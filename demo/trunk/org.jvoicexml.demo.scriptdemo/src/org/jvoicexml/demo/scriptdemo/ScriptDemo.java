@@ -162,7 +162,7 @@ public final class ScriptDemo {
             final ScriptDemo demo = new ScriptDemo();
             final InputSource rootInput = new InputSource("root.vxml");
             final VoiceXmlDocument root = new VoiceXmlDocument(rootInput);
-            final InputSource startInput = new InputSource("test.vxml");
+            final InputSource startInput = new InputSource("scriptdemo.vxml");
             final VoiceXmlDocument document = new VoiceXmlDocument(startInput);
 
             demo.addDocument("/root", root);
