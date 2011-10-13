@@ -30,6 +30,7 @@ import java.io.InputStream;
 import org.junit.Test;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.xml.sax.InputSource;
 
@@ -47,6 +48,23 @@ public class TestMarcSynthesizedOutput {
      */
     @Test
     public void testQueueSpeakable() throws Exception, JVoiceXMLEvent {
+        final SsmlDocument doc = new SsmlDocument();
+        final Speak speak = doc.getSpeak();
+        speak.addText("This is a test!");
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(doc);
+        final MarcSynthesizedOutput output = new MarcSynthesizedOutput();
+        output.activate();
+        output.connect(null);
+        output.queueSpeakable(speakable, null, null);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.implementation.marc.MarcSynthesizedOutput#queueSpeakable(org.jvoicexml.SpeakableText, java.lang.String, org.jvoicexml.DocumentServer)}.
+     * @exception Exception test failed
+     * @exception JVoiceXMLEvent test failed
+     */
+    @Test
+    public void testQueueSpeakableComplex() throws Exception, JVoiceXMLEvent {
         final InputStream in =
                 TestMarcSynthesizedOutput.class.getResourceAsStream(
                         "MarcExpressionTest.xml");

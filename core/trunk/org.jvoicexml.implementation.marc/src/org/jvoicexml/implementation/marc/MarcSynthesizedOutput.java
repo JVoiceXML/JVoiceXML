@@ -420,11 +420,6 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
 
         final String tag = node.getNodeName();
         writer.writeStartElement(tag);
-        final String namespace = node.getNamespaceURI();
-        if (namespace != null) {
-            final String prefix = node.getPrefix();
-            writer.writeNamespace(prefix, namespace);
-        }
         final NamedNodeMap attributes = node.getAttributes();
             if (attributes != null) {
             for (int k=0; k<attributes.getLength(); k++) {
