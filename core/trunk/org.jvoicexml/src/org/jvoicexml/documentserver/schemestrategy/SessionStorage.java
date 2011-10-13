@@ -61,7 +61,7 @@ public final class SessionStorage<T> {
     /**
      * Retrieves the identifier for the given session.If no identifier exists
      * a new identifier is created using the {@link SessionIdentifierFactory}.
-     * @param session the Id of the JVoiceXML session
+     * @param sessionId the Id of the JVoiceXML session
      * @return session identifier, <code>null</code> if the given session is
      *         <code>null</code>.
      */
@@ -81,7 +81,7 @@ public final class SessionStorage<T> {
 
     /**
      * Removes the identifier from the list of known session identifiers.
-     * @param session the Id of the JVoiceXML session
+     * @param sessionId the Id of the JVoiceXML session
      */
     public synchronized void releaseSession(final String sessionId) {
         sessions.remove(sessionId);

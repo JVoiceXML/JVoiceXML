@@ -37,7 +37,7 @@ package org.jvoicexml.documentserver.schemestrategy;
 public interface SessionIdentifierFactory<T> {
     /**
      * Creates a new session identifier.
-     * @param session the Id of the current JVoiceXML session
+     * @param sessionId the Id of the current JVoiceXML session
      * @return new session identifier.
      */
     T createSessionIdentifier(final String sessionId);

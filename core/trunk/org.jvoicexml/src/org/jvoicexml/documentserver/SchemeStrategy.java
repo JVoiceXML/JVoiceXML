@@ -64,7 +64,7 @@ public interface SchemeStrategy {
     /**
      * Opens the external URI and returns an <code>InputStream</code> to the
      * referenced object.
-     * @param session
+     * @param sessionId
      *        the Id of the current JVoiceXML session.
      * @param uri
      *        the URI of the object to open.
@@ -94,7 +94,7 @@ public interface SchemeStrategy {
      * Notification that the given session is closed. Now the strategy
      * may free any resources related to the given session, e.g. a session with
      * a web server.
-     * @param session the Id of the current JVoiceXML session.
+     * @param sessionId the Id of the current JVoiceXML session.
      * @since 0.7
      */
     void sessionClosed(final String sessionId);
