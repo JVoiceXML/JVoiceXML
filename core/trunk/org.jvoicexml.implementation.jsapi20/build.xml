@@ -172,11 +172,10 @@ You're using ${ant.java.version}
             if="jsapi2.present"
             description="Compile the JSAPI 2.0 sources">
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
-        <javac destdir="${build}"
+        <javac destdir="${build}" includeantruntime="false"
                optimize="${javac.optimize}"
                debug="${javac.debug}"
                deprecation="on"
-               encoding="iso-8859-1"
                source="${javac.source}"
                target="${javac.target}">
             <src path="${src}" />
