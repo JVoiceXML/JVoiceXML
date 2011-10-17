@@ -1,0 +1,169 @@
+/*
+ * File:    $HeadURL:  $
+ * Version: $LastChangedRevision: 643 $
+ * Date:    $Date: $
+ * Author:  $LastChangedBy: $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+package org.jvoicexml.client.text;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.InetSocketAddress;
+import java.net.URI;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
+import org.apache.log4j.Logger;
+import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.Session;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.xml.ssml.SsmlDocument;
+
+/**
+ * Console client for JVoiceXML.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision: $
+ * @since 0.7.5
+ */
+public class ConsoleClient implements TextListener {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(ConsoleClient.class);;
+
+    /** Server start lock. */
+    private final Object lock;
+
+    private TextServer server;
+
+    /**
+     * Constructs a new object.
+     */
+    private ConsoleClient() {
+        lock = new Object();
+    }
+
+    /**
+     * Running thread.
+     */
+    private void run(final URI uri) throws Exception, JVoiceXMLEvent {
+        final Context context = new InitialContext();
+        final JVoiceXml jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+        server = new TextServer(4242);
+        server.addTextListener(this);
+        server.start();
+        synchronized (lock) {
+            lock.wait();
+        }
+        LOGGER.info("server started");
+        final ConnectionInformation info =
+                server.getConnectionInformation();
+        final Session session = jvxml.createSession(info);
+        LOGGER.info("calling application at '" + uri + "'...");
+        session.call(uri);
+        server.waitConnected();
+        do {
+            final String line = readLine();
+            server.sendInput(line);
+        } while (!session.hasEnded());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void started() {
+        synchronized (lock) {
+            lock.notifyAll();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void connected(InetSocketAddress remote) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void outputText(final String text) {
+        System.out.println("System: " + text);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void outputSsml(final SsmlDocument document) {
+        System.out.println("System: " + document.toString());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void disconnected() {
+        LOGGER.info("system hung up");
+        System.exit(0);
+    }
+
+    /**
+     * Read an input from the command line.
+     * @return DTMF from the command line.
+     */
+    public String readLine() throws IOException {
+        System.out.print("User: ");
+        System.out.flush();
+
+        final Reader reader = new InputStreamReader(System.in);
+        final BufferedReader br = new BufferedReader(reader);
+        return br.readLine();
+    }
+
+    /**
+     * Start routine.
+     * @param args URI of the application to call
+     */
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.err.println("usage:");
+            System.err.println("\tjava "
+                    + ConsoleClient.class.getCanonicalName() + " <uri>");
+            System.exit(-1);
+        }
+        try {
+            final URI uri = new URI(args[0]);
+            final ConsoleClient console = new ConsoleClient();
+            console.run(uri);
+        } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

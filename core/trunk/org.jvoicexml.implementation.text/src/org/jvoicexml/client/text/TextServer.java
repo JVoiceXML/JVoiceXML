@@ -330,7 +330,8 @@ public final class TextServer extends Thread {
     }
 
     /**
-     * Waits until a connection to JVoiceXml has been established.
+     * Waits until a connection to JVoiceXml has been established after
+     * an application has been called.
      * @throws IOException
      *         Error in connection.
      */
