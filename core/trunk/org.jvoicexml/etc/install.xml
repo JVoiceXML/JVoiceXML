@@ -96,10 +96,10 @@
         <include name="org.springframework.beans-3.0.5.RELEASE.jar" />
         <include name="jmf.jar" />
         <include name="jlibrtp.jar" />
-        <include name="httpclient-4.0.1.jar" />
-        <include name="httpcore-4.0.1.jar" />
-        <include name="httpcore-nio-4.0.1.jar" />
-        <include name="httpmime-4.0.1.jar" />
+        <include name="httpclient-4.0.3.jar" />
+        <include name="httpcore-4.1.jar" />
+        <include name="httpcore-nio-4.1.jar" />
+        <include name="httpmime-4.0.3.jar" />
         <include name="chardet.jar" />
         <include name="org.jvoicexml.jar" />
         <include name="org.jvoicexml.config.jar" />
