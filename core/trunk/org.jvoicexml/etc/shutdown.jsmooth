@@ -19,7 +19,7 @@
 <value>config/jvoicexml.policy</value>
 </javaProperties>
 <initialMemoryHeap>-1</initialMemoryHeap>
-<mainClassName>org.jvoicexml.RemoteShutdown</mainClassName>
+<mainClassName>org.jvoicexml.jndi.RemoteShutdown</mainClassName>
 <maximumMemoryHeap>1073741824</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
 <minimumVersion></minimumVersion>
