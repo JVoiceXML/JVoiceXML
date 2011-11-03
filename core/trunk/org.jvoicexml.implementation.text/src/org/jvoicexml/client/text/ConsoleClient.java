@@ -40,6 +40,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -120,7 +121,8 @@ public class ConsoleClient implements TextListener {
      */
     @Override
     public void outputSsml(final SsmlDocument document) {
-        System.out.println("System: " + document.toString());
+        final Speak speak = document.getSpeak();
+        System.out.println("System: " + speak.getTextContent());
     }
 
     /**
