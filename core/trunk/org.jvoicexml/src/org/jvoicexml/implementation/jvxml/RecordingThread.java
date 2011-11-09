@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.jvxml;
 
 import java.io.IOException;
 import java.io.OutputStream;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
@@ -40,15 +41,8 @@ import org.apache.log4j.Logger;
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
  * {@link org.jvoicexml.implementation.Telephony} based on JSAPI 1.0.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.6
  */
 final class RecordingThread extends Thread {
@@ -60,19 +54,25 @@ final class RecordingThread extends Thread {
     private static final int BUFFER_SIZE = 512;
 
     /** The output stream where to write the recording. */
-    private OutputStream out;
+    private final OutputStream out;
 
     /** The line used for recording. */
     private TargetDataLine line;
 
+    /** The recording audio format. */
+    private final AudioFormat format;
+
     /**
      * Constructs a new object.
      * @param stream the stream where to write the recording.
+     * @param recordingFormat the audio format of the recording 
      */
-    public RecordingThread(final OutputStream stream) {
+    public RecordingThread(final OutputStream stream,
+            final AudioFormat recordingFormat) {
         out = stream;
+        format = recordingFormat;
         setDaemon(true);
-        setName("JSAPI 1.0 RecordingThread");
+        setName("RecordingThread");
     }
 
     /**
@@ -84,11 +84,6 @@ final class RecordingThread extends Thread {
             LOGGER.debug("recording started");
         }
         try {
-            final AudioFormat.Encoding encoding =
-                    new AudioFormat.Encoding("PCM_SIGNED");
-            final AudioFormat format =
-                    new AudioFormat(encoding, (float) 8000.0, 16, 1, 2,
-                    (float) 8000.0, false);
             line = AudioSystem.getTargetDataLine(format);
             line.open();
             line.start();

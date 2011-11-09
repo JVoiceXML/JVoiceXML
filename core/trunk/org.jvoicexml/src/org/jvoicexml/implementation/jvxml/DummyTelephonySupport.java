@@ -237,7 +237,7 @@ public final class DummyTelephonySupport
             final Map<String, String> parameters)
         throws IOException, NoresourceError {
         busy = true;
-        recording = new RecordingThread(stream);
+        recording = new RecordingThread(stream, RECORDING_AUDIO_FORMAT);
         recording.start();
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
