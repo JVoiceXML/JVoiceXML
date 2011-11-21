@@ -115,7 +115,7 @@ public final class VoiceXmlInterpreterContext  {
     private boolean initializingSubdialog;
 
     /** The configuration to use. */
-    private Configuration configuration;
+    private final Configuration configuration;
 
     /**
      * Create a new object.
@@ -163,6 +163,7 @@ public final class VoiceXmlInterpreterContext  {
             final Configuration config, final ScopeObserver observer) {
         session = currentSession;
         scopeObserver = observer;
+        configuration = config;
 
         grammars = new ActiveGrammarSet(scopeObserver);
         if (session != null) {
@@ -530,7 +531,6 @@ public final class VoiceXmlInterpreterContext  {
         initializingSubdialog = true;
         application = appl;
         VoiceXmlDocument document = application.getCurrentDocument();
-
         final ScriptingEngine scriptingEngine = getScriptingEngine();
         DocumentDescriptor descriptor = desc;
         while (document != null) {

@@ -1267,8 +1267,9 @@ public final class FormInterpretationAlgorithm
         final Map<String, Object> parameters = parser.getParameters();
         final ScopeObserver observer = new ScopeObserver();
         // TODO aquire the configuration object
+        final Configuration configuration = context.getConfiguration();
         final VoiceXmlInterpreterContext subdialogContext =
-            new VoiceXmlInterpreterContext(session, null, observer);
+            new VoiceXmlInterpreterContext(session, configuration, observer);
         final Thread thread = new SubdialogExecutorThread(resolvedUri,
                 subdialogContext, application, handler, parameters);
         thread.start();
