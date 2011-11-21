@@ -160,7 +160,14 @@ public final class HttpSchemeStrategy
                 SESSION_STORAGE.getSessionIdentifier(sessionId);
         final URI fullUri;
         try {
-            fullUri = addParameters(parameters, uri);
+            final URI fragmentLessUri = new URI(    
+                    uri.getScheme(),
+                    uri.getAuthority(),
+                    uri.getPath(),
+                    uri.getQuery(),
+                    null
+                    );
+            fullUri = addParameters(parameters, fragmentLessUri);
         } catch (URISyntaxException e) {
             throw new BadFetchError(e.getMessage(), e);
         } catch (SemanticError e) {
