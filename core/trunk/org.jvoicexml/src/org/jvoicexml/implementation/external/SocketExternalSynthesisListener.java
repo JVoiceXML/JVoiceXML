@@ -26,12 +26,6 @@
 
 package org.jvoicexml.implementation.external;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
@@ -54,15 +48,22 @@ import org.w3c.dom.Node;
  * @since 0.7.4
  */
 public final class SocketExternalSynthesisListener
-    extends Thread implements ExternalSynthesisListener {
+    implements ExternalSynthesisListener {
     /** Logger instance. */
     private static final Logger LOGGER =
              Logger.getLogger(SocketExternalSynthesisListener.class);
     
-    private ServerSocket server;
-    private Socket socket;
-    private ObjectOutputStream oos;
+    /** the port to be listening on. */
     private int port;
+    
+    /** internal Thread handling all connections. */
+    private SocketExternalListenerWorker worker = null;
+    
+    /** "synthesis" - The workerthread will use this string to mark log messages. */
+    private final String ASSIGNMENT = "synthesis";
+    
+    /** Status of this listener. */
+    private boolean running = false;
 
     /**
      * Constructs a new SocketExternalSynthesisListener.
@@ -71,42 +72,13 @@ public final class SocketExternalSynthesisListener
     }
 
     /**
-     * set the Port to be used.
+     * Set the port to be used.
      *
      * @param portnumber
      *            used port
      */
     public void setPort(final int portnumber) {
         port = portnumber;
-    }
-   
-    /**
-     * Starts the TCP connection.
-     * and initializes the ObjectOutputStream
-     */
-    @Override
-    public void run() {
-        LOGGER.info("starting socket external synthesis listener at port '"
-                + port + "...");
-         try {
-             server = new ServerSocket(port);
-             socket = server.accept();
-         } catch (UnknownHostException e) {
-             LOGGER.error(e.getMessage(), e);
-             return;
-         } catch (IOException e) {
-             LOGGER.error(e.getMessage(), e);
-             return;
-         }
-         try {
-             oos = new ObjectOutputStream(socket.getOutputStream());
-         } catch (IOException e) {            
-            LOGGER.error(e.getMessage(), e);
-            return;
-         }
-
-         LOGGER.info("Connect external synthesizer socket listener to port: "
-                 + port + ".");
     }
     
     /**
@@ -131,16 +103,13 @@ public final class SocketExternalSynthesisListener
                 Speak speak = document.getSpeak();
                 text = getConcatenatedText(speak);       
             }
-                
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Synthesis Listener sended Message:"
-                        + text.toString() + "...");
-            }
-                    
-             try {
-                oos.writeObject("Synthesised: '" + text + "'.");
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
+            
+            if (running) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Synthesis Listener sent Message:"
+                            + text.toString() + "...");
+                }
+                worker.postMessage("Synthesised: '" + text + "'.");
             }
         }
     }
@@ -178,5 +147,40 @@ public final class SocketExternalSynthesisListener
 
     @Override
     public void outputError(final ErrorEvent error) {
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void start() {
+        //if the workerthread has not been stopped, stop it
+        if (worker != null) {
+            worker.stopWorker();
+        }
+        
+        worker = new SocketExternalListenerWorker(port, ASSIGNMENT);
+        worker.start();
+        running = true;
+        
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("started socket external synthesis listener at port '"
+                    + port + "...");
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void stop() {
+        running = false;
+        if (worker != null) {
+            worker.stopWorker();
+            worker = null;
+        }
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("...stopped socket external synthesis listener");
+        }
     }
 }

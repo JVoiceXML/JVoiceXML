@@ -26,20 +26,13 @@
 
 package org.jvoicexml.implementation.external;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.implementation.ExternalRecognitionListener;
-import org.w3c.dom.Node;
 
 /**
- * Class to send the Recognized Result as String 
- * to a connected server socket on localhost.
+ * Class to send RecognitionResults as String 
+ * to external clients.
  * 
  * @author Josua Arndt
  * @author Dirk Schnelle-Walka
@@ -47,22 +40,30 @@ import org.w3c.dom.Node;
  * @since 0.7.4
  */
 public final class SocketExternalRecognitionListener
-    extends Thread implements ExternalRecognitionListener {
+    implements ExternalRecognitionListener {
     /** Logger instance. */
     private static final Logger LOGGER =
              Logger.getLogger(SocketExternalRecognitionListener.class);
     
-    private ServerSocket server;
-    private Socket socket;
-    private ObjectOutputStream oos;
+    /** the port to be listening on. */
     private int port;
-
+    
+    /** internal Thread handling all connections. */
+    private SocketExternalListenerWorker worker = null;
+    
+    /** "recognition"
+     *  - The workerthread will use this string to mark log messages. */
+    private final String ASSIGNMENT = "recognition";
+    
+    /** Status of this listener. */
+    private boolean running = false;
+    
     /**
-     * Constructs a new SocketExternalSynthesisListener.
+     * Constructs a new SocketExternalRecognitionListener.
      */
     public SocketExternalRecognitionListener() {
     }
-
+    
     /**
      * Set the port to be used.
      *
@@ -72,57 +73,15 @@ public final class SocketExternalRecognitionListener
     public void setPort(final int portnumber) {
         port = portnumber;
     }
-   
+    
     /**
-     * Starts the TCP connection 
-     * and initializes the ObjectOutputStream.
+     * Post a message to all connected Clients via this class's Worker.
+     * @param msg
+     *          the textmessage to be sent
+     * @since 0.7.5
      */
-    @Override
-    public void run() {
-        LOGGER.info("starting socket external recognition listener at port '"
-                + port + "...");
-         try {
-             server = new ServerSocket(port);
-             socket = server.accept();
-         } catch (UnknownHostException e) {
-             LOGGER.error(e.getMessage(), e);
-             return;
-         } catch (IOException e) {
-             LOGGER.error(e.getMessage(), e);
-             return;
-         }
-     
-         try {
-             oos = new ObjectOutputStream(socket.getOutputStream());
-         } catch (IOException e) {            
-            LOGGER.error(e.getMessage());
-         }
-
-         LOGGER.info("Connect external recognizer socket listener to port: "
-                 + port + ".");
-    }   
-       
-    public final String getConcatenatedText(final Node node) {
-        if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
-            return node.getNodeValue();
-        }
-
-        StringBuilder str = new StringBuilder();
-        Node child = node.getFirstChild(); 
-        
-        while (child != null) {
-            final short type = child.getNodeType();
-            if ((type == Node.TEXT_NODE) || (type == Node.CDATA_SECTION_NODE)) {
-                str.append(child.getNodeValue());
-                str.append(" ");
-            }
-            if (child.getFirstChild() != null) {
-                str.append(getConcatenatedText(child));
-            }
-            child = child.getNextSibling();
-        }  
-        
-        return str.toString();
+    private void postMessage(final String msg) {
+        worker.postMessage(msg);
     }
 
     /**
@@ -139,17 +98,13 @@ public final class SocketExternalRecognitionListener
             text.append(" ");
         }
         
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Recognition Listener sended Message:"
-                    + text.toString() + "...");
+        if (running) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Recognition Listener sent Message:"
+                            + text.toString() + "...");
+            }
+            postMessage("Recognized: '" + text.toString() + "'.");
         }
-                
-         try {
-            oos.writeObject("Recognized: '" + text.toString() + "'.");
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-        } 
-        
     }
 
     /**
@@ -158,14 +113,45 @@ public final class SocketExternalRecognitionListener
      */
     @Override
     public void resultRejected(final RecognitionResult result) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Recognition Listener: result rejected.");
+        final String msg = "Recognition Listener: result rejected.";
+        if (running) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(msg);
+            }
+            postMessage(msg);
         }
-
-         try {
-            oos.writeObject("Recognition Listener: result rejected.");
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-        } 
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void start() {
+        //if the workerthread has not been stopped, stop it
+        if (worker != null) {
+            worker.stopWorker();
+        }
+        
+        worker = new SocketExternalListenerWorker(port, ASSIGNMENT);
+        worker.start();
+        running = true;
+        
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("started socket external recognition listener at port '"
+                    + port + "...");
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void stop() {
+        running = false;
+        if (worker != null) {
+            worker.stopWorker();
+            worker = null;
+        }
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("...stopped socket external recognition listener");
+        }
     }
 }
