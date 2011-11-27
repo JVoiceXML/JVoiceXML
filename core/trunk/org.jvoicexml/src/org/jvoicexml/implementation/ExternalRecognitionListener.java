@@ -46,6 +46,13 @@ public interface ExternalRecognitionListener {
      * @since 0.7.5
      */
     void start();
+    
+    /**
+     * Stops this external recognition listener.
+     * 
+     * @since 0.7.5
+     */
+    void stop();
 
     /**
      * The user made an utterance, that matched an active grammar.

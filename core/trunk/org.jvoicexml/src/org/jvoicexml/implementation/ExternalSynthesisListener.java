@@ -49,4 +49,11 @@ public interface ExternalSynthesisListener extends SynthesizedOutputListener {
      * @since 0.7.5
      */
     void start();
+    
+    /**
+     * Stops this external synthesized output listener.
+     * 
+     * @since 0.7.5
+     */
+    void stop();
 }

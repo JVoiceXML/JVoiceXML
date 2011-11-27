@@ -209,7 +209,11 @@ public final class JVoiceXmlImplementationPlatform
             final ExternalRecognitionListener listener) {
         externalRecognitionListener = listener;
         if (listener != null) {
-            externalRecognitionListener.start();
+            try {
+                externalRecognitionListener.start();
+            } catch (Throwable t) {
+                LOGGER.debug("Could not start externalRecognitionListener:", t);
+            }
         }
     }
 
@@ -222,7 +226,11 @@ public final class JVoiceXmlImplementationPlatform
             final ExternalSynthesisListener listener) {
       externalSynthesisListener = listener;
       if (listener != null) {
-          externalSynthesisListener.start();
+          try {
+              externalSynthesisListener.start();
+          } catch (Throwable t) {
+              LOGGER.debug("Could not start externalSynthesisListener:", t);
+          }
       }
     }
 
@@ -495,6 +503,16 @@ public final class JVoiceXmlImplementationPlatform
             closed = true;
         }
 
+        if (externalRecognitionListener != null) {
+            LOGGER.debug("stopping externalRecognitionListener");
+            externalRecognitionListener.stop();
+        }
+        
+        if (externalSynthesisListener != null) {
+            LOGGER.debug("stopping externalSynthesisListener");
+            externalSynthesisListener.stop();
+        }
+        
         LOGGER.info("closing implementation platform");
         if (output != null) {
             if (!hungup) {
