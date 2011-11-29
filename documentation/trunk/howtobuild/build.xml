@@ -91,6 +91,7 @@ Create the document 'How to build JVoiceXML'..
 
         <exec executable="ps2pdf">
           <arg value="${dist.ps}"/>
+          <arg value="${dist.pdf}"/>
         </exec>
     </target>
 </project>
