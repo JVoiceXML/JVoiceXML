@@ -133,8 +133,8 @@ https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/<subproject>/trunk \
 jvoicexml
 \end{lstlisting}
 
-This will check out all the projects of the \lstinline{trunk} of
-the subproject \lstinline{<subproject>} into the folder \lstinline{jvoicexml}.
+This will check out all the projects of the \texttt{trunk} of
+the subproject \texttt{<subproject>} into the folder \texttt{jvoicexml}.
 
 Since all the third party libraries are checked in this may
 take a while.
@@ -143,7 +143,7 @@ Although the sub-projects are organized in folders it is expected to
 checkout all projects into the same folder regardless of the subproject folder.
 This works fine, if you are using an IDE like eclipse, this is really
 straightforward, but may cause some problems if you are working from a command
-line. In the latter case remove the \lstinline{.svn} folder if you checkout
+line. In the latter case remove the \texttt{.svn} folder if you checkout
 another subproject. Otherwise SVN will complain that there is already another
 one using this folder.
 A screenshot from a checkout in eclipse is shown in
@@ -164,7 +164,7 @@ JAVA compiler, see section~\ref{sec:ide}, an editor or preferably a JAVA
 IDE, see section~\ref{sec:ide}, and ANT, see section~\ref{sec:ant}, to build the
 binaries. All used third party libraries can be downloaded from the CVS, SVN or
 comparable repository or from their home pages. The file
-\lstinline{doc/libraries.xhtml} contains a list of all used libraries.
+\texttt{doc/libraries.xhtml} contains a list of all used libraries.
 
 
 \subsection{IDE}
@@ -277,7 +277,7 @@ MRCPv2.
 text based access.
 \end{description}
 
-\subsection{Project \lstinline{org.jvoicexml}}
+\subsection{Project \texttt{org.jvoicexml}}
 
 This project is the core of the JVoiceXML browser and the central point of
 building and configuring the environment.
@@ -299,7 +299,7 @@ central library repository.
 \item[etc] resource files
 \item[personal-props] adapted configuration from the configuration templates
 for the ant build files. The contents of this folder is never committed to the
-SVN repository except the \lstinline{README.TXT}.
+SVN repository except the \texttt{README.TXT}.
 \item[logging] logging output of JVoiceXML
 \item[src] Java source code
 \item[test] JUnit tests and other tests
@@ -380,7 +380,7 @@ You find a copy of the license terms for the libraries in the folder\\
 Some of the used libraries are under active development and have not yet
 released a patched release. In these cases the lib folder contains a snapshot
 from their repository. The presence of a snapshot is marked in the file
-\lstinline{doc/libraries.xhtml} e.g. with the comment \emph{(SVN snapshot from
+\texttt{doc/libraries.xhtml} e.g. with the comment \emph{(SVN snapshot from
 <date>)}.
 
 
@@ -451,8 +451,38 @@ one single implementation platform are located in the implementation platform's
 Currently there are seven implementations for the implementation platform
 that reside in co-projects, refer to section~\ref{sec:svn-repository}.
 
-If you want to use one of them, you have to adapt the corresponding setting
-in your copy of \texttt{platforms.xml} in the folder \texttt{personal-props}.
+Section~\ref{sec:adapt-ant} describes how to prepare your personal settings.
+If you want to use one of them, you have to adapt the corresponding setting in
+your copy of \texttt{platforms.xml} in the folder\texttt{personal-props} by
+simply uncommenting it.
+An example to enable the JSAPI 1.0 platform is shown below:
+\begin{lstlisting}[language=XML]
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<platforms>
+  <!--
+     Uncomment the platforms that you want to use or add your own platform.
+  -->
+  <platform name="org.jvoicexml.implementation.jsapi10">
+    <property name="jvxml.jsapi10.talkingJava" value ="false" />
+    <property name="jvxml.jsapi10.talkingJava.path"
+        value ="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib" />
+  </platform>
+  <!-- platform name="org.jvoicexml.implementation.jsapi20">
+    <property name="jvxml.jsapi20.sapi" value ="false" />
+    <property name="jvxml.jsapi20.mac" value ="false" />
+  </platform-->
+  <!-- platform name="org.jvoicexml.implementation.jtapi"/-->
+  <!-- platform name="org.jvoicexml.implementation.mary"/-->
+  <!-- platform name="org.jvoicexml.implementation.marc"/-->
+  <!-- platform name="org.jvoicexml.implementation.mrcpv2"/-->
+  <!-- platform name="org.jvoicexml.implementation.red5"/-->
+  <!-- platform name="org.jvoicexml.implementation.text"/-->
+</platforms>
+\end{lstlisting}
+
+This will enable the JSAPI 1.0 platform to work with Sphinx 4 and FreeTTS. 
+
+
 This setting is also used if you call ant for the main build file as described
 in the following section.
 Note that you need at least one implementation platform to use the voice
@@ -463,11 +493,12 @@ Once you changed the settings call
 ant -buildfile configuration.xml
 \end{lstlisting}
 to create your adapted configuration settings. In addition you also get
-a customized ant build file \texttt{run.xml} to start and stop the interpreter
-using the libraries from the co-projects.
+a customized ant build file \texttt{run.xml} as well as the included
+\texttt{platform-targets.xml} to start and
+stop the interpreter using the libraries from the co-projects.
 
 Note that it is required to create a configuration after you changed the
-settings in the \lstinline{ant.properties} file.
+settings in the \texttt{ant.properties} file.
 
 The voice browser can be started by
 \begin{lstlisting}
@@ -482,7 +513,7 @@ Please do not stop the voice browser by CTRL-C or similar. It may occur that
 some resources are not closed properly and may cause conflicts with the next
 start of JVoiceXML.
 
-The created \lstinline{run.xml} also contains a target to enable remote
+The created \texttt{run.xml} also contains a target to enable remote
 debugging. It can be called by
 \begin{lstlisting}
 ant -f run.xml debug
@@ -507,7 +538,7 @@ to get an overview of the targets and their purpose.
 Some of the targets use third party extensions to ANT. These 
 extensions are not described in this document, but are part of
 the 3rdparty folder. In contrast to the libraries to link with,
-these libraries are not defined in the file \lstinline{3rdparty-libs.xml}
+these libraries are not defined in the file \texttt{3rdparty-libs.xml}
 but in the corresponding target of this build file. Each features
 a preceding target that checks if the library is required. If
 the library is not found, the target will not be called.
@@ -530,7 +561,7 @@ If successful, you will find at minimum the following jar archives:
 \item jvxml.jar This jar file contains the core of JVoiceXML.
 \item jvxml-xml.jar This jar contains all files that are required
 to create and parse VoiceXML documents. This file is being build from the
-project \lstinline{org.jvoicexml.xml} which is described in
+project \texttt{org.jvoicexml.xml} which is described in
 section~\ref{sec:org.jvoicexml.xml}.
 \item jvxml-client.jar This jar contains the files needed to build
 a client.
@@ -562,7 +593,7 @@ run. A screenshot is shown in figure~\ref{fig:eclipse-launch}.
 \end{figure}
 
 
-\subsection{Project \lstinline{org.jvoicexml.config}}
+\subsection{Project \texttt{org.jvoicexml.config}}
 \label{sec:org.jvoicexml.config}
 
 This project provides a library to configure JVoiceXML based on spring.
@@ -580,7 +611,7 @@ This project has to be build after the main project.
 
 JVoiceXML uses the spring framework to address configuration issues.
 
-\subsection{Project \lstinline{org.jvoicexml.xml}}
+\subsection{Project \texttt{org.jvoicexml.xml}}
 \label{sec:org.jvoicexml.xml}
 
 This project provides an XML library to create and parse all VoiceXML related
@@ -588,14 +619,14 @@ XML languages like SRGSXML, PLS and SSML.
 
 This project has to be build before the main project.
 
-\subsection{Project \lstinline{org.jvoicexml.processor.srgs}}
+\subsection{Project \texttt{org.jvoicexml.processor.srgs}}
 \label{sec:org.jvoicexml.processor.srgs}
 
 This project provides an SRGS processor.
 
 This project has to be build before the main project.
 
-\subsection{Project \lstinline{org.jvoicexml.jndi}}
+\subsection{Project \texttt{org.jvoicexml.jndi}}
 
 This project provides JNDI support for JVoiceXML. This is not required at run
 time but in order to build JVoiceXML.
@@ -611,14 +642,14 @@ jvxml.jndi.port=1099
 \end{lstlisting}
 
 The configuration ANT script also adapts the settings in the
-\lstinline{jndi.properties} to the configured port. Make sure to also adapt
-the \lstinline{jndi.properties} in the demos or your application.
+\texttt{jndi.properties} to the configured port. Make sure to also adapt
+the \texttt{jndi.properties} in the demos or your application.
 
 The repository entry must match the repository that you are using for your
 client. Otherwise JVoiceXML will not be able to load the needed resources of
 the server side.
 
-\subsection{Project \lstinline{org.jvoicexml.implementation.jsapi10}}
+\subsection{Project \texttt{org.jvoicexml.implementation.jsapi10}}
 \label{sec:implementation-jsapi10}
 
 This project provides an implementation platform for JSAPI 1.0 compliant
@@ -626,19 +657,18 @@ speech engines. Besides a general hook for those engines there are also
 extensions for FreeTTS and Sphinx 4 bases on these hooks to demonstrate the
 capabilities.
 
-The project settings for this subproject can be adapted by the following ANT
-properties:
-\begin{lstlisting}
-jvxml.jsapi10 = true
-jvxml.jsapi10.talkingJava = true
-\end{lstlisting}
+The project settings for this subproject can be adapted by the following
+properties in the \texttt{platforms.xml}
 
-The setting \lstinline{jvxml.jsapi10} must be set to \lstinline{true} to enable
-this implementation platform. FreeTTS and Sphinx4 will be used by default. Windows
-users can also switch to Talking Java, a JSAPI 1.0 compatible wrapper for
-Microsoft's speech engine. This implementation platform requires that you have
-the TalkingJava SDK installed. Set \lstinline{jvxml.jsapi10.talkingJava} to
-\lstinline{true} in addition to the previous setting.
+\begin{description}
+\item[jvxml.jsapi10.talkingJava] A value of \texttt{false} will result in a
+configuration that uses FreeTTS and Sphinx4 as speech engines. If set to
+\texttt{true} the Talking Java wrapper for Microsoft's speech engine will be
+used. In the latter case you need also to specifiy a value for
+\texttt{jvxml.jsapi10.talkingJava.path}
+\item[jvxml.jsapi10.talkingJava.path] A path that is used to locate the DLLs
+that are required to use Talking Java as sthe speech engine.
+\end{description}
 
 \subsubsection{Third party libraries}
 \label{sec:jsapi10-third-party-libr}
@@ -677,7 +707,7 @@ and CMU sphinx4. Note that the delivered version is only free for personal use.
 If you intend to use it in a commercial corporate or institutional context, you
 will have to buy a license. Please refer to \url{http://www.cloudgarden.com}.
 
-\subsection{Project \lstinline{org.jvoicexml.implementation.jsapi20}}
+\subsection{Project \texttt{org.jvoicexml.implementation.jsapi20}}
 
 This project contains a first draft of an implementation platform to enable
 JSAPI 2.0 support for JVoiceXML.
@@ -729,7 +759,7 @@ Note that the used library is a snapshot from the FreeTTS SVN repository.
 The JSAPI 2.0 implementation platform uses sphinx 4~\cite{sphinx} from
 Carnegie Mellon University as a demo implementation for speech recognition.
 
-\subsection{Project \lstinline{org.jvoicexml.implementation.jtapi}}
+\subsection{Project \texttt{org.jvoicexml.implementation.jtapi}}
 
 This implementation platform provides telephony functionality based on JTAPI to
 JVoiceXML.This implementation platform should be used together with other
@@ -770,7 +800,7 @@ MjSIP provides an easy way to have SIP functionality. Unfortunately, this
 project uses the GPL license which makes is unusable in commercial
 applications. It should be replaced by JainSIP.
 
-\subsection{Project \lstinline{org.jvoicexml.implementation.marc}}
+\subsection{Project \texttt{org.jvoicexml.implementation.marc}}
 
 This implementation integrates MARC system into JVoiceXML. This platform
 only provides the output part and is designed to be used with other
@@ -782,7 +812,7 @@ demo. MARC can be downloaded from \url{http://marc.limsi.fr/}.
 This implementation platform will also for the integration of MARC BML commands
 into your VoiceXML files.
 
-\subsection{Project \lstinline{org.jvoicexml.implementation.mary}}
+\subsection{Project \texttt{org.jvoicexml.implementation.mary}}
 
 This implementation integrates the Mary TTS system into JVoiceXML. It is
 designed to be used with other implementation platforms like JSAPI 1.0, see
@@ -790,7 +820,7 @@ section~\ref{sec:implementation-jsapi10}.
 
 Note that you will need a Mary 4.0.0  TTS server running if you want to use this
 demo. Mary has to be configured as a socket server, therefore edit and file
-\lstinline{MARY_HOME/conf/marybase.config} and change the following line 
+\texttt{MARY\_HOME/conf/marybase.config} and change the following line 
 
 \begin{lstlisting}
 # Type of server? (socket/http/commandline)
@@ -813,7 +843,7 @@ The Mary client is shipped with the Mary TTS systems and facilitates the
 communication of clients like JVoiceXML with the Mary TTS server.
 
 
-\subsection{Project \lstinline{org.jvoicexml.implementation.mrcpv2}}
+\subsection{Project \texttt{org.jvoicexml.implementation.mrcpv2}}
 
 This implementation platform aims at MRCPv2 support for JVoiceXML. It is in the
 starting phase and currently it is not usable.
@@ -847,7 +877,7 @@ Mrcp4j provides the core functionality for the MRCPv2 integration.
 
 Cairo is required as a means for communication with MRCPv2 resources.
 
-\subsection{Project \lstinline{org.jvoicexml.implementation.text}}
+\subsection{Project \texttt{org.jvoicexml.implementation.text}}
 
 The text based implementation platform provides a text based input and output.
 This means that you receive the system output as Java strings and you are able
@@ -915,7 +945,7 @@ In addition you will need the following sub-projects:
 In order to run the system test you will need to have Tomcat 5.5 installed,
 refer to section~\ref{sec:tomcat}. The
 servlet service needs to be configured via the following lines in your copy
-of \lstinline{ant.properties} in the \lstinline{personal-props} folder:
+of \texttt{ant.properties} in the \texttt{personal-props} folder:
 
 \begin{lstlisting}
 tomcat.home=MUST BE SUPLIED DIRECTORY
@@ -925,7 +955,7 @@ servlet.lib.dir=MUST BE SUPPLIED DIRECTORY
 servlet.include=servlet-api.jar
 \end{lstlisting}
 
-In order to run the test switch to the \lstinline{org.jvoicexml.systemtest}
+In order to run the test switch to the \texttt{org.jvoicexml.systemtest}
 directory and call
 \begin{lstlisting}
 ant -f night.xml run
@@ -961,7 +991,7 @@ We follow the JAVA code conventions~\cite{sun:codeconv} for our code. All
 methods and member variables must be commented using 
 JAVADOC~\cite{sun:javadoc_guidelines}.
 
-In addition we use a custom \lstinline[language=Java]{@todo} JAVADOC tag or a \texttt{TODO} tag to
+In addition we use a custom \texttt[language=Java]{@todo} JAVADOC tag or a \texttt{TODO} tag to
 mark sections that need further work.
 
 Example:
@@ -977,9 +1007,9 @@ There are plug-ins for some IDEs, which you can use if you want to. The
 \texttt{checkstyle.xml} can be found in the folder 
 \texttt{etc} and is called \texttt{jvoicexml-checks.xml}.
 
-Developers are requested to use the \lstinline[language=Java]{@inheritDoc}
-JAVADOC tag in favor of a \lstinline[language=Java]{@see} reference for inherited documentation.
-Pros of the \lstinline[language=Java]{@inheritDoc} tag, taken 
+Developers are requested to use the \texttt[language=Java]{@inheritDoc}
+JAVADOC tag in favor of a \texttt[language=Java]{@see} reference for inherited documentation.
+Pros of the \texttt[language=Java]{@inheritDoc} tag, taken 
 from~\cite{tauber:inheritdoc}, are
 \begin{itemize}
 \item satisfies checkstyle requirements for JAVADOC,
@@ -1080,10 +1110,10 @@ JVoice\-XML.
 New releases are \emph{never} built from the workspace to ensure that there are
 no changes in the workspace that are not reflected in the SVN repository.
 Therefore change to an empty directory and copy the following files from the
-\lstinline{org.jvoicexml} project to this new folder:
+\texttt{org.jvoicexml} project to this new folder:
 \begin{enumerate}
   \item nightly.xml
-  \item all jars from the \lstinline{3rdparty/svnant/lib} folder
+  \item all jars from the \texttt{3rdparty/svnant/lib} folder
 \end{enumerate}
 Open a command prompt at this directory and call
 \begin{lstlisting}
@@ -1100,18 +1130,18 @@ of JVoiceXML to the personal-props directory of the new copy.
 There are many unit tests based on JUnit to ensure the correctness of the
 classes written for JVoiceXML. Some tests need customized settings, e.g. to
 start the Mary TTS server. These settings are maintained in the file
-\lstinline{config-props/test.properties} and can be overridden with a
-personalized copy in the folder \lstinline{personal-props}.
+\texttt{config-props/test.properties} and can be overridden with a
+personalized copy in the folder \texttt{personal-props}.
 
 The unit tests are started from the core project
-\lstinline{org.jvoicexml}. It is the entry point of the unit tests of the various subproject. Therefore, change to the core directory of the release copy and call
+\texttt{org.jvoicexml}. It is the entry point of the unit tests of the various subproject. Therefore, change to the core directory of the release copy and call
 \begin{lstlisting}
 cd org.jvoicexml
 ant -f nightly.xml unittests
 \end{lstlisting}
 This will take some time. The results of the unit tests of all sub-projects can
 be viewed using your favorite web browser by opening
-\lstinline{org.jvoicexml/dist/unittests/html/index.html} after the tests are
+\texttt{org.jvoicexml/dist/unittests/html/index.html} after the tests are
 finished. There must not be any errors or failures in the summary. Note that
 some tests require an active Internet connection. 
 
@@ -1122,10 +1152,10 @@ have been fixed, restart from the beginning to make a new release.
 \subsection{Create the Distribution}
 
 After the unit test ran successfully, the binary distribution can be built. The
-ANT script \lstinline{distribution.xml} contains the needed targets.
-Update the version number in the file \lstinline{config-props/ant.properties}
+ANT script \texttt{distribution.xml} contains the needed targets.
+Update the version number in the file \texttt{config-props/ant.properties}
 and comment the version number in the copy in the folder
-\lstinline{personal-props}. The JVoiceXML version number consists of
+\texttt{personal-props}. The JVoiceXML version number consists of
 \begin{lstlisting}
  <major-version>.<minor-version>.<bug-fix-level>.<EA|GA>
 \end{lstlisting}
@@ -1142,7 +1172,7 @@ to create the release. Make sure that the Javadoc output does not show any
 errors. In case there are errors, correct them and repeat the creation of the
 distributable.
 
-All intermediate files are stored in the folder \lstinline{dist/version}. The
+All intermediate files are stored in the folder \texttt{dist/version}. The
 distributable can be found in the folder of the core project after the
 executing the ANT target.
 
@@ -1175,7 +1205,7 @@ will have to supply values for the properties
 svn.username=
 svn.password=
 \end{lstlisting}
-in the ANT properties in the folder \lstinline{personal-props}.
+in the ANT properties in the folder \texttt{personal-props}.
 
 Call
 \begin{lstlisting}
@@ -1221,13 +1251,13 @@ ant -f distribution.xml upload
 
 The web site needs some adaption to point to the new release when users click
 on the download link. The download links can be found at the page
-\lstinline{downloads.html} in the project \lstinline{htdocs}. Update the link
+\texttt{downloads.html} in the project \texttt{htdocs}. Update the link
 to the new release and commit the changes.
 
 \subsection{Prepare the Further Development}
 
 Prepare the next version by incrementing th version number in the ANT
-properties file in the folder \lstinline{config-props} and committing that file.
+properties file in the folder \texttt{config-props} and committing that file.
 
  \section*{Document History}
 
