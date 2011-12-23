@@ -173,9 +173,11 @@ public final class Jsapi20SynthesizedOutput
     public void open() throws NoresourceError {
         try {
             synthesizer = (Synthesizer) EngineManager.createEngine(desc);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("allocating synthesizer...");
+            if (synthesizer == null) {
+                throw new NoresourceError("no synthesizer found matching "
+                        + desc);
             }
+            LOGGER.info("allocating JSAPI 2.0 synthesizer...");
             if (mediaLocator != null) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("using media locator '" + mediaLocator
@@ -205,9 +207,7 @@ public final class Jsapi20SynthesizedOutput
         final Boolean markupSupport = mode.getSupportsMarkup();
         supportsMarkup = markupSupport != Boolean.FALSE;
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...synthesizer allocated");
-        }
+        LOGGER.info("...JSAPI 2.0 synthesizer allocated");
     }
 
     /**
@@ -225,9 +225,7 @@ public final class Jsapi20SynthesizedOutput
 
         waitQueueEmpty();
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("deallocating synthesizer...");
-        }
+        LOGGER.info("deallocating  JSAPI 2.0 synthesizer...");
 
         try {
             synthesizer.deallocate();
@@ -242,6 +240,7 @@ public final class Jsapi20SynthesizedOutput
         } finally {
             synthesizer = null;
         }
+        LOGGER.info("...JSAPI 2.0 synthesizer deallocated");
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("audio output closed");
