@@ -41,11 +41,23 @@ import org.apache.log4j.spi.LoggingEvent;
  * able to configure everything using log4j, we simply forward all logging
  * requests to Log4j.
  * </p>
+ * <p>
+ * Therefore, all other logging handlers are removed and this one is
+ * left as the only remaining logging handler. Furthermore, the log level
+ * is set to root.
+ * </p>
  *
  * @author Dirk Schnelle-Walka
  * @since 0.6
 */
 public final class Log4jHandler extends Handler {
+    /**
+     * Constructs a new object.
+     */
+    public Log4jHandler() {
+        configure();
+    }
+
     /**
      * Initializes the logging environment to work solely with this handler.
      *
@@ -54,7 +66,7 @@ public final class Log4jHandler extends Handler {
      * only logging handler for the root namespace.
      * </p>
      */
-    public void init() {
+    private void configure() {
         setLevel(java.util.logging.Level.ALL);
         final java.util.logging.Logger rootLogger =
             java.util.logging.Logger.getLogger("");
@@ -62,13 +74,13 @@ public final class Log4jHandler extends Handler {
         for (java.util.logging.Handler current : handlers) {
             rootLogger.removeHandler(current);
         }
-        rootLogger.addHandler(this);
         rootLogger.setLevel(java.util.logging.Level.ALL);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void publish(final LogRecord record) {
         final Logger logger = Logger.getLogger(record.getLoggerName());
         final Level level = decode(record.getLevel());
@@ -110,12 +122,14 @@ public final class Log4jHandler extends Handler {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void flush() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
     }
 

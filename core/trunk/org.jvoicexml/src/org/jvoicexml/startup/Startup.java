@@ -27,7 +27,6 @@
 package org.jvoicexml.startup;
 
 import org.jvoicexml.JVoiceXmlMain;
-import org.jvoicexml.Log4jHandler;
 
 /**
  * Startup the JVoiceXML voice browser.
@@ -50,12 +49,6 @@ public final class Startup {
      * @since 0.4
      */
     public static void main(final String[] args) {
-        // Forward all java.util.logging messages to log4j.
-        final Log4jHandler handler = new Log4jHandler();
-        final java.util.logging.Logger rootLogger =
-            java.util.logging.Logger.getLogger("");
-        rootLogger.addHandler(handler);
-
         final JVoiceXmlMain jvxml = new JVoiceXmlMain();
 
         // Start the interpreter as a thread.
