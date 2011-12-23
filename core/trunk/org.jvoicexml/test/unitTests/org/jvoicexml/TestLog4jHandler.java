@@ -45,8 +45,8 @@ public final class TestLog4jHandler {
      */
     @Test
     public void testPublishLogRecord() {
-        Log4jHandler handler = new Log4jHandler();
-        handler.init();
+        // Need to create an object to initialize the logging.
+        new Log4jHandler();
         Logger logger = Logger.getLogger(TestLog4jHandler.class.getName());
         logger.log(Level.FINE, "test fine");
         logger.log(Level.WARNING, "test warning");
