@@ -5,14 +5,22 @@ import java.net.URI;
 
 
 
+
+
+
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class demoApplication extends Activity {
     /** Called when the activity is first created. */
+	
+	public final String sample = new String ("http://sites.google.com/site/komponiendo/vxml/sample.vxml");
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,22 +30,36 @@ public class demoApplication extends Activity {
         
         
        //interpret document button
-        final Button button1 = (Button) findViewById(R.id.start_button);
-        button1.setOnClickListener(new View.OnClickListener() {
+        final Button startButton = (Button) findViewById(R.id.start_button);
+        
+        
+        startButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 
-            	File dialog= new File(documentEditText.getText().toString());            	
+            	//Uri myUri=Uri.parse(documentEditText.getText().toString());
+            	Uri myUri=Uri.parse(sample);
+            	File dialog= new File(myUri.toString());         	
             	startJVoiceXML(dialog.toURI());
+            	
+            	//Intent interpret =new Intent("org.jvoicexml.android.callmanager.INTERPRETVXML",myUri);
+//            	String a=startService(interpret).toString();
+//            	if(a!=null)
+//            		Toast.makeText(getApplicationContext(),"el servicio se inicia. Demo",1).show();
+//            	else            		
+//            		Toast.makeText(getApplicationContext(), "ha salido null",1).show();            	
+            	
+            	//File dialog= new File(documentEditText.getText().toString()           	
+            	//startJVoiceXML(dialog.toURI());
             	
             }
         });
         
         //stop interpreter button
-        final Button button2 = (Button) findViewById(R.id.stop_button);
-        button2.setOnClickListener(new View.OnClickListener() {
+        final Button stopButton = (Button) findViewById(R.id.stop_button);
+        stopButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 
-            	//stopping interpret code
+            	//stopping interpreter code
             	
             }
         });

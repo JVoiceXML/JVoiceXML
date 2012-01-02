@@ -12,6 +12,8 @@ import org.jvoicexml.client.BasicConnectionInformation;
 //import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
+import android.widget.Toast;
+
 public final class SimpleVoiceXML implements JVoiceXmlMainListener {
 
 	private JVoiceXmlMain jvxml;
@@ -26,11 +28,11 @@ public final class SimpleVoiceXML implements JVoiceXmlMainListener {
 		
 		
         System.setProperty("jvoicexml.config", "../org.jvoicexml/config");
-		// Only needed for JSAPI 2 implementation platform
-        System.setProperty("javax.speech.supports.audio.management",
-                Boolean.TRUE.toString());
-        System.setProperty("javax.speech.supports.audio.capture",
-                Boolean.TRUE.toString());
+//		// Only needed for JSAPI 2 implementation platform
+//        System.setProperty("javax.speech.supports.audio.management",
+//                Boolean.TRUE.toString());
+//        System.setProperty("javax.speech.supports.audio.capture",
+//                Boolean.TRUE.toString());
 	}
 
 	/**
@@ -50,7 +52,7 @@ public final class SimpleVoiceXML implements JVoiceXmlMainListener {
 		
 		this.wait();
 		
-		final ConnectionInformation client = new BasicConnectionInformation("dummy", "jsapi20", "jsapi20");
+		final ConnectionInformation client = new BasicConnectionInformation("dummy", "android", "android");
 		final Session session = jvxml.createSession(client);
 
 		session.call(uri);

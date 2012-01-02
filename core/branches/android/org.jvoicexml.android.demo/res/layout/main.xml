@@ -9,7 +9,7 @@
 	android:id="@+id/textView1" 
 	android:layout_width="wrap_content" 
 	android:layout_height="wrap_content">
-	</TextView>
+</TextView>
 <EditText  android:layout_width="3000dip" android:text=""  android:id="@+id/editText1" android:layout_height="wrap_content"></EditText>
 <Button android:text="Start" android:id="@+id/start_button" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
 <Button android:text="Stop" android:id="@+id/stop_button" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
