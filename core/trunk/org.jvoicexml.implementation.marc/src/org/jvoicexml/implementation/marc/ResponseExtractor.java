@@ -32,7 +32,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 /**
- * Content handler to extract the classpath entries from a configuration file.
+ * Content handler to extract the event id from a response from MARC.
  * @author Dirk Schnelle-Walka
  * @version $Revision: 2605 $
  * @since 0.7

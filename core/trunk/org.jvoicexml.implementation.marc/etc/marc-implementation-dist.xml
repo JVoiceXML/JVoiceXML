@@ -10,5 +10,10 @@
     <beans:property name="instances" value="1" />
     <beans:property name="host" value="127.0.0.1" />
     <beans:property name="port" value="4010" />
+    <!-- Uncomment if you have an external marc publisher -->
+    <!-- beans:property name=externalMarcPublisher>
+        <beans:bean class="YourClassHere" />
+    </beans:property>
+  </beans:bean-->
   </beans:bean>
 </implementation>

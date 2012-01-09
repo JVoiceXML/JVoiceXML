@@ -73,7 +73,8 @@ import org.w3c.dom.NodeList;
  * @version $Revision$
  * @since 0.7.5
  */
-public final class MarcSynthesizedOutput implements SynthesizedOutput {
+public final class MarcSynthesizedOutput
+    implements SynthesizedOutput, MarcClient {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(MarcSynthesizedOutput.class);
@@ -111,12 +112,28 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
     /** the current session id. */
     private String sessionId;
 
+    /** The current event id. */
+    private int marcEventId;
+
+    /** An external MARC publisher. */
+    private ExternalMarcPublisher external;
+
     /**
      * Constructs a new object.
      */
     public MarcSynthesizedOutput() {
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
         speakables = new SpeakableQueue();
+    }
+
+    /**
+     * Sets the external publisher.
+     * @param publisher
+     *        the external publisher
+     */
+    public void setExternalMarcPublisher(
+            final ExternalMarcPublisher publisher) {
+        external = publisher;
     }
 
     /**
@@ -225,6 +242,10 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         LOGGER.info("connected to MARC at '" + host + ":" + port);
         feedback = new MarcFeedback(this, feedbackPort);
         feedback.start();
+        if (external != null) {
+            LOGGER.info("starting external MARC publisher");
+            external.start();
+        }
     }
 
     /**
@@ -232,6 +253,14 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void disconnect(final ConnectionInformation client) {
+        if (external != null) {
+            try {
+                LOGGER.info("stopping external MARC publisher");
+                external.stop();
+            } catch (IOException e) {
+                LOGGER.warn("error closing the external listener", e);
+            }
+        }
         feedback.interrupt();
         feedback = null;
         socket.disconnect();
@@ -325,14 +354,7 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         ErrorEvent error = null;
         try {
             final String bml = createBML(utterance, document);
-            final byte[] buffer = bml.getBytes();
-            final DatagramPacket packet = new DatagramPacket(buffer,
-                    buffer.length, host, port);
-            socket.send(packet);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("sent utterance '" + bml + "' to '"
-                        + host + ":" + port);
-            }
+            sendToMarc(bml);
         } catch (SocketException e) {
            error = new BadFetchError(e.getMessage(), e);
         } catch (UnknownHostException e) {
@@ -348,6 +370,22 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
                     listener.outputError(error);
                 }
             }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @throws IOException 
+     */
+    @Override
+    public void sendToMarc(final String bml) throws IOException {
+        final byte[] buffer = bml.getBytes();
+        final DatagramPacket packet = new DatagramPacket(buffer,
+                buffer.length, host, port);
+        socket.send(packet);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("sent utterance '" + bml + "' to '"
+                    + host + ":" + port);
         }
     }
 
@@ -370,7 +408,8 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         writer.writeStartDocument(ENCODING, "1.0");
         writer.writeStartElement("bml");
         writer.writeNamespace("marc", MARC_NAMESPACE_URI);
-        writer.writeAttribute("id", "JVoiceXMLTrack");
+        writer.writeAttribute("id", "JVoiceXMLTrack_" + marcEventId);
+        marcEventId++;
         writer.writeStartElement(MARC_NAMESPACE_URI, "agent");
         writer.writeAttribute("name", "Agent_1");
         writer.writeEndElement();
@@ -409,6 +448,13 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         }
     }
     
+    /**
+     * Writes the contents of the given node into the <code>writer</code>
+     * @param writer the writer
+     * @param node the current node
+     * @throws XMLStreamException
+     *         error writing to the stream
+     */
     private void writeMarcNode(final XMLStreamWriter writer, final Node node)
             throws XMLStreamException {
         if (node instanceof Text) {
