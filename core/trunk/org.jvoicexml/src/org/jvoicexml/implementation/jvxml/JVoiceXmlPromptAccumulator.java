@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -130,12 +130,12 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
                     timeout = currentTimeout;
                 }
             }
+            output.queueSpeakable(speakable, sessionId, server);
             try {
                 call.play(output, null);
             } catch (IOException e) {
                 throw new BadFetchError("error playing to calling device", e);
             }
-            output.queueSpeakable(speakable, sessionId, server);
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("timeout after prompt queuing: " + timeout);
