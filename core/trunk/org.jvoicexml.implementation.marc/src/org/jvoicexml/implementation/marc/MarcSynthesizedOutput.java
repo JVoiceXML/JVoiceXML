@@ -135,6 +135,11 @@ public final class MarcSynthesizedOutput
     public void setExternalMarcPublisher(
             final ExternalMarcPublisher publisher) {
         external = publisher;
+
+        // Set a reference to this object in the publisher.
+        if (external != null) {
+            external.setMarcClient(this);
+        }
     }
 
     /**
