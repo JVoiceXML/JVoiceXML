@@ -34,8 +34,8 @@ import java.io.IOException;
  * <a href="http://wiki.mindmakers.org/projects:BML:main">Behavior Markup
  * Language</a> messages that should be sento MARC.
  * <p>
- * Messages to MARC can only be sent when a session is active. This means
- * between calls to {@link #start()} and {@link #stop()}.
+ * Messages to MARC can only be sent  between calls to {@link #start()} and
+ * {@link #stop()}.
  * </p>
  * @author Dirk Schnelle-Walka
  * @version $Revision: $

@@ -40,6 +40,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Collection;
+import java.util.logging.Level;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -193,6 +194,15 @@ public final class MarcSynthesizedOutput
      */
     @Override
     public void open() throws NoresourceError {
+        if (external != null) {
+            try {
+                connect();
+                LOGGER.info("starting external MARC publisher");
+                external.start();
+            } catch (IOException e) {
+                throw new NoresourceError(e.getMessage(), e);
+            }
+        }
     }
 
     /**
@@ -215,6 +225,15 @@ public final class MarcSynthesizedOutput
      */
     @Override
     public void close() {
+        if (external != null) {
+            try {
+                LOGGER.info("stopping external MARC publisher");
+                external.stop();
+                disconnect();
+            } catch (IOException e) {
+                LOGGER.warn("error closing the external listener", e);
+            }
+        }
     }
 
     /**
@@ -230,10 +249,17 @@ public final class MarcSynthesizedOutput
     }
 
     /**
-     * {@inheritDoc}
+     * Connect to MARC.
+     * @throws IOException
+     *         if the connection to MARC could not be established
      */
-    @Override
-    public void connect(final ConnectionInformation client) throws IOException {
+    private void connect() throws IOException {
+        // Do nothing if we are already connectd.
+        if (socket != null) {
+            return;
+        }
+
+        // Connect to MARC
         if (host == null) {
             host = InetAddress.getLocalHost();
         }
@@ -242,9 +268,39 @@ public final class MarcSynthesizedOutput
         LOGGER.info("connected to MARC at '" + host + ":" + port);
         feedback = new MarcFeedback(this, feedbackPort);
         feedback.start();
-        if (external != null) {
-            LOGGER.info("starting external MARC publisher");
-            external.start();
+    }
+
+    /**
+     * Disconnects from MARC.
+     * @throws IOException
+     *         if the connection to MARC could not be disconnected.
+     */
+    private void disconnect() throws IOException {
+        // Do nothing if we are already disconnected
+        if (socket == null) {
+            return;
+        }
+
+        // disconnect.
+        try {
+            feedback.interrupt();
+            feedback = null;
+            socket.disconnect();
+            socket.close();
+        } finally {
+            socket = null;
+            feedback = null;
+        }
+        LOGGER.info("diconnected from MARC");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void connect(final ConnectionInformation client) throws IOException {
+        if (external == null) {
+            connect();
         }
     }
 
@@ -253,19 +309,13 @@ public final class MarcSynthesizedOutput
      */
     @Override
     public void disconnect(final ConnectionInformation client) {
-        if (external != null) {
+        if (external == null) {
             try {
-                LOGGER.info("stopping external MARC publisher");
-                external.stop();
-            } catch (IOException e) {
-                LOGGER.warn("error closing the external listener", e);
+                disconnect();
+            } catch (IOException ex) {
+                LOGGER.warn("error diconnecting from MARC", ex);
             }
         }
-        feedback.interrupt();
-        feedback = null;
-        socket.disconnect();
-        socket.close();
-        LOGGER.info("diconnected from MARC");
     }
 
     /**
