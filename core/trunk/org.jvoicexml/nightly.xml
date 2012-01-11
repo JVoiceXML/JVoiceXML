@@ -57,11 +57,6 @@ Checkout complete!
 
 Adapt your settings in
 org.jvoicexml/personal-props
-
-You still need to copy the jsapi2.jar to
-org.jvoicexml.implementation.jsapi20/3rdparty/jsapi20/lib
-
-You can download the libraries form http://www.conversations.com
     </echo>
   </target>
 
