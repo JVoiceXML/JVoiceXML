@@ -87,7 +87,8 @@ personal-props/README.txt
              value="${svn.base}/core/trunk"/>
          <property name="tag.core.dir"
              value="${svn.base}/core/tags/${jvxml.version}"/>
-         <svn javahl="true" username="${svn.username}" password="${svn.password}">
+         <svn javahl="true" username="${svn.username}" password="${svn.password}"
+            failonerror="false">
             <wcversion path="."/>
         </svn>
     </target>
