@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -142,6 +142,13 @@ public final class MarcSynthesizedOutput
         }
     }
 
+    /**
+     * Retrieves the external publisher.
+     * @return the external publisher
+     */
+    public ExternalMarcPublisher getExternalMarcPublisher() {
+        return external;
+    }
     /**
      * Sets the host name of MARC.
      *
