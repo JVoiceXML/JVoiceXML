@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.Locale;
 
 import javax.speech.EngineException;
+import javax.speech.EngineManager;
 import javax.speech.recognition.RecognizerMode;
 
 import org.junit.After;
@@ -76,6 +77,7 @@ public class TestJsapi20SpokenInput implements SpokenInputListener {
     public static void init() throws EngineException, IOException {
         final TestProperties properties = new TestProperties();
         final String factory = properties.get("jsapi2.engineListFactory");
+        EngineManager.registerEngineListFactory(factory);
         System.setProperty("javax.speech.supports.audio.management",
                 Boolean.TRUE.toString());
         System.setProperty("javax.speech.supports.audio.capture",
