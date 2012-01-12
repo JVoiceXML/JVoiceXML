@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date: 2010-04-19 20:20:06 +0200 (Mo, 19 Apr 2010) $, Dirk Schnelle-Walka, project lead
@@ -28,6 +28,7 @@
  */
 package org.jvoicexml.implementation.jsapi20;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -50,7 +51,7 @@ import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
-import org.jvoicexml.jsapi2.sapi.SapiEngineListFactory;
+import org.jvoicexml.test.TestProperties;
 import org.jvoicexml.test.implementation.DummySynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -87,11 +88,14 @@ public final class TestJsapi20SynthesizedOutput {
      * Global initialization.
      * @throws EngineException
      *         error registering the engine.
+     * @throws IOException
+     *         error reading the test properties file
      */
     @BeforeClass
-    public static void init() throws EngineException {
-        EngineManager.registerEngineListFactory(
-                SapiEngineListFactory.class.getCanonicalName());
+    public static void init() throws EngineException, IOException {
+        final TestProperties properties = new TestProperties();
+        final String factory = properties.get("jsapi2.engineListFactory");
+        EngineManager.registerEngineListFactory(factory);
         System.setProperty("java.library.path", "3rdparty/jsr113jsebase/lib");
         System.setProperty("javax.speech.supports.audio.management",
                 Boolean.TRUE.toString());

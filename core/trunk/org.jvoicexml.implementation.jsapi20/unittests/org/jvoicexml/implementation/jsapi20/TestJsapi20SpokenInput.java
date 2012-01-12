@@ -29,13 +29,13 @@
 
 package org.jvoicexml.implementation.jsapi20;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Collection;
 import java.util.Locale;
 
 import javax.speech.EngineException;
-import javax.speech.EngineManager;
 import javax.speech.recognition.RecognizerMode;
 
 import org.junit.After;
@@ -47,7 +47,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
-import org.jvoicexml.jsapi2.sapi.SapiEngineListFactory;
+import org.jvoicexml.test.TestProperties;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Rule;
@@ -69,11 +69,13 @@ public class TestJsapi20SpokenInput implements SpokenInputListener {
      * Global initialization.
      * @throws EngineException
      *         error registering the engine.
+     * @throws IOException
+     *         error reading the test properties file
      */
     @BeforeClass
-    public static void init() throws EngineException {
-        EngineManager.registerEngineListFactory(
-                SapiEngineListFactory.class.getCanonicalName());
+    public static void init() throws EngineException, IOException {
+        final TestProperties properties = new TestProperties();
+        final String factory = properties.get("jsapi2.engineListFactory");
         System.setProperty("javax.speech.supports.audio.management",
                 Boolean.TRUE.toString());
         System.setProperty("javax.speech.supports.audio.capture",

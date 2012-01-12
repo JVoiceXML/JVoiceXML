@@ -27,7 +27,9 @@ This file runs unit tests on the JSAPI 2.0 implemenatation platform.
             <fileset dir="${local-3rdparty.dir}/jsr113jsebase/lib">
               <include name="org.jvoicexml.jsapi2.jar"/>
               <include name="org.jvoicexml.jsapi2.jse.jar"/>
+              <include name="org.jvoicexml.jsapi2.jse.sphinx4.jar"/>
               <include name="org.jvoicexml.jsapi2.sapi.jar"/>
+              <include name="org.jvoicexml.jsapi2.mac.jar"/>
             </fileset>
         </path>
     </target>
