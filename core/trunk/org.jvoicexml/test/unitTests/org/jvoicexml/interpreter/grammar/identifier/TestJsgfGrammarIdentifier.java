@@ -99,8 +99,10 @@ public final class TestJsgfGrammarIdentifier {
         final Grammar grammar = form.appendChild(Grammar.class);
         grammar.setType(GrammarType.JSGF);
         final StringBuilder str = new StringBuilder();
-        str.append("#JSGF V1.0;" + cr);
-        str.append("grammar jvoicexml;" + cr);
+        str.append("#JSGF V1.0;");
+        str.append(cr);
+        str.append("grammar jvoicexml;");
+        str.append(cr);
         str.append("public <boolean> = yes{true}|no{false};");
         grammar.addCData(str.toString());
         final GrammarDocument grammarDocument =
