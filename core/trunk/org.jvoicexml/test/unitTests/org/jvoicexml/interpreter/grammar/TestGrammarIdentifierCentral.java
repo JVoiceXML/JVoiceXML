@@ -74,7 +74,8 @@ public final class TestGrammarIdentifierCentral
      * @return grammar document.
      */
     private GrammarDocument getGrammarFromString(final String content) {
-        return new JVoiceXmlGrammarDocument(null, content);
+        return new JVoiceXmlGrammarDocument(null, content.getBytes(),
+                System.getProperty("file.encoding"), true);
     }
 
     /**

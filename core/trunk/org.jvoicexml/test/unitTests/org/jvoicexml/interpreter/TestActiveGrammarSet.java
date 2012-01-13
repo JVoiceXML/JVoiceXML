@@ -35,7 +35,6 @@ import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.implementation.grammar.ProcessedGrammar;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -87,7 +86,7 @@ public final class TestActiveGrammarSet {
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("Fargo");
 
-        document1 = new JVoiceXmlGrammarDocument(null, doc1.toString());
+        document1 = new JVoiceXmlGrammarDocument(null, grammar1);
 
         final SrgsXmlDocument doc2 = new SrgsXmlDocument();
         final Grammar grammar2 = doc2.getGrammar();
@@ -97,7 +96,7 @@ public final class TestActiveGrammarSet {
         final Rule rule2 = grammar2.appendChild(Rule.class);
         rule2.addText("test input");
 
-        document2 = new JVoiceXmlGrammarDocument(null, doc2.toString());
+        document2 = new JVoiceXmlGrammarDocument(null, grammar2);
     }
 
     /**

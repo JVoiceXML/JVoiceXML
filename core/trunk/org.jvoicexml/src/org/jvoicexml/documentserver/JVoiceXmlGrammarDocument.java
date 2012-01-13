@@ -77,6 +77,19 @@ public final class JVoiceXmlGrammarDocument
     private final URI uri;
 
     /**
+     * Constructs a new object from a grammar node.
+     * @param source URI of the grammar document
+     * @param grammar the grammar node
+     */
+    public JVoiceXmlGrammarDocument(final URI source, final Grammar grammar) {
+        uri = source;
+        charset = System.getProperty("file.encoding");
+        isAscii = true;
+        document = null;
+        buffer = grammar.toString().getBytes();
+    }
+
+    /**
      * Creates a new grammar document.
      * @param source URI of the grammar document
      * @param content

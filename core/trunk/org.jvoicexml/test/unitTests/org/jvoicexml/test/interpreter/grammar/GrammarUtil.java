@@ -126,6 +126,7 @@ public final class GrammarUtil {
      * @return grammar document.
      */
     public static GrammarDocument getGrammarFromString(final String content) {
-        return new JVoiceXmlGrammarDocument(null, content);
+        return new JVoiceXmlGrammarDocument(null, content.getBytes(),
+                System.getProperty("file.encoding"), true);
     }
 }

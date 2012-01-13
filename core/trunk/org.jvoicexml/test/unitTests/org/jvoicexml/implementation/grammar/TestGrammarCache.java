@@ -78,7 +78,7 @@ public final class TestGrammarCache {
         item3.addText("Fargo");
 
         final GrammarDocument document =
-            new JVoiceXmlGrammarDocument(null, doc.toString());
+            new JVoiceXmlGrammarDocument(null, grammar);
         final GrammarImplementation<?> implementation =
             new SrgsXmlGrammarImplementation(doc);
         processed = new ProcessedGrammar(document, implementation);

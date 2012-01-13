@@ -723,7 +723,7 @@ public final class TestJVoiceXmlEventHandler {
         rule1.addText(input);
 
         final GrammarDocument document =
-            new JVoiceXmlGrammarDocument(null, grammar.toString());
+            new JVoiceXmlGrammarDocument(null, grammar);
         item.addGrammar(document);
         return grammar;
     }
