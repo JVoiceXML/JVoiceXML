@@ -76,6 +76,7 @@ This file runs unit tests on JVoiceXML.
                 <fileset refid="loggings.lib" />
             </classpath>
 
+            <formatter type="brief" usefile="false" />
             <formatter type="xml" />
             <batchtest todir="${test.results}">
                 <fileset dir="${test.build}">
@@ -111,6 +112,7 @@ This file runs unit tests on JVoiceXML.
                 <fileset refid="loggings.lib" />
             </classpath>
 
+            <formatter type="brief" usefile="false" />
             <formatter type="xml" />
             <test name="${run.class}" todir="${test.results}"/>
         </junit>
