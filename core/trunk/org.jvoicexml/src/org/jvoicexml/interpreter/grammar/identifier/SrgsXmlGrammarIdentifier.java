@@ -25,8 +25,8 @@
  */
 package org.jvoicexml.interpreter.grammar.identifier;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -163,10 +163,11 @@ public final class SrgsXmlGrammarIdentifier
             return null;
         }
 
-        final String document = grammar.getDocument();
+        final byte[] buffer = grammar.getBuffer();
         try {
-            final StringReader reader = new StringReader(document);
-            final InputSource input = new InputSource(reader);
+            final ByteArrayInputStream stream =
+                new ByteArrayInputStream(buffer);
+            final InputSource input = new InputSource(stream);
             final SrgsXmlDocument srgs = new SrgsXmlDocument(input);
 
             /* no exception, this must be an XML element */

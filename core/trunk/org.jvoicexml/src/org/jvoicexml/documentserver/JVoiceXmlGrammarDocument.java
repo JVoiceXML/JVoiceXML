@@ -28,8 +28,8 @@ package org.jvoicexml.documentserver;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.Arrays;
-import org.apache.log4j.Logger;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -65,28 +65,32 @@ public final class JVoiceXmlGrammarDocument
     private String document;
 
     /** Guessed character set. */
-    private String charset;
+    private final String charset;
 
     /** <code>true</code> if the contents of {@link #buffer} is plain text. */
-    private boolean isAscii;
+    private final boolean isAscii;
 
     /** The grammar document buffer if the document is binary. */
     private final byte[] buffer;
 
+    /** A grammar node. */
+    private final Grammar grammar;
+    
     /** URI of the grammar source. */
     private final URI uri;
 
     /**
      * Constructs a new object from a grammar node.
      * @param source URI of the grammar document
-     * @param grammar the grammar node
+     * @param node the grammar node
      */
-    public JVoiceXmlGrammarDocument(final URI source, final Grammar grammar) {
+    public JVoiceXmlGrammarDocument(final URI source, final Grammar node) {
         uri = source;
         charset = System.getProperty("file.encoding");
         isAscii = true;
         document = null;
-        buffer = grammar.toString().getBytes();
+        buffer = node.toString().getBytes();
+        grammar = node;
     }
 
     /**
@@ -102,6 +106,7 @@ public final class JVoiceXmlGrammarDocument
         isAscii = ascii;
         document = null;
         buffer = content;
+        grammar = null;
     }
 
     
@@ -172,6 +177,9 @@ public final class JVoiceXmlGrammarDocument
      */
     @Override
     public String getTextContent() {
+        if (grammar != null) {
+            return grammar.getTextContent();
+        }
         return getDocument();
     }
 
