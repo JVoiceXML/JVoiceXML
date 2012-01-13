@@ -147,6 +147,7 @@ public final class SrgsXmlGrammarIdentifier
      * xml:base="http://www.example.com/another-base-file-path"&gt;<br>
      * </code>
      */
+    @Override
     public GrammarType identify(final GrammarDocument grammar) {
         /* make sure grammar is neither null nor empty */
         if (grammar == null) {
@@ -275,6 +276,7 @@ public final class SrgsXmlGrammarIdentifier
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarType getSupportedType() {
         return GrammarType.SRGS_XML;
     }

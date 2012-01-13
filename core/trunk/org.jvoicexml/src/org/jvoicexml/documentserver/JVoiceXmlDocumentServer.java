@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -89,7 +89,7 @@ public final class JVoiceXmlDocumentServer
      * </p>
      */
     public JVoiceXmlDocumentServer() {
-        strategies = new java.util.Hashtable<String, SchemeStrategy>();
+        strategies = new java.util.HashMap<String, SchemeStrategy>();
     }
 
     /**
@@ -301,20 +301,10 @@ public final class JVoiceXmlDocumentServer
         final ReadBuffer buffer =
             (ReadBuffer) getObject(sessionId, descriptor, null);
 
-        if (buffer.isAscii()) {
-            final String grammar = buffer.toString();
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("read grammar");
-                LOGGER.debug(grammar);
-            }
-            return new JVoiceXmlGrammarDocument(uri, grammar);
-        } else {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("read binary grammar");
-            }
-            final byte[] bytes = buffer.getBytes();
-            return new JVoiceXmlGrammarDocument(uri, bytes);
-        }
+        final byte[] bytes = buffer.getBytes();
+        final String encoding = buffer.getCharset();
+        final boolean ascii = buffer.isAscii();
+        return new JVoiceXmlGrammarDocument(uri, bytes, encoding, ascii);
     }
 
     /**

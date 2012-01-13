@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,8 +25,10 @@
  */
 package org.jvoicexml.documentserver;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.Arrays;
+import org.apache.log4j.Logger;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -43,6 +45,10 @@ import org.jvoicexml.xml.srgs.ModeType;
  */
 public final class JVoiceXmlGrammarDocument
         implements GrammarDocument {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(JVoiceXmlGrammarDocument.class);
+
     /** Base hash code. */
     private static final int HASH_CODE_BASE = 7;
 
@@ -56,10 +62,13 @@ public final class JVoiceXmlGrammarDocument
     private ModeType mode;
 
     /** The grammar document. */
-    private final String document;
+    private String document;
 
-    /** A grammar node. */
-    private final Grammar grammar;
+    /** Guessed character set. */
+    private String charset;
+
+    /** <code>true</code> if the contents of {@link #buffer} is plain text. */
+    private boolean isAscii;
 
     /** The grammar document buffer if the document is binary. */
     private final byte[] buffer;
@@ -68,41 +77,17 @@ public final class JVoiceXmlGrammarDocument
     private final URI uri;
 
     /**
-     * Creates a new ASCCI grammar document.
+     * Creates a new grammar document.
      * @param source URI of the grammar document
      * @param content
      *        The grammar itself.
      */
-    public JVoiceXmlGrammarDocument(final URI source, final String content) {
+    public JVoiceXmlGrammarDocument(final URI source, final byte[] content,
+            final String encoding, final boolean ascii ) {
         uri = source;
-        document = content;
-        grammar = null;
-        buffer = null;
-    }
-
-    /**
-     * Creates a new ASCCI grammar document.
-     * @param source URI of the grammar document
-     * @param node
-     *        The grammar node.
-     */
-    public JVoiceXmlGrammarDocument(final URI source, final Grammar node) {
-        uri = source;
-        document = node.toString();
-        grammar = node;
-        buffer = null;
-    }
-
-    /**
-     * Creates a new binary grammar document.
-     * @param source URI of the grammar document
-     * @param content
-     *        The grammar itself.
-     */
-    public JVoiceXmlGrammarDocument(final URI source, final byte[] content) {
-        uri = source;
+        charset = encoding;
+        isAscii = ascii;
         document = null;
-        grammar = null;
         buffer = content;
     }
 
@@ -136,7 +121,7 @@ public final class JVoiceXmlGrammarDocument
      */
     @Override
     public boolean isAscii() {
-        return document != null;
+        return isAscii;
     }
 
     /**
@@ -144,9 +129,6 @@ public final class JVoiceXmlGrammarDocument
      */
     @Override
     public byte[] getBuffer() {
-        if (document != null) {
-            return document.getBytes();
-        }
         return buffer;
     }
 
@@ -155,6 +137,20 @@ public final class JVoiceXmlGrammarDocument
      */
     @Override
     public String getDocument() {
+        if (document == null) {
+            if (charset == null) {
+                document = new String(buffer);
+            } else {
+                try {
+                    document = new String(buffer, charset);
+                } catch (UnsupportedEncodingException ex) {
+                    LOGGER.warn("unable to use charset '" + charset
+                            + "' to convert grammar '"  + uri
+                            + "'' Using default.", ex);
+                    document = new String(buffer);
+                }
+            }
+        }
         return document;
     }
 
@@ -163,10 +159,7 @@ public final class JVoiceXmlGrammarDocument
      */
     @Override
     public String getTextContent() {
-        if (grammar == null) {
-            return document;
-        }
-        return grammar.getFirstLevelTextContent();
+        return getDocument();
     }
 
     /**
@@ -197,13 +190,6 @@ public final class JVoiceXmlGrammarDocument
         }
         final JVoiceXmlGrammarDocument other = (JVoiceXmlGrammarDocument) obj;
         if (!Arrays.equals(buffer, other.buffer)) {
-            return false;
-        }
-        if (document == null) {
-            if (other.document != null) {
-                return false;
-            }
-        } else if (!document.equals(other.document)) {
             return false;
         }
         if (mode != other.mode) {

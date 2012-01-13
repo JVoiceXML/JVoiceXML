@@ -97,6 +97,7 @@ public final class SrgsAbnfGrammarIdentifier
      * character encoding if is present.
      * </p>
      */
+    @Override
     public GrammarType identify(final GrammarDocument grammar) {
         if (grammar == null) {
             if (LOGGER.isDebugEnabled()) {
@@ -132,6 +133,7 @@ public final class SrgsAbnfGrammarIdentifier
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarType getSupportedType() {
         return GrammarType.SRGS_ABNF;
     }

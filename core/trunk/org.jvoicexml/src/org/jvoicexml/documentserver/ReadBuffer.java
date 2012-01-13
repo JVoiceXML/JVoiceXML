@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -97,7 +97,7 @@ class ReadBuffer {
             }
         } while(num >= 0);
         detector.DataEnd();
-        final String charset = observer.getCharset();
+        charset = observer.getCharset();
         if (charset != null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("detected charset '" + charset + "'");

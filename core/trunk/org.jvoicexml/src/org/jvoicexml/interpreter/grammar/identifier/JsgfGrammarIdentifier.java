@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -58,6 +58,7 @@ public final class JsgfGrammarIdentifier
      *
      * @todo Evaluate encoding and version.
      */
+    @Override
     public GrammarType identify(final GrammarDocument grammar) {
         /* make sure grammar is neither null nor empty */
         if (grammar == null) {
@@ -95,6 +96,7 @@ public final class JsgfGrammarIdentifier
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarType getSupportedType() {
         return GrammarType.JSGF;
     }
