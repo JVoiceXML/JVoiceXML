@@ -156,12 +156,6 @@ public final class SrgsXmlGrammarIdentifier
             }
             return null;
         }
-        if (!grammar.isAscii()) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("can only handle ascii grammars");
-            }
-            return null;
-        }
 
         final byte[] buffer = grammar.getBuffer();
         try {
