@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -204,6 +204,16 @@ public final class Rule
      */
     public void makePublic() {
         setScope("public");
+    }
+
+    /**
+     * Checks if the current rule is publicly visible.
+     * @return <code>true</code> if the rule is public.
+     * @since 0.7.5
+     */
+    public boolean isPublic() {
+        final String scope = getScope();
+        return "public".equalsIgnoreCase(scope);
     }
 
     /**

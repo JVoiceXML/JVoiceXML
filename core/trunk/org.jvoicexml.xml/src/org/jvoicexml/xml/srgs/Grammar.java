@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group
+ * Copyright (C) 2005-2012 JVoiceXML group
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -437,6 +437,31 @@ public final class Grammar
     }
 
     /**
+     * Retrieves all rule nodes.
+     * @return all rule nodes.
+     * @since 0.7.5
+     */
+    public Collection<Rule> getRules() {
+        return getChildNodes(Rule.class);
+    }
+
+    /**
+     * Retrieves all public rule nodes.
+     * @return all public rule nodes.
+     * @since 0.7.5
+     */
+    public Collection<Rule> getPublicRules() {
+        final Collection<Rule> publicRules = new java.util.ArrayList<Rule>();
+        final Collection<Rule> rules = getChildNodes(Rule.class);
+        for (Rule rule : rules) {
+            if (rule.isPublic()) {
+                publicRules.add(rule);
+            }
+        }
+        return publicRules;
+    }
+    
+    /**
      * Retrieves the rule node with the given name.
      * @param name name of the rule to retrieve.
      * @return rule node with the given name, <code>null</code> if there is
@@ -453,6 +478,7 @@ public final class Grammar
         }
         return null;
     }
+
     /**
      * Retrieve the tag-format attribute.
      *
