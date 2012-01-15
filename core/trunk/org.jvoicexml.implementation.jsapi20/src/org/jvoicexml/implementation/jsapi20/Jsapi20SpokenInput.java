@@ -32,6 +32,7 @@ import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.UUID;
 
 import javax.speech.AudioException;
 import javax.speech.AudioManager;
@@ -262,15 +263,20 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading grammar from reader");
         }
-
         RuleGrammar grammar = null;
-
         try {
             final InputSource source = new InputSource(reader);
             final SrgsXmlDocument doc = new SrgsXmlDocument(source);
             org.jvoicexml.xml.srgs.Grammar gram = doc.getGrammar();
             reader.close();
-            final String root = gram.getRoot();
+            String root = gram.getRoot();
+            if (root == null) {
+                root = UUID.randomUUID().toString(); 
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("no root rule given. using '" + root
+                            + "' as grammar reference");
+                }
+            } 
             final String content = doc.toXml();
             final Reader read = new StringReader(content);
             final GrammarManager manager = recognizer.getGrammarManager();
