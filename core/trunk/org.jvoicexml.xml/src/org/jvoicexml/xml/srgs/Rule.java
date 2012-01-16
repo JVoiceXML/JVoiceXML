@@ -213,7 +213,10 @@ public final class Rule
      */
     public boolean isPublic() {
         final String scope = getScope();
-        return "public".equalsIgnoreCase(scope);
+        if (scope == null) {
+            return false;
+        }
+        return scope.equalsIgnoreCase("public");
     }
 
     /**

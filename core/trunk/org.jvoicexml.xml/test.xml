@@ -39,7 +39,7 @@ This file runs unit tests on the JVoiceXML XML library.
                optimize="off"
                debug="on"
                deprecation="on"
-               encoding="iso-8859-1">
+               includeantruntime="false">
             <src path="${test.src}" />
             <include name="org/jvoicexml/**/*.java" />
             <classpath refid="test.classpath" />
@@ -63,6 +63,7 @@ This file runs unit tests on the JVoiceXML XML library.
             </classpath>
 
             <formatter type="xml" />
+            <formatter type="brief" usefile="false" />
             <batchtest todir="${test.results}">
                 <fileset dir="${test.build}">
                     <include name="org/jvoicexml/**/Test*" />
@@ -98,6 +99,7 @@ This file runs unit tests on the JVoiceXML XML library.
             </classpath>
 
             <formatter type="xml" />
+            <formatter type="brief" usefile="false" />
             <test name="${run.class}" todir="${test.results}"/>
         </junit>
 

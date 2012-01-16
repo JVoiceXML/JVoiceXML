@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@ package org.jvoicexml.xml.srgs;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
+import java.util.Collection;
 
 import junit.framework.Assert;
 
@@ -59,13 +60,13 @@ public final class TestGrammar {
      */
     @Test
     public void testGetRootRule() throws Exception {
-        SrgsXmlDocument document = new SrgsXmlDocument();
-        Grammar grammar = document.getGrammar();
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
         grammar.setRoot("test");
-        Rule rule = grammar.appendChild(Rule.class);
+        final Rule rule = grammar.appendChild(Rule.class);
+        rule.makePublic();
         rule.setId("test");
-
-        Rule rootRule = grammar.getRootRule();
+        final Rule rootRule = grammar.getRootRule();
         Assert.assertEquals(rule, rootRule);
     }
 
@@ -76,12 +77,13 @@ public final class TestGrammar {
      */
     @Test
     public void testGetRootRule2() throws Exception {
-        SrgsXmlDocument document = new SrgsXmlDocument();
-        Grammar grammar = document.getGrammar();
-        Rule rule = grammar.appendChild(Rule.class);
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        final Rule rule = grammar.appendChild(Rule.class);
+        rule.makePublic();
         rule.setId("test");
         grammar.setRoot(rule);
-        Rule rootRule = grammar.getRootRule();
+        final Rule rootRule = grammar.getRootRule();
         Assert.assertEquals(rule, rootRule);
     }
 
@@ -109,18 +111,108 @@ public final class TestGrammar {
      */
     @Test
     public void testGetRule() throws Exception {
-        SrgsXmlDocument document = new SrgsXmlDocument();
-        Grammar grammar = document.getGrammar();
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
         grammar.setRoot("test1");
-        Rule rule1 = grammar.appendChild(Rule.class);
+        final Rule rule1 = grammar.appendChild(Rule.class);
+        rule1.makePublic();
         rule1.setId("test1");
-        Rule rule2 = grammar.appendChild(Rule.class);
+        final Rule rule2 = grammar.appendChild(Rule.class);
         rule2.setId("test2");
 
-        Rule rule1Node = grammar.getRule("test1");
+        final Rule rule1Node = grammar.getRule("test1");
         Assert.assertEquals(rule1, rule1Node);
-        Rule rule2Node = grammar.getRule("test2");
+        final Rule rule2Node = grammar.getRule("test2");
         Assert.assertEquals(rule2, rule2Node);
+    }
+
+    /**
+     * Test method for {@link Grammar#getRules()}.
+     * @throws Exception
+     *         test failed
+     */
+    @Test
+    public void testGetRules() throws Exception {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        final Rule rule1 = grammar.appendChild(Rule.class);
+        grammar.setRoot(rule1);
+        rule1.makePublic();
+        rule1.setId("test1");
+        final Rule rule2 = grammar.appendChild(Rule.class);
+        rule2.setId("test2");
+        final Rule rule3 = grammar.appendChild(Rule.class);
+        rule3.setId("test3");
+        rule3.makePublic();
+        final Collection<Rule> rules = grammar.getRules();
+        Assert.assertEquals(3, rules.size());
+    }
+
+    /**
+     * Test method for {@link Grammar#getRules()}.
+     * @throws Exception
+     *         test failed
+     */
+    @Test
+    public void testGetRulesEmpty() throws Exception {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        final Collection<Rule> rules = grammar.getRules();
+        Assert.assertEquals(0, rules.size());
+    }
+
+    /**
+     * Test method for {@link Grammar#getPublicRules()}.
+     * @throws Exception
+     *         test failed
+     */
+    @Test
+    public void testGetPublicRules() throws Exception {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        final Rule rule1 = grammar.appendChild(Rule.class);
+        grammar.setRoot(rule1);
+        rule1.makePublic();
+        rule1.setId("test1");
+        final Rule rule2 = grammar.appendChild(Rule.class);
+        rule2.setId("test2");
+        final Rule rule3 = grammar.appendChild(Rule.class);
+        rule3.setId("test3");
+        rule3.makePublic();
+        final Collection<Rule> rules = grammar.getPublicRules();
+        Assert.assertEquals(2, rules.size());
+    }
+
+    /**
+     * Test method for {@link Grammar#getPublicRules()}.
+     * @throws Exception
+     *         test failed
+     */
+    @Test
+    public void testGetPublicRulesEmpty() throws Exception {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        final Collection<Rule> rules = grammar.getPublicRules();
+        Assert.assertEquals(0, rules.size());
+    }
+
+    /**
+     * Test method for {@link Grammar#getPublicRules()}.
+     * @throws Exception
+     *         test failed
+     */
+    @Test
+    public void testGetPublicRulesOnlyPrivate() throws Exception {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        final Rule rule1 = grammar.appendChild(Rule.class);
+        rule1.setId("test1");
+        final Rule rule2 = grammar.appendChild(Rule.class);
+        rule2.setId("test2");
+        final Rule rule3 = grammar.appendChild(Rule.class);
+        rule3.setId("test3");
+        final Collection<Rule> rules = grammar.getPublicRules();
+        Assert.assertEquals(0, rules.size());
     }
 
     /**

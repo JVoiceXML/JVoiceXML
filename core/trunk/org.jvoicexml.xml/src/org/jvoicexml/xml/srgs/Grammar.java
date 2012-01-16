@@ -314,6 +314,7 @@ public final class Grammar
      *
      * @return name of the tag.
      */
+    @Override
     public String getTagName() {
         return TAG_NAME;
     }
@@ -321,6 +322,7 @@ public final class Grammar
     /**
      * {@inheritDoc}
      */
+    @Override
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         return new Grammar(n, factory);
