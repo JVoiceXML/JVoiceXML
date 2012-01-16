@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,7 +30,6 @@ import java.io.StringReader;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.test.DummyRecognitionResult;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
@@ -49,7 +48,7 @@ import org.xml.sax.InputSource;
 public final class TestSrgsXmlGrammarImplementation {
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#accepts(RecognitionResult)}.
+     * Test method for {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#accepts(org.jvoicexml.RecognitionResult.RecognitionResult)}.
      * @exception Exception
      *            test failed.
      */
@@ -78,7 +77,7 @@ public final class TestSrgsXmlGrammarImplementation {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#accepts(RecognitionResult)}.
+     * Test method for {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#accepts(org.jvoicexml.RecognitionResult.RecognitionResult)}.
      * @exception Exception
      *            test failed.
      */
@@ -126,7 +125,7 @@ public final class TestSrgsXmlGrammarImplementation {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#accepts(RecognitionResult)}.
+     * Test method for {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#accepts(org.jvoicexml.RecognitionResult.RecognitionResult)}.
      * @exception Exception
      *            test failed.
      */

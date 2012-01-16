@@ -25,6 +25,10 @@
  */
 package org.jvoicexml.implementation.grammar.transformer;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 
 import org.jvoicexml.GrammarDocument;
@@ -37,7 +41,8 @@ import org.jvoicexml.implementation.grammar.GrammarTransformer;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
- * A null transformer.
+ * A null transformer. This transformer can be used to transform
+ * a grammar to itself. Classes exte
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -67,18 +72,27 @@ public abstract class IdentGrammarTransformer
 
         // prepare a reader to read in the grammar string
         final GrammarType targetType = getTargetType();
-        final String document;
+        Reader reader = null;
         if (sourceType.isXmlFormat()) {
-            document = grammar.getDocument();
+            // Leave the text untouched and let the parser decode it.
+            final byte[] buffer = grammar.getBuffer();
+            final ByteArrayInputStream in = new ByteArrayInputStream(buffer);
+            reader = new InputStreamReader(in);
         } else {
-            document = grammar.getTextContent();
+            String document = grammar.getTextContent();
+            reader = new StringReader(document);
         }
-        final StringReader reader = new StringReader(document);
         final GrammarImplementation<?> impl;
         try {
             impl = input.loadGrammar(reader, targetType);
         } finally {
-            reader.close();
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException ex) {
+                    throw new BadFetchError(ex.getMessage(), ex);
+                }
+            }
         }
         return impl;
     }

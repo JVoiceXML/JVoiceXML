@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -47,6 +47,7 @@ public final class SrgsXml2SrgsXmlGrammarTransformer
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarType getSourceType() {
         return GrammarType.SRGS_XML;
     }
@@ -54,6 +55,7 @@ public final class SrgsXml2SrgsXmlGrammarTransformer
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarType getTargetType() {
         return GrammarType.SRGS_XML;
     }
