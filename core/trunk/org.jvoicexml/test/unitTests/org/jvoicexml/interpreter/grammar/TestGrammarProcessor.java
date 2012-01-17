@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -110,12 +110,10 @@ public final class TestGrammarProcessor {
         final SrgsXmlDocument srgsDocument = new SrgsXmlDocument();
         final Grammar srgsxmlgrammar = srgsDocument.getGrammar();
         srgsxmlgrammar.setType(GrammarType.SRGS_XML);
-        srgsxmlgrammar.setRoot("city");
-
         final Rule rule = srgsxmlgrammar.appendChild(Rule.class);
-        rule.setAttribute(Rule.ATTRIBUTE_ID, "city");
-        rule.setAttribute(Rule.ATTRIBUTE_SCOPE, "public");
-
+        rule.setId("city");
+        rule.makePublic();
+        srgsxmlgrammar.setRoot(rule);
         final OneOf oneof = rule.appendChild(OneOf.class);
         final Item item1 = oneof.appendChild(Item.class);
         item1.addText("Boston");
@@ -178,6 +176,7 @@ public final class TestGrammarProcessor {
         final GrammarType type = processed.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
                 isSupportedGrammarType(type));
+
     }
 
     /**

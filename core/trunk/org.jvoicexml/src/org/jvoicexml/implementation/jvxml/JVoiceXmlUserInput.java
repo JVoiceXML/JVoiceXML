@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -103,6 +103,7 @@ final class JVoiceXmlUserInput
      *
      * @since 0.5.5
      */
+    @Override
     public SpokenInput getSpokenInput() {
         return spokenInput;
     }
@@ -120,6 +121,7 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activateGrammars(
             final Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError,
@@ -152,6 +154,7 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void deactivateGrammars(
             final Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError {
@@ -188,6 +191,7 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<BargeInType> getSupportedBargeInTypes() {
         return spokenInput.getSupportedBargeInTypes();
     }
@@ -195,6 +199,7 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarImplementation<?> loadGrammar(
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
@@ -218,6 +223,7 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addListener(final SpokenInputListener listener) {
         if (spokenInput instanceof ObservableSpokenInput) {
             final ObservableSpokenInput observableSpokenInput =
@@ -235,6 +241,7 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeListener(final SpokenInputListener listener) {
         if (spokenInput instanceof ObservableSpokenInput) {
             final ObservableSpokenInput observableSpokenInput =
@@ -271,6 +278,7 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<GrammarType> getSupportedGrammarTypes(
             final ModeType mode) {
         if (mode == ModeType.DTMF) {

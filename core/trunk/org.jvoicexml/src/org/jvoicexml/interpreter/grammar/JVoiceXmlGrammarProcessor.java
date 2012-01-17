@@ -77,6 +77,7 @@ public final class JVoiceXmlGrammarProcessor
      * {@link GrammarIdentifierCentral#addIdentifier(GrammarIdentifier)}
      * TODO Rewrite the configuration to let the centrals be configured.
      */
+    @Override
     public void init(final Configuration configuration)
         throws ConfigurationException {
         final Collection<GrammarIdentifier> identifiers =
