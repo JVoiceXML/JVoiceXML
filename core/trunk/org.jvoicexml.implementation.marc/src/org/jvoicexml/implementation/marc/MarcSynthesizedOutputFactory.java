@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -66,6 +66,9 @@ public final class MarcSynthesizedOutputFactory
     /** Port number for feedback from MARC. */
     private int feedbackPort;
 
+    /** An external MARC publisher. */
+    private ExternalMarcPublisher external;
+
     /**
      * Constructs a new object.
      */
@@ -73,6 +76,16 @@ public final class MarcSynthesizedOutputFactory
         type = "marc";
         port = MARC_DEFAULT_PORT;
         feedbackPort = MARC_DEFAULT_FEEDBACK_PORT;
+    }
+
+    /**
+     * Sets the external publisher.
+     * @param publisher
+     *        the external publisher
+     */
+    public void setExternalMarcPublisher(
+            final ExternalMarcPublisher publisher) {
+        external = publisher;
     }
 
     /**
@@ -118,6 +131,7 @@ public final class MarcSynthesizedOutputFactory
         }
         output.setPort(port);
         output.setFeedbackPort(feedbackPort);
+        output.setExternalMarcPublisher(external);
         return output;
     }
 
