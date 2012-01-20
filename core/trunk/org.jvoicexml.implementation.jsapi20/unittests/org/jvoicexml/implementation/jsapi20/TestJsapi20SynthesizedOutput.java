@@ -36,6 +36,7 @@ import javax.speech.EngineException;
 import javax.speech.EngineManager;
 import javax.speech.synthesis.SynthesizerMode;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -55,6 +56,7 @@ import org.jvoicexml.test.TestProperties;
 import org.jvoicexml.test.implementation.DummySynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Test cases for {@link Jsapi20SynthesizedOutput}.
@@ -69,6 +71,10 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 */
 
 public final class TestJsapi20SynthesizedOutput {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(TestJsapi20SynthesizedOutput.class);
+
     /** Timeout to wait for the listener. */
     private static final int TIMEOUT = 1000;
 
@@ -94,7 +100,8 @@ public final class TestJsapi20SynthesizedOutput {
     @BeforeClass
     public static void init() throws EngineException, IOException {
         final TestProperties properties = new TestProperties();
-        final String factory = properties.get("jsapi2.engineListFactory");
+        final String factory = properties.get("jsapi2.tts.engineListFactory");
+        LOGGER.info("registering engine factory: '" + factory + "'");
         EngineManager.registerEngineListFactory(factory);
         System.setProperty("java.library.path", "3rdparty/jsr113jsebase/lib");
         System.setProperty("javax.speech.supports.audio.management",
@@ -272,38 +279,43 @@ public final class TestJsapi20SynthesizedOutput {
     }
     
 
+    /**
+     * Test method for {@link Jsapi20SynthesizedOutput#cancelOutput()}.
+     * @throws JVoiceXMLEvent
+     *         test failed
+     * @throws Exception
+     *         test failed
+     * @since 0.7.5
+     */
     @Test
     public void testCancelSpeakable() throws JVoiceXMLEvent, Exception {
-        
+        SsmlDocument ssml = new SsmlDocument();
+        Speak speak = ssml.getSpeak();
+        speak.setXmlLang(Locale.US);
+        speak.addText("this is a test to interrupt the Text" +
+                " to Speech Engine it is a very long sentence it really" +
+                " is long very long longer than longcat");
         final SpeakableText speakable1 =
-            new SpeakablePlainText("this is a test to interrupt the Text to Speech Engine it is a very long sentence it really is long very long longer than longcat");
+                new SpeakableSsmlText(ssml, true, BargeInType.SPEECH);
 
         output.queueSpeakable(speakable1, sessionId, documentServer);
-        
-        Thread.sleep(2000);
-        
-        //Assert.assertTrue(output.supportsBargeIn());
-//        Assert.assertFalse(output.isBusy());
-        
+        Thread.sleep(1500);
         System.out.println("it is waiting till the output finishes");
         output.cancelOutput();
         
-        final int size = 3;
-        //listener.waitSize(size, TIMEOUT);
+        final int size = 2;
+        listener.waitSize(size, TIMEOUT);
         Assert.assertEquals(size, listener.size());
         SynthesizedOutputEvent start = listener.get(0);
         Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_STARTED,
                 start.getEvent());
         OutputStartedEvent startedEvent = (OutputStartedEvent) start;
         Assert.assertEquals(speakable1, startedEvent.getSpeakable());
-        SynthesizedOutputEvent stop = listener.get(1);
-        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_ENDED ,
-                stop.getEvent());
-        OutputEndedEvent stoppedEvent = (OutputEndedEvent) stop;
-        Assert.assertEquals(speakable1, stoppedEvent.getSpeakable());
-        SynthesizedOutputEvent empty = listener.get(2);
+        SynthesizedOutputEvent empty = listener.get(1);
         Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY ,
                 empty.getEvent());
+        OutputEndedEvent stoppedEvent = (OutputEndedEvent) empty;
+        Assert.assertEquals(speakable1, stoppedEvent.getSpeakable());
         Assert.assertTrue(empty instanceof QueueEmptyEvent);
     }
     

@@ -76,7 +76,7 @@ public class TestJsapi20SpokenInput implements SpokenInputListener {
     @BeforeClass
     public static void init() throws EngineException, IOException {
         final TestProperties properties = new TestProperties();
-        final String factory = properties.get("jsapi2.engineListFactory");
+        final String factory = properties.get("jsapi2.asr.engineListFactory");
         EngineManager.registerEngineListFactory(factory);
         System.setProperty("javax.speech.supports.audio.management",
                 Boolean.TRUE.toString());

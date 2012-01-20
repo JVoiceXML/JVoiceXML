@@ -544,6 +544,25 @@ public final class Jsapi20SynthesizedOutput
         } catch (EngineStateException ee) {
             throw new NoresourceError(ee);
         }
+        final Collection<SpeakableText> skipped =
+                new java.util.ArrayList<SpeakableText>();
+        for (SpeakableText speakable : queuedSpeakables) {
+            if (speakable.isBargeInEnabled()) {
+                skipped.add(speakable);
+            } else {
+                // Stop iterating after the first non-bargein speakable
+                // has been detected
+                break;
+            }
+        }
+        queuedSpeakables.removeAll(skipped);
+
+        if (queuedSpeakables.isEmpty()) {
+            fireQueueEmpty();
+            synchronized (emptyLock) {
+                emptyLock.notifyAll();
+            }
+        }
     }
 
     /**
