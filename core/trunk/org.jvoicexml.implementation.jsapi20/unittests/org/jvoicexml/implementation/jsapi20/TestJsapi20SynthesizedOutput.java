@@ -302,7 +302,6 @@ public final class TestJsapi20SynthesizedOutput {
         Thread.sleep(1500);
         System.out.println("it is waiting till the output finishes");
         output.cancelOutput();
-        
         final int size = 2;
         listener.waitSize(size, TIMEOUT);
         Assert.assertEquals(size, listener.size());
@@ -314,9 +313,52 @@ public final class TestJsapi20SynthesizedOutput {
         SynthesizedOutputEvent empty = listener.get(1);
         Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY ,
                 empty.getEvent());
-        OutputEndedEvent stoppedEvent = (OutputEndedEvent) empty;
-        Assert.assertEquals(speakable1, stoppedEvent.getSpeakable());
-        Assert.assertTrue(empty instanceof QueueEmptyEvent);
     }
     
+    /**
+     * Test method for {@link Jsapi20SynthesizedOutput#cancelOutput()}.
+     * @throws JVoiceXMLEvent
+     *         test failed
+     * @throws Exception
+     *         test failed
+     * @since 0.7.5
+     */
+    @Test
+    public void testCancelSpeakableWithNoBargein() throws JVoiceXMLEvent, Exception {
+        SsmlDocument ssml = new SsmlDocument();
+        Speak speak = ssml.getSpeak();
+        speak.setXmlLang(Locale.US);
+        speak.addText("this is a test to interrupt the Text" +
+                " to Speech Engine it is a very long sentence it really" +
+                " is long very long longer than longcat");
+        final SpeakableText speakable1 =
+                new SpeakableSsmlText(ssml, true, BargeInType.SPEECH);
+        output.queueSpeakable(speakable1, sessionId, documentServer);
+        final SpeakableText speakable2 =
+                new SpeakablePlainText("No bargein text");
+        output.queueSpeakable(speakable2, sessionId, documentServer);
+        Thread.sleep(1500);
+        System.out.println("it is waiting till the output finishes");
+        output.cancelOutput();
+        final int size = 4;
+        listener.waitSize(size, TIMEOUT);
+        Assert.assertEquals(size, listener.size());
+        SynthesizedOutputEvent start1 = listener.get(0);
+        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_STARTED,
+                start1.getEvent());
+        OutputStartedEvent started1Event = (OutputStartedEvent) start1;
+        Assert.assertEquals(speakable1, started1Event.getSpeakable());
+        SynthesizedOutputEvent start2 = listener.get(1);
+        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_STARTED,
+                start2.getEvent());
+        OutputStartedEvent started2Event = (OutputStartedEvent) start2;
+        Assert.assertEquals(speakable2, started2Event.getSpeakable());
+        SynthesizedOutputEvent end2 = listener.get(2);
+        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_ENDED,
+                end2.getEvent());
+        SynthesizedOutputEvent empty = listener.get(3);
+        Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY ,
+                empty.getEvent());
+        output.waitQueueEmpty();
+    }
 }

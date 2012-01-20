@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Queue;
 
 import javax.speech.AudioException;
@@ -129,6 +130,9 @@ public final class Jsapi20SynthesizedOutput
     /** Queued speakables. */
     private final Queue<SpeakableText> queuedSpeakables;
 
+    /** A map of queued speakables to their id returned in speak requests. */
+    private final Map<SpeakableText, Integer> queueIds;
+
     /** Flag if the phone info has been posted for the current speakable. */
     private boolean hasSentPhones;
 
@@ -151,6 +155,7 @@ public final class Jsapi20SynthesizedOutput
         desc = defaultDescriptor;
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
+        queueIds = new java.util.HashMap<SpeakableText, Integer>();
         hasSentPhones = false;
         locatorFactory = mediaLocatorFactory;
         emptyLock = new Object();
@@ -224,6 +229,7 @@ public final class Jsapi20SynthesizedOutput
         }
 
         waitQueueEmpty();
+        queueIds.clear();
 
         LOGGER.info("deallocating  JSAPI 2.0 synthesizer...");
 
@@ -348,7 +354,11 @@ public final class Jsapi20SynthesizedOutput
         enableBargeIn = ssmlText.isBargeInEnabled();
         try {
             synthesizer.resume();
-            synthesizer.speakMarkup(doc, this);
+            int id = synthesizer.speakMarkup(doc, this);
+            queueIds.put(ssmlText, id);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("queued id " + id);
+            }
         } catch (IllegalArgumentException iae) {
             throw new BadFetchError(iae);
         } catch (EngineStateException ese) {
@@ -386,7 +396,7 @@ public final class Jsapi20SynthesizedOutput
         
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("processing next speakable :" + speakable);
+            LOGGER.debug("processing next speakable: " + speakable);
         }
 
         // Really process the next speakable
@@ -513,7 +523,11 @@ public final class Jsapi20SynthesizedOutput
         }
         try {
             synthesizer.resume();
-            synthesizer.speak(text, this);
+            int id = synthesizer.speak(text, this);
+            queueIds.put(speakable, id);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("queued id " + id);
+            }
         } catch (EngineStateException ese) {
             throw new BadFetchError(ese);
         }
@@ -539,11 +553,6 @@ public final class Jsapi20SynthesizedOutput
             return;
         }
 
-        try {
-            synthesizer.cancelAll();
-        } catch (EngineStateException ee) {
-            throw new NoresourceError(ee);
-        }
         final Collection<SpeakableText> skipped =
                 new java.util.ArrayList<SpeakableText>();
         for (SpeakableText speakable : queuedSpeakables) {
@@ -555,13 +564,42 @@ public final class Jsapi20SynthesizedOutput
                 break;
             }
         }
-        queuedSpeakables.removeAll(skipped);
+        synchronized (queuedSpeakables) {
+            queuedSpeakables.removeAll(skipped);
+            for (SpeakableText speakable : skipped) {
+                final Integer id = queueIds.get(speakable);
+                if (id != null) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("cancelling queued id " + id.intValue());
+                    }
+                    synthesizer.cancel(id.intValue());
+                }
+            }
+        }
 
         if (queuedSpeakables.isEmpty()) {
             fireQueueEmpty();
             synchronized (emptyLock) {
                 emptyLock.notifyAll();
             }
+        } else {
+            final Runnable runnable = new Runnable() {
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public void run() {
+                    try {
+                        processNextSpeakable();
+                    } catch (NoresourceError e) {
+                        notifyError(e);
+                    } catch (BadFetchError e) {
+                        notifyError(e);
+                    }
+                }
+            };
+            final Thread thread = new Thread(runnable);
+            thread.start();
         }
     }
 
@@ -712,6 +750,10 @@ public final class Jsapi20SynthesizedOutput
         } else if (id == SpeakableEvent.SPEAKABLE_ENDED) {
             synchronized (queuedSpeakables) {
                 speakableText = queuedSpeakables.poll();
+                final Integer queueId = queueIds.remove(speakableText);
+                if (LOGGER.isDebugEnabled() && queueId != null) {
+                    LOGGER.debug("queued id" + queueId.intValue() + " ended ");
+                }
             }
 
             fireOutputEnded(speakableText);
