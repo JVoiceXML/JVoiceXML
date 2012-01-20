@@ -1,7 +1,7 @@
 <project name="JSAPI 2.0 implemenatation platform unit tests" default="test"
   basedir=".">
     <description>
-This file runs unit tests on the JSAPI 2.0 implemenatation platform.
+This file runs unit tests on the JSAPI 2.0 implementation platform.
     </description>
 
     <import file="build.xml" />
@@ -24,13 +24,9 @@ This file runs unit tests on the JSAPI 2.0 implemenatation platform.
             <pathelement location="${jvxml.core.dir}/test/classes"/>
             <pathelement location="${build}" />
             <fileset refid="junit.lib"/>
-            <fileset dir="${local-3rdparty.dir}/jsr113jsebase/lib">
-              <include name="org.jvoicexml.jsapi2.jar"/>
-              <include name="org.jvoicexml.jsapi2.jse.jar"/>
-              <include name="org.jvoicexml.jsapi2.jse.sphinx4.jar"/>
-              <include name="org.jvoicexml.jsapi2.sapi.jar"/>
-              <include name="org.jvoicexml.jsapi2.mac.jar"/>
-            </fileset>
+            <fileset refid="jsapi2.jse.lib"/>
+            <fileset refid="freetts.lib"/>
+            <fileset refid="sphinx4.lib"/>
         </path>
     </target>
 
@@ -50,7 +46,7 @@ This file runs unit tests on the JSAPI 2.0 implemenatation platform.
                optimize="off"
                debug="on"
                deprecation="on"
-               encoding="iso-8859-1">
+               includeantruntime="false">
             <src path="${test.src}" />
             <include name="org/jvoicexml/**/*.java" />
             <classpath refid="test.classpath" />
@@ -96,7 +92,8 @@ This file runs unit tests on the JSAPI 2.0 implemenatation platform.
         <echo message="${run.class}" />
         <fail unless="run.class">Must set property 'run.class'</fail>
         <junit printsummary="yes"
-               maxmemory="256M"
+               includeantruntime="true"
+               maxmemory="256M" 
                fork="yes"
                haltonfailure="no"
                showoutput="yes">
@@ -109,6 +106,7 @@ This file runs unit tests on the JSAPI 2.0 implemenatation platform.
             </classpath>
 
             <formatter type="xml" />
+            <formatter type="brief" usefile="false" />
             <test name="${run.class}" todir="${test.results}"/>
         </junit>
 
