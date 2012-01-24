@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -57,10 +57,12 @@ public final class SocketExternalSynthesisListener
     private int port;
     
     /** internal Thread handling all connections. */
-    private SocketExternalListenerWorker worker = null;
+    private SocketExternalListenerWorker worker;
     
-    /** "synthesis" - The workerthread will use this string to mark log messages. */
-    private final String ASSIGNMENT = "synthesis";
+    /**
+     * "synthesis" - The workerthread will use this string to mark log messages.
+     */
+    private static final String ASSIGNMENT = "synthesis";
     
     /** Status of this listener. */
     private boolean running = false;
@@ -119,7 +121,8 @@ public final class SocketExternalSynthesisListener
      * contents of the Node and their childs.
      *
      * @param node
-     *            XML Node 
+     *            XML Node
+     * @return the node contents as a string 
      */
     public String getConcatenatedText(final Node node) {
         if (node.getNodeType() == Node.ATTRIBUTE_NODE) {

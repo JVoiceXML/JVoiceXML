@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -102,7 +102,7 @@ class CharacterInputThread extends Thread {
     }
 
     /**
-     * Notifies all listeners that input has started
+     * Notifies all listeners that input has started.
      * @since 0.7.5
      */
     private void notifyStartEvent() {

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -89,7 +89,7 @@ public final class DummySynthesizedOutputListener
                 long now = System.currentTimeMillis();
                 if (size < occur.size() || (now - start > timeout)) {
                     Assert.fail(size + " not reached within " + timeout
-                            + "msec");
+                            + "msec (current: " + occur.size() + ")");
                 }
             }
         }

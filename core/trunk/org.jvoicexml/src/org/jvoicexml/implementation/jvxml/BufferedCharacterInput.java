@@ -139,6 +139,7 @@ public final class BufferedCharacterInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public synchronized void addCharacter(final char dtmf)
         throws IllegalArgumentException {
         if ("01234567890#*".indexOf(Character.toString(dtmf)) < 0) {
@@ -209,6 +210,7 @@ public final class BufferedCharacterInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopRecognition() {
         if (inputThread != null) {
             inputThread.interrupt();
@@ -225,6 +227,7 @@ public final class BufferedCharacterInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addListener(final SpokenInputListener inputListener) {
         synchronized (listener) {
             listener.add(inputListener);
@@ -234,6 +237,7 @@ public final class BufferedCharacterInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeListener(final SpokenInputListener inputListener) {
         synchronized (listener) {
             listener.remove(inputListener);

@@ -381,7 +381,7 @@ public final class JVoiceXmlMain
     }
 
     /**
-     * Shutdown of all registered call managers
+     * Shutdown of all registered call managers.
      * 
      * @since 0.7.5
      */

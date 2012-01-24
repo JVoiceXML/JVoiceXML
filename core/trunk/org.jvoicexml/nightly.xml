@@ -125,12 +125,14 @@ org.jvoicexml/personal-props
       description="Perform checkstyle checks over all projects">
     <delete dir="dist/checkstyle" failonerror="false" />
     <ant dir="../org.jvoicexml" inheritall="false" target="checkstyle" />
-    <ant dir="../org.jvoicexml.config" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.config" inheritall="false" inheritrefs="false"
+    	target="checkstyle" />
     <ant dir="../org.jvoicexml.xml" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.processor.srgs" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.jsapi10" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.jsapi20" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.jtapi" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.implementation.marc" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.mrcpv2" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.text" inheritall="false" target="checkstyle" />
   </target>

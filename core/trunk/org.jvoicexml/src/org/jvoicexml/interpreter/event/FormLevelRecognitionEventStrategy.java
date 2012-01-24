@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -291,7 +291,7 @@ final class FormLevelRecognitionEventStrategy
         }
         for (String token : tokens) {
             final Object object = scripting.getVariable(token);
-            if ((object != null) && (object != Context.getUndefinedValue())){
+            if ((object != null) && (object != Context.getUndefinedValue())) {
                 LOGGER.info("any filled: '" + token + "' is defined");
                 return true;
             }

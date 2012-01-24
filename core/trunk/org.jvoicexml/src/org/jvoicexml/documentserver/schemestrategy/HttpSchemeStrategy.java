@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -160,7 +160,7 @@ public final class HttpSchemeStrategy
                 SESSION_STORAGE.getSessionIdentifier(sessionId);
         final URI fullUri;
         try {
-            final URI fragmentLessUri = new URI(    
+            final URI fragmentLessUri = new URI(
                     uri.getScheme(),
                     uri.getAuthority(),
                     uri.getPath(),

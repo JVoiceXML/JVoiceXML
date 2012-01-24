@@ -23,6 +23,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml.documentserver;
 
 import java.io.ByteArrayOutputStream;
@@ -31,14 +32,13 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.event.error.BadFetchError;
 import org.mozilla.intl.chardet.nsDetector;
 
 /**
  * A simple buffer to read data. While the data is read, it is also checked
  * if the content is ASCII or binary. For ASCII content, this implementation
  * also tries to detect the used character set.
- * @author Dirk Schnell-Walka
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.5
  */
@@ -70,7 +70,7 @@ class ReadBuffer {
     /**
      * Reads a {@link String} from the given {@link InputStream}.
      * @param input the input stream to use.
-     * @throws BadFetchError
+     * @throws IOException
      *         Error reading.
      */
     public void read(final InputStream input) throws IOException {

@@ -1,7 +1,34 @@
+/*
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/documentserver/schemestrategy/SessionStorage.java $
+ * Version: $LastChangedRevision: 2839 $
+ * Date:    $Date: 2011-10-13 09:33:06 +0200 (Do, 13 Okt 2011) $
+ * Author:  $LastChangedBy: schnelle $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2010-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.implementation.external;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -19,6 +46,7 @@ import org.apache.log4j.Logger;
  * {@link SocketExternalSynthesisListener}.
  * 
  * @author Markus Baumgart <info@CIBEK.de>
+ * @author Dirk SChnelle-Walka
  * @version $Revision: $
  * @since 0.7.5
  * @see SocketExternalRecognitionListener
@@ -30,12 +58,13 @@ public class SocketExternalListenerWorker extends Thread {
              Logger.getLogger(SocketExternalListenerWorker.class);
 
     /** The port to be listening on. */
-    private final int PORT;
+    private final int port;
     
     /** 
      * Marks, if this thread handles Synthesis- 
-     * or RecognitionListener. */
-    private final String ASSIGNMENT;
+     * or RecognitionListener.
+     */
+    private final String assignment;
     
     /** This instances ServerSocket - clients will connect to this socket. */
     private ServerSocket server;
@@ -48,15 +77,17 @@ public class SocketExternalListenerWorker extends Thread {
 
     
     /**
-     * Initialize this WorkerThread with the given port and assignment
+     * Initialize this WorkerThread with the given port and assignment.
      * @param serverport
      *          The port to use.
      * @param thisAssignment
-     *          The kind of external listeners this class will handle (e.g. "recognition").
+     *          The kind of external listeners this class will handle
+     *          (e.g. "recognition").
      */
-    public SocketExternalListenerWorker(final int serverport, final String thisAssignment) {
-        PORT = serverport;
-        ASSIGNMENT = thisAssignment;
+    public SocketExternalListenerWorker(final int serverport,
+            final String thisAssignment) {
+        port = serverport;
+        assignment = thisAssignment;
     }
     
     /**
@@ -71,7 +102,7 @@ public class SocketExternalListenerWorker extends Thread {
         
          //configure ServerSocket
          try {
-             server = new ServerSocket(PORT);
+             server = new ServerSocket(port);
              server.setReuseAddress(true);
              server.setSoTimeout(soTimeout);
          } catch (UnknownHostException e) {
@@ -91,12 +122,13 @@ public class SocketExternalListenerWorker extends Thread {
              try {
                  final Socket clientSocket = server.accept();
                  if (LOGGER.isInfoEnabled()) {
-                     LOGGER.info("ExternalListener(" + ASSIGNMENT + "): "
+                     LOGGER.info("ExternalListener(" + assignment + "): "
                                     + "Connection accepted from "
                                     + clientSocket.getRemoteSocketAddress());
                  }
+                 final OutputStream out = clientSocket.getOutputStream();
                  clients.put(clientSocket, 
-                         new ObjectOutputStream(clientSocket.getOutputStream()));
+                         new ObjectOutputStream(out));
              } catch (SocketTimeoutException to) {
                  if (LOGGER.isTraceEnabled()) {
                      LOGGER.trace("No connections within socket-timeout...");
@@ -114,7 +146,8 @@ public class SocketExternalListenerWorker extends Thread {
          //not running anymore
          //close connections to external listeners
          if (LOGGER.isDebugEnabled()) {
-             LOGGER.debug("Disconnecting external " + ASSIGNMENT + " listener ...");
+             LOGGER.debug("Disconnecting external " + assignment
+                     + " listener ...");
          }
          for (Socket client : clients.keySet()) {
              try {
@@ -124,8 +157,8 @@ public class SocketExternalListenerWorker extends Thread {
             }
          }
          if (LOGGER.isDebugEnabled()) {
-             LOGGER.debug("...disconnected external " + ASSIGNMENT + " listener "
-                             + "(" + clients.size() + " total)");
+             LOGGER.debug("...disconnected external " + assignment
+                     + " listener (" + clients.size() + " total)");
          }
     }
     
@@ -150,8 +183,9 @@ public class SocketExternalListenerWorker extends Thread {
             } catch (IOException e) {
                 //sort out clients not responding/already disconnected
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("removed " + ASSIGNMENT + " client "
-                                    + entry.getKey().getRemoteSocketAddress(), e);
+                    LOGGER.debug("removed " + assignment + " client "
+                                    + entry.getKey().getRemoteSocketAddress(),
+                                    e);
                 }
                 it.remove();
             }

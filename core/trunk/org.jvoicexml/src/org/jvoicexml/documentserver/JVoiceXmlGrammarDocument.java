@@ -96,11 +96,12 @@ public final class JVoiceXmlGrammarDocument
     /**
      * Creates a new grammar document.
      * @param source URI of the grammar document
-     * @param content
-     *        The grammar itself.
+     * @param content the grammar itself
+     * @param encoding guessed encoding of the grammar
+     * @param ascii <code>true</code> if content is in ASCII format
      */
     public JVoiceXmlGrammarDocument(final URI source, final byte[] content,
-            final String encoding, final boolean ascii ) {
+            final String encoding, final boolean ascii) {
         uri = source;
         charset = encoding;
         isAscii = ascii;

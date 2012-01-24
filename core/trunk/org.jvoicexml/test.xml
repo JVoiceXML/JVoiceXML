@@ -22,6 +22,7 @@ This file runs unit tests on JVoiceXML.
             <pathelement location="../org.jvoicexml.processor.srgs/classes" />
             <fileset refid="junit.lib"/>
         </path>
+
     </target>
 
     <target name="-inittest" depends="-test-setup">
