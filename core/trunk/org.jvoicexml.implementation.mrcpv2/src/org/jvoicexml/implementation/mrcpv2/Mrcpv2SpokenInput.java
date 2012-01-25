@@ -202,8 +202,10 @@ public final class Mrcpv2SpokenInput
         } catch (java.io.IOException ioe) {
             throw new BadFetchError(ioe);
         }
+        final String encoding = System.getProperty("file.encoding");
         final GrammarDocument document =
-            new JVoiceXmlGrammarDocument(null, str.toString());
+            new JVoiceXmlGrammarDocument(null, str.toString().getBytes(),
+                    encoding, true);
         document.setMediaType(type);
         return new DocumentGrammarImplementation(document);
     }
