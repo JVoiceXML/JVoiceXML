@@ -284,19 +284,19 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                     "application/srgs+xml", read);
             recognizer.processGrammars();
         } catch (EngineException ex) {
-            throw new NoresourceError(ex.getMessage());
+            throw new NoresourceError(ex.getMessage(), ex);
         } catch (EngineStateException ex) {
-            throw new NoresourceError(ex.getMessage());
+            throw new NoresourceError(ex.getMessage(), ex);
         } catch (IllegalArgumentException ex) {
-            throw new NoresourceError(ex.getMessage());
+            throw new NoresourceError(ex.getMessage(), ex);
         } catch (java.io.IOException ex) {
-            throw new NoresourceError(ex.getMessage());
+            throw new NoresourceError(ex.getMessage(), ex);
         } catch (javax.speech.recognition.GrammarException ex) {
-            throw new NoresourceError(ex.getMessage());
+            throw new NoresourceError(ex.getMessage(), ex);
         } catch (ParserConfigurationException ex) {
-            throw new NoresourceError(ex.getMessage());
+            throw new NoresourceError(ex.getMessage(), ex);
         } catch (SAXException ex) {
-            throw new NoresourceError(ex.getMessage());
+            throw new NoresourceError(ex.getMessage(), ex);
         }
 
         return new RuleGrammarImplementation(grammar);

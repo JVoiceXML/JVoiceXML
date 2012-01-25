@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="3rdparty/jsapi2.0/lib/jsr113.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.sapi.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.jar" sourcepath="C:/Users/Piri/Documents/Entwicklung/jsapi/org.jvoicexml.jsapi2.jse/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
