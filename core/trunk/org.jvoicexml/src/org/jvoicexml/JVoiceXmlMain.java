@@ -352,6 +352,9 @@ public final class JVoiceXmlMain
         throws IOException, ConfigurationException {
         final Collection<JndiSupport> jndis =
             config.loadObjects(JndiSupport.class, "jndi");
+        if (jndis == null) {
+            return;
+        }
         if (jndis.size() > 0) {
             final Iterator<JndiSupport> iterator = jndis.iterator();
             jndi = iterator.next();
@@ -373,6 +376,9 @@ public final class JVoiceXmlMain
         throws NoresourceError, IOException, ConfigurationException {
         callManagers =
             config.loadObjects(CallManager.class, "callmanager");
+        if (callManagers == null) {
+            return;
+        }
         for (CallManager manager : callManagers) {
             manager.setJVoiceXml(this);
             manager.start();
