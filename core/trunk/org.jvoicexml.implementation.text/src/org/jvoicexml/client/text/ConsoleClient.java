@@ -49,7 +49,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @version $Revision: $
  * @since 0.7.5
  */
-public class ConsoleClient implements TextListener {
+public final class ConsoleClient implements TextListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(ConsoleClient.class);;
@@ -57,6 +57,7 @@ public class ConsoleClient implements TextListener {
     /** Server start lock. */
     private final Object lock;
 
+    /** The text server. */
     private TextServer server;
 
     /**
@@ -68,6 +69,11 @@ public class ConsoleClient implements TextListener {
 
     /**
      * Running thread.
+     * @param uri the URI to call
+     * @exception Exception
+     *            error communicating with JVoiceXML
+     * @exception JVoiceXMLEvent
+     *            error running the application
      */
     private void run(final URI uri) throws Exception, JVoiceXMLEvent {
         final Context context = new InitialContext();
@@ -105,7 +111,7 @@ public class ConsoleClient implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void connected(InetSocketAddress remote) {
+    public void connected(final InetSocketAddress remote) {
     }
 
     /**
@@ -137,6 +143,8 @@ public class ConsoleClient implements TextListener {
     /**
      * Read an input from the command line.
      * @return DTMF from the command line.
+     * @exception IOException
+     *            error reading the next line
      */
     public String readLine() throws IOException {
         System.out.print("User: ");
@@ -151,7 +159,7 @@ public class ConsoleClient implements TextListener {
      * Start routine.
      * @param args URI of the application to call
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         if (args.length != 1) {
             System.err.println("usage:");
             System.err.println("\tjava "

@@ -44,7 +44,7 @@ import org.junit.Test;
  * @version $Revision: $
  * @since 0.7.5
  */
-public class TestResponseExtractor {
+public final class TestResponseExtractor {
     /**
      * Test method for {@link org.jvoicexml.implementation.marc.ResponseExtractor#getEventId()}.
      * @exception Exception test failed

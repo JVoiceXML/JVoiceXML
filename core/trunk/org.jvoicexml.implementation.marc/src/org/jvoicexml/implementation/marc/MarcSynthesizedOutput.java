@@ -454,7 +454,7 @@ public final class MarcSynthesizedOutput
      * Creates the
      * <a href="http://wiki.mindmakers.org/projects:BML:main">Behavior Markup Language</a>
      * string for MARC.
-     * @param utterance the utterance to speak, m<be <code>null</code>
+     * @param utterance the utterance to speak <code>null</code>
      * @param ssml SSML with MARC annotations
      * @return created XML string
      * @throws XMLStreamException
@@ -477,7 +477,7 @@ public final class MarcSynthesizedOutput
         if (ssml != null) {
             final Speak speak = ssml.getSpeak();
             final NodeList children = speak.getChildNodes();
-            for (int i=0; i<children.getLength(); i++) {
+            for (int i = 0; i < children.getLength(); i++) {
                 final Node child = children.item(i);
                 final String namespace = child.getNamespaceURI();
                 if (namespace != null) {
@@ -510,7 +510,7 @@ public final class MarcSynthesizedOutput
     }
     
     /**
-     * Writes the contents of the given node into the <code>writer</code>
+     * Writes the contents of the given node into the <code>writer</code>.
      * @param writer the writer
      * @param node the current node
      * @throws XMLStreamException
@@ -529,7 +529,7 @@ public final class MarcSynthesizedOutput
         writer.writeStartElement(tag);
         final NamedNodeMap attributes = node.getAttributes();
             if (attributes != null) {
-            for (int k=0; k<attributes.getLength(); k++) {
+            for (int k = 0; k < attributes.getLength(); k++) {
                 final Node attribute = attributes.item(k);
                 final String name = attribute.getNodeName();
                 final String value = attribute.getNodeValue();
@@ -537,7 +537,7 @@ public final class MarcSynthesizedOutput
             }
         }
         final NodeList children = node.getChildNodes();
-        for (int i=0; i<children.getLength(); i++) {
+        for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
             writeMarcNode(writer, child);
         }

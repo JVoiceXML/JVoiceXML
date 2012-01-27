@@ -40,7 +40,7 @@ import org.xml.sax.InputSource;
  * @version $Revision: $
  * @since 0.7.5
  */
-public class TestMarcSynthesizedOutput {
+public final class TestMarcSynthesizedOutput {
     /**
      * Test method for {@link org.jvoicexml.implementation.marc.MarcSynthesizedOutput#queueSpeakable(org.jvoicexml.SpeakableText, java.lang.String, org.jvoicexml.DocumentServer)}.
      * @exception Exception test failed
