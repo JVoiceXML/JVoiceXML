@@ -32,6 +32,7 @@ import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.MDC;
 import org.jvoicexml.Application;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
@@ -127,7 +128,12 @@ public final class JVoiceXmlSession
     public JVoiceXmlSession(final ImplementationPlatform ip,
             final JVoiceXmlCore jvxml,
             final ConnectionInformation connectionInformation) {
+        // Create a unique session id
         uuid = UUID.randomUUID();
+        // Store it in the MDC
+        MDC.put("sessionId", uuid.toString());
+
+        // Initialize this object
         info = connectionInformation;
         implementationPlatform = ip;
         documentServer = jvxml.getDocumentServer();
@@ -179,6 +185,9 @@ public final class JVoiceXmlSession
         if (closed) {
             throw new NoresourceError("Session is already closed");
         }
+
+        // Store the session Id in the MDC
+        MDC.put("sessionId", uuid.toString());
 
         try {
             sem.acquire();
@@ -276,6 +285,9 @@ public final class JVoiceXmlSession
      */
     @Override
     public void run() {
+        // Store the session Id in the MDC
+        MDC.put("sessionId", uuid.toString());
+
         final URI calledDevice;
         final URI callingDevice;
         final String protocolName;
