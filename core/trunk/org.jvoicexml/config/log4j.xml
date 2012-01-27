@@ -14,7 +14,7 @@
         <param name="datePattern" value="'.'yyyy-MM-dd" />
         <param name="append" value="true" />
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{ISO8601} [%-20.20t] %-5p %40.40c (%6L) - %m%n" />
+            <param name="ConversionPattern" value="%d{ISO8601} [%-20.20t] %-5p %X{sessionId} %40.40c (%6L) - %m%n" />
         </layout>
         <filter class="org.apache.log4j.varia.LevelRangeFilter">
             <param name="LevelMin" value="debug" />
