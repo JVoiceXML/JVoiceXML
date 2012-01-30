@@ -196,7 +196,7 @@ You're using ${ant.java.version}
         </classpath>
         <classpath refid="jvxml.core.lib"/>
         <fileset dir="${src}">
-            <include name="org/jvoicexml/**/*.java" />
+            <include name="${component.path}/**/*.java" />
         </fileset>
         <formatter type="xml" tofile="${checkstyle.data}"/>
     </checkstyle>
