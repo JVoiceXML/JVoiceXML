@@ -6,10 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
- * The JVoiceXML group hereby disclaims all copyright interest in the
- * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
+ * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,12 +33,6 @@ package org.jvoicexml.xml.srgs;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public enum ModeType {
     /**

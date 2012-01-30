@@ -915,7 +915,7 @@ public final class Grammar
             throws IllegalAttributeException {
         /*
          * Exactly one of "src", "srcexpr", or an inline grammar must
-         * be specified; otherwise, an error.badfetch event is thrown.
+         * be specified; otherwise, an IllegalAttributeException is thrown.
          */
 
         /* now check if there is a "src" attribute */

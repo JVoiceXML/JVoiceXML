@@ -2,11 +2,11 @@
  * Classes that facilitate parsing and validation of grammars..
  *
  * <p>
- * {@link org.jvoicexml.GrammarImplementation}s can be validated in two phases:
+ * {@link org.jvoicexml.implementation.GrammarImplementation}s can be validated in two phases:
  * <ol>
  * <li>
- * Parse the {@link org.jvoicexml.GrammarImplementation} using the
- * {@link org.jvoicexml.implementation.grammar.GrammarParser} to retrieve an
+ * Parse the {@link org.jvoicexml.implementation.GrammarImplementation} using the
+ * {@link org.jvoicexml.processor.srgs.SrgsXmlGrammarParser} to retrieve an
  * implementation independent representation of the grammar.
  * </li>
  * <li>
