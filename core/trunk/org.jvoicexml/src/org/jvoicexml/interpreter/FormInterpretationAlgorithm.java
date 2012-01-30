@@ -37,6 +37,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.CallControl;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentDescriptor;
@@ -757,7 +758,13 @@ public final class FormInterpretationAlgorithm
         final DocumentServer server = context.getDocumentServer();
         final Session session = context.getSession();
         final String sessionId = session.getSessionID();
-        platform.renderPrompts(sessionId, server);
+        try {
+            final CallControlProperties callProps =
+                    context.getCallControlProperties(this);
+            platform.renderPrompts(sessionId, server, callProps);
+        } catch (ConfigurationException ex) {
+            throw new NoresourceError(ex.getMessage(), ex);
+        }
         queuingPrompts = false;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...queued prompts");
@@ -1105,15 +1112,12 @@ public final class FormInterpretationAlgorithm
 
         final UserInput input = platform.getUserInput();
         final CallControl call = platform.getCallControl();
-        if (call != null) {
-            try {
-                call.record(input, null);
-            } catch (IOException e) {
-                throw new BadFetchError("error recording", e);
-            }
-        }
-
         try {
+            if (call != null) {
+                final CallControlProperties callProps =
+                        context.getCallControlProperties(this);
+                call.record(input, callProps);
+            }
             final SpeechRecognizerProperties speech =
                 context.getSpeechRecognizerProperties(this);
             final DtmfRecognizerProperties dtmf =
@@ -1121,6 +1125,8 @@ public final class FormInterpretationAlgorithm
             input.startRecognition(speech, dtmf);
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BadFetchError("error recording", e);
         }
     }
 

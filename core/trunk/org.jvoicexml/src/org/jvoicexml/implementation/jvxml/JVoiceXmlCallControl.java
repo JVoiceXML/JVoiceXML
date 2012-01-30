@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,12 +29,12 @@ package org.jvoicexml.implementation.jvxml;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
-import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
@@ -85,15 +85,16 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
      * {@link Telephony} implementation.
      * </p>
      */
+    @Override
     public void play(final SystemOutput output,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
             throws NoresourceError, IOException {
         if (output instanceof SynthesizedOutputProvider) {
             final SynthesizedOutputProvider provider =
                 (SynthesizedOutputProvider) output;
             final SynthesizedOutput synthesizer =
                 provider.getSynthesizedOutput();
-            telephony.play(synthesizer, parameters);
+            telephony.play(synthesizer, props);
         } else {
             LOGGER.warn("unable to retrieve a synthesized output from "
                     + output);
@@ -117,14 +118,15 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
      * {@link Telephony} implementation.
      * </p>
      */
+    @Override
     public void record(final UserInput input,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
             throws NoresourceError, IOException {
         if (input instanceof SpokenInputProvider) {
             final SpokenInputProvider provider =
                 (SpokenInputProvider) input;
             final SpokenInput recognizer = provider.getSpokenInput();
-            telephony.record(recognizer, parameters);
+            telephony.record(recognizer, props);
         } else {
             LOGGER.warn("unable to retrieve a recognizer output from "
                     + input);
@@ -148,14 +150,15 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
      * {@link Telephony} implementation.
      * </p>
      */
+    @Override
     public void startRecording(final UserInput input, final OutputStream stream,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
             throws NoresourceError, IOException {
         if (input instanceof SpokenInputProvider) {
             final SpokenInputProvider provider =
                 (SpokenInputProvider) input;
             final SpokenInput recognizer = provider.getSpokenInput();
-            telephony.startRecording(recognizer, stream, parameters);
+            telephony.startRecording(recognizer, stream, props);
         } else {
             LOGGER.warn("unable to retrieve a recognizer output from "
                     + input);
@@ -165,6 +168,7 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopRecord() throws NoresourceError {
         telephony.stopRecording();
     }
@@ -172,6 +176,7 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void transfer(final String dest) throws NoresourceError {
         telephony.transfer(dest);
     }
@@ -187,6 +192,7 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addListener(final TelephonyListener listener) {
         if (telephony instanceof ObservableTelephony) {
             telephony.addListener(listener);
@@ -200,6 +206,7 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeListener(final TelephonyListener listener) {
         if (telephony instanceof ObservableTelephony) {
             telephony.removeListener(listener);

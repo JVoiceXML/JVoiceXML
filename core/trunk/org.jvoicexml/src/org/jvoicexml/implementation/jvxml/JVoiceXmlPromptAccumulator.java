@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.PromptAccumulator;
@@ -116,7 +117,7 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
      */
     @Override
     public void renderPrompts(final String sessionId,
-            final DocumentServer server)
+            final DocumentServer server, final CallControlProperties callProps)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent {
         final SystemOutput output = platform.getSystemOutput();
@@ -132,7 +133,7 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
             }
             output.queueSpeakable(speakable, sessionId, server);
             try {
-                call.play(output, null);
+                call.play(output, callProps);
             } catch (IOException e) {
                 throw new BadFetchError("error playing to calling device", e);
             }

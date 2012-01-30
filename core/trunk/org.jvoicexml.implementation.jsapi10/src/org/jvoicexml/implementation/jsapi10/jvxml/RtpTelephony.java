@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,11 +30,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.util.Collection;
-import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
@@ -59,7 +59,6 @@ import org.jvoicexml.implementation.jsapi10.StreamableSynthesizedOutput;
  * @version $Revision$
  * @since 0.6
  */
-
 public final class RtpTelephony implements Telephony, ObservableTelephony {
     /** Logger for this class. */
     private static final Logger LOGGER =
@@ -93,8 +92,9 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public synchronized void play(final SynthesizedOutput output,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
             throws NoresourceError, IOException {
         if (!(output instanceof StreamableSynthesizedOutput)) {
             throw new IOException("output does not support streams!");
@@ -121,6 +121,7 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
         playing = false;
         firePlayStopped();
     }
+
     /**
      * Sends the output of the synthesizer to the participant.
      * @param streamable the streamable synthesized output.
@@ -142,6 +143,7 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopPlay() throws NoresourceError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("play stopped");
@@ -173,8 +175,9 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void record(final SpokenInput input,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
             throws NoresourceError, IOException {
         if (!(input instanceof StreamableSynthesizedOutput)) {
             throw new IOException("input does not support streams!");
@@ -189,6 +192,7 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public AudioFormat getRecordingAudioFormat() {
         return null;
     }
@@ -196,8 +200,9 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void startRecording(final SpokenInput input,
-            final OutputStream stream, final Map<String, String> parameters)
+            final OutputStream stream, final CallControlProperties props)
             throws NoresourceError, IOException {
         throw new NoresourceError(
                 "recording to output streams is currently not supported");
@@ -206,6 +211,7 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopRecording() throws NoresourceError {
         server.setStreamableInput(null);
         recording = false;
@@ -233,6 +239,7 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void transfer(final String dest) throws NoresourceError {
         throw new NoresourceError("transfer is not supported!");
     }
@@ -240,12 +247,14 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activate() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
         server.close();
     }
@@ -253,6 +262,7 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return "jsapi10-rtp";
     }
@@ -260,6 +270,7 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isBusy() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("playing: " + playing + " recording: " + recording);
@@ -270,12 +281,14 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open() throws NoresourceError {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void passivate() {
         close();
     }
@@ -283,8 +296,9 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
-    public void connect(final ConnectionInformation client) throws IOException {
-        RtpConfiguration rtpClient = (RtpConfiguration) client;
+    @Override
+    public void connect(final ConnectionInformation info) throws IOException {
+        RtpConfiguration rtpClient = (RtpConfiguration) info;
         server.open();
         final InetAddress address = rtpClient.getAddress();
         final int port = rtpClient.getPort();
@@ -297,13 +311,15 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final ConnectionInformation client) {
+    @Override
+    public void disconnect(final ConnectionInformation info) {
         server.close();
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addListener(final TelephonyListener callListener) {
         synchronized (listener) {
             listener.add(callListener);
@@ -313,6 +329,7 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeListener(
             final TelephonyListener callListener) {
             synchronized (listener) {

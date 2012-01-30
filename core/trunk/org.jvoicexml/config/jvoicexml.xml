@@ -153,13 +153,29 @@
     </property>
   </bean>
 
+  <!--
+   General properties for the speech recognizer.
+   Add your own implementation of here, if special properties are needed. 
+  -->
   <bean id="org.jvoicexml.SpeechRecognizerProperties"
     class="org.jvoicexml.SpeechRecognizerProperties">
   </bean>
 
+  <!--
+   General properties for the dtmf recognizer.
+   Add your own implementation of here, if special properties are needed. 
+  -->
   <bean id="org.jvoicexml.DtmfRecognizerProperties"
     class="org.jvoicexml.DtmfRecognizerProperties">
     <property name="interdigittimeout" value="5s"/>
+  </bean>
+
+  <!--
+   General properties for the telephony.
+   Add your own implementation of here, if special properties are needed. 
+  -->
+  <bean id="org.jvoicexml.CallControlProperties"
+    class="org.jvoicexml.CallControlProperties">
   </bean>
 
   <!--

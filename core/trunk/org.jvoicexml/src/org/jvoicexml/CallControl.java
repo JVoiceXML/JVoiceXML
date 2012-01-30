@@ -28,7 +28,6 @@ package org.jvoicexml;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 
@@ -56,27 +55,27 @@ public interface CallControl {
      * </p>
      *
      * @param output the output device delivering the output.
-     * @param parameters parameters to use for playing.
+     * @param props parameters to use for playing.
      * @exception NoresourceError
      *            Error accessing the terminal
      * @exception IOException
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void play(final SystemOutput output, final Map<String, String> parameters)
+    void play(final SystemOutput output, final CallControlProperties props)
         throws NoresourceError, IOException;
 
     /**
      * Starts recording to the given input device.
      * @param input input device to use for recording.
-     * @param parameters parameters to use for the recording.
+     * @param props parameters to use for the recording.
      * @exception NoresourceError
      *            Error accessing the terminal
      * @exception IOException
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void record(final UserInput input, final Map<String, String> parameters)
+    void record(final UserInput input, final CallControlProperties props)
         throws NoresourceError, IOException;
 
     /**
@@ -90,7 +89,7 @@ public interface CallControl {
      * @param input input device to use for recording. This can be used e.g. to
      *        recognize the recorded data.
      * @param stream the stream where to store the recording.
-     * @param parameters parameters to use for the recording.
+     * @param props parameters to use for the recording.
      * @exception NoresourceError
      *            Error accessing the terminal
      * @exception IOException
@@ -98,7 +97,7 @@ public interface CallControl {
      * @since 0.6
      */
     void startRecording(final UserInput input, final OutputStream stream,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
         throws NoresourceError, IOException;
 
     /**

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,6 +38,7 @@ import java.util.Map;
 import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.callmanager.text.ConnectedTextConnectionInformation;
@@ -97,8 +98,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void play(final SynthesizedOutput output,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
             throws NoresourceError, IOException {
         if (sentHungup) {
             throw new NoresourceError("connection disconnected");
@@ -169,6 +171,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopPlay() throws NoresourceError {
         firePlayStopped();
     }
@@ -194,8 +197,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void record(final SpokenInput input,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
             throws NoresourceError, IOException {
         if (sentHungup) {
             throw new NoresourceError("connection disconnected");
@@ -224,6 +228,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      *
      * @return <code>null</code> since we do not support audio recordings.
      */
+    @Override
     public AudioFormat getRecordingAudioFormat() {
         return null;
     }
@@ -231,8 +236,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void startRecording(final SpokenInput input,
-            final OutputStream stream, final Map<String, String> parameters)
+            final OutputStream stream, final CallControlProperties props)
             throws NoresourceError, IOException {
         throw new NoresourceError(
                 "recording to output streams is currently not supported");
@@ -241,6 +247,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopRecording() throws NoresourceError {
         fireRecordStopped();
     }
@@ -283,6 +290,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void transfer(final String dest) throws NoresourceError {
         throw new NoresourceError("transfer is not supported!");
     }
@@ -290,18 +298,21 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activate() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return TextConnectionInformation.TYPE;
     }
@@ -309,6 +320,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isBusy() {
         synchronized (pendingMessages) {
             return (sender != null && sender.isSending())
@@ -320,12 +332,14 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open() throws NoresourceError {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void passivate() {
         listener.clear();
         if (receiver != null) {
@@ -379,6 +393,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void connect(final ConnectionInformation info) throws IOException {
         if (info instanceof TextConnectionInformation) {
             final TextConnectionInformation textClient =
@@ -409,6 +424,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void disconnect(final ConnectionInformation client) {
         if (LOGGER.isDebugEnabled()) {
             if (LOGGER.isDebugEnabled()) {
@@ -454,6 +470,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addListener(final TelephonyListener callListener) {
         synchronized (listener) {
             listener.add(callListener);
@@ -463,6 +480,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeListener(
             final TelephonyListener callListener) {
             synchronized (listener) {

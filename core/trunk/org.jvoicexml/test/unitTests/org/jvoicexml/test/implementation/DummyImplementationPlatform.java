@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -23,11 +23,13 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml.test.implementation;
 
 import java.util.List;
 
 import org.jvoicexml.CallControl;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
@@ -190,7 +192,7 @@ public final class DummyImplementationPlatform
      */
     @Override
     public void renderPrompts(final String sessionId,
-            final DocumentServer server)
+            final DocumentServer server, final CallControlProperties callProps)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent {
         if (prompts == null) {

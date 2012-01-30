@@ -28,10 +28,10 @@ package org.jvoicexml.implementation;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.event.error.NoresourceError;
 
 
@@ -71,7 +71,7 @@ public interface Telephony
      * </p>
      *
      * @param output the output device delivering the output.
-     * @param parameters parameters to use for playing.
+     * @param props parameters to use for playing.
      * @exception NoresourceError
      *            Error accessing the terminal
      * @exception IOException
@@ -79,7 +79,7 @@ public interface Telephony
      * @since 0.6
      */
     void play(final SynthesizedOutput output,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
         throws NoresourceError, IOException;
 
     /**
@@ -93,14 +93,14 @@ public interface Telephony
     /**
      * Starts recording to the given input device.
      * @param input input device to use for recording.
-     * @param parameters parameters to use for the recording.
+     * @param props parameters to use for the recording.
      * @exception NoresourceError
      *            Error accessing the terminal
      * @exception IOException
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void record(final SpokenInput input, final Map<String, String> parameters)
+    void record(final SpokenInput input, final CallControlProperties props)
         throws NoresourceError, IOException;
 
     /**
@@ -114,7 +114,7 @@ public interface Telephony
      * @param input input device that can be used in parallel to recognize
      *              the input.
      * @param stream the stream where to send the recorded audio to.
-     * @param parameters parameters to use for the recording.
+     * @param props parameters to use for the recording.
      * @exception NoresourceError
      *            Error accessing the terminal
      * @exception IOException
@@ -122,7 +122,7 @@ public interface Telephony
      * @since 0.6
      */
     void startRecording(final SpokenInput input, final OutputStream stream,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
         throws NoresourceError, IOException;
 
     /**

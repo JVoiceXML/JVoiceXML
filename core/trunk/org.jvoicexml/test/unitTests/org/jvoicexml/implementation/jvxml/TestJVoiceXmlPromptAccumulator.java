@@ -30,6 +30,7 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
@@ -114,7 +115,8 @@ public final class TestJVoiceXmlPromptAccumulator {
         final long timeout = 40;
         speakable2.setTimeout(timeout);
         accumulator.queuePrompt(speakable2);
-        accumulator.renderPrompts(null, null);
+        final CallControlProperties props = new CallControlProperties();
+        accumulator.renderPrompts(null, null, props);
         Assert.assertEquals(timeout, accumulator.getPromptTimeout());
     }
 }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -111,7 +111,6 @@ public class SpeechRecognizerProperties {
     /**
      * Retrieves the speech recognizer properties from the given map.
      * @param props map with current properties
-     * @since 0.7.5
      */
     public final void setProperties(final Map<String, String> props) {
         final String propConfidenceLevel = props.get(PROPERTY_CONFIDENCE_LEVEL);
@@ -148,7 +147,6 @@ public class SpeechRecognizerProperties {
     /**
      * May be used to set custom properties if this class is extended.
      * @param props map with current properties.
-     * @since 0.7.5
      */
     protected void setEnhancedProperties(final Map<String, String> props) {
     }

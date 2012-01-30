@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,11 +29,11 @@ package org.jvoicexml.implementation.jvxml;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
-import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
@@ -90,9 +90,11 @@ public final class DummyTelephonySupport
     public DummyTelephonySupport() {
         listener = new java.util.ArrayList<TelephonyListener>();
     }
+
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activate() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("activated telephony");
@@ -102,12 +104,14 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return "dummy";
     }
@@ -115,12 +119,14 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open() throws NoresourceError {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void passivate() {
         if (recording != null) {
             recording.stopRecording();
@@ -134,6 +140,7 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    @Override
     public void connect(final ConnectionInformation client)
         throws IOException {
         synchronized (listener) {
@@ -151,6 +158,7 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    @Override
     public void disconnect(final ConnectionInformation client) {
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
@@ -167,8 +175,9 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    @Override
     public void play(final SynthesizedOutput output,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
         throws IOException, NoresourceError {
         busy = true;
         synchronized (listener) {
@@ -186,6 +195,7 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopPlay() throws NoresourceError {
         if (!busy) {
             return;
@@ -206,8 +216,9 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    @Override
     public void record(final SpokenInput input,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
         throws IOException, NoresourceError {
         busy = true;
         synchronized (listener) {
@@ -232,9 +243,10 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    @Override
     public void startRecording(final SpokenInput input,
             final OutputStream stream,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
         throws IOException, NoresourceError {
         busy = true;
         recording = new RecordingThread(stream, RECORDING_AUDIO_FORMAT);
@@ -254,6 +266,7 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopRecording() throws NoresourceError {
         if (!busy) {
             return;
@@ -278,12 +291,14 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    @Override
     public void transfer(final String dest) throws NoresourceError {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addListener(final TelephonyListener callListener) {
         synchronized (listener) {
             listener.add(callListener);
@@ -293,6 +308,7 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeListener(
             final TelephonyListener callListener) {
         synchronized (listener) {
@@ -303,6 +319,7 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isBusy() {
         return busy;
     }

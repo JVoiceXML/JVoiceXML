@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,11 +28,11 @@ package org.jvoicexml.test.implementation;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 
 import org.jvoicexml.CallControl;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
@@ -50,6 +50,7 @@ public final class DummyCallControl implements CallControl {
     /**
      * {@inheritDoc}
      */
+    @Override
     public AudioFormat getRecordingAudioFormat() {
         return null;
     }
@@ -57,44 +58,50 @@ public final class DummyCallControl implements CallControl {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void play(final SystemOutput output,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
             throws NoresourceError, IOException {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void record(final UserInput input,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
             throws NoresourceError, IOException {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void startRecording(
             final UserInput input,
             final OutputStream stream,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
         throws NoresourceError, IOException {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopPlay() throws NoresourceError {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopRecord() throws NoresourceError {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void transfer(final String dest) throws NoresourceError {
     }
 

@@ -29,11 +29,11 @@ package org.jvoicexml.implementation.jsapi10;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
-import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
@@ -130,21 +130,21 @@ public final class Jsapi10TelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void connect(final ConnectionInformation client)
+    public void connect(final ConnectionInformation info)
         throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final ConnectionInformation client) {
+    public void disconnect(final ConnectionInformation info) {
     }
 
     /**
      * {@inheritDoc}
      */
     public void play(final SynthesizedOutput output,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
         throws IOException, NoresourceError {
         busy = true;
         final TelephonyEvent event =
@@ -166,7 +166,7 @@ public final class Jsapi10TelephonySupport
      * {@inheritDoc}
      */
     public void record(final SpokenInput input,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
         throws IOException, NoresourceError {
         busy = true;
         final TelephonyEvent event =
@@ -178,7 +178,7 @@ public final class Jsapi10TelephonySupport
      * {@inheritDoc}
      */
     public void startRecording(final SpokenInput input,
-            final OutputStream stream, final Map<String, String> parameters)
+            final OutputStream stream, final CallControlProperties props)
         throws IOException, NoresourceError {
         busy = true;
         recording = new RecordingThread(stream);

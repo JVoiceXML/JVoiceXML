@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,11 +29,14 @@ package org.jvoicexml.interpreter.tagstrategy;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -71,6 +74,7 @@ final class TextStrategy
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<String> getEvalAttributes() {
         return null;
     }
@@ -78,6 +82,7 @@ final class TextStrategy
     /**
      * {@inheritDoc}
      */
+    @Override
     public void execute(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem item,
@@ -99,7 +104,13 @@ final class TextStrategy
         platform.queuePrompt(speakable);
         final Session session = context.getSession();
         final String sessionId = session.getSessionID();
-        platform.renderPrompts(sessionId, documentServer);
+        try {
+            final CallControlProperties callProps =
+                    context.getCallControlProperties(fia);
+            platform.renderPrompts(sessionId, documentServer, callProps);
+        } catch (ConfigurationException ex) {
+            throw new NoresourceError(ex.getMessage(), ex);
+        }
     }
 
     /**

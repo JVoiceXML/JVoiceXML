@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -60,13 +60,14 @@ public interface PromptAccumulator {
 
     /**
      * Notifies the implementation platform about the end of the prompt
-     * queing that has been started by {@link #setPromptTimeout(long)}.
+     * queuing that has been started by {@link #setPromptTimeout(long)}.
      * <p>
      * It is assumed that the {@link PromptAccumulator} has knowledge about
      * the {@link ImplementationPlatform} to render the output.
      * </p>
      * @param sessionId the current session id
-     * @param server the document server to use.
+     * @param server the document server to use
+     * @param callProps properties for the call control
      * @exception BadFetchError
      *            error queuing the prompt
      * @exception NoresourceError
@@ -74,7 +75,8 @@ public interface PromptAccumulator {
      * @exception ConnectionDisconnectHangupEvent
      *            the user hung up
      */
-    void renderPrompts(final String sessionId, final DocumentServer server)
+    void renderPrompts(final String sessionId, final DocumentServer server,
+            final CallControlProperties callProps)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent;
 }

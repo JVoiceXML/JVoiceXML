@@ -145,7 +145,7 @@ public final class Jsapi10SpokenInput
             recognizer.allocate();
 
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...JSAPI recognizer allocated");
+                LOGGER.debug("...JSAPI 1.0  recognizer allocated");
             }
         } catch (EngineException ee) {
             throw new NoresourceError(ee);

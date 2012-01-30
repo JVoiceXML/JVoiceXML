@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
@@ -84,7 +85,8 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.setPromptTimeout(30000);
         executeTagStrategy(prompt, strategy);
-        platform.renderPrompts(null, null);
+        final CallControlProperties props = new CallControlProperties();
+        platform.renderPrompts(null, null, props);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
@@ -124,7 +126,8 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.setPromptTimeout(30000);
         executeTagStrategy(prompt, strategy);
-        platform.renderPrompts(null, null);
+        final CallControlProperties props = new CallControlProperties();
+        platform.renderPrompts(null, null, props);
 
         Assert.assertNull(
                 "wrong evaluation of the cond attribute", queuedSpeakable);
@@ -153,7 +156,8 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.setPromptTimeout(30000);
         executeTagStrategy(prompt, strategy);
-        platform.renderPrompts(null, null);
+        final CallControlProperties props = new CallControlProperties();
+        platform.renderPrompts(null, null, props);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
@@ -188,7 +192,8 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.setPromptTimeout(30000);
         executeTagStrategy(prompt, strategy);
-        platform.renderPrompts(null, null);
+        final CallControlProperties props = new CallControlProperties();
+        platform.renderPrompts(null, null, props);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();

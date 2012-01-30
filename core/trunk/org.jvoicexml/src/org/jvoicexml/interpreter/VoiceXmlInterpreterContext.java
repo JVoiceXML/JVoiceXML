@@ -44,6 +44,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.SpeechRecognizerProperties;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -377,6 +378,26 @@ public final class VoiceXmlInterpreterContext  {
         return dtmf;
     }
 
+    /**
+     * Loads the speech recognizer properties. The values from the configuration
+     * are replaced by property settings if any. 
+     * @param fia the current form interpretation algorithm, maybe
+     *        <code>null</code>.
+     * @return the speech recognizer properties
+     * @throws ConfigurationException
+     *         if the object could not be loaded.
+     * @since 0.7.5
+     */
+    public CallControlProperties getCallControlProperties(
+            final FormInterpretationAlgorithm fia)
+        throws ConfigurationException {
+        final CallControlProperties call =
+            configuration.loadObject(CallControlProperties.class);
+        final Map<String, String> props = getProperties(fia);
+        call.setProperties(props);
+        return call;
+    }
+    
     /**
      * Retrieves the currently defined properties.
      * @param fia the current form interpretation algorithm, maybe

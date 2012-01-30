@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,6 +30,8 @@ import java.util.Collection;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
@@ -37,6 +39,7 @@ import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.SsmlParser;
@@ -106,6 +109,7 @@ class PromptStrategy
      *
      * Play the prompt.
      */
+    @Override
     public void execute(final VoiceXmlInterpreterContext context,
                         final VoiceXmlInterpreter interpreter,
                         final FormInterpretationAlgorithm fia,
@@ -151,7 +155,13 @@ class PromptStrategy
                 final DocumentServer server = context.getDocumentServer();
                 final Session session = context.getSession();
                 final String sessionId = session.getSessionID();
-                platform.renderPrompts(sessionId, server);
+                try {
+                    final CallControlProperties callProps =
+                            context.getCallControlProperties(fia);
+                    platform.renderPrompts(sessionId, server, callProps);
+                } catch (ConfigurationException ex) {
+                    throw new NoresourceError(ex.getMessage(), ex);
+                }
             }
         }
     }

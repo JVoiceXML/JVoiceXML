@@ -30,6 +30,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Configurable;
 import org.jvoicexml.Configuration;
@@ -1011,9 +1012,9 @@ public final class JVoiceXmlImplementationPlatform
      */
     @Override
     public void renderPrompts(final String sessionId,
-            final DocumentServer server)
+            final DocumentServer server, final CallControlProperties props)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent {
-        promptAccumulator.renderPrompts(sessionId, server);
+        promptAccumulator.renderPrompts(sessionId, server, props);
     }
 }

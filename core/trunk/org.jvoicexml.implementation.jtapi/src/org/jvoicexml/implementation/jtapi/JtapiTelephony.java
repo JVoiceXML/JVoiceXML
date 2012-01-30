@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -34,11 +34,11 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.callmanager.jtapi.JVoiceXmlTerminal;
 import org.jvoicexml.callmanager.jtapi.JtapiConnectionInformation;
@@ -117,7 +117,7 @@ public final class JtapiTelephony implements Telephony,
      * </p>
      */
     public void play(final SynthesizedOutput output,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
         throws NoresourceError, IOException {
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
@@ -131,7 +131,7 @@ public final class JtapiTelephony implements Telephony,
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("playing URI '" + uri + "'");
         }
-        terminal.play(uri, parameters);
+        terminal.play(uri, null);
     }
 
     /**
@@ -141,8 +141,9 @@ public final class JtapiTelephony implements Telephony,
      * {@link SpokenInput#getUriForNextSpokenInput()} to obtain
      * a URI to stream from the terminal to the spoken input device.
      */
+    @Override
     public void record(final SpokenInput input,
-            final Map<String, String> parameters)
+            final CallControlProperties props)
         throws NoresourceError, IOException {
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
@@ -159,7 +160,7 @@ public final class JtapiTelephony implements Telephony,
             LOGGER.debug("recording to URI '" + uri + "'...");
         }
         // TODO Move the code from the FIA to here.
-        terminal.record(uri, parameters);
+        terminal.record(uri, null);
     }
 
     /**
@@ -173,7 +174,7 @@ public final class JtapiTelephony implements Telephony,
      * {@inheritDoc}
      */
     public void startRecording(final SpokenInput input,
-            final OutputStream stream,  final Map<String, String> parameters)
+            final OutputStream stream, final CallControlProperties props)
             throws NoresourceError, IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
