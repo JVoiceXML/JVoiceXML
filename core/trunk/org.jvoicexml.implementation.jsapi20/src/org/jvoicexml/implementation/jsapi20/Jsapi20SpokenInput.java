@@ -139,6 +139,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open() throws NoresourceError {
         try {
             recognizer = (Recognizer) EngineManager.createEngine(desc);
@@ -186,6 +187,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
         if (recognizer == null) {
             LOGGER.warn("no recognizer: cannot deallocate");
@@ -221,6 +223,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addListener(final SpokenInputListener inputListener) {
         synchronized (listeners) {
             listeners.add(inputListener);
@@ -230,6 +233,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeListener(final SpokenInputListener inputListener) {
         synchronized (listeners) {
             listeners.remove(inputListener);
@@ -240,6 +244,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<BargeInType> getSupportedBargeInTypes() {
         final Collection<BargeInType> types =
                 new java.util.ArrayList<BargeInType>();
@@ -253,6 +258,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarImplementation<RuleGrammar> loadGrammar(final Reader reader,
             final GrammarType grammarType)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
@@ -267,20 +273,23 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         try {
             final InputSource source = new InputSource(reader);
             final SrgsXmlDocument doc = new SrgsXmlDocument(source);
-            org.jvoicexml.xml.srgs.Grammar gram = doc.getGrammar();
+            final org.jvoicexml.xml.srgs.Grammar gram = doc.getGrammar();
             reader.close();
+            final String reference;
             String root = gram.getRoot();
             if (root == null) {
-                root = UUID.randomUUID().toString(); 
+                reference = UUID.randomUUID().toString();
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("no root rule given. using '" + root
                             + "' as grammar reference");
                 }
-            } 
+            } else {
+                reference = root;
+            }
             final String content = doc.toXml();
             final Reader read = new StringReader(content);
             final GrammarManager manager = recognizer.getGrammarManager();
-            grammar = (RuleGrammar) manager.loadGrammar(root,
+            grammar = (RuleGrammar) manager.loadGrammar(reference,
                     "application/srgs+xml", read);
             recognizer.processGrammars();
         } catch (EngineException ex) {
@@ -336,6 +345,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
         throws BadFetchError, UnsupportedLanguageError, NoresourceError {
@@ -382,6 +392,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void deactivateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
         throws BadFetchError {
@@ -394,16 +405,17 @@ public final class Jsapi20SpokenInput implements SpokenInput,
 
             if (current instanceof SrgsXmlGrammarImplementation) {
                 
-                SrgsXmlDocument doc = (SrgsXmlDocument) current.getGrammar();
-                org.jvoicexml.xml.srgs.Grammar srgsXmlGrammar
+                final SrgsXmlDocument doc =
+                        (SrgsXmlDocument) current.getGrammar();
+                final org.jvoicexml.xml.srgs.Grammar srgsXmlGrammar
                     = doc.getGrammar();
-                final String root = srgsXmlGrammar.getRoot();
+                final String reference = srgsXmlGrammar.getRoot();
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("deactivating grammar '" + root + "'...");
+                    LOGGER.debug("deactivating grammar '" + reference + "'...");
                 }   
                 
                 final GrammarManager manager = recognizer.getGrammarManager();
-                final Grammar grammar = manager.getGrammar(root);
+                final Grammar grammar = manager.getGrammar(reference);
                 if (grammar != null) {
                     manager.deleteGrammar(grammar);
                 }
@@ -505,7 +517,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * Scales the given value into the range from min to max.
      * @param value the value to scale
-     * @param min the minmimum border of the range
+     * @param min the minimum border of the range
      * @param max the maximum border of the range
      * @return converted value
      * @since 0.7.5
@@ -517,6 +529,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopRecognition() {
         if (!recognizer.testEngineState(Recognizer.RESUMED)) {
             if (LOGGER.isDebugEnabled()) {
@@ -530,15 +543,15 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             LOGGER.debug("stopping recognition...");
         }
 
-        GrammarManager manager = recognizer.getGrammarManager();
-        Grammar[] list = manager.listGrammars();
-        
+        final GrammarManager manager = recognizer.getGrammarManager();
+        final Grammar[] list = manager.listGrammars();
         for (Grammar gram : list) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Delete Grammar : " + gram.getReference());
             }
             manager.deleteGrammar(gram);
         }
+        recognizer.processGrammars();
 
         // If a result listener exists: Remove it.
         if (currentResultListener != null) {
@@ -569,12 +582,14 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activate() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void passivate() {
         listeners.clear();
         final GrammarManager manager = recognizer.getGrammarManager();
@@ -592,18 +607,21 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
-    public void connect(final ConnectionInformation client) throws IOException {
+    @Override
+    public void connect(final ConnectionInformation info) throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final ConnectionInformation client) {
+    @Override
+    public void disconnect(final ConnectionInformation info) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return type;
     }
@@ -621,12 +639,11 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
         final Collection<GrammarType> types =
                 new java.util.ArrayList<GrammarType>();
-
         types.add(GrammarType.SRGS_XML);
-
         return types;
     }
 
@@ -654,6 +671,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isBusy() {
         return recognizer.testEngineState(Recognizer.RESUMED);
     }
@@ -661,6 +679,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void recognizerUpdate(final RecognizerEvent recognizerEvent) {
     }
 
