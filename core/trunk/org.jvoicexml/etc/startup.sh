@@ -52,8 +52,8 @@ VMOPTIONS="${VMOPTIONS} -Djava.util.logging.config.file=${JVOICEXML_HOME}/config
 VMOPTIONS="${VMOPTIONS} -Djava.security.policy=config/jvoicexml.policy"
 
 # Allow JSAPI2 to access the audio sources
-set VMOPTIONS="${VMOPTIONS} -Djavax.speech.supports.audio.management=true"
-set VMOPTIONS="${VMOPTIONS} -Djavax.speech.supports.audio.capture=true"
+VMOPTIONS="${VMOPTIONS} -Djavax.speech.supports.audio.management=true"
+VMOPTIONS="${VMOPTIONS} -Djavax.speech.supports.audio.capture=true"
 
 # GJTAPI settings
 VMOPTIONS="${VMOPTIONS} -Dgjtapi.sip.properties=/gjtapi-provider.properties"

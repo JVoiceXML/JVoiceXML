@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -167,17 +167,17 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                 recognizer.waitEngineState(Recognizer.ALLOCATED);
                 LOGGER.info("...JSAPI 2.0 recognizer allocated");
             } catch (EngineStateException ex) {
-                throw new NoresourceError(ex);
+                throw new NoresourceError(ex.getMessage(), ex);
             } catch (EngineException ex) {
-                throw new NoresourceError(ex);
+                throw new NoresourceError(ex.getMessage(), ex);
             } catch (AudioException ex) {
-                throw new NoresourceError(ex);
+                throw new NoresourceError(ex.getMessage(), ex);
             } catch (IllegalArgumentException ex) {
-                throw new NoresourceError(ex);
+                throw new NoresourceError(ex.getMessage(), ex);
             } catch (IllegalStateException ex) {
-                throw new NoresourceError(ex);
+                throw new NoresourceError(ex.getMessage(), ex);
             } catch (InterruptedException ex) {
-                throw new NoresourceError(ex);
+                throw new NoresourceError(ex.getMessage(), ex);
             }
         } catch (EngineException ee) {
             throw new NoresourceError(ee);

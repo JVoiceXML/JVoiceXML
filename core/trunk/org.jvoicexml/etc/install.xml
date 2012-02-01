@@ -68,7 +68,13 @@
   -->
   <packs>
     <pack name="JVoiceXML Core" required="yes">
-      <description>JVoiceXML binaries</description>
+      <description>JVoiceXML binaries.
+
+You will have to select other components to actually use JVoiceXML.
+Please make sure that you select only those components that you really need.
+
+The JSAPI 1.0 implementation platform is a good place to get started.
+</description>
       <fileset dir="." targetdir="$INSTALL_PATH">
         <include name="bin/**" />
         <include name="doc/**" />
@@ -301,8 +307,9 @@ You will need a MRCPv2 server in addition to use this implementation platform.
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
         <include name="jvxml-mrcpv2.jar" />
-        <include name="cairo-sip-0.2.jar" />
-        <include name="cairo-client.jar" />
+        <include name="cairo-sip-SNAPSHOT.jar" />
+        <include name="cairo-client-SNAPSHOT.jar" />
+        <include name="cairo-rtp-SNAPSHOT.jar" />
         <include name="concurrent-1.3.4.jar" />
         <include name="jain-sip-api-1.2.jar" />
         <include name="jain-sip-ri-1.2.jar" />
