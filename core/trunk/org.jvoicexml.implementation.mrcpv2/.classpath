@@ -8,10 +8,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/jmf2.1.1e/lib/jmf.jar"/>
-	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-client.jar"/>
-	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-rtp.jar"/>
-	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-sip-0.2.jar"/>
 	<classpathentry kind="lib" path="3rdparty/speechcloud/lib/speechcloud-client.jar"/>
 	<classpathentry kind="lib" path="3rdparty/zanzibar/lib/zanzibar.jar"/>
+	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-client-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-rtp-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-sip-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
