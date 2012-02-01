@@ -73,14 +73,8 @@ final class PoolableResourceFactory<T extends ExternalResource>
             resource = factory.createResource();
             LOGGER.info("created a new resource of type ("
                     + resource.getClass().getCanonicalName() + ")");
-        } catch (NoresourceError e) {
-            throw new Exception(e.getMessage(), e);
-        }
-
-        try {
             resource.open();
-        } catch (org.jvoicexml.event.error.NoresourceError e) {
-            LOGGER.error("error opening external resource", e);
+        } catch (NoresourceError e) {
             throw new Exception(e.getMessage(), e);
         }
 
