@@ -21,7 +21,7 @@
 \include{version}
 
 \title{JVoiceXML \jvxmlversion User Guide}
-\version{0.7.4.1}
+\version{0.7.5}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -197,7 +197,8 @@ from \url{http://tomcat.apache.org}. You can also use the servlet container of
 your choice.
 
 It is also possible to store the VoiceXML files in the file system and let
-them be processed by JVoiceXML.
+them be processed by JVoiceXML. In that case, you do not need an servlet
+container.
 
 \subsection{Implementation Platform Dependent Software}
 
@@ -281,12 +282,23 @@ more programming.
 
 This implementation platform offers support for the OpenMary speech synthesizer. 
 It requires that you have an installed mary on your computer. OpenMary can be
-dowloaded for free from \url{http://mary.dfki.de}.
+downloaded for free from \url{http://mary.dfki.de}.
 
 This platform can be used in addition to other platforms, e.g. JSAPI 1.0 to
 substitute the JSAPI speech synthesizer. Note that you will need to install an
 implementation platform featuring a speech recognizer to start JVoiceXML.
 
+
+\subsection{Marc implementation platform}
+
+This implementation platform offers support for MARC, a talking
+head developed by LIMSI. MARC can be downloaded from 
+\url{http://marc.limsi.fr}. MARC requires that you have an installed mary on your computer. OpenMary can be
+downloaded for free from \url{http://mary.dfki.de}.
+
+This platform can be used in addition to other platforms, e.g. JSAPI 1.0 to
+substitute the JSAPI speech synthesizer. Note that you will need to install an
+implementation platform featuring a speech recognizer to start JVoiceXML.
 
 \subsection{MRCPv2 implementation platform}
 
@@ -1558,54 +1570,6 @@ configuration file
 Make sure that the loader repository of the JNDI configuration and your
 implementation platform use the same repositories. Otherwise, you will get some
 strange \lstinline[language=Java]{ClassCastException}s.
-
- \section*{Document history}
-
-\begin{tabular}{|l|p{5cm}|l|l|}
-\hline
-\textbf{Version} & \textbf{Comment} & \textbf{Author} & \textbf{Date} \\
-\hline
-\hline
-0.1 & Initial Release & Dirk Schnelle & 04/24/2006 \\
-\hline
-0.2 & First demo & Dirk Schnelle & 04/26/2006 \\
-\hline
-0.3 & Architectural overview & Dirk Schnelle & 04/27/2006 \\
-\hline
-0.4 & Running the demos & Dirk Schnelle & 07/20/2006 \\
-\hline
-0.4.1 & Adaption to refactoring of 0.5.5 & Dirk Schnelle & 03/07/2007 \\
-\hline
-0.5 & Started user input example & Dirk Schnelle & 03/13/2007 \\
-\hline
-0.6 & Adaption to 0.6, added VoiceXML creation demo 
-    & Dirk Schnelle & 06/05/2008 \\
-\hline
-0.7 & Adaption to 0.7.0.GA, added TalkingJava configuration 
-    & Dirk Schnelle-Walka & 06/18/2009 \\
-\hline
-0.7.1 & Adaption to 0.7.1.GA, added description for builtin grammars 
-    & Dirk Schnelle-Walka & 08/04/2009 \\
-\hline
-0.7.1.1 & Added description for platform configuration 
-    & Dirk Schnelle-Walka & 08/05/2009 \\
-\hline
-0.7.2 & Added sections semantic interpretation and mixed initiative dialogs 
-    & Dirk Schnelle-Walka & 10/27/2009 \\
-\hline
-0.7.3 & Reorganistion of startup sections 
-    & Dirk Schnelle-Walka & 05/21/2010 \\
-\hline
-0.7.4 & Added server based view 
-    & Dirk Schnelle-Walka & 12/22/2010 \\
-\hline
-0.7.4.1 & Added more details about MRCPv2 and text based platforms 
-    & Dirk Schnelle-Walka & 01/26/2011 \\
-\hline
-0.7.5 & Adaptions to 0.7.5 
-    & Dirk Schnelle-Walka & 06/17/2011 \\
-\hline
-\end{tabular}
 
 \bibliography{userguide}
 \bibliographystyle{plain}
