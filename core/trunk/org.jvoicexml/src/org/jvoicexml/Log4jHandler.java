@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 
 package org.jvoicexml;
 
+import java.text.MessageFormat;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
@@ -86,13 +87,29 @@ public final class Log4jHandler extends Handler {
         final Level level = decode(record.getLevel());
         if (level.isGreaterOrEqual(logger.getEffectiveLevel())) {
             final String message = record.getMessage();
+            final Object[] parameters = record.getParameters();
+            final  String logMessage = getMessage(message, parameters);
             final Throwable t = record.getThrown();
             final long timestamp = record.getMillis();
             final String fqcn = record.getSourceClassName();
             final LoggingEvent event =
-                new LoggingEvent(fqcn, logger, timestamp, level, message, t);
+                new LoggingEvent(fqcn, logger, timestamp, level, logMessage, t);
             logger.callAppenders(event);
         }
+    }
+
+    /**
+     * Retrieves the final logging message including the parameters.
+     * @param message the message
+     * @param parameters potential parameters
+     * @return expanded message
+     * @since 0.7.5
+     */
+    private String getMessage(final String message, final Object[] parameters) {
+        if ((parameters == null) || (parameters.length == 0)) {
+            return message;
+        }
+        return MessageFormat.format(message, parameters);
     }
 
     /**
