@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2006 UCM Technologies, Inc.
  *              - Released under the terms of LGPL License
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -80,6 +80,9 @@ final class ObjectExecutorThread extends Thread {
     /** The parameters to pass to the method. */
     private final Collection<Object> parameter;
 
+    /** Reference to the current application. */
+    private final Application application;
+
     /** The application base URL. */
     private final URL applicationBase;
     
@@ -118,7 +121,7 @@ final class ObjectExecutorThread extends Thread {
         handler = evt;
 
         // Determine the application base for the classpath
-        final Application application = context.getApplication();
+        application = context.getApplication();
         if (application == null) {
             applicationBase = null;
         } else {
@@ -306,7 +309,8 @@ final class ObjectExecutorThread extends Thread {
         int i = 0;
         for (URI uri : uris) {
             try {
-                urls[i] = uri.toURL();
+                final URI resolved = application.resolve(uri);
+                urls[i] = resolved.toURL();
                 i++;
             } catch (MalformedURLException e) {
                 throw new SemanticError(
