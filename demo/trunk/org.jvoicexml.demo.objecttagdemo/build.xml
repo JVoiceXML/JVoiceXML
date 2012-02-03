@@ -58,7 +58,8 @@ Build this jar from the main project first.
     </copy>
 
     <echo message="compiling with debug=${debug}, optimize=${optimize}" />
-    <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1">
+    <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on"
+      includeantruntime="false">
       <src path="${src}" />
       <include name="**/*.java" />
       <classpath refid="build.classpath" />

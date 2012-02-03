@@ -6,7 +6,7 @@
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -101,7 +101,7 @@ public final class MarcDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting marc demo for JVoiceXML...");
-        LOGGER.info("(c) 2011 by JVoiceXML group - "
+        LOGGER.info("(c) 2011-2012 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         try {

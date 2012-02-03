@@ -6,7 +6,7 @@
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -30,31 +30,18 @@
 package org.jvoicexml.demo.objecttagdemo;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.BasicConnectionInformation;
-import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.xml.vxml.Block;
-import org.jvoicexml.xml.vxml.Form;
-import org.jvoicexml.xml.vxml.Meta;
-import org.jvoicexml.xml.vxml.ObjectTag;
-import org.jvoicexml.xml.vxml.Param;
-import org.jvoicexml.xml.vxml.Prompt;
-import org.jvoicexml.xml.vxml.Value;
-import org.jvoicexml.xml.vxml.Var;
-import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Demo implementation for a simple object call.
@@ -78,135 +65,8 @@ public final class ObjectTagDemo {
     /**
      * Do not create from outside.
      */
-    private ObjectTagDemo() {
-        try {
-            context = new InitialContext();
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error creating initial context", ne);
-
-            context = null;
-        }
-    }
-
-    /**
-     * Create a simple VoiceXML document containing the hello world phrase.
-     * @return Created VoiceXML document, <code>null</code> if an error
-     * occurs.
-     */
-    private VoiceXmlDocument createDocument() {
-        final VoiceXmlDocument document;
-
-        try {
-            document = new VoiceXmlDocument();
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-
-            return null;
-        }
-
-        final Vxml vxml = document.getVxml();
-
-        final Meta author = vxml.appendChild(Meta.class);
-        author.setName("author");
-        author.setContent("JVoiceXML group");
-
-        final Meta copyright = vxml.appendChild(Meta.class);
-        copyright.setName("copyright");
-        copyright.setContent("2005-2010 JVoiceXML group - "
-                             + "http://jvoicexml.sourceforge.net");
-
-        final Form form = vxml.appendChild(Form.class);
-        final Var varA = form.appendChild(Var.class);
-        varA.setName("a");
-        varA.setExpr("42");
-        final Var varB = form.appendChild(Var.class);
-        varB.setName("b");
-        varB.setExpr("43");
-        final ObjectTag object = form.appendChild(ObjectTag.class);
-        object.setName("calculator");
-        object.setClassid(Calculator.class, "add");
-        final File classes = new File("classes");
-        object.setData(classes.toURI());
-        final Param paramA = object.appendChild(Param.class);
-        paramA.setName("value");
-        paramA.setExpr("a");
-        final Param paramB = object.appendChild(Param.class);
-        paramB.setName("value");
-        paramB.setExpr("b");
-
-        final Block block = form.appendChild(Block.class);
-        final Prompt prompt = block.appendChild(Prompt.class);
-        final Value valueA = prompt.appendChild(Value.class);
-        valueA.setExpr("a");
-        prompt.addText("+");
-        final Value valueB = prompt.appendChild(Value.class);
-        valueB.setExpr("b");
-        prompt.addText("=");
-        final Value valueResult = prompt.appendChild(Value.class);
-        valueResult.setExpr("calculator");
-
-        final ObjectTag overallSum = form.appendChild(ObjectTag.class);
-        overallSum.setName("overallSum");
-        overallSum.setClassid(Calculator.class, "getOverallSum");
-        overallSum.setData(classes.toURI());
-
-        final Block blockSum = form.appendChild(Block.class);
-        final Prompt promptSum = blockSum.appendChild(Prompt.class);
-        prompt.addText("The overall sum is ");
-        final Value valueSum = promptSum.appendChild(Value.class);
-        valueSum.setExpr("overallSum");
-
-        return document;
-    }
-
-    /**
-     * Print the given VoiceXML document to <code>stdout</code>. Does nothing
-     * if an error occurs.
-     * @param document The VoiceXML document to print.
-     * @return VoiceXML document as an XML string, <code>null</code> in case
-     * of an error.
-     */
-    private String printDocument(final VoiceXmlDocument document) {
-        final String xml;
-        try {
-            xml = document.toXml();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-
-            return null;
-        }
-
-        System.out.println(xml);
-
-        return xml;
-    }
-
-    /**
-     * Add the given document as a single document application.
-     * @param document The only document in this application.
-     * @return URI of the first document.
-     */
-    private URI addDocument(final VoiceXmlDocument document) {
-        MappedDocumentRepository repository;
-        try {
-            repository = (MappedDocumentRepository)
-                         context.lookup("MappedDocumentRepository");
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error obtaining the documentrepository", ne);
-
-            return null;
-        }
-
-        final URI uri;
-        try {
-            uri = repository.getUri("/root");
-        } catch (URISyntaxException e) {
-            LOGGER.error("error creating the URI", e);
-            return null;
-        }
-        repository.addDocument(uri, document.toString());
-
-        return uri;
+    private ObjectTagDemo() throws NamingException {
+        context = new InitialContext();
     }
 
     /**
@@ -231,9 +91,7 @@ public final class ObjectTagDemo {
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
-
         session.waitSessionEnd();
-
         session.hangup();
     }
 
@@ -243,30 +101,19 @@ public final class ObjectTagDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2010 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2012 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
-        final ObjectTagDemo demo = new ObjectTagDemo();
-
-        final VoiceXmlDocument document = demo.createDocument();
-        if (document == null) {
-            return;
-        }
-
-        final String xml = demo.printDocument(document);
-        if (xml == null) {
-            return;
-        }
-
-        final URI uri = demo.addDocument(document);
-        if (uri == null) {
-            return;
-        }
-
         try {
+            final ObjectTagDemo demo = new ObjectTagDemo();
+            final File dialog = new File("objectdemo.vxml");
+            final URI uri = dialog.toURI();
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
-            LOGGER.error("error processing the document", e);
+            LOGGER.error("error processing the document: " + e.getMessage(), e);
+        } catch (NamingException e) {
+            LOGGER.error("error obtaining the initial context: "
+                    + e.getMessage(), e);
         }
     }
 }
