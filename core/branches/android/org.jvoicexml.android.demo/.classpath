@@ -7,8 +7,12 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.android"/>
 	<classpathentry kind="lib" path="/org.jvoicexml.android/src/org/jvoicexml/android"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
-	<classpathentry kind="lib" path="D:/PFC/workspace/org.jvoicexml/3rdparty/log4j1.2.16/lib/log4j-1.2.16.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.android.implementation"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/log4j1.2.16/lib/log4j-1.2.16.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/log4j1.2.16/log4j1.2.16-api.zip!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
