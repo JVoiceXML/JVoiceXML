@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 public class demoApplication extends Activity {
     /** Called when the activity is first created. */
-	
+	private final SimpleVoiceXML demo = new SimpleVoiceXML();
 	public final String sample = new String ("http://sites.google.com/site/komponiendo/vxml/sample.vxml");
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +60,7 @@ public class demoApplication extends Activity {
             public void onClick(View v) {
                 
             	//stopping interpreter code
+            	demo.jvxml.shutdown();
             	
             }
         });
@@ -71,7 +72,7 @@ public class demoApplication extends Activity {
 public void startJVoiceXML(URI uri)
 {
 	
-    final SimpleVoiceXML demo = new SimpleVoiceXML();  
+    //demo = new SimpleVoiceXML();  
     //public static final Logger LOGGER = Logger.getLogger(SimpleVoiceXML.class);
     
     		//URI uri= null;
@@ -89,5 +90,6 @@ public void startJVoiceXML(URI uri)
     		} catch (InterruptedException e) {
     			e.printStackTrace();
     		}
+    		
 }
 }

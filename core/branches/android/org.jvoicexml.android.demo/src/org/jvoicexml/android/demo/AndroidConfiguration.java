@@ -29,19 +29,23 @@ import java.util.Collection;
 
 import org.jvoicexml.Configuration;
 import org.jvoicexml.DtmfRecognizerProperties;
+import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.interpreter.DialogFactory;
+import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyRepository;
 import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
+import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository;
 import org.jvoicexml.test.interpreter.tagstrategy.DummyInitializationTagStrategyFactory;
 import org.jvoicexml.test.interpreter.tagstrategy.DummyTagStrategyFactory;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
+import org.jvoicexml.android.implementation.AndroidImplementationPlatformFactory;
 
 /**
  * Dummy implementation of a configuration object.
@@ -49,7 +53,7 @@ import org.jvoicexml.xml.vxml.Menu;
  * @version $Revision$
  * @since 0.7.4
  */
-public final class DummyConfiguration implements Configuration {
+public final class AndroidConfiguration implements Configuration {
     /**
      * {@inheritDoc}
      */
@@ -96,6 +100,11 @@ public final class DummyConfiguration implements Configuration {
             } catch (Exception e) {
                 return null;
             }
+           
+        } else if(baseClass == GrammarProcessor.class){
+        	return (T) new JVoiceXmlGrammarProcessor();
+        } else if (baseClass == ImplementationPlatformFactory.class){
+        	return (T) new AndroidImplementationPlatformFactory();
         } else if (baseClass == TagStrategyRepository.class) {
             return (T) new JVoiceXmlTagStrategyRepository();
         } else if (baseClass == SpeechRecognizerProperties.class) {

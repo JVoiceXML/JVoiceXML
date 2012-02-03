@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 public final class SimpleVoiceXML implements JVoiceXmlMainListener {
 
-	private JVoiceXmlMain jvxml;
+   public JVoiceXmlMain jvxml;
 	
 	 /** Logger for this class. */
    public static final Logger LOGGER = Logger.getLogger(SimpleVoiceXML.class);
@@ -45,11 +45,11 @@ public final class SimpleVoiceXML implements JVoiceXmlMainListener {
 	 * @throws InterruptedException 
 	 */
 	public synchronized void interpretDocument(final URI uri) throws JVoiceXMLEvent, InterruptedException {
-		DummyConfiguration config = new DummyConfiguration();
+		AndroidConfiguration config = new AndroidConfiguration();
 		jvxml = new JVoiceXmlMain(config);
 		jvxml.addListener(this);
 		jvxml.start();
-		
+				
 		this.wait();
 		
 		final ConnectionInformation client = new BasicConnectionInformation("dummy", "android", "android");
