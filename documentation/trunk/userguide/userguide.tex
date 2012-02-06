@@ -14,7 +14,9 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{jvoicexml}
+\usepackage{paralist}
 
+\hyphenation{JVoice-XML JVOICE-XML web-apps}
 
 \newcommand{\speech}[2]{\noindent\hangindent=\parindent{\textbf{#1:}} #2\par}
 
@@ -123,23 +125,31 @@ The basic architecture is shown in figure~\ref{fig:architecture}.
 
 Usually, the VoiceXML documents are stored in a web server or a servlet
 container and are accessed, e.g., via the HTTP protocol. JVoiceXML also
-supports other protocols. JVoiceXML runs as a standalone server and retrieves
-the documents from the servlet container. 
+supports other protocols, e.g. file. JVoiceXML runs as a standalone server and
+retrieves the documents from the servlet container or other document repository. 
 
-Clients use the Java Naming and Directory Interface (JNDI)~\cite{sun:jndi} to 
-access JVoiceXML. They can also initiate calls for an application using this 
+There are mainly two ways, how clients can interact with JVoiceXML
+\begin{inparaenum}[(i)]
+\item using JNDI or
+\item using the \lstinline{CallMananger.}
+\end{inparaenum}
+
+Most of the demo clients use the Java Naming and Directory Interface
+(JNDI)~\cite{sun:jndi} to access JVoiceXML. They can also initiate calls for an application using this 
 technology. Currently there is only basic telephony support, but users can call 
 applications from their own Java programs. The way this is done is described in
 the following sections.
 
-Conceptually JNDI allows to connect to a centralized running JVoice\-XML 
+Conceptually JNDI allows to connect to a centralized running JVoiceXML 
 server.
 
-JVoiceXML also allows to have all that at the server side.
-This typical archtiecture for a voice browser is shown in
-figure~\ref{fig:server-architecture}. However this does not make much sense for
-the current demo implementation, since the speaker and the microphone of the
-JVoiceXML server is used for speech output and input. The
+JVoiceXML also allows to have all that at the server side with the help of a
+\lstinline{CallManager}.
+This typical architecture for a voice browser is shown in
+figure~\ref{fig:server-architecture}. Here JVoiceXML waits for incoming
+calls and once the \lstinline{CallManager} detects an call, it calls the
+configured application. However this does not make much sense for the current
+demo implementation, since the speaker and the microphone of the JVoiceXML server is used for speech output and input.
 \begin{figure}
 \includegraphics[width=\linewidth]{server-architecture.eps}
 \caption{Architecture of JVoiceXML using a CallManager}
@@ -152,7 +162,7 @@ JVoiceXML server is used for speech output and input. The
 
 JVoiceXML is written in JAVA and you will at least need a JAVA compiler, an 
 editor or preferably a JAVA IDE, see section~\ref{sec:ide}, and ANT, see 
-section~\ref{sec:ant}, to run the browser and build the binaries for the 
+section~\ref{sec:ant}, to build and run the binaries for the 
 clients. Tomcat~\cite{apache:tomcat} from the Apache Software Foundation can be
 used as a servlet container.
 
@@ -173,6 +183,9 @@ Parts of the code of JVoiceXML are using features from the JAVA 6 API, so that
 you will need at least J2SE 1.6 to compile the code. You can download it
 for free from \url{http://java.sun.com}.
 
+For now, you will need to do some programming to call your applications, but
+this is subject of change in later revisions.
+
 \subsection{ANT}
 \label{sec:ant}
 
@@ -191,13 +204,13 @@ ANT if you play with the examples of this user guide.
 \label{sec:tomcat}
 
 VoiceXML is designed to access documents via the HTTP protocol among others. This
-guide uses Tomcat 5.5~\cite{apache:tomcat} for this purpose.
+guide uses Tomcat 6~\cite{apache:tomcat} for this purpose.
 Tomcat can be obtained
 from \url{http://tomcat.apache.org}. You can also use the servlet container of
 your choice.
 
 It is also possible to store the VoiceXML files in the file system and let
-them be processed by JVoiceXML. In that case, you do not need an servlet
+them be processed by JVoiceXML. In that case, you do not need a servlet
 container.
 
 \subsection{Implementation Platform Dependent Software}
@@ -264,10 +277,12 @@ JSAPI 1 or 2. Otherwise, the JVM will crash.
 
 The JSAPI 2.0 implementation platform targets JSAPI 2.0 compliant speech
 recognizers and synthesizers. As a first start JVoiceXML is shipped with a
-first approach to use Sphinx 4 and FreeTTS with this new API.
+first approach to use Sphinx 4 and FreeTTS with this new API. Additionally,
+we added support for the Microsoft Speech API. Note, that this requires Windows
+7. Windows Vista or Windows XP are not supported. 
 
-This is an implementation of a draft specification developed under the Java
-Community Process (JCP) and is made available for testing and evaluation
+This is an implementation of a draft specification of JSR 113 developed under
+the Java Community Process (JCP) and is made available for testing and evaluation
 purposes only. The code is not compatible with any specification of the JCP.
 
 
@@ -372,13 +387,15 @@ specified in the application configuration.
 \subsection{Text implementation platform}
 
 The text implementation platform can be used to have a string based access to
-the voice browser.
+the voice browser. In this case speech recognition and text-to-speech is
+replaced by text input and output.
 
 \section{Preparing the first start}
 \label{sec:impl-platform-config}
 
 It may be necessary, to install and copy additional software depending on the
-implementation platform that you installed.
+implementation platform that you installed. The previous section provided some
+hints about it.
 
 All platform configuration files are located in the \lstinline{config} folder.
 JVoiceXML scans this folder for configuration files at startup and loads all found
@@ -417,6 +434,11 @@ only one instance of this platform.
 A closer look at certain configuration issues is given in
 section~\ref{sec:configuration}.
 
+For the specification of objects JVoiceXML utilizes the spring framework as an
+IoC. Please refer to the spring documentation at
+\url{http://static.springsource.org/spring/docs/3.1.x/spring-framework-reference/html/}
+for more details.
+
 \section{Starting the Voice Browser}
 
 After the installation and possible installation of additional software, the
@@ -425,8 +447,7 @@ the browser. The relevant files depend on your operating system and are
 described in the following sections.
 
 Make sure that you have your configuration right as described in
-section~\ref{sec:impl-platform-config} and that you downloaded and installed
-the missing jars if applicable.
+section~\ref{sec:impl-platform-config}.
 
 Having started the voice browser it is waiting for incoming requests from a
 client. Later on in this guide we will explain how to code such a client.
@@ -622,7 +643,7 @@ Create a file \texttt{hello.vxml} with the following content:
 
 Copy this file to a directory of your web server that can be accessed
 by a browser. For Tomcat create a directory \texttt{demo1} in
-the \texttt{\$CATALINA\_HOME/web\-apps} directory and copy the VoiceXML
+the \texttt{\$CATALINA\_HOME/webapps} directory and copy the VoiceXML
 file to this directory. In order to make this
 an accessible web application, create the empty sub-folder \texttt{WEB-INF}
 in \texttt{demo1}.
@@ -771,6 +792,36 @@ is bound to the given resource types.
 The argument for \lstinline[language=Java]{session.call(URI)} must point to to URI of the
 root document of your application.
 
+A simplification of the above is available by the
+\lstinline{org.jvoicexml.GenericClient}. Here, the code can be reduced to
+
+\begin{lstlisting}[language=Java]
+...
+import org.jvoicexml.Session;
+...
+    public static void main(String[] args) {
+        ...
+        try {
+            final URI uri = 
+                new URI("http://localhost:8080/demo1/hello.vxml");
+            final GenericClient client = new GenericClient();
+            final Session session =
+                client.call(uri,  "dummy", "jsapi10", "jsapi10");
+
+            session.waitSessionEnd();
+
+            session.hangup();
+        } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
+            e.printStackTrace();
+            System.exit(-1);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+    }
+...
+\end{lstlisting}
+
 \subsection{Special issues for the text client}
 
 If you are not using the text platform, you can simply skip this section and
@@ -873,6 +924,22 @@ the creation of the \lstinline[language=Java]{ConnectionInformation} by
 The object \lstinline[language=Java]{lock} is used as a semaphore to delay until
 the server started.
 
+Again, the code can be simplified through the \lstinline{GenericClient}.
+The created \lstinline{ConnectionInformation} can also be used to initiate
+calls.
+ \begin{lstlisting}[language=Java]
+ ...
+        final ConnectionInformation info =
+            server.getConnectionInformation();
+        final Session session = 
+            jvxml.createSession(info);
+        final URI uri = ...
+        ...
+        final GenericClient client = new GenericClient();
+        final Session session = client.call(uri,  info);
+...
+\end{lstlisting}
+
 Note, that you will also need to modify the jndi configuration file
 \texttt{\${JVOICEXML\_HOME}/config/jvxml-jndi.xml} to use the text libraries:
 
@@ -885,6 +952,7 @@ Note, that you will also need to modify the jndi configuration file
   ...
 </jndi>
 \end{lstlisting}
+
 
 \subsection{Starting the Client}
 \label{sec:starting-client}
@@ -1050,7 +1118,7 @@ following structure
       +- sjsxp.jar
 \end{lstlisting}
 
-Copy the created war archive to the \texttt{\$CATALINA\_HOME/web\-apps}
+Copy the created war archive to the \texttt{\$CATALINA\_HOME/webapps}
 directory and restart Tomcat.
 
 \subsection{Adapting the Code for Demo1}
@@ -1510,7 +1578,7 @@ on a single machine.
 
 If you want to change the RMI port for JVoiceXML, you have to make changes in 
 two configuration files that you can find in the folder 
-\texttt{\$JVOICE\-XML\_HOME/config}.
+\texttt{\$JVOICEXML\_HOME/config}.
 
 In the file \texttt{jvxml-jndi.xml} you have to adapt the \texttt{port} 
 attribute in following section
