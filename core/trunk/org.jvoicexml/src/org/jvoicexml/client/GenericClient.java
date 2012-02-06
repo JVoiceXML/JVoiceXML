@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml.client;
 
 import java.net.URI;
@@ -76,10 +77,26 @@ public final class GenericClient {
      */
     public Session call(final URI uri, final String input, final String output,
             final String call) throws NamingException, ErrorEvent {
-        final JVoiceXml jvoicexml = getJVoiceXml();
-        final ConnectionInformation client =
+        final ConnectionInformation info =
             new BasicConnectionInformation(call, output, input);
-        final Session session = jvoicexml.createSession(client);
+        return call(uri, info);
+    }
+
+    /**
+     * Calls JVoiceXML with the given URI and the specified platform
+     * configuration.
+     * @param uri the URI to call
+     * @param info the connection information to use.
+     * @return JVoiceXML session for the call
+     * @throws NamingException 
+     *         JVoiceXML server could not be found.
+     * @throws ErrorEvent
+     *         if an error occurs when calling JVoiceXML 
+     */
+    public Session call(final URI uri, final ConnectionInformation info)
+            throws NamingException, ErrorEvent {
+        final JVoiceXml jvoicexml = getJVoiceXml();
+        final Session session = jvoicexml.createSession(info);
         session.call(uri);
         return session;
     }

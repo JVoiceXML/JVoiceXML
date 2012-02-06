@@ -43,7 +43,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * </p>
  *
  * <p>
- * This is a facade to access the resources that are capabale to handle
+ * This is a facade to access the resources that are capable to handle
  * those user actions.
  * </p>
  *

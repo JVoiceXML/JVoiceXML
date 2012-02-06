@@ -54,6 +54,11 @@ import org.jvoicexml.implementation.pool.KeyedResourcePool;
  * delivered to each created {@link ImplementationPlatform}.
  * </p>
  *
+ * <p>
+ * In {@link #init(Configuration)} the resources are acquired as
+ * {@link PlatformFactory}s and {@link ResourceFactory}s.
+ * </p>
+ *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */

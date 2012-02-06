@@ -364,7 +364,7 @@ sphinx.lib.dir=../../lib
 
   <target name="-checkIzpack" depends="-setup">
     <!-- izpack library -->
-    <property name="izpack.dir" value="${3rdparty.dir}/izpack4.3.4" />
+    <property name="izpack.dir" value="${3rdparty.dir}/izpack4.3.5" />
     <property name="izpack.lib.dir" value="${izpack.dir}/lib" />
 
     <path id="izpack.path">

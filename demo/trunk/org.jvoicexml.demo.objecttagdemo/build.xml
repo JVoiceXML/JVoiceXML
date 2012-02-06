@@ -32,7 +32,6 @@ This file builds and runs the 'object'-tag demo for JVoiceXML.
 
   <target name="-init" depends="-setup">
     <mkdir dir="${build}" />
-    <mkdir dir="${dist}" />
   </target>
 
   <target name="-checkJVoiceXML">
