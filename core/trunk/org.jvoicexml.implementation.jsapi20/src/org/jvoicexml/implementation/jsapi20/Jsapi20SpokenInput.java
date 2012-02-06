@@ -488,6 +488,11 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             LOGGER.debug("starting recognition...");
         }
 
+        // Add listeners
+        currentResultListener = new JVoiceXMLResultListener(this);
+        recognizer.addResultListener(currentResultListener);
+
+        // Start the recognition process
         recognizer.requestFocus();
         try {
             recognizer.waitEngineState(Recognizer.FOCUSED);
@@ -503,9 +508,6 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             throw new NoresourceError(e.getMessage(), e);
         }
 
-        currentResultListener = new JVoiceXMLResultListener(this);
-
-        recognizer.addResultListener(currentResultListener);
         final SpokenInputEvent event =
             new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
         fireInputEvent(event);
