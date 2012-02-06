@@ -156,6 +156,21 @@ figure~\ref{fig:eclipse-projects}.
 
 \textbf{Note:} UNIX file and directory names are case sensitive.
 
+An alternative way to download the contents of the repository is to use the 
+nightly build system for that purpose. Download all jars from
+\url{http://jvoicexml.svn.sourceforge.net/viewvc/jvoicexml/core/trunk/org.jvoicexml/3rdparty/svnant/lib/}
+as well as the ANT file for the nightly build at
+\url{http://jvoicexml.svn.sourceforge.net/viewvc/jvoicexml/core/trunk/org.jvoicexml/nightly.xml}
+into the directory where you want to have all those project files. This may be
+your eclipse workspace.
+
+Then change in to that directory and run
+\begin{lstlisting}
+svn co \
+ant -f nightly.xml
+\end{lstlisting}
+
+
 \section{Required Software}
 \label{sec:required-software}
 
