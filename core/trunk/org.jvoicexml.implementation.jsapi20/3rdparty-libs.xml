@@ -17,13 +17,6 @@ implementation platform.
 
         <fileset dir="${jsapi2.lib.dir}" id="jsapi2.lib">
             <include name="jsr113.jar" />
-        </fileset>
-
-        <!-- jsr113 JSE base library -->
-        <property name="jsapi2.jse.dir" value="${local-3rdparty.dir}/jsr113jsebase" />
-        <property name="jsapi2.jse.lib.dir" value="${jsapi2.jse.dir}/lib" />
-
-        <fileset dir="${jsapi2.jse.lib.dir}" id="jsapi2.jse.lib">
             <include name="org.jvoicexml.jsapi2.jar" />
             <include name="org.jvoicexml.jsapi2.jse.jar" />
             <include name="org.jvoicexml.jsapi2.jse.freetts.jar" />
@@ -31,7 +24,7 @@ implementation platform.
             <include name="org.jvoicexml.jsapi2.mac.jar" />
             <include name="org.jvoicexml.jsapi2.sapi.jar" />
         </fileset>
-    	
+
         <!-- jvxml library -->
         <path id="jvxml.core.lib">
           <path location="${jvxml.core.dir}/classes"/>

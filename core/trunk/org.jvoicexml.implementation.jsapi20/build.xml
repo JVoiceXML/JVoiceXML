@@ -100,7 +100,7 @@ You're using ${ant.java.version}
         <outputproperty name="standalone" value="no" />
         <outputproperty name="encoding" value="UTF-8" />
         <outputproperty name="indent" value="yes" />
-        <param name="sapibridgepath" expression="${basedir}/3rdparty/jsr113jsebase/lib" />
+        <param name="sapibridgepath" expression="${basedir}/3rdparty/jsapi2.0/lib" />
     </xslt>
     <copy file="${jvxml.core.dir}/run-tmp.xml"
       tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
@@ -121,7 +121,7 @@ You're using ${ant.java.version}
         <outputproperty name="standalone" value="no" />
         <outputproperty name="encoding" value="UTF-8" />
         <outputproperty name="indent" value="yes" />
-        <param name="sapibridgepath" expression="${basedir}/3rdparty/jsr113jsebase/lib" />
+        <param name="sapibridgepath" expression="${basedir}/3rdparty/jsapi2.0/lib" />
     </xslt>
     <copy file="${jvxml.core.dir}/run-tmp.xml"
       tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
@@ -304,7 +304,7 @@ You're using ${ant.java.version}
         file="${dist}/org.jvoicexml.implementation.jsapi20.jar"/>
     <copy todir="${distFolder}/lib">
       <fileset refid="jsapi2.lib" />
-      <fileset dir="${local-3rdparty.dir}/jsr113jsebase/lib">
+      <fileset dir="${local-3rdparty.dir}/jsapi2.0/lib">
         <include name="*.jar"/>
         <include name="*.dll"/>
         <include name="*.jnilib"/>

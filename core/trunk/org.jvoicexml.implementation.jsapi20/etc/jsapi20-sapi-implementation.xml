@@ -5,9 +5,9 @@
   <repository>jsapi20</repository>
   <classpath>dist/org.jvoicexml.implementation.jsapi20.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/jsr113.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.sapi.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.jse.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.sapi.jar</classpath>
 
   <beans:bean
     class="org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutputFactory">
