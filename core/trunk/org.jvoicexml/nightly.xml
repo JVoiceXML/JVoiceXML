@@ -52,6 +52,10 @@ The jars are expected to be in the same folder as this build file.
       <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/systemtest/trunk" />
     </svn>
     <delete dir=".svn" />
+    <svn javahl="true">
+      <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/documentation/trunk" />
+    </svn>
+    <delete dir=".svn" />
     <echo>
 Checkout complete!
 
@@ -105,6 +109,7 @@ org.jvoicexml/personal-props
       <update dir="../org.jvoicexml.demo.voicexmlcreationdemo" />
       <update dir="../org.jvoicexml.systemtest" />
       <update dir="../org.jvoicexml.systemtest.servlet" />
+        <update dir="../userguide" />
     </svn>
   </target>
 
