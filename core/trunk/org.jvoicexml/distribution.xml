@@ -175,7 +175,7 @@ This file builds the distribution files for JVoiceXML.
       <property name="jvxml.jndi.port" value="1099"/>
       <property name="jvxml.jndi.repository" value="text"/>
     </ant>
-    <echo message="distributing org.jvoicexml.vonfig"/>
+    <echo message="distributing org.jvoicexml.config"/>
     <ant dir="../org.jvoicexml.config"
         inheritall="false" target="distribution"/>
     <echo message="distributing org.jvoicexml.implementation.jsapi10"/>
