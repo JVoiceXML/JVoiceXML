@@ -145,6 +145,7 @@ org.jvoicexml/personal-props
       <property name="jvxml.text" value="true" />
       <property name="jvxml.jsapi10" value="true" />
       <property name="jvxml.jsapi20" value="true" />
+      <property name="jvxml.marc" value="true" />
       <property name="jvxml.mary" value="true" />
       <property name="jvxml.mrcpv2" value="true" />
       <property name="jvxml.jtapi" value="true" />
