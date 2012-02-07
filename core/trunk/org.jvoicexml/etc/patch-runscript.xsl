@@ -46,6 +46,12 @@
           <xsl:with-param name="action">creating apidoc for</xsl:with-param>
         </xsl:apply-templates>
       </target>
+      <target name="-distributionPlatforms">
+        <xsl:apply-templates select="platform">
+          <xsl:with-param name="target">distribution</xsl:with-param>
+          <xsl:with-param name="action">creating distribution for</xsl:with-param>
+        </xsl:apply-templates>
+      </target>
       <target name="configurePlatforms">
         <xsl:apply-templates select="platform">
           <xsl:with-param name="target">configuration</xsl:with-param>

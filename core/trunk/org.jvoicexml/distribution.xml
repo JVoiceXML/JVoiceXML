@@ -169,6 +169,12 @@ This file builds the distribution files for JVoiceXML.
 
   <!-- Distribution of the configured components -->
   <target name="-distComponents" depends="-distinit">
+    <echo message="distributing org.jvoicexml.xml"/>
+    <ant dir="../org.jvoicexml.xml" target="jar"
+          inheritall="false" inheritrefs="false"/>
+    <echo message="distributing org.jvoicexml.processor.srgs"/>
+    <ant dir="../org.jvoicexml.processor.srgs" target="jar"
+        inheritall="false" inheritrefs="false"/>
     <echo message="distributing org.jvoicexml.jndi"/>
     <ant dir="../org.jvoicexml.jndi"
         inheritall="false" target="distribution">
@@ -178,24 +184,7 @@ This file builds the distribution files for JVoiceXML.
     <echo message="distributing org.jvoicexml.config"/>
     <ant dir="../org.jvoicexml.config"
         inheritall="false" target="distribution"/>
-    <echo message="distributing org.jvoicexml.implementation.jsapi10"/>
-    <ant dir="../org.jvoicexml.implementation.jsapi10"
-        inheritall="false" target="distribution"/>
-    <echo message="distributing org.jvoicexml.implementation.jsapi20"/>
-    <ant dir="../org.jvoicexml.implementation.jsapi20"
-        inheritall="false" target="distribution"/>
-    <echo message="distributing org.jvoicexml.implementation.jtapi"/>
-    <ant dir="../org.jvoicexml.implementation.jtapi"
-        inheritall="false" target="distribution"/>
-    <echo message="distributing org.jvoicexml.implementation.mary"/>
-    <ant dir="../org.jvoicexml.implementation.mary"
-        inheritall="false" target="distribution"/>
-    <echo message="distributing org.jvoicexml.implementation.mrcpv2"/>
-    <ant dir="../org.jvoicexml.implementation.mrcpv2"
-        inheritall="false" target="distribution"/>
-    <echo message="distributing org.jvoicexml.implementation.text"/>
-    <ant dir="../org.jvoicexml.implementation.text"
-        inheritall="false" target="distribution"/>
+    <antcall target="-distributionPlatforms"/>
   </target>
 
   <!--
