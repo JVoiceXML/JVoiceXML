@@ -228,6 +228,7 @@ Below is a list of the required update URLs.
 \item[Checkstyle] \url{http://eclipse-cs.sourceforge.net/update} (Note that you
 only need the 5.x version)
 \item[Subversion] \url{http://subclipse.tigris.org/update_1.6.x}
+(Alternatively, you can also use subversive or a similar SVN client)
 \item[TeXlipse] \url{http://texlipse.sourceforge.net} (optional if you want to
 edit the documentation)
 \end{description}
@@ -379,8 +380,8 @@ folder. These subfolder follow this convention:
 
 \begin{itemize}
 \item The name of the subfolder is a combination of the library name and
-the version of this library, e.g. \texttt{log4j1.2.15} for the \emph{log4j}
-library with the version number\emph{1.2.15}.
+the version of this library, e.g. \texttt{log4j1.2.16} for the \emph{log4j}
+library with the version number\emph{1.2.16}.
 \item The jars of this library are located in a subfolder of this folder
 called \emph{lib}
 \item The Javadoc documentation for the library is compressed into a zip
@@ -403,7 +404,7 @@ from their repository. The presence of a snapshot is marked in the file
 \subsubsection{Libraries Needed to Compile JVoiceXML}
 \label{sec:libr-need-comp}
 
-\paragraph{log4j 1.2.15}
+\paragraph{log4j 1.2.16}
 
 JVoiceXML uses log4j~\cite{apache:log4j} for logging. We think that log4j has 
 some advantages
@@ -419,21 +420,29 @@ This file contains the description of a logging handler that forwards all
 request to log4j. Hence, both the log4j logging framework and SUN's logging
 framework can be configured through the log4.xml configuration file.
 
-\paragraph{Rhino 1.7R2}
+\paragraph{Rhino 1.7R3}
 
 JVoiceXML uses rhino~\cite{rhino} from Mozilla to enable scripting.
 Java 6 already comes with a rhino implementation, but since we need to
 build custom components we can not rely on this.
 
-\paragraph{Commons pool 1.5.3}
+\paragraph{jsonsimple1.1}
+
+Helps to parse JSON formatted JavaScript.
+
+\paragraph{Commons pool 1.5.5}
 
 The pooling of implementation platform resources is based on commons
 pool.
 
-\paragraph{Commons HTTP client 4.0}
+\paragraph{Commons HTTP client 4.0.3}
 
 The HTTP client library is used to retrieve VoiceXML documents from a web
 server.
+
+\paragraph{Commons HTTP core 4.1}
+
+Core HTTP functionalities needed by the HTTP client.
 
 \subsubsection{Libraries Needed at Run-time}
 
@@ -505,7 +514,7 @@ browser.
 
 Once you changed the settings call
 \begin{lstlisting}
-ant -buildfile configuration.xml
+ant -f configuration.xml
 \end{lstlisting}
 to create your adapted configuration settings. In addition you also get
 a customized ant build file \texttt{run.xml} as well as the included
@@ -524,8 +533,8 @@ and stopped by
 ant -f run.xml shutdown
 \end{lstlisting}
 
-Please do not stop the voice browser by CTRL-C or similar. It may occur that
-some resources are not closed properly and may cause conflicts with the next
+Please do not stop the voice browser by \texttt{CTRL-C} or similar. It may occur
+that some resources are not closed properly and may cause conflicts with the next
 start of JVoiceXML.
 
 The created \texttt{run.xml} also contains a target to enable remote
@@ -745,8 +754,6 @@ JSAPI 2.0 is being developed within
 the Java Community Process (JCP)~\cite{jcp} under 
 JSR-113~\cite{jcp:jsr113}.
 
-\paragraph{jsr113-jsebase}
-
 This open source library library provides a framework to ease the development of
 JSAPI 2.0 compliant speech engines. The project also provides custom extensions for
 FreeTTS and sphinx. The project URL is \url{http://jsapi.sourceforge.net}.
@@ -916,6 +923,7 @@ The demos comprise the following sub-projects:
 \item[org.jvoicexml.demo.inputdemo] A small cinema application
 \item[org.jvoicexml.demo.jtapidemo] SIP based access to JVoiceXML calling the
 hello world servlet demo (not functional)
+\item[org.jvoicexml.demo.marcdemo] Demo to show how the interaction with MARC.
 \item[org.jvoicexml.demo.mixedinitiativedemo] Demo to show how the mix\-ed
 initiative capabilities.
 \item[org.jvoicexml.demo.objecttagdemo] Demo to show how the object tag can be
@@ -1006,8 +1014,8 @@ We follow the JAVA code conventions~\cite{sun:codeconv} for our code. All
 methods and member variables must be commented using 
 JAVADOC~\cite{sun:javadoc_guidelines}.
 
-In addition we use a custom \texttt[language=Java]{@todo} JAVADOC tag or a \texttt{TODO} tag to
-mark sections that need further work.
+In addition we use a custom \texttt[language=Java]{@todo} JAVADOC tag or a
+\texttt{TODO} tag to mark sections that need further work.
 
 Example:
 
@@ -1045,7 +1053,7 @@ copyright, see section~\ref{sec:copyright}, that we use for JVoiceXML.
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011 JVoiceXML group - 
+ * Copyright (C) 2012 JVoiceXML group - 
  *      http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it 
