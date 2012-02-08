@@ -115,7 +115,7 @@ public final class ScriptingEngine
      * @return JSON formatted string
      * @since 0.7.5
      */
-    public String toJSON(final ScriptableObject object) {
+    public static String toJSON(final ScriptableObject object) {
         if (object == null) {
             return null;
         }
@@ -130,7 +130,7 @@ public final class ScriptingEngine
      * @since 0.7.5
      */
     @SuppressWarnings("unchecked")
-    private JSONObject toJSONObject(final ScriptableObject object) {
+    private static JSONObject toJSONObject(final ScriptableObject object) {
         if (object == null) {
             return null;
         }

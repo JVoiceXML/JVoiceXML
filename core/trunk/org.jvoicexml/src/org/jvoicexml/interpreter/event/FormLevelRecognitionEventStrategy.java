@@ -356,10 +356,9 @@ final class FormLevelRecognitionEventStrategy
                     + "can not be processed!");
             return null;
         }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("semantic interpretation: '" + interpretation + "'");
-        }
         final ScriptableObject inter = (ScriptableObject) interpretation;
+        final String str = ScriptingEngine.toJSON(inter);
+        LOGGER.info("semantic interpretation: '" + str + "'");
         final Collection<String> props = getResultProperties(inter);
         final Collection<InputItem> filtered =
             new java.util.ArrayList<InputItem>();
