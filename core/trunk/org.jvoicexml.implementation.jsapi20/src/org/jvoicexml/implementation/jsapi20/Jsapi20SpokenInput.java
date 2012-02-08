@@ -36,6 +36,7 @@ import java.util.UUID;
 
 import javax.speech.AudioException;
 import javax.speech.AudioManager;
+import javax.speech.EngineEvent;
 import javax.speech.EngineException;
 import javax.speech.EngineManager;
 import javax.speech.EngineStateException;
@@ -683,6 +684,16 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      */
     @Override
     public void recognizerUpdate(final RecognizerEvent recognizerEvent) {
+        switch(recognizerEvent.getId()) {
+        case EngineEvent.ENGINE_ERROR:
+            /*
+             * quote JSAPI2-Specc: 
+             * "Event issued when an Engine error occurs. 
+             * [...] The application should deallocate the Engine in this case."
+             */
+            close();
+            break;
+        }
     }
 
     /**
