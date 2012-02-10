@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -27,10 +27,10 @@
  *
  */
 
-
 package org.jvoicexml.implementation.jsapi20;
 
 import java.util.Collection;
+import java.util.StringTokenizer;
 
 import javax.speech.recognition.FinalResult;
 import javax.speech.recognition.RecognizerProperties;
@@ -39,9 +39,11 @@ import javax.speech.recognition.ResultToken;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * JSAPI 20 implementation of the result of the recognition process.
@@ -224,9 +226,19 @@ public final class Jsapi20RecognitionResult
                 if (pair.length < 2) {
                     source = "out = '" + pair[0] + "';"; // e.g. out = 'help';
                 } else {
-                    String[] nestedctx = pair[0].split(".");
+                    final StringTokenizer tokenizer =
+                        new StringTokenizer(pair[0], ".");
                     String seq = "";
-                    for (String part : nestedctx) {
+                    if (tokenizer.hasMoreTokens()) {
+                        Object o = scope.get("out", scope);
+                        if (!(o instanceof ScriptableObject)) {
+                            context.evaluateString(scope,
+                                    "var out = new Object();", "expr",
+                                    1, null);
+                        }
+                    }
+                    while (tokenizer.hasMoreTokens()) {
+                        final String part = tokenizer.nextToken();
                         // traverse and create the nested context
                         // (e.g. out.foo.bar)
                         if (!seq.equals(pair[0])) {
@@ -234,7 +246,8 @@ public final class Jsapi20RecognitionResult
                                 seq += ".";
                             }
                             seq += part;
-                            if (!props.contains("out." + seq)) {
+                            if (!props.contains("out." + seq)
+                                    && tokenizer.hasMoreElements()) {
                                 // the subcontext hasn't been created so let's
                                 // do this here
                                 final String expr = "out." + seq
@@ -245,6 +258,8 @@ public final class Jsapi20RecognitionResult
                                 }
                                 context.evaluateString(scope, expr, "expr", 1,
                                         null);
+                                Object o = scope.get("out", scope);
+                                System.out.println("*** " + (o instanceof ScriptableObject ? ScriptingEngine.toJSON((ScriptableObject) scope.get("out", scope)) : o));
                             }
                         }
                     }
@@ -254,11 +269,13 @@ public final class Jsapi20RecognitionResult
                     LOGGER.debug("setting: '" + source + "'");
                 }
                 context.evaluateString(scope, source, "source", 1, null);
+                Object o = scope.get("out", scope);
+                System.out.println("*** " + (o instanceof ScriptableObject ? ScriptingEngine.toJSON((ScriptableObject) scope.get("out", scope)) : o));
             }
             interpretation = scope.get("out", scope);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("... created semantic interpretation");
-            }
+            final String json = ScriptingEngine.toJSON(
+                    (ScriptableObject) interpretation);
+            LOGGER.info("created semantic interpretation out=" + json);
         }
         return interpretation;
     }
