@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+  <repository>jsapi20</repository>
+  <classpath>lib/org.jvoicexml.implementation.jsapi20.jar</classpath>
+  <classpath>lib/jsr113.jar</classpath>
+  <classpath>lib/org.jvoicexml.jsapi2.jar</classpath>
+  <classpath>lib/org.jvoicexml.jsapi2.jse.jar</classpath>
+  <classpath>lib/org.jvoicexml.jsapi2.jse.freetts.jar</classpath>
+  <classpath>lib/org.jvoicexml.jsapi2.jse.sphinx4.jar</classpath>
+  <classpath>lib/freetts.jar</classpath>
+  <classpath>lib/cmu_us_kal.jar</classpath>
+  <classpath>lib/cmulex.jar</classpath>
+  <classpath>lib/en_us.jar</classpath>
+  <classpath>lib/sphinx4.jar</classpath>
+  <classpath>lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar</classpath>
+
+  <beans:bean
+    class="org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutputFactory">
+    <beans:constructor-arg type="java.lang.String"
+      value="org.jvoicexml.jsapi2.jse.synthesis.freetts.FreeTTSEngineListFactory"/>
+    <beans:property name="instances" value="1" />
+    <beans:property name="type" value="jsapi20" />
+    <!-- beans:property name="engineModeFactory">
+        <beans:bean class="org.jvoicexml.implementation.jsapi20.JVoiceXmlSynthesizerModeFactory">
+            <beans:property name="engineName" value="anna"/>
+        </beans:bean>
+    </beans:property-->
+    <!-- beans:property name="mediaLocatorFactory">
+        <beans:bean class="org.jvoicexml.implementation.jsapi20.JlibRtpMediaLocatorFactory">
+            <beans:property name="participant" value="localhost:16384"/>
+            <beans:property name="port" value="30000"/>
+            <beans:property name="rate" value="8000" />
+            <beans:property name="keepAlive" value="true" />
+        </beans:bean>
+    </beans:property-->
+  </beans:bean>
+
+  <beans:bean class="org.jvoicexml.implementation.jsapi20.Jsapi20SpokenInputFactory">
+    <beans:constructor-arg type="java.lang.String"
+      value="org.jvoicexml.jsapi2.jse.recognition.sphinx4.SphinxEngineListFactory"/>
+    <beans:property name="instances" value="1" />
+    <beans:property name="type" value="jsapi20" />
+    <!-- beans:property name="mediaLocatorFactory">
+        <beans:bean class="org.jvoicexml.implementation.jsapi20.JlibRtpMediaLocatorFactory">
+            <beans:property name="participant" value="localhost:16384"/>
+            <beans:property name="port" value="30001"/>
+            <beans:property name="rate" value="8000" />
+            <beans:property name="keepAlive" value="true" />
+        </beans:bean>
+    </beans:property>
+  </beans:bean-->
+</implementation>
