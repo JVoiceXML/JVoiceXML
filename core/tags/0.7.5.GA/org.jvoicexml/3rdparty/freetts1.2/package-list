@@ -1,0 +1,16 @@
+com.sun.speech.engine
+com.sun.speech.engine.synthesis
+com.sun.speech.engine.synthesis.text
+com.sun.speech.freetts
+com.sun.speech.freetts.audio
+com.sun.speech.freetts.cart
+com.sun.speech.freetts.clunits
+com.sun.speech.freetts.diphone
+com.sun.speech.freetts.en
+com.sun.speech.freetts.en.us
+com.sun.speech.freetts.jsapi
+com.sun.speech.freetts.lexicon
+com.sun.speech.freetts.relp
+com.sun.speech.freetts.util
+de.dfki.lt.freetts.en.us
+de.dfki.lt.freetts.mbrola
