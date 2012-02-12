@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<callmanager xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
+    <repository>mrcpv2</repository>
+    <classpath>dist/jvxml-mrcpv2.jar</classpath>
+    <classpath>dist/jvxml-client-mrcpv2.jar</classpath>
+    <classpath>
+        lib/cairo-sip-0.2.jar
+    </classpath>
+    <classpath>
+        lib/cairo-client.jar
+    </classpath>
+    <classpath>
+        lib/cairo-rtp.jar
+    </classpath>
+    <classpath>
+        lib/jain-sip-ri-1.2.jar
+    </classpath>
+    <classpath>
+        lib/nist-sdp-1.0.jar
+    </classpath>
+    <classpath>
+        lib/jain-sip-api-1.2.jar
+    </classpath>
+    <classpath>
+        lib/concurrent-1.3.4.jar
+    </classpath>
+    <classpath>
+        lib/mrcp4j-0.2.jar
+    </classpath>
+    <classpath>
+        lib/zanzibar.jar
+    </classpath>
+    <classpath>
+        lib/speechcloud-client.jar
+    </classpath>
+    <classpath>
+        lib/commons-lang-2.3.jar
+    </classpath>
+
+    <beans:bean id="callmanager"
+        class="org.jvoicexml.callmanager.mrcpv2.SipCallManager"
+        init-method="startup" destroy-method="shutdown">
+        <beans:property name="sipServer">
+            <beans:ref bean="sipServer" />
+        </beans:property>
+        <beans:property name="applications">
+            <beans:map>
+                <beans:entry key="1000"
+                    value="http://127.0.0.1:8080/helloworldservletdemo/HelloWorld" />
+                <beans:entry key="2000"
+                    value="file:///work/zanzibar/src/main/voicexml/hello.vxml" />
+                <beans:entry key="3000"
+                    value="file:///work/zanzibar/src/main/voicexml/test.vxml" />
+            </beans:map>
+        </beans:property>
+        <beans:property name="cloudUrl">
+            <beans:value>http://spokentech.net/speechcloud</beans:value>
+        </beans:property>
+    </beans:bean>
+    <beans:bean id="sipServer" class="org.speechforge.zanzibar.sip.SipServer"
+        init-method="startup" destroy-method="shutdown">
+        <beans:property name="dialogService">
+            <beans:ref bean="callmanager" />
+        </beans:property>
+        <beans:property name="mySipAddress">
+            <beans:value>@mrcpv2.sip.address@</beans:value>
+        </beans:property>
+        <beans:property name="stackName">
+            <beans:value>Mrcpv2SessionManager</beans:value>
+        </beans:property>
+        <beans:property name="port">
+            <beans:value>@mrcpv2.sip.port@</beans:value>
+        </beans:property>
+        <beans:property name="transport">
+            <beans:value>UDP</beans:value>
+        </beans:property>
+        <beans:property name="cairoSipAddress">
+            <beans:value>@mrcpv2.sip.cairo.sip.address@</beans:value>
+        </beans:property>
+        <beans:property name="cairoSipHostName">
+            <beans:value>@mrcpv2.sip.cairo.sip.host@</beans:value>
+        </beans:property>
+        <beans:property name="cairoSipPort">
+            <beans:value>@mrcpv2.sip.cairo.sip.port@</beans:value>
+        </beans:property>
+        <beans:property name="mode">
+            <beans:value>mrcpv2</beans:value>
+        </beans:property>
+        <beans:property name="baseReceiverRtpPort">
+            <beans:value>42150</beans:value>
+        </beans:property>
+        <beans:property name="baseXmitRtpPort">
+            <beans:value>42050</beans:value>
+        </beans:property>
+        <beans:property name="maxConnects">
+            <beans:value>50</beans:value>
+        </beans:property>
+    </beans:bean>
+</callmanager>
