@@ -31,9 +31,11 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.client.TcpUriFactory;
 
 /**
  * Server that waits for incoming connections over a socket.
@@ -55,6 +57,12 @@ final class TextServerThread extends Thread {
     /** Reference to JVoiceXML. */
     private final JVoiceXml jvxml;
 
+    /** <code>true</code> if the server is stopped. */
+    private boolean stopped;
+
+    /** Shutdown semaphore. */
+    private final Object lock;
+
     /**
      * Constructs a new object.
      * @param portNumber server port number.
@@ -66,6 +74,7 @@ final class TextServerThread extends Thread {
         port = portNumber;
         uri = applicationUri;
         jvxml = jvoicexml;
+        lock = new Object();
         setDaemon(true);
     }
 
@@ -74,21 +83,63 @@ final class TextServerThread extends Thread {
      */
     @Override
     public void run() {
+        ServerSocket server = null;
         try {
-            final ServerSocket server = new ServerSocket();
+            server = new ServerSocket();
             server.setReuseAddress(true);
             final InetAddress localhost = InetAddress.getLocalHost();
             final InetSocketAddress address =
                 new InetSocketAddress(localhost, port);
             server.bind(address);
-            while ((server != null) && !interrupted()) {
+            while ((server != null) && !interrupted() && !stopped) {
                 final Socket client = server.accept();
-                final TextConnection connection = new TextConnection(client,
-                        uri, jvxml);
-                connection.start();
+                if (!stopped) {
+                    final InetSocketAddress remote =
+                            (InetSocketAddress) client.getRemoteSocketAddress();
+                    final URI remoteUri = TcpUriFactory.createUri(remote);
+                    LOGGER.info("connection from '" + remoteUri + "'");
+                    final TextConnection connection = new TextConnection(client,
+                            uri, jvxml);
+                    connection.start();
+                }
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+        } catch (URISyntaxException e) {
+            LOGGER.error(e.getMessage(), e);
+        } finally {
+            try {
+                if (server != null) {
+                    server.close();
+                }
+            } catch (IOException e) {
+                LOGGER.warn(e.getMessage(), e);
+            }
+        }
+        synchronized (lock) {
+            lock.notifyAll();
+        }
+    }
+
+    /**
+     * Stops the server.
+     * @throws IOException
+     *         error stopping the server
+     * @since 0.7.6
+     */
+    public void stopServer() throws IOException {
+        stopped = true;
+        final InetAddress localhost = InetAddress.getLocalHost();
+        final InetSocketAddress address =
+                new InetSocketAddress(localhost, port);
+        final Socket socket = new Socket();
+        socket.connect(address);
+        synchronized (lock) {
+            try {
+                lock.wait();
+            } catch (InterruptedException e) {
+                return;
+            }
         }
     }
 }

@@ -27,6 +27,7 @@
 package org.jvoicexml.callmanager.text;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -51,11 +52,15 @@ public final class TextCallManager implements CallManager {
     /** Reference to JVoiceXML. */
     private JVoiceXml jvxml;
 
+    /** The server thread waiting for incoming connections. */
+    private final Collection<TextServerThread> servers;
+
     /**
      * Constructs a new object.
      */
     public TextCallManager() {
         applications = new java.util.ArrayList<TextApplication>();
+        servers = new java.util.ArrayList<TextServerThread>();
     }
 
     /**
@@ -85,6 +90,14 @@ public final class TextCallManager implements CallManager {
      */
     @Override
     public void start() throws NoresourceError, IOException {
+        for (TextApplication application : applications) {
+            final int port = application.getPort();
+            final URI uri = application.getUriObject();
+            final TextServerThread server =
+                    new TextServerThread(port, uri, jvxml);
+            server.start();
+            servers.add(server);
+        }
     }
 
     /**
@@ -92,5 +105,13 @@ public final class TextCallManager implements CallManager {
      */
     @Override
     public void stop() {
+        for (TextServerThread server : servers) {
+            try {
+                server.stopServer();
+            } catch (IOException e) {
+                LOGGER.warn(e.getMessage(), e);
+            }
+        }
+        servers.clear();
     }
 }
