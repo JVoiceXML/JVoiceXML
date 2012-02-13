@@ -35,7 +35,7 @@ This file builds the distribution files for JVoiceXML.
     <fileset dir="${etc}/legal" id="dist.files.legal" />
   </target>
   <target name="-userdoc">
-    <ant dir="../userguide" inheritall="false" target="pdf" />
+    <!--ant dir="../userguide" inheritall="false" inheritrefs="false" target="pdf"/-->
   </target>
 
   <target name="-prepareDistributionFolder"
@@ -441,6 +441,12 @@ sphinx.lib.dir=../../lib
             srcUrl="${trunk.core.dir}/org.jvoicexml"
             destUrl="${tag.core.dir}/org.jvoicexml"/>
         <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.config"
+            destUrl="${tag.core.dir}/org.jvoicexml.config"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.jndi"
+            destUrl="${tag.core.dir}/org.jvoicexml.jndi"/>
+        <copy message="Tagging release ${jvxml.version}"
             srcUrl="${trunk.core.dir}/org.jvoicexml.xml"
             destUrl="${tag.core.dir}/org.jvoicexml.xml"/>
         <copy message="Tagging release ${jvxml.version}"
@@ -455,6 +461,9 @@ sphinx.lib.dir=../../lib
         <copy message="Tagging release ${jvxml.version}"
             srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.jtapi"
             destUrl="${tag.core.dir}/org.jvoicexml.implementation.jtapi"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.marc"
+            destUrl="${tag.core.dir}/org.jvoicexml.implementation.marc"/>
         <copy message="Tagging release ${jvxml.version}"
             srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.mary"
             destUrl="${tag.core.dir}/org.jvoicexml.implementation.mary"/>
@@ -487,6 +496,9 @@ sphinx.lib.dir=../../lib
         <copy message="Tagging release ${jvxml.version}"
           srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.jtapidemo"
           destUrl="${tag.demo.dir}/org.jvoicexml.demo.jtapidemo"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.marcdemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.marcdemo"/>
         <copy message="Tagging release ${jvxml.version}"
           srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.mixedinitiativedemo"
           destUrl="${tag.demo.dir}/org.jvoicexml.demo.mixedinitiativedemo"/>
