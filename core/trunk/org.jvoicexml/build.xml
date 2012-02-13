@@ -225,9 +225,9 @@ jvxml.revision=${revision.max}
     <target name="coreapidoc" depends="-setup">
         <echo message="creating apidoc for org.jvoicexml.xml"/>
         <ant dir="../org.jvoicexml.xml" target="apidoc"
-            inheritall="false"/>
+            inheritall="false" inheritrefs="false"/>
         <ant dir="../org.jvoicexml.processor.srgs" target="apidoc"
-            inheritall="false"/>
+            inheritall="false" inheritrefs="false"/>
         <echo message="creating javadoc with access: ${javadoc.access}" />
         <delete dir="${apidoc}" />
         <javadoc destdir="${apidoc}"
@@ -295,6 +295,12 @@ jvxml.revision=${revision.max}
             <package name="org.jvoicexml.client*" />
         </group>
         </javadoc>
+
+        <!-- Create apidoc for directly dependent components -->
+        <ant dir="../org.jvoicexml.config" target="apidoc"
+            inheritall="false" inheritrefs="false"/>
+        <ant dir="../org.jvoicexml.jndi" target="apidoc"
+            inheritall="false" inheritrefs="false"/>
     </target>
 
     <target name="apidoc" depends="coreapidoc,-apidocPlatforms"
