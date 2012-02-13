@@ -1,6 +1,6 @@
-<project name="org.jvoicexml.implementation.text" default="jar" basedir=".">
+<project name="org.jvoicexml.callmanager.text" default="jar" basedir=".">
     <description>
-This file builds the text implemenation platform for JVoiceXml.
+This file builds the text callmanager for JVoiceXml.
 
 To override the current settings follow the instructions given in
 org.jvoicexml/personal-props/README.txt
@@ -15,7 +15,9 @@ org.jvoicexml/personal-props/README.txt
 
     <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
-        <property name="component" value="org.jvoicexml.implementation.text"/>
+        <property name="component" value="org.jvoicexml.callmanager.text"/>
+        <property name="component.path"
+          value="org/jvoicexml/callmanager/text"/>
 
         <!-- directory structure -->
         <property name="src" value="src" />
@@ -32,15 +34,12 @@ org.jvoicexml/personal-props/README.txt
         <!-- main jar files -->
         <property name="dist.jar"
                   value="${dist}/${component}.jar" />
-        <property name="dist.client.text.jar"
-            value="${dist}/jvxml-client-text.jar" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
             <path refid="jvxml.core.lib" />
             <path refid="jvxml.processor.srgs.lib" />
             <fileset refid="log4j.lib" />
-            <fileset refid="rhino.lib"/>
         </path>
     </target>
 
@@ -68,12 +67,16 @@ You're using ${ant.java.version}
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
-        <delete file="${dist.client.text.jar}" failonerror="false"/>
         <delete file="${dist.jar}" failonerror="false"/>
     </target>
 
     <target name="configuration" depends="-setup">
-      <copy todir="${config}" file="${etc}/text-implementation.xml"/>
+      <copy todir="${config}" file="${etc}/text-callmanager.xml"/>
+      <replace file="${config}/text-callmanager.xml">
+        <replacefilter token="@text.terminal@" value="${text.terminal}" />
+        <replacefilter token="@text.inputType@" value="${text.inputType}" />
+        <replacefilter token="@text.outputType@" value="${text.outputType}" />
+      </replace>
     </target>
 
     <target name="compile"
@@ -87,8 +90,7 @@ You're using ${ant.java.version}
                source="${javac.source}"
                target="${javac.target}">
             <src path="${src}" />
-            <include name="org/jvoicexml/client/text/**/*.java" />
-            <include name="org/jvoicexml/implementation/text/**/*.java" />
+            <include name="${component.path}/**/*.java" />
             <exclude name="**/package-info.java" />
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
@@ -98,11 +100,10 @@ You're using ${ant.java.version}
     <target name="jar"
             depends="compile"
             description="Pack all compiled files into jar files">
-        <!-- text implementation jar file -->
         <jar jarfile="${dist.jar}" compress="false">
             <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/text/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
+              <include name="${component.path}/**/*.class" />
+              <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
@@ -110,25 +111,7 @@ You're using ${ant.java.version}
                     <attribute name="Implementation-Vendor"
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
-                               value="JVoiceXML text base layer" />
-                    <attribute name="Implementation-Version"
-                        value="${version}" />
-                </section>
-            </manifest>
-        </jar>
-
-        <!-- client jar file -->
-        <jar jarfile="${dist.client.text.jar}" compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/client/text/**/*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                        value="JVoiceXML client files for text based access" />
+                               value="JVoiceXML text based call manager" />
                     <attribute name="Implementation-Version"
                         value="${version}" />
                 </section>
@@ -157,7 +140,7 @@ You're using ${ant.java.version}
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2012<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <tag name="todo" description="Stuff to complete" />
         <classpath>
@@ -175,11 +158,8 @@ You're using ${ant.java.version}
               href="http://logging.apache.org/log4j/docs/api/"
               packagelistLoc="${log4j.dir}" />
 
-        <group title="Text based implementation platform">
-            <package name="org.jvoicexml.implementation.text*" />
-        </group>
-        <group title="Text based client">
-            <package name="org.jvoicexml.client.text*" />
+        <group title="Text based call manager">
+            <package name="${component}*" />
         </group>
         </javadoc>
     </target>
@@ -214,9 +194,8 @@ You're using ${ant.java.version}
 
     <target name="distribution" depends="jar">
       <property name="distFolder" value="${dist}/${jvxml.version}" />
-      <copy tofile="${distFolder}/config/text-implementation.xml"
-        file="${etc}/text-implementation-dist.xml"/>
-      <copy todir="${distFolder}/lib" file="${dist.client.text.jar}"/>
-      <copy todir="${distFolder}/lib" file="${dist.implementation.text.jar}"/>
+      <copy tofile="${distFolder}/config/text-callmanager.xml"
+        file="${etc}/text-callmanager-dist.xml"/>
+      <copy todir="${distFolder}/lib" file="${dist.jar}"/>
     </target>
 </project>

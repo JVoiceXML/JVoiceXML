@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>text</repository>
-  <classpath>lib/jvxml-text.jar</classpath>
+  <classpath>lib/org.jvoicexml.implementation.text.jar</classpath>
   <classpath>lib/jvxml-client-text.jar</classpath>
   <classpath>lib/org.jvoicexml.processor.srgs.jar</classpath>
   <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">

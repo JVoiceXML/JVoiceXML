@@ -41,7 +41,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.callmanager.text.ConnectedTextConnectionInformation;
 import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
@@ -399,10 +398,10 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             final TextConnectionInformation textClient =
                 (TextConnectionInformation) info;
             socket = openConnection(textClient);
-        } else if (info instanceof ConnectedTextConnectionInformation) {
-            final ConnectedTextConnectionInformation textClient =
-                (ConnectedTextConnectionInformation) info;
-            socket = textClient.getSocket();
+//        } else if (info instanceof ConnectedTextConnectionInformation) {
+//            final ConnectedTextConnectionInformation textClient =
+//                (ConnectedTextConnectionInformation) info;
+//            socket = textClient.getSocket();
         } else {
             throw new IOException("Unsupported connection information '"
                     + info + "'");

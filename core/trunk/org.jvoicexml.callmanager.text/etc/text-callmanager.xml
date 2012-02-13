@@ -3,7 +3,6 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
   <repository>text</repository>
-  <classpath>dist/jvxml-text.jar</classpath>
   <classpath>dist/jvxml-client-text.jar</classpath>
 
   <beans:bean id="callmanager"
