@@ -1,49 +1,61 @@
-<project name="JVoiceXML Run Script" default="run" basedir=".">
+<project name="JVoiceXML Systemtest Run Script" default="run" basedir=".">
     <description>
-This file provides targets to run and stop the voice browser.
+This file provides targets to run and stop the thes JVoiceXML System test.
   </description>
 
     <import file="build.xml" />
 
-    <target name="-run-setup" depends="jar">
-        <property name="text.project"
-           value="../org.jvoicexml.implementation.text" />
+    <target name="-run-setup" depends="-setup">
         <path id="run.classpath">
             <path refid="project.classpath" />
-            <fileset refid="loggings.lib" />
-            <fileset refid="spring.lib"/>
             <pathelement path="${build}" />
-            <pathelement path="./config" />
+            <fileset refid="loggings.lib" />
+            <pathelement location="${config}" />
+            <pathelement location="config" />
         </path>
-        <copy file="${jvxml.core.dir}/config/jndi.properties"
-          todir="./config" />
-    </target>
-    
-    <target name="clean">
-        <delete file="./config/jndi.properties" />
+
+        <path id="shutdown.classpath">
+            <path refid="project.classpath" />
+            <fileset refid="loggings.lib" />
+            <pathelement location="${build}" />
+            <pathelement location="${config}" />
+            <pathelement location="../org.jvoicexml.jndi/classes" />
+        </path>
     </target>
 
     <target name="run"
-            description="Run the VoiceXML interpreter system test"
-            depends="-run-setup">
+            description="Runs the VoiceXML system test"
+            depends="jar,-run-setup">
         <java classname="org.jvoicexml.systemtest.SystemTestMain"
               fork="true"
               maxmemory="256m">
-            <classpath refid="run.classpath" />
+            <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties" />
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
-            <jvmarg value="-Dlog4j.xml=${config}/jvoicexml.policy" />
+            <classpath refid="run.classpath" />
         </java>
     </target>
 
-  <target name="debug"
-          description="Run the VoiceXML interpreter system test in debug mode"
-          depends="-run-setup">
-      <java classname="org.jvoicexml.systemtest.SystemTestMain"
-            fork="true"
-            maxmemory="256m">
-          <classpath refid="run.classpath" />
-          <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
-          <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12368" />
-      </java>
-  </target>
+    <target name="debug"
+            description="Run the VoiceXML interpreter in debug mode"
+            depends="jar,-run-setup">
+        <java classname="org.jvoicexml.startup.Startup"
+              fork="true"
+              maxmemory="256m">
+            <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties" />
+            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
+            <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367" />
+            <classpath refid="run.classpath" />
+        </java>
+    </target>
+
+    <target name="shutdown"
+            description="Terminates the VoiceXML interpreter"
+            depends="jar,-run-setup">
+        <java classname="org.jvoicexml.jndi.RemoteShutdown" fork="true">
+            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
+            <classpath refid="shutdown.classpath" />
+            <!-- JNDI port number -->
+            <arg value="@jndi.port@"/>
+        </java>
+    </target>
 </project>

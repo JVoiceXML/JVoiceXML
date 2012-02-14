@@ -19,11 +19,11 @@
  */
 package org.jvoicexml.systemtest;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.JVoiceXmlMain;
+import org.jvoicexml.JVoiceXmlMainListener;
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -36,13 +36,7 @@ import org.springframework.core.io.Resource;
  * @version $Revision$
  * @since 0.7
  */
-public final class SystemTestMain {
-    /** Maximum number of retries to lokk for JVoiceXML. */
-    private static final int MAX_RETRIES = 60;
-
-    /** Delay in msec between two lookups for JVoiceXML startup. */
-    private static final int DELAY_STARTUP = 1000;
-
+public final class SystemTestMain implements JVoiceXmlMainListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(SystemTestMain.class);
 
@@ -68,52 +62,32 @@ public final class SystemTestMain {
             new SystemTestConfigLoader(filename);
         final SystemTestCallManager cm = config.loadObject(
                 SystemTestCallManager.class, "callmanager");
-        final JVoiceXml interpreter = findInterpreter();
-        if (interpreter == null) {
-            LOGGER.error("JVoiceXML not found, exit.");
-            return;
+        final SystemTestMain test = new SystemTestMain();
+        try {
+            final JVoiceXml interpreter = test.startInterpreter();
+            cm.setJVoiceXml(interpreter);
+            cm.start();
+        } catch (InterruptedException e) {
+            LOGGER.fatal(e.getMessage(), e);
         }
-        cm.setJVoiceXml(interpreter);
-        cm.start();
     }
 
     /**
-     * Retrieves a reference to the JVoiceXML interpreter. If the reference can
-     * not be retrieved this methods waits for a certain amount of time and
-     * retries.
-     * @return reference to the JVoiceXML interpreter <code>null</code> if
-     * the reference could not be retrieved.
+     * Starts JVoiceXML.
+     * @return reference to the JVoiceXML interpreter
+     * @throws InterruptedException
+     *         error waiting until JVoiceXML started
      */
-    private static JVoiceXml findInterpreter() {
-        final Context context;
-        try {
-            context = new InitialContext();
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error creating initial context", ne);
-            return null;
-        }
+    private JVoiceXml startInterpreter() throws InterruptedException {
+        System.setProperty("jvoicexml.config", "../org.jvoicexml/config");
+        final JVoiceXmlConfiguration config = new JVoiceXmlConfiguration();
+        final JVoiceXmlMain jvxml = new JVoiceXmlMain(config);
+        jvxml.addListener(this);
+        jvxml.start();
 
-        LOGGER.info("Waiting until JVoiceXML started");
-        int count = 0;
-        do {
-            try {
-                return (JVoiceXml) context.lookup("JVoiceXml");
-            } catch (javax.naming.NamingException e) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("unable to find the interpreter", e);
-                }
-            }
-            ++count;
-            try {
-                Thread.sleep(DELAY_STARTUP);
-            } catch (InterruptedException e) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("waiting interrupted", e);
-                }
-                return null;
-            }
-        } while (count < MAX_RETRIES);
-        return null;
+        wait();
+
+        return jvxml;
     }
 
     /**
@@ -163,5 +137,17 @@ public final class SystemTestMain {
 
             return baseClass.cast(object);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized void jvxmlStarted() {
+        notifyAll();
+    }
+
+    @Override
+    public void jvxmlTerminated() {
     }
 }

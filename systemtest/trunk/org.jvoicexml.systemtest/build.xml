@@ -40,7 +40,14 @@ personal-props/README.txt
         <path id="project.classpath">
             <path refid="jvxml.core.lib" />
             <fileset refid="log4j.lib" />
-            <fileset refid="spring.lib" />
+            <fileset refid="rhino.lib" />
+            <fileset refid="jsonsimple.lib" />
+            <fileset refid="pool.lib" />
+            <fileset refid="httpcore.lib" />
+            <fileset refid="httpclient.lib" />
+            <fileset refid="jlibrtp.lib" />
+            <fileset refid="jchardet.lib" />
+            <fileset refid="spring.lib"/>
             <pathelement location="${dist}/jvxml-client-text.jar" />
             <pathelement location="${dist}/jvxml-text.jar" />
             <pathelement location="${build}" />
@@ -52,11 +59,12 @@ personal-props/README.txt
         <condition property="version1.6">
             <or>
                 <equals arg1="1.6" arg2="${ant.java.version}" />
+                <equals arg1="1.7" arg2="${ant.java.version}" />
             </or>
         </condition>
 
         <fail unless="version1.6">
-You need at leasr java version 1.6 to compile this project.
+You need at least java version 1.6 to compile this project.
 You're using ${ant.java.version}
     </fail>
     </target>
@@ -80,26 +88,32 @@ You're using ${ant.java.version}
         <delete dir="${build}" failonerror="false" />
     </target>
 
-    <target name="compile-jvxml" depends="-setup"
+    <target name="createSystemTestConfiguration" depends="-setup">
+        <echo file="${jvxml.core.dir}/personal-props/platforms.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+    <platforms>
+      <platform name="org.jvoicexml.implementation.text" />
+    </platforms>
+]]>
+        </echo>
+        <ant antfile="${jvxml.core.dir}/configuration.xml"
+            inheritall="false" inheritrefs="false"/>
+    </target>
+
+    <target name="compile-jvxml" depends="createSystemTestConfiguration"
       description="Create JVoiceXML core jar files">
         <echo message="Create JVoiceXML core jare files" />
         <ant antfile="${jvxml.core.dir}/build.xml" 
             dir="${jvxml.core.dir}"
             target="jar" 
-            inheritAll="false" inheritrefs="false">
-            <property name="jvxml.text" value="true"/>
-            <property name="jvxml.jsapi10" value="false"/>
-            <property name="jvxml.jsapi20" value="false"/>
-            <property name="jvxml.mrcpv2" value="false"/>
-            <property name="jvxml.jtapi" value="false"/>
-            <property name="jvxml.jndi.repository" value="text"/>
-        </ant>
+            inheritAll="false" inheritrefs="false" />
     </target>
 
     <target name="compile" depends="-init,-initcompile,compile-jvxml,-checkJavaVersion" 
         	description="Compile the sources">
         <echo message="compiling system test layer with debug=${debug}, optimize=${optimize}" />
-        <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1" source="${javac.source}" target="${javac.target}">
+        <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
+        	deprecation="on" includeantruntime="false"
+        	source="${javac.source}" target="${javac.target}">
             <src path="${src}" />
             <include name="org/jvoicexml/systemtest/**/*.java" />
             <classpath refid="project.classpath" />

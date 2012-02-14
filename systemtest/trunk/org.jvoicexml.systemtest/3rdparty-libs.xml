@@ -13,12 +13,22 @@ This file contains the 3rd party libary definitions, used by the systemtest.
         <!-- jvxml library -->
         <path id="jvxml.core.lib">
           <path location="${jvxml.core.dir}/classes"/>
+          <path location="../org.jvoicexml.config/classes"/>
           <path location="../org.jvoicexml.xml/classes"/>
           <path location="../org.jvoicexml.jndi/classes"/>
         </path>
 
         <fileset dir="${3rdparty.dir}/junit4.4/lib" id="junit.lib">
             <include name="**/*.jar" />
+        </fileset>
+
+    	<!-- spring framework library -->
+        <property name="spring.dir"
+                  value="../org.jvoicexml.config/3rdparty/springframework3.0.5" />
+        <property name="spring.lib.dir" value="${spring.dir}/lib" />
+        <fileset dir="${spring.lib.dir}" id="spring.lib">
+            <include name="org.springframework.beans-3.0.5.RELEASE.jar" />
+            <include name="org.springframework.core-3.0.5.RELEASE.jar" />
         </fileset>
     </target>
 </project>

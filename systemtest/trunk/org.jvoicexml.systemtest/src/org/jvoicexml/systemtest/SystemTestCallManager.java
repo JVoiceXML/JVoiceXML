@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -109,35 +109,35 @@ public final class SystemTestCallManager {
     /**
      * @param lib of test cases.
      */
-    public final void setTestcaseLibrary(final TestCaseLibrary lib) {
+    public void setTestcaseLibrary(final TestCaseLibrary lib) {
         this.testcaseLibrary = lib;
     }
 
     /**
      * @param cases expressions.
      */
-    public final void setTestcases(final String cases) {
+    public void setTestcases(final String cases) {
         testcases = cases;
     }
 
     /**
      * @param port of Text Server.
      */
-    public final void setTextServerPort(final int port) {
+    public void setTextServerPort(final int port) {
         this.textServerport = port;
     }
 
     /**
      * @param report test recorder.
      */
-    public final void setReport(final Report report) {
+    public void setReport(final Report report) {
         this.testRecorder = report;
     }
 
     /**
      * @param factory which create script.
      */
-    public final void setScriptFactory(final ScriptFactory factory) {
+    public void setScriptFactory(final ScriptFactory factory) {
         this.scriptFactory = factory;
     }
 }
