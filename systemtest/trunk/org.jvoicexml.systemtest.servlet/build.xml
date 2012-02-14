@@ -116,14 +116,35 @@ You're using ${ant.java.version}
           usetimestamp="true" verbose="true"/>
     </target>
     
-    <target name="unpack-testsuite" depends="-init,get-testsuite" unless="testsuite.present">
+    <target name="unpack-testsuite" depends="-init,get-testsuite"
+        unless="testsuite.present">
         <gunzip src="${testsuite}.tar.gz"/>
         <untar src="${testsuite}.tar" dest="WebContent">
           <mapper type="glob" from="${testsuite.subdirectory}/*" to="*"/>
         </untar>
-      <delete file="${testsuite}.tar"/>
+        <!-- Create a jar from the obtained class files-->
+        <jar file="WebContent/WEB-INF/lib/harness.jar">
+            <fileset dir="WebContent/WEB-INF/classes">
+                <include name="org/voicexml/conformance/**" />
+            </fileset>
+        </jar>
+        <delete file="${testsuite}.tar"/>
+        <!-- Adapt the web.xml for Tomcat 7 -->
+        <xslt in="WebContent/WEB-INF/web.xml"
+          out="web.xml" style="etc/patch-web-xml.xsl">
+            <xmlcatalog>
+                <dtd publicid="-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+                   location="http://java.sun.com/dtd/web-app_2_3.dtd" />
+            </xmlcatalog>
+            <outputproperty name="method" value="xml" />
+            <outputproperty name="standalone" value="no" />
+            <outputproperty name="encoding" value="UTF-8" />
+            <outputproperty name="indent" value="yes" />
+        </xslt>
+        <copy file="web.xml" todir="WebContent/WEB-INF" overwrite="true"/>
+        <delete file="web.xml"/>
     </target>
-    
+
     <target name="prepare-testsuite" depends="unpack-testsuite" unless="testsuite.present">
       <java classname="org.apache.tools.ant.launch.Launcher"
             fork="true" failonerror="true"
