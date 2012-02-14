@@ -73,20 +73,30 @@ public final class TextApplication {
      * @return the uri
      */
     public String getUri() {
+        if (uri == null) {
+            return null;
+        }
         return uri.toString();
     }
 
     /**
      * Sets the URI of the application to call.
      * @param applicationUri the URI to set
+     * @exception IllegalArgumentException
+     *            if the given string can not be converted into an URI
      */
-    public void setUri(final String applicationUri) {
-        final URI application;
-        try {
-            application = new URI(applicationUri);
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException(e);
+    public void setUri(final String applicationUri)
+            throws IllegalArgumentException {
+        if (applicationUri == null) {
+            uri = null;
+        } else {
+            final URI application;
+            try {
+                application = new URI(applicationUri);
+            } catch (URISyntaxException e) {
+                throw new IllegalArgumentException(e);
+            }
+            uri = application;
         }
-        uri = application;
     }
 }
