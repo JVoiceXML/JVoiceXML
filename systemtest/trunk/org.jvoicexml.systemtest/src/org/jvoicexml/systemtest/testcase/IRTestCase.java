@@ -125,6 +125,9 @@ public class IRTestCase implements TestCase {
      * {@inheritDoc}
      */
     public final int getId() {
+        if (description == null) {
+            return -1;
+        }
         return description.id;
     }
 
@@ -246,16 +249,28 @@ public class IRTestCase implements TestCase {
     public final String toString() {
         final StringBuffer buff = new StringBuffer();
         buff.append(getId());
-        buff.append(" [");
-        buff.append(description.spec);
-        buff.append("] ");
+        if (description != null) {
+            buff.append(" [");
+            buff.append(description.spec);
+            buff.append("] ");
+        }
         buff.append(" start=");
-        buff.append(start.uri);
+        if (start == null) {
+            buff.append("null");
+        } else {
+            buff.append(start.uri);
+        }
         buff.append(" deps=");
-        buff.append(dependences.size());
-        buff.append(" \"");
-        buff.append(description.text.trim());
-        buff.append("\"");
+        if (dependences == null) {
+            buff.append("null");
+        } else {
+            buff.append(dependences.size());
+        }
+        if (description != null) {
+            buff.append(" \"");
+            buff.append(description.text.trim());
+            buff.append("\"");
+        }
         return buff.toString();
     }
 

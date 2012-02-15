@@ -39,7 +39,7 @@
     <property name="testcaseLibrary">
       <bean class="org.jvoicexml.systemtest.testcase.IRTestCaseLibrary">
         <property name="testManifest"
-          value="http://localhost:8080/irtest/irtests/manifest.xml" />
+          value="http://localhost:8080/org.jvoicexml.systemtest.servlet/vxml21_0.0.5/manifest.xml" />
         <property name="ignoreList" value="./config/ignores.xml" />
         <property name="ignores" value="77, 89, 535, 564, 640, 1001, 590-599" />
       </bean>

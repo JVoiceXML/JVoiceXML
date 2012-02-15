@@ -30,8 +30,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -95,7 +97,7 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
             LOGGER.debug("ignoresFile = " + ignoresFile);
         }
         try {
-            URI uri = guessURI(ignoresFile);
+            final URI uri = guessURI(ignoresFile);
             IgnoresRootElement rootElment = loadObject(
                     IgnoresRootElement.class, uri.toURL().openStream());
             ignoreList.addAll(rootElment.ignoreList);
@@ -139,19 +141,22 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
         }
         
         try {
-            URI uri = guessURI(manifest);
-            TestsRootElement rootElement = loadObject(TestsRootElement.class,
-                    uri.toURL().openStream());
-            testCaseList.addAll(rootElement.testCaseList);
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("total " + testCaseList.size()
-                        + " testcase loaded.");
-            }
-
-            testRoot = uri.resolve(".");
-            for (IRTestCase tc : testCaseList) {
-                tc.setBaseURI(testRoot);
+            final URI uri = guessURI(manifest);
+            final URL url = uri.toURL();
+            final InputStream in = url.openStream();
+            final TestsRootElement rootElement =
+                loadObject(TestsRootElement.class, in);
+            if (rootElement != null) {
+                testCaseList.addAll(rootElement.testCaseList);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("total " + testCaseList.size()
+                            + " testcase loaded.");
+                }
+    
+                testRoot = uri.resolve(".");
+                for (IRTestCase tc : testCaseList) {
+                    tc.setBaseURI(testRoot);
+                }
             }
         } catch (URISyntaxException e) {
             LOGGER.error("unknown uri format, check config file.", e);
@@ -168,15 +173,13 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
      * @param clazz Object class.
      * @param source configuration stream
      * @return object of load
+     * @param <T> type of the object to load
      */
     private <T extends Object> T loadObject(final Class<T> clazz,
             final InputStream source) {
-        JAXBContext jc;
-
         try {
-
-            jc = JAXBContext.newInstance(clazz);
-            Unmarshaller um = jc.createUnmarshaller();
+            final JAXBContext jc = JAXBContext.newInstance(clazz);
+            final Unmarshaller um = jc.createUnmarshaller();
 
             if (LOGGER.isDebugEnabled()) {
                 um.setListener(new Unmarshaller.Listener() {
@@ -196,9 +199,14 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
                 });
             }
 
-            return clazz.cast(um.unmarshal(new InputStreamReader(source)));
+            final Reader reader = new InputStreamReader(source);
+            final Object o = um.unmarshal(reader);
+            return clazz.cast(o);
         } catch (JAXBException e) {
-            e.printStackTrace();
+            LOGGER.warn(e.getMessage(), e);
+            return null;
+        } catch (NullPointerException e) {
+            LOGGER.warn(e.getMessage(), e);
             return null;
         }
     }

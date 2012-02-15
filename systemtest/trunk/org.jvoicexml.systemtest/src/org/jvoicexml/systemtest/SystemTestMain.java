@@ -60,11 +60,14 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
 
         final String filename = System.getProperty("systemtestconfig.config",
                 "/systemtestconfig.xml");
-
         final SystemTestConfigLoader config =
             new SystemTestConfigLoader(filename);
         final SystemTestCallManager cm = config.loadObject(
                 SystemTestCallManager.class, "callmanager");
+        if (cm == null) {
+            LOGGER.fatal("error loading the call manager");
+            System.exit(-1);
+        }
         final SystemTestMain test = new SystemTestMain();
         try {
             final JVoiceXml interpreter = test.startInterpreter();
