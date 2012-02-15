@@ -3,9 +3,9 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>text</repository>
-  <classpath>dist/org.jvoicexml.implementation.text.jar</classpath>
-  <classpath>dist/jvxml-client-text.jar</classpath>
-  <classpath>dist/org.jvoicexml.processor.srgs.jar</classpath>
+  <classpath>../org.jvoicexml/dist/org.jvoicexml.implementation.text.jar</classpath>
+  <classpath>../org.jvoicexml/dist/jvxml-client-text.jar</classpath>
+  <classpath>../org.jvoicexml/dist/org.jvoicexml.processor.srgs.jar</classpath>
   <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">
     <beans:property name="instances" value="1" />
   </beans:bean>
