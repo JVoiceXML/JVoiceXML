@@ -192,6 +192,12 @@ You're using ${ant.java.version}
                 </section>
             </manifest>
         </war>
+        <echo>
+Remember to add
+JAVA_ENDORSED_DIRS=${basedir}/org.jvoicexml.systemtest.servlet/3rdparty/XercesJava2.11.0/lib
+to your start script (currently ${tomcat.startup})
+before starting Tomcat.
+        </echo>
     </target>
 
     <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,war" />
