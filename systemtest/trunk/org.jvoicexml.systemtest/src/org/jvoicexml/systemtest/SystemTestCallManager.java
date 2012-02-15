@@ -66,7 +66,7 @@ public final class SystemTestCallManager {
     private ScriptFactory scriptFactory;
 
     /**
-     * Sets the Refererence to JVoiceXml.
+     * Sets the refererence to JVoiceXml.
      * @param jvoicexml reference to JVoiceXML.
      * @since 0.7.3
      */

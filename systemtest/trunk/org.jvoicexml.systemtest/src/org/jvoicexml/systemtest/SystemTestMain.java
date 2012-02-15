@@ -40,11 +40,14 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(SystemTestMain.class);
 
+    /** Semaphore. */
+    private final Object lock;
+
     /**
      * Construct a new object. never used.
      */
     private SystemTestMain() {
-
+        lock = new Object();
     }
 
     /**
@@ -67,6 +70,11 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
             final JVoiceXml interpreter = test.startInterpreter();
             cm.setJVoiceXml(interpreter);
             cm.start();
+            LOGGER.info("Waiting for JVoiceXML shutdown...");
+            synchronized (test.lock) {
+                test.lock.wait();
+            }
+            LOGGER.info("...JVoiceXML shutdown");
         } catch (InterruptedException e) {
             LOGGER.fatal(e.getMessage(), e);
         }
@@ -84,9 +92,11 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
         final JVoiceXmlMain jvxml = new JVoiceXmlMain(config);
         jvxml.addListener(this);
         jvxml.start();
-
-        wait();
-
+        LOGGER.info("Waiting for JVoiceXML startup complete...");
+        synchronized (lock) {
+            lock.wait();
+        }
+        LOGGER.info("...JVoiceXML started");
         return jvxml;
     }
 
@@ -143,11 +153,16 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
      * {@inheritDoc}
      */
     @Override
-    public synchronized void jvxmlStarted() {
-        notifyAll();
+    public void jvxmlStarted() {
+        synchronized (lock) {
+            lock.notifyAll();
+        }
     }
 
     @Override
     public void jvxmlTerminated() {
+        synchronized (lock) {
+            lock.notifyAll();
+        }
     }
 }

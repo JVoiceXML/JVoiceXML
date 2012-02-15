@@ -80,6 +80,7 @@ class AutoTestThread extends Thread {
         testcaseList = tests;
         textServerPort = port;
         setName("AutoTestThread");
+        setDaemon(true);
     }
 
     /**
@@ -160,8 +161,6 @@ class AutoTestThread extends Thread {
         LOGGER.info("no more test uri, exit.");
 
         jvxml.shutdown();
-
-        System.exit(0);
     }
 
     /**
