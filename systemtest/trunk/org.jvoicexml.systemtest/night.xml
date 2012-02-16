@@ -80,30 +80,15 @@ This file provides targets to run and stop the voice browser.
         </delete>
     </target>
 
-    <target name="-parallel.task" description="system test parallel task" 
+    <target name="-startSystemTest" description="start of the system test" 
         depends="-run-setup,compile-jvxml">
-        
-        <parallel timeout="7200000" failonany="false">
-            <sequential>
-                <echo message="Starting JVoiceXML interpreter." />
-                <ant antfile="run.xml" 
-                    dir="${jvxml.core.dir}"
-                    target="run"
-                    inheritAll="false" inheritrefs="false"/>
-            </sequential>
-            <sequential>
-                <sleep seconds="10" />
-                <echo message="Start JVoiceXML system test." />
-                <ant antfile="run.xml"
-                    dir="."
-                    target="run"
-                    inheritall="false" inheritrefs="false"/>
-                <sleep seconds="10" />
-            </sequential>
-        </parallel>
-
+        <echo message="Start JVoiceXML system test." />
+        <ant antfile="run.xml"
+            dir="."
+            target="run"
+            inheritall="false" inheritrefs="false"/>
     </target>
-    
+
     <target name="report" description="create report from xml to html"
         depends="-run-setup">
         <xslt in="${results.dir}/ir-report.xml"
@@ -112,8 +97,8 @@ This file provides targets to run and stop the voice browser.
             <factory name="com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl"/>
         </xslt>
     </target>
-    
+
     <target name="run" description="Run the VoiceXML interpreter system test"
-        depends="-init, config.prepare, startTomcat, -parallel.task, stopTomcat, report"
+        depends="-init, config.prepare, startTomcat, -startSystemTest, stopTomcat, report"
         />
 </project>
