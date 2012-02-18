@@ -71,18 +71,21 @@ public class AndroidSynthesizedOutput extends Activity implements SynthesizedOut
 	public void passivate() throws NoresourceError {
 		texts.clear();
         outputListener.clear();
-
+        //this call flushes the queue and stops the current utterance from being played or recorded
+        //returns SUCCESS (0) or ERROR (-1)
+        mTts.stop();
 	}
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
-
+		//frees the resources
+		 mTts.shutdown();
 	}
 
 	@Override
 	public boolean isBusy() {
-		return !texts.isEmpty() || processingSpeakable;
+		//return !texts.isEmpty() || processingSpeakable;
+		return mTts.isSpeaking();
 	}
 
 	@Override
@@ -94,6 +97,7 @@ public class AndroidSynthesizedOutput extends Activity implements SynthesizedOut
 	@Override
 	public void disconnect(ConnectionInformation client) {
 		texts.clear();
+		mTts.stop();
 
 	}
 
@@ -208,6 +212,19 @@ public class AndroidSynthesizedOutput extends Activity implements SynthesizedOut
 	{
 		return mTts.isLanguageAvailable(language);
 	}
+	public boolean setLanguage(Locale language)
+	{
+		int available=isLanguageAvailable(language);
+		if(available== TextToSpeech.LANG_AVAILABLE ||available==TextToSpeech.LANG_COUNTRY_AVAILABLE){
+			mTts.setLanguage(language);
+			return true;
+		}
+		else 
+			return false;
+	}
+	public Locale getLanguage(){
+		return mTts.getLanguage();
+	} 
 
 	@Override
 	public void onUtteranceCompleted(String uttId) {
