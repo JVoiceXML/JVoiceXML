@@ -94,15 +94,15 @@ class AutoTestThread extends Thread {
 
             listener.testStarted(testcase);
 
-            LOGGER.info("check completeness...");
-            testcase.completenessCheck();
-
-            if (testcase.getIgnoreReason() != null) {
-                String reason = testcase.getIgnoreReason();
-                listener.testStopped(new Skip(reason));
+            LOGGER.info("check if all resources can be accessed...");
+            boolean complete = testcase.completenessCheck();
+            if (!complete) {
+                final String reason = testcase.getIgnoreReason();
+                final Result skip = new Skip(reason);
+                listener.testStopped(skip);
                 continue;
             }
-
+            LOGGER.info("...all resources can be accessed");
             final Script script = scriptFactory.create(
                     Integer.toString(testcase.getId()));
             if (script == null) {
@@ -130,30 +130,16 @@ class AutoTestThread extends Thread {
                 timeoutMonitor.start();
                 textServer.start();
                 executor.execute(jvxml);
-
                 result = executor.getResult();
             } finally {
                 timeoutMonitor.stopMonitor();
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("stop text server");
                 }
-                // this sleep waits for the end of remote communication.
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    return;
-                }
                 textServer.stopServer();
 
                 LOGGER.info("testcase " + testcase.getId() + " finished");
                 LOGGER.info(result.toString());
-
-                // this sleep wait for remote log sync.
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    return;
-                }
                 listener.testStopped(result);
             }
         }

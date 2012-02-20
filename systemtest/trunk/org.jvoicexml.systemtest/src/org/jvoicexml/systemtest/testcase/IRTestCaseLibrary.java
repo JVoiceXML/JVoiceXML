@@ -137,7 +137,7 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
      */
     public final void setTestManifest(final String manifest) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("manifest = " + manifest);
+            LOGGER.debug("loading manifest '" + manifest + "'");
         }
         
         try {

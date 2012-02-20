@@ -23,13 +23,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+import org.apache.log4j.Layout;
 import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.log4j.SimpleLayout;
 import org.jvoicexml.systemtest.Result;
 import org.jvoicexml.systemtest.TestCase;
 import org.jvoicexml.systemtest.TestCaseListener;
@@ -47,12 +44,10 @@ public class TestRecorder implements TestCaseListener {
     private static final Logger LOGGER = Logger.getLogger(TestRecorder.class);
 
     /** The appender to collect all log messages. */
-    private final SystemTestAppender appender;
+    private final SystemTestAppender remoteAppender;
 
-    /**
-     * log file names.
-     */
-    private Map<String, String> logFiles = new HashMap<String, String>();
+    /** The appender to collect all log messages. */
+    private final SystemTestAppender localAppender;
 
     /**
      * default report file name.
@@ -83,25 +78,16 @@ public class TestRecorder implements TestCaseListener {
      * Constructs a new object.
      */
     public TestRecorder() {
-        appender = new SystemTestAppender();
+        remoteAppender = new SystemTestAppender();
         final LoggerNameFilter filter = new LoggerNameFilter();
         filter.setName("org.jvoicexml.systemtest");
-        appender.addFilter(filter);
-        final Logger logger = Logger.getLogger("org.jvoicexml");
-        logger.addAppender(appender);
-    }
-
-    /**
-     * write the report to output Stream.
-     *
-     * @param os OutputStream which report write to.
-     */
-    public final void write(final OutputStream os) {
-        try {
-            reportDoc.writeXML(os);
-        } catch (IOException e) {
-            LOGGER.error("write report doc error.", e);
-        }
+        remoteAppender.addFilter(filter);
+        final Logger jvxmlLogger = Logger.getLogger("org.jvoicexml");
+        jvxmlLogger.addAppender(remoteAppender);
+        localAppender = new SystemTestAppender();
+        final Logger systemtestLogger =
+                Logger.getLogger("org.jvoicexml.systemtest");
+        systemtestLogger.addAppender(localAppender);
     }
 
     /**
@@ -110,13 +96,7 @@ public class TestRecorder implements TestCaseListener {
     @Override
     public final void testStopped(final Result result) {
         LOGGER.info("result is : ---- " + result.getAssert() + " ----");
-
-        List<LoggingEvent> events = appender.getEvents();
-//        if (logRoller != null) {
-//            logRoller.roll();
-//        }
-
-        long cost = new Date().getTime() - currentTestStartTime;
+        long cost = System.currentTimeMillis() - currentTestStartTime;
 
         ResultItem item = new ResultItem();
         item.id = currentTestCase.getId();
@@ -127,46 +107,70 @@ public class TestRecorder implements TestCaseListener {
         item.desc = currentTestCase.getDescription();
 
         String prefix = "" + currentTestCase.getId() + ".";
-        Map<String, File> map = moveFileTo(reportDir, prefix);
+//        Map<String, File> map = moveFileTo(reportDir, prefix);
 
-        if (map.size() > 0 && !"skip".equalsIgnoreCase(item.res.toString())) {
+        if (result.getAssert() != TestResult.SKIP) {
+            final Layout layout = new SimpleLayout();
+            final File remoteFile = new File(reportDir, prefix + "remote.log");
+            final File localFile = new File(reportDir, prefix + "local.log");
             try {
-                item.logTag = LogUtil.getContent(
-                    map.get(LogRoller.LOG_TAG_LOG_NAME)).toString();
+                remoteAppender.writeToFile(layout, remoteFile);
+                localAppender.writeToFile(layout, localFile);
             } catch (IOException e) {
-                LOGGER.warn(e.getMessage(), e);
-                item.logTag = e.getMessage();
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-            item.localLogURI = LogUtil.getURI(reportDir,
-                    map.get(LogRoller.LOCAL_LOG_NAME)).toString();
-            item.remoteLogURI = LogUtil.getURI(reportDir,
-                    map.get(LogRoller.REMOTE_LOG_NAME)).toString();
-            item.hasErrorLevelLog = LogUtil.exists(
-                    map.get(LogRoller.ERROR_LEVEL_LOG_NAME)).toString();
-            try {
-                item.resourceLog = LogUtil.getContent(
-                    map.get(LogRoller.RESOURCE_LOG_NAME)).toString();
-            } catch (IOException e) {
-                LOGGER.warn(e.getMessage(), e);
-                item.resourceLog = e.getMessage();
-            }
+//            try {
+//                item.logTag = LogUtil.getContent(
+//                    map.get(LogRoller.LOG_TAG_LOG_NAME)).toString();
+//            } catch (IOException e) {
+//                LOGGER.warn(e.getMessage(), e);
+//                item.logTag = e.getMessage();
+//            }
+//            item.localLogURI = LogUtil.getURI(reportDir,
+//                    map.get(LogRoller.LOCAL_LOG_NAME)).toString();
+//            item.remoteLogURI = LogUtil.getURI(reportDir,
+//                    map.get(LogRoller.REMOTE_LOG_NAME)).toString();
+//            item.hasErrorLevelLog = LogUtil.exists(
+//                    map.get(LogRoller.ERROR_LEVEL_LOG_NAME)).toString();
+//            try {
+//                item.resourceLog = LogUtil.getContent(
+//                    map.get(LogRoller.RESOURCE_LOG_NAME)).toString();
+//            } catch (IOException e) {
+//                LOGGER.warn(e.getMessage(), e);
+//                item.resourceLog = e.getMessage();
+//            }
         }
 
         reportDoc.add(item);
-
         currentTestCase = null;
 
         // write to file.
         final File report = new File(reportDir, reportName);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("The report :" + report.getAbsolutePath());
-        }
+        LOGGER.info("writing report to: '" + report.getAbsolutePath() + "'");
+        writeReport(report);
+    }
+
+    /**
+     * Writes the report to the given file.
+     * @param report the file where to write the report.
+     * @since 0.7.6
+     */
+    private void writeReport(final File report) {
+        OutputStream os = null;
         try {
-            OutputStream os = new FileOutputStream(report);
-            write(os);
-            os.close();
+            os = new FileOutputStream(report);
+            reportDoc.writeXML(os);
         } catch (IOException e) {
-            LOGGER.error("IOException", e);
+            LOGGER.error(e.getMessage(), e);
+        } finally {
+            try {
+                if (os != null) {
+                    os.close();
+                }
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
         }
     }
 
@@ -177,7 +181,6 @@ public class TestRecorder implements TestCaseListener {
     public final void testStarted(final TestCase tc) {
         if (reportDoc == null) {
             reportDoc = new IRXMLDocument();
-            appender.clear();
 //            if (logRoller != null) {
 //                logRoller.roll();
 //            }
@@ -189,29 +192,10 @@ public class TestRecorder implements TestCaseListener {
             testStopped(result);
         }
 
+        remoteAppender.clear();
+        localAppender.clear();
         currentTestCase = tc;
         currentTestStartTime = System.currentTimeMillis();
-    }
-
-    /**
-     * @param dir the directory the log move to.
-     * @param prefix log file name prefix.
-     * @return log map with new file.
-     */
-    private Map<String, File> moveFileTo(final File dir, final String prefix) {
-        Map<String, File> newFiles = new HashMap<String, File>();
-        for (String key : logFiles.keySet()) {
-            String filename = logFiles.get(key);
-            String from = filename + LogRoller.LAST_LOG_SUFFIX;
-            String to = prefix + new File(filename).getName();
-            File writrTo = new File(dir, to);
-            if (writrTo.exists()) {
-                writrTo.delete();
-            }
-            new File(from).renameTo(writrTo);
-            newFiles.put(key, writrTo);
-        }
-        return newFiles;
     }
 
     /**
@@ -220,13 +204,6 @@ public class TestRecorder implements TestCaseListener {
      */
     public final void setReportName(final String name) {
         reportName = name;
-    }
-
-    /**
-     * @param locations of log.
-     */
-    public final void setLogLocations(final Map<String, String> locations) {
-        logFiles = locations;
     }
 
     /**

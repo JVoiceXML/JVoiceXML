@@ -29,9 +29,13 @@
 
 package org.jvoicexml.systemtest.report;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.Layout;
 import org.apache.log4j.spi.LoggingEvent;
 
 /**
@@ -45,15 +49,24 @@ public final class SystemTestAppender extends AppenderSkeleton {
     private final List<LoggingEvent> events =
         new java.util.ArrayList<LoggingEvent>();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean requiresLayout() {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void append(final LoggingEvent event) {
         events.add(event);
@@ -65,6 +78,26 @@ public final class SystemTestAppender extends AppenderSkeleton {
      */
     public List<LoggingEvent> getEvents() {
         return events;
+    }
+
+    /**
+     * Writes the logs to the specified filename using the given layout.
+     * @param layout the layout to use.
+     * @param file the file where to write the messages.
+     * @throws IOException
+     *         error writing
+     */
+    public void writeToFile(final Layout layout, final File file)
+            throws IOException {
+        final FileWriter writer = new FileWriter(file);
+        try {
+            for (LoggingEvent event : events) {
+                final String message = layout.format(event);
+                writer.write(message);
+            }
+        } finally {
+            writer.close();
+        }
     }
 
     /**

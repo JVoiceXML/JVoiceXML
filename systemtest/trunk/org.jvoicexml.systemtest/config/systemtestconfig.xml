@@ -12,20 +12,6 @@
       <bean class="org.jvoicexml.systemtest.report.TestRecorder">
         <property name="reportDir" value="../org.jvoicexml/dist/systemtest" />
         <property name="reportName" value="ir-report.xml" />
-        <property name="logLocations">
-          <map>
-            <entry key="logTagLog"
-              value="../org.jvoicexml/logging/logtag.log.txt" />
-            <entry key="remoteLog"
-              value="../org.jvoicexml/logging/interpreter.log.txt" />
-            <entry key="errorLog"
-              value="../org.jvoicexml/logging/errorlevel.log.txt" />
-            <entry key="resourceLog"
-              value="../org.jvoicexml/logging/resource.log.txt" />
-            <entry key="localLog"
-              value="logging/systemtest.log.txt" />
-          </map>
-        </property>
       </bean>
     </property>
 

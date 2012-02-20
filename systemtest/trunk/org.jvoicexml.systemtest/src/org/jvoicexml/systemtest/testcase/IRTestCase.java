@@ -212,13 +212,14 @@ public final class IRTestCase implements TestCase {
                     // TODO read other resource.
                 }
             }
-            return true;
         } catch (Exception e) {
             LOGGER.error("the uri '" + checkedURI
                     + "' can not read. ignore this test case.", e);
-            ignoreReason = "can not read. ignore this test case";
+            ignoreReason = "can not read '" + checkedURI
+                    + "'. ignore this test case";
             return false;
         }
+        return true;
     }
 
     /**
@@ -229,6 +230,7 @@ public final class IRTestCase implements TestCase {
      */
     private void readTextStream(final URI uri)
             throws IOException {
+        LOGGER.info("checking resource '" + uri + "'");
         final URL url = uri.toURL();
         final InputStream in;
         try {
@@ -252,8 +254,8 @@ public final class IRTestCase implements TestCase {
             }
         } while(num >= 0);
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(out.toString());
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace(out.toString());
         }
     }
 

@@ -58,24 +58,6 @@ public class ReportTest {
     }
 
     @Test
-    public void testOne() {
-        TestRecorder report = new TestRecorder();
-        report.setReportName("irtest/results/ir-report.xml");
-
-        IRTestCase tc = lib.fetch(1);
-        Assert.assertNotNull(tc);
-        report.testStarted(tc);
-        report.testStopped(new DummyResult(TestResult.PASS, ""));
-        LOGGER.debug("aaaa");
-        try {
-            report.write(System.out);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
-    }
-
-    @Test
     public void testAll() {
         String reportLocation = "./irtest/results/";
 
@@ -122,7 +104,7 @@ public class ReportTest {
         report.testStarted(lib.fetch(20));
         report.testStopped(new DummyResult(TestResult.SKIP, ""));
 
-        report.write(System.out);
+//        report.write(System.out);
         System.out.flush();
 
     }
