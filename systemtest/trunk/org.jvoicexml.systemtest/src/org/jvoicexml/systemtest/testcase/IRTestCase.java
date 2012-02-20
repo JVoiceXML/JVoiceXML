@@ -230,7 +230,18 @@ public final class IRTestCase implements TestCase {
     private void readTextStream(final URI uri)
             throws IOException {
         final URL url = uri.toURL();
-        final InputStream in = url.openStream();
+        final InputStream in;
+        try {
+            in = url.openStream();
+        } catch (IOException e) {
+            final String msg = e.getMessage();
+            if (msg.indexOf("406") >= 0) {
+                LOGGER.debug(
+                        "received HTTP status code 406. That is OK for now");
+                return;
+            }
+            throw e;
+        }
         final byte[] buffer = new byte[READ_BUFFER_SIZE];
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         int num;
