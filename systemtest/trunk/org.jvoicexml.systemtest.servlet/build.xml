@@ -143,6 +143,11 @@ You're using ${ant.java.version}
         </xslt>
         <copy file="web.xml" todir="WebContent/WEB-INF" overwrite="true"/>
         <delete file="web.xml"/>
+         <!-- Adapt the definition of umbiguous type 'Part' -->
+        <replace dir="WebContent" value=" com.oreilly.servlet.multipart.Part ">
+          <include name="**/*.ircgi"/>
+          <replacetoken><![CDATA[ Part ]]></replacetoken>
+        </replace>
     </target>
 
     <target name="prepare-testsuite" depends="unpack-testsuite" unless="testsuite.present">
@@ -200,27 +205,27 @@ before starting Tomcat.
         </echo>
     </target>
 
-    <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,war" />
+    <target name="rebuild" description="Rebuild the jars from scratch"
+        depends="clean,war" />
 
     <target name="deploy" depends="-setup, war">
-        <copy todir="${dist}" file="${warfile}" />
+        <copy todir="${dist}" file="${warfile}" overwrite="true"/>
     </target>
-        
 
-	<target name="startupTomcat" depends="-setup, deploy" 
-			description="start up tomcat web service.">
-		<echo message="startup tomcat web service."/>
-		<exec dir="${tomcat.home}" executable="${tomcat.startup}"
-		  spawn="true"/>
-		<waitfor maxwait="1" maxwaitunit="minute" checkevery="500">
-		        <http url="http://localhost:8080/${component}"/>
-		</waitfor>
-		<echo message="tomcat web service started"/>
-	</target>
+    <target name="startupTomcat" depends="-setup, deploy" 
+        description="start up tomcat web service.">
+        <echo message="startup tomcat web service."/>
+        <exec dir="${tomcat.home}" executable="${tomcat.startup}"
+              spawn="true"/>
+        <waitfor maxwait="1" maxwaitunit="minute" checkevery="500">
+            <http url="http://localhost:8080/${component}"/>
+        </waitfor>
+        <echo message="tomcat web service started"/>
+    </target>
 
-	<target name="shutdownTomcat" depends="-setup" 
-		description="shutdown tomcat web service.">
-		<exec dir="${tomcat.home}" executable="${tomcat.shutdown}"
-		  spawn="true"/>
-	</target>
+    <target name="shutdownTomcat" depends="-setup" 
+        description="shutdown tomcat web service.">
+        <exec dir="${tomcat.home}" executable="${tomcat.shutdown}"
+            spawn="true"/>
+    </target>
 </project>
