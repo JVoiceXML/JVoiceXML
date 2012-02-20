@@ -101,7 +101,8 @@ You're using ${ant.java.version}
                 <exclude name="**/*.java" />
             </fileset>
         </copy>
-        <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1" source="${javac.source}" target="${javac.target}">
+        <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on"
+          includeantruntime="false" source="${javac.source}" target="${javac.target}">
             <src path="${src}" />
             <include name="org/jvoicexml/systemtest/servlet/*.java" />
             <classpath refid="project.classpath" />
