@@ -53,7 +53,7 @@ public final class SystemTestCallManager {
     /**
      * test report instance.
      */
-    private Report testRecorder;
+    private TestCaseListener listener;
 
     /**
      * test case library instance.
@@ -97,7 +97,7 @@ public final class SystemTestCallManager {
         final AutoTestThread testThread;
         if (create) {
             testThread = new AutoTestThread(jvxml, textServerport, jobs);
-            testThread.setReport(testRecorder);
+            testThread.setTestCaseListenr(listener);
             testThread.setScriptFactory(scriptFactory);
             return testThread;
         } else {
@@ -128,10 +128,11 @@ public final class SystemTestCallManager {
     }
 
     /**
-     * @param report test recorder.
+     * Sets the listener for test case notifications.
+     * @param testCaseListener the listener
      */
-    public void setReport(final Report report) {
-        this.testRecorder = report;
+    public void setTestCaseListener(final TestCaseListener testCaseListener) {
+        listener = testCaseListener;
     }
 
     /**

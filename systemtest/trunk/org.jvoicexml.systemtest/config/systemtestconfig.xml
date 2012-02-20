@@ -8,16 +8,10 @@
     <property name="shutdownInterpreter" value="true" />
      -->
     <property name="textServerPort" value="5900" />
-    <property name="report">
+    <property name="testCaseListener">
       <bean class="org.jvoicexml.systemtest.report.TestRecorder">
         <property name="reportDir" value="../org.jvoicexml/dist/systemtest" />
         <property name="reportName" value="ir-report.xml" />
-        <property name="logRoller">
-          <bean class="org.jvoicexml.systemtest.report.LogRoller">
-            <property name="host" value="localhost" />
-            <property name="port" value="5920, 5930, 5940, 5950, 5960" />
-          </bean>
-        </property>
         <property name="logLocations">
           <map>
             <entry key="logTagLog"

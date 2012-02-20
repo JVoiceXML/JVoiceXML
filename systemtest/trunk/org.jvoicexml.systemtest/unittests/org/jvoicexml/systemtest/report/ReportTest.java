@@ -64,8 +64,8 @@ public class ReportTest {
 
         IRTestCase tc = lib.fetch(1);
         Assert.assertNotNull(tc);
-        report.markStart(tc);
-        report.markStop(new DummyResult(TestResult.PASS, ""));
+        report.testStarted(tc);
+        report.testStopped(new DummyResult(TestResult.PASS, ""));
         LOGGER.debug("aaaa");
         try {
             report.write(System.out);
@@ -93,34 +93,34 @@ public class ReportTest {
                 continue;
             }
             Assert.assertNotNull(tc);
-            report.markStart(tc);
-            report.markStop(new DummyResult(TestResult.PASS, ""));
+            report.testStarted(tc);
+            report.testStopped(new DummyResult(TestResult.PASS, ""));
         }
     }
 
     @Test
     public void testSummary() {
         TestRecorder report = new TestRecorder();
-        report.markStart(lib.fetch(1));
-        report.markStop(new DummyResult(TestResult.PASS, ""));
-        report.markStart(lib.fetch(2));
-        report.markStop(new DummyResult(TestResult.PASS, ""));
+        report.testStarted(lib.fetch(1));
+        report.testStopped(new DummyResult(TestResult.PASS, ""));
+        report.testStarted(lib.fetch(2));
+        report.testStopped(new DummyResult(TestResult.PASS, ""));
 
-        report.markStart(lib.fetch(7));
-        report.markStop(new DummyResult(TestResult.FAIL, ""));
-        report.markStart(lib.fetch(8));
-        report.markStop(new DummyResult(TestResult.FAIL, ""));
-        report.markStart(lib.fetch(11));
-        report.markStop(new DummyResult(TestResult.FAIL, ""));
+        report.testStarted(lib.fetch(7));
+        report.testStopped(new DummyResult(TestResult.FAIL, ""));
+        report.testStarted(lib.fetch(8));
+        report.testStopped(new DummyResult(TestResult.FAIL, ""));
+        report.testStarted(lib.fetch(11));
+        report.testStopped(new DummyResult(TestResult.FAIL, ""));
 
-        report.markStart(lib.fetch(12));
-        report.markStop(new DummyResult(TestResult.SKIP, ""));
-        report.markStart(lib.fetch(18));
-        report.markStop(new DummyResult(TestResult.SKIP, ""));
-        report.markStart(lib.fetch(19));
-        report.markStop(new DummyResult(TestResult.SKIP, ""));
-        report.markStart(lib.fetch(20));
-        report.markStop(new DummyResult(TestResult.SKIP, ""));
+        report.testStarted(lib.fetch(12));
+        report.testStopped(new DummyResult(TestResult.SKIP, ""));
+        report.testStarted(lib.fetch(18));
+        report.testStopped(new DummyResult(TestResult.SKIP, ""));
+        report.testStarted(lib.fetch(19));
+        report.testStopped(new DummyResult(TestResult.SKIP, ""));
+        report.testStarted(lib.fetch(20));
+        report.testStopped(new DummyResult(TestResult.SKIP, ""));
 
         report.write(System.out);
         System.out.flush();

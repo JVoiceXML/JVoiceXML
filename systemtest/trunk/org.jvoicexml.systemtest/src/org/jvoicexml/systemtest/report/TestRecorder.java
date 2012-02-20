@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -25,28 +25,29 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.systemtest.Report;
+import org.apache.log4j.spi.LoggingEvent;
 import org.jvoicexml.systemtest.Result;
 import org.jvoicexml.systemtest.TestCase;
+import org.jvoicexml.systemtest.TestCaseListener;
 import org.jvoicexml.systemtest.TestResult;
 
 /**
  * trace test result and create report XML file.
  *
  * @author lancer
+ * @author Dirk Schnelle-Walka
  *
  */
-public class TestRecorder implements Report {
+public class TestRecorder implements TestCaseListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(TestRecorder.class);
 
-    /**
-     * log roller.
-     */
-    private LogRoller logRoller = null;
+    /** The appender to collect all log messages. */
+    private final SystemTestAppender appender;
 
     /**
      * log file names.
@@ -61,22 +62,34 @@ public class TestRecorder implements Report {
     /**
      * report XML document.
      */
-    private IRXMLDocument reportDoc = null;
+    private IRXMLDocument reportDoc;
 
     /**
      * testing case now.
      */
-    private TestCase currentTestCase = null;
+    private TestCase currentTestCase;
 
     /**
      * test start time.
      */
-    private long currentTestStartTime = 0;
+    private long currentTestStartTime;
 
     /**
      * directory of report.
      */
-    private File reportDir = null;
+    private File reportDir;
+
+    /**
+     * Constructs a new object.
+     */
+    public TestRecorder() {
+        appender = new SystemTestAppender();
+        final LoggerNameFilter filter = new LoggerNameFilter();
+        filter.setName("org.jvoicexml.systemtest");
+        appender.addFilter(filter);
+        final Logger logger = Logger.getLogger("org.jvoicexml");
+        logger.addAppender(appender);
+    }
 
     /**
      * write the report to output Stream.
@@ -95,12 +108,13 @@ public class TestRecorder implements Report {
      * {@inheritDoc}
      */
     @Override
-    public final void markStop(final Result result) {
+    public final void testStopped(final Result result) {
         LOGGER.info("result is : ---- " + result.getAssert() + " ----");
 
-        if (logRoller != null) {
-            logRoller.roll();
-        }
+        List<LoggingEvent> events = appender.getEvents();
+//        if (logRoller != null) {
+//            logRoller.roll();
+//        }
 
         long cost = new Date().getTime() - currentTestStartTime;
 
@@ -143,7 +157,7 @@ public class TestRecorder implements Report {
         currentTestCase = null;
 
         // write to file.
-        File report = new File(reportDir, reportName);
+        final File report = new File(reportDir, reportName);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("The report :" + report.getAbsolutePath());
         }
@@ -154,28 +168,29 @@ public class TestRecorder implements Report {
         } catch (IOException e) {
             LOGGER.error("IOException", e);
         }
-
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public final void markStart(final TestCase tc) {
+    public final void testStarted(final TestCase tc) {
         if (reportDoc == null) {
             reportDoc = new IRXMLDocument();
-            if (logRoller != null) {
-                logRoller.roll();
-            }
+            appender.clear();
+//            if (logRoller != null) {
+//                logRoller.roll();
+//            }
         }
 
+        // Check if we received a result from the previous test.
         if (currentTestCase != null) {
-            markStop(new MyFailResult("no report result"));
+            final Result result = new MyFailResult("no report result");
+            testStopped(result);
         }
 
         currentTestCase = tc;
-        currentTestStartTime = new Date().getTime();
-
+        currentTestStartTime = System.currentTimeMillis();
     }
 
     /**
@@ -208,14 +223,6 @@ public class TestRecorder implements Report {
     }
 
     /**
-     *
-     * @param arg0 log Roller.
-     */
-    public final void setLogRoller(final LogRoller arg0) {
-        logRoller = arg0;
-    }
-
-    /**
      * @param locations of log.
      */
     public final void setLogLocations(final Map<String, String> locations) {
@@ -223,10 +230,19 @@ public class TestRecorder implements Report {
     }
 
     /**
+     * Sets the directory, where to store the reports. If the specified
+     * directory does not exist, it will be created.
      * @param dir directory of report.
+     * @exception IOException
+     *            error creating the report directory.
      */
-    public final void setReportDir(final String dir) {
+    public final void setReportDir(final String dir) throws IOException {
         reportDir = new File(dir);
+        if (!reportDir.exists()) {
+            LOGGER.info("creating report directory '"
+                    + reportDir.getCanonicalPath() + "'");
+            reportDir.mkdirs();
+        }
     }
 
 

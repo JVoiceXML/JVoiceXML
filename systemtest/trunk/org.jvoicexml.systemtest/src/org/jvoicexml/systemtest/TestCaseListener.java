@@ -20,21 +20,22 @@
 package org.jvoicexml.systemtest;
 
 /**
- * record test procedure, create report.
+ * A listener to a test case run.
  * @author lancer
+ * @author Dirk Schnelle-Walka
  *
  */
-public interface Report {
+public interface TestCaseListener {
+    /**
+    * Notification that the given test case has started.
+    * @param tc the started test case.
+    */
+   void testStarted(TestCase tc);
 
     /**
-     * mark the test case stopped with the result.
+     * Notification that the test case stopped with the result.
      * @param result of test case.
      */
-    void markStop(Result result);
+    void testStopped(Result result);
 
-    /**
-     * mark the test case started.
-     * @param tc the started test case.
-     */
-    void markStart(TestCase tc);
 }

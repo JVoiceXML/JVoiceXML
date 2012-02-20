@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -53,6 +53,7 @@ import org.jvoicexml.systemtest.TestCaseLibrary;
  * IR test case library.
  *
  * @author lancer
+ * @author Dirk Schnelle-Walka
  *
  */
 public class IRTestCaseLibrary implements TestCaseLibrary {
@@ -135,7 +136,6 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
      * @param manifest URI
      */
     public final void setTestManifest(final String manifest) {
-        URI testRoot = null;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("manifest = " + manifest);
         }
@@ -153,7 +153,7 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
                             + " testcase loaded.");
                 }
     
-                testRoot = uri.resolve(".");
+                final URI testRoot = uri.resolve("vxml-srgs/");
                 for (IRTestCase tc : testCaseList) {
                     tc.setBaseURI(testRoot);
                 }
@@ -228,8 +228,8 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
                 if (tc.getId() == ignore.id) {
                     tc.setIgnoreReason(ignore.reason);
                     if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("tc.getId()  = " + tc.getId() + " ignore.id"
-                            + ignore.id);
+                        LOGGER.debug("tc.getId()  = " + tc.getId()
+                                + " ignore.id" + ignore.id);
                     
                         LOGGER.debug("tc.getIgnoreReason()  = "
                             + tc.getIgnoreReason());
@@ -240,7 +240,7 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
         if (tempIgnores != null) {
             Set<TestCase> ignores = fetch(tempIgnores);
             for (TestCase tcCase : ignores) {
-                IRTestCase irtc = (IRTestCase)tcCase;
+                IRTestCase irtc = (IRTestCase) tcCase;
                 irtc.setIgnoreReason("temporary ignore by configuration");
             }
         }

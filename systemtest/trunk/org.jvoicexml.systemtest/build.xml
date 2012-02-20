@@ -96,7 +96,20 @@ You're using ${ant.java.version}
 ]]>
         </echo>
         <ant antfile="${jvxml.core.dir}/configuration.xml"
-            inheritall="false" inheritrefs="false"/>
+            inheritall="false" inheritrefs="false">
+          <property name="enableJndi" value="false"/>
+        </ant>
+      <!--xslt in="${config}/log4j.xml"
+        out="config/log4j-patch.xml"
+        style="etc/patch-log4j.xsl">
+          <outputproperty name="method" value="xml" />
+          <outputproperty name="standalone" value="no" />
+          <outputproperty name="encoding" value="UTF-8" />
+          <outputproperty name="indent" value="yes" />
+      </xslt-->
+      <replace file="${jvxml.core.dir}/config/text-implementation.xml" 
+          token="value=&quot;1&quot;" 
+          value="value=&quot;500&quot;" />
     </target>
 
     <target name="compile-jvxml" depends="createSystemTestConfiguration"

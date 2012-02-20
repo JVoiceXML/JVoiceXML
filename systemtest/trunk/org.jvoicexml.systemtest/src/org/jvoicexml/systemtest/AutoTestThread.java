@@ -55,7 +55,7 @@ class AutoTestThread extends Thread {
     /**
      * XML report document.
      */
-    private Report report;
+    private TestCaseListener listener;
 
 
     /**
@@ -92,22 +92,22 @@ class AutoTestThread extends Thread {
             LOGGER.info("running " + testcase.getId() + "...");
             Result result = null;
 
-            report.markStart(testcase);
+            listener.testStarted(testcase);
 
             LOGGER.info("check completeness...");
             testcase.completenessCheck();
 
             if (testcase.getIgnoreReason() != null) {
                 String reason = testcase.getIgnoreReason();
-                report.markStop(new Skip(reason));
+                listener.testStopped(new Skip(reason));
                 continue;
             }
 
-            Script script = scriptFactory.create(
+            final Script script = scriptFactory.create(
                     Integer.toString(testcase.getId()));
             if (script == null) {
-                String reason = "not found suitable script.";
-                report.markStop(new Skip(reason));
+                final Result skip = new Skip("not found suitable script.");
+                listener.testStopped(skip);
                 continue;
             }
 
@@ -154,7 +154,7 @@ class AutoTestThread extends Thread {
                 } catch (InterruptedException e) {
                     return;
                 }
-                report.markStop(result);
+                listener.testStopped(result);
             }
         }
 
@@ -164,11 +164,12 @@ class AutoTestThread extends Thread {
     }
 
     /**
-     * @param recorder
-     *            result recorder for test.
+     * Sets the listener for test case notifications.
+     * @param testCaseListener
+     *            listener for test case notifications
      */
-    public void setReport(final Report recorder) {
-        this.report = recorder;
+    public void setTestCaseListenr(final TestCaseListener testCaseListener) {
+        listener = testCaseListener;
     }
 
     /**

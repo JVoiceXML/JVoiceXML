@@ -26,12 +26,12 @@
 
 package org.jvoicexml.systemtest.testcase;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,10 +48,13 @@ import org.jvoicexml.systemtest.TestCase;
  * @author lancer
  *
  */
-public class IRTestCase implements TestCase {
+public final class IRTestCase implements TestCase {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(IRTestCase.class
             .getName());
+
+    /** Size of the read buffer when reading in completeness tests. */
+    private static final int READ_BUFFER_SIZE = 1024;
 
     /**
      * optional string.
@@ -80,7 +83,7 @@ public class IRTestCase implements TestCase {
      * dependence Element.
      */
     @XmlElement(name = "dep")
-    List<Dep> dependences = new ArrayList<Dep>();
+    List<Dep> dependencies = new ArrayList<Dep>();
 
     /**
      * reason of ignore.
@@ -95,19 +98,25 @@ public class IRTestCase implements TestCase {
     /**
      * @param base URI of document.
      */
-    final void setBaseURI(final URI base) {
+    void setBaseURI(final URI base) {
         baseURI = base;
     }
 
     /**
      * {@inheritDoc}
      */
-    public final URI getStartURI() {
+    public URI getStartURI() {
+        String str = start.uri;
+        int idx = str.indexOf(".txml");
+        if (idx != -1) {
+            str = str.substring(0, idx) + ".vxml";
+        }
+        
         try {
             if (baseURI == null) {
-                return new URI(start.uri);
+                return new URI(str);
             } else {
-                return baseURI.resolve(start.uri);
+                return baseURI.resolve(str);
             }
         } catch (URISyntaxException e) {
             return null;
@@ -117,14 +126,14 @@ public class IRTestCase implements TestCase {
     /**
      * @return section of specification.
      */
-    public final String getSpec() {
+    public String getSpec() {
         return description.spec.trim();
     }
 
     /**
      * {@inheritDoc}
      */
-    public final int getId() {
+    public int getId() {
         if (description == null) {
             return -1;
         }
@@ -135,49 +144,49 @@ public class IRTestCase implements TestCase {
      *
      * @return true if there have multi-page in one test case, else false.
      */
-    public final boolean isSinglePage() {
-        return !(dependences.size() > 0);
+    public boolean isSinglePage() {
+        return !(dependencies.size() > 0);
     }
 
     /**
      * {@inheritDoc}
      */
-    public final String getIgnoreReason() {
+    public String getIgnoreReason() {
         return ignoreReason;
     }
 
     /**
      * @param reason reason of ignore.
      */
-    public final void setIgnoreReason(final String reason) {
+    public void setIgnoreReason(final String reason) {
         this.ignoreReason = reason;
     }
 
     /**
      * @return false if this test case is optional, else true.
      */
-    public final boolean isRequest() {
+    public boolean isRequest() {
         return !(OPTIONAL.equalsIgnoreCase(description.confLevel));
     }
 
     /**
      * @return true if execManual is not 1, else false.
      */
-    public final boolean canAutoExec() {
+    public boolean canAutoExec() {
         return !(description.execManual == 1);
     }
 
     /**
      * @return test case specification section.
      */
-    public final String getSpecSection(){
+    public String getSpecSection(){
         return description.spec;
     }
 
     /**
      * @return test case description
      */
-    public final String getDescription(){
+    public String getDescription(){
         return description.text;
     }
 
@@ -185,16 +194,19 @@ public class IRTestCase implements TestCase {
      * {@inheritDoc}
      */
     @Override
-    public final boolean completenessCheck() {
+    public boolean completenessCheck() {
         URI checkedURI = null;
         try {
-            String startPage = start.uri;
-            checkedURI = baseURI.resolve(startPage.trim());
+            checkedURI = getStartURI();
             readTextStream(checkedURI);
-            for (Dep d : dependences) {
-                String u = d.uri;
-                checkedURI = baseURI.resolve(u.trim());
-                if (isText(d.type)) {
+            for (Dep dependeny : dependencies) {
+                String uri = dependeny.uri;
+                int idx = uri.indexOf(".txml");
+                if (idx != -1) {
+                    uri = uri.substring(0, idx) + ".vxml";
+                }
+                checkedURI = baseURI.resolve(uri.trim());
+                if (isText(dependeny.type)) {
                     readTextStream(checkedURI);
                 } else {
                     // TODO read other resource.
@@ -202,30 +214,36 @@ public class IRTestCase implements TestCase {
             }
             return true;
         } catch (Exception e) {
-            LOGGER.error("the uri " + checkedURI
-                    + " can not read. ignore this test case.", e);
+            LOGGER.error("the uri '" + checkedURI
+                    + "' can not read. ignore this test case.", e);
             ignoreReason = "can not read. ignore this test case";
             return false;
         }
     }
 
     /**
-     * read from URI.
-     * @param startUri start URI.
+     * Perform a full read of the resource form the given uri.
+     * @param uri start URI.
      * @throws IOException
-     * @throws MalformedURLException
+     *         error reading from the given uri
      */
-    private void readTextStream(final URI startUri)
-            throws IOException, MalformedURLException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(
-                startUri.toURL().openStream()));
-        String line = null;
+    private void readTextStream(final URI uri)
+            throws IOException {
+        final URL url = uri.toURL();
+        final InputStream in = url.openStream();
+        final byte[] buffer = new byte[READ_BUFFER_SIZE];
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int num;
         do {
-            line = reader.readLine();
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(line);
+            num = in.read(buffer);
+            if (num >= 0) {
+                out.write(buffer, 0, num);
             }
-        } while (line != null);
+        } while(num >= 0);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(out.toString());
+        }
     }
 
     /**
@@ -246,7 +264,7 @@ public class IRTestCase implements TestCase {
      * {@inheritDoc}
      */
     @Override
-    public final String toString() {
+    public String toString() {
         final StringBuffer buff = new StringBuffer();
         buff.append(getId());
         if (description != null) {
@@ -261,10 +279,10 @@ public class IRTestCase implements TestCase {
             buff.append(start.uri);
         }
         buff.append(" deps=");
-        if (dependences == null) {
+        if (dependencies == null) {
             buff.append("null");
         } else {
-            buff.append(dependences.size());
+            buff.append(dependencies.size());
         }
         if (description != null) {
             buff.append(" \"");

@@ -35,7 +35,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.jvoicexml.systemtest.TestResult;
 
 /**
  * report XML root element.
@@ -48,8 +47,8 @@ class IRXMLDocument {
     /**
      * date formatter.
      */
-    private static final SimpleDateFormat FORMATTER = new SimpleDateFormat(
-            "yyyy-MM-dd hh:mm:ss");
+    private static final SimpleDateFormat FORMATTER =
+            new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     /**
      * report name attribute.
@@ -67,25 +66,25 @@ class IRXMLDocument {
      * time String of report create.
      */
     @XmlElement
-    String testStartTime = null;
+    String testStartTime;
 
     /**
      * time String of tests finished.
      */
     @XmlElement
-    String testEndTime = null;
+    String testEndTime;
 
     /**
      * total of tests.
      */
     @XmlElement
-    int totalOfTest = 0;
+    int totalOfTest;
 
     /**
      * total cost in MS of all test cases.
      */
     @XmlElement
-    long totalOfCost = 0;
+    long totalOfCost;
 
     /**
      * result list.
@@ -101,7 +100,7 @@ class IRXMLDocument {
     /**
      * time of report create.
      */
-    private Date startTime = null;
+    private final Date startTime;
 
     /**
      * Construct a new object.
@@ -162,79 +161,4 @@ class IRXMLDocument {
         }
         writer.close();
     }
-}
-
-
-/**
- * result item class.
- * @author lancer
- *
- */
-class ResultItem {
-
-    /**
-     * test case id.
-     */
-    @XmlAttribute
-    int id;
-
-    /**
-     * cost in MS of this test case.
-     */
-    @XmlAttribute
-    long costInMS = 0;
-
-    /**
-     * output of log tag.
-     */
-    @XmlElement
-    String logTag = "";
-
-    /**
-     * resource log.
-     */
-    @XmlElement
-    String resourceLog = "";
-
-    /**
-     * remote log URI.
-     */
-    @XmlElement
-    String remoteLogURI = "";
-
-    /**
-     * 'true', if has error level in remote log.
-     */
-    @XmlElement
-    String hasErrorLevelLog = "";
-
-    /**
-     * remote log URI.
-     */
-    @XmlElement
-    String localLogURI = "";
-
-    /**
-     * result assert of this test.
-     */
-    @XmlElement
-    TestResult res;
-
-    /**
-     * test comments.
-     */
-    @XmlElement
-    String notes = "OPTIONAL-NOTES-HERE";
-
-    /**
-     * test case specification section.
-     */
-    @XmlElement
-    String spec = "";
-
-    /**
-     * test case description.
-     */
-    @XmlElement
-    String desc = "";
 }
