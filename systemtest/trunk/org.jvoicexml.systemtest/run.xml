@@ -8,6 +8,7 @@ This file provides targets to run and stop the thes JVoiceXML System test.
     <target name="-run-setup" depends="-setup">
         <path id="run.classpath">
             <path refid="project.classpath" />
+            <pathelement location="${dist}/org.jvoicexml.processor.srgs.jar" />
             <pathelement path="${build}" />
             <fileset refid="loggings.lib" />
             <pathelement location="${config}" />
@@ -19,7 +20,6 @@ This file provides targets to run and stop the thes JVoiceXML System test.
             <fileset refid="loggings.lib" />
             <pathelement location="${build}" />
             <pathelement location="${config}" />
-            <pathelement location="../org.jvoicexml.jndi/classes" />
         </path>
     </target>
 

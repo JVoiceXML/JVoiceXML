@@ -17,6 +17,7 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
 package org.jvoicexml.systemtest.report;
 
 import java.io.File;
@@ -24,9 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.apache.log4j.Layout;
 import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
+import org.apache.log4j.PatternLayout;
 import org.jvoicexml.systemtest.Result;
 import org.jvoicexml.systemtest.TestCase;
 import org.jvoicexml.systemtest.TestCaseListener;
@@ -39,7 +39,7 @@ import org.jvoicexml.systemtest.TestResult;
  * @author Dirk Schnelle-Walka
  *
  */
-public class TestRecorder implements TestCaseListener {
+public final class TestRecorder implements TestCaseListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(TestRecorder.class);
 
@@ -94,7 +94,7 @@ public class TestRecorder implements TestCaseListener {
      * {@inheritDoc}
      */
     @Override
-    public final void testStopped(final Result result) {
+    public void testStopped(final Result result) {
         LOGGER.info("result is : ---- " + result.getAssert() + " ----");
         long cost = System.currentTimeMillis() - currentTestStartTime;
 
@@ -110,12 +110,16 @@ public class TestRecorder implements TestCaseListener {
 //        Map<String, File> map = moveFileTo(reportDir, prefix);
 
         if (result.getAssert() != TestResult.SKIP) {
-            final Layout layout = new SimpleLayout();
+            final PatternLayout layout = new PatternLayout();
+            layout.setConversionPattern(
+                    "%6r [%-20.20t] %-5p %30.30c (%6L) %x %m%n");
             final File remoteFile = new File(reportDir, prefix + "remote.log");
             final File localFile = new File(reportDir, prefix + "local.log");
             try {
                 remoteAppender.writeToFile(layout, remoteFile);
+                item.remoteLogURI = remoteFile.getCanonicalPath();
                 localAppender.writeToFile(layout, localFile);
+                item.localLogURI = localFile.getCanonicalPath();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -178,7 +182,7 @@ public class TestRecorder implements TestCaseListener {
      * {@inheritDoc}
      */
     @Override
-    public final void testStarted(final TestCase tc) {
+    public void testStarted(final TestCase tc) {
         if (reportDoc == null) {
             reportDoc = new IRXMLDocument();
 //            if (logRoller != null) {
@@ -188,7 +192,7 @@ public class TestRecorder implements TestCaseListener {
 
         // Check if we received a result from the previous test.
         if (currentTestCase != null) {
-            final Result result = new MyFailResult("no report result");
+            final Result result = new FailResult("no report result");
             testStopped(result);
         }
 
@@ -199,10 +203,11 @@ public class TestRecorder implements TestCaseListener {
     }
 
     /**
+     * Sets the base name of the report.
      * @param name
      *            report file name.
      */
-    public final void setReportName(final String name) {
+    public void setReportName(final String name) {
         reportName = name;
     }
 
@@ -213,51 +218,12 @@ public class TestRecorder implements TestCaseListener {
      * @exception IOException
      *            error creating the report directory.
      */
-    public final void setReportDir(final String dir) throws IOException {
+    public void setReportDir(final String dir) throws IOException {
         reportDir = new File(dir);
         if (!reportDir.exists()) {
             LOGGER.info("creating report directory '"
                     + reportDir.getCanonicalPath() + "'");
             reportDir.mkdirs();
-        }
-    }
-
-
-    /**
-     * implement of Result for this class.
-     * @author lancer
-     *
-     */
-    private class MyFailResult implements Result {
-
-        /**
-         * reason of failed.
-         */
-        private final String reason;
-
-        /**
-         * Construct a new object.
-         *
-         * @param arg0 reason of failed.
-         */
-        MyFailResult(final String arg0) {
-            reason = arg0;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public TestResult getAssert() {
-            return TestResult.FAIL;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String getReason() {
-            return reason;
         }
     }
 }

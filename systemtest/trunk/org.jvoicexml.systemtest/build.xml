@@ -49,7 +49,7 @@ personal-props/README.txt
             <fileset refid="jchardet.lib" />
             <fileset refid="spring.lib"/>
             <pathelement location="${dist}/jvxml-client-text.jar" />
-            <pathelement location="${dist}/jvxml-text.jar" />
+            <pathelement location="${dist}/org.jvoicexml.implementation.text.jar" />
             <pathelement location="${build}" />
         </path>
     </target>
@@ -99,6 +99,16 @@ You're using ${ant.java.version}
             inheritall="false" inheritrefs="false">
           <property name="enableJndi" value="false"/>
         </ant>
+      <!-- Remove classloader issues in the config file -->
+      <xslt in="${config}/text-implementation.xml"
+        out="${config}/text-test-implementation.xml"
+        style="etc/patch-text-config.xsl">
+          <outputproperty name="method" value="xml" />
+          <outputproperty name="standalone" value="no" />
+          <outputproperty name="encoding" value="UTF-8" />
+          <outputproperty name="indent" value="yes" />
+      </xslt>
+      <delete file="${config}/text-implementation.xml"/>
       <!--xslt in="${config}/log4j.xml"
         out="config/log4j-patch.xml"
         style="etc/patch-log4j.xsl">
@@ -107,9 +117,6 @@ You're using ${ant.java.version}
           <outputproperty name="encoding" value="UTF-8" />
           <outputproperty name="indent" value="yes" />
       </xslt-->
-      <replace file="${jvxml.core.dir}/config/text-implementation.xml" 
-          token="value=&quot;1&quot;" 
-          value="value=&quot;500&quot;" />
     </target>
 
     <target name="compile-jvxml" depends="createSystemTestConfiguration"

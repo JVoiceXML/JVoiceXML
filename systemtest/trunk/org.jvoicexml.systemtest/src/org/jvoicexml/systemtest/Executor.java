@@ -44,9 +44,6 @@ public final class Executor implements TextListener, TimeoutListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(Executor.class);
 
-    /** Timeout to poll for a session timeout. */
-    private static final int WAIT_SESSION_END_TIMEOUT = 300;
-
     /**
      * max wait time.
      */
@@ -121,7 +118,7 @@ public final class Executor implements TextListener, TimeoutListener {
                 textServer.getConnectionInformation();
             session = jvxml.createSession(client);
             session.call(testURI);
-            waitSessionEnd();
+            session.waitSessionEnd();
         } catch (Throwable t) {
             LOGGER.error("Error calling the interpreter", t);
             memo.setFail("call session '" + t.getMessage() + "'");
@@ -130,24 +127,6 @@ public final class Executor implements TextListener, TimeoutListener {
             if (session != null) {
                 session.hangup();
                 session = null;
-            }
-        }
-    }
-
-    /**
-     * Wait for the end of the session. In this case this is where a result
-     * was received
-     * @throws InterruptedException
-     *         wait interrupted
-     * @since 0.7.3
-     */
-    private void waitSessionEnd() throws InterruptedException {
-        while (memo.getAssert() != TestResult.NEUTRAL) {
-            synchronized (waitLock) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("waiting for a end of session");
-                }
-                waitLock.wait(WAIT_SESSION_END_TIMEOUT);
             }
         }
     }

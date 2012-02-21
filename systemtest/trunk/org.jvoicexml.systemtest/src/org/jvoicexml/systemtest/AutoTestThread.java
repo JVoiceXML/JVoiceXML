@@ -113,9 +113,8 @@ class AutoTestThread extends Thread {
 
             LOGGER.info("\n\n");
             LOGGER.info("###########################################");
-            LOGGER.info("start testcase : " + testcase.toString());
-            LOGGER.info("start uri : " + testcase.getStartURI());
-
+            LOGGER.info("start testcase: '" + testcase.toString() + "'");
+            LOGGER.info("start uri     : '" + testcase.getStartURI() + "'");
             LOGGER.info("start TextServer at port " + textServerPort);
             final TextServer textServer = new TextServer(textServerPort);
 
