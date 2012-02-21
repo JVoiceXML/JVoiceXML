@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -206,14 +206,19 @@ final class DataStrategy
         final ScriptingEngine scripting = context.getScriptingEngine();
 
         for (String name : namelist) {
-            final String value = (String) scripting.eval(name + ";");
+            final Object value = scripting.eval(name + ";");
             if ((value == null) || (value == Context.getUndefinedValue())) {
                 throw new SemanticError("'" + name + "' is undefined!");
             }
 
-            if (value.startsWith("file:/")) {
-                final File file = new File(value);
-                descriptor.addParameter(name, file);
+            if (value instanceof String) {
+                String str = (String) value;
+                if (str.startsWith("file:/")) {
+                    final File file = new File(str);
+                    descriptor.addParameter(name, file);
+                } else {
+                    descriptor.addParameter(name, value);
+                }
             } else {
                 descriptor.addParameter(name, value);
             }

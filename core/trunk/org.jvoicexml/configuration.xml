@@ -19,16 +19,22 @@ personal-props/README.txt
         <property name="config" value="config" />
         <property name="etc" value="etc" />
 
-       <!-- 
+        <property name="enableJndi" value="true" />
+
+        <!-- 
         - Prepare the files that can be changed by the implementation platforms 
         -->
         <copy file="${etc}/run.xml" todir="." overwrite="true" />
-        <delete dir="${config}">
-            <include name="*-implementation.xml" />
-            <include name="*-callmanager.xml" />
-            <include name="*-grammar.xml" />
-            <include name="jvxml-jndi.xml" />
-            <exclude name="jvxml-*.xml" />
+        <delete>
+            <fileset dir="${config}">
+              <include name="*-implementation.xml" />
+              <include name="*-callmanager.xml" />
+              <include name="*-grammar.xml" />
+              <include name="jvxml-jndi.xml" />
+              <exclude name="jvxml-implementation.xml" />
+              <exclude name="jvxml-grammar.xml" />
+              <exclude name="jvxml-variableprovider.xml" />
+            </fileset>
         </delete>
         <available file="personal-props/platforms.xml" property="personal"/>
     </target>
@@ -41,7 +47,13 @@ personal-props/README.txt
     <property name="configfile" value="personal-props/platforms.xml" />
   </target>
   
-    <target name="createConfiguration" depends="-setup,-useGlobalConfig,-usePersonalConfig">
+  <target name="-configureJndi" if="${enableJndi}">
+    <ant dir="../org.jvoicexml.jndi" target="configuration"
+        inheritall="false" inheritrefs="false" />
+  </target>
+
+    <target name="createConfiguration"
+      depends="-setup,-useGlobalConfig,-usePersonalConfig,-configureJndi">
       <xslt in="${configfile}"
         out="platform-targets.xml"
         style="${etc}/patch-runscript.xsl">
@@ -51,8 +63,6 @@ personal-props/README.txt
           <outputproperty name="indent" value="yes" />
       </xslt>
       <ant antfile="platform-targets.xml" target="configurePlatforms"
-          inheritall="false" inheritrefs="false" />
-      <ant dir="../org.jvoicexml.jndi" target="configuration"
           inheritall="false" inheritrefs="false" />
       <ant dir="../org.jvoicexml.config" target="configuration"
           inheritall="false" inheritrefs="false" />
