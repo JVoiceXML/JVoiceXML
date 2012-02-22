@@ -69,7 +69,9 @@ public final class SystemTestAppender extends AppenderSkeleton {
      */
     @Override
     protected void append(final LoggingEvent event) {
-        events.add(event);
+        synchronized (events) {
+            events.add(event);
+        }
     };
 
     /**
@@ -91,15 +93,17 @@ public final class SystemTestAppender extends AppenderSkeleton {
             throws IOException {
         final FileWriter writer = new FileWriter(file);
         try {
-            for (LoggingEvent event : events) {
-                final String message = layout.format(event);
-                writer.write(message);
-                final String[] throwable = event.getThrowableStrRep();
-                final String lf = System.getProperty("line.separator");
-                if (throwable != null) {
-                    for (String str : throwable) {
-                        writer.write(str);
-                        writer.write(lf);
+            synchronized (events) {
+                for (LoggingEvent event : events) {
+                    final String message = layout.format(event);
+                    writer.write(message);
+                    final String[] throwable = event.getThrowableStrRep();
+                    final String lf = System.getProperty("line.separator");
+                    if (throwable != null) {
+                        for (String str : throwable) {
+                            writer.write(str);
+                            writer.write(lf);
+                        }
                     }
                 }
             }
