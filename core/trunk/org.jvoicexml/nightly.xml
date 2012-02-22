@@ -88,6 +88,7 @@ org.jvoicexml/personal-props
     </taskdef>
     <svn javahl="true">
       <update dir="." />
+      <update dir="../org.jvoicexml.client" />
       <update dir="../org.jvoicexml.xml" />
       <update dir="../org.jvoicexml.jndi" />
       <update dir="../org.jvoicexml.processor.srgs" />
@@ -130,8 +131,12 @@ org.jvoicexml/personal-props
       description="Perform checkstyle checks over all projects">
     <delete dir="dist/checkstyle" failonerror="false" />
     <ant dir="../org.jvoicexml" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.client" inheritall="false" inheritrefs="false"
+        target="checkstyle" />
     <ant dir="../org.jvoicexml.config" inheritall="false" inheritrefs="false"
-    	target="checkstyle" />
+        target="checkstyle" />
+    <ant dir="../org.jvoicexml.jndi" inheritall="false" inheritrefs="false"
+        target="checkstyle" />
     <ant dir="../org.jvoicexml.xml" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.processor.srgs" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.jsapi10" inheritall="false" target="checkstyle" />

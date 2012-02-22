@@ -75,7 +75,7 @@ You're using ${ant.java.version}
 
     <target name="compile"
             depends="-init,-checkJavaVersion"
-            description="Compile the Red5 sources">
+            description="Compile the sources">
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
         <javac destdir="${build}" includeantruntime="false"
                optimize="${javac.optimize}"
@@ -94,7 +94,7 @@ You're using ${ant.java.version}
     <target name="jar"
             depends="compile"
             description="Pack all compiled files into jar files">
-        <!-- red5 implementation jar file -->
+        <!-- implementation jar file -->
         <jar jarfile="${dist.jar}" compress="false">
             <fileset dir="${build}">
                 <include name="${component.path}/**/*.class" />
@@ -154,7 +154,7 @@ You're using ${ant.java.version}
               href="http://logging.apache.org/log4j/docs/api/"
               packagelistLoc="${log4j.dir}" />
 
-        <group title="red5 based implementation platform">
+        <group title="MARC based implementation platform">
             <package name="${component}*" />
         </group>
         </javadoc>

@@ -96,7 +96,7 @@ You're using ${ant.java.version}
 ]]>
         </echo>
         <ant antfile="${jvxml.core.dir}/configuration.xml"
-            inheritall="false" inheritrefs="false">
+            inheritall="false" inheritrefs="false" dir="${jvxml.core.dir}">
           <property name="enableJndi" value="false"/>
         </ant>
       <!-- Remove classloader issues in the config file -->

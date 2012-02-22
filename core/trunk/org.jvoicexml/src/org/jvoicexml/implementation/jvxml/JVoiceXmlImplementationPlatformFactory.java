@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,7 +34,6 @@ import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.ImplementationPlatformFactory;
-import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ExternalRecognitionListener;
 import org.jvoicexml.implementation.ExternalResource;
@@ -76,17 +75,6 @@ public final class JVoiceXmlImplementationPlatformFactory
 
     /** Pool of user calling resource factories. */
     private final KeyedResourcePool<Telephony> telephonyPool;
-
-    /** The default output type, if no connection information was given. */
-    private String defaultOutputType;
-
-    /** The default output type, if no connection information was given. */
-    private String defaultSpokeninputType;
-
-    /**
-     * The default telephony type, if no connection information was given.
-     */
-    private String defaultTelephonyType;
 
     /** An external recognition listener. */
     private ExternalRecognitionListener externalRecognitionListener;
@@ -258,12 +246,6 @@ public final class JVoiceXmlImplementationPlatformFactory
     private void addSynthesizedOutputFactory(
             final ResourceFactory<SynthesizedOutput> factory) throws Exception {
         final String type = factory.getType();
-        if (defaultOutputType == null) {
-            LOGGER.info("using '" + type + "' as default output");
-
-            defaultOutputType = type;
-        }
-
         synthesizerPool.addResourceFactory(factory);
 
         LOGGER.info("added synthesized output factory "
@@ -282,12 +264,6 @@ public final class JVoiceXmlImplementationPlatformFactory
     public void addSpokenInputFactory(
             final ResourceFactory<SpokenInput> factory) throws Exception {
         final String type = factory.getType();
-        if (defaultSpokeninputType == null) {
-            LOGGER.info("using '" + type + "' as default spoken input");
-
-            defaultSpokeninputType = type;
-        }
-
         spokenInputPool.addResourceFactory(factory);
 
         LOGGER.info("added user input factory " + factory.getClass()
@@ -306,13 +282,6 @@ public final class JVoiceXmlImplementationPlatformFactory
     public void addTelephonyFactory(final ResourceFactory<Telephony> factory)
         throws Exception {
         final String type = factory.getType();
-        if (defaultTelephonyType == null) {
-            LOGGER.info("using '" + type
-                    + "' as default telephony support");
-
-            defaultTelephonyType = type;
-        }
-
         telephonyPool.addResourceFactory(factory);
         LOGGER.info("added telephony factory " + factory.getClass()
                 + " for type '" + type + "'");
@@ -322,16 +291,10 @@ public final class JVoiceXmlImplementationPlatformFactory
      * {@inheritDoc}
      */
     public synchronized ImplementationPlatform getImplementationPlatform(
-            final ConnectionInformation client)
+            final ConnectionInformation info)
         throws NoresourceError {
-
-        final ConnectionInformation info;
-        if (client == null) {
-            LOGGER.info("no client given. using default platform");
-            info = new BasicConnectionInformation(defaultTelephonyType,
-                    defaultOutputType, defaultSpokeninputType);
-        } else {
-            info = client;
+        if (info == null) {
+            throw new NoresourceError("No connection information given!");
         }
 
         final JVoiceXmlImplementationPlatform platform =

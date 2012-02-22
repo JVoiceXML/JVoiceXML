@@ -22,5 +22,6 @@
 	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/sphinx4/lib/sphinx4.jar"/>
 	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/sphinx4/lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar"/>
 	<classpathentry kind="lib" path="3rdparty/talkingjava/lib/cgjsapi.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>

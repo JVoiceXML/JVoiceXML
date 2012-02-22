@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-client-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-rtp-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-sip-SNAPSHOT.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>

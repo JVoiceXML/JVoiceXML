@@ -13,6 +13,7 @@ implementation platform.
         <!-- jvxml library -->
         <path id="jvxml.core.lib">
           <path location="${jvxml.core.dir}/classes"/>
+          <path location="../org.jvoicexml.client/classes"/>
           <path location="../org.jvoicexml.xml/classes"/>
         </path>
     </target>

@@ -214,7 +214,8 @@ before starting Tomcat.
     </target>
 
     <target name="startupTomcat" depends="-setup, deploy" 
-        description="start up tomcat web service.">
+        description="start up tomcat web service."
+        if="${tomcat.systemtest.startup}">
         <echo message="startup tomcat web service."/>
         <exec dir="${tomcat.home}" executable="${tomcat.startup}"
               spawn="true"/>
@@ -225,7 +226,8 @@ before starting Tomcat.
     </target>
 
     <target name="shutdownTomcat" depends="-setup" 
-        description="shutdown tomcat web service.">
+        description="shutdown tomcat web service."
+        if="${tomcat.systemtest.startup}">
         <exec dir="${tomcat.home}" executable="${tomcat.shutdown}"
             spawn="true"/>
     </target>

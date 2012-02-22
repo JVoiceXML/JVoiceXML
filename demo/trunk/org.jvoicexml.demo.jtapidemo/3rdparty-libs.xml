@@ -38,8 +38,8 @@ This file contains the 3rd party library definitions used by this demo.
 
     <!-- jvxml library -->
     <path id="jvxml.core.lib">
-        <path location="${jvxml.core.dir}/classes" />
-        <path location="../org.jvoicexml.xml/classes" />
+        <path location="${jvxml.core.dir}/dist/org.jvoicexml.client.jar" />
+        <path location="${jvxml.core.dir}/dist/org.jvoicexml.xml.jar" />
     </path>
   </target>
 </project>

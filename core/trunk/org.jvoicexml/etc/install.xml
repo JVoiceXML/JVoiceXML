@@ -110,7 +110,7 @@ The JSAPI 1.0 implementation platform is a good place to get started.
         <include name="org.jvoicexml.jar" />
         <include name="org.jvoicexml.config.jar" />
         <include name="org.jvoicexml.xml.jar" />
-        <include name="jvxml-client.jar" />
+        <include name="org.jvoicexml.client.jar" />
         <include name="org.jvoicexml.jndi.jar" />
         <include name="org.jvoicexml.processor.srgs.jar" />
       </fileset>

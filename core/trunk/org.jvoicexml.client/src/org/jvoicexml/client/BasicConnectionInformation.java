@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/client/BasicConnectionInformation.java $
+ * Version: $LastChangedRevision: 2553 $
+ * Date:    $Date: 2011-01-28 08:33:43 +0100 (Fr, 28 Jan 2011) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -41,7 +41,7 @@ import org.jvoicexml.ConnectionInformation;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
+ * @version $Revision: 2553 $
  * @since 0.6
  */
 public class BasicConnectionInformation implements ConnectionInformation {

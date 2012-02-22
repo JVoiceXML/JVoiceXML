@@ -94,6 +94,14 @@ public final class SystemTestAppender extends AppenderSkeleton {
             for (LoggingEvent event : events) {
                 final String message = layout.format(event);
                 writer.write(message);
+                final String[] throwable = event.getThrowableStrRep();
+                final String lf = System.getProperty("line.separator");
+                if (throwable != null) {
+                    for (String str : throwable) {
+                        writer.write(str);
+                        writer.write(lf);
+                    }
+                }
             }
         } finally {
             writer.close();

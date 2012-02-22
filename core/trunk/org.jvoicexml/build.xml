@@ -27,7 +27,6 @@ personal-props/README.txt
 
         <!-- main jar files -->
         <property name="dist.jvxml.jar" value="${dist}/${component}.jar" />
-        <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
         <!-- Value must be copied from ../org.jvoicexml.xml/build.xml -->
         <property name="dist.xml.jar" value="${dist}/org.jvoicexml.xml.jar" />
 
@@ -58,6 +57,8 @@ personal-props/README.txt
             inheritrefs="false" target="clean"/>
         <ant dir="../org.jvoicexml.config" inheritall="false"
             inheritrefs="false" target="clean"/>
+      <ant dir="../org.jvoicexml.client" inheritall="false"
+          inheritrefs="false" target="clean"/>
         <ant dir="../org.jvoicexml.jndi" inheritall="false" inheritrefs="false" 
             target="clean"/>
     </target>
@@ -131,6 +132,8 @@ jvxml.revision=${revision.max}
       <!-- Build components that are dependent on the core -->
       <ant dir="../org.jvoicexml.config" target="jar"
             inheritall="false" inheritrefs="false"/>
+      <ant dir="../org.jvoicexml.client" target="jar"
+            inheritall="false" inheritrefs="false"/>
       <ant dir="../org.jvoicexml.jndi" target="jar"
             inheritall="false" inheritrefs="false"/>
     </target>
@@ -159,34 +162,6 @@ jvxml.revision=${revision.max}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML main" />
-                    <attribute name="Implementation-Version"
-                        value="${version}" />
-                </section>
-            </manifest>
-        </jar>
-
-    	<!-- client jar file -->
-        <jar jarfile="${dist.client.jar}" compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/JVoiceXml.class" />
-                <include name="org/jvoicexml/Session.class" />
-                <include name="org/jvoicexml/CallControl.class" />
-                <include name="org/jvoicexml/CharacterInput.class" />
-                <include name="org/jvoicexml/ConnectionInformation.class" />
-                <include name="org/jvoicexml/RemoteConnectable.class" />
-                <include name="org/jvoicexml/SessionListener.class" />
-                <include name="org/jvoicexml/implementation/UserInputListener.class" />
-                <include name="org/jvoicexml/event/**/*.class" />
-                <include name="org/jvoicexml/client/**/*.class" />
-                <include name="org/jvoicexml/documentserver/schemestrategy/MappedDocumentRepository.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML client files" />
                     <attribute name="Implementation-Version"
                         value="${version}" />
                 </section>
@@ -245,7 +220,7 @@ jvxml.revision=${revision.max}
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2010<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2005-2012<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <!-- Custom tags -->
         <tag name="todo" description="Stuff to complete" />
@@ -291,14 +266,13 @@ jvxml.revision=${revision.max}
         <group title="Main package containing the VoiceXML interpreter">
             <package name="org.jvoicexml.interpreter*" />
         </group>
-        <group title="Client based interaction">
-            <package name="org.jvoicexml.client*" />
-        </group>
         </javadoc>
 
         <!-- Create apidoc for directly dependent components -->
         <ant dir="../org.jvoicexml.config" target="apidoc"
             inheritall="false" inheritrefs="false"/>
+        <ant dir="../org.jvoicexml.client" target="apidoc"
+          inheritall="false" inheritrefs="false"/>
         <ant dir="../org.jvoicexml.jndi" target="apidoc"
             inheritall="false" inheritrefs="false"/>
     </target>

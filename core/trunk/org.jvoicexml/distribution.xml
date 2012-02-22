@@ -125,7 +125,7 @@ This file builds the distribution files for JVoiceXML.
     <copy todir="${distFolder}/lib" file="${dist.jvxml.jar}" />
     <copy todir="${distFolder}/lib" file="dist/org.jvoicexml.processor.srgs.jar" />
     <copy todir="${distFolder}/lib" file="dist/org.jvoicexml.config.jar" />
-    <copy todir="${distFolder}/lib" file="${dist.client.jar}" />
+    <copy todir="${distFolder}/lib" file="dist/org.jvoicexml.client.jar" />
     <copy todir="${distFolder}/lib" file="${dist.xml.jar}" />
   </target>
 
@@ -440,6 +440,9 @@ sphinx.lib.dir=../../lib
         <copy message="Tagging release ${jvxml.version}"
             srcUrl="${trunk.core.dir}/org.jvoicexml"
             destUrl="${tag.core.dir}/org.jvoicexml"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.client"
+            destUrl="${tag.core.dir}/org.jvoicexml.client"/>
         <copy message="Tagging release ${jvxml.version}"
             srcUrl="${trunk.core.dir}/org.jvoicexml.config"
             destUrl="${tag.core.dir}/org.jvoicexml.config"/>

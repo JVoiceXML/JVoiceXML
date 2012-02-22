@@ -12,8 +12,7 @@ creation demo.
 
     <!-- jvxml library -->
     <path id="jvxml.core.lib">
-        <path location="${jvxml.core.dir}/dist/jvxml-client.jar" />
-        <path location="${jvxml.core.dir}/dist/org.jvoicexml.xml.jar" />
+      <path location="${jvxml.core.dir}/dist/org.jvoicexml.xml.jar" />
     </path>
   </target>
 </project>

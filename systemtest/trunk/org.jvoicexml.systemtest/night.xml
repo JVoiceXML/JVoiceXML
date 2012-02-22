@@ -26,13 +26,15 @@ This file provides targets to run and stop the voice browser.
         <copy file="./config/ir.xslt" tofile="${results.dir}/ir.xslt" />
     </target>
 
-    <target name="stopTomcat" depends="-run-setup">
+    <target name="stopTomcat" depends="-run-setup"
+      if="${tomcat.systemtest.startup}">
         <ant antfile="build.xml" 
             dir="${servlet.project}" target="shutdownTomcat"
             inheritAll="false" inheritrefs="false"/>
     </target>
     
-    <target name="startTomcat" depends="-run-setup">
+    <target name="startTomcat" depends="-run-setup"
+      if="${tomcat.systemtest.startup}">
         <ant antfile="build.xml" 
             dir="${servlet.project}" target="startupTomcat"
             inheritAll="false" inheritrefs="false"/>

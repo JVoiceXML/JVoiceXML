@@ -8,7 +8,7 @@
     <!-- jvxml library -->
     <path id="jvxml.core.lib">
       <fileset dir="${lib.dir}">
-        <include name="jvxml-client.jar" />
+        <include name="org.jvoicexml.client.jar" />
         <include name="org.jvoicexml.xml.jar" />
       </fileset>
     </path>

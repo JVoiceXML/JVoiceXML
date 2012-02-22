@@ -13,6 +13,7 @@ This file contains the 3rd party libary definitions, used by the systemtest.
         <!-- jvxml library -->
         <path id="jvxml.core.lib">
           <path location="${jvxml.core.dir}/classes"/>
+          <path location="../org.jvoicexml.client/classes"/>
           <path location="../org.jvoicexml.config/classes"/>
           <path location="../org.jvoicexml.xml/classes"/>
           <path location="../org.jvoicexml.jndi/classes"/>
