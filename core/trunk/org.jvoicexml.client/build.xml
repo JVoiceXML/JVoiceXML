@@ -99,6 +99,8 @@ You're using ${ant.java.version}
             <include name="org/jvoicexml/JVoiceXml.class" />
             <include name="org/jvoicexml/Session.class" />
             <include name="org/jvoicexml/CallControl.class" />
+            <include name="org/jvoicexml/UserInput.class" />
+            <include name="org/jvoicexml/SystemOutput.class" />
             <include name="org/jvoicexml/CharacterInput.class" />
             <include name="org/jvoicexml/ConnectionInformation.class" />
             <include name="org/jvoicexml/RemoteConnectable.class" />
@@ -123,6 +125,9 @@ You're using ${ant.java.version}
                         value="${version}" />
                 </section>
             </manifest>
+          <metainf dir="etc">
+            <include name="services/*"/>
+          </metainf>
         </jar>
     </target>
 

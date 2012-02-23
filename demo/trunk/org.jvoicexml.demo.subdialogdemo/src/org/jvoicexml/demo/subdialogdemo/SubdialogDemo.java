@@ -37,6 +37,7 @@ import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.GenericClient;
+import org.jvoicexml.client.UnsupportedResourceIdentifierException;
 import org.jvoicexml.event.ErrorEvent;
 
 /**
@@ -76,6 +77,9 @@ public final class SubdialogDemo {
             LOGGER.fatal(e.getMessage(), e);
             return;
         } catch (ErrorEvent e) {
+            LOGGER.fatal(e.getMessage(), e);
+            return;
+        } catch (UnsupportedResourceIdentifierException e) {
             LOGGER.fatal(e.getMessage(), e);
             return;
         }
