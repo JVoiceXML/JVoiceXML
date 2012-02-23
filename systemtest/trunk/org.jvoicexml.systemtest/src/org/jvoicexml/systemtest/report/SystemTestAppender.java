@@ -36,6 +36,7 @@ import java.util.List;
 
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
+import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 
 /**
@@ -83,6 +84,41 @@ public final class SystemTestAppender extends AppenderSkeleton {
     }
 
     /**
+     * Check if the log contains a message with at least error level.
+     * @return <code>true</code> if there is an error level message 
+     */
+    public boolean hasErrorLevelEvent() {
+        synchronized (events) {
+            for (LoggingEvent event : events) {
+                final Level level = event.getLevel();
+                if (level.isGreaterOrEqual(Level.ERROR)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public String getContents(final Layout layout) {
+        final StringBuilder content = new StringBuilder();
+        synchronized (events) {
+            for (LoggingEvent event : events) {
+                final String message = layout.format(event);
+                content.append(message);
+                final String[] throwable = event.getThrowableStrRep();
+                final String lf = System.getProperty("line.separator");
+                if (throwable != null) {
+                    for (String str : throwable) {
+                        content.append(str);
+                        content.append(lf);
+                    }
+                }
+            }
+        }
+        return content.toString();
+    }
+
+    /**
      * Writes the logs to the specified filename using the given layout.
      * @param layout the layout to use.
      * @param file the file where to write the messages.
@@ -118,6 +154,8 @@ public final class SystemTestAppender extends AppenderSkeleton {
      * @since 0.7.4
      */
     public void clear() {
-        events.clear();
+        synchronized (events) {
+            events.clear();
+        }
     }
 }

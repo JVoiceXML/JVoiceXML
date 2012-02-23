@@ -182,8 +182,7 @@
           <tr>
             <th align="left" width="5%">Assert ID</th>
             <th align="left" width="35%">Description</th>
-            <th align="left" width="15%">LogTag</th>
-            <th align="left" width="10%">Resource Borrow and Return</th>
+            <th align="left" width="10%">Resources</th>
             <th align="left" width="5%"><center>Report ERROR <br/>/<br /> Remote Log</center></th>
             <th align="left" width="10%"><center>Test Result <br/>/<br /> Local Log</center></th>
             <th align="left" width="15%">Notes</th>
@@ -208,9 +207,6 @@
       </td>
       <td>
         <xsl:value-of select="concat('[', spec, '] ', desc)" />
-      </td>
-      <td>
-        <xsl:apply-templates select="logTag" />
       </td>
       <td>
         <xsl:apply-templates select="resourceLog" />
@@ -249,13 +245,6 @@
     <xsl:value-of select="." />
   </xsl:template>
 
-  <xsl:template match="logTag">
-    <xsl:if test="string-length(.) = 0" >
-      <xsl:text>-</xsl:text>
-    </xsl:if>
-    <xsl:value-of select="." />
-  </xsl:template>
-
   <xsl:template match="hasErrorLevelLog">
     <xsl:if test="string-length(.) = 0" >
       <xsl:text>-</xsl:text>
@@ -282,17 +271,7 @@
     </xsl:if>
     <pre>
       <font size="1">
-      <xsl:call-template name="replaceAll">
-        <xsl:with-param name="input">
-          <xsl:call-template name="replaceAll">
-            <xsl:with-param name="input" select="."/>
-            <xsl:with-param name="from">pool has now </xsl:with-param>
-            <xsl:with-param name="to"/>
-          </xsl:call-template>
-        </xsl:with-param>
-        <xsl:with-param name="from" >for key 'text' (org.jvoicexml.implementation.text.</xsl:with-param>
-        <xsl:with-param name="to">(</xsl:with-param>
-      </xsl:call-template>
+        <xsl:value-of select="." />
       </font>
     </pre>
   </xsl:template>

@@ -24,9 +24,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
+import org.apache.log4j.spi.LoggingEvent;
 import org.jvoicexml.systemtest.Result;
 import org.jvoicexml.systemtest.TestCase;
 import org.jvoicexml.systemtest.TestCaseListener;
@@ -43,11 +45,14 @@ public final class TestRecorder implements TestCaseListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(TestRecorder.class);
 
-    /** The appender to collect all log messages. */
+    /** The appender to collect all log messages from JVoiceXML. */
     private final SystemTestAppender remoteAppender;
 
-    /** The appender to collect all log messages. */
+    /** The appender to collect all log messages from the system test. */
     private final SystemTestAppender localAppender;
+
+    /** The appender to collect all log messages of the resources. */
+    private final SystemTestAppender resourceAppender;
 
     /**
      * default report file name.
@@ -88,6 +93,10 @@ public final class TestRecorder implements TestCaseListener {
         final Logger systemtestLogger =
                 Logger.getLogger("org.jvoicexml.systemtest");
         systemtestLogger.addAppender(localAppender);
+        resourceAppender = new SystemTestAppender();
+        final Logger resourceLogger =
+                Logger.getLogger("org.jvoicexml.implementation.pool");
+        resourceLogger.addAppender(resourceAppender);
     }
 
     /**
@@ -107,7 +116,6 @@ public final class TestRecorder implements TestCaseListener {
         item.desc = currentTestCase.getDescription();
 
         String prefix = "" + currentTestCase.getId() + ".";
-//        Map<String, File> map = moveFileTo(reportDir, prefix);
 
         if (result.getAssert() != TestResult.SKIP) {
             final PatternLayout layout = new PatternLayout();
@@ -115,35 +123,21 @@ public final class TestRecorder implements TestCaseListener {
                     "%6r [%-20.20t] %-5p %30.30c (%6L) %x %m%n");
             final File remoteFile = new File(reportDir, prefix + "remote.log");
             final File localFile = new File(reportDir, prefix + "local.log");
+            final File resourceFile = new File(reportDir,
+                    prefix + "resource.log");
             try {
                 remoteAppender.writeToFile(layout, remoteFile);
-                item.remoteLogURI = remoteFile.getCanonicalPath();
+                item.remoteLogURI = "file:" + remoteFile.getName();
+                boolean hasError = remoteAppender.hasErrorLevelEvent();
+                item.hasErrorLevelLog = Boolean.toString(hasError);
                 localAppender.writeToFile(layout, localFile);
-                item.localLogURI = localFile.getCanonicalPath();
+                item.localLogURI = "file:" + localFile.getName();
+                resourceAppender.writeToFile(layout, resourceFile);
+                item.resourceLog = filterReturn(resourceAppender);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
+                return;
             }
-//            try {
-//                item.logTag = LogUtil.getContent(
-//                    map.get(LogRoller.LOG_TAG_LOG_NAME)).toString();
-//            } catch (IOException e) {
-//                LOGGER.warn(e.getMessage(), e);
-//                item.logTag = e.getMessage();
-//            }
-//            item.localLogURI = LogUtil.getURI(reportDir,
-//                    map.get(LogRoller.LOCAL_LOG_NAME)).toString();
-//            item.remoteLogURI = LogUtil.getURI(reportDir,
-//                    map.get(LogRoller.REMOTE_LOG_NAME)).toString();
-//            item.hasErrorLevelLog = LogUtil.exists(
-//                    map.get(LogRoller.ERROR_LEVEL_LOG_NAME)).toString();
-//            try {
-//                item.resourceLog = LogUtil.getContent(
-//                    map.get(LogRoller.RESOURCE_LOG_NAME)).toString();
-//            } catch (IOException e) {
-//                LOGGER.warn(e.getMessage(), e);
-//                item.resourceLog = e.getMessage();
-//            }
         }
 
         reportDoc.add(item);
@@ -153,6 +147,32 @@ public final class TestRecorder implements TestCaseListener {
         final File report = new File(reportDir, reportName);
         LOGGER.info("writing report to: '" + report.getAbsolutePath() + "'");
         writeReport(report);
+    }
+
+    /**
+     * Filters the resource pool info from the message of the given appender.
+     * @param appender resource appender
+     * @return filtered pool size info
+     * @since 0.7.4
+     */
+    private String filterReturn(final SystemTestAppender appender) {
+        List<LoggingEvent> events = appender.getEvents();
+        final StringBuilder str = new StringBuilder();
+        final String lf = System.getProperty("line.separator");
+        for (LoggingEvent event : events) {
+            String message = (String) event.getMessage();
+            int end = message.indexOf(" after return");
+            if (end < 0) {
+                continue;
+            }
+            message = message.substring("pool has now ".length(),
+                    end);
+            message = message.replaceAll(
+                    "for key 'text' .org.jvoicexml.implementation.text.", "(");
+            str.append(message);
+            str.append(lf);
+        }
+        return str.toString();
     }
 
     /**
@@ -198,6 +218,7 @@ public final class TestRecorder implements TestCaseListener {
 
         remoteAppender.clear();
         localAppender.clear();
+        resourceAppender.clear();
         currentTestCase = tc;
         currentTestStartTime = System.currentTimeMillis();
     }
