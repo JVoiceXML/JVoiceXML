@@ -132,6 +132,9 @@ You're using ${ant.java.version}
                     <attribute name="Implementation-Version"
                         value="${version}" />
                 </section>
+              <metainf dir="etc">
+                <include name="services/*"/>
+              </metainf>
             </manifest>
         </jar>
     </target>

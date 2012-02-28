@@ -70,7 +70,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 public final class TextServer extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(TextServer.class);;
+        Logger.getLogger(TextServer.class);
 
         /** The port number to use. */
     private final int port;
@@ -101,6 +101,9 @@ public final class TextServer extends Thread {
 
     /** <code>true</code> if a disconnect notification has been sent. */
     private boolean notifiedDisconnected;
+
+    /** <code>true</code> if the server has been started. */
+    private boolean started;
 
     /**
      * Constructs a new object.
@@ -247,6 +250,7 @@ public final class TextServer extends Thread {
         }
 
         fireStarted();
+        started = true;
 
         try {
             try {
@@ -275,6 +279,15 @@ public final class TextServer extends Thread {
             closeServer();
             closeClient();
         }
+    }
+
+    /**
+     * Checks if the server has been started.
+     * @return <code>true</code> if the server has been started
+     * @since 0.7.6
+     */
+    public boolean isStarted() {
+        return started;
     }
 
     /**
@@ -398,6 +411,7 @@ public final class TextServer extends Thread {
                     LOGGER.warn("error closing the server", e);
                 } finally {
                     server = null;
+                    started = false;
                 }
             }
         }

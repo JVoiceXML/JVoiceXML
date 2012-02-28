@@ -29,6 +29,7 @@ The jars are expected to be in the same folder as this build file.
 
   <target name="-init">
     <tstamp />
+    <ant antfile="configuration.xml" target="createDistributionConfiguration"/>
   </target>
 
   <target name="checkout" depends="-init"
@@ -116,15 +117,7 @@ org.jvoicexml/personal-props
 
   <target name="distribution" depends="update"
     description="Create JVoiceXML distribution">
-    <ant antfile="distribution.xml">
-      <property name="jvxml.text" value="true" />
-      <property name="jvxml.jsapi10" value="true" />
-      <property name="jvxml.jsapi20" value="true" />
-      <property name="jvxml.mary" value="true" />
-      <property name="jvxml.mrcpv2" value="true" />
-      <property name="jvxml.jtapi" value="true" />
-      <property name="javadoc.access" value="protected" />
-    </ant>
+    <ant antfile="distribution.xml" />
   </target>
 
   <target name="checkstyle" depends="-init"
@@ -151,19 +144,12 @@ org.jvoicexml/personal-props
       description="Perform unit tests over all projects">
     <delete dir="dist/unittests" failonerror="false" />
     <!-- Compile everything before running the tests. -->
-    <ant antfile="build.xml" target="jar">
-      <property name="jvxml.text" value="true" />
-      <property name="jvxml.jsapi10" value="true" />
-      <property name="jvxml.jsapi20" value="true" />
-      <property name="jvxml.marc" value="true" />
-      <property name="jvxml.mary" value="true" />
-      <property name="jvxml.mrcpv2" value="true" />
-      <property name="jvxml.jtapi" value="true" />
-      <property name="javadoc.access" value="protected" />
-    </ant>
+    <ant antfile="build.xml" target="jar" />
 
     <!-- Execute the unit tests for all sub projects. -->
     <ant dir="../org.jvoicexml" antfile="test.xml" inheritall="false"
+      target="test" />
+    <ant dir="../org.jvoicexml.client" antfile="test.xml" inheritall="false"
       target="test" />
     <ant dir="../org.jvoicexml.config" antfile="test.xml" inheritall="false"
       target="test" />

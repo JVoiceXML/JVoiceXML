@@ -23,20 +23,53 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.client;
+
+package org.jvoicexml.client.text;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.client.ConnectionInformationController;
+import org.jvoicexml.client.ConnectionInformationFactory;
+import org.jvoicexml.client.UnsupportedResourceIdentifierException;
 
 /**
- * {@link ConnectionInformationFactory} for the default identifiers
- * deployed with JVoiceXML.
+ * A connection information factory for text based clients.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
  */
-public final class JVoiceXmlConnectionInformationFactory
+public final class TextConnectionInformationFactory
         implements ConnectionInformationFactory {
+    /**
+     * Constructs a new object.
+     */
+    public TextConnectionInformationFactory() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String[] getCallControlIdentifiers() {
+        return new String[] {"text"};
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String[] getSystemOutputIdentifiers() {
+        return new String[] {"text"};
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String[] getUserInputIdentifiers() {
+        return new String[] {"text"};
+    }
+
     /**
      * Checks if the the given identifier is among the given list of
      * identifiers.
@@ -47,7 +80,7 @@ public final class JVoiceXmlConnectionInformationFactory
      *         if the identifier is not among the list of given identifiers
      */
     private void checkIdentifiers(final String identifier,
-            final String[] identifiers, Class<?> resource)
+            final String[] identifiers, final Class<?> resource)
                     throws UnsupportedResourceIdentifierException {
         for (String current : identifiers) {
             if (current.equals(identifier)) {
@@ -58,14 +91,14 @@ public final class JVoiceXmlConnectionInformationFactory
                 identifier, resource.getCanonicalName());
         throw new UnsupportedResourceIdentifierException(message);
     }
-
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public ConnectionInformationController createConnectionInformation(
             final String call, final String output, final String input)
-                    throws UnsupportedResourceIdentifierException {
+            throws UnsupportedResourceIdentifierException {
         // First check if all requested resources are available.
         final String[] calls = getCallControlIdentifiers();
         checkIdentifiers(call, calls, CallControl.class);
@@ -75,31 +108,7 @@ public final class JVoiceXmlConnectionInformationFactory
         checkIdentifiers(input, inputs, UserInput.class);
 
         // If successful: create a new connection info
-        return new BasicConnectionInformationController(call, output, input);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String[] getCallControlIdentifiers() {
-        return new String[] { "dummy" };
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String[] getSystemOutputIdentifiers() {
-        return new String[] { "jsapi10", "jsapi20", "mary", "marc" };
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String[] getUserInputIdentifiers() {
-        return new String[] { "jsapi10", "jsapi20", "mary", "marc" };
+        return new TextConnectionInformationController();
     }
 
 }

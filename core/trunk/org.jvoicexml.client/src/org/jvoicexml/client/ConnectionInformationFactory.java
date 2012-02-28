@@ -56,7 +56,8 @@ public interface ConnectionInformationFactory {
     String[] getUserInputIdentifiers();
 
     /**
-     * Creates a {@link ConnectionInformation} with the specified identifiers.
+     * Creates a controller for a {@link ConnectionInformation} with the
+     * specified identifiers.
      * @param call unique identifier for the {@link org.jvoicexml.CallControl}.
      * @param output unique identifier for the
      *  {@link org.jvoicexml.SystemOutput}.
@@ -65,7 +66,7 @@ public interface ConnectionInformationFactory {
      *           if one of the specified identifiers is not supported in
      *           this factory
      */
-    ConnectionInformation createConnectionInformation(final String call,
-            final String output, final String input)
+    ConnectionInformationController createConnectionInformation(
+            final String call, final String output, final String input)
                     throws UnsupportedResourceIdentifierException;
 }

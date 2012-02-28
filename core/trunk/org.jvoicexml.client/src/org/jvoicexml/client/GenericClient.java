@@ -48,6 +48,9 @@ public final class GenericClient {
     /** Reference to the JVoiceXML server. */
     private JVoiceXml jvxml;
 
+    /** The connection information that was created by the factory. */
+    private ConnectionInformationController infoController;
+
     /**
      * Retrieves a reference to the JVoiceXML server.
      * @return reference to the JVoiceXML server.
@@ -62,6 +65,14 @@ public final class GenericClient {
         return jvxml;
     }
 
+    /**
+     * Checks, if the given identifier occurs in the list of identifiers.
+     * @param identifier the identifier to look for
+     * @param identifiers the available identifiers
+     * @return <code>true</code> if the identifier is among the available
+     *           identifiers.
+     * @since 0.7.6
+     */
     private boolean contains(final String identifier,
             final String[] identifiers) {
         for (String current : identifiers) {
@@ -74,35 +85,36 @@ public final class GenericClient {
 
     /**
      * Scans all found {@link ConnectionInformationFactory}s if they are
-     * able to create a {@link ConnectionInformation} with the specified
-     * identifiers and calls the factory method for the first matching factory.
+     * able to create a {@link ConnectionInformationController} with the
+     * specified identifiers and calls the factory method for the first matching
+     * factory.
      * @param call unique identifier for the {@link org.jvoicexml.CallControl}.
      * @param output unique identifier for the
      *  {@link org.jvoicexml.SystemOutput}.
      * @param input unique identifier for the {@link org.jvoicexml.UserInput}.
-     * @return created connection inf
+     * @return created connection information controller
      * @throws UnsupportedResourceIdentifierException
      *         if the combination of the identifiers is invalid
      */
-    private ConnectionInformation createConnectionInformation(
+    private ConnectionInformationController createConnectionInformation(
             final String input, final String output, final String call)
                     throws UnsupportedResourceIdentifierException {
         final ServiceLoader<ConnectionInformationFactory> services =
                 ServiceLoader.load(ConnectionInformationFactory.class);
-        for (ConnectionInformationFactory factory : services) {
-            final String[] calls = factory.getCallControlIdentifiers();
+        for (ConnectionInformationFactory current : services) {
+            final String[] calls = current.getCallControlIdentifiers();
             if (!contains(call, calls)) {
                 continue;
             }
-            final String[] outputs = factory.getSystemOutputIdentifiers();
+            final String[] outputs = current.getSystemOutputIdentifiers();
             if (!contains(output, outputs)) {
                 continue;
             }
-            final String[] inputs = factory.getUserInputIdentifiers();
+            final String[] inputs = current.getUserInputIdentifiers();
             if (!contains(input, inputs)) {
                 continue;
             }
-            return factory.createConnectionInformation(call, output, input);
+            return current.createConnectionInformation(call, output, input);
         }
         final String message = String.format(
                 "No matching factoy found for '%s', %s', '%s'", call, output,
@@ -113,6 +125,10 @@ public final class GenericClient {
     /**
      * Calls JVoiceXML with the given URI and the specified platform
      * configuration.
+     * <p>
+     * After the session has ended and {@link Session#hangup()} has been called,
+     * {@link #close()} must be called to free potentially acquired resources. 
+     * </p>
      * @param uri the URI to call
      * @param call unique identifier for the {@link org.jvoicexml.CallControl}.
      * @param output unique identifier for the
@@ -129,9 +145,14 @@ public final class GenericClient {
     public Session call(final URI uri, final String input, final String output,
             final String call) throws NamingException, ErrorEvent,
             UnsupportedResourceIdentifierException {
-        final ConnectionInformation info =
-                createConnectionInformation(input, output, call);
-            new BasicConnectionInformation(call, output, input);
+        // Cleanup if the user forgot to call cleanup.
+        if (infoController != null) {
+            close();
+        }
+
+        // Create a new connection info
+        infoController = createConnectionInformation(input, output, call);
+        ConnectionInformation info = infoController.getConnectionInformation();
         return call(uri, info);
     }
 
@@ -152,5 +173,19 @@ public final class GenericClient {
         final Session session = jvoicexml.createSession(info);
         session.call(uri);
         return session;
+    }
+
+    /**
+     * Release potentially acquired resources.
+     * 
+     * @since 0.7.6
+     */
+    public void close() {
+        if (infoController == null) {
+            return;
+        }
+        
+        infoController.cleanup();
+        infoController = null;
     }
 }
