@@ -26,7 +26,7 @@ public class AndroidSpokenInput implements SpokenInput, ObservableSpokenInput {
 	@Override
 	public String getType() {
 		// TODO Auto-generated method stub
-		return null;
+		return "android";
 	}
 
 	@Override

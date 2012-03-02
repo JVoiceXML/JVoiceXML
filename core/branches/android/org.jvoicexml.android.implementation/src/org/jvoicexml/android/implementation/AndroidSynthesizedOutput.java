@@ -10,11 +10,17 @@ import java.util.concurrent.BlockingQueue;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SpeakablePlainText;
+import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
+import org.jvoicexml.implementation.OutputEndedEvent;
+import org.jvoicexml.implementation.OutputStartedEvent;
+import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 import android.app.Activity;
@@ -51,7 +57,7 @@ public class AndroidSynthesizedOutput extends Activity implements SynthesizedOut
 	@Override
 	public String getType() {
 		// TODO Auto-generated method stub
-		return null;
+		return "android";
 	}
 
 	@Override
@@ -84,8 +90,7 @@ public class AndroidSynthesizedOutput extends Activity implements SynthesizedOut
 
 	@Override
 	public boolean isBusy() {
-		//return !texts.isEmpty() || processingSpeakable;
-		return mTts.isSpeaking();
+		return !texts.isEmpty() || processingSpeakable || mTts.isSpeaking();
 	}
 
 	@Override
@@ -96,21 +101,39 @@ public class AndroidSynthesizedOutput extends Activity implements SynthesizedOut
 
 	@Override
 	public void disconnect(ConnectionInformation client) {
-		texts.clear();
 		mTts.stop();
+		texts.clear();
 
 	}
 
 	@Override
 	public boolean supportsBargeIn() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public void cancelOutput() throws NoresourceError {
-		// TODO Auto-generated method stub
-
+		//stops the current utterance and clears the Android queue, 
+		//which will never have more than one speakable.
+		mTts.stop();
+		
+		//cancels all speakables until it finds one with no barge in
+		if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("clearing all pending messages");
+        }
+        final Collection<SpeakableText> skipped =
+            new java.util.ArrayList<SpeakableText>();
+        for (SpeakableText speakable : texts) {
+            if (speakable.isBargeInEnabled()) {
+                skipped.add(speakable);
+            } else {
+                break;
+            }
+        }
+        texts.removeAll(skipped);
+        if (texts.isEmpty()) {
+            fireQueueEmpty();
+        }
 	}
 
 	@Override
@@ -140,13 +163,41 @@ public class AndroidSynthesizedOutput extends Activity implements SynthesizedOut
 	public void queueSpeakable(SpeakableText speakable,
 			DocumentServer documentServer) throws NoresourceError,
 			BadFetchError {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
+		final Object o;
+	    if (speakable instanceof SpeakablePlainText) {
+	        SpeakablePlainText text = (SpeakablePlainText) speakable;
+	        o = text.getSpeakableText();
+	    } else {
+	        SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
+	        o = ssml.getDocument();
+	    }
+	
+	    if (LOGGER.isDebugEnabled()) {
+	        LOGGER.debug("queuing object " + o);
+	    }
+	    texts.add(speakable);
 
 	}
 
 	@Override
 	public void waitNonBargeInPlayed() {
-		// TODO Auto-generated method stub
+		if (texts.isEmpty() && !mTts.isSpeaking()) {
+            return;
+        }
+        do {
+            final SpeakableText speakable = texts.peek();
+            if (speakable.isBargeInEnabled()) {
+                return;
+            }
+            synchronized (texts) {
+                try {
+                    texts.wait();
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        } while (!texts.isEmpty());
 
 	}
 
@@ -231,5 +282,92 @@ public class AndroidSynthesizedOutput extends Activity implements SynthesizedOut
 		// TODO Auto-generated method stub
 		
 	}
+	/**
+     * Notifies all listeners that output has started.
+     * @param speakable the current speakable.
+     */
+    private void fireOutputStarted(final SpeakableText speakable) {
+        final SynthesizedOutputEvent event =
+            new OutputStartedEvent(this, speakable);
+        fireOutputEvent(event);
+    }
+
+    /**
+     * Notifies all listeners that output has ended.
+     * @param speakable the current speakable.
+     */
+    private void fireOutputEnded(final SpeakableText speakable) {
+        final SynthesizedOutputEvent event =
+            new OutputEndedEvent(this, speakable);
+        fireOutputEvent(event);
+    }
+
+    /**
+     * Notifies all listeners that output queue is empty.
+     */
+    private void fireQueueEmpty() {
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
+        fireOutputEvent(event);
+    }
+
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     * @since 0.6
+     */
+    private void fireOutputEvent(final SynthesizedOutputEvent event) {
+        synchronized (outputListener) {
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>();
+            copy.addAll(outputListener);
+            for (SynthesizedOutputListener current : copy) {
+                current.outputStatusChanged(event);
+            }
+        }
+    }
+    /**
+     * Reads the next text to send to the client.
+     * @return next text, <code>null</code> if there is no next output.
+     */
+    SpeakableText getNextText() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("retrieving next output...");
+        }
+        final SpeakableText speakable;
+        try {
+            speakable = texts.take();
+            processingSpeakable = true;
+            fireOutputStarted(speakable);
+        } catch (InterruptedException e) {
+            return null;
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("next output: " + speakable);
+        }
+        return speakable;
+    }
+    /**
+     * Checks if the queue is empty after the retrieval of the given
+     * speakable.
+     * <p>
+     * This method is a callback after the {@link TextTelephony} safely
+     * obtained the speakable.
+     * </p>
+     * @param speakable the last retrieved speakable
+     * @since 0.7.1
+     */
+    void checkEmptyQueue(final SpeakableText speakable) {
+        fireOutputEnded(speakable);
+        processingSpeakable = false;
+        if (texts.isEmpty()) {
+            fireQueueEmpty();
+
+            // Notify the listeners that the list has changed.
+            synchronized (texts) {
+                texts.notifyAll();
+            }
+        }
+    }
 
 }
