@@ -1,28 +1,23 @@
-/**
- * 
- */
 package org.jvoicexml.android.implementation;
 
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
-/**
- * @author Yo
- *
- */
-public class AndroidSpokenInputFactory implements ResourceFactory<SpokenInput> {
+public class AndroidSynthesizedOutputFactory implements
+		ResourceFactory<SynthesizedOutput> {
+	
 	private int instances;
+
 	@Override
-	public Class<SpokenInput> getResourceType() {
-		return SpokenInput.class;
-		
+	public Class<SynthesizedOutput> getResourceType() {
+		return SynthesizedOutput.class;
 	}
 
 	@Override
-	public SpokenInput createResource() throws NoresourceError {
-		return new AndroidSpokenInput();
-	}
+	public SynthesizedOutput createResource() throws NoresourceError {
+		return new AndroidSynthesizedOutput();	
+		}
 
 	@Override
 	public int getInstances() {
@@ -32,7 +27,6 @@ public class AndroidSpokenInputFactory implements ResourceFactory<SpokenInput> {
 	public void setInstances(int number) {
 		instances = number;
 	}
-	
 
 	@Override
 	public String getType() {

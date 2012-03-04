@@ -131,11 +131,11 @@ public class AndroidSpokenInput implements SpokenInput, ObservableSpokenInput {
 		return null;
 	}
 
-	@Override
-	public void record(OutputStream out) throws NoresourceError {
-		// TODO Auto-generated method stub
-
-	}
+//	@Override
+//	public void record(OutputStream out) throws NoresourceError {
+//		// TODO Auto-generated method stub
+//
+//	}
 
 	@Override
 	public URI getUriForNextSpokenInput() throws NoresourceError,
