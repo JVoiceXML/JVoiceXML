@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<callmanager xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
+  <repository>sip</repository>
+  <classpath>dist/org.jvoicexml.callmanager.sip.jar</classpath>
+  <classpath>../org.jvoicexml.callmanager.sip/3rdparty/jainsip1.2/lib/jain-sip-api-1.2.jar</classpath>
+  <classpath>../org.jvoicexml.callmanager.sip/3rdparty/jainsip1.2/lib/jain-sip-sdp-1.2.1994.jar</classpath>
+
+  <beans:bean id="callmanager"
+    class="org.jvoicexml.callmanager.sip.SipCallManager">
+  </beans:bean>
+
+</callmanager>

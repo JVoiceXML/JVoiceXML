@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.implementation.sip;
+package org.jvoicexml.callmanager.sip;
 
 import javax.sip.DialogTerminatedEvent;
 import javax.sip.IOExceptionEvent;
@@ -33,6 +33,8 @@ import javax.sip.SipListener;
 import javax.sip.TimeoutEvent;
 import javax.sip.TransactionTerminatedEvent;
 
+import org.apache.log4j.Logger;
+
 /**
  * A listener for SIP messages.
  * @author dirk
@@ -40,6 +42,10 @@ import javax.sip.TransactionTerminatedEvent;
  * @since 0.7.6
  */
 public class JVoiceXmlSipListener implements SipListener {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(JVoiceXmlSipListener.class);
+
     /**
      * {@inheritDoc}
      */
@@ -59,6 +65,7 @@ public class JVoiceXmlSipListener implements SipListener {
      */
     @Override
     public void processRequest(final RequestEvent event) {
+        LOGGER.info(event);
     }
 
     /**

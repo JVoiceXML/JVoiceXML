@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.implementation.sip;
+package org.jvoicexml.callmanager.sip;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -84,6 +84,7 @@ public final class SipCallManager implements CallManager {
     public void start() throws NoresourceError, IOException {
         Properties properties = new Properties();
         properties.setProperty("javax.sip.USE_ROUTER_FOR_ALL_URIS","false"); 
+        properties.setProperty("javax.sip.STACK_NAME", "JVoiceXmlSipStack");
         final SipFactory factory = SipFactory.getInstance();
         factory.setPathName("gov.nist");
         try {

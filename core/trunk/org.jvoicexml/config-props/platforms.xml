@@ -17,6 +17,7 @@
   <!-- platform name="org.jvoicexml.implementation.marc"/-->
   <!-- platform name="org.jvoicexml.implementation.mrcpv2"/-->
   <!-- platform name="org.jvoicexml.implementation.red5"/-->
+  <!-- platform name="org.jvoicexml.callmanager.sip"/-->
   <!-- platform name="org.jvoicexml.callmanager.text"/-->
   <!-- platform name="org.jvoicexml.implementation.text"/-->
 </platforms>
