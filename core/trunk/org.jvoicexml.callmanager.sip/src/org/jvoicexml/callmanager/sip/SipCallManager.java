@@ -26,17 +26,8 @@
 package org.jvoicexml.callmanager.sip;
 
 import java.io.IOException;
-import java.util.Properties;
-import java.util.TooManyListenersException;
 
-import javax.sip.InvalidArgumentException;
-import javax.sip.ListeningPoint;
-import javax.sip.ObjectInUseException;
-import javax.sip.PeerUnavailableException;
 import javax.sip.SipException;
-import javax.sip.SipFactory;
-import javax.sip.SipProvider;
-import javax.sip.SipStack;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallManager;
@@ -57,14 +48,8 @@ public final class SipCallManager implements CallManager {
     /** Reference to JVoiceXML. */
     private JVoiceXml jvxml;
 
-    /** The used SIP stack. */
-    private SipStack stack;
-    
-    /** The current SIP provider. */
-    private SipProvider provider;
-
-    /** The created listening point. */
-    private ListeningPoint udp;
+    /** The SIP user agent. */
+    private JVoiceXmlUserAgent agent;
 
     /** Registered SipListener. */
     private JVoiceXmlSipListener listener;
@@ -82,24 +67,12 @@ public final class SipCallManager implements CallManager {
      */
     @Override
     public void start() throws NoresourceError, IOException {
-        Properties properties = new Properties();
-        properties.setProperty("javax.sip.USE_ROUTER_FOR_ALL_URIS","false"); 
-        properties.setProperty("javax.sip.STACK_NAME", "JVoiceXmlSipStack");
-        final SipFactory factory = SipFactory.getInstance();
-        factory.setPathName("gov.nist");
+        listener = new JVoiceXmlSipListener();
+        agent = new JVoiceXmlUserAgent("sip:jvoicexml@127.0.0.2:4242",
+                listener);
         try {
-            stack = factory.createSipStack(properties);
-            udp = stack.createListeningPoint("127.0.0.1", 5060, "udp");
-            provider = stack.createSipProvider(udp);
-            listener = new JVoiceXmlSipListener();
-            provider.addSipListener(listener);
-        } catch (PeerUnavailableException e) {
-            throw new NoresourceError(e.getMessage(), e);
+            agent.init();
         } catch (SipException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (InvalidArgumentException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (TooManyListenersException e) {
             throw new NoresourceError(e.getMessage(), e);
         }
     }
@@ -109,17 +82,13 @@ public final class SipCallManager implements CallManager {
      */
     @Override
     public void stop() {
-        if (stack != null) {
+        if (agent != null) {
             try {
-                provider.removeSipListener(listener);
-                stack.deleteListeningPoint(udp);
-                stack.deleteSipProvider(provider);
-            } catch (ObjectInUseException e) {
+                agent.dispose();
+            } catch (SipException e) {
                 LOGGER.warn(e.getMessage(), e);
             } finally {
-                udp = null;
-                provider = null;
-                stack = null;
+                agent = null;
             }
         }
     }

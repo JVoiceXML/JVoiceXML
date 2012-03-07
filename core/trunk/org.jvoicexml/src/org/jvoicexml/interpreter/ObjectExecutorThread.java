@@ -401,7 +401,10 @@ final class ObjectExecutorThread extends Thread {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("result of call is '" + result + "'");
             }
-
+            // Return at least something if the method is of return type void
+            if (result == null) {
+                return new Object();
+            }
             return result;
         } catch (SecurityException e) {
             throw new NoauthorizationError("Object tag invocation error "
