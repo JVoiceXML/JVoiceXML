@@ -535,6 +535,17 @@ sphinx.lib.dir=../../lib
           srcUrl="${trunk.systemtest.dir}/org.jvoicexml.systemtest.servlet"
           destUrl="${tag.systemtest.dir}/org.jvoicexml.systemtest.servlet"/>
       </svn>
+    <property name="trunk.documentation.dir"
+          value="${svn.base}/documentation/trunk"/>
+    <property name="tag.documentation.dir"
+          value="${svn.base}/documentation/tags/${jvxml.version}"/>
+    <svn javahl="true" username="${svn.username}" password="${svn.password}">
+      <mkdir url="${tag.documentation.dir}"
+          message="Tagging release ${jvxml.version}"/>
+      <copy message="Tagging release ${jvxml.version}"
+        srcUrl="${trunk.documentation.dir}/org.jvoicexml.systemtest"
+        destUrl="${tag.documentation.dir}/userguide"/>
+    </svn>
   </target>
 
   <target name="uploadJavadoc" depends="-distinit">
