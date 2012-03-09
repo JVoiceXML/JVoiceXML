@@ -45,7 +45,6 @@ import org.jvoicexml.test.interpreter.tagstrategy.DummyInitializationTagStrategy
 import org.jvoicexml.test.interpreter.tagstrategy.DummyTagStrategyFactory;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
-import org.jvoicexml.android.implementation.AndroidImplementationPlatformFactory;
 
 /**
  * Dummy implementation of a configuration object.

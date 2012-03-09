@@ -14,5 +14,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/log4j1.2.16/log4j1.2.16-api.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
