@@ -86,6 +86,8 @@ personal-props/README.txt
 	  <platform name="org.jvoicexml.implementation.mrcpv2" />
 	  <platform name="org.jvoicexml.implementation.red5" />
 	  <platform name="org.jvoicexml.implementation.text" />
+      <platform name="org.jvoicexml.callmanager.text" />
+      <platform name="org.jvoicexml.callmanager.sip" />
 	</platforms>
 	]]>
 	    </echo>
