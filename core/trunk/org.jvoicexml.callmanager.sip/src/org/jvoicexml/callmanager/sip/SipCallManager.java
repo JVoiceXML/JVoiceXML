@@ -26,6 +26,7 @@
 package org.jvoicexml.callmanager.sip;
 
 import java.io.IOException;
+import java.util.TooManyListenersException;
 
 import javax.sip.SipException;
 
@@ -67,12 +68,14 @@ public final class SipCallManager implements CallManager {
      */
     @Override
     public void start() throws NoresourceError, IOException {
-        listener = new JVoiceXmlSipListener();
-        agent = new JVoiceXmlUserAgent("sip:jvoicexml@127.0.0.2:4242",
-                listener);
+        agent = new JVoiceXmlUserAgent("sip:jvoicexml@127.0.0.2:4242");
         try {
             agent.init();
+            listener = new JVoiceXmlSipListener(agent);
+            agent.addListener(listener);
         } catch (SipException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (TooManyListenersException e) {
             throw new NoresourceError(e.getMessage(), e);
         }
     }
@@ -84,6 +87,7 @@ public final class SipCallManager implements CallManager {
     public void stop() {
         if (agent != null) {
             try {
+                agent.removeListener(listener);
                 agent.dispose();
             } catch (SipException e) {
                 LOGGER.warn(e.getMessage(), e);

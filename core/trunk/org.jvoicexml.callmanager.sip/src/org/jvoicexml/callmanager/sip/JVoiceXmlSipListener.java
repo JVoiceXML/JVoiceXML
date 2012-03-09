@@ -25,13 +25,19 @@
  */
 package org.jvoicexml.callmanager.sip;
 
+import java.text.ParseException;
+
 import javax.sip.DialogTerminatedEvent;
 import javax.sip.IOExceptionEvent;
+import javax.sip.InvalidArgumentException;
 import javax.sip.RequestEvent;
 import javax.sip.ResponseEvent;
+import javax.sip.SipException;
 import javax.sip.SipListener;
 import javax.sip.TimeoutEvent;
 import javax.sip.TransactionTerminatedEvent;
+import javax.sip.header.FromHeader;
+import javax.sip.message.Request;
 
 import org.apache.log4j.Logger;
 
@@ -45,6 +51,17 @@ public class JVoiceXmlSipListener implements SipListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlSipListener.class);
+
+    /** The user agent. */
+    private final JVoiceXmlUserAgent agent;
+
+    /**
+     * Constructs a new object
+     * @param ua the user agent
+     */
+    public JVoiceXmlSipListener(final JVoiceXmlUserAgent ua) {
+        agent = ua;
+    }
 
     /**
      * {@inheritDoc}
@@ -65,7 +82,23 @@ public class JVoiceXmlSipListener implements SipListener {
      */
     @Override
     public void processRequest(final RequestEvent event) {
-        LOGGER.info(event);
+        final Request request = event.getRequest();
+        final String method = request.getMethod();
+        final FromHeader header =
+                (FromHeader) request.getHeader(FromHeader.NAME);
+        LOGGER.info("Received '" + method + "' from '" + header.getAddress()
+                + "'");
+        if (method.equals(Request.INVITE)) {
+            try {
+                agent.processInvite(request);
+            } catch (ParseException e) {
+                LOGGER.error(e.getMessage(), e);
+            } catch (SipException e) {
+                LOGGER.error(e.getMessage(), e);
+            } catch (InvalidArgumentException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        }
     }
 
     /**

@@ -34,6 +34,7 @@ import java.util.TooManyListenersException;
 
 import javax.sip.InvalidArgumentException;
 import javax.sip.ListeningPoint;
+import javax.sip.ServerTransaction;
 import javax.sip.SipException;
 import javax.sip.SipFactory;
 import javax.sip.SipListener;
@@ -43,8 +44,12 @@ import javax.sip.address.Address;
 import javax.sip.address.AddressFactory;
 import javax.sip.address.SipURI;
 import javax.sip.address.URI;
+import javax.sip.header.ContactHeader;
+import javax.sip.header.FromHeader;
 import javax.sip.header.HeaderFactory;
 import javax.sip.message.MessageFactory;
+import javax.sip.message.Request;
+import javax.sip.message.Response;
 
 import org.apache.log4j.Logger;
 
@@ -69,8 +74,6 @@ public class JVoiceXmlUserAgent {
     /** The created listening point. */
     private ListeningPoint udp;
 
-    private final SipListener listener;
-
     private AddressFactory addressFactory;
 
     private MessageFactory messageFactory;
@@ -87,8 +90,7 @@ public class JVoiceXmlUserAgent {
      * Constructs a new object.
      * @param sipListener the listener to this user agent
      */
-    public JVoiceXmlUserAgent(final String address, final SipListener sipListener) {
-        listener = sipListener;
+    public JVoiceXmlUserAgent(final String address) {
         sipAddress = address;
     }
 
@@ -114,14 +116,30 @@ public class JVoiceXmlUserAgent {
             messageFactory = factory.createMessageFactory();
             udp = stack.createListeningPoint(host, 4242, "udp");
             provider = stack.createSipProvider(udp);
-            provider.addSipListener(listener);
         } catch (InvalidArgumentException e) {
-            throw new SipException(e.getMessage(), e);
-        } catch (TooManyListenersException e) {
             throw new SipException(e.getMessage(), e);
         } catch (UnknownHostException e) {
             throw new SipException(e.getMessage(), e);
         }
+    }
+
+    /**
+     * Adds a listener to this agent. Must be called after {@link #init()}.
+     * @param listener the listener to add
+     * @throws TooManyListenersException
+     *         if there are too many listeners
+     */
+    public void addListener(final SipListener listener)
+            throws TooManyListenersException {
+        provider.addSipListener(listener);
+    }
+
+    /**
+     * Removes the given listener.
+     * @param listener the listener to remove 
+     */
+    public void removeListener(final SipListener listener) {
+        provider.removeSipListener(listener);
     }
 
     /**
@@ -172,14 +190,44 @@ public class JVoiceXmlUserAgent {
     }
 
     /**
+     * Handles an incoming INVITE.
+     * @param request the received request
+     * @throws ParseException
+     *         error parsing the status code
+     * @throws SipException
+     *         error sending the message
+     * @throws InvalidArgumentException
+     *         if the creation of the response is invalid
+     */
+    public void processInvite(final Request request)
+        throws ParseException, SipException, InvalidArgumentException {
+        final Response ringingResponse =
+                messageFactory.createResponse(Response.RINGING, request);
+        final ContactHeader contactHeader =
+                headerFactory.createContactHeader();
+        final Address ca = getContactAddress();
+        contactHeader.setAddress(ca);
+        ringingResponse.addHeader(contactHeader);
+        final ServerTransaction transaction =
+                provider.getNewServerTransaction(request);
+        transaction.sendResponse(ringingResponse);
+        final FromHeader fromHeader =
+                (FromHeader) request.getHeader(FromHeader.NAME);
+        final Address fromAddress = fromHeader.getAddress();
+        LOGGER.info("sent 'RINGING' to '" + fromAddress + "'");
+        final Response okResponse =
+                messageFactory.createResponse(Response.OK, request);
+        okResponse.addHeader(contactHeader);
+        transaction.sendResponse(okResponse);
+        LOGGER.info("sent 'OK' to '" + fromAddress + "'");
+    }
+
+    /**
      * Performs some cleanup of this user agent.
      * @throws SipException
      *         error cleaning up
      */
     public void dispose() throws SipException {
-        if (provider != null) {
-            provider.removeSipListener(listener);
-        }
         if (stack != null) {
             stack.deleteListeningPoint(udp);
             stack.deleteSipProvider(provider);
