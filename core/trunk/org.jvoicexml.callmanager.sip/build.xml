@@ -189,8 +189,11 @@ You're using ${ant.java.version}
 
     <target name="distribution" depends="jar">
       <property name="distFolder" value="${dist}/${jvxml.version}" />
-      <copy tofile="${distFolder}/config/text-callmanager.xml"
-        file="${etc}/text-callmanager-dist.xml"/>
-      <copy todir="${distFolder}/lib" file="${dist.jar}"/>
+	  <copy todir="${distFolder}/lib" file="${dist.jar}"/>
+      <copy tofile="${distFolder}/config/sip-callmanager.xml"
+        file="${etc}/sip-callmanager-dist.xml"/>
+      <copy todir="${distFolder}/lib">
+          <fileset refid="jainsip.lib" />
+      </copy>
     </target>
 </project>
