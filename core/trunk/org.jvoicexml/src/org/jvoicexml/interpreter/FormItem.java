@@ -124,13 +124,15 @@ public interface FormItem
     String getNodeTagName();
 
     /**
-     * Selector for the <code>expr</code> attribute.
+     * Retrieves the evaluated <code>expr</code> attribute.
+     * @param scripting the scripting engine to use for evaluation
      *
-     * @return evaluatated expression of the <code>expr</code> attribute.
+     * @return evaluated expression of the <code>expr</code> attribute.
      * @exception SemanticError
-     *            error evaluating the expr attribute.
+     *            error evaluating the <code>expr</code> attribute.
      */
-    Object getExpression() throws SemanticError;
+    Object evaluateExpression(final ScriptingEngine scripting)
+            throws SemanticError;
 
     /**
      * An expression to evaluate in conjunction with the test of the form item

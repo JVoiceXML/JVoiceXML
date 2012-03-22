@@ -114,7 +114,7 @@ public final class BlockFormItem
     public void init(final ScriptingEngine scripting) throws SemanticError,
             BadFetchError {
         final String name = getName();
-        final Object expression = getExpression();
+        final Object expression = evaluateExpression(scripting);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("initializing form item '" + name + "'");

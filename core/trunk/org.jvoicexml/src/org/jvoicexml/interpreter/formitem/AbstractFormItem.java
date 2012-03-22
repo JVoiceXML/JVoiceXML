@@ -120,9 +120,9 @@ abstract class AbstractFormItem
      * {@inheritDoc}
      */
     @Override
-    public final Object getExpression() throws SemanticError {
+    public final Object evaluateExpression(final ScriptingEngine scripting)
+            throws SemanticError {
         final String expr = node.getAttribute("expr");
-        final ScriptingEngine scripting = context.getScriptingEngine();
         return scripting.eval(expr + ";");
     }
 
