@@ -33,6 +33,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentDescriptor;
@@ -44,7 +45,6 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.SpeechRecognizerProperties;
-import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -393,6 +393,9 @@ public final class VoiceXmlInterpreterContext  {
         throws ConfigurationException {
         final CallControlProperties call =
             configuration.loadObject(CallControlProperties.class);
+        if (call == null) {
+            return null;
+        }
         final Map<String, String> props = getProperties(fia);
         call.setProperties(props);
         return call;

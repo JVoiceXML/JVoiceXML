@@ -27,10 +27,13 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Collection;
 
+import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
+import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -49,6 +52,12 @@ import org.jvoicexml.xml.vxml.Foreach;
 final class ForeachTagStrategy
         extends AbstractSsmlParsingStrategy
         implements SsmlParsingStrategy {
+    /** The ECMA script array to iteratate over. */
+    private Object[] array;
+
+    /** Name of the variable that stores each item. */
+    private String item;
+
     /**
      * {@inheritDoc}
      */
@@ -59,17 +68,38 @@ final class ForeachTagStrategy
     /**
      * {@inheritDoc}
      */
+    @Override
+    public void evalAttributes(final VoiceXmlInterpreterContext context)
+            throws SemanticError {
+        super.evalAttributes(context);
+        final String arrayName = (String) getAttribute(Foreach.ATTRIBUTE_ARRAY);
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        array = scripting.getVariableAsArray(arrayName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void validateAttributes() throws ErrorEvent {
+        item = (String) getAttribute(Foreach.ATTRIBUTE_ITEM);
+
+        if ((item == null) || (array == null)) {
+            throw new BadFetchError("Both item and array must be specified");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public SsmlNode cloneNode(final SsmlParser parser,
             final ScriptingEngine scripting, final SsmlDocument document,
             final SsmlNode parent, final VoiceXmlNode node)
         throws SemanticError {
         final Foreach foreach = (Foreach) node;
-        final String array = foreach.getArray();
-        final String item = foreach.getItem();
-        final Object[] values = scripting.getVariableAsArray(array);
 
-        for (int i = 0; i < values.length; i++) {
-            final Object value = values[i];
+        for (int i = 0; i < array.length; i++) {
+            final Object value = array[i];
             scripting.setVariable(item, value);
 
             parser.cloneNode(document, parent, foreach);

@@ -26,6 +26,8 @@
 
 package org.jvoicexml.interpreter;
 
+import java.util.Collection;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -136,6 +138,44 @@ public final class TestFormInterpretationAlgorithm {
             (DummyUserInput) platform.getUserInput();
         Assert.assertNotNull(input);
         Assert.assertTrue(input.isRecognitionStarted());
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.FormInterpretationAlgorithm#visitFieldFormItem(org.jvoicexml.interpreter.formitem.AbstractInputItem)}.
+     * @throws Exception
+     *         Test failed.
+     * @throws JVoiceXMLEvent
+     *         Test failed.
+     */
+    @Test
+    public void testActivateGrammars() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+        final Grammar grammar = field.appendChild(Grammar.class);
+        grammar.setVersion("1.0");
+        grammar.setType(GrammarType.SRGS_XML);
+        final Rule rule = grammar.appendChild(Rule.class);
+        final OneOf oneof = rule.appendChild(OneOf.class);
+        final Item item1 = oneof.appendChild(Item.class);
+        item1.addText("visa");
+        final Item item2 = oneof.appendChild(Item.class);
+        item2.addText("mastercard");
+        final Item item3 = oneof.appendChild(Item.class);
+        item3.addText("american express");
+        final Dialog executableForm = new ExecutablePlainForm();
+        executableForm.setNode(form);
+        FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, null, executableForm);
+        fia.initialize(null);
+        fia.mainLoop();
+        final DummyUserInput input =
+            (DummyUserInput) platform.getUserInput();
+        Assert.assertNotNull(input);
+        final Collection<GrammarDocument> activeGrammars =
+                input.getActiveGrammars();
+        Assert.assertEquals(1, activeGrammars.size());
     }
 
     /**

@@ -59,7 +59,7 @@ import org.xml.sax.SAXException;
  * @version $Revision$
  * @since 0.6
  */
-public class DummyUserInput
+public final class DummyUserInput
         implements UserInput {
     /** Supported grammar types of this user input. */
     private static final Collection<GrammarType> SUPPORTED_GRAMMAR_TYPES;
@@ -67,6 +67,9 @@ public class DummyUserInput
     /** The encapsulated spoken input. */
     private final SpokenInput input;
 
+    /** All active grammars. */
+    private final Collection<GrammarDocument> activeGrammars;
+    
     static {
         SUPPORTED_GRAMMAR_TYPES = new java.util.ArrayList<GrammarType>();
         SUPPORTED_GRAMMAR_TYPES.add(GrammarType.SRGS_XML);
@@ -89,6 +92,7 @@ public class DummyUserInput
      */
     public DummyUserInput(final SpokenInput spokenInput) {
         input = spokenInput;
+        activeGrammars = new java.util.ArrayList<GrammarDocument>();
     }
 
     /**
@@ -104,6 +108,7 @@ public class DummyUserInput
     public void activateGrammars(
             final Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
+        activeGrammars.addAll(grammars);
     }
 
     /**
@@ -113,12 +118,21 @@ public class DummyUserInput
     public void deactivateGrammars(
             final Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError {
+        activeGrammars.removeAll(grammars);
     }
 
     /**
+     * Retrieves all active grammars.
+     * @return all active grammars
+     * @since 0.7.6
+     */
+    public Collection<GrammarDocument> getActiveGrammars() {
+        return activeGrammars;
+    }
+    /**
      * {@inheritDoc}
      */
-    public final Collection<BargeInType> getSupportedBargeInTypes() {
+    public Collection<BargeInType> getSupportedBargeInTypes() {
         return null;
     }
 
@@ -127,7 +141,7 @@ public class DummyUserInput
      * @param type type to add
      * @since 0.7
      */
-    public final void addSupportedGrammarType(final GrammarType type) {
+    public void addSupportedGrammarType(final GrammarType type) {
         if (!SUPPORTED_GRAMMAR_TYPES.contains(type)) {
             SUPPORTED_GRAMMAR_TYPES.add(type);
         }
@@ -136,7 +150,7 @@ public class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public final Collection<GrammarType> getSupportedGrammarTypes(
+    public Collection<GrammarType> getSupportedGrammarTypes(
             final ModeType type) {
         return SUPPORTED_GRAMMAR_TYPES;
     }
@@ -158,7 +172,7 @@ public class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public final GrammarImplementation<?> loadGrammar(
+    public GrammarImplementation<?> loadGrammar(
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError,
             UnsupportedFormatError {
@@ -189,7 +203,7 @@ public class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public final GrammarImplementation<?> newGrammar(final GrammarType type)
+    public GrammarImplementation<?> newGrammar(final GrammarType type)
         throws NoresourceError, UnsupportedFormatError {
         if (type == GrammarType.SRGS_XML) {
             return new SrgsXmlGrammarImplementation(null);
@@ -201,7 +215,7 @@ public class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public final void passivate() {
+    public void passivate() {
     }
 
     /**
@@ -213,7 +227,7 @@ public class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public final String getType() {
+    public String getType() {
         return null;
     }
 
@@ -239,7 +253,7 @@ public class DummyUserInput
      * {@inheritDoc}
      */
     @Override
-    public final void startRecognition(final SpeechRecognizerProperties speech,
+    public void startRecognition(final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf)
         throws NoresourceError, BadFetchError {
         recognitionStarted = true;
@@ -249,14 +263,14 @@ public class DummyUserInput
      * Check if the recognition has been started.
      * @return <code>true</code> if the recognition has been started.
      */
-    public final boolean isRecognitionStarted() {
+    public boolean isRecognitionStarted() {
         return recognitionStarted;
     }
 
     /**
      * {@inheritDoc}
      */
-    public final void stopRecognition() {
+    public void stopRecognition() {
         recognitionStarted = false;
     }
 
@@ -269,14 +283,14 @@ public class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public final URI getUriForNextSpokenInput() throws NoresourceError {
+    public URI getUriForNextSpokenInput() throws NoresourceError {
         return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public final SpokenInput getSpokenInput() throws NoresourceError {
+    public SpokenInput getSpokenInput() throws NoresourceError {
         return input;
     }
 
