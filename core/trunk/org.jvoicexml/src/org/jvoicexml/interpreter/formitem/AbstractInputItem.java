@@ -148,12 +148,10 @@ abstract class AbstractInputItem
      * @since 0.3.1
      */
     protected final String getShadowVarContainerName() {
-        final String name = getName();
-
         final StringBuilder str = new StringBuilder();
+        final String name = getName();
         str.append(name);
         str.append('$');
-
         return str.toString();
     }
 

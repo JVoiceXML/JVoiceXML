@@ -41,7 +41,6 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
-import org.mozilla.javascript.Context;
 
 /**
  * An input item whose value is obtained via ASR or DTMF grammars.
@@ -103,13 +102,16 @@ public final class FieldFormItem
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * Sets also the shadow variables.
+     * Sets the form item variable with values from the given recognition
+     * result.
+     * @param result the observed recognition result
+     * @exception SemanticError
+     *            error passing the values to the scripting engine
+     * @since 0.7.6
      */
-    @Override
-    public void setFormItemVariable(final Object value) throws SemanticError {
-        final RecognitionResult result = (RecognitionResult) value;
+    public void setFormItemVariable(final RecognitionResult result)
+            throws SemanticError {
+        // Propagate the result to the shadow var container.
         final FieldShadowVarContainer container = getShadowVarContainer();
         container.setResult(result);
 
@@ -124,18 +126,34 @@ public final class FieldFormItem
             final ScriptingEngine scripting = context.getScriptingEngine();
             Object slotValue;
             if (slot == null) {
-                slotValue = scripting.eval(getShadowVarContainerName()
-                        + ".interpretation." + getName() + ";");
-                // TODO This is a hack. Find a solution that works with
-                // any semantic interpretation
-                if (slotValue.equals(Context.getUndefinedValue())) {
-                    slotValue = interpretation;
-                }
+                slotValue = container.getInterpretation();
             } else {
-                slotValue = scripting.eval(getShadowVarContainerName()
-                        + ".interpretation." + slot + ";");
+                try {
+                    slotValue = scripting.eval(getShadowVarContainerName()
+                            + ".interpretation." + slot + ";");
+                } catch (SemanticError e) {
+                    // Ignore, since this means that there is no match
+                    slotValue = null;
+                }
             }
             super.setFormItemVariable(slotValue);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Sets also the shadow variables.
+     */
+    @Override
+    public void setFormItemVariable(final Object value) throws SemanticError {
+        if (value instanceof RecognitionResult) {
+            final RecognitionResult result = (RecognitionResult) value;
+            setFormItemVariable(result);
+        } else {
+            final FieldShadowVarContainer container = getShadowVarContainer();
+            container.setUtterance(value.toString());
+            super.setFormItemVariable(value);
         }
     }
 
