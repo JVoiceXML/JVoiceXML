@@ -35,6 +35,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.HelpEvent;
 import org.jvoicexml.event.plain.NomatchEvent;
+import org.jvoicexml.event.plain.ShutdownEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.Dialog;
@@ -566,6 +567,10 @@ public final class JVoiceXmlEventHandler
             LOGGER.info("sematic interpretation of the recognition "
                     + "result is a cancel request");
             return new CancelEvent();
+        } else if (interpretation.equals("shutdown")) {
+            LOGGER.info("sematic interpretation of the recognition "
+                    + "result is a shutdown request");
+            return new ShutdownEvent();
         }
         return e;
     }
