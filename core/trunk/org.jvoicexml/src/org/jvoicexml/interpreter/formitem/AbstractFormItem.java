@@ -43,6 +43,10 @@ import org.w3c.dom.NodeList;
 
 /**
  * Base functionality of a {@link FormItem}.
+ * <p>
+ * Each {@link FormItem} has an associated variable with its name
+ * that can be retrieved by {@link #getName()} in the {@link ScriptingEngine}.
+ * </p>
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -83,6 +87,8 @@ abstract class AbstractFormItem
 
     /**
      * {@inheritDoc}
+     * @return retrieves the value of the associated variable in the
+     *         {@link ScriptingEngine}.
      */
     @Override
     public final Object getFormItemVariable() {
