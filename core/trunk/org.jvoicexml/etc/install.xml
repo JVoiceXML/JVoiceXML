@@ -304,6 +304,7 @@ You will need a MRCPv2 server in addition to use this implementation platform.
       </description>
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
         <include name="mrcpv2-implementation.xml" />
+        <include name="mrcpv2-callmanager.xml" />
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
         <include name="jvxml-mrcpv2.jar" />
