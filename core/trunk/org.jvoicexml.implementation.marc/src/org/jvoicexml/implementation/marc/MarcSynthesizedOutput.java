@@ -446,7 +446,6 @@ public final class MarcSynthesizedOutput
 
     /**
      * {@inheritDoc}
-     * @throws IOException 
      */
     @Override
     public void sendToMarc(final String bml) throws IOException {
