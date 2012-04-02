@@ -205,9 +205,13 @@ public final class MarcSynthesizedOutput
      */
     @Override
     public void open() throws NoresourceError {
+        try {
+            connect();
+        } catch (IOException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
         if (external != null) {
             try {
-                connect();
                 LOGGER.info("starting external MARC publisher");
                 external.start();
             } catch (IOException e) {
@@ -221,6 +225,7 @@ public final class MarcSynthesizedOutput
      */
     @Override
     public void activate() throws NoresourceError {
+        LOGGER.info("MARC synthesized output activated");
     }
 
     /**
@@ -229,6 +234,7 @@ public final class MarcSynthesizedOutput
     @Override
     public void passivate() throws NoresourceError {
         speakables.clear();
+        LOGGER.info("MARC synthesized output passivated");
     }
 
     /**
@@ -240,10 +246,14 @@ public final class MarcSynthesizedOutput
             try {
                 LOGGER.info("stopping external MARC publisher");
                 external.stop();
-                disconnect();
             } catch (IOException e) {
                 LOGGER.warn("error closing the external listener", e);
             }
+        }
+        try {
+            disconnect();
+        } catch (IOException e) {
+            LOGGER.warn("error disconnecting from MARC", e);
         }
     }
 
@@ -440,13 +450,15 @@ public final class MarcSynthesizedOutput
      */
     @Override
     public void sendToMarc(final String bml) throws IOException {
-        final byte[] buffer = bml.getBytes();
-        final DatagramPacket packet = new DatagramPacket(buffer,
-                buffer.length, host, port);
-        socket.send(packet);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("sent utterance '" + bml + "' to '"
-                    + host + ":" + port);
+        synchronized(socket) {
+            final byte[] buffer = bml.getBytes();
+            final DatagramPacket packet = new DatagramPacket(buffer,
+                    buffer.length, host, port);
+            socket.send(packet);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("sent utterance '" + bml + "' to '"
+                        + host + ":" + port);
+            }
         }
     }
 
