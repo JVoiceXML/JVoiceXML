@@ -450,7 +450,7 @@ public final class MarcSynthesizedOutput
      */
     @Override
     public void sendToMarc(final String bml) throws IOException {
-        synchronized(socket) {
+        synchronized (socket) {
             final byte[] buffer = bml.getBytes();
             final DatagramPacket packet = new DatagramPacket(buffer,
                     buffer.length, host, port);
