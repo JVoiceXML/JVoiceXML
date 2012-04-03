@@ -922,7 +922,10 @@ the creation of the \lstinline[language=Java]{ConnectionInformation} by
 \end{lstlisting}
 
 The object \lstinline[language=Java]{lock} is used as a semaphore to delay until
-the server started.
+the server started. You will need a similar mechanism to delay after you
+initiated a call before you can use the \lstinline{TextServer} to send messages
+to your VoiceXML application. Once the \lstinline{connected(...)} of your
+\lstinline{TextListener} gets called, it is safe to use.
 
 Again, the code can be simplified through the \lstinline{GenericClient}.
 The created \lstinline{ConnectionInformation} can also be used to initiate
