@@ -63,7 +63,7 @@ class SpeakableQueue {
      * Adds the given speakable with the given id to the queue.
      * @param speakable the speakable
      */
-    public void add(final SpeakableText speakable) {
+    public void offer(final SpeakableText speakable) {
         synchronized (queue) {
             ++seq;
             final String id = "JVoiceXMLTrack " + seq;

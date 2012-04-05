@@ -391,13 +391,15 @@ public final class MarcSynthesizedOutput
             final String id, final DocumentServer documentServer)
         throws NoresourceError,
             BadFetchError {
-        sessionId = id;
-        speakables.add(speakable);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("queued speakable '" + speakable + "'");
-        }
-        if (speakables.size() == 1) {
-            sendNextSpeakable();
+        synchronized (speakables) {
+            sessionId = id;
+            speakables.offer(speakable);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("queued speakable '" + speakable + "'");
+            }
+            if (speakables.size() == 1) {
+                sendNextSpeakable();
+            }
         }
     }
 
@@ -564,30 +566,33 @@ public final class MarcSynthesizedOutput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("speech with id '" + id + "' ended");
         }
-        final QueuedSpeakable queuedSpeakable = speakables.poll();
-        if (queuedSpeakable == null) {
-            return;
-        }
-        final SpeakableText speakable = queuedSpeakable.getSpeakable();
-        final SynthesizedOutputEvent event = new OutputEndedEvent(this,
-                sessionId, speakable);
-        synchronized (listeners) {
-            for (SynthesizedOutputListener listener : listeners) {
-                listener.outputStatusChanged(event);
+        
+        synchronized (speakables) {
+            final QueuedSpeakable queuedSpeakable = speakables.poll();
+            if (queuedSpeakable == null) {
+                return;
             }
-        }
-
-        if (speakables.isEmpty()) {
-            LOGGER.info("MARC queue is empty");
-            final SynthesizedOutputEvent emptyEvent = new QueueEmptyEvent(this,
-                    sessionId);
+            final SpeakableText speakable = queuedSpeakable.getSpeakable();
+            final SynthesizedOutputEvent event = new OutputEndedEvent(this,
+                    sessionId, speakable);
             synchronized (listeners) {
                 for (SynthesizedOutputListener listener : listeners) {
-                    listener.outputStatusChanged(emptyEvent);
+                    listener.outputStatusChanged(event);
                 }
             }
-        } else {
-            sendNextSpeakable();
+    
+            if (speakables.isEmpty()) {
+                LOGGER.info("MARC queue is empty");
+                final SynthesizedOutputEvent emptyEvent = new QueueEmptyEvent(
+                        this, sessionId);
+                synchronized (listeners) {
+                    for (SynthesizedOutputListener listener : listeners) {
+                        listener.outputStatusChanged(emptyEvent);
+                    }
+                }
+            } else {
+                sendNextSpeakable();
+            }
         }
     }
 
