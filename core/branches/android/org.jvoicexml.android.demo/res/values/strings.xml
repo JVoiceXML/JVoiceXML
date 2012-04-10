@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name"></string>
-    <string name="document_request">Please type in an URL or a file location within the system</string>
-    <string name="document_URL">http://sites.google.com/site/komponiendo/vxml/sample.vxml</string>
-   
-</resources>
