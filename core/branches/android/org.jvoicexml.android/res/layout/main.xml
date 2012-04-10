@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" android:baselineAligned="true">
-    <TextView android:text="LA casa de la pradera es un sitio muy bonito, no tiene quien la vea ni quien la venda el jueguito, no sabe que no tiene problema ni frontera, que el loco del barrio ni siquiera la vea" android:id="@+id/textView2" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1"></TextView>
-    <TextView android:id="@+id/textView1" android:text="@string/hello" android:layout_width="fill_parent" android:layout_gravity="top" android:layout_weight="1" android:layout_height="fill_parent"></TextView>
-</LinearLayout>
