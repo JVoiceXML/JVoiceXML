@@ -21,7 +21,7 @@ public class RhinoActivity extends Activity {
         setContentView(R.layout.main);
         ScriptingEngine rhino = new ScriptingEngine(null);
         Context context = getApplicationContext();
-        CharSequence text = "Sí funciona!";
+        CharSequence text = "Si funciona!";
         int duration = Toast.LENGTH_SHORT;
 
         Toast toast = Toast.makeText(context, text, duration);
@@ -29,8 +29,10 @@ public class RhinoActivity extends Activity {
         
         try {
         	toast.show();
-			Object result = rhino.eval("Lolailo");
+			Object result = rhino.eval("var a = 7;");
 			String json = rhino.toJSON((ScriptableObject) result);
+			
+			
 		} catch (SemanticError e) {
 			// TODO Auto-generated catch block
 			
