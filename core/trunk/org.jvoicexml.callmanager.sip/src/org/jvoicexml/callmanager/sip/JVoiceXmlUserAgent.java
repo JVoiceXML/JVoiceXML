@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.util.Properties;
 import java.util.TooManyListenersException;
 
+import javax.sip.Dialog;
 import javax.sip.InvalidArgumentException;
 import javax.sip.ListeningPoint;
 import javax.sip.ServerTransaction;
@@ -47,6 +48,7 @@ import javax.sip.address.URI;
 import javax.sip.header.ContactHeader;
 import javax.sip.header.FromHeader;
 import javax.sip.header.HeaderFactory;
+import javax.sip.header.ToHeader;
 import javax.sip.message.MessageFactory;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
@@ -85,6 +87,12 @@ public class JVoiceXmlUserAgent {
     private Address address;
 
     private Address contactAddress;
+
+    /** The current dialog. */
+    private Dialog dialog;
+
+    /** The server transaction that was created when processing the INVITE. */
+    private ServerTransaction inviteTransaction;
 
     /**
      * Constructs a new object.
@@ -203,6 +211,9 @@ public class JVoiceXmlUserAgent {
         throws ParseException, SipException, InvalidArgumentException {
         final Response ringingResponse =
                 messageFactory.createResponse(Response.RINGING, request);
+        final ToHeader ringingToHeader =
+                (ToHeader) ringingResponse.getHeader(ToHeader.NAME);
+        ringingToHeader.setTag("4321");
         final ContactHeader contactHeader =
                 headerFactory.createContactHeader();
         final Address ca = getContactAddress();
@@ -210,16 +221,48 @@ public class JVoiceXmlUserAgent {
         ringingResponse.addHeader(contactHeader);
         final ServerTransaction transaction =
                 provider.getNewServerTransaction(request);
+        dialog = transaction.getDialog();
+        if (dialog != null) {
+            LOGGER.info("Dialog: " + dialog);
+            LOGGER.info("Dialog state: " + dialog.getState());
+        }
         transaction.sendResponse(ringingResponse);
+        
         final FromHeader fromHeader =
                 (FromHeader) request.getHeader(FromHeader.NAME);
         final Address fromAddress = fromHeader.getAddress();
         LOGGER.info("sent 'RINGING' to '" + fromAddress + "'");
+
         final Response okResponse =
                 messageFactory.createResponse(Response.OK, request);
+        final ToHeader okToHeader =
+                (ToHeader) okResponse.getHeader(ToHeader.NAME);
+        okToHeader.setTag("4321");
         okResponse.addHeader(contactHeader);
         transaction.sendResponse(okResponse);
         LOGGER.info("sent 'OK' to '" + fromAddress + "'");
+        inviteTransaction = transaction;
+    }
+
+    /**
+     * Processes a BYE request.
+     * @param request the received request
+     * @param transaction the transaction of the request
+     * @throws ParseException
+     *         error parsing the status code
+     * @throws SipException
+     *         error sending the message
+     * @throws InvalidArgumentException
+     *         if the creation of the response is invalid
+     */
+    public void processBye(final Request request,
+            final ServerTransaction transaction)
+                    throws ParseException, SipException, InvalidArgumentException {
+        final Response response =
+                messageFactory.createResponse(Response.OK, request);
+        transaction.sendResponse(response);
+        dialog = null;
+        inviteTransaction = null;
     }
 
     /**

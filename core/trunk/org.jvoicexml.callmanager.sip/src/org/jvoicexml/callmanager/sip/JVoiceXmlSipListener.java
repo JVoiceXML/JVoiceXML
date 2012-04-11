@@ -32,6 +32,7 @@ import javax.sip.IOExceptionEvent;
 import javax.sip.InvalidArgumentException;
 import javax.sip.RequestEvent;
 import javax.sip.ResponseEvent;
+import javax.sip.ServerTransaction;
 import javax.sip.SipException;
 import javax.sip.SipListener;
 import javax.sip.TimeoutEvent;
@@ -88,16 +89,20 @@ public class JVoiceXmlSipListener implements SipListener {
                 (FromHeader) request.getHeader(FromHeader.NAME);
         LOGGER.info("Received '" + method + "' from '" + header.getAddress()
                 + "'");
-        if (method.equals(Request.INVITE)) {
-            try {
+        try {
+            if (method.equals(Request.INVITE)) {
                 agent.processInvite(request);
-            } catch (ParseException e) {
-                LOGGER.error(e.getMessage(), e);
-            } catch (SipException e) {
-                LOGGER.error(e.getMessage(), e);
-            } catch (InvalidArgumentException e) {
-                LOGGER.error(e.getMessage(), e);
+            } else if (method.equals(Request.BYE)) {
+                final ServerTransaction transaction =
+                        event.getServerTransaction();
+                agent.processBye(request, transaction);
             }
+        } catch (ParseException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (SipException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (InvalidArgumentException e) {
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
