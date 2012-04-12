@@ -26,12 +26,23 @@
 
 package org.jvoicexml.callmanager.sip;
 
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.util.Properties;
 import java.util.TooManyListenersException;
+import java.util.Vector;
 
+import javax.sdp.Connection;
+import javax.sdp.MediaDescription;
+import javax.sdp.Origin;
+import javax.sdp.SdpException;
+import javax.sdp.SdpFactory;
+import javax.sdp.SessionDescription;
+import javax.sdp.SessionName;
+import javax.sdp.TimeDescription;
+import javax.sdp.Version;
 import javax.sip.Dialog;
 import javax.sip.InvalidArgumentException;
 import javax.sip.ListeningPoint;
@@ -46,6 +57,7 @@ import javax.sip.address.AddressFactory;
 import javax.sip.address.SipURI;
 import javax.sip.address.URI;
 import javax.sip.header.ContactHeader;
+import javax.sip.header.ContentTypeHeader;
 import javax.sip.header.FromHeader;
 import javax.sip.header.HeaderFactory;
 import javax.sip.header.ToHeader;
@@ -206,9 +218,10 @@ public class JVoiceXmlUserAgent {
      *         error sending the message
      * @throws InvalidArgumentException
      *         if the creation of the response is invalid
+     * @throws SdpException 
      */
     public void processInvite(final Request request)
-        throws ParseException, SipException, InvalidArgumentException {
+        throws ParseException, SipException, InvalidArgumentException, SdpException {
         final Response ringingResponse =
                 messageFactory.createResponse(Response.RINGING, request);
         final ToHeader ringingToHeader =
@@ -239,9 +252,111 @@ public class JVoiceXmlUserAgent {
                 (ToHeader) okResponse.getHeader(ToHeader.NAME);
         okToHeader.setTag("4321");
         okResponse.addHeader(contactHeader);
+        ContentTypeHeader contentTypeHeader =
+                headerFactory.createContentTypeHeader("application", "sdp");
+        String sdp;
+        try {
+            final Vector<MediaDescription> mediaDescriptions
+                = createMediaDescriptions(request);
+            final SessionDescription description =
+                    createSessionDescription(InetAddress.getLocalHost(), null,
+                            mediaDescriptions);
+            sdp = description.toString();
+        } catch (UnknownHostException e) {
+            throw new SdpException(e.getMessage(), e);
+        }
+        okResponse.setContent(sdp, contentTypeHeader);
         transaction.sendResponse(okResponse);
         LOGGER.info("sent 'OK' to '" + fromAddress + "'");
         inviteTransaction = transaction;
+    }
+
+    /**
+     * Creates a list of media descriptions. For now, this simply copies
+     * the received description.
+     * TODO 
+     * @return list of media descriptions
+     * @throws SdpException
+     *         error parsing the media descriptions from the request
+     */
+    @SuppressWarnings("unchecked")
+    private Vector<MediaDescription> createMediaDescriptions(
+            final Request request) throws SdpException {
+        byte[] content = request.getRawContent();
+        if (content == null) {
+            return null;
+        }
+        final String sdp = new String(content);
+        final SdpFactory factory = SdpFactory.getInstance();
+        final SessionDescription description =
+                factory.createSessionDescription(sdp);
+        return description.getMediaDescriptions(false);
+    }
+
+    /**
+     * Creates an empty instance of a <tt>SessionDescription</tt> with
+     * preinitialized  <tt>s</tt>, <tt>v</tt>, <tt>c</tt>, <tt>o</tt> and
+     * <tt>t</tt> parameters.
+     *
+     * @param localAddress the <tt>InetAddress</tt> corresponding to the local
+     * address that we'd like to use when talking to the remote party.
+     * @param userName the user name to use in the origin parameter or
+     * <tt>null</tt> in case we'd like to use a default.
+     * @param mediaDescriptions a <tt>Vector</tt> containing the list of
+     * <tt>MediaDescription</tt>s that we'd like to advertise (leave
+     * <tt>null</tt> if you'd like to add these later).
+     *
+     * @return an empty instance of a <tt>SessionDescription</tt> with
+     * preinitialized <tt>s</tt>, <tt>v</tt>, and <tt>t</tt> parameters.
+     * @throws SdpException if the SDP creation failed
+     */
+    private SessionDescription createSessionDescription(
+            InetAddress localAddress, String userName,
+            Vector<MediaDescription> mediaDescriptions)
+            throws SdpException {
+        final SdpFactory factory = SdpFactory.getInstance();
+        final SessionDescription description =
+                factory.createSessionDescription();
+
+        //"v=0"
+        final Version version = factory.createVersion(0);
+        description.setVersion(version);
+
+        //"s=-"
+        final SessionName sessionName = factory.createSessionName("-");
+        description.setSessionName(sessionName);
+
+        //"t=0 0"
+        final TimeDescription timeDescription =
+                factory.createTimeDescription();
+        final Vector<TimeDescription> timeDescs =
+                new Vector<TimeDescription>();
+        timeDescs.add(timeDescription);
+        description.setTimeDescriptions(timeDescs);
+
+        final String addrType = localAddress instanceof Inet6Address
+            ? Connection.IP6
+            : Connection.IP4;
+
+        //o
+        if (userName == null) {
+            userName = "jvoicexml";
+        }
+
+        final Origin origin = factory.createOrigin(
+            userName, 0, 0, "IN", addrType, localAddress.getHostAddress());
+        description.setOrigin(origin);
+
+        //c=
+        final Connection connection = factory.createConnection(
+            "IN", addrType, localAddress.getHostAddress());
+        description.setConnection(connection);
+
+        if ( mediaDescriptions != null) {
+            description.setMediaDescriptions(mediaDescriptions);
+        }
+
+        return description;
     }
 
     /**

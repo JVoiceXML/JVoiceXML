@@ -27,6 +27,7 @@ package org.jvoicexml.callmanager.sip;
 
 import java.text.ParseException;
 
+import javax.sdp.SdpException;
 import javax.sip.DialogTerminatedEvent;
 import javax.sip.IOExceptionEvent;
 import javax.sip.InvalidArgumentException;
@@ -102,6 +103,8 @@ public class JVoiceXmlSipListener implements SipListener {
         } catch (SipException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (InvalidArgumentException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (SdpException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }

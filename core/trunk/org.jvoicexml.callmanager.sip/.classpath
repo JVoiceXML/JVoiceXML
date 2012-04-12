@@ -8,6 +8,10 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.callmanager.sip/3rdparty/jainsip1.2/jainsip1.2-api.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="3rdparty/jainsip1.2/lib/jain-sip-sdp-1.2.1994.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jainsip1.2/lib/jain-sip-sdp-1.2.1994.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.callmanager.sip/3rdparty/jainsip1.2/jainsip1.2-api.zip!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
