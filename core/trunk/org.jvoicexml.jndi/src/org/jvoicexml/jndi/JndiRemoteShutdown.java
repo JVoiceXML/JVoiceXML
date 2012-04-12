@@ -35,6 +35,7 @@ import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.startup.RemoteShutdown;
 
 /**
  * Remote shutdown utility for the VoiceXML interpreter.
@@ -43,22 +44,29 @@ import org.jvoicexml.JVoiceXml;
  * @version $Revision$
  * @since 0.4
  */
-public final class RemoteShutdown {
+public final class JndiRemoteShutdown implements RemoteShutdown {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(RemoteShutdown.class);
+        Logger.getLogger(JndiRemoteShutdown.class);
 
     /** The default port number. */
     private static final int DEFAULT_PORT = 1099;
 
     /** The JNDI port number. */
-    private final int port;
+    private int port;
 
     /**
      * Constructs a new object.
+     */
+    public JndiRemoteShutdown() {
+        port = DEFAULT_PORT;
+    }
+
+    /**
+     * Sets the port number for the remote shutdown.
      * @param portNumber JNDI port number
      */
-    public RemoteShutdown(final int portNumber) {
+    public void setPort(final int portNumber) {
         port = portNumber;
     }
 
@@ -115,7 +123,7 @@ public final class RemoteShutdown {
         } else {
             portNumber = DEFAULT_PORT;
         }
-        final RemoteShutdown shutdown = new RemoteShutdown(portNumber);
+        final JndiRemoteShutdown shutdown = new JndiRemoteShutdown();
         shutdown.shutdown();
     }
 }

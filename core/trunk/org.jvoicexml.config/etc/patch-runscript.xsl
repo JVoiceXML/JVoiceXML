@@ -35,6 +35,23 @@
     </xsl:copy>
   </xsl:template>
 
+  <!-- Adapt the jvmarg values -->
+  <xsl:template match="java[@classname='org.jvoicexml.startup.Shutdown']">
+    <xsl:copy>
+      <!-- Keep current path -->
+      <xsl:apply-templates select="@*" />
+        <xsl:comment>Added org.jvoicexml.config configuration settings</xsl:comment>
+        <classpath>
+        <pathelement location="dist/org.jvoicexml.config.jar"/>
+          <fileset dir="../org.jvoicexml.config/3rdparty/springframework3.0.5/lib">
+            <include name="org.springframework.beans-3.0.5.RELEASE.jar" />
+            <include name="org.springframework.core-3.0.5.RELEASE.jar" />
+          </fileset>
+        </classpath>
+      <xsl:apply-templates select="@*|*|text()|comment()" />
+    </xsl:copy>
+  </xsl:template>
+
   <!-- This template passes anything unmatched -->
   <xsl:template match="@*|*|text()|comment()">
     <xsl:copy>

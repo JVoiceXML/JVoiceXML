@@ -12,4 +12,8 @@
       </beans:bean>
     </beans:property>
   </beans:bean>
+  <beans:bean id="org.jvoicexml.startup.RemoteShutdown"
+    class="org.jvoicexml.jndi.JndiRemoteShutdown">
+    <beans:property name="port" value="@jndi.port@" />
+  </beans:bean>
 </jndi>
