@@ -11,6 +11,7 @@ This file provides targets to run and stop the voice browser.
             <fileset refid="loggings.lib" />
             <fileset refid="codec.lib"/>
             <pathelement path="${build}" />
+            <pathelement location="../org.jvoicexml.client/classes" />
             <pathelement location="../org.jvoicexml.xml/classes" />
             <pathelement location="../org.jvoicexml.processor.srgs/classes" />
             <pathelement location="${config}" />
@@ -19,6 +20,7 @@ This file provides targets to run and stop the voice browser.
         <path id="shutdown.classpath">
             <path refid="project.classpath" />
             <fileset refid="loggings.lib" />
+            <pathelement location="../org.jvoicexml.client/classes" />
             <pathelement location="../org.jvoicexml.xml/classes" />
             <pathelement location="${build}" />
             <pathelement location="${config}" />

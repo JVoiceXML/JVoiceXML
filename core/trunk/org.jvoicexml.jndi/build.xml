@@ -105,6 +105,9 @@ You're using ${ant.java.version}
             <fileset dir="${build}">
                 <include name="org/jvoicexml/jndi/**/*.class" />
             </fileset>
+          <fileset dir="../org.jvoicexml.client">
+              <include name="org/jvoicexml/client/jndi/**/*.class" />
+          </fileset>
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
                 <section name="common">
