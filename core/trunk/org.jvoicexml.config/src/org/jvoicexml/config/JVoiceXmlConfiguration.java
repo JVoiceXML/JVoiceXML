@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,7 +28,6 @@ package org.jvoicexml.config;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -128,6 +127,12 @@ public final class JVoiceXmlConfiguration implements Configuration {
     /** Location of the config folder. */
     private final File configFolder;
 
+    /** The configuration file storage. */
+    private final ConfigurationRepository configurationRepository;
+
+    /** The cached SAX Parser Factory. */
+    private SAXParserFactory parserFactory;
+
     /**
      * Constructs a new object.
      */
@@ -142,6 +147,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
             LOGGER.info("loading configurations from '"
                     + configFolder.getCanonicalPath() + "'");
         } catch (IOException e) {
+            configurationRepository = null;
             LOGGER.error(e.getMessage(), e);
             return;
         }
@@ -154,6 +160,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
                 factory = null;
             }
         }
+        configurationRepository = new ConfigurationRepository(configFolder);
     }
 
 
@@ -191,19 +198,14 @@ public final class JVoiceXmlConfiguration implements Configuration {
      */
     private Resource getResource(final File file)
         throws IOException {
-        final TransformerFactory tf = TransformerFactory.newInstance();
         try {
+            final TransformerFactory tf = TransformerFactory.newInstance();
             final TransformerHandler th = ((SAXTransformerFactory) tf)
-            .newTransformerHandler();
+                    .newTransformerHandler();
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
-            final Result result = new StreamResult(out);
+			final Result result = new StreamResult(out);
             th.setResult(result);
-            final SAXParserFactory spf = SAXParserFactory.newInstance();
-            spf.setValidating(false);
-            spf.setNamespaceAware(true);
-            spf.setFeature("http://xml.org/sax/features/namespace-prefixes",
-                    true);
-            final SAXParser parser = spf.newSAXParser();
+            final SAXParser parser = getSAXParser();
             final XMLFilterImpl filter = new BeansFilter(parser.getXMLReader());
             filter.setContentHandler(th);
             final EntityResolver resolver = new IgnoringEntityResolver();
@@ -220,6 +222,30 @@ public final class JVoiceXmlConfiguration implements Configuration {
         } catch (ParserConfigurationException e) {
             throw new IOException(e.getMessage());
         }
+    }
+
+    /**
+     * Lazy instantiation of a SAX Parser.
+     * @return SAX parser
+     * @throws TransformerConfigurationException
+     *         if the SAX parser could not be created
+     * @throws SAXException
+     *         if the SAX parser could not be created
+     * @throws ParserConfigurationException
+     *         if the SAX parser could not be created
+     * @since 0.7.5
+     */
+    private SAXParser getSAXParser()
+            throws TransformerConfigurationException, SAXException,
+            ParserConfigurationException {
+        if (parserFactory == null) {
+            parserFactory = SAXParserFactory.newInstance();
+            parserFactory.setValidating(false);
+            parserFactory.setNamespaceAware(true);
+            parserFactory.setFeature(
+                    "http://xml.org/sax/features/namespace-prefixes", true);
+        }
+        return parserFactory.newSAXParser();
     }
 
     /**
@@ -241,10 +267,8 @@ public final class JVoiceXmlConfiguration implements Configuration {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("looking for configurations '" + root + "'");
         }
-        final XPathFactory xpathFactory = XPathFactory.newInstance();
-        final XPath xpath = xpathFactory.newXPath();
-        final FileFilter filter = new XMLFileFilter();
-        final File[] children = configFolder.listFiles(filter);
+        final Collection<File> children =
+                configurationRepository.getConfigurationFiles(root);
         if (children == null) {
             LOGGER.warn("no configuration files found at '"
                     + configFolder.getCanonicalPath() + "'");
@@ -261,6 +285,8 @@ public final class JVoiceXmlConfiguration implements Configuration {
         }
         final EntityResolver resolver = new IgnoringEntityResolver();
         builder.setEntityResolver(resolver);
+        final XPathFactory xpathFactory = XPathFactory.newInstance();
+        final XPath xpath = xpathFactory.newXPath();
         for (File current : children) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("inspecting file '"
