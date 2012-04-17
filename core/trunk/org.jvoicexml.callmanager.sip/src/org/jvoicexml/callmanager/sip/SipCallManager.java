@@ -25,14 +25,12 @@
  */
 package org.jvoicexml.callmanager.sip;
 
-import java.io.IOException;
-import java.util.TooManyListenersException;
-
-import javax.sip.SipException;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallManager;
-import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.callmanager.BaseCallManager;
+import org.jvoicexml.callmanager.Terminal;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -42,59 +40,22 @@ import org.jvoicexml.event.error.NoresourceError;
  * @version $Revision: $
  * @since 0.7.6
  */
-public final class SipCallManager implements CallManager {
+public final class SipCallManager extends BaseCallManager {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(SipCallManager.class);
 
-    /** Reference to JVoiceXML. */
-    private JVoiceXml jvxml;
-
-    /** The SIP user agent. */
-    private JVoiceXmlUserAgent agent;
-
-    /** Registered SipListener. */
-    private JVoiceXmlSipListener listener;
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setJVoiceXml(final JVoiceXml jvoicexml) {
-        jvxml = jvoicexml;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void start() throws NoresourceError, IOException {
-        agent = new JVoiceXmlUserAgent("sip:jvoicexml@127.0.0.2:4242");
-        try {
-            agent.init();
-            listener = new JVoiceXmlSipListener(agent);
-            agent.addListener(listener);
-        } catch (SipException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (TooManyListenersException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void stop() {
-        if (agent != null) {
-            try {
-                agent.removeListener(listener);
-                agent.dispose();
-            } catch (SipException e) {
-                LOGGER.warn(e.getMessage(), e);
-            } finally {
-                agent = null;
-            }
-        }
+    protected Collection<Terminal> createTerminals() throws NoresourceError {
+        final Collection<Terminal> terminals =
+                new java.util.ArrayList<Terminal>();
+        final SipTerminal terminal = new SipTerminal();
+        terminal.setPort(4242);
+        terminal.setUser("jvoicexml");
+        terminals.add(terminal);
+        return terminals;
     }
 
 }

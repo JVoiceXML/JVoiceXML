@@ -129,7 +129,6 @@ public class JVoiceXmlUserAgent {
             InetAddress localhost = InetAddress.getLocalHost();
             final String host = localhost.getHostAddress();
             properties.setProperty("javax.sip.IP_ADDRESS", host);
-            LOGGER.info("Listening at '" + host + "'");
             stack = factory.createSipStack(properties);
             headerFactory = factory.createHeaderFactory();
             addressFactory = factory.createAddressFactory();
