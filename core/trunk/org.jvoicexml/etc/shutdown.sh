@@ -54,9 +54,11 @@ VMOPTIONS="${VMOPTIONS} -Djava.rmi.server.codebase=file://${JVOICEXML_HOME}/lib/
 LOCAL_CLASSPATH="$JVOICEXML_HOME/config"
 LOCAL_CLASSPATH=${LOCAL_CLASSPATH}:"${JVOICEXML_LIB}/log4j-1.2.16.jar"
 LOCAL_CLASSPATH=${LOCAL_CLASSPATH}:"${JVOICEXML_LIB}/org.jvoicexml.jar"
-LOCAL_CLASSPATH=${LOCAL_CLASSPATH}:"${JVOICEXML_LIB}/org.jvoicexml.jndi.jar"
-LOCAL_CLASSPATH=${LOCAL_CLASSPATH}:"${JVOICEXML_LIB}/jvxml-client.jar"
+LOCAL_CLASSPATH=${LOCAL_CLASSPATH}:"${JVOICEXML_LIB}/org.jvoicexml.client.jar"
+LOCAL_CLASSPATH=${LOCAL_CLASSPATH}:"${JVOICEXML_LIB}/org.jvoicexml.config.jar"
+LOCAL_CLASSPATH=${LOCAL_CLASSPATH}:"${JVOICEXML_LIB}/org.jvoicexml.xml.jar"
+
 
 cd ${JVOICEXML_HOME}
 
-$JAVA_CMD $VMOPTIONS -classpath $LOCAL_CLASSPATH org.jvoicexml.jndi.RemoteShutdown 1099
+$JAVA_CMD $VMOPTIONS -classpath $LOCAL_CLASSPATH org.jvoicexml.startup.Shutdown

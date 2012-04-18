@@ -64,7 +64,7 @@ set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\org.jvoicexml.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\org.jvoicexml.xml.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\org.jvoicexml.config.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\org.jvoicexml.processor.srgs.jar"
-set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\jvxml-client.jar"
+set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\org.jvoicexml.client.jar"
 
 cd "%JVOICEXML_HOME%"
 
