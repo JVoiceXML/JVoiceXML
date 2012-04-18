@@ -30,6 +30,7 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.ParseException;
+import java.util.Collection;
 import java.util.Properties;
 import java.util.TooManyListenersException;
 import java.util.Vector;
@@ -106,12 +107,37 @@ public class JVoiceXmlUserAgent {
     /** The server transaction that was created when processing the INVITE. */
     private ServerTransaction inviteTransaction;
 
+    /** Listeners for this user agent. */
+    private final Collection<UserAgentListener> listeners;
+
+    /** A related SIP session. */
+    private SipSession session;
+
     /**
      * Constructs a new object.
      * @param sipListener the listener to this user agent
      */
     public JVoiceXmlUserAgent(final String address) {
         sipAddress = address;
+        listeners = new java.util.ArrayList<UserAgentListener>();
+    }
+
+    /**
+     * Adds the given user agent listener to the list of known user agent
+     * listeners
+     * @param listener the listener to add
+     */
+    public void addUserAgentListener(final UserAgentListener listener) {
+        listeners.add(listener);
+    }
+
+    /**
+     * Removes the given user agent listener from the list of known user agent
+     * listeners
+     * @param listener the listener to remove
+     */
+    public void removeUserAgentListener(final UserAgentListener listener) {
+        listeners.remove(listener);
     }
 
     /**
@@ -268,6 +294,12 @@ public class JVoiceXmlUserAgent {
         transaction.sendResponse(okResponse);
         LOGGER.info("sent 'OK' to '" + fromAddress + "'");
         inviteTransaction = transaction;
+
+        // Create a new session
+        session = new SipSession();
+        for (UserAgentListener listener : listeners) {
+            listener.sessionCreated(session);
+        }
     }
 
     /**
@@ -377,6 +409,10 @@ public class JVoiceXmlUserAgent {
         transaction.sendResponse(response);
         dialog = null;
         inviteTransaction = null;
+        for (UserAgentListener listener : listeners) {
+            listener.sessionDropped(session);
+        }
+        session = null;
     }
 
     /**

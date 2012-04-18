@@ -25,43 +25,22 @@
  */
 package org.jvoicexml.callmanager.sip;
 
-import java.util.Collection;
-
-import org.apache.log4j.Logger;
-import org.jvoicexml.CallManager;
-import org.jvoicexml.callmanager.BaseCallManager;
-import org.jvoicexml.callmanager.Terminal;
-import org.jvoicexml.event.error.NoresourceError;
-
 /**
- * A {@link CallManager} for the SIP protocol, based on JainSip.
- * 
+ * A listener for SIP calls with the user agent.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
  */
-public final class SipCallManager extends BaseCallManager {
-    /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(SipCallManager.class);
-
-    /** Configured terminals. */
-    private Collection<Terminal> terminals;
+public interface UserAgentListener {
+    /**
+     * A SIP session was created.
+     * @param session the created SIP session
+     */
+    void sessionCreated(final SipSession session);
 
     /**
-     * Sets the terminals used in this call manager.
-     * @param terms the terminals.
-     * @since 0.7.6
+     * A SIP session was dropped.
+     * @param session the dropped SIP session
      */
-    public void setTerminals(final Collection<Terminal> terms) {
-        terminals = terms;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Collection<Terminal> createTerminals() throws NoresourceError {
-        return terminals;
-    }
-
+    void sessionDropped(final SipSession session);
 }

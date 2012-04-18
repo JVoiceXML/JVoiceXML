@@ -26,12 +26,15 @@
 package org.jvoicexml.callmanager.sip;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.TooManyListenersException;
 
 import javax.sip.SipException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.callmanager.ObservableTerminal;
 import org.jvoicexml.callmanager.Terminal;
+import org.jvoicexml.callmanager.TerminalListener;
 
 /**
  * Implementation of a terminal for the SIP callmanager
@@ -39,7 +42,8 @@ import org.jvoicexml.callmanager.Terminal;
  * @version $Revision: $
  * @since 0.7.6
  */
-public final class SipTerminal implements Terminal {
+public final class SipTerminal
+    implements Terminal, ObservableTerminal, UserAgentListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(SipTerminal.class);
 
@@ -54,6 +58,16 @@ public final class SipTerminal implements Terminal {
 
     /** SIP port. */
     private int port;
+
+    /** Registered terminal listeners. */
+    private final Collection<TerminalListener> terminalListeners;
+
+    /**
+     * Constructs a new object.
+     */
+    public SipTerminal() {
+        terminalListeners = new java.util.ArrayList<TerminalListener>();
+    }
 
     /**
      * Sets the SIP user name.
@@ -95,6 +109,7 @@ public final class SipTerminal implements Terminal {
             agent.init();
             listener = new JVoiceXmlSipListener(agent);
             agent.addListener(listener);
+            agent.addUserAgentListener(this);
         } catch (SipException e) {
             throw new IOException(e.getMessage(), e);
         } catch (TooManyListenersException e) {
@@ -120,6 +135,42 @@ public final class SipTerminal implements Terminal {
             }
             final String name = getName();
             LOGGER.info("'" + name + "' stopped listening for SIP calls");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addListener(final TerminalListener listener) {
+        terminalListeners.add(listener);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeListener(final TerminalListener listener) {
+        terminalListeners.remove(listener);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sessionCreated(final SipSession session) {
+        for (TerminalListener listener : terminalListeners) {
+            listener.terminalConnected(this, null);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sessionDropped(final SipSession session) {
+        for (TerminalListener listener : terminalListeners) {
+            listener.terminalDisconnected(this);
         }
     }
 }

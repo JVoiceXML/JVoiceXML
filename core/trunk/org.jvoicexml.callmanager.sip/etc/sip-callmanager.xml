@@ -9,6 +9,15 @@
 
   <beans:bean id="callmanager"
     class="org.jvoicexml.callmanager.sip.SipCallManager">
+    <beans:property name="terminals">
+      <beans:list>
+        <beans:bean
+          class="org.jvoicexml.callmanager.sip.SipTerminal">
+          <beans:property name="user" value="jvoicexml" />
+          <beans:property name="port" value="4242" />
+        </beans:bean>
+      </beans:list>
+    </beans:property>
   </beans:bean>
 
 </callmanager>
