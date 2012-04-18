@@ -55,5 +55,6 @@ public interface TerminalListener {
      * @param cause the error cause.
      * @since 0.7.5
      */
-    void terminalError(Terminal terminal, String message, Throwable cause);
+    void terminalError(final Terminal terminal, final String message,
+            final Throwable cause);
 }

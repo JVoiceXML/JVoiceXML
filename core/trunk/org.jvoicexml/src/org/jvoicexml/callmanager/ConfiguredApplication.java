@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/callmanager/ConfiguredApplication.java $
+ * Version: $LastChangedRevision: 2129 $
+ * Date:    $Date: 2010-04-09 11:33:10 +0200 (Fr, 09 Apr 2010) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -31,15 +31,15 @@ import java.net.URISyntaxException;
 
 
 /**
- * Application configuration settings. Maps a terminal name to a URI.
+ * Application configuration settings. Maps a terminal to a URI.
  *
  * @author Dirk Schnelle-Walka
  *
- * @version $Revision$
- * @since 0.6
+ * @version $Revision: 2129 $
+ * @since 0.7.6
  */
 public class ConfiguredApplication {
-    /** Name of the terminal. */
+    /** Identifier of the terminal. */
     private String terminal;
 
     /** URI of the application to call. */
@@ -58,8 +58,8 @@ public class ConfiguredApplication {
     }
 
     /**
-     * Retrieves the name of the terminal.
-     * @return the terminal
+     * Retrieves the name of the SIP user.
+     * @return the SIP user
      */
     public final String getTerminal() {
         return terminal;
@@ -67,7 +67,7 @@ public class ConfiguredApplication {
 
     /**
      * Sets the name of the terminal.
-     * @param term the terminal to set
+     * @param term the name of the terminal to set
      */
     public final void setTerminal(final String term) {
         terminal = term;
@@ -93,7 +93,7 @@ public class ConfiguredApplication {
      * Sets the URI of the application to call.
      * @param applicationUri the URI to set
      */
-    public final  void setUri(final String applicationUri) {
+    public final void setUri(final String applicationUri) {
         final URI application;
         try {
             application = new URI(applicationUri);
