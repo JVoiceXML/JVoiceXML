@@ -55,7 +55,7 @@ import org.xml.sax.SAXException;
 final class ConfigurationRepository {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(ConfigurationRepository.class);;
+        Logger.getLogger(ConfigurationRepository.class);
 
     /** Location of the config folder. */
     private final File configFolder;
