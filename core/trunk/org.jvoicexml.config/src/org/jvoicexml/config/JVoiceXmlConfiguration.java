@@ -26,17 +26,15 @@
 
 package org.jvoicexml.config;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -51,10 +49,6 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Configuration;
@@ -65,9 +59,6 @@ import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -203,14 +194,19 @@ public final class JVoiceXmlConfiguration implements Configuration {
             final TransformerHandler th = ((SAXTransformerFactory) tf)
                     .newTransformerHandler();
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
-			final Result result = new StreamResult(out);
+                final Result result = new StreamResult(out);
             th.setResult(result);
             final SAXParser parser = getSAXParser();
             final XMLFilterImpl filter = new BeansFilter(parser.getXMLReader());
             filter.setContentHandler(th);
             final EntityResolver resolver = new IgnoringEntityResolver();
             filter.setEntityResolver(resolver);
-            final InputStream in = new FileInputStream(file);
+            final byte[] buffer =
+                    configurationRepository.getConfigurationFile(file);
+            if (buffer == null) {
+                return null;
+            }
+            final InputStream in = new ByteArrayInputStream(buffer);
             final InputSource input = new InputSource(in);
             filter.parse(input);
             final byte[] bytes = out.toByteArray();
@@ -262,56 +258,12 @@ public final class JVoiceXmlConfiguration implements Configuration {
      *            error reading the configuration files.
      * @since 0.7
      */
-    public Collection<File> getConfigurationFiles(final String root)
+    Collection<File> getConfigurationFiles(final String root)
         throws IOException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("looking for configurations '" + root + "'");
         }
-        final Collection<File> children =
-                configurationRepository.getConfigurationFiles(root);
-        if (children == null) {
-            LOGGER.warn("no configuration files found at '"
-                    + configFolder.getCanonicalPath() + "'");
-            return null;
-        }
-        final Collection<File> files = new java.util.ArrayList<File>();
-        final DocumentBuilderFactory dbfactory =
-            DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
-        try {
-            builder = dbfactory.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            throw new IOException(e.getMessage());
-        }
-        final EntityResolver resolver = new IgnoringEntityResolver();
-        builder.setEntityResolver(resolver);
-        final XPathFactory xpathFactory = XPathFactory.newInstance();
-        final XPath xpath = xpathFactory.newXPath();
-        for (File current : children) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("inspecting file '"
-                        + current.getCanonicalPath() + "'");
-            }
-            final Node node;
-            try {
-                final Document document = builder.parse(current);
-                final Element element = document.getDocumentElement();
-                node = (Node) xpath.evaluate("/" + root, element,
-                        XPathConstants.NODE);
-                if (node != null) {
-                    files.add(current);
-                }
-            } catch (XPathExpressionException e) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error inspecting configuration files", e);
-                }
-            } catch (SAXException e) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error inspecting configuration files", e);
-                }
-            }
-        }
-        return files;
+        return configurationRepository.getConfigurationFiles(root);
     }
 
     /**
@@ -331,7 +283,13 @@ public final class JVoiceXmlConfiguration implements Configuration {
         } catch (TransformerConfigurationException e) {
             throw new IOException(e.getMessage());
         }
-        final Source source = new StreamSource(file);
+        final byte[] buffer =
+                configurationRepository.getConfigurationFile(file);
+        if (buffer == null) {
+            return null;
+        }
+        final InputStream input = new ByteArrayInputStream(buffer);
+        final Source source = new StreamSource(input);
         final ClasspathExtractor extractor = new ClasspathExtractor();
         final Result result = new SAXResult(extractor);
         try {
@@ -361,9 +319,15 @@ public final class JVoiceXmlConfiguration implements Configuration {
                 LOGGER.info("loading configuration '" + file.getCanonicalPath()
                         + "'...");
                 final Resource resource = getResource(file);
+                if (resource == null) {
+                    continue;
+                }
                 final XmlBeanFactory beanFactory = new XmlBeanFactory(resource);
                 final ClasspathExtractor extractor =
                     getClassPathExtractor(file);
+                if (extractor == null) {
+                    continue;
+                }
                 final String repository = extractor.getLoaderRepostory();
                 final JVoiceXmlClassLoader loader = getClassLoader(repository);
                 final URL[] urls = extractor.getClasspathEntries();

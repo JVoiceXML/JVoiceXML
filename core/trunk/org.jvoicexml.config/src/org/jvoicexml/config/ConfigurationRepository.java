@@ -25,10 +25,14 @@
  */
 package org.jvoicexml.config;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -52,25 +56,20 @@ import org.xml.sax.SAXException;
  * @version $Revision: $
  * @since 0.7.6
  */
-final class ConfigurationRepository {
+final class ConfigurationRepository
+    implements ConfigurationFileChangedListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(ConfigurationRepository.class);
 
+    /** Size of the read buffer when reading objects. */
+    private static final int READ_BUFFER_SIZE = 1024;
+
     /** Location of the config folder. */
     private final File configFolder;
 
-    /** Files in the config folder. */
-    private File[] configFiles;
-
-    /** The timestamp when the config files where retrieved the last time. */
-    private long timestampRetrievedConfigFiles;
-
-    /** 
-     * The time-interval after which the configuration folder should
-     * be reread.
-     */
-    private static final long REFRESH_INTERVAL = 1000 * 60 * 10;
+    /** Known configuration files. */
+    private final Map<File, byte[]> configurationFiles;
 
     /**
      * Constructs a new object.
@@ -78,6 +77,26 @@ final class ConfigurationRepository {
      */
     public ConfigurationRepository(final File config) {
         configFolder = config;
+        configurationFiles = new java.util.HashMap<File, byte[]>();
+        final ConfigurationFolderMonitor monitor =
+                new ConfigurationFolderMonitor(config);
+        monitor.addListener(this);
+        monitor.start();
+        try {
+            monitor.waitScanCompleted();
+        } catch (InterruptedException e) {
+            return;
+        }
+    }
+
+    /**
+     * Retrieves the contents of the given configuration file.
+     * @param file the file
+     * @return the contents of the file.
+     * @since 0.7.6
+     */
+    public byte[] getConfigurationFile(final File file) {
+        return configurationFiles.get(file);
     }
 
     /**
@@ -86,22 +105,15 @@ final class ConfigurationRepository {
      * @throws IOException
      *         error listing the configuration files
      */
-    private File[] getConfigFiles() throws IOException {
-        final long now = System.currentTimeMillis();
-        if ((configFiles == null)
-                || (now - timestampRetrievedConfigFiles > REFRESH_INTERVAL)) {
-            final FileFilter filter = new XMLFileFilter();
-            configFiles = configFolder.listFiles(filter);
-            if (configFiles == null) {
-                LOGGER.warn("no configuration files found at '"
-                        + configFolder.getCanonicalPath() + "'");
-            } else {
-                timestampRetrievedConfigFiles = System.currentTimeMillis();
-                LOGGER.info("(re-)reading configuration folder: "
-                        + configFiles.length + " files");
+    private Collection<File> getConfigFiles() throws IOException {
+        final Collection<File> files = new java.util.ArrayList<File>();
+        for (File file : configurationFiles.keySet()) {
+            final String name = file.getName();
+            if (name.endsWith(".xml")) {
+                files.add(file);
             }
         }
-        return configFiles;
+        return files;
     }
 
     /**
@@ -123,7 +135,7 @@ final class ConfigurationRepository {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("looking for configurations '" + root + "'");
         }
-        final File[] children = getConfigFiles();
+        final Collection<File> children = getConfigFiles();
         if (children == null) {
             LOGGER.warn("no configuration files found at '"
                     + configFolder.getCanonicalPath() + "'");
@@ -143,17 +155,25 @@ final class ConfigurationRepository {
         final XPathFactory xpathFactory = XPathFactory.newInstance();
         final XPath xpath = xpathFactory.newXPath();
         for (File current : children) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("inspecting file '"
-                        + current.getCanonicalPath() + "'");
-            }
             final Node node;
             try {
-                final Document document = builder.parse(current);
+                final byte[] buffer;
+                synchronized(configurationFiles) {
+                    buffer = configurationFiles.get(current);
+                    if (buffer == null) {
+                        continue;
+                    }
+                }
+                final InputStream in = new ByteArrayInputStream(buffer);
+                final Document document = builder.parse(in);
                 final Element element = document.getDocumentElement();
                 node = (Node) xpath.evaluate("/" + root, element,
                         XPathConstants.NODE);
                 if (node != null) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("inspecting file '"
+                                + current.getCanonicalPath() + "'");
+                    }
                     files.add(current);
                 }
             } catch (XPathExpressionException e) {
@@ -167,6 +187,73 @@ final class ConfigurationRepository {
             }
         }
         return files;
+    }
+
+    /**
+     * Loads the given configuration file.
+     * @param file the file to load
+     * @throws IOException
+     *         error loading the configuration file
+     */
+    private void loadConfigurationFile(final File file) throws IOException {
+        final byte[] readBuffer = new byte[READ_BUFFER_SIZE];
+        final InputStream input = new FileInputStream(file);
+        final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int num;
+        do {
+            num = input.read(readBuffer);
+            if (num >= 0) {
+                buffer.write(readBuffer, 0, num);
+            }
+        } while(num >= 0);
+        final byte[] bytes = buffer.toByteArray();
+        synchronized (configurationFiles) {
+            configurationFiles.put(file, bytes);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void fileAdded(final File file) {
+        try {
+            loadConfigurationFile(file);
+            LOGGER.info("added config file '" + file.getCanonicalPath()
+                    + "'");
+        } catch (IOException e) {
+            LOGGER.warn(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void fileUpdated(final File file) {
+        try {
+            loadConfigurationFile(file);
+            LOGGER.info("updated config file '" + file.getCanonicalPath()
+                    + "'");
+        } catch (IOException e) {
+            LOGGER.warn(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void fileRemoved(final File file) {
+        synchronized (configurationFiles) {
+            configurationFiles.remove(file);
+        }
+        try {
+            LOGGER.info("removed config file '" + file.getCanonicalPath()
+                    + "'");
+        } catch (IOException e) {
+            LOGGER.warn(e.getMessage(), e);
+        }
     }
 
 }

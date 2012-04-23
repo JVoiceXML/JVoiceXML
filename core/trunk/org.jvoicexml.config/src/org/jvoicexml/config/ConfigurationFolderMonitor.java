@@ -45,7 +45,7 @@ public final class ConfigurationFolderMonitor extends Thread {
         Logger.getLogger(ConfigurationFolderMonitor.class);
 
     /** Delay between two scans of the configuration folder. */
-    private static final int DELAY = 1000;
+    private static final int DEFAULT_DELAY = 60 * 1000;
 
     /** Known files. */
     private final Map<File, Long> files;
@@ -62,6 +62,12 @@ public final class ConfigurationFolderMonitor extends Thread {
     /** A filter for files to look for. */
     private final FileFilter filter;
 
+    /** The delay between two polls. */
+    private long delay;
+
+    /** Notification of the completion of the first scan. */
+    private final Object lock;
+
     /**
      * Constructs a new object.
      * @param folder the configuration folder
@@ -71,7 +77,17 @@ public final class ConfigurationFolderMonitor extends Thread {
         configFolder = folder;
         listeners = new java.util.ArrayList<ConfigurationFileChangedListener>();
         filter = new XMLFileFilter();
+        delay = DEFAULT_DELAY;
         setDaemon(true);
+        lock = new Object();
+    }
+
+    /**
+     * Sets the delay between two polls of the configuration folder.
+     * @param msec msec to wait
+     */
+    public void setDelay(final long msec) {
+        delay = msec;
     }
 
     /**
@@ -97,14 +113,38 @@ public final class ConfigurationFolderMonitor extends Thread {
     @Override
     public void run() {
         while (!stop) {
+            if (LOGGER.isDebugEnabled()) {
+                try {
+                    LOGGER.debug("scanning configuration folder '"
+                            + configFolder.getCanonicalPath() + "'");
+                } catch (IOException e) {
+                    LOGGER.warn(e.getMessage(), e);
+                }
+            }
             final File[] configurationFiles = configFolder.listFiles(filter);
             checkAddedUpdatedFiles(configurationFiles);
             checkRemovedFiles(configurationFiles);
+            synchronized (lock) {
+                lock.notifyAll();
+            }
             try {
-                Thread.sleep(DELAY);
+                Thread.sleep(delay);
             } catch (InterruptedException e) {
                 return;
             }
+        }
+    }
+
+    /**
+     * Delays until a complete scan of the configuration folder is completed.
+     * TODO Should be removed. Currently, this is necessary to ensure that
+     * all configuration files have been read.
+     * @throws InterruptedException
+     *         error waiting for the completion
+     */
+    public void waitScanCompleted() throws InterruptedException {
+        synchronized (lock) {
+            lock.wait();
         }
     }
 

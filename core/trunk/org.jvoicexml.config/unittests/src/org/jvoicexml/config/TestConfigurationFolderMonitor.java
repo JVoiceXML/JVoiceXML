@@ -1,6 +1,7 @@
 package org.jvoicexml.config;
 
 import java.io.File;
+import java.io.FileWriter;
 
 import junit.framework.Assert;
 
@@ -22,6 +23,9 @@ public final class TestConfigurationFolderMonitor
     /** The reported file. */
     private File reportedFile;
 
+    /** The reported action. */
+    private String action;
+
     /**
      * Setup the test environment.
      */
@@ -40,6 +44,7 @@ public final class TestConfigurationFolderMonitor
         final File configFolder = new File("unittests/config");
         final ConfigurationFolderMonitor monitor =
                 new ConfigurationFolderMonitor(configFolder);
+        monitor.setDelay(500);
         monitor.addListener(this);
         monitor.start();
         synchronized (lock) {
@@ -48,7 +53,9 @@ public final class TestConfigurationFolderMonitor
         Assert.assertEquals(
                 new File("unittests/config/test-implementation.xml"),
                 reportedFile);
+        Assert.assertEquals("added", action);
         reportedFile = null;
+        action = null;
         final File added = new File("unittests/config/test.xml");
         added.deleteOnExit();
         added.createNewFile();
@@ -56,12 +63,26 @@ public final class TestConfigurationFolderMonitor
             lock.wait();
         }
         Assert.assertEquals(added, reportedFile);
+        Assert.assertEquals("added", action);
         reportedFile = null;
+        action = null;
+        Thread.sleep(100);
+        final FileWriter writer = new FileWriter(added);
+        writer.write("test");
+        writer.close();
+        synchronized (lock) {
+            lock.wait();
+        }
+        Assert.assertEquals(added, reportedFile);
+        Assert.assertEquals("updated", action);
+        reportedFile = null;
+        action = null;
         added.delete();
         synchronized (lock) {
             lock.wait();
         }
         Assert.assertEquals(added, reportedFile);
+        Assert.assertEquals("deleted", action);
     }
 
     /**
@@ -70,6 +91,7 @@ public final class TestConfigurationFolderMonitor
     @Override
     public void fileAdded(final File file) {
         reportedFile = file;
+        action = "added";
         synchronized (lock) {
             lock.notifyAll();
         }
@@ -81,6 +103,7 @@ public final class TestConfigurationFolderMonitor
     @Override
     public void fileUpdated(final File file) {
         reportedFile = file;
+        action = "updated";
         synchronized (lock) {
             lock.notifyAll();
         }
@@ -92,6 +115,7 @@ public final class TestConfigurationFolderMonitor
     @Override
     public void fileRemoved(final File file) {
         reportedFile = file;
+        action = "deleted";
         synchronized (lock) {
             lock.notifyAll();
         }
