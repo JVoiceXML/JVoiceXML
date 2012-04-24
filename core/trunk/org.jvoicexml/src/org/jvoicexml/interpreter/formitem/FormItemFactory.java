@@ -28,6 +28,7 @@
 package org.jvoicexml.interpreter.formitem;
 
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Initial;
@@ -35,19 +36,12 @@ import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Record;
 import org.jvoicexml.xml.vxml.Subdialog;
 import org.jvoicexml.xml.vxml.Transfer;
-import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
  * Factory for form items.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class FormItemFactory {
     /**
@@ -57,7 +51,8 @@ public final class FormItemFactory {
     }
 
     /**
-     * Factory method to get a form item for a voice xml node.
+     * Factory method to get a {@link org.jvoicexml.interpreter.FormItem}
+     * for a {@link VoiceXmlNode}.
      *
      * @param context
      *        The current <code>VoiceXmlInterpreterContext</code>.

@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/dialog/ChoiceConverter.java $
+ * Version: $LastChangedRevision: 2612 $
+ * Date:    $Date: 2011-02-28 18:58:33 +0100 (Mo, 28 Feb 2011) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -37,7 +37,7 @@ import org.jvoicexml.xml.vxml.Choice;
  * </p>
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
+ * @version $Revision: 2612 $
  * @since 0.7.5
  */
 public interface ChoiceConverter {

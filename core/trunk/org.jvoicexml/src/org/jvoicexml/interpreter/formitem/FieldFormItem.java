@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter.formitem;
 
 import java.util.Collection;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
@@ -39,6 +40,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.Field;
+import org.jvoicexml.xml.vxml.Option;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
@@ -62,6 +64,10 @@ public final class FieldFormItem
     /** The shadow var container for this filed. */
     private FieldShadowVarContainer shadowVarContainer;
 
+    /** The converter for <code>&lt;option&gt;</code> tags. */
+    private OptionConverter converter;
+
+
     /**
      * Creates a new field input item.
      *
@@ -73,6 +79,16 @@ public final class FieldFormItem
     public FieldFormItem(final VoiceXmlInterpreterContext context,
                          final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
+    }
+
+    /**
+     * Sets the option converter to use for the conversion of
+     * <code>&lt;option</code> tags into a grammar.
+     * @param optionConverter the option converter
+     * @since 0.7.6
+     */
+    public void setOptionConverter(final OptionConverter optionConverter) {
+        converter = optionConverter;
     }
 
     /**
@@ -205,6 +221,7 @@ public final class FieldFormItem
             return;
         }
 
+        // Add builtin grammars
         final VoiceXmlDocument document =
             field.getOwnerXmlDocument(VoiceXmlDocument.class);
         final Vxml vxml = document.getVxml();
@@ -220,6 +237,20 @@ public final class FieldFormItem
             final Grammar voiceGrammar = addCustomGrammar(field,
                     "builtin:voice/" + type, language);
             grammars.add(voiceGrammar);
+        }
+
+        // Add grammars defined by option tags
+        final Locale locale = vxml.getXmlLangObject();
+        final Collection<Option> options = field.getChildNodes(Option.class);
+        final Grammar optionVoiceGrammar =
+                converter.createVoiceGrammar(options, locale);
+        if (optionVoiceGrammar != null) {
+            grammars.add(optionVoiceGrammar);
+        }
+        final Grammar optionDtmfGrammar =
+                converter.createDtmfGrammar(options, locale);
+        if (optionDtmfGrammar != null) {
+            grammars.add(optionDtmfGrammar);
         }
     }
 

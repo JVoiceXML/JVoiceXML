@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -59,8 +59,10 @@ import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
 import org.jvoicexml.interpreter.formitem.BlockFormItem;
+import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
+import org.jvoicexml.interpreter.formitem.OptionConverter;
 import org.jvoicexml.interpreter.formitem.RecordFormItem;
 import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
 import org.jvoicexml.interpreter.formitem.TransferFormItem;
@@ -317,6 +319,18 @@ public final class FormInterpretationAlgorithm
         }
         final ScriptingEngine scripting = context.getScriptingEngine();
         formItem.init(scripting);
+        if (formItem instanceof FieldFormItem) {
+            final Configuration configuration = context.getConfiguration();
+            try {
+                final OptionConverter converter =
+                        configuration.loadObject(OptionConverter.class);
+                final FieldFormItem fieldFormItem =
+                        (FieldFormItem) formItem;
+                fieldFormItem.setOptionConverter(converter);
+            } catch (ConfigurationException e) {
+                throw new BadFetchError(e.getMessage(), e);
+            }
+        }
     }
 
     /**

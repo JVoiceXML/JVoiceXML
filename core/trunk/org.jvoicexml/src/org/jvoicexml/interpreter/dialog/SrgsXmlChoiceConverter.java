@@ -33,7 +33,7 @@ import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.Choice;
 
 /**
- * A converter for the SRGS XML grammar.
+ * A <code>&lt;choice&gt;</code> converter for the SRGS XML grammar.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.5

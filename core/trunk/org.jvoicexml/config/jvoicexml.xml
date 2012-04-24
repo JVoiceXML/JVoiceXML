@@ -104,6 +104,11 @@
     </property>
   </bean>
 
+  <!-- The converter for options in fields -->
+  <bean id="org.jvoicexml.interpreter.formitem.OptionConverter"
+      class="org.jvoicexml.interpreter.formitem.SrgsXmlOptionConverter">
+  </bean>
+
   <!--
     - Grammar processor with all grammar identifiers and transformers from 
     - a source type into a target type.
