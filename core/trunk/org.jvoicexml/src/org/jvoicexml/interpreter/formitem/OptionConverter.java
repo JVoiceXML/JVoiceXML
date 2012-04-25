@@ -50,9 +50,7 @@ public interface OptionConverter {
     /**
      * Creates a DTMF grammar from the given options.
      * @param options the options to transfer into a DTMF grammar
-     * @param language the language to use
      * @return created grammar, <code>null</code> if there is no DTMF grammar. 
      */
-    Grammar createDtmfGrammar(final Collection<Option> options,
-            final Locale language);
+    Grammar createDtmfGrammar(final Collection<Option> options);
 }

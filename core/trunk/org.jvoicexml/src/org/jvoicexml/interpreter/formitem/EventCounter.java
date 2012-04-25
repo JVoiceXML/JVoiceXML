@@ -36,16 +36,10 @@ import org.jvoicexml.interpreter.EventCountable;
 /**
  * Basic implementation of an {@link EventCountable}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @see org.jvoicexml.interpreter.formitem.AbstractInputItem
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 final class EventCounter implements EventCountable {
     /** Logger for this class. */

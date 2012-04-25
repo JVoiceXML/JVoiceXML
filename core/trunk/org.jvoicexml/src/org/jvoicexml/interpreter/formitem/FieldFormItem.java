@@ -225,22 +225,20 @@ public final class FieldFormItem
         final VoiceXmlDocument document =
             field.getOwnerXmlDocument(VoiceXmlDocument.class);
         final Vxml vxml = document.getVxml();
-        final String language = vxml.getXmlLang();
-
+        final Locale locale = vxml.getXmlLangObject();
         if (type.startsWith("builtin:")) {
-            final Grammar grammar = addCustomGrammar(field, type, language);
+            final Grammar grammar = addCustomGrammar(field, type, locale);
             grammars.add(grammar);
         } else {
             final Grammar dtmfGrammar = addCustomGrammar(field,
-                    "builtin:dtmf/" + type, language);
+                    "builtin:dtmf/" + type, locale);
             grammars.add(dtmfGrammar);
             final Grammar voiceGrammar = addCustomGrammar(field,
-                    "builtin:voice/" + type, language);
+                    "builtin:voice/" + type, locale);
             grammars.add(voiceGrammar);
         }
 
         // Add grammars defined by option tags
-        final Locale locale = vxml.getXmlLangObject();
         final Collection<Option> options = field.getChildNodes(Option.class);
         final Grammar optionVoiceGrammar =
                 converter.createVoiceGrammar(options, locale);
@@ -248,7 +246,7 @@ public final class FieldFormItem
             grammars.add(optionVoiceGrammar);
         }
         final Grammar optionDtmfGrammar =
-                converter.createDtmfGrammar(options, locale);
+                converter.createDtmfGrammar(options);
         if (optionDtmfGrammar != null) {
             grammars.add(optionDtmfGrammar);
         }
@@ -263,7 +261,7 @@ public final class FieldFormItem
      * @since 0.7.5
      */
     private Grammar addCustomGrammar(final Field field, final String type,
-            final String language) {
+            final Locale language) {
         final Grammar grammar = field.appendChild(Grammar.class);
         grammar.setSrc(type);
         grammar.setXmlLang(language);

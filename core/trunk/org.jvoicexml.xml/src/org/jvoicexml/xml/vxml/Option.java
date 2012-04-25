@@ -167,6 +167,15 @@ public final class Option
     }
 
     /**
+     * Checks if there are any DTMF sequences associated with this option.
+     * @return <code>true</code> if a DTMF sequence is defined
+     * @since 0.7.6
+     */
+    public boolean hasDtmf() {
+        return hasAttribute(ATTRIBUTE_DTMF);
+    }
+
+    /**
      * Set the dtmf attribute.
      * @param dtmf Value of the dtmf attribute.
      * @see #ATTRIBUTE_DTMF
@@ -231,6 +240,7 @@ public final class Option
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return false;
     }
@@ -240,6 +250,7 @@ public final class Option
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }

@@ -112,7 +112,6 @@ public abstract class AbstractXmlNode
      */
     public final String getAttribute(final String attribute) {
         final NamedNodeMap attributes = node.getAttributes();
-
         if (attributes == null) {
             return null;
         }
@@ -123,6 +122,21 @@ public abstract class AbstractXmlNode
         }
 
         return item.getNodeValue();
+    }
+
+    /**
+     * Checks, if the attribute with the given name is present.
+     * @param attribute name of the attribute to check for
+     * @return <code>true</code> if there is an attribute with the given name
+     * @since 0.7.6
+     */
+    public final boolean hasAttribute(final String attribute) {
+        final NamedNodeMap attributes = node.getAttributes();
+        if (attributes == null) {
+            return false;
+        }
+        final Node item = attributes.getNamedItem(attribute);
+        return item != null;
     }
 
     /**

@@ -41,7 +41,7 @@ public final class FormItemNameFactory {
     private static final String ATTRIBUTE_NAME = "name";
 
     /**
-     * A sequence number to distingush multiple form items that are created
+     * A sequence number to distinguish multiple form items that are created
      * within a single millisecond.
      */
     private static long sequence = 0;
