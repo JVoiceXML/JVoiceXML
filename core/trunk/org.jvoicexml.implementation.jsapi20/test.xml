@@ -1,4 +1,4 @@
-<project name="JSAPI 2.0 implemenatation platform unit tests" default="test"
+<project name="org.jvoicexml.implementation.jsapi20 unit tests" default="test"
   basedir=".">
     <description>
 This file runs unit tests on the JSAPI 2.0 implementation platform.
@@ -8,11 +8,11 @@ This file runs unit tests on the JSAPI 2.0 implementation platform.
 
     <target name="-test-setup" depends="-setup">
         <!-- directory structure -->
-        <property name="test" value="test" />
+        <property name="test" value="unittests" />
 
-        <property name="test.src" value="unittests" />
-        <property name="test.results" value="${dist}/unittests" />
-        <property name="test.build" value="${test}/classes" />
+      <property name="test.src" value="${test}/src" />
+      <property name="test.results" value="${dist}/unittests" />
+      <property name="test.build" value="${test}/classes" />
 
         <!-- Compile the test core classes -->
         <ant dir="${jvxml.core.dir}" antfile="test.xml" target="compiletests"
@@ -24,7 +24,6 @@ This file runs unit tests on the JSAPI 2.0 implementation platform.
             <pathelement location="${jvxml.core.dir}/test/classes"/>
             <pathelement location="${build}" />
             <fileset refid="junit.lib"/>
-            <fileset refid="jsapi2.jse.lib"/>
             <fileset refid="freetts.lib"/>
             <fileset refid="sphinx4.lib"/>
         </path>

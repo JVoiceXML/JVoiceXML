@@ -258,8 +258,6 @@ public final class Jsapi20RecognitionResult
                                 }
                                 context.evaluateString(scope, expr, "expr", 1,
                                         null);
-                                Object o = scope.get("out", scope);
-                                System.out.println("*** " + (o instanceof ScriptableObject ? ScriptingEngine.toJSON((ScriptableObject) scope.get("out", scope)) : o));
                             }
                         }
                     }
@@ -269,14 +267,30 @@ public final class Jsapi20RecognitionResult
                     LOGGER.debug("setting: '" + source + "'");
                 }
                 context.evaluateString(scope, source, "source", 1, null);
-                Object o = scope.get("out", scope);
-                System.out.println("*** " + (o instanceof ScriptableObject ? ScriptingEngine.toJSON((ScriptableObject) scope.get("out", scope)) : o));
             }
             interpretation = scope.get("out", scope);
-            final String json = ScriptingEngine.toJSON(
-                    (ScriptableObject) interpretation);
-            LOGGER.info("created semantic interpretation out=" + json);
+            if (interpretation instanceof ScriptableObject) {
+                final String json = ScriptingEngine.toJSON(
+                        (ScriptableObject) interpretation);
+                LOGGER.info("created semantic interpretation out=" + json);
+            } else {
+                LOGGER.info("created semantic interpretation '"
+                        + interpretation + "'");
+            }
         }
         return interpretation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append(getClass().getCanonicalName());
+        str.append('[');
+        str.append(result);
+        str.append(']');
+        return str.toString();
     }
 }

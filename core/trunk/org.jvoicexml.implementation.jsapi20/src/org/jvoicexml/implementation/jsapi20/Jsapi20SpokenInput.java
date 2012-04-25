@@ -550,7 +550,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         final Grammar[] list = manager.listGrammars();
         for (Grammar gram : list) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Delete Grammar : " + gram.getReference());
+                LOGGER.debug("delete grammar : " + gram.getReference());
             }
             manager.deleteGrammar(gram);
         }
