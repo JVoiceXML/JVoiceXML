@@ -43,6 +43,14 @@ class PendingMessage {
     private final SpeakableText speakable;
 
     /**
+     * Constructs a new object without a speakable.
+     * @param msg the text message
+     */
+    public PendingMessage(final TextMessage msg) {
+        this(msg, null);
+    }
+
+    /**
      * Constructs a new object.
      * @param msg the text message
      * @param spk the speakable

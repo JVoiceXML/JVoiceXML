@@ -36,9 +36,12 @@ import java.io.Serializable;
 */
 public final class TextMessage implements Serializable {
     /** The serial version UID. */
-    private static final long serialVersionUID = 1617046798561316307L;
+    private static final long serialVersionUID = 7832004614102610277L;
 
-    /** Code indicating that this message contains data. */
+    /**
+     * Code indicating that this message contains data. Ususally this is used
+     * to send prompts as text or SSML 
+     */
     public static final int DATA = 1;
 
     /** Code indicating an acknowledge. */
@@ -49,6 +52,12 @@ public final class TextMessage implements Serializable {
 
     /** Code indicating user input. */
     public static final int USER = 4;
+
+    /** Code indicating that clients may send input. */
+    public static final int EXPECTING_INPUT = 5;
+
+    /** Code indicating that clients may no loger send input. */
+    public static final int INPUT_CLOSED = 6;
 
     /** The message code. */
     private final int code;
@@ -136,6 +145,15 @@ public final class TextMessage implements Serializable {
             break;
         case ACK:
             str.append("ACK");
+            break;
+        case USER:
+            str.append("USER");
+            break;
+        case EXPECTING_INPUT:
+            str.append("EXPECTING_INPUT");
+            break;
+        case INPUT_CLOSED:
+            str.append("INPUT_CLOSED");
             break;
         default:
             str.append(code);

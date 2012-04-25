@@ -185,4 +185,18 @@ public final class TestTextSenderThread
      */
     public void started() {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void expectingInput() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void inputClosed() {
+    }
 }

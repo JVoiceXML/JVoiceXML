@@ -220,4 +220,18 @@ public final class TestTextTelephony
             lock.notifyAll();
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void expectingInput() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void inputClosed() {
+    }
 }

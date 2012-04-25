@@ -64,6 +64,20 @@ public interface TextListener {
     void outputSsml(final SsmlDocument document);
 
     /**
+     * Notification that the voice browser is ready to receive input.
+     * 
+     * @since 0.7.6
+     */
+    void expectingInput();
+
+    /**
+     * Notification that the voice browser stopped listening for input.
+     * 
+     * @since 0.7.6
+     */
+    void inputClosed();
+
+    /**
      * Notification about a disconnect from the server.
      * @since 0.7
      */

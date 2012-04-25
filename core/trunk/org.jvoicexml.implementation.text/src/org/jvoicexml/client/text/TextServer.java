@@ -190,6 +190,28 @@ public final class TextServer extends Thread {
     }
 
     /**
+     * Notifies all registered listeners that it is OK to send input.
+     */
+    private void fireExpectingInput() {
+        synchronized (listener) {
+            for (TextListener current : listener) {
+                current.expectingInput();
+            }
+        }
+    }
+
+    /**
+     * Notifies all registered listeners that it is no longer OK to send input.
+     */
+    private void fireInputClosed() {
+        synchronized (listener) {
+            for (TextListener current : listener) {
+                current.inputClosed();
+            }
+        }
+    }
+
+    /**
      * Notifies all registered listeners that a connection has been closed.
      * @since 0.7
      */
@@ -332,6 +354,10 @@ public final class TextServer extends Thread {
                         final SsmlDocument document = (SsmlDocument) data;
                         fireOutputArrived(document);
                     }
+                } else if (code == TextMessage.EXPECTING_INPUT) {
+                    fireExpectingInput();
+                } else if (code == TextMessage.INPUT_CLOSED) {
+                    fireInputClosed();
                 }
                 final int seq = message.getSequenceNumber();
                 final TextMessage ack = new TextMessage(TextMessage.ACK, seq);

@@ -165,6 +165,30 @@ final class TextSenderThread extends Thread {
     }
 
     /**
+     * Sends a message that JVoiceXML is ready to receive input.
+     * 
+     * @since 0.7.6
+     */
+    public void sendExpectingInput() {
+        final TextMessage message =
+                new TextMessage(TextMessage.EXPECTING_INPUT, ++sequenceNumber);
+        final PendingMessage pending = new PendingMessage(message);
+        messages.add(pending);
+    }
+
+    /**
+     * Sends a message that JVoiceXML is ready to receive input.
+     * 
+     * @since 0.7.6
+     */
+    public void sendClosedInput() {
+        final TextMessage message =
+                new TextMessage(TextMessage.INPUT_CLOSED, ++sequenceNumber);
+        final PendingMessage pending = new PendingMessage(message);
+        messages.add(pending);
+    }
+
+    /**
      * Sends a bye message and terminates the sender thread.
      */
     public void sendBye() {

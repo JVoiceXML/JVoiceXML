@@ -90,11 +90,6 @@ public final class ConsoleClient implements TextListener {
         final Session session = jvxml.createSession(info);
         LOGGER.info("calling application at '" + uri + "'...");
         session.call(uri);
-        server.waitConnected();
-        do {
-            final String line = readLine();
-            server.sendInput(line);
-        } while (!session.hasEnded());
     }
 
     /**
@@ -129,6 +124,25 @@ public final class ConsoleClient implements TextListener {
     public void outputSsml(final SsmlDocument document) {
         final Speak speak = document.getSpeak();
         System.out.println("System: " + speak.getTextContent());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void expectingInput() {
+        try {
+            final String line = readLine();
+            server.sendInput(line);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void inputClosed() {
+        // TODO Auto-generated method stub
+        
     }
 
     /**

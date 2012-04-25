@@ -160,7 +160,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("removed pending message " + sequenceNumber);
                 }
-                textOutput.checkEmptyQueue(speakable);
+                if (speakable != null) {
+                    textOutput.checkEmptyQueue(speakable);
+                }
             }
         }
         firePlayStopped();
@@ -209,7 +211,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         fireRecordStarted();
         final TextSpokenInput textInput = (TextSpokenInput) input;
         receiver.setSpokenInput(textInput);
-
+        sender.sendExpectingInput();
     }
 
     /**
@@ -249,6 +251,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     @Override
     public void stopRecording() throws NoresourceError {
         fireRecordStopped();
+        sender.sendClosedInput();
     }
 
     /**
