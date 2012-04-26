@@ -213,8 +213,28 @@ public final class FieldFormItem
      */
     @Override
     protected void addCustomGrammars(final Collection<Grammar> grammars) {
+        // Determine general parameters for possible grammar additions
         final Field field = getField();
+        final VoiceXmlDocument document =
+                field.getOwnerXmlDocument(VoiceXmlDocument.class);
+        final Vxml vxml = document.getVxml();
+        final Locale locale = vxml.getXmlLangObject();
 
+        // Possibly add custom grammars
+        addCustomBuiltinGrammars(grammars, field, locale);
+        addCustomOptionGrammars(grammars, field, locale);
+    }
+
+    /**
+     * Check, if there are builtin grammars defined and if so, add them as
+     * custom gramamrs.
+     * @param grammars current grammars of the field
+     * @param field the field
+     * @param locale the locale to use
+     * @since 0.7.6
+     */
+    private void addCustomBuiltinGrammars(final Collection<Grammar> grammars,
+            final Field field, final Locale locale) {
         // If a type is given, create a nested grammar with a builtin URI. 
         final String type = field.getType();
         if (type == null) {
@@ -222,10 +242,6 @@ public final class FieldFormItem
         }
 
         // Add builtin grammars
-        final VoiceXmlDocument document =
-            field.getOwnerXmlDocument(VoiceXmlDocument.class);
-        final Vxml vxml = document.getVxml();
-        final Locale locale = vxml.getXmlLangObject();
         if (type.startsWith("builtin:")) {
             final Grammar grammar = addCustomGrammar(field, type, locale);
             grammars.add(grammar);
@@ -237,9 +253,25 @@ public final class FieldFormItem
                     "builtin:voice/" + type, locale);
             grammars.add(voiceGrammar);
         }
+    }
 
-        // Add grammars defined by option tags
+    /**
+     * Check, if there are builtin grammars defined and if so, add them as
+     * custom gramamrs.
+     * @param grammars current grammars of the field
+     * @param field the field
+     * @param locale the locale to use
+     * @since 0.7.6
+     */
+    private void addCustomOptionGrammars(final Collection<Grammar> grammars,
+            final Field field, final Locale locale) {
         final Collection<Option> options = field.getChildNodes(Option.class);
+        if (converter == null) {
+            if (!options.isEmpty()) {
+                LOGGER.warn("no converter defined. unable to process options");
+            }
+            return;
+        }
         final Grammar optionVoiceGrammar =
                 converter.createVoiceGrammar(options, locale);
         if (optionVoiceGrammar != null) {
@@ -251,6 +283,7 @@ public final class FieldFormItem
             grammars.add(optionDtmfGrammar);
         }
     }
+
 
     /**
      * Adds a new grammar to the field.

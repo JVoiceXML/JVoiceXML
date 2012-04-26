@@ -48,6 +48,7 @@ import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
+import org.jvoicexml.xml.vxml.Option;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -94,6 +95,8 @@ public final class TestFieldFormItem {
         item = new FieldFormItem(context, field);
         final ScriptingEngine scripting = context.getScriptingEngine();
         item.init(scripting);
+        final OptionConverter converter = new SrgsXmlOptionConverter();
+        item.setOptionConverter(converter);
     }
 
     /**
@@ -210,6 +213,32 @@ public final class TestFieldFormItem {
         final Grammar voiceGrammar = iterator.next();
         Assert.assertEquals("builtin:voice/boolean", voiceGrammar.getSrc());
         Assert.assertEquals(vxml.getXmlLang(), voiceGrammar.getXmlLang());
+    }
+
+    /**
+     * Test case for {@link FieldFormItem#getGrammars()}.
+     * @throws Exception
+     *         test failed.
+     * @since 0.7.1
+     */
+    @Test
+    public void testGetGrammarsWithOptions() throws Exception {
+        field.setName("lo_fat_meal");
+        final Prompt prompt = field.appendChild(Prompt.class);
+        prompt.addText("Do you want a low fat meal on this flight?");
+        final Option option1 = field.appendChild(Option.class);
+        option1.addText("yes");
+        option1.setDtmf("1");
+        final Option option2 = field.appendChild(Option.class);
+        option2.addText("no");
+        option2.setDtmf("2");
+        final Collection<Grammar> grammars = item.getGrammars();
+        Assert.assertEquals(2, grammars.size());
+        final Iterator<Grammar> iterator = grammars.iterator();
+        final Grammar voiceGrammar = iterator.next();
+        final Vxml vxml = document.getVxml();
+        Assert.assertEquals(vxml.getXmlLang(), voiceGrammar.getXmlLang());
+        final Grammar dtmfGrammar = iterator.next();
     }
 
     /**
