@@ -44,8 +44,7 @@ This file runs unit tests on the JSAPI 1.0 implemenatation platform.
         <javac destdir="${test.build}"
                optimize="off"
                debug="on"
-               deprecation="on"
-               encoding="iso-8859-1">
+               deprecation="on">
             <src path="${test.src}" />
             <include name="org/jvoicexml/**/*.java" />
             <classpath refid="test.classpath" />
