@@ -22,7 +22,7 @@
 
 \include{version}
 
-\title{JVoiceXML \jvxmlversion User Guide}
+\title{JVoiceXML \jvxmlversion \\ User Guide}
 \version{0.7.5}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
@@ -42,11 +42,22 @@
 
 \maketitle
 
+\pagenumbering{roman}
+
 \pagestyle{headings}
 
 \tableofcontents
 
 \newpage
+
+\listoffigures
+
+\newpage
+
+\listoftables
+
+\newpage
+\pagenumbering{arabic}
 
 \begin{abstract}
 This documents describes the API of JVoiceXML from the user's point of
@@ -614,6 +625,13 @@ ant war
 to create a war archive that must be deployed to you servlet container
 before running the demo.
 
+The demos are also suitable to get you started with your own first tests.
+Currently, the use requires some programming and you could have an easier
+start if you reuse the demo code and simply exchange the VoiceXML files.
+
+The following sections will help you to get a better understanding of the
+code that is used in the demos.
+
 \section{A first TTS example}
 \label{sec:first-tts-example}
 
@@ -944,7 +962,8 @@ calls.
 \end{lstlisting}
 
 Note, that you will also need to modify the jndi configuration file
-\texttt{\${JVOICEXML\_HOME}/config/jvxml-jndi.xml} to use the text libraries:
+\texttt{\${JVOICE-} \texttt{XML\_HOME}/config/jvxml-jndi.xml} to use the text
+libraries:
 
 \begin{lstlisting}[language=XML]
 <?xml version="1.0" encoding="UTF-8"?>
@@ -1187,7 +1206,28 @@ Our VoiceXML code in the file \texttt{input.vxml} looks like this:
 
 The VoiceXML code above relates to the grammar \texttt{yesno.gram} in JSGF
 format~\cite{w3c:2000:jsgf}.
-It is also possible to have the grammar in SRGS XML format.
+It is also possible to have the grammar in SRGS XML format. The grammar format
+highly depends on the used implementation platform. For the implemetnation
+platforms that are shipped with the browser, these are
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+Implementation platform & grammar format \\
+\hline
+\hline
+JSAPI 1.0 & JSGF \\
+\hline
+JSAPI 2.0 & SRGS+XML \\
+\hline
+Text & SRGS+XML \\
+\hline
+\end{tabular}
+\end{center}
+\caption{supported grammars per implementation platform}
+\end{table}
+
 
 Create a file \texttt{yesno.gram} with the following content:
 
@@ -1266,6 +1306,8 @@ Text input can be delivered by calling:
 Take care that the server connected to the client. You will get the
 appropriate notifications via the \lstinline[language=java]{TextListener}
 methods.
+
+Also note, that you will have to use SRGS+XML formatted grammars.
 
 \subsection{Starting the Client to Capture Input}
 \label{sec:starting-the-client}
