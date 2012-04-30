@@ -59,7 +59,7 @@ import org.xml.sax.SAXException;
  * @version $Revision$
  * @since 0.6
  */
-public final class DummyUserInput
+public class DummyUserInput
         implements UserInput {
     /** Supported grammar types of this user input. */
     private static final Collection<GrammarType> SUPPORTED_GRAMMAR_TYPES;
