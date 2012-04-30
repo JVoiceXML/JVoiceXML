@@ -43,7 +43,7 @@ This file runs unit tests on the JSAPI 1.0 implemenatation platform.
             description="Compile the JAVA sources for the test cases">
         <javac destdir="${test.build}"
                optimize="off"
-               debug="on"
+               debug="on" includeantruntime="false"
                deprecation="on">
             <src path="${test.src}" />
             <include name="org/jvoicexml/**/*.java" />
