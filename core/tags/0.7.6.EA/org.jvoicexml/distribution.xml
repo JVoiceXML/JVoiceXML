@@ -1,0 +1,595 @@
+<project name="JVoiceXML - distribution" default="distribution" basedir=".">
+  <description>
+This file builds the distribution files for JVoiceXML.
+    </description>
+
+  <!-- Load the settings from the main build file -->
+  <import file="build.xml" />
+
+  <target name="-distinit" depends="-init">
+    <!-- distribution files -->
+    <property name="dist.zip" value="jvxml-${jvxml.version}.zip" />
+    <property name="dist.install.jar"
+      value="jvxml-install-${jvxml.version}.jar" />
+
+    <property name="distribution" value="true" />
+
+    <!-- create the folder for the distribution files. -->
+    <property name="distFolder" value="${dist}/${jvxml.version}" />
+    <mkdir dir="${distFolder}" />
+    <property name="distRpmFolder" value="${dist}/${jvxml.version}_rpm" />
+    <mkdir dir="${distRpmFolder}" />
+
+    <property name="distribution" value="true" />
+    <condition property="windows">
+        <os family="windows"/>
+    </condition>
+  </target>
+
+  <target name="-prepareAdditionalFiles" depends="-distinit">
+    <fileset dir="${etc}" id="dist.files.additional">
+      <include name="COPYING" />
+      <include name="README" />
+    </fileset>
+
+    <fileset dir="${etc}/legal" id="dist.files.legal" />
+  </target>
+  <target name="-userdoc">
+    <!--ant dir="../userguide" inheritall="false" inheritrefs="false" target="pdf"/-->
+  </target>
+
+  <target name="-prepareDistributionFolder"
+    depends="jar,-prepareAdditionalFiles,-userdoc" 
+  	description="copy all files for the binary distribution">
+    <antcall target="apidoc">
+      <param name="jvxml.text" value="true" />
+      <param name="jvxml.jsapi10" value="true" />
+      <param name="jvxml.jsapi20" value="true" />
+      <param name="jvxml.mary" value="true" />
+      <param name="jvxml.mrcpv2" value="true" />
+      <param name="jvxml.jtapi" value="true" />
+      <param name="javadoc.access" value="protected" />
+    </antcall>
+    <mkdir dir="${distFolder}/bin" />
+
+    <copy todir="${distFolder}">
+      <fileset refid="dist.files.additional" />
+    </copy>
+    <replace file="${distFolder}/README">
+      <replacefilter token="@jvxml.version@" value="${jvxml.version}"/>
+    </replace>
+
+    <copy todir="${distFolder}/bin">
+      <fileset dir="${etc}">
+        <include name="**/*.sh" />
+        <include name="**/*.bat" />
+      </fileset>
+    </copy>
+
+    <mkdir dir="${distFolder}/config" />
+    <!-- copy all the configuration settings that are needed for the core. -->
+    <copy todir="${distFolder}/config">
+      <fileset dir="${config}">
+        <include name="*.xsd" />
+        <include name="jvxml*.xml" />
+        <include name="jvoicexml.xml" />
+        <include name="jvoicexml.policy" />
+        <include name="log4j.xml" />
+        <include name="logging.properties" />
+        <include name="jmf.properties" />
+        <include name="*-tagsupport.xml" />
+      </fileset>
+    </copy>
+    <replace file="${distFolder}/config/log4j.xml">
+      <replacetoken><![CDATA[level value="debug"]]></replacetoken>
+      <replacevalue><![CDATA[level value="info"]]></replacevalue>
+    </replace>
+
+    <mkdir dir="${distFolder}/demo" />
+
+    <!-- Copy the documentation -->
+    <mkdir dir="${distFolder}/doc" />
+    <copy todir="${distFolder}/doc">
+      <fileset dir="doc">
+        <include name="*.xhtml"/>
+        <include name="*api/**"/>
+        <include name="**.pdf"/>
+      </fileset>
+    </copy>
+    <replace file="${distFolder}/doc/index.xhtml">
+      <replacefilter token="@jvxml.version@" value="${jvxml.version}"/>
+    </replace>
+
+    <!-- Copy the license terms -->
+    <mkdir dir="${distFolder}/doc/legal" />
+    <copy todir="${distFolder}/doc/legal">
+      <fileset refid="dist.files.legal" />
+    </copy>
+
+    <!-- Copy all libraries of the core -->
+    <mkdir dir="${distFolder}/lib" />
+    <copy todir="${distFolder}/lib">
+      <fileset refid="log4j.lib" />
+      <fileset refid="sphinx4.lib" />
+      <fileset refid="loggings.lib" />
+      <fileset refid="codec.lib"/>
+      <fileset refid="rhino.lib" />
+      <fileset refid="pool.lib" />
+      <fileset refid="jlibrtp.lib"/>
+      <fileset refid="httpclient.lib"/>
+      <fileset refid="httpcore.lib"/>
+      <fileset refid="jchardet.lib"/>
+      <fileset refid="jmf.lib"/>
+      <fileset refid="freetts.lib" />
+      <fileset refid="jsonsimple.lib" />
+    </copy>
+    <copy todir="${distFolder}/lib" file="${dist.jvxml.jar}" />
+    <copy todir="${distFolder}/lib" file="dist/org.jvoicexml.processor.srgs.jar" />
+    <copy todir="${distFolder}/lib" file="dist/org.jvoicexml.config.jar" />
+    <copy todir="${distFolder}/lib" file="dist/org.jvoicexml.client.jar" />
+    <copy todir="${distFolder}/lib" file="${dist.xml.jar}" />
+  </target>
+
+  <target name="-jsmooth" depends="-prepareDistributionFolder"
+      description="Create windows exe wrappers for the main processes">
+    <!-- jsmooth library -->
+    <property name="jsmooth.dir" value="${3rdparty.dir}/jsmooth0.9.9" />
+    <property name="jsmooth.lib.dir" value="${jsmooth.dir}/lib" />
+    <!-- Register the JSmooth ANT task -->
+    <taskdef classname="net.charabia.jsmoothgen.ant.JSmoothGen"
+        name="jsmoothgen">
+      <classpath>
+        <fileset dir="${jsmooth.lib.dir}">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+    </taskdef>
+
+    <!--
+      - Copy the jsmooth configuration file to the bin folder to have all
+      - library settings right
+      -->
+    <copy todir="${distFolder}/bin">
+      <fileset dir="${etc}">
+        <include name="*.jsmooth" />
+      </fileset>
+    </copy>
+
+    <jsmoothgen project="${distFolder}/bin/jvoicexml.jsmooth"
+        skeletonroot="${jsmooth.dir}" />
+    <jsmoothgen project="${distFolder}/bin/shutdown.jsmooth"
+        skeletonroot="${jsmooth.dir}" />
+
+    <!-- some cleanup after the work is done -->
+    <delete>
+      <fileset dir="${distFolder}/bin">
+        <include name="*.jsmooth" />
+      </fileset>
+    </delete>
+  </target>
+
+  <!-- Distribution of the configured components -->
+  <target name="-distComponents" depends="-distinit">
+    <echo message="distributing org.jvoicexml.xml"/>
+    <ant dir="../org.jvoicexml.xml" target="jar"
+          inheritall="false" inheritrefs="false"/>
+    <echo message="distributing org.jvoicexml.processor.srgs"/>
+    <ant dir="../org.jvoicexml.processor.srgs" target="jar"
+        inheritall="false" inheritrefs="false"/>
+    <echo message="distributing org.jvoicexml.jndi"/>
+    <ant dir="../org.jvoicexml.jndi"
+        inheritall="false" target="distribution">
+      <property name="jvxml.jndi.port" value="1099"/>
+      <property name="jvxml.jndi.repository" value="text"/>
+    </ant>
+    <echo message="distributing org.jvoicexml.config"/>
+    <ant dir="../org.jvoicexml.config"
+        inheritall="false" target="distribution"/>
+    <antcall target="-distributionPlatforms"/>
+  </target>
+
+  <!--
+    - Subtarget that copies a demo project
+    - expected parameter: demoproject as the name of the demoproject
+    -->
+  <target name="-copyDemoProject" depends="-distinit">
+    <echo message="copying demo ${demoproject}" />
+    <mkdir dir="${distFolder}/demo/${demoproject}"/>
+    <copy todir="${distFolder}/demo/${demoproject}">
+      <fileset dir="../${demoproject}">
+        <include name="**/*.java"/>
+        <include name="**/*.xml"/>
+        <include name="config/ua2" />
+        <include name="**/*.properties"/>
+        <include name="**/*.policy"/>
+        <include name="**/*.wav"/>
+        <include name="**/*.vxml"/>
+        <include name="**/*.gram"/>
+        <exclude name="classes/**"/>
+        <exclude name="eclipse-compiled/**"/>
+        <exclude name=".settings/**"/>
+        <exclude name="3rdparty-libs.xml" />
+      </fileset>
+    </copy>
+    <!-- Copy a uniqe file for the 3rdparty libraries -->
+    <copy file="${etc}/dist-demo-3rdparty-libs.xml"
+      tofile="${distFolder}/demo/${demoproject}/3rdparty-libs.xml" />
+    <!-- Make the properties files local to the demo folder -->
+    <replace file="${distFolder}/demo/${demoproject}/build.xml">
+      <replacetoken><![CDATA[property file="../../]]></replacetoken>
+      <replacevalue><![CDATA[property file="../]]></replacevalue>
+    </replace>
+    <replace file="${distFolder}/demo/${demoproject}/build.xml">
+      <replacetoken><![CDATA[property file="../org.jvoicexml/]]></replacetoken>
+      <replacevalue><![CDATA[property file="../]]></replacevalue>
+    </replace>
+  </target>
+
+  <target name="-copyDemos" depends="-prepareDistributionFolder">
+    <!-- Prepare configuration settings for the demos -->
+    <mkdir dir="${distFolder}/demo/config-props"/>
+    <echo file="${distFolder}/demo/config-props/ant.properties">
+#
+# Used libraries
+#
+jvxml.core.dir=../../lib
+
+#
+# Configuration for the servlet demo
+#
+servlet.lib.dir=MUST BE SUPLIED DIRECTORY
+servlet.include=servlet-api.jar
+    </echo>
+    <mkdir dir="${distFolder}/demo/personal-props"/>
+    <copy file="personal-props/README.txt"
+      todir="${distFolder}/demo/personal-props"/>
+
+    <!-- Copy all demo projects. -->
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.embedded"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.helloworlddemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.helloworldservletdemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.inputdemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.jtapidemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.mixedinitiativedemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.marcdemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.objecttagdemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.recorddemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.scriptdemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.subdialogdemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.voicexmlcreationdemo"/>
+    </antcall>
+  </target>
+
+  <target name="-copyComponentSourceCode">
+      <mkdir dir="${distFolder}/src/${currentcomponent}"/>
+      <copy todir="${distFolder}/src/${currentcomponent}" overwrite="true">
+          <fileset dir="../${currentcomponent}">
+            <include name="3rdparty-libs.xml" />
+            <include name="build.xml" />
+            <include name="configuration.xml" />
+            <include name="src/**/*.java" />
+            <include name="etc/**"/>
+            <include name="config-props/*"/>
+            <include name="personal-props/README.txt"/>
+          </fileset>
+      </copy>
+  </target>
+
+  <target name="-copySourceCode" depends="-distinit">
+    <antcall target="-copyComponentSourceCode">
+      <param name="currentcomponent" value="org.jvoicexml"/>
+    </antcall>
+    <antcall target="-copyComponentSourceCode">
+      <param name="currentcomponent" value="org.jvoicexml.config"/>
+    </antcall>
+    <antcall target="-copyComponentSourceCode">
+      <param name="currentcomponent" value="org.jvoicexml.xml"/>
+    </antcall>
+    <antcall target="-copyComponentSourceCode">
+      <param name="currentcomponent" value="org.jvoicexml.jndi"/>
+    </antcall>
+    <antcall target="-copyComponentSourceCode">
+      <param name="currentcomponent" value="org.jvoicexml.processor.srgs"/>
+    </antcall>
+    <echo append="true" file="${distFolder}/src/org.jvoicexml/config-props/ant.properties">
+
+# Correction of library locations for installation
+#
+
+3rdparty.dir=../../lib
+log4j.dir=../../lib
+log4j.lib.dir=../../lib
+commons.dir=../../lib
+loggings.dir=../../lib
+loggings.lib.dir=../../lib
+pool.dir=../../lib
+pool.lib.dir=../../lib
+httpclient.dir=../../lib
+httpclient.lib.dir=../../lib
+codec.dir=../../lib
+codec.lib.dir=../../lib
+codec.lib.dir=../../lib
+rhino.dir=../../lib
+rhino.lib.dir=../../lib
+spring.dir=../../lib
+spring.lib.dir=../../lib
+jmf.dir=../../lib
+jmf.lib.dir=../../lib
+jlibrtp.dir=../../lib
+jlibrtp.lib.dir=../../lib
+freetts.dir=../../lib
+freetts.lib.dir=../../lib
+sphinx.dir=../../lib
+sphinx.lib.dir=../../lib
+    </echo>
+  </target>
+
+  <target name="distributionFolder"
+      depends="-prepareDistributionFolder, -jsmooth, -distComponents,-copyDemos,-copySourceCode"
+      description="collect all files for the binary distribution">
+  </target>
+
+  <target name="-checkIzpack" depends="-setup">
+    <!-- izpack library -->
+    <property name="izpack.dir" value="${3rdparty.dir}/izpack4.3.5" />
+    <property name="izpack.lib.dir" value="${izpack.dir}/lib" />
+
+    <path id="izpack.path">
+      <fileset dir="${izpack.lib.dir}">
+        <include name="**/*.jar" />
+      </fileset>
+    </path>
+
+    <condition property="izpack.present">
+      <and>
+        <available file="${izpack.lib.dir}" type="dir" />
+        <available classpathref="izpack.path" classname="com.izforge.izpack.ant.IzPackTask" />
+      </and>
+    </condition>
+  </target>
+
+  <target name="izpack" description="Build the installer"
+    depends="-checkIzpack,distributionFolder" if="izpack.present">
+    <taskdef classname="com.izforge.izpack.ant.IzPackTask" name="izpack">
+      <classpath refid="izpack.path" />
+    </taskdef>
+
+    <izpack input="${etc}/install.xml" output="${dist.install.jar}"
+      installerType="standard" basedir="${distFolder}" inheritall="true" />
+  </target>
+
+  <target name="distribution" description="Build the distribution files"
+      depends="izpack">
+    <!-- Compress the installer into a zip archive -->
+    <zip basedir="." destfile="${dist.zip}" compress="true">
+      <include name="${dist.install.jar}" />
+      <fileset refid="dist.files.additional" />
+    </zip>
+  </target>
+
+  <target name="copyRpmFiles" description="Copy all files for the RPM"
+     depends="distributionFolder" unless="windows">
+    <property name="rpm.build" value="${distRpmFolder}/BUILDROOT/jvoicexml-${jvxml.version}-1.noarch" />
+
+    <delete dir="${rpm.build}" />
+    <mkdir dir="${rpm.build}/usr/local/jvoicexml" />
+
+    <copy todir="${rpm.build}/usr/local/jvoicexml">
+      <fileset dir="${distFolder}" />
+    </copy>
+    <mkdir dir="${rpm.build}/var/log/jvoicexml" />
+    <replace file="${rpm.build}/usr/local/jvoicexml/config/log4j.xml">
+      <replacetoken><![CDATA[logging/jvoicexml.log]]></replacetoken>
+      <replacevalue><![CDATA[/var/log/jvoicexml/jvoicexml.log]]></replacevalue>
+    </replace>
+  </target>
+
+  <target name="rpm" depends="clean,-distinit,distributionFolder,copyRpmFiles"
+    description="Create the RPM" unless="windows">
+    <mkdir dir="${distRpmFolder}/RPMS" />
+    <mkdir dir="${distRpmFolder}/SPECS" />
+    <copy todir="${distRpmFolder}/SPECS" file="${etc}/jvoicexml.spec" />
+    <replace file="${distRpmFolder}/SPECS/jvoicexml.spec">
+      <replacefilter token="@jvxml.version@" value="${jvxml.version}"/>
+    </replace>
+    <rpm topdir="${distRpmFolder}" specFile="jvoicexml.spec" command="--target noarch -bb" />
+    <copy todir="${basedir}"
+      file="${distRpmFolder}/RPMS/noarch/jvoicexml-${jvxml.version}-1.noarch.rpm" />
+  </target>
+
+  <target name="tag" depends="-setup"
+      description="Create a tag in the SVN repository">
+      <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
+        <classpath>
+          <fileset dir="3rdparty/svnant/lib">
+            <include name="*.jar" />
+          </fileset>
+        </classpath>
+      </taskdef>
+      <property name="svn.base"
+          value="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml"/>
+      <property name="trunk.core.dir"
+            value="${svn.base}/core/trunk"/>
+      <property name="tag.core.dir"
+            value="${svn.base}/core/tags/${jvxml.version}"/>
+      <svn javahl="true" username="${svn.username}" password="${svn.password}">
+        <mkdir url="${tag.core.dir}"
+            message="Tagging release ${jvxml.version}"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml"
+            destUrl="${tag.core.dir}/org.jvoicexml"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.client"
+            destUrl="${tag.core.dir}/org.jvoicexml.client"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.config"
+            destUrl="${tag.core.dir}/org.jvoicexml.config"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.jndi"
+            destUrl="${tag.core.dir}/org.jvoicexml.jndi"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.xml"
+            destUrl="${tag.core.dir}/org.jvoicexml.xml"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.processor.srgs"
+            destUrl="${tag.core.dir}/org.jvoicexml.processor.srgs"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.callmanager.sip"
+            destUrl="${tag.core.dir}/org.jvoicexml.callmanager.sip"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.callmanager.text"
+            destUrl="${tag.core.dir}/org.jvoicexml.callmanager.text"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.jsapi10"
+            destUrl="${tag.core.dir}/org.jvoicexml.implementation.jsapi10"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.jsapi20"
+            destUrl="${tag.core.dir}/org.jvoicexml.implementation.jsapi20"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.jtapi"
+            destUrl="${tag.core.dir}/org.jvoicexml.implementation.jtapi"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.marc"
+            destUrl="${tag.core.dir}/org.jvoicexml.implementation.marc"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.mary"
+            destUrl="${tag.core.dir}/org.jvoicexml.implementation.mary"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.mrcpv2"
+            destUrl="${tag.core.dir}/org.jvoicexml.implementation.mrcpv2"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.text"
+            destUrl="${tag.core.dir}/org.jvoicexml.implementation.text"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.red5"
+            destUrl="${tag.core.dir}/org.jvoicexml.implementation.red5"/>
+      </svn>
+      <property name="trunk.demo.dir"
+            value="${svn.base}/demo/trunk"/>
+      <property name="tag.demo.dir"
+            value="${svn.base}/demo/tags/${jvxml.version}"/>
+      <svn javahl="true" username="${svn.username}" password="${svn.password}">
+        <mkdir url="${tag.demo.dir}"
+            message="Tagging release ${jvxml.version}"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.embedded"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.embedded"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.helloworlddemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.helloworlddemo"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.helloworldservletdemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.helloworldservletdemo"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.inputdemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.inputdemo"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.jtapidemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.jtapidemo"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.marcdemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.marcdemo"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.mixedinitiativedemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.mixedinitiativedemo"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.objecttagdemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.objecttagdemo"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.recorddemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.recorddemo"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.scriptdemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.scriptdemo"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.subdialogdemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.subdialogdemo"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.voicexmlcreationdemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.voicexmlcreationdemo"/>
+      </svn>
+      <property name="trunk.systemtest.dir"
+            value="${svn.base}/systemtest/trunk"/>
+      <property name="tag.systemtest.dir"
+            value="${svn.base}/systemtest/tags/${jvxml.version}"/>
+      <svn javahl="true" username="${svn.username}" password="${svn.password}">
+        <mkdir url="${tag.systemtest.dir}"
+            message="Tagging release ${jvxml.version}"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.systemtest.dir}/org.jvoicexml.systemtest"
+          destUrl="${tag.systemtest.dir}/org.jvoicexml.systemtest"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.systemtest.dir}/org.jvoicexml.systemtest.servlet"
+          destUrl="${tag.systemtest.dir}/org.jvoicexml.systemtest.servlet"/>
+      </svn>
+    <property name="trunk.documentation.dir"
+          value="${svn.base}/documentation/trunk"/>
+    <property name="tag.documentation.dir"
+          value="${svn.base}/documentation/tags/${jvxml.version}"/>
+    <svn javahl="true" username="${svn.username}" password="${svn.password}">
+      <mkdir url="${tag.documentation.dir}"
+          message="Tagging release ${jvxml.version}"/>
+      <copy message="Tagging release ${jvxml.version}"
+        srcUrl="${trunk.documentation.dir}/org.jvoicexml.systemtest"
+        destUrl="${tag.documentation.dir}/userguide"/>
+    </svn>
+  </target>
+
+  <target name="uploadJavadoc" depends="-distinit">
+    <scp sftp="true" trust="true" verbose="true"
+      todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@web.sourceforge.net:/home/groups/j/jv/jvoicexml/htdocs/api-${jvxml.version}">
+      <fileset dir="${basedir}/doc/api" />
+      <fileset dir="etc">
+        <include name=".htaccess"/>
+      </fileset>
+    </scp>
+  </target>
+
+  <target name="upload" depends="-distinit">
+      <!--scp sftp="true" trust="true" verbose="true"
+        todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@web.sourceforge.net:/home/groups/j/jv/jvoicexml/htdocs/install-${jvxml.version}">
+        <fileset dir=".">
+            <include name="jvxml-install-${jvxml.version}.pack**"/>
+        </fileset>
+        <fileset dir="etc">
+          <include name=".htaccess"/>
+        </fileset>
+      </scp-->
+      <scp trust="true" verbose="true" 
+        todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@frs.sourceforge.net:/home/frs/project/j/jv/jvoicexml/jvoicexml/${jvxml.version}">
+        <fileset dir=".">
+          <include name="${dist.zip}" />
+        </fileset>
+      </scp>
+    <scp trust="true" verbose="true" 
+      todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@frs.sourceforge.net:/home/frs/project/j/jv/jvoicexml/userguide/${jvxml.version}">
+      <fileset dir="doc">
+        <include name="jvxml-userguide-${jvxml.version}.pdf" />
+        <include name="jvxml-userguide-${jvxml.version}.ps" />
+      </fileset>
+    </scp>
+  </target>
+</project>

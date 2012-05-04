@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Libraries</title>
+</head>
+<body>
+<h1>Library dependencies</h1>
+
+<h2>JVoiceXML libraries</h2>
+
+<p>JVoiceXML comprises the following jar files:</p>
+
+<ul>
+	<li>jvxml.jar<br />
+	This is the main jar, containing the VoiceXML interpreter</li>
+	<li>org.jvoicexml.xml.jar<br />
+	This jar contains all the XML related stuff</li>
+    <li>org.jvoicexml.config.jar<br/>
+    spring based configuration of JVoiceXML</li>
+    <li>org.jvoicexml.processor.srgs.jar<br/>
+    This jar contains an SRGS grammar processor.</li>
+    <li>org.jvoicexml.jndi.jar<br/>
+    This jar contains the JNDI support for JVoiceXML which is needed for
+    remote access.</li>
+	<li>org.jvoicexml.implementation.jsapi10.jar<br />
+	This jar contains a basic implementation platform based on the JSAPI
+	1.0.</li>
+	<li>org.jvoicexml.implementation.jsapi10-impl.jar<br />
+	This jar contains some demo implementations for the JSAPI 1.0 using
+	some open source libraries. Currently we support FreeTTS as the TTS
+	engine and sphinx 4 as the voice recognizer.</li>
+	<li>org.jvoicexml.implementation.jsapi20.jar<br />
+	This jar contains an unfinished implementation platform based on the
+	JSAPI 2.0.</li>
+    <li>org.jvoicexml.implementation.mary.jar<br />
+    This jar contains support for the <a href="http://mary.dfki.de"></a>OpenMary</a>
+    TTS engine.</li>
+    <li>org.jvoicexml.implementation.marc.jar<br />
+    This jar contains support for <a href="http://marc.limsi.fr"></a>MARC</a></li>
+	<li>jvxml-text.jar<br />
+	This jar contains a basic implementation platform for text based
+	interaction.</li>
+	<li>jvxml-jtapi.jar<br />
+	This jar contains an unfinished implementation for jtapi 1.3.1 support</li>
+    <li>org.jvoicexml.jndi.jar<br />
+    This jar contains support remote access to the JVoiceXML server</li>
+	<li>jvmxl-client.jar<br />
+	jar containing the interfaces to create client applications.</li>
+	<li>jvmxl-client-text.jar<br />
+	jar containing the classes to access the text based implementation
+	platform</li>
+</ul>
+
+<h2>Library dependencies</h2>
+
+<p>All libraries can be found in the $JVOICEXML_HOME/lib folder. You
+will need:</p>
+
+<h3>To create VoiceXML documents</h3>
+<ul>
+	<li>org.jvoicexml.xml.jar</li>
+</ul>
+
+<h3>To run the interpreter</h3>
+<ul>
+	<li>jvxml.jar</li>
+	<li>org.jvoicexml.xml.jar</li>
+	<li>org.jvoicexml.processor.srgs.jar</li>
+	<li>jvxml-client.jar</li>
+    <li>org.jvoicexml.jndi.jar (optional)</li>
+	<li>log4j 1.2.16 or above (<a
+		href="http://logging.apache.org/log4j/">http://logging.apache.org/log4j/</a>)</li>
+	<li>commons libraries (<a
+		href="http://jakarta.apache.org/commons/">http://jakarta.apache.org/commons/</a>)
+	<ul>
+		<li>logging 1.1.1</li>
+		<li>lang 2.3</li>
+		<li>pool 1.5.5</li>
+		<li>http core 4.1</li>
+        <li>http client 4.0.3</li>
+        <li>codec 1.4</li>
+	</ul>
+	</li>
+	<li>rhino 1.7R3 (<a href="http://www.mozilla.org/rhino/">http://www.mozilla.org/rhino/</a>)</li>
+    <li>json-simple 1.1 (<a href="http://code.google.com/p/json-simple//">http://code.google.com/p/json-simple/</a>)</li>
+	<li>spring framework 3.0.5 (<a
+		href="http://www.springsource.org/">http://www.springsource.org/</a>)</li>
+    <li>jchardet 1.1 (<a
+        href="http://jchardet.sourceforge.net/">http://jchardet.sourceforge.net/</a>)</li>
+</ul>
+
+<h4>Interpreter with JSAPI 1.0 support</h4>
+<ul>
+	<li>org.jvoicexml.implementation.jsapi10.jar</li>
+	<li>org.jvoicexml.implementation.jsapi10-impl.jar</li>
+	<li>JSAPI 1.0 (<a
+		href="http://java.sun.com/products/java-media/speech/">http://java.sun.com/products/java-media/speech/</a>)</li>
+	<li>FreeTTS 1.2.2 (SVN snapshot) (<a
+		href="http://freetts.sourceforge.net/">http://freetts.sourceforge.rtp.orgnet/</a>)
+	(This includes the JSAPI)</li>
+	<li>sphinx 4 (SVN snapshot) (<a href="http://cmusphinx.sourceforge.net/">http://cmusphinx.sourceforge.net/</a>)</li>
+</ul>
+
+<h4>Interpreter with JSAPI 2.0 support (unfinished)</h4>
+<ul>
+	<li>org.jvoicexml.implementation.jsapi20.jar</li>
+	<li>jsr113.jar</li>
+	<li>org.jvoicexml.jsapi2.jar</li>
+    <li>org.jvoicexml.jsapi2.jse.jar</li>
+    <li>org.jvoicexml.jsapi2.jse.sphinx4.jar</li>
+    <li>org.jvoicexml.jsapi2.jse.freetts.jar</li>
+	<li>FreeTTS 1.2.2 (SVN snapshot) (<a
+		href="http://freetts.sourceforge.net/">http://freetts.sourceforge.net/</a>)</li>
+	<li>sphinx 4 (SVN snapshot)(<a href="http://cmusphinx.sourceforge.net/">http://cmusphinx.sourceforge.net/</a>)</li>
+</ul>
+
+<h4>Interpreter with Mary support</h4>
+<ul>
+    <li>org.jvoicexml.implementation.mary.jar</li>
+    <li>maryclient.jar (<a href="mary.dfki.de">http://mary.dfki.de</a>)</li>
+</ul>
+
+<h4>Interpreter with MARC support</h4>
+<ul>
+    <li>org.jvoicexml.implementation.marc.jar</li>
+</ul>
+
+<h4>Interpreter with MRCPv2 support</h4>
+<ul>
+    <li>jvxml-mrcpv2.jar</li>
+    <li>cairo-client.jar</li>
+    <li>cairo-sip-0.2.jar</li>
+    <li>jain-sip-ri-1.2.jar</li>
+    <li>jain-sip-api-1.2.jar</li>
+    <li>nist-sdp-1.0.jar</li>
+    <li>concurrent-1.3.4.jar</li>
+    <li>mrcp4j-0.2.jar</li>
+    <li>zanzibar.jar</li>
+    <li>commons-lang-2.3.jar</li>
+    <li>MRCPv2 server</li>
+    <li>SIP phone</li>
+</ul>
+
+<h4>Interpreter with text based interface</h4>
+<ul>
+	<li>jvxml-text.jar</li>
+</ul>
+
+<h3>To run a client</h3>
+<ul>
+	<li>jvxml-client.jar</li>
+	<li>org.jvoicexml.xml.jar (optional if you want to author VoiceXML documents</li>
+	<li>jvxml-client-text.jar (optional, to access the text based
+	implementation platform)</li>
+</ul>
+<p>You can also download the third party libraries from their web
+sites.</p>
+
+<h2>3rd party licenses</h2>
+
+<p>The folder legal contains all licenses of used libraries.</p>
+
+<p>These are</p>
+<ul>
+	<li>apache-license-2.0
+	<ul>
+		<li>commons logging</li>
+		<li>commons pool</li>
+		<li>commons http core</li>
+        <li>commons http client</li>
+        <li>commons codec</li>
+		<li>log4j</li>
+		<li>spring framework</li>
+		<li>json-simple</li>
+	</ul>
+	</li>
+
+	<li>cmu-license
+	<ul>
+		<li>sphinx</li>
+	</ul>
+	</li>
+
+	<li>freetts-license
+	<ul>
+		<li>FreeTTS</li>
+	</ul>
+	</li>
+
+	<li>jsapi-license
+	<ul>
+		<li>JSAPI</li>
+	</ul>
+	</li>
+
+	<li>lgpl
+	<ul>
+        <li>jsr113 base layer</li>
+		<li>rhino</li>
+        <li>mrcp4j</li>
+        <li>cairo</li>
+        <li>mary client</li>
+	</ul>
+	</li>
+    <li>mozilla public license 1.1
+    <ul>
+        <li>jchardet</li>
+    </ul>
+    </li>
+</ul>
+</body>
+</html>

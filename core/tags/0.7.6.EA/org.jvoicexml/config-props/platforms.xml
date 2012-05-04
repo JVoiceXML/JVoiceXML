@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<platforms>
+  <!--
+     Uncomment the platforms that you want to use or add your own platform.
+  -->
+  <!-- platform name="org.jvoicexml.implementation.jsapi10">
+    <property name="jvxml.jsapi10.talkingJava" value ="false" />
+    <property name="jvxml.jsapi10.talkingJava.path"
+        value ="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib" />
+  </platform-->
+  <!-- platform name="org.jvoicexml.implementation.jsapi20">
+    <property name="jvxml.jsapi20.sapi" value ="false" />
+    <property name="jvxml.jsapi20.mac" value ="false" />
+  </platform-->
+  <!-- platform name="org.jvoicexml.implementation.jtapi"/-->
+  <!-- platform name="org.jvoicexml.implementation.mary"/-->
+  <!-- platform name="org.jvoicexml.implementation.marc"/-->
+  <!-- platform name="org.jvoicexml.implementation.mrcpv2"/-->
+  <!-- platform name="org.jvoicexml.implementation.red5"/-->
+  <!-- platform name="org.jvoicexml.callmanager.sip"/-->
+  <!-- platform name="org.jvoicexml.callmanager.text"/-->
+  <!-- platform name="org.jvoicexml.implementation.text"/-->
+</platforms>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jvxmlgrammar xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-grammar-0-7.xsd">
+  <beans:bean
+    class="org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier" />
+  <beans:bean
+    class="org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier" />
+  <beans:bean
+    class="org.jvoicexml.interpreter.grammar.identifier.JsgfGrammarIdentifier" />
+  <beans:bean
+    class="org.jvoicexml.interpreter.grammar.identifier.NuanceDynagramBinaryGrammarIdentifier" />
+  <beans:bean
+    class="org.jvoicexml.interpreter.grammar.identifier.GslGrammarIdentifier" />
+  <beans:bean
+    class="org.jvoicexml.implementation.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer" />
+  <beans:bean
+    class="org.jvoicexml.implementation.grammar.transformer.SrgsXml2SrgsAbnfGrammarTransformer" />
+  <beans:bean
+    class="org.jvoicexml.implementation.grammar.transformer.SrgsAbnf2SrgsAbnfGrammarTransformer" />
+  <beans:bean
+    class="org.jvoicexml.implementation.grammar.transformer.Jsgf2JsgfGrammarTransformer" />
+  <beans:bean
+    class="org.jvoicexml.implementation.grammar.transformer.SrgsXml2JsgfGrammarTransformer" />
+  <beans:bean
+    class="org.jvoicexml.implementation.grammar.transformer.NuanceDynagramBinaryGrammarTransformer" />
+  <beans:bean
+    class="org.jvoicexml.implementation.grammar.transformer.Gsl2GslGrammarTransformer" />
+</jvxmlgrammar>
