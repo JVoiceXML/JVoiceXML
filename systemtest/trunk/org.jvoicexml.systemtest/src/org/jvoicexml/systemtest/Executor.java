@@ -306,4 +306,20 @@ public final class Executor implements TextListener, TimeoutListener {
     public Result getResult() {
         return memo;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void expectingInput() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void inputClosed() {
+    }
 }
