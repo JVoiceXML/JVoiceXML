@@ -13,9 +13,9 @@
 <classPath>..\lib\org.springframework.core-3.0.5.RELEASE.jar</classPath>
 <classPath>..\lib\org.springframework.beans-3.0.5.RELEASE.jar</classPath>
 <classPath>..\lib\commons-pool-1.5.5.jar</classPath>
-<classPath>..\lib\httpclient-4.1.jar</classPath>
+<classPath>..\lib\httpclient-4.0.3.jar</classPath>
 <classPath>..\lib\httpcore-nio-4.1.jar</classPath>
-<classPath>..\lib\httpcore-4.0.3.jar</classPath>
+<classPath>..\lib\httpcore-4.1.jar</classPath>
 <classPath>..\lib\httpmime-4.0.3.jar</classPath>
 <classPath>..\lib\jmf.jar</classPath>
 <classPath>..\lib\jlibrtp.jar</classPath>
