@@ -42,7 +42,7 @@ This file runs unit tests for the text callmanager.
                optimize="off"
                debug="on"
                deprecation="on"
-               encoding="iso-8859-1">
+               includeantruntime="false">
             <src path="${test.src}" />
             <include name="org/jvoicexml/**/*.java" />
             <classpath refid="test.classpath" />
