@@ -32,11 +32,11 @@ The jars are expected to be in the same folder as this build file.
     <ant antfile="configuration.xml" target="createDistributionConfiguration"/>
   </target>
 
-  <target name="checkout"
+  <target name="checkout" depends="-init"
       description="Checkout the SVN repository content">
     <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
       <classpath>
-        <fileset dir=".">
+        <fileset dir="3rdparty/svnant/lib">
           <include name="*.jar" />
         </fileset>
       </classpath>
