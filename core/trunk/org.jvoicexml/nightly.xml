@@ -92,6 +92,7 @@ org.jvoicexml/personal-props
       <update dir="../org.jvoicexml.callmanager.sip" />
       <update dir="../org.jvoicexml.callmanager.text" />
       <update dir="../org.jvoicexml.client" />
+      <update dir="../org.jvoicexml.config" />
       <update dir="../org.jvoicexml.xml" />
       <update dir="../org.jvoicexml.jndi" />
       <update dir="../org.jvoicexml.processor.srgs" />
