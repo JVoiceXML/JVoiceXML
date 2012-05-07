@@ -116,9 +116,7 @@ You're using ${ant.java.version}
         <javac destdir="${build}" includeantruntime="false"
                optimize="${javac.optimize}"
                debug="${javac.debug}"
-               deprecation="on"
-               source="${javac.source}"
-               target="${javac.target}">
+               deprecation="on">
             <src path="${src}" />
             <include name="${component.path}/**/*.java" />
             <include name="org/jvoicexml/callmanager/mrcpv2/**/*.java" />
