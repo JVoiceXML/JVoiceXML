@@ -153,8 +153,9 @@ public final class ConfigurationFolderMonitor extends Thread {
      * @param configurationFiles the current files in the directory
      */
     private void checkAddedUpdatedFiles(final File[] configurationFiles) {
-        if (configurationFiles == null) {
+        if (configurationFiles == null || configurationFiles.length == 0) {
             LOGGER.warn("unable to check configuration files: no files given");
+            return;
         }
         for (File file : configurationFiles) {
             try {
