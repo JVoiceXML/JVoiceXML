@@ -136,8 +136,10 @@ The basic architecture is shown in figure~\ref{fig:architecture}.
 
 Usually, the VoiceXML documents are stored in a web server or a servlet
 container and are accessed, e.g., via the HTTP protocol. JVoiceXML also
-supports other protocols, e.g. file. JVoiceXML runs as a standalone server and
-retrieves the documents from the servlet container or other document repository. 
+supports other protocols, e.g. file. In principle all resources can be supported
+that can be addressed by a URI scheme, but this will require additional
+programming effort. JVoiceXML runs as a
+standalone server and retrieves the documents from the servlet container or other document repository. 
 
 There are mainly two ways, how clients can interact with JVoiceXML
 \begin{inparaenum}[(i)]
@@ -148,8 +150,9 @@ There are mainly two ways, how clients can interact with JVoiceXML
 Most of the demo clients use the Java Naming and Directory Interface
 (JNDI)~\cite{sun:jndi} to access JVoiceXML. They can also initiate calls for an application using this 
 technology. Currently there is only basic telephony support, but users can call 
-applications from their own Java programs. The way this is done is described in
-the following sections.
+applications from their own Java programs. This is also the reason, why some
+programming effort is needed to start with your first programs. The way this is
+done is described in the following sections.
 
 Conceptually JNDI allows to connect to a centralized running JVoiceXML 
 server.
@@ -160,7 +163,8 @@ This typical architecture for a voice browser is shown in
 figure~\ref{fig:server-architecture}. Here JVoiceXML waits for incoming
 calls and once the \lstinline{CallManager} detects an call, it calls the
 configured application. However this does not make much sense for the current
-demo implementation, since the speaker and the microphone of the JVoiceXML server is used for speech output and input.
+demo implementation, since the speaker and the microphone of the JVoiceXML server
+ is used for speech output and input.
 \begin{figure}
 \includegraphics[width=\linewidth]{server-architecture.eps}
 \caption{Architecture of JVoiceXML using a CallManager}
