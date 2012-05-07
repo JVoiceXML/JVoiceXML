@@ -112,8 +112,8 @@ public final class Mrcpv2SynthesizedOutput
     // TODO Perhaps this port should be managed by call manager -- it is the
     // one that uses it. 
     
-    /** the local host address **/
-    String hostAddress;
+    /** the local host address. **/
+    private String hostAddress;
     
     private int queueCount = 0;
     
@@ -431,50 +431,20 @@ public final class Mrcpv2SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void connect( ConnectionInformation client) throws IOException {
+    public void connect(final ConnectionInformation client) throws IOException {
         // If the connection is already established, use this connection.
 
-        Mrcpv2ConnectionInformation mrcpv2Client = (Mrcpv2ConnectionInformation) client;
-        LOGGER.debug(mrcpv2Client.toString2());
+        Mrcpv2ConnectionInformation mrcpv2Client =
+                (Mrcpv2ConnectionInformation) client;
+        LOGGER.info("connecting to '" + mrcpv2Client + "'");
 
-        if (mrcpv2Client.getAsrClient() != null) {
+        if (mrcpv2Client.getTtsClient() != null) {
             speechClient = mrcpv2Client.getTtsClient();
             speechClient.addListener(this);
             return;
         } else {
-            //TODO:  What condition is this?  Need to digram out the sequence of events.  Its is getting confusing...
-            LOGGER.warn("No TTS Client.");
+            throw new IOException("No TTS client");
         }
-        
-        /* old code delete...
-        //create the mrcp tts channel
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("creating sip session to '" + hostAddress + ":"
-                    + rtpReceiverPort + "'");
-            LOGGER.debug(client.getClass().getCanonicalName());
-        }
-        try {
-            final SipSession session =
-                sessionManager.newSynthChannel(rtpReceiverPort, hostAddress,
-                    "Session Name");
-
-            //construct the speech client with this session
-            speechClient = new SpeechClientImpl(session.getTtsChannel(), null);
-            speechClient.addListener(this);
-        } catch (SdpException e) {
-            LOGGER.error(e, e);
-            throw new IOException(e.getLocalizedMessage());
-        } catch (SipException e) {
-            LOGGER.error(e, e);
-            throw new IOException(e.getLocalizedMessage());
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Connected the synthesizedoutput mrcpv2 client to the "
-                    + "server");
-        }
-        ... end old code */
-        
     }
 
     /**
@@ -567,7 +537,7 @@ public final class Mrcpv2SynthesizedOutput
             //TODO Should there be a queue here in the client or over on the
             // server or both?
             queueCount--;
-            LOGGER.info("Queue count decremented, now "+ queueCount);
+            LOGGER.info("Queue count decremented, now " + queueCount);
             synchronized (_lock) {
                 _lock.notifyAll();
             }

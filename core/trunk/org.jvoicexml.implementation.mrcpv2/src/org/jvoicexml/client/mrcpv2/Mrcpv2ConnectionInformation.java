@@ -31,14 +31,14 @@ package org.jvoicexml.client.mrcpv2;
 
 import java.net.URI;
 
-import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.speechforge.cairo.client.SpeechClient;
 
 /**
- * {@link ConnectionInformation} implementation for mrcpv2 clients.
+ * {@link org.jvoicexml.ConnectionInformation} implementation for mrcpv2
+ * clients.
  *
- * <br><br>
+ * <p>
  * This implementation is used to setup the MRCP channels and then to pass the
  * channels to the systemOutput and userInput objects.
  * At some point during or after a call comes in you must set the client side
@@ -91,7 +91,7 @@ import org.speechforge.cairo.client.SpeechClient;
  *   sm.setTransport("UDP");
  *   sm.startup();
  * </pre>
- *
+ * </p>
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -132,7 +132,8 @@ public final class Mrcpv2ConnectionInformation
      * @param callingDevice URI of the calling device
      * @param calledDevice URI of the called device
      */
-    public Mrcpv2ConnectionInformation(final URI callingDevice, final URI calledDevice) {
+    public Mrcpv2ConnectionInformation(final URI callingDevice,
+            final URI calledDevice) {
         super("dummy", "mrcpv2", "mrcpv2");
         setCalledDevice(callingDevice);
         setCalledDevice(calledDevice);
@@ -222,16 +223,23 @@ public final class Mrcpv2ConnectionInformation
     }
     
 
-    public final String toString2() {
-        final StringBuilder str = new StringBuilder();
-        str.append(getClass().getCanonicalName());
-        str.append("\n clientPort: "+ clientPort);
-        str.append("\n clientAddress: "+ clientAddress);
-        str.append("\n serverPort: "+ serverPort);
-        str.append("\n serverAddress: "+ serverAddress);
-        str.append("\n asrClient: "+ asrClient);
-        str.append("\n asrClient: "+ asrClient);
-
-        return str.toString();
+    /**
+     * 
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addToString(final StringBuilder str) {
+        str.append("clientPort");
+        str.append(clientPort);
+        str.append("clientAddress");
+        str.append(clientAddress);
+        str.append("serverPort");
+        str.append(serverPort);
+        str.append("serverAddress");
+        str.append(serverAddress);
+        str.append("asrClient");
+        str.append(asrClient);
+        str.append("ttsClient");
+        str.append(ttsClient);
     }
 }

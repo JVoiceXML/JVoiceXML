@@ -361,20 +361,17 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     public void connect(final ConnectionInformation client) throws IOException {
-
-        Mrcpv2ConnectionInformation mrcpv2Client = (Mrcpv2ConnectionInformation) client;
-        LOGGER.debug(mrcpv2Client.toString2());
+        final Mrcpv2ConnectionInformation mrcpv2Client =
+                (Mrcpv2ConnectionInformation) client;
+        LOGGER.info("connecting to '" + mrcpv2Client + "'");
 
         if (mrcpv2Client.getAsrClient() != null) {
             speechClient = mrcpv2Client.getAsrClient();
             speechClient.addListener(this);
             return;
         } else {
-            //TODO:  What condition is this?  Need to digram out the sequence of events.  Its is getting confusing...
-            LOGGER.warn("No ASR Client.");
+            throw new IOException("No ASR client");
         }
-
-
     }
 
     /**
@@ -430,10 +427,11 @@ public final class Mrcpv2SpokenInput
         return types;
     }
 
-    // TODO: Determine if this is needed in the mrcpv2 case. Hopefully
-    // returning null is ok.
+    /**
+     * {@inheritDoc}
+     */
     public URI getUriForNextSpokenInput() throws NoresourceError {
-        String url = "rtp://" + remoteRtpHost + ":" + remoteRtpPort;
+        final String url = "rtp://" + remoteRtpHost + ":" + remoteRtpPort;
         try {
             return new URI(url);
         } catch (URISyntaxException e) {
