@@ -89,20 +89,11 @@ org.jvoicexml/personal-props
     </taskdef>
     <svn javahl="true">
       <update dir="." />
+      <update dir="../org.jvoicexml.callmanager.mmi" />
       <update dir="../org.jvoicexml.callmanager.sip" />
       <update dir="../org.jvoicexml.callmanager.text" />
       <update dir="../org.jvoicexml.client" />
       <update dir="../org.jvoicexml.config" />
-      <update dir="../org.jvoicexml.xml" />
-      <update dir="../org.jvoicexml.jndi" />
-      <update dir="../org.jvoicexml.processor.srgs" />
-      <update dir="../org.jvoicexml.implementation.jsapi10" />
-      <update dir="../org.jvoicexml.implementation.jsapi20" />
-      <update dir="../org.jvoicexml.implementation.jtapi" />
-      <update dir="../org.jvoicexml.implementation.marc" />
-      <update dir="../org.jvoicexml.implementation.mary" />
-      <update dir="../org.jvoicexml.implementation.mrcpv2" />
-      <update dir="../org.jvoicexml.implementation.text" />
       <update dir="../org.jvoicexml.demo.helloworlddemo" />
       <update dir="../org.jvoicexml.demo.helloworldservletdemo" />
       <update dir="../org.jvoicexml.demo.inputdemo" />
@@ -112,9 +103,20 @@ org.jvoicexml/personal-props
       <update dir="../org.jvoicexml.demo.scriptdemo" />
       <update dir="../org.jvoicexml.demo.subdialogdemo" />
       <update dir="../org.jvoicexml.demo.voicexmlcreationdemo" />
+      <update dir="../org.jvoicexml.jndi" />
+      <update dir="../org.jvoicexml.implementation.jsapi10" />
+      <update dir="../org.jvoicexml.implementation.jsapi20" />
+      <update dir="../org.jvoicexml.implementation.jtapi" />
+      <update dir="../org.jvoicexml.implementation.marc" />
+      <update dir="../org.jvoicexml.implementation.mary" />
+      <update dir="../org.jvoicexml.implementation.mrcpv2" />
+      <update dir="../org.jvoicexml.implementation.text" />
+      <update dir="../org.jvoicexml.mmi.events" />
+      <update dir="../org.jvoicexml.processor.srgs" />
       <update dir="../org.jvoicexml.systemtest" />
+      <update dir="../org.jvoicexml.xml" />
       <update dir="../org.jvoicexml.systemtest.servlet" />
-        <update dir="../userguide" />
+      <update dir="../userguide" />
     </svn>
   </target>
 
