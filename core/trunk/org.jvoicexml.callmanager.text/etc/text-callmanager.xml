@@ -4,6 +4,7 @@
   xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
   <repository>text</repository>
   <classpath>dist/jvxml-client-text.jar</classpath>
+  <classpath>dist/org.jvoicexml.callmanager.text.jar</classpath>
 
   <beans:bean id="callmanager"
     class="org.jvoicexml.callmanager.text.TextCallManager">
