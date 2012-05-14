@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:mmi="http://www.w3.org/2008/04/mmi-arch" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://www.w3.org/2008/04/mmi-arch">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+             Schema definition for MMI Life cycle events version 1.0
+        </xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="mmi-attribs.xsd"/>
+    <xs:include schemaLocation="NewContextRequest.xsd"/>
+    <xs:include schemaLocation="NewContextResponse.xsd"/>
+    <xs:include schemaLocation="ClearContextRequest.xsd"/>
+    <xs:include schemaLocation="ClearContextResponse.xsd"/>
+    <xs:include schemaLocation="CancelRequest.xsd"/>
+    <xs:include schemaLocation="CancelResponse.xsd"/>
+    <xs:include schemaLocation="DoneNotification.xsd"/>
+    <xs:include schemaLocation="ExtensionNotification.xsd"/>
+    <xs:include schemaLocation="PauseRequest.xsd"/>
+    <xs:include schemaLocation="PauseResponse.xsd"/>
+    <xs:include schemaLocation="PrepareRequest.xsd"/>
+    <xs:include schemaLocation="PrepareResponse.xsd"/>
+    <xs:include schemaLocation="ResumeRequest.xsd"/>
+    <xs:include schemaLocation="ResumeResponse.xsd"/>
+    <xs:include schemaLocation="StartRequest.xsd"/>
+    <xs:include schemaLocation="StartResponse.xsd"/>
+    <xs:include schemaLocation="StatusRequest.xsd"/>
+    <xs:include schemaLocation="StatusResponse.xsd"/>
+    <xs:element name="mmi">
+        <xs:complexType>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element ref="mmi:NewContextRequest"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:NewContextResponse"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:ClearContextRequest"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:ClearContextResponse"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:CancelRequest"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:CancelResponse"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:DoneNotification"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:ExtensionNotification"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:PauseRequest"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:PauseResponse"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:PrepareRequest"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:PrepareResponse"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:ResumeRequest"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:ResumeResponse"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:StartRequest"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:StartResponse"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:StatusRequest"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="mmi:StatusResponse"/>
+                </xs:sequence>
+            </xs:choice>
+            <xs:attribute form="unqualified" name="version" type="xs:decimal" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

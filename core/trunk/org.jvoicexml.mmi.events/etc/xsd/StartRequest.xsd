@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:mmi="http://www.w3.org/2008/04/mmi-arch" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://www.w3.org/2008/04/mmi-arch">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+             StartRequest schema for MMI Life cycle events version 1.0. 
+             The Runtime Framework sends the event StartRequest to invoke a Modality Component 
+             (to start loading a new GUI resource or to start the ASR or TTS). The Modality Component 
+             must return a StartResponse event in response. If the Runtime Framework has sent a previous
+             PrepareRequest event, it may leave the contentURL and content fields empty, and the Modality
+             Component will use the values from the PrepareRequest event. If the Runtime Framework includes 
+             new values for these fields, the values in the StartRequest event override those in the 
+             PrepareRequest event.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="mmi-datatypes.xsd"/>
+    <xs:include schemaLocation="mmi-attribs.xsd"/>
+    
+    <xs:element name="StartRequest">
+        <xs:complexType>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element name="ContentURL" type="mmi:contentURLType"/>
+                    <xs:element minOccurs="0" name="data" type="mmi:anyComplexType"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element name="Content" type="mmi:anyComplexType"/>
+                    <xs:element minOccurs="0" name="data" type="mmi:anyComplexType"/>
+                </xs:sequence>
+            </xs:choice>
+            <xs:attributeGroup ref="mmi:group.allEvents.attrib"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

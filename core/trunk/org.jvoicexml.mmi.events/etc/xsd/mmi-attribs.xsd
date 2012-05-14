@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:mmi="http://www.w3.org/2008/04/mmi-arch" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" targetNamespace="http://www.w3.org/2008/04/mmi-arch">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+             general Type definition schema for MMI Life cycle events version 1.0
+        </xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="mmi-datatypes.xsd"/>
+    <xs:attributeGroup name="source.attrib">
+        <xs:attribute name="Source" type="xs:string" use="required"/>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="target.attrib">
+        <xs:attribute name="Target" type="mmi:targetType" use="optional"/>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="requestID.attrib">
+        <xs:attribute name="RequestID" type="mmi:requestIDType" use="required"/>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="context.attrib">
+        <xs:attribute name="Context" type="mmi:contextType" use="required"/>
+    </xs:attributeGroup>  
+    <xs:attributeGroup name="confidential.attrib">
+        <xs:attribute name="Confidential" type="xs:boolean" use="optional"/>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="context.optional.attrib">
+        <xs:attribute name="Context" type="mmi:contextType" use="optional"/>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="status.attrib">
+        <xs:attribute name="Status" type="mmi:statusType" use="required"/>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="statusResponse.attrib">
+        <xs:attribute name="Status" type="mmi:statusResponseType" use="required"/>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="extension.name.attrib">
+        <xs:attribute name="Name" type="xs:string" use="required"/>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="requestAutomaticUpdate.attrib">
+        <xs:attribute name="RequestAutomaticUpdate" type="xs:boolean" use="required"/>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="automaticUpdate.attrib">
+        <xs:attribute name="AutomaticUpdate" type="xs:boolean" use="required"/>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="group.allEvents.attrib">
+        <xs:attributeGroup ref="mmi:source.attrib"/>
+        <xs:attributeGroup ref="mmi:target.attrib"/>
+        <xs:attributeGroup ref="mmi:requestID.attrib"/>
+        <xs:attributeGroup ref="mmi:context.attrib"/>
+        <xs:attributeGroup ref="mmi:confidential.attrib"/>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="group.allResponseEvents.attrib">
+        <xs:attributeGroup ref="mmi:group.allEvents.attrib"/>
+        <xs:attributeGroup ref="mmi:status.attrib"/>
+    </xs:attributeGroup>
+</xs:schema>

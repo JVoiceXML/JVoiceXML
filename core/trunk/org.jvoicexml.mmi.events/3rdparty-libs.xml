@@ -1,0 +1,11 @@
+<project name="org.jvoicexml.mmi.events - 3rd party libraries" basedir=".">
+    <description>
+This file contains the 3rd party libary definitions, used by the MMI Events
+implementation.
+    </description>
+    <property name="jvxml.core.dir" value="../org.jvoicexml"/>
+    <import file="${jvxml.core.dir}/3rdparty-libs.xml" />
+
+    <target name="-local-3rdparty-setup" depends="-3rdparty-setup">
+    </target>
+</project>

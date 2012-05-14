@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:mmi="http://www.w3.org/2008/04/mmi-arch" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://www.w3.org/2008/04/mmi-arch">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+             PrepareRequest schema for MMI Life cycle events version 1.0. 
+             The optional PrepareRequest event is an event that the Runtime Framework may send 
+             to allow the Modality Components to pre-load markup and prepare to run (e.g. in case of 
+             VXML VUI-MC). Modality Components are not required to take any particular action in 
+             response to this event, but they must return a PrepareResponse event.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="mmi-datatypes.xsd"/>
+    <xs:include schemaLocation="mmi-attribs.xsd"/>
+    
+    <xs:element name="PrepareRequest">
+        <xs:complexType>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element name="ContentURL" type="mmi:contentURLType"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element name="Content" type="mmi:anyComplexType"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Data" type="mmi:anyComplexType"/>
+                </xs:sequence>
+            </xs:choice>
+            <xs:attributeGroup ref="mmi:group.allEvents.attrib"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:mmi="http://www.w3.org/2008/04/mmi-arch" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://www.w3.org/2008/04/mmi-arch">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+             ClearContextRequest schema for MMI Life cycle events version 1.0
+        </xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="mmi-datatypes.xsd"/>
+    <xs:include schemaLocation="mmi-attribs.xsd"/>
+    <xs:include schemaLocation="mmi-elements.xsd"/>
+
+    <xs:element name="ClearContextRequest">
+        <xs:complexType>
+            <xs:attributeGroup ref="mmi:group.allEvents.attrib"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
