@@ -27,7 +27,7 @@
 package org.jvoicexml.callmanager.mmi.socket;
 
 import java.io.IOException;
-import java.net.ServerSocket;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
@@ -45,11 +45,14 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
     private static final Logger LOGGER =
         Logger.getLogger(SocketETLProtocolAdapter.class);
 
+    /** Registered listeners for MMI events. */
+    private Collection<MMIEventListener> listeners;
+
     /** The port number to listen on. */
     private int port;
 
-    /** the server socket listening for events. */
-    private ServerSocket server;
+    /** The server. */
+    private SocketETLServer server;
 
     /**
      * sets the port number to listen on.
@@ -64,7 +67,8 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void start() throws IOException {
-        LOGGER.info("listening on port " + port + " for MMI events");
+        server = new SocketETLServer(this, port);
+        server.start();
     }
 
     /**
@@ -72,8 +76,9 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void addMMIEventListener(final MMIEventListener listener) {
-        // TODO Auto-generated method stub
-
+        synchronized (listeners) {
+            listeners.add(listener);
+        }
     }
 
     /**
@@ -81,8 +86,9 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void removeMMIEventListener(final MMIEventListener listener) {
-        // TODO Auto-generated method stub
-
+        synchronized (listeners) {
+            listeners.remove(listener);
+        }
     }
 
     /**
@@ -90,8 +96,20 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void sendMMIEvent(final MMIEvent event) {
-        // TODO Auto-generated method stub
+        LOGGER.warn("sending currently not implented. cannot send " + event);
+    }
 
+    /**
+     * Notifies all registered listeners about a received MMI Event.
+     * @param event
+     * @since 0.7.6
+     */
+    void notifyMMIEvent(final MMIEvent event) {
+        synchronized (listeners) {
+            for (MMIEventListener listener : listeners) {
+                listener.receivedEvent(event);
+            }
+        }
     }
 
     /**
@@ -99,8 +117,10 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void stop() {
-        // TODO Auto-generated method stub
-
+        if (server != null) {
+            server.interrupt();
+            server = null;
+        }
     }
 
 }

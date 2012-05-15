@@ -1,0 +1,90 @@
+/*
+ * File:    $HeadURL:  $
+ * Version: $LastChangedRevision: 643 $
+ * Date:    $Date: $
+ * Author:  $LastChangedBy: $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+package org.jvoicexml.callmanager.mmi.socket;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import org.apache.log4j.Logger;
+
+/**
+ * The server thread who is listening for clients.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision: $
+ * @since 0.7.6
+ */
+public final class SocketETLServer extends Thread {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(SocketETLServer.class);
+
+    /** The port number to listen on. */
+    private final int port;
+
+    /** The socket protocol adapter. */
+    private final SocketETLProtocolAdapter adapter;
+
+    /** the server socket listening for events. */
+    private ServerSocket server;
+
+    /** <code>true</code> if the server should stop. */
+    private boolean stopRequest;
+    
+    /**
+     * Constructs a new object.
+     * @param protocolAdapter the protocol adapter
+     * @param portNumber the port number to listen on
+     */
+    public SocketETLServer(final SocketETLProtocolAdapter protocolAdapter,
+            final int portNumber) {
+        adapter = protocolAdapter;
+        port = portNumber;
+        setDaemon(true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void run() {
+        try {
+            server = new ServerSocket(port);
+            server.setReuseAddress(true);
+            LOGGER.info("listening on port " + port + " for MMI events");
+            while (!stopRequest) {
+                final Socket socket = server.accept();
+                LOGGER.info("connection from "
+                        + socket.getRemoteSocketAddress());
+                final SocketETLClient client =
+                        new SocketETLClient(adapter, socket);
+                client.start();
+            }
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+}
