@@ -4,7 +4,8 @@
 package org.jvoicexml.mmi.events;
 
 /**
- * @author dirk
+ * Base class for all MMI events.
+ * @author Dirk Schnelle-Walka
  *
  */
 public class MMIEvent {

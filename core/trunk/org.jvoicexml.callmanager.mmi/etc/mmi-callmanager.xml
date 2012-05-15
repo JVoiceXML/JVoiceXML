@@ -20,7 +20,8 @@
     <beans:property name="protocolAdapter">
       <beans:bean
        class="org.jvoicexml.callmanager.mmi.socket.SocketETLProtocolAdapter">
-      <beans:property name="port" value="4242" />
+        <beans:property name="port" value="4242" />
+      </beans:bean>
     </beans:property>
   </beans:bean>
 

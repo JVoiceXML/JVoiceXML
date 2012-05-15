@@ -66,32 +66,20 @@ You're using ${ant.java.version}
             description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
         <delete dir="${gen}" failonerror="false" />
-        <delete file="${dist.jndi.jar}" failonerror="false"/>
-    </target>
-
-    <target name="configuration" depends="-setup">
-        <copy todir="${config}" file="${etc}/jvxml-jndi.xml"
-            overwrite="true"/>
-        <replace file="${config}/jvxml-jndi.xml">
-          <replacefilter token="@jndi@" value="${jvxml.jndi.repository}"/>
-          <replacefilter token="@jndi.port@" value="${jvxml.jndi.port}"/>
-        </replace>
-      <replace file="${jvxml.core.dir}/run.xml">
-        <replacefilter token="@jndi.port@" value="${jvxml.jndi.port}"/>
-      </replace>
+        <delete file="${dist.jar}" failonerror="false"/>
     </target>
 
     <target name="preprocess" depends="-init">
-      <java classname="com.sun.tools.internal.xjc.Driver" dir="${gen}">
+      <java classname="com.sun.tools.internal.xjc.Driver">
         <arg value="-b"/>
-        <arg value="etc/jaxb-bindings.xml"/>
+        <arg value="${basedir}/etc/jaxb-bindings.xml"/>
         <arg value="-extension"/>
         <!--arg value="-Xinheritance"/-->
         <arg value="-p"/>
         <arg value="${component}"/>
         <arg value="-d"/>
-        <arg value="${gen}"/>
-        <arg value="etc/xsd/mmi.xsd"/>
+        <arg value="${basedir}/${gen}"/>
+        <arg value="${basedir}/etc/xsd/mmi.xsd"/>
         <!--classpath>
           <fileset dir="${jdk.home}">
             <include name="lib/tools.jar"/>
@@ -107,9 +95,7 @@ You're using ${ant.java.version}
         <javac destdir="${build}" includeantruntime="false"
                optimize="${javac.optimize}"
                debug="${javac.debug}"
-               deprecation="on"
-               source="${javac.source}"
-               target="${javac.target}">
+               deprecation="on">
             <src path="${src}" />
             <src path="${gen}" />
             <include name="${component.path}/**/*.java" />
@@ -208,17 +194,6 @@ You're using ${ant.java.version}
 
     <target name="distribution" depends="jar">
       <property name="distFolder" value="${dist}/${jvxml.version}" />
-      <copy todir="${distFolder}/config" overwrite="true">
-        <fileset dir="${etc}">
-          <include name="jvxml-jndi.xml" />
-        </fileset>
-      </copy>
-      <replace file="${distFolder}/config/jvxml-jndi.xml">
-        <replacefilter token="dist/"
-            value="lib/"/>
-        <replacefilter token="@jndi@" value="jndi"/>
-        <replacefilter token="@jndi.port@" value="${jvxml.jndi.port}"/>
-      </replace>
-      <copy todir="${distFolder}/lib" file="${dist.jndi.jar}" />
+      <copy todir="${distFolder}/lib" file="${dist.jar}" />
     </target>
 </project>

@@ -65,7 +65,8 @@ You're using ${ant.java.version}
 
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
-        <ant dir="../org.jvoicexml.mmi.events" target="clean"/>
+        <ant dir="../org.jvoicexml.mmi.events" target="clean"
+          inheritrefs="false"  inheritall="false"/>
         <delete dir="${build}" failonerror="false" />
         <delete file="${dist.jar}" failonerror="false"/>
     </target>
@@ -77,7 +78,8 @@ You're using ${ant.java.version}
     <target name="compile"
             depends="-init,-checkJavaVersion"
             description="Compile the sources">
-        <ant dir="../org.jvoicexml.mmi.events" target="compile"/>
+        <ant dir="../org.jvoicexml.mmi.events" target="jar"
+          inheritrefs="false" inheritall="false"/>
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
         <javac destdir="${build}" includeantruntime="false"
                optimize="${javac.optimize}"
@@ -189,10 +191,9 @@ You're using ${ant.java.version}
     <target name="distribution" depends="jar">
       <property name="distFolder" value="${dist}/${jvxml.version}" />
 	  <copy todir="${distFolder}/lib" file="${dist.jar}"/>
-      <copy tofile="${distFolder}/config/sip-callmanager.xml"
-        file="${etc}/sip-callmanager-dist.xml"/>
-      <copy todir="${distFolder}/lib">
-          <fileset refid="jainsip.lib" />
-      </copy>
+      <copy tofile="${distFolder}/config/mmi-callmanager.xml"
+        file="${etc}/mmi-callmanager-dist.xml"/>
+      <ant dir="../org.jvoicexml.mmi.events" target="clean"
+        inheritrefs="false" inheritall="false"/>
     </target>
 </project>
