@@ -26,6 +26,7 @@
 
 package org.jvoicexml.processor.srgs;
 
+import java.io.InputStream;
 import java.util.Collection;
 
 import junit.framework.Assert;
@@ -38,6 +39,7 @@ import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.Ruleref;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.srgs.Tag;
+import org.xml.sax.InputSource;
 
 /**
  * Test cases for {@link GrammarChecker}.
@@ -76,6 +78,25 @@ public final class TestGrammarChecker {
         final String[] tags = checker.getInterpretation();
         Assert.assertEquals(1, tags.length);
         Assert.assertEquals("coke", tags[0]);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.implementation.grammar.GrammarChecker#getInterpretation()}.
+     * @exception Exception test failed
+     */
+    @Test
+    public void testGetInterpretationCompoundObject() throws Exception {
+        final InputStream in =
+                TestGrammarChecker.class.getResourceAsStream("pizza.srgs");
+        final InputSource source = new InputSource(in);
+        final SrgsXmlDocument document = new SrgsXmlDocument(source);
+
+        final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
+        final GrammarGraph graph = parser.parse(document);
+        dump(graph, 2);
+        final GrammarChecker checker = new GrammarChecker(graph);
+        String[] words = new String[] {"a", "small", "pizza", "with", "ham"};
+        Assert.assertTrue(checker.isValid(words));
     }
 
     /**
