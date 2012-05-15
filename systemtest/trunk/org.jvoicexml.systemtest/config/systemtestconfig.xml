@@ -40,6 +40,6 @@
     -->
     <!-- passed: 43, 44, 45, 96, 11 -->
     <!-- fail: 564, 1001 dead loop -->
-    <property name="testcases" value="40-50" />
+    <property name="testcases" value="40" />
   </bean>
 </beans>
