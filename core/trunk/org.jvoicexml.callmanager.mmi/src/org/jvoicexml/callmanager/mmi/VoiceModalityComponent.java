@@ -27,10 +27,21 @@
 package org.jvoicexml.callmanager.mmi;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Session;
+import org.jvoicexml.SessionListener;
+import org.jvoicexml.client.UnsupportedResourceIdentifierException;
+import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.mmi.events.ContentURLType;
+import org.jvoicexml.mmi.events.DoneNotification;
 import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.MMIRequestIdentifier;
 import org.jvoicexml.mmi.events.StartRequest;
+import org.jvoicexml.mmi.events.StatusResponse;
 
 
 /**
@@ -39,7 +50,8 @@ import org.jvoicexml.mmi.events.StartRequest;
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
  */
-public class VoiceModalityComponent implements MMIEventListener {
+public final class VoiceModalityComponent
+    implements MMIEventListener, SessionListener {
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(VoiceModalityComponent.class);
@@ -50,11 +62,15 @@ public class VoiceModalityComponent implements MMIEventListener {
     /** Reference to the call manager. */
     private final MMICallManager callManager;
 
+    /** Created sessions. */
+    private final Map<Session, MMIRequestIdentifier> sessions;
+
     /**
      * Constructs a new object.
      */
     public VoiceModalityComponent(final MMICallManager cm) {
         callManager = cm;
+        sessions = new java.util.HashMap<Session, MMIRequestIdentifier>();
     }
 
     /**
@@ -77,6 +93,9 @@ public class VoiceModalityComponent implements MMIEventListener {
      */
     @Override
     public void receivedEvent(final MMIEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("received new MMI event: " + event);
+        }
         if (event instanceof StartRequest) {
             final StartRequest request = (StartRequest) event;
             startRequest(request);
@@ -88,6 +107,31 @@ public class VoiceModalityComponent implements MMIEventListener {
      * @param request the received event
      */
     private void startRequest(final StartRequest request) {
+        final ContentURLType contentUrlType = request.getContentURL();
+        final String contextId = request.getContext();
+        final String requestId = request.getRequestID();
+        final MMIRequestIdentifier ids =
+                new MMIRequestIdentifier(requestId, contextId);
+        final String href = contentUrlType.getHref();
+        LOGGER.info("received a start request for " + ids + " to " + href);
+        try {
+            final URI uri = new URI(href);
+            final Session session = callManager.createSession(uri);
+            sessions.put(session, ids);
+            session.addSessionListener(this);
+            final StatusResponse response = new StatusResponse();
+            response.setContext(contextId);
+            response.setRequestID(requestId);
+            adapter.sendMMIEvent(response);
+        } catch (URISyntaxException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (ErrorEvent e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (UnsupportedResourceIdentifierException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 
     /**
@@ -97,5 +141,35 @@ public class VoiceModalityComponent implements MMIEventListener {
         adapter.stop();
         LOGGER.info("stopped ETL protocol adapter " + adapter.getClass()
                 + "'");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sessionStarted(final Session session) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sessionEnded(final Session session) {
+        final MMIRequestIdentifier ids = sessions.remove(session);
+        if (ids == null) {
+            LOGGER.warn("session " + session.getSessionID()
+                    + " ended without MMI identifiers");
+            return;
+        }
+        final String requestId = ids.getRequestId();
+        final String contextId = ids.getContexId();
+        final DoneNotification done = new DoneNotification();
+        done.setContext(contextId);
+        done.setRequestID(requestId);
+        try {
+            adapter.sendMMIEvent(done);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 }

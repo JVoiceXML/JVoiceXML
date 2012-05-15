@@ -45,7 +45,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
  */
-public class MMICallManager implements CallManager {
+public final class MMICallManager implements CallManager {
     /** Reference to JVoiceXML. */
     private JVoiceXml jvxml;
 
@@ -128,6 +128,14 @@ public class MMICallManager implements CallManager {
     public void setJVoiceXml(JVoiceXml jvoicexml) {
         jvxml = jvoicexml;
 
+    }
+
+    /**
+     * Retrieves the voice modality component.
+     * @return the voice modality component. 
+     */
+    VoiceModalityComponent getVoiceModalityComponent() {
+        return mc;
     }
 
     /**

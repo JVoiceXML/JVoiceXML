@@ -27,10 +27,12 @@
 package org.jvoicexml.callmanager.mmi.socket;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
+import org.jvoicexml.mmi.events.MMIEvent;
 
 /**
  * A protocol adapter using plain sockets.
@@ -38,13 +40,16 @@ import org.jvoicexml.callmanager.mmi.MMIEventListener;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class SocketETLProtocolAdapter implements ETLProtocolAdapter {
+public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(SocketETLProtocolAdapter.class);
 
     /** The port number to listen on. */
     private int port;
+
+    /** the server socket listening for events. */
+    private ServerSocket server;
 
     /**
      * sets the port number to listen on.
@@ -66,7 +71,7 @@ public class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void addMMIEventListener(MMIEventListener listener) {
+    public void addMMIEventListener(final MMIEventListener listener) {
         // TODO Auto-generated method stub
 
     }
@@ -75,7 +80,7 @@ public class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void removeMMIEventListener(MMIEventListener listener) {
+    public void removeMMIEventListener(final MMIEventListener listener) {
         // TODO Auto-generated method stub
 
     }
@@ -84,7 +89,7 @@ public class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void sendMMIEvent(Object event) throws IllegalArgumentException {
+    public void sendMMIEvent(final MMIEvent event) {
         // TODO Auto-generated method stub
 
     }

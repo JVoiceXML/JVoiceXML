@@ -29,6 +29,7 @@ import java.io.IOException;
 
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
+import org.jvoicexml.mmi.events.MMIEvent;
 
 /**
  * Dummy implementation of an {@link ETLProtocolAdapter}.
@@ -36,7 +37,7 @@ import org.jvoicexml.callmanager.mmi.MMIEventListener;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class DummyETLProtocolAdapter implements ETLProtocolAdapter {
+public final class DummyETLProtocolAdapter implements ETLProtocolAdapter {
 
     /**
      * {@inheritDoc}
@@ -63,9 +64,7 @@ public class DummyETLProtocolAdapter implements ETLProtocolAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void sendMMIEvent(Object event) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-
+    public void sendMMIEvent(final MMIEvent event) {
     }
 
     /**
@@ -73,8 +72,6 @@ public class DummyETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void stop() {
-        // TODO Auto-generated method stub
-
     }
 
 }

@@ -29,6 +29,8 @@ package org.jvoicexml.callmanager.mmi;
 
 import java.io.IOException;
 
+import org.jvoicexml.mmi.events.MMIEvent;
+
 /**
  * Adapter to the actual used protocol used in the event and transport layer
  * to receive and respond to MMI events.
@@ -61,9 +63,10 @@ public interface ETLProtocolAdapter {
     /**
      * Sends the given MMI event to the event and transport layer.
      * @param event the event to send
-     * @exception IllegalArgumentException
+     * @exception IOException
+     *            error sending the event
      */
-    void sendMMIEvent(final Object event) throws IllegalArgumentException;
+    void sendMMIEvent(final MMIEvent event) throws IOException;
 
     /**
      * Stops the protocol adapter.
