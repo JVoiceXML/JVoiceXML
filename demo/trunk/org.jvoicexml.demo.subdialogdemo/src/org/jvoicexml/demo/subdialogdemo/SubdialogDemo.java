@@ -82,6 +82,8 @@ public final class SubdialogDemo {
         } catch (UnsupportedResourceIdentifierException e) {
             LOGGER.fatal(e.getMessage(), e);
             return;
+        } finally {
+            client.close();
         }
     }
 

@@ -38,7 +38,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.callmanager.CallParameters;
 import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.callmanager.ConnectionInformationCreationException;
-import org.jvoicexml.callmanager.ConnectionInformationFactory;
+import org.jvoicexml.callmanager.TerminalConnectionInformationFactory;
 
 /**
  * A factory for the {@link JtapiConnectionInformation}.
@@ -47,7 +47,7 @@ import org.jvoicexml.callmanager.ConnectionInformationFactory;
  * @since 0.7
  */
 public final class JtapiConnectionInformationFactory
-    implements ConnectionInformationFactory {
+    implements TerminalConnectionInformationFactory {
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(JtapiConnectionInformationFactory.class);

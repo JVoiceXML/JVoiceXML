@@ -96,7 +96,7 @@ public final class JVoiceXmlTerminal
     private CallControlCall currentCall;
 
     /** CallControl Listeners. */
-    private List<TelephonyListener> callControlListeners;
+    private final List<TelephonyListener> callControlListeners;
 
     /**
      * Constructs a new object.
@@ -104,7 +104,7 @@ public final class JVoiceXmlTerminal
      * @param cm
      *            the call manager.
      * @param service
-     *            GenericMediaService
+     *            GenericMediaServesiice
      */
     public JVoiceXmlTerminal(final JtapiCallManager cm,
                              final GenericMediaService service) {

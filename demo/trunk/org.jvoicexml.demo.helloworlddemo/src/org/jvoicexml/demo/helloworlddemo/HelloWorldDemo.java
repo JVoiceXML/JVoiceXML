@@ -63,9 +63,9 @@ public final class HelloWorldDemo {
 
         final GenericClient client = new GenericClient();
         final File file = new File("helloworld.vxml");
-        final URI subdialog = file.toURI();
+        final URI dialog = file.toURI();
         try {
-            Session session = client.call(subdialog, "jsapi10", "jsapi10",
+            Session session = client.call(dialog, "jsapi10", "jsapi10",
                     "dummy");
             session.waitSessionEnd();
             session.hangup();
@@ -78,6 +78,8 @@ public final class HelloWorldDemo {
         } catch (UnsupportedResourceIdentifierException e) {
             LOGGER.fatal(e.getMessage(), e);
             return;
+        } finally {
+            client.close();
         }
     }
 }
