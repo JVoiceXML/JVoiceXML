@@ -57,11 +57,11 @@ public class TestSocketETLServer {
         Thread.sleep(500);
         final Socket client = new Socket("localhost", 4242);
         final StartRequestBuilder builder = new StartRequestBuilder();
-        builder.addContextId("http://nowhere");
-        builder.addRequestId("4242");
+        builder.setContextId("http://nowhere");
+        builder.setRequestId("4242");
         final File file = new File("unittests/vxml/hello.vxml");
         final URI uri = file.toURI();
-        builder.addHref(uri);
+        builder.setHref(uri);
         final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
         final Marshaller marshaller = ctx.createMarshaller();
 

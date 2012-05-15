@@ -27,7 +27,7 @@ public final class StartRequestBuilder {
      * @param id the context id.
      * @return this object
      */
-    public StartRequestBuilder addContextId(final String id) {
+    public StartRequestBuilder setContextId(final String id) {
         request.setContext(id);
         return this;
     }
@@ -37,7 +37,7 @@ public final class StartRequestBuilder {
      * @param id the context id.
      * @return this object
      */
-    public StartRequestBuilder addRequestId(final String id) {
+    public StartRequestBuilder setRequestId(final String id) {
         request.setRequestID(id);
         return this;
     }
@@ -46,7 +46,7 @@ public final class StartRequestBuilder {
      * Adds a href.
      * @param href the href to add
      */
-    public StartRequestBuilder addHref(final String href) {
+    public StartRequestBuilder setHref(final String href) {
         ContentURLType urlType = request.getContentURL();
         if (urlType == null) {
             urlType = new ContentURLType();
@@ -60,7 +60,7 @@ public final class StartRequestBuilder {
      * Adds a href.
      * @param href the href to add
      */
-    public StartRequestBuilder addHref(final URI href) {
+    public StartRequestBuilder setHref(final URI href) {
         ContentURLType urlType = request.getContentURL();
         if (urlType == null) {
             urlType = new ContentURLType();

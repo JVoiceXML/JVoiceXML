@@ -86,11 +86,11 @@ public class TestVoiceModalityComponent {
     public void testReceivedEvent() {
         final VoiceModalityComponent mc = cm.getVoiceModalityComponent();
         final StartRequestBuilder builder = new StartRequestBuilder();
-        builder.addContextId("http://nowhere");
-        builder.addRequestId("4242");
+        builder.setContextId("http://nowhere");
+        builder.setRequestId("4242");
         final File file = new File("unittests/vxml/hello.vxml");
         final URI uri = file.toURI();
-        builder.addHref(uri);
+        builder.setHref(uri);
         final StartRequest request = builder.toStartRequest();
         mc.receivedEvent(request);
     }
