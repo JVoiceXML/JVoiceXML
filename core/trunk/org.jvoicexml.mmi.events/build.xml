@@ -84,7 +84,7 @@ You're using ${ant.java.version}
     <target name="preprocess" depends="-init">
       <java classname="com.sun.tools.internal.xjc.Driver" dir="${gen}">
         <arg value="-b"/>
-        <arg value="etc/jaxb-bindings.xjb"/>
+        <arg value="etc/jaxb-bindings.xml"/>
         <arg value="-extension"/>
         <!--arg value="-Xinheritance"/-->
         <arg value="-p"/>

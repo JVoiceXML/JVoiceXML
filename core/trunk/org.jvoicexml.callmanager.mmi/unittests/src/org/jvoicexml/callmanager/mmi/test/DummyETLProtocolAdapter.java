@@ -23,40 +23,26 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.callmanager.mmi;
+package org.jvoicexml.callmanager.mmi.test;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
+import org.jvoicexml.callmanager.mmi.MMIEventListener;
 
 /**
- * A protocol adapter using plain sockets.
+ * Dummy implementation of an {@link ETLProtocolAdapter}.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
  */
-public class SocketETLProtocolAdapter implements ETLProtocolAdapter {
-    /** Logger instance. */
-    private static final Logger LOGGER =
-        Logger.getLogger(SocketETLProtocolAdapter.class);
-
-    /** The port number to listen on. */
-    private int port;
-
-    /**
-     * sets the port number to listen on.
-     * @param portNumber the port number
-     */
-    public void setPort(final int portNumber) {
-        port = portNumber;
-    }
+public class DummyETLProtocolAdapter implements ETLProtocolAdapter {
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void start() throws IOException {
-        LOGGER.info("listening on port " + port + " for MMI events");
     }
 
     /**
@@ -64,8 +50,6 @@ public class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void addMMIEventListener(MMIEventListener listener) {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -73,8 +57,6 @@ public class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void removeMMIEventListener(MMIEventListener listener) {
-        // TODO Auto-generated method stub
-
     }
 
     /**

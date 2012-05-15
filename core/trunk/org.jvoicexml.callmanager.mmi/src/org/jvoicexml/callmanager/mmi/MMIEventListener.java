@@ -1,4 +1,3 @@
-package org.jvoicexml.callmanager.mmi;
 /*
  * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
  * Version: $LastChangedRevision: 2493 $
@@ -25,6 +24,10 @@ package org.jvoicexml.callmanager.mmi;
  *
  */
 
+package org.jvoicexml.callmanager.mmi;
+
+import org.jvoicexml.mmi.events.MMIEvent;
+
 /**
  * A listener to MMI events.
  * @author Dirk Schnelle-Walka
@@ -34,8 +37,6 @@ public interface MMIEventListener {
     /**
      * Notification that the given MMI event has been received.
      * @param event the received MMI event
-     * @throws IllegalArgumentException
-     *         if the event is not an MMI event
      */
-    void receivedEvent(final Object event) throws IllegalArgumentException;
+    void receivedEvent(final MMIEvent event);
 }

@@ -54,7 +54,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
         Logger.getLogger(BaseCallManager.class);
 
     /** Factory to create the {@link org.jvoicexml.ConnectionInformation} instances. */
-    private ConnectionInformationFactory clientFactory;
+    private TerminalConnectionInformationFactory clientFactory;
 
     /** Reference to JVoiceXml. */
     private JVoiceXml jvxml;
@@ -98,7 +98,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
      * @since 0.7
      */
     public final void setConnectionInformationFactory(
-            final ConnectionInformationFactory factory) {
+            final TerminalConnectionInformationFactory factory) {
         clientFactory = factory;
     }
 

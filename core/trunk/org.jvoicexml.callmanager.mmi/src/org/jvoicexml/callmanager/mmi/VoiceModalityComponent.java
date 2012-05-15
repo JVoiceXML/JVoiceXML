@@ -1,4 +1,3 @@
-package org.jvoicexml.callmanager.mmi;
 /*
  * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
  * Version: $LastChangedRevision: 2493 $
@@ -25,9 +24,12 @@ package org.jvoicexml.callmanager.mmi;
  *
  */
 
+package org.jvoicexml.callmanager.mmi;
+
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.mmi.events.MMIEvent;
 import org.jvoicexml.mmi.events.StartRequest;
 
 
@@ -44,6 +46,16 @@ public class VoiceModalityComponent implements MMIEventListener {
 
     /** Adpater for the event and transport layer. */
     private ETLProtocolAdapter adapter;
+
+    /** Reference to the call manager. */
+    private final MMICallManager callManager;
+
+    /**
+     * Constructs a new object.
+     */
+    public VoiceModalityComponent(final MMICallManager cm) {
+        callManager = cm;
+    }
 
     /**
      * Starts accepting MMI lifecycle events asynchronously.
@@ -64,8 +76,7 @@ public class VoiceModalityComponent implements MMIEventListener {
      * {@inheritDoc}
      */
     @Override
-    public void receivedEvent(final Object event)
-            throws IllegalArgumentException {
+    public void receivedEvent(final MMIEvent event) {
         if (event instanceof StartRequest) {
             final StartRequest request = (StartRequest) event;
             startRequest(request);

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns:xsi="http://www.w3.org/2000/10/XMLSchema-instance"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	version="2.1" xmlns="http://java.sun.com/xml/ns/jaxb"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd">
+
+	<globalBindings>
+		<serializable />
+		<xjc:superClass name="org.jvoicexml.mmi.events.MMIEvent" />
+	</globalBindings>
+
+	<!-- bindings schemaLocation="xsd/StartRequest.xsd" node="/xs:schema">
+		<bindings node="//xs:element[position() == 1]">
+			<property name="dataAttibute" />
+		</bindings>
+	</bindings-->
+</bindings>

@@ -1,4 +1,3 @@
-package org.jvoicexml.callmanager.mmi;
 /*
  * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
  * Version: $LastChangedRevision: 2493 $
@@ -24,6 +23,8 @@ package org.jvoicexml.callmanager.mmi;
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
+package org.jvoicexml.callmanager.mmi;
 
 
 import java.io.IOException;

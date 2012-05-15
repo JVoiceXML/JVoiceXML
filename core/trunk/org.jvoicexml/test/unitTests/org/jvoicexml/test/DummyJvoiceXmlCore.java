@@ -28,16 +28,20 @@ package org.jvoicexml.test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
+import org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
+import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifierCentral;
 import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
+import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 
 /**
  * This class provides a dummy implementation for {@link JVoiceXmlCore}.
@@ -61,6 +65,7 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
             documentServer = new JVoiceXmlDocumentServer();
             documentServer.addSchemeStrategy(new MappedDocumentStrategy());
             documentServer.addSchemeStrategy(new FileSchemeStrategy());
+            documentServer.addSchemeStrategy(new HttpSchemeStrategy());
         }
 
         return documentServer;
@@ -86,9 +91,11 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final ConnectionInformation client)
+    public Session createSession(final ConnectionInformation info)
         throws ErrorEvent {
-        return null;
+        final ImplementationPlatform platform =
+                new DummyImplementationPlatform();
+        return new JVoiceXmlSession(platform, this, info);
     }
 
     /**

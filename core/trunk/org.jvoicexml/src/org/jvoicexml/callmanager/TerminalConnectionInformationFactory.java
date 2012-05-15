@@ -32,12 +32,12 @@ import org.jvoicexml.ConnectionInformation;
 /**
  * Some {@link CallManager}s will require to use a custom implementation of a
  * {@link ConnectionInformation}. This factory allows to create those custom
- * implementations.
+ * implementations for use with a {@link Terminal}.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-public interface ConnectionInformationFactory {
+public interface TerminalConnectionInformationFactory {
     /**
      * Factory method to retrieve a new {@link ConnectionInformation}.
      * @param callManager the calling call manager instance

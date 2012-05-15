@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<xs:schema xmlns:mmi="http://www.w3.org/2008/04/mmi-arch" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://www.w3.org/2008/04/mmi-arch">
+<xs:schema xmlns:mmi="http://www.w3.org/2008/04/mmi-arch"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    jaxb:version="2.0"
+    attributeFormDefault="qualified" elementFormDefault="qualified"
+    targetNamespace="http://www.w3.org/2008/04/mmi-arch">
     <xs:annotation>
         <xs:documentation xml:lang="en">
              StartRequest schema for MMI Life cycle events version 1.0. 
@@ -20,7 +25,13 @@
             <xs:choice>
                 <xs:sequence>
                     <xs:element name="ContentURL" type="mmi:contentURLType"/>
-                    <xs:element minOccurs="0" name="data" type="mmi:anyComplexType"/>
+                    <xs:element minOccurs="0" name="data" type="mmi:anyComplexType">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <jaxb:property name="dataURL"/>
+                            </xs:appinfo>
+                        </xs:annotation>
+                   </xs:element>
                 </xs:sequence>
                 <xs:sequence>
                     <xs:element name="Content" type="mmi:anyComplexType"/>
