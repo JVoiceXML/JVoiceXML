@@ -69,7 +69,17 @@ You're using ${ant.java.version}
         <delete file="${dist.jar}" failonerror="false"/>
     </target>
 
-    <target name="preprocess" depends="-init">
+    <target name="-up2date">
+      <uptodate property="schemasChanged" targetfile="${gen}/__gen__">
+        <srcfiles dir="${basedir}">
+          <include name="build.xml"/>
+          <include name="etc/jaxb-bindings.xml"/>
+          <include name="etc/xsd/*.xsd" />
+        </srcfiles>
+      </uptodate>
+    </target>
+
+    <target name="preprocess" depends="-init,-up2date" unless="schemasChanged">
       <java classname="com.sun.tools.internal.xjc.Driver">
         <arg value="-b"/>
         <arg value="${basedir}/etc/jaxb-bindings.xml"/>
@@ -86,6 +96,7 @@ You're using ${ant.java.version}
           </fileset>
         </classpath-->
       </java>
+      <touch file="${gen}/__gen__"/>
     </target>
   
     <target name="compile"

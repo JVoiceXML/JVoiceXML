@@ -36,10 +36,12 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.mmi.events.CancelRequest;
+import org.jvoicexml.mmi.events.CancelResponse;
+import org.jvoicexml.mmi.events.CancelResponseBuilder;
 import org.jvoicexml.mmi.events.ContentURLType;
 import org.jvoicexml.mmi.events.DoneNotification;
 import org.jvoicexml.mmi.events.MMIEvent;
-import org.jvoicexml.mmi.events.MMIRequestIdentifier;
 import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.mmi.events.StatusResponse;
 
@@ -63,14 +65,14 @@ public final class VoiceModalityComponent
     private final MMICallManager callManager;
 
     /** Created sessions. */
-    private final Map<Session, MMIRequestIdentifier> sessions;
+    private final Map<Session, ChannelMMIRequestIdentifier> sessions;
 
     /**
      * Constructs a new object.
      */
     public VoiceModalityComponent(final MMICallManager cm) {
         callManager = cm;
-        sessions = new java.util.HashMap<Session, MMIRequestIdentifier>();
+        sessions = new java.util.HashMap<Session, ChannelMMIRequestIdentifier>();
     }
 
     /**
@@ -89,6 +91,24 @@ public final class VoiceModalityComponent
     }
 
     /**
+     * Determines the session from the given identifiers.
+     * @param requestId the request id
+     * @param contextId the context id
+     * @return found session, or <code>null</code> if there is no session
+     */
+    private Session findSession(final String requestId,
+            final String contextId) {
+        for (ChannelMMIRequestIdentifier ids : sessions.values()) {
+            final String reqId = ids.getRequestId();
+            final String ctxId = ids.getContexId();
+            if (requestId.equals(reqId) || contextId.equals(ctxId)) {
+                return ids.getSession();
+            }
+        }
+        return null;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -99,6 +119,9 @@ public final class VoiceModalityComponent
         if (event instanceof StartRequest) {
             final StartRequest request = (StartRequest) event;
             startRequest(request);
+        } else if (event instanceof CancelRequest) {
+            final CancelRequest request = (CancelRequest) event;
+            cancelRequest(request);
         }
     }
 
@@ -110,25 +133,62 @@ public final class VoiceModalityComponent
         final ContentURLType contentUrlType = request.getContentURL();
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        final MMIRequestIdentifier ids =
-                new MMIRequestIdentifier(requestId, contextId);
+        final ChannelMMIRequestIdentifier ids =
+                new ChannelMMIRequestIdentifier(requestId, contextId);
+        final Object channel = request.getSource();
+        ids.setChannel(channel);
         final String href = contentUrlType.getHref();
         LOGGER.info("received a start request for " + ids + " to " + href);
         try {
             final URI uri = new URI(href);
             final Session session = callManager.createSession(uri);
-            sessions.put(session, ids);
+            synchronized (sessions) {
+                sessions.put(session, ids);
+            }
             session.addSessionListener(this);
+            ids.setSession(session);
             final StatusResponse response = new StatusResponse();
             response.setContext(contextId);
             response.setRequestID(requestId);
-            adapter.sendMMIEvent(response);
+            adapter.sendMMIEvent(channel, response);
         } catch (URISyntaxException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (ErrorEvent e) {
             LOGGER.error(e.getMessage(), e);
         } catch (UnsupportedResourceIdentifierException e) {
             LOGGER.error(e.getMessage(), e);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Processes a cancel request.
+     * @param request the cancel request.
+     */
+    private void cancelRequest(final CancelRequest request) {
+        final String contextId = request.getContext();
+        final String requestId = request.getRequestID();
+        LOGGER.info("received a cancel request for " + requestId + ", "
+                + contextId);
+        final Session session = findSession(requestId, contextId);
+        if (session != null) {
+            session.hangup();
+        }
+        final CancelResponseBuilder builder = new CancelResponseBuilder();
+        builder.setRequestId(requestId);
+        builder.setContextId(contextId);
+        if (session == null) {
+            builder.setStatusFailure();
+            builder.addStatusInfo(
+                    "no running session for the given request and context ids");
+        } else {
+            builder.setStatusSuccess();
+        }
+        final CancelResponse response = builder.toCancelResponse();
+        final Object channel = request.getSource();
+        try {
+            adapter.sendMMIEvent(channel, response);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -155,7 +215,10 @@ public final class VoiceModalityComponent
      */
     @Override
     public void sessionEnded(final Session session) {
-        final MMIRequestIdentifier ids = sessions.remove(session);
+        final ChannelMMIRequestIdentifier ids;
+        synchronized (sessions) {
+            ids = sessions.remove(session);
+        }
         if (ids == null) {
             LOGGER.warn("session " + session.getSessionID()
                     + " ended without MMI identifiers");
@@ -167,7 +230,8 @@ public final class VoiceModalityComponent
         done.setContext(contextId);
         done.setRequestID(requestId);
         try {
-            adapter.sendMMIEvent(done);
+            final Object channel = ids.getChannel();
+            adapter.sendMMIEvent(channel, done);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }

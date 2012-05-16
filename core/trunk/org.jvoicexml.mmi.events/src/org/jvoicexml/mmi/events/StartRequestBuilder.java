@@ -8,8 +8,8 @@ import java.net.URI;
 /**
  * A builder to create a start request.
  * 
- * @author Dirk Schnelle
- * 
+ * @author Dirk Schnelle-Walka
+ * @since 0.7.6
  */
 public final class StartRequestBuilder {
     /** The created start request. */
@@ -43,15 +43,24 @@ public final class StartRequestBuilder {
     }
 
     /**
-     * Adds a href.
-     * @param href the href to add
+     * Lazy instantiation of the content URL type.
+     * @return content url type
      */
-    public StartRequestBuilder setHref(final String href) {
+    private ContentURLType getContentURLType() {
         ContentURLType urlType = request.getContentURL();
         if (urlType == null) {
             urlType = new ContentURLType();
             request.setContentURL(urlType);
         }
+        return urlType;
+    }
+
+    /**
+     * Adds a href.
+     * @param href the href to add
+     */
+    public StartRequestBuilder setHref(final String href) {
+        ContentURLType urlType = getContentURLType();
         urlType.setHref(href);
         return this;
     }
@@ -61,11 +70,7 @@ public final class StartRequestBuilder {
      * @param href the href to add
      */
     public StartRequestBuilder setHref(final URI href) {
-        ContentURLType urlType = request.getContentURL();
-        if (urlType == null) {
-            urlType = new ContentURLType();
-            request.setContentURL(urlType);
-        }
+        ContentURLType urlType = getContentURLType();
         urlType.setHref(href.toString());
         return this;
     }

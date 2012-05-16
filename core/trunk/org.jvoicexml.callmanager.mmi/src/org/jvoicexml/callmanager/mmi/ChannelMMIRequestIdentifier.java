@@ -23,55 +23,62 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.callmanager.mmi.test;
+package org.jvoicexml.callmanager.mmi;
 
-import java.io.IOException;
-
-import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
-import org.jvoicexml.callmanager.mmi.MMIEventListener;
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.Session;
+import org.jvoicexml.mmi.events.MMIRequestIdentifier;
 
 /**
- * Dummy implementation of an {@link ETLProtocolAdapter}.
- * @author Dirk Schnelle-Walka
+ * Associated a communication channel object with MMI request identifiers.
+ * @author Dirk Schnelle-walka
  * @version $Revision: $
  * @since 0.7.6
  */
-public final class DummyETLProtocolAdapter implements ETLProtocolAdapter {
+public class ChannelMMIRequestIdentifier extends MMIRequestIdentifier {
+    /** The associated communication channel. */
+    private Object channel;
+
+    /** An associated session. */
+    private Session session;
 
     /**
-     * {@inheritDoc}
+     * Constructs a new object.
+     * @param reqId the request id
+     * @param ctxId the context id
      */
-    @Override
-    public void start() throws IOException {
+    public ChannelMMIRequestIdentifier(final String reqId, final String ctxId) {
+        super(reqId, ctxId);
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the channel.
+     * @return the channel
      */
-    @Override
-    public void addMMIEventListener(MMIEventListener listener) {
+    public Object getChannel() {
+        return channel;
     }
 
     /**
-     * {@inheritDoc}
+     * Sets the channel.
+     * @param ch the channel.
      */
-    @Override
-    public void removeMMIEventListener(MMIEventListener listener) {
+    public void setChannel(final Object ch) {
+        channel = ch;
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the session.
+     * @return the session
      */
-    @Override
-    public void sendMMIEvent(final Object channel, final MMIEvent event) {
+    public Session getSession() {
+        return session;
     }
 
     /**
-     * {@inheritDoc}
+     * Sets the session.
+     * @param sess the session.
      */
-    @Override
-    public void stop() {
+    public void setSession(final Session sess) {
+        session = sess;
     }
-
 }

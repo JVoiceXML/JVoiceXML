@@ -27,10 +27,12 @@ package org.jvoicexml.callmanager.mmi.socket;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
@@ -68,22 +70,40 @@ final class SocketETLClient extends Thread {
     
     @Override
     public void run() {
-        System.out.println("reading...");
         try {
             final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
             final Unmarshaller unmarshaller = ctx.createUnmarshaller();
             final InputStream in = socket.getInputStream();
-            final Object o = unmarshaller.unmarshal(in);
-            if (o instanceof MMIEvent) {
-                final MMIEvent event = (MMIEvent) o;
-                adapter.notifyMMIEvent(event);
-            } else {
-                LOGGER.warn("received unknown MMI object: " + o);
+            while(!isInterrupted()) {
+                final Object o = unmarshaller.unmarshal(in);
+                if (o instanceof MMIEvent) {
+                    final MMIEvent event = (MMIEvent) o;
+                    event.setSource(this);
+                    adapter.notifyMMIEvent(event);
+                } else {
+                    LOGGER.warn("received unknown MMI object: " + o);
+                }
             }
         } catch (JAXBException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Sends the MMI event to the client connect to this socket.
+     * @param event the event to send.
+     */
+    public void send(final MMIEvent event) throws IOException {
+        LOGGER.info("sending " + event);
+        try {
+            final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
+            final Marshaller marshaller = ctx.createMarshaller();
+            final OutputStream out = socket.getOutputStream();
+            marshaller.marshal(event, out);
+        } catch (JAXBException e) {
+            throw new IOException(e.getMessage(), e);
         }
     }
 }

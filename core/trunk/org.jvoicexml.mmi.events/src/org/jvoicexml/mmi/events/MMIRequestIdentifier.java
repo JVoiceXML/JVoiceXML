@@ -26,12 +26,16 @@
 package org.jvoicexml.mmi.events;
 
 /**
- * Container to stroe all request identifier for MMI events in a single place.
+ * Container to store all request identifier for MMI events in a single place.
+ * <p>
+ * It may be extended by custom implementations to also add other information
+ * associated with this ids.
+ * </p>
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
  */
-public final class MMIRequestIdentifier {
+public class MMIRequestIdentifier {
     /**
      * A unique identifier for a Request/Response pair. Most life-cycle events
      * come in Request/Response pairs that share a common RequestID. For any
@@ -63,7 +67,7 @@ public final class MMIRequestIdentifier {
      * Retrieves the request id.
      * @return the request id
      */
-    public String getRequestId() {
+    public final String getRequestId() {
         return requestId;
     }
 
@@ -71,7 +75,7 @@ public final class MMIRequestIdentifier {
      * Retrieves the context id.
      * @return the context id.
      */
-    public String getContexId() {
+    public final String getContexId() {
         return contexId;
     }
 }

@@ -29,7 +29,6 @@ package org.jvoicexml.callmanager.mmi.socket;
 import java.io.IOException;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
 import org.jvoicexml.mmi.events.MMIEvent;
@@ -41,10 +40,6 @@ import org.jvoicexml.mmi.events.MMIEvent;
  * @since 0.7.6
  */
 public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
-    /** Logger instance. */
-    private static final Logger LOGGER =
-        Logger.getLogger(SocketETLProtocolAdapter.class);
-
     /** Registered listeners for MMI events. */
     private Collection<MMIEventListener> listeners;
 
@@ -95,8 +90,10 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void sendMMIEvent(final MMIEvent event) {
-        LOGGER.warn("sending currently not implented. cannot send " + event);
+    public void sendMMIEvent(final Object channel, final MMIEvent event)
+        throws IOException {
+        final SocketETLClient client = (SocketETLClient) channel;
+        client.send(event);
     }
 
     /**

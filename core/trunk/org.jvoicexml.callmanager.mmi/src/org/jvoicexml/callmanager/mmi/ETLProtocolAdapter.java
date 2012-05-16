@@ -62,11 +62,13 @@ public interface ETLProtocolAdapter {
 
     /**
      * Sends the given MMI event to the event and transport layer.
+     * @param channel a communication channel or an identifier thereof
      * @param event the event to send
      * @exception IOException
      *            error sending the event
      */
-    void sendMMIEvent(final MMIEvent event) throws IOException;
+    void sendMMIEvent(final Object channel, final MMIEvent event)
+            throws IOException;
 
     /**
      * Stops the protocol adapter.

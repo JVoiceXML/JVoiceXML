@@ -64,7 +64,6 @@ public class TestSocketETLServer {
         builder.setHref(uri);
         final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
         final Marshaller marshaller = ctx.createMarshaller();
-
         final StartRequest request = builder.toStartRequest();
         final OutputStream out = client.getOutputStream();
         marshaller.marshal(request, out);
