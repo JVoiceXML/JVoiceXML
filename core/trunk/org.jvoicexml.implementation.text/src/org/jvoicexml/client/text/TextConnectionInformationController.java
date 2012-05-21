@@ -32,8 +32,8 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.client.ConnectionInformationController;
 
 /**
- * 
- * @author dirk
+ * A {@link ConnectionInformationController} for the text platform.
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
  */
