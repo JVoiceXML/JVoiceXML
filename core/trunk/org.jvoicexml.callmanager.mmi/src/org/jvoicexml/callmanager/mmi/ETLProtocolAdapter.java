@@ -62,6 +62,11 @@ public interface ETLProtocolAdapter {
 
     /**
      * Sends the given MMI event to the event and transport layer.
+     * <p>
+     * Implementations will also have to set the source attribute for
+     * response message. The target attributes are copied from the received
+     * request messages.
+     * </p>
      * @param channel a communication channel or an identifier thereof
      * @param event the event to send
      * @exception IOException

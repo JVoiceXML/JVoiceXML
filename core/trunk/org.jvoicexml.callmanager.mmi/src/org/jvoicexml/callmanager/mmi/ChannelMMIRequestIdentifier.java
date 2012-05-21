@@ -41,6 +41,9 @@ public class ChannelMMIRequestIdentifier extends MMIRequestIdentifier {
     /** An associated session. */
     private Session session;
 
+    /** State of this session. */
+    private ModalityComponentState state;
+
     /**
      * Constructs a new object.
      * @param reqId the request id
@@ -81,4 +84,21 @@ public class ChannelMMIRequestIdentifier extends MMIRequestIdentifier {
     public void setSession(final Session sess) {
         session = sess;
     }
+
+    /**
+     * Retrieves the state of this session.
+     * @return the current state
+     */
+    public ModalityComponentState getState() {
+        return state;
+    }
+
+    /**
+     * Sets the new state for this session.
+     * @param the new state
+     */
+    public void setState(final ModalityComponentState value) {
+        state = value;
+    }
+
 }

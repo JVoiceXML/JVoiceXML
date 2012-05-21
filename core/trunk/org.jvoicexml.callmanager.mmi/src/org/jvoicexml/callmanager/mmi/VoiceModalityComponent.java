@@ -43,7 +43,8 @@ import org.jvoicexml.mmi.events.ContentURLType;
 import org.jvoicexml.mmi.events.DoneNotification;
 import org.jvoicexml.mmi.events.MMIEvent;
 import org.jvoicexml.mmi.events.StartRequest;
-import org.jvoicexml.mmi.events.StatusResponse;
+import org.jvoicexml.mmi.events.StartResponse;
+import org.jvoicexml.mmi.events.StartResponseBuilder;
 
 
 /**
@@ -88,6 +89,7 @@ public final class VoiceModalityComponent
         LOGGER.info("starting ETL protocol adapter " + adapter.getClass()
                 + "'");
         adapter.start();
+        
     }
 
     /**
@@ -147,9 +149,12 @@ public final class VoiceModalityComponent
             }
             session.addSessionListener(this);
             ids.setSession(session);
-            final StatusResponse response = new StatusResponse();
-            response.setContext(contextId);
-            response.setRequestID(requestId);
+            final StartResponseBuilder builder = new StartResponseBuilder();
+            final String target = request.getSource();
+            builder.setTarget(target);
+            builder.setContextId(contextId);
+            builder.setRequestId(requestId);
+            final StartResponse response = builder.toStartResponse();
             adapter.sendMMIEvent(channel, response);
         } catch (URISyntaxException e) {
             LOGGER.error(e.getMessage(), e);
@@ -178,6 +183,8 @@ public final class VoiceModalityComponent
         final CancelResponseBuilder builder = new CancelResponseBuilder();
         builder.setRequestId(requestId);
         builder.setContextId(contextId);
+        final String target = request.getSource();
+        builder.setTarget(target);
         if (session == null) {
             builder.setStatusFailure();
             builder.addStatusInfo(
