@@ -41,13 +41,20 @@ import org.jvoicexml.mmi.events.MMIEvent;
  */
 public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
     /** Registered listeners for MMI events. */
-    private Collection<MMIEventListener> listeners;
+    private final Collection<MMIEventListener> listeners;
 
     /** The port number to listen on. */
     private int port;
 
     /** The server. */
     private SocketETLServer server;
+
+    /**
+     * Constructs a new object.
+     */
+    public SocketETLProtocolAdapter() {
+        listeners = new java.util.ArrayList<MMIEventListener>();
+    }
 
     /**
      * sets the port number to listen on.

@@ -26,10 +26,14 @@
 package org.jvoicexml.callmanager.mmi.socket;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.client.TcpUriFactory;
 
 /**
  * The server thread who is listening for clients.
@@ -77,13 +81,17 @@ public final class SocketETLServer extends Thread {
             LOGGER.info("listening on port " + port + " for MMI events");
             while (!stopRequest) {
                 final Socket socket = server.accept();
-                LOGGER.info("connection from "
-                        + socket.getRemoteSocketAddress());
+                final InetSocketAddress address =
+                        (InetSocketAddress) socket.getRemoteSocketAddress();
+                final URI uri = TcpUriFactory.createUri(address);
+                LOGGER.info("connection from " + uri);
                 final SocketETLClient client =
                         new SocketETLClient(adapter, socket);
                 client.start();
             }
         } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (URISyntaxException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }

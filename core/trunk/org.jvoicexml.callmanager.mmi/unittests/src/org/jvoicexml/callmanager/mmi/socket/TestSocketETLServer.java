@@ -33,7 +33,12 @@ import java.net.URI;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
+import junit.framework.Assert;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.callmanager.mmi.MMIEventListener;
+import org.jvoicexml.mmi.events.MMIEvent;
 import org.jvoicexml.mmi.events.Mmi;
 import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.mmi.events.StartRequestBuilder;
@@ -44,7 +49,21 @@ import org.jvoicexml.mmi.events.StartRequestBuilder;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class TestSocketETLServer {
+public class TestSocketETLServer implements MMIEventListener {
+    /** Notification mechanism. */
+    private Object lock;
+
+    /** The received event. */
+    private MMIEvent event;
+
+    /**
+     * Set up the test environment
+     */
+    @Before
+    public void setUp() {
+        lock = new Object();
+    }
+
     /**
      * Test method for {@link org.jvoicexml.callmanager.mmi.socket.SocketETLServer#run()}.
      * @exception Exception
@@ -52,7 +71,9 @@ public class TestSocketETLServer {
      */
     @Test
     public void testRun() throws Exception {
-        final SocketETLServer server = new SocketETLServer(null, 4242);
+        final SocketETLProtocolAdapter adapter = new SocketETLProtocolAdapter();
+        adapter.addMMIEventListener(this);
+        final SocketETLServer server = new SocketETLServer(adapter, 4242);
         server.start();
         Thread.sleep(500);
         final Socket client = new Socket("localhost", 4242);
@@ -68,8 +89,23 @@ public class TestSocketETLServer {
         final OutputStream out = client.getOutputStream();
         marshaller.marshal(request, out);
         out.flush();
-        Thread.sleep(2000);
         out.close();
+        synchronized (lock) {
+            lock.wait();
+        }
+        Assert.assertTrue(event instanceof StartRequest);
+        client.close();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void receivedEvent(final MMIEvent evt) {
+        event = evt;
+        synchronized (lock) {
+            lock.notifyAll();
+        }
     }
 
 }

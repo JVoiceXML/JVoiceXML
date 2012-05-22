@@ -39,6 +39,9 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.mmi.events.CancelRequest;
 import org.jvoicexml.mmi.events.CancelResponse;
 import org.jvoicexml.mmi.events.CancelResponseBuilder;
+import org.jvoicexml.mmi.events.ClearContextRequest;
+import org.jvoicexml.mmi.events.ClearContextResponse;
+import org.jvoicexml.mmi.events.ClearContextResponseBuilder;
 import org.jvoicexml.mmi.events.ContentURLType;
 import org.jvoicexml.mmi.events.DoneNotification;
 import org.jvoicexml.mmi.events.MMIEvent;
@@ -93,18 +96,19 @@ public final class VoiceModalityComponent
     }
 
     /**
-     * Determines the session from the given identifiers.
+     * Determines the {@link ChannelMMIRequestIdentifier} from the given
+     * identifiers.
      * @param requestId the request id
      * @param contextId the context id
-     * @return found session, or <code>null</code> if there is no session
+     * @return found identifiers, or <code>null</code> if there is no identifier
      */
-    private Session findSession(final String requestId,
-            final String contextId) {
+    private ChannelMMIRequestIdentifier findChannelRequestIdentifier(
+            final String requestId, final String contextId) {
         for (ChannelMMIRequestIdentifier ids : sessions.values()) {
             final String reqId = ids.getRequestId();
             final String ctxId = ids.getContexId();
             if (requestId.equals(reqId) || contextId.equals(ctxId)) {
-                return ids.getSession();
+                return ids;
             }
         }
         return null;
@@ -124,6 +128,9 @@ public final class VoiceModalityComponent
         } else if (event instanceof CancelRequest) {
             final CancelRequest request = (CancelRequest) event;
             cancelRequest(request);
+        } else if (event instanceof ClearContextRequest) {
+            final ClearContextRequest request = (ClearContextRequest) event;
+            clearContext(request);
         }
     }
 
@@ -135,14 +142,26 @@ public final class VoiceModalityComponent
         final ContentURLType contentUrlType = request.getContentURL();
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        final ChannelMMIRequestIdentifier ids =
-                new ChannelMMIRequestIdentifier(requestId, contextId);
+        LOGGER.info("received a cancel request for " + requestId + ", "
+                + contextId);
+        ChannelMMIRequestIdentifier ids =
+                findChannelRequestIdentifier(requestId, contextId);
+        if (ids == null) {
+            ids = new ChannelMMIRequestIdentifier(requestId, contextId);
+        } else {
+            final ModalityComponentState state = ids.getState();
+            if (state == ModalityComponentState.RUNNING) {
+                LOGGER.info("terminating old session");
+                final Session session = ids.getSession();
+                session.hangup();
+            }
+        }
         final Object channel = request.getSource();
         ids.setChannel(channel);
         final String href = contentUrlType.getHref();
-        LOGGER.info("received a start request for " + ids + " to " + href);
         try {
             final URI uri = new URI(href);
+            LOGGER.info("calling '" + uri + "'");
             final Session session = callManager.createSession(uri);
             synchronized (sessions) {
                 sessions.put(session, ids);
@@ -156,6 +175,8 @@ public final class VoiceModalityComponent
             builder.setRequestId(requestId);
             final StartResponse response = builder.toStartResponse();
             adapter.sendMMIEvent(channel, response);
+            ids.setState(ModalityComponentState.RUNNING);
+            LOGGER.info(ids + ": " + ModalityComponentState.RUNNING);
         } catch (URISyntaxException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (ErrorEvent e) {
@@ -176,26 +197,93 @@ public final class VoiceModalityComponent
         final String requestId = request.getRequestID();
         LOGGER.info("received a cancel request for " + requestId + ", "
                 + contextId);
-        final Session session = findSession(requestId, contextId);
-        if (session != null) {
-            session.hangup();
+        final ChannelMMIRequestIdentifier ids =
+                findChannelRequestIdentifier(requestId, contextId);
+        String statusInfo = null;
+        if (ids == null) {
+            statusInfo =
+                    "no running session for the given request and context ids";
+        } else {
+            final ModalityComponentState state = ids.getState();
+            if (state == ModalityComponentState.IDLE) {
+                statusInfo = "session is idle: ignoring cancel request";
+            } else {
+                LOGGER.info("hanging up session");
+                final Session session = ids.getSession();
+                session.hangup();
+            }
         }
         final CancelResponseBuilder builder = new CancelResponseBuilder();
         builder.setRequestId(requestId);
         builder.setContextId(contextId);
         final String target = request.getSource();
         builder.setTarget(target);
-        if (session == null) {
-            builder.setStatusFailure();
-            builder.addStatusInfo(
-                    "no running session for the given request and context ids");
-        } else {
+        if (statusInfo == null) {
             builder.setStatusSuccess();
+        } else {
+            LOGGER.info(statusInfo);
+            builder.setStatusFailure();
+            builder.addStatusInfo(statusInfo);
         }
         final CancelResponse response = builder.toCancelResponse();
         final Object channel = request.getSource();
         try {
             adapter.sendMMIEvent(channel, response);
+            if (statusInfo == null) {
+                ids.setState(ModalityComponentState.IDLE);
+                LOGGER.info(ids + ": " + ModalityComponentState.RUNNING);
+            }
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Processes a clear context request.
+     * @param request the clear context request.
+     */
+    private void clearContext(final ClearContextRequest request) {
+        final String contextId = request.getContext();
+        final String requestId = request.getRequestID();
+        LOGGER.info("received a clear contex request for " + requestId + ", "
+                + contextId);
+        final ChannelMMIRequestIdentifier ids =
+                findChannelRequestIdentifier(requestId, contextId);
+        String statusInfo = null;
+        if (ids == null) {
+            statusInfo =
+                    "no running session for the given request and context ids";
+        } else {
+            synchronized (sessions) {
+                sessions.remove(ids);
+            }
+            final ModalityComponentState state = ids.getState();
+            if (state == ModalityComponentState.RUNNING) {
+                LOGGER.info("hanging up session");
+                final Session session = ids.getSession();
+                session.hangup();
+            }
+        }
+        final ClearContextResponseBuilder builder =
+                new ClearContextResponseBuilder();
+        builder.setRequestId(requestId);
+        builder.setContextId(contextId);
+        final String target = request.getSource();
+        builder.setTarget(target);
+        if (statusInfo == null) {
+            builder.setStatusSuccess();
+        } else {
+            LOGGER.info(statusInfo);
+            builder.setStatusFailure();
+            builder.addStatusInfo(statusInfo);
+        }
+        final ClearContextResponse response =
+                builder.toClearContextResponse();
+        final Object channel = request.getSource();
+        try {
+            adapter.sendMMIEvent(channel, response);
+            if (statusInfo == null) {
+            }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }

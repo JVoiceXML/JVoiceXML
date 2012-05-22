@@ -28,7 +28,10 @@ package org.jvoicexml.callmanager.mmi.socket;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -36,6 +39,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.client.TcpUriFactory;
+import org.jvoicexml.mmi.events.CommonAttributeAdapter;
 import org.jvoicexml.mmi.events.MMIEvent;
 import org.jvoicexml.mmi.events.Mmi;
 
@@ -79,6 +84,7 @@ final class SocketETLClient extends Thread {
                 if (o instanceof MMIEvent) {
                     final MMIEvent event = (MMIEvent) o;
                     event.setSource(this);
+                    LOGGER.info("received MMI event: " + event);
                     adapter.notifyMMIEvent(event);
                 } else {
                     LOGGER.warn("received unknown MMI object: " + o);
@@ -96,13 +102,23 @@ final class SocketETLClient extends Thread {
      * @param event the event to send.
      */
     public void send(final MMIEvent event) throws IOException {
-        LOGGER.info("sending " + event);
         try {
+            // Adapt the source address
+            final InetAddress address = socket.getLocalAddress();
+            final URI uri = TcpUriFactory.createUri(address);
+            final CommonAttributeAdapter adapter =
+                    new CommonAttributeAdapter(event);
+            adapter.setSource(uri.toString());
+            LOGGER.info("sending " + event);
+
+            // Send the message
             final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
             final Marshaller marshaller = ctx.createMarshaller();
             final OutputStream out = socket.getOutputStream();
             marshaller.marshal(event, out);
         } catch (JAXBException e) {
+            throw new IOException(e.getMessage(), e);
+        } catch (URISyntaxException e) {
             throw new IOException(e.getMessage(), e);
         }
     }
