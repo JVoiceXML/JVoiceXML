@@ -34,7 +34,7 @@ import org.jvoicexml.mmi.events.MMIRequestIdentifier;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class ChannelMMIRequestIdentifier extends MMIRequestIdentifier {
+public class MMIContext extends MMIRequestIdentifier {
     /** The associated communication channel. */
     private Object channel;
 
@@ -49,7 +49,7 @@ public class ChannelMMIRequestIdentifier extends MMIRequestIdentifier {
      * @param reqId the request id
      * @param ctxId the context id
      */
-    public ChannelMMIRequestIdentifier(final String reqId, final String ctxId) {
+    public MMIContext(final String reqId, final String ctxId) {
         super(reqId, ctxId);
     }
 
