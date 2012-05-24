@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.mmi.events"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.config"/>
+	<classpathentry kind="lib" path="/org.jvoicexml.config/3rdparty/springframework3.0.5/lib/org.springframework.beans-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml.config/3rdparty/springframework3.0.5/lib/org.springframework.core-3.0.5.RELEASE.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.config/3rdparty/springframework3.0.5/org.springframework-api.zip!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.callmanager.mmi"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
