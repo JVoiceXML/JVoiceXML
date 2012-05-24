@@ -37,8 +37,8 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
-import org.jvoicexml.mmi.events.MMIEvent;
 import org.jvoicexml.mmi.events.Mmi;
 import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.mmi.events.StartRequestBuilder;
@@ -54,7 +54,7 @@ public class TestSocketETLServer implements MMIEventListener {
     private Object lock;
 
     /** The received event. */
-    private MMIEvent event;
+    private DecoratedMMIEvent event;
 
     /**
      * Set up the test environment
@@ -93,7 +93,7 @@ public class TestSocketETLServer implements MMIEventListener {
         synchronized (lock) {
             lock.wait();
         }
-        Assert.assertTrue(event instanceof StartRequest);
+        Assert.assertTrue(event.getEvent() instanceof StartRequest);
         client.close();
     }
 
@@ -101,7 +101,7 @@ public class TestSocketETLServer implements MMIEventListener {
      * {@inheritDoc}
      */
     @Override
-    public void receivedEvent(final MMIEvent evt) {
+    public void receivedEvent(final DecoratedMMIEvent evt) {
         event = evt;
         synchronized (lock) {
             lock.notifyAll();

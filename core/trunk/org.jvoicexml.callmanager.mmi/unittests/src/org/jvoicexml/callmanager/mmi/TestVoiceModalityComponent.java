@@ -92,7 +92,8 @@ public class TestVoiceModalityComponent {
         final URI uri = file.toURI();
         builder.setHref(uri);
         final StartRequest request = builder.toStartRequest();
-        mc.receivedEvent(request);
+        final DecoratedMMIEvent event = new DecoratedMMIEvent(this, request);
+        mc.receivedEvent(event);
     }
 
 }

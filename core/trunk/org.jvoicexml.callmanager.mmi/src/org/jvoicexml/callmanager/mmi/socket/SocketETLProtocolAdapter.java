@@ -29,6 +29,7 @@ package org.jvoicexml.callmanager.mmi.socket;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
 import org.jvoicexml.mmi.events.MMIEvent;
@@ -108,7 +109,7 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      * @param event
      * @since 0.7.6
      */
-    void notifyMMIEvent(final MMIEvent event) {
+    void notifyMMIEvent(final DecoratedMMIEvent event) {
         synchronized (listeners) {
             for (MMIEventListener listener : listeners) {
                 listener.receivedEvent(event);

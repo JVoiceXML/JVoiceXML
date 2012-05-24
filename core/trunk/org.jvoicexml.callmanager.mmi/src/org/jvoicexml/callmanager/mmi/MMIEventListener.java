@@ -26,7 +26,6 @@
 
 package org.jvoicexml.callmanager.mmi;
 
-import org.jvoicexml.mmi.events.MMIEvent;
 
 /**
  * A listener to MMI events.
@@ -38,5 +37,5 @@ public interface MMIEventListener {
      * Notification that the given MMI event has been received.
      * @param event the received MMI event
      */
-    void receivedEvent(final MMIEvent event);
+    void receivedEvent(final DecoratedMMIEvent event);
 }

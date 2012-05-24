@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -39,6 +40,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.mmi.events.CommonAttributeAdapter;
 import org.jvoicexml.mmi.events.MMIEvent;
@@ -79,20 +81,29 @@ final class SocketETLClient extends Thread {
             final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
             final Unmarshaller unmarshaller = ctx.createUnmarshaller();
             final InputStream in = socket.getInputStream();
-            while(!isInterrupted()) {
+//            while(!isInterrupted()) {
+                if (LOGGER.isDebugEnabled()) {
+                    final InetSocketAddress address =
+                            (InetSocketAddress) socket.getRemoteSocketAddress();
+                    final URI uri = TcpUriFactory.createUri(address);
+                    LOGGER.debug("expecting MMI events from '" + uri + "'");
+                }
                 final Object o = unmarshaller.unmarshal(in);
                 if (o instanceof MMIEvent) {
-                    final MMIEvent event = (MMIEvent) o;
-                    event.setSource(this);
-                    LOGGER.info("received MMI event: " + event);
+                    final MMIEvent evt = (MMIEvent) o;
+                    LOGGER.info("received MMI event: " + evt);
+                    final DecoratedMMIEvent event =
+                            new DecoratedMMIEvent(this, evt);
                     adapter.notifyMMIEvent(event);
                 } else {
                     LOGGER.warn("received unknown MMI object: " + o);
                 }
-            }
+//            }
         } catch (JAXBException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (URISyntaxException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }

@@ -95,6 +95,7 @@ public final class VoiceModalityComponent
             final ETLProtocolAdapter protocolAdapter)
             throws IOException {
         adapter = protocolAdapter;
+        adapter.addMMIEventListener(this);
         LOGGER.info("starting ETL protocol adapter " + adapter.getClass()
                 + "'");
         adapter.start();
@@ -123,25 +124,27 @@ public final class VoiceModalityComponent
      * {@inheritDoc}
      */
     @Override
-    public void receivedEvent(final MMIEvent event) {
+    public void receivedEvent(final DecoratedMMIEvent evt) {
+        final MMIEvent event = evt.getEvent();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("received new MMI event: " + event);
         }
+        final Object channel = evt.getChannel();
         if (event instanceof StartRequest) {
             final StartRequest request = (StartRequest) event;
-            start(request);
+            start(channel, request);
         } else if (event instanceof CancelRequest) {
             final CancelRequest request = (CancelRequest) event;
-            cancel(request);
+            cancel(channel, request);
         } else if (event instanceof ClearContextRequest) {
             final ClearContextRequest request = (ClearContextRequest) event;
-            clearContext(request);
+            clearContext(channel, request);
         } else if (event instanceof PauseRequest) {
             final PauseRequest request = (PauseRequest) event;
-            pause(request);
+            pause(channel, request);
         } else if (event instanceof ResumeRequest) {
             final ResumeRequest request = (ResumeRequest) event;
-            resume(request);
+            resume(channel, request);
         }
     }
 
@@ -149,7 +152,7 @@ public final class VoiceModalityComponent
      * Processes a start request.
      * @param request the received event
      */
-    private void start(final StartRequest request) {
+    private void start(final Object channel, final StartRequest request) {
         final ContentURLType contentUrlType = request.getContentURL();
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
@@ -167,7 +170,6 @@ public final class VoiceModalityComponent
                 session.hangup();
             }
         }
-        final Object channel = request.getSource();
         context.setChannel(channel);
         final String href = contentUrlType.getHref();
         try {
@@ -203,7 +205,7 @@ public final class VoiceModalityComponent
      * Processes a cancel request.
      * @param request the cancel request.
      */
-    private void cancel(final CancelRequest request) {
+    private void cancel(final Object channel, final CancelRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
         LOGGER.info("received a cancel request for " + requestId + ", "
@@ -237,7 +239,6 @@ public final class VoiceModalityComponent
             builder.addStatusInfo(statusInfo);
         }
         final CancelResponse response = builder.toCancelResponse();
-        final Object channel = request.getSource();
         try {
             adapter.sendMMIEvent(channel, response);
             if (statusInfo == null) {
@@ -253,7 +254,8 @@ public final class VoiceModalityComponent
      * Processes a clear context request.
      * @param request the clear context request.
      */
-    private void clearContext(final ClearContextRequest request) {
+    private void clearContext(final Object channel,
+            final ClearContextRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
         LOGGER.info("received a clear contex request for " + requestId + ", "
@@ -290,7 +292,6 @@ public final class VoiceModalityComponent
         }
         final ClearContextResponse response =
                 builder.toClearContextResponse();
-        final Object channel = request.getSource();
         try {
             adapter.sendMMIEvent(channel, response);
             if (statusInfo == null) {
@@ -304,7 +305,7 @@ public final class VoiceModalityComponent
      * Processes a clear context request.
      * @param request the clear context request.
      */
-    private void pause(final PauseRequest request) {
+    private void pause(final Object channel, final PauseRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
         LOGGER.info("received a pause request for " + requestId + ", "
@@ -318,7 +319,6 @@ public final class VoiceModalityComponent
         builder.addStatusInfo(
                 "The JVoiceXML modality component is unable to pause");
         final PauseResponse response = builder.toPauseResponse();
-        final Object channel = request.getSource();
         try {
             adapter.sendMMIEvent(channel, response);
         } catch (IOException e) {
@@ -330,7 +330,7 @@ public final class VoiceModalityComponent
      * Processes a clear context request.
      * @param request the clear context request.
      */
-    private void resume(final ResumeRequest request) {
+    private void resume(final Object channel, final ResumeRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
         LOGGER.info("received a pause request for " + requestId + ", "
@@ -344,7 +344,6 @@ public final class VoiceModalityComponent
         builder.addStatusInfo(
                 "The JVoiceXML modality component is unable to resume");
         final ResumeResponse response = builder.toResumeResponse();
-        final Object channel = request.getSource();
         try {
             adapter.sendMMIEvent(channel, response);
         } catch (IOException e) {
