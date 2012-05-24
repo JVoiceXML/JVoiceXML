@@ -34,7 +34,7 @@ personal-props/README.txt
         </condition>
 
         <!-- main jar files -->
-        <property name="dist.systemtest.jar" value="${dist}/jvxml-systemtest.jar" />
+        <property name="dist.systemtest.jar" value="${dist}/${component}.jar" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">

@@ -33,6 +33,15 @@ package org.jvoicexml;
  */
 public interface JVoiceXmlMainListener {
     /**
+     * Error when trying to startup JVoiceXML before calling
+     * {@link #jvxmlStarted()}.
+     * @param exception
+     *        the exception that caused all the trouble
+     * @since 0.7.6
+     */
+    void jvxmlStartupError(final Throwable exception);
+
+    /**
      * JVoiceXml has been started.
      */
     void jvxmlStarted();

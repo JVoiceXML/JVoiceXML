@@ -22,6 +22,10 @@
   <li>started to work on a SIP call manager</li>
   <li>started to work on a MMI call manager</li>
   <li>bugfix: fixed classpath problems in the JVoiceXML.exe</li>
+  <li>
+    enhanced the JVoiceXMLMainListener to get notified if JVoiceXML does
+    not strat up properly
+  </li>
 </ul>
 
 <h3>interpreter</h3>
@@ -94,8 +98,12 @@
 
 <ul>
   <li>
-    Optimized parsing of configuration files by introducing a configuration file
+    optimized parsing of configuration files by introducing a configuration file
     monitor thread
+  </li>
+  <li>
+    bugfix: terminating the startup in case a configured class could not be
+    loaded
   </li>
 </ul>
 

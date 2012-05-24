@@ -44,7 +44,7 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
     private final Object lock;
 
     /**
-     * Construct a new object. never used.
+     * Construct a new object.
      */
     private SystemTestMain() {
         lock = new Object();
@@ -162,10 +162,22 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void jvxmlTerminated() {
         synchronized (lock) {
             lock.notifyAll();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void jvxmlStartupError(final Throwable exception) {
+        LOGGER.fatal("JVoiceXML did not start up", exception);
+        System.exit(-1);
     }
 }

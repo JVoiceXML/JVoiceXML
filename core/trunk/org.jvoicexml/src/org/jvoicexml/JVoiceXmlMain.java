@@ -310,6 +310,7 @@ public final class JVoiceXmlMain
             synchronized (shutdownSemaphore) {
                 shutdownSemaphore.notifyAll();
             }
+            fireJVoiceXmlStartupError(e);
             return;
         }
 
@@ -323,20 +324,24 @@ public final class JVoiceXmlMain
             synchronized (shutdownSemaphore) {
                 shutdownSemaphore.notifyAll();
             }
+            fireJVoiceXmlStartupError(e);
             return;
         } catch (IOException e) {
             LOGGER.fatal(e.getMessage(), e);
             synchronized (shutdownSemaphore) {
                 shutdownSemaphore.notifyAll();
             }
+            fireJVoiceXmlStartupError(e);
             return;
         } catch (ConfigurationException e) {
             LOGGER.fatal(e.getMessage(), e);
             synchronized (shutdownSemaphore) {
                 shutdownSemaphore.notifyAll();
             }
+            fireJVoiceXmlStartupError(e);
             return;
         }
+
         shutdownWaiter.start();
         LOGGER.info("VoiceXML interpreter " + getVersion() + " started.");
         fireJVoiceXmlStarted();
@@ -495,6 +500,21 @@ public final class JVoiceXmlMain
             }
         } catch (InterruptedException ie) {
             LOGGER.error("wait event was interrupted", ie);
+        }
+    }
+
+    /**
+     * Notifies all registered listener about an error when trying to startup
+     * JVoiceXML.
+     * @param exception the causing error
+     * 
+     * @since 0.7.6
+     */
+    private void fireJVoiceXmlStartupError(final Throwable exception) {
+        synchronized (listeners) {
+            for (JVoiceXmlMainListener listener : listeners) {
+                listener.jvxmlStartupError(exception);
+            }
         }
     }
 

@@ -18,9 +18,6 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
-  <xsl:template match="repository">
-  </xsl:template>
-
   <xsl:template match="classpath">
   </xsl:template>
 

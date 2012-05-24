@@ -359,6 +359,8 @@ public final class JVoiceXmlConfiguration implements Configuration {
                 }
             } catch (IOException e) {
                 throw new ConfigurationException(e.getMessage(), e);
+            } catch (BeansException e) {
+                throw new ConfigurationException(e.getMessage(), e);
             }
         }
         return beans;
