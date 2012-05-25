@@ -10,6 +10,7 @@
         <beans:property name="instances" value="1" />
         <beans:property name="type" value="mary" />
         <beans:property name="audioType" value="WAVE"/>
+        <beans:property name="lang" value="en"/>
         <beans:property name="voiceName" value="cmu-slt-hsmm" />
     </beans:bean>
 </implementation>

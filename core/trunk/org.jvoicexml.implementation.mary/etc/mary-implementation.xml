@@ -4,14 +4,14 @@
     xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
     <repository>mary</repository>
     <classpath>dist/org.jvoicexml.implementation.mary.jar</classpath>
-    <classpath>../org.jvoicexml.implementation.mary/3rdparty/mary4.3.0/lib/maryclient.jar
+    <classpath>../org.jvoicexml.implementation.mary/3rdparty/mary4.3.1/lib/maryclient.jar
     </classpath>
     <beans:bean
         class="org.jvoicexml.implementation.mary.MarySynthesizedOutputFactory">
         <beans:property name="instances" value="1" />
         <beans:property name="type" value="mary" />
         <beans:property name="audioType" value="WAVE"/>
-        <beans:property name="lang" value="en"/>
+        <beans:property name="lang" value="en-US"/>
         <beans:property name="voiceName" value="cmu-slt-hsmm" />
     </beans:bean>
 </implementation>

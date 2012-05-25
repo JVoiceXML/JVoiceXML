@@ -164,7 +164,7 @@ You're using ${ant.java.version}
               href="http://logging.apache.org/log4j/docs/api/"
               packagelistLoc="${log4j.dir}" />
         <link offline="true" 
-              href="http://mary.dfki.de/javadoc/4.0%20beta/"
+              href="http://mary.dfki.de/javadoc/4.3.0/"
               packagelistLoc="${mary.dir}" />
 
           <!-- Group definitions -->

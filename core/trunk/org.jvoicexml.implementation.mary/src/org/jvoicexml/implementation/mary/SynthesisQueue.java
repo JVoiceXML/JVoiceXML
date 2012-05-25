@@ -3,6 +3,7 @@ package org.jvoicexml.implementation.mary;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Queue;
@@ -23,6 +24,8 @@ import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.xml.ssml.Speak;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * SynthesisQueue extends Thead and is responsible for getting the speakables.
@@ -50,25 +53,17 @@ final class SynthesisQueue extends Thread
     /** The system output listener. */
     private SynthesizedOutputListener listener;
 
-    /** The MarySynthesized Output resource. */
-    private final MaryAudioOutput maryAudioFileOutput;
+    /** The Mary synthesized output resource. */
+    private final MaryAudioOutput audioOutput;
 
-    /** The Mary Client used to send requests to Mary server . */
+    /** The Mary client used to send requests to Mary server . */
     private MaryClient processor;
 
-    /** The ByteArrayOutputStream used to store.
-     * Mary server's response to synthesis request */
-    private ByteArrayOutputStream out;
-
-    /**Reference to the SpeakableText object that can be.
-     * either a SpeakablePlainText or a SpeakableSsmlText */
+    /**
+     * Reference to the SpeakableText object that is currently played back. This
+     * can be either a SpeakablePlainText or a SpeakableSsmlText.
+     */
     private SpeakableText queuedSpeakable;
-
-    /** Object lock.
-     * The SynthesisQueue Thread waits on this object
-     * until the previous audio playing has completed
-     *  */
-    private final Object audioPlayedLock;
 
     /**
      * The HashTable that contains Mary synthesis request parameters.
@@ -87,8 +82,7 @@ final class SynthesisQueue extends Thread
      * .*/
     public SynthesisQueue() {
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
-        audioPlayedLock = new Object();
-        maryAudioFileOutput = new MaryAudioOutput(audioPlayedLock);
+        audioOutput = new MaryAudioOutput();
         setDaemon(true);
         setName("SynthesisQueueThread");
     }
@@ -109,7 +103,6 @@ final class SynthesisQueue extends Thread
                     } catch (InterruptedException e) {
                         return;
                     }
-
                 }
 
                 queuedSpeakable = queuedSpeakables.remove();
@@ -156,23 +149,24 @@ final class SynthesisQueue extends Thread
        fireOutputStarted(speakable);
        
        enableBargeIn = speakable.isBargeInEnabled();
-       out = new ByteArrayOutputStream();
+       final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
        if (speakable instanceof SpeakablePlainText) {
            final String text = speakable.getSpeakableText();
-           speakPlainText(text);
+           speakPlainText(text, out);
        } else if (speakable instanceof SpeakableSsmlText) {
            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
-           speakSsml(ssml);
+           speakSsml(ssml, out);
        } else {
            throw new BadFetchError("Unsupported Speakable type: '"
                    + speakable.getClass() + "'");
        }
 
        try {
-           maryAudioFileOutput.queueAudio(
-                   new ByteArrayInputStream(out.toByteArray()));
-           waitAudioPlaying();
+           final byte[] bytes = out.toByteArray();
+           final InputStream in = new ByteArrayInputStream(bytes);
+           audioOutput.playAudio(in);
+           audioOutput.waitAudioPlaying();
 
            fireOutputEnded(speakable);
        } catch (LineUnavailableException e) {
@@ -181,56 +175,52 @@ final class SynthesisQueue extends Thread
        } catch (UnsupportedAudioFileException e) {
            final BadFetchError error = new BadFetchError(e.getMessage(), e);
            throw error;
-       } 
+       }
    }
 
     /**
      * Speaks the given SSML document.
      * @param ssml the SSML document to be synthesized by Mary
+     * @param out the output buffer to store Mary's response
      * @exception IOException
      *            error communicating with Mary
      */
-    private void speakSsml(final SpeakableSsmlText ssml) throws IOException {
-        final String speakableText = ssml.getSpeakableText();
-       
-        try {
-            processor.process(speakableText, "SSML", "AUDIO",
-                    maryRequestParameters.get("lang"), maryRequestParameters
-                            .get("audioType"), maryRequestParameters
-                            .get("voiceName"), out, SERVER_TIMEOUT);
-        } finally {
-            try {
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                LOGGER.warn("error closng the output stream:" + e.getMessage(),
-                        e);
-            }
+    private void speakSsml(final SpeakableSsmlText ssml,
+            final ByteArrayOutputStream out) throws IOException {
+        final SsmlDocument document = ssml.getDocument();
+        final Speak speak = document.getSpeak();
+        String lang = speak.getXmlLang();
+        if (lang == null) {
+            lang = maryRequestParameters.get("lang");
         }
+        final String text = document.toXml();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("synthesizing '" + text + "'");
+        }
+
+        processor.process(text, "SSML", "AUDIO",
+                maryRequestParameters.get("lang"), maryRequestParameters
+                        .get("audioType"), maryRequestParameters
+                        .get("voiceName"), out, SERVER_TIMEOUT);
     }
 
     /**
      * Passes the given text to be synthesized by Mary.
      * @param text the text to be spoken
+     * @param out the output buffer to store Mary's response
      * @exception IOException
      *            error communicating with Mary
      */
-    private void speakPlainText(final String text) throws IOException {
-        try {
-               processor.process(text, "TEXT", "AUDIO",
-                    maryRequestParameters.get("lang"),
-                    maryRequestParameters.get("audioType"),
-                    maryRequestParameters.get("voiceName"), out,
-                    SERVER_TIMEOUT);
-       } finally {
-           try {
-               out.flush();
-               out.close();
-           } catch (IOException e) {
-               LOGGER.warn("error closing the output stream: "
-                       + e.getMessage(), e);
-           }
-       }
+    private void speakPlainText(final String text,
+            final ByteArrayOutputStream out) throws IOException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("synthesizing '" + text + "'");
+        }
+        processor.process(text, "TEXT", "AUDIO",
+                maryRequestParameters.get("lang"),
+                maryRequestParameters.get("audioType"),
+                maryRequestParameters.get("voiceName"), out,
+                SERVER_TIMEOUT);
     }
 
    /**
@@ -298,24 +288,6 @@ final class SynthesisQueue extends Thread
     }
 
     /**
-     * Waits until the previous audio playing has completed.
-     */
-    private void waitAudioPlaying() {
-        synchronized (audioPlayedLock) {
-            if (maryAudioFileOutput.isBusy()) {
-                try {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("waiting for end of audio");
-                    }
-                    audioPlayedLock.wait();
-                } catch (InterruptedException e) {
-                    return;
-                }
-            }
-        }
-    }
-
-    /**
      * The queueSpeakable method simply offers a speakable to the queue.
      * it notifies the synthesisQueue Thread and then it returns
      * @param speakable the speakable to offer
@@ -346,7 +318,7 @@ final class SynthesisQueue extends Thread
             return;
         }
             
-        maryAudioFileOutput.cancelOutput();
+        audioOutput.cancelOutput();
 
         synchronized (queuedSpeakables) {
             final Collection<SpeakableText> skipped =
@@ -369,7 +341,7 @@ final class SynthesisQueue extends Thread
         if (!enableBargeIn) {
             return;
         }
-         maryAudioFileOutput.cancelOutput();
+         audioOutput.cancelOutput();
     }
 
     /**

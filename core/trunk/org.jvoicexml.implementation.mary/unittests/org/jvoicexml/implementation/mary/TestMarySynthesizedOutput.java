@@ -184,7 +184,7 @@ public final class TestMarySynthesizedOutput
      * @exception Exception test failed
      * @exception JVoiceXMLEvent test failed
      */
-    @Test(timeout = 5000)
+    @Test(timeout = 6000)
     public void testQueueSpeakable() throws Exception, JVoiceXMLEvent {
         final SpeakablePlainText plainText =
             new SpeakablePlainText("Hello world");
@@ -196,7 +196,7 @@ public final class TestMarySynthesizedOutput
         final SsmlDocument doc = new SsmlDocument();
         final Speak speak = doc.getSpeak();
         speak.setXmlLang(Locale.US);
-        speak.addText("hello from SSML");
+        speak.addText("hello from an SSML document");
         final SpeakableSsmlText ssml = new SpeakableSsmlText(doc);
         output.queueSpeakable(ssml, sessionId, documentServer);
         synchronized (outputEndedLock) {
@@ -204,8 +204,22 @@ public final class TestMarySynthesizedOutput
         }
     }
 
-    
-    
+    /**
+     * Test method for {@link org.jvoicexml.implementation.mary.MarySynthesizedOutput#queueSpeakable(org.jvoicexml.SpeakableText, org.jvoicexml.DocumentServer)}.
+     * @exception Exception test failed
+     * @exception JVoiceXMLEvent test failed
+     */
+    @Test
+    public void testQueueMultiplePlainTexts() throws Exception, JVoiceXMLEvent {
+        for (int i = 0; i < 10; i++) {
+            final SpeakablePlainText plainText =
+                new SpeakablePlainText("a " + i + " b");
+     
+            output.queueSpeakable(plainText, sessionId, documentServer);
+        }
+        output.waitQueueEmpty();
+    }
+
     /**
      * Test method for {@link org.jvoicexml.implementation.mary.MarySynthesizedOutput#waitQueueEmpty()}.
      * @exception Exception test failed

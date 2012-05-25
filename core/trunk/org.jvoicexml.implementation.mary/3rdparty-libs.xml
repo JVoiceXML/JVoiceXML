@@ -17,7 +17,7 @@ implementation platform.
         </path>
 
       <!-- mary library -->
-        <property name="mary.dir" value="${local-3rdparty.dir}/mary4.3.0" />
+        <property name="mary.dir" value="${local-3rdparty.dir}/mary4.3.1" />
         <property name="mary.lib.dir" value="${mary.dir}/lib" />
         <fileset dir="${mary.lib.dir}" id="mary.lib">
             <include name="maryclient.jar" />

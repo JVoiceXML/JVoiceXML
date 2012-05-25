@@ -6,6 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="3rdparty/mary4.3.0/lib/maryclient.jar"/>
+	<classpathentry kind="lib" path="3rdparty/mary4.3.1/lib/maryclient.jar"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>

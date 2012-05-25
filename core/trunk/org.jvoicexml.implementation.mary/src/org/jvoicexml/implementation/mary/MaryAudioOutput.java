@@ -30,8 +30,8 @@
 package org.jvoicexml.implementation.mary;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -68,14 +68,14 @@ public final class MaryAudioOutput implements LineListener {
 
     /**
      * Constructs a new object.
-     * @param lock object in which SynthesisQueue Thread waits until
-     * audio playing is complete
      */
-    public MaryAudioOutput(final Object lock) {
-        audioPlayedLock = lock;
+    public MaryAudioOutput() {
+        audioPlayedLock = new Object();
     }
 
-  /**
+    /**
+     * Plays back the audio that can be retrieved from the given
+     * input stream.
      * @throws LineUnavailableException if a clip object is not available
      *         due to resource restrictions
      * @throws IOException if an I/O Exception occurs
@@ -83,24 +83,21 @@ public final class MaryAudioOutput implements LineListener {
      *         valid audio file data recognized by the system
      * @param  inputStream that contains the processed data from the Mary Server
      */
-    public void queueAudio(final ByteArrayInputStream inputStream)
+    public void playAudio(final InputStream inputStream)
         throws LineUnavailableException, IOException,
             UnsupportedAudioFileException {
+        isBusy = true;
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Queuing audio");
+            LOGGER.debug("playing audio");
         }
 
         final BufferedInputStream buf = new BufferedInputStream(inputStream);
         clip = AudioSystem.getClip();
         clip.open(AudioSystem.getAudioInputStream(buf));
         clip.addLineListener(this);
-        isBusy = true;
         clip.start();
-
-        inputStream.close();
     }
-
 
     /**
      * Cancels the currently playing audio.
@@ -108,20 +105,41 @@ public final class MaryAudioOutput implements LineListener {
     public void cancelOutput() {
         if (clip != null) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Cancel Output Requested");
+                LOGGER.debug("cancel output requested");
             }
             clip.stop();
             clip = null;
+            isBusy = false;
+            synchronized (audioPlayedLock) {
+                audioPlayedLock.notify();
+            }
         }
     }
-
 
     /**
      * Checks if there is currently an audio playing.
      * @return <code>true</code> if there is an active output.
      */
-    public boolean isBusy() {   
-        return isBusy;  
+    public boolean isBusy() {
+        return isBusy;
+    }
+
+    /**
+     * Waits until the previous audio playing has completed.
+     */
+    public void waitAudioPlaying() {
+        synchronized (audioPlayedLock) {
+            if (isBusy()) {
+                try {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("waiting for end of audio");
+                    }
+                    audioPlayedLock.wait();
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        }
     }
 
     /**
@@ -133,6 +151,11 @@ public final class MaryAudioOutput implements LineListener {
     public void update(final LineEvent event) {
         if ((event.getType() == LineEvent.Type.CLOSE)
                 || (event.getType() == LineEvent.Type.STOP)) {
+            clip.close();
+            clip = null;
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("audio playing ended");
+            }
             isBusy = false;
             synchronized (audioPlayedLock) {
                 audioPlayedLock.notify();
