@@ -38,6 +38,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Property;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ScriptableObject;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -165,7 +166,14 @@ abstract class AbstractFormItem
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("checking if selectable");
-            LOGGER.debug("value of   '" + name + "': '" + result + "'");
+            final Object logResult;
+            if (result instanceof ScriptableObject) {
+                final ScriptableObject scriptable = (ScriptableObject) result;
+                logResult = ScriptingEngine.toJSON(scriptable);
+            } else {
+                logResult = result;
+            }
+            LOGGER.debug("value of   '" + name + "': '" + logResult + "'");
             LOGGER.debug("cond of    '" + name + "': '" + cond + "'");
             LOGGER.debug("selectable '" + name + "': " + selectable);
         }
