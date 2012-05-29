@@ -49,6 +49,6 @@
             <beans:property name="rate" value="8000" />
             <beans:property name="keepAlive" value="true" />
         </beans:bean>
-    </beans:property>
-  </beans:bean-->
+    </beans:property-->
+  </beans:bean>
 </implementation>
