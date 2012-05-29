@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<callmanager xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
+  <repository>text</repository>
+  <classpath>lib/jvxml-client-text.jar</classpath>
+  <classpath>lib/org.jvoicexml.callmanager.text.jar</classpath>
+
+  <beans:bean id="callmanager"
+    class="org.jvoicexml.callmanager.text.TextCallManager">
+    <beans:property name="applications">
+      <beans:list>
+        <beans:bean
+          class="org.jvoicexml.callmanager.text.TextApplication">
+          <beans:property name="uri"
+            value="http://127.0.0.1:8080/helloworldservletdemo/JVoiceXML" />
+          <beans:property name="port" value="4243" />
+        </beans:bean>
+      </beans:list>
+    </beans:property>
+  </beans:bean>
+
+</callmanager>
