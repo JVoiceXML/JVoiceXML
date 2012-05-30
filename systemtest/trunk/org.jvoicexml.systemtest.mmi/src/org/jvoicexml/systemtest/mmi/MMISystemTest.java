@@ -5,6 +5,7 @@ package org.jvoicexml.systemtest.mmi;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,6 +16,8 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.JVoiceXmlMain;
 import org.jvoicexml.JVoiceXmlMainListener;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
+import org.jvoicexml.systemtest.mmi.mcspecific.AbstractAssert;
+import org.jvoicexml.systemtest.mmi.mcspecific.Assert155;
 import org.jvoicexml.systemtest.mmi.mcspecific.Assert169;
 import org.jvoicexml.systemtest.mmi.report.ImplementationReport;
 import org.jvoicexml.systemtest.mmi.report.TestCaseReport;
@@ -31,11 +34,17 @@ public class MMISystemTest implements JVoiceXmlMainListener {
     /** Semaphore. */
     private final Object lock;
 
+    /** Tests to perform. */
+    private final List<AbstractAssert> tests;
+
     /**
      * Construct a new object. never used.
      */
     private MMISystemTest() {
         lock = new Object();
+        tests = new java.util.ArrayList<AbstractAssert>();
+        tests.add(new Assert155());
+        tests.add(new Assert169());
     }
 
     /**
@@ -52,16 +61,21 @@ public class MMISystemTest implements JVoiceXmlMainListener {
         try {
             final SystemTestETLSocketServer server = test.startSocketServer();
             final JVoiceXml interpreter = test.startInterpreter();
-            final TestCaseReport result = new TestCaseReport(169);
-            Assert169 testcase = new Assert169();
-            testcase.setSource(server.getUri());
-            server.setListener(testcase);
-            try {
-                testcase.test();
-                result.setResult(TestResult.PASS);
-            } catch (Exception e) {
-                result.setResult(TestResult.FAIL);
-                result.setNotes(e.getMessage());
+            for (AbstractAssert testcase : test.tests) {
+                final int id = testcase.getId();
+                LOGGER.info("runnig test case " + id);
+                final TestCaseReport result = new TestCaseReport(id);
+                testcase.setSource(server.getUri());
+                server.setListener(testcase);
+                try {
+                    testcase.test();
+                    result.setResult(TestResult.PASS);
+                } catch (Exception e) {
+                    result.setResult(TestResult.FAIL);
+                    result.setNotes(e.getMessage());
+                }
+                report.addReport(result);
+                LOGGER.info("result: " + result.getResult());
             }
             LOGGER.info("all test terminated");
             interpreter.shutdown();
@@ -69,9 +83,6 @@ public class MMISystemTest implements JVoiceXmlMainListener {
             final JAXBContext ctx =
                     JAXBContext.newInstance(ImplementationReport.class);
             final Marshaller marshaller = ctx.createMarshaller();
-            result.setResult(TestResult.PASS);
-            result.setNotes("Test entry");
-            report.addReport(result);
             final FileOutputStream out = new FileOutputStream("mmi-report.xml");
             marshaller.marshal(report, out);
             out.close();

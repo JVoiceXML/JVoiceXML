@@ -28,25 +28,24 @@ package org.jvoicexml.systemtest.mmi.mcspecific;
 import java.io.File;
 import java.net.URI;
 
-import org.jvoicexml.mmi.events.DoneNotification;
 import org.jvoicexml.mmi.events.MMIEvent;
-import org.jvoicexml.mmi.events.StartRequest;
-import org.jvoicexml.mmi.events.StartRequestBuilder;
-import org.jvoicexml.mmi.events.StartResponse;
+import org.jvoicexml.mmi.events.PrepareRequest;
+import org.jvoicexml.mmi.events.PrepareRequestBuilder;
+import org.jvoicexml.mmi.events.PrepareResponse;
 import org.jvoicexml.systemtest.mmi.TestFailedException;
 
 /**
- * Assertion 169: If the IM includes a value in the ContentURL or Content field
- * of the StartRequest event, the Modality Component MUST use this value.
+ * Assertion 155: Modality Components MUST return a PrepareResponse event in
+ * response to a PrepareRequest event.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
  */
-public class Assert169  extends AbstractAssert {
+public class Assert155 extends AbstractAssert {
     /**
      * Constructs a new object.
      */
-    public Assert169() {
+    public Assert155() {
     }
 
     /**
@@ -54,35 +53,27 @@ public class Assert169  extends AbstractAssert {
      */
     @Override
     public int getId() {
-        return 169;
+        return 155;
     }
 
     /**
-     * Executes the test case.
-     * @exception Exception
-     *            test failed
+     * {@inheritDoc}
      */
     @Override
     public void test() throws Exception {
-        final StartRequestBuilder builder = new StartRequestBuilder();
-        builder.setContextId("http://mmisystemtest/169");
+        final PrepareRequestBuilder builder = new PrepareRequestBuilder();
+        builder.setContextId("http://mmisystemtest/" + getId());
         final String requestId = createRequestId();
         builder.setRequestId(requestId);
         final File file = new File("vxml/helloworld.vxml");
         final URI uri = file.toURI();
         builder.setHref(uri);
-        final StartRequest request = builder.toStartRequest();
+        final PrepareRequest request = builder.toPrepareRequest();
         send(request);
-        final MMIEvent startReponse = waitForResponse();
-        if (!(startReponse instanceof StartResponse)) {
-            throw new TestFailedException("expected a StartReponse but got a "
-                    + startReponse.getClass());
-        }
-        final MMIEvent doneNotification = waitForResponse();
-        if (!(doneNotification instanceof DoneNotification)) {
-            throw new TestFailedException(
-                    "expected a DoneNotification but got a "
-                    + startReponse.getClass());
+        final MMIEvent prepareReponse = waitForResponse();
+        if (!(prepareReponse instanceof PrepareResponse)) {
+            throw new TestFailedException("expected a PrepareReponse but got a "
+                    + prepareReponse.getClass());
         }
     }
 }
