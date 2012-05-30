@@ -58,7 +58,7 @@ public final class PauseResponseBuilder {
      * @param uri the uri to add
      */
     public PauseResponseBuilder setSource(final URI uri) {
-        response.setTarget(uri.toString());
+        response.setSource(uri.toString());
         return this;
     }
 

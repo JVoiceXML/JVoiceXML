@@ -76,6 +76,42 @@ public final class StartRequestBuilder {
     }
 
     /**
+     * Adds a source.
+     * @param uri the uri to add
+     */
+    public StartRequestBuilder setSource(final String uri) {
+        request.setSource(uri);
+        return this;
+    }
+
+    /**
+     * Adds a source.
+     * @param uri the uri to add
+     */
+    public StartRequestBuilder setSource(final URI uri) {
+        request.setSource(uri.toString());
+        return this;
+    }
+
+    /**
+     * Adds a target.
+     * @param uri the uri to add
+     */
+    public StartRequestBuilder setTarget(final String uri) {
+        request.setTarget(uri);
+        return this;
+    }
+
+    /**
+     * Adds a target.
+     * @param uri the uri to add
+     */
+    public StartRequestBuilder setTarget(final URI uri) {
+        request.setTarget(uri.toString());
+        return this;
+    }
+
+    /**
      * Retrieves the start request object with all added properties.
      * @return the created start request.
      */

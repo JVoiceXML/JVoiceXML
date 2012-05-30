@@ -58,7 +58,7 @@ public final class ClearContextResponseBuilder {
      * @param uri the uri to add
      */
     public ClearContextResponseBuilder setSource(final URI uri) {
-        response.setTarget(uri.toString());
+        response.setSource(uri.toString());
         return this;
     }
 
