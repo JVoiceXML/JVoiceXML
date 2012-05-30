@@ -119,4 +119,12 @@ public final class EmbeddedJVoiceXML implements JVoiceXmlMainListener {
     @Override
     public void jvxmlTerminated() {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void jvxmlStartupError(final Throwable exception) {
+        LOGGER.error("error starting JVoiceML", exception);
+    }
 }
