@@ -17,14 +17,38 @@
   -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  version="1.0">
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    version="1.0">
   <xsl:param name="jvxmlbase"/>
 
   <xsl:template match="repository">
+    <repository>text</repository>
   </xsl:template>
 
   <xsl:template match="classpath">
     <classpath><xsl:value-of select="$jvxmlbase"/>/<xsl:value-of select="text()"/></classpath>
+  </xsl:template>
+
+  <xsl:template match="beans:property[@value='jsapi20']">
+    <beans:property value="text">
+      <xsl:attribute name="name">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+    </beans:property>
+  </xsl:template>
+
+  <xsl:template match="beans:property[@value='dummy']">
+    <beans:property value="text">
+      <xsl:attribute name="name">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+    </beans:property>
+  </xsl:template>
+
+  <xsl:template match="beans:property[@name='connectionInformationFactory']">
+    <beans:property name="connectionInformationFactory">
+       <beans:bean class="org.jvoicexml.client.text.TextConnectionInformationFactory"/>
+    </beans:property>
   </xsl:template>
 
   <!-- This template passes anything unmatched -->
