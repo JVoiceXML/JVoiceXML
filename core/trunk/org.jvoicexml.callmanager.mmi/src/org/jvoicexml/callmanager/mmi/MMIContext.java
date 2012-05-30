@@ -25,6 +25,9 @@
  */
 package org.jvoicexml.callmanager.mmi;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.jvoicexml.Session;
 import org.jvoicexml.mmi.events.MMIRequestIdentifier;
 
@@ -46,6 +49,9 @@ public class MMIContext extends MMIRequestIdentifier {
 
     /** The target URI. */
     private String target;
+
+    /** The current contentURL. */
+    private URI contentURL;
 
     /**
      * Constructs a new object.
@@ -118,5 +124,32 @@ public class MMIContext extends MMIRequestIdentifier {
      */
     public void setTarget(final String value) {
         target = value;
+    }
+
+    /**
+     * Retrieves the content URL.
+     * @return the content URL
+     */
+    public URI getContentURL() {
+        return contentURL;
+    }
+
+    /**
+     * Sets the content URL.
+     * @param the content URL
+     */
+    public void setContentURL(final URI value) {
+        contentURL = value;
+    }
+
+    /**
+     * Sets the content URL.
+     * @param the content URL
+     * @throws URISyntaxException
+     *         the given value does not denote a valid URI
+     */
+    public void setContentURL(final String value) throws URISyntaxException {
+        final URI uri = new URI(value);
+        setContentURL(uri);
     }
 }

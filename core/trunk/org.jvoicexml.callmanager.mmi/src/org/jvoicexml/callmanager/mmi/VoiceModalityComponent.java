@@ -48,6 +48,9 @@ import org.jvoicexml.mmi.events.MMIEvent;
 import org.jvoicexml.mmi.events.PauseRequest;
 import org.jvoicexml.mmi.events.PauseResponse;
 import org.jvoicexml.mmi.events.PauseResponseBuilder;
+import org.jvoicexml.mmi.events.PrepareRequest;
+import org.jvoicexml.mmi.events.PrepareResponse;
+import org.jvoicexml.mmi.events.PrepareResponseBuilder;
 import org.jvoicexml.mmi.events.ResumeRequest;
 import org.jvoicexml.mmi.events.ResumeResponse;
 import org.jvoicexml.mmi.events.ResumeResponseBuilder;
@@ -130,7 +133,10 @@ public final class VoiceModalityComponent
             LOGGER.debug("received new MMI event: " + event);
         }
         final Object channel = evt.getChannel();
-        if (event instanceof StartRequest) {
+        if (event instanceof PrepareRequest) {
+            final PrepareRequest request = (PrepareRequest) event;
+            prepare(channel, request);
+        } else if (event instanceof StartRequest) {
             final StartRequest request = (StartRequest) event;
             start(channel, request);
         } else if (event instanceof CancelRequest) {
@@ -152,8 +158,66 @@ public final class VoiceModalityComponent
      * Processes a start request.
      * @param request the received event
      */
-    private void start(final Object channel, final StartRequest request) {
+    private void prepare(final Object channel, final PrepareRequest request) {
+        final String contextId = request.getContext();
+        final String requestId = request.getRequestID();
+        LOGGER.info("received a prepare request for " + requestId + ", "
+                + contextId);
+        MMIContext context =
+                findMMIContext(requestId, contextId);
+        if (context == null) {
+            context = new MMIContext(requestId, contextId);
+        }
         final ContentURLType contentUrlType = request.getContentURL();
+        final String href = contentUrlType.getHref();
+        String statusInfo = null;
+        try {
+            context.setContentURL(href);
+        } catch (URISyntaxException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
+        }
+        final URI uri = context.getContentURL();
+        try {
+            if (statusInfo != null) {
+                LOGGER.info("creating session for URI '" + uri + "'");
+                final Session session = callManager.createSession(uri);
+                synchronized (sessions) {
+                    sessions.put(session, context);
+                }
+            }
+        } catch (ErrorEvent e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
+        } catch (UnsupportedResourceIdentifierException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
+        }
+        final PrepareResponseBuilder builder = new PrepareResponseBuilder();
+        final String target = request.getSource();
+        builder.setTarget(target);
+        builder.setContextId(contextId);
+        builder.setRequestId(requestId);
+        if (statusInfo == null) {
+            builder.setStatusSuccess();
+        } else {
+            builder.setStatusFailure();
+            builder.addStatusInfo(statusInfo);
+        }
+        final PrepareResponse response = builder.toPrepareResponse();
+        try {
+            adapter.sendMMIEvent(channel, response);
+            LOGGER.info(context + ": " + ModalityComponentState.RUNNING);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Processes a start request.
+     * @param request the received event
+     */
+    private void start(final Object channel, final StartRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
         LOGGER.info("received a start request for " + requestId + ", "
@@ -173,31 +237,55 @@ public final class VoiceModalityComponent
         final String source = request.getSource();
         context.setTarget(source);
         context.setChannel(channel);
+        final ContentURLType contentUrlType = request.getContentURL();
         final String href = contentUrlType.getHref();
+        String statusInfo = null;
+        URI uri = context.getContentURL();
         try {
-            final URI uri = new URI(href);
-            LOGGER.info("calling '" + uri + "'");
-            final Session session = callManager.createSession(uri);
-            synchronized (sessions) {
-                sessions.put(session, context);
+            if (href != null) {
+                uri = new URI(href);
             }
-            session.addSessionListener(this);
-            context.setSession(session);
-            final StartResponseBuilder builder = new StartResponseBuilder();
-            final String target = request.getSource();
-            builder.setTarget(target);
-            builder.setContextId(contextId);
-            builder.setRequestId(requestId);
-            final StartResponse response = builder.toStartResponse();
+        } catch (URISyntaxException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
+        }
+        if (uri == null) {
+            statusInfo = "no URI given. Unable to start";
+        }
+        try {
+            if (statusInfo != null) {
+                LOGGER.info("calling '" + uri + "'");
+                final Session session = callManager.createSession(uri);
+                session.call(uri);
+                synchronized (sessions) {
+                    sessions.put(session, context);
+                }
+                session.addSessionListener(this);
+                context.setSession(session);
+            }
+        } catch (ErrorEvent e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
+        } catch (UnsupportedResourceIdentifierException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
+        }
+        final StartResponseBuilder builder = new StartResponseBuilder();
+        final String target = request.getSource();
+        builder.setTarget(target);
+        builder.setContextId(contextId);
+        builder.setRequestId(requestId);
+        if (statusInfo == null) {
+            builder.setStatusSuccess();
+        } else {
+            builder.setStatusFailure();
+            builder.addStatusInfo(statusInfo);
+        }
+        final StartResponse response = builder.toStartResponse();
+        try {
             adapter.sendMMIEvent(channel, response);
             context.setState(ModalityComponentState.RUNNING);
             LOGGER.info(context + ": " + ModalityComponentState.RUNNING);
-        } catch (URISyntaxException e) {
-            LOGGER.error(e.getMessage(), e);
-        } catch (ErrorEvent e) {
-            LOGGER.error(e.getMessage(), e);
-        } catch (UnsupportedResourceIdentifierException e) {
-            LOGGER.error(e.getMessage(), e);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }

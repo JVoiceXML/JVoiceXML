@@ -170,7 +170,6 @@ public final class MMICallManager implements CallManager {
                 controller.getConnectionInformation();
         final Session session = jvxml.createSession(info);
         sessions.put(session, controller);
-        session.call(uri);
         return session;
     }
 
