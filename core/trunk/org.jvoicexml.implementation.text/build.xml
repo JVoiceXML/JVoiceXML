@@ -220,6 +220,6 @@ You're using ${ant.java.version}
       <copy tofile="${distFolder}/config/text-implementation.xml"
         file="${etc}/text-implementation-dist.xml"/>
       <copy todir="${distFolder}/lib" file="${dist.client.text.jar}"/>
-      <copy todir="${distFolder}/lib" file="${dist.implementation.text.jar}"/>
+      <copy todir="${distFolder}/lib" file="${dist.jar}"/>
     </target>
 </project>
