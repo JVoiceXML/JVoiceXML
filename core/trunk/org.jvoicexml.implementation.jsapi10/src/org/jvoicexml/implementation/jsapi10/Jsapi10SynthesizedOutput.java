@@ -438,13 +438,11 @@ public final class Jsapi10SynthesizedOutput
             return;
         }
 
-        queueingSsml = true;
         final SSMLSpeakStrategy strategy =
             SPEAK_FACTORY.getSpeakStrategy(speak);
         if (strategy != null) {
             strategy.speak(this, speak);
         }
-        queueingSsml = false;
         if (!outputCanceled) {
             final SpeakableEvent event =
                 new SpeakableEvent(document, SpeakableEvent.SPEAKABLE_ENDED);
@@ -821,12 +819,13 @@ public final class Jsapi10SynthesizedOutput
      */
     public void speakableEnded(final SpeakableEvent event) {
         final Object source = event.getSource();
-        final boolean removeSpeakable;
         if (source instanceof SsmlDocument) {
-            removeSpeakable = true;
-        } else {
-            removeSpeakable = !queueingSsml;
+            queueingSsml = false;
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Synthesis of an SSML document started");
+            }
         }
+        final boolean removeSpeakable = !queueingSsml;
         if (removeSpeakable) {
             // TODO this will fail if we end with an audio or break tag.
             final SpeakableText speakable;
@@ -881,6 +880,13 @@ public final class Jsapi10SynthesizedOutput
      * {@inheritDoc}
      */
     public void speakableStarted(final SpeakableEvent event) {
+        final Object source = event.getSource();
+        if (source instanceof SsmlDocument) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("synthesis of an SSML document started: " + source);
+            }
+            queueingSsml = true;
+        }
     }
 
     /**
