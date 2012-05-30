@@ -27,8 +27,6 @@ package org.jvoicexml.callmanager.mmi.socket;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
@@ -36,18 +34,18 @@ import java.net.URISyntaxException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.client.TcpUriFactory;
-import org.jvoicexml.mmi.events.CommonAttributeAdapter;
 import org.jvoicexml.mmi.events.MMIEvent;
 import org.jvoicexml.mmi.events.Mmi;
 
 /**
- * A connected ETL socket.
+ * A connected ETL socket. Since the {@link javax.xml.bind.Unmarshaller}
+ * reads until it receives an <code>EOS</code>, i.e. the socket closed, this
+ * is a one-shot asynchronous read from the socket.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
@@ -81,56 +79,34 @@ final class SocketETLClient extends Thread {
             final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
             final Unmarshaller unmarshaller = ctx.createUnmarshaller();
             final InputStream in = socket.getInputStream();
-//            while(!isInterrupted()) {
-                if (LOGGER.isDebugEnabled()) {
-                    final InetSocketAddress address =
-                            (InetSocketAddress) socket.getRemoteSocketAddress();
-                    final URI uri = TcpUriFactory.createUri(address);
-                    LOGGER.debug("expecting MMI events from '" + uri + "'");
-                }
-                final Object o = unmarshaller.unmarshal(in);
-                if (o instanceof MMIEvent) {
-                    final MMIEvent evt = (MMIEvent) o;
-                    LOGGER.info("received MMI event: " + evt);
-                    final DecoratedMMIEvent event =
-                            new DecoratedMMIEvent(this, evt);
-                    adapter.notifyMMIEvent(event);
-                } else {
-                    LOGGER.warn("received unknown MMI object: " + o);
-                }
-//            }
+            if (LOGGER.isDebugEnabled()) {
+                final InetSocketAddress address =
+                        (InetSocketAddress) socket.getRemoteSocketAddress();
+                final URI uri = TcpUriFactory.createUri(address);
+                LOGGER.debug("expecting MMI events from '" + uri + "'");
+            }
+            final Object o = unmarshaller.unmarshal(in);
+            if (o instanceof MMIEvent) {
+                final MMIEvent evt = (MMIEvent) o;
+                LOGGER.info("received MMI event: " + evt);
+                final DecoratedMMIEvent event =
+                        new DecoratedMMIEvent(this, evt);
+                adapter.notifyMMIEvent(event);
+            } else {
+                LOGGER.warn("received unknown MMI object: " + o);
+            }
         } catch (JAXBException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (URISyntaxException e) {
             LOGGER.error(e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Sends the MMI event to the client connect to this socket.
-     * @param event the event to send.
-     */
-    public void send(final MMIEvent event) throws IOException {
-        try {
-            // Adapt the source address
-            final InetAddress address = socket.getLocalAddress();
-            final URI uri = TcpUriFactory.createUri(address);
-            final CommonAttributeAdapter adapter =
-                    new CommonAttributeAdapter(event);
-            adapter.setSource(uri.toString());
-            LOGGER.info("sending " + event);
-
-            // Send the message
-            final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
-            final Marshaller marshaller = ctx.createMarshaller();
-            final OutputStream out = socket.getOutputStream();
-            marshaller.marshal(event, out);
-        } catch (JAXBException e) {
-            throw new IOException(e.getMessage(), e);
-        } catch (URISyntaxException e) {
-            throw new IOException(e.getMessage(), e);
+        } finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                LOGGER.warn(e.getMessage(), e);
+            }
         }
     }
 }

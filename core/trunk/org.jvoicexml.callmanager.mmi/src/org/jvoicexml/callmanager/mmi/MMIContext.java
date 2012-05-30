@@ -44,6 +44,9 @@ public class MMIContext extends MMIRequestIdentifier {
     /** State of this session. */
     private ModalityComponentState state;
 
+    /** The target URI. */
+    private String target;
+
     /**
      * Constructs a new object.
      * @param reqId the request id
@@ -101,4 +104,19 @@ public class MMIContext extends MMIRequestIdentifier {
         state = value;
     }
 
+    /**
+     * Retrieves the target address for communication issues.
+     * @return the target address
+     */
+    public String getTarget() {
+        return target;
+    }
+
+    /**
+     * Sets the target address for communication issues..
+     * @param the target address
+     */
+    public void setTarget(final String value) {
+        target = value;
+    }
 }

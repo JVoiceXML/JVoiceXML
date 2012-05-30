@@ -27,12 +27,23 @@
 package org.jvoicexml.callmanager.mmi.socket;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
+import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
+import org.jvoicexml.mmi.events.CommonAttributeAdapter;
 import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.Mmi;
 
 /**
  * A protocol adapter using plain sockets.
@@ -41,6 +52,10 @@ import org.jvoicexml.mmi.events.MMIEvent;
  * @since 0.7.6
  */
 public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(SocketETLProtocolAdapter.class);
+
     /** Registered listeners for MMI events. */
     private final Collection<MMIEventListener> listeners;
 
@@ -100,8 +115,35 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
     @Override
     public void sendMMIEvent(final Object channel, final MMIEvent event)
         throws IOException {
-        final SocketETLClient client = (SocketETLClient) channel;
-        client.send(event);
+        try {
+            final CommonAttributeAdapter adapter =
+                    new CommonAttributeAdapter(event);
+            final String target = adapter.getTarget();
+            if (target == null) {
+                LOGGER.error("unable to send MMI event '" + event
+                        + "'. No target.");
+                return;
+            }
+            final URI uri = new URI(target);
+            // Adapt the source address
+            final String host = uri.getHost();
+            final int port = uri.getPort();
+            final Socket client = new Socket(host, port);
+            final URI serverUri = server.getUri();
+            adapter.setSource(serverUri.toString());
+            LOGGER.info("sending " + event + " to '" + uri + "'");
+
+            // Send the message
+            final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
+            final Marshaller marshaller = ctx.createMarshaller();
+            final OutputStream out = client.getOutputStream();
+            marshaller.marshal(event, out);
+            client.close();
+        } catch (JAXBException e) {
+            throw new IOException(e.getMessage(), e);
+        } catch (URISyntaxException e) {
+            throw new IOException(e.getMessage(), e);
+        }
     }
 
     /**

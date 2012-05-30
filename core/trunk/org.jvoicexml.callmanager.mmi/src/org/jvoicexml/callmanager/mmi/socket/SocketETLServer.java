@@ -57,7 +57,10 @@ public final class SocketETLServer extends Thread {
 
     /** <code>true</code> if the server should stop. */
     private boolean stopRequest;
-    
+
+    /** The URI of this server. */
+    private URI uri;
+
     /**
      * Constructs a new object.
      * @param protocolAdapter the protocol adapter
@@ -71,6 +74,14 @@ public final class SocketETLServer extends Thread {
     }
 
     /**
+     * Retrieves the URI of the socket server.
+     * @return the URI of the socket server.
+     */
+    public URI getUri() {
+        return uri;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -78,6 +89,7 @@ public final class SocketETLServer extends Thread {
         try {
             server = new ServerSocket(port);
             server.setReuseAddress(true);
+            uri = TcpUriFactory.createUri(server.getInetAddress());
             LOGGER.info("listening on port " + port + " for MMI events");
             while (!stopRequest) {
                 final Socket socket = server.accept();

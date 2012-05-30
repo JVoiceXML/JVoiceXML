@@ -156,7 +156,7 @@ public final class VoiceModalityComponent
         final ContentURLType contentUrlType = request.getContentURL();
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        LOGGER.info("received a cancel request for " + requestId + ", "
+        LOGGER.info("received a start request for " + requestId + ", "
                 + contextId);
         MMIContext context =
                 findMMIContext(requestId, contextId);
@@ -170,6 +170,8 @@ public final class VoiceModalityComponent
                 session.hangup();
             }
         }
+        final String source = request.getSource();
+        context.setTarget(source);
         context.setChannel(channel);
         final String href = contentUrlType.getHref();
         try {
@@ -383,9 +385,11 @@ public final class VoiceModalityComponent
         }
         final String requestId = context.getRequestId();
         final String contextId = context.getContexId();
+        final String target = context.getTarget();
         final DoneNotification done = new DoneNotification();
         done.setContext(contextId);
         done.setRequestID(requestId);
+        done.setTarget(target);
         try {
             final Object channel = context.getChannel();
             adapter.sendMMIEvent(channel, done);
