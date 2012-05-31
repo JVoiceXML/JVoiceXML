@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
@@ -14,9 +15,15 @@ import javax.xml.bind.Marshaller;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.client.TcpUriFactory;
+import org.jvoicexml.mmi.events.AnyComplexType;
+import org.jvoicexml.mmi.events.ClearContextRequest;
+import org.jvoicexml.mmi.events.ClearContextRequestBuilder;
+import org.jvoicexml.mmi.events.ClearContextResponse;
 import org.jvoicexml.mmi.events.CommonAttributeAdapter;
+import org.jvoicexml.mmi.events.CommonResponseAttributeAdapter;
 import org.jvoicexml.mmi.events.MMIEvent;
 import org.jvoicexml.mmi.events.Mmi;
+import org.jvoicexml.mmi.events.StatusType;
 import org.jvoicexml.systemtest.mmi.MMIEventListener;
 import org.jvoicexml.systemtest.mmi.TestFailedException;
 
@@ -85,6 +92,36 @@ public abstract class AbstractAssert implements MMIEventListener {
         client.close();
     }
 
+    public void clearContext() throws IOException, JAXBException,
+        URISyntaxException, InterruptedException, TestFailedException {
+        final String contextId = getContextId();
+        LOGGER.info("clearing context '" + contextId + "'...");
+        final ClearContextRequestBuilder builder =
+                new ClearContextRequestBuilder();
+        builder.setContextId(contextId);
+        final String requestId = createRequestId();
+        builder.setRequestId(requestId);
+        ClearContextRequest request = builder.toClearContextRequest();
+        send(request);
+        final MMIEvent clearResponse = waitForResponse("ClearContextResponse");
+        if (!(clearResponse instanceof ClearContextResponse)) {
+            throw new TestFailedException(
+                    "expected a ClearContextResponse but got a "
+                    + clearResponse.getClass());
+        }
+        checkIds(clearResponse, contextId, requestId);
+        ensureSuccess(clearResponse);
+        LOGGER.info("...context '" + contextId + "' cleared");
+    }
+
+    /**
+     * Retrieves a unique context id for this test case.
+     * @return the conext id.
+     */
+    public String getContextId() {
+        return "http://mmisystemtest/" + getId();
+    }
+
     /**
      * Creates a new request id.
      * @return a new request id
@@ -94,15 +131,80 @@ public abstract class AbstractAssert implements MMIEventListener {
         return id.toString();
     }
 
-    protected MMIEvent waitForResponse() throws InterruptedException,
-            TestFailedException {
+    /**
+     * Checks if the given request and context ids match the attributes of the
+     * given event.
+     * @param event the event to check
+     * @param contextId the context id
+     * @param requestId the request id
+     * @throws TestFailedException
+     *        if the ids do not match
+     */
+    public void checkIds(final MMIEvent event, final String contextId,
+            final String requestId)
+        throws TestFailedException {
+        final CommonAttributeAdapter adapter =
+                new CommonAttributeAdapter(event);
+        final String eventContextId = adapter.getContext();
+        if (!contextId.equals(eventContextId)) {
+            throw new TestFailedException("Expected context id '" + contextId
+                    + "' but have '" + eventContextId + "'");
+        }
+        final String eventRequestId = adapter.getRequestID();
+        if (!requestId.equals(eventRequestId)) {
+            throw new TestFailedException("Expected context id '" + contextId
+                    + "' but have '" + requestId + "'");
+        }
+    }
+
+    /**
+     * Checks if the received response was successful.
+     * @param event the received event
+     * @throws TestFailedException
+     *         if the response was not successful. The status info is set as the
+     *         detailed error message.
+     */
+    public void ensureSuccess(final MMIEvent event) throws TestFailedException {
+        final CommonResponseAttributeAdapter adapter =
+                new CommonResponseAttributeAdapter(event);
+        if (adapter.getStatus() != StatusType.SUCCESS) {
+            final AnyComplexType any = adapter.getStatusInfo();
+            final List<Object> content = any.getContent();
+            final StringBuilder str = new StringBuilder();
+            for (Object o : content) {
+                str.append(o);
+                str.append(System.getProperty("line.separator"));
+            }
+            throw new TestFailedException(str.toString());
+        }
+    }
+
+    /**
+     * Waits for a response from JVoiceXML.
+     * @param expected short description of the expected response
+     * @return the received event
+     * @throws InterruptedException
+     *         if the waiting was interrupted
+     * @throws TestFailedException
+     *         if the response did not arrive
+     */
+    protected MMIEvent waitForResponse(final String expected)
+            throws InterruptedException, TestFailedException {
         synchronized (lock) {
-            lock.wait(60000);
+            if (event != null) {
+                return event;
+            }
+            lock.wait(20000);
         }
         if (event == null) {
-            throw new TestFailedException("Timeout waiting for a response");
+            throw new TestFailedException("Timeout waiting for '" + expected
+                    + "'");
         }
-        return event;
+
+        // Clear the old event so that it is not detected any more
+        final MMIEvent copy = event;
+        event = null;
+        return copy;
     }
 
     /**

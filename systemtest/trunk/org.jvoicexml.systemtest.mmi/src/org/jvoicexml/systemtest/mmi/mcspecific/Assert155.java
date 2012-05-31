@@ -62,7 +62,8 @@ public class Assert155 extends AbstractAssert {
     @Override
     public void test() throws Exception {
         final PrepareRequestBuilder builder = new PrepareRequestBuilder();
-        builder.setContextId("http://mmisystemtest/" + getId());
+        final String contextId = getContextId();
+        builder.setContextId(contextId);
         final String requestId = createRequestId();
         builder.setRequestId(requestId);
         final File file = new File("vxml/helloworld.vxml");
@@ -70,10 +71,12 @@ public class Assert155 extends AbstractAssert {
         builder.setHref(uri);
         final PrepareRequest request = builder.toPrepareRequest();
         send(request);
-        final MMIEvent prepareReponse = waitForResponse();
+        final MMIEvent prepareReponse = waitForResponse("PrepareResponse");
         if (!(prepareReponse instanceof PrepareResponse)) {
             throw new TestFailedException("expected a PrepareReponse but got a "
                     + prepareReponse.getClass());
         }
+        checkIds(prepareReponse, contextId, requestId);
+        clearContext();
     }
 }

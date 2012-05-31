@@ -65,7 +65,8 @@ public class Assert169  extends AbstractAssert {
     @Override
     public void test() throws Exception {
         final StartRequestBuilder builder = new StartRequestBuilder();
-        builder.setContextId("http://mmisystemtest/169");
+        final String contextId = getContextId();
+        builder.setContextId(contextId);
         final String requestId = createRequestId();
         builder.setRequestId(requestId);
         final File file = new File("vxml/helloworld.vxml");
@@ -73,16 +74,20 @@ public class Assert169  extends AbstractAssert {
         builder.setHref(uri);
         final StartRequest request = builder.toStartRequest();
         send(request);
-        final MMIEvent startReponse = waitForResponse();
+        final MMIEvent startReponse = waitForResponse("StartResponse");
         if (!(startReponse instanceof StartResponse)) {
             throw new TestFailedException("expected a StartReponse but got a "
                     + startReponse.getClass());
         }
-        final MMIEvent doneNotification = waitForResponse();
+        checkIds(startReponse, contextId, requestId);
+        ensureSuccess(startReponse);
+        final MMIEvent doneNotification = waitForResponse("DoneNotification");
         if (!(doneNotification instanceof DoneNotification)) {
             throw new TestFailedException(
                     "expected a DoneNotification but got a "
                     + startReponse.getClass());
         }
+        checkIds(startReponse, contextId, requestId);
+        clearContext();
     }
 }

@@ -13,11 +13,63 @@ public class CommonAttributeAdapter {
     private final MMIEvent event;
 
     /**
-     * Constructs a ne object.
-     * @param mmiEvent
+     * Constructs a nee object.
+     * @param mmiEvent the event to investigate
      */
     public CommonAttributeAdapter(final MMIEvent mmiEvent) {
         event = mmiEvent;
+    }
+
+    /**
+     * Retrieves the encapsulated event.
+     * @return the event
+     */
+    protected MMIEvent getEvent() {
+        return event;
+    }
+
+    /**
+     * Retrieves the context attribute.
+     * @return the context attribute
+     */
+    public String getContext() {
+        Class<?> clazz = event.getClass();
+        try {
+            Method method = clazz.getDeclaredMethod("getContext");
+            return (String) method.invoke(event);
+        } catch (NoSuchMethodException e) {
+            return null;
+        } catch (SecurityException e) {
+            return null;
+        } catch (IllegalAccessException e) {
+            return null;
+        } catch (IllegalArgumentException e) {
+            return null;
+        } catch (InvocationTargetException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Retrieves the request id attribute.
+     * @return the request id attribute
+     */
+    public String getRequestID() {
+        Class<?> clazz = event.getClass();
+        try {
+            Method method = clazz.getDeclaredMethod("getRequestID");
+            return (String) method.invoke(event);
+        } catch (NoSuchMethodException e) {
+            return null;
+        } catch (SecurityException e) {
+            return null;
+        } catch (IllegalAccessException e) {
+            return null;
+        } catch (IllegalArgumentException e) {
+            return null;
+        } catch (InvocationTargetException e) {
+            return null;
+        }
     }
 
     /**

@@ -179,7 +179,7 @@ public final class VoiceModalityComponent
         }
         final URI uri = context.getContentURL();
         try {
-            if (statusInfo != null) {
+            if (statusInfo == null) {
                 LOGGER.info("creating session for URI '" + uri + "'");
                 final Session session = callManager.createSession(uri);
                 synchronized (sessions) {
@@ -253,7 +253,7 @@ public final class VoiceModalityComponent
             statusInfo = "no URI given. Unable to start";
         }
         try {
-            if (statusInfo != null) {
+            if (statusInfo == null) {
                 LOGGER.info("calling '" + uri + "'");
                 final Session session = callManager.createSession(uri);
                 session.call(uri);
@@ -305,7 +305,7 @@ public final class VoiceModalityComponent
         String statusInfo = null;
         if (context == null) {
             statusInfo =
-                    "no running session for the given context";
+                    "no running session for the given context " + contextId;
         } else {
             final ModalityComponentState state = context.getState();
             if (state == ModalityComponentState.IDLE) {
@@ -355,7 +355,7 @@ public final class VoiceModalityComponent
         String statusInfo = null;
         if (context == null) {
             statusInfo =
-                    "no running session for the given context";
+                    "no running session for the given context " + contextId;
         } else {
             synchronized (sessions) {
                 sessions.remove(context);
@@ -464,7 +464,7 @@ public final class VoiceModalityComponent
     public void sessionEnded(final Session session) {
         final MMIContext context;
         synchronized (sessions) {
-            context = sessions.remove(session);
+            context = sessions.get(session);
         }
         if (context == null) {
             LOGGER.warn("session " + session.getSessionID()

@@ -48,6 +48,55 @@ public class MMISystemTest implements JVoiceXmlMainListener {
     }
 
     /**
+     * Run all tests.
+     * @param server the receiving server
+     * @return the created report over the test runs
+     */
+    private ImplementationReport runTests(
+            final SystemTestETLSocketServer server) {
+        final ImplementationReport report =
+                new ImplementationReport("JVoiceXML");
+        for (AbstractAssert testcase : tests) {
+            final int id = testcase.getId();
+            LOGGER.info("runnig test case " + id);
+            final TestCaseReport result = new TestCaseReport(id);
+            testcase.setSource(server.getUri());
+            server.setListener(testcase);
+            try {
+                testcase.test();
+                result.setResult(TestResult.PASS);
+            } catch (NotImplementedException e) {
+                result.setResult(TestResult.NOT_IMPLEMENTED);
+            } catch (Exception e) {
+                result.setResult(TestResult.FAIL);
+                result.setNotes(e.getMessage());
+            }
+            report.addReport(result);
+            LOGGER.info("result: " + result.getResult());
+        }
+        return report;
+    }
+
+    /**
+     * Writes the report.
+     * @param report the report to writer
+     * @throws IOException
+     *         if the report could not be written
+     * @throws JAXBException
+     *         if the report could not be serialized
+     */
+    private void writeReport(final ImplementationReport report)
+            throws IOException, JAXBException {
+        final JAXBContext ctx =
+                JAXBContext.newInstance(ImplementationReport.class);
+        final Marshaller marshaller = ctx.createMarshaller();
+        final FileOutputStream out =
+                new FileOutputStream("jvoicexml-mmi-report.xml");
+        marshaller.marshal(report, out);
+        out.close();
+    }
+
+    /**
      * The main method.
      *
      * @param args Command line arguments. None expected.
@@ -56,36 +105,15 @@ public class MMISystemTest implements JVoiceXmlMainListener {
         LOGGER.info("Starting SystemTest for JVoiceXML...");
 
         final MMISystemTest test = new MMISystemTest();
-        final ImplementationReport report =
-                new ImplementationReport("JVoiceXML");
+        ImplementationReport report = null;
         try {
             final SystemTestETLSocketServer server = test.startSocketServer();
             final JVoiceXml interpreter = test.startInterpreter();
-            for (AbstractAssert testcase : test.tests) {
-                final int id = testcase.getId();
-                LOGGER.info("runnig test case " + id);
-                final TestCaseReport result = new TestCaseReport(id);
-                testcase.setSource(server.getUri());
-                server.setListener(testcase);
-                try {
-                    testcase.test();
-                    result.setResult(TestResult.PASS);
-                } catch (Exception e) {
-                    result.setResult(TestResult.FAIL);
-                    result.setNotes(e.getMessage());
-                }
-                report.addReport(result);
-                LOGGER.info("result: " + result.getResult());
-            }
+            report = test.runTests(server);
             LOGGER.info("all test terminated");
             interpreter.shutdown();
             LOGGER.info("...JVoiceXML shutdown");
-            final JAXBContext ctx =
-                    JAXBContext.newInstance(ImplementationReport.class);
-            final Marshaller marshaller = ctx.createMarshaller();
-            final FileOutputStream out = new FileOutputStream("mmi-report.xml");
-            marshaller.marshal(report, out);
-            out.close();
+            test.writeReport(report);
         } catch (InterruptedException e) {
             LOGGER.fatal(e.getMessage(), e);
         } catch (IOException e) {
