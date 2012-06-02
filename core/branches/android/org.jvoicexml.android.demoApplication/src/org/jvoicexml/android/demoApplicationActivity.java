@@ -1,10 +1,6 @@
 package org.jvoicexml.android;
 
-import java.io.File;
-import java.net.URI;
-
 import org.jvoicexml.android.demoApplication.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,14 +12,12 @@ import android.widget.Toast;
 
 public class demoApplicationActivity extends Activity {
     /** Called when the activity is first created. */
-	private final SimpleVoiceXML demo = new SimpleVoiceXML();
 	public final String sample = new String ("http://sites.google.com/site/komponiendo/vxml/sample.vxml");
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        final EditText documentEditText = (EditText) findViewById(R.id.editText1);
-        
+        final EditText documentEditText = (EditText) findViewById(R.id.editText1);        
         
         
        //interpret document button
@@ -33,20 +27,14 @@ public class demoApplicationActivity extends Activity {
         startButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 
-            	//Uri myUri=Uri.parse(documentEditText.getText().toString());
             	Uri myUri=Uri.parse(sample);
-            	File dialog= new File(myUri.toString());         	
-            	startJVoiceXML(dialog.toURI());
             	
-            	//Intent interpret =new Intent("org.jvoicexml.android.callmanager.INTERPRETVXML",myUri);
-//            	String a=startService(interpret).toString();
-//            	if(a!=null)
-//            		Toast.makeText(getApplicationContext(),"el servicio se inicia. Demo",1).show();
-//            	else            		
-//            		Toast.makeText(getApplicationContext(), "ha salido null",1).show();            	
-            	
-            	//File dialog= new File(documentEditText.getText().toString()           	
-            	//startJVoiceXML(dialog.toURI());
+            	Intent interpret =new Intent("org.jvoicexml.android.callmanager.INTERPRETVXML",myUri);
+            	String a=startService(interpret).toString();
+            	if(a!=null)
+            		Toast.makeText(getApplicationContext(),"el servicio se inicia. Demo",1).show();
+            	else            		
+            		Toast.makeText(getApplicationContext(), "ha salido null",1).show();            	
             	
             	Toast.makeText(getApplicationContext(),"el servicio se inicia bien. Demo",1).show();
             	
@@ -59,9 +47,6 @@ public class demoApplicationActivity extends Activity {
             public void onClick(View v) {
                 
             	//stopping interpreter code
-            	demo.jvxml.shutdown();
-            	demo.jvxml.waitShutdownComplete();
-            	Toast.makeText(getApplicationContext(),"el servicio se apaga bien. Demo",1).show();
             }
         });
     }
@@ -90,31 +75,4 @@ public class demoApplicationActivity extends Activity {
         super.onDestroy();
         // The activity is about to be destroyed.
     }
-      
-   
-
-
-public void startJVoiceXML(URI uri)
-{
-	
-    //demo = new SimpleVoiceXML();  
-    //public static final Logger LOGGER = Logger.getLogger(SimpleVoiceXML.class);
-    
-    		//URI uri= null;
-    		//try {
-    			//File dialog = new File("hello.vxml");
-    			//uri = dialog.toURI();
-    		//} catch (RuntimeException e) {
-    			//e.printStackTrace();
-    			//return;
-    		//}
-    		try {        		
-    			demo.interpretDocument(uri);
-    		} catch (org.jvoicexml.event.JVoiceXMLEvent e) {
-    			SimpleVoiceXML.LOGGER.error("error processing the document", e);
-    		} catch (InterruptedException e) {
-    			e.printStackTrace();
-    		}
-    		
-}
 }
