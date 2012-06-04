@@ -26,9 +26,6 @@
 
 package org.jvoicexml.callmanager.mmi;
 
-import java.io.File;
-import java.net.URI;
-
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -91,9 +88,7 @@ public class TestMMICallManager {
      */
     @Test
     public void testCreateSession() throws Exception, JVoiceXMLEvent {
-        final File file = new File("unittests/vxml/hello.vxml");
-        final URI uri = file.toURI();
-        final Session session = cm.createSession(uri);
+        final Session session = cm.createSession();
         Assert.assertNotNull(session);
         cm.cleanupSession(session);
     }

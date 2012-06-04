@@ -27,7 +27,6 @@
 package org.jvoicexml.callmanager.mmi;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Map;
 
 import org.jvoicexml.CallManager;
@@ -162,7 +161,7 @@ public final class MMICallManager implements CallManager {
      * @throws UnsupportedResourceIdentifierException 
      *         error in the URI scheme
      */
-    public Session createSession(final URI uri)
+    public Session createSession()
             throws ErrorEvent, UnsupportedResourceIdentifierException {
         final ConnectionInformationController controller =
                 factory.createConnectionInformation(call, output, input);

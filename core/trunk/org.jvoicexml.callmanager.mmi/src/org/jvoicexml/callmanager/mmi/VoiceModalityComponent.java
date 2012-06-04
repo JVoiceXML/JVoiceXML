@@ -77,15 +77,15 @@ public final class VoiceModalityComponent
     /** Reference to the call manager. */
     private final MMICallManager callManager;
 
-    /** Created sessions. */
-    private final Map<Session, MMIContext> sessions;
+    /** Active contexts. */
+    private final Map<Session, MMIContext> contexts;
 
     /**
      * Constructs a new object.
      */
     public VoiceModalityComponent(final MMICallManager cm) {
         callManager = cm;
-        sessions = new java.util.HashMap<Session, MMIContext>();
+        contexts = new java.util.HashMap<Session, MMIContext>();
     }
 
     /**
@@ -114,7 +114,11 @@ public final class VoiceModalityComponent
      */
     private MMIContext findMMIContext(
             final String requestId, final String contextId) {
-        for (MMIContext ctx : sessions.values()) {
+        if (contextId == null) {
+            LOGGER.warn("no context id given");
+            return null;
+        }
+        for (MMIContext ctx : contexts.values()) {
             final String ctxId = ctx.getContexId();
             if (contextId.equals(ctxId)) {
                 return ctx;
@@ -161,29 +165,31 @@ public final class VoiceModalityComponent
     private void prepare(final Object channel, final PrepareRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        LOGGER.info("received a prepare request for " + requestId + ", "
-                + contextId);
+        LOGGER.info("received a prepare request for context " + contextId
+                + " with request id " + requestId);
         MMIContext context =
                 findMMIContext(requestId, contextId);
         if (context == null) {
             context = new MMIContext(requestId, contextId);
         }
-        final ContentURLType contentUrlType = request.getContentURL();
-        final String href = contentUrlType.getHref();
         String statusInfo = null;
-        try {
-            context.setContentURL(href);
-        } catch (URISyntaxException e) {
-            LOGGER.error(e.getMessage(), e);
-            statusInfo = e.getMessage();
+        final ContentURLType contentUrlType = request.getContentURL();
+        if (contentUrlType != null) {
+            final String href = contentUrlType.getHref();
+            try {
+                context.setContentURL(href);
+            } catch (URISyntaxException e) {
+                LOGGER.error(e.getMessage(), e);
+                statusInfo = e.getMessage();
+            }
         }
         final URI uri = context.getContentURL();
         try {
             if (statusInfo == null) {
                 LOGGER.info("creating session for URI '" + uri + "'");
-                final Session session = callManager.createSession(uri);
-                synchronized (sessions) {
-                    sessions.put(session, context);
+                final Session session = callManager.createSession();
+                synchronized (contexts) {
+                    contexts.put(session, context);
                 }
             }
         } catch (ErrorEvent e) {
@@ -220,8 +226,8 @@ public final class VoiceModalityComponent
     private void start(final Object channel, final StartRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        LOGGER.info("received a start request for " + requestId + ", "
-                + contextId);
+        LOGGER.info("received a prepare request for context " + contextId
+                + " with request id " + requestId);
         MMIContext context =
                 findMMIContext(requestId, contextId);
         if (context == null) {
@@ -237,17 +243,19 @@ public final class VoiceModalityComponent
         final String source = request.getSource();
         context.setTarget(source);
         context.setChannel(channel);
-        final ContentURLType contentUrlType = request.getContentURL();
-        final String href = contentUrlType.getHref();
         String statusInfo = null;
+        final ContentURLType contentUrlType = request.getContentURL();
         URI uri = context.getContentURL();
-        try {
-            if (href != null) {
-                uri = new URI(href);
+        if (contentUrlType != null) {
+            final String href = contentUrlType.getHref();
+            try {
+                if (href != null) {
+                    uri = new URI(href);
+                }
+            } catch (URISyntaxException e) {
+                LOGGER.error(e.getMessage(), e);
+                statusInfo = e.getMessage();
             }
-        } catch (URISyntaxException e) {
-            LOGGER.error(e.getMessage(), e);
-            statusInfo = e.getMessage();
         }
         if (uri == null) {
             statusInfo = "no URI given. Unable to start";
@@ -255,10 +263,10 @@ public final class VoiceModalityComponent
         try {
             if (statusInfo == null) {
                 LOGGER.info("calling '" + uri + "'");
-                final Session session = callManager.createSession(uri);
+                final Session session = callManager.createSession();
                 session.call(uri);
-                synchronized (sessions) {
-                    sessions.put(session, context);
+                synchronized (contexts) {
+                    contexts.put(session, context);
                 }
                 session.addSessionListener(this);
                 context.setSession(session);
@@ -298,8 +306,8 @@ public final class VoiceModalityComponent
     private void cancel(final Object channel, final CancelRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        LOGGER.info("received a cancel request for " + requestId + ", "
-                + contextId);
+        LOGGER.info("received a prepare request for context " + contextId
+                + " with request id " + requestId);
         final MMIContext context =
                 findMMIContext(requestId, contextId);
         String statusInfo = null;
@@ -348,8 +356,8 @@ public final class VoiceModalityComponent
             final ClearContextRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        LOGGER.info("received a clear contex request for " + requestId + ", "
-                + contextId);
+        LOGGER.info("received a prepare request for context " + contextId
+                + " with request id " + requestId);
         final MMIContext context =
                 findMMIContext(requestId, contextId);
         String statusInfo = null;
@@ -357,14 +365,16 @@ public final class VoiceModalityComponent
             statusInfo =
                     "no running session for the given context " + contextId;
         } else {
-            synchronized (sessions) {
-                sessions.remove(context);
+            synchronized (contexts) {
+                contexts.remove(context);
             }
             final ModalityComponentState state = context.getState();
             if (state == ModalityComponentState.RUNNING) {
                 LOGGER.info("hanging up session");
                 final Session session = context.getSession();
-                session.hangup();
+                if (session != null) {
+                    session.hangup();
+                }
             }
         }
         final ClearContextResponseBuilder builder =
@@ -398,8 +408,8 @@ public final class VoiceModalityComponent
     private void pause(final Object channel, final PauseRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        LOGGER.info("received a pause request for " + requestId + ", "
-                + contextId);
+        LOGGER.info("received a prepare request for context " + contextId
+                + " with request id " + requestId);
         final PauseResponseBuilder builder = new PauseResponseBuilder();
         builder.setRequestId(requestId);
         builder.setContextId(contextId);
@@ -423,8 +433,8 @@ public final class VoiceModalityComponent
     private void resume(final Object channel, final ResumeRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        LOGGER.info("received a pause request for " + requestId + ", "
-                + contextId);
+        LOGGER.info("received a prepare request for context " + contextId
+                + " with request id " + requestId);
         final ResumeResponseBuilder builder = new ResumeResponseBuilder();
         builder.setRequestId(requestId);
         builder.setContextId(contextId);
@@ -463,8 +473,8 @@ public final class VoiceModalityComponent
     @Override
     public void sessionEnded(final Session session) {
         final MMIContext context;
-        synchronized (sessions) {
-            context = sessions.get(session);
+        synchronized (contexts) {
+            context = contexts.get(session);
         }
         if (context == null) {
             LOGGER.warn("session " + session.getSessionID()
