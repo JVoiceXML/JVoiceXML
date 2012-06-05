@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -18,7 +19,23 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class demoApplicationActivity extends Activity {
-    protected static final int STOP_INTERPRETER = -1;
+	/**
+     * Command to the service to register a client, receiving callbacks
+     * from the service.  The Message's replyTo field must be a Messenger of
+     * the client where callbacks should be sent.
+     */
+    static final int MSG_REGISTER_CLIENT = 1;
+
+    /**
+     * Command to the service to unregister a client, ot stop receiving callbacks
+     * from the service.  The Message's replyTo field must be a Messenger of
+     * the client as previously given with MSG_REGISTER_CLIENT.
+     */
+    static final int MSG_UNREGISTER_CLIENT = 2;
+    /**
+     * Command to the service to stop the Interpreter
+     */
+    public static final int STOP_INTERPRETER = -1;	
 	/** Called when the activity is first created. */
 	public final String sample = new String ("http://sites.google.com/site/komponiendo/vxml/sample.vxml");
 	 /** Messenger for communicating with the service. */
@@ -26,7 +43,26 @@ public class demoApplicationActivity extends Activity {
 
     /** Flag indicating whether we have called bind on the service. */
     boolean mBound;
-
+    
+    /**
+     * Handler of incoming messages from service.
+     */
+    class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+           		case 5:
+           			Toast.makeText(getApplicationContext(),"El servicio me envió un OBJETO"+msg.getData().getString("str1"),1).show();            	
+           		default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+    
+    /**
+     * Target we publish for the callManager to send messages to demoApplication.
+     */
+    final Messenger callbackMessenger = new Messenger(new IncomingHandler());
     /**
      * Class for interacting with the main interface of the service.
      */
@@ -39,9 +75,24 @@ public class demoApplicationActivity extends Activity {
             // representation of that from the raw IBinder object.
             mService = new Messenger(service);
             mBound = true;
+            
+         // We want to monitor the service for as long as we are
+            // connected to it.
+            try {
+                Message msg = Message.obtain(null,
+                        MSG_REGISTER_CLIENT);                
+                msg.replyTo = callbackMessenger;
+                mService.send(msg);               
+            } catch (RemoteException e) {
+                // In this case the service has crashed before we could even
+                // do anything with it; we can count on soon being
+                // disconnected (and then reconnected if it can be restarted)
+                // so there is no need to do anything here.
+        
+            }
         }
 
-        public void onServiceDisconnected(ComponentName className) {
+        public void onServiceDisconnected(ComponentName className){
             // This is called when the connection with the service has been
             // unexpectedly disconnected -- that is, its process crashed.
             mService = null;
