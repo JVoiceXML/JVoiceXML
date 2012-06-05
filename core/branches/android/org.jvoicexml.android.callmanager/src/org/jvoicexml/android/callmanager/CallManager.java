@@ -1,29 +1,19 @@
 package org.jvoicexml.android.callmanager;
 
-import java.io.File;
-import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXmlMainListener;
-import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.event.JVoiceXMLEvent;
-
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.jvoicexml.JVoiceXmlMain;
-import org.jvoicexml.JVoiceXmlMainListener;
-import org.jvoicexml.Session;
-import org.jvoicexml.client.BasicConnectionInformation;
-//import org.jvoicexml.config.JVoiceXmlConfiguration;
 
 
 	  
@@ -33,25 +23,60 @@ public class CallManager extends Service implements JVoiceXmlMainListener{
 	 * Target we publish for clients to send messages to IncomingHandler.
 	 */
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
+	Messenger mClient; 
+	/**
+     * Command to the service to register a client, receiving callbacks
+     * from the service.  The Message's replyTo field must be a Messenger of
+     * the client where callbacks should be sent.
+     */
+    static final int MSG_REGISTER_CLIENT = 1;
+
+    /**
+     * Command to the service to unregister a client, ot stop receiving callbacks
+     * from the service.  The Message's replyTo field must be a Messenger of
+     * the client as previously given with MSG_REGISTER_CLIENT.
+     */
+    static final int MSG_UNREGISTER_CLIENT = 2;
+    /**
+     * Command to the service to stop the Interpreter
+     */
+    public static final int STOP_INTERPRETER = -1;	
+    
 	public static final Logger LOGGER = Logger.getLogger(Service.class);
-	public static final int STOP_INTERPRETER = -1;	
 	private Interpreter interpreter;
 	
 	/**
 	 * Handler of incoming messages from clients.
 	 */
     class IncomingHandler extends Handler {
-
-		@Override
+    	@Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case MSG_REGISTER_CLIENT:
+                    mClient= msg.replyTo;
+					try {
+						Message message= Message.obtain(null,5);
+						Bundle b= new Bundle();
+						b.putString("str1", "testingConnection");					
+						message.setData(b);
+						mClient.send(message);
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                    break;
+                case MSG_UNREGISTER_CLIENT:
+                	mClient=null;
+                    break;
                 case STOP_INTERPRETER:
                     Toast.makeText(getApplicationContext(),"stopping interpreter!",Toast.LENGTH_SHORT).show();
+                    interpreter.finish();
                     break;
                 default:
                     super.handleMessage(msg);
             }
         }
+		
     }
     
 
@@ -76,7 +101,6 @@ public class CallManager extends Service implements JVoiceXmlMainListener{
   public CallManager() {
 	    super();
 	}
-  
   
   @Override
   public void onCreate() {
@@ -115,6 +139,6 @@ public class CallManager extends Service implements JVoiceXmlMainListener{
 	@Override
 	public void jvxmlTerminated() {
 		// TODO Auto-generated method stub
-		
+		this.notifyAll();
 	}
 }

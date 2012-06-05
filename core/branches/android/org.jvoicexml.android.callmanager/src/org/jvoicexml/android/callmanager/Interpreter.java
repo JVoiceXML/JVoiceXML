@@ -83,9 +83,16 @@ public class Interpreter extends Thread implements JVoiceXmlMainListener
 		this.notifyAll();		
 	}
 	@Override
-	public void jvxmlTerminated() {
+	public synchronized void jvxmlTerminated() {
 		// TODO Auto-generated method stub
-		
+		this.notifyAll();
+	}
+	
+	public void finish()
+	{
+		jvxml.shutdown();
+		jvxml.waitShutdownComplete();
+		this.stop();
 	}
 	
 }
