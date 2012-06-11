@@ -29,6 +29,7 @@ package org.jvoicexml.callmanager.mmi;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.CallManager;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
@@ -45,6 +46,10 @@ import org.jvoicexml.event.error.NoresourceError;
  * @since 0.7.6
  */
 public final class MMICallManager implements CallManager {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(MMICallManager.class);
+
     /** Reference to JVoiceXML. */
     private JVoiceXml jvxml;
 
@@ -169,6 +174,9 @@ public final class MMICallManager implements CallManager {
                 controller.getConnectionInformation();
         final Session session = jvxml.createSession(info);
         sessions.put(session, controller);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("session '" + session.getSessionID() + "' created");
+        }
         return session;
     }
 
@@ -180,6 +188,10 @@ public final class MMICallManager implements CallManager {
         final ConnectionInformationController controller =
                 sessions.get(session);
         if (session == null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.info("no controller for session '" + session.getSessionID()
+                        + "'");
+            }
             return;
         }
         controller.cleanup();

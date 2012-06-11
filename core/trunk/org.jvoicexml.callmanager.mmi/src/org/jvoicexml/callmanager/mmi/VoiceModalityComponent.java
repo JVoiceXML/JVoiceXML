@@ -71,21 +71,21 @@ public final class VoiceModalityComponent
     private static final Logger LOGGER =
         Logger.getLogger(VoiceModalityComponent.class);
 
-    /** Adpater for the event and transport layer. */
+    /** Adapter for the event and transport layer. */
     private ETLProtocolAdapter adapter;
 
     /** Reference to the call manager. */
     private final MMICallManager callManager;
 
     /** Active contexts. */
-    private final Map<Session, MMIContext> contexts;
+    private final Map<String, MMIContext> contexts;
 
     /**
      * Constructs a new object.
      */
     public VoiceModalityComponent(final MMICallManager cm) {
         callManager = cm;
-        contexts = new java.util.HashMap<Session, MMIContext>();
+        contexts = new java.util.HashMap<String, MMIContext>();
     }
 
     /**
@@ -103,28 +103,6 @@ public final class VoiceModalityComponent
                 + "'");
         adapter.start();
         
-    }
-
-    /**
-     * Determines the {@link MMIContext} from the given
-     * identifiers.
-     * @param requestId the request id
-     * @param contextId the context id
-     * @return found identifiers, or <code>null</code> if there is no identifier
-     */
-    private MMIContext findMMIContext(
-            final String requestId, final String contextId) {
-        if (contextId == null) {
-            LOGGER.warn("no context id given");
-            return null;
-        }
-        for (MMIContext ctx : contexts.values()) {
-            final String ctxId = ctx.getContexId();
-            if (contextId.equals(ctxId)) {
-                return ctx;
-            }
-        }
-        return null;
     }
 
     /**
@@ -167,10 +145,15 @@ public final class VoiceModalityComponent
         final String requestId = request.getRequestID();
         LOGGER.info("received a prepare request for context " + contextId
                 + " with request id " + requestId);
-        MMIContext context =
-                findMMIContext(requestId, contextId);
+        MMIContext context;
+        synchronized (contexts) {
+            context = contexts.get(contextId);
+        }
         if (context == null) {
             context = new MMIContext(requestId, contextId);
+            synchronized (contexts) {
+                contexts.put(contextId, context);
+            }
         }
         String statusInfo = null;
         final ContentURLType contentUrlType = request.getContentURL();
@@ -188,9 +171,7 @@ public final class VoiceModalityComponent
             if (statusInfo == null) {
                 LOGGER.info("creating session for URI '" + uri + "'");
                 final Session session = callManager.createSession();
-                synchronized (contexts) {
-                    contexts.put(session, context);
-                }
+                context.setSession(session);
             }
         } catch (ErrorEvent e) {
             LOGGER.error(e.getMessage(), e);
@@ -228,16 +209,23 @@ public final class VoiceModalityComponent
         final String requestId = request.getRequestID();
         LOGGER.info("received a prepare request for context " + contextId
                 + " with request id " + requestId);
-        MMIContext context =
-                findMMIContext(requestId, contextId);
+        MMIContext context;
+        synchronized (contexts) {
+            context = contexts.get(contextId);
+        }
         if (context == null) {
             context = new MMIContext(requestId, contextId);
+            synchronized (contexts) {
+                contexts.put(contextId, context);
+            }
         } else {
             final ModalityComponentState state = context.getState();
             if (state == ModalityComponentState.RUNNING) {
                 LOGGER.info("terminating old session");
                 final Session session = context.getSession();
+                context.setSession(null);
                 session.hangup();
+                callManager.cleanupSession(session);
             }
         }
         final String source = request.getSource();
@@ -263,13 +251,13 @@ public final class VoiceModalityComponent
         try {
             if (statusInfo == null) {
                 LOGGER.info("calling '" + uri + "'");
-                final Session session = callManager.createSession();
-                session.call(uri);
-                synchronized (contexts) {
-                    contexts.put(session, context);
+                Session session = context.getSession();
+                if (session == null) {
+                    session = callManager.createSession();
+                    context.setSession(session);
                 }
+                session.call(uri);
                 session.addSessionListener(this);
-                context.setSession(session);
             }
         } catch (ErrorEvent e) {
             LOGGER.error(e.getMessage(), e);
@@ -308,8 +296,10 @@ public final class VoiceModalityComponent
         final String requestId = request.getRequestID();
         LOGGER.info("received a prepare request for context " + contextId
                 + " with request id " + requestId);
-        final MMIContext context =
-                findMMIContext(requestId, contextId);
+        MMIContext context;
+        synchronized (contexts) {
+            context = contexts.get(contextId);
+        }
         String statusInfo = null;
         if (context == null) {
             statusInfo =
@@ -321,7 +311,9 @@ public final class VoiceModalityComponent
             } else {
                 LOGGER.info("hanging up session");
                 final Session session = context.getSession();
+                context.setSession(null);
                 session.hangup();
+                callManager.cleanupSession(session);
             }
         }
         final CancelResponseBuilder builder = new CancelResponseBuilder();
@@ -358,23 +350,29 @@ public final class VoiceModalityComponent
         final String requestId = request.getRequestID();
         LOGGER.info("received a prepare request for context " + contextId
                 + " with request id " + requestId);
-        final MMIContext context =
-                findMMIContext(requestId, contextId);
+        MMIContext context;
+        synchronized (contexts) {
+            context = contexts.get(contextId);
+        }
         String statusInfo = null;
         if (context == null) {
-            statusInfo =
-                    "no running session for the given context " + contextId;
+            statusInfo = "context '" + contextId + " is unknown";
         } else {
             synchronized (contexts) {
-                contexts.remove(context);
+                contexts.remove(contextId);
+                LOGGER.info("cleared context '" + contextId + "'");
             }
             final ModalityComponentState state = context.getState();
+            final Session session = context.getSession();
             if (state == ModalityComponentState.RUNNING) {
                 LOGGER.info("hanging up session");
-                final Session session = context.getSession();
                 if (session != null) {
+                    context.setSession(null);
                     session.hangup();
                 }
+            }
+            if (session != null) {
+                callManager.cleanupSession(session);
             }
         }
         final ClearContextResponseBuilder builder =
@@ -394,8 +392,6 @@ public final class VoiceModalityComponent
                 builder.toClearContextResponse();
         try {
             adapter.sendMMIEvent(channel, response);
-            if (statusInfo == null) {
-            }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -467,15 +463,29 @@ public final class VoiceModalityComponent
     public void sessionStarted(final Session session) {
     }
 
+    private MMIContext findSession(final Session session) {
+        final String sessionId = session.getSessionID();
+        synchronized (contexts) {
+            for (String contextId : contexts.keySet()) {
+                final MMIContext context = contexts.get(contextId);
+                final Session other = context.getSession();
+                if (other != null) {
+                    final String otherSessionId = other.getSessionID();
+                    if (otherSessionId.equals(sessionId)) {
+                        return context;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void sessionEnded(final Session session) {
-        final MMIContext context;
-        synchronized (contexts) {
-            context = contexts.get(session);
-        }
+        final MMIContext context = findSession(session);
         if (context == null) {
             LOGGER.warn("session " + session.getSessionID()
                     + " ended without MMI identifiers");

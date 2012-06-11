@@ -92,6 +92,5 @@ public class Assert165 extends AbstractAssert {
             throw new TestFailedException(
                     "default behavious should be FAILURE");
         }
-        clearContext();
     }
 }

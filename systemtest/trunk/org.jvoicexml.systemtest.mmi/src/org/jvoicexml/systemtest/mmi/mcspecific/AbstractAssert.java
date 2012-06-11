@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -23,6 +23,8 @@ import org.jvoicexml.mmi.events.CommonAttributeAdapter;
 import org.jvoicexml.mmi.events.CommonResponseAttributeAdapter;
 import org.jvoicexml.mmi.events.MMIEvent;
 import org.jvoicexml.mmi.events.Mmi;
+import org.jvoicexml.mmi.events.PrepareRequest;
+import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.mmi.events.StatusType;
 import org.jvoicexml.systemtest.mmi.MMIEventListener;
 import org.jvoicexml.systemtest.mmi.TestFailedException;
@@ -40,8 +42,25 @@ public abstract class AbstractAssert implements MMIEventListener {
     /** The last received MMI event. */
     private MMIEvent event;
 
+    /** Possible additional notes. */
+    private String notes;
+
+    /** <code>true</code> if the context is cleared. */
+    private boolean clearedContext;
+
+    /** An atomic counter for the request ids. */
+    private static AtomicLong currentId;
+
+    static {
+        currentId = new AtomicLong();
+    }
+
+    /**
+     * Constructs a new Object.
+     */
     public AbstractAssert() {
         lock = new Object();
+        clearedContext = true;
     }
 
     /**
@@ -49,6 +68,22 @@ public abstract class AbstractAssert implements MMIEventListener {
      * @return
      */
     public abstract int getId();
+
+    /**
+     * Retrieves possible additional notes.
+     * @return notes, maybe <code>null</code> if there are no notes.
+     */
+    public String getNotes() {
+        return notes;
+    }
+
+    /**
+     * Sets additional notes.
+     * @param value the notes.
+     */
+    public void setNotes(final String value) {
+        notes = value;
+    }
 
     /**
      * Sets the source URI.
@@ -90,10 +125,23 @@ public abstract class AbstractAssert implements MMIEventListener {
         marshaller.marshal(request, out);
         LOGGER.info("sent '" + request + "'");
         client.close();
+        if (request instanceof StartRequest || request instanceof PrepareRequest) {
+            clearedContext = false;
+        }
+    }
+
+    /**
+     * Notification that a clear context request must be sent.
+     */
+    protected void needToClearContext() {
+        clearedContext = false;
     }
 
     public void clearContext() throws IOException, JAXBException,
         URISyntaxException, InterruptedException, TestFailedException {
+        if (clearedContext) {
+            return;
+        }
         final String contextId = getContextId();
         LOGGER.info("clearing context '" + contextId + "'...");
         final ClearContextRequestBuilder builder =
@@ -127,8 +175,8 @@ public abstract class AbstractAssert implements MMIEventListener {
      * @return a new request id
      */
     public String createRequestId() {
-        final UUID id = UUID.randomUUID();
-        return id.toString();
+        long requestId = currentId.addAndGet(1);
+        return Long.toString(requestId);
     }
 
     /**
@@ -152,8 +200,10 @@ public abstract class AbstractAssert implements MMIEventListener {
         }
         final String eventRequestId = adapter.getRequestID();
         if (!requestId.equals(eventRequestId)) {
-            throw new TestFailedException("Expected context id '" + contextId
-                    + "' but have '" + requestId + "'");
+            final String message = "Expected request id '" + requestId
+                    + "' but have '" + eventRequestId + "'";
+            LOGGER.warn(message);
+            throw new TestFailedException(message);
         }
     }
 
@@ -175,7 +225,9 @@ public abstract class AbstractAssert implements MMIEventListener {
                 str.append(o);
                 str.append(System.getProperty("line.separator"));
             }
-            throw new TestFailedException(str.toString());
+            final String message = str.toString();
+            LOGGER.warn("call was not successful: '" + message + "'");
+            throw new TestFailedException(message);
         }
     }
 

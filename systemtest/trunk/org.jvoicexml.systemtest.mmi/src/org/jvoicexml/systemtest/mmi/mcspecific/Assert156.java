@@ -25,7 +25,18 @@
  */
 package org.jvoicexml.systemtest.mmi.mcspecific;
 
-import org.jvoicexml.systemtest.mmi.NotImplementedException;
+import java.io.File;
+import java.net.URI;
+
+import org.jvoicexml.mmi.events.DoneNotification;
+import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.PrepareRequest;
+import org.jvoicexml.mmi.events.PrepareRequestBuilder;
+import org.jvoicexml.mmi.events.PrepareResponse;
+import org.jvoicexml.mmi.events.StartRequest;
+import org.jvoicexml.mmi.events.StartRequestBuilder;
+import org.jvoicexml.mmi.events.StartResponse;
+import org.jvoicexml.systemtest.mmi.TestFailedException;
 
 /**
  * Assertion 156: Modality Components that return a PrepareResponse event with
@@ -55,6 +66,44 @@ public class Assert156 extends AbstractAssert {
      */
     @Override
     public void test() throws Exception {
-        throw new NotImplementedException();
+        final PrepareRequestBuilder builder = new PrepareRequestBuilder();
+        final String contextId = getContextId();
+        builder.setContextId(contextId);
+        final String requestId = createRequestId();
+        builder.setRequestId(requestId);
+        final File file = new File("vxml/helloworld.vxml");
+        final URI uri = file.toURI();
+        builder.setHref(uri);
+        final PrepareRequest request = builder.toPrepareRequest();
+        send(request);
+        final MMIEvent prepareReponse = waitForResponse("PrepareResponse");
+        if (!(prepareReponse instanceof PrepareResponse)) {
+            throw new TestFailedException("expected a PrepareReponse but got a "
+                    + prepareReponse.getClass());
+        }
+        checkIds(prepareReponse, contextId, requestId);
+        final StartRequestBuilder startBuilder = new StartRequestBuilder();
+        startBuilder.setContextId(contextId);
+        final String startRequestId = createRequestId();
+        startBuilder.setRequestId(startRequestId);
+        final StartRequest startRequest = startBuilder.toStartRequest();
+        final long startTime = System.currentTimeMillis();
+        send(startRequest);
+        final MMIEvent startReponse = waitForResponse("StartResponse");
+        final long endTime = System.currentTimeMillis();
+        if (!(startReponse instanceof StartResponse)) {
+            throw new TestFailedException("expected a StartReponse but got a "
+                    + startReponse.getClass());
+        }
+        ensureSuccess(startReponse);
+        setNotes("started after " + (endTime - startTime) + " msec");
+        checkIds(startReponse, contextId, requestId);
+        final MMIEvent doneNotification = waitForResponse("DoneNotification");
+        if (!(doneNotification instanceof DoneNotification)) {
+            throw new TestFailedException(
+                    "expected a DoneNotification but got a "
+                    + startReponse.getClass());
+        }
+        checkIds(doneNotification, contextId, startRequestId);
     }
 }

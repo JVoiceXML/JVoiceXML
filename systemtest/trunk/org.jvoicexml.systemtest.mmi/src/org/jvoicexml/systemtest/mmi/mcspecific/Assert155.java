@@ -77,6 +77,5 @@ public class Assert155 extends AbstractAssert {
                     + prepareReponse.getClass());
         }
         checkIds(prepareReponse, contextId, requestId);
-        clearContext();
     }
 }

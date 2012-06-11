@@ -87,7 +87,6 @@ public class Assert169  extends AbstractAssert {
                     "expected a DoneNotification but got a "
                     + startReponse.getClass());
         }
-        checkIds(startReponse, contextId, requestId);
-        clearContext();
+        checkIds(doneNotification, contextId, requestId);
     }
 }

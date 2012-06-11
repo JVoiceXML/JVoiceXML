@@ -86,6 +86,5 @@ public class Assert8 extends AbstractAssert {
                     + startReponse.getClass());
         }
         checkIds(startReponse, contextId, requestId);
-        clearContext();
     }
 }

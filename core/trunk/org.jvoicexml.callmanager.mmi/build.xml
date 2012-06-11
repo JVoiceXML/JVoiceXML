@@ -87,7 +87,6 @@ You're using ${ant.java.version}
                deprecation="on">
             <src path="${src}" />
             <include name="${component.path}/**/*.java" />
-            <exclude name="**/package-info.java" />
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
@@ -193,7 +192,7 @@ You're using ${ant.java.version}
 	  <copy todir="${distFolder}/lib" file="${dist.jar}"/>
       <copy tofile="${distFolder}/config/mmi-callmanager.xml"
         file="${etc}/mmi-callmanager-dist.xml"/>
-      <ant dir="../org.jvoicexml.mmi.events" target="clean"
+      <ant dir="../org.jvoicexml.mmi.events" target="distribution"
         inheritrefs="false" inheritall="false"/>
     </target>
 </project>
