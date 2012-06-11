@@ -26,8 +26,6 @@
 
     <target name="-setup">
         <!-- base properties. -->
-        <property name="javac.source" value="1.6" />
-        <property name="javac.target" value="1.6" />
         <property name="tomcat.home" value="/usr/local/tomcat" />
         <property name="servlet.lib.dir" value="${tomcat.home}/common/lib" />
         <property name="servlet.include" value="servlet-api.jar" />
@@ -101,8 +99,8 @@ You're using ${ant.java.version}
                 <exclude name="**/*.java" />
             </fileset>
         </copy>
-        <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on"
-          includeantruntime="false" source="${javac.source}" target="${javac.target}">
+        <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
+        	deprecation="on" includeantruntime="false">
             <src path="${src}" />
             <include name="org/jvoicexml/systemtest/servlet/*.java" />
             <classpath refid="project.classpath" />

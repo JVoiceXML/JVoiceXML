@@ -87,14 +87,11 @@ You're using ${ant.java.version}
                optimize="${javac.optimize}"
                debug="${javac.debug}"
                deprecation="on"
-               encoding="iso-8859-1"
-               source="${javac.source}"
-               target="${javac.target}">
+        	   includeantruntime="false">
             <src path="${src}" />
             <include name="org/jvoicexml/callmanager/text/**/*.java" />
             <include name="org/jvoicexml/client/text/**/*.java" />
             <include name="org/jvoicexml/implementation/text/**/*.java" />
-            <exclude name="**/package-info.java" />
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>

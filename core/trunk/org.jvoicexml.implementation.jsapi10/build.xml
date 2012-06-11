@@ -143,11 +143,8 @@ You're using ${ant.java.version}
         <javac destdir="${build}" includeantruntime="false"
                optimize="${javac.optimize}"
                debug="${javac.debug}"
-               deprecation="on"
-               source="${javac.source}"
-               target="${javac.target}">
+               deprecation="on">
             <src path="${src}" />
-            <exclude name="**/package-info.java" />
             <include name="org/jvoicexml/implementation/jsapi10/**/*.java" />
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />

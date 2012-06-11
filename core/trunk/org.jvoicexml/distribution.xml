@@ -41,15 +41,7 @@ This file builds the distribution files for JVoiceXML.
   <target name="-prepareDistributionFolder"
     depends="jar,-prepareAdditionalFiles,-userdoc" 
   	description="copy all files for the binary distribution">
-    <antcall target="apidoc">
-      <param name="jvxml.text" value="true" />
-      <param name="jvxml.jsapi10" value="true" />
-      <param name="jvxml.jsapi20" value="true" />
-      <param name="jvxml.mary" value="true" />
-      <param name="jvxml.mrcpv2" value="true" />
-      <param name="jvxml.jtapi" value="true" />
-      <param name="javadoc.access" value="protected" />
-    </antcall>
+    <antcall target="apidoc" />
     <mkdir dir="${distFolder}/bin" />
 
     <copy todir="${distFolder}">
@@ -65,7 +57,9 @@ This file builds the distribution files for JVoiceXML.
         <include name="**/*.bat" />
       </fileset>
     </copy>
-
+	<fixcrlf srcdir="${distFolder}/bin" includes="*.sh" eol="unix"/>
+	<fixcrlf srcdir="${distFolder}/bin" includes="*.bat" eol="dos" />
+  	
     <mkdir dir="${distFolder}/config" />
     <!-- copy all the configuration settings that are needed for the core. -->
     <copy todir="${distFolder}/config">
@@ -178,13 +172,13 @@ This file builds the distribution files for JVoiceXML.
         inheritall="false" inheritrefs="false"/>
     <echo message="distributing org.jvoicexml.jndi"/>
     <ant dir="../org.jvoicexml.jndi"
-        inheritall="false" target="distribution">
+        inheritall="false" inheritrefs="false" target="distribution">
       <property name="jvxml.jndi.port" value="1099"/>
       <property name="jvxml.jndi.repository" value="text"/>
     </ant>
     <echo message="distributing org.jvoicexml.config"/>
     <ant dir="../org.jvoicexml.config"
-        inheritall="false" target="distribution"/>
+        inheritall="false" inheritrefs="false" target="distribution"/>
     <antcall target="-distributionPlatforms"/>
   </target>
 

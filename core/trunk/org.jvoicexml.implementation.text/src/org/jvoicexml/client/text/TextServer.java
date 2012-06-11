@@ -271,6 +271,7 @@ public final class TextServer extends Thread {
             return;
         }
 
+        LOGGER.info("text server started at port '" + port + "'");
         fireStarted();
         started = true;
 
@@ -423,6 +424,7 @@ public final class TextServer extends Thread {
         closeServer();
         closeClient();
         interrupt();
+        LOGGER.info("text server stopped");
     }
 
     /**
@@ -433,6 +435,7 @@ public final class TextServer extends Thread {
             if (server != null) {
                 try {
                     server.close();
+                    LOGGER.info("server closed");
                 } catch (IOException e) {
                     LOGGER.warn("error closing the server", e);
                 } finally {

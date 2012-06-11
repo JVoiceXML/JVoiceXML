@@ -135,8 +135,7 @@ You're using ${ant.java.version}
         	description="Compile the sources">
         <echo message="compiling system test layer with debug=${debug}, optimize=${optimize}" />
         <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
-        	deprecation="on" includeantruntime="false"
-        	source="${javac.source}" target="${javac.target}">
+        	deprecation="on" includeantruntime="false">
             <src path="${src}" />
             <include name="org/jvoicexml/systemtest/mmi/**/*.java" />
             <classpath refid="project.classpath" />

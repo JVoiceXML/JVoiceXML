@@ -120,7 +120,6 @@ You're using ${ant.java.version}
             <src path="${src}" />
             <include name="${component.path}/**/*.java" />
             <include name="org/jvoicexml/callmanager/mrcpv2/**/*.java" />
-            <exclude name="**/package-info.java" />
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
