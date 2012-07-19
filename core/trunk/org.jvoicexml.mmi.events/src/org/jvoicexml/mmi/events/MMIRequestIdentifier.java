@@ -43,7 +43,7 @@ public class MMIRequestIdentifier {
      * in the request event. The RequestID for such a pair MUST be unique within
      * the given context.
      */
-    private final String requestId;
+    private String requestId;
     
     /**
      * A URI that MUST be unique for the lifetime of the system. It is used to
@@ -52,7 +52,15 @@ public class MMIRequestIdentifier {
      * MUST be interpreted as part of other, unrelated, interactions.
      */
     private final String contexId;
-    
+
+    /**
+     * Constructs a new object.
+     * @param ctxId the context id
+     */
+    public MMIRequestIdentifier(final String ctxId) {
+        contexId = ctxId;
+    }
+
     /**
      * Constructs a new object.
      * @param reqId the request id
@@ -61,6 +69,14 @@ public class MMIRequestIdentifier {
     public MMIRequestIdentifier(final String reqId, final String ctxId) {
         requestId = reqId;
         contexId = ctxId;
+    }
+
+    /**
+     * Sets the requuest id.
+     * @param reqId the new request id.
+     */
+    public final void setRequestId(final String reqId) {
+        requestId = reqId;
     }
 
     /**

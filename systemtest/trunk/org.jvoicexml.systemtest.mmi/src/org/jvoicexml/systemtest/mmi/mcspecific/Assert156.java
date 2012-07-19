@@ -97,7 +97,7 @@ public class Assert156 extends AbstractAssert {
         }
         ensureSuccess(startReponse);
         setNotes("started after " + (endTime - startTime) + " msec");
-        checkIds(startReponse, contextId, requestId);
+        checkIds(startReponse, contextId, startRequestId);
         final MMIEvent doneNotification = waitForResponse("DoneNotification");
         if (!(doneNotification instanceof DoneNotification)) {
             throw new TestFailedException(

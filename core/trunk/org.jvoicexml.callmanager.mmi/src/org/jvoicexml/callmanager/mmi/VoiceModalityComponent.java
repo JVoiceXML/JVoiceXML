@@ -150,7 +150,7 @@ public final class VoiceModalityComponent
             context = contexts.get(contextId);
         }
         if (context == null) {
-            context = new MMIContext(requestId, contextId);
+            context = new MMIContext(contextId);
             synchronized (contexts) {
                 contexts.put(contextId, context);
             }
@@ -207,7 +207,7 @@ public final class VoiceModalityComponent
     private void start(final Object channel, final StartRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        LOGGER.info("received a prepare request for context " + contextId
+        LOGGER.info("received a start request for context " + contextId
                 + " with request id " + requestId);
         MMIContext context;
         synchronized (contexts) {
@@ -273,6 +273,7 @@ public final class VoiceModalityComponent
         builder.setRequestId(requestId);
         if (statusInfo == null) {
             builder.setStatusSuccess();
+            context.setRequestId(requestId);
         } else {
             builder.setStatusFailure();
             builder.addStatusInfo(statusInfo);
@@ -294,7 +295,7 @@ public final class VoiceModalityComponent
     private void cancel(final Object channel, final CancelRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        LOGGER.info("received a prepare request for context " + contextId
+        LOGGER.info("received a cancel request for context " + contextId
                 + " with request id " + requestId);
         MMIContext context;
         synchronized (contexts) {
@@ -348,7 +349,7 @@ public final class VoiceModalityComponent
             final ClearContextRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        LOGGER.info("received a prepare request for context " + contextId
+        LOGGER.info("received a clear context request for context " + contextId
                 + " with request id " + requestId);
         MMIContext context;
         synchronized (contexts) {
@@ -404,7 +405,7 @@ public final class VoiceModalityComponent
     private void pause(final Object channel, final PauseRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        LOGGER.info("received a prepare request for context " + contextId
+        LOGGER.info("received a pause request for context " + contextId
                 + " with request id " + requestId);
         final PauseResponseBuilder builder = new PauseResponseBuilder();
         builder.setRequestId(requestId);
@@ -429,7 +430,7 @@ public final class VoiceModalityComponent
     private void resume(final Object channel, final ResumeRequest request) {
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
-        LOGGER.info("received a prepare request for context " + contextId
+        LOGGER.info("received a resume request for context " + contextId
                 + " with request id " + requestId);
         final ResumeResponseBuilder builder = new ResumeResponseBuilder();
         builder.setRequestId(requestId);

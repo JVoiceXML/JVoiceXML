@@ -195,13 +195,17 @@ public abstract class AbstractAssert implements MMIEventListener {
                 new CommonAttributeAdapter(event);
         final String eventContextId = adapter.getContext();
         if (!contextId.equals(eventContextId)) {
-            throw new TestFailedException("Expected context id '" + contextId
-                    + "' but have '" + eventContextId + "'");
+            final String message = "Expected context id '" + contextId
+                    + "' but have '" + eventContextId + "' in "
+                    + event.getClass().getCanonicalName();
+            LOGGER.warn(message);
+            throw new TestFailedException(message);
         }
         final String eventRequestId = adapter.getRequestID();
         if (!requestId.equals(eventRequestId)) {
             final String message = "Expected request id '" + requestId
-                    + "' but have '" + eventRequestId + "'";
+                    + "' but have '" + eventRequestId + "' in "
+                    + event.getClass().getCanonicalName();
             LOGGER.warn(message);
             throw new TestFailedException(message);
         }

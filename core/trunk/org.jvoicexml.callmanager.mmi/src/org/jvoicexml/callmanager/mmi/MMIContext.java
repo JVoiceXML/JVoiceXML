@@ -55,6 +55,14 @@ public class MMIContext extends MMIRequestIdentifier {
 
     /**
      * Constructs a new object.
+     * @param ctxId the context id
+     */
+    public MMIContext(final String ctxId) {
+        super(ctxId);
+    }
+
+    /**
+     * Constructs a new object.
      * @param reqId the request id
      * @param ctxId the context id
      */
