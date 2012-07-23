@@ -25,7 +25,18 @@
  */
 package org.jvoicexml.systemtest.mmi.mcspecific;
 
-import org.jvoicexml.systemtest.mmi.NotImplementedException;
+import java.io.File;
+import java.net.URI;
+
+import org.jvoicexml.mmi.events.DoneNotification;
+import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.PrepareRequest;
+import org.jvoicexml.mmi.events.PrepareRequestBuilder;
+import org.jvoicexml.mmi.events.PrepareResponse;
+import org.jvoicexml.mmi.events.StartRequest;
+import org.jvoicexml.mmi.events.StartRequestBuilder;
+import org.jvoicexml.mmi.events.StartResponse;
+import org.jvoicexml.systemtest.mmi.TestFailedException;
 
 /**
  * Assertion 159: When it receives multiple PrepareRequests, the Modality
@@ -54,6 +65,74 @@ public class Assert159 extends AbstractAssert {
      */
     @Override
     public void test() throws Exception {
-        throw new NotImplementedException();
+        final PrepareRequestBuilder builder1 = new PrepareRequestBuilder();
+        final String contextId = getContextId();
+        builder1.setContextId(contextId);
+        final String requestId1 = createRequestId();
+        builder1.setRequestId(requestId1);
+        final File file1 = new File("vxml/helloworld1.vxml");
+        final URI uri1 = file1.toURI();
+        builder1.setHref(uri1);
+        final PrepareRequest request1 = builder1.toPrepareRequest();
+        send(request1);
+        final MMIEvent prepareReponse1 = waitForResponse("PrepareResponse");
+        if (!(prepareReponse1 instanceof PrepareResponse)) {
+            throw new TestFailedException("expected a PrepareReponse but got a "
+                    + prepareReponse1.getClass());
+        }
+        checkIds(prepareReponse1, contextId, requestId1);
+        final PrepareRequestBuilder builder2 = new PrepareRequestBuilder();
+        builder2.setContextId(contextId);
+        final String requestId2 = createRequestId();
+        builder2.setRequestId(requestId2);
+        final File file2 = new File("vxml/helloworld2.vxml");
+        final URI uri2 = file2.toURI();
+        builder2.setHref(uri2);
+        final PrepareRequest request2 = builder2.toPrepareRequest();
+        send(request2);
+        final MMIEvent prepareReponse2 = waitForResponse("PrepareResponse");
+        if (!(prepareReponse2 instanceof PrepareResponse)) {
+            throw new TestFailedException("expected a PrepareReponse but got a "
+                    + prepareReponse2.getClass());
+        }
+        checkIds(prepareReponse2, contextId, requestId2);
+        final PrepareRequestBuilder builder3 = new PrepareRequestBuilder();
+        builder3.setContextId(contextId);
+        final String requestId3 = createRequestId();
+        builder3.setRequestId(requestId3);
+        final File file3 = new File("vxml/helloworld.vxml");
+        final URI uri3 = file3.toURI();
+        builder3.setHref(uri3);
+        final PrepareRequest request3 = builder3.toPrepareRequest();
+        send(request3);
+        final MMIEvent prepareReponse3 = waitForResponse("PrepareResponse");
+        if (!(prepareReponse3 instanceof PrepareResponse)) {
+            throw new TestFailedException("expected a PrepareReponse but got a "
+                    + prepareReponse3.getClass());
+        }
+        checkIds(prepareReponse3, contextId, requestId3);
+        final StartRequestBuilder startBuilder = new StartRequestBuilder();
+        startBuilder.setContextId(contextId);
+        final String startRequestId = createRequestId();
+        startBuilder.setRequestId(startRequestId);
+        final StartRequest startRequest = startBuilder.toStartRequest();
+        final long startTime = System.currentTimeMillis();
+        send(startRequest);
+        final MMIEvent startReponse = waitForResponse("StartResponse");
+        final long endTime = System.currentTimeMillis();
+        if (!(startReponse instanceof StartResponse)) {
+            throw new TestFailedException("expected a StartReponse but got a "
+                    + startReponse.getClass());
+        }
+        ensureSuccess(startReponse);
+        setNotes("started after " + (endTime - startTime) + " msec");
+        checkIds(startReponse, contextId, startRequestId);
+        final MMIEvent doneNotification = waitForResponse("DoneNotification");
+        if (!(doneNotification instanceof DoneNotification)) {
+            throw new TestFailedException(
+                    "expected a DoneNotification but got a "
+                    + startReponse.getClass());
+        }
+        checkIds(doneNotification, contextId, startRequestId);
     }
 }

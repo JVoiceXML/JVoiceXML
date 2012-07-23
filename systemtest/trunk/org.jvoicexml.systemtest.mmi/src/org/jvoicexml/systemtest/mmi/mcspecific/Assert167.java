@@ -25,7 +25,12 @@
  */
 package org.jvoicexml.systemtest.mmi.mcspecific;
 
-import org.jvoicexml.systemtest.mmi.NotImplementedException;
+import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.StartRequest;
+import org.jvoicexml.mmi.events.StartRequestBuilder;
+import org.jvoicexml.mmi.events.StartResponse;
+import org.jvoicexml.mmi.events.StatusType;
+import org.jvoicexml.systemtest.mmi.TestFailedException;
 
 /**
  * Assertion 167: The Modality Component MUST return a StartResponse event in
@@ -54,6 +59,23 @@ public class Assert167 extends AbstractAssert {
      */
     @Override
     public void test() throws Exception {
-        throw new NotImplementedException();
+        final String contextId = getContextId();
+        final StartRequestBuilder startBuilder = new StartRequestBuilder();
+        startBuilder.setContextId(contextId);
+        String requestId = createRequestId();
+        startBuilder.setRequestId(requestId);
+        final StartRequest startRequest = startBuilder.toStartRequest();
+        send(startRequest);
+        final MMIEvent startReponse = waitForResponse("StartResponse");
+        if (!(startReponse instanceof StartResponse)) {
+            throw new TestFailedException("expected a StartReponse but got a "
+                    + startReponse.getClass());
+        }
+        checkIds(startReponse, contextId, requestId);
+        final StartResponse response = (StartResponse) startReponse;
+        if (response.getStatus() != StatusType.FAILURE) {
+            throw new TestFailedException(
+                    "default behavious should be FAILURE");
+        }
     }
 }
