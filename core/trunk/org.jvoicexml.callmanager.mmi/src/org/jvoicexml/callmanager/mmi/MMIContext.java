@@ -56,8 +56,10 @@ public class MMIContext extends MMIRequestIdentifier {
     /**
      * Constructs a new object.
      * @param ctxId the context id
+     * @exception URISyntaxException
+     *            the given context id does not denote a valid URI
      */
-    public MMIContext(final String ctxId) {
+    public MMIContext(final String ctxId) throws URISyntaxException {
         super(ctxId);
     }
 
@@ -65,8 +67,11 @@ public class MMIContext extends MMIRequestIdentifier {
      * Constructs a new object.
      * @param reqId the request id
      * @param ctxId the context id
+     * @exception URISyntaxException
+     *            the given context id does not denote a valid URI
      */
-    public MMIContext(final String reqId, final String ctxId) {
+    public MMIContext(final String reqId, final String ctxId)
+            throws URISyntaxException {
         super(reqId, ctxId);
     }
 

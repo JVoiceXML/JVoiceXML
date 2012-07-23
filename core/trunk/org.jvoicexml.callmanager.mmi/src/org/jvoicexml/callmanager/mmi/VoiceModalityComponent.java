@@ -42,6 +42,7 @@ import org.jvoicexml.mmi.events.CancelResponseBuilder;
 import org.jvoicexml.mmi.events.ClearContextRequest;
 import org.jvoicexml.mmi.events.ClearContextResponse;
 import org.jvoicexml.mmi.events.ClearContextResponseBuilder;
+import org.jvoicexml.mmi.events.CommonAttributeAdapter;
 import org.jvoicexml.mmi.events.ContentURLType;
 import org.jvoicexml.mmi.events.DoneNotification;
 import org.jvoicexml.mmi.events.MMIEvent;
@@ -137,38 +138,79 @@ public final class VoiceModalityComponent
     }
 
     /**
-     * Processes a start request.
-     * @param request the received event
+     * Obtains the MMI context to use for the given request. If no previous
+     * context exists for the given context id specified in the received
+     * MMI message, a new one will be created if specified and added to the
+     * list of known
+     * contexts.
+     * @param event the received MMI event
+     * @param create create a new context if it was previously unknown
+     * @return associated MMI context
+     * @throws MMIMessageException
+     *         if either the context id or the request id are missing
      */
-    private void prepare(final Object channel, final PrepareRequest request) {
-        final String contextId = request.getContext();
-        final String requestId = request.getRequestID();
-        LOGGER.info("received a prepare request for context " + contextId
-                + " with request id " + requestId);
+    private MMIContext getContext(final MMIEvent event, boolean create)
+            throws MMIMessageException {
+        final CommonAttributeAdapter adapter =
+                new CommonAttributeAdapter(event);
+        final String contextId = adapter.getContext();
+        final String requestId = adapter.getRequestID();
+        if (requestId == null || requestId.isEmpty()) {
+            throw new MMIMessageException("No request id given");
+        }
         MMIContext context;
         synchronized (contexts) {
             context = contexts.get(contextId);
         }
         if (context == null) {
-            context = new MMIContext(contextId);
+            if (!create) {
+                throw new MMIMessageException("Context '" + contextId
+                        + "' refers to an unknown context");
+            }
+            try {
+                context = new MMIContext(contextId);
+            } catch (URISyntaxException e) {
+                throw new MMIMessageException(e.getMessage(), e);
+            }
             synchronized (contexts) {
                 contexts.put(contextId, context);
             }
         }
+        return context;
+    }
+
+    /**
+     * Processes a start request.
+     * @param request the received event
+     */
+    private void prepare(final Object channel, final PrepareRequest request) {
         String statusInfo = null;
-        final ContentURLType contentUrlType = request.getContentURL();
-        if (contentUrlType != null) {
-            final String href = contentUrlType.getHref();
-            try {
-                context.setContentURL(href);
-            } catch (URISyntaxException e) {
-                LOGGER.error(e.getMessage(), e);
-                statusInfo = e.getMessage();
+        final String contextId = request.getContext();
+        final String requestId = request.getRequestID();
+        LOGGER.info("received a prepare request for context " + contextId
+                + " with request id " + requestId);
+        MMIContext context = null;
+        try {
+            context = getContext(request, true);
+        } catch (MMIMessageException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
+        }
+        if (statusInfo != null) {
+            final ContentURLType contentUrlType = request.getContentURL();
+            if (contentUrlType != null) {
+                final String href = contentUrlType.getHref();
+                try {
+                    context.setContentURL(href);
+                } catch (URISyntaxException e) {
+                    LOGGER.error(e.getMessage(), e);
+                    statusInfo = e.getMessage();
+                }
             }
         }
-        final URI uri = context.getContentURL();
         try {
             if (statusInfo == null) {
+                final URI uri = context.getContentURL();
                 LOGGER.info("creating session for URI '" + uri + "'");
                 final Session session = callManager.createSession();
                 context.setSession(session);
@@ -188,6 +230,7 @@ public final class VoiceModalityComponent
         if (statusInfo == null) {
             builder.setStatusSuccess();
         } else {
+            LOGGER.info("prepare failed: " + statusInfo);
             builder.setStatusFailure();
             builder.addStatusInfo(statusInfo);
         }
@@ -205,33 +248,29 @@ public final class VoiceModalityComponent
      * @param request the received event
      */
     private void start(final Object channel, final StartRequest request) {
+        String statusInfo = null;
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
         LOGGER.info("received a start request for context " + contextId
                 + " with request id " + requestId);
-        MMIContext context;
-        synchronized (contexts) {
-            context = contexts.get(contextId);
+        MMIContext context = null;
+        try {
+            context = getContext(request, true);
+        } catch (MMIMessageException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
         }
-        if (context == null) {
-            context = new MMIContext(requestId, contextId);
-            synchronized (contexts) {
-                contexts.put(contextId, context);
-            }
-        } else {
-            final ModalityComponentState state = context.getState();
-            if (state == ModalityComponentState.RUNNING) {
-                LOGGER.info("terminating old session");
-                final Session session = context.getSession();
-                context.setSession(null);
-                session.hangup();
-                callManager.cleanupSession(session);
-            }
+        final ModalityComponentState state = context.getState();
+        if (state == ModalityComponentState.RUNNING) {
+            LOGGER.info("terminating old session");
+            final Session session = context.getSession();
+            context.setSession(null);
+            session.hangup();
+            callManager.cleanupSession(session);
         }
         final String source = request.getSource();
         context.setTarget(source);
         context.setChannel(channel);
-        String statusInfo = null;
         final ContentURLType contentUrlType = request.getContentURL();
         URI uri = context.getContentURL();
         if (contentUrlType != null) {
@@ -275,6 +314,7 @@ public final class VoiceModalityComponent
             builder.setStatusSuccess();
             context.setRequestId(requestId);
         } else {
+            LOGGER.info("start failed: " + statusInfo);
             builder.setStatusFailure();
             builder.addStatusInfo(statusInfo);
         }
@@ -293,29 +333,31 @@ public final class VoiceModalityComponent
      * @param request the cancel request.
      */
     private void cancel(final Object channel, final CancelRequest request) {
+        String statusInfo = null;
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
         LOGGER.info("received a cancel request for context " + contextId
                 + " with request id " + requestId);
-        MMIContext context;
-        synchronized (contexts) {
-            context = contexts.get(contextId);
+        MMIContext context = null;
+        try {
+            context = getContext(request, false);
+        } catch (MMIMessageException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
         }
-        String statusInfo = null;
-        if (context == null) {
+        final ModalityComponentState state = context.getState();
+        if ((state == ModalityComponentState.RUNNING)
+                || (state == ModalityComponentState.PAUSED)) {
+            LOGGER.info("hanging up session");
+            final Session session = context.getSession();
+            context.setSession(null);
+            session.hangup();
+            callManager.cleanupSession(session);
+        } else if (state == ModalityComponentState.IDLE) {
+            statusInfo = "session is idle: ignoring cancel request";
+        } else {
             statusInfo =
                     "no running session for the given context " + contextId;
-        } else {
-            final ModalityComponentState state = context.getState();
-            if (state == ModalityComponentState.IDLE) {
-                statusInfo = "session is idle: ignoring cancel request";
-            } else {
-                LOGGER.info("hanging up session");
-                final Session session = context.getSession();
-                context.setSession(null);
-                session.hangup();
-                callManager.cleanupSession(session);
-            }
         }
         final CancelResponseBuilder builder = new CancelResponseBuilder();
         builder.setRequestId(requestId);
@@ -325,7 +367,7 @@ public final class VoiceModalityComponent
         if (statusInfo == null) {
             builder.setStatusSuccess();
         } else {
-            LOGGER.info(statusInfo);
+            LOGGER.info("cancel failed: " + statusInfo);
             builder.setStatusFailure();
             builder.addStatusInfo(statusInfo);
         }
@@ -347,18 +389,19 @@ public final class VoiceModalityComponent
      */
     private void clearContext(final Object channel,
             final ClearContextRequest request) {
+        String statusInfo = null;
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
         LOGGER.info("received a clear context request for context " + contextId
                 + " with request id " + requestId);
-        MMIContext context;
-        synchronized (contexts) {
-            context = contexts.get(contextId);
+        MMIContext context = null;
+        try {
+            context = getContext(request, false);
+        } catch (MMIMessageException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
         }
-        String statusInfo = null;
-        if (context == null) {
-            statusInfo = "context '" + contextId + " is unknown";
-        } else {
+        if (statusInfo != null) {
             synchronized (contexts) {
                 contexts.remove(contextId);
                 LOGGER.info("cleared context '" + contextId + "'");
@@ -385,7 +428,7 @@ public final class VoiceModalityComponent
         if (statusInfo == null) {
             builder.setStatusSuccess();
         } else {
-            LOGGER.info(statusInfo);
+            LOGGER.info("clear failed: " + statusInfo);
             builder.setStatusFailure();
             builder.addStatusInfo(statusInfo);
         }
@@ -403,18 +446,27 @@ public final class VoiceModalityComponent
      * @param request the clear context request.
      */
     private void pause(final Object channel, final PauseRequest request) {
+        String statusInfo = null;
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
         LOGGER.info("received a pause request for context " + contextId
                 + " with request id " + requestId);
+        try {
+            getContext(request, false);
+        } catch (MMIMessageException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
+        }
         final PauseResponseBuilder builder = new PauseResponseBuilder();
         builder.setRequestId(requestId);
         builder.setContextId(contextId);
         final String target = request.getSource();
         builder.setTarget(target);
         builder.setStatusFailure();
-        builder.addStatusInfo(
-                "The JVoiceXML modality component is unable to pause");
+        if (statusInfo != null) {
+            statusInfo ="The JVoiceXML modality component is unable to pause"; 
+        }
+        builder.addStatusInfo(statusInfo);
         final PauseResponse response = builder.toPauseResponse();
         try {
             adapter.sendMMIEvent(channel, response);
@@ -428,18 +480,27 @@ public final class VoiceModalityComponent
      * @param request the clear context request.
      */
     private void resume(final Object channel, final ResumeRequest request) {
+        String statusInfo = null;
         final String contextId = request.getContext();
         final String requestId = request.getRequestID();
         LOGGER.info("received a resume request for context " + contextId
                 + " with request id " + requestId);
+        try {
+            getContext(request, false);
+        } catch (MMIMessageException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
+        }
         final ResumeResponseBuilder builder = new ResumeResponseBuilder();
         builder.setRequestId(requestId);
         builder.setContextId(contextId);
         final String target = request.getSource();
         builder.setTarget(target);
         builder.setStatusFailure();
-        builder.addStatusInfo(
-                "The JVoiceXML modality component is unable to resume");
+        if (statusInfo != null) {
+            statusInfo ="The JVoiceXML modality component is unable to resume"; 
+        }
+        builder.addStatusInfo(statusInfo);
         final ResumeResponse response = builder.toResumeResponse();
         try {
             adapter.sendMMIEvent(channel, response);
@@ -493,7 +554,7 @@ public final class VoiceModalityComponent
             return;
         }
         final String requestId = context.getRequestId();
-        final String contextId = context.getContexId();
+        final String contextId = context.getContextId();
         final String target = context.getTarget();
         final DoneNotification done = new DoneNotification();
         done.setContext(contextId);
