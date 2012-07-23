@@ -58,6 +58,7 @@ import org.jvoicexml.mmi.events.ResumeResponseBuilder;
 import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.mmi.events.StartResponse;
 import org.jvoicexml.mmi.events.StartResponseBuilder;
+import org.jvoicexml.mmi.events.StatusRequest;
 
 
 /**
@@ -107,6 +108,38 @@ public final class VoiceModalityComponent
     }
 
     /**
+     * Checks, if this modality component is currently accepting lifecycle
+     * events.
+     * @return <code>true</code> if lifecycle events are not accepted.
+     */
+    boolean isAcceptingLifecycleEvents() {
+        return adapter.isStarted();
+    }
+
+    /**
+     * Sends a response to the given channel.
+     * @param channel the channel to use
+     * @param response the response to send
+     * @exception IOException
+     *            if an error occurs when sending the response
+     */
+    void sendResponse(final Object channel, final MMIEvent response) 
+        throws IOException {
+        try {
+            adapter.sendMMIEvent(channel, response);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+            final CommonAttributeAdapter ad =
+                    new CommonAttributeAdapter(response);
+            final String contextId = ad.getContext();
+            if (contextId != null) {
+                removeContext(contextId);
+            }
+            throw e;
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -134,6 +167,21 @@ public final class VoiceModalityComponent
         } else if (event instanceof ResumeRequest) {
             final ResumeRequest request = (ResumeRequest) event;
             resume(channel, request);
+        } else if (event instanceof StatusRequest) {
+            final StatusRequest request = (StatusRequest) event;
+            status(channel, request);
+        }
+    }
+
+    /**
+     * Retrieves the MMI context for the given context id.
+     * @param contextId the context id to look up
+     * @return
+     * @since 0.7.6
+     */
+    MMIContext getContext(final URI contextId) {
+        synchronized (contexts) {
+            return contexts.get(contextId.toString());
         }
     }
 
@@ -196,12 +244,13 @@ public final class VoiceModalityComponent
             LOGGER.error(e.getMessage(), e);
             statusInfo = e.getMessage();
         }
-        if (statusInfo != null) {
+        if (statusInfo == null) {
             final ContentURLType contentUrlType = request.getContentURL();
             if (contentUrlType != null) {
                 final String href = contentUrlType.getHref();
                 try {
                     context.setContentURL(href);
+                    LOGGER.info("preparing URI '" + href + "'");
                 } catch (URISyntaxException e) {
                     LOGGER.error(e.getMessage(), e);
                     statusInfo = e.getMessage();
@@ -240,6 +289,7 @@ public final class VoiceModalityComponent
             LOGGER.info(context + ": " + ModalityComponentState.RUNNING);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+            removeContext(contextId);
         }
     }
 
@@ -325,6 +375,7 @@ public final class VoiceModalityComponent
             LOGGER.info(context + ": " + ModalityComponentState.RUNNING);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+            removeContext(contextId);
         }
     }
 
@@ -380,6 +431,18 @@ public final class VoiceModalityComponent
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+            removeContext(contextId);
+        }
+    }
+
+    /**
+     * Removes the context with the given id from the list of known contexts.
+     * @param contextId the context to remove
+     */
+    private void removeContext(final String contextId) {
+        synchronized (contexts) {
+            contexts.remove(contextId);
+            LOGGER.info("cleared context '" + contextId + "'");
         }
     }
 
@@ -402,10 +465,7 @@ public final class VoiceModalityComponent
             statusInfo = e.getMessage();
         }
         if (statusInfo != null) {
-            synchronized (contexts) {
-                contexts.remove(contextId);
-                LOGGER.info("cleared context '" + contextId + "'");
-            }
+            removeContext(contextId);
             final ModalityComponentState state = context.getState();
             final Session session = context.getSession();
             if (state == ModalityComponentState.RUNNING) {
@@ -472,6 +532,7 @@ public final class VoiceModalityComponent
             adapter.sendMMIEvent(channel, response);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+            removeContext(contextId);
         }
     }
 
@@ -506,9 +567,36 @@ public final class VoiceModalityComponent
             adapter.sendMMIEvent(channel, response);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+            removeContext(contextId);
         }
     }
-    
+
+    /**
+     * Processes a clear context request.
+     * @param request the clear context request.
+     */
+    private void status(final Object channel, final StatusRequest request) {
+        final String contextId = request.getContext();
+        final String requestId = request.getRequestID();
+        LOGGER.info("received a status request for context " + contextId
+                + " with request id " + requestId);
+        final boolean automaticUpdate = request.isRequestAutomaticUpdate();
+        URI context = null;
+        if (contextId != null) {
+            try {
+                context = new URI(contextId);
+            } catch (URISyntaxException e) {
+                LOGGER.warn("context '" + contextId
+                        + "' does not denote a valid URI. Unable to send status"
+                        + " response messages");
+                return;
+            }
+        }
+        final StatusUpdateThread thread = new StatusUpdateThread(this, channel,
+                context,  requestId, automaticUpdate);
+        thread.start();
+    }
+
     /**
      * Stops accepting MMI lifecycle events.
      */

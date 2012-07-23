@@ -49,6 +49,12 @@ public interface ETLProtocolAdapter {
     void start() throws IOException;
 
     /**
+     * Checks if the protocol adapter is started.
+     * @return <code>true</code> if the adapter is started.
+     */
+    boolean isStarted();
+
+    /**
      * Registers the given listener for MMI events.
      * @param listener the listener to add
      */

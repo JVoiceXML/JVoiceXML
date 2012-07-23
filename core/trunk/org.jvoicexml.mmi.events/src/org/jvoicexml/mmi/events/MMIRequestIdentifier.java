@@ -25,6 +25,9 @@
  */
 package org.jvoicexml.mmi.events;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 /**
  * Container to store all request identifier for MMI events in a single place.
  * <p>
@@ -51,28 +54,33 @@ public class MMIRequestIdentifier {
      * MUST use the same context URI. Events containing a different context URI
      * MUST be interpreted as part of other, unrelated, interactions.
      */
-    private final String contexId;
+    private final URI contextId;
 
     /**
      * Constructs a new object.
      * @param ctxId the context id
+     * @exception URISyntaxException
+     *            the given context id does not denote a valid URI
      */
-    public MMIRequestIdentifier(final String ctxId) {
-        contexId = ctxId;
+    public MMIRequestIdentifier(final String ctxId) throws URISyntaxException {
+        contextId = new URI(ctxId);
     }
 
     /**
      * Constructs a new object.
      * @param reqId the request id
      * @param ctxId the context id
+     * @exception URISyntaxException
+     *            the given context id does not denote a valid URI
      */
-    public MMIRequestIdentifier(final String reqId, final String ctxId) {
+    public MMIRequestIdentifier(final String reqId, final String ctxId)
+            throws URISyntaxException {
+        this(ctxId);
         requestId = reqId;
-        contexId = ctxId;
     }
 
     /**
-     * Sets the requuest id.
+     * Sets the request id.
      * @param reqId the new request id.
      */
     public final void setRequestId(final String reqId) {
@@ -91,7 +99,15 @@ public class MMIRequestIdentifier {
      * Retrieves the context id.
      * @return the context id.
      */
-    public final String getContexId() {
-        return contexId;
+    public final String getContextId() {
+        return contextId.toString();
+    }
+
+    /**
+     * Retrieves the context id.
+     * @return the context id.
+     */
+    public final URI getContextIdUri() throws URISyntaxException {
+        return contextId;
     }
 }

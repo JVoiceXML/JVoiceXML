@@ -93,6 +93,14 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      * {@inheritDoc}
      */
     @Override
+    public boolean isStarted() {
+        return server.isAlive();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void addMMIEventListener(final MMIEventListener listener) {
         synchronized (listeners) {
             listeners.add(listener);

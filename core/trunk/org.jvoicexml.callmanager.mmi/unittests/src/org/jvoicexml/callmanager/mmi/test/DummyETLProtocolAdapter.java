@@ -50,6 +50,14 @@ public final class DummyETLProtocolAdapter implements ETLProtocolAdapter {
      * {@inheritDoc}
      */
     @Override
+    public boolean isStarted() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void addMMIEventListener(MMIEventListener listener) {
     }
 

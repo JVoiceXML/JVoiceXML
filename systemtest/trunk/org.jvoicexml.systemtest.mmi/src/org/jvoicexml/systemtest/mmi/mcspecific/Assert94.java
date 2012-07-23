@@ -25,7 +25,12 @@
  */
 package org.jvoicexml.systemtest.mmi.mcspecific;
 
-import org.jvoicexml.systemtest.mmi.NotImplementedException;
+import org.apache.log4j.Logger;
+import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.StatusRequest;
+import org.jvoicexml.mmi.events.StatusRequestBuilder;
+import org.jvoicexml.mmi.events.StatusResponse;
+import org.jvoicexml.systemtest.mmi.TestFailedException;
 
 /**
  * Assertion 94: All Modality Components must support the basic life-cycle
@@ -35,6 +40,9 @@ import org.jvoicexml.systemtest.mmi.NotImplementedException;
  * @since 0.7.6
  */
 public class Assert94 extends AbstractAssert {
+    /** The logger instance. */
+    private static final Logger LOGGER = Logger.getLogger(Assert94.class);
+
     /**
      * Constructs a new object.
      */
@@ -54,6 +62,31 @@ public class Assert94 extends AbstractAssert {
      */
     @Override
     public void test() throws Exception {
-        throw new NotImplementedException();
+        final StatusRequestBuilder statusBuilder = new StatusRequestBuilder();
+        String requestId = createRequestId();
+        statusBuilder.setRequestId(requestId);
+        final StatusRequest statusRequest = statusBuilder.toStatusRequest();
+        send(statusRequest);
+        final MMIEvent statusReponse = waitForResponse("StatusResponse");
+        if (!(statusReponse instanceof StatusResponse)) {
+            throw new TestFailedException("expected a StatusReponse but got a "
+                    + statusReponse.getClass());
+        }
+        checkIds(statusReponse, null, requestId);
+        final StatusResponse statusResponseObject =
+                (StatusResponse) statusReponse;
+        if (statusResponseObject.getRequestID() != null) {
+            throw new TestFailedException("expected no context id but got '"
+                    + statusResponseObject.getRequestID() + "'");
+        }
+        if (!requestId.equals(statusResponseObject.getRequestID())) {
+            final String message = "Expected request id '" + requestId
+                    + "' but have '" + statusResponseObject.getRequestID()
+                    + "' in "
+                    + statusResponseObject.getClass().getCanonicalName();
+            LOGGER.warn(message);
+            throw new TestFailedException(message);
+        }
+        throw new TestFailedException("need to add other lifecycle events");
     }
 }
