@@ -27,11 +27,14 @@ package org.jvoicexml.systemtest.mmi;
 
 /**
  * Exception that is thrown if a test case is not implemented yet.
- * @author Dirk SChnelle-Walka
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
  */
-public class NotImplementedException extends Exception {
+public final class NotImplementedException extends Exception {
+    /** The serial version UID.  */
+    private static final long serialVersionUID = 4771816390126808741L;
+
     /**
      * Constructs a new object.
      */

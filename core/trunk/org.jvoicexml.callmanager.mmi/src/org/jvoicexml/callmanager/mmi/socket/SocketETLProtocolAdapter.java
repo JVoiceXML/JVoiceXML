@@ -135,8 +135,8 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
             final URI uri = new URI(target);
             // Adapt the source address
             final String host = uri.getHost();
-            final int port = uri.getPort();
-            final Socket client = new Socket(host, port);
+            final int targetPort = uri.getPort();
+            final Socket client = new Socket(host, targetPort);
             final URI serverUri = server.getUri();
             adapter.setSource(serverUri.toString());
             LOGGER.info("sending " + event + " to '" + uri + "'");
@@ -156,8 +156,7 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
 
     /**
      * Notifies all registered listeners about a received MMI Event.
-     * @param event
-     * @since 0.7.6
+     * @param event the event to notify
      */
     void notifyMMIEvent(final DecoratedMMIEvent event) {
         synchronized (listeners) {
@@ -177,5 +176,4 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
             server = null;
         }
     }
-
 }

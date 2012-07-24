@@ -31,7 +31,7 @@ package org.jvoicexml.systemtest.mmi;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class TestFailedException extends Exception {
+public final class TestFailedException extends Exception {
     /** The serial verson UID. */
     private static final long serialVersionUID = -91773328203422845L;
 
@@ -39,7 +39,7 @@ public class TestFailedException extends Exception {
      * Constructs a new object.
      * @param message the detailed message
      */
-    public TestFailedException(String message) {
+    public TestFailedException(final String message) {
         super(message);
     }
 }

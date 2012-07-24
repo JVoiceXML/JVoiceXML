@@ -84,6 +84,7 @@ public final class VoiceModalityComponent
 
     /**
      * Constructs a new object.
+     * @param cm the call manager
      */
     public VoiceModalityComponent(final MMICallManager cm) {
         callManager = cm;
@@ -92,7 +93,7 @@ public final class VoiceModalityComponent
 
     /**
      * Starts accepting MMI lifecycle events asynchronously.
-     * @param adapter the adapter for the event and transport layer
+     * @param protocolAdapter the adapter for the event and transport layer
      * @throws IOException
      *         error starting the modality component
      */
@@ -176,7 +177,7 @@ public final class VoiceModalityComponent
     /**
      * Retrieves the MMI context for the given context id.
      * @param contextId the context id to look up
-     * @return
+     * @return the context, maybe <code>null</code>
      * @since 0.7.6
      */
     MMIContext getContext(final URI contextId) {
@@ -197,12 +198,12 @@ public final class VoiceModalityComponent
      * @throws MMIMessageException
      *         if either the context id or the request id are missing
      */
-    private MMIContext getContext(final MMIEvent event, boolean create)
+    private MMIContext getContext(final MMIEvent event, final boolean create)
             throws MMIMessageException {
-        final CommonAttributeAdapter adapter =
+        final CommonAttributeAdapter attributeAdapter =
                 new CommonAttributeAdapter(event);
-        final String contextId = adapter.getContext();
-        final String requestId = adapter.getRequestID();
+        final String contextId = attributeAdapter.getContext();
+        final String requestId = attributeAdapter.getRequestID();
         if (requestId == null || requestId.isEmpty()) {
             throw new MMIMessageException("No request id given");
         }
@@ -229,6 +230,7 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a start request.
+     * @param channel the channel that was used to send the request
      * @param request the received event
      */
     private void prepare(final Object channel, final PrepareRequest request) {
@@ -295,6 +297,7 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a start request.
+     * @param channel the channel that was used to send the request
      * @param request the received event
      */
     private void start(final Object channel, final StartRequest request) {
@@ -381,6 +384,7 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a cancel request.
+     * @param channel the channel that was used to send the request
      * @param request the cancel request.
      */
     private void cancel(final Object channel, final CancelRequest request) {
@@ -448,6 +452,7 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a clear context request.
+     * @param channel the channel that was used to send the request
      * @param request the clear context request.
      */
     private void clearContext(final Object channel,
@@ -503,6 +508,7 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a clear context request.
+     * @param channel the channel that was used to send the request
      * @param request the clear context request.
      */
     private void pause(final Object channel, final PauseRequest request) {
@@ -524,7 +530,7 @@ public final class VoiceModalityComponent
         builder.setTarget(target);
         builder.setStatusFailure();
         if (statusInfo != null) {
-            statusInfo ="The JVoiceXML modality component is unable to pause"; 
+            statusInfo = "The JVoiceXML modality component is unable to pause";
         }
         builder.addStatusInfo(statusInfo);
         final PauseResponse response = builder.toPauseResponse();
@@ -538,6 +544,7 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a clear context request.
+     * @param channel the channel that was used to send the request
      * @param request the clear context request.
      */
     private void resume(final Object channel, final ResumeRequest request) {
@@ -559,7 +566,7 @@ public final class VoiceModalityComponent
         builder.setTarget(target);
         builder.setStatusFailure();
         if (statusInfo != null) {
-            statusInfo ="The JVoiceXML modality component is unable to resume"; 
+            statusInfo = "The JVoiceXML modality component is unable to resume";
         }
         builder.addStatusInfo(statusInfo);
         final ResumeResponse response = builder.toResumeResponse();
@@ -573,6 +580,7 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a clear context request.
+     * @param channel the channel that was used to send the request
      * @param request the clear context request.
      */
     private void status(final Object channel, final StatusRequest request) {
@@ -592,8 +600,9 @@ public final class VoiceModalityComponent
                 return;
             }
         }
+        final String target = request.getSource();
         final StatusUpdateThread thread = new StatusUpdateThread(this, channel,
-                context,  requestId, automaticUpdate);
+                target, context, requestId, automaticUpdate);
         thread.start();
     }
 
@@ -613,7 +622,13 @@ public final class VoiceModalityComponent
     public void sessionStarted(final Session session) {
     }
 
-    private MMIContext findSession(final Session session) {
+    /**
+     * Tries to find the context for the given session.
+     * @param session the session that maybe associated with an MMI context
+     * @return found context, <code>null</code> if there is no context for that
+     *          session
+     */
+    private MMIContext findContext(final Session session) {
         final String sessionId = session.getSessionID();
         synchronized (contexts) {
             for (String contextId : contexts.keySet()) {
@@ -635,7 +650,7 @@ public final class VoiceModalityComponent
      */
     @Override
     public void sessionEnded(final Session session) {
-        final MMIContext context = findSession(session);
+        final MMIContext context = findContext(session);
         if (context == null) {
             LOGGER.warn("session " + session.getSessionID()
                     + " ended without MMI identifiers");

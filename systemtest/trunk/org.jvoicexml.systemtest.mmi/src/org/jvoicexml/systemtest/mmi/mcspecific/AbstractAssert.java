@@ -1,3 +1,29 @@
+/*
+ * File:    $HeadURL:  $
+ * Version: $LastChangedRevision: 643 $
+ * Date:    $Date: $
+ * Author:  $LastChangedBy: $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.systemtest.mmi.mcspecific;
 
 import java.io.IOException;
@@ -29,6 +55,13 @@ import org.jvoicexml.mmi.events.StatusType;
 import org.jvoicexml.systemtest.mmi.MMIEventListener;
 import org.jvoicexml.systemtest.mmi.TestFailedException;
 
+/**
+ * Base class for MMI test assertions.
+ * 
+ * @author Dirk Schnelle-Walka
+ * @version $Revision: $
+ * @since 0.7.6
+ */
 public abstract class AbstractAssert implements MMIEventListener {
     /** The logger instance. */
     private static final Logger LOGGER = Logger.getLogger(AbstractAssert.class);
@@ -37,7 +70,7 @@ public abstract class AbstractAssert implements MMIEventListener {
     private URI source;
 
     /** Message lock. */
-    protected final Object lock;
+    private final Object lock;
 
     /** The last received MMI event. */
     private MMIEvent event;
@@ -65,7 +98,7 @@ public abstract class AbstractAssert implements MMIEventListener {
 
     /**
      * Retrieves the id of this test case.
-     * @return
+     * @return the id of this test case
      */
     public abstract int getId();
 
@@ -73,7 +106,7 @@ public abstract class AbstractAssert implements MMIEventListener {
      * Retrieves possible additional notes.
      * @return notes, maybe <code>null</code> if there are no notes.
      */
-    public String getNotes() {
+    public final String getNotes() {
         return notes;
     }
 
@@ -81,7 +114,7 @@ public abstract class AbstractAssert implements MMIEventListener {
      * Sets additional notes.
      * @param value the notes.
      */
-    public void setNotes(final String value) {
+    public final void setNotes(final String value) {
         notes = value;
     }
 
@@ -89,7 +122,7 @@ public abstract class AbstractAssert implements MMIEventListener {
      * Sets the source URI.
      * @param uri the source URI.
      */
-    public void setSource(final URI uri) {
+    public final void setSource(final URI uri) {
         source = uri;
     }
 
@@ -103,7 +136,8 @@ public abstract class AbstractAssert implements MMIEventListener {
      * @throws URISyntaxException
      *         error determining the source attribute 
      */
-    public void send(final MMIEvent request) throws IOException, JAXBException,
+    public final void send(final MMIEvent request)
+            throws IOException, JAXBException,
             URISyntaxException {
         event = null;
 
@@ -125,7 +159,8 @@ public abstract class AbstractAssert implements MMIEventListener {
         marshaller.marshal(request, out);
         LOGGER.info("sent '" + request + "'");
         client.close();
-        if (request instanceof StartRequest || request instanceof PrepareRequest) {
+        if ((request instanceof StartRequest)
+                || (request instanceof PrepareRequest)) {
             clearedContext = false;
         }
     }
@@ -133,11 +168,25 @@ public abstract class AbstractAssert implements MMIEventListener {
     /**
      * Notification that a clear context request must be sent.
      */
-    protected void needToClearContext() {
+    protected final void needToClearContext() {
         clearedContext = false;
     }
 
-    public void clearContext() throws IOException, JAXBException,
+    /**
+     * Clears the context after the test has run by sending a clear context
+     * message.
+     * @throws IOException
+     *         error sending the message
+     * @throws JAXBException
+     *         error marshalling the message
+     * @throws URISyntaxException
+     *         if the target could not be resolved
+     * @throws InterruptedException
+     *         in case of a timeout waiting for a response
+     * @throws TestFailedException
+     *         if sending fails in general
+     */
+    public final void clearContext() throws IOException, JAXBException,
         URISyntaxException, InterruptedException, TestFailedException {
         if (clearedContext) {
             return;
@@ -164,9 +213,9 @@ public abstract class AbstractAssert implements MMIEventListener {
 
     /**
      * Retrieves a unique context id for this test case.
-     * @return the conext id.
+     * @return the context id.
      */
-    public String getContextId() {
+    public final String getContextId() {
         return "http://mmisystemtest/" + getId();
     }
 
@@ -174,7 +223,7 @@ public abstract class AbstractAssert implements MMIEventListener {
      * Creates a new request id.
      * @return a new request id
      */
-    public String createRequestId() {
+    public final String createRequestId() {
         long requestId = currentId.addAndGet(1);
         return Long.toString(requestId);
     }
@@ -182,22 +231,22 @@ public abstract class AbstractAssert implements MMIEventListener {
     /**
      * Checks if the given request and context ids match the attributes of the
      * given event.
-     * @param event the event to check
+     * @param evt the event to check
      * @param contextId the context id
      * @param requestId the request id
      * @throws TestFailedException
      *        if the ids do not match
      */
-    public void checkIds(final MMIEvent event, final String contextId,
+    public final void checkIds(final MMIEvent evt, final String contextId,
             final String requestId)
         throws TestFailedException {
         final CommonAttributeAdapter adapter =
-                new CommonAttributeAdapter(event);
+                new CommonAttributeAdapter(evt);
         final String eventContextId = adapter.getContext();
         if (!contextId.equals(eventContextId)) {
             final String message = "Expected context id '" + contextId
                     + "' but have '" + eventContextId + "' in "
-                    + event.getClass().getCanonicalName();
+                    + evt.getClass().getCanonicalName();
             LOGGER.warn(message);
             throw new TestFailedException(message);
         }
@@ -205,7 +254,7 @@ public abstract class AbstractAssert implements MMIEventListener {
         if (!requestId.equals(eventRequestId)) {
             final String message = "Expected request id '" + requestId
                     + "' but have '" + eventRequestId + "' in "
-                    + event.getClass().getCanonicalName();
+                    + evt.getClass().getCanonicalName();
             LOGGER.warn(message);
             throw new TestFailedException(message);
         }
@@ -213,14 +262,15 @@ public abstract class AbstractAssert implements MMIEventListener {
 
     /**
      * Checks if the received response was successful.
-     * @param event the received event
+     * @param evt the received event
      * @throws TestFailedException
      *         if the response was not successful. The status info is set as the
      *         detailed error message.
      */
-    public void ensureSuccess(final MMIEvent event) throws TestFailedException {
+    public final void ensureSuccess(final MMIEvent evt)
+            throws TestFailedException {
         final CommonResponseAttributeAdapter adapter =
-                new CommonResponseAttributeAdapter(event);
+                new CommonResponseAttributeAdapter(evt);
         if (adapter.getStatus() != StatusType.SUCCESS) {
             final AnyComplexType any = adapter.getStatusInfo();
             final List<Object> content = any.getContent();
@@ -244,7 +294,7 @@ public abstract class AbstractAssert implements MMIEventListener {
      * @throws TestFailedException
      *         if the response did not arrive
      */
-    protected MMIEvent waitForResponse(final String expected)
+    protected final MMIEvent waitForResponse(final String expected)
             throws InterruptedException, TestFailedException {
         synchronized (lock) {
             if (event != null) {
@@ -267,7 +317,7 @@ public abstract class AbstractAssert implements MMIEventListener {
      * {@inheritDoc}
      */
     @Override
-    public void receivedEvent(final MMIEvent evt) {
+    public final void receivedEvent(final MMIEvent evt) {
         synchronized (lock) {
             event = evt;
             lock.notifyAll();

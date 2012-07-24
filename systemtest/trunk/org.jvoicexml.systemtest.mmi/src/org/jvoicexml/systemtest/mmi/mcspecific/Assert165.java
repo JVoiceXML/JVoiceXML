@@ -42,7 +42,7 @@ import org.jvoicexml.systemtest.mmi.TestFailedException;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class Assert165 extends AbstractAssert {
+public final class Assert165 extends AbstractAssert {
     /**
      * Constructs a new object.
      */

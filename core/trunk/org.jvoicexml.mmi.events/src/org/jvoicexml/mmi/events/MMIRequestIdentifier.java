@@ -47,7 +47,7 @@ public class MMIRequestIdentifier {
      * the given context.
      */
     private String requestId;
-    
+
     /**
      * A URI that MUST be unique for the lifetime of the system. It is used to
      * identify this interaction. All events relating to a given interaction
@@ -107,7 +107,7 @@ public class MMIRequestIdentifier {
      * Retrieves the context id.
      * @return the context id.
      */
-    public final URI getContextIdUri() throws URISyntaxException {
+    public final URI getContextIdUri() {
         return contextId;
     }
 }

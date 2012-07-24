@@ -48,6 +48,9 @@ final class StatusUpdateThread extends Thread {
     /** The channel to use to send messages. */
     private final Object channel;
 
+    /** The target where to send status update messages. */
+    private final String target;
+
     /** A given context id. */
     private final URI contextId;
 
@@ -61,14 +64,18 @@ final class StatusUpdateThread extends Thread {
      * Constructs a new object.
      * @param vmc the voice modality component
      * @param ch the channel
-     * @param context the context id
+     * @param trgt the target where to send messages
+     * @param context the context id, maybe <code>null</code>
+     * @param reqId the request id of the message that caused the status update
      * @param automatic <code>true</code> if periodic sending of updates is
      *          requested
      */
     public StatusUpdateThread(final VoiceModalityComponent vmc, final Object ch,
-            final URI context, final String reqId, final boolean automatic) {
+            final String trgt, final URI context, final String reqId,
+            final boolean automatic) {
         mc = vmc;
         channel = ch;
+        target = trgt;
         contextId = context;
         requestId = reqId;
         automaticUpdate = automatic;
@@ -84,6 +91,7 @@ final class StatusUpdateThread extends Thread {
         boolean running = automaticUpdate;
         do {
             final StatusResponseBuilder builder = new StatusResponseBuilder();
+            builder.setTarget(target);
             builder.setAutomaticUpdate(automaticUpdate);
             builder.setRequestId(requestId);
             if (contextId == null) {

@@ -60,17 +60,4 @@ public class MMIMessageException extends Exception {
         super(message, cause);
         // TODO Auto-generated constructor stub
     }
-
-    /**
-     * @param message
-     * @param cause
-     * @param enableSuppression
-     * @param writableStackTrace
-     */
-    public MMIMessageException(String message, Throwable cause,
-            boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-        // TODO Auto-generated constructor stub
-    }
-
 }

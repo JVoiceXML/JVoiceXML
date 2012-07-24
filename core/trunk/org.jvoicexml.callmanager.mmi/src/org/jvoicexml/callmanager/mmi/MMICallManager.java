@@ -92,7 +92,7 @@ public final class MMICallManager implements CallManager {
 
     /**
      * Sets the identifier for the spoken input.
-     * @param call identifier for the spoken input
+     * @param value identifier for the spoken input
      */
     public void setInput(final String value) {
         input = value;
@@ -100,7 +100,7 @@ public final class MMICallManager implements CallManager {
 
     /**
      * Sets the identifier for the system output.
-     * @param call identifier for the system output
+     * @param value identifier for the system output
      */
     public void setOutput(final String value) {
         output = value;
@@ -126,10 +126,10 @@ public final class MMICallManager implements CallManager {
     }
 
     /**
-     * {@link}
+     * {@inheritDoc}
      */
     @Override
-    public void setJVoiceXml(JVoiceXml jvoicexml) {
+    public void setJVoiceXml(final JVoiceXml jvoicexml) {
         jvxml = jvoicexml;
 
     }
@@ -143,7 +143,7 @@ public final class MMICallManager implements CallManager {
     }
 
     /**
-     * {@link}
+     * {@inheritDoc}
      */
     @Override
     public void start() throws NoresourceError, IOException {
@@ -156,13 +156,12 @@ public final class MMICallManager implements CallManager {
     }
 
     /**
-     * Creates a session and calls the given URI. Created sessions must be
+     * Creates a session. Created sessions must be
      * cleaned up after the session has ended using
      * {@link #cleanupSession(Session)}.
-     * @param uri the URI to call
      * @return created session
      * @throws ErrorEvent
-     *         error calling the URI 
+     *         error creating the session 
      * @throws UnsupportedResourceIdentifierException 
      *         error in the URI scheme
      */
@@ -187,10 +186,10 @@ public final class MMICallManager implements CallManager {
     public void cleanupSession(final Session session) {
         final ConnectionInformationController controller =
                 sessions.get(session);
-        if (session == null) {
+        if (controller == null) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.info("no controller for session '" + session.getSessionID()
-                        + "'");
+                LOGGER.info("no controller for session '"
+                        + session.getSessionID() + "'");
             }
             return;
         }
@@ -198,7 +197,7 @@ public final class MMICallManager implements CallManager {
     }
 
     /**
-     * {@link}
+     * {@inheritDoc}
      */
     @Override
     public void stop() {
@@ -207,5 +206,4 @@ public final class MMICallManager implements CallManager {
         }
         mc.stopAcceptingLifecycleEvents();
     }
-
 }

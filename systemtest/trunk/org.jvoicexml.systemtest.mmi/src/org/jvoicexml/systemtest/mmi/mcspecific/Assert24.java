@@ -29,12 +29,12 @@ import org.jvoicexml.systemtest.mmi.NotImplementedException;
 
 /**
  * Assertion 24: CancelResponse MUST be sent by the Modality Component as a
- * response to the CancelRequest event
+ * response to the CancelRequest event.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
  */
-public class Assert24 extends AbstractAssert {
+public final class Assert24 extends AbstractAssert {
     /**
      * Constructs a new object.
      */

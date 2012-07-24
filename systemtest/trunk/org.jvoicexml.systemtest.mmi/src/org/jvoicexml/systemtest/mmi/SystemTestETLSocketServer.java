@@ -63,7 +63,6 @@ public final class SystemTestETLSocketServer extends Thread {
 
     /**
      * Constructs a new object.
-     * @param protocolAdapter the protocol adapter
      * @param portNumber the port number to listen on
      */
     public SystemTestETLSocketServer(final int portNumber) {
@@ -110,8 +109,8 @@ public final class SystemTestETLSocketServer extends Thread {
                 final Socket socket = server.accept();
                 final InetSocketAddress address =
                         (InetSocketAddress) socket.getRemoteSocketAddress();
-                final URI uri = TcpUriFactory.createUri(address);
-                LOGGER.info("connection from " + uri);
+                final URI remoteUri = TcpUriFactory.createUri(address);
+                LOGGER.info("connection from " + remoteUri);
                 final SystemTestETLSocketClient client =
                         new SystemTestETLSocketClient(socket, listener);
                 client.start();

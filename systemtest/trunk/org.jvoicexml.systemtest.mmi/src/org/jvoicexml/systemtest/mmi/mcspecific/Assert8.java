@@ -37,12 +37,12 @@ import org.jvoicexml.systemtest.mmi.TestFailedException;
 
 /**
  * Assertion 8: If a modality component finishes processing it MUST send a
- * DoneNotification
+ * DoneNotification.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
  */
-public class Assert8 extends AbstractAssert {
+public final class Assert8 extends AbstractAssert {
     /**
      * Constructs a new object.
      */

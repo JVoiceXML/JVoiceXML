@@ -75,10 +75,10 @@ public final class TestCaseReport {
 
     /**
      * Sets the test result.
-     * @param result the result to set
+     * @param rslt the result to set
      */
-    public void setResult(final TestResult result) {
-        this.result = result;
+    public void setResult(final TestResult rslt) {
+        result = rslt;
     }
 
     /**
@@ -98,7 +98,7 @@ public final class TestCaseReport {
     }
 
     /**
-     * Retrieves the id of this test case
+     * Retrieves the id of this test case.
      * @return the id
      */
     public int getId() {

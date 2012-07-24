@@ -36,7 +36,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.client.TcpUriFactory;
 
 /**
- * The server thread who is listening for clients.
+ * The server thread that is listening for clients.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
@@ -95,8 +95,8 @@ public final class SocketETLServer extends Thread {
                 final Socket socket = server.accept();
                 final InetSocketAddress address =
                         (InetSocketAddress) socket.getRemoteSocketAddress();
-                final URI uri = TcpUriFactory.createUri(address);
-                LOGGER.info("connection from " + uri);
+                final URI remoteUri = TcpUriFactory.createUri(address);
+                LOGGER.info("connection from " + remoteUri);
                 final SocketETLClient client =
                         new SocketETLClient(adapter, socket);
                 client.start();

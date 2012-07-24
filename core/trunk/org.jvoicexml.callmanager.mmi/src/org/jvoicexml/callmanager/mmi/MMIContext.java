@@ -37,7 +37,7 @@ import org.jvoicexml.mmi.events.MMIRequestIdentifier;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class MMIContext extends MMIRequestIdentifier {
+public final class MMIContext extends MMIRequestIdentifier {
     /** The associated communication channel. */
     private Object channel;
 
@@ -117,7 +117,7 @@ public class MMIContext extends MMIRequestIdentifier {
 
     /**
      * Sets the new state for this session.
-     * @param the new state
+     * @param value the new state
      */
     public void setState(final ModalityComponentState value) {
         state = value;
@@ -133,7 +133,7 @@ public class MMIContext extends MMIRequestIdentifier {
 
     /**
      * Sets the target address for communication issues..
-     * @param the target address
+     * @param value the target address
      */
     public void setTarget(final String value) {
         target = value;
@@ -149,7 +149,7 @@ public class MMIContext extends MMIRequestIdentifier {
 
     /**
      * Sets the content URL.
-     * @param the content URL
+     * @param value the content URL
      */
     public void setContentURL(final URI value) {
         contentURL = value;
@@ -157,7 +157,7 @@ public class MMIContext extends MMIRequestIdentifier {
 
     /**
      * Sets the content URL.
-     * @param the content URL
+     * @param value the content URL
      * @throws URISyntaxException
      *         the given value does not denote a valid URI
      */

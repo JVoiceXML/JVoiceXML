@@ -33,7 +33,7 @@ import org.jvoicexml.mmi.events.MMIEvent;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class DecoratedMMIEvent {
+public final class DecoratedMMIEvent {
 
     /** The channel over which the {@link MMIEvent} was received. */
     private final Object channel;
@@ -52,7 +52,7 @@ public class DecoratedMMIEvent {
     }
 
     /**
-     * Retrieves the channel over which the {@link MMIEvent} was received
+     * Retrieves the channel over which the {@link MMIEvent} was received.
      * @return the channel
      */
     public Object getChannel() {
@@ -66,6 +66,4 @@ public class DecoratedMMIEvent {
     public MMIEvent getEvent() {
         return event;
     }
-
-    
 }

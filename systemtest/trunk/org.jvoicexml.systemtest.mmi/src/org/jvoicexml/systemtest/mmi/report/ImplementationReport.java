@@ -85,7 +85,7 @@ public final class ImplementationReport {
 
     /**
      * Retrieves the name of the tested system.
-     * @return
+     * @return the name of the tested system
      */
     public String getName() {
         return name;

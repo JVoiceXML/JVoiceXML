@@ -30,6 +30,7 @@ import org.jvoicexml.mmi.events.MMIEvent;
 import org.jvoicexml.mmi.events.StatusRequest;
 import org.jvoicexml.mmi.events.StatusRequestBuilder;
 import org.jvoicexml.mmi.events.StatusResponse;
+import org.jvoicexml.mmi.events.StatusResponseType;
 import org.jvoicexml.systemtest.mmi.TestFailedException;
 
 /**
@@ -39,7 +40,7 @@ import org.jvoicexml.systemtest.mmi.TestFailedException;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class Assert94 extends AbstractAssert {
+public final class Assert94 extends AbstractAssert {
     /** The logger instance. */
     private static final Logger LOGGER = Logger.getLogger(Assert94.class);
 
@@ -72,18 +73,23 @@ public class Assert94 extends AbstractAssert {
             throw new TestFailedException("expected a StatusReponse but got a "
                     + statusReponse.getClass());
         }
-        checkIds(statusReponse, null, requestId);
         final StatusResponse statusResponseObject =
                 (StatusResponse) statusReponse;
-        if (statusResponseObject.getRequestID() != null) {
+        if (statusResponseObject.getContext() != null) {
             throw new TestFailedException("expected no context id but got '"
-                    + statusResponseObject.getRequestID() + "'");
+                    + statusResponseObject.getContext() + "'");
         }
         if (!requestId.equals(statusResponseObject.getRequestID())) {
             final String message = "Expected request id '" + requestId
                     + "' but have '" + statusResponseObject.getRequestID()
                     + "' in "
                     + statusResponseObject.getClass().getCanonicalName();
+            LOGGER.warn(message);
+            throw new TestFailedException(message);
+        }
+        if (statusResponseObject.getStatus() != StatusResponseType.ALIVE) {
+            final String message = "Expected a live response but got "
+                    + statusResponseObject.getStatus();
             LOGGER.warn(message);
             throw new TestFailedException(message);
         }

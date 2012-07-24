@@ -35,7 +35,7 @@ import org.jvoicexml.systemtest.mmi.NotImplementedException;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class Assert69 extends AbstractAssert {
+public final class Assert69 extends AbstractAssert {
     /**
      * Constructs a new object.
      */
