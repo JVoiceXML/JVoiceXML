@@ -62,6 +62,14 @@ public final class Shutdown {
         return null;
     }
 
+    /**
+     * Retrieves the remote shutdown implementation.
+     * @param configuration the configuration to use
+     * @return remote shutdown implementation, <code>null</code> if there is
+     *           none.
+     * @throws ConfigurationException
+     *          error reading the configuration
+     */
     private RemoteShutdown getRemoteShutdown(final Configuration configuration)
             throws ConfigurationException {
         final Collection<RemoteShutdown> shutdowns =
@@ -103,5 +111,4 @@ public final class Shutdown {
             return;
         }
     }
-
 }

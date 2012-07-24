@@ -7,5 +7,11 @@ implementation.
     <import file="${jvxml.core.dir}/3rdparty-libs.xml" />
 
     <target name="-local-3rdparty-setup" depends="-3rdparty-setup">
+        <!-- jvxml library -->
+        <path id="jvxml.core.lib">
+          <path location="${jvxml.core.dir}/classes"/>
+          <path location="../org.jvoicexml.client/classes"/>
+          <path location="../org.jvoicexml.xml/classes"/>
+        </path>
     </target>
 </project>

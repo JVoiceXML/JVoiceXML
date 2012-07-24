@@ -114,8 +114,9 @@ org.jvoicexml/personal-props
       <update dir="../org.jvoicexml.mmi.events" />
       <update dir="../org.jvoicexml.processor.srgs" />
       <update dir="../org.jvoicexml.systemtest" />
+      <update dir="../org.jvoicexml.systemtest" />
       <update dir="../org.jvoicexml.xml" />
-      <update dir="../org.jvoicexml.systemtest.servlet" />
+      <update dir="../org.jvoicexml.systemtest.mmi" />
       <update dir="../userguide" />
     </svn>
   </target>
@@ -136,6 +137,7 @@ org.jvoicexml/personal-props
     <ant dir="../org.jvoicexml.jndi" inheritall="false" inheritrefs="false"
         target="checkstyle" />
     <ant dir="../org.jvoicexml.xml" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.mmi.events" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.processor.srgs" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.jsapi10" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.jsapi20" inheritall="false" target="checkstyle" />
@@ -143,6 +145,9 @@ org.jvoicexml/personal-props
     <ant dir="../org.jvoicexml.implementation.marc" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.mrcpv2" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.text" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.callmanager.mmi" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.callmanager.sip" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.callmanager.text" inheritall="false" target="checkstyle" />
   </target>
 
   <target name="unittests" depends="-init"
@@ -152,14 +157,16 @@ org.jvoicexml/personal-props
     <ant antfile="build.xml" target="jar" />
 
     <!-- Execute the unit tests for all sub projects. -->
-    <ant dir="../org.jvoicexml" antfile="test.xml" inheritall="false"
-      target="test" />
-    <ant dir="../org.jvoicexml.client" antfile="test.xml" inheritall="false"
-      target="test" />
-    <ant dir="../org.jvoicexml.config" antfile="test.xml" inheritall="false"
-      target="test" />
-    <ant dir="../org.jvoicexml.xml" antfile="test.xml" inheritall="false"
-      target="test" />
+    <ant dir="../org.jvoicexml" antfile="test.xml"
+      inheritall="false" inheritrefs="false" target="test" />
+    <ant dir="../org.jvoicexml.client" antfile="test.xml"
+      inheritall="false" inheritrefs="false" target="test" />
+    <ant dir="../org.jvoicexml.config" antfile="test.xml"
+      inheritall="false" inheritrefs="false" target="test" />
+    <ant dir="../org.jvoicexml.xml" antfile="test.xml"
+      inheritall="false" inheritrefs="false" target="test" />
+    <ant dir="../org.jvoicexml.mmi.events" antfile="test.xml"
+      inheritall="false" inheritrefs="false" target="test" />
     <ant dir="../org.jvoicexml.processor.srgs" antfile="test.xml"
       inheritall="false" target="test" />
     <ant dir="../org.jvoicexml.implementation.jsapi10" antfile="test.xml"
@@ -171,6 +178,10 @@ org.jvoicexml/personal-props
     <ant dir="../org.jvoicexml.implementation.mary" antfile="test.xml"
       inheritall="false" target="test" />
     <ant dir="../org.jvoicexml.implementation.text" antfile="test.xml"
+      inheritall="false" target="test" />
+    <ant dir="../org.jvoicexml.callmanager.mmi" antfile="test.xml"
+      inheritall="false" target="test" />
+    <ant dir="../org.jvoicexml.callmanager.text" antfile="test.xml"
       inheritall="false" target="test" />
     <junitreport>
       <fileset dir="dist/unittests">
