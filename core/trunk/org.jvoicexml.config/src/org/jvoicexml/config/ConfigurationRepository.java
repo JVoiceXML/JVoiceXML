@@ -158,7 +158,7 @@ final class ConfigurationRepository
             final Node node;
             try {
                 final byte[] buffer;
-                synchronized(configurationFiles) {
+                synchronized (configurationFiles) {
                     buffer = configurationFiles.get(current);
                     if (buffer == null) {
                         continue;

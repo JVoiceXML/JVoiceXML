@@ -34,7 +34,7 @@ import org.jvoicexml.mmi.events.MMIEvent;
 /**
  * Adapter to the actual used protocol used in the event and transport layer
  * to receive and respond to MMI events.
- * Events can be received between calls to {@link #start()} and {@link stop}.
+ * Events can be received between calls to {@link #start()} and {@link #stop()}.
  * Once the adapter receives an event, it is propagated to all
  * registered {@link MMIEventListener}s.
  * @author Dirk Schnelle-Walka

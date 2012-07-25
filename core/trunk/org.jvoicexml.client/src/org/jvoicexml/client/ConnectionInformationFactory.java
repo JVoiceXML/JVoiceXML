@@ -25,10 +25,9 @@
  */
 package org.jvoicexml.client;
 
-import org.jvoicexml.ConnectionInformation;
 
 /**
- * A factory or {@link ConnectionInformation}.
+ * A factory or {@link org.jvoicexml.ConnectionInformation}.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
@@ -36,32 +35,33 @@ import org.jvoicexml.ConnectionInformation;
 public interface ConnectionInformationFactory {
     /**
      * Retrieves all identifiers for {@link org.jvoicexml.CallControl} that are
-     * supported by this factory
+     * supported by this factory.
      * @return all identifiers.
      */
     String[] getCallControlIdentifiers();
 
     /**
      * Retrieves all identifiers for {@link org.jvoicexml.SystemOutput} that are
-     * supported by this factory
+     * supported by this factory.
      * @return all identifiers.
      */
     String[] getSystemOutputIdentifiers();
 
     /**
      * Retrieves all identifiers for {@link org.jvoicexml.UserInput} that are
-     * supported by this factory
+     * supported by this factory.
      * @return all identifiers.
      */
     String[] getUserInputIdentifiers();
 
     /**
-     * Creates a controller for a {@link ConnectionInformation} with the
-     * specified identifiers.
+     * Creates a controller for a {@link org.jvoicexml.ConnectionInformation}
+     * with the specified identifiers.
      * @param call unique identifier for the {@link org.jvoicexml.CallControl}.
      * @param output unique identifier for the
      *  {@link org.jvoicexml.SystemOutput}.
      * @param input unique identifier for the {@link org.jvoicexml.UserInput}.
+     * @return created connection information
      * @exception UnsupportedResourceIdentifierException
      *           if one of the specified identifiers is not supported in
      *           this factory

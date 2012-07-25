@@ -115,7 +115,7 @@ public class JVoiceXmlUserAgent {
 
     /**
      * Constructs a new object.
-     * @param sipListener the listener to this user agent
+     * @param address the SIP address of this agent
      */
     public JVoiceXmlUserAgent(final String address) {
         sipAddress = address;

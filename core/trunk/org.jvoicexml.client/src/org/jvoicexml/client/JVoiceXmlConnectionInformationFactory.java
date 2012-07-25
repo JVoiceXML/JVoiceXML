@@ -47,7 +47,7 @@ public final class JVoiceXmlConnectionInformationFactory
      *         if the identifier is not among the list of given identifiers
      */
     private void checkIdentifiers(final String identifier,
-            final String[] identifiers, Class<?> resource)
+            final String[] identifiers, final Class<?> resource)
                     throws UnsupportedResourceIdentifierException {
         for (String current : identifiers) {
             if (current.equals(identifier)) {
@@ -83,7 +83,7 @@ public final class JVoiceXmlConnectionInformationFactory
      */
     @Override
     public String[] getCallControlIdentifiers() {
-        return new String[] { "dummy" };
+        return new String[] {"dummy"};
     }
 
     /**
@@ -91,7 +91,7 @@ public final class JVoiceXmlConnectionInformationFactory
      */
     @Override
     public String[] getSystemOutputIdentifiers() {
-        return new String[] { "jsapi10", "jsapi20", "mary", "marc" };
+        return new String[] {"jsapi10", "jsapi20", "mary", "marc"};
     }
 
     /**
@@ -99,7 +99,7 @@ public final class JVoiceXmlConnectionInformationFactory
      */
     @Override
     public String[] getUserInputIdentifiers() {
-        return new String[] { "jsapi10", "jsapi20", "mary", "marc" };
+        return new String[] {"jsapi10", "jsapi20", "mary", "marc"};
     }
 
 }
