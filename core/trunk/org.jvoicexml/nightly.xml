@@ -143,6 +143,7 @@ org.jvoicexml/personal-props
     <ant dir="../org.jvoicexml.implementation.jsapi20" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.jtapi" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.marc" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.implementation.mary" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.mrcpv2" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.text" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.callmanager.mmi" inheritall="false" target="checkstyle" />

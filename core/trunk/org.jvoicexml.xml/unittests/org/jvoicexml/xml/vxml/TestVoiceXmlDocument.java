@@ -107,7 +107,7 @@ public final class TestVoiceXmlDocument {
         final Vxml vxml = doc.getVxml();
         final Form form = vxml.appendChild(Form.class);
         final Block block = form.appendChild(Block.class);
-        block.setName("testäöü");
+        block.setName("testÃ¤Ã¶Ã¼");
         final File file = File.createTempFile("jvxmltest", null);
         file.deleteOnExit();
         final FileOutputStream fout = new FileOutputStream(file);
