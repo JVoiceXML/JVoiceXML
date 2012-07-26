@@ -69,6 +69,12 @@ public final class MarcSynthesizedOutputFactory
     /** An external MARC publisher. */
     private ExternalMarcPublisher external;
 
+    /** The voice to use for MARC. */
+    private String voice;
+
+    /** The default locale for text to be synthesized. */
+    private String defaultLocale;
+
     /**
      * Constructs a new object.
      */
@@ -119,6 +125,24 @@ public final class MarcSynthesizedOutputFactory
     }
 
     /**
+     * Sets the name of the voice to use.
+     * @param name name of the voice
+     * @since 0.7.6
+     */
+    public void setVoice(final String name) {
+        voice = name;
+    }
+
+    /**
+     * Sets the default locale.
+     * @param locale the default locale
+     * @since 0.7.6
+     */
+    public void setDefaultLocale(final String locale) {
+        defaultLocale = locale;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public SynthesizedOutput createResource() throws NoresourceError {
@@ -132,6 +156,8 @@ public final class MarcSynthesizedOutputFactory
         output.setPort(port);
         output.setFeedbackPort(feedbackPort);
         output.setExternalMarcPublisher(external);
+        output.setVoice(voice);
+        output.setDefaultLocale(defaultLocale);
         return output;
     }
 

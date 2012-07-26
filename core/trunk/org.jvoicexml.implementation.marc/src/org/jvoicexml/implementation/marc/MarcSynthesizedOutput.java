@@ -118,6 +118,12 @@ public final class MarcSynthesizedOutput
     /** An external MARC publisher. */
     private ExternalMarcPublisher external;
 
+    /** The voice to use for MARC. */
+    private String voice;
+
+    /** The default locale for text to be synthesized. */
+    private String defaultLocale;
+
     /**
      * Constructs a new object.
      */
@@ -182,6 +188,24 @@ public final class MarcSynthesizedOutput
      */
     public void setFeedbackPort(final int portNumber) {
         feedbackPort = portNumber;
+    }
+
+    /**
+     * Sets the name of the voice to use.
+     * @param name name of the voice
+     * @since 0.7.6
+     */
+    public void setVoice(final String name) {
+        voice = name;
+    }
+
+    /**
+     * Sets the default locale.
+     * @param locale the default locale
+     * @since 0.7.6
+     */
+    public void setDefaultLocale(final String locale) {
+        defaultLocale = locale;
     }
 
     /**
@@ -504,7 +528,23 @@ public final class MarcSynthesizedOutput
         writer.writeAttribute("id", "SpeechCommand");
         writer.writeAttribute(MARC_NAMESPACE_URI, "synthesizer",
                 "OpenMary");
-        writer.writeAttribute(MARC_NAMESPACE_URI, "voice", "DEFAULT");
+        if (voice == null) {
+            writer.writeAttribute(MARC_NAMESPACE_URI, "voice", "DEFAULT");
+        } else {
+            writer.writeAttribute(MARC_NAMESPACE_URI, "voice", voice);
+        }
+        final String locale;
+        if (ssml == null) {
+            if (defaultLocale != null) {
+                locale = defaultLocale;
+            } else {
+                locale = null;
+            }
+        } else {
+            final Speak speak = ssml.getSpeak();
+            locale = speak.getXmlLang();
+        }
+        writer.writeAttribute(MARC_NAMESPACE_URI, "locale", locale);
         writer.writeAttribute(MARC_NAMESPACE_URI, "options", "");
         writer.writeAttribute(MARC_NAMESPACE_URI, "f0_shift", "0.0");
         writer.writeAttribute("text", utterance);
