@@ -37,7 +37,7 @@ import java.util.List;
 
  */
 public final class StartResponseBuilder {
-    /** The created cancel responser */
+    /** The created cancel response. */
     private final StartResponse response;
 
     /**
@@ -70,6 +70,7 @@ public final class StartResponseBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public StartResponseBuilder setSource(final String uri) {
         response.setSource(uri);
@@ -79,6 +80,7 @@ public final class StartResponseBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public StartResponseBuilder setSource(final URI uri) {
         response.setSource(uri.toString());
@@ -88,6 +90,7 @@ public final class StartResponseBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public StartResponseBuilder setTarget(final String uri) {
         response.setTarget(uri);
@@ -97,6 +100,7 @@ public final class StartResponseBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public StartResponseBuilder setTarget(final URI uri) {
         response.setTarget(uri.toString());

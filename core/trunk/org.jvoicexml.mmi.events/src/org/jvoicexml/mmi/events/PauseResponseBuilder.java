@@ -70,6 +70,7 @@ public final class PauseResponseBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public PauseResponseBuilder setSource(final String uri) {
         response.setSource(uri);
@@ -79,6 +80,7 @@ public final class PauseResponseBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public PauseResponseBuilder setSource(final URI uri) {
         response.setSource(uri.toString());
@@ -88,6 +90,7 @@ public final class PauseResponseBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public PauseResponseBuilder setTarget(final String uri) {
         response.setTarget(uri);
@@ -97,6 +100,7 @@ public final class PauseResponseBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public PauseResponseBuilder setTarget(final URI uri) {
         response.setTarget(uri.toString());
@@ -106,6 +110,7 @@ public final class PauseResponseBuilder {
     /**
      * Sets the status to success.
      * @return this object.
+     * @return this object
      */
     public PauseResponseBuilder setStatusSuccess() {
         response.setStatus(StatusType.SUCCESS);
@@ -115,6 +120,7 @@ public final class PauseResponseBuilder {
     /**
      * Sets the status to success.
      * @return this object.
+     * @return this object
      */
     public PauseResponseBuilder setStatusFailure() {
         response.setStatus(StatusType.FAILURE);

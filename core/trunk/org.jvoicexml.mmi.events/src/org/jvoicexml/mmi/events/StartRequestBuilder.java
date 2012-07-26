@@ -81,6 +81,7 @@ public final class StartRequestBuilder {
     /**
      * Adds a href.
      * @param href the href to add
+     * @return this object
      */
     public StartRequestBuilder setHref(final String href) {
         ContentURLType urlType = getContentURLType();
@@ -91,6 +92,7 @@ public final class StartRequestBuilder {
     /**
      * Adds a href.
      * @param href the href to add
+     * @return this object
      */
     public StartRequestBuilder setHref(final URI href) {
         ContentURLType urlType = getContentURLType();
@@ -101,6 +103,7 @@ public final class StartRequestBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public StartRequestBuilder setSource(final String uri) {
         request.setSource(uri);
@@ -110,6 +113,7 @@ public final class StartRequestBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public StartRequestBuilder setSource(final URI uri) {
         request.setSource(uri.toString());
@@ -119,6 +123,7 @@ public final class StartRequestBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public StartRequestBuilder setTarget(final String uri) {
         request.setTarget(uri);
@@ -128,6 +133,7 @@ public final class StartRequestBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public StartRequestBuilder setTarget(final URI uri) {
         request.setTarget(uri.toString());

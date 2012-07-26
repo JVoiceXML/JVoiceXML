@@ -68,6 +68,7 @@ public final class StatusRequestBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public StatusRequestBuilder setSource(final String uri) {
         request.setSource(uri);
@@ -77,6 +78,7 @@ public final class StatusRequestBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public StatusRequestBuilder setSource(final URI uri) {
         request.setSource(uri.toString());
@@ -86,6 +88,7 @@ public final class StatusRequestBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public StatusRequestBuilder setTarget(final String uri) {
         request.setTarget(uri);
@@ -95,6 +98,7 @@ public final class StatusRequestBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public StatusRequestBuilder setTarget(final URI uri) {
         request.setTarget(uri.toString());
@@ -102,7 +106,7 @@ public final class StatusRequestBuilder {
     }
 
     /**
-     * Sets the flag to enable automatic status update sending
+     * Sets the flag to enable automatic status update sending.
      * @param enable <code>true</code> if periodic status update messages
      *          should be sent
      * @return this object

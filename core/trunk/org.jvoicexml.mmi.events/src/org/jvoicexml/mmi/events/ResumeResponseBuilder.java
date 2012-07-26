@@ -37,7 +37,7 @@ import java.net.URI;
 
  */
 public final class ResumeResponseBuilder {
-    /** The created pause responser */
+    /** The created pause response. */
     private final ResumeResponse response;
 
     /**
@@ -70,6 +70,7 @@ public final class ResumeResponseBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public ResumeResponseBuilder setSource(final String uri) {
         response.setSource(uri);
@@ -79,6 +80,7 @@ public final class ResumeResponseBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public ResumeResponseBuilder setSource(final URI uri) {
         response.setSource(uri.toString());
@@ -88,6 +90,7 @@ public final class ResumeResponseBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public ResumeResponseBuilder setTarget(final String uri) {
         response.setTarget(uri);
@@ -97,6 +100,7 @@ public final class ResumeResponseBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public ResumeResponseBuilder setTarget(final URI uri) {
         response.setTarget(uri.toString());

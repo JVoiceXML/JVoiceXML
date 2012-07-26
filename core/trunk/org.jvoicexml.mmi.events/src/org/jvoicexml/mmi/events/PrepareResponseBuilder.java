@@ -37,7 +37,7 @@ import java.util.List;
 
  */
 public final class PrepareResponseBuilder {
-    /** The created prepare responser */
+    /** The created prepare response. */
     private final PrepareResponse response;
 
     /**
@@ -70,6 +70,7 @@ public final class PrepareResponseBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public PrepareResponseBuilder setSource(final String uri) {
         response.setSource(uri);
@@ -79,6 +80,7 @@ public final class PrepareResponseBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public PrepareResponseBuilder setSource(final URI uri) {
         response.setSource(uri.toString());
@@ -88,6 +90,7 @@ public final class PrepareResponseBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public PrepareResponseBuilder setTarget(final String uri) {
         response.setTarget(uri);
@@ -97,6 +100,7 @@ public final class PrepareResponseBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public PrepareResponseBuilder setTarget(final URI uri) {
         response.setTarget(uri.toString());

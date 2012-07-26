@@ -27,7 +27,6 @@
 package org.jvoicexml.mmi.events;
 
 import java.net.URI;
-import java.util.List;
 
 /**
  * A builder to create a status response.
@@ -37,7 +36,7 @@ import java.util.List;
 
  */
 public final class StatusResponseBuilder {
-    /** The created cancel responser */
+    /** The created cancel response. */
     private final StatusResponse response;
 
     /**
@@ -70,6 +69,7 @@ public final class StatusResponseBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public StatusResponseBuilder setSource(final String uri) {
         response.setSource(uri);
@@ -79,6 +79,7 @@ public final class StatusResponseBuilder {
     /**
      * Adds a source.
      * @param uri the uri to add
+     * @return this object
      */
     public StatusResponseBuilder setSource(final URI uri) {
         response.setSource(uri.toString());
@@ -88,6 +89,7 @@ public final class StatusResponseBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public StatusResponseBuilder setTarget(final String uri) {
         response.setTarget(uri);
@@ -97,6 +99,7 @@ public final class StatusResponseBuilder {
     /**
      * Adds a target.
      * @param uri the uri to add
+     * @return this object
      */
     public StatusResponseBuilder setTarget(final URI uri) {
         response.setTarget(uri.toString());
@@ -105,7 +108,7 @@ public final class StatusResponseBuilder {
 
     /**
      * Sets the automatic update flag.
-     * @param automaticUpdate <code>true</<code> if automatic updates were
+     * @param automaticUpdate <code>true</code> if automatic updates were
      *          requested
      * @return this object
      */
