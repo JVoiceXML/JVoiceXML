@@ -13,17 +13,18 @@
 <p>JVoiceXML comprises the following jar files:</p>
 
 <ul>
-	<li>jvxml.jar<br />
+ 	<li>org.jvoicexml.jar<br />
 	This is the main jar, containing the VoiceXML interpreter</li>
-	<li>org.jvoicexml.xml.jar<br />
-	This jar contains all the XML related stuff</li>
+    <li>org.jvoicexml.callmanager.mmi.jar<br/>
+    CallManager implementation with support for the W3C MMI architectural pattern</li>
+    <li>org.jvoicexml.callmanager.sip.jar<br/>
+    CallManager implementation with support for SIP (unfinished)</li>
+    <li>org.jvoicexml.callmanager.text.jar<br/>
+    CallManager implementation for text based access (unfinished)</li>
+	<li>org.jvoicexml.client.jar<br />
+	jar containing the interfaces to create client applications.</li>
     <li>org.jvoicexml.config.jar<br/>
     spring based configuration of JVoiceXML</li>
-    <li>org.jvoicexml.processor.srgs.jar<br/>
-    This jar contains an SRGS grammar processor.</li>
-    <li>org.jvoicexml.jndi.jar<br/>
-    This jar contains the JNDI support for JVoiceXML which is needed for
-    remote access.</li>
 	<li>org.jvoicexml.implementation.jsapi10.jar<br />
 	This jar contains a basic implementation platform based on the JSAPI
 	1.0.</li>
@@ -34,23 +35,30 @@
 	<li>org.jvoicexml.implementation.jsapi20.jar<br />
 	This jar contains an unfinished implementation platform based on the
 	JSAPI 2.0.</li>
-    <li>org.jvoicexml.implementation.mary.jar<br />
-    This jar contains support for the <a href="http://mary.dfki.de"></a>OpenMary</a>
-    TTS engine.</li>
     <li>org.jvoicexml.implementation.marc.jar<br />
-    This jar contains support for <a href="http://marc.limsi.fr"></a>MARC</a></li>
-	<li>jvxml-text.jar<br />
+    This jar contains support for <a href="http://marc.limsi.fr">MARC</a></li>
+    <li>org.jvoicexml.implementation.mary.jar<br />
+    This jar contains support for the <a href="http://mary.dfki.de">OpenMary</a>
+    TTS engine.</li>
+	<li>org.jvoicexml.implementation.text.jar<br />
 	This jar contains a basic implementation platform for text based
 	interaction.</li>
-	<li>jvxml-jtapi.jar<br />
-	This jar contains an unfinished implementation for jtapi 1.3.1 support</li>
-    <li>org.jvoicexml.jndi.jar<br />
-    This jar contains support remote access to the JVoiceXML server</li>
-	<li>jvmxl-client.jar<br />
-	jar containing the interfaces to create client applications.</li>
+    <li>org.jvoicexml.jndi.jar<br/>
+    This jar contains the JNDI support for JVoiceXML which is needed for
+    remote access.</li>
+	<li>org.jvoicexml.mmi.events.jar<br />
+	Class library for authoring MMI events.</li>
+    <li>org.jvoicexml.processor.srgs.jar<br/>
+    This jar contains an SRGS grammar processor.</li>
+	<li>org.jvoicexml.xml.jar<br />
+	This jar contains all the XML related stuff</li>
 	<li>jvmxl-client-text.jar<br />
 	jar containing the classes to access the text based implementation
 	platform</li>
+	<li>jvxml-jtapi.jar<br />
+	This jar contains an unfinished implementation for jtapi 1.3.1 support</li>
+	<li>jvxml-mrcpv2.jar<br />
+	This jar contains a basic implementation platform for MRCPv2.</li>
 </ul>
 
 <h2>Library dependencies</h2>
@@ -65,10 +73,10 @@ will need:</p>
 
 <h3>To run the interpreter</h3>
 <ul>
-	<li>jvxml.jar</li>
+	<li>org.jvoicexml.jar</li>
 	<li>org.jvoicexml.xml.jar</li>
 	<li>org.jvoicexml.processor.srgs.jar</li>
-	<li>jvxml-client.jar</li>
+	<li>org.jvoicexml.client.jar</li>
     <li>org.jvoicexml.jndi.jar (optional)</li>
 	<li>log4j 1.2.16 or above (<a
 		href="http://logging.apache.org/log4j/">http://logging.apache.org/log4j/</a>)</li>
@@ -94,7 +102,7 @@ will need:</p>
 <h4>Interpreter with JSAPI 1.0 support</h4>
 <ul>
 	<li>org.jvoicexml.implementation.jsapi10.jar</li>
-	<li>org.jvoicexml.implementation.jsapi10-impl.jar</li>
+	<li>org.jvoicexml.implementation.jsapi10-impl.jar (optional for FreeTTS and Sphinx4 support)</li>
 	<li>JSAPI 1.0 (<a
 		href="http://java.sun.com/products/java-media/speech/">http://java.sun.com/products/java-media/speech/</a>)</li>
 	<li>FreeTTS 1.2.2 (SVN snapshot) (<a
@@ -140,23 +148,28 @@ will need:</p>
     <li>zanzibar.jar</li>
     <li>commons-lang-2.3.jar</li>
     <li>MRCPv2 server</li>
-    <li>SIP phone</li>
 </ul>
 
 <h4>Interpreter with text based interface</h4>
 <ul>
-	<li>jvxml-text.jar</li>
+	<li>org.jvoicexml.text.jar</li>
 </ul>
 
 <h3>To run a client</h3>
 <ul>
-	<li>jvxml-client.jar</li>
+	<li>org.jvoicexml.client.jar</li>
 	<li>org.jvoicexml.xml.jar (optional if you want to author VoiceXML documents</li>
 	<li>jvxml-client-text.jar (optional, to access the text based
 	implementation platform)</li>
 </ul>
 <p>You can also download the third party libraries from their web
 sites.</p>
+
+<h3>MMI</h3>
+<ul>
+	<li>org.jvoicexml.callmanager.mmi.jar</li>
+	<li>org.jvoicexml.mmi.events.jar</li>
+</ul>
 
 <h2>3rd party licenses</h2>
 
