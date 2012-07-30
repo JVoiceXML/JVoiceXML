@@ -21,6 +21,7 @@ This file runs unit tests on the JSAPI 1.0 implemenatation platform.
         <!-- the class path for the test case -->
         <path id="test.classpath">
             <path refid="project.classpath" />
+        	<path location="../${component}/etc" />
             <pathelement location="${build}" />
             <pathelement location="${jvxml.core.dir}/test/classes" />
             <fileset refid="freetts.jsapi10.lib"/>

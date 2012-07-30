@@ -544,7 +544,9 @@ public final class MarcSynthesizedOutput
             final Speak speak = ssml.getSpeak();
             locale = speak.getXmlLang();
         }
-        writer.writeAttribute(MARC_NAMESPACE_URI, "locale", locale);
+        if (locale != null) {
+            writer.writeAttribute(MARC_NAMESPACE_URI, "locale", locale);
+        }
         writer.writeAttribute(MARC_NAMESPACE_URI, "options", "");
         writer.writeAttribute(MARC_NAMESPACE_URI, "f0_shift", "0.0");
         writer.writeAttribute("text", utterance);

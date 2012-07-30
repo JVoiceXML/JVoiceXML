@@ -24,6 +24,9 @@ This file runs unit tests on org.jvoicexml.callmanager.mmi.
             <pathelement location="${jvxml.core.dir}/test/classes"/>
             <pathelement location="${build}" />
             <fileset refid="junit.lib"/>
+            <fileset refid="rhino.lib" />
+            <fileset refid="httpcore.lib" />
+            <fileset refid="httpclient.lib" />
         </path>
     </target>
 
@@ -39,7 +42,7 @@ This file runs unit tests on org.jvoicexml.callmanager.mmi.
     <target name="compiletests"
             depends="-inittest,compile,-checkJunit"
             description="Compile the JAVA sources for the test cases">
-        <javac destdir="${test.build}"
+        <javac destdir="${test.build}" includeantruntime="false"
                optimize="off"
                debug="on"
                deprecation="on">
