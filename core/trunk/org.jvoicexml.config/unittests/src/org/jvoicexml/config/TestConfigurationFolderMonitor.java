@@ -5,6 +5,7 @@ import java.io.FileWriter;
 
 import junit.framework.Assert;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,6 +18,10 @@ import org.junit.Test;
  */
 public final class TestConfigurationFolderMonitor
     implements ConfigurationFileChangedListener {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(TestConfigurationFolderMonitor.class);
+
     /** Notifications about messages from the monitor. */
     private Object lock;
 
@@ -41,7 +46,8 @@ public final class TestConfigurationFolderMonitor
      */
     @Test(timeout = 10000)
     public void test() throws Exception {
-        final File configFolder = new File("unittests/config");
+        final File configFolder = new File(
+                "../org.jvoicexml.config/unittests/config");
         final ConfigurationFolderMonitor monitor =
                 new ConfigurationFolderMonitor(configFolder);
         monitor.setDelay(500);
@@ -50,18 +56,21 @@ public final class TestConfigurationFolderMonitor
         synchronized (lock) {
             lock.wait();
         }
-        Assert.assertEquals(
-                new File("unittests/config/test-implementation.xml"),
-                reportedFile);
+        LOGGER.info(action + " on " + reportedFile);
+        Assert.assertEquals(new File(
+            "../org.jvoicexml.config/unittests/config/test-implementation.xml"),
+            reportedFile);
         Assert.assertEquals("added", action);
         reportedFile = null;
         action = null;
-        final File added = new File("unittests/config/test.xml");
+        final File added = new File(
+                "../org.jvoicexml.config/unittests/config/test.xml");
         added.deleteOnExit();
         added.createNewFile();
         synchronized (lock) {
             lock.wait();
         }
+        LOGGER.info(action + " on " + reportedFile);
         Assert.assertEquals(added, reportedFile);
         Assert.assertEquals("added", action);
         reportedFile = null;
@@ -73,6 +82,7 @@ public final class TestConfigurationFolderMonitor
         synchronized (lock) {
             lock.wait();
         }
+        LOGGER.info(action + " on " + reportedFile);
         Assert.assertEquals(added, reportedFile);
         Assert.assertEquals("updated", action);
         reportedFile = null;
@@ -81,6 +91,7 @@ public final class TestConfigurationFolderMonitor
         synchronized (lock) {
             lock.wait();
         }
+        LOGGER.info(action + " on " + reportedFile);
         Assert.assertEquals(added, reportedFile);
         Assert.assertEquals("deleted", action);
     }

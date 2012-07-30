@@ -57,7 +57,7 @@ public final class TestClasspathExtractor {
         final TransformerFactory factory = TransformerFactory.newInstance();
         final Transformer transformer = factory.newTransformer();
         final Source source =
-            new StreamSource("unittests/config/test-implementation.xml");
+            new StreamSource("../org.jvoicexml.config/unittests/config/test-implementation.xml");
         final ClasspathExtractor extractor = new ClasspathExtractor();
         final Result result = new SAXResult(extractor);
         transformer.transform(source, result);
@@ -76,7 +76,7 @@ public final class TestClasspathExtractor {
         final TransformerFactory factory = TransformerFactory.newInstance();
         final Transformer transformer = factory.newTransformer();
         final Source source =
-            new StreamSource("unittests/config/test-implementation.xml");
+            new StreamSource("../org.jvoicexml.config/unittests/config/test-implementation.xml");
         final ClasspathExtractor extractor = new ClasspathExtractor();
         final Result result = new SAXResult(extractor);
         transformer.transform(source, result);

@@ -73,7 +73,8 @@ public class TestJsapi10RecognitionResult {
      */
     @Before
     public void setUp() throws Exception {
-        final RecognizerModeDesc desc = new SphinxRecognizerModeDesc();
+        final String config = "/sphinx4.jsapi10.config";
+        final RecognizerModeDesc desc = new SphinxRecognizerModeDesc(config);
         recognizer = Central.createRecognizer(desc);
         recognizer.allocate();
         recognizer.waitEngineState(Recognizer.ALLOCATED);

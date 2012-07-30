@@ -57,24 +57,24 @@ public interface SynthesizedOutputConnectionHandler {
     /**
      * Establishes a connection from the given {@link ConnectionInformation} to this
      * object.
-     * @param client data container with connection relevant data.
+     * @param info data container with connection relevant data.
      * @param output the current synthesized output.
      * @param synthesizer the current synthesizer.
      * @throws IOException
      *         error establishing the connection.
      */
-    void connect(final ConnectionInformation client, final SynthesizedOutput output,
-            final Synthesizer synthesizer)
+    void connect(final ConnectionInformation info,
+            final SynthesizedOutput output, final Synthesizer synthesizer)
         throws IOException;
 
     /**
      * Disconnects a previously established connection.
-     * @param client data container with connection relevant data.
+     * @param info data container with connection relevant data.
      * @param output the current synthesized output.
      * @param synthesizer the current synthesizer.
      */
-    void disconnect(final ConnectionInformation client, final SynthesizedOutput output,
-            final Synthesizer synthesizer);
+    void disconnect(final ConnectionInformation info,
+            final SynthesizedOutput output, final Synthesizer synthesizer);
 
     /**
      * Delegate from
