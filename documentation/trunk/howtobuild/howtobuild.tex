@@ -140,7 +140,8 @@ Since all the third party libraries are checked in this may
 take a while.
 
 Although the sub-projects are organized in folders it is expected to
-checkout all projects into the same folder regardless of the subproject folder.
+checkout \textbf{all projects into the same folder}
+regardless of the subproject folder.
 This works fine, if you are using an IDE like eclipse, this is really
 straightforward, but may cause some problems if you are working from a command
 line. In the latter case remove the \texttt{.svn} folder if you checkout
@@ -185,7 +186,7 @@ comparable repository or from their home pages. The file
 \subsection{IDE}
 \label{sec:ide}
 
-JVoiceXML is being developed using eclipse 3.4, but you can use the IDE of your
+JVoiceXML is being developed using eclipse 3.5, but you can use the IDE of your
 choice to edit the sources and compile the binaries. You can even use a simple
 text editor to perform this job. Nevertheless there are some restriction that
 you cannot work around.
@@ -200,9 +201,9 @@ Your IDE must support
 \subsection{JAVA}
 \label{sec:java}
 
-Parts of the code of JVoiceXML are using features from the JAVA 5 API, so that
+Parts of the code of JVoiceXML are using features from the JAVA 6 API, so that
 you will need at least J2SE 1.6 to compile the code. You can download it
-for free from \url{http://java.sun.com/javase/}.
+for free from \url{http://oracle.com/technetwork/java/javase/downloads/index.html}.
 
 
 \subsubsection{Eclipse settings}
@@ -239,7 +240,8 @@ edit the documentation)
 JVoiceXML is being built by an ANT build file It is recommended that
 you use at least ANT 1.7.0. 
 If you don't have ANT installed, you can download the current release
-from \url{http://ant.apache.org}.
+from \url{http://ant.apache.org}. This should not be necessary if ANT is builtin
+your IDE as it is the case with eclipse.
 
 The build file allows you to override the settings by using a custom 
 properties file jvoicexml.properties in the \$\{JVOICEXML\_HOME\}
@@ -277,6 +279,12 @@ The core of JVoiceXML comprises the following sub-projects:
 \item[org.jvoicexml.xml] The JVoiceXML XML library (Required)
 \item[org.jvoicexml.jndi] JNDI support for JVoiceXML (Required)
 \item[org.jvoicexml.processor.srgs] SRGS processor (Required)
+\item[org.jvoicexml.callmanager.mmi] Demo implementation for the W3C MMI
+architecture.
+\item[org.jvoicexml.callmanager.sip] Demo implementation for SIP based access to
+JVoiceXML.
+\item[org.jvoicexml.callmanager.text] Demo implementation for text based access to
+JVoiceXML.
 \item[org.jvoicexml.implementation.jsapi10] Demo implementation platform for
 JSAPI 1.0~\cite{sun:jsapi}.
 \item[org.jvoicexml.implementation.jsapi20] Demo implementation platform for
@@ -291,6 +299,7 @@ the MARC.
 MRCPv2.
 \item[org.jvoicexml.implementation.text] Demo implementation platform for
 text based access.
+\item[org.jvoicexml.mmi.events] A library to author MMI events.
 \end{description}
 
 \subsection{Project \texttt{org.jvoicexml}}
@@ -340,7 +349,7 @@ document, see section~\ref{sec:ant-build-file} or while running the interpreter.
 \label{sec:adapt-ant}
 
 The directory \texttt{personal-props} provides a developer with the 
-possibility to override any 
+possibility to override some 
 default properties defined by files in \texttt{config-props}. 
 Any file that is to be
 substituted must be copied from \texttt{config-props} 
@@ -361,10 +370,11 @@ SourceForge. You can download them either from that location or
 from their home pages. 
 
 In this section, only those libraries are described, that are required
-to build the main project. The demos may require additional libraries.
+to build the main project. Some implementation platforms or demos may
+require additional libraries.
 
 You can also use your local copy by adjusting the settings in your
-custom properties file.
+custom properties file. However, this is not recommended.
 
 The settings of these libraries are stored in the file \emph{3rdparty-libs.xml}
 which is imported by the main build file.
@@ -472,7 +482,7 @@ one single implementation platform are located in the implementation platform's
 \subsubsection{Creating a Configuration}
 \label{sec:create-configuration}
 
-Currently there are seven implementations for the implementation platform
+Currently there are eleven implementations for the implementation platform
 that reside in co-projects, refer to section~\ref{sec:svn-repository}.
 
 Section~\ref{sec:adapt-ant} describes how to prepare your personal settings.
@@ -500,6 +510,9 @@ An example to enable the JSAPI 1.0 platform is shown below:
   <!-- platform name="org.jvoicexml.implementation.marc"/-->
   <!-- platform name="org.jvoicexml.implementation.mrcpv2"/-->
   <!-- platform name="org.jvoicexml.implementation.red5"/-->
+  <!-- platform name="org.jvoicexml.callmanager.sip"/-->
+  <!-- platform name="org.jvoicexml.callmanager.mmi"/-->
+  <!-- platform name="org.jvoicexml.callmanager.text"/-->
   <!-- platform name="org.jvoicexml.implementation.text"/-->
 </platforms>
 \end{lstlisting}
@@ -620,9 +633,10 @@ run. A screenshot is shown in figure~\ref{fig:eclipse-launch}.
 \subsection{Project \texttt{org.jvoicexml.config}}
 \label{sec:org.jvoicexml.config}
 
-This project provides a library to configure JVoiceXML based on spring.
+This project provides a library to configure JVoiceXML based on the spring
+framework.
 This is not required at run time and can be replaced by custom
-implementations, e.g. to embed JVoiceXML. It s required to build
+implementations, e.g. to embed JVoiceXML. However, it is required to build
 JVoiceXML.
 
 This project has to be build after the main project.
@@ -655,7 +669,7 @@ This project has to be build before the main project.
 This project provides JNDI support for JVoiceXML. This is not required at run
 time but in order to build JVoiceXML.
 
-JNDI support offers remote access to JVoiceXML, e.g. the ability to run the
+JNDI offers remote access to JVoiceXML, e.g. the ability to run the
 shutdown script or to run the demos.
 
 The project settings for this subproject can be adapted by the following ANT
@@ -699,9 +713,10 @@ that are required to use Talking Java as sthe speech engine.
 
 \paragraph{JSAPI 1.0}
 
-This implementation platform uses the Java Speech API v1.0
+This library contains the Java Speech API v1.0
 (JSAPI)~\cite{sun:jsapi} to address speech recognition and speech synthesis
-issues.
+issues. It is a pure API layer without any concrete TTS or ASR implementations
+which have to be added in addition.
 
 
 \paragraph{FreeTTS 1.2.2}
@@ -831,7 +846,7 @@ implementation platforms like JSAPI 1.0, see section~\ref{sec:implementation-jsa
 Note that you will need a MARC instance running if you want to use this
 demo. MARC can be downloaded from \url{http://marc.limsi.fr/}.
 
-This implementation platform will also for the integration of MARC BML commands
+This implementation platform will allow for the integration of MARC BML commands
 into your VoiceXML files.
 
 \subsection{Project \texttt{org.jvoicexml.implementation.mary}}
@@ -910,6 +925,47 @@ to provide input via Java strings.
 
 No special libraries.
 
+\subsection{Project \texttt{org.jvoicexml.callmanger.mmi}}
+
+This callmanager allows for accessing JVoiceXML as a modality component in
+the W3C MMI architectural pattern.
+
+\subsubsection{Third party libraries}
+
+This platform makes use of the \lstinline{org.jvoicexml.mmi.event} library
+to author MMI compatible events (see section\ref{sec:mmi-events}).
+
+\subsection{Project \texttt{org.jvoicexml.callmanger.sip}}
+
+This callmanager aims at supporting SIP based access to JVoiceXML.
+
+\subsubsection{Third party libraries}
+
+\paragraph{jainsip1.2}
+
+JainSIP provides a SIP stack for Java.
+
+\subsection{Project \texttt{org.jvoicexml.callmanger.text}}
+
+This callmanager aims at accesssing JVoiceXML as a server for text based
+access. In contrast to the text based implementation platform this callmanager
+doese not require JNDI.
+
+\subsubsection{Third party libraries}
+
+No special libraries.
+
+
+\subsection{Project \texttt{org.jvoicexml.mmi.events}}
+\label{sec:mmi-events}
+
+This project is a library to author MMI compatible events that can be used in
+the MMI architectural pattern from the W3C.
+
+\subsubsection{Third party libraries}
+
+No special libraries.
+
 \section{Demo Programs}
 
 The demo programs give a short impression how the JVoiceXML voice browser can
@@ -918,6 +974,8 @@ be used.
 The demos comprise the following sub-projects:
 
 \begin{description}
+\item[org.jvoicexml,demo.embedded] A demo project that shows how JVoiceXML can
+be embedded into other projects.
 \item[org.jvoicexml,demo.helloworlddemo] The venerable hello world in Voice\-XML
 \item[org.jvoicexml.demo.helloworldservletdemo] The same but as a servlet
 \item[org.jvoicexml.demo.inputdemo] A small cinema application
@@ -1029,6 +1087,17 @@ of our ANT buildfile, see section~\ref{sec:ant-build-file}.
 There are plug-ins for some IDEs, which you can use if you want to. The
 \texttt{checkstyle.xml} can be found in the folder 
 \texttt{etc} and is called \texttt{jvoicexml-checks.xml}.
+
+With the help of the checkstyle plugin these tests can be run automatically
+and visualized inside eclipse. Therefore, each project has to be configured to
+use this project relative configuration file. A screenshot is shown inside
+figure~\ref{fig:eclipse-project-checkstyle}.
+\begin{figure}
+\includegraphics[width=\linewidth]{eclipse-project-checkstyle.eps}
+\caption{Project relative configuration of checkstyle within eclipse}
+\label{fig:eclipse-project-checkstyle}
+\end{figure}
+
 
 Developers are requested to use the \texttt[language=Java]{@inheritDoc}
 JAVADOC tag in favor of a \texttt[language=Java]{@see} reference for inherited documentation.
