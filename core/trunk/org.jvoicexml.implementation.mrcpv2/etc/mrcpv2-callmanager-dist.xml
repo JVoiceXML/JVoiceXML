@@ -3,16 +3,16 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
     <repository>mrcpv2</repository>
-    <classpath>dist/jvxml-mrcpv2.jar</classpath>
-    <classpath>dist/jvxml-client-mrcpv2.jar</classpath>
+    <classpath>lib/jvxml-mrcpv2.jar</classpath>
+    <classpath>lib/jvxml-client-mrcpv2.jar</classpath>
     <classpath>
-        lib/cairo-sip-0.2.jar
+        lib/cairo-sip-SNAPSHOT.jar
     </classpath>
     <classpath>
-        lib/cairo-client.jar
+        lib/cairo-client-SNAPSHOT.jar
     </classpath>
     <classpath>
-        lib/cairo-rtp.jar
+        lib/cairo-rtp-SNAPSHOT.jar
     </classpath>
     <classpath>
         lib/jain-sip-ri-1.2.jar
@@ -30,7 +30,7 @@
         lib/mrcp4j-0.2.jar
     </classpath>
     <classpath>
-        lib/zanzibar.jar
+        lib/zanzibar-SNAPSHOT.jar
     </classpath>
     <classpath>
         lib/speechcloud-client.jar

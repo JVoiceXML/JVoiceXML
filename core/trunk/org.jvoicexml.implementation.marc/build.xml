@@ -189,6 +189,7 @@ You're using ${ant.java.version}
     <property name="distFolder" value="${dist}/${jvxml.version}" />
     <copy tofile="${distFolder}/config/marc-implementation.xml"
       file="${etc}/marc-implementation-dist.xml"/>
+    <copy todir="${distFolder}/lib" file="${dist.jar}"/>
   </target>
 
 </project>

@@ -89,18 +89,18 @@ You're using ${ant.java.version}
       </replace>
       <copy todir="${config}" file="${etc}/mrcpv2-callmanager.xml"
           overwrite="true"/>
-        <replace file="${config}/mrcpv2-callmanager.xml">
-            <replacefilter token="@mrcpv2.sip.address@"
-                value="${mrcpv2.sip.address}" />
-            <replacefilter token="@mrcpv2.sip.port@"
-                value="${mrcpv2.sip.port}" />
-            <replacefilter token="@mrcpv2.sip.cairo.sip.address@"
-                value="${mrcpv2.sip.cairo.sip.address}" />
-                <replacefilter token="@mrcpv2.sip.cairo.sip.host@"
-                    value="${mrcpv2.sip.cairo.sip.host}" />
-                <replacefilter token="@mrcpv2.sip.cairo.sip.port@"
-                    value="${mrcpv2.sip.cairo.sip.port}" />
-        </replace>
+     <replace file="${config}/mrcpv2-callmanager.xml">
+        <replacefilter token="@mrcpv2.sip.address@"
+            value="${mrcpv2.sip.address}" />
+        <replacefilter token="@mrcpv2.sip.port@"
+            value="${mrcpv2.sip.port}" />
+        <replacefilter token="@mrcpv2.sip.cairo.sip.address@"
+            value="${mrcpv2.sip.cairo.sip.address}" />
+            <replacefilter token="@mrcpv2.sip.cairo.sip.host@"
+                value="${mrcpv2.sip.cairo.sip.host}" />
+            <replacefilter token="@mrcpv2.sip.cairo.sip.port@"
+                value="${mrcpv2.sip.cairo.sip.port}" />
+     </replace>
   </target>
 
     <target name="clean" depends="-setup"
@@ -231,8 +231,32 @@ You're using ${ant.java.version}
     <property name="distFolder" value="${dist}/${jvxml.version}" />
     <copy tofile="${distFolder}/config/mrcpv2-implementation.xml"
       file="${etc}/mrcpv2-implementation-dist.xml"/>
+    <replace file="${distFolder}/config/mrcpv2-callmanager.xml">
+      <replacefilter token="@mrcpv2.sip.address@"
+          value="${mrcpv2.sip.address}" />
+      <replacefilter token="@mrcpv2.sip.port@"
+          value="${mrcpv2.sip.port}" />
+      <replacefilter token="@mrcpv2.sip.cairo.sip.address@"
+          value="${mrcpv2.sip.cairo.sip.address}" />
+      <replacefilter token="@mrcpv2.sip.cairo.sip.host@"
+          value="${mrcpv2.sip.cairo.sip.host}" />
+      <replacefilter token="@mrcpv2.sip.cairo.sip.port@"
+          value="${mrcpv2.sip.cairo.sip.port}" />
+   </replace>
     <copy tofile="${distFolder}/config/mrcpv2-callmanager.xml"
       file="${etc}/mrcpv2-callmanager-dist.xml"/>
+    <replace file="${distFolder}/config/mrcpv2-implementation.xml">
+        <replacefilter token="@mrcpv2.sip.address@"
+            value="${mrcpv2.sip.address}" />
+        <replacefilter token="@mrcpv2.sip.port@"
+            value="${mrcpv2.sip.port}" />
+        <replacefilter token="@mrcpv2.sip.cairo.sip.address@"
+            value="${mrcpv2.sip.cairo.sip.address}" />
+        <replacefilter token="@mrcpv2.sip.cairo.sip.host@"
+            value="${mrcpv2.sip.cairo.sip.host}" />
+        <replacefilter token="@mrcpv2.sip.cairo.sip.port@"
+            value="${mrcpv2.sip.cairo.sip.port}" />
+    </replace>
     <copy todir="${distFolder}/lib" file="${dist.jar}"/>
     <copy todir="${distFolder}/lib">
       <fileset refid="cairo.lib" />

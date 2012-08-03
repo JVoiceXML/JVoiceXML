@@ -405,11 +405,15 @@ public final class SipCallManager
     @Override
     public void stop() {
         try {
-            sipServer.shutdown();
+            if (sipServer != null) {
+                sipServer.shutdown();
+            }
         } catch (ObjectInUseException e) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(e.getLocalizedMessage(), e);
             }
+        } finally {
+            sipServer = null;
         }
     }
 
