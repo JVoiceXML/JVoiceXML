@@ -1159,7 +1159,8 @@ Since this has to be done for each file, you might want to have a look
 at the SVN's automatic property setting capability.
 
 In order to activate it, locate the \texttt{config} file in you subversion home
-folder and open it for editing.
+folder and open it for editing. Under Linux you will usually find this
+configuration folder \texttt{.subversion} in your home directory.
 
 In the section \texttt{[miscellany]} set
 \begin{lstlisting}
@@ -1169,7 +1170,7 @@ enable-auto-props = yes
 In the section \texttt{[auto-props]} set
 \begin{lstlisting}
 *.java = svn:mime-type=text/plain;svn:eol-style=native;svn:\
-keywords=HeadURL LastChangedRevision LastChangedBy \
+keywords=Rev Date HeadURL LastChangedRevision LastChangedBy \
 LastChangedDate
 \end{lstlisting}
 
