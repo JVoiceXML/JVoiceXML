@@ -50,47 +50,11 @@ Create the document 'JVoiceXML Userguide'..
         <delete file="${dist.pdf}"/>
     </target>
 
-    <target name="dia">
-        <apply executable="dia">
-            <fileset dir=".">
-                <include name="*.dia"/>
-            </fileset>
-            <mapper type="glob" from="*.dia" to="*.eps"/>
-            <arg value="-e"/>
-            <targetfile/>
-        </apply>
-    </target>
-
-    <target name="fig2dev">
-        <apply executable="fig2dev">
-            <fileset dir=".">
-                <include name="*.fig"/>
-            </fileset>
-            <mapper type="glob" from="*.fig" to="*.eps"/>
-            <arg value="-L"/>
-            <arg value="eps"/>
-            <srcfile/>
-            <targetfile/>
-        </apply>
-    </target>
- 
-    <target name="latex" description="Create the dvi file" 
-            depends="-setup,dia,fig2dev">
-        <latex latexfile="${basefilename}.tex" verbose="on">
+    <target name="latex" description="Create the PDF file" 
+            depends="-setup">
+        <latex pdftex="true"  latexfile="${basefilename}.tex" verbose="on">
             <bibtex />
         </latex>
-    </target>
-
-    <target name="pdf" description="Create the pdf" depends="latex">
-        <exec executable="dvips">
-          <arg value="-o"/>
-          <arg value="${dist.ps}"/>
-          <arg value="${basefilename}.dvi"/>
-        </exec>
-
-        <exec executable="ps2pdf">
-          <arg value="${dist.ps}"/>
-        </exec>
     </target>
 </project>
 

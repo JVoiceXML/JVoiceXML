@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[11pt,a4paper]{book}
 
 %
 % File:    $HeadURL: $
@@ -15,6 +15,9 @@
 \usepackage{xcolor}
 \usepackage{jvoicexml}
 \usepackage{paralist}
+\usepackage[pdftex, citecolor=black, urlcolor=black,
+linkcolor=black, colorlinks=black, colorlinks=true,
+ bookmarksopen=true]{hyperref}
 
 \hyphenation{JVoice-XML JVOICE-XML web-apps}
 
@@ -59,15 +62,13 @@
 \newpage
 \pagenumbering{arabic}
 
-\begin{abstract}
+\chapter{Introduction}
+\section{Introduction}
+\label{sec:introduction}
+
 This documents describes the API of JVoiceXML from the user's point of
 view. It provides information about the coding of clients for
 the JVoiceXML voice browser.
-\end{abstract}
-
-
-\section{Introduction}
-\label{sec:introduction}
 
 JVoiceXML is a free VoiceXML~\cite{w3.org:voicexml} implementation written in 
 the JAVA programming language with an open architecture for custom
@@ -129,7 +130,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 Before going into detail the general architecture and concepts are presented.
 The basic architecture is shown in figure~\ref{fig:architecture}.
 \begin{figure}
-\includegraphics[width=\linewidth]{client-architecture.eps}
+\includegraphics[width=\linewidth]{client-architecture.jpg}
 \caption{Basic architecture of JVoiceXML}
 \label{fig:architecture}
 \end{figure}
@@ -139,7 +140,9 @@ container and are accessed, e.g., via the HTTP protocol. JVoiceXML also
 supports other protocols, e.g. file. In principle all resources can be supported
 that can be addressed by a URI scheme, but this will require additional
 programming effort. JVoiceXML runs as a
-standalone server and retrieves the documents from the servlet container or other document repository. 
+standalone server and retrieves the documents from the servlet container or
+other document repository. Some more information can be found in
+chapter~\ref{cha:document-server}. 
 
 There are mainly two ways, how clients can interact with JVoiceXML
 \begin{inparaenum}[(i)]
@@ -152,7 +155,7 @@ Most of the demo clients use the Java Naming and Directory Interface
 technology. Currently there is only basic telephony support, but users can call 
 applications from their own Java programs. This is also the reason, why some
 programming effort is needed to start with your first programs. The way this is
-done is described in the following sections.
+done is described in chapter~\ref{cha:programmatic-approach}.
 
 Conceptually JNDI allows to connect to a centralized running JVoiceXML 
 server.
@@ -162,15 +165,18 @@ JVoiceXML also allows to have all that at the server side with the help of a
 This typical architecture for a voice browser is shown in
 figure~\ref{fig:server-architecture}. Here JVoiceXML waits for incoming
 calls and once the \lstinline{CallManager} detects an call, it calls the
-configured application. However this does not make much sense for the current
-demo implementation, since the speaker and the microphone of the JVoiceXML server
- is used for speech output and input.
+configured application. This architecture aims at settings where JVoiceXML
+is accessed using e.g. SIP or via MMI messages. 
+The current demo implementations mainly support JNDI, since the speaker and the
+microphone of the JVoiceXML server are used for speech output and input.
+Redirection of the audi streams is still in its infancy and may need
+custom build implementation platforms.
 \begin{figure}
-\includegraphics[width=\linewidth]{server-architecture.eps}
+\includegraphics[width=\linewidth]{server-architecture.jpg}
 \caption{Architecture of JVoiceXML using a CallManager}
 \label{fig:server-architecture}
 \end{figure}
-
+This approch is described in more detail in section~\ref{cha:callmanager}.
 
 \section{Required Software}
 \label{sec:required-software}
@@ -272,7 +278,8 @@ platform:
 \end{enumerate}
 
 You will need to install at least one of these engines in order to use this
-platform.
+platform. Note that all options may be displayed, depending on you operating
+system.
 
 Thanks to Jontahan Kinnersley, JVoiceXML ships with the Talking Java hook from
 from \url{http://www.cloudgarden.com}. This copy is free for
@@ -293,20 +300,23 @@ JSAPI 1 or 2. Otherwise, the JVM will crash.
 The JSAPI 2.0 implementation platform targets JSAPI 2.0 compliant speech
 recognizers and synthesizers. As a first start JVoiceXML is shipped with a
 first approach to use Sphinx 4 and FreeTTS with this new API. Additionally,
-we added support for the Microsoft Speech API. Note, that this requires Windows
-7. Windows Vista or Windows XP are not supported. 
+we added support for the Microsoft Speech API and TTS for Mac OS X.
+Note, that this requires Windows 7. Windows Vista or Windows XP are not
+supported. 
 
 This is an implementation of a draft specification of JSR 113 developed under
 the Java Community Process (JCP) and is made available for testing and evaluation
 purposes only. The code is not compatible with any specification of the JCP.
 
+You will need to install the base layer for JSAPI 2 and in addition one
+speech recognizer and speech synthesizer implementation.
 
 \subsection{JTAPI implementation platform}
 
 The JTAPI implementation platform can be used in addition to any other
 implementation platform to enable telephony support. Currently there are some
-basic tests with the JSAPI 2.0 implementation platform, but this one needs some
-more programming.
+basic tests in conjunction with the JSAPI 2.0 implementation platform, but this
+needs some more furhter programming before it actually can be used.
 
 \subsection{Mary implementation platform}
 
@@ -326,7 +336,7 @@ head developed by LIMSI. MARC can be downloaded from
 \url{http://marc.limsi.fr}. MARC requires that you have an installed mary on your computer. OpenMary can be
 downloaded for free from \url{http://mary.dfki.de}.
 
-This platform can be used in addition to other platforms, e.g. JSAPI 1.0 to
+This platform can be used in addition to other platforms, e.g. JSAPI 2.0 to
 substitute the JSAPI speech synthesizer. Note that you will need to install an
 implementation platform featuring a speech recognizer to start JVoiceXML.
 
@@ -387,7 +397,7 @@ Create a new account and make
 sure that the settings are as shown in figure~\ref{fig:sip-properties}.
 \begin{figure}
 \begin{center}
-\includegraphics[width=.5\linewidth]{SIPProperties}
+\includegraphics[width=.5\linewidth]{SIPProperties.jpg}
 \end{center}
 \caption{X-Lite Properties}
 \label{fig:sip-properties}
@@ -404,6 +414,14 @@ specified in the application configuration.
 The text implementation platform can be used to have a string based access to
 the voice browser. In this case speech recognition and text-to-speech is
 replaced by text input and output.
+
+\subsection{MMI CallManager}
+
+JVoiceXML can be used as a modality component in the MMI architectural pattern
+which is described at~\cite{w3c:mmi}.
+
+Note that this component only serves as a hook to the MMI system and that you
+will need a speech recognizer and a speech synthesizer in addition.
 
 \section{Preparing the first start}
 \label{sec:impl-platform-config}
@@ -636,8 +654,8 @@ start if you reuse the demo code and simply exchange the VoiceXML files.
 The following sections will help you to get a better understanding of the
 code that is used in the demos.
 
-\section{A first TTS example}
-\label{sec:first-tts-example}
+\chapter{The Document Server}
+\label{cha:document-server}
 
 This first example shows how VoiceXML documents are accessed from a
 servlet container or a web server and how clients can start the application.
@@ -648,7 +666,7 @@ you have to use a URL using the \lstinline{file} scheme, e.g.
 specification to retrieve the VoiceXML documents via the \lstinline{HTTP}
 protocol.
 
-\subsection{Creating the VoiceXML file}
+\section{Creating and storing a VoiceXML file}
 \label{sec:hello-vxml}
 
 This first example is very simple. It just echos a 'hello world'.
@@ -676,6 +694,26 @@ contents of this file is displayed in the browser. In some cases the file
 might be offered for download. This is the default behaviour of your browser if
 it can not determine the type of the file. Download the file and open it in your
 favorite editor to verify that this is your VoiceXML code.
+
+
+\chapter{JVoiceXML as a Server}
+\label{cha:callmanager}
+
+The ususal way to interact with a voice browser would be to run JVoiceXML as a
+server and interact with it by issuing calls with a phone. However, the history
+of JVoiceXML is not like this so there is still something to do to make this
+happen. The most advanced setting here is to have JVoiceXML as a modality
+component in an MMI setting~\cite{w3c:mmi}.
+
+\chapter{Programmatic Approach to JVoiceXML}
+\label{cha:programmatic-approach}
+
+\section{A first TTS example}
+\label{sec:first-tts-example}
+
+This example uses the VoiceXML file that has been coded in
+section~\ref{sec:hello-vxml} and shows how it can be synthesized by writing an
+own client.
 
 \subsection{Writing the Client}
 
@@ -1610,6 +1648,8 @@ class into this directory. Again, you will have to create an empty
 
 The use of static variables is possible, if you want
 to e.g., store some information that has to persist between two calls.
+
+\chapter{Configuration}
 
 \section{Configuration}
 \label{sec:configuration}

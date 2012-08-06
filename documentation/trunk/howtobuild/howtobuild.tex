@@ -11,7 +11,9 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{jvoicexml}
-
+\usepackage[pdftex, citecolor=black, urlcolor=black,
+linkcolor=black, colorlinks=black, colorlinks=true,
+ bookmarksopen=true]{hyperref}
 \include{version}
 
 \title{How to build JVoiceXML \jvxmlversion}
@@ -150,7 +152,7 @@ one using this folder.
 A screenshot from a checkout in eclipse is shown in
 figure~\ref{fig:eclipse-projects}.
 \begin{figure}
-\includegraphics[width=\linewidth]{eclipse-projects.eps}
+\includegraphics[width=\linewidth]{eclipse-projects.png}
 \caption{Eclipse project overview of JVoiceXML}
 \label{fig:eclipse-projects}
 \end{figure}
@@ -624,7 +626,7 @@ The ANT launch configurations for eclipse are part of the SVN repository. They
 are available as a shortcut in the external tools configuration after a first
 run. A screenshot is shown in figure~\ref{fig:eclipse-launch}.
 \begin{figure}
-\includegraphics[width=\linewidth]{eclipse-launch.eps}
+\includegraphics[width=\linewidth]{eclipse-launch.png}
 \caption{Eclipse External Tools Configuration for JVoiceXML}
 \label{fig:eclipse-launch}
 \end{figure}
@@ -1093,7 +1095,7 @@ and visualized inside eclipse. Therefore, each project has to be configured to
 use this project relative configuration file. A screenshot is shown inside
 figure~\ref{fig:eclipse-project-checkstyle}.
 \begin{figure}
-\includegraphics[width=\linewidth]{eclipse-project-checkstyle.eps}
+\includegraphics[width=\linewidth]{eclipse-project-checkstyle.png}
 \caption{Project relative configuration of checkstyle within eclipse}
 \label{fig:eclipse-project-checkstyle}
 \end{figure}

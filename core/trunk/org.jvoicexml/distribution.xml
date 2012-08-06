@@ -34,8 +34,9 @@ This file builds the distribution files for JVoiceXML.
 
     <fileset dir="${etc}/legal" id="dist.files.legal" />
   </target>
+
   <target name="-userdoc">
-    <!--ant dir="../userguide" inheritall="false" inheritrefs="false" target="pdf"/-->
+    <ant dir="../userguide" inheritall="false" inheritrefs="false"/>
   </target>
 
   <target name="-prepareDistributionFolder"
