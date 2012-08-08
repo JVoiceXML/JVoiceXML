@@ -1,6 +1,6 @@
-<project name="org.jvoicexml.systemtest.mmi" default="jar" basedir=".">
+<project name="org.jvoicexml.systemtest.mmi" default="run" basedir=".">
     <description>
-This file builds the system test for JVoiceXml.
+This file builds and runs the MMI system test for JVoiceXml.
 
 To override the current settings follow the instructions given in
 personal-props/README.txt

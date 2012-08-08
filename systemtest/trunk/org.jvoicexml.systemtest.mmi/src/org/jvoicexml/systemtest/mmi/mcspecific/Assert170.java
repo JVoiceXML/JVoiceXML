@@ -25,7 +25,15 @@
  */
 package org.jvoicexml.systemtest.mmi.mcspecific;
 
-import org.jvoicexml.systemtest.mmi.NotImplementedException;
+import java.io.File;
+import java.net.URI;
+
+import org.jvoicexml.mmi.events.DoneNotification;
+import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.StartRequest;
+import org.jvoicexml.mmi.events.StartRequestBuilder;
+import org.jvoicexml.mmi.events.StartResponse;
+import org.jvoicexml.systemtest.mmi.TestFailedException;
 
 /**
  * Assertion 170: If a Modality Component receives a new StartRequest while it
@@ -57,6 +65,43 @@ public final class Assert170 extends AbstractAssert {
      */
     @Override
     public void test() throws Exception {
-        throw new NotImplementedException();
+        final StartRequestBuilder builder1 = new StartRequestBuilder();
+        final String contextId = getContextId();
+        builder1.setContextId(contextId);
+        final String requestId1 = createRequestId();
+        builder1.setRequestId(requestId1);
+        final File file = new File("vxml/helloworld.vxml");
+        final URI uri = file.toURI();
+        builder1.setHref(uri);
+        final StartRequest request1 = builder1.toStartRequest();
+        send(request1);
+        final MMIEvent startReponse1 = waitForResponse("StartResponse");
+        if (!(startReponse1 instanceof StartResponse)) {
+            throw new TestFailedException("expected a StartReponse but got a "
+                    + startReponse1.getClass());
+        }
+        checkIds(startReponse1, contextId, requestId1);
+        ensureSuccess(startReponse1);
+        final StartRequestBuilder builder2 = new StartRequestBuilder();
+        builder2.setContextId(contextId);
+        final String requestId2 = createRequestId();
+        builder2.setRequestId(requestId2);
+        builder2.setHref(uri);
+        final StartRequest request2 = builder2.toStartRequest();
+        send(request2);
+        final MMIEvent startReponse2 = waitForResponse("StartResponse");
+        if (!(startReponse2 instanceof StartResponse)) {
+            throw new TestFailedException("expected a StartReponse but got a "
+                    + startReponse1.getClass());
+        }
+        checkIds(startReponse2, contextId, requestId2);
+        ensureSuccess(startReponse1);
+        final MMIEvent doneNotification = waitForResponse("DoneNotification");
+        if (!(doneNotification instanceof DoneNotification)) {
+            throw new TestFailedException(
+                    "expected a DoneNotification but got a "
+                    + startReponse1.getClass());
+        }
+        checkIds(doneNotification, contextId, requestId2);
     }
 }

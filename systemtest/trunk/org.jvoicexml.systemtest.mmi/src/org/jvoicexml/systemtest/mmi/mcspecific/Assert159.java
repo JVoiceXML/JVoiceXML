@@ -116,16 +116,13 @@ public final class Assert159 extends AbstractAssert {
         final String startRequestId = createRequestId();
         startBuilder.setRequestId(startRequestId);
         final StartRequest startRequest = startBuilder.toStartRequest();
-        final long startTime = System.currentTimeMillis();
         send(startRequest);
         final MMIEvent startReponse = waitForResponse("StartResponse");
-        final long endTime = System.currentTimeMillis();
         if (!(startReponse instanceof StartResponse)) {
             throw new TestFailedException("expected a StartReponse but got a "
                     + startReponse.getClass());
         }
         ensureSuccess(startReponse);
-        setNotes("started after " + (endTime - startTime) + " msec");
         checkIds(startReponse, contextId, startRequestId);
         final MMIEvent doneNotification = waitForResponse("DoneNotification");
         if (!(doneNotification instanceof DoneNotification)) {
