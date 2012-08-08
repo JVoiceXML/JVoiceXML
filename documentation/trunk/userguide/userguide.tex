@@ -97,6 +97,10 @@ Nobody is perfect, so you may find some errors or small things to correct.
 Please let me know if you think you found something that should be written
 differently or should be added.
 
+Also, this documentation is still not complete and requires further work.
+Please share your experience with us and help to improve the documentation by
+sending hints where it should be improved.
+
 \section{Copyright}
 \label{sec:copyright}
 
@@ -240,6 +244,7 @@ JVoiceXML is shipped with several implementation platforms. Some may require
 additional software as it is described in the following section.
 
 \section{Installation}
+\label{sec:installation}
 
 You can download the compiled voice browser as \texttt{jvxml-VERSION.zip} from 
 \url{http://jvoicexml.sourceforge.net/downloads.htm}.
@@ -423,6 +428,12 @@ which is described at~\cite{w3c:mmi}.
 Note that this component only serves as a hook to the MMI system and that you
 will need a speech recognizer and a speech synthesizer in addition.
 
+Before starting the MMI call manager you will need to configure the used
+implementation platforms in the configuration file \texttt{mmi-callmanager.xml}.
+The current demo implementation uses sockets to communicate with JVoiceXML.
+However, the used protocol is configurable and may be replaced by own
+implementations.
+
 \section{Preparing the first start}
 \label{sec:impl-platform-config}
 
@@ -495,6 +506,19 @@ It is written to work independent to the current folder. Simply call
 \begin{lstlisting}
 sh JVOICEXML_HOME/bin/startup.sh
 \end{lstlisting}
+
+On recent Ubuntu and Ubuntu-derived setups, start JVoiceXML using this command:
+\begin{lstlisting}
+padsp ./startup.sh
+\end{lstlisting}
+
+On these systems, pulse is the default audio manager. Using the previously
+mentioned way you'll most likely get no
+sound, since Java doesn't work properly with alsa (breaks up quickly, calls
+the alsa API in stupid ways, so that sound cannot be used by multiple apps
+concurrently, locks itself out from using sound etc.), whereas padsp simulates
+oss, with which Java works right.
+
 
 After the start lots of debug information will be displayed.
 It may take a while until the TTS engine and the recognizer are launched.
@@ -704,6 +728,10 @@ server and interact with it by issuing calls with a phone. However, the history
 of JVoiceXML is not like this so there is still something to do to make this
 happen. The most advanced setting here is to have JVoiceXML as a modality
 component in an MMI setting~\cite{w3c:mmi}.
+
+Typically this solution needs other implementation platforms in addition. This
+may be e.g. JSAPI 2.0. Refer to section~\ref{sec:installation} for a complete
+list of available implementation platforms.
 
 \chapter{Programmatic Approach to JVoiceXML}
 \label{cha:programmatic-approach}
