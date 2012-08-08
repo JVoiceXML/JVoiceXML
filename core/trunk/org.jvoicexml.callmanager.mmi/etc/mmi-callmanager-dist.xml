@@ -8,6 +8,9 @@
 
   <beans:bean id="callmanager"
     class="org.jvoicexml.callmanager.mmi.MMICallManager">
+    <!--
+      Adapt the settings to the implementation platforms that you intend to use.
+      -->
     <beans:property name="call" value="dummy"/>
     <beans:property name="input" value="jsapi20"/>
     <beans:property name="output" value="jsapi20"/>
@@ -17,6 +20,7 @@
          class="org.jvoicexml.client.JVoiceXmlConnectionInformationFactory" />
     </beans:property>
   
+    <!-- Specification of the ETL -->
     <beans:property name="protocolAdapter">
       <beans:bean
        class="org.jvoicexml.callmanager.mmi.socket.SocketETLProtocolAdapter">
