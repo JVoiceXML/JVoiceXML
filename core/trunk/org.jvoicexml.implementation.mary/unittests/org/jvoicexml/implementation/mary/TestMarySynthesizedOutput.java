@@ -106,30 +106,33 @@ public final class TestMarySynthesizedOutput
     public static void init() throws Exception {
         final Runtime runtime = Runtime.getRuntime();
         final TestProperties properties = new TestProperties();
-        final String mary = properties.get("mary.startcmd");
-        LOGGER.info("starting '" + mary + "'...");
-        process = runtime.exec(mary);
-        final InputStream in = process.getInputStream();
-        ingobbler = new StreamGobbler(in, System.out);
-        ingobbler.start();
-        final InputStream err = process.getErrorStream();
-        errgobbler = new StreamGobbler(err, System.out);
-        errgobbler.start();
-        
-        boolean started = false;
-        do {
-            Thread.sleep(DELAY);
-            try {
-                MaryClient.getMaryClient();
-                started = true;
-            } catch (Exception ignore) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("not started yet, retrying in " + DELAY
-                            + " msecs...");
+        final String startMary = properties.get("mary.startmary");
+        if (Boolean.valueOf(startMary)) {
+            final String mary = properties.get("mary.startcmd");
+            LOGGER.info("starting '" + mary + "'...");
+            process = runtime.exec(mary);
+            final InputStream in = process.getInputStream();
+            ingobbler = new StreamGobbler(in, System.out);
+            ingobbler.start();
+            final InputStream err = process.getErrorStream();
+            errgobbler = new StreamGobbler(err, System.out);
+            errgobbler.start();
+            
+            boolean started = false;
+            do {
+                Thread.sleep(DELAY);
+                try {
+                    MaryClient.getMaryClient();
+                    started = true;
+                } catch (Exception ignore) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("not started yet, retrying in " + DELAY
+                                + " msecs...");
+                    }
                 }
-            }
-        } while (!started);
-        LOGGER.info("...started");
+            } while (!started);
+            LOGGER.info("...started");
+        }
     }
 
     /**
