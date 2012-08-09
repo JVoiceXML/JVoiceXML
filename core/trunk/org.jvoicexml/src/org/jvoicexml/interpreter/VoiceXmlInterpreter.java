@@ -59,6 +59,9 @@ public final class VoiceXmlInterpreter implements Configurable {
     /** Current VoiceXML document. */
     private VoiceXmlDocument document;
 
+    /** The default locale of the document. */
+    private Locale documentLocale;
+
     /** The executable dialogs of the current VoiceXML document. */
     private Collection<Dialog> dialogs;
 
@@ -307,14 +310,23 @@ public final class VoiceXmlInterpreter implements Configurable {
      * @since 0.7.3
      */
     public Locale getLanguage() {
+        if (documentLocale != null) {
+            return documentLocale;
+        }
         if (document == null) {
             return null;
         }
         final Vxml vxml = document.getVxml();
         final Locale locale = vxml.getXmlLangObject();
         if (locale != null) {
-            return locale;
+            
+            documentLocale = locale;
+        } else {
+            documentLocale = Locale.getDefault();
         }
-        return Locale.getDefault();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("document default language is " + documentLocale);
+        }
+        return documentLocale;
     }
 }
