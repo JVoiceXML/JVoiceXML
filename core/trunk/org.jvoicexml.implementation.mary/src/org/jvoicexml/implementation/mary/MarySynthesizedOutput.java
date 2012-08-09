@@ -132,6 +132,9 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
         if (processor == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("queued speakable: " + speakable);
+        }
         synthesisQueue.queueSpeakables(speakable);
         speakableQueueEmpty = false;
       }
