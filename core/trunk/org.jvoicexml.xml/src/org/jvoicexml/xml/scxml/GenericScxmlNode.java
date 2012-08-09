@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -23,27 +23,27 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.xml.pls;
+package org.jvoicexml.xml.scxml;
 
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * A generic PLS node that is returned by the PLS node factory if the
+ * A generic SCXML node that is returned by the SCXML node factory if the
  * node is unknown.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.6
+ * @since 0.7.6
  */
-class GenericPlsNode
-        extends AbstractPlsNode {
+class GenericScxmlNode
+        extends AbstractScxmlNode {
     /**
      * Constructs a new object.
      * @param n The encapsulated node.
      */
-    GenericPlsNode(final Node n) {
+    GenericScxmlNode(final Node n) {
         super(n);
     }
 
@@ -55,7 +55,7 @@ class GenericPlsNode
      * @param factory
      *            The node factory to use.
      */
-    private GenericPlsNode(final Node n,
+    private GenericScxmlNode(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
     }
@@ -81,6 +81,6 @@ class GenericPlsNode
      */
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
-        return new GenericPlsNode(n, factory);
+        return new GenericScxmlNode(n, factory);
     }
 }

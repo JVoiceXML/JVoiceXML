@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -23,13 +23,14 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.xml.pls;
+
+package org.jvoicexml.xml.scxml;
 
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jvoicexml.xml.PlsNode;
+import org.jvoicexml.xml.ScxmlNode;
 import org.jvoicexml.xml.XmlDocument;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.XmlNodeList;
@@ -40,45 +41,41 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * A PLS XML document according to the specification in <a
- * href="http://www.w3.org/TR/pronunciation-lexicon/">
- * http://www.w3.org/TR/pronunciation-lexicon/</a>.
+ * An SCXML XML document according to the specification in <a
+ * href="http://www.w3.org/TR/scxml//">
+ * http://www.w3.org/TR/scxml/</a>.
  *
  * <p>
- * Objects of this class can create PLS XML grammar documents or
+ * Objects of this class can create SCXML XML  documents or
  * parse them.
  * </p>
  *
  * @author Dirk Schnelle-Walka
- *
  * @version $Revision$
- * @since 0.6
+ * @since 0.7.6
  */
-public final class PlsDocument
-        extends XmlDocument {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -2218143321006476920L;
+public final class ScxmlDocument extends XmlDocument {
 
     /** The <code>XmlNodefactory</code> to use. */
-    private static final transient PlsNodeFactory NODE_FACTORY;
+    private static final transient ScxmlNodeFactory NODE_FACTORY;
 
     static {
-        NODE_FACTORY = new PlsNodeFactory();
+        NODE_FACTORY = new ScxmlNodeFactory();
     }
 
     /**
-     * Creates an empty PLS Document.
+     * Creates an empty SCXML Document.
      *
      * @throws ParserConfigurationException
      *         If anything goes wrong while parsing the document.
      */
-    public PlsDocument()
+    public ScxmlDocument()
             throws ParserConfigurationException {
         super();
     }
 
     /**
-     * Constructs a new PLS document from the given input source.
+     * Constructs a new SCXML document from the given input source.
      *
      * @param source
      *        Input source for a single XML document.
@@ -89,7 +86,7 @@ public final class PlsDocument
      * @throws IOException
      *         Error reading the input source.
      */
-    public PlsDocument(final InputSource source)
+    public ScxmlDocument(final InputSource source)
             throws ParserConfigurationException, SAXException, IOException {
         super(source);
     }
@@ -108,8 +105,8 @@ public final class PlsDocument
     @Override
     protected Node createRootNode() {
         final Document document = getDocument();
-        final Node node = document.createElement(Lexicon.TAG_NAME);
-        return new Lexicon(node);
+        final Node node = document.createElement(Scxml.TAG_NAME);
+        return new Scxml(node);
     }
 
     /**
@@ -117,22 +114,22 @@ public final class PlsDocument
      */
     @Override
     protected NodeList getXmlNodeList(final NodeList nodeList) {
-        return new XmlNodeList<PlsNode>(NODE_FACTORY, nodeList);
+        return new XmlNodeList<ScxmlNode>(NODE_FACTORY, nodeList);
     }
 
     /**
-     * Get the one and only child of this document: The lexicon node.
+     * Get the one and only child of this document: The scxml node.
      *
-     * @return The lexicon child, <code>null</code> if there is
+     * @return The scxml child, <code>null</code> if there is
      *         none.
      */
-    public Lexicon getLexicon() {
-        final NodeList lexicon = getElementsByTagName(Lexicon.TAG_NAME);
-        if (lexicon.getLength() == 0) {
+    public Scxml getScxml() {
+        final NodeList scxml = getElementsByTagName(Scxml.TAG_NAME);
+        if (scxml.getLength() == 0) {
             return null;
         }
 
-        return (Lexicon) lexicon.item(0);
+        return (Scxml) scxml.item(0);
     }
 
     /**
@@ -140,6 +137,7 @@ public final class PlsDocument
      */
     @Override
     protected String getDefaultNamespaceURI() {
-        return "http://www.w3.org/2005/01/pronunciation-lexicon";
+        return "http://www.w3.org/2005/07/scxml";
     }
+
 }

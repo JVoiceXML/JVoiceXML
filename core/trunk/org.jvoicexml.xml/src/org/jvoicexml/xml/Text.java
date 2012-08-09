@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: Text.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,7 +36,7 @@ import org.w3c.dom.Node;
  */
 public class Text
     extends AbstractXmlNode
-    implements VoiceXmlNode, SrgsNode, SsmlNode, CcxmlNode, PlsNode {
+    implements VoiceXmlNode, SrgsNode, SsmlNode, CcxmlNode, PlsNode, ScxmlNode {
     /** Name of the text tag. */
     public static final String TAG_NAME = "#text";
 
