@@ -56,6 +56,9 @@ import org.xml.sax.SAXException;
  */
 public final class ScxmlDocument extends XmlDocument {
 
+    /** The serial version UID.  */
+    private static final long serialVersionUID = 8531815223302622356L;
+
     /** The <code>XmlNodefactory</code> to use. */
     private static final transient ScxmlNodeFactory NODE_FACTORY;
 
