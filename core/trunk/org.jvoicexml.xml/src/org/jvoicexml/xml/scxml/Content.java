@@ -26,6 +26,7 @@
 
 package org.jvoicexml.xml.scxml;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -34,18 +35,36 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * A wrapper element containing executable content to be executed when the state
- * is entered.
+ * A container element holding data to be passed to an external service.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-public final class Onentry
+public final class Content
         extends AbstractScxmlNode {
 
     /** Name of the tag. */
-    public static final String TAG_NAME = "onentry";
+    public static final String TAG_NAME = "content";
+
+    /**
+     * A value expression.
+     */
+    private static final String ATTRIBUTE_EXPR = "expr";
+
+    /**
+     * Supported attribute names for this node.
+     */
+    protected static final ArrayList<String> ATTRIBUTE_NAMES;
+
+    /**
+     * Set the valid attributes for this node.
+     */
+    static {
+        ATTRIBUTE_NAMES = new java.util.ArrayList<String>();
+
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_EXPR);
+    }
 
     /**
      * Valid child tags for this node.
@@ -60,22 +79,22 @@ public final class Onentry
     }
 
     /**
-     * Construct a onentry object without a node.
+     * Construct a new content object without a node.
      * <p>
      * This is necessary for the node factory.
      * </p>
      *
      * @see org.jvoicexml.xml.scxml.ScxmlNodeFactory
      */
-    public Onentry() {
+    public Content() {
         super(null);
     }
 
     /**
-     * Construct a new onentry object.
+     * Construct a new content object.
      * @param node The encapsulated node.
      */
-    Onentry(final Node node) {
+    Content(final Node node) {
         super(node);
     }
 
@@ -87,7 +106,7 @@ public final class Onentry
      * @param factory
      *            The node factory to use.
      */
-    private Onentry(final Node n,
+    private Content(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
     }
@@ -106,8 +125,29 @@ public final class Onentry
      */
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
-        return new Onentry(n, factory);
+        return new Content(n, factory);
     }
+
+    /**
+     * Retrieves the expr attribute.
+     *
+     * @return value of the expr attribute.
+     * @see #ATTRIBUTE_EXPR
+     */
+    public String getExpr() {
+        return getAttribute(ATTRIBUTE_EXPR);
+    }
+
+    /**
+     * Sets the expr attribute.
+     *
+     * @param expr Value of the expr attribute.
+     * @see #ATTRIBUTE_EXPR
+     */
+    public void setExpr(final String expr) {
+        setAttribute(ATTRIBUTE_EXPR, expr);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -121,6 +161,6 @@ public final class Onentry
      */
     @Override
     public Collection<String> getAttributeNames() {
-        return null;
+        return ATTRIBUTE_NAMES;
     }
 }

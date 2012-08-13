@@ -34,18 +34,18 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * A wrapper element containing executable content to be executed when the state
- * is entered.
+ * AA wrapper element holding data to be returned when a
+ * <code>&lt;final&gt;</code> state is entered.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-public final class Onentry
+public final class Donedata
         extends AbstractScxmlNode {
 
     /** Name of the tag. */
-    public static final String TAG_NAME = "onentry";
+    public static final String TAG_NAME = "donedata";
 
     /**
      * Valid child tags for this node.
@@ -60,14 +60,14 @@ public final class Onentry
     }
 
     /**
-     * Construct a onentry object without a node.
+     * Construct a onentry final object without a node.
      * <p>
      * This is necessary for the node factory.
      * </p>
      *
      * @see org.jvoicexml.xml.scxml.ScxmlNodeFactory
      */
-    public Onentry() {
+    public Donedata() {
         super(null);
     }
 
@@ -75,7 +75,7 @@ public final class Onentry
      * Construct a new onentry object.
      * @param node The encapsulated node.
      */
-    Onentry(final Node node) {
+    Donedata(final Node node) {
         super(node);
     }
 
@@ -87,7 +87,7 @@ public final class Onentry
      * @param factory
      *            The node factory to use.
      */
-    private Onentry(final Node n,
+    private Donedata(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
     }
@@ -106,7 +106,7 @@ public final class Onentry
      */
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
-        return new Onentry(n, factory);
+        return new Donedata(n, factory);
     }
     /**
      * {@inheritDoc}

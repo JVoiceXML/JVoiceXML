@@ -34,18 +34,25 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * A wrapper element containing executable content to be executed when the state
- * is entered.
+ * The <code>&lt;finalize&gt;</code> element enables an invoking session to
+ * update its data model with data contained in events returned by the invoked
+ * session. <code>&lt;finalize&gt;</code> contains executable content that is
+ * executed whenever the external service returns an event after the
+ * <code>&lt;invoke&gt;</code> has been executed. This content is applied before
+ * the system looks for transitions that match the event. Within the executable
+ * content, the system variable <code>_event</code> can be used to refer to the
+ * data contained in the event which is being processed.In the case of parallel
+ * states, only the finalize code in the original invoking state is executed.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-public final class Onentry
+public final class Finalize
         extends AbstractScxmlNode {
 
     /** Name of the tag. */
-    public static final String TAG_NAME = "onentry";
+    public static final String TAG_NAME = "finalize";
 
     /**
      * Valid child tags for this node.
@@ -60,22 +67,22 @@ public final class Onentry
     }
 
     /**
-     * Construct a onentry object without a node.
+     * Construct a finalize object without a node.
      * <p>
      * This is necessary for the node factory.
      * </p>
      *
      * @see org.jvoicexml.xml.scxml.ScxmlNodeFactory
      */
-    public Onentry() {
+    public Finalize() {
         super(null);
     }
 
     /**
-     * Construct a new onentry object.
+     * Construct a new finalize object.
      * @param node The encapsulated node.
      */
-    Onentry(final Node node) {
+    Finalize(final Node node) {
         super(node);
     }
 
@@ -87,7 +94,7 @@ public final class Onentry
      * @param factory
      *            The node factory to use.
      */
-    private Onentry(final Node n,
+    private Finalize(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
     }
@@ -106,7 +113,7 @@ public final class Onentry
      */
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
-        return new Onentry(n, factory);
+        return new Finalize(n, factory);
     }
     /**
      * {@inheritDoc}

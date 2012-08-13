@@ -26,6 +26,7 @@
 
 package org.jvoicexml.xml.scxml;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -34,18 +35,37 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * A wrapper element containing executable content to be executed when the state
- * is entered.
+ * The <code>&lt;script&gt></code> element adds scripting capability to the
+ * state machine.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-public final class Onentry
+public final class Script
         extends AbstractScxmlNode {
 
     /** Name of the tag. */
-    public static final String TAG_NAME = "onentry";
+    public static final String TAG_NAME = "script";
+
+    /**
+     * Gives the location from which the script should be downloaded.
+     */
+    private static final String ATTRIBUTE_SRC = "src";
+
+    /**
+     * Supported attribute names for this node.
+     */
+    protected static final ArrayList<String> ATTRIBUTE_NAMES;
+
+    /**
+     * Set the valid attributes for this node.
+     */
+    static {
+        ATTRIBUTE_NAMES = new java.util.ArrayList<String>();
+
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_SRC);
+    }
 
     /**
      * Valid child tags for this node.
@@ -60,22 +80,22 @@ public final class Onentry
     }
 
     /**
-     * Construct a onentry object without a node.
+     * Construct a new final object without a node.
      * <p>
      * This is necessary for the node factory.
      * </p>
      *
      * @see org.jvoicexml.xml.scxml.ScxmlNodeFactory
      */
-    public Onentry() {
+    public Script() {
         super(null);
     }
 
     /**
-     * Construct a new onentry object.
+     * Construct a new final object.
      * @param node The encapsulated node.
      */
-    Onentry(final Node node) {
+    Script(final Node node) {
         super(node);
     }
 
@@ -87,7 +107,7 @@ public final class Onentry
      * @param factory
      *            The node factory to use.
      */
-    private Onentry(final Node n,
+    private Script(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
     }
@@ -106,8 +126,29 @@ public final class Onentry
      */
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
-        return new Onentry(n, factory);
+        return new Script(n, factory);
     }
+
+    /**
+     * Retrieves the src attribute.
+     *
+     * @return value of the src attribute.
+     * @see #ATTRIBUTE_SRC
+     */
+    public String getSrc() {
+        return getAttribute(ATTRIBUTE_SRC);
+    }
+
+    /**
+     * Sets the src attribute.
+     *
+     * @param src Value of the src attribute.
+     * @see #ATTRIBUTE_SRC
+     */
+    public void setSrc(final String src) {
+        setAttribute(ATTRIBUTE_SRC, src);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -121,6 +162,6 @@ public final class Onentry
      */
     @Override
     public Collection<String> getAttributeNames() {
-        return null;
+        return ATTRIBUTE_NAMES;
     }
 }

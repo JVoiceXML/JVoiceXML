@@ -64,10 +64,15 @@ final class ScxmlNodeFactory
         // general tags
         NODES.put(Text.TAG_NAME, new Text(null, this));
         
+        NODES.put(Assign.TAG_NAME, new Assign());
+        NODES.put(Content.TAG_NAME, new Content());
         NODES.put(Datamodel.TAG_NAME, new Datamodel());
+        NODES.put(Data.TAG_NAME, new Data());
+        NODES.put(Donedata.TAG_NAME, new Donedata());
         NODES.put(Else.TAG_NAME, new Else());
         NODES.put(Elseif.TAG_NAME, new Elseif());
         NODES.put(Final.TAG_NAME, new Final());
+        NODES.put(Finalize.TAG_NAME, new Finalize());
         NODES.put(Foreach.TAG_NAME, new Foreach());
         NODES.put(History.TAG_NAME, new History());
         NODES.put(If.TAG_NAME, new If());
@@ -76,10 +81,13 @@ final class ScxmlNodeFactory
         NODES.put(Onentry.TAG_NAME, new Onentry());
         NODES.put(Onexit.TAG_NAME, new Onexit());
         NODES.put(Parallel.TAG_NAME, new Parallel());
+        NODES.put(Param.TAG_NAME, new Param());
         NODES.put(Raise.TAG_NAME, new Raise());
+        NODES.put(Script.TAG_NAME, new Script());
         NODES.put(Scxml.TAG_NAME, new Scxml());
         NODES.put(State.TAG_NAME, new State());
         NODES.put(Transition.TAG_NAME, new Transition());
+        NODES.put(Validate.TAG_NAME, new Validate());
     }
 
     /**

@@ -26,6 +26,7 @@
 
 package org.jvoicexml.xml.scxml;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -34,18 +35,51 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * A wrapper element containing executable content to be executed when the state
- * is entered.
+ * The <code>&lt;param&gt></code>tag provides a general way of identifying a
+ * name/key and a dynamically calculated value, which can be passed to an
+ * external service or included in an event.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-public final class Onentry
+public final class Param
         extends AbstractScxmlNode {
 
     /** Name of the tag. */
-    public static final String TAG_NAME = "onentry";
+    public static final String TAG_NAME = "param";
+
+    /**
+     * The name of the key.
+     */
+    private static final String ATTRIBUTE_NAME = "name";
+
+    /**
+     * A location expression that specifies the location in the datamodel to use
+     * as the value.
+     */
+    private static final String ATTRIBUTE_LOCATION = "location";
+
+    /**
+     * A value expression that is evaluated to provide the value.
+     */
+    private static final String ATTRIBUTE_EXPR = "expr";
+
+    /**
+     * Supported attribute names for this node.
+     */
+    protected static final ArrayList<String> ATTRIBUTE_NAMES;
+
+    /**
+     * Set the valid attributes for this node.
+     */
+    static {
+        ATTRIBUTE_NAMES = new java.util.ArrayList<String>();
+
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_NAME);
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_EXPR);
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_LOCATION);
+    }
 
     /**
      * Valid child tags for this node.
@@ -60,22 +94,22 @@ public final class Onentry
     }
 
     /**
-     * Construct a onentry object without a node.
+     * Construct a new assign object without a node.
      * <p>
      * This is necessary for the node factory.
      * </p>
      *
      * @see org.jvoicexml.xml.scxml.ScxmlNodeFactory
      */
-    public Onentry() {
+    public Param() {
         super(null);
     }
 
     /**
-     * Construct a new onentry object.
+     * Construct a new assign object.
      * @param node The encapsulated node.
      */
-    Onentry(final Node node) {
+    Param(final Node node) {
         super(node);
     }
 
@@ -87,7 +121,7 @@ public final class Onentry
      * @param factory
      *            The node factory to use.
      */
-    private Onentry(final Node n,
+    private Param(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
     }
@@ -106,8 +140,69 @@ public final class Onentry
      */
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
-        return new Onentry(n, factory);
+        return new Param(n, factory);
     }
+
+    /**
+     * Retrieves the name attribute.
+     *
+     * @return value of the name attribute.
+     * @see #ATTRIBUTE_NAME
+     */
+    public String getName() {
+        return getAttribute(ATTRIBUTE_NAME);
+    }
+
+    /**
+     * Sets the name attribute.
+     *
+     * @param name Value of the name attribute.
+     * @see #ATTRIBUTE_NAME
+     */
+    public void setName(final String name) {
+        setAttribute(ATTRIBUTE_NAME, name);
+    }
+
+    /**
+     * Retrieves the location attribute.
+     *
+     * @return value of the location attribute.
+     * @see #ATTRIBUTE_LOCATION
+     */
+    public String getLocation() {
+        return getAttribute(ATTRIBUTE_LOCATION);
+    }
+
+    /**
+     * Sets the location attribute.
+     *
+     * @param location Value of the location attribute.
+     * @see #ATTRIBUTE_LOCATION
+     */
+    public void setLocation(final String location) {
+        setAttribute(ATTRIBUTE_LOCATION, location);
+    }
+
+    /**
+     * Retrieves the expr attribute.
+     *
+     * @return value of the expr attribute.
+     * @see #ATTRIBUTE_EXPR
+     */
+    public String getExpr() {
+        return getAttribute(ATTRIBUTE_EXPR);
+    }
+
+    /**
+     * Sets the expr attribute.
+     *
+     * @param expr Value of the expr attribute.
+     * @see #ATTRIBUTE_EXPR
+     */
+    public void setExpr(final String expr) {
+        setAttribute(ATTRIBUTE_EXPR, expr);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -121,6 +216,6 @@ public final class Onentry
      */
     @Override
     public Collection<String> getAttributeNames() {
-        return null;
+        return ATTRIBUTE_NAMES;
     }
 }

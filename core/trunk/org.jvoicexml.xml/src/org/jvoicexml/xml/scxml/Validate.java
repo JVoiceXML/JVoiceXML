@@ -26,6 +26,7 @@
 
 package org.jvoicexml.xml.scxml;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -34,18 +35,46 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * A wrapper element containing executable content to be executed when the state
- * is entered.
+ * The <code>&lt;validate&gt></code> element causes the datamodel to be
+ * validated.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-public final class Onentry
+public final class Validate
         extends AbstractScxmlNode {
 
     /** Name of the tag. */
-    public static final String TAG_NAME = "onentry";
+    public static final String TAG_NAME = "validate";
+
+    /**
+     * The location of the subtree to validate. If it is not present, the entire
+     * datamodel is validated.
+     */
+    private static final String ATTRIBUTE_LOCATION = "location";
+
+    /**
+     * The location of the schema to use for validation. If this attribute is
+     * not present, the schema specified in the top-level
+     * <code>&lt;datamodel&gt;</code> is used.
+     */
+    private static final String ATTRIBUTE_SCHEMA = "schema";
+
+    /**
+     * Supported attribute names for this node.
+     */
+    protected static final ArrayList<String> ATTRIBUTE_NAMES;
+
+    /**
+     * Set the valid attributes for this node.
+     */
+    static {
+        ATTRIBUTE_NAMES = new java.util.ArrayList<String>();
+
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_LOCATION);
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_SCHEMA);
+    }
 
     /**
      * Valid child tags for this node.
@@ -60,22 +89,22 @@ public final class Onentry
     }
 
     /**
-     * Construct a onentry object without a node.
+     * Construct a new validate object without a node.
      * <p>
      * This is necessary for the node factory.
      * </p>
      *
      * @see org.jvoicexml.xml.scxml.ScxmlNodeFactory
      */
-    public Onentry() {
+    public Validate() {
         super(null);
     }
 
     /**
-     * Construct a new onentry object.
+     * Construct a new validate object.
      * @param node The encapsulated node.
      */
-    Onentry(final Node node) {
+    Validate(final Node node) {
         super(node);
     }
 
@@ -87,7 +116,7 @@ public final class Onentry
      * @param factory
      *            The node factory to use.
      */
-    private Onentry(final Node n,
+    private Validate(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
     }
@@ -106,8 +135,49 @@ public final class Onentry
      */
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
-        return new Onentry(n, factory);
+        return new Validate(n, factory);
     }
+
+    /**
+     * Retrieves the location attribute.
+     *
+     * @return value of the location attribute.
+     * @see #ATTRIBUTE_LOCATION
+     */
+    public String getLocation() {
+        return getAttribute(ATTRIBUTE_LOCATION);
+    }
+
+    /**
+     * Sets the location attribute.
+     *
+     * @param location Value of the location attribute.
+     * @see #ATTRIBUTE_LOCATION
+     */
+    public void setLocation(final String location) {
+        setAttribute(ATTRIBUTE_LOCATION, location);
+    }
+
+    /**
+     * Retrieves the schema attribute.
+     *
+     * @return value of the schema attribute.
+     * @see #ATTRIBUTE_SCHEMA
+     */
+    public String getSchema() {
+        return getAttribute(ATTRIBUTE_SCHEMA);
+    }
+
+    /**
+     * Sets the schema attribute.
+     *
+     * @param expr Value of the schema attribute.
+     * @see #ATTRIBUTE_SCHEMA
+     */
+    public void setSchema(final String expr) {
+        setAttribute(ATTRIBUTE_SCHEMA, expr);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -121,6 +191,6 @@ public final class Onentry
      */
     @Override
     public Collection<String> getAttributeNames() {
-        return null;
+        return ATTRIBUTE_NAMES;
     }
 }

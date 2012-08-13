@@ -26,6 +26,7 @@
 
 package org.jvoicexml.xml.scxml;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -34,18 +35,49 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * A wrapper element containing executable content to be executed when the state
- * is entered.
+ * The <code>&lt;data&gt;</code> element is used to declare and populate
+ * portions of the datamodel.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-public final class Onentry
+public final class Data
         extends AbstractScxmlNode {
 
     /** Name of the tag. */
-    public static final String TAG_NAME = "onentry";
+    public static final String TAG_NAME = "data";
+
+    /**
+     * The name of the data item.
+     */
+    private static final String ATTRIBUTE_ID = "id";
+
+    /**
+     * Gives the location from which the data object should be fetched.
+     */
+    private static final String ATTRIBUTE_SRC = "src";
+
+    /**
+     * Evaluates to provide the value of the data item.
+     */
+    private static final String ATTRIBUTE_EXPR = "expr";
+
+    /**
+     * Supported attribute names for this node.
+     */
+    protected static final ArrayList<String> ATTRIBUTE_NAMES;
+
+    /**
+     * Set the valid attributes for this node.
+     */
+    static {
+        ATTRIBUTE_NAMES = new java.util.ArrayList<String>();
+
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_ID);
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_SRC);
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_EXPR);
+    }
 
     /**
      * Valid child tags for this node.
@@ -57,25 +89,29 @@ public final class Onentry
      */
     static {
         CHILD_TAGS = new java.util.HashSet<String>();
+
+        CHILD_TAGS.add(Data.TAG_NAME);
+        CHILD_TAGS.add(State.TAG_NAME);
+        CHILD_TAGS.add(Transition.TAG_NAME);
     }
 
     /**
-     * Construct a onentry object without a node.
+     * Construct a new data object without a node.
      * <p>
      * This is necessary for the node factory.
      * </p>
      *
      * @see org.jvoicexml.xml.scxml.ScxmlNodeFactory
      */
-    public Onentry() {
+    public Data() {
         super(null);
     }
 
     /**
-     * Construct a new onentry object.
+     * Construct a new data object.
      * @param node The encapsulated node.
      */
-    Onentry(final Node node) {
+    Data(final Node node) {
         super(node);
     }
 
@@ -87,7 +123,7 @@ public final class Onentry
      * @param factory
      *            The node factory to use.
      */
-    private Onentry(final Node n,
+    private Data(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
     }
@@ -106,8 +142,69 @@ public final class Onentry
      */
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
-        return new Onentry(n, factory);
+        return new Data(n, factory);
     }
+
+    /**
+     * Retrieve the id attribute.
+     *
+     * @return value of the id attribute.
+     * @see #ATTRIBUTE_ID
+     */
+    public String getId() {
+        return getAttribute(ATTRIBUTE_ID);
+    }
+
+    /**
+     * Sets the id attribute.
+     *
+     * @param id Value of the id attribute.
+     * @see #ATTRIBUTE_ID
+     */
+    public void setId(final String id) {
+        setAttribute(ATTRIBUTE_ID, id);
+    }
+
+    /**
+     * Retrieve the src attribute.
+     *
+     * @return value of the src attribute.
+     * @see #ATTRIBUTE_SRC
+     */
+    public String getSrc() {
+        return getAttribute(ATTRIBUTE_SRC);
+    }
+
+    /**
+     * Sets the src attribute.
+     *
+     * @param src Value of the src attribute.
+     * @see #ATTRIBUTE_SRC
+     */
+    public void setSrc(final String src) {
+        setAttribute(ATTRIBUTE_SRC, src);
+    }
+
+    /**
+     * Retrieve the expr attribute.
+     *
+     * @return value of the expr attribute.
+     * @see #ATTRIBUTE_EXPR
+     */
+    public String getExpr() {
+        return getAttribute(ATTRIBUTE_EXPR);
+    }
+
+    /**
+     * Sets the expr attribute.
+     *
+     * @param expr Value of the expr attribute.
+     * @see #ATTRIBUTE_EXPR
+     */
+    public void setExpr(final String expr) {
+        setAttribute(ATTRIBUTE_EXPR, expr);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -121,6 +218,6 @@ public final class Onentry
      */
     @Override
     public Collection<String> getAttributeNames() {
-        return null;
+        return ATTRIBUTE_NAMES;
     }
 }
