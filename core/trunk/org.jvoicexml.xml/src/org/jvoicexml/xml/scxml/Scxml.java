@@ -119,7 +119,10 @@ public final class Scxml
     static {
         CHILD_TAGS = new java.util.HashSet<String>();
         
+        CHILD_TAGS.add(Datamodel.TAG_NAME);
         CHILD_TAGS.add(Final.TAG_NAME);
+        CHILD_TAGS.add(Parallel.TAG_NAME);
+        CHILD_TAGS.add(Script.TAG_NAME);
         CHILD_TAGS.add(State.TAG_NAME);
     }
 

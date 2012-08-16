@@ -27,7 +27,6 @@
 package org.jvoicexml.xml.scxml;
 
 import java.util.Collection;
-import java.util.Set;
 
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
@@ -46,19 +45,6 @@ public final class Else
 
     /** Name of the tag. */
     public static final String TAG_NAME = "else";
-
-    /**
-     * Valid child tags for this node.
-     */
-    private static final Set<String> CHILD_TAGS;
-
-    /**
-     * Set the valid child tags for this node.
-     */
-    static {
-        CHILD_TAGS = new java.util.HashSet<String>();
-
-    }
 
     /**
      * Construct a new else object without a node.
@@ -115,7 +101,7 @@ public final class Else
      */
     @Override
     protected boolean canContainChild(final String tagName) {
-        return CHILD_TAGS.contains(tagName);
+        return false;
     }
 
     /**

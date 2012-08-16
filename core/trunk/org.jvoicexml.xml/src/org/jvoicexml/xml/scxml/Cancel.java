@@ -28,29 +28,42 @@ package org.jvoicexml.xml.scxml;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * <code>&lt;if&gt;</code> is a container for conditionally executed elements.
- *
+ * The <code>&lt;cancel&gt;></code> element is used to cancel a delayed
+ * <code>&lt;send&gt;</code> event. The SCXML Processor MUST NOT allow
+ * <code>&lt;cancel&gt;</code> to affect events that were not raised in the
+ * same document. The Processor SHOULD make its best attempt to cancel the
+ * delayed event. Note, however, that it can not be guaranteed to succeed,
+ * for example if the event has already been delivered by the time the
+ *  <code>&lt;cancel&gt;></code> tag executes.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-public final class If
+public final class Cancel
         extends AbstractScxmlNode {
 
     /** Name of the tag. */
-    public static final String TAG_NAME = "if";
+    public static final String TAG_NAME = "cancel";
 
     /**
-     * A boolean expression.
+     * The ID of the event which is to be canceled.
      */
-    private static final String ATTRIBUTE_COND = "cond";
+    private static final String ATTRIBUTE_SENDID = "sendid";
+
+    /**
+     * A dynamic alternative to <code>sendid</code>. If this attribute is
+     * present, the SCXML Processor MUST evaluate it when the parent
+     * <code>&lt;cancel&gt;</code> element is evaluated and treat the result as
+     * if it had been entered as the value of <code>sendid</code>.
+     */
+    private static final String ATTRIBUTE_SENDIDEXPR = "sendidEXPR";
 
     /**
      * Supported attribute names for this node.
@@ -63,50 +76,27 @@ public final class If
     static {
         ATTRIBUTE_NAMES = new java.util.ArrayList<String>();
 
-        ATTRIBUTE_NAMES.add(ATTRIBUTE_COND);
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_SENDID);
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_SENDIDEXPR);
     }
 
     /**
-     * Valid child tags for this node.
-     */
-    private static final Set<String> CHILD_TAGS;
-
-    /**
-     * Set the valid child tags for this node.
-     */
-    static {
-        CHILD_TAGS = new java.util.HashSet<String>();
-
-        CHILD_TAGS.add(Assign.TAG_NAME);
-        CHILD_TAGS.add(Cancel.TAG_NAME);
-        CHILD_TAGS.add(Else.TAG_NAME);
-        CHILD_TAGS.add(Elseif.TAG_NAME);
-        CHILD_TAGS.add(Foreach.TAG_NAME);
-        CHILD_TAGS.add(If.TAG_NAME);
-        CHILD_TAGS.add(Log.TAG_NAME);
-        CHILD_TAGS.add(Raise.TAG_NAME);
-        CHILD_TAGS.add(Send.TAG_NAME);
-        CHILD_TAGS.add(Script.TAG_NAME);
-        CHILD_TAGS.add(Validate.TAG_NAME);
-    }
-
-    /**
-     * Construct a new if object without a node.
+     * Construct a new final object without a node.
      * <p>
      * This is necessary for the node factory.
      * </p>
      *
      * @see org.jvoicexml.xml.scxml.ScxmlNodeFactory
      */
-    public If() {
+    public Cancel() {
         super(null);
     }
 
     /**
-     * Construct a new if object.
+     * Construct a new final object.
      * @param node The encapsulated node.
      */
-    If(final Node node) {
+    Cancel(final Node node) {
         super(node);
     }
 
@@ -118,7 +108,7 @@ public final class If
      * @param factory
      *            The node factory to use.
      */
-    private If(final Node n,
+    private Cancel(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
     }
@@ -137,27 +127,47 @@ public final class If
      */
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
-        return new If(n, factory);
+        return new Cancel(n, factory);
     }
 
     /**
-     * Retrieves the cond attribute.
+     * Retrieves the sendid attribute.
      *
-     * @return value of the cond attribute.
-     * @see #ATTRIBUTE_COND
+     * @return value of the sendid attribute.
+     * @see #ATTRIBUTE_SENDID
      */
-    public String getCond() {
-        return getAttribute(ATTRIBUTE_COND);
+    public String getSendid() {
+        return getAttribute(ATTRIBUTE_SENDID);
     }
 
     /**
-     * Sets the cond attribute.
+     * Sets the sendid attribute.
      *
-     * @param id Value of the cond attribute.
-     * @see #ATTRIBUTE_COND
+     * @param sendid Value of the sendid attribute.
+     * @see #ATTRIBUTE_SENDID
      */
-    public void setCond(final String id) {
-        setAttribute(ATTRIBUTE_COND, id);
+    public void setSendid(final String sendid) {
+        setAttribute(ATTRIBUTE_SENDID, sendid);
+    }
+
+    /**
+     * Retrieves the sendidexpr attribute.
+     *
+     * @return value of the sendidexpr attribute.
+     * @see #ATTRIBUTE_SENDIDEXPR
+     */
+    public String getSendidexpr() {
+        return getAttribute(ATTRIBUTE_SENDIDEXPR);
+    }
+
+    /**
+     * Sets the sendidexpr attribute.
+     *
+     * @param sendidexpr Value of the sendidexpr attribute.
+     * @see #ATTRIBUTE_SENDIDEXPR
+     */
+    public void setSendidexp(final String sendidexpr) {
+        setAttribute(ATTRIBUTE_SENDIDEXPR, sendidexpr);
     }
 
     /**
@@ -165,7 +175,7 @@ public final class If
      */
     @Override
     protected boolean canContainChild(final String tagName) {
-        return CHILD_TAGS.contains(tagName);
+        return false;
     }
 
     /**

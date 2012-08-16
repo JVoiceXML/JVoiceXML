@@ -28,7 +28,6 @@ package org.jvoicexml.xml.scxml;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
@@ -79,18 +78,6 @@ public final class Param
         ATTRIBUTE_NAMES.add(ATTRIBUTE_NAME);
         ATTRIBUTE_NAMES.add(ATTRIBUTE_EXPR);
         ATTRIBUTE_NAMES.add(ATTRIBUTE_LOCATION);
-    }
-
-    /**
-     * Valid child tags for this node.
-     */
-    private static final Set<String> CHILD_TAGS;
-
-    /**
-     * Set the valid child tags for this node.
-     */
-    static {
-        CHILD_TAGS = new java.util.HashSet<String>();
     }
 
     /**
@@ -208,7 +195,7 @@ public final class Param
      */
     @Override
     protected boolean canContainChild(final String tagName) {
-        return CHILD_TAGS.contains(tagName);
+        return false;
     }
 
     /**

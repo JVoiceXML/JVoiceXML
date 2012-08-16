@@ -65,6 +65,7 @@ final class ScxmlNodeFactory
         NODES.put(Text.TAG_NAME, new Text(null, this));
         
         NODES.put(Assign.TAG_NAME, new Assign());
+        NODES.put(Cancel.TAG_NAME, new Cancel());
         NODES.put(Content.TAG_NAME, new Content());
         NODES.put(Datamodel.TAG_NAME, new Datamodel());
         NODES.put(Data.TAG_NAME, new Data());
@@ -77,12 +78,14 @@ final class ScxmlNodeFactory
         NODES.put(History.TAG_NAME, new History());
         NODES.put(If.TAG_NAME, new If());
         NODES.put(Initial.TAG_NAME, new Initial());
+        NODES.put(Invoke.TAG_NAME, new Invoke());
         NODES.put(Log.TAG_NAME, new Log());
         NODES.put(Onentry.TAG_NAME, new Onentry());
         NODES.put(Onexit.TAG_NAME, new Onexit());
         NODES.put(Parallel.TAG_NAME, new Parallel());
         NODES.put(Param.TAG_NAME, new Param());
         NODES.put(Raise.TAG_NAME, new Raise());
+        NODES.put(Send.TAG_NAME, new Send());
         NODES.put(Script.TAG_NAME, new Script());
         NODES.put(Scxml.TAG_NAME, new Scxml());
         NODES.put(State.TAG_NAME, new State());

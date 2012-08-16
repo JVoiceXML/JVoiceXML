@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
@@ -76,6 +77,8 @@ public final class Content
      */
     static {
         CHILD_TAGS = new java.util.HashSet<String>();
+
+        CHILD_TAGS.add(Text.TAG_NAME);
     }
 
     /**

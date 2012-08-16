@@ -64,6 +64,18 @@ public final class Finalize
      */
     static {
         CHILD_TAGS = new java.util.HashSet<String>();
+
+        CHILD_TAGS.add(Assign.TAG_NAME);
+        CHILD_TAGS.add(Cancel.TAG_NAME);
+        CHILD_TAGS.add(Else.TAG_NAME);
+        CHILD_TAGS.add(Elseif.TAG_NAME);
+        CHILD_TAGS.add(Foreach.TAG_NAME);
+        CHILD_TAGS.add(If.TAG_NAME);
+        CHILD_TAGS.add(Log.TAG_NAME);
+        CHILD_TAGS.add(Raise.TAG_NAME);
+        CHILD_TAGS.add(Send.TAG_NAME);
+        CHILD_TAGS.add(Script.TAG_NAME);
+        CHILD_TAGS.add(Validate.TAG_NAME);
     }
 
     /**

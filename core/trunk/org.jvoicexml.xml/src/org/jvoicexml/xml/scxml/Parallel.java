@@ -78,6 +78,11 @@ public final class Parallel
     static {
         CHILD_TAGS = new java.util.HashSet<String>();
 
+        CHILD_TAGS.add(Datamodel.TAG_NAME);
+        CHILD_TAGS.add(History.TAG_NAME);
+        CHILD_TAGS.add(Invoke.TAG_NAME);
+        CHILD_TAGS.add(Onentry.TAG_NAME);
+        CHILD_TAGS.add(Onexit.TAG_NAME);
         CHILD_TAGS.add(Parallel.TAG_NAME);
         CHILD_TAGS.add(State.TAG_NAME);
         CHILD_TAGS.add(Transition.TAG_NAME);

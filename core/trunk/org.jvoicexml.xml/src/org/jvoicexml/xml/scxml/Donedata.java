@@ -57,6 +57,9 @@ public final class Donedata
      */
     static {
         CHILD_TAGS = new java.util.HashSet<String>();
+
+        CHILD_TAGS.add(Content.TAG_NAME);
+        CHILD_TAGS.add(Param.TAG_NAME);
     }
 
     /**

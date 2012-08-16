@@ -79,6 +79,7 @@ public final class Datamodel
     static {
         CHILD_TAGS = new java.util.HashSet<String>();
 
+        CHILD_TAGS.add(Data.TAG_NAME);
     }
 
     /**

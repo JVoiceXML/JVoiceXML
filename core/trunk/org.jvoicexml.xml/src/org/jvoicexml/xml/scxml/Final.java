@@ -77,6 +77,10 @@ public final class Final
      */
     static {
         CHILD_TAGS = new java.util.HashSet<String>();
+
+        CHILD_TAGS.add(Donedata.TAG_NAME);
+        CHILD_TAGS.add(Onentry.TAG_NAME);
+        CHILD_TAGS.add(Onexit.TAG_NAME);
     }
 
     /**

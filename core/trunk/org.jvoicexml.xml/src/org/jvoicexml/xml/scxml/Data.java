@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
@@ -90,9 +91,7 @@ public final class Data
     static {
         CHILD_TAGS = new java.util.HashSet<String>();
 
-        CHILD_TAGS.add(Data.TAG_NAME);
-        CHILD_TAGS.add(State.TAG_NAME);
-        CHILD_TAGS.add(Transition.TAG_NAME);
+        CHILD_TAGS.add(Text.TAG_NAME);
     }
 
     /**
