@@ -56,8 +56,8 @@ public final class Invoke
     /**
      * A dynamic alternative to <code>type</code>. If this attribute is
      * present, the SCXML Processor MUST evaluate it when the parent
-     * <code>&lt;invoke&gt;</code> element is evaluated and treat the result as if
-     * it had been entered as the value of <code>type</code>.
+     * <code>&lt;invoke&gt;</code> element is evaluated and treat the result as
+     * if it had been entered as the value of <code>type</code>.
      */
     private static final String ATTRIBUTE_TYPEEXPR = "typeexpr";
 
@@ -69,8 +69,8 @@ public final class Invoke
     /**
      * A dynamic alternative to <code>src</code>. If this attribute is
      * present, the SCXML Processor MUST evaluate it when the parent
-     * <code>&lt;invoke&gt;</code> element is evaluated and treat the result as if
-     * it had been entered as the value of <code>src</code>.
+     * <code>&lt;invoke&gt;</code> element is evaluated and treat the result as
+     * if it had been entered as the value of <code>src</code>.
      */
     private static final String ATTRIBUTE_SRCEXPR = "srcexpr";
 

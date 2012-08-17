@@ -28,7 +28,6 @@ package org.jvoicexml.xml.scxml;
 
 
 import org.jvoicexml.xml.AbstractXmlNode;
-import org.jvoicexml.xml.PlsNode;
 import org.jvoicexml.xml.ScxmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
@@ -36,12 +35,10 @@ import org.w3c.dom.Node;
 
 
 /**
- * Abstract base class for all nodes in a PLS document.
+ * Abstract base class for all nodes in a {@link ScxmlDocument}.
  * Although this class is an empty class it serves as a base
  * type for all VoiceXML nodes.
  *
- * @see org.jvoicexml.xml.pls.PlsDocument
- * @see org.jvoicexml.xml.XmlNode
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -57,7 +54,7 @@ abstract class AbstractScxmlNode
     }
 
     /**
-     * Constructs a new {@link PlsNode}.
+     * Constructs a new {@link org.jvoicexml.xml.ScxmlNode}.
      * @param n The encapsulated node.
      */
     protected AbstractScxmlNode(final Node n) {
@@ -65,7 +62,7 @@ abstract class AbstractScxmlNode
     }
 
     /**
-     * Construct a new {@link PlsNode}.
+     * Construct a new {@link org.jvoicexml.xml.ScxmlNode}.
      *
      * @param n
      *            The encapsulated node.

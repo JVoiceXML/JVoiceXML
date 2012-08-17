@@ -66,7 +66,7 @@ public final class Scxml
     public static final String ATTRIBUTE_XMLNS = "xmlns";
 
     /**
-     * he value MUST be <code>1.0</code>
+     * The value MUST be <code>1.0</code>.
      */
     public static final String ATTRIBUTE_VERSION = "version";
 
