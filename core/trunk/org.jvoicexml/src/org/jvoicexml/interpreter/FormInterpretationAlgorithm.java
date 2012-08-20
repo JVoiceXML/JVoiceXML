@@ -163,8 +163,11 @@ public final class FormInterpretationAlgorithm
     /** The strategies that were added while visiting an input item. */
     private Collection<EventStrategy> eventStrategies;
 
-    /** Modal grammars. */
-    private final Collection<GrammarDocument> localGrammars;
+    /**
+     * Field local grammars. They have to be kept separated since processing
+     * of form items does not enter a new scope.
+     */
+    private final Set<GrammarDocument> localGrammars;
 
     /** Form item local properties. */
     private final Map<String, String> localProperties;
@@ -202,7 +205,7 @@ public final class FormInterpretationAlgorithm
         } catch (ConfigurationException e) {
             LOGGER.warn(e.getMessage(), e);
         }
-        localGrammars = new java.util.ArrayList<GrammarDocument>();
+        localGrammars = new java.util.HashSet<GrammarDocument>();
         localProperties = new java.util.HashMap<String, String>();
     }
 
@@ -758,13 +761,19 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("queuing prompts...");
         }
         queuingPrompts = true;
+
+        // Collect all prompts to be queued
         final PromptChooser promptChooser =
                 new PromptChooser(countable, context);
         final Collection<Prompt> prompts = promptChooser.collect();
+
+        // Set the timeout to use for the prompts
         final ImplementationPlatform platform =
                 context.getImplementationPlatform();
         final long timeout = getPromptTimeout();
         platform.setPromptTimeout(timeout);
+
+        // Actually queue the prompts
         for (Prompt prompt : prompts) {
             executor.executeTagStrategy(context, interpreter, this, formItem,
                     prompt);

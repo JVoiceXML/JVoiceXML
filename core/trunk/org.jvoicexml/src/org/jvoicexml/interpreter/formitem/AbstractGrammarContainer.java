@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 package org.jvoicexml.interpreter.formitem;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
@@ -48,7 +49,7 @@ abstract class AbstractGrammarContainer
             Logger.getLogger(AbstractGrammarContainer.class);
 
     /** List of grammar documents for this grammar container. */
-    private final Collection<GrammarDocument> documents;
+    private final Set<GrammarDocument> documents;
 
     /** Grammars of this input item. */
     private Collection<Grammar> grammars;
@@ -64,7 +65,7 @@ abstract class AbstractGrammarContainer
     public AbstractGrammarContainer(final VoiceXmlInterpreterContext context,
             final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
-        documents = new java.util.ArrayList<GrammarDocument>();
+        documents = new java.util.HashSet<GrammarDocument>();
     }
 
     /**
@@ -72,11 +73,12 @@ abstract class AbstractGrammarContainer
      */
     @Override
     public void addGrammar(final GrammarDocument document) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("added grammar " + document + " for field '"
-                    + getName() + "'");
+        if (documents.add(document)) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added grammar " + document + " for field '"
+                        + getName() + "'");
+            }
         }
-        documents.add(document);
     }
 
     /**

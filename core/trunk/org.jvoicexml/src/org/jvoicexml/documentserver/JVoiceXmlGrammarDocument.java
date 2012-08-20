@@ -39,7 +39,6 @@ import org.jvoicexml.xml.srgs.ModeType;
  * Basic implementation of a {@link GrammarDocument}.
  *
  * @author Dirk Schnelle-Walka
- *
  * @version $Revision$
  * @since 0.5.5
  */
@@ -274,5 +273,26 @@ public final class JVoiceXmlGrammarDocument
     @Override
     public void setModeType(final ModeType modeType) {
         mode = modeType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append(getClass().getCanonicalName());
+        str.append('[');
+        str.append(uri);
+        str.append(',');
+        str.append(mode);
+        str.append(',');
+        str.append(type);
+        str.append(',');
+        str.append(charset);
+        str.append(',');
+        str.append(getDocument());
+        str.append(']');
+        return str.toString();
     }
 }

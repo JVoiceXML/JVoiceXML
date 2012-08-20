@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,9 +29,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
 import java.util.Collection;
+import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarDocument;
@@ -61,6 +63,10 @@ import org.xml.sax.SAXException;
  */
 public class DummyUserInput
         implements UserInput {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(DummyUserInput.class);
+
     /** Supported grammar types of this user input. */
     private static final Collection<GrammarType> SUPPORTED_GRAMMAR_TYPES;
 
@@ -68,7 +74,7 @@ public class DummyUserInput
     private final SpokenInput input;
 
     /** All active grammars. */
-    private final Collection<GrammarDocument> activeGrammars;
+    private final Set<GrammarDocument> activeGrammars;
     
     static {
         SUPPORTED_GRAMMAR_TYPES = new java.util.ArrayList<GrammarType>();
@@ -78,6 +84,9 @@ public class DummyUserInput
 
     /** Flag if the recognition has been started. */
     private boolean recognitionStarted;
+
+    /** Semaphore to tell that the recognition process has started. */
+    private final Object recognitionStartedLock;
 
     /**
      * Constructs a new object.
@@ -92,7 +101,8 @@ public class DummyUserInput
      */
     public DummyUserInput(final SpokenInput spokenInput) {
         input = spokenInput;
-        activeGrammars = new java.util.ArrayList<GrammarDocument>();
+        activeGrammars = new java.util.HashSet<GrammarDocument>();
+        recognitionStartedLock = new Object();
     }
 
     /**
@@ -109,6 +119,10 @@ public class DummyUserInput
             final Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
         activeGrammars.addAll(grammars);
+        for (GrammarDocument document : grammars) {
+            LOGGER.info("activated: " + document);
+        }
+        LOGGER.info("active grammars: " + activeGrammars.size());
     }
 
     /**
@@ -119,6 +133,10 @@ public class DummyUserInput
             final Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError {
         activeGrammars.removeAll(grammars);
+        for (GrammarDocument document : grammars) {
+            LOGGER.info("deactivated: " + document);
+        }
+        LOGGER.info("active grammars: " + activeGrammars.size());
     }
 
     /**
@@ -257,6 +275,22 @@ public class DummyUserInput
             final DtmfRecognizerProperties dtmf)
         throws NoresourceError, BadFetchError {
         recognitionStarted = true;
+        synchronized (recognitionStartedLock) {
+            recognitionStartedLock.notifyAll();
+        }
+    }
+
+    /**
+     * Delays until the recognition process hass started.
+     * @throws InterruptedException
+     *         error waiting
+     * 
+     * @since 0.7.6
+     */
+    public void waitRecognitionStarted() throws InterruptedException {
+        synchronized (recognitionStartedLock) {
+            recognitionStartedLock.wait();
+        }
     }
 
     /**

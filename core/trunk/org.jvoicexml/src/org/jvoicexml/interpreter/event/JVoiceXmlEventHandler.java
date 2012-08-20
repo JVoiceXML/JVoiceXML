@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -62,7 +62,9 @@ import org.w3c.dom.NodeList;
 
 /**
  * Event handler to catch events generated from the
- * {@link org.jvoicexml.ImplementationPlatform}.
+ * {@link org.jvoicexml.ImplementationPlatform}. This event handler can
+ * catch only one event at a time. The first event is propagated to the the
+ * FIA while subsequent events will be ignored.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -522,8 +524,8 @@ public final class JVoiceXmlEventHandler
         }
         // Allow for only one event.
         if ((event != null) && (e != null)) {
-            LOGGER.info("ignoring second event " + e.getEventType()
-                    + " current is " + event.getEventType());
+            LOGGER.info("ignoring second event '" + e.getEventType()
+                    + "' current  event is '" + event.getEventType() + "'");
             return;
         }
         if (LOGGER.isDebugEnabled()) {
