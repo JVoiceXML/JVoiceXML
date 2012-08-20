@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -108,13 +108,16 @@ public interface UserInput {
      * the {@link UserInput}. For some implementation platforms it may be
      * necessary that the instance activating the grammar also loaded the
      * grammar. In these cases, the grammar implementation must be loaded in
-     * this call. The grammar source may ba accessed by the grammar
+     * this call. The grammar source may be accessed by the grammar
      * implementation itself, e.g. SRGS grammar sources can be accessed via
      * {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#getGrammar()}.
      * </p>
      *
      * @param grammars
-     *        Grammars to activate.
+     *        grammars to activate. This collection may contain grammars
+     *        that already have been activated by a previous call to this
+     *        method. It is up to the implementation to distinguish if the
+     *        grammar is already active or not.
      * @exception BadFetchError
      *            Grammar is not known by the recognizer.
      * @exception UnsupportedLanguageError
@@ -148,7 +151,7 @@ public interface UserInput {
 
     /**
      * Creates a {@link GrammarImplementation} from the contents provided by
-     * the Reader. If the grammar contained in the Reader already exists, it is
+     * the reader. If the grammar contained in the reader already exists, it is
      * over-written.
      *
      * <p>
@@ -164,7 +167,7 @@ public interface UserInput {
      * </code>
      * </p>
      *
-     * @param reader The Reader from which the grammar text is loaded
+     * @param reader the reader from which the grammar text is loaded
      * @param type type of the grammar to read. The type is one of the supported
      *             types of the implementation, that has been requested via
      *             {@link #getSupportedGrammarTypes(ModeType)}.
