@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,9 +43,10 @@ import org.jvoicexml.xml.srgs.Grammar;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
+ * @see org.jvoicexml.xml.srgs.Grammar
  */
 
-final class GrammarStrategy extends AbstractTagStrategy {
+public final class GrammarStrategy extends AbstractTagStrategy {
     /**
      * {@inheritDoc}
      */

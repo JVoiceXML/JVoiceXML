@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -36,8 +37,11 @@ import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.interpreter.tagstrategy.GrammarStrategy;
+import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlInitializationTagStrategyFactory;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.config.DummyConfiguration;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
@@ -63,6 +67,9 @@ public final class TestFormInterpretationAlgorithm {
     /** The VoiceXml interpreter context. */
     private VoiceXmlInterpreterContext context;
 
+    /** The VoiceXml interpreter. */
+    private VoiceXmlInterpreter interpreter;
+
     /** The implementation platform. */
     private ImplementationPlatform platform;
 
@@ -79,6 +86,8 @@ public final class TestFormInterpretationAlgorithm {
             new JVoiceXmlSession(platform, jvxml, null);
         final Configuration configuration = new DummyConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
+        interpreter = new VoiceXmlInterpreter(context);
+        interpreter.init(configuration);
     }
 
     /**
@@ -108,7 +117,8 @@ public final class TestFormInterpretationAlgorithm {
         final Dialog executableForm = new ExecutablePlainForm();
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, null, executableForm);
+            new FormInterpretationAlgorithm(context, interpreter,
+                    executableForm);
         final GrammarDocument processed = fia.processGrammar(grammar);
         Assert.assertEquals(grammar.toString(),
                 processed.getDocument().toString());
@@ -130,8 +140,9 @@ public final class TestFormInterpretationAlgorithm {
 
         final Dialog executableForm = new ExecutablePlainForm();
         executableForm.setNode(form);
-        FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, null, executableForm);
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, interpreter,
+                    executableForm);
         final InputItem item = new FieldFormItem(context, field);
         fia.visitFieldFormItem(item);
         final DummyUserInput input =
@@ -141,14 +152,14 @@ public final class TestFormInterpretationAlgorithm {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.FormInterpretationAlgorithm#visitFieldFormItem(org.jvoicexml.interpreter.formitem.AbstractInputItem)}.
+     * Test method to activate a grammar with a field scope.
      * @throws Exception
      *         Test failed.
      * @throws JVoiceXMLEvent
      *         Test failed.
      */
     @Test
-    public void testActivateGrammars() throws Exception, JVoiceXMLEvent {
+    public void testActivateFieldGrammars() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
         final Form form = vxml.appendChild(Form.class);
@@ -166,16 +177,98 @@ public final class TestFormInterpretationAlgorithm {
         item3.addText("american express");
         final Dialog executableForm = new ExecutablePlainForm();
         executableForm.setNode(form);
-        FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, null, executableForm);
-        fia.initialize(null);
-        fia.mainLoop();
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, interpreter,
+                    executableForm);
+        final JVoiceXmlInitializationTagStrategyFactory factory =
+                new JVoiceXmlInitializationTagStrategyFactory();
+        final Map<String, TagStrategy> strategies =
+                new java.util.HashMap<String, TagStrategy>();
+        strategies.put(Grammar.TAG_NAME, new GrammarStrategy());
+        factory.setTagStrategies(strategies);
+        final Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    fia.initialize(factory);
+                    fia.mainLoop();
+                } catch (JVoiceXMLEvent e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            };
+        };
+        thread.start();
+        Thread.sleep(500);
         final DummyUserInput input =
             (DummyUserInput) platform.getUserInput();
         Assert.assertNotNull(input);
         final Collection<GrammarDocument> activeGrammars =
                 input.getActiveGrammars();
         Assert.assertEquals(1, activeGrammars.size());
+        final EventHandler handler = context.getEventHandler();
+        final JVoiceXMLEvent event = new CancelEvent();
+        handler.notifyEvent(event);
+    }
+
+    /**
+     * Test method to activate a grammar with a field scope.
+     * @throws Exception
+     *         Test failed.
+     * @throws JVoiceXMLEvent
+     *         Test failed.
+     */
+    @Test
+    public void testActivateFormGrammars() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Grammar grammar = form.appendChild(Grammar.class);
+        grammar.setVersion("1.0");
+        grammar.setType(GrammarType.SRGS_XML);
+        final Rule rule = grammar.appendChild(Rule.class);
+        final OneOf oneof = rule.appendChild(OneOf.class);
+        final Item item1 = oneof.appendChild(Item.class);
+        item1.addText("visa");
+        final Item item2 = oneof.appendChild(Item.class);
+        item2.addText("mastercard");
+        final Item item3 = oneof.appendChild(Item.class);
+        item3.addText("american express");
+        form.appendChild(Field.class);
+        final Dialog executableForm = new ExecutablePlainForm();
+        executableForm.setNode(form);
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, interpreter,
+                    executableForm);
+        final JVoiceXmlInitializationTagStrategyFactory factory =
+                new JVoiceXmlInitializationTagStrategyFactory();
+        final Map<String, TagStrategy> strategies =
+                new java.util.HashMap<String, TagStrategy>();
+        strategies.put(Grammar.TAG_NAME, new GrammarStrategy());
+        factory.setTagStrategies(strategies);
+        final Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    fia.initialize(factory);
+                    fia.mainLoop();
+                } catch (JVoiceXMLEvent e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            };
+        };
+        thread.start();
+        Thread.sleep(500);
+        final DummyUserInput input =
+            (DummyUserInput) platform.getUserInput();
+        Assert.assertNotNull(input);
+        final Collection<GrammarDocument> activeGrammars =
+                input.getActiveGrammars();
+        Assert.assertEquals(1, activeGrammars.size());
+        final EventHandler handler = context.getEventHandler();
+        final JVoiceXMLEvent event = new CancelEvent();
+        handler.notifyEvent(event);
     }
 
     /**
@@ -194,7 +287,8 @@ public final class TestFormInterpretationAlgorithm {
         final Dialog executableForm = new ExecutablePlainForm();
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, null, executableForm);
+            new FormInterpretationAlgorithm(context, interpreter,
+                    executableForm);
         Assert.assertFalse(fia.isJustFilled(item));
         fia.setJustFilled(item);
         Assert.assertTrue(fia.isJustFilled(item));

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,7 +34,9 @@ import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
- * Factory for initialization tag strategies.
+ * Factory for initialization tag strategies. Initialization tag strategies
+ * are used in the initialization phase of the
+ * {@link org.jvoicexml.interpreter.FormInterpretationAlgorithm}.
  *
  * @see org.jvoicexml.interpreter.TagStrategy
  *
@@ -50,7 +52,8 @@ public final class JVoiceXmlInitializationTagStrategyFactory
 
     /**
      * Known strategies. The known strategies are templates for the strategy to
-     * be executed by the <code>ForminterpreteationAlgorithm</code>.
+     * be executed by the
+     * {@link org.jvoicexml.interpreter.FormInterpretationAlgorithm}.
      */
     private Map<String, TagStrategy> strategies;
 
@@ -58,6 +61,8 @@ public final class JVoiceXmlInitializationTagStrategyFactory
      * Constructs a new object.
      */
     public JVoiceXmlInitializationTagStrategyFactory() {
+        // Initialize woth an empty set of strategies
+        strategies = new java.util.HashMap<String, TagStrategy>();
     }
 
     /**
@@ -67,6 +72,7 @@ public final class JVoiceXmlInitializationTagStrategyFactory
      */
     public void setTagStrategies(final Map<String, TagStrategy> values) {
         strategies = values;
+        // Output of the received strategies for debugging
         if (LOGGER.isDebugEnabled()) {
             for (String name : values.keySet()) {
                 final TagStrategy strategy = values.get(name);
@@ -84,7 +90,6 @@ public final class JVoiceXmlInitializationTagStrategyFactory
             LOGGER.warn("cannot get strategy for null");
             return null;
         }
-
         final String tagName = node.getTagName();
         return getTagStrategy(tagName);
     }
@@ -93,15 +98,16 @@ public final class JVoiceXmlInitializationTagStrategyFactory
      * {@inheritDoc}
      */
     public TagStrategy getTagStrategy(final String tag) {
+        // First check if a strategy can be obtained in general
         if (tag == null) {
             LOGGER.warn("cannot get strategy for null");
             return null;
         }
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("getting strategy for tag: '" + tag + "'");
         }
 
+        // Retrieve the strategy
         final TagStrategy strategy = strategies.get(tag);
         if (strategy == null) {
             if (LOGGER.isDebugEnabled()) {

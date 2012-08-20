@@ -75,6 +75,8 @@ public class DummyTagStrategyFactory
                 loadStrategy("org.jvoicexml.interpreter.tagstrategy.ExitStrategy"));
         strategies.put("goto",
                 loadStrategy("org.jvoicexml.interpreter.tagstrategy.GotoStrategy"));
+        strategies.put("grammar",
+                loadStrategy("org.jvoicexml.interpreter.tagstrategy.GrammarStrategy"));
         strategies.put("if",
                 loadStrategy("org.jvoicexml.interpreter.tagstrategy.IfStrategy"));
         strategies.put("log",

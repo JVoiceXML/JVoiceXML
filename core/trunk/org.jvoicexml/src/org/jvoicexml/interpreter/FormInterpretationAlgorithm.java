@@ -809,7 +809,7 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Process the given grammar tags and add them to the
+     * Process the given grammar tag and add it to the
      * {@link ActiveGrammarSet}.
      * @param grammar grammar to process.
      * @return the processed grammar.
@@ -826,7 +826,6 @@ public final class FormInterpretationAlgorithm
         throws UnsupportedFormatError, NoresourceError, BadFetchError,
             SemanticError {
         final GrammarProcessor processor = context.getGrammarProcessor();
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("preprocessing grammar " + grammar + "...");
         }
@@ -853,18 +852,20 @@ public final class FormInterpretationAlgorithm
             final Collection<Grammar> grammars)
         throws UnsupportedFormatError, NoresourceError, BadFetchError,
             SemanticError {
-        final Collection<GrammarDocument> documents =
+        final Collection<GrammarDocument> grammarDocuments =
             new java.util.ArrayList<GrammarDocument>();
         if (grammars.isEmpty()) {
-            return documents;
+            // No grammars to process
+            return grammarDocuments;
         }
 
+        // Process the given grammars
         for (Grammar grammar : grammars) {
             final GrammarDocument document = processGrammar(grammar);
-            documents.add(document);
+            grammarDocuments.add(document);
             grammarContainer.addGrammar(document);
         }
-        return documents;
+        return grammarDocuments;
     }
 
     /**
@@ -910,6 +911,7 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("activating modal grammars...");
         }
 
+        // Retrieve the grammars of the given form item
         final GrammarContainer grammarContainer = (GrammarContainer) formItem;
         final Collection<Grammar> grammars = grammarContainer.getGrammars();
 
@@ -982,6 +984,7 @@ public final class FormInterpretationAlgorithm
         // Process the grammars of the grammar container
         final ActiveGrammarSet activeGrammars = context.getActiveGrammarSet();
         if (isGrammarContainer) {
+            // Add the grammars of the current form item
             final GrammarContainer grammarContainer =
                 (GrammarContainer) formItem;
             final Collection<Grammar> grammars = grammarContainer.getGrammars();
