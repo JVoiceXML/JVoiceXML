@@ -623,7 +623,7 @@ public final class FormInterpretationAlgorithm
             activateGrammars(formItem);
         }
 
-        // Execute the form item.        
+        // Execute the form item.
         formItem.accept(this);
     }
 

@@ -75,7 +75,7 @@ public class DummyUserInput
 
     /** All active grammars. */
     private final Set<GrammarDocument> activeGrammars;
-    
+
     static {
         SUPPORTED_GRAMMAR_TYPES = new java.util.ArrayList<GrammarType>();
         SUPPORTED_GRAMMAR_TYPES.add(GrammarType.SRGS_XML);
@@ -123,6 +123,9 @@ public class DummyUserInput
             LOGGER.info("activated: " + document);
         }
         LOGGER.info("active grammars: " + activeGrammars.size());
+        for (GrammarDocument document : activeGrammars) {
+            LOGGER.info("active: " + document);
+        }
     }
 
     /**
@@ -137,6 +140,9 @@ public class DummyUserInput
             LOGGER.info("deactivated: " + document);
         }
         LOGGER.info("active grammars: " + activeGrammars.size());
+        for (GrammarDocument document : activeGrammars) {
+            LOGGER.info("active: " + document);
+        }
     }
 
     /**

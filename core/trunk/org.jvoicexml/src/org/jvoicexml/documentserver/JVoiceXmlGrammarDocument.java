@@ -79,7 +79,8 @@ public final class JVoiceXmlGrammarDocument
     private final URI uri;
 
     /**
-     * Constructs a new object from a grammar node.
+     * Constructs a new object from a grammar node. This constructor is
+     * intended to be used to capture inline grammars in a VoiceXML document.
      * @param source URI of the grammar document
      * @param node the grammar node
      */
@@ -93,7 +94,8 @@ public final class JVoiceXmlGrammarDocument
     }
 
     /**
-     * Creates a new grammar document.
+     * Creates a new grammar document. This constructor is intended to be
+     * used to capture external grammars.
      * @param source URI of the grammar document
      * @param content the grammar itself
      * @param encoding guessed encoding of the grammar
