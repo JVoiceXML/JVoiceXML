@@ -825,7 +825,7 @@ public final class Grammar
      *         be converted to a number.
      * @since 0.6
      */
-    public long getMastaleAsMsec() {
+    public long getMaxstaleAsMsec() {
         final String timeout = getMaxage();
         final TimeParser parser = new TimeParser(timeout);
         return parser.parse();
