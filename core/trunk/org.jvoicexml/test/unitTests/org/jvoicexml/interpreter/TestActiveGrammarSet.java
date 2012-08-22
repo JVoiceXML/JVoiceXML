@@ -123,13 +123,43 @@ public final class TestActiveGrammarSet {
     }
 
     /**
-     * Test method for {@link ActiveGrammarSet#add(ProcessedGrammar)}.
+     * Test method for {@link ActiveGrammarSet#add(GrammarDocument)}.
+     * @throws Exception test failed
+     * @since 0.7.5
+     */
+    @Test
+    public void testAdd() throws Exception {
+        final ActiveGrammarSet set = new ActiveGrammarSet(observer);
+        set.add(document1);
+        set.add(document2);
+        set.add(document1);
+        final SrgsXmlDocument doc3 = new SrgsXmlDocument();
+        final Grammar grammar3 = doc3.getGrammar();
+        grammar3.setAttribute(Grammar.ATTRIBUTE_VERSION, "1.0");
+        grammar3.setAttribute(Grammar.ATTRIBUTE_ROOT, "test");
+        final Rule rule3 = grammar3.appendChild(Rule.class);
+        rule3.addText("test input");
+        final JVoiceXmlGrammarDocument document3 =
+                new JVoiceXmlGrammarDocument(null, grammar3);
+        set.add(document3);
+        final byte[] buffer = doc3.toString().getBytes();
+        final String encoding = System.getProperty("jvoicexml.xml.encoding",
+                "UTF-8");
+        final JVoiceXmlGrammarDocument document4 =
+                new JVoiceXmlGrammarDocument(null, buffer, encoding, true);
+        set.add(document4);
+        final Collection<GrammarDocument> docs = set.getGrammars();
+        Assert.assertEquals(2, docs.size());
+    }
+
+    /**
+     * Test method for {@link ActiveGrammarSet#add(GrammarDocument)}.
      * @throws Exception test failed
      * @throws JVoiceXMLEvent test failed
      * @since 0.7.5
      */
     @Test
-    public void testAdd() throws Exception, JVoiceXMLEvent {
+    public void testAddScopeChange() throws Exception, JVoiceXMLEvent {
         final ActiveGrammarSet set = new ActiveGrammarSet(observer);
         final ActiveGrammarSetObserver grammarObserver
             = new ActiveGrammarSetObserver() {
