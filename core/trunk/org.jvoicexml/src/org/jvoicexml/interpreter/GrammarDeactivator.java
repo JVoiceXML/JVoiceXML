@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,7 +36,10 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 /**
- * Deactivates grammars, once the grammars gets out of scope.
+ * Deactivates grammars, once the grammars gets out of scope. This class
+ * is intended to decouple the {@link ActiveGrammarSet} from the
+ * used {@link ImplementationPlatform}.
+ *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.3

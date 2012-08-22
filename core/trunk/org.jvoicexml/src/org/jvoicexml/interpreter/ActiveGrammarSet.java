@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,11 +36,13 @@ import org.jvoicexml.interpreter.scope.ScopedSetObserver;
 
 /**
  * The set of grammars active during a VoiceXML interpreter context's input
- * collection operation.
+ * collection operation. This grammar set is scope aware. {@link ScopeObserver}s
+ * can be added to monitor scope related changes in this grammar set.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.2
+ * @see org.jvoicexml.interpreter.scope.Scope
  */
 public final class ActiveGrammarSet
     implements ScopedSetObserver<GrammarDocument> {

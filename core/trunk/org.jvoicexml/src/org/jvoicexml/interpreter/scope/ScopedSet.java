@@ -110,7 +110,7 @@ public final class ScopedSet<E>
     }
 
     /**
-     * Unsubscribe this scoped container from the <code>ScopePublisher</code>.
+     * Unsubscribe this scoped container from the {@link ScopePublisher}.
      */
     public void close() {
         if (observer != null) {
@@ -161,11 +161,12 @@ public final class ScopedSet<E>
         if (!stack.empty()) {
             item = stack.peek();
         }
-
         if (item == null) {
+            // There is no item on the stack
             item = new ScopedCollectionItem<E>(scope);
             stack.push(item);
         } else if (item.getScope() != scope) {
+            // the topmost item's scope is not the current scope
             item = new ScopedCollectionItem<E>(scope);
             stack.push(item);
         }

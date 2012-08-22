@@ -256,7 +256,7 @@ public final class JVoiceXmlGrammarDocument
         }
         hash *= HASH_CODE_MULTIPLIER;
         if (buffer != null) {
-            hash += buffer.hashCode();
+            hash += Arrays.hashCode(buffer);
         }
         return hash;
     }
