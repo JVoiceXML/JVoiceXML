@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -1145,6 +1145,7 @@ public abstract class XmlDocument
             final String encoding = System.getProperty("jvoicexml.xml.encoding",
                 "UTF-8");
             transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
+            transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
             final DocumentType type = getDoctype();
             if (type != null) {
                 transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC,
@@ -1164,7 +1165,7 @@ public abstract class XmlDocument
      * {@inheritDoc}
      *
      * Creates a representation as an XML string. If this is not possible
-     * for some reason, the conventional <code>toString</code> creation
+     * for some reason, the conventional {@link Object#toString()} creation
      * is used.
      *
      * @since 0.3

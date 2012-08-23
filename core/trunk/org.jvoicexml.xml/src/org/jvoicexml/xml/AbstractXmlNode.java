@@ -858,6 +858,7 @@ public abstract class AbstractXmlNode
             final String encoding = System.getProperty("jvoicexml.xml.encoding",
                 "UTF-8");
             transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
+            transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
             final Source source = new DOMSource(this);
             transformer.transform(source, result);
             return out.toString(encoding);
