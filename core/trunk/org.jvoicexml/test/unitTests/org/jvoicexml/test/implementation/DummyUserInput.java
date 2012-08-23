@@ -148,6 +148,7 @@ public class DummyUserInput
         LOGGER.info("active grammars: " + activeGrammars.size());
         for (GrammarDocument document : activeGrammars) {
             LOGGER.info("active: " + document + ", " + document.hashCode());
+            System.out.println(activeGrammars.contains(document));
         }
     }
 

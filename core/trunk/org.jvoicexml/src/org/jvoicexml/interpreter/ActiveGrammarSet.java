@@ -111,12 +111,25 @@ public final class ActiveGrammarSet
 
     /**
      * Adds the given grammars to the active grammar set.
-     * @param grams the grammar to add
+     * @param grams the grammars to add
      */
     public void addAll(final Collection<GrammarDocument> grams) {
         grammars.addAll(grams);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("added " + grams.size()
+                    + " grammar(s) - now containing " + grammars.size());
+        }
+    }
+
+    /**
+     * Removes the given grammars to the active grammar set.
+     * @param grams the grammars to remove
+     * @since 0.7.6
+     */
+    public void removeAll(final Collection<GrammarDocument> grams) {
+        grammars.removeAll(grams);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("removed " + grams.size()
                     + " grammar(s) - now containing " + grammars.size());
         }
     }

@@ -485,7 +485,15 @@ public final class FormInterpretationAlgorithm
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("deactivating local grammars...");
         }
+        // Deactivate the local grammars in the implementation platform
         deactivateGrammars(localGrammars);
+
+        // Need to remove the local grammars from the active set manually
+        // since there is no scope that is left and performs the cleanup
+        final ActiveGrammarSet activeGrammars = context.getActiveGrammarSet();
+        activeGrammars.removeAll(localGrammars);
+
+        // Now, get rid of those local grammars
         localGrammars.clear();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...local grammars deactivated");

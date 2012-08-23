@@ -90,11 +90,11 @@ public final class TestActiveGrammarSet {
 
         final SrgsXmlDocument doc2 = new SrgsXmlDocument();
         final Grammar grammar2 = doc2.getGrammar();
-        grammar2.setAttribute(Grammar.ATTRIBUTE_VERSION, "1.0");
-        grammar2.setAttribute(Grammar.ATTRIBUTE_ROOT, "test");
-
+        grammar2.setVersion("1.0");
         final Rule rule2 = grammar2.appendChild(Rule.class);
+        rule2.setId("test");
         rule2.addText("test input");
+        grammar2.setRoot(rule2);
 
         document2 = new JVoiceXmlGrammarDocument(null, grammar2);
     }
@@ -135,10 +135,11 @@ public final class TestActiveGrammarSet {
         set.add(document1);
         final SrgsXmlDocument doc3 = new SrgsXmlDocument();
         final Grammar grammar3 = doc3.getGrammar();
-        grammar3.setAttribute(Grammar.ATTRIBUTE_VERSION, "1.0");
-        grammar3.setAttribute(Grammar.ATTRIBUTE_ROOT, "test");
+        grammar3.setVersion("1.0");
         final Rule rule3 = grammar3.appendChild(Rule.class);
+        rule3.setId("test");
         rule3.addText("test input");
+        grammar3.setRoot(rule3);
         final JVoiceXmlGrammarDocument document3 =
                 new JVoiceXmlGrammarDocument(null, grammar3);
         set.add(document3);

@@ -34,6 +34,7 @@ import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.w3c.dom.Document;
 
 /**
  * Basic implementation of a {@link GrammarDocument}.
@@ -86,7 +87,15 @@ public final class JVoiceXmlGrammarDocument
      */
     public JVoiceXmlGrammarDocument(final URI source, final Grammar node) {
         uri = source;
-        charset = System.getProperty("file.encoding");
+        // Try getting the encoding of the owner document 
+        final Document owner = node.getOwnerDocument();
+        final String ownerEncoding = owner.getInputEncoding();
+        if (ownerEncoding == null) {
+            charset = System.getProperty("file.encoding");
+        } else {
+            charset = ownerEncoding;
+        }
+        // We are for sure ascii and the buffer is the contents of this node
         isAscii = true;
         document = null;
         buffer = node.toString().getBytes();
@@ -187,24 +196,8 @@ public final class JVoiceXmlGrammarDocument
 
     /**
      * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof JVoiceXmlGrammarDocument)) {
-            return false;
-        }
-        final JVoiceXmlGrammarDocument other = (JVoiceXmlGrammarDocument) obj;
-        return equals(other);
-    }
-
-    /**
-     * {@inheritDoc}
+     * @return <code>true</code> if the {@link GrammarDocument}s share
+     * the same buffer
      */
     @Override
     public boolean equals(final GrammarDocument obj) {
@@ -212,53 +205,18 @@ public final class JVoiceXmlGrammarDocument
             return false;
         }
         final JVoiceXmlGrammarDocument other = (JVoiceXmlGrammarDocument) obj;
-        if (!Arrays.equals(buffer, other.buffer)) {
-            return false;
-        }
-        if (mode != other.mode) {
-            return false;
-        }
-        if (type == null) {
-            if (other.type != null) {
-                return false;
-            }
-        } else if (!type.equals(other.type)) {
-            return false;
-        }
-        if (uri == null) {
-            if (other.uri != null) {
-                return false;
-            }
-        } else if (!uri.equals(other.uri)) {
-            return false;
-        }
-        return true;
+        return Arrays.equals(buffer, other.buffer);
     }
-
 
     /**
      * {@inheritDoc}
      */
     @Override
     public int hashCode() {
-        int hash = HASH_CODE_BASE;
-        hash *= HASH_CODE_MULTIPLIER;
-        if (type != null) {
-            hash += type.hashCode();
-        }
-        hash *= HASH_CODE_MULTIPLIER;
-        if (uri != null) {
-            hash += uri.hashCode();
-        }
-        hash *= HASH_CODE_MULTIPLIER;
-        if (document != null) {
-            hash += document.hashCode();
-        }
-        hash *= HASH_CODE_MULTIPLIER;
-        if (buffer != null) {
-            hash += Arrays.hashCode(buffer);
-        }
-        return hash;
+        final int prime = HASH_CODE_MULTIPLIER;
+        int result = HASH_CODE_BASE;
+        result = prime * result + Arrays.hashCode(buffer);
+        return result;
     }
 
     /**
