@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -142,7 +142,7 @@ public final class TestActiveGrammarSet {
         final JVoiceXmlGrammarDocument document3 =
                 new JVoiceXmlGrammarDocument(null, grammar3);
         set.add(document3);
-        final byte[] buffer = doc3.toString().getBytes();
+        final byte[] buffer = grammar3.toString().getBytes();
         final String encoding = System.getProperty("jvoicexml.xml.encoding",
                 "UTF-8");
         final JVoiceXmlGrammarDocument document4 =

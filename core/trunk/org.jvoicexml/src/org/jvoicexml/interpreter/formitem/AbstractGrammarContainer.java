@@ -72,6 +72,14 @@ abstract class AbstractGrammarContainer
      * {@inheritDoc}
      */
     @Override
+    public Collection<GrammarDocument> getGrammarDocuments() {
+        return documents;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void addGrammar(final GrammarDocument document) {
         if (documents.add(document)) {
             if (LOGGER.isDebugEnabled()) {
@@ -91,7 +99,7 @@ abstract class AbstractGrammarContainer
     /**
      * Get all nested definitions of a <code>&lt;grammar&gt;</code>.
      *
-     * @return Collection about all nested <code>&lt;grammar&gt;</code> tags.
+     * @return Collection of all nested <code>&lt;grammar&gt;</code> tags.
      */
     public final Collection<Grammar> getGrammars() {
         final VoiceXmlNode node = getNode();

@@ -40,9 +40,16 @@ public interface GrammarContainer extends InputItem {
     /**
      * Gets all nested definitions of a <code>&lt;grammar&gt;</code>.
      *
-     * @return Collection about all nested <code>&lt;grammar&gt;</code> tags.
+     * @return collection of all nested <code>&lt;grammar&gt;</code> tags.
      */
     Collection<Grammar> getGrammars();
+
+    /**
+     * Retrieves the list of converted grammars.
+     * @return list of converted grammars
+     * @since 0.7.6
+     */
+    Collection<GrammarDocument> getGrammarDocuments();
 
     /**
      * Adds the given converted grammar to the list of converted grammars

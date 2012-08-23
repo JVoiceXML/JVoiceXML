@@ -104,7 +104,7 @@ final class GrammarLoader {
     private GrammarDocument loadInternalGrammar(final Grammar grammar)
             throws UnsupportedFormatError {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("process internal grammar");
+            LOGGER.debug("loading internal grammar");
         }
 
         // TODO provide a means to tell about the URI
@@ -136,7 +136,7 @@ final class GrammarLoader {
             final FetchAttributes attributes, final Grammar grammar)
             throws BadFetchError, UnsupportedFormatError, SemanticError {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("process external grammar");
+            LOGGER.debug("loading external grammar");
         }
 
         // First of all, we need to check, if user has provided any

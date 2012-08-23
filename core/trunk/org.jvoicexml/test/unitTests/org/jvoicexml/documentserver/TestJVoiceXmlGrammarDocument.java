@@ -197,8 +197,6 @@ public class TestJVoiceXmlGrammarDocument {
         item23.addText("american express");
         final JVoiceXmlGrammarDocument document2 =
                 new JVoiceXmlGrammarDocument(null, grammar2);
-        System.out.println(document1);
-        System.out.println(document2);
         Assert.assertEquals(document1.hashCode(), document2.hashCode());
     }
 
@@ -236,6 +234,36 @@ public class TestJVoiceXmlGrammarDocument {
                         encoding, true);
         document2.setModeType(ModeType.VOICE);
         document2.setMediaType(GrammarType.SRGS_XML);
+        Assert.assertEquals(document1.hashCode(), document2.hashCode());
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.documentserver.JVoiceXmlGrammarDocument#hashCode()}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testHashCodeInternalExternal() throws Exception {
+        final SrgsXmlDocument srgsDocument = new SrgsXmlDocument();
+        final Grammar grammar = srgsDocument.getGrammar();
+        grammar.setVersion("1.0");
+        grammar.setType(GrammarType.SRGS_XML);
+        final Rule rule = grammar.appendChild(Rule.class);
+        final OneOf oneof = rule.appendChild(OneOf.class);
+        final Item item1 = oneof.appendChild(Item.class);
+        item1.addText("visa");
+        final Item item2 = oneof.appendChild(Item.class);
+        item2.addText("mastercard");
+        final Item item3 = oneof.appendChild(Item.class);
+        item3.addText("american express");
+        final JVoiceXmlGrammarDocument document1 =
+                new JVoiceXmlGrammarDocument(null, grammar);
+        final String encoding = System.getProperty("jvoicexml.xml.encoding",
+                "UTF-8");
+        final JVoiceXmlGrammarDocument document2 =
+                new JVoiceXmlGrammarDocument(null,
+                        grammar.toString().getBytes(),
+                        encoding, true);
         Assert.assertEquals(document1.hashCode(), document2.hashCode());
     }
 }

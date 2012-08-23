@@ -49,7 +49,7 @@ public final class JVoiceXmlGrammarDocument
             Logger.getLogger(JVoiceXmlGrammarDocument.class);
 
     /** Base hash code. */
-    private static final int HASH_CODE_BASE = 7;
+    private static final int HASH_CODE_BASE = 13;
 
     /** Multiplier for hash code generation. */
     private static final int HASH_CODE_MULTIPLIER = 31;

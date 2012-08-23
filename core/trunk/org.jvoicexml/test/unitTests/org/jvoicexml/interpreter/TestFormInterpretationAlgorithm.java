@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,11 +39,13 @@ import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.NoinputEvent;
+import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.tagstrategy.GrammarStrategy;
 import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlInitializationTagStrategyFactory;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.test.DummyRecognitionResult;
 import org.jvoicexml.test.config.DummyConfiguration;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.test.implementation.DummyUserInput;
@@ -272,7 +274,87 @@ public final class TestFormInterpretationAlgorithm {
         Collection<GrammarDocument> grammars = input.getActiveGrammars();
         for (GrammarDocument document : grammars) {
             System.out.println(document);
+            System.out.println(document.hashCode());
         }
+        Assert.assertEquals(1, activeGrammars.size());
+        final JVoiceXMLEvent cancel = new CancelEvent();
+        handler.notifyEvent(cancel);
+    }
+
+    /**
+     * Test method to activate a grammar with a field scope with two fields.
+     * @throws Exception
+     *         Test failed.
+     * @throws JVoiceXMLEvent
+     *         Test failed.
+     */
+    @Test
+    public void testTwoFieldsActivateFieldGrammars()
+            throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field1 = form.appendChild(Field.class);
+        field1.setName("field1");
+        final Grammar grammar1 = field1.appendChild(Grammar.class);
+        grammar1.setVersion("1.0");
+        grammar1.setType(GrammarType.SRGS_XML);
+        final Rule rule1 = grammar1.appendChild(Rule.class);
+        final OneOf oneof1 = rule1.appendChild(OneOf.class);
+        final Item item11 = oneof1.appendChild(Item.class);
+        item11.addText("visa");
+        final Item item12 = oneof1.appendChild(Item.class);
+        item12.addText("mastercard");
+        final Item item13 = oneof1.appendChild(Item.class);
+        item13.addText("american express");
+        final Field field2 = form.appendChild(Field.class);
+        field2.setName("field2");
+        final Grammar grammar2 = field2.appendChild(Grammar.class);
+        grammar2.setVersion("1.0");
+        grammar2.setType(GrammarType.SRGS_XML);
+        final Rule rule2 = grammar2.appendChild(Rule.class);
+        final OneOf oneof2 = rule2.appendChild(OneOf.class);
+        final Item item21 = oneof2.appendChild(Item.class);
+        item21.addText("euro");
+        final Item item22 = oneof2.appendChild(Item.class);
+        item22.addText("dollar");
+        final Dialog executableForm = new ExecutablePlainForm();
+        executableForm.setNode(form);
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, interpreter,
+                    executableForm);
+        final JVoiceXmlInitializationTagStrategyFactory factory =
+                new JVoiceXmlInitializationTagStrategyFactory();
+        final Map<String, TagStrategy> strategies =
+                new java.util.HashMap<String, TagStrategy>();
+        strategies.put(Grammar.TAG_NAME, new GrammarStrategy());
+        factory.setTagStrategies(strategies);
+        final Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    fia.initialize(factory);
+                    fia.mainLoop();
+                } catch (JVoiceXMLEvent e) {
+                    Assert.fail(e.getMessage());
+                }
+            };
+        };
+        thread.start();
+        final DummyUserInput input =
+                (DummyUserInput) platform.getUserInput();
+        input.waitRecognitionStarted();
+        final Collection<GrammarDocument> activeGrammars =
+                input.getActiveGrammars();
+        Assert.assertEquals(1, activeGrammars.size());
+        final EventHandler handler = context.getEventHandler();
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        result.setUtterance("visa");
+        result.setAccepted(true);
+        result.setConfidence(1.0f);
+        final JVoiceXMLEvent recognitionEvent = new RecognitionEvent(result);
+        handler.notifyEvent(recognitionEvent);
+        input.waitRecognitionStarted();
         Assert.assertEquals(1, activeGrammars.size());
         final JVoiceXMLEvent cancel = new CancelEvent();
         handler.notifyEvent(cancel);

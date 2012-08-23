@@ -118,13 +118,14 @@ public class DummyUserInput
     public void activateGrammars(
             final Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
-        activeGrammars.addAll(grammars);
-        for (GrammarDocument document : grammars) {
-            LOGGER.info("activated: " + document);
+        if (activeGrammars.addAll(grammars)) {
+            for (GrammarDocument document : grammars) {
+                LOGGER.info("activated: " + document);
+            }
         }
         LOGGER.info("active grammars: " + activeGrammars.size());
         for (GrammarDocument document : activeGrammars) {
-            LOGGER.info("active: " + document);
+            LOGGER.info("active: " + document + ", " + document.hashCode());
         }
     }
 
@@ -135,13 +136,18 @@ public class DummyUserInput
     public void deactivateGrammars(
             final Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError {
-        activeGrammars.removeAll(grammars);
-        for (GrammarDocument document : grammars) {
-            LOGGER.info("deactivated: " + document);
+        for (GrammarDocument document : activeGrammars) {
+            LOGGER.info("deactivate: " + document + ", " + document.hashCode());
+            System.out.println(activeGrammars.contains(document));
+        }
+        if (activeGrammars.removeAll(grammars)) {
+            for (GrammarDocument document : grammars) {
+                LOGGER.info("deactivated: " + document);
+            }
         }
         LOGGER.info("active grammars: " + activeGrammars.size());
         for (GrammarDocument document : activeGrammars) {
-            LOGGER.info("active: " + document);
+            LOGGER.info("active: " + document + ", " + document.hashCode());
         }
     }
 

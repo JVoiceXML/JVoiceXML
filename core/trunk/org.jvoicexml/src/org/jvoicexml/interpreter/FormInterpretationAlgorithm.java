@@ -862,9 +862,10 @@ public final class FormInterpretationAlgorithm
         throws UnsupportedFormatError, NoresourceError, BadFetchError,
             SemanticError {
         final Collection<GrammarDocument> grammarDocuments =
-            new java.util.ArrayList<GrammarDocument>();
-        if (grammars.isEmpty()) {
-            // No grammars to process
+            grammarContainer.getGrammarDocuments();
+        if (!grammarDocuments.isEmpty() || grammars.isEmpty()) {
+            // All grammar documents are already processed or
+            // no more grammars to process
             return grammarDocuments;
         }
 
