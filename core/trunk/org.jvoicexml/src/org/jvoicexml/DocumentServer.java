@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,6 +36,11 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 /**
  * A <em>document server</em> processes <em>requests</em> from a client
  * application.
+ *
+ * <p>
+ * Usually these requests serve to obtain resources like VoiceXML documents,
+ * grammar documents and audio files from a repository.
+ * </p>
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
