@@ -3,11 +3,12 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
+	<classpathentry kind="lib" path="libs/log4j1.2.16/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="libs/rhino1.7R3/lib/js.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client"/>
-	<classpathentry kind="lib" path="D:/PFC/workspace/org.jvoicexml/src/org/jvoicexml/interpreter/grammar"/>
-	<classpathentry kind="lib" path="D:/PFC/workspace/org.jvoicexml.android.callmanager/3rdparty/rhino1.7R3/lib/js.jar"/>
-	<classpathentry kind="lib" path="D:/PFC/workspace/org.jvoicexml.android.callmanager/3rdparty/log4j1.2.16/lib/log4j-1.2.16.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
