@@ -43,7 +43,6 @@ import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
@@ -227,16 +226,12 @@ public final class JVoiceXmlEventHandler
             }
         }
 
+        // Add the default strategies for input items.
+        Collection<EventStrategy> defaultStrategies =
+            addDefaultStrategies(context, interpreter, fia, item);
+        added.addAll(defaultStrategies);
+
         // Add an input item strategy
-        if (item instanceof InputItem) {
-            final InputItem inputItem = (InputItem) item;
-
-            // Add the default strategies for input items.
-            Collection<EventStrategy> defaultStrategies =
-                addDefaultStrategies(context, interpreter, fia, inputItem);
-            added.addAll(defaultStrategies);
-        }
-
         final EventStrategy itemStrategy =
             inputItemFactory.getDecorator(context, interpreter, fia,
                     item);
@@ -293,7 +288,7 @@ public final class JVoiceXmlEventHandler
      * @param fia
      *        The <code>FormInterpretationAlgorithm</code>
      * @param item
-     *        The visited form item.
+     *        The visited input item.
      * @since 0.7
      * @return added strategies
      */
@@ -301,7 +296,7 @@ public final class JVoiceXmlEventHandler
             final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,
-            final InputItem item) {
+            final CatchContainer item) {
         final Collection<EventStrategy> added =
             new java.util.ArrayList<EventStrategy>();
         if (!containsStrategy(Noinput.TAG_NAME)) {

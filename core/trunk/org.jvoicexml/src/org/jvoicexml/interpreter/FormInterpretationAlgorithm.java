@@ -1171,7 +1171,8 @@ public final class FormInterpretationAlgorithm
     public void visitInitialFormItem(final InitialFormItem initial)
             throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("visiting field '" + initial.getName() + "'...");
+            LOGGER.debug("visiting initial form item '"
+                    + initial.getName() + "'...");
         }
 
         final ImplementationPlatform platform =
