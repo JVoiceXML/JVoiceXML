@@ -350,10 +350,15 @@ final class FormLevelRecognitionEventStrategy
 
         final Object interpretation =
             result.getSemanticInterpretation();
-        if ((interpretation == null)
-                || (!(interpretation instanceof ScriptableObject))) {
+        if (interpretation == null) {
             LOGGER.warn("result has no sematic interpretation: "
                     + "can not be processed!");
+            return null;
+        }
+        if (!(interpretation instanceof ScriptableObject)) {
+            LOGGER.warn("a structured object is expected at form level: "
+                    + " semantic interpretation '" + interpretation
+                    + "' can not be processed!");
             return null;
         }
         final ScriptableObject inter = (ScriptableObject) interpretation;

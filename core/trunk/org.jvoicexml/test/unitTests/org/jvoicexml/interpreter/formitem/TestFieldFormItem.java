@@ -52,6 +52,7 @@ import org.jvoicexml.xml.vxml.Option;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Test cases for {@link FieldFormItem}.
@@ -177,7 +178,8 @@ public final class TestFieldFormItem {
         scripting.eval("out.pizza = new Object();");
         scripting.eval("out.pizza.number = 3;");
         scripting.eval("out.pizza.size = 'large';");
-        final Object interpretation = scripting.getVariable("out");
+        final ScriptableObject interpretation =
+                (ScriptableObject) scripting.getVariable("out");
         result.setSemanticInterpretation(interpretation);
         field.setSlot("pizza.size");
         item.setFormItemVariable(result);

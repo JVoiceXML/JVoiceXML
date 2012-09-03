@@ -42,6 +42,7 @@ import org.jvoicexml.event.plain.NoinputEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.tagstrategy.GrammarStrategy;
 import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlInitializationTagStrategyFactory;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
@@ -648,8 +649,13 @@ public final class TestFormInterpretationAlgorithm {
         item2.addText("mastercard");
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("american express");
-        form.appendChild(Initial.class);
+        final Initial initial = form.appendChild(Initial.class);
+        initial.setName("initial");
+        final Field card = form.appendChild(Field.class);
+        card.setName("cardfield");
+        card.setSlot("card");
         final Field field = form.appendChild(Field.class);
+        field.setName("field");
         final Grammar fieldGrammar = field.appendChild(Grammar.class);
         fieldGrammar.setVersion("1.0");
         fieldGrammar.setType(GrammarType.SRGS_XML);
@@ -689,8 +695,22 @@ public final class TestFormInterpretationAlgorithm {
                 input.getActiveGrammars();
         Assert.assertEquals(1, activeGrammars.size());
         final EventHandler handler = context.getEventHandler();
-        final JVoiceXMLEvent event = new CancelEvent();
-        handler.notifyEvent(event);
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        result.setUtterance("visa");
+        final ScriptingEngine scripting = new ScriptingEngine(null);
+        scripting.enterScope(null, Scope.APPLICATION);
+        scripting.eval("var out = new Object();");
+        scripting.eval("out.card = 'visa';");
+        final Object out = scripting.getVariable("out");
+        result.setSemanticInterpretation(out);
+        result.setAccepted(true);
+        result.setConfidence(1.0f);
+        final JVoiceXMLEvent recognitionEvent = new RecognitionEvent(result);
+        handler.notifyEvent(recognitionEvent);
+        input.waitRecognitionStarted();
+        Assert.assertEquals(2, activeGrammars.size());
+        final JVoiceXMLEvent cancel = new CancelEvent();
+        handler.notifyEvent(cancel);
     }
 
     /**
