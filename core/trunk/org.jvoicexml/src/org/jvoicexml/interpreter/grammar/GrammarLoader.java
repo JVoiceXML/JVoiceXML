@@ -31,7 +31,6 @@ import java.net.URISyntaxException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -108,7 +107,7 @@ final class GrammarLoader {
         }
 
         // TODO provide a means to tell about the URI
-        return new JVoiceXmlGrammarDocument(null, grammar);
+        return new InternalGrammarDocument(null, grammar);
     }
 
     /**

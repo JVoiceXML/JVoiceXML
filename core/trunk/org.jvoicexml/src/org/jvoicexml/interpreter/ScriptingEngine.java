@@ -199,8 +199,13 @@ public final class ScriptingEngine
         if (LOGGER.isDebugEnabled()) {
             if (result instanceof String) {
                 LOGGER.debug("value of '" + expr + "': '" + result + "'");
+            } else if (result instanceof ScriptableObject) {
+                final ScriptableObject scriptable = (ScriptableObject) result;
+                final String json = toJSON(scriptable);
+                LOGGER.debug("value of '" + expr + "': " + json);
             } else {
-                LOGGER.debug("value of '" + expr + "': " + result);
+                final String json = toJSON((ScriptableObject) result);
+                LOGGER.debug("value of '" + expr + "': " + json);
             }
         }
 

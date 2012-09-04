@@ -29,7 +29,7 @@ package org.jvoicexml.interpreter.grammar;
 import junit.framework.TestCase;
 
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
+import org.jvoicexml.documentserver.ExternalGrammarDocument;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
@@ -74,7 +74,7 @@ public final class TestGrammarIdentifierCentral
      * @return grammar document.
      */
     private GrammarDocument getGrammarFromString(final String content) {
-        return new JVoiceXmlGrammarDocument(null, content.getBytes(),
+        return new ExternalGrammarDocument(null, content.getBytes(),
                 System.getProperty("file.encoding"), true);
     }
 

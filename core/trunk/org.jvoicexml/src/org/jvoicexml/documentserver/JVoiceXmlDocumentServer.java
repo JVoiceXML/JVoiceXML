@@ -304,7 +304,7 @@ public final class JVoiceXmlDocumentServer
         final byte[] bytes = buffer.getBytes();
         final String encoding = buffer.getCharset();
         final boolean ascii = buffer.isAscii();
-        return new JVoiceXmlGrammarDocument(uri, bytes, encoding, ascii);
+        return new ExternalGrammarDocument(uri, bytes, encoding, ascii);
     }
 
     /**

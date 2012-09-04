@@ -33,8 +33,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
+import org.jvoicexml.documentserver.ExternalGrammarDocument;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.grammar.InternalGrammarDocument;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -86,7 +87,7 @@ public final class TestActiveGrammarSet {
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("Fargo");
 
-        document1 = new JVoiceXmlGrammarDocument(null, grammar1);
+        document1 = new InternalGrammarDocument(null, grammar1);
 
         final SrgsXmlDocument doc2 = new SrgsXmlDocument();
         final Grammar grammar2 = doc2.getGrammar();
@@ -96,7 +97,7 @@ public final class TestActiveGrammarSet {
         rule2.addText("test input");
         grammar2.setRoot(rule2);
 
-        document2 = new JVoiceXmlGrammarDocument(null, grammar2);
+        document2 = new InternalGrammarDocument(null, grammar2);
     }
 
     /**
@@ -140,14 +141,14 @@ public final class TestActiveGrammarSet {
         rule3.setId("test");
         rule3.addText("test input");
         grammar3.setRoot(rule3);
-        final JVoiceXmlGrammarDocument document3 =
-                new JVoiceXmlGrammarDocument(null, grammar3);
+        final InternalGrammarDocument document3 =
+                new InternalGrammarDocument(null, grammar3);
         set.add(document3);
         final byte[] buffer = grammar3.toString().getBytes();
         final String encoding = System.getProperty("jvoicexml.xml.encoding",
                 "UTF-8");
-        final JVoiceXmlGrammarDocument document4 =
-                new JVoiceXmlGrammarDocument(null, buffer, encoding, true);
+        final ExternalGrammarDocument document4 =
+                new ExternalGrammarDocument(null, buffer, encoding, true);
         set.add(document4);
         final Collection<GrammarDocument> docs = set.getGrammars();
         Assert.assertEquals(2, docs.size());

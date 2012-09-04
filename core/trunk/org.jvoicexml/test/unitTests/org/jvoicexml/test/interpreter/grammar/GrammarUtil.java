@@ -35,7 +35,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
+import org.jvoicexml.documentserver.ExternalGrammarDocument;
 
 /**
  * This class provides utility methods to test grammars.
@@ -126,7 +126,7 @@ public final class GrammarUtil {
      * @return grammar document.
      */
     public static GrammarDocument getGrammarFromString(final String content) {
-        return new JVoiceXmlGrammarDocument(null, content.getBytes(),
+        return new ExternalGrammarDocument(null, content.getBytes(),
                 System.getProperty("file.encoding"), true);
     }
 }

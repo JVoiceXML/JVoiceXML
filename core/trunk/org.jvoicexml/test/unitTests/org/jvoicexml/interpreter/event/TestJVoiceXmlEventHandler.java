@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -40,7 +40,6 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
@@ -57,6 +56,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
+import org.jvoicexml.interpreter.grammar.InternalGrammarDocument;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
@@ -619,6 +619,7 @@ public final class TestJVoiceXmlEventHandler {
         handler.notifyEvent(event);
 
         handler.processEvent(item2);
+        System.out.println(scripting.eval(name1 + ";"));
         Assert.assertEquals(utterance1, scripting.eval(name1 + ";"));
         Assert.assertEquals(utterance2, scripting.eval(name2 + ";"));
         Assert.assertTrue(TestAppender.containsMessage("test: " + utterance1));
@@ -723,7 +724,7 @@ public final class TestJVoiceXmlEventHandler {
         rule1.addText(input);
 
         final GrammarDocument document =
-            new JVoiceXmlGrammarDocument(null, grammar);
+            new InternalGrammarDocument(null, grammar);
         item.addGrammar(document);
         return grammar;
     }

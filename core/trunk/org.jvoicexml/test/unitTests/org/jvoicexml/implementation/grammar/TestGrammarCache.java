@@ -29,11 +29,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
-import org.jvoicexml.implementation.grammar.GrammarCache;
-import org.jvoicexml.implementation.grammar.ProcessedGrammar;
+import org.jvoicexml.interpreter.grammar.InternalGrammarDocument;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
@@ -78,7 +76,7 @@ public final class TestGrammarCache {
         item3.addText("Fargo");
 
         final GrammarDocument document =
-            new JVoiceXmlGrammarDocument(null, grammar);
+            new InternalGrammarDocument(null, grammar);
         final GrammarImplementation<?> implementation =
             new SrgsXmlGrammarImplementation(doc);
         processed = new ProcessedGrammar(document, implementation);

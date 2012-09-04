@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -23,7 +23,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.documentserver;
+package org.jvoicexml.interpreter.grammar;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -37,17 +37,18 @@ import org.jvoicexml.xml.srgs.ModeType;
 import org.w3c.dom.Document;
 
 /**
- * Basic implementation of a {@link GrammarDocument}.
+ * A {@link GrammarDocument} referencing a grammar inside a
+ * VoiceXML document.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.5.5
+ * @since 0.7.6
  */
-public final class JVoiceXmlGrammarDocument
+public final class InternalGrammarDocument
         implements GrammarDocument {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlGrammarDocument.class);
+            Logger.getLogger(InternalGrammarDocument.class);
 
     /** Base hash code. */
     private static final int HASH_CODE_BASE = 13;
@@ -67,9 +68,6 @@ public final class JVoiceXmlGrammarDocument
     /** Guessed character set. */
     private final String charset;
 
-    /** <code>true</code> if the contents of {@link #buffer} is plain text. */
-    private final boolean isAscii;
-
     /** The grammar document buffer if the document is binary. */
     private final byte[] buffer;
 
@@ -85,7 +83,7 @@ public final class JVoiceXmlGrammarDocument
      * @param source URI of the grammar document
      * @param node the grammar node
      */
-    public JVoiceXmlGrammarDocument(final URI source, final Grammar node) {
+    public InternalGrammarDocument(final URI source, final Grammar node) {
         uri = source;
         // Try getting the encoding of the owner document 
         final Document owner = node.getOwnerDocument();
@@ -95,32 +93,11 @@ public final class JVoiceXmlGrammarDocument
         } else {
             charset = ownerEncoding;
         }
-        // We are for sure ascii and the buffer is the contents of this node
-        isAscii = true;
         document = null;
         buffer = node.toString().getBytes();
         grammar = node;
     }
 
-    /**
-     * Creates a new grammar document. This constructor is intended to be
-     * used to capture external grammars.
-     * @param source URI of the grammar document
-     * @param content the grammar itself
-     * @param encoding guessed encoding of the grammar
-     * @param ascii <code>true</code> if content is in ASCII format
-     */
-    public JVoiceXmlGrammarDocument(final URI source, final byte[] content,
-            final String encoding, final boolean ascii) {
-        uri = source;
-        charset = encoding;
-        isAscii = ascii;
-        document = null;
-        buffer = content;
-        grammar = null;
-    }
-
-    
     /**
      * {@inheritDoc}
      */
@@ -147,10 +124,11 @@ public final class JVoiceXmlGrammarDocument
 
     /**
      * {@inheritDoc}
+     * @return <code>true</code> since internal documents are for sure ASCII.
      */
     @Override
     public boolean isAscii() {
-        return isAscii;
+        return true;
     }
 
     /**
@@ -188,10 +166,19 @@ public final class JVoiceXmlGrammarDocument
      */
     @Override
     public String getTextContent() {
-        if (grammar != null) {
-            return grammar.getTextContent();
+        return grammar.getTextContent();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof GrammarDocument)) {
+            return false;
         }
-        return getDocument();
+        final GrammarDocument other = (GrammarDocument) obj;
+        return equals(other);
     }
 
     /**
@@ -200,12 +187,9 @@ public final class JVoiceXmlGrammarDocument
      * the same buffer
      */
     @Override
-    public boolean equals(final GrammarDocument obj) {
-        if (!(obj instanceof JVoiceXmlGrammarDocument)) {
-            return false;
-        }
-        final JVoiceXmlGrammarDocument other = (JVoiceXmlGrammarDocument) obj;
-        return Arrays.equals(buffer, other.buffer);
+    public boolean equals(final GrammarDocument other) {
+        final byte[] otherBuffer = other.getBuffer();
+        return Arrays.equals(buffer, otherBuffer);
     }
 
     /**
@@ -214,9 +198,7 @@ public final class JVoiceXmlGrammarDocument
     @Override
     public int hashCode() {
         final int prime = HASH_CODE_MULTIPLIER;
-        int result = HASH_CODE_BASE;
-        result = prime * result + Arrays.hashCode(buffer);
-        return result;
+        return prime * HASH_CODE_BASE + Arrays.hashCode(buffer);
     }
 
     /**

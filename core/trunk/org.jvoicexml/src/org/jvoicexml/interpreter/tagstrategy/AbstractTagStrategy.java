@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,6 +41,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Skeleton for a {@link TagStrategy}.
@@ -206,7 +207,13 @@ abstract class AbstractTagStrategy
             str.append(" ");
             str.append(attribute);
             str.append(": '");
-            str.append(value);
+            if (value instanceof ScriptableObject) {
+                final ScriptableObject scriptable = (ScriptableObject) value;
+                final String json = ScriptingEngine.toJSON(scriptable);
+                str.append(json);
+            } else {
+                str.append(value);
+            }
             str.append("'");
         }
 

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,8 +32,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
+import org.jvoicexml.interpreter.grammar.InternalGrammarDocument;
 import org.jvoicexml.test.interpreter.grammar.GrammarUtil;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -106,7 +106,7 @@ public final class TestJsgfGrammarIdentifier {
         str.append("public <boolean> = yes{true}|no{false};");
         grammar.addCData(str.toString());
         final GrammarDocument grammarDocument =
-            new JVoiceXmlGrammarDocument(null, grammar);
+            new InternalGrammarDocument(null, grammar);
         final GrammarType type = identifier.identify(grammarDocument);
         Assert.assertEquals(GrammarType.JSGF, type);
     }
