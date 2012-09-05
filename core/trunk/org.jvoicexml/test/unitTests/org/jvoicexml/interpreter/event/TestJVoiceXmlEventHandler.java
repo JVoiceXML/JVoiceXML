@@ -619,7 +619,6 @@ public final class TestJVoiceXmlEventHandler {
         handler.notifyEvent(event);
 
         handler.processEvent(item2);
-        System.out.println(scripting.eval(name1 + ";"));
         Assert.assertEquals(utterance1, scripting.eval(name1 + ";"));
         Assert.assertEquals(utterance2, scripting.eval(name2 + ";"));
         Assert.assertTrue(TestAppender.containsMessage("test: " + utterance1));

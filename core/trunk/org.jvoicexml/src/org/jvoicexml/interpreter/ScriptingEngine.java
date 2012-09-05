@@ -53,10 +53,12 @@ import org.mozilla.javascript.ScriptableObject;
  * </p>
  *
  * <p>
- * The Rhino implementation has the disadvantage that setting and accessing
- * variables do not traverse the scope stack. This implementation offers
- * a workaround for that. This also means that it has to be changed, once
- * Rhino traverses the scope stack.
+ * The main aspect is that it is necessary to observe changes in the scope
+ * and to adapt the scope stack accordingly.
+ * </p>
+ * <p>
+ * Note, that all access to the scripting engine must happen in the same
+ * thread. Otherwise, rhino will treat them differently.
  * </p>
  *
  * @author Torben Hardt
@@ -204,8 +206,7 @@ public final class ScriptingEngine
                 final String json = toJSON(scriptable);
                 LOGGER.debug("value of '" + expr + "': " + json);
             } else {
-                final String json = toJSON((ScriptableObject) result);
-                LOGGER.debug("value of '" + expr + "': " + json);
+                LOGGER.debug("value of '" + expr + "': " + result);
             }
         }
 

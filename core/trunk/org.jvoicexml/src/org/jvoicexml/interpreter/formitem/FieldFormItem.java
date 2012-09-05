@@ -133,24 +133,19 @@ public final class FieldFormItem
 
         final Object interpretation =
             result.getSemanticInterpretation();
-        final Field field = getField();
         if (interpretation == null) {
             super.setFormItemVariable(result.getUtterance());
         } else {
-            final String slot = field.getSlot();
+            final String slot = getSlot();
             final VoiceXmlInterpreterContext context = getContext();
             final ScriptingEngine scripting = context.getScriptingEngine();
             Object slotValue;
-            if (slot == null) {
-                slotValue = container.getInterpretation();
-            } else {
-                try {
-                    slotValue = scripting.eval(getShadowVarContainerName()
-                            + ".interpretation." + slot + ";");
-                } catch (SemanticError e) {
-                    // Ignore, since this means that there is no match
-                    slotValue = null;
-                }
+            try {
+                slotValue = scripting.eval(getShadowVarContainerName()
+                        + ".interpretation." + slot + ";");
+            } catch (SemanticError e) {
+                // Ignore, since this means that there is no match
+                slotValue = null;
             }
             super.setFormItemVariable(slotValue);
         }
