@@ -2,6 +2,7 @@ package org.jvoicexml.android.callmanager;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
@@ -13,13 +14,13 @@ import org.jvoicexml.event.ErrorEvent;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 public class Interpreter extends Thread implements JVoiceXmlMainListener
 {
 	private JVoiceXmlMain jvxml;
-	
-	private Uri myUri;
 	
 	private URI voiceXmlDocument;
 	
@@ -31,16 +32,21 @@ public class Interpreter extends Thread implements JVoiceXmlMainListener
 	public Interpreter(final Uri uri, Context context)
 	{
 		System.setProperty("jvoicexml.config", "../org.jvoicexml/config");
-		this.myUri = uri;
-		File dialog= new File(myUri.toString()); 
-		this.voiceXmlDocument=dialog.toURI();
+		
+		try {
+			this.voiceXmlDocument= new URI(uri.toString());
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		android.os.Debug.waitForDebugger();
 		this.callManagerContext=context; 
 		
 	}
 	public void run()
 	{
-		AndroidConfiguration config = new AndroidConfiguration(callManagerContext);
+		AndroidConfiguration config = new AndroidConfiguration();
 		jvxml = new JVoiceXmlMain(config);
 		jvxml.addListener(this);
 		jvxml.start();
@@ -53,7 +59,10 @@ public class Interpreter extends Thread implements JVoiceXmlMainListener
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}		
-		}			
+		}	
+		Log.e("el Interprete salio del wait","VICTORIA!");
+	
+//		while(true);
 		
 		final ConnectionInformation client = new BasicConnectionInformation("dummy", "android", "android");
 		Session session = null;

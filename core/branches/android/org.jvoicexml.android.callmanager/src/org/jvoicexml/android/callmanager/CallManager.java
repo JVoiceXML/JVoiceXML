@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXmlMainListener;
 import android.app.Service;
 import android.content.Intent;
+import android.media.AudioFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -15,10 +16,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 
-
 	  
 public class CallManager extends Service implements JVoiceXmlMainListener{
 
+	
 	/**
 	 * Target we publish for clients to send messages to IncomingHandler.
 	 */

@@ -32,6 +32,7 @@ import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.JndiSupport;
 import org.jvoicexml.SpeechRecognizerProperties;
+import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.interpreter.DialogFactory;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
@@ -42,23 +43,12 @@ import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
+import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
 import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository;
 import org.jvoicexml.test.interpreter.tagstrategy.DummyInitializationTagStrategyFactory;
 import org.jvoicexml.test.interpreter.tagstrategy.DummyTagStrategyFactory;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
-
-import dalvik.system.PathClassLoader;
-
-import android.app.Activity;
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
-import android.os.IBinder;
 
 /**
  * Dummy implementation of a configuration object.
@@ -68,14 +58,6 @@ import android.os.IBinder;
  */
 public final class AndroidConfiguration 
     implements Configuration {
-	
-	private Context callManagerContext;
-	
-	public AndroidConfiguration(Context context)
-	{
-		this.callManagerContext=context;
-		
-	}
     
 	/**
      * {@inheritDoc}
@@ -95,7 +77,14 @@ public final class AndroidConfiguration
             }
         }
         if (baseClass == GrammarIdentifier.class) {
-        	return null;
+        	final Collection<T> col = new java.util.ArrayList<T>();
+            try {
+                T value = (T) new SrgsXmlGrammarIdentifier();
+                col.add(value);
+                return col;
+            } catch (Exception e) {
+                return null;
+            }
         }
         if (baseClass == JndiSupport.class) {
         	return null;
@@ -152,7 +141,7 @@ public final class AndroidConfiguration
         } else if (baseClass == DtmfRecognizerProperties.class) {
             return (T) new DtmfRecognizerProperties();         
 	    } else if (baseClass == DocumentServer.class) {
-	        return null;
+	        return (T) new AndroidDocumentServer();
 	    }else if (baseClass == DialogFactory.class) {
 	    	final JVoiceXmlDialogFactory factory = new JVoiceXmlDialogFactory();
 	    	factory.addDialogMapping(Form.TAG_NAME, new ExecutablePlainForm());
