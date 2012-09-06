@@ -10,5 +10,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.android.implementation"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
