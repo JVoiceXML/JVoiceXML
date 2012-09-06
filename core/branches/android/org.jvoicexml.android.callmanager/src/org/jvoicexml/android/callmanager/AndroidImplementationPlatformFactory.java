@@ -1,6 +1,5 @@
 package org.jvoicexml.android.callmanager;
 
-import org.jvoicexml.Configurable;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.CharacterInput;
@@ -14,6 +13,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.android.implementation.AndroidSpokenInput;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -21,11 +21,16 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 public class AndroidImplementationPlatformFactory 
 	implements ImplementationPlatformFactory, ImplementationPlatform {
-
+	
+	private Session session;
+	private EventObserver observer;
+	private long timeout;
+	private AndroidSpokenInput androidSpokenInput;
+	
+	
 	@Override
 	public void setPromptTimeout(long timeout) {
-		// TODO Auto-generated method stub
-
+		this.timeout=timeout;
 	}
 
 	@Override
@@ -37,46 +42,42 @@ public class AndroidImplementationPlatformFactory
 	@Override
 	public SystemOutput getSystemOutput() throws NoresourceError,
 			ConnectionDisconnectHangupEvent {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void waitOutputQueueEmpty() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void waitNonBargeInPlayed() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public boolean hasUserInput() {
-		// TODO Auto-generated method stub
-		return false;
+		if (androidSpokenInput!=null)
+			return true;
+		else
+			return false;
 	}
 
 	@Override
 	public UserInput getUserInput() throws NoresourceError,
 			ConnectionDisconnectHangupEvent {
-		// TODO Auto-generated method stub
-		return null;
+		return androidSpokenInput;
 	}
 
 	@Override
 	public CharacterInput getCharacterInput() throws NoresourceError,
 			ConnectionDisconnectHangupEvent {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public CallControl getCallControl() throws NoresourceError,
 			ConnectionDisconnectHangupEvent {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -88,18 +89,16 @@ public class AndroidImplementationPlatformFactory
 
 	@Override
 	public void setEventHandler(EventObserver observer) {
-		// TODO Auto-generated method stub
-
+		this.observer=observer;
 	}
 
 	@Override
 	public void setSession(Session session) {
-		// TODO Auto-generated method stub
-
+		this.session = session;
 	}
 	public void init(Configuration config) throws ConfigurationException
 	{
-		
+		androidSpokenInput = new AndroidSpokenInput();
 	}
 
 	@Override
@@ -113,8 +112,7 @@ public class AndroidImplementationPlatformFactory
 	@Override
 	public ImplementationPlatform getImplementationPlatform(
 			ConnectionInformation info) throws NoresourceError {
-		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 
 }
