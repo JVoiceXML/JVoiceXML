@@ -3,6 +3,7 @@
  */
 package org.jvoicexml.android.implementation;
 
+import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
@@ -11,16 +12,15 @@ import org.jvoicexml.implementation.SpokenInput;
  * @author Yo
  *
  */
-public class AndroidSpokenInputFactory implements ResourceFactory<SpokenInput> {
+public class AndroidSpokenInputFactory implements ResourceFactory<AndroidSpokenInput> {
 	private int instances;
 	@Override
-	public Class<SpokenInput> getResourceType() {
-		return SpokenInput.class;
-		
+	public Class<AndroidSpokenInput> getResourceType() {
+		return AndroidSpokenInput.class;		
 	}
 
 	@Override
-	public SpokenInput createResource() throws NoresourceError {
+	public AndroidSpokenInput createResource() throws NoresourceError {
 		return new AndroidSpokenInput();
 	}
 
