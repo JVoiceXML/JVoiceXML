@@ -43,6 +43,7 @@ import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Option;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * An input item whose value is obtained via ASR or DTMF grammars.
@@ -141,8 +142,12 @@ public final class FieldFormItem
             final ScriptingEngine scripting = context.getScriptingEngine();
             Object slotValue;
             try {
-                slotValue = scripting.eval(getShadowVarContainerName()
-                        + ".interpretation." + slot + ";");
+                if (interpretation instanceof ScriptableObject) {
+                    slotValue = scripting.eval(getShadowVarContainerName()
+                            + ".interpretation." + slot + ";");
+                } else {
+                    slotValue = interpretation;
+                }
             } catch (SemanticError e) {
                 // Ignore, since this means that there is no match
                 slotValue = null;

@@ -237,6 +237,10 @@ public final class ScriptingEngine
         if (LOGGER.isDebugEnabled()) {
             if (value instanceof String) {
                 LOGGER.debug("set '" + name + "' to '" + value + "'");
+            } else if (value instanceof ScriptableObject) {
+                final ScriptableObject scriptable = (ScriptableObject) value;
+                final String json = toJSON(scriptable);
+                LOGGER.debug("set '" + name + "' to " + json);
             } else {
                 LOGGER.debug("set '" + name + "' to " + value);
             }

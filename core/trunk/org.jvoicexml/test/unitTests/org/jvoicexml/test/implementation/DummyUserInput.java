@@ -138,7 +138,6 @@ public class DummyUserInput
             throws NoresourceError, BadFetchError {
         for (GrammarDocument document : activeGrammars) {
             LOGGER.info("deactivate: " + document + ", " + document.hashCode());
-            System.out.println(activeGrammars.contains(document));
         }
         if (activeGrammars.removeAll(grammars)) {
             for (GrammarDocument document : grammars) {
@@ -148,7 +147,6 @@ public class DummyUserInput
         LOGGER.info("active grammars: " + activeGrammars.size());
         for (GrammarDocument document : activeGrammars) {
             LOGGER.info("active: " + document + ", " + document.hashCode());
-            System.out.println(activeGrammars.contains(document));
         }
     }
 

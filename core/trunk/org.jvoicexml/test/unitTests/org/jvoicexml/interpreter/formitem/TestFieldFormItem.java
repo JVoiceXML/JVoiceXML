@@ -86,6 +86,7 @@ public final class TestFieldFormItem {
         vxml.setXmlLang("en");
         final Form form = vxml.appendChild(Form.class);
         field = form.appendChild(Field.class);
+        field.setName("testfield");
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final ImplementationPlatform platform =
                 new DummyImplementationPlatform();
@@ -151,7 +152,7 @@ public final class TestFieldFormItem {
         final DummyRecognitionResult result = new DummyRecognitionResult();
         result.setAccepted(true);
         result.setUtterance("yeah");
-        result.setSemanticInterpretation("yes");
+        result.setSemanticInterpretation("'yes'");
         item.setFormItemVariable(result);
         Assert.assertEquals(result.getSemanticInterpretation(),
                 item.getFormItemVariable());
