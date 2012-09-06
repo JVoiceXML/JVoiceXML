@@ -89,8 +89,8 @@ final class TextStrategy
             final VoiceXmlNode node) throws JVoiceXMLEvent {
         final String text = getOutput(node);
         if (text == null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("ignoring null text node");
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("ignoring null text node");
             }
 
             return;
@@ -123,24 +123,19 @@ final class TextStrategy
      */
     private String getOutput(final VoiceXmlNode node) {
         final String text = node.getNodeValue();
-
         if (text == null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("ignoring null text node");
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("ignoring null text node");
             }
-
             return null;
         }
-
         final String cleaned = text.trim();
-        if (cleaned.length() == 0) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("ignoring empty text node");
+        if (cleaned.isEmpty()) {
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("ignoring empty text node");
             }
-
             return null;
         }
-
         return cleaned;
     }
 

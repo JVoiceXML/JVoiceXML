@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -52,7 +52,7 @@ public final class ScopedCollection<E>
     private static final Logger LOGGER = Logger
             .getLogger(ScopedCollection.class);
 
-    /** Scope stack. */
+    /** The scope stack. All changes are made to the topmost item. */
     private final Stack<ScopedCollectionItem<E>> stack;
 
     /** A view onto all items of all elements. */
@@ -71,7 +71,6 @@ public final class ScopedCollection<E>
     public ScopedCollection(final ScopeObserver scopeObserver) {
         stack = new Stack<ScopedCollectionItem<E>>();
         view = new java.util.ArrayList<E>();
-
         if (scopeObserver != null) {
             observer = scopeObserver;
             observer.addScopeSubscriber(this);
@@ -84,7 +83,7 @@ public final class ScopedCollection<E>
     }
 
     /**
-     * Unsubscribe this scoped container from the <code>ScopePublisher</code>.
+     * Unsubscribe this scoped container from the {@link ScopePublisher}.
      */
     public void close() {
         if (observer != null) {
@@ -107,7 +106,6 @@ public final class ScopedCollection<E>
             final ScopedCollectionItem<E> item = stack.peek();
             if (item.getScope() == previous) {
                 stack.pop();
-
                 view.removeAll(item);
             }
         }
@@ -128,6 +126,8 @@ public final class ScopedCollection<E>
             item = stack.peek();
         }
 
+        // Create a new  entry in the scope stack if there are no items
+        // on the stack or if the topmost scope differs from the current scope.
         if (item == null) {
             item = new ScopedCollectionItem<E>(scope);
             stack.push(item);
@@ -144,9 +144,7 @@ public final class ScopedCollection<E>
      */
     public boolean add(final E e) {
         final ScopedCollectionItem<E> collection = getCurrentCollection();
-
         view.add(e);
-
         return collection.add(e);
     }
 
@@ -155,9 +153,7 @@ public final class ScopedCollection<E>
      */
     public boolean addAll(final Collection<? extends E> c) {
         final ScopedCollectionItem<E> collection = getCurrentCollection();
-
         view.addAll(c);
-
         return collection.addAll(c);
     }
 
@@ -187,7 +183,7 @@ public final class ScopedCollection<E>
      * {@inheritDoc}
      */
     public boolean isEmpty() {
-        return stack.empty();
+        return view.isEmpty();
     }
 
     /**
@@ -205,12 +201,16 @@ public final class ScopedCollection<E>
             return false;
         }
 
+        // Iterate over the stack and try to find the collection where
+        // the item has been added
         for (ScopedCollectionItem<E> item : stack) {
             if (item.remove(o)) {
                 return true;
             }
         }
 
+        // This should not happen since it means that the object has been
+        // added to the view but not to the scoped collections.
         return false;
     }
 

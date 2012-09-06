@@ -61,7 +61,7 @@ public final class JVoiceXmlInitializationTagStrategyFactory
      * Constructs a new object.
      */
     public JVoiceXmlInitializationTagStrategyFactory() {
-        // Initialize woth an empty set of strategies
+        // Initialize with an empty set of strategies
         strategies = new java.util.HashMap<String, TagStrategy>();
     }
 
@@ -103,14 +103,14 @@ public final class JVoiceXmlInitializationTagStrategyFactory
             LOGGER.warn("cannot get strategy for null");
             return null;
         }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("getting strategy for tag: '" + tag + "'");
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("getting strategy for tag: '" + tag + "'");
         }
 
         // Retrieve the strategy
         final TagStrategy strategy = strategies.get(tag);
         if (strategy == null) {
-            if (LOGGER.isDebugEnabled()) {
+            if (LOGGER.isTraceEnabled()) {
                 LOGGER.warn("no suitable strategy for tag: '" + tag + "'");
             }
             return null;

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -75,7 +75,6 @@ public final class ScopeObserver
     public void enterScope(final Scope scope) {
         if (scope == null) {
             LOGGER.warn("ignoring entered null scope");
-
             return;
         }
 
@@ -110,10 +109,7 @@ public final class ScopeObserver
         if (position < 0) {
             LOGGER.warn("mismatched scope order. cannot exit '"
                         + scope.getName() + "'");
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("current scope stack: " + scopes);
-            }
+            LOGGER.warn("current scope stack: " + scopes);
             return;
         }
 
@@ -125,7 +121,6 @@ public final class ScopeObserver
         }
 
         final Scope previous = currentScope();
-
         synchronized (scopeSubscriber) {
             for (ScopeSubscriber listener : scopeSubscriber) {
                 listener.exitScope(scope, previous);

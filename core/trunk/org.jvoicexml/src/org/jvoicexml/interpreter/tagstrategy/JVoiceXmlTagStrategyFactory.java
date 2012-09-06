@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -102,12 +102,14 @@ public final class JVoiceXmlTagStrategyFactory
             return null;
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("getting strategy for tag: '" + tag + "'");
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("getting strategy for tag: '" + tag + "'");
         }
         final TagStrategy strategy = strategies.get(tag);
         if (strategy == null) {
-            LOGGER.warn("no suitable strategy for tag: '" + tag + "'");
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.warn("no suitable strategy for tag: '" + tag + "'");
+            }
 
             return null;
         }
