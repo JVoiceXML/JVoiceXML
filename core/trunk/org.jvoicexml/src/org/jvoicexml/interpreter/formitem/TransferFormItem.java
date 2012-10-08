@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group
+ * Copyright (C) 2005-2012 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -46,18 +46,39 @@ import org.jvoicexml.xml.vxml.Transfer;
 public final class TransferFormItem
         extends AbstractGrammarContainer {
     /**
+     * Constructs a new object as a template.
+     */
+    public TransferFormItem() {
+    }
+
+    /**
      * Create a new transfer input item.
      *
      * @param context
      *        The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
      *        The corresponding xml node in the VoiceXML document.
+     * @throws IllegalArgumentException
+     *         if the given node is not a {@link Transfer}
      */
     public TransferFormItem(final VoiceXmlInterpreterContext context,
-                            final VoiceXmlNode voiceNode) {
+                         final VoiceXmlNode voiceNode)
+                                 throws IllegalArgumentException {
         super(context, voiceNode);
+        if (!(voiceNode instanceof Transfer)) {
+            throw new IllegalArgumentException("Node must be a <transfer>");
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AbstractFormItem newInstance(
+            final VoiceXmlInterpreterContext ctx,
+            final VoiceXmlNode voiceNode) {
+        return new TransferFormItem(ctx, voiceNode);
+    }
 
     /**
      * {@inheritDoc}
@@ -137,11 +158,6 @@ public final class TransferFormItem
         if (node == null) {
             return null;
         }
-
-        if (!(node instanceof Transfer)) {
-            return null;
-        }
-
         return (Transfer) node;
     }
 

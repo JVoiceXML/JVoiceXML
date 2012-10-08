@@ -71,6 +71,15 @@ abstract class AbstractFormItem
     private final String name;
 
     /**
+     * Constructs a new form item as a template.
+     */
+    public AbstractFormItem() {
+        node = null;
+        context = null;
+        name = null;
+    }
+
+    /**
      * Create a new form item.
      *
      * @param ctx
@@ -82,9 +91,20 @@ abstract class AbstractFormItem
                             final VoiceXmlNode voiceNode) {
         node = voiceNode;
         context = ctx;
-
         name = FormItemNameFactory.getName(node);
     }
+
+    /**
+     * Factory method to create a new instance from a template.
+     * @param ctx
+     *        The current <code>VoiceXmlInterpreterContext</code>.
+     * @param voiceNode
+     *        The corresponding XML node in the VoiceXML document.
+     * @return created form item
+     * @since 0.7.6
+     */
+    public abstract AbstractFormItem newInstance(
+            final VoiceXmlInterpreterContext ctx, final VoiceXmlNode voiceNode);
 
     /**
      * {@inheritDoc}

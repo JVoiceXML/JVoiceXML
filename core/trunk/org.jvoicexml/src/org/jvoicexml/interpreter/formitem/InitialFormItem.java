@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,6 +37,7 @@ import org.jvoicexml.interpreter.PromptCountable;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Initial;
 
 /**
  * This element controls the initial interaction in a mixed initiative form.
@@ -62,6 +63,13 @@ public final class InitialFormItem
     /** The maintained event counter. */
     private final EventCountable eventCounter;
 
+        /**
+     * Constructs a new object as a template.
+     */
+    public InitialFormItem() {
+        eventCounter = null;
+        promptCounter = 0;
+    }
 
     /**
      * Create a new initial form item.
@@ -70,12 +78,28 @@ public final class InitialFormItem
      *        The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
      *        The corresponding xml node in the VoiceXML document.
+     * @throws IllegalArgumentException
+     *         if the given node is not a {@link Initial}
      */
     public InitialFormItem(final VoiceXmlInterpreterContext context,
-                           final VoiceXmlNode voiceNode) {
+                         final VoiceXmlNode voiceNode)
+                                 throws IllegalArgumentException {
         super(context, voiceNode);
+        if (!(voiceNode instanceof Initial)) {
+            throw new IllegalArgumentException("Node must be a <initial>");
+        }
         eventCounter = new EventCounter();
         promptCounter = 1;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AbstractFormItem newInstance(
+            final VoiceXmlInterpreterContext ctx,
+            final VoiceXmlNode voiceNode) {
+        return new InitialFormItem(ctx, voiceNode);
     }
 
     /**

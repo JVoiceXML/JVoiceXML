@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -50,7 +50,7 @@ final class EventCounter implements EventCountable {
     private final Map<String, Integer> counter;
 
     /**
-     * Constructss a new object.
+     * Constructs a new object.
      */
     public EventCounter() {
         counter = new java.util.HashMap<String, Integer>();
@@ -66,9 +66,7 @@ final class EventCounter implements EventCountable {
             if (count == null) {
                 count = new Integer(0);
             }
-
             counter.put(prefix, count.intValue() + 1);
-
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("incremented count of '" + prefix + "' to "
                              + counter.get(prefix));
@@ -77,7 +75,7 @@ final class EventCounter implements EventCountable {
     }
 
     /**
-     * Get a collection of all prefixes for the given envent type.
+     * Get a collection of all prefixes for the given event type.
      * @param type Event type
      * @return Collection of prefixes, including the name of the
      * event.
@@ -86,9 +84,7 @@ final class EventCounter implements EventCountable {
      */
     private Collection<String> getPrefixes(final String type) {
         final Collection<String> prefixes = new java.util.ArrayList<String>();
-
         prefixes.add(type);
-
         String prefix = type;
         int dot = prefix.lastIndexOf(".");
         while (dot > 0) {
@@ -96,7 +92,6 @@ final class EventCounter implements EventCountable {
             prefixes.add(prefix);
             dot = prefix.lastIndexOf(".");
         }
-
         return prefixes;
     }
 

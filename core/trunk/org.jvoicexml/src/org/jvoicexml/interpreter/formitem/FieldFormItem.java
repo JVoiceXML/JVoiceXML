@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group
+ * Copyright (C) 2005-2012 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -68,6 +68,11 @@ public final class FieldFormItem
     /** The converter for <code>&lt;option&gt;</code> tags. */
     private OptionConverter converter;
 
+    /**
+     * Constructs a new object as a template.
+     */
+    public FieldFormItem() {
+    }
 
     /**
      * Creates a new field input item.
@@ -76,10 +81,26 @@ public final class FieldFormItem
      *        The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
      *        The corresponding XML node in the VoiceXML document.
+     * @throws IllegalArgumentException
+     *         if the given node is not a {@link Field}.
      */
     public FieldFormItem(final VoiceXmlInterpreterContext context,
-                         final VoiceXmlNode voiceNode) {
+                         final VoiceXmlNode voiceNode)
+                                 throws IllegalArgumentException {
         super(context, voiceNode);
+        if (!(voiceNode instanceof Field)) {
+            throw new IllegalArgumentException("Node must be a <field>");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AbstractFormItem newInstance(
+            final VoiceXmlInterpreterContext ctx,
+            final VoiceXmlNode voiceNode) {
+        return new FieldFormItem(ctx, voiceNode);
     }
 
     /**
@@ -200,11 +221,6 @@ public final class FieldFormItem
         if (node == null) {
             return null;
         }
-
-        if (!(node instanceof Field)) {
-            return null;
-        }
-
         return (Field) node;
     }
 

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group
+ * Copyright (C) 2005-2012 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItemVisitor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.ObjectTag;
 
 /**
  * This input item invokes a platform-specific <em>object</em> with various
@@ -48,7 +49,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * variable as described in
  * <a href="http://www.w3.org/TR/voicexml20#dml5.2.2">Section 5.2.2</a>).
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @see org.jvoicexml.event.error.UnsupportedObjectnameError
@@ -56,16 +57,38 @@ import org.jvoicexml.xml.VoiceXmlNode;
 public final class ObjectFormItem
         extends AbstractInputItem {
     /**
+     * Constructs a new object as a template.
+     */
+    public ObjectFormItem() {
+    }
+
+    /**
      * Creates a new object input item.
      *
      * @param context
      *        The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
      *        The corresponding xml node in the VoiceXML document.
+     * @throws IllegalArgumentException
+     *         if the given node is not a {@link Object}
      */
     public ObjectFormItem(final VoiceXmlInterpreterContext context,
-                          final VoiceXmlNode voiceNode) {
+                         final VoiceXmlNode voiceNode)
+                                 throws IllegalArgumentException {
         super(context, voiceNode);
+        if (!(voiceNode instanceof ObjectTag)) {
+            throw new IllegalArgumentException("Node must be a <object>");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AbstractFormItem newInstance(
+            final VoiceXmlInterpreterContext ctx,
+            final VoiceXmlNode voiceNode) {
+        return new ObjectFormItem(ctx, voiceNode);
     }
 
     /**

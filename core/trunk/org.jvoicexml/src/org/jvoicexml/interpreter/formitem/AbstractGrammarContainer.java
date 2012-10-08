@@ -55,6 +55,13 @@ abstract class AbstractGrammarContainer
     private Collection<Grammar> grammars;
 
     /**
+     * Constructs a new object as a template.
+     */
+    public AbstractGrammarContainer() {
+        documents = null;
+    }
+
+    /**
      * Create a new object.
      *
      * @param context

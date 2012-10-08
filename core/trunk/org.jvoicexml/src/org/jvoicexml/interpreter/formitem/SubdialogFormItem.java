@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group
+ * Copyright (C) 2005-2012 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,11 +41,17 @@ import org.jvoicexml.xml.vxml.Subdialog;
  * It invokes another dialog on the current page, or invokes another VoiceXML
  * document. It returns an ECMAScript Object as its result.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class SubdialogFormItem
         extends AbstractInputItem {
+    /**
+     * Constructs a new object as a template.
+     */
+    public SubdialogFormItem() {
+    }
+
     /**
      * Create a new subdialog input item.
      *
@@ -53,10 +59,26 @@ public final class SubdialogFormItem
      *        The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
      *        The corresponding xml node in the VoiceXML document.
+     * @throws IllegalArgumentException
+     *         if the given node is not a block
      */
     public SubdialogFormItem(final VoiceXmlInterpreterContext context,
-                             final VoiceXmlNode voiceNode) {
+                         final VoiceXmlNode voiceNode)
+                                 throws IllegalArgumentException {
         super(context, voiceNode);
+        if (!(voiceNode instanceof Subdialog)) {
+            throw new IllegalArgumentException("Node must be a <subdialog>");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AbstractFormItem newInstance(
+            final VoiceXmlInterpreterContext ctx,
+            final VoiceXmlNode voiceNode) {
+        return new BlockFormItem(ctx, voiceNode);
     }
 
     /**
@@ -68,15 +90,9 @@ public final class SubdialogFormItem
      */
     private Subdialog getSubdialog() {
         final VoiceXmlNode node = getNode();
-
         if (node == null) {
             return null;
         }
-
-        if (!(node instanceof Subdialog)) {
-            return null;
-        }
-
         return (Subdialog) node;
     }
 

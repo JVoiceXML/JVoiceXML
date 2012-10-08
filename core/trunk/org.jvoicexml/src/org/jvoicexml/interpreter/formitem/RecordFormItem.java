@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group
+ * Copyright (C) 2005-2012 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -44,16 +44,38 @@ import org.jvoicexml.xml.vxml.Record;
 public final class RecordFormItem
         extends AbstractGrammarContainer {
     /**
+     * Constructs a new object as a template.
+     */
+    public RecordFormItem() {
+    }
+
+    /**
      * Create a new record input item.
      *
      * @param context
      *        The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
      *        The corresponding xml node in the VoiceXML document.
+     * @throws IllegalArgumentException
+     *         if the given node is not a {@link Record}
      */
     public RecordFormItem(final VoiceXmlInterpreterContext context,
-                          final VoiceXmlNode voiceNode) {
+                         final VoiceXmlNode voiceNode)
+                                 throws IllegalArgumentException {
         super(context, voiceNode);
+        if (!(voiceNode instanceof Record)) {
+            throw new IllegalArgumentException("Node must be a <record>");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AbstractFormItem newInstance(
+            final VoiceXmlInterpreterContext ctx,
+            final VoiceXmlNode voiceNode) {
+        return new RecordFormItem(ctx, voiceNode);
     }
 
     /**
@@ -63,15 +85,9 @@ public final class RecordFormItem
      */
     private Record getRecord() {
         final VoiceXmlNode node = getNode();
-
         if (node == null) {
             return null;
         }
-
-        if (!(node instanceof Record)) {
-            return null;
-        }
-
         return (Record) node;
     }
 

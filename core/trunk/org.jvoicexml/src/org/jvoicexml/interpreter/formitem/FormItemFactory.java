@@ -27,6 +27,8 @@
 
 package org.jvoicexml.interpreter.formitem;
 
+import java.util.Map;
+
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Block;
@@ -44,6 +46,22 @@ import org.jvoicexml.xml.vxml.Transfer;
  * @version $Revision$
  */
 public final class FormItemFactory {
+    /** Known form items. */
+    private static final Map<Class<?>, AbstractFormItem> FORM_ITEMS;
+
+    static {
+        FORM_ITEMS = new java.util.HashMap<Class<?>, AbstractFormItem>();
+        FORM_ITEMS.put(Block.class, new BlockFormItem());
+        
+        FORM_ITEMS.put(Block.class, new BlockFormItem());
+        FORM_ITEMS.put(Initial.class, new InitialFormItem());
+        FORM_ITEMS.put(Field.class, new FieldFormItem());
+        FORM_ITEMS.put(ObjectTag.class, new ObjectFormItem());
+        FORM_ITEMS.put(Record.class, new RecordFormItem());
+        FORM_ITEMS.put(Subdialog.class, new SubdialogFormItem());
+        FORM_ITEMS.put(Transfer.class, new TransferFormItem());
+    }
+
     /**
      * Do not create from outside.
      */
@@ -64,27 +82,10 @@ public final class FormItemFactory {
     public static AbstractFormItem getFormItem(
             final VoiceXmlInterpreterContext context, final VoiceXmlNode node) {
         final Class<?> clazz = node.getClass();
-        final AbstractFormItem item;
-
-        /** @todo Optimize this if-else-stuff */
-        if (clazz == Block.class) {
-            item = new BlockFormItem(context, node);
-        } else if (clazz == Initial.class) {
-            item = new InitialFormItem(context, node);
-        } else if (clazz == Field.class) {
-            item = new FieldFormItem(context, node);
-        } else if (clazz == Record.class) {
-            item = new RecordFormItem(context, node);
-        } else if (clazz == Transfer.class) {
-            item = new TransferFormItem(context, node);
-        } else if (clazz == ObjectTag.class) {
-            item = new ObjectFormItem(context, node);
-        } else if (clazz == Subdialog.class) {
-            item = new SubdialogFormItem(context, node);
-        } else {
-            item = null;
+        final AbstractFormItem template = FORM_ITEMS.get(clazz);
+        if (template == null) {
+            return null;
         }
-
-        return item;
+        return template.newInstance(context, node);
     }
 }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,6 +37,7 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
+import org.jvoicexml.xml.vxml.Block;
 
 /**
  * A sequence of procedural statements used for prompting and computation, but
@@ -53,16 +54,38 @@ public final class BlockFormItem
         Logger.getLogger(BlockFormItem.class);
 
     /**
+     * Constructs a new object as a template.
+     */
+    public BlockFormItem() {
+    }
+
+    /**
      * Create a new block form item.
      *
      * @param context
      *        The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
      *        The corresponding XML node in the VoiceXML document.
+     * @throws IllegalArgumentException
+     *         if the given node is not a {@link Block}
      */
     public BlockFormItem(final VoiceXmlInterpreterContext context,
-                         final VoiceXmlNode voiceNode) {
+                         final VoiceXmlNode voiceNode)
+                                 throws IllegalArgumentException {
         super(context, voiceNode);
+        if (!(voiceNode instanceof Block)) {
+            throw new IllegalArgumentException("Node must be a <block>");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AbstractFormItem newInstance(
+            final VoiceXmlInterpreterContext ctx,
+            final VoiceXmlNode voiceNode) {
+        return new BlockFormItem(ctx, voiceNode);
     }
 
     /**

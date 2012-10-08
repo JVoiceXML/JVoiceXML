@@ -32,13 +32,14 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 
 /**
- * A context factory for the {@link ScriptingEngine}.
+ * A context factory for the {@link ScriptingEngine}. The VoiceXML specification
+ * requires the activation of certain features, like strict variable
+ * declarations. This implementation takes care that they are set properly.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.5
  */
 class JVoiceXmlContextFactory extends ContextFactory {
-
     /**
      * {@inheritDoc}
      */
