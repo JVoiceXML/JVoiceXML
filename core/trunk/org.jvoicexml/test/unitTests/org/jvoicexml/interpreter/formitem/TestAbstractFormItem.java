@@ -124,6 +124,17 @@ public class TestAbstractFormItem {
      *            test failed
      */
     @Test
+    public void testGetConditionTrueNumbers() throws JVoiceXMLEvent {
+        field.setCond("1 == 1");
+        Assert.assertTrue(item.getCondition());
+    }
+    
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#getCondition()}.
+     * @exception JVoiceXMLEvent
+     *            test failed
+     */
+    @Test
     public void testGetConditionFalseStrings() throws JVoiceXMLEvent {
         field.setCond(item.getName() + " == 'hallo'");
         Assert.assertFalse(item.getCondition());
@@ -158,11 +169,34 @@ public class TestAbstractFormItem {
      *            test failed
      */
     @Test
+    public void testIsSelectableVariableSet() throws JVoiceXMLEvent {
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.setVariable(field.getName(), "hallo");
+        Assert.assertFalse(item.isSelectable());
+    }
+    
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}.
+     * @exception JVoiceXMLEvent
+     *            test failed
+     */
+    @Test
     public void testIsSelectableFalseNumbers() throws JVoiceXMLEvent {
         field.setCond("1 == 0");
         Assert.assertFalse(item.isSelectable());
     }
 
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}.
+     * @exception JVoiceXMLEvent
+     *            test failed
+     */
+    @Test
+    public void testIsSelectableTrueNumbers() throws JVoiceXMLEvent {
+        field.setCond("1 == 1");
+        Assert.assertTrue(item.isSelectable());
+    }
+    
     /**
      * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}.
      * @exception JVoiceXMLEvent

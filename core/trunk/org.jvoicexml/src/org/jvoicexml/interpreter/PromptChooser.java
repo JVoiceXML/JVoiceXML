@@ -160,8 +160,8 @@ final class PromptChooser {
      * Remove from this list all prompts whose cond evaluates to false after
      * conversion to boolean.
      *
-     * @param prompts Collection of prompts to be filered.
-     * @return List of filtered prompts.
+     * @param prompts Collection of prompts to be filtered.
+     * @return list of filtered prompts.
      *
      * @exception SemanticError
      *            Error evaluating the condition.
@@ -173,7 +173,6 @@ final class PromptChooser {
         final ScriptingEngine scripting = context.getScriptingEngine();
         for (Prompt prompt : prompts) {
             final String cond = prompt.getCond();
-
             final Object result = scripting.eval(cond + ";");
             if (Boolean.TRUE.equals(result)) {
                 filteredPrompts.add(prompt);
