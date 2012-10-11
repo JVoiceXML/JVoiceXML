@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,7 +31,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Prompt;
-import org.w3c.dom.NodeList;
 
 /**
  * When a prompt must be chosen, a set of prompts to be queued is chosen
@@ -43,8 +42,8 @@ import org.w3c.dom.NodeList;
  * enclosing element in document order.
  * </li>
  * <li>
- * Remove from this list all prompts whose cond evaluates to false after
- * conversion to boolean.
+ * Remove from this list all prompts whose <code>cond</code> evaluates to false
+ * after conversion to boolean.
  * </li>
  * <li>
  * Find the <em>correct count</em>: the highest count among the prompt elements
@@ -101,26 +100,22 @@ final class PromptChooser {
             LOGGER.debug("find all prompts of '" + countable.getName()
                          + "' with count " + count);
         }
-
         final Collection<Prompt> allPrompts = findAllPrompts();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("found " + allPrompts.size() + " prompt(s) in '"
                          + countable.getName() + "'");
         }
-
         final Collection<Prompt> condPrompts = filterCond(allPrompts);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("found " + condPrompts.size()
                          + " prompt(s) after cond evaluation in '"
                          + countable.getName() + "'");
         }
-
         final int highestCount = findHighestCount(condPrompts, count);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("highest count of " + countable.getName() + "' is "
                          + highestCount + " <= " + count);
         }
-
         final Collection<Prompt> correctCountPrompts =
                 filterCount(condPrompts, highestCount);
         if (LOGGER.isDebugEnabled()) {
@@ -139,21 +134,8 @@ final class PromptChooser {
      * @return List of prompts.
      */
     private Collection<Prompt> findAllPrompts() {
-        final Collection<Prompt> prompts = new java.util.ArrayList<Prompt>();
-
         final VoiceXmlNode node = countable.getNode();
-        final NodeList children = node.getChildNodes();
-
-        for (int i = 0; i < children.getLength(); i++) {
-            final VoiceXmlNode child = (VoiceXmlNode) children.item(i);
-
-            if (child instanceof Prompt) {
-                final Prompt prompt = (Prompt) child;
-                prompts.add(prompt);
-            }
-        }
-
-        return prompts;
+        return node.getChildNodes(Prompt.class);
     }
 
     /**
