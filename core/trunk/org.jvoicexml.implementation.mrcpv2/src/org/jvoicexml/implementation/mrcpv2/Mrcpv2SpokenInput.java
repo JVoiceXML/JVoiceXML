@@ -41,7 +41,7 @@ import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
-import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
+import org.jvoicexml.documentserver.ExternalGrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -204,7 +204,7 @@ public final class Mrcpv2SpokenInput
         }
         final String encoding = System.getProperty("file.encoding");
         final GrammarDocument document =
-            new JVoiceXmlGrammarDocument(null, str.toString().getBytes(),
+            new ExternalGrammarDocument(null, str.toString().getBytes(),
                     encoding, true);
         document.setMediaType(type);
         return new DocumentGrammarImplementation(document);
