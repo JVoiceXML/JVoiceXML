@@ -142,7 +142,6 @@ public final class TestFormInterpretationAlgorithm {
         final Vxml vxml = doc.getVxml();
         final Form form = vxml.appendChild(Form.class);
         final Field field = form.appendChild(Field.class);
-
         final Dialog executableForm = new ExecutablePlainForm();
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia =

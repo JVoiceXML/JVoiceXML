@@ -176,6 +176,36 @@ public final class TestFieldFormItem {
         result.setUtterance("yeah");
         final ScriptingEngine scripting = context.getScriptingEngine();
         scripting.eval("var out = new Object();");
+        scripting.eval("out.number = 3;");
+        scripting.eval("out.size = 'large';");
+        final ScriptableObject interpretation =
+                (ScriptableObject) scripting.getVariable("out");
+        result.setSemanticInterpretation(interpretation);
+        field.setName("size");
+        item.setFormItemVariable(result);
+        final String name = item.getName();
+        Assert.assertEquals("large", item.getFormItemVariable());
+        Assert.assertEquals("large", scripting.getVariable(name));
+
+        field.setSlot("pizza.topping");
+        item.setFormItemVariable(result);
+        Assert.assertNull(scripting.getVariable(name));
+    }
+
+    /**
+     * Test case for {@link FieldFormItem#getFormItemVariable()}.
+     * @exception JVoiceXMLEvent
+     *            test failed
+     * @since 0.7.6
+     */
+    @Test
+    public void setFormItemVariableRecognitionResultSemanticInterpretationCompoundObjectSlot()
+            throws JVoiceXMLEvent {
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        result.setAccepted(true);
+        result.setUtterance("yeah");
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.eval("var out = new Object();");
         scripting.eval("out.pizza = new Object();");
         scripting.eval("out.pizza.number = 3;");
         scripting.eval("out.pizza.size = 'large';");

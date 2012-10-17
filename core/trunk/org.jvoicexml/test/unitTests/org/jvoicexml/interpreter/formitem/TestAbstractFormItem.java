@@ -196,7 +196,7 @@ public class TestAbstractFormItem {
         field.setCond("1 == 1");
         Assert.assertTrue(item.isSelectable());
     }
-    
+
     /**
      * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}.
      * @exception JVoiceXMLEvent
