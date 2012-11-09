@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- @ Copyright 1998-2003 W3C (MIT, ERCIM, Keio), All Rights Reserved. See http://www.w3.org/Consortium/Legal/. @ -->
+<grammar version="1.0" root="digit" mode="dtmf" xmlns="http://www.w3.org/2001/06/grammar">
+  <rule id="digit" scope="public">
+    <one-of>
+      <item> 1 </item>
+    </one-of>
+  </rule>
+</grammar>

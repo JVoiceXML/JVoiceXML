@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+-->
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN"
+                  "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+
+<grammar xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar 
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         xml:lang="en-US" version="1.0" mode="voice"
+         root="main">
+
+<!-- meta information -->
+<meta name="description" content="implementation report test -- activate root, single public rule, set of public rules or roots of one or many grammars directly or indirectly referenced (same language and locale)"/>
+<meta name="in.1" content="please call Johnny"/>
+<meta name="out.1" content='$main[$&lt;common.grxml#polite_start&gt;[$&lt;polite.grxml#start&gt;["please"]],"call",$&lt;more_english_names.grxml&gt;["Johnny"]]'/>
+<meta name="info.1" content="In order to test activation of a set of rules
+the root rule and the rule 'parallel' must be activated in parallel."/>
+
+<meta name="in.2" content="help"/>
+<meta name="out.2" content='$parallel[$&lt;token-basic.grxml&gt;["help"]]'/>
+<meta name="info.2" content="In order to test activation of a set of rules
+the root rule and the rule 'parallel' must be activated in parallel."/>
+
+<!-- rule declarations -->
+<rule id="main" scope="public">
+  <!-- activate indirectly referenced en-US public rule -->
+  <item repeat="0-1">
+    <ruleref uri="common.grxml#polite_start"/>
+    call
+  </item>
+  <one-of>
+    <!-- activate en-US single public rule -->
+    <item><ruleref uri="english_names.grxml#single_public"/></item>
+    <!-- activate (non-public) en-US root rule -->
+    <item><ruleref uri="more_english_names.grxml"/></item>
+  </one-of>
+  <!-- activate directly referenced en-US public rule -->
+  <item repeat="0-1"><ruleref uri="polite.grxml#end"/></item>
+</rule>
+
+<rule id="parallel" scope="public">
+  <ruleref uri="token-basic.grxml"/>
+</rule>
+
+</grammar>

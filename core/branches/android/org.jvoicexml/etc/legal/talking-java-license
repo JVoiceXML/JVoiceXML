@@ -1,0 +1,23 @@
+License terms for Version 1.x of Cloudgarden's TalkingJava SDK
+
+ * The TalkingJava SDK and runtime libraries are FREE FOR PERSONAL USE ONLY.
+ * Any COMMERCIAL CORPORATE or INSTITUTIONAL use of the SDK or runtimes requires
+   purchase of one or more professional licenses. Please see the website
+   www.cloudgarden.com for current details.
+ * None of the code used in the SDK or the implementation may be disassembled or
+   reverse-engineered.
+ * Neither the SDK nor the runtimes may be resold - the implementation may only
+   be resold as part of a speech-enabled application if significant
+   functionality is added, and sufficient Professional licenses are purchased
+   from Cloudgarden.
+ * Any distribution of the SDK or runtimes must include a copy of this license
+   agreement, and the end-user should be made aware of it.
+ * Purchase of a Professional License for Version 1.x of this SDK allows the
+   license holder to download any future upgrades to the Version 1.x SDK
+   (where 'x' stands for any minor version number)
+ * THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
+   ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, AND IN NO EVENT SHALL
+   HE BE LIABLE FOR ANY DAMAGES WHATSOEVER ARISING OUT OF OR IN CONNECTION WITH
+   THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ * The SDK and implementation is the property of Cloudgarden,
+   Copyright (c) 2001-2009, all rights reserved.
