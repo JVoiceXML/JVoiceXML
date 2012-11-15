@@ -1,4 +1,4 @@
-package voicexmlunit.framework;
+package org.jvoicexml.voicexmlunit;
 
 import org.jvoicexml.client.text.TextServer;
 

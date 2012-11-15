@@ -1,4 +1,4 @@
-package voicexmlunit.framework;
+package org.jvoicexml.voicexmlunit;
 
 import java.io.IOException;
 
@@ -12,7 +12,7 @@ public class Input extends Statement {
 	}
 	
 	public void receive(String actual) {
-		Assert.fail(String("Tried to receive Input: ")+actual);
+		Assert.fail("Tried to receive Input: "+actual);
 	}
 	
 	public void send(TextServer server) {

@@ -1,23 +1,24 @@
-package voicexmlunit.framework;
+package org.jvoicexml.voicexmlunit;
+
+import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.Session;
+import org.jvoicexml.client.text.TextListener;
+import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
-import java.util.Properties;
 
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
 
+import java.util.Properties;
+
 import javax.naming.Context;
 import javax.naming.spi.NamingManager;
-
-import org.jvoicexml.*;
-import org.jvoicexml.client.text.*;
-import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.xml.ssml.SsmlDocument;
 
 import junit.framework.Assert;
 

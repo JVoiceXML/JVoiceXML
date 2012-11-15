@@ -1,4 +1,4 @@
-package voicexmlunit.framework;
+package org.jvoicexml.voicexmlunit;
 
 import junit.framework.Assert;
 
@@ -16,6 +16,6 @@ public class Output extends Statement {
 	}
 	
 	public void send(TextServer server) {
-		Assert.fail("Tried to send Output: ")+toString());
+		Assert.fail("Tried to send Output: "+toString());
 	}
 }

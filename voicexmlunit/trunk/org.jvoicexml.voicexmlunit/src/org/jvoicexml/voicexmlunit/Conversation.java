@@ -1,6 +1,5 @@
-package voicexmlunit.framework;
+package org.jvoicexml.voicexmlunit;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
