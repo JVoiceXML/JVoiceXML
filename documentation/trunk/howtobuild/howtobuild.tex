@@ -17,7 +17,7 @@ linkcolor=black, colorlinks=black, colorlinks=true,
 \include{version}
 
 \title{How to build JVoiceXML \jvxmlversion}
-\version{1.9.6}
+\version{1.9.7}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -121,6 +121,7 @@ sub projects:
 \item[documentation] \LaTeX sources for the documentation
 \item[eclipse] Eclipse server plug-in
 \item[systemtest] Source for the VoiceXML compatibility test
+\item[voicexmlunit] Source for an approach to ad unit testing capabilities to VoiceXML
 \end{description}
 
 Each subproject has its own trunk, tags, and branches folder.
@@ -130,9 +131,8 @@ using the command line. Feel free to grab the required parameters from
 this description and feed your favorite tool with them.
 
 \begin{lstlisting}
-svn co \
-https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/<subproject>/trunk \
-jvoicexml
+svn checkout --username=<your name> \
+  https://svn.code.sf.net/p/jvoicexml/code/<subproject>/trunk
 \end{lstlisting}
 
 This will check out all the projects of the \texttt{trunk} of
@@ -141,10 +141,20 @@ the subproject \texttt{<subproject>} into the folder \texttt{jvoicexml}.
 Since all the third party libraries are checked in this may
 take a while.
 
+An alternative way is given by using svn+ssh. In this case code is checked out
+by
+\begin{lstlisting}
+svn checkout --username=<your name>
+  svn+ssh://<your name>@svn.code.sf.net/p/jvoicexml/code/<subproject>/trunk
+\end{lstlisting}
+
+For the eclipse users on Windows the following article might be of some interest
+\url{http://www.woodwardweb.com/java/howto_configure.html}. 
+
 Although the sub-projects are organized in folders it is expected to
 checkout \textbf{all projects into the same folder}
 regardless of the subproject folder.
-This works fine, if you are using an IDE like eclipse, this is really
+This works fine, if you are using an IDE like eclipse. In this case it is really
 straightforward, but may cause some problems if you are working from a command
 line. In the latter case remove the \texttt{.svn} folder if you checkout
 another subproject. Otherwise SVN will complain that there is already another
@@ -158,6 +168,10 @@ figure~\ref{fig:eclipse-projects}.
 \end{figure}
 
 \textbf{Note:} UNIX file and directory names are case sensitive.
+
+All projects follow the convention that they have the same name as the jar
+that will be produced when bundling them. For instance, the jar \lstinline{org.jvoicexml.xml.jar}
+is built by the project \lstinline{org.jvoicexm.xml}.
 
 An alternative way to download the contents of the repository is to use the 
 nightly build system for that purpose. Download all jars from
@@ -188,7 +202,7 @@ comparable repository or from their home pages. The file
 \subsection{IDE}
 \label{sec:ide}
 
-JVoiceXML is being developed using eclipse 3.5, but you can use the IDE of your
+JVoiceXML is being developed using eclipse 4.2, but you can use the IDE of your
 choice to edit the sources and compile the binaries. You can even use a simple
 text editor to perform this job. Nevertheless there are some restriction that
 you cannot work around.
