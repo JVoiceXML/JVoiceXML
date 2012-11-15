@@ -1,14 +1,17 @@
-package voicexmlunit.demo.hello;
+package org.voicexmlunit.demo.hello;
 
 
 import java.io.File;
 
+import junit.framework.TestCase;
+
 import org.junit.*;
+
+import org.jvoicexml.voicexmlunit.Supervisor;
+import org.jvoicexml.voicexmlunit.Conversation;
+
 import org.jvoicexml.client.text.TextServer;
 
-import voicexmlunit.framework.*;
-
-import junit.framework.TestCase;
 
 public class HelloTest extends TestCase {
 
