@@ -41,19 +41,21 @@ The jars are expected to be in the same folder as this build file.
         </fileset>
       </classpath>
     </taskdef>
-    <svn javahl="true">
+    <svnSetting client="javahl" id="svn.settings" failonerror="false"
+  	 	username="${svn.username}" password="${svn.password}"/>
+    <svn refid="svn.settings">
       <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/" />
     </svn>
     <delete dir=".svn" />
-    <svn javahl="true">
+    <svn refid="svn.settings">
       <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/demo/trunk" />
     </svn>
     <delete dir=".svn" />
-    <svn javahl="true">
+    <svn refid="svn.settings">
       <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/systemtest/trunk" />
     </svn>
     <delete dir=".svn" />
-    <svn javahl="true">
+    <svn refid="svn.settings">
       <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/documentation/trunk" />
     </svn>
     <delete dir=".svn" />
@@ -73,7 +75,9 @@ org.jvoicexml/personal-props
         </fileset>
       </classpath>
     </taskdef>
-    <svn javahl="false">
+    <svnSetting client="javahl" id="svn.settings" failonerror="false"
+  	 	username="${svn.username}" password="${svn.password}"/>
+    <svn refid="svn.settings">
       <wcVersion path="."/>
     </svn>
   </target>
@@ -87,7 +91,9 @@ org.jvoicexml/personal-props
         </fileset>
       </classpath>
     </taskdef>
-    <svn javahl="true">
+    <svnSetting client="javahl" id="svn.settings" failonerror="false"
+  	 	username="${svn.username}" password="${svn.password}"/>
+    <svn refid="svn.settings">
       <update dir="." />
       <update dir="../org.jvoicexml.callmanager.mmi" />
       <update dir="../org.jvoicexml.callmanager.sip" />

@@ -430,7 +430,9 @@ sphinx.lib.dir=../../lib
             value="${svn.base}/core/trunk"/>
       <property name="tag.core.dir"
             value="${svn.base}/core/tags/${jvxml.version}"/>
-      <svn javahl="true" username="${svn.username}" password="${svn.password}">
+      <svnSetting client="javahl" id="svn.settings" failonerror="false"
+    	 	username="${svn.username}" password="${svn.password}"/>
+      <svn refid="svn.settings">
         <mkdir url="${tag.core.dir}"
             message="Tagging release ${jvxml.version}"/>
         <copy message="Tagging release ${jvxml.version}"
@@ -492,7 +494,7 @@ sphinx.lib.dir=../../lib
             value="${svn.base}/demo/trunk"/>
       <property name="tag.demo.dir"
             value="${svn.base}/demo/tags/${jvxml.version}"/>
-      <svn javahl="true" username="${svn.username}" password="${svn.password}">
+      <svn refid="svn.settings">
         <mkdir url="${tag.demo.dir}"
             message="Tagging release ${jvxml.version}"/>
         <copy message="Tagging release ${jvxml.version}"
@@ -536,7 +538,7 @@ sphinx.lib.dir=../../lib
             value="${svn.base}/systemtest/trunk"/>
       <property name="tag.systemtest.dir"
             value="${svn.base}/systemtest/tags/${jvxml.version}"/>
-      <svn javahl="true" username="${svn.username}" password="${svn.password}">
+      <svn refid="svn.settings">
         <mkdir url="${tag.systemtest.dir}"
             message="Tagging release ${jvxml.version}"/>
         <copy message="Tagging release ${jvxml.version}"
@@ -553,7 +555,7 @@ sphinx.lib.dir=../../lib
           value="${svn.base}/documentation/trunk"/>
     <property name="tag.documentation.dir"
           value="${svn.base}/documentation/tags/${jvxml.version}"/>
-    <svn javahl="true" username="${svn.username}" password="${svn.password}">
+    <svn refid="svn.settings">
       <mkdir url="${tag.documentation.dir}"
           message="Tagging release ${jvxml.version}"/>
       <copy message="Tagging release ${jvxml.version}"
