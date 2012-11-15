@@ -55,7 +55,9 @@
         <module name="NeedBraces"/>
         <module name="RightCurly"/>
         <module name="AvoidInlineConditionals"/>
-        <module name="DoubleCheckedLocking"/>
+        <!-- DoubleCheckedLocking check has been removed from Checkstyle 5.6 
+           - see http://sourceforge.net/p/checkstyle/bugs/682/ --> 
+        <!--module name="DoubleCheckedLocking"/-->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
         <module name="HiddenField"/>
