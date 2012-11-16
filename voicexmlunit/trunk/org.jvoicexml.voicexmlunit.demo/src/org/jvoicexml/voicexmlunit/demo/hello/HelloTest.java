@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.voicexmlunit.Conversation;
 import org.jvoicexml.voicexmlunit.Supervisor;
 
 
