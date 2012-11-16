@@ -5,12 +5,11 @@ import java.io.File;
 
 import junit.framework.TestCase;
 
-import org.junit.*;
-
-import org.jvoicexml.voicexmlunit.Supervisor;
-import org.jvoicexml.voicexmlunit.Conversation;
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.voicexmlunit.Supervisor;
 
 
 public class HelloTest extends TestCase {
