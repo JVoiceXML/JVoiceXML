@@ -65,42 +65,41 @@ public final class Supervisor implements TextListener {
 		this.server = server;
 		server.addTextListener(this);
 		conversation = new Conversation();
-		server.start();
-		
-		/* wait for the server */
-		synchronized (conversation) {
-			try {
-				conversation.wait(SERVER_WAIT);
-			}
-			catch (InterruptedException e) {
-
-			}
-		}
-
+		//server.start();
 		return conversation;
 	}
+
 	
 	public void process(File file) {
 		Assert.assertNotNull("JVoiceXML",jvxml);
 		Assert.assertNotNull("Server",server);
-        try {
-			final URI dialog = file.toURI();
-			final Session session = jvxml.createSession(server.getConnectionInformation());
-			session.call(dialog);
-			session.waitSessionEnd();
-			session.hangup();
-		} catch (ErrorEvent | UnknownHostException e) {
-			e.printStackTrace();
-			Assert.fail("Session");
-		}		
+		/* wait for the server */
+		synchronized (conversation) {
+	        try {
+	        	conversation.wait(SERVER_WAIT);
+	    		Assert.assertTrue("Started",started);
+	    		doCall(file);
+			} catch (ErrorEvent | UnknownHostException | InterruptedException e) {
+				e.printStackTrace();
+				Assert.fail("Session");
+			}
+		}
+	}
+
+	/* helper method for process, does the real call via a temporary session */
+	private void doCall(File file) throws ErrorEvent, UnknownHostException {
+		final URI dialog = file.toURI();
+		final Session session = jvxml.createSession(server.getConnectionInformation());
+		session.call(dialog);
+		session.waitSessionEnd();
+		session.hangup();
 	}
 	
 	public void assertActivity() {
-		Assert.assertTrue("Started",started);
-		Assert.assertTrue("Connected",connected);
 		if (statement == null) {
 			statement = conversation.begin();
 		}
+		Assert.assertTrue("Connected",connected);
 	}
 
 	public void assertOutput(String message) {
