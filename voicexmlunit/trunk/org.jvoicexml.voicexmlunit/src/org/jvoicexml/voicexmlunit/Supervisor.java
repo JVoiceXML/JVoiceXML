@@ -73,6 +73,7 @@ public final class Supervisor implements TextListener {
 	
 	public void process(File file) {
 		Assert.assertNotNull("JVoiceXML",jvxml);
+		Assert.assertNotNull("Server",server);
         try {
 			final URI dialog = file.toURI();
 			final Session session = jvxml.createSession(server.getConnectionInformation());
