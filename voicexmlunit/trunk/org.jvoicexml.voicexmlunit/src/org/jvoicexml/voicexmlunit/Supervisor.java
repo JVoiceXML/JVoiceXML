@@ -31,6 +31,16 @@ import javax.naming.spi.NamingManager;
 import junit.framework.Assert;
 
 
+/**
+ * Supervisor can help you to write unit tests for VoiceXML documents.
+ * Use case scenario:
+ * 1. Lookup the JVoiceXML engine.
+ * 2. Initialize a new conversation with a TextServer instance.
+ * 3. Process a given VoiceXML file. 
+ * 
+ * @author thesis
+ *
+ */
 public final class Supervisor implements TextListener {
 	JVoiceXml jvxml;
 	TextServer server;
@@ -41,6 +51,9 @@ public final class Supervisor implements TextListener {
 	
 	public static long SERVER_WAIT = 5000;
 
+	/**
+	 * Constructor
+	 */
 	public Supervisor() {
 		jvxml = null;
 		server = null;
@@ -50,6 +63,10 @@ public final class Supervisor implements TextListener {
 		statement = null;
 	}
 	
+	/**
+	 * Lookup the JVoiceXML engine
+	 * @param configuration Configuration file with settings for JNDI
+	 */
 	public void lookupVoice(File configuration) {
 		try {
 			final Properties environment = new Properties();
@@ -61,6 +78,11 @@ public final class Supervisor implements TextListener {
 		}
 	}
 	
+	/**
+	 * Initialize a new server conversation
+	 * @param server Server to use
+	 * @return Conversation to be used and initialized by the caller
+	 */
 	public Conversation init(TextServer server) {
 		this.server = server;
 		server.addTextListener(this);
@@ -70,6 +92,10 @@ public final class Supervisor implements TextListener {
 	}
 
 	
+	/**
+	 * Process a VoiceXML file and generate test log
+	 * @param file File to use
+	 */
 	public void process(File file) {
 		Assert.assertNotNull("JVoiceXML",jvxml);
 		Assert.assertNotNull("Server",server);
@@ -86,7 +112,13 @@ public final class Supervisor implements TextListener {
 		}
 	}
 
-	/* helper method for process, does the real call via a temporary session */
+	/**
+	 * Helper method for process, does the real call via a temporary session
+	 * Don't call this directly! Better use the process() methods instead.
+	 * @param file
+	 * @throws ErrorEvent
+	 * @throws UnknownHostException
+	 */
 	private void doCall(File file) throws ErrorEvent, UnknownHostException {
 		final URI dialog = file.toURI();
 		final Session session = jvxml.createSession(server.getConnectionInformation());
@@ -95,6 +127,9 @@ public final class Supervisor implements TextListener {
 		session.hangup();
 	}
 	
+	/**
+	 * Assert that a working conversation and the server connection is established
+	 */
 	public void assertActivity() {
 		if (statement == null) {
 			statement = conversation.begin();
@@ -102,18 +137,28 @@ public final class Supervisor implements TextListener {
 		Assert.assertTrue("Connected",connected);
 	}
 
+	/**
+	 * Assert that the current statement is an Output instance with the given message
+	 * @param message Message to expect in the call
+	 */
 	public void assertOutput(String message) {
 		Assert.assertTrue("Output: "+message,statement instanceof Output);
 		statement.receive(message);
 		conversation.next();
 	}
 	
+	/**
+	 * Assert that the current statement is an Input instance and the actual message can be send.´
+	 */
 	public void assertInput() {
 		Assert.assertTrue("Input",statement instanceof Input);
 		statement.send(server);
 		conversation.next();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.jvoicexml.client.text.TextListener#started()
+	 */
 	public void started() {
 		started = true;
 		
@@ -122,28 +167,46 @@ public final class Supervisor implements TextListener {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.jvoicexml.client.text.TextListener#connected(java.net.InetSocketAddress)
+	 */
 	public void connected(final InetSocketAddress remote) {
 		connected = true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.jvoicexml.client.text.TextListener#outputText(java.lang.String)
+	 */
 	public void outputText(final String text) {
 		assertActivity();
 		assertOutput(text);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.jvoicexml.client.text.TextListener#outputSsml(org.jvoicexml.xml.ssml.SsmlDocument)
+	 */
 	public void outputSsml(final SsmlDocument document) {
 		outputText(document.toString());
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.jvoicexml.client.text.TextListener#expectingInput()
+	 */
 	public void expectingInput() {
 		assertActivity();
 		assertInput();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.jvoicexml.client.text.TextListener#inputClosed()
+	 */
 	public void inputClosed() {
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.jvoicexml.client.text.TextListener#disconnected()
+	 */
 	public void disconnected() {
 		started = false;
 		connected = false;
