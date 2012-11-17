@@ -1,7 +1,12 @@
 package org.jvoicexml.voicexmlunit;
 
+
 import java.util.LinkedList;
 import java.util.ListIterator;
+
+import org.jvoicexml.voicexmlunit.io.Input;
+import org.jvoicexml.voicexmlunit.io.Output;
+import org.jvoicexml.voicexmlunit.io.Statement;
 
 public final class Conversation {
 	private LinkedList<Statement> history;

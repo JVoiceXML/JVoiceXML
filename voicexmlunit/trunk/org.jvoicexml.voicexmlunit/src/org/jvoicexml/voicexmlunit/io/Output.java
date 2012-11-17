@@ -1,4 +1,4 @@
-package org.jvoicexml.voicexmlunit;
+package org.jvoicexml.voicexmlunit.io;
 
 import junit.framework.Assert;
 
