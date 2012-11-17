@@ -34,20 +34,20 @@ import junit.framework.Assert;
 public final class Supervisor implements TextListener {
 	JVoiceXml jvxml;
 	TextServer server;
-	Conversation log;
+	Conversation conversation;
 	boolean connected;
 	boolean started;
-	Statement focus;
+	Statement statement;
 	
 	public static long SERVER_WAIT = 5000;
 
 	public Supervisor() {
 		jvxml = null;
 		server = null;
-		log = null;
+		conversation = null;
 		connected = false;
 		started = false;
-		focus = null;
+		statement = null;
 	}
 	
 	public void lookupVoice(File configuration) {
@@ -64,20 +64,20 @@ public final class Supervisor implements TextListener {
 	public Conversation init(TextServer server) {
 		this.server = server;
 		server.addTextListener(this);
-		log = new Conversation();
+		conversation = new Conversation();
 		server.start();
 		
 		/* wait for the server */
-		synchronized (log) {
+		synchronized (conversation) {
 			try {
-				log.wait(SERVER_WAIT);
+				conversation.wait(SERVER_WAIT);
 			}
 			catch (InterruptedException e) {
 
 			}
 		}
 
-		return log;
+		return conversation;
 	}
 	
 	public void process(File file) {
@@ -98,28 +98,28 @@ public final class Supervisor implements TextListener {
 	public void assertActivity() {
 		Assert.assertTrue("Started",started);
 		Assert.assertTrue("Connected",connected);
-		if (focus == null) {
-			focus = log.begin();
+		if (statement == null) {
+			statement = conversation.begin();
 		}
 	}
 
 	public void assertOutput(String message) {
-		Assert.assertTrue("Output: "+message,focus instanceof Output);
-		focus.receive(message);
-		log.next();
+		Assert.assertTrue("Output: "+message,statement instanceof Output);
+		statement.receive(message);
+		conversation.next();
 	}
 	
 	public void assertInput() {
-		Assert.assertTrue("Input",focus instanceof Input);
-		focus.send(server);
-		log.next();
+		Assert.assertTrue("Input",statement instanceof Input);
+		statement.send(server);
+		conversation.next();
 	}
 	
 	public void started() {
 		started = true;
 		
-		synchronized (log) {
-			log.notifyAll();
+		synchronized (conversation) {
+			conversation.notifyAll();
 		}
 	}
 	
@@ -148,6 +148,6 @@ public final class Supervisor implements TextListener {
 	public void disconnected() {
 		started = false;
 		connected = false;
-		Assert.assertNull("Disconnected", focus);
+		Assert.assertNull("Disconnected", statement);
 	}
 }
