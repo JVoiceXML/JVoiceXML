@@ -42,7 +42,7 @@ public class HelloTest extends TestCase {
 		conversation.addOutput("Hello World!");
 		conversation.addOutput("Goodbye!");
 
-		supervisor.process(new File("helloworld.vxml"));
+		supervisor.process(new File("rc/helloworld.vxml"));
 	}
 
 }
