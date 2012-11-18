@@ -3,6 +3,7 @@ package org.jvoicexml.voicexmlunit.demo.hello;
 
 import java.io.File;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.junit.After;
@@ -40,9 +41,10 @@ public class HelloTest extends TestCase {
 
 		server.start();
 		conversation.addOutput("Hello World!");
-		conversation.addOutput("Goodbye!");
+		//conversation.addOutput("Goodbye!");
 
-		supervisor.process(new File("rc/helloworld.vxml"));
+		supervisor.assertStatements(1);
+		supervisor.process("rc/helloworld.vxml");
 	}
 
 }
