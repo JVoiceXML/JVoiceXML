@@ -56,11 +56,11 @@ public final class Supervisor implements TextListener {
 	 * @return Conversation to be used and initialized by the caller
 	 */
 	public Conversation init(TextServer server, JVoiceXml jvxml) {
-		this.call = new Call(server,jvxml);
 		if (server != null) {
 			server.addTextListener(this);
 			//server.start();
 		}
+		this.call = new Call(server,jvxml);
 		conversation = new Conversation();
 		return conversation;
 	}
@@ -70,13 +70,11 @@ public final class Supervisor implements TextListener {
 	 * @param file File to use
 	 */
 	public void process(File file) {
-		Assert.assertTrue("Started",started);
 		/* wait for the server */
 		synchronized (conversation) {
 	        try {
 				/* wait for the server to be ready */
 				conversation.wait(SERVER_WAIT);
-				
 				call.dial(file.toURI());
 				//new Thread(call).start();
 				call.run();
