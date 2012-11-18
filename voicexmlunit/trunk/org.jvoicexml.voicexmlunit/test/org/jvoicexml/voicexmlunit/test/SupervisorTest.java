@@ -6,8 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.jvoicexml.client.text.TextServer;
-
 import org.jvoicexml.voicexmlunit.Conversation;
 import org.jvoicexml.voicexmlunit.Supervisor;
 
@@ -27,7 +25,7 @@ public class SupervisorTest {
 
 	@Test
 	public void testStatements() {
-		Conversation conversation = supervisor.init(null);
+		Conversation conversation = supervisor.init(null,null);
 
 		supervisor.assertStatements(0);
 		
@@ -39,7 +37,7 @@ public class SupervisorTest {
 	
 	@Test
 	public void testActivity() {
-		Conversation conversation = supervisor.init(null);
+		Conversation conversation = supervisor.init(null,null);
 		
 		conversation.addOutput("bla"); // at least, one element required
 		
@@ -50,7 +48,7 @@ public class SupervisorTest {
 
 	@Test
 	public void testOuput(){
-		Conversation conversation = supervisor.init(null);
+		Conversation conversation = supervisor.init(null,null);
 		
 		final String message = "bla";
 		conversation.addOutput(message);
@@ -65,7 +63,7 @@ public class SupervisorTest {
 	
 	@Test
 	public void testInput(){
-		Conversation conversation = supervisor.init(null);
+		Conversation conversation = supervisor.init(null,null);
 		
 		final String message = "blub";
 		conversation.addOutput(message); // must have an Output before

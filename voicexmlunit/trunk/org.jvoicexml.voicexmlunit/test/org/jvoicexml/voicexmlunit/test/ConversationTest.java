@@ -61,7 +61,7 @@ public class ConversationTest {
 	private Conversation createConversationForSimpleTest() {
 		//final TextServer server = new TextServer(4711);
 		final TextServer server = null; // we don't need any server here
-		Conversation conversation = supervisor.init(server);
+		Conversation conversation = supervisor.init(server,null);
 		supervisor.assertStatements(0);
 		return conversation;
 	}

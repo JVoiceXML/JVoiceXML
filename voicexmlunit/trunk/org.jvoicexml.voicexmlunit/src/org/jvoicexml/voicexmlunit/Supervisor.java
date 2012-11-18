@@ -1,13 +1,16 @@
 package org.jvoicexml.voicexmlunit;
 
 
+import java.io.File;
+
+import java.net.InetSocketAddress;
+
+import junit.framework.Assert;
+
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.Session;
 
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
-
-import org.jvoicexml.event.ErrorEvent;
 
 import org.jvoicexml.voicexmlunit.io.Call;
 import org.jvoicexml.voicexmlunit.io.Input;
@@ -15,21 +18,6 @@ import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.io.Statement;
 
 import org.jvoicexml.xml.ssml.SsmlDocument;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.net.UnknownHostException;
-
-import java.util.Properties;
-
-import javax.naming.Context;
-import javax.naming.spi.NamingManager;
-
-import junit.framework.Assert;
 
 
 /**
@@ -43,8 +31,7 @@ import junit.framework.Assert;
  *
  */
 public final class Supervisor implements TextListener {
-	JVoiceXml jvxml;
-	TextServer server;
+	Call call;
 	Conversation conversation;
 	boolean connected;
 	boolean started;
@@ -56,8 +43,7 @@ public final class Supervisor implements TextListener {
 	 * Constructor
 	 */
 	public Supervisor() {
-		jvxml = null;
-		server = null;
+		call = null;
 		conversation = null;
 		connected = false;
 		started = false;
@@ -65,27 +51,12 @@ public final class Supervisor implements TextListener {
 	}
 	
 	/**
-	 * Lookup the JVoiceXML engine
-	 * @param configuration Configuration file with settings for JNDI
-	 */
-	public void lookupVoice(File configuration) {
-		try {
-			final Properties environment = new Properties();
-			environment.load(new FileReader(configuration));
-			final Context context = NamingManager.getInitialContext(environment);
-			jvxml = (JVoiceXml)context.lookup("JVoiceXml");
-		} catch (javax.naming.NamingException | IOException ne) {
-			ne.printStackTrace();
-		}
-	}
-	
-	/**
 	 * Initialize a new server conversation
 	 * @param server Server to use
 	 * @return Conversation to be used and initialized by the caller
 	 */
-	public Conversation init(TextServer server) {
-		this.server = server;
+	public Conversation init(TextServer server, JVoiceXml jvxml) {
+		this.call = new Call(server,jvxml);
 		if (server != null) {
 			server.addTextListener(this);
 			//server.start();
@@ -99,12 +70,16 @@ public final class Supervisor implements TextListener {
 	 * @param file File to use
 	 */
 	public void process(File file) {
-		Assert.assertNotNull("JVoiceXML",jvxml);
-		Assert.assertNotNull("Server",server);
+		Assert.assertTrue("Started",started);
 		/* wait for the server */
 		synchronized (conversation) {
 	        try {
-	    		doCall(file.toURI());
+				/* wait for the server to be ready */
+				conversation.wait(SERVER_WAIT);
+				
+				call.dial(file.toURI());
+				//new Thread(call).start();
+				call.run();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				Assert.fail("Call: "+file.getPath());
@@ -118,23 +93,6 @@ public final class Supervisor implements TextListener {
 	 */
 	public void process(String path) {
 		process(new File(path));
-	}
-
-	/**
-	 * Helper method for process, does the real call via a temporary session
-	 * Don't call this directly! Better use the process() methods instead.
-	 * @param dialog Resource to the dialog
-	 * @throws InterruptedException 
-	 */
-	private void doCall(URI dialog) throws InterruptedException {
-		/* wait for the server to be ready */
-    	synchronized (conversation) {
-			conversation.wait(SERVER_WAIT);
-    	}
-		Assert.assertTrue("Started",started);
-		Call call = new Call(jvxml,server,dialog);
-		//new Thread(call).start();
-		call.run();
 	}
 
 	/**
@@ -168,6 +126,7 @@ public final class Supervisor implements TextListener {
 	 */
 	public void assertInput() {
 		Assert.assertTrue("Input",statement instanceof Input);
+		final TextServer server = call.getServer(); 
 		if (server != null) {
 			statement.send(server);
 		}
