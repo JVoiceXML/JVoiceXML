@@ -50,7 +50,7 @@ public final class Supervisor implements TextListener {
 	boolean started;
 	Statement statement;
 	
-	public static long SERVER_WAIT = 5000;
+	public long SERVER_WAIT = 5000;
 
 	/**
 	 * Constructor
