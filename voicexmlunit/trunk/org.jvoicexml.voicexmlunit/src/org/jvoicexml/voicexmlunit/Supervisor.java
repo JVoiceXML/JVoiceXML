@@ -9,6 +9,7 @@ import org.jvoicexml.client.text.TextServer;
 
 import org.jvoicexml.event.ErrorEvent;
 
+import org.jvoicexml.voicexmlunit.io.Call;
 import org.jvoicexml.voicexmlunit.io.Input;
 import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.io.Statement;
@@ -90,7 +91,6 @@ public final class Supervisor implements TextListener {
 		//server.start();
 		return conversation;
 	}
-
 	
 	/**
 	 * Process a VoiceXML file and generate test log
@@ -102,29 +102,44 @@ public final class Supervisor implements TextListener {
 		/* wait for the server */
 		synchronized (conversation) {
 	        try {
-	        	conversation.wait(SERVER_WAIT);
-	    		Assert.assertTrue("Started",started);
-	    		doCall(file);
-			} catch (ErrorEvent | UnknownHostException | InterruptedException e) {
+	    		doCall(file.toURI());
+			} catch (InterruptedException e) {
 				e.printStackTrace();
-				Assert.fail("Session");
+				Assert.fail("Call: "+file.getPath());
 			}
 		}
+	}
+	
+	/**
+	 * Process a VoiceXML path and generate test log
+	 * @param path Path to the VoiceXML document
+	 */
+	public void process(String path) {
+		process(new File(path));
 	}
 
 	/**
 	 * Helper method for process, does the real call via a temporary session
 	 * Don't call this directly! Better use the process() methods instead.
-	 * @param file
-	 * @throws ErrorEvent
-	 * @throws UnknownHostException
+	 * @param dialog Resource to the dialog
+	 * @throws InterruptedException 
 	 */
-	private void doCall(File file) throws ErrorEvent, UnknownHostException {
-		final URI dialog = file.toURI();
-		final Session session = jvxml.createSession(server.getConnectionInformation());
-		session.call(dialog);
-		session.waitSessionEnd();
-		session.hangup();
+	private void doCall(URI dialog) throws InterruptedException {
+		/* wait for the server to be ready */
+    	synchronized (conversation) {
+			conversation.wait(SERVER_WAIT);
+    	}
+		Assert.assertTrue("Started",started);
+		Call call = new Call(jvxml,server,dialog);
+		//new Thread(call).start();
+		call.run();
+	}
+
+	/**
+	 * Assert the expected count of conversation statements
+	 */
+	public void assertStatements(int expected) {
+		Assert.assertEquals(expected,conversation.countStatements());
 	}
 	
 	/**
