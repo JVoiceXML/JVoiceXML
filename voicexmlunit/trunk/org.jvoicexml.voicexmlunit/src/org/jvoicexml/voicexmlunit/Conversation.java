@@ -66,12 +66,22 @@ public final class Conversation {
 	 * @return Next statement after the previously current one
 	 */
 	public Statement next() {
-		if (iterator.hasNext()) {
+		if (iterator == null) {
+			return begin();
+		}
+		else if (iterator.hasNext()) {
 			return iterator.next();
 		}
 		else {
 			iterator = null;
 			return null;
 		}
+	}
+
+	/**
+	 * @return Count of so far collected statements wit addOutput/addInput
+	 */
+	public int countStatements() {
+		return history.size();
 	}
 }
