@@ -55,8 +55,14 @@ public final class Conversation {
 	 * @return First statement of the conversation
 	 */
 	public Statement begin() {
-		iterator = history.listIterator(0);
-		return iterator.next();
+		if (history.isEmpty()) {
+			iterator = null; // invalidate any existing cursor
+			return null;
+		}
+		else {
+			iterator = history.listIterator(0);
+			return iterator.next();
+		}
 	}
 	
 	/**

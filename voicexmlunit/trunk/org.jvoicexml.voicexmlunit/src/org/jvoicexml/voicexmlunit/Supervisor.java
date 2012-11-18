@@ -139,18 +139,17 @@ public final class Supervisor implements TextListener {
 
 	/**
 	 * Assert the expected count of conversation statements
+	 * @param expectedCount How many statements should we have?
 	 */
-	public void assertStatements(int expected) {
-		Assert.assertEquals(expected,conversation.countStatements());
+	public void assertStatements(int expectedCount) {
+		Assert.assertEquals(expectedCount,conversation.countStatements());
 	}
 	
 	/**
 	 * Assert that a working conversation and the server connection is established
 	 */
 	public void assertActivity() {
-		if (statement == null) {
-			statement = conversation.begin();
-		}
+		Assert.assertNotNull("Statement",statement);
 		Assert.assertTrue("Connected",connected);
 	}
 
@@ -161,7 +160,7 @@ public final class Supervisor implements TextListener {
 	public void assertOutput(String message) {
 		Assert.assertTrue("Output: "+message,statement instanceof Output);
 		statement.receive(message);
-		conversation.next();
+		statement = conversation.next();
 	}
 	
 	/**
@@ -169,8 +168,10 @@ public final class Supervisor implements TextListener {
 	 */
 	public void assertInput() {
 		Assert.assertTrue("Input",statement instanceof Input);
-		statement.send(server);
-		conversation.next();
+		if (server != null) {
+			statement.send(server);
+		}
+		statement = conversation.next();
 	}
 	
 	/* (non-Javadoc)
@@ -189,6 +190,11 @@ public final class Supervisor implements TextListener {
 	 */
 	public void connected(final InetSocketAddress remote) {
 		connected = true;
+		started = true; // just in case...
+		
+		if (statement == null) {
+			statement = conversation.begin();
+		}
 	}
 	
 	/* (non-Javadoc)

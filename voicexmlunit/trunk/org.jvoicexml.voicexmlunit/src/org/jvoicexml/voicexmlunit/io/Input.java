@@ -20,6 +20,7 @@ public class Input extends Statement {
 		try {
 			server.sendInput(expect);
 		} catch (IOException e) {
+			e.printStackTrace();
 			Assert.fail("Tried to send Input: "+expect);
 		}
 	}
