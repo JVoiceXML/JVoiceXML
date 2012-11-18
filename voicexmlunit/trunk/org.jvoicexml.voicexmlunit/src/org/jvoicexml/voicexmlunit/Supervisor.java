@@ -86,9 +86,11 @@ public final class Supervisor implements TextListener {
 	 */
 	public Conversation init(TextServer server) {
 		this.server = server;
-		server.addTextListener(this);
+		if (server != null) {
+			server.addTextListener(this);
+			//server.start();
+		}
 		conversation = new Conversation();
-		//server.start();
 		return conversation;
 	}
 	
