@@ -49,5 +49,6 @@ public class HelloTest extends TestCase {
 
 		supervisor.SERVER_WAIT = 10000;
 		supervisor.process("rc/helloworld.vxml");
+		server.stopServer();
 	}
 }
