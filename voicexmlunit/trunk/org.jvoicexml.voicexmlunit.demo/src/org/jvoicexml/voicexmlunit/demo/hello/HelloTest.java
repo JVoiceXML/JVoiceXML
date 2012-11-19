@@ -26,9 +26,9 @@ public class HelloTest extends TestCase {
 	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
-		System.setProperty("java.security.policy","config/jvoicexml.policy");
+		System.setProperty("java.security.policy","etc/jvoicexml.policy");
 
-		final File configuration = new File("config/jndi.properties");
+		final File configuration = new File("etc/jndi.properties");
 		jvxml = Voice.lookup(configuration);
 		supervisor = new Supervisor();
 	}
