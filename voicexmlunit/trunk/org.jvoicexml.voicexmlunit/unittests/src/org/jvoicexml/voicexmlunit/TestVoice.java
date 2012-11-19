@@ -13,10 +13,10 @@ public class TestVoice {
 
 	@Test
 	public void test() {
-		System.setProperty("java.security.policy","test/etc/jvoicexml.policy");
+		System.setProperty("java.security.policy","unittests/etc/jvoicexml.policy");
 		
 		// NOTICE: JVoiceXml has to run for test success!!
-		final String path = "test/etc/jndi.properties";
+		final String path = "unittests/etc/jndi.properties";
 		final File configuration = new File(path);
 		Assert.assertNotNull(Voice.lookup(configuration));
 	}
