@@ -1,4 +1,4 @@
-package org.jvoicexml.voicexmlunit.test;
+package org.jvoicexml.voicexmlunit;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -10,7 +10,7 @@ import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.voicexmlunit.Conversation;
 import org.jvoicexml.voicexmlunit.Supervisor;
 
-public class ConversationTest {
+public class TestConversation {
 
 	private Supervisor supervisor;
 
