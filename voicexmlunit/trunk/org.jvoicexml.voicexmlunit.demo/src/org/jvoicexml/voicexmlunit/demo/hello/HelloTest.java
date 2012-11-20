@@ -11,10 +11,9 @@ import org.junit.Test;
 
 import org.jvoicexml.JVoiceXml;
 
-import org.jvoicexml.client.text.TextServer;
-
-import org.jvoicexml.voicexmlunit.Conversation;
+import org.jvoicexml.voicexmlunit.Runner;
 import org.jvoicexml.voicexmlunit.Supervisor;
+import org.jvoicexml.voicexmlunit.Conversation;
 import org.jvoicexml.voicexmlunit.Voice;
 
 
@@ -40,15 +39,13 @@ public class HelloTest extends TestCase {
 
 	@Test
 	public void test() {
-		final TextServer server = new TextServer(4242);
-		final Conversation conversation = supervisor.init(server,jvxml);
+		final Runner runner = new Runner("rc/helloworld.vxml",supervisor);
+		final Conversation conversation = supervisor.init(runner.getServer(),jvxml);
 
-		server.start();
 		conversation.addOutput("Hello World!");
 		conversation.addOutput("Goodbye!");
 
 		supervisor.SERVER_WAIT = 10000;
-		supervisor.process("rc/helloworld.vxml");
-		server.stopServer();
+		runner.run();
 	}
 }
