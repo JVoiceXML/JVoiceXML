@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="test/unitTests"/>
+	<classpathentry kind="src" path="unittests/src"/>
 	<classpathentry exported="true" kind="lib" path="3rdparty/jlibrtp/lib/jlibrtp.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/jlibrtp/jlibrtp-api.zip!/"/>

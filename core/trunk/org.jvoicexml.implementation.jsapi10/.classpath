@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="unittests"/>
+	<classpathentry kind="src" path="unittests/src"/>
 	<classpathentry kind="lib" path="3rdparty/jsapi1.0/lib/jsapi.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.implementation.jsapi10/3rdparty/jsapi1.0/jsapi1.0-api.zip!/"/>

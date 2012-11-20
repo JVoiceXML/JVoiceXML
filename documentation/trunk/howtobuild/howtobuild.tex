@@ -285,6 +285,42 @@ documentation you will need to install a \LaTeX system like MiKTeX
 This is not needed if you do not want to author the documentation or create a
 distribution.
 
+\section{Project conventions}
+
+JVoiceXML comprises several projects. Some of them are described in more
+detail in the following section. All these projects follow some conventions
+that should help to stay oriented.
+
+The base namespace for all projects is \lstinline{org.jvoicexml}. Dependent 
+projects may extend this namespace. For instance the namespace for the
+XML library is \lstinline{org.jvoicexml.xml}.
+
+The project names have the same name as the jar that they produce. This
+makes it easier to find the project related to a specific Java Archive.
+For instance the project name for the XML library is
+\lstinline{org.jvoicexml.xml}. It produces the jar
+\texttt{org.jvoicexml.xml.jar}.
+
+Within a project the following directory structure applies
+
+\begin{description}
+\item[3rdparty] third party libraries. This directory contains all libraries
+that are used by the specific project 
+\item[classes] compiled binaries
+\item[etc] resource files
+\item[src] Java source code
+\item[unittests] JUnit tests and other tests. The code is located within a
+dedicated \texttt{src} subfolder. The binaries are built into the subfolder
+\texttt{classes}.
+\item[3rdparty-libs.xml] ANT setting for the third party libraries
+\item[build.xml] main ANT build file for this project
+\item[test.xml] ANT build file to to run the unit tests for this project.
+\ref{sec:create-configuration})
+\end{description}
+
+Demo projects may have an additional folder \texttt{config} to hold
+configurations settings. 
+
 \section{JVoiceXML Core}
 
 The core of JVoiceXML comprises the following sub-projects:
@@ -343,7 +379,7 @@ for the ant build files. The contents of this folder is never committed to the
 SVN repository except the \texttt{README.TXT}.
 \item[logging] logging output of JVoiceXML
 \item[src] Java source code
-\item[test] JUnit tests and other tests
+\item[unittests] JUnit tests and other tests
 \item[work] Recorded audio files
 \item[3rdparty-libs.xml] ANT setting for the third party libraries
 \item[build.xml] main ANT build file

@@ -10,7 +10,7 @@ This file runs unit tests on the JVoiceXML XML library.
         <!-- directory structure -->
         <property name="test" value="test" />
 
-        <property name="test.src" value="unittests" />
+        <property name="test.src" value="${test}/src" />
         <property name="test.results" value="${dist}/unittests" />
         <property name="test.build" value="${test}/classes" />
 

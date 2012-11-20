@@ -7,9 +7,9 @@ This file runs unit tests on JVoiceXML.
 
   <target name="-test-setup" depends="-setup">
     <!-- directory structure -->
-    <property name="test" value="${basedir}/test" />
+    <property name="test" value="${basedir}/unittests" />
 
-    <property name="test.src" value="${test}/unitTests" />
+    <property name="test.src" value="${test}/src" />
     <property name="test.results" value="${dist}/unittests" />
     <property name="test.build" value="${test}/classes" />
     <property name="test.config" value="${test}/config" />
