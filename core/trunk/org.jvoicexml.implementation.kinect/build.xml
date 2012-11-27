@@ -60,7 +60,7 @@ You're using ${ant.java.version}
     </target>
 
     <target name="configuration" depends="-setup">
-        <copy todir="${config}" file="${etc}/kinect-implementation.xml" overwrite="true"/>
+        <copy todir="${config}" file="${etc}/kinect-implementation.xml" overwrite="true" />
     </target>
 
     <target name="clean" depends="-setup" description="Remove all compiled and distribution files">
@@ -76,6 +76,11 @@ You're using ${ant.java.version}
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
+        <javah destdir="../org.jvoicexml.implementation.kinect.recognizer/src">
+            <class name="${component}.KinectRecognizer" />
+            <classpath refid="project.classpath" />
+            <classpath location="${build}" />
+        </javah>
     </target>
 
     <target name="jar" depends="compile" description="Pack all compiled files into jar files">
