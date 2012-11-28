@@ -4,6 +4,8 @@
 package org.jvoicexml.voicexmlunit.io;
 
 
+import java.io.File;
+
 import java.net.URI;
 import java.net.UnknownHostException;
 
@@ -43,10 +45,11 @@ public final class Call implements Runnable {
 	
 	/**
 	 * Start a new dialog
-	 * @param dialog the dialog resource
+	 * @param path the dialog resource
 	 */
-	public void dial(URI dialog) {
-		this.dialog = dialog;
+	public void dial(String path) {
+		final File file = new File(path);
+		this.dialog = file.toURI();
 	}
 	
 	/* (non-Javadoc)

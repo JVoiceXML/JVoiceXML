@@ -4,19 +4,24 @@ package org.jvoicexml.voicexmlunit;
 import java.io.File;
 
 import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.UnknownHostException;
 
 import junit.framework.Assert;
 
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.Session;
 
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.event.ErrorEvent;
 
 import org.jvoicexml.voicexmlunit.io.Call;
 import org.jvoicexml.voicexmlunit.io.Input;
 import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.io.Statement;
 
+import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 
@@ -31,14 +36,14 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  */
 public final class Supervisor implements TextListener {
-	Call call;
-	Conversation conversation;
-	boolean connected;
-	boolean started;
-	Statement statement;
+	private Call call;
+	private Conversation conversation;
+	private boolean connected;
+	private boolean started;
+	private Statement statement;
 	
 	public long SERVER_WAIT = 5000;
-
+	
 	/**
 	 * Constructor
 	 */
@@ -49,48 +54,43 @@ public final class Supervisor implements TextListener {
 		started = false;
 		statement = null;
 	}
-	
+
 	/**
 	 * Initialize a new server conversation
 	 * @param server Server to use
+	 * @param jvxml Engine to use
 	 * @return Conversation to be used and initialized by the caller
 	 */
 	public Conversation init(TextServer server, JVoiceXml jvxml) {
 		if (server != null) {
 			server.addTextListener(this);
-			//server.start();
 		}
-		this.call = new Call(server,jvxml);
+		
+		call = new Call(server,jvxml);
+		
 		conversation = new Conversation();
 		return conversation;
 	}
-	
+
 	/**
 	 * Process a VoiceXML file and generate test log
 	 * @param file File to use
 	 */
-	public void process(File file) {
+	public void process(String path) {
+		Assert.assertNotNull("Call",call);
+		
 		/* wait for the server */
 		synchronized (conversation) {
 	        try {
-				/* wait for the server to be ready */
 				conversation.wait(SERVER_WAIT);
-				call.dial(file.toURI());
-				//new Thread(call).start();
-				call.run();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-				Assert.fail("Call: "+file.getPath());
+				Assert.fail("Started");
 			}
 		}
-	}
-	
-	/**
-	 * Process a VoiceXML path and generate test log
-	 * @param path Path to the VoiceXML document
-	 */
-	public void process(String path) {
-		process(new File(path));
+
+		call.dial(path);
+		call.run();
 	}
 
 	/**
@@ -105,8 +105,9 @@ public final class Supervisor implements TextListener {
 	 * Assert that a working conversation and the server connection is established
 	 */
 	public void assertActivity() {
-		Assert.assertNotNull("Statement",statement);
+		Assert.assertTrue("Started",started);
 		Assert.assertTrue("Connected",connected);
+		Assert.assertNotNull("Statement",statement);
 	}
 
 	/**
@@ -166,7 +167,14 @@ public final class Supervisor implements TextListener {
 	 * @see org.jvoicexml.client.text.TextListener#outputSsml(org.jvoicexml.xml.ssml.SsmlDocument)
 	 */
 	public void outputSsml(final SsmlDocument document) {
-		outputText(document.toString());
+		String text = null;
+		if (document != null) {
+			Speak speak = document.getSpeak();
+			if (speak != null) {
+				text = speak.getTextContent();
+			}
+		}
+		outputText(text);
 	}
 	
 	/* (non-Javadoc)
