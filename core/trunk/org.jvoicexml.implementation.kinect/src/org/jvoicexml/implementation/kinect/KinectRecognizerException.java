@@ -26,62 +26,44 @@
 
 package org.jvoicexml.implementation.kinect;
 
-import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.implementation.SpokenInput;
-
 /**
- * A resource factory to produce {@link KinectSpokenInput} objects.
+ * Error in the Kinect recognizer.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
- *
  */
-public final class KinectSpokenInputFactory implements ResourceFactory<SpokenInput> {
-
-    static {
-        //Check the processor architecture
-        if (System.getProperty("os.arch").equalsIgnoreCase("x86")) {
-            System.loadLibrary("JVoiceXmlKinectRecognizer");
-        } else {
-            System.loadLibrary("JVoiceXmlKinectRecognizer_x64");
-        }
+public final class KinectRecognizerException extends Exception {
+    /**
+     * Constructs a new exception without any detail message.
+     */
+    public KinectRecognizerException() {
     }
 
     /**
-     * {@inheritDoc}
+     * Constructs a new exception with the given detail error message.
+     * @param message the detail error message
      */
-    @Override
-    public Class<SpokenInput> getResourceType() {
-        // TODO Auto-generated method stub
-        return null;
+    public KinectRecognizerException(final String message) {
+        super(message);
     }
 
     /**
-     * {@inheritDoc}
+     * Constructs a new exception with the given cause of the exception.
+     * @param cause cause of this exception
      */
-    @Override
-    public SpokenInput createResource() throws NoresourceError {
-        // TODO Auto-generated method stub
-        return null;
+    public KinectRecognizerException(final Throwable cause) {
+        super(cause);
     }
 
     /**
-     * {@inheritDoc}
+     * Constructs a new exception with the given detail and cause of the
+     * exception.
+     * @param message the detail error message
+     * @param cause cause of this exception
      */
-    @Override
-    public int getInstances() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getType() {
-        // TODO Auto-generated method stub
-        return null;
+    public KinectRecognizerException(String message, Throwable cause) {
+        super(message, cause);
+        // TODO Auto-generated constructor stub
     }
 
 }

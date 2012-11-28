@@ -14,43 +14,6 @@
 // Static initializers
 LPCWSTR JVoiceXmlKinectRecognizer::GrammarFileName = L"SpeechBasics-D2D.grxml";
 
-// This is the class ID we expect for the Microsoft Speech recognizer.
-// Other values indicate that we're using a version of sapi.h that is
-// incompatible with this sample.
-DEFINE_GUID(CLSID_ExpectedRecognizer, 0x495648e7, 0xf7ab, 0x4267, 0x8e, 0x0f, 0xca, 0xfb, 0x7a, 0x33, 0xc1, 0x60);
-
-/// <summary>
-/// Entry point for the application
-/// </summary>
-/// <param name="hInstance">handle to the application instance</param>
-/// <param name="hPrevInstance">always 0</param>
-/// <param name="lpCmdLine">command line arguments</param>
-/// <param name="nCmdShow">whether to display minimized, maximized, or normally</param>
-/// <returns>status</returns>
-int APIENTRY DllMain(HINSTANCE hInstance, DWORD ul_reason_for_call, LPVOID lpReserved)
-{
-    if (CLSID_ExpectedRecognizer != CLSID_SpInprocRecognizer)
-    {
-        MessageBoxW(NULL, L"This sample was compiled against an incompatible version of sapi.h.\nPlease ensure that Microsoft Speech SDK and other sample requirements are installed and then rebuild application.", L"Missing requirements", MB_OK | MB_ICONERROR);
-        
-        return EXIT_FAILURE;
-    }
-
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-
-    if (SUCCEEDED(hr))
-    {
-        {
-            JVoiceXmlKinectRecognizer application;
-            application.Run(hInstance, false);
-        }
-
-        CoUninitialize();
-    }
-
-    return EXIT_SUCCESS;
-}
-
 /// <summary>
 /// Constructor
 /// </summary>
@@ -81,6 +44,33 @@ JVoiceXmlKinectRecognizer::~JVoiceXmlKinectRecognizer()
     SafeRelease(m_pSpeechRecognizer);
     SafeRelease(m_pSpeechContext);
     SafeRelease(m_pSpeechGrammar);
+}
+
+HRESULT JVoiceXmlKinectRecognizer::Allocate()
+{
+    // Look for a connected Kinect, and create it if found
+    HRESULT hr = CreateFirstConnected();
+    if (FAILED(hr))
+    {
+        return hr;
+    }
+
+	return SUCCESS;
+}
+
+
+HRESULT JVoiceXmlKinectRecognizer::Deallocate()
+{
+    if (NULL != m_pKinectAudioStream)
+    {
+        m_pKinectAudioStream->StopCapture();
+    }
+
+    if (NULL != m_pSpeechRecognizer)
+    {
+        m_pSpeechRecognizer->SetRecoState(SPRST_INACTIVE);
+    }
+	return SUCCESS;
 }
 
 /// <summary>
@@ -310,17 +300,11 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
         return hr;
     }
 
+    // TODO move to an own method to dynamically load grammars
     hr = LoadSpeechGrammar();
     if (FAILED(hr))
     {
         //SetStatusMessage(L"Could not load speech grammar. Please ensure that grammar configuration file was properly deployed.");
-        return hr;
-    }
-
-    hr = StartSpeechRecognition();
-    if (FAILED(hr))
-    {
-        //SetStatusMessage(L"Could not start recognizing speech.");
         return hr;
     }
 
@@ -485,6 +469,11 @@ HRESULT JVoiceXmlKinectRecognizer::StartSpeechRecognition()
     }
         
     return hr;
+}
+
+HRESLT JVoiceXmlKinectRecognizer::StopSpeechRecognition()
+{
+	return SUCCESS;
 }
 
 /// <summary>

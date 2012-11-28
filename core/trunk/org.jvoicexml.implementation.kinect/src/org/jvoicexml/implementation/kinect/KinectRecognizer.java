@@ -34,7 +34,7 @@ import org.jvoicexml.event.error.BadFetchError;
  * @since 0.7.6
  *
  */
-public class KinectRecognizer {
+public final class KinectRecognizer {
     /** Kinect recognizer Handle. **/
     private long handle;
     

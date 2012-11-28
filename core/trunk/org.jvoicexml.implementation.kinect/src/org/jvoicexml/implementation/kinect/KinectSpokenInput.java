@@ -51,7 +51,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @version $Revision$
  * @since 0.7.6
  */
-public class KinectSpokenInput implements SpokenInput {
+public final class KinectSpokenInput implements SpokenInput {
 
     /**
      * {@inheritDoc}

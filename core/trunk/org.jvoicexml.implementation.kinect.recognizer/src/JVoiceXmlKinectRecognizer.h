@@ -68,6 +68,20 @@ public:
     /// <param name="nCmdShow">whether to display minimized, maximized, or normally</param>
     int                     Run(HINSTANCE hInstance, int nCmdShow);
 
+    HRESULT Allocate();
+
+    /// <summary>
+    /// Start recognizing speech asynchronously.
+    /// </summary>
+    /// <returns>
+    /// <para>S_OK on success, otherwise failure code.</para>
+    /// </returns>
+    HRESULT                 StartSpeechRecognition();
+
+    HRESULT                 StopSpeechRecognition();
+
+    HRESULT Deallocate();
+
 private:
     static LPCWSTR          GrammarFileName;
     
@@ -122,14 +136,6 @@ private:
     /// <para>S_OK on success, otherwise failure code.</para>
     /// </returns>
     HRESULT                 LoadSpeechGrammar();
-
-    /// <summary>
-    /// Start recognizing speech asynchronously.
-    /// </summary>
-    /// <returns>
-    /// <para>S_OK on success, otherwise failure code.</para>
-    /// </returns>
-    HRESULT                 StartSpeechRecognition();
 
     /// <summary>
     /// Process recently triggered speech recognition events.
