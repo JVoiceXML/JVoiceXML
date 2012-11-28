@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <sapi.h>
 #include "JNIUtils.h"
 
 #define INITGUID
@@ -15,12 +16,9 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved)
     if (CLSID_ExpectedRecognizer != CLSID_SpInprocRecognizer)
     {
         char buffer[1024];
-        GetErrorMessage(buffer, sizeof(buffer), "Incompatible SAPI versions! Please ensure that Microsoft Speech SDK and other requirements are installed!",
-            hr);
+        //GetErrorMessage(buffer, sizeof(buffer), "Incompatible SAPI versions! Please ensure that Microsoft Speech SDK and other requirements are installed!",
+        //    hr);
         return JNI_ERR;
-        MessageBoxW(NULL, L"This sample was compiled against an incompatible version of sapi.h.\nPlease ensure that Microsoft Speech SDK and other sample requirements are installed and then rebuild application.", L"Missing requirements", MB_OK | MB_ICONERROR);
-
-        return EXIT_FAILURE;
     }
 
 	// Initialize COM
@@ -28,12 +26,12 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved)
     if (FAILED(hr))
     {
         char buffer[1024];
-        GetErrorMessage(buffer, sizeof(buffer), "Initializing COM failed!",
-            hr);
+        //GetErrorMessage(buffer, sizeof(buffer), "Initializing COM failed!",
+        //    hr);
         return JNI_ERR;
     }
 
-    return JNI_VERSION_1_6;
+	return JNI_VERSION_1_6;
 }
 
 JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *jvm, void *reserved)

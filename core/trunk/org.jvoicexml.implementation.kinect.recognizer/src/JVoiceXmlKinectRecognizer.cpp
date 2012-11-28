@@ -55,7 +55,7 @@ HRESULT JVoiceXmlKinectRecognizer::Allocate()
         return hr;
     }
 
-	return SUCCESS;
+	return S_OK;
 }
 
 
@@ -70,7 +70,7 @@ HRESULT JVoiceXmlKinectRecognizer::Deallocate()
     {
         m_pSpeechRecognizer->SetRecoState(SPRST_INACTIVE);
     }
-	return SUCCESS;
+	return S_OK;
 }
 
 /// <summary>
@@ -471,9 +471,9 @@ HRESULT JVoiceXmlKinectRecognizer::StartSpeechRecognition()
     return hr;
 }
 
-HRESLT JVoiceXmlKinectRecognizer::StopSpeechRecognition()
+HRESULT JVoiceXmlKinectRecognizer::StopSpeechRecognition()
 {
-	return SUCCESS;
+	return S_OK;
 }
 
 /// <summary>
