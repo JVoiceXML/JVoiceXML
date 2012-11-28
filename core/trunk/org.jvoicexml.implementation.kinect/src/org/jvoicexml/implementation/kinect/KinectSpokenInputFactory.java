@@ -39,15 +39,6 @@ import org.jvoicexml.implementation.SpokenInput;
  */
 public final class KinectSpokenInputFactory implements ResourceFactory<SpokenInput> {
 
-    static {
-        //Check the processor architecture
-        if (System.getProperty("os.arch").equalsIgnoreCase("x86")) {
-            System.loadLibrary("JVoiceXmlKinectRecognizer");
-        } else {
-            System.loadLibrary("JVoiceXmlKinectRecognizer_x64");
-        }
-    }
-
     /**
      * {@inheritDoc}
      */

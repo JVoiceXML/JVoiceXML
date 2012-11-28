@@ -35,6 +35,17 @@ import org.jvoicexml.event.error.BadFetchError;
  *
  */
 public final class KinectRecognizer {
+    static {
+        //Check the processor architecture
+        if (System.getProperty("os.arch").equalsIgnoreCase("x86")) {
+            System.loadLibrary("JVoiceXmlKinectRecognizer");
+        } else {
+            System.loadLibrary("JVoiceXmlKinectRecognizer");
+//            System.loadLibrary("JVoiceXmlKinectRecognizer_x64");
+        }
+    }
+
+
     /** Kinect recognizer Handle. **/
     private long handle;
     
