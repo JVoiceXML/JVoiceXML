@@ -88,8 +88,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>3rdparty\jni\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -164,11 +163,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\JNIUtils.cpp" />
     <ClCompile Include="src\KinectAudioStream.cpp" />
     <ClCompile Include="src\JVoiceXmlKinectRecognizer.cpp" />
+    <ClCompile Include="src\KinectRecognizer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\JNIUtils.h" />
     <ClInclude Include="src\KinectAudioStream.h" />
+    <ClInclude Include="src\org_jvoicexml_implementation_kinect_KinectRecognizer.h" />
     <ClInclude Include="src\resource.h" />
     <ClInclude Include="src\JVoiceXmlKinectRecognizer.h" />
     <ClInclude Include="src\stdafx.h" />
