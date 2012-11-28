@@ -94,7 +94,7 @@ You're using ${ant.java.version}
                 <attribute name="Built-By" value="${user.name}" />
                 <section name="common">
                     <attribute name="Implementation-Vendor" value="JVoiceXML group" />
-                    <attribute name="Implementation-Title" value="JVoiceXML jsapi 2.0 base layer" />
+                    <attribute name="Implementation-Title" value="JVoiceXML kinect implementation layer" />
                     <attribute name="Implementation-Version" value="${version}" />
                 </section>
             </manifest>
