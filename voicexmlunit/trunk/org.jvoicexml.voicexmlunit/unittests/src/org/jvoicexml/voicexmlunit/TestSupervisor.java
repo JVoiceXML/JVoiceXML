@@ -25,7 +25,7 @@ public class TestSupervisor {
 
 	@Test
 	public void testStatements() {
-		Conversation conversation = supervisor.init(null,null);
+		Conversation conversation = initMock();
 
 		supervisor.assertStatements(0);
 		
@@ -37,7 +37,7 @@ public class TestSupervisor {
 	
 	@Test
 	public void testActivity() {
-		Conversation conversation = supervisor.init(null,null);
+		Conversation conversation = initMock();
 		
 		conversation.addOutput("bla"); // at least, one element required
 		
@@ -48,7 +48,7 @@ public class TestSupervisor {
 
 	@Test
 	public void testOuput(){
-		Conversation conversation = supervisor.init(null,null);
+		Conversation conversation = initMock();
 		
 		final String message = "bla";
 		conversation.addOutput(message);
@@ -63,7 +63,7 @@ public class TestSupervisor {
 	
 	@Test
 	public void testInput(){
-		Conversation conversation = supervisor.init(null,null);
+		Conversation conversation = initMock();
 		
 		final String message = "blub";
 		conversation.addOutput(message); // must have an Output before
@@ -76,6 +76,10 @@ public class TestSupervisor {
 		
 		supervisor.assertOutput(message);
 		supervisor.assertInput();
+	}
+	
+	private Conversation initMock() {
+		return supervisor.init(null,null);
 	}
 
 	private void simulateCall() {
