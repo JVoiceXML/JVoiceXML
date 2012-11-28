@@ -95,6 +95,6 @@ public final class KinectRecognizer {
      * Native method call to shutdown the kinect recognizer.
      * @param handle handle to the kinect recognizer
      */
-    private native long kinectDeallocate(long handle);
+    private native void kinectDeallocate(long handle);
     
 }
