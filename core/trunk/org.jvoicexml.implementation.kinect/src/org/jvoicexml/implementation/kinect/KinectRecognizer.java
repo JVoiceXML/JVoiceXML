@@ -47,7 +47,10 @@ public final class KinectRecognizer {
 
     /** Kinect recognizer Handle. **/
     private long handle;
-    
+
+    /** The active recognition thread. */
+    private KinectRecognitionThread recognitionThread;
+
     /**
      * Allocates this recognizer.
      * @throws KinectRecognizerException
@@ -78,16 +81,30 @@ public final class KinectRecognizer {
      * @throws KinectRecognizerException
      *         error starting the recognizer
      */
-    public void startRecognition() throws KinectRecognizerException {
-        kinectStartRecognition(handle);
+    public void startRecognition() {
+        recognitionThread = new KinectRecognitionThread(this);
+        recognitionThread.start();
+    }
+
+    /**
+     * Internal call to start the recognition.
+     * @return recognition result
+     * @throws KinectRecognizerException
+     *         error recognizing
+     */
+    RecognitionResult recognize()
+            throws KinectRecognizerException {
+        return kinectStartRecognition(handle);
     }
 
     /**
      * Native method call to start the recognition process
      * @param handle handle to the kinect recognizer
+     * @return result of the recognition process
      */
-    private native void kinectStartRecognition(long handle)
+    private native RecognitionResult kinectStartRecognition(long handle)
             throws KinectRecognizerException;
+
 
     /**
      * Stops the recognition process.
@@ -95,7 +112,11 @@ public final class KinectRecognizer {
      *         error starting the recognizer
      */
     public void stopRecognition() throws KinectRecognizerException {
-        kinectStartRecognition(handle);
+        if (recognitionThread != null) {
+            recognitionThread.stopRecognition();
+            recognitionThread = null;
+        }
+        kinectStopRecognition(handle);
     }
 
     /**
