@@ -7,6 +7,7 @@
 #include "stdafx.h"
 #include "JVoiceXmlKinectRecognizer.h"
 #include "resource.h"
+#include <iostream>
 
 #define INITGUID
 #include <guiddef.h>
@@ -290,6 +291,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     if (FAILED(hr))
     {
         //SetStatusMessage(L"Could not initialize audio stream.");
+		std::cout << "Could not initialize audio stream." << std::endl;
         return hr;
     }
 
@@ -466,6 +468,20 @@ HRESULT JVoiceXmlKinectRecognizer::StartSpeechRecognition()
         {
             m_hSpeechEvent = m_pSpeechContext->GetNotifyEventHandle();
         }
+
+		BOOL continuing = true;
+		hr = S_FALSE;
+
+		// wait for an event and try to look if it occured 
+		while( continuing && hr == S_FALSE )
+		{
+			std::cout.flush();
+			hr = m_pSpeechContext->WaitForNotifyEvent(20);
+			if(hr == S_OK)
+			{
+				ProcessSpeech();
+			}
+		}
     }
         
     return hr;
@@ -508,8 +524,8 @@ void JVoiceXmlKinectRecognizer::ProcessSpeech()
                             const SPPHRASEPROPERTY* pSemanticTag = pPhrase->pProperties->pFirstChild;
                             if (pSemanticTag->SREngineConfidence > ConfidenceThreshold)
                             {
-                                //TurtleAction action = MapSpeechTagToAction(pSemanticTag->pszValue);
-                                //m_pTurtleController->DoAction(action);
+								USES_CONVERSION;
+								std::cout << "rec: " << W2A(pSemanticTag->pszValue) << std::endl;
                             }
                         }
                         ::CoTaskMemFree(pPhrase);

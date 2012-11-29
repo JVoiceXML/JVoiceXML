@@ -128,6 +128,10 @@ JNIEXPORT jlong JNICALL Java_org_jvoicexml_implementation_kinect_KinectRecognize
 	HRESULT hr = recognizer->Allocate();
 	if (FAILED(hr))
 	{
+		// Clean up
+		delete recognizer;
+
+		// Produce an error message
         char buffer[1024];
         GetErrorMessage(buffer, sizeof(buffer), "Allocation of recognizer failed", hr);
         ThrowJavaException(env, "org/jvoicexml/implementation/kinect/KinectRecognizerException", buffer);
@@ -148,6 +152,7 @@ JNIEXPORT void JNICALL Java_org_jvoicexml_implementation_kinect_KinectRecognizer
 	HRESULT hr = recognizer->StartSpeechRecognition();
 	if (FAILED(hr))
 	{
+		// Produce an error message
         char buffer[1024];
         GetErrorMessage(buffer, sizeof(buffer), "Starting recognition failed", hr);
         ThrowJavaException(env, "org/jvoicexml/implementation/kinect/KinectRecognizerException", buffer);
@@ -167,6 +172,7 @@ JNIEXPORT void JNICALL Java_org_jvoicexml_implementation_kinect_KinectRecognizer
 	HRESULT hr = recognizer->StopSpeechRecognition();
 	if (FAILED(hr))
 	{
+		// Produce an error message
         char buffer[1024];
         GetErrorMessage(buffer, sizeof(buffer), "Stopping recognition failed", hr);
         ThrowJavaException(env, "org/jvoicexml/implementation/kinect/KinectRecognizerException", buffer);
@@ -186,6 +192,7 @@ JNIEXPORT void JNICALL Java_org_jvoicexml_implementation_kinect_KinectRecognizer
 	HRESULT hr = recognizer->Deallocate();
 	if (FAILED(hr))
 	{
+		// Produce an error message
         char buffer[1024];
         GetErrorMessage(buffer, sizeof(buffer), "Stopping recognition failed", hr);
         ThrowJavaException(env, "org/jvoicexml/implementation/kinect/KinectRecognizerException", buffer);
