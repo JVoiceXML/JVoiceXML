@@ -166,11 +166,13 @@
     <ClCompile Include="src\KinectAudioStream.cpp" />
     <ClCompile Include="src\JVoiceXmlKinectRecognizer.cpp" />
     <ClCompile Include="src\KinectRecognizer.cpp" />
+    <ClCompile Include="src\RecognitionResult.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\JNIUtils.h" />
     <ClInclude Include="src\KinectAudioStream.h" />
     <ClInclude Include="src\org_jvoicexml_implementation_kinect_KinectRecognizer.h" />
+    <ClInclude Include="src\RecognitionResult.h" />
     <ClInclude Include="src\resource.h" />
     <ClInclude Include="src\JVoiceXmlKinectRecognizer.h" />
     <ClInclude Include="src\stdafx.h" />
