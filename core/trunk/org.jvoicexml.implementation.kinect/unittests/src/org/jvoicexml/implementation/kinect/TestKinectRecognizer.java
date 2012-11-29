@@ -70,8 +70,13 @@ public final class TestKinectRecognizer {
 
     
     @Test
-    public void testStartRecognition() {
-        fail("Not yet implemented");
+    public void testStartRecognition() throws Exception {
+        final KinectRecognizer recognizer = new KinectRecognizer();
+        recognizer.allocate();
+        recognizer.startRecognition();
+        while (true) {
+            Thread.sleep(1000);
+        }
     }
 
     @Test
