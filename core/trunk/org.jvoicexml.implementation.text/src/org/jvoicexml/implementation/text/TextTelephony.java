@@ -251,7 +251,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     @Override
     public void stopRecording() throws NoresourceError {
         fireRecordStopped();
-        sender.sendClosedInput();
+        if (sender != null) {
+            sender.sendClosedInput();
+        }
     }
 
     /**
