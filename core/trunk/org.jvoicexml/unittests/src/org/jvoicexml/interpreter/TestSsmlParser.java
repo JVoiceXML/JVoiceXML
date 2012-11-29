@@ -39,6 +39,7 @@ import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.P;
 import org.jvoicexml.xml.ssml.Speak;
@@ -120,6 +121,30 @@ public final class TestSsmlParser {
         Speak speak = ssml.getSpeak();
         speak.setXmlLang(Locale.US);
         speak.addText("This is a test");
+        Assert.assertEquals(ssml.toString(), parser.getDocument().toString());
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.SsmlParser#getDocument()}.
+     * @exception Exception
+     *            Test failed.
+     * @throws JVoiceXMLEvent
+     *            Test failed.
+     */
+    @Test
+    public void testGetDocumentFromPlainText()
+            throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        vxml.setXmlLang(Locale.US);
+        final Form form = vxml.appendChild(Form.class);
+        final Block block = form.appendChild(Block.class);
+        final Text text = block.addText("this is a plain text test");
+        SsmlParser parser = new SsmlParser(text, context);
+        SsmlDocument ssml = new SsmlDocument();
+        Speak speak = ssml.getSpeak();
+        speak.setXmlLang(Locale.US);
+        speak.addText("this is a plain text test");
         Assert.assertEquals(ssml.toString(), parser.getDocument().toString());
     }
 

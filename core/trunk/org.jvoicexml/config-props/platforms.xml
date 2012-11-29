@@ -13,6 +13,7 @@
     <property name="jvxml.jsapi20.mac" value ="false" />
   </platform-->
   <!-- platform name="org.jvoicexml.implementation.jtapi"/-->
+  <!-- platform name="org.jvoicexml.implementation.kinect"/-->
   <!-- platform name="org.jvoicexml.implementation.mary"/-->
   <!-- platform name="org.jvoicexml.implementation.marc"/-->
   <!-- platform name="org.jvoicexml.implementation.mrcpv2"/-->

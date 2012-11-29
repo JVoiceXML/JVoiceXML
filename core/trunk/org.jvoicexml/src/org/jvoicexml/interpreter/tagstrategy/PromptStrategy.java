@@ -27,7 +27,6 @@
 package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Collection;
-import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControlProperties;
@@ -133,10 +132,7 @@ class PromptStrategy
         // Set the locale
         final Speak speak = document.getSpeak();
         final String lang = (String) getAttribute(Prompt.ATTRIBUTE_XML_LANG);
-        if (lang == null) {
-            final Locale locale = interpreter.getLanguage();
-            speak.setXmlLang(locale);
-        } else {
+        if (lang != null) {
             speak.setXmlLang(lang);
         }
         final BargeInType bargeInType = getBargeInType();

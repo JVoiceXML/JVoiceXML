@@ -319,7 +319,6 @@ public final class VoiceXmlInterpreter implements Configurable {
         final Vxml vxml = document.getVxml();
         final Locale locale = vxml.getXmlLangObject();
         if (locale != null) {
-            
             documentLocale = locale;
         } else {
             documentLocale = Locale.getDefault();

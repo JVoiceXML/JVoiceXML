@@ -49,6 +49,7 @@ import org.jvoicexml.Application;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.SsmlNode;
+import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.ssml.Audio;
@@ -93,7 +94,7 @@ public final class SsmlParser {
     private final ScriptingEngine scripting;
 
     /** The base URI to convert a given URI into a hierarchical URI. */
-    private final URI baseUri;
+    private URI baseUri;
 
     /** Declared namespaces. */
     private final Map<String, String> namespaces;
@@ -117,28 +118,35 @@ public final class SsmlParser {
         context = interpreterContext;
         scripting = context.getScriptingEngine();
         namespaces = new java.util.HashMap<String, String>();
-        URI uri;
-        if (node instanceof Prompt) {
-            final Prompt promptNode = (Prompt) node;
-            final Collection<String> attributes =
-                promptNode.getDefinedAttributeNames();
-            for (String attribute : attributes) {
-                if (attribute.startsWith("xmlns")) {
-                    final String value = promptNode.getAttribute(attribute);
-                    namespaces.put(attribute, value);
-                }
-            }
-            try {
-                uri = promptNode.getXmlBaseUri();
-            } catch (URISyntaxException e) {
-                uri = null;
-            }
-        } else {
-            uri = null;
-        }
-        baseUri = uri;
+        baseUri = null;
     }
 
+    /**
+     * Constructs a new object.
+     *
+     * @param vxmlNode
+     *            the prompt.
+     * @param interpreterContext
+     *            the current VoiceXML interpreter context.
+     */
+    public SsmlParser(final Prompt prompt,
+            final VoiceXmlInterpreterContext interpreterContext) {
+        this((VoiceXmlNode) prompt, interpreterContext);
+        final Collection<String> attributes =
+            prompt.getDefinedAttributeNames();
+        for (String attribute : attributes) {
+            if (attribute.startsWith("xmlns")) {
+                final String value = prompt.getAttribute(attribute);
+                namespaces.put(attribute, value);
+            }
+        }
+        try {
+            baseUri = prompt.getXmlBaseUri();
+        } catch (URISyntaxException e) {
+            baseUri = null;
+        }
+    }
+    
     /**
      * Retrieves the parsed SSML document.
      *
@@ -154,7 +162,7 @@ public final class SsmlParser {
         final Speak parent = document.getSpeak();
         final Locale locale = getLocale(node);
         parent.setXmlLang(locale);
-        if (node instanceof Audio) {
+        if ((node instanceof Audio) || (node instanceof Text)) {
             cloneChildNode(document, parent, node);
         } else {
             final Collection<VoiceXmlNode> children = node.getChildren();
