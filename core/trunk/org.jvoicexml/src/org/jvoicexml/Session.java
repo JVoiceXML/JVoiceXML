@@ -54,6 +54,11 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * </p>
  *
  * <p>
+ * Note, that a call to {@link #call(URI)} <b>must</b> be followed by
+ * a call to {@link #hangup()} in order to free resources such as ASR and TTS.
+ * </p>
+ * 
+ * <p>
  * The call method returns immediately. In case of an error the client
  * does not get notified. In order to monitor the call and retrieve error
  * messages, clients should use the {@link #waitSessionEnd() waitSessionEnd}
@@ -102,6 +107,10 @@ public interface Session {
      * Another way can be via the {@link org.jvoicexml.implementation.Telephony}
      * interface and calling {@link #getLastError()}. However, the latter
      * option relies on the concrete implementation.
+     * </p>
+     * <p>
+     * Ensure that you call {@link #hangup()} after this call
+     * to ensure that resources like ASR and TTS are released.
      * </p>
      * @param uri URI of the first document to load.
      *
