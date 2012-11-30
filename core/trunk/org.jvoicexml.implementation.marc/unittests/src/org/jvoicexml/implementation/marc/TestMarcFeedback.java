@@ -34,7 +34,7 @@ import java.util.UUID;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.jvoicexml.SpeakablePlainText;
+import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -72,7 +72,7 @@ public final class TestMarcFeedback implements SynthesizedOutputListener {
         final MarcSynthesizedOutput output = new MarcSynthesizedOutput();
         output.connect(null);
         output.addListener(this);
-        final SpeakableText speakable = new SpeakablePlainText("test");
+        final SpeakableText speakable = new SpeakableSsmlText("test");
         final String sessionId = UUID.randomUUID().toString();
         output.queueSpeakable(speakable, sessionId, null);
         final MarcFeedback feedback = new MarcFeedback(output, 4011);

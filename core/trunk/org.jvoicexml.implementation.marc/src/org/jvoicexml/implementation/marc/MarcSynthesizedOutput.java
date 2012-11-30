@@ -48,7 +48,6 @@ import javax.xml.stream.XMLStreamWriter;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
@@ -435,11 +434,7 @@ public final class MarcSynthesizedOutput
         final SpeakableText speakable = next.getSpeakable();
         final String utterance;
         final SsmlDocument document;
-        if (speakable instanceof SpeakablePlainText) {
-            final SpeakablePlainText plain = (SpeakablePlainText) speakable;
-            utterance = plain.getSpeakableText();
-            document = null;
-        } else if (speakable instanceof SpeakableSsmlText) {
+        if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             document = ssml.getDocument();
             final Speak speak = document.getSpeak();
