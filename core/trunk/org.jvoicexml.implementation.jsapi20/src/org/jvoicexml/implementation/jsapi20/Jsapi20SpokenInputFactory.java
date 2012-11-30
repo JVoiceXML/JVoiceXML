@@ -195,7 +195,7 @@ public final class Jsapi20SpokenInputFactory
 
     /**
      * Sets the type.
-     * @param value new value for the ype.
+     * @param value new value for the type.
      * @since 0.7.5
      */
     public void setType(final String value) {
