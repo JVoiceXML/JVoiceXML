@@ -2,10 +2,14 @@ package org.jvoicexml.systemtest;
 
 import java.net.InetSocketAddress;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.xml.ssml.Speak;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
 public class ExecuterTest {
     Executor executer;
@@ -35,20 +39,24 @@ public class ExecuterTest {
     }
 
     @Test
-    public void testPass() {
+    public void testPass() throws ParserConfigurationException {
         executer.started();
         executer.connected(inet);
-        executer.outputText("pass");
+        final SsmlDocument ssml = new SsmlDocument();
+        final Speak speak = ssml.getSpeak();
+        speak.addText("pass");
+        executer.outputSsml(ssml);
         executer.disconnected();
         Result result = executer.getResult();
         Assert.assertEquals(TestResult.PASS, result.getAssert());
     }
 
     @Test
-    public void testFail() {
-        executer.started();
-        executer.connected(inet);
-        executer.outputText("fail");
+    public void testFail() throws ParserConfigurationException {
+        final SsmlDocument ssml = new SsmlDocument();
+        final Speak speak = ssml.getSpeak();
+        speak.addText("faile");
+        executer.outputSsml(ssml);
         executer.disconnected();
         Result result = executer.getResult();
         Assert.assertEquals(TestResult.FAIL, result.getAssert());
@@ -77,10 +85,13 @@ public class ExecuterTest {
     }
 
     @Test
-    public void testTimeout22() {
+    public void testTimeout22() throws Exception {
         executer.started();
         executer.connected(inet);
-        executer.outputText("some output");
+        final SsmlDocument ssml = new SsmlDocument();
+        final Speak speak = ssml.getSpeak();
+        speak.addText("some output");
+        executer.outputSsml(ssml);
         executer.timeout(22);
         Result result = executer.getResult();
         Assert.assertEquals(TestResult.FAIL, result.getAssert());
@@ -91,12 +102,16 @@ public class ExecuterTest {
 
     /**
      * pass but no disconnect.
+     * @throws Exception 
      */
     @Test
-    public void testTimeout31() {
+    public void testTimeout31() throws Exception {
         executer.started();
         executer.connected(inet);
-        executer.outputText("pass");
+        final SsmlDocument ssml = new SsmlDocument();
+        final Speak speak = ssml.getSpeak();
+        speak.addText("pass");
+        executer.outputSsml(ssml);
         executer.timeout(31);
         Result result = executer.getResult();
         Assert.assertEquals(TestResult.PASS, result.getAssert());
@@ -105,12 +120,16 @@ public class ExecuterTest {
 
     /**
      * fail but no disconnect.
+     * @throws Exception 
      */
     @Test
-    public void testTimeout32() {
+    public void testTimeout32() throws Exception {
         executer.started();
         executer.connected(inet);
-        executer.outputText("fail");
+        final SsmlDocument ssml = new SsmlDocument();
+        final Speak speak = ssml.getSpeak();
+        speak.addText("faile");
+        executer.outputSsml(ssml);
         executer.timeout(32);
         Result result = executer.getResult();
         Assert.assertEquals(TestResult.FAIL, result.getAssert());
@@ -118,7 +137,7 @@ public class ExecuterTest {
     }
 
     @Test
-    public void testStatusListener() {
+    public void testStatusListener() throws Exception {
         int count = 0;
         MyListener listener = new MyListener();
         Assert.assertEquals(count, listener.updateCount);
@@ -132,10 +151,16 @@ public class ExecuterTest {
         executer.connected(inet);
         Assert.assertEquals(++count, listener.updateCount);
 
-        executer.outputText("some message1");
+        final SsmlDocument ssml1 = new SsmlDocument();
+        final Speak speak1 = ssml1.getSpeak();
+        speak1.addText("some message1");
+        executer.outputSsml(ssml1);
         Assert.assertEquals(++count, listener.updateCount);
 
-        executer.outputText("some message2");
+        final SsmlDocument ssml2 = new SsmlDocument();
+        final Speak speak2 = ssml2.getSpeak();
+        speak2.addText("some message2");
+        executer.outputSsml(ssml2);
         Assert.assertEquals(++count, listener.updateCount);
 
         executer.disconnected();

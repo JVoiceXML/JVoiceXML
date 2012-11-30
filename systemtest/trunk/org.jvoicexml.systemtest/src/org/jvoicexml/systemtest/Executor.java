@@ -155,14 +155,6 @@ public final class Executor implements TextListener, TimeoutListener {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void outputText(final String text) {
-        processReceivedText(text);
-    }
-
-    /**
      * Processes the received text.
      * @param text the received text
      * @since 0.7.3
