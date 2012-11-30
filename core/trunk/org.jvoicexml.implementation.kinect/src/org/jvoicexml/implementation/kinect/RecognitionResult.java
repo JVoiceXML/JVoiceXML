@@ -52,7 +52,7 @@ public final class RecognitionResult {
     /**
      * Constructs a new object.
      */
-    public RecognitionResult(final int statusCode, String mssml) {
+    public RecognitionResult(final int statusCode, final String mssml) {
         status = statusCode;
         sml = mssml;
     }

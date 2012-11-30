@@ -1,24 +1,30 @@
 #include "stdafx.h"
-#include "sapi.h"
 #include "RecognitionResult.h"
 
 
 RecognitionResult::RecognitionResult(void)
+	: status(S_OK),
+	ruleName(NULL),
+	sml(NULL),
+	pPhrase(NULL)
 {
 }
 
 
 RecognitionResult::~RecognitionResult(void)
 {
+	if (pPhrase != NULL)
+	{
+		::CoTaskMemFree(pPhrase);
+	}
 }
 
 HRESULT RecognitionResult::SetResult(ISpRecoResult* result)
 {
-    SPPHRASE* pPhrase = NULL;
-	HRESULT hr = result->GetPhrase(&pPhrase);
-	if (FAILED(hr))
+	status = result->GetPhrase(&pPhrase);
+	if (FAILED(status))
 	{
-		return hr;
+		return status;
 	}
 
 	ruleName = (pPhrase->Rule.pszName);
@@ -29,10 +35,10 @@ HRESULT RecognitionResult::SetResult(ISpRecoResult* result)
 
 	// receive an SML String from the XMLRecoResult
 	BSTR tmp = NULL;
-	hr = XMLResult->GetXMLResult(SPXRO_SML, &tmp);
-	if (FAILED(hr))
+	status = XMLResult->GetXMLResult(SPXRO_SML, &tmp);
+	if (FAILED(status))
     {
-		return hr; // could not retrieve the SML-Resultstring
+		return status; // could not retrieve the SML-Resultstring
 	}
 	sml = (WCHAR*) tmp;
 	return S_OK;

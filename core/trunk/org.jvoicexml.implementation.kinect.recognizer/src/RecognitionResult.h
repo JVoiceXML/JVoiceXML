@@ -1,4 +1,7 @@
 #pragma once
+
+#include "sapi.h"
+
 class RecognitionResult
 {
 public:
@@ -13,5 +16,6 @@ private:
 	HRESULT status;
 	LPCWSTR ruleName;
 	LPCWSTR sml;
+	SPPHRASE* pPhrase;
 };
 

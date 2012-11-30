@@ -74,163 +74,8 @@ HRESULT JVoiceXmlKinectRecognizer::Deallocate()
 	return S_OK;
 }
 
-/// <summary>
-/// Creates the main window and begins processing
-/// </summary>
-/// <param name="hInstance">handle to the application instance</param>
-/// <param name="nCmdShow">whether to display minimized, maximized, or normally</param>
-int JVoiceXmlKinectRecognizer::Run(HINSTANCE hInstance, int nCmdShow)
-{
-    MSG       msg = {0};
-    WNDCLASS  wc;
 
-    // Dialog custom window class
-    ZeroMemory(&wc, sizeof(wc));
-    wc.style         = CS_HREDRAW | CS_VREDRAW;
-    wc.cbWndExtra    = DLGWINDOWEXTRA;
-    wc.hInstance     = hInstance;
-    wc.hCursor       = LoadCursorW(NULL, IDC_ARROW);
-    wc.hIcon         = LoadIconW(hInstance, MAKEINTRESOURCE(IDI_APP));
-    wc.lpfnWndProc   = DefDlgProcW;
-    wc.lpszClassName = L"SpeechBasicsAppDlgWndClass";
 
-    if (!RegisterClassW(&wc))
-    {
-        return 0;
-    }
-
-    // Create main application window
-    HWND hWndApp = CreateDialogParamW(
-        hInstance,
-        MAKEINTRESOURCE(IDD_APP),
-        NULL,
-        (DLGPROC)JVoiceXmlKinectRecognizer::MessageRouter, 
-        reinterpret_cast<LPARAM>(this));
-
-    // Show window
-    ShowWindow(hWndApp, nCmdShow);
-
-    const int eventCount = 1;
-    HANDLE hEvents[eventCount];
-
-    // Main message loop
-    while (WM_QUIT != msg.message)
-    {
-        hEvents[0] = m_hSpeechEvent;
-
-        // Check to see if we have either a message (by passing in QS_ALLINPUT)
-        // Or a speech event (hEvents)
-        DWORD dwEvent = MsgWaitForMultipleObjectsEx(eventCount, hEvents, INFINITE, QS_ALLINPUT, MWMO_INPUTAVAILABLE);
-
-        // Check if this is an event we're waiting on and not a timeout or message
-        if (WAIT_OBJECT_0 == dwEvent)
-        {
-            ProcessSpeech();
-        }
-
-        if (PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE))
-        {
-            // If a dialog message will be taken care of by the dialog proc
-            if ((hWndApp != NULL) && IsDialogMessageW(hWndApp, &msg))
-            {
-                continue;
-            }
-
-            TranslateMessage(&msg);
-            DispatchMessageW(&msg);
-        }
-    }
-
-    return static_cast<int>(msg.wParam);
-}
-
-/// <summary>
-/// Handles window messages, passes most to the class instance to handle
-/// </summary>
-/// <param name="hWnd">window message is for</param>
-/// <param name="uMsg">message</param>
-/// <param name="wParam">message data</param>
-/// <param name="lParam">additional message data</param>
-/// <returns>result of message processing</returns>
-LRESULT CALLBACK JVoiceXmlKinectRecognizer::MessageRouter(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    JVoiceXmlKinectRecognizer* pThis = NULL;
-    
-    if (WM_INITDIALOG == uMsg)
-    {
-        pThis = reinterpret_cast<JVoiceXmlKinectRecognizer*>(lParam);
-        SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pThis));
-    }
-    else
-    {
-        pThis = reinterpret_cast<JVoiceXmlKinectRecognizer*>(::GetWindowLongPtr(hWnd, GWLP_USERDATA));
-    }
-
-    if (NULL != pThis)
-    {
-        return pThis->DlgProc(hWnd, uMsg, wParam, lParam);
-    }
-
-    return 0;
-}
-
-/// <summary>
-/// Handle windows messages for the class instance
-/// </summary>
-/// <param name="hWnd">window message is for</param>
-/// <param name="uMsg">message</param>
-/// <param name="wParam">message data</param>
-/// <param name="lParam">additional message data</param>
-/// <returns>result of message processing</returns>
-LRESULT CALLBACK JVoiceXmlKinectRecognizer::DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    LRESULT result = FALSE;
-
-    switch (message)
-    {
-        case WM_INITDIALOG:
-        {
-            // Bind application window handle
-            m_hWnd = hWnd;
-
-            // Look for a connected Kinect, and create it if found
-            HRESULT hr = CreateFirstConnected();
-            if (FAILED(hr))
-            {
-                break;
-            }
-
-            //SetStatusMessage(L"Say: \"Forward\", \"Back\", \"Turn Left\" or \"Turn Right\"");
-
-            result = FALSE;
-            break;
-        }
-
-        // If the titlebar X is clicked, destroy app
-        case WM_CLOSE:
-            if (NULL != m_pKinectAudioStream)
-            {
-                m_pKinectAudioStream->StopCapture();
-            }
-
-            if (NULL != m_pSpeechRecognizer)
-            {
-                m_pSpeechRecognizer->SetRecoState(SPRST_INACTIVE);
-            }
-
-            DestroyWindow(hWnd);
-            result = TRUE;
-            break;
-
-        case WM_DESTROY:
-            // Quit the main message pump
-            PostQuitMessage(0);
-            result = TRUE;
-            break;
-    }
-
-    return result;
-}
 
 /// <summary>
 /// Create the first connected Kinect found.
@@ -447,7 +292,7 @@ HRESULT JVoiceXmlKinectRecognizer::LoadSpeechGrammar()
 /// <returns>
 /// <para>S_OK on success, otherwise failure code.</para>
 /// </returns>
-HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech()
+HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech(RecognitionResult& result)
 {
     HRESULT hr = m_pKinectAudioStream->StartCapture();
 
@@ -479,7 +324,7 @@ HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech()
 			hr = m_pSpeechContext->WaitForNotifyEvent(20);
 			if(hr == S_OK)
 			{
-				ProcessSpeech();
+				ProcessSpeech(result);
 			}
 		}
     }
@@ -495,7 +340,7 @@ HRESULT JVoiceXmlKinectRecognizer::StopSpeechRecognition()
 /// <summary>
 /// Process recently triggered speech recognition events.
 /// </summary>
-void JVoiceXmlKinectRecognizer::ProcessSpeech()
+HRESULT JVoiceXmlKinectRecognizer::ProcessSpeech(RecognitionResult& result)
 {
     const float ConfidenceThreshold = 0.3f;
 
@@ -513,23 +358,8 @@ void JVoiceXmlKinectRecognizer::ProcessSpeech()
                 if (SPET_LPARAM_IS_OBJECT == curEvent.elParamType)
                 {
                     // this is an ISpRecoResult
-                    ISpRecoResult* result = reinterpret_cast<ISpRecoResult*>(curEvent.lParam);
-                    SPPHRASE* pPhrase = NULL;
-                    
-                    hr = result->GetPhrase(&pPhrase);
-                    if (SUCCEEDED(hr))
-                    {
-                        if ((pPhrase->pProperties != NULL) && (pPhrase->pProperties->pFirstChild != NULL))
-                        {
-                            const SPPHRASEPROPERTY* pSemanticTag = pPhrase->pProperties->pFirstChild;
-                            if (pSemanticTag->SREngineConfidence > ConfidenceThreshold)
-                            {
-								USES_CONVERSION;
-								std::cout << "rec: " << W2A(pSemanticTag->pszValue) << std::endl;
-                            }
-                        }
-                        ::CoTaskMemFree(pPhrase);
-                    }
+                    ISpRecoResult* recoresult = reinterpret_cast<ISpRecoResult*>(curEvent.lParam);
+					hr = result.SetResult(recoresult);
                 }
                 break;
         }
@@ -537,6 +367,6 @@ void JVoiceXmlKinectRecognizer::ProcessSpeech()
         m_pSpeechContext->GetEvents(1, &curEvent, &fetched);
     }
 
-    return;
+    return hr;
 }
 

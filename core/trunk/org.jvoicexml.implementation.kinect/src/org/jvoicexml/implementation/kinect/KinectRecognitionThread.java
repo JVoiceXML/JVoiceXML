@@ -60,30 +60,15 @@ final class KinectRecognitionThread extends Thread {
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("Starting recognition process");
         }
-        RecognitionResult result;
         try {
-            result = recognizer.recognize();
+            RecognitionResult result = recognizer.recognize();
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("Recognitionprocess ended");
             }
+            recognizer.reportResult(result);
         } catch (KinectRecognizerException e) {
-            LOGGER.warn("Error in recognition process", e);
+            recognizer.reportResult(e);
             return;
-        }
-
-        switch (result.getStatus()) {
-        case RecognitionResult.RECOGNITION_NOMATCH:
-//            recognizer.reportResultRejected();
-            break;
-        case RecognitionResult.RECOGNITION_SUCCESSFULL:
-//            recognizer.reportResult(ruleName, utterance);
-            break;
-        case RecognitionResult.RECOGNITION_ABORTED:
-            break;
-        default:
-            LOGGER.warn("Unknown return value: " +
-                   Integer.toHexString(result.getStatus()));
-            break;
         }
     }
 

@@ -24,6 +24,7 @@
 //       which might contain a version of SAPI that is not appropriate for use together with Kinect sensor.
 #include <sapi.h>
 #include <sphelper.h>
+#include "RecognitionResult.h"
 
 /// <summary>
 /// The bridge between the Microsoft Kinect and JVoiceXML.
@@ -42,31 +43,11 @@ public:
     ~JVoiceXmlKinectRecognizer();
 
     /// <summary>
-    /// Handles window messages, passes most to the class instance to handle
-    /// </summary>
-    /// <param name="hWnd">window message is for</param>
-    /// <param name="uMsg">message</param>
-    /// <param name="wParam">message data</param>
-    /// <param name="lParam">additional message data</param>
-    /// <returns>result of message processing</returns>
-    static LRESULT CALLBACK MessageRouter(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-    /// <summary>
-    /// Handle windows messages for a class instance
-    /// </summary>
-    /// <param name="hWnd">window message is for</param>
-    /// <param name="uMsg">message</param>
-    /// <param name="wParam">message data</param>
-    /// <param name="lParam">additional message data</param>
-    /// <returns>result of message processing</returns>
-    LRESULT CALLBACK        DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-    /// <summary>
     /// Creates the main window and begins processing
     /// </summary>
     /// <param name="hInstance">handle to the application instance</param>
     /// <param name="nCmdShow">whether to display minimized, maximized, or normally</param>
-    int                     Run(HINSTANCE hInstance, int nCmdShow);
+    //int                     Run(HINSTANCE hInstance, int nCmdShow);
 
     HRESULT Allocate();
 
@@ -76,7 +57,7 @@ public:
     /// <returns>
     /// <para>S_OK on success, otherwise failure code.</para>
     /// </returns>
-    HRESULT                 RecognizeSpeech();
+	HRESULT                 RecognizeSpeech(RecognitionResult& result);
 
     HRESULT                 StopSpeechRecognition();
 
@@ -140,5 +121,5 @@ private:
     /// <summary>
     /// Process recently triggered speech recognition events.
     /// </summary>
-    void                    ProcessSpeech();
+    HRESULT                 ProcessSpeech(RecognitionResult& result);
 };

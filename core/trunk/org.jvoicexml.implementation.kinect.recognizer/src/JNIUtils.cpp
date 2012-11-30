@@ -24,7 +24,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved)
 
     if (CLSID_ExpectedRecognizer != CLSID_SpInprocRecognizer)
     {
-        char buffer[1024];
+        //char buffer[1024];
         //GetErrorMessage(buffer, sizeof(buffer), "Incompatible SAPI versions! Please ensure that Microsoft Speech SDK and other requirements are installed!",
         //    hr);
         return JNI_ERR;
@@ -34,7 +34,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved)
 	HRESULT hr = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (FAILED(hr))
     {
-        char buffer[1024];
+        //char buffer[1024];
         //GetErrorMessage(buffer, sizeof(buffer), "Initializing COM failed!",
         //    hr);
         return JNI_ERR;

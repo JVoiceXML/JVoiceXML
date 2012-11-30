@@ -105,7 +105,22 @@ public final class KinectRecognizer {
     private native RecognitionResult kinectRecognizeSpeech(long handle)
             throws KinectRecognizerException;
 
+    /**
+     * Reports the result of the recognition process.
+     * @param result the obtained result.
+     */
+    void reportResult(final RecognitionResult result) {
+        
+    }
 
+    /**
+     * Reports the result of the recognition process.
+     * @param e error while recognizing
+     */
+    void reportResult(final KinectRecognizerException e) {
+        
+    }
+    
     /**
      * Stops the recognition process.
      * @throws KinectRecognizerException

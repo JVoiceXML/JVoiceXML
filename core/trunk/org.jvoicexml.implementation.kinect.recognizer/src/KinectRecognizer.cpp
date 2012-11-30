@@ -6,6 +6,7 @@
  */
 
 #include "stdafx.h"
+#include <iostream>
 #include "JNIUtils.h"
 #include "org_jvoicexml_implementation_kinect_KinectRecognizer.h"
 #include "JVoiceXmlKinectRecognizer.h"
@@ -149,7 +150,8 @@ JNIEXPORT jobject JNICALL Java_org_jvoicexml_implementation_kinect_KinectRecogni
   (JNIEnv *env, jobject caller, jlong handle)
 {
 	JVoiceXmlKinectRecognizer* recognizer = (JVoiceXmlKinectRecognizer*) handle;
-	HRESULT hr = recognizer->RecognizeSpeech();
+	RecognitionResult result;
+	HRESULT hr = recognizer->RecognizeSpeech(result);
 	if (FAILED(hr))
 	{
 		// Produce an error message
@@ -158,8 +160,14 @@ JNIEXPORT jobject JNICALL Java_org_jvoicexml_implementation_kinect_KinectRecogni
         ThrowJavaException(env, "org/jvoicexml/implementation/kinect/KinectRecognizerException", buffer);
 		return NULL;
 	}
-
-	return NULL;
+	jstring sml = env->NewString((jchar*) result.GetSML(), wcslen(result.GetSML()));
+	jclass clazz;
+	jmethodID methodId;
+	if (!GetMethodId(env, "org/jvoicexml/implementation/kinect/RecognitionResult", "<init>", "(ILjava/lang/String;)V", clazz, methodId))
+	{
+		return NULL;
+	}
+	return env->NewObject(clazz, methodId, (int) result.GetStatus(), sml);
 }
 
 /*
