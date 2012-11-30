@@ -304,6 +304,10 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      */
     @Override
     public void activate() {
+        pendingMessages.clear();
+        listener.clear();
+        sentHungup = false;
+        textOutput = null;
     }
 
     /**
@@ -345,6 +349,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      */
     @Override
     public void passivate() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("passivating...");
+        }
         listener.clear();
         if (receiver != null) {
             receiver.interrupt();
@@ -367,6 +374,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         pendingMessages.clear();
         sentHungup = false;
         textOutput = null;
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...passivated");
+        }
     }
 
     /**
