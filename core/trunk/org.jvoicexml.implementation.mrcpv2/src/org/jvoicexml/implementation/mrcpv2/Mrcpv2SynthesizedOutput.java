@@ -40,7 +40,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SynthesisResult;
@@ -196,8 +195,6 @@ public final class Mrcpv2SynthesizedOutput
                InputSource src = new InputSource(is);
                SsmlDocument ssml = new SsmlDocument(src);
                speakText = ssml.getSpeak().getTextContent();
-            } else if (speakable instanceof SpeakablePlainText) {
-                speakText = speakable.getSpeakableText();
             }
             //play the text
             speechClient.queuePrompt(false, speakText);

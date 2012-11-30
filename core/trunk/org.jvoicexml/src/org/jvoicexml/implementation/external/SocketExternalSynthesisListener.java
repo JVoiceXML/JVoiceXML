@@ -27,7 +27,6 @@
 package org.jvoicexml.implementation.external;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
@@ -95,17 +94,13 @@ public final class SocketExternalSynthesisListener
                 ((OutputStartedEvent) event).getSpeakable();
             String text = null;
             
-            if (speakable instanceof SpeakablePlainText) {
-                text = ((SpeakablePlainText) speakable).getSpeakableText();
-            }
-            
             if (speakable instanceof SpeakableSsmlText) {
                 SsmlDocument document =
                     ((SpeakableSsmlText) speakable).getDocument();
                 Speak speak = document.getSpeak();
-                text = getConcatenatedText(speak);       
+                text = getConcatenatedText(speak);
             }
-            
+
             if (running) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Synthesis Listener sent Message:"

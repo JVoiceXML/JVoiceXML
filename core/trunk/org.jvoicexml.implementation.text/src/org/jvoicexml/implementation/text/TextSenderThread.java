@@ -34,7 +34,6 @@ import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextMessage;
@@ -152,11 +151,11 @@ final class TextSenderThread extends Thread {
      */
     public void sendData(final SpeakableText speakable) {
         final Serializable data;
-        if (speakable instanceof SpeakablePlainText) {
-            data = speakable.getSpeakableText();
-        } else {
+        if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             data = ssml.getDocument();
+        } else {
+            data = speakable.getSpeakableText();
         }
         final TextMessage message =
             new TextMessage(TextMessage.DATA, ++sequenceNumber, data);

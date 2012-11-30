@@ -34,8 +34,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.ConnectionInformation;
-import org.jvoicexml.SpeakablePlainText;
-import org.jvoicexml.SpeakableText;
+import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
@@ -121,13 +120,13 @@ public final class TestTextTelephony
     public void testPlay() throws Exception, JVoiceXMLEvent {
         final TextSynthesizedOutput textOutput = new TextSynthesizedOutput();
         final String prompt = "testPlay";
-        final SpeakableText speakable = new SpeakablePlainText(prompt);
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(prompt);
         textOutput.queueSpeakable(speakable, sessionId, null);
         telephony.play(textOutput, null);
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
-        Assert.assertEquals(prompt, receivedObject);
+        Assert.assertEquals(speakable.getDocument(), receivedObject);
     }
 
     /**

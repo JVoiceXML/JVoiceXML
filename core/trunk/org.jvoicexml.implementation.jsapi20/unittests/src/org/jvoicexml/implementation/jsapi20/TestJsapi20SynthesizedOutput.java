@@ -43,7 +43,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
@@ -141,39 +140,6 @@ public final class TestJsapi20SynthesizedOutput {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutput#queueSpeakable(org.jvoicexml.SpeakableText, org.jvoicexml.DocumentServer)}.
-     * @exception JVoiceXMLEvent
-     *            test failed
-     * @exception Exception
-     *            test failed
-     */
-    @Test
-    public void testQueueSpeakable() throws JVoiceXMLEvent, Exception {
-        final SpeakableText speakable1 =
-            new SpeakablePlainText("this is a test");
-        output.queueSpeakable(speakable1, sessionId, documentServer);
-        output.waitQueueEmpty();
-        Assert.assertFalse("output should be busy", output.isBusy());
-        final int size = 3;
-        listener.waitSize(size, TIMEOUT);
-        Assert.assertEquals(size, listener.size());
-        SynthesizedOutputEvent start = listener.get(0);
-        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_STARTED,
-                start.getEvent());
-        OutputStartedEvent startedEvent = (OutputStartedEvent) start;
-        Assert.assertEquals(speakable1, startedEvent.getSpeakable());
-        SynthesizedOutputEvent stop = listener.get(1);
-        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_ENDED ,
-                stop.getEvent());
-        OutputEndedEvent stoppedEvent = (OutputEndedEvent) stop;
-        Assert.assertEquals(speakable1, stoppedEvent.getSpeakable());
-        SynthesizedOutputEvent empty = listener.get(2);
-        Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY ,
-                empty.getEvent());
-        Assert.assertTrue(empty instanceof QueueEmptyEvent);
-    }
-
-    /**
      * Test method for {@link Jsapi20SynthesizedOutput#queueSpeakable(SpeakableText, boolean, org.jvoicexml.DocumentServer)}.
      * @throws JVoiceXMLEvent
      *         Test failed.
@@ -219,8 +185,10 @@ public final class TestJsapi20SynthesizedOutput {
      */
     @Test
     public void testWaitQueueEmpty() throws JVoiceXMLEvent, Exception {
-        final SpeakableText speakable1 =
-            new SpeakablePlainText("this is a test for queue empty");
+        final SsmlDocument ssml = new SsmlDocument();
+        final Speak speak = ssml.getSpeak();
+        speak.addText("this is a test");
+        final SpeakableText speakable1 = new SpeakableSsmlText(ssml);
         output.queueSpeakable(speakable1, sessionId, documentServer);
         output.waitQueueEmpty();
         Assert.assertFalse("output should be busy", output.isBusy());
@@ -238,15 +206,11 @@ public final class TestJsapi20SynthesizedOutput {
         final int max = 10;
         for (int i = 0; i < max; i++) {
             final SpeakableText speakable;
-            if (i % 2 == 0) {
-                final SsmlDocument ssml = new SsmlDocument();
-                final Speak speak = ssml.getSpeak();
-                speak.setXmlLang(Locale.US);
-                speak.addText("this is test " + i);
-                speakable = new SpeakableSsmlText(ssml);
-            } else {
-                speakable = new SpeakablePlainText("this is test " + i);
-            }
+            final SsmlDocument ssml = new SsmlDocument();
+            final Speak speak = ssml.getSpeak();
+            speak.setXmlLang(Locale.US);
+            speak.addText("this is test " + i);
+            speakable = new SpeakableSsmlText(ssml);
             output.queueSpeakable(speakable, sessionId, documentServer);
         }
 
@@ -334,8 +298,11 @@ public final class TestJsapi20SynthesizedOutput {
         final SpeakableText speakable1 =
                 new SpeakableSsmlText(ssml, true, BargeInType.SPEECH);
         output.queueSpeakable(speakable1, sessionId, documentServer);
+        final SsmlDocument ssml2 = new SsmlDocument();
+        final Speak speak2 = ssml.getSpeak();
+        speak2.addText("No bargein text");
         final SpeakableText speakable2 =
-                new SpeakablePlainText("No bargein text");
+                new SpeakableSsmlText(ssml2, false, null);
         output.queueSpeakable(speakable2, sessionId, documentServer);
         Thread.sleep(1500);
         System.out.println("it is waiting till the output finishes");

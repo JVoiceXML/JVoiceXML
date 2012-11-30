@@ -63,7 +63,8 @@ public final class TestSpeakableSsmlText {
         simpleSpeakable.appendSpeakableText("some text");
         Assert.assertFalse(simpleSpeakable.isSpeakableTextEmpty());
 
-        final SpeakableSsmlText emptySpeakable = new SpeakableSsmlText(null);
+        final SpeakableSsmlText emptySpeakable =
+                new SpeakableSsmlText((SsmlDocument)null);
 
         Assert.assertTrue(emptySpeakable.isSpeakableTextEmpty());
 

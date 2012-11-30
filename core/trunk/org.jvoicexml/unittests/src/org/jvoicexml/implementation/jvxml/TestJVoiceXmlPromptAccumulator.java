@@ -32,7 +32,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -84,14 +83,17 @@ public final class TestJVoiceXmlPromptAccumulator {
     @Test
     public void testGetLastSpeakableText() throws Exception {
         Assert.assertNull(accumulator.getLastSpeakableText());
+        final SsmlDocument ssml1 = new SsmlDocument();
+        final Speak speak1 = ssml1.getSpeak();
+        speak1.addText("this is a test");
         final SpeakableText speakable1 =
-                new SpeakablePlainText("this is a test");
+                new SpeakableSsmlText(ssml1);
         accumulator.queuePrompt(speakable1);
         Assert.assertEquals(speakable1, accumulator.getLastSpeakableText());
-        final SsmlDocument document = new SsmlDocument();
-        final Speak speak = document.getSpeak();
-        speak.addText("this is another test");
-        final SpeakableText speakable2 = new SpeakableSsmlText(document);
+        final SsmlDocument ssml2 = new SsmlDocument();
+        final Speak speak2 = ssml2.getSpeak();
+        speak2.addText("this is another test");
+        final SpeakableText speakable2 = new SpeakableSsmlText(ssml2);
         accumulator.queuePrompt(speakable2);
         Assert.assertEquals(speakable2, accumulator.getLastSpeakableText());
     }
@@ -105,13 +107,16 @@ public final class TestJVoiceXmlPromptAccumulator {
      */
     @Test
     public void testRenderPrompts() throws Exception, JVoiceXMLEvent {
+        final SsmlDocument ssml1 = new SsmlDocument();
+        final Speak speak1 = ssml1.getSpeak();
+        speak1.addText("this is a test");
         final SpeakableText speakable1 =
-                new SpeakablePlainText("this is a test");
+                new SpeakableSsmlText(ssml1);
         accumulator.queuePrompt(speakable1);
-        final SsmlDocument document = new SsmlDocument();
-        final Speak speak = document.getSpeak();
-        speak.addText("this is another test");
-        final SpeakableSsmlText speakable2 = new SpeakableSsmlText(document);
+        final SsmlDocument ssml2 = new SsmlDocument();
+        final Speak speak2 = ssml2.getSpeak();
+        speak2.addText("this is another test");
+        final SpeakableSsmlText speakable2 = new SpeakableSsmlText(ssml2);
         final long timeout = 40;
         speakable2.setTimeout(timeout);
         accumulator.queuePrompt(speakable2);

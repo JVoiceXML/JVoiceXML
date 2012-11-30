@@ -14,7 +14,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import marytts.client.MaryClient;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
@@ -151,10 +150,7 @@ final class SynthesisQueue extends Thread
        enableBargeIn = speakable.isBargeInEnabled();
        final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-       if (speakable instanceof SpeakablePlainText) {
-           final String text = speakable.getSpeakableText();
-           speakPlainText(text, out);
-       } else if (speakable instanceof SpeakableSsmlText) {
+       if (speakable instanceof SpeakableSsmlText) {
            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
            speakSsml(ssml, out);
        } else {
@@ -202,25 +198,6 @@ final class SynthesisQueue extends Thread
                 maryRequestParameters.get("lang"), maryRequestParameters
                         .get("audioType"), maryRequestParameters
                         .get("voiceName"), out, SERVER_TIMEOUT);
-    }
-
-    /**
-     * Passes the given text to be synthesized by Mary.
-     * @param text the text to be spoken
-     * @param out the output buffer to store Mary's response
-     * @exception IOException
-     *            error communicating with Mary
-     */
-    private void speakPlainText(final String text,
-            final ByteArrayOutputStream out) throws IOException {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("synthesizing '" + text + "'");
-        }
-        processor.process(text, "TEXT", "AUDIO",
-                maryRequestParameters.get("lang"),
-                maryRequestParameters.get("audioType"),
-                maryRequestParameters.get("voiceName"), out,
-                SERVER_TIMEOUT);
     }
 
    /**

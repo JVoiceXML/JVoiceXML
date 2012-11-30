@@ -29,7 +29,7 @@ package org.jvoicexml.interpreter.tagstrategy;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.jvoicexml.SpeakablePlainText;
+import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -38,6 +38,8 @@ import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.xml.ssml.Speak;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Value;
 
@@ -91,7 +93,10 @@ public final class TestValueStrategy extends TagStrategyTestBase
         setSystemOutputListener(this);
         final ValueStrategy strategy = new ValueStrategy();
         executeTagStrategy(value, strategy);
-        final SpeakableText speakable = new SpeakablePlainText(val);
+        final SsmlDocument ssml = new SsmlDocument();
+        final Speak speak = ssml.getSpeak();
+        speak.addText("this is a test");
+        final SpeakableText speakable = new SpeakableSsmlText(ssml);
         Assert.assertEquals(speakable, queuedSpeakable);
     }
 

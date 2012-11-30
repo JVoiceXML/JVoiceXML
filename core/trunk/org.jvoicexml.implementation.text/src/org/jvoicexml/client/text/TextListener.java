@@ -52,12 +52,6 @@ public interface TextListener {
     void connected(final InetSocketAddress remote);
 
     /**
-     * Notification that a portion of text has arrived.
-     * @param text the received text.
-     */
-    void outputText(final String text);
-
-    /**
      * Notification that an SSML document has arrived.
      * @param document the received SSML document.
      */

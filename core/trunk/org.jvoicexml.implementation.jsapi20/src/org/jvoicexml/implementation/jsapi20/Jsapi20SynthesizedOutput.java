@@ -55,7 +55,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakablePhoneInfo;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SynthesisResult;
@@ -71,7 +70,6 @@ import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
-import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 
@@ -333,18 +331,15 @@ public final class Jsapi20SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
-        final SsmlDocument document = ssmlText.getDocument();
         if (!supportsMarkup) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
                  "synthesizer does not support markup. reducing to plain text");
             }
-            final Speak speak = document.getSpeak();
-            final String text = speak.getTextContent();
-            final SpeakablePlainText speakable = new SpeakablePlainText(text);
-            speakPlaintext(speakable);
+            speakPlaintext(ssmlText);
             return;
         }
+        final SsmlDocument document = ssmlText.getDocument();
         final String doc = document.toString();
 
         if (LOGGER.isDebugEnabled()) {
@@ -400,10 +395,7 @@ public final class Jsapi20SynthesizedOutput
         }
 
         // Really process the next speakable
-        if (speakable instanceof SpeakablePlainText) {
-            final SpeakablePlainText text = (SpeakablePlainText) speakable;
-            speakPlaintext(text);
-        } else if (speakable instanceof SpeakableSsmlText) {
+        if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             speakSSML(ssml);
         } else {
@@ -512,12 +504,13 @@ public final class Jsapi20SynthesizedOutput
      * @exception BadFetchError
      *                    Synthesizer in wrong state.
      */
-    private void speakPlaintext(final SpeakablePlainText speakable)
+    private void speakPlaintext(final SpeakableSsmlText speakable)
         throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
-        final String text = speakable.getSpeakableText();
+        final SsmlDocument ssml = speakable.getDocument();
+        final String text = ssml.getTextContent();
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("speaking '" + text + "'...");
         }

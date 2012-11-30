@@ -38,7 +38,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.ErrorEvent;
@@ -189,8 +188,8 @@ public final class TestMarySynthesizedOutput
      */
     @Test(timeout = 6000)
     public void testQueueSpeakable() throws Exception, JVoiceXMLEvent {
-        final SpeakablePlainText plainText =
-            new SpeakablePlainText("Hello world");
+        final SpeakableSsmlText plainText =
+            new SpeakableSsmlText("Hello world");
  
         output.queueSpeakable(plainText, sessionId, documentServer);
         synchronized (outputEndedLock) {
@@ -213,12 +212,13 @@ public final class TestMarySynthesizedOutput
      * @exception JVoiceXMLEvent test failed
      */
     @Test
-    public void testQueueMultiplePlainTexts() throws Exception, JVoiceXMLEvent {
+    public void testQueueMultipleSpeakables()
+            throws Exception, JVoiceXMLEvent {
         for (int i = 0; i < 10; i++) {
-            final SpeakablePlainText plainText =
-                new SpeakablePlainText("a " + i + " b");
+            final SpeakableSsmlText speakable =
+                new SpeakableSsmlText("a " + i + " b");
      
-            output.queueSpeakable(plainText, sessionId, documentServer);
+            output.queueSpeakable(speakable, sessionId, documentServer);
         }
         output.waitQueueEmpty();
     }
@@ -245,11 +245,11 @@ public final class TestMarySynthesizedOutput
         final SpeakableSsmlText ssml2 =
             new SpeakableSsmlText(doc2, true, BargeInType.SPEECH);
         
-        SpeakablePlainText plainText =
-            new SpeakablePlainText("Test 3");
+        SpeakableSsmlText plainText =
+            new SpeakableSsmlText("Test 3");
         
-        SpeakablePlainText plainText2 =
-            new SpeakablePlainText("Test 4");
+        SpeakableSsmlText plainText2 =
+            new SpeakableSsmlText("Test 4");
         
         final SsmlDocument doc3 = new SsmlDocument();
         final Speak speak3 = doc3.getSpeak();
@@ -320,7 +320,7 @@ public final class TestMarySynthesizedOutput
             }
         } 
 
-        SpeakablePlainText plainText = new SpeakablePlainText(
+        SpeakableSsmlText plainText = new SpeakableSsmlText(
                 "Test 3.Barge-in off.You can not skip this audio");
         output.queueSpeakable(plainText, sessionId, documentServer);
         LOGGER.info(plainText + " offered to queue");
@@ -338,7 +338,7 @@ public final class TestMarySynthesizedOutput
             }
         } 
 
-        plainText = new SpeakablePlainText(
+        plainText = new SpeakableSsmlText(
                 "Test 4.Barge-in off.You can not skip this audio");
         output.queueSpeakable(plainText, sessionId, documentServer);
         LOGGER.info(plainText + " offered to queue");
@@ -378,7 +378,7 @@ public final class TestMarySynthesizedOutput
             }
         } 
 
-        plainText = new SpeakablePlainText(
+        plainText = new SpeakableSsmlText(
                 "Test 6.Barge-in off.You can not skip this audio");
         output.queueSpeakable(plainText, sessionId, documentServer);
         LOGGER.info(plainText + " offered to queue");
@@ -423,5 +423,6 @@ public final class TestMarySynthesizedOutput
     @Override
     public void outputError(final ErrorEvent error) {
     }
+   
 }
 

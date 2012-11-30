@@ -50,7 +50,6 @@ import javax.speech.synthesis.SynthesizerModeDesc;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
@@ -396,11 +395,7 @@ public final class Jsapi10SynthesizedOutput
         // Really process the next speakable
         fireOutputStarted(speakable);
 
-        if (speakable instanceof SpeakablePlainText) {
-            final String text = speakable.getSpeakableText();
-
-            speakPlaintext(text);
-        } else if (speakable instanceof SpeakableSsmlText) {
+        if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             bargein = ssml.isBargeInEnabled();
             bargeInType = ssml.getBargeInType();

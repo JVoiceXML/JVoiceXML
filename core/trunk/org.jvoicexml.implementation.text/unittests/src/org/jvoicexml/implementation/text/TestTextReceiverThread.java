@@ -63,7 +63,7 @@ public final class TestTextReceiverThread
     private static final int MAX_WAIT = 1000;
 
     /** Port number to use. */
-    private static final int PORT = 4244;
+    private static final int PORT = 5353;
 
     /** Text server to send the data. */
     private TextServer server;
@@ -120,7 +120,9 @@ public final class TestTextReceiverThread
      */
     @After
     public void tearDown() throws Exception {
-        receiver.interrupt();
+        if (receiver != null) {
+            receiver.interrupt();
+        }
         server.stopServer();
     }
 

@@ -39,7 +39,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
@@ -135,8 +134,10 @@ public final class TestJsapi10SynthesizedOutput {
      */
     @Test
     public void testQueueSpeakable() throws JVoiceXMLEvent, Exception {
-        final SpeakableText speakable1 =
-            new SpeakablePlainText("this is a test");
+        final SsmlDocument ssml = new SsmlDocument();
+        final Speak speak = ssml.getSpeak();
+        speak.addText("this is a test");
+        final SpeakableText speakable1 = new SpeakableSsmlText(ssml);
         synthesizer.queueSpeakable(speakable1, sessionId, documentServer);
         synthesizer.waitQueueEmpty();
         Assert.assertFalse(synthesizer.isBusy());
@@ -171,14 +172,10 @@ public final class TestJsapi10SynthesizedOutput {
         final int max = 10;
         for (int i = 0; i < max; i++) {
             final SpeakableText speakable;
-            if (i % 2 == 0) {
-                final SsmlDocument ssml = new SsmlDocument();
-                final Speak speak = ssml.getSpeak();
-                speak.addText("this is test " + i);
-                speakable = new SpeakableSsmlText(ssml);
-            } else {
-                speakable = new SpeakablePlainText("this is test " + i);
-            }
+            final SsmlDocument ssml = new SsmlDocument();
+            final Speak speak = ssml.getSpeak();
+            speak.addText("this is test " + i);
+            speakable = new SpeakableSsmlText(ssml);
             synthesizer.queueSpeakable(speakable, sessionId, documentServer);
         }
 

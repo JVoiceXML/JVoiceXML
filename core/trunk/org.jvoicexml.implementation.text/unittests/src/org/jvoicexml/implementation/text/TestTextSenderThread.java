@@ -35,7 +35,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextListener;
@@ -55,7 +54,7 @@ public final class TestTextSenderThread
     private static final int MAX_WAIT = 1000;
 
     /** Port number to use. */
-    private static final int PORT = 4244;
+    private static final int PORT = 5354;
 
     /** Text server to receive the data. */
     private TextServer server;
@@ -98,9 +97,11 @@ public final class TestTextSenderThread
      */
     @After
     public void tearDown() throws Exception {
-        sender.sendBye();
-        synchronized (lock) {
-            lock.wait(MAX_WAIT);
+        if (sender != null) {
+            sender.sendBye();
+            synchronized (lock) {
+                lock.wait(MAX_WAIT);
+            }
         }
         server.stopServer();
     }
@@ -112,12 +113,12 @@ public final class TestTextSenderThread
     @Test
     public void testSendData() throws Exception {
         final String test1 = "test1";
-        final SpeakableText speakable1 = new SpeakablePlainText(test1);
+        final SpeakableSsmlText speakable1 = new SpeakableSsmlText(test1);
         sender.sendData(speakable1);
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
-        Assert.assertEquals(test1, receivedObject);
+        Assert.assertEquals(speakable1.getDocument(), receivedObject);
 
         synchronized (lock) {
             lock.wait(MAX_WAIT);
@@ -133,7 +134,7 @@ public final class TestTextSenderThread
 
         for (int  i = 0; i < 10; i++) {
             final String test3 = "test" + i;
-            final SpeakableText speakable3 = new SpeakablePlainText(test3);
+            final SpeakableText speakable3 = new SpeakableSsmlText(test3);
             sender.sendData(speakable3);
         }
         int i = 0;

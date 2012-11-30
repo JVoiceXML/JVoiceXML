@@ -34,8 +34,9 @@ import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
-import org.jvoicexml.SpeakablePlainText;
+import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -47,8 +48,10 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.TextContainer;
+import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.Value;
 import org.mozilla.javascript.Context;
 
@@ -109,20 +112,35 @@ final class ValueStrategy
             return;
         }
 
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
-        final SpeakablePlainText speakable = new SpeakablePlainText(text);
-        final DocumentServer documentServer = context.getDocumentServer();
-        platform.setPromptTimeout(-1);
-        platform.queuePrompt(speakable);
-        final Session session = context.getSession();
-        final String sessionId = session.getSessionID();
+        final SsmlParser parser = new SsmlParser(node, context);
+        final SsmlDocument document;
+
         try {
-            final CallControlProperties callProps =
-                    context.getCallControlProperties(fia);
-            platform.renderPrompts(sessionId, documentServer, callProps);
-        } catch (ConfigurationException ex) {
-            throw new NoresourceError(ex.getMessage(), ex);
+            document = parser.getDocument();
+        } catch (javax.xml.parsers.ParserConfigurationException pce) {
+            throw new BadFetchError("Error converting to SSML!", pce);
+        }
+        final SpeakableSsmlText speakable =
+            new SpeakableSsmlText(document, false, null);
+        final long timeout = getTimeout();
+        speakable.setTimeout(timeout);
+        if (!speakable.isSpeakableTextEmpty()) {
+            final ImplementationPlatform platform =
+                    context.getImplementationPlatform();
+            if (!fia.isQueuingPrompts()) {
+                platform.setPromptTimeout(-1);
+            }
+            platform.queuePrompt(speakable);
+            final Session session = context.getSession();
+            final String sessionId = session.getSessionID();
+            try {
+                final CallControlProperties callProps =
+                        context.getCallControlProperties(fia);
+                final DocumentServer server = context.getDocumentServer();
+                platform.renderPrompts(sessionId, server, callProps);
+            } catch (ConfigurationException ex) {
+                throw new NoresourceError(ex.getMessage(), ex);
+            }
         }
     }
 
@@ -172,5 +190,21 @@ final class ValueStrategy
                     + parent.getClass() + "!");
         }
         return null;
+    }
+
+    /**
+     * Retrieves the timeout attribute.
+     * @return timeout to use for this prompt.
+     * @since 0.7
+     */
+    private long getTimeout() {
+        final String timeoutAttribute =
+            (String) getAttribute(Prompt.ATTRIBUTE_TIMEOUT);
+        if (timeoutAttribute == null) {
+            return -1;
+        } else {
+            final TimeParser timeParser = new TimeParser(timeoutAttribute);
+            return timeParser.parse();
+        }
     }
 }

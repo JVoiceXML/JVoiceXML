@@ -26,6 +26,8 @@
 
 package org.jvoicexml;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -62,6 +64,23 @@ public final class SpeakableSsmlText
     private final boolean bargein;
 
     /**
+     * Constructs a new object. The given text is encapsulated in an
+     * {@link SsmlDocument}.
+     * @param text the text that should be contained in the speakable
+     * @throws ParserConfigurationException
+     *         error creating the {@link SsmlDocument}.
+     */
+    public SpeakableSsmlText(final String text)
+            throws ParserConfigurationException {
+        document = new SsmlDocument();
+        final Speak speak = document.getSpeak();
+        speak.addText(text);
+        timeout = -1;
+        bargeInType = null;
+        bargein = false;
+    }
+
+    /**
      * Constructs a new object.
      * @param doc
      *        The SSML document to speak.
@@ -80,7 +99,8 @@ public final class SpeakableSsmlText
      * @param useBargein
      *        <code>true</code> if bargein is supported.
      * @param type
-     *        the barge-in type.
+     *        the barge-in type, maybe <code>null</code> if no bargein is
+     *        supported.
      */
     public SpeakableSsmlText(final SsmlDocument doc, final boolean useBargein,
             final BargeInType type) {

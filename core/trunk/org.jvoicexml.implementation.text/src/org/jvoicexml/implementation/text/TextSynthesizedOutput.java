@@ -34,7 +34,6 @@ import java.util.concurrent.BlockingQueue;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextConnectionInformation;
@@ -148,12 +147,11 @@ final class TextSynthesizedOutput
         throws NoresourceError,
             BadFetchError {
         final Object o;
-        if (speakable instanceof SpeakablePlainText) {
-            SpeakablePlainText text = (SpeakablePlainText) speakable;
-            o = text.getSpeakableText();
-        } else {
+        if (speakable instanceof SpeakableSsmlText) {
             SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             o = ssml.getDocument();
+        } else {
+            o = speakable.getSpeakableText();
         }
 
         if (LOGGER.isDebugEnabled()) {
