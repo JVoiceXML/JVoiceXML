@@ -49,7 +49,7 @@ public final class TestKinectRecognizer {
      */
     @Test
     public void testAllocate() throws Exception {
-        final KinectRecognizer recognizer = new KinectRecognizer();
+        final KinectRecognizer recognizer = new KinectRecognizer(null);
         recognizer.allocate();
         Assert.assertTrue(recognizer.isAllocated());
     }
@@ -61,7 +61,7 @@ public final class TestKinectRecognizer {
      */
     @Test
     public void testDeallocate() throws Exception {
-        final KinectRecognizer recognizer = new KinectRecognizer();
+        final KinectRecognizer recognizer = new KinectRecognizer(null);
         recognizer.allocate();
         Assert.assertTrue(recognizer.isAllocated());
         recognizer.deallocate();
@@ -71,7 +71,7 @@ public final class TestKinectRecognizer {
     
     @Test
     public void testStartRecognition() throws Exception {
-        final KinectRecognizer recognizer = new KinectRecognizer();
+        final KinectRecognizer recognizer = new KinectRecognizer(null);
         recognizer.allocate();
         recognizer.startRecognition();
         while (true) {

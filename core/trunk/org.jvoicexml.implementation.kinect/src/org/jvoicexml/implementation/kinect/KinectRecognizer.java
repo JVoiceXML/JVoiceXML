@@ -25,7 +25,20 @@
  */
 package org.jvoicexml.implementation.kinect;
 
+import java.io.Reader;
+import java.io.StringReader;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamSource;
+
 import org.apache.log4j.Logger;
+import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.implementation.SpokenInputEvent;
 
 
 /**
@@ -50,7 +63,6 @@ public final class KinectRecognizer {
         }
     }
 
-
     /** Kinect recognizer Handle. **/
     private long handle;
 
@@ -59,6 +71,17 @@ public final class KinectRecognizer {
 
     /** <code>true</code> if the recognizer has been started. */
     private boolean isRecognizing;
+
+    /** Reference to the spoken input. */
+    private final KinectSpokenInput input;
+
+    /**
+     * Constructs a new object.
+     * @param spokenInput the spoken input
+     */
+    public KinectRecognizer(final KinectSpokenInput spokenInput) {
+        input = spokenInput;
+    }
 
     /**
      * Allocates this recognizer.
@@ -121,10 +144,51 @@ public final class KinectRecognizer {
      */
     void reportResult(final RecognitionResult result) {
         isRecognizing = false;
-        LOGGER.info("recognized: " + result.getStatus());
-        LOGGER.info("recognized: " + result.getSml());
+        
+        if (result == null) {
+            // ...
+        }
+        // parse our tags from SML
+        try {
+            final String sml = result.getSml();
+            final SmlInterpretationExtractor extractor = parseSml(sml);
+            final KinectRecognitionResult kinectResult =
+                    new KinectRecognitionResult(extractor);
+            final SpokenInputEvent event;
+            if (kinectResult.isAccepted()) {
+                event = new SpokenInputEvent(input,
+                        SpokenInputEvent.RESULT_ACCEPTED, kinectResult);
+            } else {
+                event = new SpokenInputEvent(input,
+                        SpokenInputEvent.RESULT_REJECTED, kinectResult);
+            }
+            input.fireInputEvent(event);
+        } catch (TransformerException ex) {
+            LOGGER.error("error parsing SML '" + result.getSml() + "'", ex);
+            return;
+        }
     }
 
+    /**
+     * Parses the given SML string.
+     * @param sml the SML to parse
+     * @return the parsed information
+     * @throws TransformerException
+     *         error parsing
+     */
+    private SmlInterpretationExtractor parseSml(final String sml)
+            throws TransformerException {
+        final TransformerFactory factory = TransformerFactory.newInstance();
+        final Transformer transformer = factory.newTransformer();
+        final Reader reader = new StringReader(sml);
+        final Source source = new StreamSource(reader);
+        final SmlInterpretationExtractor extractor =
+                new SmlInterpretationExtractor();
+        final javax.xml.transform.Result result = new SAXResult(extractor);
+        transformer.transform(source, result);
+        return extractor;
+    }
+    
     /**
      * Reports the result of the recognition process.
      * @param e error while recognizing
@@ -132,6 +196,8 @@ public final class KinectRecognizer {
     void reportResult(final KinectRecognizerException e) {
         isRecognizing = false;
         LOGGER.warn("error recognizing", e);
+        final ErrorEvent error = new BadFetchError(e.getMessage(), e);
+        input.notifyError(error);
     }
 
     /**

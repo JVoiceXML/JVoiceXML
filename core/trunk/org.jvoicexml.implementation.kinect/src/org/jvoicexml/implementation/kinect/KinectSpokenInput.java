@@ -38,12 +38,14 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.SpeechRecognizerProperties;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -100,7 +102,7 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void open() throws NoresourceError {
-        recognizer = new KinectRecognizer();
+        recognizer = new KinectRecognizer(this);
     }
 
     /**
@@ -165,6 +167,10 @@ public final class KinectSpokenInput implements SpokenInput {
             DtmfRecognizerProperties dtmf) throws NoresourceError,
             BadFetchError {
         recognizer.startRecognition();
+
+        final SpokenInputEvent event =
+                new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
+        fireInputEvent(event);
     }
 
     /**
@@ -176,6 +182,10 @@ public final class KinectSpokenInput implements SpokenInput {
             recognizer.stopRecognition();
         } catch (KinectRecognizerException e) {
             LOGGER.warn(e.getMessage(), e);
+        } finally {
+            final SpokenInputEvent event = new SpokenInputEvent(this,
+                            SpokenInputEvent.RECOGNITION_STOPPED);
+            fireInputEvent(event);
         }
     }
 
@@ -278,5 +288,37 @@ public final class KinectSpokenInput implements SpokenInput {
         types.add(BargeInType.HOTWORD);
 
         return types;
+    }
+
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     * @since 0.6
+     */
+    void fireInputEvent(final SpokenInputEvent event) {
+        synchronized (listeners) {
+            final Collection<SpokenInputListener> copy =
+                new java.util.ArrayList<SpokenInputListener>();
+            copy.addAll(listeners);
+            for (SpokenInputListener current : copy) {
+                current.inputStatusChanged(event);
+            }
+        }
+    }
+
+    /**
+     * Notifies all registered listeners about the given error.
+     * @param error the error.
+     * @since 0.6
+     */
+    void notifyError(final ErrorEvent error) {
+        synchronized (listeners) {
+            final Collection<SpokenInputListener> copy =
+                new java.util.ArrayList<SpokenInputListener>();
+            copy.addAll(listeners);
+            for (SpokenInputListener current : copy) {
+                current.inputError(error);
+            }
+        }
     }
 }
