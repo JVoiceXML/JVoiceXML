@@ -30,6 +30,7 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Queue;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableText;
@@ -52,6 +53,10 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  */
 public final class DummySynthesizedOutput implements SynthesizedOutput,
     ObservableSynthesizedOutput {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(DummySynthesizedOutput.class);
+
     /** Registered output listener. */
     private final Collection<SynthesizedOutputListener> listener;
 
@@ -118,12 +123,14 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     public void activate() {
+        LOGGER.info("activated");
     }
 
     /**
      * {@inheritDoc}
      */
     public void close() {
+        LOGGER.info("closed");
     }
 
     /**
@@ -137,12 +144,14 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     public void open() throws NoresourceError {
+        LOGGER.info("opened");
     }
 
     /**
      * {@inheritDoc}
      */
     public void passivate() {
+        LOGGER.info("passivated");
     }
 
     /**
