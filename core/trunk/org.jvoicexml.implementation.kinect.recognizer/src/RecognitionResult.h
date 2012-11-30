@@ -10,12 +10,13 @@ public:
 
 	HRESULT SetResult(ISpRecoResult* result);
 	HRESULT GetStatus();
-	LPCWSTR GetSML();
+	BSTR GetSML();
 
 private:
 	HRESULT status;
 	LPCWSTR ruleName;
-	LPCWSTR sml;
+	BSTR sml;
 	SPPHRASE* pPhrase;
+	ISpeechXMLRecoResult* xmlresult;
 };
 

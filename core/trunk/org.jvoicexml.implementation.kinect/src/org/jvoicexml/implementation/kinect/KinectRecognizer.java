@@ -25,6 +25,8 @@
  */
 package org.jvoicexml.implementation.kinect;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * A Kinect Recognizer.
@@ -34,6 +36,10 @@ package org.jvoicexml.implementation.kinect;
  *
  */
 public final class KinectRecognizer {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(KinectRecognizer.class);
+
     static {
         //Check the processor architecture
         if (System.getProperty("os.arch").equalsIgnoreCase("x86")) {
@@ -110,7 +116,8 @@ public final class KinectRecognizer {
      * @param result the obtained result.
      */
     void reportResult(final RecognitionResult result) {
-        
+        LOGGER.info("recognized: " + result.getStatus());
+        LOGGER.info("recognized: " + result.getSml());
     }
 
     /**
@@ -118,7 +125,7 @@ public final class KinectRecognizer {
      * @param e error while recognizing
      */
     void reportResult(final KinectRecognizerException e) {
-        
+        LOGGER.warn("error recognizing", e);
     }
     
     /**

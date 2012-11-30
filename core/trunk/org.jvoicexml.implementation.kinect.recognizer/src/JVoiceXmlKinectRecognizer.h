@@ -122,4 +122,6 @@ private:
     /// Process recently triggered speech recognition events.
     /// </summary>
     HRESULT                 ProcessSpeech(RecognitionResult& result);
+
+	BOOL stopRequest;
 };

@@ -160,7 +160,11 @@ JNIEXPORT jobject JNICALL Java_org_jvoicexml_implementation_kinect_KinectRecogni
         ThrowJavaException(env, "org/jvoicexml/implementation/kinect/KinectRecognizerException", buffer);
 		return NULL;
 	}
-	jstring sml = env->NewString((jchar*) result.GetSML(), wcslen(result.GetSML()));
+	jstring sml = NULL;
+	if (result.GetStatus() == S_OK && result.GetSML() != NULL)
+	{
+		sml = env->NewString((jchar*) OLE2T(result.GetSML()), wcslen(OLE2T(result.GetSML())));
+	}
 	jclass clazz;
 	jmethodID methodId;
 	if (!GetMethodId(env, "org/jvoicexml/implementation/kinect/RecognitionResult", "<init>", "(ILjava/lang/String;)V", clazz, methodId))

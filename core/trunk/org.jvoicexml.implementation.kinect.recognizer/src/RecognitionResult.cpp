@@ -6,7 +6,8 @@ RecognitionResult::RecognitionResult(void)
 	: status(S_OK),
 	ruleName(NULL),
 	sml(NULL),
-	pPhrase(NULL)
+	pPhrase(NULL),
+	xmlresult(NULL)
 {
 }
 
@@ -30,17 +31,18 @@ HRESULT RecognitionResult::SetResult(ISpRecoResult* result)
 	ruleName = (pPhrase->Rule.pszName);
 
 	// receive an XMLRecoResult from the RecoResult
-	ISpeechXMLRecoResult* XMLResult;
-	result->QueryInterface(IID_ISpeechXMLRecoResult, (void**)&XMLResult);
+	status = result->QueryInterface(IID_ISpeechXMLRecoResult, (void**)&xmlresult);
+	if (FAILED(status))
+	{
+		return status;
+	}
 
 	// receive an SML String from the XMLRecoResult
-	BSTR tmp = NULL;
-	status = XMLResult->GetXMLResult(SPXRO_SML, &tmp);
+	status = xmlresult->GetXMLResult(SPXRO_SML, &sml);
 	if (FAILED(status))
     {
 		return status; // could not retrieve the SML-Resultstring
 	}
-	sml = (WCHAR*) tmp;
 	return S_OK;
 }
 
@@ -49,7 +51,7 @@ HRESULT RecognitionResult::GetStatus()
 	return status;
 }
 
-LPCWSTR RecognitionResult::GetSML()
+BSTR RecognitionResult::GetSML()
 {
-	return sml;
+	return (WCHAR*) sml;
 }

@@ -25,7 +25,8 @@ JVoiceXmlKinectRecognizer::JVoiceXmlKinectRecognizer() :
     m_pSpeechRecognizer(NULL),
     m_pSpeechContext(NULL),
     m_pSpeechGrammar(NULL),
-    m_hSpeechEvent(INVALID_HANDLE_VALUE)
+    m_hSpeechEvent(INVALID_HANDLE_VALUE),
+	stopRequest(FALSE)
 {
 }
 
@@ -36,6 +37,7 @@ JVoiceXmlKinectRecognizer::~JVoiceXmlKinectRecognizer()
 {
     if (m_pNuiSensor)
     {
+		StopSpeechRecognition();
         m_pNuiSensor->NuiShutdown();
     }
 
@@ -62,15 +64,6 @@ HRESULT JVoiceXmlKinectRecognizer::Allocate()
 
 HRESULT JVoiceXmlKinectRecognizer::Deallocate()
 {
-    if (NULL != m_pKinectAudioStream)
-    {
-        m_pKinectAudioStream->StopCapture();
-    }
-
-    if (NULL != m_pSpeechRecognizer)
-    {
-        m_pSpeechRecognizer->SetRecoState(SPRST_INACTIVE);
-    }
 	return S_OK;
 }
 
@@ -136,7 +129,6 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     if (FAILED(hr))
     {
         //SetStatusMessage(L"Could not initialize audio stream.");
-		std::cout << "Could not initialize audio stream." << std::endl;
         return hr;
     }
 
@@ -314,13 +306,11 @@ HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech(RecognitionResult& result)
             m_hSpeechEvent = m_pSpeechContext->GetNotifyEventHandle();
         }
 
-		BOOL continuing = true;
 		hr = S_FALSE;
 
 		// wait for an event and try to look if it occured 
-		while( continuing && hr == S_FALSE )
+		while (!stopRequest && (hr == S_FALSE))
 		{
-			std::cout.flush();
 			hr = m_pSpeechContext->WaitForNotifyEvent(20);
 			if(hr == S_OK)
 			{
@@ -334,6 +324,18 @@ HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech(RecognitionResult& result)
 
 HRESULT JVoiceXmlKinectRecognizer::StopSpeechRecognition()
 {
+	stopRequest = TRUE;
+
+    if (NULL != m_pKinectAudioStream)
+    {
+        m_pKinectAudioStream->StopCapture();
+    }
+
+    if (NULL != m_pSpeechRecognizer)
+    {
+        m_pSpeechRecognizer->SetRecoState(SPRST_INACTIVE);
+    }
+
 	return S_OK;
 }
 
