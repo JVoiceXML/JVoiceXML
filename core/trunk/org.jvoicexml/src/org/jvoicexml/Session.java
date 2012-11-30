@@ -35,7 +35,9 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 /**
  * A session begins when the user starts to interact with a VoiceXML interpreter
  * context, continues as documents are loaded and processed, and ends when
- * requested by the user, a document, or the interpreter context.
+ * requested by the user, a document, or the interpreter context. Note, that
+ * a session is only valid for a single call and <b>cannot be reused for
+ * subsequent calls</b>.
  *
  * <p>
  * A <code>Session</code> can be obtained via the
