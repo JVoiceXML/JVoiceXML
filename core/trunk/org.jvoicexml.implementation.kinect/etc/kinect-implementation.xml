@@ -6,7 +6,6 @@
   <classpath>dist/org.jvoicexml.implementation.kinect.jar</classpath>
 
   <beans:bean class="org.jvoicexml.implementation.kinect.KinectSpokenInputFactory">
-    <beans:property name="instances" value="1" />
     <beans:property name="type" value="kinect" />
   </beans:bean>
 </implementation>

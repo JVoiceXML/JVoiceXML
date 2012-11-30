@@ -57,6 +57,9 @@ public final class KinectRecognizer {
     /** The active recognition thread. */
     private KinectRecognitionThread recognitionThread;
 
+    /** <code>true</code> if the recognizer has been started. */
+    private boolean isRecognizing;
+
     /**
      * Allocates this recognizer.
      * @throws KinectRecognizerException
@@ -90,6 +93,7 @@ public final class KinectRecognizer {
     public void startRecognition() {
         recognitionThread = new KinectRecognitionThread(this);
         recognitionThread.start();
+        isRecognizing = true;
     }
 
     /**
@@ -116,6 +120,7 @@ public final class KinectRecognizer {
      * @param result the obtained result.
      */
     void reportResult(final RecognitionResult result) {
+        isRecognizing = false;
         LOGGER.info("recognized: " + result.getStatus());
         LOGGER.info("recognized: " + result.getSml());
     }
@@ -125,9 +130,18 @@ public final class KinectRecognizer {
      * @param e error while recognizing
      */
     void reportResult(final KinectRecognizerException e) {
+        isRecognizing = false;
         LOGGER.warn("error recognizing", e);
     }
-    
+
+    /**
+     * Checks if the recognizer is currently recognizing.
+     * @return <code>true</code> if the recognizer is current recognizing.
+     */
+    public boolean isRecognizing() {
+        return isRecognizing;
+    }
+
     /**
      * Stops the recognition process.
      * @throws KinectRecognizerException
@@ -138,7 +152,11 @@ public final class KinectRecognizer {
             recognitionThread.stopRecognition();
             recognitionThread = null;
         }
-        kinectStopRecognition(handle);
+        try {
+            kinectStopRecognition(handle);
+        } finally {
+            isRecognizing = false;
+        }
     }
 
     /**

@@ -32,6 +32,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.SpeechRecognizerProperties;
@@ -42,8 +45,12 @@ import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * A spoken input implementation for the use of the Microsoft Kinect.
@@ -52,14 +59,40 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @since 0.7.6
  */
 public final class KinectSpokenInput implements SpokenInput {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(KinectSpokenInput.class);
 
+    /** Listener for user input events. */
+    private final Collection<SpokenInputListener> listeners;
+    
+    /** Type of the created resources. */
+    private String type;
+
+    /** Reference to the Kinect. */
+    private KinectRecognizer recognizer;
+
+    /**
+     * Constructs a new object
+     */
+    public KinectSpokenInput() {
+        listeners = new java.util.ArrayList<SpokenInputListener>();
+    }
+
+    /**
+     * Sets the type.
+     * @param value new value for the type.
+     */
+    public void setType(final String value) {
+        type = value;
+    }
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public String getType() {
-        // TODO Auto-generated method stub
-        return null;
+        return type;
     }
 
     /**
@@ -67,8 +100,7 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void open() throws NoresourceError {
-        // TODO Auto-generated method stub
-
+        recognizer = new KinectRecognizer();
     }
 
     /**
@@ -76,8 +108,11 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void activate() throws NoresourceError {
-        // TODO Auto-generated method stub
-
+        try {
+            recognizer.allocate();
+        } catch (KinectRecognizerException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
     }
 
     /**
@@ -85,8 +120,11 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void passivate() throws NoresourceError {
-        // TODO Auto-generated method stub
-
+        try {
+            recognizer.deallocate();
+        } catch (KinectRecognizerException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
     }
 
     /**
@@ -94,8 +132,7 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void close() {
-        // TODO Auto-generated method stub
-
+        recognizer = null;
     }
 
     /**
@@ -103,8 +140,7 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public boolean isBusy() {
-        // TODO Auto-generated method stub
-        return false;
+        return recognizer.isRecognizing();
     }
 
     /**
@@ -112,8 +148,6 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void connect(ConnectionInformation client) throws IOException {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -121,8 +155,6 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void disconnect(ConnectionInformation client) {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -132,8 +164,7 @@ public final class KinectSpokenInput implements SpokenInput {
     public void startRecognition(SpeechRecognizerProperties speech,
             DtmfRecognizerProperties dtmf) throws NoresourceError,
             BadFetchError {
-        // TODO Auto-generated method stub
-
+        recognizer.startRecognition();
     }
 
     /**
@@ -141,33 +172,39 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void stopRecognition() {
-        // TODO Auto-generated method stub
-
+        try {
+            recognizer.stopRecognition();
+        } catch (KinectRecognizerException e) {
+            LOGGER.warn(e.getMessage(), e);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addListener(SpokenInputListener listener) {
-        // TODO Auto-generated method stub
-
+    public void addListener(final SpokenInputListener listener) {
+        synchronized (listeners) {
+            listeners.add(listener);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void removeListener(SpokenInputListener listener) {
-        // TODO Auto-generated method stub
-
+    public void removeListener(final SpokenInputListener listener) {
+        synchronized (listeners) {
+            listeners.remove(listener);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void activateGrammars(Collection<GrammarImplementation<?>> grammars)
+    public void activateGrammars(
+            final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError,
             UnsupportedFormatError, NoresourceError {
         // TODO Auto-generated method stub
@@ -178,7 +215,8 @@ public final class KinectSpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public void deactivateGrammars(Collection<GrammarImplementation<?>> grammars)
+    public void deactivateGrammars(
+            final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
         // TODO Auto-generated method stub
 
@@ -190,7 +228,6 @@ public final class KinectSpokenInput implements SpokenInput {
     @Override
     public URI getUriForNextSpokenInput() throws NoresourceError,
             URISyntaxException {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -199,8 +236,10 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        // TODO Auto-generated method stub
-        return null;
+        final Collection<GrammarType> types =
+                new java.util.ArrayList<GrammarType>();
+        types.add(GrammarType.SRGS_XML);
+        return types;
     }
 
     /**
@@ -209,8 +248,22 @@ public final class KinectSpokenInput implements SpokenInput {
     @Override
     public GrammarImplementation<?> loadGrammar(Reader reader, GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
-        // TODO Auto-generated method stub
-        return null;
+        if (type != GrammarType.SRGS_XML) {
+            throw new UnsupportedFormatError("Only SRGS XML is supported!");
+        }
+
+        final InputSource inputSource = new InputSource(reader);
+        final SrgsXmlDocument doc;
+        try {
+            doc = new SrgsXmlDocument(inputSource);
+        } catch (ParserConfigurationException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (SAXException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        }
+        return new SrgsXmlGrammarImplementation(doc);
     }
 
     /**
@@ -218,8 +271,12 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public Collection<BargeInType> getSupportedBargeInTypes() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+        final Collection<BargeInType> types =
+                new java.util.ArrayList<BargeInType>();
 
+        types.add(BargeInType.SPEECH);
+        types.add(BargeInType.HOTWORD);
+
+        return types;
+    }
 }

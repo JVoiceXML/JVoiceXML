@@ -33,6 +33,9 @@ package org.jvoicexml.implementation.kinect;
  * @since 0.7.6
  */
 public final class KinectRecognizerException extends Exception {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -1722369195142179191L;
+
     /**
      * Constructs a new exception without any detail message.
      */

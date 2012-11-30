@@ -38,14 +38,22 @@ import org.jvoicexml.implementation.SpokenInput;
  *
  */
 public final class KinectSpokenInputFactory implements ResourceFactory<SpokenInput> {
+    /** Type of the created resources. */
+    private String type;
+
+    /**
+     * Constructs a new object.
+     */
+    public KinectSpokenInputFactory() {
+        type = "kinect";
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public Class<SpokenInput> getResourceType() {
-        // TODO Auto-generated method stub
-        return null;
+        return SpokenInput.class;
     }
 
     /**
@@ -53,8 +61,9 @@ public final class KinectSpokenInputFactory implements ResourceFactory<SpokenInp
      */
     @Override
     public SpokenInput createResource() throws NoresourceError {
-        // TODO Auto-generated method stub
-        return null;
+        final KinectSpokenInput input = new KinectSpokenInput();
+        input.setType(type);
+        return input;
     }
 
     /**
@@ -62,8 +71,7 @@ public final class KinectSpokenInputFactory implements ResourceFactory<SpokenInp
      */
     @Override
     public int getInstances() {
-        // TODO Auto-generated method stub
-        return 0;
+        return 1;
     }
 
     /**
@@ -71,8 +79,14 @@ public final class KinectSpokenInputFactory implements ResourceFactory<SpokenInp
      */
     @Override
     public String getType() {
-        // TODO Auto-generated method stub
-        return null;
+        return type;
     }
 
+    /**
+     * Sets the type.
+     * @param value new value for the type.
+     */
+    public void setType(final String value) {
+        type = value;
+    }
 }
