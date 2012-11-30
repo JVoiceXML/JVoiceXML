@@ -60,7 +60,21 @@ You're using ${ant.java.version}
     </target>
 
     <target name="configuration" depends="-setup">
-        <copy todir="${config}" file="${etc}/kinect-implementation.xml" overwrite="true" />
+        <xslt in="${jvxml.core.dir}/run.xml"
+          out="${jvxml.core.dir}/run-tmp.xml"
+          style="${etc}/patch-runscript-kinect.xsl">
+            <outputproperty name="method" value="xml" />
+            <outputproperty name="standalone" value="no" />
+            <outputproperty name="encoding" value="UTF-8" />
+            <outputproperty name="indent" value="yes" />
+            <param name="kinectrecognizerpath"
+                expression="${basedir}/../org.jvoicexml.implementation.kinect.recognizer/x64/Debug" />
+        </xslt>
+        <copy file="${jvxml.core.dir}/run-tmp.xml"
+          tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
+        <delete file="${jvxml.core.dir}/run-tmp.xml"/>
+    	<copy todir="${config}" file="${etc}/kinect-implementation.xml"
+    		overwrite="true" />
     </target>
 
     <target name="clean" depends="-setup" description="Remove all compiled and distribution files">
