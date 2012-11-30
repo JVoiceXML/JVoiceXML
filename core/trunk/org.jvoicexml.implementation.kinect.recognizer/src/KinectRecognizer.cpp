@@ -142,14 +142,14 @@ JNIEXPORT jlong JNICALL Java_org_jvoicexml_implementation_kinect_KinectRecognize
 
 /*
  * Class:     org_jvoicexml_implementation_kinect_KinectRecognizer
- * Method:    kinectStartRecognition
- * Signature: (J)V
+ * Method:    kinectRecognizeSpeech
+ * Signature: (J)Lorg/jvoicexml/implementation/kinect/RecognitionResult;
  */
-JNIEXPORT jobject JNICALL Java_org_jvoicexml_implementation_kinect_KinectRecognizer_kinectStartRecognition
+JNIEXPORT jobject JNICALL Java_org_jvoicexml_implementation_kinect_KinectRecognizer_kinectRecognizeSpeech
   (JNIEnv *env, jobject caller, jlong handle)
 {
 	JVoiceXmlKinectRecognizer* recognizer = (JVoiceXmlKinectRecognizer*) handle;
-	HRESULT hr = recognizer->StartSpeechRecognition();
+	HRESULT hr = recognizer->RecognizeSpeech();
 	if (FAILED(hr))
 	{
 		// Produce an error message

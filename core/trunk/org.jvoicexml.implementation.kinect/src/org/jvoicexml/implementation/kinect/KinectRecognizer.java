@@ -94,7 +94,7 @@ public final class KinectRecognizer {
      */
     RecognitionResult recognize()
             throws KinectRecognizerException {
-        return kinectStartRecognition(handle);
+        return kinectRecognizeSpeech(handle);
     }
 
     /**
@@ -102,7 +102,7 @@ public final class KinectRecognizer {
      * @param handle handle to the kinect recognizer
      * @return result of the recognition process
      */
-    private native RecognitionResult kinectStartRecognition(long handle)
+    private native RecognitionResult kinectRecognizeSpeech(long handle)
             throws KinectRecognizerException;
 
 

@@ -71,12 +71,12 @@ public:
     HRESULT Allocate();
 
     /// <summary>
-    /// Start recognizing speech asynchronously.
+    /// Start recognizing speechsynchronously.
     /// </summary>
     /// <returns>
     /// <para>S_OK on success, otherwise failure code.</para>
     /// </returns>
-    HRESULT                 StartSpeechRecognition();
+    HRESULT                 RecognizeSpeech();
 
     HRESULT                 StopSpeechRecognition();
 

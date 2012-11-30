@@ -442,12 +442,12 @@ HRESULT JVoiceXmlKinectRecognizer::LoadSpeechGrammar()
 }
 
 /// <summary>
-/// Start recognizing speech asynchronously.
+/// Start recognizing speech synchronously.
 /// </summary>
 /// <returns>
 /// <para>S_OK on success, otherwise failure code.</para>
 /// </returns>
-HRESULT JVoiceXmlKinectRecognizer::StartSpeechRecognition()
+HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech()
 {
     HRESULT hr = m_pKinectAudioStream->StartCapture();
 
