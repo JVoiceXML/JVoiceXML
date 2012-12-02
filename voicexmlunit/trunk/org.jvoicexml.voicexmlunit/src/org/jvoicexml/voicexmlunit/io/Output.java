@@ -1,8 +1,8 @@
 package org.jvoicexml.voicexmlunit.io;
 
+
 import junit.framework.Assert;
 
-import org.jvoicexml.client.text.TextServer;
 
 public class Output extends Statement {
 	public Output(String message) {
@@ -11,11 +11,10 @@ public class Output extends Statement {
 	
 	public void receive(String actual) {
 		String expect = toString();
-		String assert_message = "Output received: "+actual+", expected: "+expect;
-		Assert.assertEquals(assert_message,expect,actual);
+		Assert.assertEquals(getClass().getSimpleName(),expect,actual);
 	}
 	
-	public void send(TextServer server) {
-		Assert.fail("Tried to send Output: "+toString());
+	public void send(Recording record) {
+		Assert.fail("Send "+getClass().getSimpleName()+": "+toString());
 	}
 }

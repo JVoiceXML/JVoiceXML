@@ -1,24 +1,28 @@
 package org.jvoicexml.voicexmlunit;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
+
 import org.jvoicexml.voicexmlunit.Voice;
 
-public class TestVoice {
 
+public class TestVoice {
+	private Voice voice;
+
+	@Before
+	public void setUp() throws Exception {
+		voice = new Voice();
+		voice.setPolicy("unittests/etc/jvoicexml.policy");
+		voice.loadConfiguration("unittests/etc/jndi.properties");
+	}
+	
 	@Test
-	public void test() {
-		System.setProperty("java.security.policy","unittests/etc/jvoicexml.policy");
-		
+	public void testLookup() {		
 		// NOTICE: JVoiceXml has to run for test success!!
-		final String path = "unittests/etc/jndi.properties";
-		final File configuration = new File(path);
-		Assert.assertNotNull(Voice.lookup(configuration));
+		Assert.assertNotNull(voice.getJVoiceXml());
 	}
 
 }

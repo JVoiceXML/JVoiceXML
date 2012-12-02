@@ -4,6 +4,7 @@ package org.jvoicexml.voicexmlunit;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+import org.jvoicexml.voicexmlunit.io.Assertion;
 import org.jvoicexml.voicexmlunit.io.Input;
 import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.io.Statement;
@@ -54,7 +55,7 @@ public final class Conversation {
 	 * Begin the conversation
 	 * @return First statement of the conversation
 	 */
-	public Statement begin() {
+	public Assertion begin() {
 		if (history.isEmpty()) {
 			iterator = null; // invalidate any existing cursor
 			return null;
@@ -71,7 +72,7 @@ public final class Conversation {
 	 * the conversation and returns an invalid object.
 	 * @return Next statement after the previously current one
 	 */
-	public Statement next() {
+	public Assertion next() {
 		if (iterator == null) {
 			return begin();
 		}

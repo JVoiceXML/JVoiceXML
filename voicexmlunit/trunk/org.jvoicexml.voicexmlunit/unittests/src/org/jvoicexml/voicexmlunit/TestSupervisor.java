@@ -1,6 +1,8 @@
 package org.jvoicexml.voicexmlunit;
 
 
+import junit.framework.AssertionFailedError;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,17 +36,6 @@ public class TestSupervisor {
 		
 		supervisor.assertStatements(2);
 	}
-	
-	@Test
-	public void testActivity() {
-		Conversation conversation = initMock();
-		
-		conversation.addOutput("bla"); // at least, one element required
-		
-		simulateCall();
-
-		supervisor.assertActivity();
-	}
 
 	@Test
 	public void testOuput(){
@@ -56,8 +47,7 @@ public class TestSupervisor {
 		Assert.assertEquals(message,conversation.begin().toString());
 		
 		simulateCall();
-		
-		//supervisor.assertActivity();
+
 		supervisor.assertOutput(message);
 	}
 	
@@ -78,8 +68,60 @@ public class TestSupervisor {
 		supervisor.assertInput();
 	}
 	
+	@Test
+	public void testDisconnect() {
+		Conversation conversation = supervisor.init(null);
+
+		conversation.addOutput("hello");
+		
+		simulateCall();
+		
+		boolean failed = false;
+		try {
+			supervisor.disconnected();
+		} catch (AssertionFailedError e) {
+			failed = true;
+		}
+		Assert.assertTrue(failed);
+	}
+	
+	@Test
+	public void testInputIsOutput() {
+		Conversation conversation = supervisor.init(null);
+
+		conversation.addOutput("input");
+		
+		simulateCall();
+		
+		boolean failed = false;
+		try {
+			supervisor.assertInput();
+		} catch (AssertionFailedError e) {
+			failed = true;
+		}
+		Assert.assertTrue(failed);
+	}
+	
+	@Test
+	public void testOutputIsinput() {
+		Conversation conversation = supervisor.init(null);
+
+		String message = "output";
+		conversation.addInput(message);
+		
+		simulateCall();
+		
+		boolean failed = false;
+		try {
+			supervisor.assertOutput(message);
+		} catch (AssertionFailedError e) {
+			failed = true;
+		}
+		Assert.assertTrue(failed);
+	}
+	
 	private Conversation initMock() {
-		return supervisor.init(null,null);
+		return supervisor.init(null);
 	}
 
 	private void simulateCall() {

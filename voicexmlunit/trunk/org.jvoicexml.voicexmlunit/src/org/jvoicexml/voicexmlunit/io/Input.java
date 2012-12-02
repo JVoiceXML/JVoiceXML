@@ -1,10 +1,10 @@
 package org.jvoicexml.voicexmlunit.io;
 
+
 import java.io.IOException;
 
-import org.jvoicexml.client.text.TextServer;
-
 import junit.framework.Assert;
+
 
 public class Input extends Statement {
 	public Input(String message) {
@@ -12,16 +12,20 @@ public class Input extends Statement {
 	}
 	
 	public void receive(String actual) {
-		Assert.fail("Tried to receive Input: "+actual);
+		Assert.fail("Receive "+getClass().getSimpleName()+": "+actual);
 	}
 	
-	public void send(TextServer server) {
+	public void send(Recording record) {
+		if (record == null) {
+			return;
+		}
+		
 		String expect = toString();
 		try {
-			server.sendInput(expect);
+			record.input(expect);
 		} catch (IOException e) {
 			e.printStackTrace();
-			Assert.fail("Tried to send Input: "+expect);
+			Assert.fail("Send "+getClass().getSimpleName()+": "+expect);
 		}
 	}
 }

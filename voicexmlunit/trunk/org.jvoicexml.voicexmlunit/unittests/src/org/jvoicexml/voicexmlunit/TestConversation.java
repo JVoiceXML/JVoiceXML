@@ -5,8 +5,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.jvoicexml.client.text.TextServer;
-
 import org.jvoicexml.voicexmlunit.Conversation;
 import org.jvoicexml.voicexmlunit.Supervisor;
 
@@ -59,9 +57,7 @@ public class TestConversation {
 
 	
 	private Conversation createConversationForSimpleTest() {
-		//final TextServer server = new TextServer(4711);
-		final TextServer server = null; // we don't need any server here
-		Conversation conversation = supervisor.init(server,null);
+		Conversation conversation = supervisor.init(null);
 		supervisor.assertStatements(0);
 		return conversation;
 	}
