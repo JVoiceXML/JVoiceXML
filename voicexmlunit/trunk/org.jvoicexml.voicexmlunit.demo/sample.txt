@@ -1,0 +1,20 @@
+	@Test
+	public void testSimple() {
+		final String path = "rc/helloworld.vxml";
+		
+		final TextServer server = new TextServer(4242);
+		server.start();
+		
+		URI dialog = new File(path).toURI();
+		try {
+			final Session session = jvxml.createSession(server.getConnectionInformation());
+			session.call(dialog);
+			session.waitSessionEnd();
+			session.hangup();			
+		} catch (UnknownHostException | ErrorEvent e) {
+			e.printStackTrace();
+			Assert.fail("Session");
+		} finally {
+			server.stopServer();
+		}
+	}

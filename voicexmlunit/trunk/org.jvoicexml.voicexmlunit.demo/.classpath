@@ -6,5 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.implementation.text"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.voicexmlunit"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
