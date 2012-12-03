@@ -1,12 +1,12 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL:  $
+ * Version: $LastChangedRevision: 643 $
+ * Date:    $Date: $
+ * Author:  $LastChangedBy: $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,7 +23,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
 package org.jvoicexml.test.implementation;
 
 import java.util.List;
@@ -32,37 +31,28 @@ import junit.framework.Assert;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.implementation.SynthesizedOutputEvent;
-import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.implementation.SpokenInputEvent;
+import org.jvoicexml.implementation.SpokenInputListener;
 
 /**
- * {@link SynthesizedOutputListener} for test purposes.
+ * Dummy implementation of a {@link SpokenInputListener}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
- * @since 0.7
+ * @version $Revision: $
+ * @since 0.7.6
  */
-public final class DummySynthesizedOutputListener
-        implements SynthesizedOutputListener {
+public class DummySpokenInputListener implements SpokenInputListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(DummySynthesizedOutputListener.class);
+            Logger.getLogger(DummySpokenInputListener.class);
 
-    /** Collected events. */
-    private final List<SynthesizedOutputEvent> occur;
+    /** Received events. */
+    private final List<SpokenInputEvent> events;
 
     /**
      * Constructs a new object.
      */
-    public DummySynthesizedOutputListener() {
-        occur = new java.util.ArrayList<SynthesizedOutputEvent>();
-    }
-
-    /**
-     * Retrieves the caught events.
-     * @return caught events.
-     */
-    public List<SynthesizedOutputEvent> events() {
-        return occur;
+    public DummySpokenInputListener() {
+        events = new java.util.ArrayList<SpokenInputEvent>();
     }
 
     /**
@@ -70,7 +60,7 @@ public final class DummySynthesizedOutputListener
      * @return number of events.
      */
     public int size() {
-        return occur.size();
+        return events.size();
     }
 
     /**
@@ -83,44 +73,29 @@ public final class DummySynthesizedOutputListener
     public void waitSize(final int size, final long timeout)
         throws InterruptedException {
         long start = System.currentTimeMillis();
-        while (size > occur.size()) {
-            synchronized (occur) {
-                occur.wait(timeout);
+        while (size > events.size()) {
+            synchronized (events) {
+                events.wait(timeout);
                 long now = System.currentTimeMillis();
-                if (size < occur.size() || (now - start > timeout)) {
+                if (size < events.size() || (now - start > timeout)) {
                     Assert.fail(size + " not reached within " + timeout
-                            + "msec (current: " + occur.size() + ")");
+                            + "msec (current: " + events.size() + ")");
                 }
             }
         }
     }
-
-    /**
-     * Retrieves the event at the given position.
-     * @param index the position of the event to retrieve
-     * @return event at the given position
-     */
-    public SynthesizedOutputEvent get(final int index) {
-        return occur.get(index);
-    }
-
-    /**
-     * Removes all collected events.
-     */
-    public void clear() {
-        occur.clear();
-    }
-
+    
     /**
      * {@inheritDoc}
      */
-    public void outputStatusChanged(final SynthesizedOutputEvent event) {
+    @Override
+    public void inputStatusChanged(final SpokenInputEvent event) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(event);
+            LOGGER.debug("received: " + event);
         }
-        occur.add(event);
-        synchronized (occur) {
-            occur.notifyAll();
+        events.add(event);
+        synchronized (events) {
+            events.notifyAll();
         }
     }
 
@@ -128,9 +103,7 @@ public final class DummySynthesizedOutputListener
      * {@inheritDoc}
      */
     @Override
-    public void outputError(final ErrorEvent error) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(error);
-        }
+    public void inputError(final ErrorEvent error) {
+        LOGGER.error(error.getMessage(), error);
     }
 }
