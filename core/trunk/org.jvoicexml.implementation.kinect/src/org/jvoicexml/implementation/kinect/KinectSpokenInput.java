@@ -110,10 +110,16 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void activate() throws NoresourceError {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("allocating kinect recognizer...");
+        }
         try {
             recognizer.allocate();
         } catch (KinectRecognizerException e) {
             throw new NoresourceError(e.getMessage(), e);
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...allocated kinect recognizer");
         }
     }
 
@@ -122,10 +128,16 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void passivate() throws NoresourceError {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("deallocating kinect recognizer...");
+        }
         try {
             recognizer.deallocate();
         } catch (KinectRecognizerException e) {
             throw new NoresourceError(e.getMessage(), e);
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...deallocated kinect recognizer");
         }
     }
 
@@ -171,6 +183,7 @@ public final class KinectSpokenInput implements SpokenInput {
         final SpokenInputEvent event =
                 new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
         fireInputEvent(event);
+        LOGGER.info("kinect recognition started");
     }
 
     /**
