@@ -84,6 +84,22 @@ public class DummySpokenInputListener implements SpokenInputListener {
             }
         }
     }
+
+    /**
+     * Retrieves the event at the given position.
+     * @param index the position of the event to retrieve
+     * @return event at the given position
+     */
+    public SpokenInputEvent get(final int index) {
+        return events.get(index);
+    }
+
+    /**
+     * Removes all collected events.
+     */
+    public void clear() {
+        events.clear();
+    }
     
     /**
      * {@inheritDoc}
