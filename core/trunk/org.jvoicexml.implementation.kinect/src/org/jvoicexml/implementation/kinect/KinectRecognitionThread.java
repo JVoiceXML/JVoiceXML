@@ -61,7 +61,7 @@ final class KinectRecognitionThread extends Thread {
             LOGGER.trace("Starting recognition process");
         }
         try {
-            RecognitionResult result = recognizer.recognize();
+            final RecognitionResult result = recognizer.recognize();
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("Recognitionprocess ended");
             }

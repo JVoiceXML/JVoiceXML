@@ -146,11 +146,14 @@ public final class KinectRecognizer {
         isRecognizing = false;
         
         if (result == null) {
-            // ...
+            final ErrorEvent error = new BadFetchError("No result obtained!");
+            input.notifyError(error);
+            return;
         }
         // parse our tags from SML
         try {
             final String sml = result.getSml();
+            LOGGER.info("recognized '" + sml + "'");
             final SmlInterpretationExtractor extractor = parseSml(sml);
             final KinectRecognitionResult kinectResult =
                     new KinectRecognitionResult(extractor);

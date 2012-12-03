@@ -29,7 +29,9 @@ package org.jvoicexml.implementation.kinect;
 import static org.junit.Assert.fail;
 import junit.framework.Assert;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.jvoicexml.test.implementation.DummySpokenInputListener;
 
 /**
  * Test cases for {@link KinectRecognizer}.
@@ -42,6 +44,10 @@ import org.junit.Test;
  * @since 0.7.6
  */
 public final class TestKinectRecognizer {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(TestKinectRecognizer.class);
+    
     /**
      * Test method for {@link KinectRecognizer#allocate()}.
      * @throws Exception
@@ -71,12 +77,15 @@ public final class TestKinectRecognizer {
     
     @Test
     public void testStartRecognition() throws Exception {
-        final KinectRecognizer recognizer = new KinectRecognizer(null);
+        final KinectSpokenInput input = new KinectSpokenInput();
+        final DummySpokenInputListener listener =
+                new DummySpokenInputListener();
+        input.addListener(listener);
+        final KinectRecognizer recognizer = new KinectRecognizer(input);
         recognizer.allocate();
         recognizer.startRecognition();
-        while (true) {
-            Thread.sleep(1000);
-        }
+        LOGGER.info("Say something!");
+        listener.waitSize(1, 10000);
     }
 
     @Test
