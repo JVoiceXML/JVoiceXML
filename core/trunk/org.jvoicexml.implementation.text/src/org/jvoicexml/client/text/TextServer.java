@@ -165,18 +165,6 @@ public final class TextServer extends Thread {
     }
 
     /**
-     * Notifies all registered listeners that the given text has arrived.
-     * @param text the received text.
-     */
-    private void fireOutputArrived(final String text) {
-        synchronized (listener) {
-            for (TextListener current : listener) {
-                current.outputText(text);
-            }
-        }
-    }
-
-    /**
      * Notifies all registered listeners that the given SSML document has
      * arrived.
      * @param document the received document.
@@ -348,10 +336,7 @@ public final class TextServer extends Thread {
                 }
                 if (code == TextMessage.DATA) {
                     final Object data = message.getData();
-                    if (data instanceof String) {
-                        final String text = (String) data;
-                        fireOutputArrived(text);
-                    } else if (data instanceof SsmlDocument) {
+                    if (data instanceof SsmlDocument) {
                         final SsmlDocument document = (SsmlDocument) data;
                         fireOutputArrived(document);
                     }
@@ -367,6 +352,7 @@ public final class TextServer extends Thread {
                 throw new IOException("unable to instantiate the read object");
             }
         }
+        oin.close();
     }
 
     /**
