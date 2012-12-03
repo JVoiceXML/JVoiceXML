@@ -31,6 +31,7 @@ import junit.framework.Assert;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.test.implementation.DummySpokenInputListener;
 
 /**
@@ -102,6 +103,10 @@ public final class TestKinectRecognizer {
         recognizer.startRecognition();
         LOGGER.info("Say something!");
         listener.waitSize(1, 10000);
+        final SpokenInputEvent event = listener.get(0);
+        final KinectRecognitionResult result =
+                (KinectRecognitionResult) event.getParam();
+        Assert.assertEquals("FORWARD", result.getUtterance());
     }
 
     @Test

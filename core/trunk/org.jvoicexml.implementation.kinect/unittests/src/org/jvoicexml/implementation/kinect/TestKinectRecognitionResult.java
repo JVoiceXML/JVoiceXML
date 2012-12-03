@@ -26,8 +26,6 @@
 
 package org.jvoicexml.implementation.kinect;
 
-import static org.junit.Assert.fail;
-
 import java.io.InputStream;
 
 import javax.xml.transform.Result;
@@ -41,6 +39,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
@@ -50,6 +49,8 @@ import org.mozilla.javascript.ScriptableObject;
  * @since 0.7.6
  */
 public class TestKinectRecognitionResult {
+    /** Maximal diff for parsing the confidence value. */
+    private static final float MAX_CONFIDENCE_DIFF = 0.0001f;
 
     /**
      * Parses the given resource into an extractor.
@@ -145,58 +146,89 @@ public class TestKinectRecognitionResult {
 
     /**
      * Test method for {@link org.jvoicexml.implementation.kinect.KinectRecognitionResult#getConfidence()}.
+     * @exception Exception
+     *            test faield
      */
     @Test
-    public void testGetConfidence() {
-        fail("Not yet implemented");
+    public void testGetConfidence() throws Exception {
+        final SmlInterpretationExtractor extractor = readSml("sml-simple.xml");
+        final KinectRecognitionResult result =
+                new KinectRecognitionResult(extractor);
+        Assert.assertEquals(0.5100203, result.getConfidence(),
+                MAX_CONFIDENCE_DIFF);
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.kinect.KinectRecognitionResult#getWordsConfidence()}.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testGetWordsConfidence() {
-        fail("Not yet implemented");
+    public void testGetWordsConfidence() throws Exception {
+        final SmlInterpretationExtractor extractor = readSml("sml-simple.xml");
+        final KinectRecognitionResult result =
+                new KinectRecognitionResult(extractor);
+        final float[] confidences = result.getWordsConfidence();
+        Assert.assertEquals(2, confidences.length);
+        for (int i=0; i < confidences.length; i++) {
+            Assert.assertEquals(0.5100203, confidences[i],
+                    MAX_CONFIDENCE_DIFF);
+        }
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.kinect.KinectRecognitionResult#getMode()}.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testGetMode() {
-        fail("Not yet implemented");
+    public void testGetMode() throws Exception {
+        final SmlInterpretationExtractor extractor = readSml("sml-simple.xml");
+        final KinectRecognitionResult result =
+                new KinectRecognitionResult(extractor);
+        Assert.assertEquals(ModeType.VOICE, result.getMode());
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.kinect.KinectRecognitionResult#isAccepted()}.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testIsAccepted() {
-        fail("Not yet implemented");
+    public void testIsAccepted() throws Exception {
+        final SmlInterpretationExtractor extractor = readSml("sml-simple.xml");
+        final KinectRecognitionResult result =
+                new KinectRecognitionResult(extractor);
+        Assert.assertTrue(result.isAccepted());
+        
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.kinect.KinectRecognitionResult#isRejected()}.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testIsRejected() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link org.jvoicexml.implementation.kinect.KinectRecognitionResult#setMark(java.lang.String)}.
-     */
-    @Test
-    public void testSetMark() {
-        fail("Not yet implemented");
+    public void testIsRejected() throws Exception {
+        final SmlInterpretationExtractor extractor = readSml("sml-simple.xml");
+        final KinectRecognitionResult result =
+                new KinectRecognitionResult(extractor);
+        Assert.assertFalse(result.isRejected());
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.kinect.KinectRecognitionResult#getMark()}.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testGetMark() {
-        fail("Not yet implemented");
+    public void testGetMark() throws Exception {
+        final SmlInterpretationExtractor extractor = readSml("sml-simple.xml");
+        final KinectRecognitionResult result =
+                new KinectRecognitionResult(extractor);
+        final String mark = "testmark";
+        result.setMark(mark);
+        Assert.assertEquals(mark, result.getMark());
     }
 
     /**

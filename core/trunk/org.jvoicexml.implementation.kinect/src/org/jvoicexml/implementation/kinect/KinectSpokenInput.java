@@ -106,6 +106,14 @@ public final class KinectSpokenInput implements SpokenInput {
     }
 
     /**
+     * Checks if this spoken input has been opened.
+     * @return <code>true</code> if the spoken input has been opened. 
+     */
+    boolean isOpen() {
+        return recognizer != null;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -123,6 +131,13 @@ public final class KinectSpokenInput implements SpokenInput {
         }
     }
 
+    /**
+     * Checks if the spoken input has been allocated.
+     * @return <code>true</code> if the recognizer is allocated
+     */
+    boolean isActivated() {
+        return (recognizer != null) && recognizer.isAllocated();
+    }
     /**
      * {@inheritDoc}
      */
