@@ -45,7 +45,7 @@ import org.junit.Test;
  * @author Dirk Schnelle-Walka
  *
  */
-public final class SmlInterpretationExtractorTest {
+public final class TestSmlInterpretationExtractor {
     /** Maximal diff for parsing the confidence value. */
     private static final float MAX_CONFIDENCE_DIFF = 0.0001f;
 
@@ -59,7 +59,7 @@ public final class SmlInterpretationExtractorTest {
         final TransformerFactory factory = TransformerFactory.newInstance();
         final Transformer transformer = factory.newTransformer();
         final InputStream in =
-                SmlInterpretationExtractorTest.class.getResourceAsStream(
+                TestSmlInterpretationExtractor.class.getResourceAsStream(
                         "sml-simple.xml");
         final Source source = new StreamSource(in);
         final SmlInterpretationExtractor extractor =
@@ -86,7 +86,7 @@ public final class SmlInterpretationExtractorTest {
         final TransformerFactory factory = TransformerFactory.newInstance();
         final Transformer transformer = factory.newTransformer();
         final InputStream in =
-                SmlInterpretationExtractorTest.class.getResourceAsStream(
+                TestSmlInterpretationExtractor.class.getResourceAsStream(
                         "sml-tag.xml");
         final Source source = new StreamSource(in);
         final SmlInterpretationExtractor extractor =
@@ -113,7 +113,7 @@ public final class SmlInterpretationExtractorTest {
         final TransformerFactory factory = TransformerFactory.newInstance();
         final Transformer transformer = factory.newTransformer();
         final InputStream in =
-                SmlInterpretationExtractorTest.class.getResourceAsStream(
+                TestSmlInterpretationExtractor.class.getResourceAsStream(
                         "sml-multiple-tags.xml");
         final Source source = new StreamSource(in);
         final SmlInterpretationExtractor extractor =
@@ -150,7 +150,7 @@ public final class SmlInterpretationExtractorTest {
         final TransformerFactory factory = TransformerFactory.newInstance();
         final Transformer transformer = factory.newTransformer();
         final InputStream in =
-                SmlInterpretationExtractorTest.class.getResourceAsStream(
+                TestSmlInterpretationExtractor.class.getResourceAsStream(
                         "sml-compound.xml");
         final Source source = new StreamSource(in);
         final SmlInterpretationExtractor extractor =

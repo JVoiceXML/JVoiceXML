@@ -29,6 +29,8 @@ package org.jvoicexml.implementation.kinect;
 import java.util.List;
 
 import org.jvoicexml.xml.srgs.ModeType;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 
 /**
  * A recognition result as it comes from the Kinect.
@@ -59,32 +61,27 @@ public class KinectRecognitionResult
     public Object getSemanticInterpretation() {
         final List<SmlInterpretation> interpretations =
                 extractor.getInterpretations();
-        final String[] tags;
-        int i = 0;
-        final String utteranceTag = extractor.getUtteranceTag();
-        final String utterance = getUtterance();
-        if (utteranceTag.isEmpty()
-                || utteranceTag.equals(utterance)) {
-            tags = new String[interpretations.size()];
-        } else {
-            tags = new String[interpretations.size() + 1];
-            tags[i] = utteranceTag;
-            i++;
+        if (interpretations.size() == 0) {
+            return null;
         }
+        final Context context = Context.enter();
+        context.setLanguageVersion(Context.VERSION_1_6);
+        
+        final Scriptable scope = context.initStandardObjects();
+        context.evaluateString(scope, "var out = new Object();", "expr",
+                1, null);
         for (SmlInterpretation interpretation : interpretations) {
             final String tag = interpretation.getTag();
             final String value = interpretation.getValue();
-            
-            // SRGS-tags like <tag>FOO</tag>
-            tags[i] = tag; 
-            
-            // SRGS-tags like <tag>FOO="bar"</tag>
-            if (!(value != null) && !value.isEmpty()) {
-                    tags[i] += "=" + value; 
+            if (value == null) {
+                context.evaluateString(scope, "out." + tag + " = new Object();",
+                        "expr", 1, null);
+            } else {
+                context.evaluateString(scope, "out." + tag + " = '" + value
+                        + "';", "expr", 1, null);
             }
-            i++;
         }
-        return null;
+        return scope.get("out", scope);
     }
 
     /**
@@ -92,7 +89,11 @@ public class KinectRecognitionResult
      */
     @Override
     public String getUtterance() {
-        return extractor.getUtterance();
+        final String utterance = extractor.getUtteranceTag();
+        if ((utterance == null) || utterance.isEmpty()) {
+            return extractor.getUtterance();
+        }
+        return utterance;
     }
 
     /**
