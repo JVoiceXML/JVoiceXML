@@ -36,6 +36,7 @@ org.jvoicexml/personal-props/README.txt
         <path id="project.classpath">
             <path refid="jvxml.core.lib" />
             <fileset refid="log4j.lib" />
+            <fileset refid="rhino.lib"/>
         </path>
     </target>
 
