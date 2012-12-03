@@ -74,6 +74,22 @@ public final class TestKinectRecognizer {
         Assert.assertFalse(recognizer.isAllocated());
     }
 
+    /**
+     * Test method for {@link KinectRecognizer#allocate()}.
+     * @throws Exception
+     *         test failed
+     */
+    @Test
+    public void testMultipleAllocates() throws Exception {
+        final KinectRecognizer recognizer = new KinectRecognizer(null);
+        for (int i=0; i<10; i++) {
+            recognizer.allocate();
+            Assert.assertTrue(recognizer.isAllocated());
+            recognizer.deallocate();
+            Assert.assertFalse(recognizer.isAllocated());
+        }
+    }
+    
     
     @Test
     public void testStartRecognition() throws Exception {
