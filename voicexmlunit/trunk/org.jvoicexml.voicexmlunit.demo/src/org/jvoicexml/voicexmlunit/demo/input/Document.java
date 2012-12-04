@@ -246,11 +246,6 @@ public class Document implements TextListener {
 	}
 
 	@Override
-	public void outputText(String text) {
-		
-	}
-
-	@Override
 	public void outputSsml(SsmlDocument document) {
 		
 	}
