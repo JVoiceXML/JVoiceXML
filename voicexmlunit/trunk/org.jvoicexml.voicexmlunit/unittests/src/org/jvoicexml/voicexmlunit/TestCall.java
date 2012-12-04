@@ -76,11 +76,6 @@ public class TestCall implements TextListener {
 	}
 
 	@Override
-	public void outputText(String text) {
-		
-	}
-
-	@Override
 	public void outputSsml(SsmlDocument document) {
 	
 	}
