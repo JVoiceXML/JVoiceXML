@@ -103,6 +103,17 @@ public final class KinectSpokenInput implements SpokenInput {
     @Override
     public void open() throws NoresourceError {
         recognizer = new KinectRecognizer(this);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("allocating kinect recognizer...");
+        }
+//        try {
+//            recognizer.allocate();
+//        } catch (KinectRecognizerException e) {
+//            throw new NoresourceError(e.getMessage(), e);
+//        }
+//        if (LOGGER.isDebugEnabled()) {
+//            LOGGER.debug("...allocated kinect recognizer");
+//        }
     }
 
     /**
@@ -118,17 +129,17 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void activate() throws NoresourceError {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("allocating kinect recognizer...");
-        }
-        try {
-            recognizer.allocate();
-        } catch (KinectRecognizerException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...allocated kinect recognizer");
-        }
+//        if (LOGGER.isDebugEnabled()) {
+//            LOGGER.debug("allocating kinect recognizer...");
+//        }
+//        try {
+//            recognizer.allocate();
+//        } catch (KinectRecognizerException e) {
+//            throw new NoresourceError(e.getMessage(), e);
+//        }
+//        if (LOGGER.isDebugEnabled()) {
+//            LOGGER.debug("...allocated kinect recognizer");
+//        }
     }
 
     /**
@@ -138,22 +149,23 @@ public final class KinectSpokenInput implements SpokenInput {
     boolean isActivated() {
         return (recognizer != null) && recognizer.isAllocated();
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void passivate() throws NoresourceError {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("deallocating kinect recognizer...");
-        }
-        try {
-            recognizer.deallocate();
-        } catch (KinectRecognizerException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...deallocated kinect recognizer");
-        }
+//        if (LOGGER.isDebugEnabled()) {
+//            LOGGER.debug("deallocating kinect recognizer...");
+//        }
+//        try {
+//            recognizer.deallocate();
+//        } catch (KinectRecognizerException e) {
+//            throw new NoresourceError(e.getMessage(), e);
+//        }
+//        if (LOGGER.isDebugEnabled()) {
+//            LOGGER.debug("...deallocated kinect recognizer");
+//        }
     }
 
     /**
@@ -161,6 +173,17 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void close() {
+//        if (LOGGER.isDebugEnabled()) {
+//            LOGGER.debug("deallocating kinect recognizer...");
+//        }
+//        try {
+//            recognizer.deallocate();
+//        } catch (KinectRecognizerException e) {
+////            throw new NoresourceError(e.getMessage(), e);
+//        }
+//        if (LOGGER.isDebugEnabled()) {
+//            LOGGER.debug("...deallocated kinect recognizer");
+//        }
         recognizer = null;
     }
 
@@ -193,6 +216,11 @@ public final class KinectSpokenInput implements SpokenInput {
     public void startRecognition(SpeechRecognizerProperties speech,
             DtmfRecognizerProperties dtmf) throws NoresourceError,
             BadFetchError {
+        try {
+            recognizer.allocate();
+        } catch (KinectRecognizerException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
         recognizer.startRecognition();
 
         final SpokenInputEvent event =
@@ -208,6 +236,7 @@ public final class KinectSpokenInput implements SpokenInput {
     public void stopRecognition() {
         try {
             recognizer.stopRecognition();
+            recognizer.deallocate();
         } catch (KinectRecognizerException e) {
             LOGGER.warn(e.getMessage(), e);
         } finally {

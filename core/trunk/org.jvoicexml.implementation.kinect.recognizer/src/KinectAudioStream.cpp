@@ -67,7 +67,7 @@ HRESULT KinectAudioStream::StartCapture()
 }
 
 /// <summary>
-/// Starts capturing audio data from Kinect sensor.
+/// Stops capturing audio data from Kinect sensor.
 /// </summary>
 /// <returns>S_OK on success, otherwise failure code.</returns>
 HRESULT KinectAudioStream::StopCapture()

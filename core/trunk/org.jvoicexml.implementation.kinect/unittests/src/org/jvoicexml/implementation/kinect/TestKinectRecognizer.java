@@ -91,7 +91,10 @@ public final class TestKinectRecognizer {
         }
     }
     
-    
+    /**
+     * Test method fpr {@link KinectRecognizer#startRecognition()}
+     * @throws Exception test failed
+     */
     @Test
     public void testStartRecognition() throws Exception {
         final KinectSpokenInput input = new KinectSpokenInput();
@@ -109,6 +112,31 @@ public final class TestKinectRecognizer {
         Assert.assertEquals("FORWARD", result.getUtterance());
     }
 
+    /**
+     * Test method for {@link KinectRecognizer#startRecognition()}
+     * @throws Exception test failed
+     */
+    @Test
+    public void testStartRecognitionMultiple() throws Exception {
+        final KinectSpokenInput input = new KinectSpokenInput();
+        final DummySpokenInputListener listener =
+                new DummySpokenInputListener();
+        input.addListener(listener);
+        final KinectRecognizer recognizer = new KinectRecognizer(input);
+        recognizer.allocate();
+        for (int i=0; i<3; i++) {
+            listener.clear();
+            recognizer.startRecognition();
+            LOGGER.info("Say something " + i);
+            listener.waitSize(1, 10000);
+            final SpokenInputEvent event = listener.get(0);
+            final KinectRecognitionResult result =
+                    (KinectRecognitionResult) event.getParam();
+            Assert.assertEquals("FORWARD", result.getUtterance());
+            recognizer.stopRecognition();
+        }
+        recognizer.deallocate();
+    }
     @Test
     public void testStopRecognition() {
         fail("Not yet implemented");

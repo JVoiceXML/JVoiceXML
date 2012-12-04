@@ -204,11 +204,12 @@ JNIEXPORT void JNICALL Java_org_jvoicexml_implementation_kinect_KinectRecognizer
 {
 	JVoiceXmlKinectRecognizer* recognizer = (JVoiceXmlKinectRecognizer*) handle;
 	HRESULT hr = recognizer->Deallocate();
+	delete recognizer;
 	if (FAILED(hr))
 	{
 		// Produce an error message
         char buffer[1024];
-        GetErrorMessage(buffer, sizeof(buffer), "Stopping recognition failed", hr);
+        GetErrorMessage(buffer, sizeof(buffer), "Deallocating of recognizer failed", hr);
         ThrowJavaException(env, "org/jvoicexml/implementation/kinect/KinectRecognizerException", buffer);
 		return;
 	}

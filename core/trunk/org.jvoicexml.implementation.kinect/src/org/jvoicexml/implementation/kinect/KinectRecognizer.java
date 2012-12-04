@@ -127,6 +127,10 @@ public final class KinectRecognizer {
      */
     RecognitionResult recognize()
             throws KinectRecognizerException {
+        if (handle == 0) {
+            throw new KinectRecognizerException("no recognizer allocated!");
+        }
+
         return kinectRecognizeSpeech(handle);
     }
 
@@ -217,9 +221,12 @@ public final class KinectRecognizer {
     /**
      * Stops the recognition process.
      * @throws KinectRecognizerException
-     *         error starting the recognizer
+     *         error stopping the recognizer
      */
     public void stopRecognition() throws KinectRecognizerException {
+        if (handle == 0) {
+            throw new KinectRecognizerException("no recognizer allocated!");
+        }
         if (recognitionThread != null) {
             recognitionThread.stopRecognition();
             recognitionThread = null;
@@ -246,6 +253,9 @@ public final class KinectRecognizer {
      *          recognizer could not be deallocated
      */
     public void deallocate() throws KinectRecognizerException{
+        if (handle == 0) {
+            return;
+        }
         try {
             kinectDeallocate(handle);
         } finally {
@@ -262,4 +272,12 @@ public final class KinectRecognizer {
     private native void kinectDeallocate(long handle)
             throws KinectRecognizerException;
     
+    /**
+     * Final clean-up.
+     */
+    @Override
+    protected void finalize() throws Throwable {
+        deallocate();
+        super.finalize();
+    }
 }

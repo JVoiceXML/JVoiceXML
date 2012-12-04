@@ -83,6 +83,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     hr = NuiGetSensorCount(&iSensorCount);
     if (FAILED(hr))
     {
+		std::err << "unable to coonect to sensor" << std::endl;
         return hr;
     }
 
@@ -122,6 +123,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     if (NULL == m_pNuiSensor || FAILED(hr))
     {
         //SetStatusMessage(L"No ready Kinect found!");
+		std::err << "no kinect found" << std::endl;
         return E_FAIL;
     }
 
@@ -129,6 +131,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     if (FAILED(hr))
     {
         //SetStatusMessage(L"Could not initialize audio stream.");
+		std::err << "could not initialize audio stream" << std::endl;
         return hr;
     }
 
@@ -136,6 +139,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     if (FAILED(hr))
     {
         //SetStatusMessage(L"Could not create speech recognizer. Please ensure that Microsoft Speech SDK and other sample requirements are installed.");
+		std::err << "Could not create speech recognizer. Please ensure that Microsoft Speech SDK and other sample requirements are installed." << std::endl;
         return hr;
     }
 
@@ -143,6 +147,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     hr = LoadSpeechGrammar();
     if (FAILED(hr))
     {
+		std::err << "Could not load speech grammar. Please ensure that grammar configuration file was properly deployed." << std::endl;
         //SetStatusMessage(L"Could not load speech grammar. Please ensure that grammar configuration file was properly deployed.");
         return hr;
     }
@@ -172,7 +177,6 @@ HRESULT JVoiceXmlKinectRecognizer::InitializeAudioStream()
         if (SUCCEEDED(hr))
         {
             hr = pNuiAudioSource->QueryInterface(IID_IPropertyStore, (void**)&pPropertyStore);
-    
             // Set AEC-MicArray DMO system mode. This must be set for the DMO to work properly.
             // Possible values are:
             //   SINGLE_CHANNEL_AEC = 0
@@ -293,7 +297,7 @@ HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech(RecognitionResult& result)
         // Specify that all top level rules in grammar are now active
         m_pSpeechGrammar->SetRuleState(NULL, NULL, SPRS_ACTIVE);
 
-        // Specify that engine should always be reading audio
+		// Specify that engine should always be reading audio
         m_pSpeechRecognizer->SetRecoState(SPRST_ACTIVE_ALWAYS);
 
         // Specify that we're only interested in receiving recognition events
@@ -314,7 +318,11 @@ HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech(RecognitionResult& result)
 			hr = m_pSpeechContext->WaitForNotifyEvent(20);
 			if(hr == S_OK)
 			{
-				ProcessSpeech(result);
+				hr = ProcessSpeech(result);
+				if (FAILED(hr))
+				{
+					return hr;
+				}
 			}
 		}
     }
@@ -329,11 +337,6 @@ HRESULT JVoiceXmlKinectRecognizer::StopSpeechRecognition()
     if (NULL != m_pKinectAudioStream)
     {
         m_pKinectAudioStream->StopCapture();
-    }
-
-    if (NULL != m_pSpeechRecognizer)
-    {
-        m_pSpeechRecognizer->SetRecoState(SPRST_INACTIVE);
     }
 
 	return S_OK;
