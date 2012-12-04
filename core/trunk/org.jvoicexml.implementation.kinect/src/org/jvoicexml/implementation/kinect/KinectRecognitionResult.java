@@ -141,6 +141,9 @@ public class KinectRecognitionResult
     @Override
     public boolean isAccepted() {
         final String utterance = getUtterance();
+        if (utterance == null) {
+            return false;
+        }
         // Check if there is only garbage recognized
         return !utterance.equals("...");
     }

@@ -181,12 +181,15 @@ public final class KinectRecognizer {
      */
     private SmlInterpretationExtractor parseSml(final String sml)
             throws TransformerException {
+        final SmlInterpretationExtractor extractor =
+                new SmlInterpretationExtractor();
+        if (sml == null) {
+            return extractor;
+        }
         final TransformerFactory factory = TransformerFactory.newInstance();
         final Transformer transformer = factory.newTransformer();
         final Reader reader = new StringReader(sml);
         final Source source = new StreamSource(reader);
-        final SmlInterpretationExtractor extractor =
-                new SmlInterpretationExtractor();
         final javax.xml.transform.Result result = new SAXResult(extractor);
         transformer.transform(source, result);
         return extractor;

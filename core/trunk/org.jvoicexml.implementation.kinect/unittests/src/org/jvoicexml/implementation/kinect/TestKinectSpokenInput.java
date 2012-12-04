@@ -26,7 +26,6 @@
 
 package org.jvoicexml.implementation.kinect;
 
-import static org.junit.Assert.fail;
 import junit.framework.Assert;
 
 import org.apache.log4j.Logger;
