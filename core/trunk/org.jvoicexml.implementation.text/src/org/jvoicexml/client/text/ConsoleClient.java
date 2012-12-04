@@ -113,14 +113,6 @@ public final class ConsoleClient implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void outputText(final String text) {
-        System.out.println("System: " + text);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void outputSsml(final SsmlDocument document) {
         final Speak speak = document.getSpeak();
         System.out.println("System: " + speak.getTextContent());
