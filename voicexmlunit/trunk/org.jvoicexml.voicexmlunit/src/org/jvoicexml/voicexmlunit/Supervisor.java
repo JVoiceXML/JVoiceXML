@@ -118,8 +118,11 @@ public final class Supervisor implements TextListener {
 		statement = conversation.begin();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.jvoicexml.client.text.TextListener#outputText(java.lang.String)
+	/**
+	 * Some text has received, test it with expectation.
+	 * This is a method from an older TextListener interface and is
+	 * kept for compatibility.
+	 * @param text the received text
 	 */
 	public void outputText(final String text) {
 		try {
@@ -134,14 +137,14 @@ public final class Supervisor implements TextListener {
 	 * @see org.jvoicexml.client.text.TextListener#outputSsml(org.jvoicexml.xml.ssml.SsmlDocument)
 	 */
 	public void outputSsml(final SsmlDocument document) {
-		String text = null;
+		//TODO better handling of the XML structure inside (xpath?)
 		if (document != null) {
 			Speak speak = document.getSpeak();
 			if (speak != null) {
-				text = speak.getTextContent();
+				final String text = speak.getTextContent();
+				outputText(text);
 			}
 		}
-		outputText(text);
 	}
 	
 	/* (non-Javadoc)
