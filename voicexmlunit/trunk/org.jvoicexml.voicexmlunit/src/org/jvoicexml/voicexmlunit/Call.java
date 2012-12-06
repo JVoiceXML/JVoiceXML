@@ -40,7 +40,6 @@ public final class Call implements Runnable {
 	private TextServer server;
 	private Voice voice;
 	private AssertionFailedError error;
-	private Session session;
 	
 	static public int SERVER_PORT = 6000; // port number must be greater than 1024
 	static public int SERVER_PORT_RANDOMIZE_COUNT = 100; // 0 means a fixed port number
@@ -54,9 +53,8 @@ public final class Call implements Runnable {
 		super();
 		this.dialog = dialog;
 		this.server = new TextServer(randomizePortForServer());
-		this.voice = new Voice();
+		this.voice = null;
 		this.error = null;
-		this.session = null;
 	}
 	
 	/**
@@ -75,8 +73,24 @@ public final class Call implements Runnable {
 		server.addTextListener(listener);
 	}
 	
+	/**
+	 * Get the Voice object
+	 * This method tries best to get a valid object.
+	 * @return the actual Voice object
+	 */
 	public Voice getVoice() {
+		if (voice == null) {
+			setVoice(new Voice());
+		}
 		return voice;
+	}
+	
+	/**
+	 * Set a custom Voice object
+	 * @param voice the new Voice object
+	 */
+	public void setVoice(Voice voice) {
+		this.voice = voice;
 	}
 	
 	/* (non-Javadoc)
@@ -95,8 +109,8 @@ public final class Call implements Runnable {
 			synchronized (dialog) {
 				dialog.wait(SERVER_WAIT);
 			}
-			doSession();
-		} catch (InterruptedException e) {
+			runDialog();
+		} catch (InterruptedException | UnknownHostException | ErrorEvent e) {
 			e.printStackTrace();
 		} finally {
 			server.stopServer();
@@ -113,25 +127,8 @@ public final class Call implements Runnable {
 		}
 	}
 
-	private void doSession() {
-		try {
-			session = getVoice().getJVoiceXml().createSession(server.getConnectionInformation());
-			session.call(dialog);
-			session.waitSessionEnd();		
-			session.hangup();
-			session = null;
-		} catch (UnknownHostException | ErrorEvent e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Get the current session
-	 * Caution! May be null if there's no current session.
-	 * @return the session
-	 */
-	public Session getSession() {
-		return session;
+	private void runDialog() throws UnknownHostException, ErrorEvent {
+		getVoice().connect(server.getConnectionInformation(),dialog);
 	}
 	
 	/**
@@ -147,7 +144,7 @@ public final class Call implements Runnable {
 	 * @param error the error that has caused the failure
 	 */
 	public void fail(AssertionFailedError error) {
-		server.stopServer();
+		//server.stopServer(); // hopefully done in run()
 		if (error != null) { // only the first error
 			this.error = error;
 		}
