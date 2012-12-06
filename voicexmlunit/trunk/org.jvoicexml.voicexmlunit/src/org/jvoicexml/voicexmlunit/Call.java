@@ -13,7 +13,6 @@ import junit.framework.AssertionFailedError;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 
-import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 
 import org.jvoicexml.voicexmlunit.io.Recording;
