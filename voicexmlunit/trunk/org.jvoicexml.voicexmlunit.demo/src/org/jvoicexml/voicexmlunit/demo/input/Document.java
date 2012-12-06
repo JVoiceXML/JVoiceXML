@@ -70,7 +70,7 @@ public class Document implements TextListener {
      * @return Created VoiceXML document, <code>null</code> if an error
      * occurs.
      */
-    public VoiceXmlDocument createDocument() {
+    public VoiceXmlDocument create() {
         final VoiceXmlDocument document;
 
         try {
@@ -175,7 +175,7 @@ public class Document implements TextListener {
      * @return VoiceXML document as an XML string, <code>null</code> in case
      * of an error.
      */
-    public String printDocument(final VoiceXmlDocument document) {
+    public String print(final VoiceXmlDocument document) {
         final String xml;
         try {
             xml = document.toXml();
@@ -195,7 +195,7 @@ public class Document implements TextListener {
      * @param document The only document in this application.
      * @return URI of the first document.
      */
-    public URI addDocument(final Context context, final VoiceXmlDocument document) {
+    public URI add(final Context context, final VoiceXmlDocument document) {
         MappedDocumentRepository repository;
         try {
             repository = (MappedDocumentRepository)
@@ -225,7 +225,7 @@ public class Document implements TextListener {
      * @exception JVoiceXMLEvent
      *            Error processing the call
      */
-    public void interpretDocument(final Supervisor supervisor, final Call call) {
+    public void interpret(final Supervisor supervisor, final Call call) {
         this.call = call;
         call.setListener(this);
         supervisor.init(call);
@@ -252,10 +252,11 @@ public class Document implements TextListener {
 
 	@Override
 	public void expectingInput() {
-        final char dtmf = randomizeDtmf();
+		final int count = 2;
+        final char dtmf = randomizeDtmf(count);
 		LOGGER.info("sending DTMF '" + dtmf  + "'");
 
-        final Session session = call.getSession();
+        final Session session = call.getVoice().getSession();
         if (session != null) {
 			try {
 				final CharacterInput input = session.getCharacterInput();
@@ -269,8 +270,8 @@ public class Document implements TextListener {
         }
 	}
 
-	private char randomizeDtmf() {
-		Integer random = new Integer((int)Math.random()*10);
+	private char randomizeDtmf(int count) {
+		final Integer random = new Integer((int)Math.random()*count);
 		return random.toString().toCharArray()[0];
 	}
 

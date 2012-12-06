@@ -21,18 +21,22 @@ public class DtmfDemo {
 	private Voice voice = new Voice();
 	
 	private VoiceXmlDocument document;
-	
+	private Call call;
 	private Supervisor supervisor;
     
 	@Before
 	public void setUp() throws Exception {
 		voice.setPolicy("etc/jvoicexml.policy");
+		voice.lookupJVoiceXML();
 
-		document = demo.createDocument();
+		document = demo.create();
         if (document != null) {
 	        @SuppressWarnings("unused")
-			final String xml = demo.printDocument(document);
+			final String xml = demo.print(document);
 
+	        call = new Call(demo.add(voice.getContext(), document));
+	        call.setVoice(voice);
+	        
 	        supervisor = new Supervisor();
         }
 	}
@@ -40,13 +44,8 @@ public class DtmfDemo {
 	@Test
 	public void testDocument() {
 		assertNotNull("JVoiceXML",voice.getJVoiceXml());
-		
-		assertNotNull(document);
-        URI uri = demo.addDocument(voice.getContext(), document);
-		assertNotNull(uri);
-		
-    	final Call call = new Call(uri);
-    	demo.interpretDocument(supervisor,call);
+
+     	demo.interpret(supervisor,call);
     	
     	assertTrue(demo.inputSent());
 	}

@@ -21,15 +21,16 @@ public class InputDemo {
 		voice.setPolicy("etc/jvoicexml.policy");		
 		//voice.loadConfiguration("etc/jndi.properties");
 
-		supervisor = new Supervisor();	}
+		supervisor = new Supervisor();
+	}
 
 	@Test
 	public void testInput() {
 		Conversation conversation = supervisor.init(call);
 		conversation.addOutput("Hello!");
-		//conversation.addInput("Goodbye!");
+		conversation.addInput("Bye!");
 
-		supervisor.assertStatements(1);
+		supervisor.assertStatements(2);
 		supervisor.process();
 	}
 
