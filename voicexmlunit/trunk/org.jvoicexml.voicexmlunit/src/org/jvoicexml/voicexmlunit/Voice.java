@@ -82,8 +82,8 @@ public class Voice {
 			URI dialog) throws ErrorEvent {
 		session = getJVoiceXml().createSession(connectionInformation);
 		session.call(dialog);
-		session.waitSessionEnd();		
-		session.hangup();
+		session.waitSessionEnd();
+		//session.hangup();
 		session = null;
 	}
 	
