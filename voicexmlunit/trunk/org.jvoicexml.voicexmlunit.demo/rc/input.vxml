@@ -1,13 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-< xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	version="2.1" xml:lang="en"
-	xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
-	<meta content="JVoiceXML group" name="author" />
-	<meta content="2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net"
-		name="copyright" />
-	<form>
-		<field>
-			<prompt timeout="3s">Hello!</prompt>
-		</field>
-	</form>
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.1">
+<form>
+ <field name="answer">
+  <grammar src="yesno.srgs" type="application/srgs+xml"/>
+  <prompt>Do you like this example?</prompt>
+  <filled>
+   <if cond="answer=='yes'">
+    You like this example.
+   <else/>
+    You do not like this example.
+   </if>
+  </filled>
+ </field>
+</form>
 </vxml>

@@ -1,6 +1,9 @@
 package org.jvoicexml.voicexmlunit.demo.input;
 
 
+import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,13 +28,27 @@ public class InputDemo {
 	}
 
 	@Test
-	public void testInput() {
-		Conversation conversation = supervisor.init(call);
-		conversation.addOutput("Hello!");
-		conversation.addInput("Bye!");
-
-		supervisor.assertStatements(2);
+	public void testInputYes() {
+		createConversation("yes");
 		supervisor.process();
 	}
 
+	@Test
+	public void testInputNoFail() {
+		createConversation("no");
+		boolean failed = false;
+		try {
+			supervisor.process();
+		} catch (AssertionFailedError e) {
+			failed = true;
+		}
+		Assert.assertEquals(true,failed);
+	}
+
+	private void createConversation(String answer) {
+		Conversation conversation = supervisor.init(call);
+		conversation.addOutput("Do you like this example?");
+		conversation.addInput(answer);
+		conversation.addOutput("You like this example.");
+	}
 }
