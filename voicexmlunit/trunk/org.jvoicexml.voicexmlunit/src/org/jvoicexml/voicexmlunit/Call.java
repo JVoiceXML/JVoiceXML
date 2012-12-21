@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 
 import junit.framework.AssertionFailedError;
 
+import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 
@@ -143,8 +144,12 @@ public final class Call implements Runnable {
 	 * @param error the error that has caused the failure
 	 */
 	public void fail(AssertionFailedError error) {
-		//server.stopServer(); // hopefully done in run()
-		if (error != null) { // only the first error
+		if (this.error == null) { // only the first error
+			server.interrupt();
+			final Session session = getVoice().getSession();
+			if (session != null) {
+				session.hangup();
+			}
 			this.error = error;
 		}
 	}
