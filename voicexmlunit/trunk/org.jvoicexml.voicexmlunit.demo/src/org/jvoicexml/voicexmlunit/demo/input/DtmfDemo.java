@@ -1,53 +1,54 @@
 package org.jvoicexml.voicexmlunit.demo.input;
 
 
-import static org.junit.Assert.*;
-
-import java.net.URI;
+import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import org.jvoicexml.voicexmlunit.Call;
+import org.jvoicexml.voicexmlunit.Conversation;
 import org.jvoicexml.voicexmlunit.Supervisor;
 import org.jvoicexml.voicexmlunit.Voice;
 
-import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-
-
 public class DtmfDemo {
-
-	private Document demo = new Document();
-	private Voice voice = new Voice();
-	
-	private VoiceXmlDocument document;
 	private Call call;
 	private Supervisor supervisor;
-    
+
 	@Before
 	public void setUp() throws Exception {
-		voice.setPolicy("etc/jvoicexml.policy");
-		voice.lookupJVoiceXML();
+		call = new Call("rc/dtmf.vxml");
+		
+		Voice voice = call.getVoice();
+		voice.setPolicy("etc/jvoicexml.policy");		
+		//voice.loadConfiguration("etc/jndi.properties");
 
-		document = demo.create();
-        if (document != null) {
-	        @SuppressWarnings("unused")
-			final String xml = demo.print(document);
-
-	        call = new Call(demo.add(voice.getContext(), document));
-	        call.setVoice(voice);
-	        
-	        supervisor = new Supervisor();
-        }
+		supervisor = new Supervisor();
 	}
 
 	@Test
-	public void testDocument() {
-		assertNotNull("JVoiceXML",voice.getJVoiceXml());
-
-     	demo.interpret(supervisor,call);
-    	
-    	assertTrue(demo.inputSent());
+	public void testInputYes() {
+		createConversation('1');
+		supervisor.process();
 	}
 
+	@Test
+	public void testInputNoFail() {
+		createConversation('2');
+		boolean failed = false;
+		try {
+			supervisor.process();
+		} catch (AssertionFailedError e) {
+			failed = true;
+		}
+		Assert.assertEquals(true,failed);
+	}
+
+	private void createConversation(char answer) {
+		Conversation conversation = supervisor.init(call);
+		conversation.addOutput("Do you like this example? Please enter 1 for yes or 2 for no");
+		conversation.addDtmf(answer);
+		conversation.addOutput("You like this example.");
+	}
 }
