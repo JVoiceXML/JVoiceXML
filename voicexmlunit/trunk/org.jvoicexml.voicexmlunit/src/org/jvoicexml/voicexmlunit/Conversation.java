@@ -8,7 +8,6 @@ import org.jvoicexml.voicexmlunit.io.Assertion;
 import org.jvoicexml.voicexmlunit.io.Dtmf;
 import org.jvoicexml.voicexmlunit.io.Input;
 import org.jvoicexml.voicexmlunit.io.Output;
-import org.jvoicexml.voicexmlunit.io.Statement;
 
 
 /**
@@ -23,14 +22,14 @@ import org.jvoicexml.voicexmlunit.io.Statement;
  *
  */
 public final class Conversation {
-	private LinkedList<Statement> history;
-	private ListIterator<Statement> iterator;
+	private LinkedList<Assertion> history;
+	private ListIterator<Assertion> iterator;
 	
 	/**
 	 * Constructor
 	 */
 	public Conversation() {
-		history = new LinkedList<Statement>();
+		history = new LinkedList<Assertion>();
 		iterator = null;
 	}
 
