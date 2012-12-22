@@ -95,7 +95,7 @@ public final class Supervisor implements TextListener {
 		} else {
 			Recording record;
 			if (call == null) {
-				record = new Recording(null); // mock
+				record = new Recording(null,null); // mock
 			} else {
 				record = call.record();
 			}

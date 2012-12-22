@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 import org.jvoicexml.voicexmlunit.io.Assertion;
+import org.jvoicexml.voicexmlunit.io.Dtmf;
 import org.jvoicexml.voicexmlunit.io.Input;
 import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.io.Statement;
@@ -49,6 +50,15 @@ public final class Conversation {
 	public void addInput(String message) {
 		Input input = new Input(message);
 		history.add(input);
+	}
+	
+	/**
+	 * Add a new Dtmf with the message to be send
+	 * @param message Message to send
+	 */
+	public void addDtmf(char message) {
+		Dtmf dtmf = new Dtmf(message);
+		history.add(dtmf);
 	}
 	
 	/**

@@ -136,7 +136,7 @@ public final class Call implements Runnable {
 	 * @return transaction to use for the input
 	 */
 	public Recording record() {
-		return new Recording(server);
+		return new Recording(server,getVoice().getSession());
 	}
 	
 	/**

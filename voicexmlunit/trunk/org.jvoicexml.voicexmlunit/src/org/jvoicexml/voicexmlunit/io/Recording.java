@@ -6,7 +6,11 @@ package org.jvoicexml.voicexmlunit.io;
 
 import java.io.IOException;
 
+import org.jvoicexml.CharacterInput;
+import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 
 /**
@@ -18,14 +22,16 @@ import org.jvoicexml.client.text.TextServer;
  */
 public class Recording {
 	private TextServer server;
+	private Session session;
 
 	/**
 	 * Constructs a Recording
 	 * @param server the server to send something
 	 */
-	public Recording(TextServer server) {
+	public Recording(TextServer server, Session session) {
 		super();
 		this.server = server;
+		this.session = session;
 	}
 	
 	/**
@@ -36,6 +42,13 @@ public class Recording {
 	public void input(String text) throws IOException {
 		if (server != null) {
 			server.sendInput(text);
+		}
+	}
+	
+	public void input(char dtmf) throws NoresourceError, ConnectionDisconnectHangupEvent {
+		if (session != null) {
+			CharacterInput input = session.getCharacterInput();
+	        input.addCharacter(dtmf);
 		}
 	}
 }
