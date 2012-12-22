@@ -1,8 +1,6 @@
 package org.jvoicexml.voicexmlunit.io;
 
 
-import java.io.IOException;
-
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
