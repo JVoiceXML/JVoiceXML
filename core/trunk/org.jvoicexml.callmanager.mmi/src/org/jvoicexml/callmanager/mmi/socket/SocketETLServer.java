@@ -89,7 +89,8 @@ public final class SocketETLServer extends Thread {
         try {
             server = new ServerSocket(port);
             server.setReuseAddress(true);
-            uri = TcpUriFactory.createUri(server.getInetAddress());
+            uri = TcpUriFactory.createUri(
+                    (InetSocketAddress)server.getLocalSocketAddress());
             LOGGER.info("listening on '" + uri + "' for MMI events");
             while (!stopRequest) {
                 final Socket socket = server.accept();
