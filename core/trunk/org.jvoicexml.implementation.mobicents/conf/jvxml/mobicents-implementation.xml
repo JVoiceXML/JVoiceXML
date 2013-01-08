@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+  <repository>mobicents</repository>
+  <classpath>lib/jsapi.jar</classpath>
+  <classpath>lib/freetts-jsapi10.jar</classpath>
+  <classpath>lib/freetts.jar</classpath>
+  <classpath>lib/cmu_us_kal.jar</classpath>
+  <classpath>lib/cmulex.jar</classpath>
+  <classpath>lib/en_us.jar</classpath>
+  <classpath>lib/sphinx4.jar</classpath>
+  <classpath>lib/jsapi-1.0-base.jar</classpath>
+  <classpath>lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar</classpath>
+   <beans:bean
+    class="org.jvoicexml.implementation.mobicents.jvxml.MobicentsXIVRSynthesizedOutputFactory">
+    <beans:property name="instances" value="1" />
+    <beans:property name="type" value="mobicents" />
+    <beans:property name="synthesizerModeDescriptorFactory">
+      <beans:bean
+        class="org.jvoicexml.implementation.mobicents.JVoiceXmlSynthesizerModeDescFactory">
+        <beans:property name="locale">
+          <beans:bean class="java.util.Locale">
+            <beans:constructor-arg value="en" />
+            <beans:constructor-arg value="US" />
+          </beans:bean>
+        </beans:property>
+      </beans:bean>
+    </beans:property>
+  </beans:bean>
+  <beans:bean
+    class="org.jvoicexml.implementation.mobicents.jvxml.MobicentsSphinx4SpokenInputFactory">
+    <beans:property name="type" value="mobicents" />
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+  <beans:bean
+    class="org.jvoicexml.implementation.mobicents.MobicentsTelephonyFactory">
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+</implementation>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jndi xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-jndi-0-7.xsd">
+  <repository>jndi</repository>
+  <classpath>lib/org.jvoicexml.jndi.jar</classpath>
+  <beans:bean id="org.jvoicexml.JndiSupport"
+    class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
+    <beans:property name="registry">
+      <beans:bean id="registry" class="org.jvoicexml.jndi.JVoiceXmlRegistry">
+        <beans:property name="port" value="1099" />
+      </beans:bean>
+    </beans:property>
+  </beans:bean>
+</jndi>

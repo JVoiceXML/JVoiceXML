@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?> 
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.1" xml:lang="en-US" xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+    <menu id="mainmenu">
+        <prompt>
+            <audio src="http://192.168.146.146:8080/VNXIVR/audio/ivrClientWelcome.wav"/>
+        </prompt> 
+        <choice dtmf="1" next="#playwav1" /> 
+        <choice dtmf="2" next="#playwav2" /> 
+    </menu>
+    <form id="playwav1">
+        <block>
+		<audio src="http://192.168.146.146:8080/VNXIVR/audio/dtmf_welcome.wav"/>
+	</block>
+    </form>
+    <form id="playwav2">
+        <block>
+		<audio src="http://192.168.146.146:8080/VNXIVR/audio/record_welcome.wav"/>
+	</block>
+    </form>
+</vxml>

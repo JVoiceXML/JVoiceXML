@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.1" xml:lang="en-US" xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+    <!--so voice broadcast 1354 -->
+    <var name="calling_number" expr="session.connection.local.uri"/>
+    
+    <!-- So nguoi goi den: 0985xxxxxx-->
+    <var name="sender" expr="session.connection.remote.uri"/>
+    
+    <var name="receiver" value="0"/>
+
+    <var name="save_sms" value="0"/>
+    <var name="duration" value="0"/> <!-- Thoi gian ghi am sms-->
+    <var name="updateSMS" value="-1"/><!--goi webservice update hay khong: -1 ko goi. 1 goi update new sms; 0: goi update old sms-->
+    <var name="var_commit_sms" value="-1"/>
+   
+    <var name="current_sms" value="0"/>
+    <var name="current_sms_list" value="0"/>
+    <var name="current_sms_length" value="0"/>
+    <var name="pre_sms" value="-1"/>
+    <var name="current_old_sms" value="0"/>
+    <var name="current_old_sms_list" value="0"/>
+	
+    <var name="pre_old_sms" value="-1"/>
+
+    <var name="go_back" value="0"/>
+    <!--  The next line show how to import javascript from an external file -->
+    <script src="file:///F:/WorkStation/Java/Projects/VNXIVR/org.jvoicexml.implementation.mobicents/conf/jvxml/vxml/vb_sms_talk.js"/>
+    <script>
+        <![CDATA[
+            _cdr_set_info("service_number", session.connection.local.uri);
+        ]]>
+    </script>
+
+ 
+ <!-- Catch the call hangup event and call the webservice to send SMS -->
+    <catch event="connection.disconnect.hangup">
+        <if cond="updateSMS =='1'"> <!--update new sms-->
+            <if cond="current_sms != '-1'">
+                <object name="update_sms" classid="webservice_json">
+                    <param name="url" expr="webservice_url"/>
+                    <param name="method" value="POST"/>
+                    <param name="request_param" param_name="method" value="update_new_sms"/>		
+                    <param name="request_param" param_name="receiver" expr="receiver"/>
+                    <param name="request_param" param_name="sms_id" expr="current_sms_list[current_sms]['sms_id']"/>
+                </object>
+            </if>	
+            <elseif cond="updateSMS=='0'"/><!--update old sms-->
+            <if cond="current_old_sms != '-1'">
+                <object name="update_sms" classid="webservice_json">
+                    <param name="url" expr="webservice_url"/>
+                    <param name="method" value="POST"/>
+                    <param name="request_param" param_name="method" value="update_old_sms"/>		
+                    <param name="request_param" param_name="receiver" expr="receiver"/>
+                    <param name="request_param" param_name="sms_id" expr="current_old_sms_list[current_old_sms]['sms_id']"/>
+                </object>
+            </if>	
+            <else/>
+        </if>
+        <if cond="var_commit_sms=='0'">		
+            <script><![CDATA[                                   
+			_log_debug("My log: Hangup: save file ghi am");
+			]]>	
+            </script>
+		
+            <object name="set_sms" classid="webservice_json">
+                <param name="url" expr="webservice_url"/>
+                <param name="method" value="POST"/>
+                <param name="request_param" param_name="method" value="set_sms"/>		
+                <param name="request_param" param_name="sender" expr="sender"/>      
+                <param name="request_param" param_name="receiver" expr="receiver"/>
+            </object>								
+            <if cond="set_sms['ret_code'] == '0'">
+                <script><![CDATA[                   
+                var ret = true;				 
+                ret = sms_record.save_to("sm:nolang//localsound::sms_store::" + set_sms["data"]["file_name"]);
+				duration=sms_record.duration;
+				_log_debug("My log: Thoi gian ghi am: %s",duration);
+                if (ret) {
+                    save_sms = "0";
+                } else {
+                    save_sms = "1";
+                }
+                _log_debug("My log: save_sms  = %s", save_sms);
+				]]>	
+                </script>
+                <if cond="save_sms == '0'">
+                    <object name="commit_sms" classid="webservice_json">
+                        <param name="url" expr="webservice_url"/>
+                        <param name="method" value="POST"/>
+                        <param name="request_param" param_name="method" value="commit_sms"/>		
+                        <param name="request_param" param_name="sender" expr="sender" />
+                        <param name="request_param" param_name="duration" expr="duration" />
+                        <param name="request_param" param_name="receiver" expr="receiver"/>      
+                        <param name="request_param" param_name="sms_id" expr="set_sms['data']['sms_id']"/>
+                        <param name="request_param" param_name="file_name" expr="set_sms['data']['file_name']"/>
+                    </object>
+                    <script><![CDATA[                                  
+                    _log_debug("My log: sms_id, commit_sms_return   %s %s", set_sms['data']['sms_id'], commit_sms['return_code']);
+                     ]]>	
+                    </script>
+					
+                    <if cond="commit_sms['ret_code'] == '-1'">
+                        <prompt>
+                            <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_system_error.wav" />
+                        </prompt> 
+                        <exit/>
+					<!--thoi gian ghi am qua ngan-->
+                        <elseif cond="commit_sms['ret_code'] == '-2'" />
+                        <exit/>					
+                    </if>
+                    <else/>
+                    <prompt>
+						<!--SAI FILE GHI AM:CO LOI TRONG QUA TRINH GHI AM. VUI  LONG THU LAI-->
+                        <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_system_error.wav" />
+                    </prompt> 
+                    <exit/>
+                </if>					  
+                <exit/>                
+                <else/>
+                <prompt>
+					<!--SAI FILE GHI AM: so dt nguoi nhan ko dung ->CO LOI TRONG QUA TRINH XU LY. XIN QUY KHACH VUI LONG KIEM TRA LAI. CAM ON-->
+                    <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_system_error.wav" />
+                </prompt> 
+                <goto next="#frm_1354"/>
+            </if>            
+       
+        </if>
+    </catch>
+ 
+    <noinput>
+        <prompt>
+            <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_no_input_detected.wav" />
+        </prompt>
+        <reprompt/>
+    </noinput>
+    <noinput count="2">
+        <exit/>
+    </noinput>
+ 
+    <nomatch>
+        <prompt>
+            <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_invalid_input.wav" />
+        </prompt>
+        <reprompt/>
+    </nomatch>
+    <nomatch count="2">
+        <exit/>    
+    </nomatch>
+    
+    <form id="frm_gioi_thieu">
+        <field name="menu_action">
+                <!-- 
+                VT g?i l?i cám on trân tr?ng d?.... Ð? th?c hi?n g?i tr?c ti?p tin nh?n tho?i Talk SMS m?i b?n b?m phím1.
+                -->
+		<script><![CDATA[                                   
+			Log.error("Variable value is: "+current_sms);
+			]]>	
+	        </script>
+                <prompt timeout="5s">
+                    <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_instruction.wav" />
+                </prompt> 
+		<!--detecting dtmf input-->
+		<grammar xmlns="http://www.w3.org/2001/06/grammar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" mode="dtmf" root="test" version="1.0" xml:lang="en-US" xsi:schemaLocation="http://www.w3.org/2001/06/grammar http://www.w3.org/TR/speech-grammar/grammar.xsd">
+		    <rule id="test">
+			<one-of>
+			    <item>1</item>
+			</one-of>
+		    </rule>
+		</grammar>
+         
+                <noinput>
+                    <reprompt/>
+                </noinput>
+                
+                <noinput count="2">
+                    <exit/>
+                </noinput>
+            
+                <filled>
+                    <if cond="menu_action == '1'">
+                        <goto next="#frm_startup"/>
+                        <clear namelist="menu_action"/>
+                    <else/>
+                        <clear namelist="menu_action"/>                
+                    </if>            
+                </filled>
+            </field>
+    </form>
+    
+    <form id="frm_startup">	 
+        <field name="chosen_song_id" timeout="5s" >
+            <prompt>
+		<audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_enter_phone_number.wav" />
+            </prompt>
+            <noinput>
+                <reprompt/>
+            </noinput>
+            <!--grammar type="dtmfstring" allowed_keys="0-9" term_key="#"/-->
+	    <grammar xmlns="http://www.w3.org/2001/06/grammar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" mode="dtmf" root="phonenumber" version="1.0" xml:lang="en-US" xsi:schemaLocation="http://www.w3.org/2001/06/grammar http://www.w3.org/TR/speech-grammar/grammar.xsd">
+		    <rule id="digit">
+                        <one-of>
+                            <item>1</item>
+                            <item>2</item>
+                            <item>3</item>
+                            <item>4</item>
+                        </one-of>
+                    </rule>
+                    <rule id="phonenumber" scope="public">
+                        <item repeat="4">
+                            <ruleref uri="#digit"/>
+                        </item>
+                    </rule>
+	    </grammar>
+            <filled>
+                <if cond="get_receiver(chosen_song_id) != ''">
+                    <script>
+                        <![CDATA[                                   
+                            receiver = get_receiver(chosen_song_id);  
+                            go_back = "0";                
+                            _log_debug("My log: receiver = %s", receiver);
+                            _log_debug("My log: receiver_1 = %s", get_receiver(chosen_song_id));
+                        ]]>	
+                    </script> 
+                    <goto next="#frm_save_send"/>
+                    
+                <else/>
+                    <prompt>
+                        <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_instruction.wav" />
+                    </prompt>		
+                </if>
+            </filled>
+        </field>
+    </form>
+
+ <!--  introduce and terminate -->
+    <form id="frm_1354">	
+        <block>
+            <prompt>
+                <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_instruction.wav" />
+            </prompt>
+        </block>
+    </form>
+
+
+<!--  save a SMS and send to receiver -->
+    <form id="frm_save_send">	
+        <object name="is_first_time" classid="webservice_json">
+            <param name="url" expr="webservice_url"/>
+            <param name="method" value="POST"/>
+            <param name="request_param" param_name="method" value="is_first_time"/>
+            <param name="request_param" param_name="sender" expr="sender"/>                
+        </object>
+        <block>
+            <if cond="is_first_time['ret_code'] == '-1'">
+                <prompt>
+                    <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_welcome.wav" />                    
+                </prompt>		            					           
+            </if>              
+        </block>
+	
+	
+	<!-- Kiem tra su ton tai cua nguoi nhan -->
+        <object name="check_receiver" classid="webservice_json">
+            <param name="url" expr="webservice_url"/>
+            <param name="method" value="POST"/>
+            <param name="request_param" param_name="method" value="check_receiver"/>
+            <param name="request_param" param_name="receiver" expr="receiver"/>                  
+        </object>
+        <block>
+            <if cond="check_receiver['ret_code'] == '404'"> <!-- Khong tim thay -->
+                <prompt>
+                    <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_not_exist_callee.wav" />                    
+                </prompt>
+                <goto next="#frm_startup"/>
+            <elseif cond="check_receiver['ret_code'] == '440'"/><!-- Co loi xay ra-->
+                <prompt>
+                    <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_not_exist_callee.wav" />                    
+                </prompt> 
+                <goto next="#frm_startup"/>
+            <elseif cond="check_receiver['ret_code'] == '-1'"/><!-- Co loi xay ra-->
+                <prompt>
+                    <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_not_exist_callee.wav" />                    
+                </prompt> 
+                <goto next="#frm_startup"/>
+            <elseif cond="check_receiver['ret_code'] == '1'"/><!-- Thue bao khong hoat dong-->
+                <prompt>
+                    <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_not_exist_callee.wav" />                    
+                </prompt> 
+                <goto next="#frm_startup"/>
+            <elseif cond="check_receiver['ret_code'] == '2'"/><!-- Thue bao khoa hai chieu-->
+                <prompt>
+                    <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_locked_callee.wav" />                    
+                </prompt> 
+                <goto next="#frm_startup"/>
+            <else/>
+            </if>                  
+        </block>
+	
+    <!-- Kiem tra tai khoan -->
+        <object name="check_balance" classid="webservice_json">
+            <param name="url" expr="webservice_url"/>
+            <param name="method" value="POST"/>
+            <param name="request_param" param_name="method" value="check_balance"/>
+            <param name="request_param" param_name="sender" expr="sender"/>                  
+        </object>
+        <block>
+            <if cond="check_balance['ret_code'] == '0'">
+                <prompt>
+                    <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_record.wav" />                    
+                </prompt>                                                             
+                <else/>
+                <prompt>
+                    <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_no_balance2.wav" />
+                </prompt>
+                <exit/>
+            </if>      
+            <script>
+                <![CDATA[             
+                    var_commit_sms=0;
+                ]]>	
+            </script>          
+        </block>
+
+        <record name="sms_record" beep="true" dtmfterm="true" maxtime="90"/>	
+	
+        <object name="set_sms" classid="webservice_json">
+            <param name="url" expr="webservice_url"/>
+            <param name="method" value="POST"/>
+            <param name="request_param" param_name="method" value="set_sms"/>		
+            <param name="request_param" param_name="sender" expr="sender"/>      
+            <param name="request_param" param_name="receiver" expr="receiver"/>
+        </object>
+        <block>
+            <script><![CDATA[     	
+				var_commit_sms=-1;
+				]]>	
+            </script>			
+            <if cond="set_sms['ret_code'] == '0'">
+                <script>
+                    <![CDATA[                   
+                        var ret = true;
+                        ret = sms_record.save_to("sm:nolang//localsound::sms_store::" + set_sms["data"]["file_name"]);
+                        duration=sms_record.duration;
+                        _log_debug("My log: Thoi gian ghi am: %s",duration);
+                        if (ret) {
+                            save_sms = "0";
+                        } else {
+                            save_sms = "1";
+                        }
+                        _log_debug("My log: save_sms  = %s", save_sms);
+                    ]]>	
+                </script>
+                <if cond="save_sms == '0'">
+                    <object name="commit_sms" classid="webservice_json">
+                        <param name="url" expr="webservice_url"/>
+                        <param name="method" value="POST"/>
+                        <param name="request_param" param_name="method" value="commit_sms"/>		
+                        <param name="request_param" param_name="sender" expr="sender" />
+                        <param name="request_param" param_name="duration" expr="duration" />
+                        <param name="request_param" param_name="receiver" expr="receiver"/>      
+                        <param name="request_param" param_name="sms_id" expr="set_sms['data']['sms_id']"/>
+                        <param name="request_param" param_name="file_name" expr="set_sms['data']['file_name']"/>
+						
+                    </object>
+                    <script>
+                        <![CDATA[                                  
+                        _log_debug("My log: sms_id, commit_sms_return   %s %s", set_sms['data']['sms_id'], commit_sms['return_code']);
+                         ]]>	
+                    </script>
+                    <if cond="commit_sms['ret_code'] == '-1'">
+                        <prompt>
+                            <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_system_error.wav" />
+                        </prompt> 
+                        <exit/>
+					<!--thoi gian ghi am qua ngan-->
+                    <elseif cond="commit_sms['ret_code'] == '-2'" />
+                        <exit/>
+                    </if>
+                <else/>
+                    <prompt>
+                        <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_system_error.wav" />
+                    </prompt> 
+                    <exit/>
+                </if>
+                <prompt>
+                    <!-- Quy khach da gui tin xong. cam on quy khach da su dung dich vu cua vt-->
+                    <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_sent_bye.wav" />
+                </prompt>   
+                <exit/>                      
+            <else/>
+                <prompt>
+                    <audio src="file://///home/thangtq/Documents/Audio/SMSTalk/vie_system_error.wav" />
+                </prompt> 
+                <goto next="#frm_1354"/>
+            </if>                    
+        </block>
+    </form>	
+</vxml>
