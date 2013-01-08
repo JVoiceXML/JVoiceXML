@@ -37,7 +37,7 @@ public class Voice {
 	}
 	
 	/**
-	 * Get the JVoiceXML ibject
+	 * Get the JVoiceXML object
 	 */
 	public JVoiceXml getJVoiceXml() {
 		if (jvxml == null) {
