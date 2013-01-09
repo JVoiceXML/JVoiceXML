@@ -3,7 +3,7 @@
    <description url="http://jvoicexml.sourceforge.net/eclipseupdates">
       JVoiceXml eclipse update site
    </description>
-   <feature url="features/org.jvoicexml.eclipse.features_0.7.3.jar" id="org.jvoicexml.eclipse.features" version="0.7.3" patch="true">
+   <feature url="features/org.jvoicexml.eclipse.features_0.7.5.jar" id="org.jvoicexml.eclipse.features" version="0.7.5" patch="true">
       <category name="JVoiceXml"/>
    </feature>
    <category-def name="JVoiceXml" label="JVoiceXml">

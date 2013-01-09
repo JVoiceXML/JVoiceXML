@@ -3,6 +3,8 @@
 	<name>org.jvoicexml.eclipse.features</name>
 	<comment></comment>
 	<projects>
+		<project>org.jvoicexml.eclipse.debug.ui</project>
+		<project>org.jvoicexml.eclipse.jst.server</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

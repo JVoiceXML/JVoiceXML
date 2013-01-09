@@ -2,7 +2,7 @@
 <feature
       id="org.jvoicexml.eclipse.features"
       label="JVoiceXml features"
-      version="0.7.3"
+      version="0.7.5"
       provider-name="JVoiceXML Group">
 
    <description>
@@ -10,7 +10,7 @@
    </description>
 
    <copyright>
-      Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+      Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
    </copyright>
 
    <license url="http://www.opensource.org/licenses/eclipse-1.0.php">
@@ -115,13 +115,36 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <import plugin="org.eclipse.wst.server.core"/>
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.jst.server.core"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.apache.log4j"/>
    </requires>
 
    <plugin
          id="org.jvoicexml.eclipse.jst.server"
          download-size="0"
          install-size="0"
-         version="0.7.3"
+         version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="org.jvoicexml.eclipse.debug.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.jvoicexml.eclipse.debug.ui.launching"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.jvoicexml.eclipse.debug.ui.launching.jvoicexml"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>
