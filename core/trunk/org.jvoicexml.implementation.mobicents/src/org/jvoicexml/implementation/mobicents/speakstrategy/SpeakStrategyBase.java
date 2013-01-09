@@ -38,7 +38,7 @@ import org.jvoicexml.implementation.mobicents.MobicentsSynthesizedOutput;
 import org.w3c.dom.NodeList;
 
 /**
- * Base strategy functionality to play back a node of a SSML document via JSAPI.
+ * Base strategy functionality to play back a node of a SSML document via Mobicents.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision: 2583 $

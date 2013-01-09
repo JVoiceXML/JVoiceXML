@@ -1,0 +1,149 @@
+annotation.processing.enabled=true
+annotation.processing.enabled.in.editor=false
+annotation.processing.run.all.processors=true
+annotation.processing.source.output=${build.generated.sources.dir}/ap-source-output
+application.title=VIVRLib
+application.vendor=ThangTQ11
+build.classes.dir=${build.dir}/classes
+build.classes.excludes=**/*.java,**/*.form
+# This directory is removed when the project is cleaned:
+build.dir=build
+build.generated.dir=${build.dir}/generated
+build.generated.sources.dir=${build.dir}/generated-sources
+# Only compile against the classpath explicitly listed here:
+build.sysclasspath=ignore
+build.test.classes.dir=${build.dir}/test/classes
+build.test.results.dir=${build.dir}/test/results
+# Uncomment to specify the preferred debugger connection transport:
+#debug.transport=dt_socket
+debug.classpath=\
+    ${run.classpath}
+debug.test.classpath=\
+    ${run.test.classpath}
+# This directory is removed when the project is cleaned:
+dist.dir=dist
+dist.jar=${dist.dir}/VIVRLib.jar
+dist.javadoc.dir=${dist.dir}/javadoc
+endorsed.classpath=
+excludes=
+file.reference.annotations-api.jar=libs/annotations-api.jar
+file.reference.catalina.jar=libs/catalina.jar
+file.reference.commons-codec-1.5.jar=libs/commons-codec-1.5.jar
+file.reference.commons-logging-1.0.4.jar=libs/commons-logging-1.0.4.jar
+file.reference.dnsjava-2.1.0.jar=libs/dnsjava-2.1.0.jar
+file.reference.EqualsVerifier-1.1.3.jar=libs/EqualsVerifier-1.1.3.jar
+file.reference.gwt-servlet-2.4.0-rc1.jar=libs/gwt-servlet-2.4.0-rc1.jar
+file.reference.gwtext.jar=libs/gwtext.jar
+file.reference.jain-mgcp-ri-1.0.jar=libs/jain-mgcp-ri-1.0.jar
+file.reference.jain-sip-api-1.2.0.jar=libs/jain-sip-api-1.2.0.jar
+file.reference.jain-sip-ri-1.2.169.jar=libs/jain-sip-ri-1.2.169.jar
+file.reference.jasper-el.jar=libs/jasper-el.jar
+file.reference.jasper.jar=libs/jasper.jar
+file.reference.javax.ejb.jar=libs/javax.ejb.jar
+file.reference.javax.persistence_1.0.0.jar=libs/javax.persistence_1.0.0.jar
+file.reference.jsp-api.jar=libs/jsp-api.jar
+file.reference.log4j-1.2.15.jar=libs/log4j-1.2.15.jar
+file.reference.mail-1.4.jar=libs/mail-1.4.jar
+file.reference.mobicents-jain-sip-ext-1.1.jar=libs/mobicents-jain-sip-ext-1.1.jar
+file.reference.mobicents-jain-sip-ha-core-1.3.1.FINAL.jar=libs/mobicents-jain-sip-ha-core-1.3.1.FINAL.jar
+file.reference.mockito-all-1.9.5-rc1.jar=libs/mockito-all-1.9.5-rc1.jar
+file.reference.mscontrol-1.0.jar=libs/mscontrol-1.0.jar
+file.reference.ojdbc14.jar=libs/ojdbc14.jar
+file.reference.servlet-api.jar=libs/servlet-api.jar
+file.reference.sip-servlets-jruby-1.7.0.FINAL.jar=libs/sip-servlets-jruby-1.7.0.FINAL.jar
+file.reference.sip-servlets-spec-1.7.0.FINAL.jar=libs/sip-servlets-spec-1.7.0.FINAL.jar
+file.reference.sipunit.jar=libs/sipunit.jar
+file.reference.snmp.jar=libs/snmp.jar
+file.reference.stun4j-1.0.MOBICENTS.jar=libs/stun4j-1.0.MOBICENTS.jar
+file.reference.tomcat-api.jar=libs/tomcat-api.jar
+file.reference.tomcat-coyote.jar=libs/tomcat-coyote.jar
+file.reference.tomcat-juli.jar=libs/tomcat-juli.jar
+file.reference.tomcat-util.jar=libs/tomcat-util.jar
+file.reference.ttjdbc6.jar=libs/ttjdbc6.jar
+file.reference.ucp.jar=libs/ucp.jar
+file.reference.util-7.0.27.1.jar=libs/util-7.0.27.1.jar
+file.reference.VOraInMemRAC.jar=libs/VOraInMemRAC.jar
+file.reference.VVASPLib.jar=libs/VVASPLib.jar
+includes=**
+jar.compress=false
+javac.classpath=\
+    ${file.reference.dnsjava-2.1.0.jar}:\
+    ${file.reference.log4j-1.2.15.jar}:\
+    ${file.reference.sip-servlets-spec-1.7.0.FINAL.jar}:\
+    ${file.reference.snmp.jar}:\
+    ${file.reference.mobicents-jain-sip-ext-1.1.jar}:\
+    ${file.reference.mobicents-jain-sip-ha-core-1.3.1.FINAL.jar}:\
+    ${file.reference.sip-servlets-jruby-1.7.0.FINAL.jar}:\
+    ${file.reference.mail-1.4.jar}:\
+    ${file.reference.commons-codec-1.5.jar}:\
+    ${libs.junit_4.classpath}:\
+    ${file.reference.sipunit.jar}:\
+    ${file.reference.stun4j-1.0.MOBICENTS.jar}:\
+    ${file.reference.commons-logging-1.0.4.jar}:\
+    ${file.reference.tomcat-juli.jar}:\
+    ${file.reference.javax.ejb.jar}:\
+    ${file.reference.javax.persistence_1.0.0.jar}:\
+    ${file.reference.catalina.jar}:\
+    ${file.reference.servlet-api.jar}:\
+    ${file.reference.tomcat-util.jar}:\
+    ${file.reference.tomcat-coyote.jar}:\
+    ${file.reference.tomcat-api.jar}:\
+    ${file.reference.mockito-all-1.9.5-rc1.jar}:\
+    ${file.reference.EqualsVerifier-1.1.3.jar}:\
+    ${file.reference.VVASPLib.jar}:\
+    ${file.reference.jain-sip-api-1.2.0.jar}:\
+    ${file.reference.jain-sip-ri-1.2.169.jar}:\
+    ${file.reference.util-7.0.27.1.jar}:\
+    ${file.reference.annotations-api.jar}:\
+    ${file.reference.jasper-el.jar}:\
+    ${file.reference.jasper.jar}:\
+    ${file.reference.jsp-api.jar}:\
+    ${file.reference.VOraInMemRAC.jar}:\
+    ${file.reference.ttjdbc6.jar}:\
+    ${file.reference.ucp.jar}:\
+    ${file.reference.gwt-servlet-2.4.0-rc1.jar}:\
+    ${file.reference.gwtext.jar}:\
+    ${file.reference.mscontrol-1.0.jar}:\
+    ${file.reference.jain-mgcp-ri-1.0.jar}:\
+    ${file.reference.ojdbc14.jar}
+# Space-separated list of extra javac options
+javac.compilerargs=
+javac.deprecation=false
+javac.processorpath=\
+    ${javac.classpath}
+javac.source=1.6
+javac.target=1.6
+javac.test.classpath=\
+    ${javac.classpath}:\
+    ${build.classes.dir}
+javac.test.processorpath=\
+    ${javac.test.classpath}
+javadoc.additionalparam=
+javadoc.author=false
+javadoc.encoding=${source.encoding}
+javadoc.noindex=false
+javadoc.nonavbar=false
+javadoc.notree=false
+javadoc.private=false
+javadoc.splitindex=true
+javadoc.use=true
+javadoc.version=false
+javadoc.windowtitle=
+main.class=org.VNXTele.VIVRClientTest
+manifest.file=manifest.mf
+meta.inf.dir=${src.dir}/META-INF
+mkdist.disabled=false
+platform.active=default_platform
+run.classpath=\
+    ${javac.classpath}:\
+    ${build.classes.dir}
+# Space-separated list of JVM arguments used when running the project
+# (you may also define separate properties like run-sys-prop.name=value instead of -Dname=value
+# or test-sys-prop.name=value to set system properties for unit tests):
+run.jvmargs=-Dcatalina.base="H:\\Setups\\Eclipse\\mss-1.7.0.FINAL-apache-tomcat-7.0.26" -Dcatalina.home="H:\\Setups\\Eclipse\\mss-1.7.0.FINAL-apache-tomcat-7.0.26" -Dwtp.deploy="F:\\WorkStation\\VOIPProjects\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\webapps" -Djava.endorsed.dirs="H:\\Setups\\Eclipse\\mss-1.7.0.FINAL-apache-tomcat-7.0.26\\endorsed" -XX:MaxPermSize=256M
+run.test.classpath=\
+    ${javac.test.classpath}:\
+    ${build.test.classes.dir}
+source.encoding=UTF-8
+src.dir=src
+test.src.dir=test

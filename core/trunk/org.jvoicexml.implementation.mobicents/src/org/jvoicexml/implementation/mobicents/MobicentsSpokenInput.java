@@ -63,10 +63,10 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
- * Spoken input that uses the JSAPI 1.0 to address the recognition engine.
+ * Spoken input that uses the Mobicents 1.0 to address the recognition engine.
  *
  * <p>
- * Handle all JSAPI calls to the recognizer to make JSAPI transparent
+ * Handle all Mobicents calls to the recognizer to make Mobicents transparent
  * to the interpreter.
  * </p>
  *
@@ -140,13 +140,13 @@ public final class MobicentsSpokenInput
                 throw new NoresourceError("Error creating the recognizer! desc:"+desc);
             }
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("allocating JSAPI 1.0 recognizer...");
+                LOGGER.debug("allocating Mobicents 1.0 recognizer...");
             }
 
             recognizer.allocate();
 
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...JSAPI 1.0  recognizer allocated");
+                LOGGER.debug("...Mobicents 1.0  recognizer allocated");
             }
         } catch (EngineException ee) {
             LOGGER.error(ee);
@@ -219,7 +219,7 @@ public final class MobicentsSpokenInput
 
         if (type != GrammarType.JSGF) {
             throw new UnsupportedFormatError(
-                    "JSAPI 1.0 implementation supports only type "
+                    "Mobicents 1.0 implementation supports only type "
                     + GrammarType.JSGF.getType());
         }
 
@@ -273,7 +273,7 @@ public final class MobicentsSpokenInput
     /**
      * {@inheritDoc}
      * 
-     * Activation of grammars means to enable the grammar in the JSAPI jargon.
+     * Activation of grammars means to enable the grammar in the Mobicents jargon.
      */
     public void activateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
@@ -342,7 +342,7 @@ public final class MobicentsSpokenInput
     /**
      * {@inheritDoc}
      * 
-     * Activation of grammars means to disable the grammar in the JSAPI jargon.
+     * Activation of grammars means to disable the grammar in the Mobicents jargon.
      */
     public void deactivateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)

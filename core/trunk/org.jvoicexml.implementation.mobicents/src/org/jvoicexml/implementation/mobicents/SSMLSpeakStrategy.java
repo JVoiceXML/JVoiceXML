@@ -31,7 +31,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.xml.SsmlNode;
 
 /**
- * Strategy to play back a node of a SSML document via JSAPI.
+ * Strategy to play back a node of a SSML document via Mobicents.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision: 2583 $

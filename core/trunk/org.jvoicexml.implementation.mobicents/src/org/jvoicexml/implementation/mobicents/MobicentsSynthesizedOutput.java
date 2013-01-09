@@ -69,10 +69,10 @@ import org.mobicents.servlet.sip.restcomm.media.api.Call;
 import org.mobicents.servlet.sip.restcomm.media.api.CallObserver;
 
 /**
- * Audio output that uses the JSAPI 1.0 to address the TTS engine.
+ * Audio output that uses the Mobicents 1.0 to address the TTS engine.
  *
  * <p>
- * Handle all JSAPI calls to the TTS engine to make JSAPI transparent to the
+ * Handle all Mobicents calls to the TTS engine to make Mobicents transparent to the
  * interpreter.
  * </p>
  *
@@ -88,7 +88,7 @@ import org.mobicents.servlet.sip.restcomm.media.api.CallObserver;
  * </p>
  *
  * <p>
- * This implementation offers 2 ways to overcome the lack in JSAPI 1.0 not
+ * This implementation offers 2 ways to overcome the lack in Mobicents 1.0 not
  * to be able to stream audio data.
  * <ol>
  * <li>use custom streaming via {@link SpokenInputConnectionHandler} and</li>
@@ -98,7 +98,7 @@ import org.mobicents.servlet.sip.restcomm.media.api.CallObserver;
  *
  * <p>
  * Note that these ways are not fully tested and might be changed towards
- * the JSAPI 2 way.
+ * the Mobicents 2 way.
  * </p>
  *
  * @author Dirk Schnelle-Walka

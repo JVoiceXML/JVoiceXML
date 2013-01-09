@@ -40,7 +40,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
 /**
- * JSAPI 1.0 implementation of the result of the recognition process.
+ * Mobicents 1.0 implementation of the result of the recognition process.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision: 2515 $

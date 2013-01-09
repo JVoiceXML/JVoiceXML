@@ -36,7 +36,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SpokenInput;
 
 /**
- * JSAPI 1.0 does not know how to stream audio from a client to a server.
+ * Mobicents 1.0 does not know how to stream audio from a client to a server.
  * However, custom implementations exist to fill this gap. Classes
  * implementing this interface can be used to address this custom
  * implementation.

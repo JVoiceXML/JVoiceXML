@@ -37,14 +37,14 @@ import org.jvoicexml.implementation.SpokenInput;
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link SpokenInput} based on JSAPI 1.0.
+ * {@link SpokenInput} based on Mobicents 1.0.
  *
  * <p>
  * Custom implementations are expected to override
- * {@link #registerEngineCentral()} to register the JSAPI compliant
+ * {@link #registerEngineCentral()} to register the Mobicents compliant
  * {@link javax.speech.EngineCentral} for the
  * {@link javax.speech.recognition.Recognizer}. Afterwards the default
- * mechanisms of JSAPI 1.0  are used to instantiate the
+ * mechanisms of Mobicents 1.0  are used to instantiate the
  * {@link javax.speech.recognition.Recognizer}.
  * </p>
  *
