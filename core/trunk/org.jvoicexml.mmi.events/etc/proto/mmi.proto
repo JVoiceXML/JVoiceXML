@@ -1,0 +1,194 @@
+package org.jvoicexml.mmi.events.protobuf;
+
+enum Status {
+  SUCCESS = 0;
+  FAILURE = 1;
+}
+
+enum LifeCycle {
+  ALIVE = 0;
+  DEAD = 1;
+}
+
+message NewContextRequest {
+  required string RequestId = 1;
+  required string Source = 2;
+  required string Target = 3;
+  // Extend for custom data
+  extensions 4;
+}
+
+message NewContextResponse {
+  required string RequestId = 1;
+  required Status Status = 2;
+  required string Context = 3;
+  optional string StatusInfo = 4;
+  required string Source = 5;
+  required string Target = 6;
+  // Extend for custom data
+  extensions 7;
+}
+
+message PrepareRequest {
+  required string RequestId = 1;
+  required string Context = 2;
+  optional string ContentURL = 3;
+  optional string Content = 4;
+  required string Source = 5;
+  required string Target = 6;
+  // Extend for custom data
+  extensions 7;
+}
+
+message PrepareResponse {
+  required string RequestId = 1;
+  required string Context = 2;
+  required Status Status = 3;
+  optional string StatusInfo = 4;
+  required string Source = 5;
+  required string Target = 6;
+  // Extend for custom data
+  extensions 7;
+}
+
+message StartRequest {
+  required string RequestId = 1;
+  required string Context = 2;
+  optional string ContentURL = 3;
+  optional string Content = 4;
+  required string Source = 5;
+  required string Target = 6;
+  // Extend for custom data
+  extensions 7;
+}
+
+message StartResponse {
+  required string RequestId = 1;
+  required string Context = 2;
+  required Status Status = 3;
+  optional string StatusInfo = 4;
+  required string Source = 5;
+  required string Target = 6;
+  // Extend for custom data
+  extensions 7;
+}
+
+message DoneNotification {
+  required string RequestId = 1;
+  required string Context = 2;
+  required Status Status = 3;
+  optional string StatusInfo = 4;
+  required string Source = 5;
+  required string Target = 6;
+  // Extend for custom data
+  extensions 7;
+}
+
+message CancelRequest {
+  required string RequestId = 1;
+  required string Context = 2;
+  required string Source = 3;
+  required string Target = 4;
+  // Extend for custom data
+  extensions 5;
+}
+
+message CancelResponse {
+  required string RequestId = 1;
+  required string Context = 2;
+  required Status Status = 3;
+  optional string StatusInfo = 4;
+  required string Source = 5;
+  required string Target = 6;
+  // Extend for custom data
+  extensions 7;
+}
+
+message PauseRequest {
+  required string RequestId = 1;
+  required string Context = 2;
+  required string Source = 3;
+  required string Target = 4;
+  // Extend for custom data
+  extensions 5;
+}
+
+message PauseResponse {
+  required string RequestId = 1;
+  required string Context = 2;
+  required Status Status = 3;
+  optional string StatusInfo = 4;
+  required string Source = 5;
+  required string Target = 6;
+  // Extend for custom data
+  extensions 7;
+}
+
+message ResumeRequest {
+  required string RequestId = 1;
+  required string Context = 2;
+  required string Source = 3;
+  required string Target = 4;
+  // Extend for custom data
+  extensions 5;
+}
+
+message ResumeResponse {
+  required string RequestId = 1;
+  required string Context = 2;
+  required Status Status = 3;
+  optional string StatusInfo = 4;
+  required string Source = 5;
+  required string Target = 6;
+  // Extend for custom data
+  extensions 7;
+}
+
+message ExtensionNotification {
+  required string RequestId = 1;
+  required string Name = 2;
+  required string Context = 3;
+  required string Source = 4;
+  required string Target = 5;
+  // Extend for custom data
+  extensions 6;
+}
+
+message ClearContextRequest {
+  required string RequestId = 1;
+  required string Context = 2;
+  required string Source = 3;
+  required string Target = 4;
+  // Extend for custom data
+  extensions 5;
+}
+
+message ClearContextResponse {
+  required string RequestId = 1;
+  required string Context = 2;
+  required Status Status = 3;
+  optional string StatusInfo = 4;
+  required string Source = 5;
+  required string Target = 6;
+  // Extend for custom data
+  extensions 7;
+}
+
+message StatusRequest {
+  required string RequestId = 1;
+  optional string Context = 2;
+  required string Source = 3;
+  required string Target = 4;
+  // Extend for custom data
+  extensions 5;
+}
+
+message StatusResponse {
+  required string RequestId = 1;
+  optional string Context = 2;
+  required LifeCycle Status = 3;
+  required string Source = 4;
+  required string Target = 5;
+  // Extend for custom data
+  extensions 6;
+}
