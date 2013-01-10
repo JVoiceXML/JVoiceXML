@@ -24,27 +24,27 @@
  *
  */
 
-package org.jvoicexml.mmi.events;
+package org.jvoicexml.mmi.events.xml;
 
-import java.util.List;
 import java.net.URI;
+import java.util.List;
 
 /**
- * A builder to create a cancel response.
- *
+ * A builder to create a prepare response.
+ * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
 
  */
-public final class CancelResponseBuilder {
-    /** The created cancel responser. */
-    private final CancelResponse response;
+public final class PrepareResponseBuilder {
+    /** The created prepare response. */
+    private final PrepareResponse response;
 
     /**
      * Constructs a new object.
      */
-    public CancelResponseBuilder() {
-        response = new CancelResponse();
+    public PrepareResponseBuilder() {
+        response = new PrepareResponse();
     }
 
     /**
@@ -52,7 +52,7 @@ public final class CancelResponseBuilder {
      * @param id the context id.
      * @return this object
      */
-    public CancelResponseBuilder setContextId(final String id) {
+    public PrepareResponseBuilder setContextId(final String id) {
         response.setContext(id);
         return this;
     }
@@ -62,7 +62,7 @@ public final class CancelResponseBuilder {
      * @param id the context id.
      * @return this object
      */
-    public CancelResponseBuilder setRequestId(final String id) {
+    public PrepareResponseBuilder setRequestId(final String id) {
         response.setRequestID(id);
         return this;
     }
@@ -72,7 +72,7 @@ public final class CancelResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public CancelResponseBuilder setSource(final String uri) {
+    public PrepareResponseBuilder setSource(final String uri) {
         response.setSource(uri);
         return this;
     }
@@ -82,7 +82,7 @@ public final class CancelResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public CancelResponseBuilder setSource(final URI uri) {
+    public PrepareResponseBuilder setSource(final URI uri) {
         response.setSource(uri.toString());
         return this;
     }
@@ -92,7 +92,7 @@ public final class CancelResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public CancelResponseBuilder setTarget(final String uri) {
+    public PrepareResponseBuilder setTarget(final String uri) {
         response.setTarget(uri);
         return this;
     }
@@ -102,7 +102,7 @@ public final class CancelResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public CancelResponseBuilder setTarget(final URI uri) {
+    public PrepareResponseBuilder setTarget(final URI uri) {
         response.setTarget(uri.toString());
         return this;
     }
@@ -111,7 +111,7 @@ public final class CancelResponseBuilder {
      * Sets the status to success.
      * @return this object.
      */
-    public CancelResponseBuilder setStatusSuccess() {
+    public PrepareResponseBuilder setStatusSuccess() {
         response.setStatus(StatusType.SUCCESS);
         return this;
     }
@@ -120,7 +120,7 @@ public final class CancelResponseBuilder {
      * Sets the status to success.
      * @return this object.
      */
-    public CancelResponseBuilder setStatusFailure() {
+    public PrepareResponseBuilder setStatusFailure() {
         response.setStatus(StatusType.FAILURE);
         return this;
     }
@@ -130,7 +130,7 @@ public final class CancelResponseBuilder {
      * @param info the status info to add
      * @return this object
      */
-    public CancelResponseBuilder addStatusInfo(final Object info) {
+    public PrepareResponseBuilder addStatusInfo(final Object info) {
         AnyComplexType type = new AnyComplexType();
         List<Object> content = type.getContent();
         content.add(info);
@@ -139,10 +139,10 @@ public final class CancelResponseBuilder {
     }
 
     /**
-     * Retrieves the cancel object with all added properties.
-     * @return the created cancel response.
+     * Retrieves the prepare response object with all added properties.
+     * @return the created prepare response.
      */
-    public CancelResponse toCancelResponse() {
+    public PrepareResponse toPrepareResponse() {
         return response;
     }
 }

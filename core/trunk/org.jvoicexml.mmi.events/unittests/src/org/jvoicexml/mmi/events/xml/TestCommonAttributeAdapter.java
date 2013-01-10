@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.mmi.events;
+package org.jvoicexml.mmi.events.xml;
 
 import java.util.UUID;
 

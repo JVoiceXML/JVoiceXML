@@ -41,9 +41,9 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
-import org.jvoicexml.mmi.events.CommonAttributeAdapter;
-import org.jvoicexml.mmi.events.MMIEvent;
-import org.jvoicexml.mmi.events.Mmi;
+import org.jvoicexml.mmi.events.xml.CommonAttributeAdapter;
+import org.jvoicexml.mmi.events.xml.MMIEvent;
+import org.jvoicexml.mmi.events.xml.Mmi;
 
 /**
  * A protocol adapter using plain sockets.

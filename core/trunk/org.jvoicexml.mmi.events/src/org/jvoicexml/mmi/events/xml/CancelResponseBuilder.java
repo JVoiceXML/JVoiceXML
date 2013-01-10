@@ -24,27 +24,27 @@
  *
  */
 
-package org.jvoicexml.mmi.events;
+package org.jvoicexml.mmi.events.xml;
 
 import java.net.URI;
 import java.util.List;
 
 /**
- * A builder to create a clear context response.
+ * A builder to create a cancel response.
  *
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
 
  */
-public final class ClearContextResponseBuilder {
+public final class CancelResponseBuilder {
     /** The created cancel responser. */
-    private final ClearContextResponse response;
+    private final CancelResponse response;
 
     /**
      * Constructs a new object.
      */
-    public ClearContextResponseBuilder() {
-        response = new ClearContextResponse();
+    public CancelResponseBuilder() {
+        response = new CancelResponse();
     }
 
     /**
@@ -52,7 +52,7 @@ public final class ClearContextResponseBuilder {
      * @param id the context id.
      * @return this object
      */
-    public ClearContextResponseBuilder setContextId(final String id) {
+    public CancelResponseBuilder setContextId(final String id) {
         response.setContext(id);
         return this;
     }
@@ -62,7 +62,7 @@ public final class ClearContextResponseBuilder {
      * @param id the context id.
      * @return this object
      */
-    public ClearContextResponseBuilder setRequestId(final String id) {
+    public CancelResponseBuilder setRequestId(final String id) {
         response.setRequestID(id);
         return this;
     }
@@ -72,7 +72,7 @@ public final class ClearContextResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public ClearContextResponseBuilder setSource(final String uri) {
+    public CancelResponseBuilder setSource(final String uri) {
         response.setSource(uri);
         return this;
     }
@@ -82,7 +82,7 @@ public final class ClearContextResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public ClearContextResponseBuilder setSource(final URI uri) {
+    public CancelResponseBuilder setSource(final URI uri) {
         response.setSource(uri.toString());
         return this;
     }
@@ -92,7 +92,7 @@ public final class ClearContextResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public ClearContextResponseBuilder setTarget(final String uri) {
+    public CancelResponseBuilder setTarget(final String uri) {
         response.setTarget(uri);
         return this;
     }
@@ -102,7 +102,7 @@ public final class ClearContextResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public ClearContextResponseBuilder setTarget(final URI uri) {
+    public CancelResponseBuilder setTarget(final URI uri) {
         response.setTarget(uri.toString());
         return this;
     }
@@ -111,7 +111,7 @@ public final class ClearContextResponseBuilder {
      * Sets the status to success.
      * @return this object.
      */
-    public ClearContextResponseBuilder setStatusSuccess() {
+    public CancelResponseBuilder setStatusSuccess() {
         response.setStatus(StatusType.SUCCESS);
         return this;
     }
@@ -120,7 +120,7 @@ public final class ClearContextResponseBuilder {
      * Sets the status to success.
      * @return this object.
      */
-    public ClearContextResponseBuilder setStatusFailure() {
+    public CancelResponseBuilder setStatusFailure() {
         response.setStatus(StatusType.FAILURE);
         return this;
     }
@@ -130,7 +130,7 @@ public final class ClearContextResponseBuilder {
      * @param info the status info to add
      * @return this object
      */
-    public ClearContextResponseBuilder addStatusInfo(final Object info) {
+    public CancelResponseBuilder addStatusInfo(final Object info) {
         AnyComplexType type = new AnyComplexType();
         List<Object> content = type.getContent();
         content.add(info);
@@ -139,10 +139,10 @@ public final class ClearContextResponseBuilder {
     }
 
     /**
-     * Retrieves the clear context response object with all added properties.
-     * @return the created clear context response.
+     * Retrieves the cancel object with all added properties.
+     * @return the created cancel response.
      */
-    public ClearContextResponse toClearContextResponse() {
+    public CancelResponse toCancelResponse() {
         return response;
     }
 }

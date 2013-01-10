@@ -24,27 +24,25 @@
  *
  */
 
-package org.jvoicexml.mmi.events;
+package org.jvoicexml.mmi.events.xml;
 
 import java.net.URI;
-import java.util.List;
 
 /**
- * A builder to create a start response.
- * 
+ * A builder to create a clear context request.
+ *
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
-
  */
-public final class StartResponseBuilder {
-    /** The created cancel response. */
-    private final StartResponse response;
+public final class ClearContextRequestBuilder {
+    /** The created start request. */
+    private final ClearContextRequest request;
 
     /**
      * Constructs a new object.
      */
-    public StartResponseBuilder() {
-        response = new StartResponse();
+    public ClearContextRequestBuilder() {
+        request = new ClearContextRequest();
     }
 
     /**
@@ -52,8 +50,8 @@ public final class StartResponseBuilder {
      * @param id the context id.
      * @return this object
      */
-    public StartResponseBuilder setContextId(final String id) {
-        response.setContext(id);
+    public ClearContextRequestBuilder setContextId(final String id) {
+        request.setContext(id);
         return this;
     }
 
@@ -62,8 +60,8 @@ public final class StartResponseBuilder {
      * @param id the context id.
      * @return this object
      */
-    public StartResponseBuilder setRequestId(final String id) {
-        response.setRequestID(id);
+    public ClearContextRequestBuilder setRequestId(final String id) {
+        request.setRequestID(id);
         return this;
     }
 
@@ -72,8 +70,8 @@ public final class StartResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public StartResponseBuilder setSource(final String uri) {
-        response.setSource(uri);
+    public ClearContextRequestBuilder setSource(final String uri) {
+        request.setSource(uri);
         return this;
     }
 
@@ -82,8 +80,8 @@ public final class StartResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public StartResponseBuilder setSource(final URI uri) {
-        response.setSource(uri.toString());
+    public ClearContextRequestBuilder setSource(final URI uri) {
+        request.setSource(uri.toString());
         return this;
     }
 
@@ -92,8 +90,8 @@ public final class StartResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public StartResponseBuilder setTarget(final String uri) {
-        response.setTarget(uri);
+    public ClearContextRequestBuilder setTarget(final String uri) {
+        request.setTarget(uri);
         return this;
     }
 
@@ -102,47 +100,16 @@ public final class StartResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public StartResponseBuilder setTarget(final URI uri) {
-        response.setTarget(uri.toString());
+    public ClearContextRequestBuilder setTarget(final URI uri) {
+        request.setTarget(uri.toString());
         return this;
     }
 
     /**
-     * Sets the status to success.
-     * @return this object.
+     * Retrieves the clear context request object with all added properties.
+     * @return the created clear context request.
      */
-    public StartResponseBuilder setStatusSuccess() {
-        response.setStatus(StatusType.SUCCESS);
-        return this;
-    }
-
-    /**
-     * Sets the status to success.
-     * @return this object.
-     */
-    public StartResponseBuilder setStatusFailure() {
-        response.setStatus(StatusType.FAILURE);
-        return this;
-    }
-
-    /**
-     * Adds the given status info.
-     * @param info the status info to add
-     * @return this object
-     */
-    public StartResponseBuilder addStatusInfo(final Object info) {
-        AnyComplexType type = new AnyComplexType();
-        List<Object> content = type.getContent();
-        content.add(info);
-        response.setStatusInfo(type);
-        return this;
-    }
-
-    /**
-     * Retrieves the start object with all added properties.
-     * @return the created start response.
-     */
-    public StartResponse toStartResponse() {
-        return response;
+    public ClearContextRequest toClearContextRequest() {
+        return request;
     }
 }

@@ -35,8 +35,8 @@ import org.jvoicexml.callmanager.mmi.test.DummyETLProtocolAdapter;
 import org.jvoicexml.client.ConnectionInformationFactory;
 import org.jvoicexml.client.JVoiceXmlConnectionInformationFactory;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.mmi.events.StartRequest;
-import org.jvoicexml.mmi.events.StartRequestBuilder;
+import org.jvoicexml.mmi.events.xml.StartRequest;
+import org.jvoicexml.mmi.events.xml.StartRequestBuilder;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 
 /**
@@ -80,7 +80,7 @@ public class TestVoiceModalityComponent {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.callmanager.mmi.VoiceModalityComponent#receivedEvent(org.jvoicexml.mmi.events.MMIEvent)}.
+     * Test method for {@link org.jvoicexml.callmanager.mmi.VoiceModalityComponent#receivedEvent(org.jvoicexml.mmi.events.xml.MMIEvent)}.
      */
     @Test
     public void testReceivedEvent() {

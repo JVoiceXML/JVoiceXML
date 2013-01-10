@@ -29,7 +29,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.jvoicexml.Session;
-import org.jvoicexml.mmi.events.MMIRequestIdentifier;
+import org.jvoicexml.mmi.events.xml.MMIRequestIdentifier;
 
 /**
  * Associated a communication channel object with MMI request identifiers.

@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.mmi.events;
+package org.jvoicexml.mmi.events.xml;
 
 import java.net.URI;
 import java.net.URISyntaxException;

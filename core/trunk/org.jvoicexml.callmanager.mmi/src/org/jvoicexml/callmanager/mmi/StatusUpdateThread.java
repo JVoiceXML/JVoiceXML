@@ -28,8 +28,8 @@ package org.jvoicexml.callmanager.mmi;
 import java.io.IOException;
 import java.net.URI;
 
-import org.jvoicexml.mmi.events.StatusResponse;
-import org.jvoicexml.mmi.events.StatusResponseBuilder;
+import org.jvoicexml.mmi.events.xml.StatusResponse;
+import org.jvoicexml.mmi.events.xml.StatusResponseBuilder;
 
 /**
  * A thread to send status update messages to the sender.

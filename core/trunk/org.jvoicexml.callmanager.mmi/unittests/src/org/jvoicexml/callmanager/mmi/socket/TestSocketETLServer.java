@@ -39,9 +39,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
-import org.jvoicexml.mmi.events.Mmi;
-import org.jvoicexml.mmi.events.StartRequest;
-import org.jvoicexml.mmi.events.StartRequestBuilder;
+import org.jvoicexml.mmi.events.xml.Mmi;
+import org.jvoicexml.mmi.events.xml.StartRequest;
+import org.jvoicexml.mmi.events.xml.StartRequestBuilder;
 
 /**
  * Test cases for {@link SocketETLServer}.

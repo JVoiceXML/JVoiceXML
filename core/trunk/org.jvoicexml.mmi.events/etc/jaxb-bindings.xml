@@ -7,7 +7,7 @@
 
 	<globalBindings>
 		<serializable />
-		<xjc:superInterface name="org.jvoicexml.mmi.events.MMIEvent" />
+		<xjc:superInterface name="org.jvoicexml.mmi.events.xml.MMIEvent" />
 	</globalBindings>
 
 	<!-- bindings schemaLocation="xsd/StartRequest.xsd" node="/xs:schema">

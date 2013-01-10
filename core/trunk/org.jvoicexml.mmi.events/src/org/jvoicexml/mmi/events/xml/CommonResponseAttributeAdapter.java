@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.mmi.events;
+package org.jvoicexml.mmi.events.xml;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

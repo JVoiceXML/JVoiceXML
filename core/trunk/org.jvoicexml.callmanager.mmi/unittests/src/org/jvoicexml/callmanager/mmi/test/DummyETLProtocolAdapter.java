@@ -29,7 +29,7 @@ import java.io.IOException;
 
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.xml.MMIEvent;
 
 /**
  * Dummy implementation of an {@link ETLProtocolAdapter}.

@@ -29,7 +29,7 @@ package org.jvoicexml.callmanager.mmi;
 
 import java.io.IOException;
 
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.xml.MMIEvent;
 
 /**
  * Adapter to the actual used protocol used in the event and transport layer

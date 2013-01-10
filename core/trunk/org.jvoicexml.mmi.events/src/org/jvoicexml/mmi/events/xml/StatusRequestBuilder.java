@@ -24,25 +24,25 @@
  *
  */
 
-package org.jvoicexml.mmi.events;
+package org.jvoicexml.mmi.events.xml;
 
 import java.net.URI;
 
 /**
- * A builder to create a start request.
+ * A builder to create a status request.
  * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
  */
-public final class StartRequestBuilder {
+public final class StatusRequestBuilder {
     /** The created start request. */
-    private final StartRequest request;
+    private final StatusRequest request;
 
     /**
      * Constructs a new object.
      */
-    public StartRequestBuilder() {
-        request = new StartRequest();
+    public StatusRequestBuilder() {
+        request = new StatusRequest();
     }
 
     /**
@@ -50,7 +50,7 @@ public final class StartRequestBuilder {
      * @param id the context id.
      * @return this object
      */
-    public StartRequestBuilder setContextId(final String id) {
+    public StatusRequestBuilder setContextId(final String id) {
         request.setContext(id);
         return this;
     }
@@ -60,43 +60,8 @@ public final class StartRequestBuilder {
      * @param id the context id.
      * @return this object
      */
-    public StartRequestBuilder setRequestId(final String id) {
+    public StatusRequestBuilder setRequestId(final String id) {
         request.setRequestID(id);
-        return this;
-    }
-
-    /**
-     * Lazy instantiation of the content URL type.
-     * @return content url type
-     */
-    private ContentURLType getContentURLType() {
-        ContentURLType urlType = request.getContentURL();
-        if (urlType == null) {
-            urlType = new ContentURLType();
-            request.setContentURL(urlType);
-        }
-        return urlType;
-    }
-
-    /**
-     * Adds a href.
-     * @param href the href to add
-     * @return this object
-     */
-    public StartRequestBuilder setHref(final String href) {
-        ContentURLType urlType = getContentURLType();
-        urlType.setHref(href);
-        return this;
-    }
-
-    /**
-     * Adds a href.
-     * @param href the href to add
-     * @return this object
-     */
-    public StartRequestBuilder setHref(final URI href) {
-        ContentURLType urlType = getContentURLType();
-        urlType.setHref(href.toString());
         return this;
     }
 
@@ -105,7 +70,7 @@ public final class StartRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public StartRequestBuilder setSource(final String uri) {
+    public StatusRequestBuilder setSource(final String uri) {
         request.setSource(uri);
         return this;
     }
@@ -115,7 +80,7 @@ public final class StartRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public StartRequestBuilder setSource(final URI uri) {
+    public StatusRequestBuilder setSource(final URI uri) {
         request.setSource(uri.toString());
         return this;
     }
@@ -125,7 +90,7 @@ public final class StartRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public StartRequestBuilder setTarget(final String uri) {
+    public StatusRequestBuilder setTarget(final String uri) {
         request.setTarget(uri);
         return this;
     }
@@ -135,16 +100,27 @@ public final class StartRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public StartRequestBuilder setTarget(final URI uri) {
+    public StatusRequestBuilder setTarget(final URI uri) {
         request.setTarget(uri.toString());
         return this;
     }
 
     /**
-     * Retrieves the start request object with all added properties.
-     * @return the created start request.
+     * Sets the flag to enable automatic status update sending.
+     * @param enable <code>true</code> if periodic status update messages
+     *          should be sent
+     * @return this object
      */
-    public StartRequest toStartRequest() {
+    public StatusRequestBuilder setAutomaticUpdate(final boolean enable) {
+        request.setRequestAutomaticUpdate(enable);
+        return this;
+    }
+
+    /**
+     * Retrieves the status request object with all added properties.
+     * @return the created status request.
+     */
+    public StatusRequest toStatusRequest() {
         return request;
     }
 }

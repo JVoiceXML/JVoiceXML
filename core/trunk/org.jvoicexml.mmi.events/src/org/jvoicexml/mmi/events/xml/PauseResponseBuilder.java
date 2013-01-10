@@ -24,25 +24,27 @@
  *
  */
 
-package org.jvoicexml.mmi.events;
+package org.jvoicexml.mmi.events.xml;
 
 import java.net.URI;
+import java.util.List;
 
 /**
- * A builder to create a status request.
+ * A builder to create a pause response.
  * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
+
  */
-public final class StatusRequestBuilder {
-    /** The created start request. */
-    private final StatusRequest request;
+public final class PauseResponseBuilder {
+    /** The created pause responser */
+    private final PauseResponse response;
 
     /**
      * Constructs a new object.
      */
-    public StatusRequestBuilder() {
-        request = new StatusRequest();
+    public PauseResponseBuilder() {
+        response = new PauseResponse();
     }
 
     /**
@@ -50,8 +52,8 @@ public final class StatusRequestBuilder {
      * @param id the context id.
      * @return this object
      */
-    public StatusRequestBuilder setContextId(final String id) {
-        request.setContext(id);
+    public PauseResponseBuilder setContextId(final String id) {
+        response.setContext(id);
         return this;
     }
 
@@ -60,8 +62,8 @@ public final class StatusRequestBuilder {
      * @param id the context id.
      * @return this object
      */
-    public StatusRequestBuilder setRequestId(final String id) {
-        request.setRequestID(id);
+    public PauseResponseBuilder setRequestId(final String id) {
+        response.setRequestID(id);
         return this;
     }
 
@@ -70,8 +72,8 @@ public final class StatusRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public StatusRequestBuilder setSource(final String uri) {
-        request.setSource(uri);
+    public PauseResponseBuilder setSource(final String uri) {
+        response.setSource(uri);
         return this;
     }
 
@@ -80,8 +82,8 @@ public final class StatusRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public StatusRequestBuilder setSource(final URI uri) {
-        request.setSource(uri.toString());
+    public PauseResponseBuilder setSource(final URI uri) {
+        response.setSource(uri.toString());
         return this;
     }
 
@@ -90,8 +92,8 @@ public final class StatusRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public StatusRequestBuilder setTarget(final String uri) {
-        request.setTarget(uri);
+    public PauseResponseBuilder setTarget(final String uri) {
+        response.setTarget(uri);
         return this;
     }
 
@@ -100,27 +102,49 @@ public final class StatusRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public StatusRequestBuilder setTarget(final URI uri) {
-        request.setTarget(uri.toString());
+    public PauseResponseBuilder setTarget(final URI uri) {
+        response.setTarget(uri.toString());
         return this;
     }
 
     /**
-     * Sets the flag to enable automatic status update sending.
-     * @param enable <code>true</code> if periodic status update messages
-     *          should be sent
+     * Sets the status to success.
+     * @return this object.
      * @return this object
      */
-    public StatusRequestBuilder setAutomaticUpdate(final boolean enable) {
-        request.setRequestAutomaticUpdate(enable);
+    public PauseResponseBuilder setStatusSuccess() {
+        response.setStatus(StatusType.SUCCESS);
         return this;
     }
 
     /**
-     * Retrieves the status request object with all added properties.
-     * @return the created status request.
+     * Sets the status to success.
+     * @return this object.
+     * @return this object
      */
-    public StatusRequest toStatusRequest() {
-        return request;
+    public PauseResponseBuilder setStatusFailure() {
+        response.setStatus(StatusType.FAILURE);
+        return this;
+    }
+
+    /**
+     * Adds the given status info.
+     * @param info the status info to add
+     * @return this object
+     */
+    public PauseResponseBuilder addStatusInfo(final Object info) {
+        AnyComplexType type = new AnyComplexType();
+        List<Object> content = type.getContent();
+        content.add(info);
+        response.setStatusInfo(type);
+        return this;
+    }
+
+    /**
+     * Retrieves the pause response object with all added properties.
+     * @return the created pause response.
+     */
+    public PauseResponse toPauseResponse() {
+        return response;
     }
 }

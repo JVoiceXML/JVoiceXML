@@ -24,27 +24,26 @@
  *
  */
 
-package org.jvoicexml.mmi.events;
+package org.jvoicexml.mmi.events.xml;
 
-import java.util.List;
 import java.net.URI;
 
 /**
- * A builder to create a resume response.
+ * A builder to create a status response.
  * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
 
  */
-public final class ResumeResponseBuilder {
-    /** The created pause response. */
-    private final ResumeResponse response;
+public final class StatusResponseBuilder {
+    /** The created cancel response. */
+    private final StatusResponse response;
 
     /**
      * Constructs a new object.
      */
-    public ResumeResponseBuilder() {
-        response = new ResumeResponse();
+    public StatusResponseBuilder() {
+        response = new StatusResponse();
     }
 
     /**
@@ -52,7 +51,7 @@ public final class ResumeResponseBuilder {
      * @param id the context id.
      * @return this object
      */
-    public ResumeResponseBuilder setContextId(final String id) {
+    public StatusResponseBuilder setContextId(final String id) {
         response.setContext(id);
         return this;
     }
@@ -62,7 +61,7 @@ public final class ResumeResponseBuilder {
      * @param id the context id.
      * @return this object
      */
-    public ResumeResponseBuilder setRequestId(final String id) {
+    public StatusResponseBuilder setRequestId(final String id) {
         response.setRequestID(id);
         return this;
     }
@@ -72,7 +71,7 @@ public final class ResumeResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public ResumeResponseBuilder setSource(final String uri) {
+    public StatusResponseBuilder setSource(final String uri) {
         response.setSource(uri);
         return this;
     }
@@ -82,7 +81,7 @@ public final class ResumeResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public ResumeResponseBuilder setSource(final URI uri) {
+    public StatusResponseBuilder setSource(final URI uri) {
         response.setSource(uri.toString());
         return this;
     }
@@ -92,7 +91,7 @@ public final class ResumeResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public ResumeResponseBuilder setTarget(final String uri) {
+    public StatusResponseBuilder setTarget(final String uri) {
         response.setTarget(uri);
         return this;
     }
@@ -102,47 +101,46 @@ public final class ResumeResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public ResumeResponseBuilder setTarget(final URI uri) {
+    public StatusResponseBuilder setTarget(final URI uri) {
         response.setTarget(uri.toString());
         return this;
     }
 
     /**
-     * Sets the status to success.
-     * @return this object.
-     */
-    public ResumeResponseBuilder setStatusSuccess() {
-        response.setStatus(StatusType.SUCCESS);
-        return this;
-    }
-
-    /**
-     * Sets the status to success.
-     * @return this object.
-     */
-    public ResumeResponseBuilder setStatusFailure() {
-        response.setStatus(StatusType.FAILURE);
-        return this;
-    }
-
-    /**
-     * Adds the given status info.
-     * @param info the status info to add
+     * Sets the automatic update flag.
+     * @param automaticUpdate <code>true</code> if automatic updates were
+     *          requested
      * @return this object
      */
-    public ResumeResponseBuilder addStatusInfo(final Object info) {
-        AnyComplexType type = new AnyComplexType();
-        List<Object> content = type.getContent();
-        content.add(info);
-        response.setStatusInfo(type);
+    public StatusResponseBuilder setAutomaticUpdate(
+            final boolean automaticUpdate) {
+        response.setAutomaticUpdate(automaticUpdate);
         return this;
     }
 
     /**
-     * Retrieves the resume response object with all added properties.
-     * @return the created resume response.
+     * Sets the status to success.
+     * @return this object.
      */
-    public ResumeResponse toResumeResponse() {
+    public StatusResponseBuilder setStatusAlive() {
+        response.setStatus(StatusResponseType.ALIVE);
+        return this;
+    }
+
+    /**
+     * Sets the status to success.
+     * @return this object.
+     */
+    public StatusResponseBuilder setStatusDead() {
+        response.setStatus(StatusResponseType.DEAD);
+        return this;
+    }
+
+    /**
+     * Retrieves the status response object with all added properties.
+     * @return the created status response.
+     */
+    public StatusResponse toStatusResponse() {
         return response;
     }
 }

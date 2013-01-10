@@ -86,7 +86,7 @@ You're using ${ant.java.version}
         <arg value="-extension"/>
         <!--arg value="-Xinheritance"/-->
         <arg value="-p"/>
-        <arg value="${component}"/>
+        <arg value="${component}.xml"/>
         <arg value="-d"/>
         <arg value="${basedir}/${gen}"/>
         <arg value="${basedir}/etc/xsd/mmi.xsd"/>

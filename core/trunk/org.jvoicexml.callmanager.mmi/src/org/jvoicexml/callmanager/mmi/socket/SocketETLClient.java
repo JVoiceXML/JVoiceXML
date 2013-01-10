@@ -39,8 +39,8 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.client.TcpUriFactory;
-import org.jvoicexml.mmi.events.MMIEvent;
-import org.jvoicexml.mmi.events.Mmi;
+import org.jvoicexml.mmi.events.xml.MMIEvent;
+import org.jvoicexml.mmi.events.xml.Mmi;
 
 /**
  * A connected ETL socket. Since the {@link javax.xml.bind.Unmarshaller}

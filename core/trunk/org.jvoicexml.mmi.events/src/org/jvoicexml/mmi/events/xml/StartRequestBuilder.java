@@ -24,25 +24,25 @@
  *
  */
 
-package org.jvoicexml.mmi.events;
+package org.jvoicexml.mmi.events.xml;
 
 import java.net.URI;
 
 /**
- * A builder to create a prepare request.
+ * A builder to create a start request.
  * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
  */
-public final class PrepareRequestBuilder {
+public final class StartRequestBuilder {
     /** The created start request. */
-    private final PrepareRequest request;
+    private final StartRequest request;
 
     /**
      * Constructs a new object.
      */
-    public PrepareRequestBuilder() {
-        request = new PrepareRequest();
+    public StartRequestBuilder() {
+        request = new StartRequest();
     }
 
     /**
@@ -50,7 +50,7 @@ public final class PrepareRequestBuilder {
      * @param id the context id.
      * @return this object
      */
-    public PrepareRequestBuilder setContextId(final String id) {
+    public StartRequestBuilder setContextId(final String id) {
         request.setContext(id);
         return this;
     }
@@ -60,7 +60,7 @@ public final class PrepareRequestBuilder {
      * @param id the context id.
      * @return this object
      */
-    public PrepareRequestBuilder setRequestId(final String id) {
+    public StartRequestBuilder setRequestId(final String id) {
         request.setRequestID(id);
         return this;
     }
@@ -83,7 +83,7 @@ public final class PrepareRequestBuilder {
      * @param href the href to add
      * @return this object
      */
-    public PrepareRequestBuilder setHref(final String href) {
+    public StartRequestBuilder setHref(final String href) {
         ContentURLType urlType = getContentURLType();
         urlType.setHref(href);
         return this;
@@ -94,7 +94,7 @@ public final class PrepareRequestBuilder {
      * @param href the href to add
      * @return this object
      */
-    public PrepareRequestBuilder setHref(final URI href) {
+    public StartRequestBuilder setHref(final URI href) {
         ContentURLType urlType = getContentURLType();
         urlType.setHref(href.toString());
         return this;
@@ -105,7 +105,7 @@ public final class PrepareRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public PrepareRequestBuilder setSource(final String uri) {
+    public StartRequestBuilder setSource(final String uri) {
         request.setSource(uri);
         return this;
     }
@@ -115,7 +115,7 @@ public final class PrepareRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public PrepareRequestBuilder setSource(final URI uri) {
+    public StartRequestBuilder setSource(final URI uri) {
         request.setSource(uri.toString());
         return this;
     }
@@ -125,7 +125,7 @@ public final class PrepareRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public PrepareRequestBuilder setTarget(final String uri) {
+    public StartRequestBuilder setTarget(final String uri) {
         request.setTarget(uri);
         return this;
     }
@@ -135,7 +135,7 @@ public final class PrepareRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public PrepareRequestBuilder setTarget(final URI uri) {
+    public StartRequestBuilder setTarget(final URI uri) {
         request.setTarget(uri.toString());
         return this;
     }
@@ -144,7 +144,7 @@ public final class PrepareRequestBuilder {
      * Retrieves the start request object with all added properties.
      * @return the created start request.
      */
-    public PrepareRequest toPrepareRequest() {
+    public StartRequest toStartRequest() {
         return request;
     }
 }

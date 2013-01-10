@@ -24,27 +24,27 @@
  *
  */
 
-package org.jvoicexml.mmi.events;
+package org.jvoicexml.mmi.events.xml;
 
-import java.util.List;
 import java.net.URI;
+import java.util.List;
 
 /**
- * A builder to create a pause response.
+ * A builder to create a start response.
  * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
 
  */
-public final class PauseResponseBuilder {
-    /** The created pause responser */
-    private final PauseResponse response;
+public final class StartResponseBuilder {
+    /** The created cancel response. */
+    private final StartResponse response;
 
     /**
      * Constructs a new object.
      */
-    public PauseResponseBuilder() {
-        response = new PauseResponse();
+    public StartResponseBuilder() {
+        response = new StartResponse();
     }
 
     /**
@@ -52,7 +52,7 @@ public final class PauseResponseBuilder {
      * @param id the context id.
      * @return this object
      */
-    public PauseResponseBuilder setContextId(final String id) {
+    public StartResponseBuilder setContextId(final String id) {
         response.setContext(id);
         return this;
     }
@@ -62,7 +62,7 @@ public final class PauseResponseBuilder {
      * @param id the context id.
      * @return this object
      */
-    public PauseResponseBuilder setRequestId(final String id) {
+    public StartResponseBuilder setRequestId(final String id) {
         response.setRequestID(id);
         return this;
     }
@@ -72,7 +72,7 @@ public final class PauseResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public PauseResponseBuilder setSource(final String uri) {
+    public StartResponseBuilder setSource(final String uri) {
         response.setSource(uri);
         return this;
     }
@@ -82,7 +82,7 @@ public final class PauseResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public PauseResponseBuilder setSource(final URI uri) {
+    public StartResponseBuilder setSource(final URI uri) {
         response.setSource(uri.toString());
         return this;
     }
@@ -92,7 +92,7 @@ public final class PauseResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public PauseResponseBuilder setTarget(final String uri) {
+    public StartResponseBuilder setTarget(final String uri) {
         response.setTarget(uri);
         return this;
     }
@@ -102,7 +102,7 @@ public final class PauseResponseBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public PauseResponseBuilder setTarget(final URI uri) {
+    public StartResponseBuilder setTarget(final URI uri) {
         response.setTarget(uri.toString());
         return this;
     }
@@ -110,9 +110,8 @@ public final class PauseResponseBuilder {
     /**
      * Sets the status to success.
      * @return this object.
-     * @return this object
      */
-    public PauseResponseBuilder setStatusSuccess() {
+    public StartResponseBuilder setStatusSuccess() {
         response.setStatus(StatusType.SUCCESS);
         return this;
     }
@@ -120,9 +119,8 @@ public final class PauseResponseBuilder {
     /**
      * Sets the status to success.
      * @return this object.
-     * @return this object
      */
-    public PauseResponseBuilder setStatusFailure() {
+    public StartResponseBuilder setStatusFailure() {
         response.setStatus(StatusType.FAILURE);
         return this;
     }
@@ -132,7 +130,7 @@ public final class PauseResponseBuilder {
      * @param info the status info to add
      * @return this object
      */
-    public PauseResponseBuilder addStatusInfo(final Object info) {
+    public StartResponseBuilder addStatusInfo(final Object info) {
         AnyComplexType type = new AnyComplexType();
         List<Object> content = type.getContent();
         content.add(info);
@@ -141,10 +139,10 @@ public final class PauseResponseBuilder {
     }
 
     /**
-     * Retrieves the pause response object with all added properties.
-     * @return the created pause response.
+     * Retrieves the start object with all added properties.
+     * @return the created start response.
      */
-    public PauseResponse toPauseResponse() {
+    public StartResponse toStartResponse() {
         return response;
     }
 }

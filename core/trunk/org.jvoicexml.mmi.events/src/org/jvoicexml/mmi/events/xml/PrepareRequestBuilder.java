@@ -24,25 +24,25 @@
  *
  */
 
-package org.jvoicexml.mmi.events;
+package org.jvoicexml.mmi.events.xml;
 
 import java.net.URI;
 
 /**
- * A builder to create a clear context request.
- *
+ * A builder to create a prepare request.
+ * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
  */
-public final class ClearContextRequestBuilder {
+public final class PrepareRequestBuilder {
     /** The created start request. */
-    private final ClearContextRequest request;
+    private final PrepareRequest request;
 
     /**
      * Constructs a new object.
      */
-    public ClearContextRequestBuilder() {
-        request = new ClearContextRequest();
+    public PrepareRequestBuilder() {
+        request = new PrepareRequest();
     }
 
     /**
@@ -50,7 +50,7 @@ public final class ClearContextRequestBuilder {
      * @param id the context id.
      * @return this object
      */
-    public ClearContextRequestBuilder setContextId(final String id) {
+    public PrepareRequestBuilder setContextId(final String id) {
         request.setContext(id);
         return this;
     }
@@ -60,8 +60,43 @@ public final class ClearContextRequestBuilder {
      * @param id the context id.
      * @return this object
      */
-    public ClearContextRequestBuilder setRequestId(final String id) {
+    public PrepareRequestBuilder setRequestId(final String id) {
         request.setRequestID(id);
+        return this;
+    }
+
+    /**
+     * Lazy instantiation of the content URL type.
+     * @return content url type
+     */
+    private ContentURLType getContentURLType() {
+        ContentURLType urlType = request.getContentURL();
+        if (urlType == null) {
+            urlType = new ContentURLType();
+            request.setContentURL(urlType);
+        }
+        return urlType;
+    }
+
+    /**
+     * Adds a href.
+     * @param href the href to add
+     * @return this object
+     */
+    public PrepareRequestBuilder setHref(final String href) {
+        ContentURLType urlType = getContentURLType();
+        urlType.setHref(href);
+        return this;
+    }
+
+    /**
+     * Adds a href.
+     * @param href the href to add
+     * @return this object
+     */
+    public PrepareRequestBuilder setHref(final URI href) {
+        ContentURLType urlType = getContentURLType();
+        urlType.setHref(href.toString());
         return this;
     }
 
@@ -70,7 +105,7 @@ public final class ClearContextRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public ClearContextRequestBuilder setSource(final String uri) {
+    public PrepareRequestBuilder setSource(final String uri) {
         request.setSource(uri);
         return this;
     }
@@ -80,7 +115,7 @@ public final class ClearContextRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public ClearContextRequestBuilder setSource(final URI uri) {
+    public PrepareRequestBuilder setSource(final URI uri) {
         request.setSource(uri.toString());
         return this;
     }
@@ -90,7 +125,7 @@ public final class ClearContextRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public ClearContextRequestBuilder setTarget(final String uri) {
+    public PrepareRequestBuilder setTarget(final String uri) {
         request.setTarget(uri);
         return this;
     }
@@ -100,16 +135,16 @@ public final class ClearContextRequestBuilder {
      * @param uri the uri to add
      * @return this object
      */
-    public ClearContextRequestBuilder setTarget(final URI uri) {
+    public PrepareRequestBuilder setTarget(final URI uri) {
         request.setTarget(uri.toString());
         return this;
     }
 
     /**
-     * Retrieves the clear context request object with all added properties.
-     * @return the created clear context request.
+     * Retrieves the start request object with all added properties.
+     * @return the created start request.
      */
-    public ClearContextRequest toClearContextRequest() {
+    public PrepareRequest toPrepareRequest() {
         return request;
     }
 }

@@ -25,7 +25,7 @@
  */
 package org.jvoicexml.callmanager.mmi;
 
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.xml.MMIEvent;
 
 /**
  * An {@link MMIEvent} decorated with a source.
