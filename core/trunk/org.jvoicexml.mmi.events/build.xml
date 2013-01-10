@@ -82,13 +82,14 @@ Currently it is set to '${mmi.protoc}'
     </target>
 
     <target name="-up2date">
-      <uptodate property="schemasChanged" targetfile="${gen}/__gen__">
+      <uptodate property="schemasChanged">
         <srcfiles dir="${basedir}">
           <include name="build.xml"/>
           <include name="etc/jaxb-bindings.xml"/>
           <include name="etc/xsd/*.xsd" />
           <include name="etc/proto/*.proto"/>
         </srcfiles>
+        <mapper type="merge" to="${gen}/__gen__"/>
       </uptodate>
     </target>
 
