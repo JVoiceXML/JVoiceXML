@@ -37,6 +37,7 @@ org.jvoicexml/personal-props/README.txt
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
+          <fileset refid="protobuf.lib"/>
         </path>
     </target>
 
