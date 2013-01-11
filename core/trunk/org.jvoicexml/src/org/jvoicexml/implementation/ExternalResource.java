@@ -32,6 +32,12 @@ import org.jvoicexml.event.error.NoresourceError;
 /**
  * An external resource that is required by the used implementation
  * platform.
+ * 
+ * <p>
+ * An externalk resource features a lifecycle as shown in the following
+ * image:<br/>
+ * <img src="doc-files/External-Resource-Lifecycle.jpg"/>
+ * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
