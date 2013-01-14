@@ -395,8 +395,14 @@ sphinx.lib.dir=../../lib
       <arg value="-DrepositoryId=sonatype-nexus-snapshots" />
       <arg value="-DpomFile=dist/jvoicexml.pom" />
       <arg value="-Dfile=dist/org.jvoicexml.xml.jar" />
-      <arg value="-e" />
     </artifact:mvn>
+      <artifact:mvn>
+        <arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
+        <arg value="-Durl=https://oss.sonatype.org/content/repositories/snapshots" />
+        <arg value="-DrepositoryId=sonatype-nexus-snapshots" />
+        <arg value="-DpomFile=dist/jvoicexml.pom" />
+        <arg value="-Dfile=dist/org.jvoicexml.mmi.events.jar" />
+      </artifact:mvn>
   </target>
 
   <target name="distribution" description="Build the distribution files"
