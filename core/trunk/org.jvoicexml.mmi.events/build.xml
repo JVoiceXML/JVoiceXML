@@ -1,4 +1,5 @@
-<project name="org.jvoicexml.mmi.events" default="jar" basedir=".">
+<project name="org.jvoicexml.mmi.events" default="jar" basedir="."
+    xmlns:artifact="antlib:org.apache.maven.artifact.ant">
     <description>
 This file builds MMI Events.
 
@@ -240,5 +241,26 @@ Currently it is set to '${mmi.protoc}'
     <target name="distribution" depends="jar">
       <property name="distFolder" value="${dist}/${jvxml.version}" />
       <copy todir="${distFolder}/lib" file="${dist.jar}" />
+    </target>
+    
+    <target name="dist-maven-snapshot" depends="distribution">
+      <copy todir="${dist}" file="etc/jvoicexml.pom" overwrite="true" />
+      <replace file="${dist}/${component}.pom" token="@version@" value="${jvxml.version}.${revision.max}-SNAPSHOT" />
+      <path id="maven.path">
+        <fileset dir="${3rdparty.dir}/maven/lib">
+          <include name="maven-ant-tasks-2.1.3.jar"/>
+        </fileset>
+      </path>
+      <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+        uri="antlib:org.apache.maven.artifact.ant"
+        classpathref="maven.path"
+      />
+      <artifact:mvn>
+          <arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
+          <arg value="-Durl=https://oss.sonatype.org/content/repositories/snapshots" />
+          <arg value="-DrepositoryId=sonatype-nexus-snapshots" />
+          <arg value="-DpomFile=dist/${component}.pom" />
+          <arg value="-Dfile=dist/${component}jar" />
+      </artifact:mvn>
     </target>
 </project>
