@@ -26,7 +26,7 @@
 
 package org.jvoicexml.implementation.mobicents.jvxml;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.net.URI;
 
@@ -54,6 +54,7 @@ import org.jvoicexml.implementation.mobicents.SynthesizedOutputConnectionHandler
 public final class MobicentsConnectionHandler
     implements SynthesizedOutputConnectionHandler 
 {
+    private static final Logger LOGGER = Logger.getLogger(MobicentsConnectionHandler.class);
     private URI resourceUri=null;
     /**
      * {@inheritDoc}
@@ -66,7 +67,7 @@ public final class MobicentsConnectionHandler
             final SynthesizedOutput output, final Synthesizer synthesizer)
             throws IOException 
     {
-        VNXLog.error2("don't support");
+        LOGGER.error("don't support");
 //        final SynthesizerProperties props =
 //            synthesizer.getSynthesizerProperties();
 //        final FreeTTSVoice freettsvoice = (FreeTTSVoice) props.getVoice();

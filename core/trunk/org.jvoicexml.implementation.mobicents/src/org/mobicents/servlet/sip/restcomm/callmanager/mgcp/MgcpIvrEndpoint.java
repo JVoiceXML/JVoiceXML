@@ -16,7 +16,7 @@
  */
 package org.mobicents.servlet.sip.restcomm.callmanager.mgcp;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,6 +83,8 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
         PLAY_RECORD.addTransition(FAILED);
         STOP.addTransition(IDLE);
         STOP.addTransition(FAILED);
+        //Shadowman
+        STOP.addTransition(PLAY);
     }
     private final MgcpServer server;
     private final EndpointIdentifier any;
@@ -112,7 +114,7 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
     private void fireOperationCompleted() {
         for (final MgcpIvrEndpointObserver observer : observers) 
         {
-            VNXLog.debug2(" for observer:"+observer);
+            LOGGER.debug(" for observer:"+observer);
             observer.operationCompleted(this);
         }
     }
@@ -137,8 +139,12 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
         }
     }
 
-    public synchronized void play(final List<URI> announcements, final int iterations) {
-        assertState(IDLE);
+    public synchronized void play(final List<URI> announcements, final int iterations) 
+    {
+        final List<State> possibleStates = new ArrayList<State>();
+        possibleStates.add(IDLE);
+        possibleStates.add(STOP);
+        assertState(possibleStates);
         // Create the signal parameters.
         final AdvancedAudioParametersBuilder builder = new AdvancedAudioParametersBuilder();
         for (final URI announcement : announcements) {
@@ -237,7 +243,7 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
 
     @Override
     public synchronized void processMgcpCommandEvent(final JainMgcpCommandEvent command) {
-        VNXLog.debug2("incomming MGCP command event:" + command);
+        LOGGER.debug("incomming MGCP command event:" + command);
         final int commandValue = command.getObjectIdentifier();
         switch (commandValue) {
             case Constants.CMD_NOTIFY: {
@@ -292,7 +298,7 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
 
     @Override
     public void processMgcpResponseEvent(final JainMgcpResponseEvent response) {
-        VNXLog.debug2("incomming MGCP response event:" + response + " currentState:"+getState().getName());
+        LOGGER.debug("incomming MGCP response event:" + response + " currentState:"+getState().getName());
         final ReturnCode code = response.getReturnCode();
         if (code.getValue() == ReturnCode.TRANSACTION_BEING_EXECUTED) {
             return;
@@ -325,7 +331,9 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
         observers.remove(observer);
     }
 
-    public void stop() {
+    public void stop() 
+    {
+        LOGGER.debug("stoping ivrendpoint...");
         final List<State> possibleStates = new ArrayList<State>();
         possibleStates.add(PLAY);
         possibleStates.add(PLAY_COLLECT);

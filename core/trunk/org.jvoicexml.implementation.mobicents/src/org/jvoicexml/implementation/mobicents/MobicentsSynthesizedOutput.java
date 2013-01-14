@@ -26,10 +26,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
 package org.jvoicexml.implementation.mobicents;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -67,6 +66,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.mobicents.servlet.sip.restcomm.media.api.Call;
 import org.mobicents.servlet.sip.restcomm.media.api.CallObserver;
+import org.util.ExLog;
 
 /**
  * Audio output that uses the Mobicents 1.0 to address the TTS engine.
@@ -107,78 +107,59 @@ import org.mobicents.servlet.sip.restcomm.media.api.CallObserver;
 public final class MobicentsSynthesizedOutput
         implements SynthesizedOutput, ObservableSynthesizedOutput,
         CallObserver, StreamableSynthesizedOutput {
+
+    private static final Logger LOGGER = Logger.getLogger(MobicentsSynthesizedOutput.class);
     /** Factory for SSML speak strategies. */
     private static final SSMLSpeakStrategyFactory SPEAK_FACTORY;
-
     /** Size of the read buffer when reading objects. */
     private static final int READ_BUFFER_SIZE = 1024;
-
     /** Number of msec to wait when waiting for an empty queue. */
     private static final int WAIT_EMPTY_TIMEINTERVALL = 300;
-
     /** The used synthesizer. */
     private Synthesizer synthesizer;
-
     /** The default synthesizer mode descriptor. */
     private final SynthesizerModeDesc desc;
-
     /** The system output listener. */
     private final Collection<SynthesizedOutputListener> listener;
-
     /** A custom handler to handle remote connections. */
     private SynthesizedOutputConnectionHandler handler;
-
     /** Type of this resources. */
     private String type;
-
     /** Information about the current connection. */
     private ConnectionInformation info;
-
     /** Set to <code>true</code> if SSML output is active. */
     private boolean queueingSsml;
-
     /**
      * Set to <code>true</code> if SSML output is active and there was a cancel
      * output request.
      */
     private boolean outputCanceled;
-
     /** Streams to be played by the streamable output. */
     private final BlockingQueue<InputStream> synthesizerStreams;
-
     /** Current synthesizer stream of the streamable output. */
     private InputStream currentSynthesizerStream;
-
     /** Stream  buffer that is used for streamable outputs. */
     private ByteArrayOutputStream streamBuffer;
-
     /** Reference to the document server. */
     private DocumentServer documentServer;
-
     /**
      * Flag to indicate that TTS output and audio of the current speakable can
      * be canceled.
      */
     private boolean bargein;
-
     /** Suggested behavior for the bargein. */
     private BargeInType bargeInType;
-
     /** Queued speakables. */
     private final Queue<SpeakableText> queuedSpeakables;
-
     /** Object lock for an empty queue. */
     private final Object emptyLock;
-
     /** Object lock to signal the end of a speakable. */
     private final Object endplayLock;
-
     /** The Id of the current session. */
     private String sessionId;
 
     static {
-        SPEAK_FACTORY = new org.jvoicexml.implementation.mobicents.speakstrategy.
-            JVoiceXmlSpeakStratgeyFactory();
+        SPEAK_FACTORY = new org.jvoicexml.implementation.mobicents.speakstrategy.JVoiceXmlSpeakStratgeyFactory();
     }
 
     /**
@@ -188,16 +169,15 @@ public final class MobicentsSynthesizedOutput
      *            the default synthesizer mode descriptor.
      */
     public MobicentsSynthesizedOutput(
-            final SynthesizerModeDesc defaultDescriptor) 
-    {
-        VNXLog.debug2("constructor ...:SynthesizerModeDesc:"+defaultDescriptor);
+            final SynthesizerModeDesc defaultDescriptor) {
+        LOGGER.debug("constructor ...:SynthesizerModeDesc:" + defaultDescriptor);
         desc = defaultDescriptor;
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
         emptyLock = new Object();
         endplayLock = new Object();
         synthesizerStreams =
-            new java.util.concurrent.LinkedBlockingQueue<InputStream>();
+                new java.util.concurrent.LinkedBlockingQueue<InputStream>();
     }
 
     /**
@@ -206,15 +186,15 @@ public final class MobicentsSynthesizedOutput
     public void open()
             throws NoresourceError {
         try {
-            VNXLog.debug2("allocating synthesizer...");
+            LOGGER.debug("allocating synthesizer...");
             synthesizer = Central.createSynthesizer(desc);
             if (synthesizer == null) {
                 throw new NoresourceError("Error creating the synthesizer!");
             }
-            VNXLog.debug2("allocating synthesizer..."+synthesizer);
+            LOGGER.debug("allocating synthesizer..." + synthesizer);
             synthesizer.allocate();
             synthesizer.resume();
-            VNXLog.debug2("...synthesizer allocated");
+            LOGGER.debug("...synthesizer allocated");
         } catch (EngineException ee) {
             throw new NoresourceError(ee);
         } catch (AudioException ae) {
@@ -227,27 +207,28 @@ public final class MobicentsSynthesizedOutput
      */
     public void close() {
         if (synthesizer == null) {
-            VNXLog.warn2("no synthesizer: cannot deallocate");
+            LOGGER.warn("no synthesizer: cannot deallocate");
             return;
         }
 
-            VNXLog.debug2("closing audio output...");
+        LOGGER.debug("closing audio output...");
 
         waitQueueEmpty();
 
-            VNXLog.debug2("deallocating synthesizer...");
+        LOGGER.debug("deallocating synthesizer...");
 
         try {
             synthesizer.deallocate();
-                VNXLog.debug2("...synthesizer deallocated");
+            LOGGER.debug("...synthesizer deallocated");
         } catch (EngineException ee) {
-            VNXLog.warn2("error deallocating synthesizer", ee);
-        }catch (Exception ee) { VNXLog.error(ee);}
-        finally {
+            LOGGER.warn("error deallocating synthesizer", ee);
+        } catch (Exception ee) {
+            ExLog.exception(LOGGER, ee);
+        } finally {
             synthesizer = null;
         }
 
-            VNXLog.debug2("...audio output closed");
+        LOGGER.debug("...audio output closed");
     }
 
     /**
@@ -305,14 +286,14 @@ public final class MobicentsSynthesizedOutput
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-                               final String id,
-                               final DocumentServer server)
+            final String id,
+            final DocumentServer server)
             throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
         sessionId = id;
-        VNXLog.debug2("offering a speakable:"+speakable+ " id :"+id);
+        LOGGER.debug("offering a speakable:" + speakable + " id :" + id);
         synchronized (queuedSpeakables) {
             queuedSpeakables.offer(speakable);
         }
@@ -320,13 +301,14 @@ public final class MobicentsSynthesizedOutput
         // Do not process the speakable if there is some ongoing processing
         synchronized (queuedSpeakables) {
             if (queuedSpeakables.size() > 1) {
-                VNXLog.error2("Do not process the speakable if there is some ongoing processing:"+queuedSpeakables);
+                LOGGER.error("Do not process the speakable if there is some ongoing processing:" + queuedSpeakables);
                 return;
             }
         }
         outputCanceled = false;
         // Otherwise process the added speakable asynchronous.
         final Runnable runnable = new Runnable() {
+
             /**
              * {@inheritDoc}
              */
@@ -354,7 +336,7 @@ public final class MobicentsSynthesizedOutput
      * @since 0.7.1
      */
     private synchronized void processNextSpeakable()
-        throws NoresourceError, BadFetchError {
+            throws NoresourceError, BadFetchError {
         // Reset all flags of the previous output.
         queueingSsml = false;
         bargeInType = null;
@@ -364,7 +346,7 @@ public final class MobicentsSynthesizedOutput
         final SpeakableText speakable;
         synchronized (queuedSpeakables) {
             if (queuedSpeakables.isEmpty()) {
-                    VNXLog.debug2("no more speakables to process");
+                LOGGER.debug("no more speakables to process");
                 fireQueueEmpty();
                 synchronized (emptyLock) {
                     emptyLock.notifyAll();
@@ -373,7 +355,7 @@ public final class MobicentsSynthesizedOutput
             }
             speakable = queuedSpeakables.peek();
         }
-        VNXLog.debug2("processing next speakable :" + speakable);
+        LOGGER.debug("processing next speakable :" + speakable);
         // Really process the next speakable
         fireOutputStarted(speakable);
 
@@ -381,9 +363,10 @@ public final class MobicentsSynthesizedOutput
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             bargein = ssml.isBargeInEnabled();
             bargeInType = ssml.getBargeInType();
+            LOGGER.debug("bargein:" + bargein + " bargeInType:" + bargeInType);
             speakSSML(ssml, documentServer);
         } else {
-            VNXLog.error2("unsupported speakable: " + speakable);
+            LOGGER.error("unsupported speakable: " + speakable);
         }
     }
 
@@ -401,10 +384,10 @@ public final class MobicentsSynthesizedOutput
      */
     private void speakSSML(final SpeakableSsmlText text,
             final DocumentServer server)
-        throws NoresourceError, BadFetchError {
+            throws NoresourceError, BadFetchError {
 
         final SsmlDocument document = text.getDocument();
-            VNXLog.debug2("speaking SSML:outputCanceled:"+outputCanceled+" document:" + document.toString() );
+        LOGGER.debug("speaking SSML:outputCanceled:" + outputCanceled + " document:" + document.toString());
 
         final SsmlNode speak = document.getSpeak();
         if (speak == null) {
@@ -412,7 +395,7 @@ public final class MobicentsSynthesizedOutput
         }
 
         final SSMLSpeakStrategy strategy =
-            SPEAK_FACTORY.getSpeakStrategy(speak);
+                SPEAK_FACTORY.getSpeakStrategy(speak);
         if (strategy != null) {
             strategy.speak(this, speak);
         }
@@ -429,7 +412,7 @@ public final class MobicentsSynthesizedOutput
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new OutputStartedEvent(this, null, speakable);
+                new OutputStartedEvent(this, null, speakable);
         fireOutputEvent(event);
     }
 
@@ -439,7 +422,7 @@ public final class MobicentsSynthesizedOutput
      */
     private void fireMarkerReached(final String mark) {
         final SynthesizedOutputEvent event =
-            new MarkerReachedEvent(this, null, mark);
+                new MarkerReachedEvent(this, null, mark);
         fireOutputEvent(event);
     }
 
@@ -449,7 +432,7 @@ public final class MobicentsSynthesizedOutput
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new OutputEndedEvent(this, null, speakable);
+                new OutputEndedEvent(this, null, speakable);
         fireOutputEvent(event);
         synchronized (endplayLock) {
             endplayLock.notifyAll();
@@ -479,9 +462,9 @@ public final class MobicentsSynthesizedOutput
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
-        VNXLog.info2("speaking '" + text + "'...");
+        LOGGER.info("speaking '" + text + "'...");
         try {
-            VNXLog.error2("currently, don't support this function");
+            LOGGER.error("currently, don't support this function");
         } catch (EngineStateError e) {
             throw new BadFetchError(e.getMessage(), e);
         } catch (IllegalArgumentException e) {
@@ -506,13 +489,12 @@ public final class MobicentsSynthesizedOutput
             throw new NoresourceError("No synthesizer: Cannot cancel output");
         }
 
-        if (!bargein) 
-        {
-            VNXLog.debug2("bargein not active for current output");
+        if (!bargein) {
+            LOGGER.debug("bargein not active for current output");
             return;
         }
 
-        VNXLog.debug2("cancelling current output...");
+        LOGGER.debug("cancelling current output...");
         outputCanceled = true;
         synchronized (queuedSpeakables) {
             try {
@@ -522,7 +504,7 @@ public final class MobicentsSynthesizedOutput
             }
 
             final Collection<SpeakableText> skipped =
-                new java.util.ArrayList<SpeakableText>();
+                    new java.util.ArrayList<SpeakableText>();
             for (SpeakableText speakable : queuedSpeakables) {
                 if (speakable.isBargeInEnabled()) {
                     skipped.add(speakable);
@@ -540,6 +522,7 @@ public final class MobicentsSynthesizedOutput
                 }
             } else {
                 final Runnable runnable = new Runnable() {
+
                     /**
                      * {@inheritDoc}
                      */
@@ -559,19 +542,19 @@ public final class MobicentsSynthesizedOutput
                 thread.start();
             }
         }
-        if (true) {
-            VNXLog.debug2("...output cancelled.");
-        }
+        //reset handle
+        handler = null;
+        LOGGER.debug("...output cancelled. queuedSpeakables:" + queuedSpeakables + " reset handler:" + handler + " this:" + this);
+
     }
-    
+
     public void cancelAllSpeakers()
-            throws NoresourceError 
-    {
+            throws NoresourceError {
         if (synthesizer == null) {
-            VNXLog.error2("No synthesizer: Cannot cancel output");
+            LOGGER.error("No synthesizer: Cannot cancel output");
         }
 
-        VNXLog.debug2("cancelling current output...");
+        LOGGER.debug("forcing current output cancelled...");
         outputCanceled = true;
         synchronized (queuedSpeakables) {
             try {
@@ -580,8 +563,7 @@ public final class MobicentsSynthesizedOutput
                 throw new NoresourceError(ee);
             }
             queuedSpeakables.clear();
-            if (queuedSpeakables.isEmpty())
-            {
+            if (queuedSpeakables.isEmpty()) {
                 fireQueueEmpty();
                 synchronized (emptyLock) {
                     emptyLock.notifyAll();
@@ -589,9 +571,9 @@ public final class MobicentsSynthesizedOutput
             }
         }
         //reset handle
-        handler=null;
-        VNXLog.debug2("...output cancelled. queuedSpeakables:"+queuedSpeakables + " handler:"+handler + " this:"+this);
-        
+        handler = null;
+        LOGGER.debug("...output cancelled. queuedSpeakables:" + queuedSpeakables + " handler:" + handler + " this:" + this);
+
     }
 
     /**
@@ -625,12 +607,12 @@ public final class MobicentsSynthesizedOutput
     public void waitEngineState(final long state)
             throws java.lang.InterruptedException {
         if (synthesizer == null) {
-            VNXLog.warn2("no synthesizer: cannot wait for engine state");
+            LOGGER.warn("no synthesizer: cannot wait for engine state");
             return;
         }
 
         if (true) {
-            VNXLog.debug2("waiting for synthesizer engine state " + state);
+            LOGGER.debug("waiting for synthesizer engine state " + state);
         }
 
         final long current = synthesizer.getEngineState();
@@ -639,7 +621,7 @@ public final class MobicentsSynthesizedOutput
         }
 
         if (true) {
-            VNXLog.debug2("...reached engine state " + state);
+            LOGGER.debug("...reached engine state " + state);
         }
     }
 
@@ -648,9 +630,11 @@ public final class MobicentsSynthesizedOutput
      */
     @Override
     public void waitNonBargeInPlayed() {
-            VNXLog.debug2("waiting until all non-barge-in has been played...");
-        if (!bargein) {
-                VNXLog.debug2("bargein not active for current output");
+        long starttime = System.currentTimeMillis();
+        if (bargein == false) {
+            LOGGER.debug("waiting until all non-barge-in has been played...");
+        } else if (bargein == true) {
+            LOGGER.debug("bargein is active for current output");
             return;
         }
         boolean stopWaiting = false;
@@ -669,22 +653,21 @@ public final class MobicentsSynthesizedOutput
                     final SpeakableText speakable = queuedSpeakables.peek();
                     if (speakable instanceof SpeakableSsmlText) {
                         final SpeakableSsmlText ssml =
-                            (SpeakableSsmlText) speakable;
+                                (SpeakableSsmlText) speakable;
                         stopWaiting = ssml.getBargeInType() == null;
                     }
                 }
             }
         }
-        VNXLog.debug2("...all non barge-in has been played");
+        LOGGER.debug("...all non barge-in has been played: waittedTime:" + (System.currentTimeMillis() - starttime));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void waitQueueEmpty() 
-    {
-        VNXLog.warn2("waiting queuedSpeakables is emply:"+queuedSpeakables);
+    public void waitQueueEmpty() {
+        LOGGER.warn("waiting queuedSpeakables is emply:" + queuedSpeakables);
         while (!queuedSpeakables.isEmpty()) {
             synchronized (emptyLock) {
                 try {
@@ -718,9 +701,8 @@ public final class MobicentsSynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void passivate() 
-    {
-        VNXLog.debug2("passivating output...");
+    public void passivate() {
+        LOGGER.debug("passivating output...");
         // Clear all lists and reset the flags.
         listener.clear();
         queuedSpeakables.clear();
@@ -730,16 +712,15 @@ public final class MobicentsSynthesizedOutput
         documentServer = null;
         bargein = false;
         bargeInType = null;
-        VNXLog.debug2("...passivated output");
+        LOGGER.debug("...passivated output");
     }
 
     /**
      * {@inheritDoc}
      */
     public void connect(final ConnectionInformation connectionInformation)
-        throws IOException 
-    {
-        VNXLog.debug2("...connecting with  connectionInformation:"+connectionInformation + " handle: "+handler);
+            throws IOException {
+        LOGGER.debug("...connecting with  connectionInformation:" + connectionInformation + " handle: " + handler);
         if (handler != null) {
             handler.connect(connectionInformation, this, synthesizer);
         }
@@ -752,17 +733,18 @@ public final class MobicentsSynthesizedOutput
      */
     public void disconnect(final ConnectionInformation connectionInformation) 
     {
-        VNXLog.debug2("...disconnecting with  connectionInformation:"+connectionInformation + " handle: "+handler);
-        if (handler != null) {
+        LOGGER.debug("...disconnecting with  connectionInformation:" + connectionInformation + " handle: " + handler);
+        if (handler != null) 
+        {
             handler.disconnect(connectionInformation, this, synthesizer);
         }
         info = null;
         //
-        try{
-        cancelAllSpeakers();
+        try {
+            cancelAllSpeakers();
         } catch (NoresourceError err) {
-            VNXLog.error2(err.getMessage());
-        } 
+            ExLog.exception(LOGGER, err);
+        }
     }
 
     /**
@@ -785,52 +767,46 @@ public final class MobicentsSynthesizedOutput
      * @param connectionHandler the connection handler.
      */
     public void setSynthesizedOutputConnectionHandler(
-            final SynthesizedOutputConnectionHandler connectionHandler) throws NoresourceError 
-    {
+            final SynthesizedOutputConnectionHandler connectionHandler) throws NoresourceError {
         try {
             if (connectionHandler != null) {
-                VNXLog.info2(" connectionHandler is :" + connectionHandler
+                LOGGER.info(" connectionHandler is :" + connectionHandler
                         + " uri:" + connectionHandler.getUriForNextSynthesisizedOutput(info));
             }
             handler = connectionHandler;
         } catch (Exception ex) {
-            VNXLog.error2(ex);
+            ExLog.exception(LOGGER, ex);
         }
-        
+
     }
 
     /**
      * {@inheritDoc}
      */
-    public URI getUriForNextSynthesisizedOutput() throws NoresourceError 
-    {
-        try 
-        {
-             // Do not process the speakable if there is some ongoing processing
-            while (queuedSpeakables.size() > 1 || handler == null) 
-            {
-                if(handler == null)
-                    VNXLog.warn2("waiting for handling...");
-                else
-                {
-                    VNXLog.warn2("waiting a speakable ended:"+queuedSpeakables);
-                    final SpeakableEvent event =   new SpeakableEvent(documentServer, SpeakableEvent.SPEAKABLE_ENDED);
+    public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
+        try {
+            // Do not process the speakable if there is some ongoing processing
+            while (queuedSpeakables.size() > 1 || handler == null) {
+                if (handler == null) {
+                    LOGGER.warn("waiting for handling...");
+                } else {
+                    LOGGER.warn("waiting a speakable ended:" + queuedSpeakables);
+                    final SpeakableEvent event = new SpeakableEvent(documentServer, SpeakableEvent.SPEAKABLE_ENDED);
                     speakableEnded(event);
                 }
                 Thread.sleep(10);
             }
-            if (handler != null) 
-            {
-                VNXLog.info2(" handler is :" + handler
-                        + " uri:" + handler.getUriForNextSynthesisizedOutput(info) + " this:"+this
-                        + " queuedSpeakables:"+queuedSpeakables);
+            if (handler != null) {
+                LOGGER.info(" handler is :" + handler
+                        + " uri:" + handler.getUriForNextSynthesisizedOutput(info) + " this:" + this
+                        + " queuedSpeakables:" + queuedSpeakables);
                 return handler.getUriForNextSynthesisizedOutput(info);
             } else {
-                VNXLog.error2(" handler is null:" + handler + " info :" + info
+                LOGGER.error(" handler is null:" + handler + " info :" + info
                         + " documentServer:" + documentServer);
             }
         } catch (Exception ex) {
-            VNXLog.error2(ex);
+            ExLog.exception(LOGGER, ex);
         }
         return null;
     }
@@ -852,13 +828,11 @@ public final class MobicentsSynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void speakableEnded(final SpeakableEvent event) 
-    {
+    public void speakableEnded(final SpeakableEvent event) {
         final Object source = event.getSource();
-        if (source instanceof SsmlDocument) 
-        {
+        if (source instanceof SsmlDocument) {
             queueingSsml = false;
-            VNXLog.debug2("ending Synthesis of an SSML document started");
+            LOGGER.debug("ending Synthesis of an SSML document started");
         }
         final boolean removeSpeakable = !queueingSsml;
         if (removeSpeakable) {
@@ -869,8 +843,8 @@ public final class MobicentsSynthesizedOutput
             }
             if (true) {
                 if (speakable != null) {
-                    VNXLog.debug2("speakable ended: "
-                        + speakable.getSpeakableText());
+                    LOGGER.debug("speakable ended: "
+                            + speakable.getSpeakableText());
                 }
             }
 
@@ -881,7 +855,7 @@ public final class MobicentsSynthesizedOutput
                 try {
                     synthesizerStreams.put(input);
                 } catch (InterruptedException e) {
-                    VNXLog.debug2("unable to add a synthesizer stream", e);
+                    LOGGER.debug("unable to add a synthesizer stream", e);
                 }
                 streamBuffer = null;
             }
@@ -916,9 +890,8 @@ public final class MobicentsSynthesizedOutput
      */
     public void speakableStarted(final SpeakableEvent event) {
         final Object source = event.getSource();
-        if (source instanceof SsmlDocument) 
-        {
-            VNXLog.debug2("synthesis of an SSML document started: " + source);
+        if (source instanceof SsmlDocument) {
+            LOGGER.debug("synthesis of an SSML document started: " + source);
             queueingSsml = true;
         }
     }
@@ -940,7 +913,7 @@ public final class MobicentsSynthesizedOutput
      */
     public boolean isBusy() {
         synchronized (queuedSpeakables) {
-           return !queuedSpeakables.isEmpty();
+            return !queuedSpeakables.isEmpty();
         }
     }
 
@@ -968,7 +941,7 @@ public final class MobicentsSynthesizedOutput
      *            Error reading from the given stream.
      */
     public void addSynthesizerStream(final InputStream input)
-        throws IOException {
+            throws IOException {
         if (streamBuffer == null) {
             streamBuffer = new ByteArrayOutputStream();
         }
@@ -980,7 +953,7 @@ public final class MobicentsSynthesizedOutput
             if (num >= 0) {
                 streamBuffer.write(buffer, 0, num);
             }
-        } while(num >= 0);
+        } while (num >= 0);
     }
 
     /**
@@ -991,7 +964,7 @@ public final class MobicentsSynthesizedOutput
     private void fireOutputEvent(final SynthesizedOutputEvent event) {
         synchronized (listener) {
             final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>();
+                    new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listener);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -1007,35 +980,33 @@ public final class MobicentsSynthesizedOutput
     private void notifyError(final ErrorEvent error) {
         synchronized (listener) {
             final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>();
+                    new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listener);
             for (SynthesizedOutputListener current : copy) {
                 current.outputError(error);
             }
         }
     }
+
     /**
      * 
      * @param call 
      * @Override
      */
-    public void onStatusChanged(Call call)
-    {
-        try
-        {
-            VNXLog.debug2("current is " +call.toString());
-            if(Call.Status.COMPLETED == call.getStatus()
-                    ||Call.Status.IN_PROGRESS == call.getStatus())
-            {
-                if(documentServer==null) return;
-                final SpeakableEvent event =   new SpeakableEvent(documentServer, SpeakableEvent.SPEAKABLE_ENDED);
+    public void onStatusChanged(Call call) {
+        try {
+            LOGGER.debug("current is " + call.toString());
+            if (Call.Status.COMPLETED == call.getStatus()
+                    || Call.Status.IN_PROGRESS == call.getStatus()) {
+                if (documentServer == null) {
+                    return;
+                }
+                final SpeakableEvent event = new SpeakableEvent(documentServer, SpeakableEvent.SPEAKABLE_ENDED);
                 speakableEnded(event);
             }
-        }catch(Exception ex)
-        {
-            VNXLog.error2(ex);
+        } catch (Exception ex) {
+            ExLog.exception(LOGGER, ex);
         }
-        
+
     }
 }
-

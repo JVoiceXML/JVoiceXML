@@ -16,7 +16,7 @@
  */
 package org.mobicents.servlet.sip.restcomm.callmanager.mgcp;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import jain.protocol.ip.mgcp.message.parms.ConnectionDescriptor;
 import jain.protocol.ip.mgcp.message.parms.ConnectionMode;
 
@@ -51,6 +51,7 @@ import org.mobicents.servlet.sip.restcomm.media.api.Call;
 import org.mobicents.servlet.sip.restcomm.media.api.CallException;
 import org.mobicents.servlet.sip.restcomm.media.api.CallObserver;
 import org.mobicents.servlet.sip.restcomm.util.IPUtils;
+import org.util.ExLog;
 
 /**
  * @author quintana.thomas@gmail.com (Thomas Quintana)
@@ -60,7 +61,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         implements Terminal, Call, MgcpConnectionObserver, MgcpIvrEndpointObserver,
         ObservableTelephony {
 
-    private static final Logger logger = Logger.getLogger(MgcpCallTerminal.class);
+    private static final Logger LOGGER = Logger.getLogger(MgcpCallTerminal.class);
     // Call states.
     private static final State IDLE = new State(Status.IDLE.toString());
     private static final State QUEUED = new State(Status.QUEUED.toString());
@@ -210,7 +211,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             cleanup();
             setState(FAILED);
             fireStatusChanged();
-            logger.error(exception);
+            LOGGER.error(exception);
             throw new CallException(exception);
         }
     }
@@ -226,7 +227,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             cleanup();
             setState(FAILED);
             fireStatusChanged();
-            logger.error(exception);
+            LOGGER.error(exception);
             throw new CallException(exception);
         }
     }
@@ -249,7 +250,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         } catch (final Exception exception) {
             fail(SipServletResponse.SC_SERVER_INTERNAL_ERROR);
             fireStatusChanged();
-            logger.error(exception);
+            LOGGER.error(exception);
             throw new CallException(exception);
         }
     }
@@ -354,7 +355,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
     }
 
     public synchronized void established() {
-        logger.debug("ACK received");
+        LOGGER.debug("ACK received");
     }
 
     public synchronized void established(final SipServletResponse successResponse) throws CallException, IOException {
@@ -405,7 +406,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         try {
             fail.send();
         } catch (final IOException exception) {
-            logger.error(exception);
+            LOGGER.error(exception);
         }
         cleanup();
         setState(FAILED);
@@ -528,7 +529,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
                     throw new Exception(mmsTimedOutException());
                 }
             } catch (final Exception exception) {
-                logger.error(exception);
+                LOGGER.error(exception);
             }
             remoteOutboundConnection.removeObserver(this);
             remoteOutboundConnection = null;
@@ -577,8 +578,10 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             assertState(IN_PROGRESS);
             ivrEndpoint.play(announcements, iterations);
 //            wait();
-        } catch (Exception ignored) {
+        } catch (Exception ignored) 
+        {
             stopMedia();
+            ExLog.exception(LOGGER, ignored);
         }
     }
 
@@ -627,7 +630,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             cleanup();
             setState(FAILED);
             fireStatusChanged();
-            logger.error(exception);
+            LOGGER.error(exception);
         }
     }
 
@@ -662,7 +665,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         
 //            wait();
         } catch (final Exception ignored) {
-            logger.error(ignored);
+            LOGGER.error(ignored);
         }
     }
 
@@ -672,7 +675,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         try {
             bye.send();
         } catch (final IOException exception) {
-            logger.error(exception);
+            LOGGER.error(exception);
         }
         cleanup();
     }
@@ -706,7 +709,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
 
     @Override
     public synchronized void halfOpen(final MgcpConnection connection) {
-        logger.debug("halfOpen notification for connection: " + connection + ", endpoint: " + connection.getEndpoint()
+        LOGGER.debug("halfOpen notification for connection: " + connection + ", endpoint: " + connection.getEndpoint()
                 + ", state: " + connection.getState().getName());
         final List<State> impossibleStates = new ArrayList<State>();
         impossibleStates.add(COMPLETED);
@@ -733,7 +736,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
 
     @Override
     public synchronized void open(final MgcpConnection connection) {
-        logger.debug("open notification for connection: " + connection + ", endpoint: " + connection.getEndpoint()
+        LOGGER.debug("open notification for connection: " + connection + ", endpoint: " + connection.getEndpoint()
                 + ", state: " + connection.getState().getName());
         final List<State> impossibleStates = new ArrayList<State>();
         impossibleStates.add(COMPLETED);
@@ -811,7 +814,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
      * @return name of the terminal
      */
     public String getName() {
-        VNXLog.error2("not support yet");
+        LOGGER.error("not support yet");
         return null;
     }
 
@@ -825,14 +828,14 @@ public final class MgcpCallTerminal extends FiniteStateMachine
      *         error waiting for connections.
      */
     public void waitForConnections() throws IOException {
-        VNXLog.error2("not support yet");
+        LOGGER.error("not support yet");
     }
 
     /**
      * Stops waiting for incoming connections.
      */
     public void stopWaiting() {
-        VNXLog.error2("not support yet");
+        LOGGER.error("not support yet");
     }
 
     /**
@@ -867,7 +870,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
      * @since 0.7
      */
     public synchronized void disconnect() {
-        VNXLog.error2("not support yet");
+        LOGGER.error("not support yet");
     }
 
     public void setSIPCallID(String callid) {

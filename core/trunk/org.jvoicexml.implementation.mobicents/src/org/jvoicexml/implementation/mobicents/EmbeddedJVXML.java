@@ -25,7 +25,7 @@
  */
 package org.jvoicexml.implementation.mobicents;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import java.io.File;
 import java.net.URI;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,9 +44,9 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.implementation.jvxml.JVoiceXmlSystemOutput;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.jvoicexml.implementation.mobicents.MobicentsSynthesizedOutput;
 import org.jvoicexml.implementation.mobicents.callmanager.MobicentsConnectionInformation;
 import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpCallTerminal;
+import org.util.ExLog;
 
 /**
  * Demo to show how JVoiceXML can be launched by other applications.
@@ -54,7 +54,10 @@ import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpCallTerminal;
  * @version $Revision: 2771 $
  * @since 0.7.5
  */
-public final class EmbeddedJVXML implements JVoiceXmlMainListener {
+public final class EmbeddedJVXML implements JVoiceXmlMainListener 
+{
+    private static final Logger LOGGER =
+            Logger.getLogger(EmbeddedJVXML.class);
 
     /** Reference to JVoiceXML. */
     private JVoiceXmlMain jvxml;
@@ -82,14 +85,14 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener {
      */
     public void init() {
         try {
-            VNXLog.info2("initializing JVoiceXML interface ......");
+            LOGGER.info("initializing JVoiceXML interface ......");
             JVoiceXmlConfiguration config = new JVoiceXmlConfiguration();
             jvxml = new JVoiceXmlMain(config);
             jvxml.addListener(this);
             jvxml.start();
 //            wait();
         } catch (Exception ex) {
-            VNXLog.error2(ex);
+            ExLog.exception(LOGGER, ex);
         }
     }
 
@@ -100,9 +103,9 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener {
             final Session session = jvxml.createSession(jndiClient);
             return session;
         } catch (JVoiceXMLEvent ev) {
-            VNXLog.error2(ev.toString());
+            ExLog.exception(LOGGER, ev);
         } catch (Exception ex) {
-            VNXLog.error2(ex);
+            ExLog.exception(LOGGER, ex);
         }
         return null;
     }
@@ -112,11 +115,11 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener {
         try {
             final Session session = listCurrentCalls.remove(call.getSIPCallID());
             if (session == null) {
-                VNXLog.error2("error when delete a jvoice session with call:" + call);
+                LOGGER.error("error when delete a jvoice session with call:" + call);
                 return;
             }
             ImplementationPlatform implPlatform = ((JVoiceXmlSession) session).getImplementationPlatform();
-            VNXLog.info2("terminating a jvoice session:" + session + " with call:" + call
+            LOGGER.info("terminating a jvoice session:" + session + " with call:" + call
                     + " ImplementationPlatform:" + implPlatform);
             JVoiceXmlSystemOutput sysout=(JVoiceXmlSystemOutput)implPlatform.getSystemOutput();
             ((MobicentsSynthesizedOutput)sysout.getSynthesizedOutput()).cancelAllSpeakers();
@@ -127,17 +130,17 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener {
 //            }
 //            ((JVoiceXmlSession) session).cleanup();
         } catch (ConnectionDisconnectHangupEvent evnt) {
-            VNXLog.error2(evnt.getMessage());
+            ExLog.exception(LOGGER, evnt);
         } catch (NoresourceError err) {
-            VNXLog.error2(err.getMessage());
+            ExLog.exception(LOGGER, err);
         } catch (Exception ex) {
-            VNXLog.error2(ex);
+            ExLog.exception(LOGGER, ex);
         }
     }
 
     public void execute(MgcpCallTerminal call) {
         try {
-            VNXLog.debug2("execute vxml script for a MgcpCallTerminal:" + call);
+            LOGGER.debug("execute vxml script for a MgcpCallTerminal:" + call);
 //            File dialog = new File("conf/jvxml/vxml/hello.vxml");
             //play wav and collect DTMF input
 //            File dialog = new File("conf/jvxml/vxml/hellodtmf.vxml");
@@ -147,41 +150,41 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener {
             jndiClient = new MobicentsConnectionInformation(call, "mobicents", "mobicents");
             final Session session = jvxml.createSession(jndiClient);
             listCurrentCalls.put(call.getSIPCallID(), session);
-            VNXLog.debug2("call jxmlsession:" + session + " and initiate a call at JVoiceXML:vxmlURI:" + vxmlURI);
+            LOGGER.debug("call jxmlsession:" + session + " and initiate a call at JVoiceXML:vxmlURI:" + vxmlURI);
             session.call(vxmlURI);
 //            session.waitSessionEnd();
 //            session.hangup();
         } catch (JVoiceXMLEvent ev) {
-            VNXLog.error2(ev.toString());
+            ExLog.exception(LOGGER, ev);
         } catch (Exception ex) {
-            VNXLog.error2(ex);
+            ExLog.exception(LOGGER, ex);
         }
     }
 
     public void procSIPInfo(SipServletRequest request) {
         try {
             Session session = listCurrentCalls.get(request.getCallId());
-            VNXLog.debug2("get jvxml session for sip callid:" + request.getCallId() + " jxmlsession:" + session);
+            LOGGER.debug("get jvxml session for sip callid:" + request.getCallId() + " jxmlsession:" + session);
             if (session == null) {
-                VNXLog.debug2(" null jxmlsession with call id:" + request.getCallId());
+                LOGGER.debug(" null jxmlsession with call id:" + request.getCallId());
                 return;
             }
             String messageContent = new String((byte[]) request.getContent());
             int idexdigit = messageContent.indexOf(VAppCfg.digitPattern);
             String signal = messageContent.substring(idexdigit + VAppCfg.digitPattern.length(), idexdigit + VAppCfg.digitPattern.length() + 2).trim();
-            VNXLog.info2("got INFO request with following content " + messageContent
+            LOGGER.info("got INFO request with following content " + messageContent
                     + " signal:" + signal + " charAt0:" + signal.trim().charAt(0));
             CharacterInput input = session.getCharacterInput();
             if (input == null) {
-                VNXLog.error2("CharacterInput is null:" + input);
+                LOGGER.error("CharacterInput is null:" + input);
             } else {
                 input.addCharacter(signal.trim().charAt(0));
             }
         } catch (JVoiceXMLEvent ev) {
-            VNXLog.error2(ev.toString());
+            ExLog.exception(LOGGER, ev);
         } catch (Exception ex) {
-            VNXLog.error2(" error when processing sip info with" + request.toString());
-            VNXLog.error2(ex);
+            LOGGER.error(" error when processing sip info with" + request.toString());
+            ExLog.exception(LOGGER, ex);
         }
         
     }
@@ -228,9 +231,9 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener {
             final URI uri = dialog.toURI();
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
-            VNXLog.error2("error processing the document", e);
+            LOGGER.error("error processing the document", e);
         } catch (InterruptedException e) {
-            VNXLog.error2("error processing the document", e);
+            LOGGER.error("error processing the document", e);
         }
     }
 
@@ -251,6 +254,6 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener {
      */
     @Override
     public void jvxmlStartupError(final Throwable exception) {
-        VNXLog.error2("error starting JVoiceML", exception);
+        LOGGER.error("error starting JVoiceML", exception);
     }
 }

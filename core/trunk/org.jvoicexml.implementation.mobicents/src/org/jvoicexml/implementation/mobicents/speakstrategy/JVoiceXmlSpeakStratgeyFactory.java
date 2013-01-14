@@ -27,7 +27,7 @@
 
 package org.jvoicexml.implementation.mobicents.speakstrategy;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import java.util.Map;
 
 import org.jvoicexml.xml.SsmlNode;
@@ -54,6 +54,7 @@ import org.jvoicexml.implementation.mobicents.SSMLSpeakStrategyFactory;
  */
 public final class JVoiceXmlSpeakStratgeyFactory
     implements SSMLSpeakStrategyFactory {
+        private static final Logger LOGGER = Logger.getLogger(JVoiceXmlSpeakStratgeyFactory.class);
     /** Known speak strategies. */
     private final Map<String, SpeakStrategyBase> strategies;
 
@@ -88,11 +89,11 @@ public final class JVoiceXmlSpeakStratgeyFactory
         final String tag = node.getTagName();
         
         SpeakStrategyBase strategy = strategies.get(tag);
-        VNXLog.debug2("get SpeakStrategyBase:"+strategy+" with tag:"+tag );
+        LOGGER.debug("get SpeakStrategyBase:"+strategy+" with tag:"+tag );
         if(strategy!=null)
             strategy.setSSMLSpeakStrategyFactory(this);
         else
-            VNXLog.error2("error when getting SpeakStrategyBase:"+strategy+" with tag:"+tag + " strategies:"+strategies);
+            LOGGER.error("error when getting SpeakStrategyBase:"+strategy+" with tag:"+tag + " strategies:"+strategies);
         return strategy;
     }
 }

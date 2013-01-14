@@ -28,7 +28,7 @@
  */
 package org.jvoicexml.implementation.mobicents;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
@@ -50,7 +50,7 @@ import org.jvoicexml.implementation.TelephonyListener;
 import org.jvoicexml.implementation.mobicents.callmanager.MobicentsConnectionInformation;
 import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpCallTerminal;
 import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpIvrEndpoint;
-import org.mobicents.servlet.sip.restcomm.media.api.Call;
+import org.util.ExLog;
 
 /**
  * JTAPI based implementation of a {@link Telephony}.
@@ -67,7 +67,7 @@ import org.mobicents.servlet.sip.restcomm.media.api.Call;
  */
 public final class MobicentsTelephony implements Telephony,
         ObservableTelephony, TelephonyListener {
-
+    private static final Logger LOGGER = Logger.getLogger(MobicentsTelephony.class);
     /** Listener to this call control. */
     private final Collection<TelephonyListener> callControlListeners;
     /** The SIP MGCP connection. */
@@ -122,27 +122,27 @@ public final class MobicentsTelephony implements Telephony,
             }
             URI uri=null;
             try {
-                VNXLog.debug2("status of the terminal " + terminal );
+                LOGGER.debug("status of the terminal " + terminal );
                 //checking termnal status before play
-                if(terminal.getIVREndPointState()==MgcpIvrEndpoint.PLAY||
+                if((terminal.getIVREndPointState()==MgcpIvrEndpoint.PLAY||
                         terminal.getIVREndPointState()==MgcpIvrEndpoint.PLAY_COLLECT||
-                                terminal.getIVREndPointState()==MgcpIvrEndpoint.PLAY_RECORD)
+                                terminal.getIVREndPointState()==MgcpIvrEndpoint.PLAY_RECORD)&&
+                        terminal.getIVREndPointState()!=MgcpIvrEndpoint.STOP)
                 {
-                    VNXLog.debug2("canceling current playing....  " );
+                    LOGGER.debug("canceling current playing....  " );
                     terminal.stopMedia();
                 }
-                
                 uri = output.getUriForNextSynthesisizedOutput();
             } catch (URISyntaxException e) {
                 throw new IOException(e.getMessage(), e);
             }
-            VNXLog.debug2("playing URI '" + uri + "'" + " CallControlProperties: "+props);
+            LOGGER.debug("playing URI '" + uri + "'" + " CallControlProperties: "+props);
             terminal.play(uri, 1);
             terminal.addObserver((MobicentsSynthesizedOutput)output);
 //            terminal.play(new URI("http://192.168.146.146:8080/VNXIVR/audio/dtmf_welcome.wav"), 1);
 //            Thread.sleep(10000);
         } catch (Exception ex) {
-            VNXLog.error2(ex);
+            ExLog.exception(LOGGER, ex);
         }
     }
 
@@ -170,7 +170,7 @@ public final class MobicentsTelephony implements Telephony,
         }
         // TODO Do the actual recording.
         if (true) {
-            VNXLog.debug2("recording to URI '" + uri + "'...");
+            LOGGER.debug("recording to URI '" + uri + "'...");
         }
         // TODO Move the code from the FIA to here.
 //        terminal.record(uri, null);
@@ -337,7 +337,7 @@ public final class MobicentsTelephony implements Telephony,
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
-        VNXLog.info("stop play media for terminal:"+terminal);
+        LOGGER.info("stop play media for terminal:"+terminal);
 //        terminal.stopMedia();
     }
 
@@ -349,7 +349,7 @@ public final class MobicentsTelephony implements Telephony,
             throw new NoresourceError("No active telephony connection!");
         }
 
-        VNXLog.error2("not support yet");
+        LOGGER.error("not support yet");
     }
 
     /**
@@ -359,7 +359,7 @@ public final class MobicentsTelephony implements Telephony,
         if (terminal == null) {
             return false;
         }
-        VNXLog.error2("not support yet");
+        LOGGER.error("not support yet");
         return false;
     }
 
@@ -419,7 +419,7 @@ public final class MobicentsTelephony implements Telephony,
      */
     public void connect(final ConnectionInformation info) throws IOException 
     {
-        VNXLog.info2(".. with ConnectionInformation:"+info);
+        LOGGER.info(".. with ConnectionInformation:"+info);
         final MobicentsConnectionInformation vnxivrInfo =
             (MobicentsConnectionInformation) info;
         terminal = vnxivrInfo.getTerminal();
@@ -432,7 +432,7 @@ public final class MobicentsTelephony implements Telephony,
      */
     public void disconnect(final ConnectionInformation info) 
     {
-        VNXLog.info2(".. with ConnectionInformation:"+info);
+        LOGGER.info(".. with ConnectionInformation:"+info);
         final MobicentsConnectionInformation vnxivrInfo =
             (MobicentsConnectionInformation) info;
         terminal = vnxivrInfo.getTerminal();

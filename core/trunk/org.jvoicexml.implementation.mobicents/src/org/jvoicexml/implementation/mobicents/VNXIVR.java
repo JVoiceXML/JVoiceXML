@@ -21,8 +21,7 @@
  */
 package org.jvoicexml.implementation.mobicents;
 
-import com.vnxtele.util.VNXLog;
-import com.vnxtele.util.VText;
+import org.apache.log4j.Logger;
 import java.io.File;
 import java.util.Properties;
 
@@ -34,9 +33,10 @@ import org.mobicents.servlet.sip.SipServletTestCase;
 import org.mobicents.servlet.sip.catalina.SipStandardManager;
 import org.mobicents.servlet.sip.startup.SipContextConfig;
 import org.mobicents.servlet.sip.startup.SipStandardContext;
+import org.util.TextUtil;
 
 public class VNXIVR extends SipServletTestCase {
-
+        private static final Logger LOGGER = Logger.getLogger(VNXIVR.class);
     private SipStack[] sipStackReceivers;
     private SipPhone[] sipPhoneReceivers;
     // Don't restart the server for this set of tests.
@@ -50,7 +50,7 @@ public class VNXIVR extends SipServletTestCase {
 
     @Override
     public void setUp() throws Exception {
-        VNXLog.debug2("");
+        LOGGER.debug("");
         if (firstTime) {
             super.setUp();
         }
@@ -82,21 +82,21 @@ public class VNXIVR extends SipServletTestCase {
     public void deployApplication() {
 
         context = new SipStandardContext();
-        context.setDocBase(VText.osResPath(projectHome + "/conf/applications/VNXIVR/sipapp"));
+        context.setDocBase(TextUtil.osResPath(projectHome + "/conf/applications/VNXIVR/sipapp"));
         context.setName("VNXIVR-context");
         context.setPath("/VNXIVR");
         context.addLifecycleListener(new SipContextConfig());
         manager = new SipStandardManager();
         context.setManager(manager);
-        VNXLog.debug2("deploying host context:" + context
+        LOGGER.debug("deploying host context:" + context
                 + " getBasePath:" + context.getBasePath() + " getDocBase:" + context.getDocBase());
         assertTrue(tomcat.deployContext(context));
     }
 
     @Override
     protected String getDarConfigurationFile() {
-        VNXLog.debug2("");
-        return VText.osResPath("file:///"
+        LOGGER.debug("");
+        return TextUtil.osResPath("file:///"
                 + projectHome
                 + "/conf/resources/VNXIVR.properties");
     }
@@ -146,14 +146,13 @@ public class VNXIVR extends SipServletTestCase {
 
             System.setProperty("javax.servlet.sip.ar.spi.SipApplicationRouterProvider",
                     "org.mobicents.servlet.sip.router.DefaultApplicationRouterProvider");
-            VNXLog genlog = new VNXLog("conf" + File.separatorChar + "VNXIVR.cfg");
             VAppCfg appcfg = new VAppCfg();
             appcfg.initcontext();
-            System.setProperty("CATALINA_HOME", VText.standardPath(VAppCfg.CATALINA_HOME));
-            System.setProperty("CATALINA_BASE", VText.standardPath(VAppCfg.CATALINA_HOME));
+            System.setProperty("CATALINA_HOME", TextUtil.standardPath(VAppCfg.CATALINA_HOME));
+            System.setProperty("CATALINA_BASE", TextUtil.standardPath(VAppCfg.CATALINA_HOME));
             System.setProperty("org.vnxtele.vnxivr.configfile", "conf" + File.separatorChar + "VNXIVR.cfg");
             System.setProperty("org.vnxtele.vnxivr.sipstackpropertiesfile",
-                    VText.osResPath(VAppCfg.projectHome + "conf" + File.separatorChar + "VNXIVR.cfg"));
+                    TextUtil.osResPath(VAppCfg.projectHome + "conf" + File.separatorChar + "VNXIVR.cfg"));
             System.setProperty("org.vnxtele.vnxivr.sipaddr", VAppCfg.sipStackAddr);
             System.setProperty("org.vnxtele.vnxivr.sipport", VAppCfg.sipStackPort);
             System.setProperty("org.vnxtele.vnxivr.tomcatAddress", VAppCfg.httpServerBindAddress);

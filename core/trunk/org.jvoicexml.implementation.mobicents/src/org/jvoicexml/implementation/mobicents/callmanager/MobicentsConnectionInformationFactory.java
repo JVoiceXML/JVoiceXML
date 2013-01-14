@@ -29,7 +29,7 @@
 
 package org.jvoicexml.implementation.mobicents.callmanager;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import java.net.URI;
 import java.net.UnknownHostException;
 
@@ -49,6 +49,7 @@ import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpCallTerminal;
  */
 public final class MobicentsConnectionInformationFactory
     implements TerminalConnectionInformationFactory {
+        private static final Logger LOGGER = Logger.getLogger(MobicentsConnectionInformationFactory.class);
     /**
      * {@inheritDoc}
      */
@@ -60,7 +61,7 @@ public final class MobicentsConnectionInformationFactory
             (MgcpCallTerminal) parameters.getTerminal();
         final String output = application.getOutputType();
         final String input = application.getInputType();
-            VNXLog.debug2("creating connection information with output '"
+            LOGGER.debug("creating connection information with output '"
                     + output + "' and input '" + input + "' for terminal '"
                     + term.getName() + "'");
         try {

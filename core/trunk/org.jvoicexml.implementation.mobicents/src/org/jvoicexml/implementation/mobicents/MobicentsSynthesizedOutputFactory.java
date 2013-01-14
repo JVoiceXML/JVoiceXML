@@ -26,7 +26,7 @@
 
 package org.jvoicexml.implementation.mobicents;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import javax.speech.EngineException;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
@@ -111,7 +111,7 @@ public class MobicentsSynthesizedOutputFactory
      */
     public final SynthesizedOutput createResource() throws NoresourceError 
     {
-        VNXLog.debug2(".. handler:"+handler + " type:"+type);
+        LOGGER.debug(".. handler:"+handler + " type:"+type);
         final SynthesizerModeDesc desc = getDescriptor();
         final MobicentsSynthesizedOutput output = new MobicentsSynthesizedOutput(
                 desc);

@@ -7,13 +7,15 @@ import javax.media.mscontrol.join.JoinEventListener;
 import javax.media.mscontrol.join.Joinable.Direction;
 import javax.media.mscontrol.mediagroup.MediaGroup;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 
- public class MMSJoinEventListener implements JoinEventListener {
+ public class MMSJoinEventListener implements JoinEventListener 
+ {
+     private static final Logger LOGGER = Logger.getLogger(MMSJoinEventListener.class);
 
 	public void onEvent(javax.media.mscontrol.join.JoinEvent event) 
 	{
-		VNXLog.info2("event:"+event+ " eventType:"+event.getEventType());
+		LOGGER.info("event:"+event+ " eventType:"+event.getEventType());
 		MediaGroup mg = (MediaGroup) event.getThisJoinable();
 		if (event.isSuccessful()) {
 
@@ -26,7 +28,7 @@ import com.vnxtele.util.VNXLog;
 			}
 
 		} else {
-			VNXLog.error2("Joining of MG and NC failed");
+			LOGGER.error("Joining of MG and NC failed");
 		}
 	}
 

@@ -41,19 +41,12 @@ import org.mobicents.servlet.sip.restcomm.BootstrapException;
 import org.mobicents.servlet.sip.restcomm.Bootstrapper;
 import org.mobicents.servlet.sip.restcomm.Janitor;
 import org.mobicents.servlet.sip.restcomm.ServiceLocator;
-import org.mobicents.servlet.sip.restcomm.Sid;
-import org.mobicents.servlet.sip.restcomm.entities.Application;
-import org.mobicents.servlet.sip.restcomm.entities.Client;
-import org.mobicents.servlet.sip.restcomm.entities.IncomingPhoneNumber;
 import org.mobicents.servlet.sip.restcomm.media.api.Call;
 import org.mobicents.servlet.sip.restcomm.media.api.CallException;
 import org.mobicents.servlet.sip.restcomm.media.api.CallManager;
 import org.mobicents.servlet.sip.restcomm.media.api.CallManagerException;
 
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import java.io.File;
 import java.util.Collection;
 import java.util.Map;
@@ -65,7 +58,6 @@ import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Meta;
 import org.jvoicexml.event.error.NoresourceError;
-import org.vnxtele.ivrgw.sip.utils.VIVRUtil;
 
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
@@ -73,6 +65,8 @@ import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.callmanager.Terminal;
 import org.jvoicexml.callmanager.TerminalConnectionInformationFactory;
 import org.jvoicexml.implementation.mobicents.EmbeddedJVXML;
+import org.util.ExLog;
+import org.util.SIPUtil;
 
 
 
@@ -80,8 +74,9 @@ import org.jvoicexml.implementation.mobicents.EmbeddedJVXML;
  * @author quintana.thomas@gmail.com (Thomas Quintana)
  */
 public final class MgcpCallManager extends SipServlet 
-    implements org.jvoicexml.CallManager,CallManager, SipApplicationSessionListener {
-
+    implements org.jvoicexml.CallManager,CallManager, SipApplicationSessionListener 
+{
+        private static final Logger LOGGER = Logger.getLogger(MgcpIvrEndpoint.class);
     private static final long serialVersionUID = 4758133818077979879L;
     private static SipFactory sipFactory;
     private static Configuration configuration;
@@ -186,7 +181,7 @@ public final class MgcpCallManager extends SipServlet
     {
         try
         {
-            VNXLog.info2("incoming SIPBYE:"+VIVRUtil.dumpSIPMsgHdr2(request)) ;
+            LOGGER.info("incoming SIPBYE:"+SIPUtil.dumpSIPMsgHdr2(request)) ;
             final SipApplicationSession session = request.getApplicationSession();
             final MgcpCallTerminal call = (MgcpCallTerminal) session.getAttribute("CALL");
             call.bye(request);
@@ -195,7 +190,7 @@ public final class MgcpCallManager extends SipServlet
         }
           catch(Exception ex)       
         {
-            VNXLog.error2(ex);
+            ExLog.exception(LOGGER, ex);
         }
     }
     
@@ -254,7 +249,7 @@ public final class MgcpCallManager extends SipServlet
     protected final void doInvite(final SipServletRequest request) throws ServletException, IOException {
         try 
         {
-            VNXLog.info2("incoming SIPInvite:"+VIVRUtil.dumpSIPMsgHdr2(request)) ;
+            LOGGER.info("incoming SIPInvite:"+SIPUtil.dumpSIPMsgHdr2(request)) ;
             // Create the call.
             final MgcpServer server = servers.getMediaServer();
             final MgcpCallTerminal call = new MgcpCallTerminal(server);
@@ -265,12 +260,12 @@ public final class MgcpCallManager extends SipServlet
             // Schedule the VXML script to execute for this call.
             //
             // Create a session and initiate a call at JVoiceXML.
-            VNXLog.debug2("Create a session and initiate a call at JVoiceXML.");
+            LOGGER.debug("Create a session and initiate a call at JVoiceXML.");
             embJVXML.execute(call);
         }
          catch(Exception ex)       
         {
-            VNXLog.error2(ex);
+            ExLog.exception(LOGGER, ex);
         }
                     
     }
@@ -281,7 +276,7 @@ public final class MgcpCallManager extends SipServlet
         try {
             String fromUri = request.getFrom().getURI().toString();
             SipURI toUri = (SipURI) request.getTo().getURI();
-            VNXLog.info2("<<<<<<<<<<< sipInfo comming:\n" + "fromUri:" + fromUri
+            LOGGER.info("<<<<<<<<<<< sipInfo comming:\n" + "fromUri:" + fromUri
                     + " toUri:" + toUri + " content:"+request.getContent());
             SipServletResponse ok = request.createResponse(SipServletResponse.SC_OK);
             ok.send();
@@ -289,7 +284,7 @@ public final class MgcpCallManager extends SipServlet
             embJVXML.procSIPInfo(request);
             
         } catch (Exception ex) {
-            VNXLog.error2(ex);
+            ExLog.exception(LOGGER, ex);
         }
     }
     
@@ -328,7 +323,7 @@ public final class MgcpCallManager extends SipServlet
     {
         try{
         final ServletContext context = config.getServletContext();
-        VNXLog.info2("initializing the servlet with context:" + context + " ServerInfo:"
+        LOGGER.info("initializing the servlet with context:" + context + " ServerInfo:"
                 + context.getServerInfo() + " ServletContextName:" + context.getServletContextName()
                 + " config:"+config);
         context.setAttribute("org.mobicents.servlet.sip.restcomm.callmanager.CallManager", this);
@@ -348,26 +343,26 @@ public final class MgcpCallManager extends SipServlet
             proxyUri = sipFactory.createSipURI(null, uri);
         }
         ///////////
-        VNXLog.info2("initializing jvoicexml inteface........");
+        LOGGER.info("initializing jvoicexml inteface........");
         embJVXML = new EmbeddedJVXML();
         embJVXML.init();
 //        //init jvoicexml context
 //        contextJXML = new InitialContext();
-//        VNXLog.info2("init jvoicexml context:contextJXML:"+contextJXML);
+//        LOGGER.info("init jvoicexml context:contextJXML:"+contextJXML);
 //        
 //        //
-//        VNXLog.info2("creating VoiceXML documents and binding to the applications.....");
+//        LOGGER.info("creating VoiceXML documents and binding to the applications.....");
 //        vxmlDocument = createVXMLDoc();
 //        printDocument(vxmlDocument);
 //        
 //        //
-//        VNXLog.info2("adding VXML document to repository...");
+//        LOGGER.info("adding VXML document to repository...");
 //        vxmlURI=addDocument(vxmlDocument);
 //        
         }
         catch(Exception e)
         {
-            VNXLog.error2(e);
+            ExLog.exception(LOGGER, e);
         }
     }
     
@@ -386,7 +381,7 @@ public final class MgcpCallManager extends SipServlet
         call.failed();
         final StringBuilder buffer = new StringBuilder();
         buffer.append("A call with ID ").append(call.getSid().toString()).append(" was forcefully clean up after SipApplicationSession timed out.");
-        VNXLog.warn2(buffer.toString());
+        LOGGER.warn(buffer.toString());
     }
     
     @Override
@@ -404,7 +399,7 @@ public final class MgcpCallManager extends SipServlet
      */
     @Override
     public void start() throws NoresourceError, IOException {
-            VNXLog.error2("error, it will be implemented late");
+            LOGGER.error("error, it will be implemented late");
     }
 
        /**
@@ -414,10 +409,10 @@ public final class MgcpCallManager extends SipServlet
     public void stop() {
         try 
         {
-            VNXLog.error2("error, it will be implemented late");
+            LOGGER.error("error, it will be implemented late");
         } catch (Exception e) 
         {
-            VNXLog.error2(e);
+            ExLog.exception(LOGGER, e);
         } 
     }
     
@@ -470,9 +465,9 @@ public final class MgcpCallManager extends SipServlet
         try {
             xml = document.toXml();
         } catch (IOException ioe) {
-            VNXLog.error2(ioe);
+            ExLog.exception(LOGGER, ioe);
         }
-        VNXLog.info2(xml);
+        LOGGER.info(xml);
     }
     
 //    /**
@@ -486,8 +481,7 @@ public final class MgcpCallManager extends SipServlet
 //            repository = (MappedDocumentRepository) contextJXML.lookup("MappedDocumentRepository");
 //        } catch (javax.naming.NamingException ne) 
 //        {
-//            VNXLog.error2("error obtaining the documentrepository", ne);
-//            VNXLog.error2(ne);
+//            LOGGER.error("error obtaining the documentrepository", ne);
 //            return null;
 //        }
 //
@@ -495,7 +489,7 @@ public final class MgcpCallManager extends SipServlet
 //        try {
 //            uri = repository.getUri("/root");
 //        } catch (URISyntaxException e) {
-//            VNXLog.error2("error creating the URI", e);
+//            LOGGER.error("error creating the URI", e);
 //            return null;
 //        }
 //        repository.addDocument(uri, document.toString());
@@ -516,7 +510,7 @@ public final class MgcpCallManager extends SipServlet
 //            jvxml = (JVoiceXml) contextJXML.lookup("JVoiceXml");
 //        } catch (javax.naming.NamingException ne) 
 //        {
-//            VNXLog.error2("error obtaining JVoiceXml", ne);
+//            LOGGER.error("error obtaining JVoiceXml", ne);
 //
 //            return;
 //        }

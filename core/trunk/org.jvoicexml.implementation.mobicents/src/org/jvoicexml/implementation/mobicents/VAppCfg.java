@@ -4,9 +4,6 @@
  */
 package org.jvoicexml.implementation.mobicents;
 
-import com.vnxtele.oracle.VOracleCfg;
-import com.vnxtele.telnetd.VTelnetD;
-import com.vnxtele.telnetd.io.BasicTerminalIO;
 import java.io.*;
 import java.util.*;
 
@@ -30,15 +27,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.vnxtele.util.*;
 import javax.servlet.sip.SipServlet;
+import org.apache.log4j.Logger;
+import org.util.ExLog;
 
 /**
  *
  * @author Shadowman
  */
 public class VAppCfg implements ServletContextListener {
-
+        private static final Logger LOGGER = Logger.getLogger(VAppCfg.class);
     private static volatile VAppCfg instance = null;
     private Properties prop = null;
     //configurations of vappctl
@@ -77,7 +75,6 @@ public class VAppCfg implements ServletContextListener {
     public static String httpServerBindAddress = "0.0.0.0";
     public static String httpServerBindPort = "8080";
     public static String recordingDir = "/tmp";
-    public static VNXLog vgenLog = null;
     /**
      * sip stack address
      */
@@ -125,8 +122,6 @@ public class VAppCfg implements ServletContextListener {
     /************supporting telnet **************/
     public static String telnUser = "vivrmng";
     public static String telnPass = "ivradmsystm";
-    public static BasicTerminalIO m_IO;
-    public static VTelnetD telnet = null;
     public static String telnetCfgFile = "";
 
     /*********************************************/
@@ -156,23 +151,20 @@ public class VAppCfg implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent event) {
         VAppCfg appCfg = getInstance();
-        vgenLog = new VNXLog(appCfg.nInsts, appCfg.instNames, appCfg.logdir,
-                appCfg.logCfgFile);
-        VNXLog.info2("init context for VAppCfg:" + appCfg);
+      
+        LOGGER.info("init context for VAppCfg:" + appCfg);
         appCfg.init();
         event.getServletContext().setAttribute("VAppCfg", appCfg);
     }
 
     public void initcontext() {
         VAppCfg appCfg = getInstance();
-        vgenLog = new VNXLog(appCfg.nInsts, appCfg.instNames, appCfg.logdir,
-                appCfg.logCfgFile);
-        VNXLog.info2("init context for VAppCfg:" + appCfg);
+        LOGGER.info("init context for VAppCfg:" + appCfg);
         appCfg.init();
     }
 
     public void contextDestroyed(ServletContextEvent event) {
-        VNXLog.info2("destroy context for VAppCfg:" + Integer.toHexString(hashCode()));
+        LOGGER.info("destroy context for VAppCfg:" + Integer.toHexString(hashCode()));
     }
 
     public VAppCfg() {
@@ -181,7 +173,7 @@ public class VAppCfg implements ServletContextListener {
             VAPP_HOME = "";
         }
 
-        VNXLog.info2("constructor a VAppCfg hashCode:" + Integer.toHexString(hashCode()));
+        LOGGER.info("constructor a VAppCfg hashCode:" + Integer.toHexString(hashCode()));
         genCfgFile = VAPP_HOME + "conf" + File.separatorChar + "VNXIVR.cfg";
         logdir = VAPP_HOME + "logs";
         logCfgFile = VAPP_HOME + "conf" + File.separatorChar + "VNXIVRLog.cfg";
@@ -192,148 +184,148 @@ public class VAppCfg implements ServletContextListener {
     public void init() {
         try {
             if (initConfig == true) {
-                VNXLog.info2("system is already init configurations");
+                LOGGER.info("system is already init configurations");
                 return;
             } else {
                 initConfig = true;
             }
             //telnet session
-//            VNXLog.info("crearte VTelnetD server...:from telnetCfgFile:" + telnetCfgFile);
+//            LOGGER.info("crearte VTelnetD server...:from telnetCfgFile:" + telnetCfgFile);
 //            telnet = new VTelnetD();
 //            telnet.init(telnetCfgFile);
 //            telnet.start();
             //loading configuration from file
             prop = new Properties();
-            VNXLog.info2("reading configuration informations from file:" + genCfgFile);
+            LOGGER.info("reading configuration informations from file:" + genCfgFile);
 
             FileInputStream gencfgFile = new FileInputStream(genCfgFile);
             prop.load(gencfgFile);
-            VNXLog.info2("*******print out properties from the config file: \n" + prop);
+            LOGGER.info("*******print out properties from the config file: \n" + prop);
             //
             
             
                     
             sipStackAddr = prop.getProperty("VNXIVR.sipStackAddr");
-            VNXLog.info2("sipStackAddr:" + sipStackAddr);
+            LOGGER.info("sipStackAddr:" + sipStackAddr);
             
             sipStackPort = prop.getProperty("VNXIVR.sipStackPort");
-            VNXLog.info2("sipStackPort:" + sipStackPort);
+            LOGGER.info("sipStackPort:" + sipStackPort);
             
             LOCAL_ADDRESS = prop.getProperty("VNXIVR.local_callAgent_address");
-            VNXLog.info2("LOCAL_ADDRESS:" + LOCAL_ADDRESS);
+            LOGGER.info("LOCAL_ADDRESS:" + LOCAL_ADDRESS);
 
             CA_PORT = prop.getProperty("VNXIVR.local_callAgent_port");
-            VNXLog.info2("CA_PORT:" + CA_PORT);
+            LOGGER.info("CA_PORT:" + CA_PORT);
             
             
 
             LOCAL_MGCP_PORT = prop.getProperty("VNXIVR.local_mgcp_port");
-            VNXLog.info2("LOCAL_MGCP_PORT:" + LOCAL_MGCP_PORT);
+            LOGGER.info("LOCAL_MGCP_PORT:" + LOCAL_MGCP_PORT);
 
             INBOUND_MGW_ADDRESS = prop.getProperty("VNXIVR.INBOUND_MGW_ADDRESS");
-            VNXLog.info2("INBOUND_MGW_ADDRESS:" + INBOUND_MGW_ADDRESS);
+            LOGGER.info("INBOUND_MGW_ADDRESS:" + INBOUND_MGW_ADDRESS);
             OUTBOUND_MGW_ADDRESS = prop.getProperty("VNXIVR.OUTBOUND_MGW_ADDRESS");
-            VNXLog.info2("OUTBOUND_MGW_ADDRESS:" + OUTBOUND_MGW_ADDRESS);
+            LOGGER.info("OUTBOUND_MGW_ADDRESS:" + OUTBOUND_MGW_ADDRESS);
 
             MGW_PORT = prop.getProperty("VNXIVR.MGW_PORT");
-            VNXLog.info2("MGW_PORT:" + MGW_PORT);
+            LOGGER.info("MGW_PORT:" + MGW_PORT);
 
             enableBackProxy = Integer.parseInt(prop.getProperty("VNXIVR.enableBackProxy"));
-            VNXLog.info2("enableBackProxy:" + enableBackProxy);
+            LOGGER.info("enableBackProxy:" + enableBackProxy);
 
             backSIPProxyIP = prop.getProperty("VNXIVR.backSIPProxyIP");
-            VNXLog.info2("backSIPProxyIP:" + backSIPProxyIP);
+            LOGGER.info("backSIPProxyIP:" + backSIPProxyIP);
 
             backSIPProxyPort = Integer.parseInt(prop.getProperty("VNXIVR.backSIPProxyPort"));
-            VNXLog.info2("backSIPProxyPort:" + backSIPProxyPort);
+            LOGGER.info("backSIPProxyPort:" + backSIPProxyPort);
 
 
             digitPattern = prop.getProperty("VNXIVR.digitPattern");
-            VNXLog.info2("digitPattern:" + digitPattern);
+            LOGGER.info("digitPattern:" + digitPattern);
 
             packetRelayEndpointNamePattern = prop.getProperty("VNXIVR.packetRelayEndpointNamePattern");
-            VNXLog.info2("packetRelayEndpointNamePattern:" + packetRelayEndpointNamePattern);
+            LOGGER.info("packetRelayEndpointNamePattern:" + packetRelayEndpointNamePattern);
 
             conferEndpointNamePattern = prop.getProperty("VNXIVR.conferEndpointNamePattern");
-            VNXLog.info2("conferEndpointNamePattern:" + conferEndpointNamePattern);
+            LOGGER.info("conferEndpointNamePattern:" + conferEndpointNamePattern);
 
             ivrEndpointNamePattern = prop.getProperty("VNXIVR.ivrEndpointNamePattern");
-            VNXLog.info2("ivrEndpointNamePattern:" + ivrEndpointNamePattern);
+            LOGGER.info("ivrEndpointNamePattern:" + ivrEndpointNamePattern);
             
             INBOUND_CONTACT_IP = prop.getProperty("VNXIVR.INBOUND_CONTACT_IP");
-            VNXLog.info2("INBOUND_CONTACT_IP:" + INBOUND_CONTACT_IP);
+            LOGGER.info("INBOUND_CONTACT_IP:" + INBOUND_CONTACT_IP);
             
             
 //            loadRuleSets();
             
             CATALINA_HOME= prop.getProperty("tomcat.home");
-            VNXLog.info2("CATALINA_HOME:" + CATALINA_HOME);
+            LOGGER.info("CATALINA_HOME:" + CATALINA_HOME);
             projectHome= prop.getProperty("project.home");
-            VNXLog.info2("projectHome:" + projectHome);
+            LOGGER.info("projectHome:" + projectHome);
             
 
             //
             if (prop.getProperty("VNXIVR.enableEditContactHeader").equals("true")) {
                 enableEditContactHeader = true;
             }
-            VNXLog.info2("enableEditContactHeader:" + enableEditContactHeader);
+            LOGGER.info("enableEditContactHeader:" + enableEditContactHeader);
 
             if (prop.getProperty("VNXIVR.enableModSDP").equals("true")) {
                 enableModSDP = true;
             }
-            VNXLog.info2("enableModSDP:" + enableModSDP);
+            LOGGER.info("enableModSDP:" + enableModSDP);
 
 
             httpServerBindAddress = prop.getProperty("VNXIVR.httpServerBindAddress");
-            VNXLog.info2("httpServerBindAddress:" + httpServerBindAddress);
+            LOGGER.info("httpServerBindAddress:" + httpServerBindAddress);
 
             httpServerBindPort = prop.getProperty("VNXIVR.httpServerBindPort");
-            VNXLog.info2("httpServerBindPort:" + httpServerBindPort);
+            LOGGER.info("httpServerBindPort:" + httpServerBindPort);
 
             recordingDir = prop.getProperty("VNXIVR.recordingDir");
-            VNXLog.info2("recordingDir:" + recordingDir);
+            LOGGER.info("recordingDir:" + recordingDir);
             
             digitPattern = prop.getProperty("VNXIVR.digitPattern");
-            VNXLog.info2("digitPattern:" + digitPattern);
+            LOGGER.info("digitPattern:" + digitPattern);
             
             digitModPattern = prop.getProperty("VNXIVR.digitModPattern");
-            VNXLog.info2("digitModPattern:" + digitModPattern);
+            LOGGER.info("digitModPattern:" + digitModPattern);
             
             
             
 
 
             defaulSipServlet = prop.getProperty("VNXIVR.defaulSipServlet");
-            VNXLog.info2("defaulSipServlet:" + defaulSipServlet);
+            LOGGER.info("defaulSipServlet:" + defaulSipServlet);
             
             
             conferMngRate = Integer.parseInt(prop.getProperty("VNXIVR.conferMngRate"));
-            VNXLog.info2("conferMngRate:" + conferMngRate);
+            LOGGER.info("conferMngRate:" + conferMngRate);
             
             conferExpiredTime = Integer.parseInt(prop.getProperty("VNXIVR.conferExpiredTime"));
-            VNXLog.info2("conferExpiredTime:" + conferExpiredTime);
+            LOGGER.info("conferExpiredTime:" + conferExpiredTime);
             initIntfs();
 
 
         } catch (Exception ex) {
-            VNXLog.error2("error when loading configuration from file:" + genCfgFile + ex.getMessage());
-            VNXLog.error2(ex);
+            LOGGER.error("error when loading configuration from file:" + genCfgFile + ex.getMessage());
+            ExLog.exception(LOGGER, ex);
         }
     }
 
     public static void initIntfs() {
         try {
-            VNXLog.info2("initializing interface ...");
+            LOGGER.info("initializing interface ...");
            
         } catch (Exception ex) {
 
-            VNXLog.error2(ex);
+            ExLog.exception(LOGGER, ex);
         }
     }
 
     public static void loadRuleSets() throws Exception {
         try {
-            VNXLog.info2("loading routing for SipServlet ...");
+            LOGGER.info("loading routing for SipServlet ...");
             Document xmlDoc = loadXMLFromFile("conf/VIVRRouting.xml");
             // Document xmlDoc=loadXMLFromString();
             Element template = xmlDoc.getDocumentElement();
@@ -347,18 +339,18 @@ public class VAppCfg implements ServletContextListener {
                     Element fstNmElmnt = (Element) fstNmElmntLst.item(0);
                     NodeList fstNm = fstNmElmnt.getChildNodes();
                     String servlet_name = ((Node) fstNm.item(0)).getNodeValue();
-                    VNXLog.info2("servlet-name : " + servlet_name);
+                    LOGGER.info("servlet-name : " + servlet_name);
                     NodeList lstNmElmntLst = fstElmnt.getElementsByTagName("pattern");
                     Element lstNmElmnt = (Element) lstNmElmntLst.item(0);
                     NodeList lstNm = lstNmElmnt.getChildNodes();
-                    VNXLog.info2("patternxml:"
+                    LOGGER.info("patternxml:"
                             + xmlToString((Node) lstNm.item(1)));
                     //
                     MatchingRule matrule = MatchingRuleParser.buildRule((Element) lstNm.item(1));
                     ruleServletMap.put(servlet_name, matrule);
                 }
             }
-            VNXLog.info2("ruleServletMap:" + ruleServletMap);
+            LOGGER.info("ruleServletMap:" + ruleServletMap);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -384,7 +376,7 @@ public class VAppCfg implements ServletContextListener {
 
     public static Document loadXMLFromString() throws Exception {
         try {
-            VNXLog.debug2("loading rule patterns from String");
+            LOGGER.debug("loading rule patterns from String");
             String sipXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                     + "<servlet-selection>"
                     + "<servlet-mapping>"
@@ -449,9 +441,9 @@ public class VAppCfg implements ServletContextListener {
     public static Document loadXMLFromFile(String filename) throws Exception {
         try {
 
-            VNXLog.debug2("loading rule patterns from file:" + filename);
+            LOGGER.debug("loading rule patterns from file:" + filename);
             if (filename == null || filename.isEmpty() == true) {
-                VNXLog.error2("xml file is null ");
+                LOGGER.error("xml file is null ");
             }
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
@@ -459,7 +451,7 @@ public class VAppCfg implements ServletContextListener {
             DocumentBuilder builder = factory.newDocumentBuilder();
             return builder.parse(new File(filename));
         } catch (Exception ex) {
-            VNXLog.error2(ex);
+            ExLog.exception(LOGGER, ex);
         }
         return null;
     }
@@ -469,12 +461,12 @@ public class VAppCfg implements ServletContextListener {
             if (str == null || str.isEmpty() == true) {
                 return;
             }
-            if (m_IO != null) {
-                m_IO.write(str + "\r\n");
-            }
-            VNXLog.info2(str);
+//            if (m_IO != null) {
+//                m_IO.write(str + "\r\n");
+//            }
+            LOGGER.info(str);
         } catch (Exception ex) {
-            VNXLog.error(ex);
+            ExLog.exception(LOGGER, ex);
         }
     }
 

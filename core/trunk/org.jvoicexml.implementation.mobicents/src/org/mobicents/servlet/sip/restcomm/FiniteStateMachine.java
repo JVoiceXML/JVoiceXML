@@ -16,7 +16,7 @@
  */
 package org.mobicents.servlet.sip.restcomm;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +26,7 @@ import java.util.Set;
  */
 public class FiniteStateMachine {
 
+        private static final Logger LOGGER = Logger.getLogger(FiniteStateMachine.class);
     private volatile State state;
     private final Set<State> states;
 
@@ -83,7 +84,7 @@ public class FiniteStateMachine {
             if (transitions.contains(state)) {
                 // Set new state.
                 this.state = state;
-                VNXLog.debug2("set state:"+state.getName() + " for "+this);
+                LOGGER.debug("set state:"+state.getName() + " for "+this);
             } else {
                 final StringBuilder buffer = new StringBuilder();
                 buffer.append("Can not transition from a(n) ").append(this.state.getName()).append(" state to a ").append(state.getName()).append(" state.");

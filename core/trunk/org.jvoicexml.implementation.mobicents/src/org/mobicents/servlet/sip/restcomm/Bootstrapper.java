@@ -16,7 +16,7 @@
  */
 package org.mobicents.servlet.sip.restcomm;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
@@ -33,7 +33,9 @@ import org.mobicents.servlet.sip.restcomm.sms.SmsAggregator;
 /**
  * @author quintana.thomas@gmail.com (Thomas Quintana)
  */
-public final class Bootstrapper {
+public final class Bootstrapper 
+{
+    private static final Logger LOGGER = Logger.getLogger(Bootstrapper.class);
 
     private Bootstrapper() {
         super();
@@ -57,7 +59,7 @@ public final class Bootstrapper {
     {
         final ServletContext context = config.getServletContext();
         final String path = context.getRealPath("WEB-INF/conf/vnxivr.xml");
-        VNXLog.info2("loading configuration file located at " + path);
+        LOGGER.info("loading configuration file located at " + path);
         // Initialize the configuration interpolator.
         final ConfigurationStringLookup strings = new ConfigurationStringLookup();
         strings.addProperty("home", getRestCommPath(config));
@@ -68,7 +70,7 @@ public final class Bootstrapper {
         try {
             configuration = new XMLConfiguration(path);
         } catch (final ConfigurationException exception) {
-            VNXLog.error2("The VNXIVR environment could not be bootstrapped.", exception);
+            LOGGER.error("The VNXIVR environment could not be bootstrapped.", exception);
             throw new BootstrapException(exception);
         }
         // Register the services with the service locator.
@@ -86,7 +88,7 @@ public final class Bootstrapper {
             services.set(ConferenceCenter.class, getConferenceCenter(serverManager));
             services.set(SmsAggregator.class, getSmsAggregator(configuration));
         } catch (final ObjectInstantiationException exception) {
-            VNXLog.error2("The VNXIVR environment could not be bootstrapped.", exception);
+            LOGGER.error("The VNXIVR environment could not be bootstrapped.", exception);
             throw new BootstrapException(exception);
         }
     }

@@ -26,7 +26,7 @@
 
 package org.jvoicexml.implementation.mobicents.speakstrategy;
 
-import com.vnxtele.util.VNXLog;
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.xml.SsmlNode;
@@ -41,6 +41,7 @@ import org.jvoicexml.implementation.mobicents.MobicentsSynthesizedOutput;
  */
 public final class SpeakSpeakStrategy
         extends SpeakStrategyBase {
+        private static final Logger LOGGER = Logger.getLogger(SpeakSpeakStrategy.class);
 
     /**
      * Creates a new object.
@@ -55,7 +56,7 @@ public final class SpeakSpeakStrategy
             final SsmlNode node)
             throws NoresourceError, BadFetchError 
     {
-        VNXLog.debug2("output:"+output);
+        LOGGER.debug("output:"+output);
         speakChildNodes(output, node);
         waitQueueEmpty(output);
     }
