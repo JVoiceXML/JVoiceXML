@@ -1,4 +1,4 @@
-option java_package = "org.jvoicexml.mmi.events.protobuf";
+option java_package = "@mmi.protoc.package@";
 
 message LifeCycleEvent {
   required string RequestID = 1;

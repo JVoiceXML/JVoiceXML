@@ -111,15 +111,25 @@ Currently it is set to '${mmi.protoc}'
           </fileset>
         </classpath-->
       </java>
+      <copy todir="${gen}">
+          <fileset dir="etc/proto/">
+              <include name="*.proto"/>
+          </fileset>
+      </copy>
+      <replace token="@mmi.protoc.package@" value="org.jvoicexml.mmi.events.protobuf">
+          <fileset dir="${gen}">
+              <include name="*.proto"/>
+          </fileset>
+      </replace>
       <exec executable="${mmi.protoc}" failonerror="true">
         <arg value="--java_out=${gen}" />
-        <arg value="--proto_path=${basedir}/etc/proto" />
-        <arg value="${basedir}/etc/proto/LifeCycleEvents.proto" />
+        <arg value="--proto_path=${gen}" />
+        <arg value="${gen}/LifeCycleEvents.proto" />
       </exec>
         <exec executable="${mmi.protoc}" failonerror="true">
           <arg value="--java_out=${gen}" />
-          <arg value="--proto_path=${basedir}/etc/proto" />
-          <arg value="${basedir}/etc/proto/StringDataExtension.proto" />
+          <arg value="--proto_path=${gen}" />
+          <arg value="${gen}/StringDataExtension.proto" />
         </exec>
       <touch file="${gen}/__gen__"/>
     </target>

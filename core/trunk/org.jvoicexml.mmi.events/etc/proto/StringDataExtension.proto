@@ -1,6 +1,6 @@
 import "LifeCycleEvents.proto";
 
-option java_package = "org.jvoicexml.mmi.events.protobuf";
+option java_package = "@mmi.protoc.package@";
 
 message NewContextRequestData {
   extend NewContextRequest {
