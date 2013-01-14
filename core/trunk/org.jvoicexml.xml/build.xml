@@ -1,4 +1,5 @@
-<project name="org.jvoicexml.xml" default="jar" basedir=".">
+<project name="org.jvoicexml.xml" default="jar" basedir="."
+    xmlns:artifact="antlib:org.apache.maven.artifact.ant">
     <description>
 This file builds the XML library of JVoiceXML.
 To override the current settings follow the instructions given in
@@ -103,7 +104,48 @@ You are using ${ant.java.version}.
             description="Rebuild the jars from scratch"
             depends="clean,jar" />
 
+    <target name="-version" depends="-setup"
+      description="Retrieve the SVN version number">
+         <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
+             <classpath>
+                 <fileset dir="${3rdparty.dir}/svnant/lib">
+                     <include name="*.jar" />
+                 </fileset>
+             </classpath>
+         </taskdef>
+         <property name="svn.base"
+             value="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml"/>
+         <property name="trunk.core.dir"
+             value="${svn.base}/core/trunk"/>
+         <property name="tag.core.dir"
+             value="${svn.base}/core/tags/${jvxml.version}"/>
+         <svnSetting client="javahl" id="svn.settings" failonerror="false"
+            username="${svn.username}" password="${svn.password}"/>
+         <svn refid="svn.settings">
+            <wcversion path="."/>
+        </svn>
+    </target>
 
+    <target name="dist-maven-snapshot" depends="-version,jar">
+      <copy todir="${dist}" file="etc/${component}.pom" overwrite="true" />
+      <replace file="${dist}/${component}.pom" token="@version@" value="${jvxml.version}.${revision.max}-SNAPSHOT" />
+      <path id="maven.path">
+        <fileset dir="${3rdparty.dir}/maven/lib">
+          <include name="maven-ant-tasks-2.1.3.jar"/>
+        </fileset>
+      </path>
+      <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+        uri="antlib:org.apache.maven.artifact.ant"
+        classpathref="maven.path"
+      />
+      <artifact:mvn>
+          <arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
+          <arg value="-Durl=https://oss.sonatype.org/content/repositories/snapshots" />
+          <arg value="-DrepositoryId=sonatype-nexus-snapshots" />
+          <arg value="-DpomFile=${dist}/${component}.pom" />
+          <arg value="-Dfile=${dist}/${component}.jar" />
+      </artifact:mvn>
+    </target>
 
 	<target name="apidoc" depends="-setup">
         <echo message="creating javadoc with access: ${javadoc.access}" />
