@@ -114,8 +114,13 @@ Currently it is set to '${mmi.protoc}'
       <exec executable="${mmi.protoc}" failonerror="true">
         <arg value="--java_out=${gen}" />
         <arg value="--proto_path=${basedir}/etc/proto" />
-        <arg value="${basedir}/etc/proto/mmi.proto" />
+        <arg value="${basedir}/etc/proto/LifeCycleEvents.proto" />
       </exec>
+        <exec executable="${mmi.protoc}" failonerror="true">
+          <arg value="--java_out=${gen}" />
+          <arg value="--proto_path=${basedir}/etc/proto" />
+          <arg value="${basedir}/etc/proto/StringDataExtension.proto" />
+        </exec>
       <touch file="${gen}/__gen__"/>
     </target>
   
