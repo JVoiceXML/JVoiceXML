@@ -104,28 +104,6 @@ You are using ${ant.java.version}.
             description="Rebuild the jars from scratch"
             depends="clean,jar" />
 
-    <target name="-version" depends="-setup"
-      description="Retrieve the SVN version number">
-         <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
-             <classpath>
-                 <fileset dir="${3rdparty.dir}/svnant/lib">
-                     <include name="*.jar" />
-                 </fileset>
-             </classpath>
-         </taskdef>
-         <property name="svn.base"
-             value="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml"/>
-         <property name="trunk.core.dir"
-             value="${svn.base}/core/trunk"/>
-         <property name="tag.core.dir"
-             value="${svn.base}/core/tags/${jvxml.version}"/>
-         <svnSetting client="javahl" id="svn.settings" failonerror="false"
-            username="${svn.username}" password="${svn.password}"/>
-         <svn refid="svn.settings">
-            <wcversion path="."/>
-        </svn>
-    </target>
-
     <target name="dist-maven-snapshot" depends="-version,jar">
       <copy todir="${dist}" file="etc/${component}.pom" overwrite="true" />
       <replace file="${dist}/${component}.pom" token="@version@" value="${jvxml.version}.${revision.max}-SNAPSHOT" />

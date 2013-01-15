@@ -174,4 +174,25 @@ You need at least java version 1.6 to compile this project.
 You are using ${ant.java.version}.
         </fail>
     </target>
+
+    <target name="-version" description="Retrieve the SVN version number">
+         <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
+             <classpath>
+                 <fileset dir="3rdparty/svnant/lib">
+                     <include name="*.jar" />
+                 </fileset>
+             </classpath>
+         </taskdef>
+         <property name="svn.base"
+             value="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml"/>
+         <property name="trunk.core.dir"
+             value="${svn.base}/core/trunk"/>
+         <property name="tag.core.dir"
+             value="${svn.base}/core/tags/${jvxml.version}"/>
+         <svnSetting client="javahl" id="svn.settings" failonerror="false"
+            username="${svn.username}" password="${svn.password}"/>
+         <svn refid="svn.settings">
+            <wcversion path="."/>
+        </svn>
+    </target>
 </project>
