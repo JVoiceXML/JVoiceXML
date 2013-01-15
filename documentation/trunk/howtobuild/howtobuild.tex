@@ -17,7 +17,7 @@ linkcolor=black, colorlinks=black, colorlinks=true,
 \include{version}
 
 \title{How to build JVoiceXML \jvxmlversion}
-\version{1.9.7}
+\version{1.9.8}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -121,7 +121,7 @@ sub projects:
 \item[documentation] \LaTeX sources for the documentation
 \item[eclipse] Eclipse server plug-in
 \item[systemtest] Source for the VoiceXML compatibility test
-\item[voicexmlunit] Source for an approach to ad unit testing capabilities to VoiceXML
+\item[voicexmlunit] Source for an approach to add unit testing capabilities to VoiceXML
 \end{description}
 
 Each subproject has its own trunk, tags, and branches folder.
@@ -602,6 +602,10 @@ Please do not stop the voice browser by \texttt{CTRL-C} or similar. It may occur
 that some resources are not closed properly and may cause conflicts with the next
 start of JVoiceXML.
 
+This target will try to determine the current SVN version number using JavaHL. On
+windows systems this may cause some trouble. In case you encounter any problems,
+please read the instructions at \url{http://subclipes.tigris.org/wiki/JavaHL}.
+
 The created \texttt{run.xml} also contains a target to enable remote
 debugging. It can be called by
 \begin{lstlisting}
@@ -1014,9 +1018,14 @@ No special libraries.
 This project is a library to author MMI compatible events that can be used in
 the MMI architectural pattern from the W3C.
 
+Currently the library is able to generate events in XML format and for
+protobuf\footnote{http://code.google.com/p/protobuf}.
+
 \subsubsection{Third party libraries}
 
-No special libraries.
+\paragraph{protobuf2.4.1}
+
+Needed for MMI generation in Google's protobuf format.
 
 \section{Demo Programs}
 
@@ -1409,7 +1418,48 @@ to the new release and commit the changes.
 Prepare the next version by incrementing th version number in the ANT
 properties file in the folder \texttt{config-props} and committing that file.
 
+\subsection{Creation of Snapshots for Maven}
 
+Some subprojects are ready to be upload snapshots for Maven to
+Sonatype\footnote{\url{http://www.sonatype.com}}. Sonatype offers
+a free repository hosting service using Nexus for open soource projects.
+
+Therefore deployers are requested to sign up for their servie. Detailed
+instructions are given at \url{https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide}.
+
+Create the file \texttt{settings.xml} in the \texttt{.m2} folder in your
+home directory with the following contents:
+
+\begin{lstlisting}[language=XML]
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+         http://maven.apache.org/xsd/settings-1.0.0.xsd">>
+  <servers>
+    <server>
+      <id>sonatype-nexus-snapshots</id>
+      <username>your user name</username>
+      <password>your password</password>
+    </server>
+    <server>
+      <id>sonatype-nexus-staging</id>
+      <username>your user name</username>
+      <password>your password</password>
+    </server>
+  </servers>
+</settings>
+\end{lstlisting}
+
+Insert your user name and your password at the marked entries.
+Aftwerwards call 
+\begin{lstlisting}
+ant -f distribution.xml dist-maven-snapshot
+\end{lstlisting}
+in the core project \lstinline{org.jvoicexml}.
+
+The snapshots will use the SVN version number to differntiate between different
+snapshots of the same jar. Consequently, you will have to have at least
+a commit between two snapshots.
 \bibliography{howtobuild}
 \bibliographystyle{plain}
 
