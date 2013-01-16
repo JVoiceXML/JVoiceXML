@@ -41,7 +41,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
  * @since 0.7.6
  */
 public class TestLifeCycleEvents {
-    // The registry for protobuf extensions. */
+    /** The registry for protobuf extensions. */
     private ExtensionRegistry registry;
 
     /**
