@@ -57,20 +57,17 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "")
 @XmlRootElement(name = "StatusRequest")
 public class StatusRequest extends LifeCycleEvent implements Serializable {
 
-    @XmlAttribute(name = "RequestAutomaticUpdate", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     protected boolean requestAutomaticUpdate;
-    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected String context;
 
     /**
      * Gets the value of the requestAutomaticUpdate property.
      * 
      */
+    @XmlAttribute(name = "RequestAutomaticUpdate", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     public boolean isRequestAutomaticUpdate() {
         return requestAutomaticUpdate;
     }
@@ -89,6 +86,7 @@ public class StatusRequest extends LifeCycleEvent implements Serializable {
      * @return possible object is {@link String }
      * 
      */
+    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch")
     public String getContext() {
         return context;
     }

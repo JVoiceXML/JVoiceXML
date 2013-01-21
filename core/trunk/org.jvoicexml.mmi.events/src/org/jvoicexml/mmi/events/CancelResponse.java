@@ -60,16 +60,40 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class CancelResponse extends LifeCycleResponse implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = 5456069514727740643L;
-    
+
     /** Nested data elements. */ 
     protected List<Object> statusInfo;
+
+    /** Nested data elements. */ 
+    protected List<Object> data;
+
+    /**
+     * Retrieves the data property.
+     * @return the data property
+     */
+    @XmlElementWrapper(name = "Data", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    public List<Object> getData() {
+        if (data == null) {
+            data = new ArrayList<Object>();
+        }
+        return data;
+    }
+
+    /**
+     * Sets the value of the data property.
+     * 
+     * @param value new value for data attribute 
+     */
+    public void setData(final List<Object> value) {
+        this.data = value;
+    }
 
     /**
      * Retrieves the statusInfo property.
      * @return the statusInfo property
      */
     @XmlElementWrapper(name = "StatusInfo", namespace = "http://www.w3.org/2008/04/mmi-arch")
-    public List<Object> getData() {
+    public List<Object> getStatusInfo() {
         if (statusInfo == null) {
             statusInfo = new ArrayList<Object>();
         }

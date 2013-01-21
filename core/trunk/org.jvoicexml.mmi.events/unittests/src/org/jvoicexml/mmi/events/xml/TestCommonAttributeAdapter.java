@@ -31,6 +31,11 @@ import java.util.UUID;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents;
+import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents.LifeCycleEvent;
+import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents.LifeCycleEvent.LifeCycleEventType;
+
+import com.google.protobuf.ExtensionRegistry;
 
 /**
  * Test cases for the {@link CommonAttributeAdapter}.
@@ -38,12 +43,18 @@ import org.junit.Test;
  * @since 0.7.6
  */
 public final class TestCommonAttributeAdapter {
-
     /**
      * Test case for {@link CommonAttributeAdapter#getSource()}.
      */
     @Test
     public void testGetSource() {
+        ExtensionRegistry registry = ExtensionRegistry.newInstance();
+        LifeCycleEvents.registerAllExtensions(registry);
+
+        LifeCycleEvents.NewContextRequest a = 
+                LifeCycleEvents.NewContextRequest.newBuilder().build();
+        LifeCycleEvents.LifeCycleEvent req = 
+                LifeCycleEvents.LifeCycleEvent.newBuilder().setType(LifeCycleEventType.NEW_CONTEXT_REQUEST).setRequestID("req1").setSource("bla").setTarget("blub").build();
         final DoneNotification e1 = new DoneNotification();
         e1.setSource(UUID.randomUUID().toString());
         final CommonAttributeAdapter a1 = new CommonAttributeAdapter(e1);

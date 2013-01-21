@@ -27,12 +27,17 @@
 package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import org.jvoicexml.mmi.events.xml.AnyComplexType;
 
 /**
  * <p>
@@ -64,17 +69,35 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "contentURL", "dataURL", "content" })
 @XmlRootElement(name = "StartRequest")
 public class StartRequest extends LifeCycleRequest implements Serializable {
+    /** Nested data elements. */ 
+    protected List<Object> data;
 
-    @XmlElement(name = "ContentURL")
     protected ContentURLType contentURL;
-    @XmlElement(name = "data")
-    protected AnyComplexType dataURL;
-    @XmlElement(name = "Content")
-    protected AnyComplexType content;
+    protected List<Object> content;
+
+    /**
+     * Retrieves the data property.
+     * @return the data property
+     */
+    @XmlElementWrapper(name = "Data", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    public List<Object> getData() {
+        if (data == null) {
+            data = new ArrayList<Object>();
+        }
+        return data;
+    }
+
+    /**
+     * Sets the value of the data property.
+     * 
+     * @param value new value for data attribute 
+     */
+    public void setData(final List<Object> value) {
+        this.data = value;
+    }
+
 
     /**
      * Gets the value of the contentURL property.
@@ -82,6 +105,7 @@ public class StartRequest extends LifeCycleRequest implements Serializable {
      * @return possible object is {@link ContentURLType }
      * 
      */
+    @XmlElement(name = "ContentURL")
     public ContentURLType getContentURL() {
         return contentURL;
     }
@@ -98,33 +122,13 @@ public class StartRequest extends LifeCycleRequest implements Serializable {
     }
 
     /**
-     * Gets the value of the dataURL property.
-     * 
-     * @return possible object is {@link AnyComplexType }
-     * 
-     */
-    public AnyComplexType getDataURL() {
-        return dataURL;
-    }
-
-    /**
-     * Sets the value of the dataURL property.
-     * 
-     * @param value
-     *            allowed object is {@link AnyComplexType }
-     * 
-     */
-    public void setDataURL(AnyComplexType value) {
-        this.dataURL = value;
-    }
-
-    /**
      * Gets the value of the content property.
      * 
      * @return possible object is {@link AnyComplexType }
      * 
      */
-    public AnyComplexType getContent() {
+    @XmlElement(name = "Content")
+    public List<Object> getContent() {
         return content;
     }
 
@@ -135,8 +139,7 @@ public class StartRequest extends LifeCycleRequest implements Serializable {
      *            allowed object is {@link AnyComplexType }
      * 
      */
-    public void setContent(AnyComplexType value) {
+    public void setContent(List<Object> value) {
         this.content = value;
     }
-
 }

@@ -26,8 +26,6 @@
 
 package org.jvoicexml.mmi.events;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
@@ -64,14 +62,6 @@ public class ObjectFactory {
      */
     public NewContextRequest createNewContextRequest() {
         return new NewContextRequest();
-    }
-
-    /**
-     * Create an instance of {@link AnyComplexType }
-     * 
-     */
-    public AnyComplexType createAnyComplexType() {
-        return new AnyComplexType();
     }
 
     /**
@@ -240,15 +230,6 @@ public class ObjectFactory {
      */
     public EmmaType createEmmaType() {
         return new EmmaType();
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link AnyComplexType }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.w3.org/2008/04/mmi-arch", name = "statusInfo")
-    public JAXBElement<AnyComplexType> createStatusInfo(AnyComplexType value) {
-        return new JAXBElement<AnyComplexType>(_StatusInfo_QNAME, AnyComplexType.class, null, value);
     }
 
 }

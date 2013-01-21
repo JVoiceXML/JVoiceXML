@@ -27,9 +27,12 @@
 package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -56,78 +59,29 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "statusInfo" })
 @XmlRootElement(name = "ResumeResponse")
-public class ResumeResponse extends LifeCycleEvent implements Serializable {
-
-    protected AnyComplexType statusInfo;
-    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    protected String context;
-    @XmlAttribute(name = "Status", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    protected StatusType status;
+public class ResumeResponse extends LifeCycleResponse implements Serializable {
+    /** Nested data elements. */ 
+    protected List<Object> data;
 
     /**
-     * Gets the value of the statusInfo property.
-     * 
-     * @return possible object is {@link AnyComplexType }
-     * 
+     * Retrieves the data property.
+     * @return the data property
      */
-    public AnyComplexType getStatusInfo() {
-        return statusInfo;
+    @XmlElementWrapper(name = "Data", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    public List<Object> getData() {
+        if (data == null) {
+            data = new ArrayList<Object>();
+        }
+        return data;
     }
 
     /**
-     * Sets the value of the statusInfo property.
+     * Sets the value of the data property.
      * 
-     * @param value
-     *            allowed object is {@link AnyComplexType }
-     * 
+     * @param value new value for data attribute 
      */
-    public void setStatusInfo(AnyComplexType value) {
-        this.statusInfo = value;
+    public void setData(final List<Object> value) {
+        this.data = value;
     }
-
-    /**
-     * Gets the value of the context property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getContext() {
-        return context;
-    }
-
-    /**
-     * Sets the value of the context property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setContext(String value) {
-        this.context = value;
-    }
-
-    /**
-     * Gets the value of the status property.
-     * 
-     * @return possible object is {@link StatusType }
-     * 
-     */
-    public StatusType getStatus() {
-        return status;
-    }
-
-    /**
-     * Sets the value of the status property.
-     * 
-     * @param value
-     *            allowed object is {@link StatusType }
-     * 
-     */
-    public void setStatus(StatusType value) {
-        this.status = value;
-    }
-
 }

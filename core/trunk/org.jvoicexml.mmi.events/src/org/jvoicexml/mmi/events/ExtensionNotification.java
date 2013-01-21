@@ -57,49 +57,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "data" })
 @XmlRootElement(name = "ExtensionNotification")
-public class ExtensionNotification extends LifeCycleEvent
+public class ExtensionNotification extends LifeCycleRequest
         implements Serializable {
-
-    protected AnyComplexType data;
-    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    protected String context;
-    @XmlAttribute(name = "Name", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     protected String name;
-
-    /**
-     * Sets the value of the data property.
-     * 
-     * @param value
-     *            allowed object is {@link AnyComplexType }
-     * 
-     */
-    public void setData(AnyComplexType value) {
-        this.data = value;
-    }
-
-    /**
-     * Gets the value of the context property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getContext() {
-        return context;
-    }
-
-    /**
-     * Sets the value of the context property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setContext(String value) {
-        this.context = value;
-    }
 
     /**
      * Gets the value of the name property.
@@ -107,6 +68,7 @@ public class ExtensionNotification extends LifeCycleEvent
      * @return possible object is {@link String }
      * 
      */
+    @XmlAttribute(name = "Name", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     public String getName() {
         return name;
     }
