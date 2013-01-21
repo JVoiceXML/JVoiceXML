@@ -27,7 +27,7 @@
 package org.jvoicexml.mmi.events.xml;
 
 /**
- * Marker interface forr all MMI events.
+ * Marker interface for all MMI events.
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
  *
