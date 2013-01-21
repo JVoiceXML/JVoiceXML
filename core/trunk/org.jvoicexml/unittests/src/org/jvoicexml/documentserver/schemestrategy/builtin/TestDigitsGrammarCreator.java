@@ -91,7 +91,7 @@ public final class TestDigitsGrammarCreator {
         final GrammarCreator creator = new DigitsGrammarCreator();
 
         final URI dtmfUri = new URI(
-                "builtin:dtmf/digit?minlength=2;maxlength=4");
+                "builtin:dtmf/digits?minlength=2;maxlength=4");
         final byte[] bytes1 = creator.createGrammar(dtmfUri);
         final ByteArrayInputStream in1 = new ByteArrayInputStream(bytes1);
         final InputSource source1 = new InputSource(in1);
@@ -102,7 +102,7 @@ public final class TestDigitsGrammarCreator {
         Assert.assertEquals("2-4", dtmfItem.getRepeat());
 
         final URI voiceUri = new URI(
-                "builtin:voice/digit?minlength=2;maxlength=4");
+                "builtin:voice/digits?minlength=2;maxlength=4");
         final byte[] bytes2 = creator.createGrammar(voiceUri);
         final ByteArrayInputStream in2 = new ByteArrayInputStream(bytes2);
         final InputSource source2 = new InputSource(in2);
@@ -126,7 +126,7 @@ public final class TestDigitsGrammarCreator {
         final GrammarCreator creator = new DigitsGrammarCreator();
 
         final URI dtmfUri = new URI(
-                "builtin:dtmf/digit?minlength=4;maxlength=2");
+                "builtin:dtmf/digits?minlength=4;maxlength=2");
         creator.createGrammar(dtmfUri);
     }
 
