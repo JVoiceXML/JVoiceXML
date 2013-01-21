@@ -17,7 +17,7 @@ linkcolor=black, colorlinks=black, colorlinks=true,
 \include{version}
 
 \title{How to build JVoiceXML \jvxmlversion}
-\version{1.9.8}
+\version{1.9.9}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -217,8 +217,8 @@ Your IDE must support
 \subsection{JAVA}
 \label{sec:java}
 
-Parts of the code of JVoiceXML are using features from the JAVA 6 API, so that
-you will need at least J2SE 1.6 to compile the code. You can download it
+Parts of the code of JVoiceXML are using features from the JAVA 7 API, so that
+you will need at least J2SE 7 to compile the code. You can download it
 for free from \url{http://oracle.com/technetwork/java/javase/downloads/index.html}.
 
 
@@ -229,9 +229,17 @@ If you are not using eclipse as your favorite IDE, you may ignore this section.
 We are using the \emph{Eclipse IDE for Java EE Developers} version 3.5.2 for
 the development of JVoiceXML. The subversion repository contains the eclipse
 project settings. However you are requested to configure the execution
-environment development for Java 6 \emph{JavaSE-1.6} to point to a valid JDK.
+environment development for Java 7 \emph{JavaSE-1.7} to point to a valid JDK.
 The use of execution environments makes the development independent of the
-used version of the Java 6 SDK.
+used version of the Java 7 SDK.
+
+A screenshot for a possible configuration is shown in
+figure~\ref{fig:eclipse-execution-environments}.
+\begin{figure}
+\includegraphics[width=\linewidth]{eclipse-execution-environments}
+\caption{Configuration of the Java 7 Execution Environment in eclipse}
+\label{fig:eclipse-execution-environments}
+\end{figure}
 
 \paragraph{Eclipse Plug-ins}
 
@@ -248,6 +256,8 @@ only need the 5.x version)
 (Alternatively, you can also use subversive or a similar SVN client)
 \item[TeXlipse] \url{http://texlipse.sourceforge.net} (optional if you want to
 edit the documentation)
+\item[Protocol Buffers Development Tools] \url{http://code.google.com/p/protobuf-dt/}
+(optional if you want to edit the protobuf files in the sub project \texttt{org.jvoicexml.mmi.events})
 \end{description}
 
 \subsection{ANT}
@@ -265,6 +275,32 @@ directory.
 
 Nearly all IDE's feature an ANT integration. This allows to use
 your favorite IDE.
+
+\subsubsection{ANT Support for Eclipse}
+\label{sec:ant-eclipse}
+
+The ANT project files are usually named \texttt{build.xml} and reside in
+the folders of the subprojects. In order to run an ANT target from within
+eclipse you can open these build files with the ANT editor as shown in
+figure~\ref{fig:eclipse-open-ant-editor}.
+\begin{figure}
+\includegraphics[width=\linewidth]{eclipse-open-ant-editor}
+\caption{Open the ANT build file with the ANT editor}
+\label{fig:eclipse-open-ant-editor}
+\end{figure}
+The targets that can be executed will be shown in eclipse's outline view.
+Right-click the target to execute and select \emph{Run As} and the
+\emph{ANT Build} as shown in figure~\ref{fig:eclipse-run-ant}.
+\begin{figure}
+\includegraphics[width=\linewidth]{eclipse-run-ant}
+\caption{Run an ANT target}
+\label{fig:eclipse-run-ant}
+\end{figure}
+Afterwards, it may be necessary to refresh the project to synchronize generated
+files with eclipse's view onto the file system.
+
+Some more information for executing ANT targets from within eclipse are given at
+the end of section~\ref{sec:ant-build-file}. 
 
 \subsection{Tomcat}
 \label{sec:tomcat}
@@ -285,7 +321,7 @@ documentation you will need to install a \LaTeX system like MiKTeX
 This is not needed if you do not want to author the documentation or create a
 distribution.
 
-\section{Project conventions}
+\section{Project Conventions}
 
 JVoiceXML comprises several projects. Some of them are described in more
 detail in the following section. All these projects follow some conventions
@@ -585,6 +621,8 @@ to create your adapted configuration settings. In addition you also get
 a customized ant build file \texttt{run.xml} as well as the included
 \texttt{platform-targets.xml} to start and
 stop the interpreter using the libraries from the co-projects.
+Eclipse users may want to read section~\ref{sec:ant-eclipse} if they do
+not how hot wo run ANT build files from eclipse. 
 
 Note that it is required to create a configuration after you changed the
 settings in the \texttt{ant.properties} file.
@@ -729,7 +767,9 @@ JNDI offers remote access to JVoiceXML, e.g. the ability to run the
 shutdown script or to run the demos.
 
 The project settings for this subproject can be adapted by the following ANT
-properties:
+properties in your copy of the \texttt{ant.properties} file in the
+\texttt{personal-props} folder of the core project (see 
+section~\ref{sec:adapt-ant}):
 \begin{lstlisting}
 jvxml.jndi.repository=text
 jvxml.jndi.port=1099
@@ -860,7 +900,9 @@ implementation platforms like the JSAPI 2.0 implementation platform since it
 does not have any speech functionality.
 
 The project settings for this subproject can be adapted by the following ANT
-properties:
+properties in your copy of the \texttt{ant.properties} file in the
+\texttt{personal-props} folder of the core project (see 
+section~\ref{sec:adapt-ant}):
 \begin{lstlisting}
 jtapi.sip.providername=net.sourceforge.gjtapi.raw.mjsip.MjSipProvider
 jtapi.sip.address=127.0.0.1:4242
@@ -950,7 +992,9 @@ phone. We used the xlite phone which can be downloaded for free from
 \url{http://www.counterpath.com}.
 
 The project settings for this subproject can be adapted by the following ANT
-properties:
+properties in your copy of the \texttt{ant.properties} file in the
+\texttt{personal-props} folder of the core project (see 
+section~\ref{sec:adapt-ant}):
 \begin{lstlisting}
 mrcpv2.sip.address=127.0.0.1:4242
 mrcpv2.sip.port=4242
@@ -1019,7 +1063,17 @@ This project is a library to author MMI compatible events that can be used in
 the MMI architectural pattern from the W3C.
 
 Currently the library is able to generate events in XML format and for
-protobuf\footnote{http://code.google.com/p/protobuf}.
+protobuf~\cite{google:protobuf}. The generation of Java files for protobuf
+support requires the download of the \texttt{protoc} compiler. The \texttt{protoc}
+executable can be downloaded from \url{http://code.google.com/p/protobuf/downloads/list}.
+
+The project settings for this subproject can be adapted by the following ANT
+properties in your copy of the \texttt{ant.properties} file in the
+\texttt{personal-props} folder of the core project (see 
+section~\ref{sec:adapt-ant}):
+\begin{lstlisting}
+mmi.protoc=protoc
+\end{lstlisting}
 
 \subsubsection{Third party libraries}
 
