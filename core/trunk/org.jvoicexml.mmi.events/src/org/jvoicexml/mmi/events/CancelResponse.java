@@ -27,11 +27,11 @@
 package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>
@@ -56,78 +56,32 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "statusInfo" })
 @XmlRootElement(name = "CancelResponse")
-public class CancelResponse extends LifeCycleEvent implements Serializable {
-
-    protected AnyComplexType statusInfo;
-    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    protected String context;
-    @XmlAttribute(name = "Status", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    protected StatusType status;
+public class CancelResponse extends LifeCycleResponse implements Serializable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 5456069514727740643L;
+    
+    /** Nested data elements. */ 
+    protected List<Object> statusInfo;
 
     /**
-     * Gets the value of the statusInfo property.
-     * 
-     * @return possible object is {@link AnyComplexType }
-     * 
+     * Retrieves the statusInfo property.
+     * @return the statusInfo property
      */
-    public AnyComplexType getStatusInfo() {
+    @XmlElementWrapper(name = "StatusInfo", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    public List<Object> getData() {
+        if (statusInfo == null) {
+            statusInfo = new ArrayList<Object>();
+        }
         return statusInfo;
     }
 
     /**
      * Sets the value of the statusInfo property.
      * 
-     * @param value
-     *            allowed object is {@link AnyComplexType }
-     * 
+     * @param value new value for statusInfo attribute 
      */
-    public void setStatusInfo(AnyComplexType value) {
+    public void setStatusInfo(final List<Object> value) {
         this.statusInfo = value;
     }
-
-    /**
-     * Gets the value of the context property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getContext() {
-        return context;
-    }
-
-    /**
-     * Sets the value of the context property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setContext(String value) {
-        this.context = value;
-    }
-
-    /**
-     * Gets the value of the status property.
-     * 
-     * @return possible object is {@link StatusType }
-     * 
-     */
-    public StatusType getStatus() {
-        return status;
-    }
-
-    /**
-     * Sets the value of the status property.
-     * 
-     * @param value
-     *            allowed object is {@link StatusType }
-     * 
-     */
-    public void setStatus(StatusType value) {
-        this.status = value;
-    }
-
 }
