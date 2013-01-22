@@ -113,6 +113,42 @@ public class TestExternalGrammarDocument {
     }
 
     /**
+     * Test method for {@link org.jvoicexml.documentserver.ExternalGrammarDocument#equals(java.lang.Object)}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testEqualsDifferentMode() throws Exception {
+        final SrgsXmlDocument srgsDocument = new SrgsXmlDocument();
+        final Grammar grammar = srgsDocument.getGrammar();
+        grammar.setVersion("1.0");
+        grammar.setMode(ModeType.DTMF);
+        grammar.setType(GrammarType.SRGS_XML);
+        final Rule rule = grammar.appendChild(Rule.class);
+        final OneOf oneof = rule.appendChild(OneOf.class);
+        final Item item1 = oneof.appendChild(Item.class);
+        item1.addText("1");
+        final Item item2 = oneof.appendChild(Item.class);
+        item2.addText("2");
+        final Item item3 = oneof.appendChild(Item.class);
+        item3.addText("3");
+
+        final String encoding = System.getProperty("jvoicexml.xml.encoding",
+                "UTF-8");
+        final ExternalGrammarDocument document1 =
+                new ExternalGrammarDocument(null,
+                        srgsDocument.toString().getBytes(),
+                        encoding, true);
+        grammar.setMode(ModeType.VOICE);
+
+        final ExternalGrammarDocument document2 =
+                new ExternalGrammarDocument(null,
+                        srgsDocument.toString().getBytes(),
+                        encoding, true);
+        Assert.assertFalse(document1.equals(document2));
+    }
+
+    /**
      * Test method for {@link org.jvoicexml.documentserver.ExternalGrammarDocument#hashCode()}.
      * @exception Exception
      *            test failed
