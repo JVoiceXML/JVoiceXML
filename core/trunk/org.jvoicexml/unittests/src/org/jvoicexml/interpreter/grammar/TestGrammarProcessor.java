@@ -144,11 +144,10 @@ public final class TestGrammarProcessor {
         grammar.setType(GrammarType.SRGS_XML);
         grammar.setRoot("city");
         final File file =
-            new File("test/config/irp_srgs10/conformance-1.grxml");
+            new File("unittests/config/irp_srgs10/conformance-1.grxml");
         grammar.setSrc(file.toURI());
         final GrammarDocument processed =
             processor.process(context, null, grammar);
-
         final GrammarType type = processed.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
                 isSupportedGrammarType(type));
@@ -168,7 +167,7 @@ public final class TestGrammarProcessor {
         grammar.setType(GrammarType.SRGS_XML);
         grammar.setRoot("city");
         final File file =
-            new File("test/config/irp_srgs10/conformance-1.grxml");
+            new File("unittests/config/irp_srgs10/conformance-1.grxml");
         grammar.setSrc(file.toURI().toString() + "#main");
         final GrammarDocument processed =
             processor.process(context, null, grammar);
