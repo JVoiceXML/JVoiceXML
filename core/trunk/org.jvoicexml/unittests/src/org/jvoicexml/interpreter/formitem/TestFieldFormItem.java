@@ -230,7 +230,7 @@ public final class TestFieldFormItem {
      * @since 0.7.1
      */
     @Test
-    public void testGetGrammars() throws Exception {
+    public void testGetGrammarsTypeBoolean() throws Exception {
         field.setName("lo_fat_meal");
         field.setType("boolean");
         final Prompt prompt = field.appendChild(Prompt.class);
@@ -245,6 +245,33 @@ public final class TestFieldFormItem {
         Assert.assertEquals(vxml.getXmlLang(), dtmfGrammar.getXmlLang());
         final Grammar voiceGrammar = iterator.next();
         Assert.assertEquals("builtin:voice/boolean", voiceGrammar.getSrc());
+        Assert.assertEquals(vxml.getXmlLang(), voiceGrammar.getXmlLang());
+    }
+
+    /**
+     * Test case for {@link FieldFormItem#getGrammars()}.
+     * @throws Exception
+     *         test failed.
+     * @since 0.7.1
+     */
+    @Test
+    public void testGetGrammarsTypeDigits() throws Exception {
+        field.setName("numbers");
+        field.setType("digits?minlength=3;maxlength=8");
+        final Prompt prompt = field.appendChild(Prompt.class);
+        prompt.addText("Please enter a number");
+
+        final Collection<Grammar> grammars = item.getGrammars();
+        Assert.assertEquals(2, grammars.size());
+        final Iterator<Grammar> iterator = grammars.iterator();
+        final Grammar dtmfGrammar = iterator.next();
+        final Vxml vxml = document.getVxml();
+        Assert.assertEquals("builtin:dtmf/digits?minlength=3;maxlength=8",
+                dtmfGrammar.getSrc());
+        Assert.assertEquals(vxml.getXmlLang(), dtmfGrammar.getXmlLang());
+        final Grammar voiceGrammar = iterator.next();
+        Assert.assertEquals("builtin:voice/digits?minlength=3;maxlength=8",
+                voiceGrammar.getSrc());
         Assert.assertEquals(vxml.getXmlLang(), voiceGrammar.getXmlLang());
     }
 
