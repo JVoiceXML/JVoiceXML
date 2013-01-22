@@ -39,6 +39,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Option;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -264,9 +265,11 @@ public final class FieldFormItem
         } else {
             final Grammar dtmfGrammar = addCustomGrammar(field,
                     "builtin:dtmf/" + type, locale);
+            dtmfGrammar.setMode(ModeType.DTMF);
             grammars.add(dtmfGrammar);
             final Grammar voiceGrammar = addCustomGrammar(field,
                     "builtin:voice/" + type, locale);
+            voiceGrammar.setMode(ModeType.VOICE);
             grammars.add(voiceGrammar);
         }
     }
