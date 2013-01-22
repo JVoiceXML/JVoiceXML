@@ -27,11 +27,9 @@
 package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>
@@ -58,9 +56,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlRootElement(name = "ExtensionNotification")
-public class ExtensionNotification extends LifeCycleRequest
+public final class ExtensionNotification extends LifeCycleRequest
         implements Serializable {
-    protected String name;
+    /** The serial version UID. */
+    private static final long serialVersionUID = -9220638526537659755L;
+    private String name;
 
     /**
      * Gets the value of the name property.
@@ -68,7 +68,8 @@ public class ExtensionNotification extends LifeCycleRequest
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Name", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "Name",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     public String getName() {
         return name;
     }
@@ -80,8 +81,8 @@ public class ExtensionNotification extends LifeCycleRequest
      *            allowed object is {@link String }
      * 
      */
-    public void setName(String value) {
-        this.name = value;
+    public void setName(final String value) {
+        name = value;
     }
 
 }

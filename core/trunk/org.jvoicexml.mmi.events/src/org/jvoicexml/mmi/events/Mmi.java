@@ -120,8 +120,10 @@ import javax.xml.bind.annotation.XmlType;
         "resumeRequest", "resumeResponse", "startRequest", "startResponse",
         "statusRequest", "statusResponse" })
 @XmlRootElement(name = "mmi")
-public class Mmi implements Serializable {
+public final class Mmi implements Serializable {
 
+    /** The serial version UID. */
+    private static final long serialVersionUID = 5100515080041567275L;
     @XmlElement(name = "NewContextRequest")
     protected NewContextRequest newContextRequest;
     @XmlElement(name = "NewContextResponse")

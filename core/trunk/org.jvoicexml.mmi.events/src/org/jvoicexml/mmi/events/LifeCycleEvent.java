@@ -48,8 +48,9 @@ public class LifeCycleEvent {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "RequestID", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    public String getRequestID() {
+    @XmlAttribute(name = "RequestID",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    public final String getRequestID() {
         return requestID;
     }
 
@@ -60,8 +61,8 @@ public class LifeCycleEvent {
      *            allowed object is {@link String }
      * 
      */
-    public void setRequestID(String value) {
-        this.requestID = value;
+    public final void setRequestID(final String value) {
+        requestID = value;
     }
 
     /**
@@ -70,8 +71,9 @@ public class LifeCycleEvent {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Source", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    public String getSource() {
+    @XmlAttribute(name = "Source",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    public final String getSource() {
         return source;
     }
 
@@ -82,8 +84,8 @@ public class LifeCycleEvent {
      *            allowed object is {@link String }
      * 
      */
-    public void setSource(String value) {
-        this.source = value;
+    public final void setSource(final String value) {
+        source = value;
     }
 
     /**
@@ -92,8 +94,9 @@ public class LifeCycleEvent {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Target", namespace = "http://www.w3.org/2008/04/mmi-arch")
-    public String getTarget() {
+    @XmlAttribute(name = "Target",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
+    public final String getTarget() {
         return target;
     }
 
@@ -104,7 +107,7 @@ public class LifeCycleEvent {
      *            allowed object is {@link String }
      * 
      */
-    public void setTarget(String value) {
-        this.target = value;
+    public final void setTarget(final String value) {
+        target = value;
     }
 }

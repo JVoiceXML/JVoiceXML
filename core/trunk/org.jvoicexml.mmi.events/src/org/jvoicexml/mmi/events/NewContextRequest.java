@@ -30,8 +30,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -61,15 +59,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  */
 @XmlRootElement(name = "NewContextRequest")
-public class NewContextRequest extends LifeCycleRequest implements Serializable {
+public final class NewContextRequest extends LifeCycleRequest
+    implements Serializable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -6971508369061539460L;
+
     /** Nested data elements. */ 
-    protected List<Object> data;
+    private List<Object> data;
 
     /**
      * Retrieves the data property.
      * @return the data property
      */
-    @XmlElementWrapper(name = "Data", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElementWrapper(name = "Data",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public List<Object> getData() {
         if (data == null) {
             data = new ArrayList<Object>();
@@ -83,6 +86,6 @@ public class NewContextRequest extends LifeCycleRequest implements Serializable 
      * @param value new value for data attribute 
      */
     public void setData(final List<Object> value) {
-        this.data = value;
+        data = value;
     }
 }

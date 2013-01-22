@@ -30,11 +30,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>
@@ -61,7 +58,9 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlRootElement(name = "StartResponse")
-public class StartResponse extends LifeCycleResponse implements Serializable {
+public final class StartResponse extends LifeCycleResponse implements Serializable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -1878514146243582336L;
 
     /** Nested data elements. */ 
     protected List<Object> statusInfo;
@@ -73,7 +72,8 @@ public class StartResponse extends LifeCycleResponse implements Serializable {
      * Retrieves the data property.
      * @return the data property
      */
-    @XmlElementWrapper(name = "Data", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElementWrapper(name = "Data",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public List<Object> getData() {
         if (data == null) {
             data = new ArrayList<Object>();
@@ -87,14 +87,15 @@ public class StartResponse extends LifeCycleResponse implements Serializable {
      * @param value new value for data attribute 
      */
     public void setData(final List<Object> value) {
-        this.data = value;
+        data = value;
     }
 
     /**
      * Retrieves the statusInfo property.
      * @return the statusInfo property
      */
-    @XmlElementWrapper(name = "StatusInfo", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElementWrapper(name = "StatusInfo",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public List<Object> getStatusInfo() {
         if (statusInfo == null) {
             statusInfo = new ArrayList<Object>();
@@ -108,6 +109,6 @@ public class StartResponse extends LifeCycleResponse implements Serializable {
      * @param value new value for statusInfo attribute 
      */
     public void setStatusInfo(final List<Object> value) {
-        this.statusInfo = value;
+        statusInfo = value;
     }
 }

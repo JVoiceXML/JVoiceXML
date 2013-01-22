@@ -33,6 +33,9 @@ public class LifeCycleRequest extends LifeCycleEvent {
 
     private String context;
 
+    /**
+     * Constructs a new object.
+     */
     public LifeCycleRequest() {
         super();
     }
@@ -43,8 +46,9 @@ public class LifeCycleRequest extends LifeCycleEvent {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    public String getContext() {
+    @XmlAttribute(name = "Context",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    public final String getContext() {
         return context;
     }
 
@@ -55,8 +59,8 @@ public class LifeCycleRequest extends LifeCycleEvent {
      *            allowed object is {@link String }
      * 
      */
-    public void setContext(String value) {
-        this.context = value;
+    public final void setContext(final String value) {
+        context = value;
     }
 
 }

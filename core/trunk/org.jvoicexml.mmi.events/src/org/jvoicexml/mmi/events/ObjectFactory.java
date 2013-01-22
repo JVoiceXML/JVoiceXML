@@ -45,7 +45,7 @@ import javax.xml.namespace.QName;
  * 
  */
 @XmlRegistry
-public class ObjectFactory {
+public final class ObjectFactory {
 
     private final static QName _StatusInfo_QNAME = new QName("http://www.w3.org/2008/04/mmi-arch", "statusInfo");
 

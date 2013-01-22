@@ -27,11 +27,9 @@
 package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>
@@ -58,16 +56,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlRootElement(name = "StatusRequest")
-public class StatusRequest extends LifeCycleEvent implements Serializable {
+public final class StatusRequest extends LifeCycleEvent implements Serializable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 4633844966738136923L;
 
-    protected boolean requestAutomaticUpdate;
-    protected String context;
+    private boolean requestAutomaticUpdate;
+    private String context;
 
     /**
      * Gets the value of the requestAutomaticUpdate property.
      * 
      */
-    @XmlAttribute(name = "RequestAutomaticUpdate", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "RequestAutomaticUpdate",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     public boolean isRequestAutomaticUpdate() {
         return requestAutomaticUpdate;
     }
@@ -76,8 +77,8 @@ public class StatusRequest extends LifeCycleEvent implements Serializable {
      * Sets the value of the requestAutomaticUpdate property.
      * 
      */
-    public void setRequestAutomaticUpdate(boolean value) {
-        this.requestAutomaticUpdate = value;
+    public void setRequestAutomaticUpdate(final boolean value) {
+        requestAutomaticUpdate = value;
     }
 
     /**
@@ -86,7 +87,8 @@ public class StatusRequest extends LifeCycleEvent implements Serializable {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlAttribute(name = "Context",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public String getContext() {
         return context;
     }
@@ -98,8 +100,7 @@ public class StatusRequest extends LifeCycleEvent implements Serializable {
      *            allowed object is {@link String }
      * 
      */
-    public void setContext(String value) {
-        this.context = value;
+    public void setContext(final String value) {
+        context = value;
     }
-
 }

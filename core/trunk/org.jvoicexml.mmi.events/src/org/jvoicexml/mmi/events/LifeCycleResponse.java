@@ -32,8 +32,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class LifeCycleResponse extends LifeCycleEvent {
 
     private String context;
-    protected StatusType status;
+    private StatusType status;
 
+    /**
+     * Constructs a new object.
+     */
     public LifeCycleResponse() {
         super();
     }
@@ -44,8 +47,9 @@ public class LifeCycleResponse extends LifeCycleEvent {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    public String getContext() {
+    @XmlAttribute(name = "Context",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    public final String getContext() {
         return context;
     }
 
@@ -56,8 +60,8 @@ public class LifeCycleResponse extends LifeCycleEvent {
      *            allowed object is {@link String }
      * 
      */
-    public void setContext(String value) {
-        this.context = value;
+    public final void setContext(final String value) {
+        context = value;
     }
 
     /**
@@ -66,8 +70,9 @@ public class LifeCycleResponse extends LifeCycleEvent {
      * @return possible object is {@link StatusType }
      * 
      */
-    @XmlAttribute(name = "Status", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    public StatusType getStatus() {
+    @XmlAttribute(name = "Status",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    public final StatusType getStatus() {
         return status;
     }
 
@@ -78,7 +83,7 @@ public class LifeCycleResponse extends LifeCycleEvent {
      *            allowed object is {@link StatusType }
      * 
      */
-    public void setStatus(StatusType value) {
-        this.status = value;
+    public final void setStatus(final StatusType value) {
+        status = value;
     }
 }

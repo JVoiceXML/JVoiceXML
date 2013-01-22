@@ -54,18 +54,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  */
 @XmlRootElement(name = "CancelRequest")
-public class CancelRequest extends LifeCycleRequest implements Serializable {
+public final class CancelRequest extends LifeCycleRequest
+    implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = -5173239335946499422L;
 
     /** Nested data elements. */ 
-    protected List<Object> data;
+    private List<Object> data;
 
     /**
      * Retrieves the data property.
      * @return the data property
      */
-    @XmlElementWrapper(name = "Data", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElementWrapper(name = "Data",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public List<Object> getData() {
         if (data == null) {
             data = new ArrayList<Object>();

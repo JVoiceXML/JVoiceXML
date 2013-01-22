@@ -30,12 +30,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>
@@ -66,24 +63,26 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlRootElement(name = "StatusResponse")
-public class StatusResponse implements Serializable {
+public final class StatusResponse implements Serializable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -6344529758381887906L;
+    private boolean automaticUpdate;
+    private String context;
+    private StatusResponseType status;
 
-    protected boolean automaticUpdate;
-    protected String context;
-    protected StatusResponseType status;
-
-
-    /** Nested data elements. */ 
-    protected List<Object> statusInfo;
 
     /** Nested data elements. */ 
-    protected List<Object> data;
+    private List<Object> statusInfo;
+
+    /** Nested data elements. */ 
+    private List<Object> data;
 
     /**
      * Retrieves the data property.
      * @return the data property
      */
-    @XmlElementWrapper(name = "Data", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElementWrapper(name = "Data",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public List<Object> getData() {
         if (data == null) {
             data = new ArrayList<Object>();
@@ -104,7 +103,8 @@ public class StatusResponse implements Serializable {
      * Retrieves the statusInfo property.
      * @return the statusInfo property
      */
-    @XmlElementWrapper(name = "StatusInfo", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElementWrapper(name = "StatusInfo",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public List<Object> getStatusInfo() {
         if (statusInfo == null) {
             statusInfo = new ArrayList<Object>();
@@ -125,7 +125,8 @@ public class StatusResponse implements Serializable {
      * Gets the value of the automaticUpdate property.
      * 
      */
-    @XmlAttribute(name = "AutomaticUpdate", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "AutomaticUpdate",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     public boolean isAutomaticUpdate() {
         return automaticUpdate;
     }
@@ -134,7 +135,7 @@ public class StatusResponse implements Serializable {
      * Sets the value of the automaticUpdate property.
      * 
      */
-    public void setAutomaticUpdate(boolean value) {
+    public void setAutomaticUpdate(final boolean value) {
         this.automaticUpdate = value;
     }
 
@@ -144,7 +145,8 @@ public class StatusResponse implements Serializable {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlAttribute(name = "Context",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public String getContext() {
         return context;
     }
@@ -156,8 +158,8 @@ public class StatusResponse implements Serializable {
      *            allowed object is {@link String }
      * 
      */
-    public void setContext(String value) {
-        this.context = value;
+    public void setContext(final String value) {
+        context = value;
     }
 
     /**
@@ -166,7 +168,8 @@ public class StatusResponse implements Serializable {
      * @return possible object is {@link StatusResponseType }
      * 
      */
-    @XmlAttribute(name = "Status", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "Status",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     public StatusResponseType getStatus() {
         return status;
     }
@@ -178,8 +181,8 @@ public class StatusResponse implements Serializable {
      *            allowed object is {@link StatusResponseType }
      * 
      */
-    public void setStatus(StatusResponseType value) {
-        this.status = value;
+    public void setStatus(final StatusResponseType value) {
+        status = value;
     }
 
 }

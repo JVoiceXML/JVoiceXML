@@ -57,21 +57,23 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  */
 @XmlRootElement(name = "CancelResponse")
-public class CancelResponse extends LifeCycleResponse implements Serializable {
+public final class CancelResponse extends LifeCycleResponse
+    implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = 5456069514727740643L;
 
     /** Nested data elements. */ 
-    protected List<Object> statusInfo;
+    private List<Object> statusInfo;
 
     /** Nested data elements. */ 
-    protected List<Object> data;
+    private List<Object> data;
 
     /**
      * Retrieves the data property.
      * @return the data property
      */
-    @XmlElementWrapper(name = "Data", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElementWrapper(name = "Data",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public List<Object> getData() {
         if (data == null) {
             data = new ArrayList<Object>();
@@ -85,14 +87,15 @@ public class CancelResponse extends LifeCycleResponse implements Serializable {
      * @param value new value for data attribute 
      */
     public void setData(final List<Object> value) {
-        this.data = value;
+        data = value;
     }
 
     /**
      * Retrieves the statusInfo property.
      * @return the statusInfo property
      */
-    @XmlElementWrapper(name = "StatusInfo", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElementWrapper(name = "StatusInfo",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public List<Object> getStatusInfo() {
         if (statusInfo == null) {
             statusInfo = new ArrayList<Object>();
@@ -106,6 +109,6 @@ public class CancelResponse extends LifeCycleResponse implements Serializable {
      * @param value new value for statusInfo attribute 
      */
     public void setStatusInfo(final List<Object> value) {
-        this.statusInfo = value;
+        statusInfo = value;
     }
 }
