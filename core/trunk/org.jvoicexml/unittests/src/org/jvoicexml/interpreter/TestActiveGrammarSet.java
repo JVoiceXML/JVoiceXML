@@ -155,6 +155,24 @@ public final class TestActiveGrammarSet {
     }
 
     /**
+     * Test method for {@link ActiveGrammarSet#addAll(Collection)}.
+     * @throws Exception test failed
+     * @since 0.7.5
+     */
+    @Test
+    public void testAddAll() throws Exception {
+        final ActiveGrammarSet set = new ActiveGrammarSet(observer);
+        final Collection<GrammarDocument> documents =
+                new java.util.ArrayList<GrammarDocument>();
+        documents.add(document1);
+        documents.add(document2);
+        documents.add(document1);
+        set.addAll(documents);
+        final Collection<GrammarDocument> docs = set.getGrammars();
+        Assert.assertEquals(2, docs.size());
+    }
+
+    /**
      * Test method for {@link ActiveGrammarSet#add(GrammarDocument)}.
      * @throws Exception test failed
      * @throws JVoiceXMLEvent test failed

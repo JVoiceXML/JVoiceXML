@@ -192,7 +192,7 @@ public final class ScopedSet<E>
     public boolean addAll(final Collection<? extends E> c) {
         boolean modified = false;
         for (E e : c) {
-            modified = modified || add(e);
+            modified = add(e) || modified;
         }
 
         return modified;
