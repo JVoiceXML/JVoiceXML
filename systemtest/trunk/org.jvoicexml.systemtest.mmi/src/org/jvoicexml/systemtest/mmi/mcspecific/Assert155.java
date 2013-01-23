@@ -28,9 +28,8 @@ package org.jvoicexml.systemtest.mmi.mcspecific;
 import java.io.File;
 import java.net.URI;
 
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.PrepareRequest;
-import org.jvoicexml.mmi.events.PrepareRequestBuilder;
 import org.jvoicexml.mmi.events.PrepareResponse;
 import org.jvoicexml.systemtest.mmi.TestFailedException;
 
@@ -61,17 +60,17 @@ public final class Assert155 extends AbstractAssert {
      */
     @Override
     public void test() throws Exception {
-        final PrepareRequestBuilder builder = new PrepareRequestBuilder();
+        final PrepareRequest request = new PrepareRequest();
         final String contextId = getContextId();
-        builder.setContextId(contextId);
+        request.setContext(contextId);
         final String requestId = createRequestId();
-        builder.setRequestId(requestId);
+        request.setRequestId(requestId);
         final File file = new File("vxml/helloworld.vxml");
         final URI uri = file.toURI();
-        builder.setHref(uri);
-        final PrepareRequest request = builder.toPrepareRequest();
+        request.setContentURL(uri);
         send(request);
-        final MMIEvent prepareReponse = waitForResponse("PrepareResponse");
+        final LifeCycleEvent prepareReponse =
+                waitForResponse("PrepareResponse");
         if (!(prepareReponse instanceof PrepareResponse)) {
             throw new TestFailedException("expected a PrepareReponse but got a "
                     + prepareReponse.getClass());

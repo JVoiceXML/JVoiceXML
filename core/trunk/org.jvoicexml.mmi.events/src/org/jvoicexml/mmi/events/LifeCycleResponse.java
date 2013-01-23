@@ -27,12 +27,16 @@
 
 package org.jvoicexml.mmi.events;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
 public class LifeCycleResponse extends LifeCycleEvent {
 
     private String context;
     private StatusType status;
+    private AnyComplexType statusInfo;
 
     /**
      * Constructs a new object.
@@ -85,5 +89,27 @@ public class LifeCycleResponse extends LifeCycleEvent {
      */
     public final void setStatus(final StatusType value) {
         status = value;
+    }
+    
+    @XmlElement(name = "StatusInfo",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
+    public final AnyComplexType getStatusInfo() {
+        return statusInfo;
+    }
+    
+    public final void setStatusInfo(final AnyComplexType value) {
+        statusInfo = value;
+    }
+
+    /**
+     * Adds the value of the status info property to the given text message.
+     * @param text the status message to set
+     */
+    public final void addStatusInfo(final String text) {
+        if (statusInfo == null) {
+            statusInfo = new AnyComplexType();
+        }
+        final List<Object> infos = statusInfo.getContent();
+        infos.add(infos);
     }
 }

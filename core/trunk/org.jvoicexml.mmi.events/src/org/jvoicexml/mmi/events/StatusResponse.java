@@ -27,11 +27,10 @@
 package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -63,7 +62,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  */
 @XmlRootElement(name = "StatusResponse")
-public final class StatusResponse implements Serializable {
+public final class StatusResponse extends LifeCycleEvent
+    implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = -6344529758381887906L;
     private boolean automaticUpdate;
@@ -72,54 +72,7 @@ public final class StatusResponse implements Serializable {
 
 
     /** Nested data elements. */ 
-    private List<Object> statusInfo;
-
-    /** Nested data elements. */ 
-    private List<Object> data;
-
-    /**
-     * Retrieves the data property.
-     * @return the data property
-     */
-    @XmlElementWrapper(name = "Data",
-            namespace = "http://www.w3.org/2008/04/mmi-arch")
-    public List<Object> getData() {
-        if (data == null) {
-            data = new ArrayList<Object>();
-        }
-        return data;
-    }
-
-    /**
-     * Sets the value of the data property.
-     * 
-     * @param value new value for data attribute 
-     */
-    public void setData(final List<Object> value) {
-        this.data = value;
-    }
-
-    /**
-     * Retrieves the statusInfo property.
-     * @return the statusInfo property
-     */
-    @XmlElementWrapper(name = "StatusInfo",
-            namespace = "http://www.w3.org/2008/04/mmi-arch")
-    public List<Object> getStatusInfo() {
-        if (statusInfo == null) {
-            statusInfo = new ArrayList<Object>();
-        }
-        return statusInfo;
-    }
-
-    /**
-     * Sets the value of the statusInfo property.
-     * 
-     * @param value new value for statusInfo attribute 
-     */
-    public void setStatusInfo(final List<Object> value) {
-        this.statusInfo = value;
-    }
+    private AnyComplexType statusInfo;
 
     /**
      * Gets the value of the automaticUpdate property.
@@ -185,4 +138,34 @@ public final class StatusResponse implements Serializable {
         status = value;
     }
 
+    /**
+     * Retrieves the statusInfo property.
+     * @return the statusInfo property
+     */
+    @XmlElement(name = "StatusInfo",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
+    public AnyComplexType getStatusInfo() {
+        return statusInfo;
+    }
+
+    /**
+     * Sets the value of the statusInfo property.
+     * 
+     * @param value new value for statusInfo attribute 
+     */
+    public void setStatusInfo(final AnyComplexType value) {
+        statusInfo = value;
+    }
+
+    /**
+     * Adds the value of the status info property to the given text message.
+     * @param text the status message to set
+     */
+    public final void addStatusInfo(final String text) {
+        if (statusInfo == null) {
+            statusInfo = new AnyComplexType();
+        }
+        final List<Object> infos = statusInfo.getContent();
+        infos.add(infos);
+    }
 }

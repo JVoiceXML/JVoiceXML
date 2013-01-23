@@ -28,8 +28,8 @@ package org.jvoicexml.callmanager.mmi;
 import java.io.IOException;
 import java.net.URI;
 
-import org.jvoicexml.mmi.events.xml.StatusResponse;
-import org.jvoicexml.mmi.events.xml.StatusResponseBuilder;
+import org.jvoicexml.mmi.events.StatusResponse;
+import org.jvoicexml.mmi.events.StatusResponseType;
 
 /**
  * A thread to send status update messages to the sender.
@@ -90,26 +90,25 @@ final class StatusUpdateThread extends Thread {
     public void run() {
         boolean running = automaticUpdate;
         do {
-            final StatusResponseBuilder builder = new StatusResponseBuilder();
-            builder.setTarget(target);
-            builder.setAutomaticUpdate(automaticUpdate);
-            builder.setRequestId(requestId);
+            final StatusResponse response = new StatusResponse();
+            response.setTarget(target);
+            response.setAutomaticUpdate(automaticUpdate);
+            response.setRequestId(requestId);
             if (contextId == null) {
                 if (mc.isAcceptingLifecycleEvents()) {
-                    builder.setStatusAlive();
+                    response.setStatus(StatusResponseType.ALIVE);
                 } else {
-                    builder.setStatusDead();
+                    response.setStatus(StatusResponseType.DEAD);
                 }
             } else {
-                builder.setContextId(contextId.toString());
+                response.setContext(contextId.toString());
                 final MMIContext context = mc.getContext(contextId);
                 if (context == null) {
-                    builder.setStatusDead();
+                    response.setStatus(StatusResponseType.DEAD);
                 } else {
-                    builder.setStatusAlive();
+                    response.setStatus(StatusResponseType.ALIVE);
                 }
             }
-            final StatusResponse response = builder.toStatusResponse();
             try {
                 mc.sendResponse(channel, response);
             } catch (IOException e) {

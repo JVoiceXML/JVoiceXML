@@ -43,11 +43,10 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.ClearContextRequest;
-import org.jvoicexml.mmi.events.ClearContextRequestBuilder;
 import org.jvoicexml.mmi.events.ClearContextResponse;
-import org.jvoicexml.mmi.events.CommonAttributeAdapter;
-import org.jvoicexml.mmi.events.CommonResponseAttributeAdapter;
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.LifeCycleRequest;
+import org.jvoicexml.mmi.events.LifeCycleResponse;
 import org.jvoicexml.mmi.events.Mmi;
 import org.jvoicexml.mmi.events.PrepareRequest;
 import org.jvoicexml.mmi.events.StartRequest;
@@ -73,7 +72,7 @@ public abstract class AbstractAssert implements MMIEventListener {
     private final Object lock;
 
     /** The last received MMI event. */
-    private MMIEvent event;
+    private LifeCycleEvent event;
 
     /** Possible additional notes. */
     private String notes;
@@ -136,21 +135,20 @@ public abstract class AbstractAssert implements MMIEventListener {
      * @throws URISyntaxException
      *         error determining the source attribute 
      */
-    public final void send(final MMIEvent request)
+    public final void send(final LifeCycleEvent request)
             throws IOException, JAXBException,
             URISyntaxException {
         event = null;
 
         final Socket client = new Socket("localhost", 4343);
-        final CommonAttributeAdapter adapter =
-                new CommonAttributeAdapter(request);
-        adapter.setSource(source.toString());
+        request.setSource(source.toString());
         final URI target = TcpUriFactory.createUri(
                 (InetSocketAddress) client.getRemoteSocketAddress());
-        adapter.setTarget(target.toString());
+        request.setTarget(target.toString());
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
+            client.close();
             return;
         }
         final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
@@ -193,14 +191,14 @@ public abstract class AbstractAssert implements MMIEventListener {
         }
         final String contextId = getContextId();
         LOGGER.info("clearing context '" + contextId + "'...");
-        final ClearContextRequestBuilder builder =
-                new ClearContextRequestBuilder();
-        builder.setContextId(contextId);
+        final ClearContextRequest request =
+                new ClearContextRequest();
+        request.setContext(contextId);
         final String requestId = createRequestId();
-        builder.setRequestId(requestId);
-        ClearContextRequest request = builder.toClearContextRequest();
+        request.setRequestId(requestId);
         send(request);
-        final MMIEvent clearResponse = waitForResponse("ClearContextResponse");
+        final LifeCycleEvent clearResponse = waitForResponse(
+                "ClearContextResponse");
         if (!(clearResponse instanceof ClearContextResponse)) {
             throw new TestFailedException(
                     "expected a ClearContextResponse but got a "
@@ -237,12 +235,20 @@ public abstract class AbstractAssert implements MMIEventListener {
      * @throws TestFailedException
      *        if the ids do not match
      */
-    public final void checkIds(final MMIEvent evt, final String contextId,
+    public final void checkIds(final LifeCycleEvent evt, final String contextId,
             final String requestId)
         throws TestFailedException {
-        final CommonAttributeAdapter adapter =
-                new CommonAttributeAdapter(evt);
-        final String eventContextId = adapter.getContext();
+        final String eventContextId;
+        if (event instanceof LifeCycleRequest) {
+            final LifeCycleRequest request = (LifeCycleRequest) event;
+            eventContextId = request.getContext();
+        } else if (event instanceof LifeCycleResponse) {
+            final LifeCycleResponse response = (LifeCycleResponse) event;
+            eventContextId = response.getContext();
+        } else {
+            throw new TestFailedException(
+                    "event does not contain a context id");
+        }
         if (!contextId.equals(eventContextId)) {
             final String message = "Expected context id '" + contextId
                     + "' but have '" + eventContextId + "' in "
@@ -250,7 +256,7 @@ public abstract class AbstractAssert implements MMIEventListener {
             LOGGER.warn(message);
             throw new TestFailedException(message);
         }
-        final String eventRequestId = adapter.getRequestID();
+        final String eventRequestId = event.getRequestId();
         if (!requestId.equals(eventRequestId)) {
             final String message = "Expected request id '" + requestId
                     + "' but have '" + eventRequestId + "' in "
@@ -267,12 +273,15 @@ public abstract class AbstractAssert implements MMIEventListener {
      *         if the response was not successful. The status info is set as the
      *         detailed error message.
      */
-    public final void ensureSuccess(final MMIEvent evt)
+    public final void ensureSuccess(final LifeCycleEvent evt)
             throws TestFailedException {
-        final CommonResponseAttributeAdapter adapter =
-                new CommonResponseAttributeAdapter(evt);
-        if (adapter.getStatus() != StatusType.SUCCESS) {
-            final AnyComplexType any = adapter.getStatusInfo();
+        if (!(evt instanceof LifeCycleResponse)) {
+            throw new TestFailedException(
+            "received event was not a LifeCycleResponse");
+        }
+        final LifeCycleResponse response = (LifeCycleResponse) evt;
+        if (response.getStatus() != StatusType.SUCCESS) {
+            final AnyComplexType any = response.getStatusInfo();
             final List<Object> content = any.getContent();
             final StringBuilder str = new StringBuilder();
             for (Object o : content) {
@@ -294,7 +303,7 @@ public abstract class AbstractAssert implements MMIEventListener {
      * @throws TestFailedException
      *         if the response did not arrive
      */
-    protected final MMIEvent waitForResponse(final String expected)
+    protected final LifeCycleEvent waitForResponse(final String expected)
             throws InterruptedException, TestFailedException {
         synchronized (lock) {
             if (event != null) {
@@ -308,7 +317,7 @@ public abstract class AbstractAssert implements MMIEventListener {
         }
 
         // Clear the old event so that it is not detected any more
-        final MMIEvent copy = event;
+        final LifeCycleEvent copy = event;
         event = null;
         return copy;
     }
@@ -317,7 +326,7 @@ public abstract class AbstractAssert implements MMIEventListener {
      * {@inheritDoc}
      */
     @Override
-    public final void receivedEvent(final MMIEvent evt) {
+    public final void receivedEvent(final LifeCycleEvent evt) {
         synchronized (lock) {
             event = evt;
             lock.notifyAll();

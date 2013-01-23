@@ -28,9 +28,8 @@ package org.jvoicexml.systemtest.mmi.mcspecific;
 import java.io.File;
 import java.net.URI;
 
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.PrepareRequest;
-import org.jvoicexml.mmi.events.PrepareRequestBuilder;
 import org.jvoicexml.mmi.events.PrepareResponse;
 import org.jvoicexml.systemtest.mmi.TestFailedException;
 
@@ -62,47 +61,47 @@ public final class Assert207 extends AbstractAssert {
      */
     @Override
     public void test() throws Exception {
-        final PrepareRequestBuilder builder1 = new PrepareRequestBuilder();
+        final PrepareRequest request1 = new PrepareRequest();
         final String contextId = getContextId();
-        builder1.setContextId(contextId);
+        request1.setContext(contextId);
         final String requestId1 = createRequestId();
-        builder1.setRequestId(requestId1);
+        request1.setRequestId(requestId1);
         final File file1 = new File("vxml/helloworld1.vxml");
         final URI uri1 = file1.toURI();
-        builder1.setHref(uri1);
-        final PrepareRequest request1 = builder1.toPrepareRequest();
+        request1.setContentURL(uri1);
         send(request1);
-        final MMIEvent prepareReponse1 = waitForResponse("PrepareResponse");
+        final LifeCycleEvent prepareReponse1 =
+                waitForResponse("PrepareResponse");
         if (!(prepareReponse1 instanceof PrepareResponse)) {
             throw new TestFailedException("expected a PrepareReponse but got a "
                     + prepareReponse1.getClass());
         }
         checkIds(prepareReponse1, contextId, requestId1);
-        final PrepareRequestBuilder builder2 = new PrepareRequestBuilder();
-        builder2.setContextId(contextId);
+        final PrepareRequest request2 = new PrepareRequest();
+        request2.setContext(contextId);
         final String requestId2 = createRequestId();
-        builder2.setRequestId(requestId2);
+        request2.setRequestId(requestId2);
         final File file2 = new File("vxml/helloworld2.vxml");
         final URI uri2 = file2.toURI();
-        builder2.setHref(uri2);
-        final PrepareRequest request2 = builder2.toPrepareRequest();
+        request2.setContentURL(uri2);
         send(request2);
-        final MMIEvent prepareReponse2 = waitForResponse("PrepareResponse");
+        final LifeCycleEvent prepareReponse2 =
+                waitForResponse("PrepareResponse");
         if (!(prepareReponse2 instanceof PrepareResponse)) {
             throw new TestFailedException("expected a PrepareReponse but got a "
                     + prepareReponse2.getClass());
         }
         checkIds(prepareReponse2, contextId, requestId2);
-        final PrepareRequestBuilder builder3 = new PrepareRequestBuilder();
-        builder3.setContextId(contextId);
+        final PrepareRequest request3 = new PrepareRequest();
+        request3.setContext(contextId);
         final String requestId3 = createRequestId();
-        builder3.setRequestId(requestId3);
+        request3.setRequestId(requestId3);
         final File file3 = new File("vxml/helloworld.vxml");
         final URI uri3 = file3.toURI();
-        builder3.setHref(uri3);
-        final PrepareRequest request3 = builder3.toPrepareRequest();
+        request3.setContentURL(uri3);
         send(request3);
-        final MMIEvent prepareReponse3 = waitForResponse("PrepareResponse");
+        final LifeCycleEvent prepareReponse3 =
+                waitForResponse("PrepareResponse");
         if (!(prepareReponse3 instanceof PrepareResponse)) {
             throw new TestFailedException("expected a PrepareReponse but got a "
                     + prepareReponse3.getClass());

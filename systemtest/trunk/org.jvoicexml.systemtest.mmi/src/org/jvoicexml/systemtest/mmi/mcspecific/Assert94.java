@@ -26,9 +26,8 @@
 package org.jvoicexml.systemtest.mmi.mcspecific;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.StatusRequest;
-import org.jvoicexml.mmi.events.StatusRequestBuilder;
 import org.jvoicexml.mmi.events.StatusResponse;
 import org.jvoicexml.mmi.events.StatusResponseType;
 import org.jvoicexml.systemtest.mmi.TestFailedException;
@@ -63,12 +62,11 @@ public final class Assert94 extends AbstractAssert {
      */
     @Override
     public void test() throws Exception {
-        final StatusRequestBuilder statusBuilder = new StatusRequestBuilder();
+        final StatusRequest statusRequest = new StatusRequest();
         String requestId = createRequestId();
-        statusBuilder.setRequestId(requestId);
-        final StatusRequest statusRequest = statusBuilder.toStatusRequest();
+        statusRequest.setRequestId(requestId);
         send(statusRequest);
-        final MMIEvent statusReponse = waitForResponse("StatusResponse");
+        final LifeCycleEvent statusReponse = waitForResponse("StatusResponse");
         if (!(statusReponse instanceof StatusResponse)) {
             throw new TestFailedException("expected a StatusReponse but got a "
                     + statusReponse.getClass());
@@ -79,9 +77,9 @@ public final class Assert94 extends AbstractAssert {
             throw new TestFailedException("expected no context id but got '"
                     + statusResponseObject.getContext() + "'");
         }
-        if (!requestId.equals(statusResponseObject.getRequestID())) {
+        if (!requestId.equals(statusResponseObject.getRequestId())) {
             final String message = "Expected request id '" + requestId
-                    + "' but have '" + statusResponseObject.getRequestID()
+                    + "' but have '" + statusResponseObject.getRequestId()
                     + "' in "
                     + statusResponseObject.getClass().getCanonicalName();
             LOGGER.warn(message);

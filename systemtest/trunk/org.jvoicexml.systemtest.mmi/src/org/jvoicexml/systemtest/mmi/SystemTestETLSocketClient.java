@@ -38,7 +38,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.client.TcpUriFactory;
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.Mmi;
 
 /**
@@ -85,8 +85,8 @@ final class SystemTestETLSocketClient extends Thread {
                 LOGGER.debug("expecting MMI events from '" + uri + "'");
             }
             final Object o = unmarshaller.unmarshal(in);
-            if (o instanceof MMIEvent) {
-                final MMIEvent event = (MMIEvent) o;
+            if (o instanceof LifeCycleEvent) {
+                final LifeCycleEvent event = (LifeCycleEvent) o;
                 LOGGER.info("received MMI event: " + event);
                 listener.receivedEvent(event);
             } else {

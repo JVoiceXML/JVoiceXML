@@ -132,7 +132,11 @@ public final class MMISystemTest implements JVoiceXmlMainListener {
             } catch (Exception e) {
                 result.setResult(TestResult.FAIL);
                 final String message = e.getMessage();
-                result.setNotes(message);
+                if (message == null) {
+                    result.setNotes("Caught exception: " + e.getClass());
+                } else {
+                    result.setNotes(message);
+                }
             } finally {
                 try {
                     testcase.clearContext();

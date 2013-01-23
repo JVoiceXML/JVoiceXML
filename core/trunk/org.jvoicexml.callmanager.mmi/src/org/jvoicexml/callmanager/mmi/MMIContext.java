@@ -29,7 +29,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.jvoicexml.Session;
-import org.jvoicexml.mmi.events.xml.MMIRequestIdentifier;
 
 /**
  * Associated a communication channel object with MMI request identifiers.
@@ -37,7 +36,7 @@ import org.jvoicexml.mmi.events.xml.MMIRequestIdentifier;
  * @version $Revision: $
  * @since 0.7.6
  */
-public final class MMIContext extends MMIRequestIdentifier {
+public final class MMIContext {
     /** The associated communication channel. */
     private Object channel;
 
@@ -53,6 +52,12 @@ public final class MMIContext extends MMIRequestIdentifier {
     /** The current contentURL. */
     private URI contentURL;
 
+    /** The request Identifier. */
+    private String requestId;
+
+    /** The context identifier. */
+    private final String contextId;
+
     /**
      * Constructs a new object.
      * @param ctxId the context id
@@ -60,7 +65,7 @@ public final class MMIContext extends MMIRequestIdentifier {
      *            the given context id does not denote a valid URI
      */
     public MMIContext(final String ctxId) throws URISyntaxException {
-        super(ctxId);
+        contextId = ctxId;
     }
 
     /**
@@ -72,7 +77,34 @@ public final class MMIContext extends MMIRequestIdentifier {
      */
     public MMIContext(final String reqId, final String ctxId)
             throws URISyntaxException {
-        super(reqId, ctxId);
+        contextId = ctxId;
+        requestId = reqId;
+    }
+
+    /**
+     * Retrieves the context identifier.
+     * @return the context identifier
+     */
+    public String getContextId() {
+        return contextId;
+    }
+
+    /**
+     * Gets the value of the requestID property.
+     * 
+     * @return possible object is {@link String }
+     * 
+     */
+    public String getRequestId() {
+        return requestId;
+    }
+
+    /**
+     * Sets the request identifier.
+     * @param value the request identifier
+     */
+    public void setRequestId(final String value) {
+        requestId = value;
     }
 
     /**

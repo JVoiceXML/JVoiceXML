@@ -27,14 +27,12 @@
 package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.net.URI;
+import java.net.URL;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.jvoicexml.mmi.events.xml.AnyComplexType;
 
 /**
  * <p>
@@ -72,34 +70,8 @@ public final class StartRequest extends LifeCycleRequest
     /** The serial version UID. */
     private static final long serialVersionUID = 5116545132217922157L;
 
-    /** Nested data elements. */ 
-    private List<Object> data;
-
     private ContentURLType contentURL;
     private List<Object> content;
-
-    /**
-     * Retrieves the data property.
-     * @return the data property
-     */
-    @XmlElementWrapper(name = "Data",
-            namespace = "http://www.w3.org/2008/04/mmi-arch")
-    public List<Object> getData() {
-        if (data == null) {
-            data = new ArrayList<Object>();
-        }
-        return data;
-    }
-
-    /**
-     * Sets the value of the data property.
-     * 
-     * @param value new value for data attribute 
-     */
-    public void setData(final List<Object> value) {
-        data = value;
-    }
-
 
     /**
      * Gets the value of the contentURL property.
@@ -121,6 +93,28 @@ public final class StartRequest extends LifeCycleRequest
      */
     public void setContentURL(final ContentURLType value) {
         contentURL = value;
+    }
+
+    /**
+     * Sets the content URL.
+     * @param value the content URL to set
+     */
+    public void setContentURL(final URL value) {
+        final ContentURLType type = new ContentURLType();
+        final String href = value.toString();
+        type.setHref(href);
+        setContentURL(type);
+    }
+
+    /**
+     * Sets the content URL.
+     * @param value the content URL to set
+     */
+    public void setContentURL(final URI value) {
+        final ContentURLType type = new ContentURLType();
+        final String href = value.toString();
+        type.setHref(href);
+        setContentURL(type);
     }
 
     /**

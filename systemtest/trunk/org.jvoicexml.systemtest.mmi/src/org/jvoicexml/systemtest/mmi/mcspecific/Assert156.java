@@ -29,12 +29,10 @@ import java.io.File;
 import java.net.URI;
 
 import org.jvoicexml.mmi.events.DoneNotification;
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.PrepareRequest;
-import org.jvoicexml.mmi.events.PrepareRequestBuilder;
 import org.jvoicexml.mmi.events.PrepareResponse;
 import org.jvoicexml.mmi.events.StartRequest;
-import org.jvoicexml.mmi.events.StartRequestBuilder;
 import org.jvoicexml.mmi.events.StartResponse;
 import org.jvoicexml.systemtest.mmi.TestFailedException;
 
@@ -66,30 +64,29 @@ public final class Assert156 extends AbstractAssert {
      */
     @Override
     public void test() throws Exception {
-        final PrepareRequestBuilder builder = new PrepareRequestBuilder();
+        final PrepareRequest request = new PrepareRequest();
         final String contextId = getContextId();
-        builder.setContextId(contextId);
+        request.setContext(contextId);
         final String requestId = createRequestId();
-        builder.setRequestId(requestId);
+        request.setRequestId(requestId);
         final File file = new File("vxml/helloworld.vxml");
         final URI uri = file.toURI();
-        builder.setHref(uri);
-        final PrepareRequest request = builder.toPrepareRequest();
+        request.setContentURL(uri);
         send(request);
-        final MMIEvent prepareReponse = waitForResponse("PrepareResponse");
+        final LifeCycleEvent prepareReponse =
+                waitForResponse("PrepareResponse");
         if (!(prepareReponse instanceof PrepareResponse)) {
             throw new TestFailedException("expected a PrepareReponse but got a "
                     + prepareReponse.getClass());
         }
         checkIds(prepareReponse, contextId, requestId);
-        final StartRequestBuilder startBuilder = new StartRequestBuilder();
-        startBuilder.setContextId(contextId);
+        final StartRequest startRequest = new StartRequest();
+        startRequest.setContext(contextId);
         final String startRequestId = createRequestId();
-        startBuilder.setRequestId(startRequestId);
-        final StartRequest startRequest = startBuilder.toStartRequest();
+        startRequest.setRequestId(startRequestId);
         final long startTime = System.currentTimeMillis();
         send(startRequest);
-        final MMIEvent startReponse = waitForResponse("StartResponse");
+        final LifeCycleEvent startReponse = waitForResponse("StartResponse");
         final long endTime = System.currentTimeMillis();
         if (!(startReponse instanceof StartResponse)) {
             throw new TestFailedException("expected a StartReponse but got a "
@@ -98,7 +95,8 @@ public final class Assert156 extends AbstractAssert {
         ensureSuccess(startReponse);
         setNotes("started after " + (endTime - startTime) + " msec");
         checkIds(startReponse, contextId, startRequestId);
-        final MMIEvent doneNotification = waitForResponse("DoneNotification");
+        final LifeCycleEvent doneNotification =
+                waitForResponse("DoneNotification");
         if (!(doneNotification instanceof DoneNotification)) {
             throw new TestFailedException(
                     "expected a DoneNotification but got a "

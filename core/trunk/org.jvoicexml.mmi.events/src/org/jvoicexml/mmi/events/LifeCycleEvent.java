@@ -28,12 +28,14 @@
 package org.jvoicexml.mmi.events;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
 public class LifeCycleEvent {
 
     private String requestID;
     private String source;
     private String target;
+    private AnyComplexType data;
 
     /**
      * Constructs a new object.
@@ -50,7 +52,7 @@ public class LifeCycleEvent {
      */
     @XmlAttribute(name = "RequestID",
             namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    public final String getRequestID() {
+    public final String getRequestId() {
         return requestID;
     }
 
@@ -61,7 +63,7 @@ public class LifeCycleEvent {
      *            allowed object is {@link String }
      * 
      */
-    public final void setRequestID(final String value) {
+    public final void setRequestId(final String value) {
         requestID = value;
     }
 
@@ -109,5 +111,15 @@ public class LifeCycleEvent {
      */
     public final void setTarget(final String value) {
         target = value;
+    }
+    
+    @XmlElement(name = "Data",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
+    public final AnyComplexType getData() {
+        return data;
+    }
+
+    public void setData(final AnyComplexType value) {
+        data = value;
     }
 }

@@ -26,7 +26,7 @@
 package org.jvoicexml.callmanager.mmi;
 
 import java.io.File;
-import java.net.URI;
+import java.net.URL;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,8 +35,7 @@ import org.jvoicexml.callmanager.mmi.test.DummyETLProtocolAdapter;
 import org.jvoicexml.client.ConnectionInformationFactory;
 import org.jvoicexml.client.JVoiceXmlConnectionInformationFactory;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.mmi.events.xml.StartRequest;
-import org.jvoicexml.mmi.events.xml.StartRequestBuilder;
+import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 
 /**
@@ -45,12 +44,12 @@ import org.jvoicexml.test.DummyJvoiceXmlCore;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class TestVoiceModalityComponent {
+public final class TestVoiceModalityComponent {
     /** The call manager. */
     private MMICallManager cm;
 
     /**
-     * Set up the test environment
+     * Set up the test environment.
      * @throws Exception
      *         test failed
      * @throws JVoiceXMLEvent
@@ -81,17 +80,17 @@ public class TestVoiceModalityComponent {
 
     /**
      * Test method for {@link org.jvoicexml.callmanager.mmi.VoiceModalityComponent#receivedEvent(org.jvoicexml.mmi.events.xml.MMIEvent)}.
+     * @throws Exception test failed
      */
     @Test
-    public void testReceivedEvent() {
+    public void testReceivedEvent() throws Exception {
         final VoiceModalityComponent mc = cm.getVoiceModalityComponent();
-        final StartRequestBuilder builder = new StartRequestBuilder();
-        builder.setContextId("http://nowhere");
-        builder.setRequestId("4242");
+        final StartRequest request = new StartRequest();
+        request.setContext("http://nowhere");
+        request.setRequestId("4242");
         final File file = new File("unittests/vxml/hello.vxml");
-        final URI uri = file.toURI();
-        builder.setHref(uri);
-        final StartRequest request = builder.toStartRequest();
+        final URL url = file.toURI().toURL();
+        request.setContentURL(url);
         final DecoratedMMIEvent event = new DecoratedMMIEvent(this, request);
         mc.receivedEvent(event);
     }

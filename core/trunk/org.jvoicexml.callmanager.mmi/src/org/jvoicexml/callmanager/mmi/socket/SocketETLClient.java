@@ -39,8 +39,8 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.client.TcpUriFactory;
-import org.jvoicexml.mmi.events.xml.MMIEvent;
-import org.jvoicexml.mmi.events.xml.Mmi;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.Mmi;
 
 /**
  * A connected ETL socket. Since the {@link javax.xml.bind.Unmarshaller}
@@ -86,8 +86,8 @@ final class SocketETLClient extends Thread {
                 LOGGER.debug("expecting MMI events from '" + uri + "'");
             }
             final Object o = unmarshaller.unmarshal(in);
-            if (o instanceof MMIEvent) {
-                final MMIEvent evt = (MMIEvent) o;
+            if (o instanceof LifeCycleEvent) {
+                final LifeCycleEvent evt = (LifeCycleEvent) o;
                 LOGGER.info("received MMI event: " + evt);
                 final DecoratedMMIEvent event =
                         new DecoratedMMIEvent(this, evt);

@@ -26,6 +26,7 @@
 package org.jvoicexml.callmanager.mmi.socket;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -87,10 +88,11 @@ public final class SocketETLServer extends Thread {
     @Override
     public void run() {
         try {
-            server = new ServerSocket(port);
+            final InetAddress localHost = InetAddress.getLocalHost();
+            server = new ServerSocket(port, -1, localHost);
             server.setReuseAddress(true);
             uri = TcpUriFactory.createUri(
-                    (InetSocketAddress)server.getLocalSocketAddress());
+                    (InetSocketAddress) server.getLocalSocketAddress());
             LOGGER.info("listening on '" + uri + "' for MMI events");
             while (!stopRequest) {
                 final Socket socket = server.accept();

@@ -25,7 +25,7 @@
  */
 package org.jvoicexml.callmanager.mmi;
 
-import org.jvoicexml.mmi.events.xml.MMIEvent;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
 
 /**
  * An {@link MMIEvent} decorated with a source.
@@ -39,14 +39,14 @@ public final class DecoratedMMIEvent {
     private final Object channel;
 
     /** The received MMI event. */
-    private final MMIEvent event;
+    private final LifeCycleEvent event;
 
     /**
      * Constructs a new object.
      * @param ch channel over which the {@link MMIEvent} was received 
      * @param evt received MMI event
      */
-    public DecoratedMMIEvent(final Object ch, final MMIEvent evt) {
+    public DecoratedMMIEvent(final Object ch, final LifeCycleEvent evt) {
         channel = ch;
         event = evt;
     }
@@ -63,7 +63,7 @@ public final class DecoratedMMIEvent {
      * Retrieves the received MMI event.
      * @return the event
      */
-    public MMIEvent getEvent() {
+    public LifeCycleEvent getEvent() {
         return event;
     }
 }

@@ -25,9 +25,8 @@
  */
 package org.jvoicexml.systemtest.mmi.mcspecific;
 
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.StartRequest;
-import org.jvoicexml.mmi.events.StartRequestBuilder;
 import org.jvoicexml.mmi.events.StartResponse;
 import org.jvoicexml.mmi.events.StatusType;
 import org.jvoicexml.systemtest.mmi.TestFailedException;
@@ -60,13 +59,12 @@ public final class Assert167 extends AbstractAssert {
     @Override
     public void test() throws Exception {
         final String contextId = getContextId();
-        final StartRequestBuilder startBuilder = new StartRequestBuilder();
-        startBuilder.setContextId(contextId);
+        final StartRequest startRequest = new StartRequest();
+        startRequest.setContext(contextId);
         String requestId = createRequestId();
-        startBuilder.setRequestId(requestId);
-        final StartRequest startRequest = startBuilder.toStartRequest();
+        startRequest.setRequestId(requestId);
         send(startRequest);
-        final MMIEvent startReponse = waitForResponse("StartResponse");
+        final LifeCycleEvent startReponse = waitForResponse("StartResponse");
         if (!(startReponse instanceof StartResponse)) {
             throw new TestFailedException("expected a StartReponse but got a "
                     + startReponse.getClass());

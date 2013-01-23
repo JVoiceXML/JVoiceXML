@@ -39,9 +39,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
-import org.jvoicexml.mmi.events.xml.Mmi;
-import org.jvoicexml.mmi.events.xml.StartRequest;
-import org.jvoicexml.mmi.events.xml.StartRequestBuilder;
+import org.jvoicexml.mmi.events.Mmi;
+import org.jvoicexml.mmi.events.StartRequest;
 
 /**
  * Test cases for {@link SocketETLServer}.
@@ -77,15 +76,14 @@ public class TestSocketETLServer implements MMIEventListener {
         server.start();
         Thread.sleep(500);
         final Socket client = new Socket("localhost", 4242);
-        final StartRequestBuilder builder = new StartRequestBuilder();
-        builder.setContextId("http://nowhere");
-        builder.setRequestId("4242");
+        final StartRequest request = new StartRequest();
+        request.setContext("http://nowhere");
+        request.setRequestId("4242");
         final File file = new File("unittests/vxml/hello.vxml");
         final URI uri = file.toURI();
-        builder.setHref(uri);
+        request.setContentURL(uri.toURL());
         final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
         final Marshaller marshaller = ctx.createMarshaller();
-        final StartRequest request = builder.toStartRequest();
         final OutputStream out = client.getOutputStream();
         marshaller.marshal(request, out);
         out.flush();

@@ -41,9 +41,8 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
-import org.jvoicexml.mmi.events.xml.CommonAttributeAdapter;
-import org.jvoicexml.mmi.events.xml.MMIEvent;
-import org.jvoicexml.mmi.events.xml.Mmi;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.Mmi;
 
 /**
  * A protocol adapter using plain sockets.
@@ -121,12 +120,10 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void sendMMIEvent(final Object channel, final MMIEvent event)
+    public void sendMMIEvent(final Object channel, final LifeCycleEvent event)
         throws IOException {
         try {
-            final CommonAttributeAdapter adapter =
-                    new CommonAttributeAdapter(event);
-            final String target = adapter.getTarget();
+            final String target = event.getTarget();
             if (target == null) {
                 LOGGER.error("unable to send MMI event '" + event
                         + "'. No target.");
@@ -138,7 +135,7 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
             final int targetPort = uri.getPort();
             final Socket client = new Socket(host, targetPort);
             final URI serverUri = server.getUri();
-            adapter.setSource(serverUri.toString());
+            event.setSource(serverUri.toString());
             LOGGER.info("sending " + event + " to '" + uri + "'");
 
             // Send the message

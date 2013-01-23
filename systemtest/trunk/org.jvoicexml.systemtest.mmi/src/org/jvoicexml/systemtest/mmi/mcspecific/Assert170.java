@@ -29,9 +29,8 @@ import java.io.File;
 import java.net.URI;
 
 import org.jvoicexml.mmi.events.DoneNotification;
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.StartRequest;
-import org.jvoicexml.mmi.events.StartRequestBuilder;
 import org.jvoicexml.mmi.events.StartResponse;
 import org.jvoicexml.systemtest.mmi.TestFailedException;
 
@@ -65,38 +64,37 @@ public final class Assert170 extends AbstractAssert {
      */
     @Override
     public void test() throws Exception {
-        final StartRequestBuilder builder1 = new StartRequestBuilder();
+        final StartRequest request1 = new StartRequest();
         final String contextId = getContextId();
-        builder1.setContextId(contextId);
+        request1.setContext(contextId);
         final String requestId1 = createRequestId();
-        builder1.setRequestId(requestId1);
+        request1.setRequestId(requestId1);
         final File file = new File("vxml/helloworld.vxml");
         final URI uri = file.toURI();
-        builder1.setHref(uri);
-        final StartRequest request1 = builder1.toStartRequest();
+        request1.setContentURL(uri);
         send(request1);
-        final MMIEvent startReponse1 = waitForResponse("StartResponse");
+        final LifeCycleEvent startReponse1 = waitForResponse("StartResponse");
         if (!(startReponse1 instanceof StartResponse)) {
             throw new TestFailedException("expected a StartReponse but got a "
                     + startReponse1.getClass());
         }
         checkIds(startReponse1, contextId, requestId1);
         ensureSuccess(startReponse1);
-        final StartRequestBuilder builder2 = new StartRequestBuilder();
-        builder2.setContextId(contextId);
+        final StartRequest request2 = new StartRequest();
+        request2.setContext(contextId);
         final String requestId2 = createRequestId();
-        builder2.setRequestId(requestId2);
-        builder2.setHref(uri);
-        final StartRequest request2 = builder2.toStartRequest();
+        request2.setRequestId(requestId2);
+        request2.setContentURL(uri);
         send(request2);
-        final MMIEvent startReponse2 = waitForResponse("StartResponse");
+        final LifeCycleEvent startReponse2 = waitForResponse("StartResponse");
         if (!(startReponse2 instanceof StartResponse)) {
             throw new TestFailedException("expected a StartReponse but got a "
                     + startReponse1.getClass());
         }
         checkIds(startReponse2, contextId, requestId2);
         ensureSuccess(startReponse1);
-        final MMIEvent doneNotification = waitForResponse("DoneNotification");
+        final LifeCycleEvent doneNotification =
+                waitForResponse("DoneNotification");
         if (!(doneNotification instanceof DoneNotification)) {
             throw new TestFailedException(
                     "expected a DoneNotification but got a "

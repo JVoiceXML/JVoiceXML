@@ -29,9 +29,8 @@ import java.io.File;
 import java.net.URI;
 
 import org.jvoicexml.mmi.events.DoneNotification;
-import org.jvoicexml.mmi.events.MMIEvent;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.StartRequest;
-import org.jvoicexml.mmi.events.StartRequestBuilder;
 import org.jvoicexml.mmi.events.StartResponse;
 import org.jvoicexml.systemtest.mmi.TestFailedException;
 
@@ -62,24 +61,24 @@ public final class Assert8 extends AbstractAssert {
      */
     @Override
     public void test() throws Exception {
-        final StartRequestBuilder builder = new StartRequestBuilder();
+        final StartRequest request = new StartRequest();
         final String contextId = getContextId();
-        builder.setContextId(contextId);
+        request.setContext(contextId);
         final String requestId = createRequestId();
-        builder.setRequestId(requestId);
+        request.setRequestId(requestId);
         final File file = new File("vxml/helloworld.vxml");
         final URI uri = file.toURI();
-        builder.setHref(uri);
-        final StartRequest request = builder.toStartRequest();
+        request.setContentURL(uri);
         send(request);
-        final MMIEvent startReponse = waitForResponse("StartResponse");
+        final LifeCycleEvent startReponse = waitForResponse("StartResponse");
         if (!(startReponse instanceof StartResponse)) {
             throw new TestFailedException("expected a StartReponse but got a "
                     + startReponse.getClass());
         }
         checkIds(startReponse, contextId, requestId);
         ensureSuccess(startReponse);
-        final MMIEvent doneNotification = waitForResponse("DoneNotification");
+        final LifeCycleEvent doneNotification =
+                waitForResponse("DoneNotification");
         if (!(doneNotification instanceof DoneNotification)) {
             throw new TestFailedException(
                     "expected a DoneNotification but got a "
