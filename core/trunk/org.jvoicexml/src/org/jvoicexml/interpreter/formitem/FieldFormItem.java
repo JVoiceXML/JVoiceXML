@@ -276,7 +276,7 @@ public final class FieldFormItem
 
     /**
      * Check, if there are builtin grammars defined and if so, add them as
-     * custom gramamrs.
+     * custom grammars.
      * @param grammars current grammars of the field
      * @param field the field
      * @param locale the locale to use
