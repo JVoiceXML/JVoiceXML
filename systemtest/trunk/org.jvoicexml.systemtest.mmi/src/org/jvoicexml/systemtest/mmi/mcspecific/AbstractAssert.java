@@ -239,15 +239,16 @@ public abstract class AbstractAssert implements MMIEventListener {
             final String requestId)
         throws TestFailedException {
         final String eventContextId;
-        if (event instanceof LifeCycleRequest) {
-            final LifeCycleRequest request = (LifeCycleRequest) event;
+        if (evt instanceof LifeCycleRequest) {
+            final LifeCycleRequest request = (LifeCycleRequest) evt;
             eventContextId = request.getContext();
-        } else if (event instanceof LifeCycleResponse) {
-            final LifeCycleResponse response = (LifeCycleResponse) event;
+        } else if (evt instanceof LifeCycleResponse) {
+            final LifeCycleResponse response = (LifeCycleResponse) evt;
             eventContextId = response.getContext();
         } else {
             throw new TestFailedException(
-                    "event does not contain a context id");
+                    "event does not contain a context id (" + evt.getClass()
+                    + ")");
         }
         if (!contextId.equals(eventContextId)) {
             final String message = "Expected context id '" + contextId
@@ -256,7 +257,7 @@ public abstract class AbstractAssert implements MMIEventListener {
             LOGGER.warn(message);
             throw new TestFailedException(message);
         }
-        final String eventRequestId = event.getRequestId();
+        final String eventRequestId = evt.getRequestId();
         if (!requestId.equals(eventRequestId)) {
             final String message = "Expected request id '" + requestId
                     + "' but have '" + eventRequestId + "' in "
