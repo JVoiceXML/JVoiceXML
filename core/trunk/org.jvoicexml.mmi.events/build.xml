@@ -86,8 +86,6 @@ Currently it is set to '${mmi.protoc}'
       <uptodate property="schemasChanged">
         <srcfiles dir="${basedir}">
           <include name="build.xml"/>
-          <include name="etc/jaxb-bindings.xml"/>
-          <include name="etc/xsd/*.xsd" />
           <include name="etc/proto/*.proto"/>
         </srcfiles>
         <mapper type="merge" to="${gen}/__gen__"/>
@@ -96,22 +94,6 @@ Currently it is set to '${mmi.protoc}'
 
     <target name="preprocess" depends="-init,-up2date,-checkProtoc"
       unless="schemasChanged">
-      <java classname="com.sun.tools.internal.xjc.Driver" failonerror="true">
-        <arg value="-b"/>
-        <arg value="${basedir}/etc/jaxb-bindings.xml"/>
-        <arg value="-extension"/>
-        <!--arg value="-Xinheritance"/-->
-        <arg value="-p"/>
-        <arg value="${component}.xml"/>
-        <arg value="-d"/>
-        <arg value="${basedir}/${gen}"/>
-        <arg value="${basedir}/etc/xsd/mmi.xsd"/>
-        <!--classpath>
-          <fileset dir="${jdk.home}">
-            <include name="lib/tools.jar"/>
-          </fileset>
-        </classpath-->
-      </java>
       <copy todir="${gen}">
           <fileset dir="etc/proto/">
               <include name="*.proto"/>
