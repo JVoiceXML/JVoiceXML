@@ -83,7 +83,7 @@ public class DtmfRecognizerProperties {
             setTermtimeout(propTermtimeout);
         }
         final String propTermchar = props.get(PROPERTY_TERM_CHAR);
-        if (propTermchar != null) {
+        if ((propTermchar != null) && !propTermchar.isEmpty()) {
             termchar = propTermchar.charAt(0);
         }
         setEnhancedProperties(props);
@@ -150,7 +150,8 @@ public class DtmfRecognizerProperties {
 
     /**
      * Retrieves the terminating DTMF character for DTMF input recognition.
-     * @return the terminating DTMF character
+     * @return the terminating DTMF character, maybe 0, if no terminating
+     *          character has been defined
      */
     public final char getTermchar() {
         return termchar;
