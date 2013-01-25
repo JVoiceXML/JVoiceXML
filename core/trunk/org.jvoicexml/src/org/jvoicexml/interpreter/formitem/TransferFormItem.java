@@ -165,6 +165,6 @@ public final class TransferFormItem
      * {@inheritDoc}
      */
     public boolean isModal() {
-        return false;
+        return true;
     }
 }
