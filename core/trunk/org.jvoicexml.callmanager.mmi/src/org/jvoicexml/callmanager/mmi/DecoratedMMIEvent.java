@@ -28,14 +28,18 @@ package org.jvoicexml.callmanager.mmi;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 
 /**
- * An {@link MMIEvent} decorated with a source.
+ * An {@link LifeCycleEvent} decorated with a channel. A channel can
+ * uniquely be identified within an {@link ETLProtocolAdapter}. Usually
+ * this will be the instance that received the request and should send a
+ * response.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
  */
+
 public final class DecoratedMMIEvent {
 
-    /** The channel over which the {@link MMIEvent} was received. */
+    /** The channel over which the {@link LifeCycleEvent} was received. */
     private final Object channel;
 
     /** The received MMI event. */
@@ -43,7 +47,7 @@ public final class DecoratedMMIEvent {
 
     /**
      * Constructs a new object.
-     * @param ch channel over which the {@link MMIEvent} was received 
+     * @param ch channel over which the {@link LifeCycleEvent} was received 
      * @param evt received MMI event
      */
     public DecoratedMMIEvent(final Object ch, final LifeCycleEvent evt) {
