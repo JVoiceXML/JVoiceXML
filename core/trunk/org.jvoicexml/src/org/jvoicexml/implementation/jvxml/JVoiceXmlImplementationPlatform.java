@@ -182,11 +182,37 @@ public final class JVoiceXmlImplementationPlatform
             final KeyedResourcePool<SynthesizedOutput> synthesizedOutputPool,
             final KeyedResourcePool<SpokenInput> spokenInputPool,
             final ConnectionInformation connectionInformation) {
+       this(telePool, synthesizedOutputPool, spokenInputPool, new BufferedCharacterInput(), connectionInformation);
+    }
+    
+    /**
+     * Constructs a new Implementation platform.
+     *
+     * <p>
+     * This method should not be called by any application. The implementation
+     * platform is accessible via the <code>Session</code>
+     * </p>
+     *
+     * @param telePool  pool of telephony resource factories
+     * @param synthesizedOutputPool pool of synthesized output resource
+     *        factories
+     * @param spokenInputPool pool of spoken input resource factories
+     * @param characterInput buffer character input for this platform 
+     * @param connectionInformation connection information container
+     *
+     * @see org.jvoicexml.Session
+     */
+    JVoiceXmlImplementationPlatform(
+            final KeyedResourcePool<Telephony> telePool,
+            final KeyedResourcePool<SynthesizedOutput> synthesizedOutputPool,
+            final KeyedResourcePool<SpokenInput> spokenInputPool,
+            final BufferedCharacterInput characterInput,
+            final ConnectionInformation connectionInformation) {
         info = connectionInformation;
         telephonyPool = telePool;
         synthesizerPool = synthesizedOutputPool;
         recognizerPool = spokenInputPool;
-        characterInput = new BufferedCharacterInput();
+        this.characterInput = characterInput;
         inputLock = new Object();
         processor = new JVoiceXmlImplementationGrammarProcessor();
         promptAccumulator = new JVoiceXmlPromptAccumulator(this);

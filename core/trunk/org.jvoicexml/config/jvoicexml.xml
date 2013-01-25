@@ -195,4 +195,12 @@
         <bean class="YourClas" />
     </property-->
  </bean>
+ 
+ <!--
+   Implementation of BufferCharacterInput to use
+ --> 
+ <bean id="org.jvoicexml.implementation.jvxml.BufferedCharacterInput"
+   class="org.jvoicexml.implementation.jvxml.BufferedCharacterInput">
+ </bean>
+ 
 </beans>

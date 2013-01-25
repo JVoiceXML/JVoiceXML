@@ -52,7 +52,7 @@ import org.jvoicexml.implementation.SpokenInputListener;
  *
  * @since 0.5
  */
-public final class BufferedCharacterInput
+public class BufferedCharacterInput
         implements CharacterInput, InputDevice, ObservableSpokenInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
@@ -198,7 +198,7 @@ public final class BufferedCharacterInput
      * @return <code>true</code> if the result is accepted.
      * @since 0.7
      */
-    boolean isAccepted(final RecognitionResult result) {
+    public boolean isAccepted(final RecognitionResult result) {
         for (GrammarImplementation<?> grammar : activeGrammars) {
             if (grammar.accepts(result)) {
                 return true;
@@ -249,7 +249,7 @@ public final class BufferedCharacterInput
      * @param event the event.
      * @since 0.6
      */
-    void fireInputEvent(final SpokenInputEvent event) {
+    public void fireInputEvent(final SpokenInputEvent event) {
         final Collection<SpokenInputListener> copy =
             new java.util.ArrayList<SpokenInputListener>();
         synchronized (listener) {

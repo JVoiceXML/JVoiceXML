@@ -296,10 +296,15 @@ public final class JVoiceXmlImplementationPlatformFactory
         if (info == null) {
             throw new NoresourceError("No connection information given!");
         }
-
+        BufferedCharacterInput input = null;
+        try {
+            input = configuration.loadObject(BufferedCharacterInput.class);
+        } catch (ConfigurationException e1) {
+            e1.printStackTrace();
+        }
         final JVoiceXmlImplementationPlatform platform =
             new JVoiceXmlImplementationPlatform(telephonyPool, synthesizerPool,
-                spokenInputPool, info);
+                spokenInputPool, input, info);
         platform.setExternalRecognitionListener(externalRecognitionListener);
         platform.setExternalSynthesisListener(externalSynthesisListener);
         try {
