@@ -61,6 +61,8 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.util.Log;
+
 /**
  * Parser to transform the contents of a <code>&lt;prompt&gt;</code> or
  * <code>&lt;audio&gt;</code> into an SSML document.
@@ -179,7 +181,16 @@ public final class SsmlParser {
             transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
             final Speak speak = document.getSpeak();
             final Source source = new DOMSource(speak);
-            transformer.transform(source, result);
+//            if (transformerFactory.getFeature(DOMSource.FEATURE))
+//            {
+//               Log.e("transformer","sí está soportado");
+//            }
+            try{
+                transformer.transform(source, result);
+            }
+            catch (ClassCastException e){
+                Log.e("SsmlParser", "apache's exception");
+            }
             final ByteArrayInputStream stream =
                 new ByteArrayInputStream(buffer.toByteArray());
             final InputSource inputSource = new InputSource(stream);

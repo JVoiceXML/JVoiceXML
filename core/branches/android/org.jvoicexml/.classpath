@@ -32,8 +32,8 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.processor.srgs"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
-	<classpathentry kind="lib" path="D:/PFC/sdk/platforms/android-15/android.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="D:/PFC/sdk/platforms/android-15/android.jar" sourcepath="C:/Program Files/Java/jdk1.7.0_09/jre"/>
 	<classpathentry kind="lib" path="D:/PFC/workspace/org.jvoicexml/3rdparty/json/lib/json-20090211.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
