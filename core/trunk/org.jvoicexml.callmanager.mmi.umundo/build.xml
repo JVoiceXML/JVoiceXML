@@ -1,6 +1,6 @@
-<project name="org.jvoicexml.callmanager.mmi" default="jar" basedir=".">
+<project name="org.jvoicexml.callmanager.mmi.umundo" default="jar" basedir=".">
     <description>
-This file builds the MMI callmanager for JVoiceXml.
+This file builds the umundo ETL of the MMI callmanager for JVoiceXml.
 
 To override the current settings follow the instructions given in
 org.jvoicexml/personal-props/README.txt
@@ -15,9 +15,9 @@ org.jvoicexml/personal-props/README.txt
 
     <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
-        <property name="component" value="org.jvoicexml.callmanager.mmi"/>
+        <property name="component" value="org.jvoicexml.callmanager.mmi.umundo"/>
         <property name="component.path"
-          value="org/jvoicexml/callmanager/mmi"/>
+          value="org/jvoicexml/callmanager/mmi/umundo"/>
 
         <!-- directory structure -->
         <property name="src" value="src" />
@@ -39,20 +39,21 @@ org.jvoicexml/personal-props/README.txt
         <path id="project.classpath">
             <path refid="jvxml.core.lib" />
             <fileset refid="log4j.lib" />
+            <fileset refid="umundo.lib" />
+            <fileset refid="protobuf.lib" />
         </path>
     </target>
 
     <target name="-checkJavaVersion">
-        <!-- Check if at least java 6 is used. -->
-        <condition property="version1.6">
+        <!-- Check if at least java 7 is used. -->
+        <condition property="version1.7">
             <or>
-                <equals arg1="1.6" arg2="${ant.java.version}" />
                 <equals arg1="1.7" arg2="${ant.java.version}" />
             </or>
         </condition>
 
-        <fail unless="version1.6">
-You need at least java version 1.6 to compile this project.
+        <fail unless="version1.7">
+You need at least java version 1.7 to compile this project.
 You're using ${ant.java.version}
     </fail>
     </target>
@@ -63,39 +64,22 @@ You're using ${ant.java.version}
         <mkdir dir="${dist}" />
     </target>
 
-    <target name="-cleanUmundoCallmanager" if="jvxml.mmi.umundo">
-        <ant dir="../org.jvoicexml.callmanager.mmi.umundo" target="clean"
-          inheritrefs="false" inheritall="false" />
-    </target>
-    
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
         <ant dir="../org.jvoicexml.mmi.events" target="clean"
           inheritrefs="false"  inheritall="false"/>
         <delete dir="${build}" failonerror="false" />
         <delete file="${dist.jar}" failonerror="false"/>
-        <antcall target="-cleanUmundoCallmanager"/>
     </target>
 
-    <target name="-configurationUmundoCallmanager" if="jvxml.mmi.umundo">
-        <ant dir="../org.jvoicexml.callmanager.mmi.umundo" target="configuration"
-          inheritrefs="false" inheritall="false"/>
-    </target>
-
-    <target name="configuration" depends="-setup,-configurationUmundoCallmanager">
-      <copy todir="${config}" file="${etc}/mmi-callmanager.xml"/>
-    </target>
-
-    <target name="-compileUmundoCallmanager" if="jvxml.mmi.umundo">
-        <ant dir="../org.jvoicexml.callmanager.mmi.umundo" target="jar"
-          inheritrefs="false" inheritall="false"/>
+    
+    <target name="configuration" depends="-setup">
+      <copy todir="${config}" file="${etc}/mmi-callmanager-umundo.xml"/>
     </target>
 
     <target name="compile"
             depends="-init,-checkJavaVersion"
             description="Compile the sources">
-        <ant dir="../org.jvoicexml.mmi.events" target="jar"
-          inheritrefs="false" inheritall="false"/>
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
         <javac destdir="${build}" includeantruntime="false"
                optimize="${javac.optimize}"
@@ -106,7 +90,6 @@ You're using ${ant.java.version}
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
-        <antcall target="-compileUmundoCallmanager"/>
     </target>
 
     <target name="jar"
@@ -123,7 +106,7 @@ You're using ${ant.java.version}
                     <attribute name="Implementation-Vendor"
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
-                               value="JVoiceXML MMI call manager" />
+                               value="JVoiceXML umundo ETL of the MMI call manager" />
                     <attribute name="Implementation-Version"
                         value="${version}" />
                 </section>
@@ -152,7 +135,7 @@ You're using ${ant.java.version}
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2012<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2013<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <tag name="todo" description="Stuff to complete" />
         <classpath>

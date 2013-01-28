@@ -17,38 +17,5 @@ callmanager.
           <path location="../org.jvoicexml.client/classes"/>
           <path location="../org.jvoicexml.mmi.events/classes"/>
         </path>
-        <!-- commons libraries -->
-        <property name="commons.dir" value="${3rdparty.dir}/commons" />
-
-        <!-- commons-logging library -->
-        <property name="loggings.dir" value="${commons.dir}/logging1.1.1" />
-        <property name="loggings.lib.dir" value="${loggings.dir}/lib" />
-        <fileset dir="${loggings.lib.dir}" id="loggings.lib">
-            <include name="commons-logging-1.1.1.jar" />
-        </fileset>
-
-        <!-- commons-httpclient library -->
-        <property name="httpclient.dir" value="${commons.dir}/httpclient4.0.3" />
-        <property name="httpclient.lib.dir" value="${httpclient.dir}/lib" />
-        <fileset dir="${httpclient.lib.dir}" id="httpclient.lib">
-            <include name="httpclient-4.0.3.jar" />
-            <include name="httpmime-4.0.3.jar" />
-        </fileset>
-
-        <!-- commons-httpcore library -->
-        <property name="httpcore.dir" value="${commons.dir}/httpcore4.1" />
-        <property name="httpcore.lib.dir" value="${httpcore.dir}/lib" />
-        <fileset dir="${httpcore.lib.dir}" id="httpcore.lib">
-            <include name="httpcore-4.1.jar" />
-            <include name="httpcore-nio-4.1.jar" />
-        </fileset>
-
-        <!-- mozilla rhino javascript library -->
-        <property name="rhino.dir" value="${3rdparty.dir}/rhino1.7R3" />
-        <property name="rhino.lib.dir" value="${rhino.dir}/lib" />
-        <fileset dir="${rhino.lib.dir}" id="rhino.lib">
-            <include name="js.jar" />
-        </fileset>
-
     </target>
 </project>
