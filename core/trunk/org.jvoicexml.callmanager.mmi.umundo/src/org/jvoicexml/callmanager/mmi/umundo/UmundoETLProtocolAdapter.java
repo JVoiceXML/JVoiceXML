@@ -53,7 +53,7 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
 
     private Node node;
     private TypedSubscriber subscriber;
-    private MmiReceiver receiver;
+    private final MmiReceiver receiver;
     private TypedPublisher publisher;
     /** The registry for protobuf extensions. */
     private ExtensionRegistry registry;
@@ -66,6 +66,7 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
     public UmundoETLProtocolAdapter() {
         channel = "mmi:jvoicexml";
         sourceUrl = "umundo://mmi/jvoicexml";
+        receiver = new MmiReceiver(sourceUrl);
     }
 
     public void setChannel(final String name) {
@@ -84,7 +85,6 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
     @Override
     public void start() throws IOException {
         node = new Node();
-        receiver = new MmiReceiver(sourceUrl);
         subscriber = new TypedSubscriber(channel, receiver);
         subscriber.registerType(LifeCycleEvents.LifeCycleEvent.class);
         subscriber.registerType(LifeCycleEvents.LifeCycleRequest.class);
