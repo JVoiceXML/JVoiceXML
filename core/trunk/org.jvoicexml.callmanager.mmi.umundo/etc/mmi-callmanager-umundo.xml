@@ -6,8 +6,8 @@
   <classpath>dist/org.jvoicexml.mmi.events.jar</classpath>
   <classpath>dist/org.jvoicexml.callmanager.mmi.jar</classpath>
   <classpath>dist/org.jvoicexml.callmanager.mmi.umundo.jar</classpath>
-  <classpath>../org.jvoicexml.callmanager.mmi.umundo/3rdparty/umundo/umundo.jar</classpath>
-  <classpath>../org.jvoicexml.mmi.events/3rdparty/protobuf-2.4.1/lib/protobuf-java-2.4.1.jar</classpath>
+  <classpath>../org.jvoicexml.callmanager.mmi.umundo/3rdparty/umundo/lib/umundo.jar</classpath>
+  <classpath>../org.jvoicexml.mmi.events/3rdparty/protobuf2.4.1/lib/protobuf-java-2.4.1.jar</classpath>
 
   <beans:bean id="callmanager"
     class="org.jvoicexml.callmanager.mmi.MMICallManager">
@@ -26,7 +26,7 @@
     <!-- Specification of the ETL -->
     <beans:property name="protocolAdapter">
       <beans:bean
-        class="org.jvoicexml.callmanager.mmi.socket.umundo.UmundoETLProtocolAdapter">
+        class="org.jvoicexml.callmanager.mmi.umundo.UmundoETLProtocolAdapter">
           <beans:property name="channel" value="mmi:jvoicexml" />
           <beans:property name="sourceUrl" value="umundo://mmi/jvoicexml" />
       </beans:bean>

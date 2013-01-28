@@ -75,6 +75,11 @@ You're using ${ant.java.version}
     
     <target name="configuration" depends="-setup">
       <copy todir="${config}" file="${etc}/mmi-callmanager-umundo.xml"/>
+      <copy todir="${dist}">
+          <fileset dir="${umundo.lib.dir}">
+              <include name="*.so"/>
+          </fileset>
+      </copy>
     </target>
 
     <target name="compile"
