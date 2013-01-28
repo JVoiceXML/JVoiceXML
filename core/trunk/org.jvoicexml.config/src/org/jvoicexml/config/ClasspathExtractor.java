@@ -109,13 +109,13 @@ final class ClasspathExtractor implements ContentHandler {
             final String entry = str.toString().trim();
             try {
                 final File file = new File(entry);
+                final File canonical = file.getCanonicalFile();
+                final URI fileUri = canonical.toURI();
+                final URL url = fileUri.toURL();
                 if (file.exists()) {
-                    final File canonical = file.getCanonicalFile();
-                    final URI fileUri = canonical.toURI();
-                    final URL url = fileUri.toURL();
                     entries.add(url);
                 } else {
-                    LOGGER.warn("'" + entry + "' does not exist");
+                    LOGGER.warn("'" + url + "' does not exist");
                 }
             } catch (MalformedURLException e) {
                 throw new SAXException(e.getMessage(), e);
