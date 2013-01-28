@@ -141,11 +141,8 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
     }
 
     /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.jvoicexml.callmanager.mmi.ETLProtocolAdapter#sendMMIEvent(java.lang
-     * .Object, org.jvoicexml.mmi.events.xml.MMIEvent)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void sendMMIEvent(Object channel, LifeCycleEvent event)
@@ -154,14 +151,12 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.jvoicexml.callmanager.mmi.ETLProtocolAdapter#stop()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void stop() {
-
+        node.suspend();
     }
 
 }
