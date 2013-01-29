@@ -65,7 +65,9 @@ public final class MmiReceiver implements ITypedReceiver {
     public void receiveObject(Object object, Message msg) {
         LifeCycleEvents.LifeCycleEvent receivedEvent =
                 (LifeCycleEvents.LifeCycleEvent) object;
+        System.out.println(object);
         final LifeCycleEvent event = convertToLifeCycleEvent(receivedEvent);
+        System.out.println(event);
         if (event == null) {
             return;
         }
