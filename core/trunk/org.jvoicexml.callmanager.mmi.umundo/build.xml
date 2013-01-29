@@ -78,6 +78,7 @@ You're using ${ant.java.version}
       <copy todir="${dist}">
           <fileset dir="${umundo.lib.dir}">
               <include name="*.so"/>
+              <include name="*.dll"/>
           </fileset>
       </copy>
     </target>
