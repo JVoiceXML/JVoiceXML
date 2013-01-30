@@ -12,44 +12,47 @@ import com.google.protobuf.ExtensionRegistry;
 
 public class TestMmiReceiver {
 
-    private Node node;
+    private Node receivingNode;
+    private Node publishingNode;
 
     @Before
     public void setUp() throws Exception {
-        node = new Node();
+        receivingNode = new Node();
+        publishingNode = new Node();
         final MmiReceiver receiver = new MmiReceiver("test");
         TypedSubscriber subscriber = new TypedSubscriber("test", receiver);
-        node.addSubscriber(subscriber);
-        subscriber.registerType(LifeCycleEvents.LifeCycleEvent.class);
-        subscriber.registerType(LifeCycleEvents.LifeCycleRequest.class);
-        subscriber.registerType(LifeCycleEvents.LifeCycleResponse.class);
-        subscriber.registerType(LifeCycleEvents.NewContextRequest.class);
-        subscriber.registerType(LifeCycleEvents.NewContextResponse.class);
-        subscriber.registerType(LifeCycleEvents.PrepareRequest.class);
-        subscriber.registerType(LifeCycleEvents.PrepareResponse.class);
-        subscriber.registerType(LifeCycleEvents.StartRequest.class);
-        subscriber.registerType(LifeCycleEvents.StartResponse.class);
-        subscriber.registerType(LifeCycleEvents.DoneNotification.class);
-        subscriber.registerType(LifeCycleEvents.CancelRequest.class);
-        subscriber.registerType(LifeCycleEvents.CancelResponse.class);
-        subscriber.registerType(LifeCycleEvents.PauseRequest.class);
-        subscriber.registerType(LifeCycleEvents.PauseResponse.class);
-        subscriber.registerType(LifeCycleEvents.ResumeRequest.class);
-        subscriber.registerType(LifeCycleEvents.ResumeResponse.class);
-        subscriber.registerType(LifeCycleEvents.ExtensionNotification.class);
-        subscriber.registerType(LifeCycleEvents.ClearContextRequest.class);
-        subscriber.registerType(LifeCycleEvents.ClearContextResponse.class);
-        subscriber.registerType(LifeCycleEvents.StatusRequest.class);
-        subscriber.registerType(LifeCycleEvents.StatusResponse.class);
-
-        ExtensionRegistry registry = ExtensionRegistry.newInstance();
-        LifeCycleEvents.registerAllExtensions(registry);
+        receivingNode.addSubscriber(subscriber);
+//        subscriber.registerType(LifeCycleEvents.LifeCycleEvent.class);
+//        subscriber.registerType(LifeCycleEvents.LifeCycleRequest.class);
+//        subscriber.registerType(LifeCycleEvents.LifeCycleResponse.class);
+//        subscriber.registerType(LifeCycleEvents.NewContextRequest.class);
+//        subscriber.registerType(LifeCycleEvents.NewContextResponse.class);
+//        subscriber.registerType(LifeCycleEvents.PrepareRequest.class);
+//        subscriber.registerType(LifeCycleEvents.PrepareResponse.class);
+//        subscriber.registerType(LifeCycleEvents.StartRequest.class);
+//        subscriber.registerType(LifeCycleEvents.StartResponse.class);
+//        subscriber.registerType(LifeCycleEvents.DoneNotification.class);
+//        subscriber.registerType(LifeCycleEvents.CancelRequest.class);
+//        subscriber.registerType(LifeCycleEvents.CancelResponse.class);
+//        subscriber.registerType(LifeCycleEvents.PauseRequest.class);
+//        subscriber.registerType(LifeCycleEvents.PauseResponse.class);
+//        subscriber.registerType(LifeCycleEvents.ResumeRequest.class);
+//        subscriber.registerType(LifeCycleEvents.ResumeResponse.class);
+//        subscriber.registerType(LifeCycleEvents.ExtensionNotification.class);
+//        subscriber.registerType(LifeCycleEvents.ClearContextRequest.class);
+//        subscriber.registerType(LifeCycleEvents.ClearContextResponse.class);
+//        subscriber.registerType(LifeCycleEvents.StatusRequest.class);
+//        subscriber.registerType(LifeCycleEvents.StatusResponse.class);
+//
+//        ExtensionRegistry registry = ExtensionRegistry.newInstance();
+//        LifeCycleEvents.registerAllExtensions(registry);
     }
 
     @Test(timeout = 5000)
     public void testReceiveObject() throws Exception {
         final TypedPublisher publisher = new TypedPublisher("test");
-        node.addPublisher(publisher);
+        publisher.setGreeter(new MmiGreeter());
+        publishingNode.addPublisher(publisher);
         System.out.println("waiting for subscribers");
         publisher.waitForSubscribers(1);
         System.out.println("have subscribers");
