@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
+import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.Mmi;
 
@@ -122,6 +123,7 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
     @Override
     public void sendMMIEvent(final Object channel, final LifeCycleEvent event)
         throws IOException {
+        Socket client = null; 
         try {
             final String target = event.getTarget();
             if (target == null) {
@@ -133,9 +135,15 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
             // Adapt the source address
             final String host = uri.getHost();
             final int targetPort = uri.getPort();
-            final Socket client = new Socket(host, targetPort);
+            client = new Socket(host, targetPort);
             final URI serverUri = server.getUri();
-            event.setSource(serverUri.toString());
+            if (serverUri == null) {
+                final URI clientUri = TcpUriFactory.createUri(
+                        client.getInetAddress());
+                event.setSource(clientUri.toString());
+            } else {
+                event.setSource(serverUri.toString());
+            }
             LOGGER.info("sending " + event + " to '" + uri + "'");
 
             // Send the message
@@ -143,11 +151,14 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
             final Marshaller marshaller = ctx.createMarshaller();
             final OutputStream out = client.getOutputStream();
             marshaller.marshal(event, out);
-            client.close();
         } catch (JAXBException e) {
             throw new IOException(e.getMessage(), e);
         } catch (URISyntaxException e) {
             throw new IOException(e.getMessage(), e);
+        } finally {
+            if (client != null) {
+                client.close();
+            }
         }
     }
 
