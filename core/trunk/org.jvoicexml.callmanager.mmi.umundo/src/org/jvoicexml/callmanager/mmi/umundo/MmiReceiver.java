@@ -31,7 +31,10 @@ import java.util.Collection;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.LifeCycleRequest;
+import org.jvoicexml.mmi.events.NewContextRequest;
 import org.jvoicexml.mmi.events.PrepareRequest;
+import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents;
 import org.umundo.core.Message;
 import org.umundo.s11n.ITypedReceiver;
@@ -101,15 +104,50 @@ public final class MmiReceiver implements ITypedReceiver {
         final LifeCycleEvent event;
         final LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
             type = receivedEvent.getType();
-        if (type.equals(
-                LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.PREPARE_REQUEST)) {
+        if (type.equals(LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
+                .PREPARE_REQUEST)) {
             final PrepareRequest request = new PrepareRequest();
             final LifeCycleEvents.LifeCycleRequest decodedLifeCycleRequest =
-                    receivedEvent.getExtension(LifeCycleEvents.LifeCycleRequest.request);
-            request.setContext(decodedLifeCycleRequest.getContext());
+                    extractContext(receivedEvent, request);
             final LifeCycleEvents.PrepareRequest decodedPrepareRequest =
-                    decodedLifeCycleRequest.getExtension(LifeCycleEvents.PrepareRequest.request);
+                    decodedLifeCycleRequest.getExtension(
+                            LifeCycleEvents.PrepareRequest.request);
             request.setContentURL(decodedPrepareRequest.getContentURL());
+            event = request;
+        } else if (type.equals(LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
+                .NEW_CONTEXT_REQUEST)) {
+            final NewContextRequest request = new NewContextRequest();
+                    extractContext(receivedEvent, request);
+            event = request;
+        } else if (type.equals(LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
+                    .START_REQUEST)) {
+                final StartRequest request = new StartRequest();
+                final LifeCycleEvents.LifeCycleRequest decodedLifeCycleRequest =
+                        extractContext(receivedEvent, request);
+                final LifeCycleEvents.PrepareRequest decodedPrepareRequest =
+                        decodedLifeCycleRequest.getExtension(
+                                LifeCycleEvents.PrepareRequest.request);
+                request.setContentURL(decodedPrepareRequest.getContentURL());
+                event = request;
+        } else if (type.equals(LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
+                .CANCEL_REQUEST)) {
+            final NewContextRequest request = new NewContextRequest();
+            extractContext(receivedEvent, request);
+            event = request;
+        } else if (type.equals(LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
+                .PAUSE_REQUEST)) {
+            final NewContextRequest request = new NewContextRequest();
+            extractContext(receivedEvent, request);
+            event = request;
+        } else if (type.equals(LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
+                .RESUME_REQUEST)) {
+            final NewContextRequest request = new NewContextRequest();
+            extractContext(receivedEvent, request);
+            event = request;
+        } else if (type.equals(LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
+                .CLEAR_CONTEXT_REQUEST)) {
+            final NewContextRequest request = new NewContextRequest();
+            extractContext(receivedEvent, request);
             event = request;
         } else {
             event = null;
@@ -118,6 +156,23 @@ public final class MmiReceiver implements ITypedReceiver {
         event.setRequestId(receivedEvent.getRequestID());
         event.setSource(receivedEvent.getSource());
         return event;
+    }
+
+    /**
+     * Extract a context identifier from the received message into the
+     * current request.
+     * @param receivedEvent the received event
+     * @param request the current request.
+     * @return decoded lifecycle request
+     */
+    private LifeCycleEvents.LifeCycleRequest extractContext(
+            final LifeCycleEvents.LifeCycleEvent receivedEvent,
+            final LifeCycleRequest request) {
+        final LifeCycleEvents.LifeCycleRequest decodedLifeCycleRequest =
+                receivedEvent.getExtension(LifeCycleEvents
+                        .LifeCycleRequest.request);
+        request.setContext(decodedLifeCycleRequest.getContext());
+        return decodedLifeCycleRequest;
     }
 
     /**
