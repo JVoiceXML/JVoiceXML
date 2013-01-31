@@ -51,7 +51,10 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
     private static final Logger LOGGER = Logger
             .getLogger(SocketETLProtocolAdapter.class);
 
-    private Node node;
+    /** The umundo not to receive messages. */
+    private Node receivingNode;
+    /** The umundo not to send messages. */
+    private Node sendingNode;
     private TypedSubscriber subscriber;
     private final MmiReceiver receiver;
     private TypedPublisher publisher;
@@ -69,6 +72,10 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
         receiver = new MmiReceiver(sourceUrl);
     }
 
+    /**
+     * Sets the name of the channel to send and receive messages.
+     * @param name name of the channel
+     */
     public void setChannel(final String name) {
         channel = name;
     }
@@ -77,47 +84,26 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
         sourceUrl = name;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.jvoicexml.callmanager.mmi.ETLProtocolAdapter#start()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void start() throws IOException {
-        node = new Node();
+        receivingNode = new Node();
         subscriber = new TypedSubscriber(channel, receiver);
         subscriber.registerType(LifeCycleEvents.LifeCycleEvent.class);
-        subscriber.registerType(LifeCycleEvents.LifeCycleRequest.class);
-        subscriber.registerType(LifeCycleEvents.LifeCycleResponse.class);
-        subscriber.registerType(LifeCycleEvents.NewContextRequest.class);
-        subscriber.registerType(LifeCycleEvents.NewContextResponse.class);
-        subscriber.registerType(LifeCycleEvents.PrepareRequest.class);
-        subscriber.registerType(LifeCycleEvents.PrepareResponse.class);
-        subscriber.registerType(LifeCycleEvents.StartRequest.class);
-        subscriber.registerType(LifeCycleEvents.StartResponse.class);
-        subscriber.registerType(LifeCycleEvents.DoneNotification.class);
-        subscriber.registerType(LifeCycleEvents.CancelRequest.class);
-        subscriber.registerType(LifeCycleEvents.CancelResponse.class);
-        subscriber.registerType(LifeCycleEvents.PauseRequest.class);
-        subscriber.registerType(LifeCycleEvents.PauseResponse.class);
-        subscriber.registerType(LifeCycleEvents.ResumeRequest.class);
-        subscriber.registerType(LifeCycleEvents.ResumeResponse.class);
-        subscriber.registerType(LifeCycleEvents.ExtensionNotification.class);
-        subscriber.registerType(LifeCycleEvents.ClearContextRequest.class);
-        subscriber.registerType(LifeCycleEvents.ClearContextResponse.class);
-        subscriber.registerType(LifeCycleEvents.StatusRequest.class);
-        subscriber.registerType(LifeCycleEvents.StatusResponse.class);
 
         registry = ExtensionRegistry.newInstance();
         LifeCycleEvents.registerAllExtensions(registry);
+        receivingNode.addSubscriber(subscriber);
 
+        sendingNode = new Node();
         publisher = new TypedPublisher(channel);
+        sendingNode.addPublisher(publisher);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.jvoicexml.callmanager.mmi.ETLProtocolAdapter#isStarted()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public boolean isStarted() {
@@ -140,12 +126,11 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
         receiver.removeMMIEventListener(listener);
     }
 
-    /*
     /**
      * {@inheritDoc}
      */
     @Override
-    public void sendMMIEvent(Object channel, LifeCycleEvent event)
+    public void sendMMIEvent(final Object ch, final LifeCycleEvent evt)
             throws IOException {
         // TODO Auto-generated method stub
 
@@ -156,7 +141,8 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void stop() {
-        node.suspend();
+        receivingNode.suspend();
+        sendingNode.suspend();
     }
 
 }

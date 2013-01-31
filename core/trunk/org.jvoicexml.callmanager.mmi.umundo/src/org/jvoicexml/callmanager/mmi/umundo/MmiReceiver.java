@@ -38,6 +38,7 @@ import org.umundo.s11n.ITypedReceiver;
 
 /**
  * Receiver for MMI events over umundo.
+ *
  * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
  * @since 0.7.6
@@ -51,7 +52,9 @@ public final class MmiReceiver implements ITypedReceiver {
 
     /**
      * Constructs a new object.
-     * @param source the source URL of this endpoint
+     *
+     * @param source
+     *            the source URL of this endpoint
      */
     public MmiReceiver(final String source) {
         listeners = new java.util.ArrayList<MMIEventListener>();
@@ -62,17 +65,13 @@ public final class MmiReceiver implements ITypedReceiver {
      * {@inheritDoc}
      */
     @Override
-    public void receiveObject(Object object, Message msg) {
-        LifeCycleEvents.LifeCycleEvent receivedEvent =
-                (LifeCycleEvents.LifeCycleEvent) object;
-        System.out.println(object);
-        final LifeCycleEvent event = convertToLifeCycleEvent(receivedEvent);
-        System.out.println(event);
+    public void receiveObject(final Object object, final Message msg) {
+        final LifeCycleEvent event = convertToLifeCycleEvent(object);
         if (event == null) {
             return;
         }
-        final DecoratedMMIEvent docatedEvent =
-                new DecoratedMMIEvent(sourceUrl, event);
+        final DecoratedMMIEvent docatedEvent = new DecoratedMMIEvent(sourceUrl,
+                event);
         synchronized (listeners) {
             for (MMIEventListener listener : listeners) {
                 listener.receivedEvent(docatedEvent);
@@ -80,37 +79,64 @@ public final class MmiReceiver implements ITypedReceiver {
         }
     }
 
+    /**
+     * Converts the received object into a {@link LifeCycleEvent} that can be
+     * handled by the {@link org.jvoicexml.callmananager.mmi.MMICallManager}.
+     * @param object the received object
+     * @return the converted lifecycle event, <code>null</code> if the
+     * object could not be converted or is not addressed to this modality
+     * component
+     */
     private LifeCycleEvent convertToLifeCycleEvent(
-            final LifeCycleEvents.LifeCycleEvent receivedEvent) {
-        final LifeCycleEvent event;
-        switch (receivedEvent.getType()) {
-        case PREPARE_REQUEST:
-            event = new PrepareRequest();
-            break;
-        default:
-            event = null;
-            break;
+            final Object object) {
+        if (!(object instanceof LifeCycleEvents.LifeCycleEvent)) {
+            return null;
         }
+        final LifeCycleEvents.LifeCycleEvent receivedEvent =
+                (LifeCycleEvents.LifeCycleEvent) object;
         final String target = receivedEvent.getTarget();
         if (!target.equals(sourceUrl)) {
             return null;
+        }
+        final LifeCycleEvent event;
+        final LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
+            type = receivedEvent.getType();
+        if (type.equals(
+                LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.PREPARE_REQUEST)) {
+            final PrepareRequest request = new PrepareRequest();
+            final LifeCycleEvents.LifeCycleRequest decodedLifeCycleRequest =
+                    receivedEvent.getExtension(LifeCycleEvents.LifeCycleRequest.request);
+            request.setContext(decodedLifeCycleRequest.getContext());
+            final LifeCycleEvents.PrepareRequest decodedPrepareRequest =
+                    decodedLifeCycleRequest.getExtension(LifeCycleEvents.PrepareRequest.request);
+            request.setContentURL(decodedPrepareRequest.getContentURL());
+            event = request;
+        } else {
+            event = null;
         }
         event.setTarget(receivedEvent.getTarget());
         event.setRequestId(receivedEvent.getRequestID());
         event.setSource(receivedEvent.getSource());
         return event;
     }
- 
+
+    /**
+     * Adds the given listener to the list of known event listeners.
+     * @param listener the listener to add
+     */
     public void addMMIEventListener(final MMIEventListener listener) {
         synchronized (listeners) {
             listeners.add(listener);
         }
     }
 
+    /**
+     * Removes the given listener from the list of known event listeners.
+     * @param listener the listener to remove
+     */
     public void removeMMIEventListener(final MMIEventListener listener) {
         synchronized (listeners) {
             listeners.remove(listener);
         }
     }
 }
-
