@@ -31,6 +31,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents.LifeCycleEvent.LifeCycleEventType;
+import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents.PrepareRequest;
 
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -75,7 +76,7 @@ public class TestLifeCycleEvents {
                         LifeCycleEvents.NewContextRequest.request, builder)
                 .build();
         final byte[] buffer = request1.toByteArray();
-        LifeCycleEvents.LifeCycleEvent event =
+        final LifeCycleEvents.LifeCycleEvent event =
                 LifeCycleEvents.LifeCycleEvent.newBuilder()
                 .mergeFrom(buffer, registry).build();
         Assert.assertEquals(LifeCycleEventType.NEW_CONTEXT_REQUEST,

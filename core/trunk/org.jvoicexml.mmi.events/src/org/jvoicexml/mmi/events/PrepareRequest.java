@@ -94,6 +94,12 @@ public final class PrepareRequest extends LifeCycleRequest implements Serializab
         contentURL = value;
     }
 
+    public void setContentURL(final String value) {
+        final ContentURLType type = new ContentURLType();
+        type.setHref(value);
+        setContentURL(type);
+    }
+    
     /**
      * Sets the content URL.
      * @param value the content URL to set

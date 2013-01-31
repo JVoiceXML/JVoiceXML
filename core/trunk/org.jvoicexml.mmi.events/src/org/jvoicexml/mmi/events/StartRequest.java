@@ -99,6 +99,16 @@ public final class StartRequest extends LifeCycleRequest
      * Sets the content URL.
      * @param value the content URL to set
      */
+    public void setContentURL(final String value) {
+        final ContentURLType type = new ContentURLType();
+        type.setHref(value);
+        setContentURL(type);
+    }
+    
+    /**
+     * Sets the content URL.
+     * @param value the content URL to set
+     */
     public void setContentURL(final URL value) {
         final ContentURLType type = new ContentURLType();
         final String href = value.toString();
