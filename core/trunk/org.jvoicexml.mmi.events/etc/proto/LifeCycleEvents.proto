@@ -42,7 +42,7 @@ message LifeCycleRequest {
 
 message LifeCycleResponse {
   extend LifeCycleEvent {
-        required LifeCycleRequest Request = 6;
+        required LifeCycleResponse Response = 6;
   }
 
   enum StatusType {
