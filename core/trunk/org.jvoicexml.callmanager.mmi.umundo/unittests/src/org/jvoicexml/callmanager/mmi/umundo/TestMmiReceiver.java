@@ -54,7 +54,7 @@ public final class TestMmiReceiver implements MMIEventListener {
     private Node receivingNode;
     /** The umundo sending node. */
     private Node publishingNode;
-    /** Synchrinzation lock. */
+    /** Synchronization lock. */
     private Object lock;
     /** The received event. */
     private LifeCycleEvent receivedEvent;

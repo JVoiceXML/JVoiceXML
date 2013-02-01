@@ -164,16 +164,18 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
             } else {
                 type = LifeCycleEvents.LifeCycleResponse.StatusType.FAILURE;
             }
-            final AnyComplexType any = response.getStatusInfo();
-            final List<Object> content = any.getContent();
-            final StringBuilder str = new StringBuilder();
-            for (Object o : content) {
-                str.append(o);
-            }
             builder = LifeCycleEvents.LifeCycleResponse.newBuilder()
                     .setContext(response.getContext())
-                    .setStatus(type)
-                    .setStatusInfo(str.toString());
+                    .setStatus(type);
+            final AnyComplexType any = response.getStatusInfo();
+            if (any != null) {
+                final List<Object> content = any.getContent();
+                final StringBuilder str = new StringBuilder();
+                for (Object o : content) {
+                    str.append(o);
+                }
+                builder.setStatusInfo(str.toString());
+            }
         } else {
             return null;
         }
@@ -289,6 +291,9 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
                 .setExtension(LifeCycleEvents.LifeCycleResponse.response,
                         response)
                 .build();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("sending " + evt);
+        }
         publisher.sendObject("LifeCycleEvent", event);
     }
 
