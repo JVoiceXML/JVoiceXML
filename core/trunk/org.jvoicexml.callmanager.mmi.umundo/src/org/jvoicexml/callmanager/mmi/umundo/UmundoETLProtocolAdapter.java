@@ -34,10 +34,17 @@ import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
 import org.jvoicexml.callmanager.mmi.socket.SocketETLProtocolAdapter;
 import org.jvoicexml.mmi.events.AnyComplexType;
+import org.jvoicexml.mmi.events.CancelResponse;
+import org.jvoicexml.mmi.events.ClearContextResponse;
+import org.jvoicexml.mmi.events.DoneNotification;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.LifeCycleResponse;
 import org.jvoicexml.mmi.events.NewContextResponse;
+import org.jvoicexml.mmi.events.PauseResponse;
 import org.jvoicexml.mmi.events.PrepareResponse;
+import org.jvoicexml.mmi.events.ResumeResponse;
+import org.jvoicexml.mmi.events.StartResponse;
+import org.jvoicexml.mmi.events.StatusResponse;
 import org.jvoicexml.mmi.events.StatusType;
 import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents;
 import org.umundo.core.Node;
@@ -182,7 +189,51 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
                     .build();
             builder.setExtension(LifeCycleEvents.NewContextResponse.response,
                     newContextResponse);
+        } else if (evt instanceof StartResponse) {
+            LifeCycleEvents.StartResponse startResponse =
+                    LifeCycleEvents.StartResponse.newBuilder()
+                    .build();
+            builder.setExtension(LifeCycleEvents.StartResponse.response,
+                    startResponse);
+        } else if (evt instanceof DoneNotification) {
+            LifeCycleEvents.DoneNotification notification =
+                    LifeCycleEvents.DoneNotification.newBuilder()
+                    .build();
+            builder.setExtension(LifeCycleEvents.DoneNotification.notification,
+                    notification);
+        } else if (evt instanceof CancelResponse) {
+            LifeCycleEvents.CancelResponse cancelResponse =
+                    LifeCycleEvents.CancelResponse.newBuilder()
+                    .build();
+            builder.setExtension(LifeCycleEvents.CancelResponse.response,
+                    cancelResponse);
+        } else if (evt instanceof PauseResponse) {
+            LifeCycleEvents.PauseResponse pauseResponse =
+                    LifeCycleEvents.PauseResponse.newBuilder()
+                    .build();
+            builder.setExtension(LifeCycleEvents.PauseResponse.response,
+                    pauseResponse);
+        } else if (evt instanceof ResumeResponse) {
+            LifeCycleEvents.ResumeResponse resumeResponse =
+                    LifeCycleEvents.ResumeResponse.newBuilder()
+                    .build();
+            builder.setExtension(LifeCycleEvents.ResumeResponse.response,
+                    resumeResponse);
+        } else if (evt instanceof ClearContextResponse) {
+            LifeCycleEvents.ClearContextResponse clearContextResponse =
+                    LifeCycleEvents.ClearContextResponse.newBuilder()
+                    .build();
+            builder.setExtension(LifeCycleEvents.ClearContextResponse.response,
+                    clearContextResponse);
+        } else if (evt instanceof StatusResponse) {
+//            LifeCycleEvents.StatusResponse statusResponse =
+//                    LifeCycleEvents.StatusResponse.newBuilder()
+//                    .build();
+//            builder.setExtension(LifeCycleEvents.StatusResponse.response,
+//                    clearContextResponse);
+            LOGGER.warn("status is currently unsupported");
         } else {
+            LOGGER.warn("unable to map '" + evt + "' to protobuf");
             return null;
         }
         return builder.build();
@@ -190,8 +241,34 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
 
     private LifeCycleEvents.LifeCycleEvent.LifeCycleEventType getEventType(
             final LifeCycleEvent evt) {
-        return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.PREPARE_RESPONSE;
-    }
+        if (evt instanceof PrepareResponse) {
+            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.PREPARE_RESPONSE;
+        } else if (evt instanceof NewContextResponse) {
+            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.NEW_CONTEXT_RESPONSE;
+        } else if (evt instanceof StartResponse) {
+            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.START_RESPONSE;
+        } else if (evt instanceof DoneNotification) {
+            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.DONE_NOTIFICATION;
+        } else if (evt instanceof CancelResponse) {
+            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.CANCEL_RESPONSE;
+        } else if (evt instanceof PauseResponse) {
+            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.PAUSE_RESPONSE;
+        } else if (evt instanceof ResumeResponse) {
+            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.RESUME_RESPONSE;
+        } else if (evt instanceof ClearContextResponse) {
+            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.CLEAR_CONTEXT_RESPONSE;
+        } else if (evt instanceof StatusResponse) {
+//            LifeCycleEvents.StatusResponse statusResponse =
+//                    LifeCycleEvents.StatusResponse.newBuilder()
+//                    .build();
+//            builder.setExtension(LifeCycleEvents.StatusResponse.response,
+//                    clearContextResponse);
+            LOGGER.warn("status is currently unsupported");
+        } else {
+            LOGGER.warn("unable to map '" + evt + "' to protobuf");
+        }
+        return null;
+   }
 
     /**
      * {@inheritDoc}
