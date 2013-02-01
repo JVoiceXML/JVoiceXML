@@ -27,12 +27,18 @@
 package org.jvoicexml.callmanager.mmi.umundo;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
 import org.jvoicexml.callmanager.mmi.socket.SocketETLProtocolAdapter;
+import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.LifeCycleResponse;
+import org.jvoicexml.mmi.events.NewContextResponse;
+import org.jvoicexml.mmi.events.PrepareResponse;
+import org.jvoicexml.mmi.events.StatusType;
 import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents;
 import org.umundo.core.Node;
 import org.umundo.s11n.TypedPublisher;
@@ -52,15 +58,18 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
             .getLogger(SocketETLProtocolAdapter.class);
 
     /** The umundo not to receive messages. */
-    private Node receivingNode;
-    /** The umundo not to send messages. */
-    private Node sendingNode;
+    private Node node;
+    /** The subscriber to MMI events. */
     private TypedSubscriber subscriber;
+    /** The receiver that effectively receives the event objects. */
     private final MmiReceiver receiver;
+    /** The publisher to send MMI events. */
     private TypedPublisher publisher;
     /** The registry for protobuf extensions. */
     private ExtensionRegistry registry;
+    /** The name of the umundo channel to use. */
     private String channel;
+    /** The source URL of this modality component. */
     private String sourceUrl;
 
     /**
@@ -80,6 +89,10 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
         channel = name;
     }
 
+    /**
+     * Sets the source URL of this modality component.
+     * @param name source URL
+     */
     public void setSourceUrl(final String name) {
         sourceUrl = name;
     }
@@ -89,17 +102,18 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void start() throws IOException {
-        receivingNode = new Node();
+        node = new Node();
         subscriber = new TypedSubscriber(channel, receiver);
         subscriber.registerType(LifeCycleEvents.LifeCycleEvent.class);
 
         registry = ExtensionRegistry.newInstance();
         LifeCycleEvents.registerAllExtensions(registry);
-        receivingNode.addSubscriber(subscriber);
+        node.addSubscriber(subscriber);
 
-        sendingNode = new Node();
         publisher = new TypedPublisher(channel);
-        sendingNode.addPublisher(publisher);
+        node.addPublisher(publisher);
+        LOGGER.info("receiving MMI events via channel '" + channel
+                + "' to '" + sourceUrl + "'");
     }
 
     /**
@@ -127,13 +141,78 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
     }
 
     /**
+     * Create a protobuf response object from the given event.
+     * @param evt the event to transform into a protobuf representation
+     * @return the transformed event
+     */
+    private LifeCycleEvents.LifeCycleResponse createResponse(
+            final LifeCycleEvent evt) {
+        final LifeCycleEvents.LifeCycleResponse.Builder builder;
+        if (evt instanceof LifeCycleResponse) {
+            final LifeCycleResponse response =
+                    (LifeCycleResponse) evt;
+            final LifeCycleEvents.LifeCycleResponse.StatusType type;
+            if (response.getStatus() == StatusType.SUCCESS) {
+                type = LifeCycleEvents.LifeCycleResponse.StatusType.SUCCESS;
+            } else {
+                type = LifeCycleEvents.LifeCycleResponse.StatusType.FAILURE;
+            }
+            final AnyComplexType any = response.getStatusInfo();
+            final List<Object> content = any.getContent();
+            final StringBuilder str = new StringBuilder();
+            for (Object o : content) {
+                str.append(o);
+            }
+            builder = LifeCycleEvents.LifeCycleResponse.newBuilder()
+                    .setContext(response.getContext())
+                    .setStatus(type)
+                    .setStatusInfo(str.toString());
+        } else {
+            return null;
+        }
+        if (evt instanceof PrepareResponse) {
+            LifeCycleEvents.PrepareResponse prepareResponse =
+                    LifeCycleEvents.PrepareResponse.newBuilder()
+                    .build();
+            builder.setExtension(LifeCycleEvents.PrepareResponse.response,
+                    prepareResponse);
+        } else if (evt instanceof NewContextResponse) {
+            LifeCycleEvents.NewContextResponse newContextResponse =
+                    LifeCycleEvents.NewContextResponse.newBuilder()
+                    .build();
+            builder.setExtension(LifeCycleEvents.NewContextResponse.response,
+                    newContextResponse);
+        } else {
+            return null;
+        }
+        return builder.build();
+    }
+
+    private LifeCycleEvents.LifeCycleEvent.LifeCycleEventType getEventType(
+            final LifeCycleEvent evt) {
+        return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.PREPARE_RESPONSE;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public void sendMMIEvent(final Object ch, final LifeCycleEvent evt)
             throws IOException {
-        // TODO Auto-generated method stub
-
+        LifeCycleEvents.LifeCycleResponse response =
+                createResponse(evt);
+        final LifeCycleEvents.LifeCycleEvent.LifeCycleEventType type
+            = getEventType(evt);
+        final LifeCycleEvents.LifeCycleEvent event =
+                LifeCycleEvents.LifeCycleEvent.newBuilder()
+                .setType(type)
+                .setRequestID(evt.getRequestId())
+                .setSource(sourceUrl)
+                .setTarget(evt.getTarget())
+                .setExtension(LifeCycleEvents.LifeCycleResponse.response,
+                        response)
+                .build();
+        publisher.sendObject("LifeCycleEvent", event);
     }
 
     /**
@@ -141,8 +220,6 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void stop() {
-        receivingNode.suspend();
-        sendingNode.suspend();
+        node.suspend();
     }
-
 }
