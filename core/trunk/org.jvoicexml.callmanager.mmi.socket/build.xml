@@ -1,6 +1,6 @@
-<project name="org.jvoicexml.callmanager.mmi.umundo" default="jar" basedir=".">
+<project name="org.jvoicexml.callmanager.mmi.socket" default="jar" basedir=".">
     <description>
-This file builds the umundo ETL of the MMI callmanager for JVoiceXml.
+This file builds socket ETL the MMI callmanager for JVoiceXml.
 
 To override the current settings follow the instructions given in
 org.jvoicexml/personal-props/README.txt
@@ -15,9 +15,9 @@ org.jvoicexml/personal-props/README.txt
 
     <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
-        <property name="component" value="org.jvoicexml.callmanager.mmi.umundo"/>
+        <property name="component" value="org.jvoicexml.callmanager.mmi.socket"/>
         <property name="component.path"
-          value="org/jvoicexml/callmanager/mmi/umundo"/>
+          value="org/jvoicexml/callmanager/mmi"/>
 
         <!-- directory structure -->
         <property name="src" value="src" />
@@ -39,8 +39,6 @@ org.jvoicexml/personal-props/README.txt
         <path id="project.classpath">
             <path refid="jvxml.core.lib" />
             <fileset refid="log4j.lib" />
-            <fileset refid="umundo.lib" />
-            <fileset refid="protobuf.lib" />
         </path>
     </target>
 
@@ -50,6 +48,11 @@ org.jvoicexml/personal-props/README.txt
         <mkdir dir="${dist}" />
     </target>
 
+    <target name="-cleanUmundoCallmanager" if="jvxml.mmi.umundo">
+        <ant dir="../org.jvoicexml.callmanager.mmi.umundo" target="clean"
+          inheritrefs="false" inheritall="false" />
+    </target>
+    
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
         <ant dir="../org.jvoicexml.mmi.events" target="clean"
@@ -58,14 +61,15 @@ org.jvoicexml/personal-props/README.txt
         <delete file="${dist.jar}" failonerror="false"/>
     </target>
 
-    
     <target name="configuration" depends="-setup">
-      <copy todir="${config}" file="${etc}/mmi-callmanager-umundo.xml"/>
+      <copy todir="${config}" file="${etc}/mmi-callmanager.xml"/>
     </target>
 
     <target name="compile"
             depends="-init,-checkJavaVersion"
             description="Compile the sources">
+        <ant dir="../org.jvoicexml.mmi.events" target="jar"
+          inheritrefs="false" inheritall="false"/>
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
         <javac destdir="${build}" includeantruntime="false"
                optimize="${javac.optimize}"
@@ -92,7 +96,7 @@ org.jvoicexml/personal-props/README.txt
                     <attribute name="Implementation-Vendor"
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
-                               value="JVoiceXML umundo ETL of the MMI call manager" />
+                               value="Socket ETL for the MMI call manager" />
                     <attribute name="Implementation-Version"
                         value="${version}" />
                 </section>

@@ -20,6 +20,7 @@
   <!-- platform name="org.jvoicexml.implementation.red5"/-->
   <!-- platform name="org.jvoicexml.callmanager.sip"/-->
   <!-- platform name="org.jvoicexml.callmanager.mmi">
+    <property name="jvxml.mmi.socket" value ="false" />
     <property name="jvxml.mmi.umundo" value ="false" />
   </platform-->
   <!-- platform name="org.jvoicexml.callmanager.text"/-->

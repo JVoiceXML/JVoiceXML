@@ -42,25 +42,15 @@ org.jvoicexml/personal-props/README.txt
         </path>
     </target>
 
-    <target name="-checkJavaVersion">
-        <!-- Check if at least java 6 is used. -->
-        <condition property="version1.6">
-            <or>
-                <equals arg1="1.6" arg2="${ant.java.version}" />
-                <equals arg1="1.7" arg2="${ant.java.version}" />
-            </or>
-        </condition>
-
-        <fail unless="version1.6">
-You need at least java version 1.6 to compile this project.
-You're using ${ant.java.version}
-    </fail>
-    </target>
-
     <target name="-init" depends="-setup">
         <!-- Create build directories -->
         <mkdir dir="${build}" />
         <mkdir dir="${dist}" />
+    </target>
+
+    <target name="-cleanSocketCallmanager" if="jvxml.mmi.umundo">
+        <ant dir="../org.jvoicexml.callmanager.mmi.socket" target="clean"
+          inheritrefs="false" inheritall="false" />
     </target>
 
     <target name="-cleanUmundoCallmanager" if="jvxml.mmi.umundo">
@@ -74,18 +64,28 @@ You're using ${ant.java.version}
           inheritrefs="false"  inheritall="false"/>
         <delete dir="${build}" failonerror="false" />
         <delete file="${dist.jar}" failonerror="false"/>
+        <antcall target="-cleanSocketCallmanager"/>
         <antcall target="-cleanUmundoCallmanager"/>
     </target>
 
+    <target name="-configurationSocketCallmanager" if="jvxml.mmi.socket">
+        <ant dir="../org.jvoicexml.callmanager.mmi.socket" target="configuration"
+          inheritrefs="false" inheritall="false"/>
+    </target>
+    
     <target name="-configurationUmundoCallmanager" if="jvxml.mmi.umundo">
         <ant dir="../org.jvoicexml.callmanager.mmi.umundo" target="configuration"
           inheritrefs="false" inheritall="false"/>
     </target>
 
-    <target name="configuration" depends="-setup,-configurationUmundoCallmanager">
-      <copy todir="${config}" file="${etc}/mmi-callmanager.xml"/>
+    <target name="configuration" depends="-setup,-configurationUmundoCallmanager,-configurationSocketCallmanager">
     </target>
 
+    <target name="-compileSocketCallmanager" if="jvxml.mmi.socket">
+      <ant dir="../org.jvoicexml.callmanager.mmi.socket" target="jar"
+           inheritrefs="false" inheritall="false"/>
+    </target>
+    
     <target name="-compileUmundoCallmanager" if="jvxml.mmi.umundo">
         <ant dir="../org.jvoicexml.callmanager.mmi.umundo" target="jar"
           inheritrefs="false" inheritall="false"/>
@@ -106,6 +106,7 @@ You're using ${ant.java.version}
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
+        <antcall target="-compileSocketCallmanager"/>
         <antcall target="-compileUmundoCallmanager"/>
     </target>
 

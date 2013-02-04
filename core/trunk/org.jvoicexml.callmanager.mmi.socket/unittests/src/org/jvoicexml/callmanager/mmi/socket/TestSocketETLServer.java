@@ -64,7 +64,7 @@ public class TestSocketETLServer implements MMIEventListener {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.callmanager.mmi.socket.SocketETLServer#run()}.
+     * Test method for {@link org.jvoicexml.callmanager.mmi.SocketETLServer#run()}.
      * @exception Exception
      *            test failed
      */

@@ -32,7 +32,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
-import org.jvoicexml.callmanager.mmi.socket.SocketETLProtocolAdapter;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.CancelResponse;
 import org.jvoicexml.mmi.events.ClearContextResponse;
@@ -62,7 +61,7 @@ import com.google.protobuf.ExtensionRegistry;
 public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
-            .getLogger(SocketETLProtocolAdapter.class);
+            .getLogger(UmundoETLProtocolAdapter.class);
 
     /** The umundo not to receive messages. */
     private Node node;

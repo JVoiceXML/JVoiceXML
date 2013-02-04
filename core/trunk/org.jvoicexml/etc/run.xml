@@ -33,6 +33,7 @@ This file provides targets to run and stop the voice browser.
         <java classname="org.jvoicexml.startup.Startup"
               fork="true"
               maxmemory="256m">
+            <jvmarg value="-Djava.library.path=${dist}" />
             <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties" />
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
             <classpath refid="run.classpath" />
