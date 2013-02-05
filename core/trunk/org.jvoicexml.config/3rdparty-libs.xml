@@ -13,11 +13,11 @@ org.jvoicexml.config.
 
         <!-- spring framework library -->
         <property name="spring.dir"
-                  value="${local-3rdparty.dir}/springframework3.0.5" />
+                  value="${local-3rdparty.dir}/springframework3.2.1" />
         <property name="spring.lib.dir" value="${spring.dir}/lib" />
         <fileset dir="${spring.lib.dir}" id="spring.lib">
-            <include name="org.springframework.beans-3.0.5.RELEASE.jar" />
-            <include name="org.springframework.core-3.0.5.RELEASE.jar" />
+            <include name="spring-beans-3.2.1.RELEASE.jar" />
+            <include name="spring-core-3.2.1.RELEASE.jar" />
         </fileset>
 
         <!-- jvxml library -->
