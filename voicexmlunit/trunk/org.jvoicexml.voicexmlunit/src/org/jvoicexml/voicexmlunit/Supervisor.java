@@ -107,6 +107,7 @@ public final class Supervisor implements TextListener {
 	/* (non-Javadoc)
 	 * @see org.jvoicexml.client.text.TextListener#started()
 	 */
+	@Override
 	public void started() {
 		call.startDialog();
 	}
@@ -114,6 +115,7 @@ public final class Supervisor implements TextListener {
 	/* (non-Javadoc)
 	 * @see org.jvoicexml.client.text.TextListener#connected(java.net.InetSocketAddress)
 	 */
+	@Override
 	public void connected(final InetSocketAddress remote) {
 		statement = conversation.begin();
 	}
@@ -136,7 +138,8 @@ public final class Supervisor implements TextListener {
 	/* (non-Javadoc)
 	 * @see org.jvoicexml.client.text.TextListener#outputSsml(org.jvoicexml.xml.ssml.SsmlDocument)
 	 */
-	public void outputSsml(final SsmlDocument document) {
+	@Override
+	public void outputSsml(SsmlDocument document) {
 		//TODO better handling of the XML structure inside (xpath?)
 		if (document != null) {
 			Speak speak = document.getSpeak();
@@ -150,6 +153,7 @@ public final class Supervisor implements TextListener {
 	/* (non-Javadoc)
 	 * @see org.jvoicexml.client.text.TextListener#expectingInput()
 	 */
+	@Override
 	public void expectingInput() {
 		try {
 			assertInput();
@@ -162,6 +166,7 @@ public final class Supervisor implements TextListener {
 	/* (non-Javadoc)
 	 * @see org.jvoicexml.client.text.TextListener#inputClosed()
 	 */
+	@Override
 	public void inputClosed() {
 		
 	}
@@ -169,6 +174,7 @@ public final class Supervisor implements TextListener {
 	/* (non-Javadoc)
 	 * @see org.jvoicexml.client.text.TextListener#disconnected()
 	 */
+	@Override
 	public void disconnected() {
 		try {
 			if (statement != null) {
