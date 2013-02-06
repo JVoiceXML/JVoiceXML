@@ -55,9 +55,11 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.xml.IgnoringEntityResolver;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -110,7 +112,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
         Logger.getLogger(JVoiceXmlConfiguration.class);;
 
     /** The factory to retrieve configured objects. */
-    private XmlBeanFactory factory;
+    private ApplicationContext context;
 
     /** Known class loader repositories. */
     private final Map<String, JVoiceXmlClassLoader> loaderRepositories;
@@ -143,12 +145,12 @@ public final class JVoiceXmlConfiguration implements Configuration {
             return;
         }
         if (resource.exists()) {
-            final Resource res = new FileSystemResource(resource);
             try {
-                factory = new XmlBeanFactory(res);
+                context = new FileSystemXmlApplicationContext(
+                        resource.toURI().toString());
             } catch (BeansException e) {
                 LOGGER.error("unable to load configuration", e);
-                factory = null;
+                context = null;
             }
         }
         configurationRepository = new ConfigurationRepository(configFolder);
@@ -322,7 +324,11 @@ public final class JVoiceXmlConfiguration implements Configuration {
                 if (resource == null) {
                     continue;
                 }
-                final XmlBeanFactory beanFactory = new XmlBeanFactory(resource);
+                final DefaultListableBeanFactory factory =
+                        new DefaultListableBeanFactory();
+                final XmlBeanDefinitionReader reader =
+                        new XmlBeanDefinitionReader(factory);
+                reader.loadBeanDefinitions(resource);
                 final ClasspathExtractor extractor =
                     getClassPathExtractor(file);
                 if (extractor == null) {
@@ -337,9 +343,9 @@ public final class JVoiceXmlConfiguration implements Configuration {
                         LOGGER.debug("using classpath entry '" + url + "'");
                     }
                 }
-                beanFactory.setBeanClassLoader(loader);
+                factory.setBeanClassLoader(loader);
                 final String[] names =
-                    beanFactory.getBeanNamesForType(baseClass);
+                        factory.getBeanNamesForType(baseClass);
                 if (names.length == 0) {
                     LOGGER.info("no loadable objects of type '" + baseClass 
                             + "' in file '"
@@ -347,7 +353,8 @@ public final class JVoiceXmlConfiguration implements Configuration {
                 } else {
                     for (String name : names) {
                         LOGGER.info("loading '" + name + "'");
-                        final Object o = beanFactory.getBean(name, baseClass);
+                        final Object o =
+                                factory.getBean(name, baseClass);
                         final T bean = baseClass.cast(o);
                         beans.add(bean);
                         if (bean instanceof ExtendedConfiguration) {
@@ -373,12 +380,12 @@ public final class JVoiceXmlConfiguration implements Configuration {
     public <T extends Object> T loadObject(final Class<T> baseClass,
                                            final String key)
         throws ConfigurationException {
-        if (factory == null) {
+        if (context == null) {
             LOGGER.warn("configuration error. unable to load object: key '"
                     + key + "' from a null configuration");
             return null;
         }
-        if (!factory.containsBean(key)) {
+        if (!context.containsBean(key)) {
             LOGGER.warn("unable to load object: key '" + key + "' not found");
             return null;
         }
@@ -387,7 +394,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("loading bean with id '" + key + "'");
             }
-            object = factory.getBean(key, baseClass);
+            object = context.getBean(key, baseClass);
         } catch (org.springframework.beans.BeansException e) {
             throw new ConfigurationException(e.getMessage(), e);
         }

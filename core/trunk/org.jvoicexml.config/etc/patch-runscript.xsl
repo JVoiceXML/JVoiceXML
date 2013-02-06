@@ -26,9 +26,11 @@
         <xsl:comment>Added org.jvoicexml.config configuration settings</xsl:comment>
         <classpath>
         <pathelement location="dist/org.jvoicexml.config.jar"/>
-          <fileset dir="../org.jvoicexml.config/3rdparty/springframework3.0.5/lib">
-            <include name="org.springframework.beans-3.0.5.RELEASE.jar" />
-            <include name="org.springframework.core-3.0.5.RELEASE.jar" />
+          <fileset dir="../org.jvoicexml.config/3rdparty/springframework3.2.1/lib">
+            <include name="spring-core-3.2.1.RELEASE.jar" />
+            <include name="spring-beans-3.2.1.RELEASE.jar" />
+            <include name="spring-context-3.2.1.RELEASE.jar" />
+            <include name="spring-expression-3.2.1.RELEASE.jar" />
           </fileset>
         </classpath>
       <xsl:apply-templates select="@*|*|text()|comment()" />
@@ -43,9 +45,11 @@
         <xsl:comment>Added org.jvoicexml.config configuration settings</xsl:comment>
         <classpath>
         <pathelement location="dist/org.jvoicexml.config.jar"/>
-          <fileset dir="../org.jvoicexml.config/3rdparty/springframework3.0.5/lib">
-            <include name="org.springframework.beans-3.0.5.RELEASE.jar" />
-            <include name="org.springframework.core-3.0.5.RELEASE.jar" />
+          <fileset dir="../org.jvoicexml.config/3rdparty/springframework3.2.1/lib">
+            <include name="spring-core-3.2.1.RELEASE.jar" />
+            <include name="spring-beans-3.2.1.RELEASE.jar" />
+            <include name="spring-context-3.2.1.RELEASE.jar" />
+            <include name="spring-expression-3.2.1.RELEASE.jar" />
           </fileset>
         </classpath>
       <xsl:apply-templates select="@*|*|text()|comment()" />

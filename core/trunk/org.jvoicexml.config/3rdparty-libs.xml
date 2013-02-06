@@ -16,8 +16,9 @@ org.jvoicexml.config.
                   value="${local-3rdparty.dir}/springframework3.2.1" />
         <property name="spring.lib.dir" value="${spring.dir}/lib" />
         <fileset dir="${spring.lib.dir}" id="spring.lib">
-            <include name="spring-beans-3.2.1.RELEASE.jar" />
             <include name="spring-core-3.2.1.RELEASE.jar" />
+            <include name="spring-beans-3.2.1.RELEASE.jar" />
+            <include name="spring-context-3.2.1.RELEASE.jar" />
         </fileset>
 
         <!-- jvxml library -->
