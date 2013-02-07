@@ -332,10 +332,29 @@ projects may extend this namespace. For instance the namespace for the
 XML library is \lstinline{org.jvoicexml.xml}.
 
 The project names have the same name as the jar that they produce. This
-makes it easier to find the project related to a specific Java Archive.
+makes it easier to find the project related to a specific Java archive.
 For instance the project name for the XML library is
 \lstinline{org.jvoicexml.xml}. It produces the jar
 \texttt{org.jvoicexml.xml.jar}.
+
+The project names generally also reflect the overall architecture as shown in
+figure~\ref{fig:main-components}.
+\begin{figure}
+\includegraphics[width=\linewidth]{main-components.png}
+\caption{JVoiceXML general architecture}
+\label{fig:main-components}
+\end{figure}
+These components can be mapped to the packages as shown in
+figure~\ref{fig:main-packages}. Specializations mainfest as subpackages thereof.
+For instance, the JSAPI 1.0 implementation platform resides in package 
+\lstinline{org.jvoicexml.implementation.jsapi10} as a subpackage of
+\lstinline{org.jvoicexml.implementation}.
+\begin{figure}
+\includegraphics[width=\linewidth]{main-packages.png}
+\caption{Main pacakages of JVoiceXML}
+\label{fig:main-packages}
+\end{figure}
+
 
 Within a project the following directory structure applies
 
@@ -642,7 +661,7 @@ start of JVoiceXML.
 
 This target will try to determine the current SVN version number using JavaHL. On
 windows systems this may cause some trouble. In case you encounter any problems,
-please read the instructions at \url{http://subclipes.tigris.org/wiki/JavaHL}.
+please read the instructions at \url{http://subclipse.tigris.org/wiki/JavaHL}.
 
 The created \texttt{run.xml} also contains a target to enable remote
 debugging. It can be called by
@@ -738,7 +757,7 @@ This project has to be build after the main project.
 \subsubsection{Third party libraries}
 \label{sec:config-third-party-libr}
 
-\paragraph{Spring Framework 3.0.5}
+\paragraph{Spring Framework 3.2.1}
 \label{sec:spring-framework}
 
 JVoiceXML uses the spring framework to address configuration issues.
@@ -1122,50 +1141,27 @@ plug-in.
 JVoiceXML plug-in
 \end{description}
 
+\section{VoiceXML Unit}
+\section{voicexml-unit}
+
+This component is an approach to establish unit testing capabilities for
+VoiceXML.
+
 \section{System test}
 
-The system test implements the W3C's conformance test for VoiceXML 2.0.
+The system test implements the W3C's conformance test for VoiceXML 2.1.
 
 \begin{description}
-\item[org.jvoicexml.systemtest] Main system test project
-\item[org.jvoicexml.systemtest.servlet] Servlet to access the W3C
-confor\-man\-ce test
+\item[org.jvoicexml.voicexmlunit] VoiceXML unit test framewortk
+\item[org.jvoicexml.voicexmlunit] Demo test project
 \end{description}
 
 In addition you will need the following sub-projects:
 \begin{itemize}
 \item org.jvoicexml
+\item org.jvoicexml.xml
 \item org.jvoicexml.implementation.text
 \end{itemize} 
-
-In order to run the system test you will need to have Tomcat 5.5 installed,
-refer to section~\ref{sec:tomcat}. The
-servlet service needs to be configured via the following lines in your copy
-of \texttt{ant.properties} in the \texttt{personal-props} folder:
-
-\begin{lstlisting}
-tomcat.home=MUST BE SUPLIED DIRECTORY
-tomcat.startup=${tomcat.home}/bin/startup.sh
-tomcat.shutdown=${tomcat.home}/bin/shutdown.sh
-servlet.lib.dir=MUST BE SUPPLIED DIRECTORY
-servlet.include=servlet-api.jar
-\end{lstlisting}
-
-In order to run the test switch to the \texttt{org.jvoicexml.systemtest}
-directory and call
-\begin{lstlisting}
-ant -f night.xml run
-\end{lstlisting}
-
-The first time you call it the test suite is obtained from the W3C. If you are
-behind a firewall you will have to configure the proxy settings by
-\begin{lstlisting}
-proxy.host=
-proxy.port=
-proxy.user=
-proxy.pass
-\end{lstlisting}
-in the same configuration file.
 
 \section{Documentation}
 
