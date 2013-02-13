@@ -777,7 +777,21 @@ This project provides an SRGS processor.
 
 This project has to be build before the main project.
 
+\section{Remote Java Applications}
+\subsection{Project \texttt{org.jvoicexml.client}}
+
+This project contains the basic classes that are needed to implement a
+client that can connect remotely to JVoiceXML.
+
+\subsubsection{Third party libraries}
+
+This platform makes use of the \lstinline{org.jvoicexml.jndi} library
+to connect to JVoiceXML (see section\ref{sec:jndi}). In addition specialized
+libraries from the implementation platform (see section
+\ref{sec:implementation-platforms}) maybe required.
+
 \subsection{Project \texttt{org.jvoicexml.jndi}}
+\label{sec:jndi}
 
 This project provides JNDI support for JVoiceXML. This is not required at run
 time but in order to build JVoiceXML.
@@ -802,8 +816,13 @@ The repository entry must match the repository that you are using for your
 client. Otherwise JVoiceXML will not be able to load the needed resources of
 the server side.
 
-\subsection{Project \texttt{org.jvoicexml.implementation.jsapi10}}
+\section{Implementation Platforms}
+\label{sec:implementation-platforms}
+
+\subsection{JSAPI 10 Implementation Platform}
 \label{sec:implementation-jsapi10}
+
+\subsubsection{Project \texttt{org.jvoicexml.implementation.jsapi10}}
 
 This project provides an implementation platform for JSAPI 1.0 compliant
 speech engines. Besides a general hook for those engines there are also
@@ -861,7 +880,8 @@ and CMU sphinx4. Note that the delivered version is only free for personal use.
 If you intend to use it in a commercial corporate or institutional context, you
 will have to buy a license. Please refer to \url{http://www.cloudgarden.com}.
 
-\subsection{Project \texttt{org.jvoicexml.implementation.jsapi20}}
+\subsection{JSAPI 2.0 Implementation Platform}
+\subsubsection{Project \texttt{org.jvoicexml.implementation.jsapi20}}
 
 This project contains a first draft of an implementation platform to enable
 JSAPI 2.0 support for JVoiceXML.
@@ -911,7 +931,8 @@ Note that the used library is a snapshot from the FreeTTS SVN repository.
 The JSAPI 2.0 implementation platform uses sphinx 4~\cite{sphinx} from
 Carnegie Mellon University as a demo implementation for speech recognition.
 
-\subsection{Project \texttt{org.jvoicexml.implementation.jtapi}}
+\subsection{JTAPI 1.3 Implementation Platform}
+\subsubsection{Project \texttt{org.jvoicexml.implementation.jtapi}}
 
 This implementation platform provides telephony functionality based on JTAPI to
 JVoiceXML.This implementation platform should be used together with other
@@ -954,7 +975,8 @@ MjSIP provides an easy way to have SIP functionality. Unfortunately, this
 project uses the GPL license which makes is unusable in commercial
 applications. It should be replaced by JainSIP.
 
-\subsection{Project \texttt{org.jvoicexml.implementation.marc}}
+\subsection{MARC implementation Platform}
+\subsubsection{Project \texttt{org.jvoicexml.implementation.marc}}
 
 This implementation integrates MARC system into JVoiceXML. This platform
 only provides the output part and is designed to be used with other
@@ -966,7 +988,8 @@ demo. MARC can be downloaded from \url{http://marc.limsi.fr/}.
 This implementation platform will allow for the integration of MARC BML commands
 into your VoiceXML files.
 
-\subsection{Project \texttt{org.jvoicexml.implementation.mary}}
+\subsection{OpenMary Implementation Platform}
+\subsubsection{Project \texttt{org.jvoicexml.implementation.mary}}
 
 This implementation integrates the Mary TTS system into JVoiceXML. It is
 designed to be used with other implementation platforms like JSAPI 1.0, see
@@ -996,8 +1019,9 @@ server = socket
 The Mary client is shipped with the Mary TTS systems and facilitates the
 communication of clients like JVoiceXML with the Mary TTS server.
 
+\subsection{MRCPv2 Implementation Platform}
 
-\subsection{Project \texttt{org.jvoicexml.implementation.mrcpv2}}
+\subsubsection{Project \texttt{org.jvoicexml.implementation.mrcpv2}}
 
 This implementation platform aims at MRCPv2 support for JVoiceXML. It is in the
 starting phase and currently it is not usable.
@@ -1044,6 +1068,7 @@ to provide input via Java strings.
 
 No special libraries.
 
+\subsection{MMI Implementation Platform}
 \subsection{Project \texttt{org.jvoicexml.callmanger.mmi}}
 
 This callmanager allows for accessing JVoiceXML as a modality component in
@@ -1053,26 +1078,29 @@ the W3C MMI architectural pattern.
 
 This platform makes use of the \lstinline{org.jvoicexml.mmi.event} library
 to author MMI compatible events (see section\ref{sec:mmi-events}).
+In addition an implemention of an Event and Transport Layer is needed.
 
-\subsection{Project \texttt{org.jvoicexml.callmanger.sip}}
+\subsection{Project \texttt{org.jvoicexml.mmi.socket}}
 
-This callmanager aims at supporting SIP based access to JVoiceXML.
-
-\subsubsection{Third party libraries}
-
-\paragraph{jainsip1.2}
-
-JainSIP provides a SIP stack for Java.
-
-\subsection{Project \texttt{org.jvoicexml.callmanger.text}}
-
-This callmanager aims at accesssing JVoiceXML as a server for text based
-access. In contrast to the text based implementation platform this callmanager
-doese not require JNDI.
+This project contains an implementation of the Event and Transport Layer
+via sockets. MMI events are received as XML.
 
 \subsubsection{Third party libraries}
 
-No special libraries.
+This platform makes use of the \lstinline{org.jvoicexml.mmi.event} library
+to author MMI compatible events (see section\ref{sec:mmi-events}).
+
+\subsection{Project \texttt{org.jvoicexml.mmi.umundo}}
+
+This project contains an implementation of the Event and Transport Layer
+via umundo\footnote{\url{https://github.com/tklab-tud/umundo}}.
+MMI events are received as protopuf messages.
+
+\subsubsection{Third party libraries}
+
+\paragraph{protobuf2.4.1}
+
+Needed for MMI generation in Google's protobuf format.
 
 
 \subsection{Project \texttt{org.jvoicexml.mmi.events}}
@@ -1099,6 +1127,30 @@ mmi.protoc=protoc
 \paragraph{protobuf2.4.1}
 
 Needed for MMI generation in Google's protobuf format.
+
+\subsection{SIP Implemetation Platform}
+\subsubsection{Project \texttt{org.jvoicexml.callmanger.sip}}
+
+This callmanager aims at supporting SIP based access to JVoiceXML.
+
+\subsubsection{Third party libraries}
+
+\paragraph{jainsip1.2}
+
+JainSIP provides a SIP stack for Java.
+
+\subsection{Text Implementation Platform}
+\subsubsection{Project \texttt{org.jvoicexml.callmanger.text}}
+
+This callmanager aims at accesssing JVoiceXML as a server for text based
+access. In contrast to the text based implementation platform this callmanager
+doese not require JNDI.
+
+\subsubsection{Third party libraries}
+
+No special libraries.
+
+
 
 \section{Demo Programs}
 
