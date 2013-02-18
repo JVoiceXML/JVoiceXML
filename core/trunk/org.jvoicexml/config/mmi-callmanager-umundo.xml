@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<callmanager xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
+  <repository>mmi</repository>
+  <classpath>dist/org.jvoicexml.mmi.events.jar</classpath>
+  <classpath>dist/org.jvoicexml.callmanager.mmi.jar</classpath>
+  <classpath>dist/org.jvoicexml.callmanager.mmi.umundo.jar</classpath>
+  <classpath>../org.jvoicexml.callmanager.mmi.umundo/3rdparty/umundo/lib/umundo.jar</classpath>
+  <classpath>../org.jvoicexml.mmi.events/3rdparty/protobuf2.4.1/lib/protobuf-java-2.4.1.jar</classpath>
+
+  <beans:bean id="callmanager"
+    class="org.jvoicexml.callmanager.mmi.MMICallManager">
+    <!--
+      Adapt the settings to the implementation platforms that you intend to use.
+      -->
+    <beans:property name="call" value="dummy"/>
+    <beans:property name="input" value="jsapi20"/>
+    <beans:property name="output" value="jsapi20"/>
+
+    <beans:property name="connectionInformationFactory">
+       <beans:bean
+         class="org.jvoicexml.client.JVoiceXmlConnectionInformationFactory" />
+    </beans:property>
+
+    <!-- Specification of the ETL -->
+    <beans:property name="protocolAdapter">
+      <beans:bean
+        class="org.jvoicexml.callmanager.mmi.umundo.UmundoETLProtocolAdapter">
+          <beans:property name="channel" value="mmi:jvoicexml" />
+          <beans:property name="sourceUrl" value="umundo://mmi/jvoicexml" />
+      </beans:bean>
+    </beans:property>
+  </beans:bean>
+</callmanager>
