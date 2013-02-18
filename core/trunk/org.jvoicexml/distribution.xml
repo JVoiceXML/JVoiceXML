@@ -181,6 +181,8 @@ This file builds the distribution files for JVoiceXML.
     <ant dir="../org.jvoicexml.config"
         inheritall="false" inheritrefs="false" target="distribution"/>
     <antcall target="-distributionPlatforms"/>
+    <ant dir="../org.jvoicexml.voicexmlunit" target="distribution"
+        inheritall="false" inheritrefs="false"/>
   </target>
 
   <!--
