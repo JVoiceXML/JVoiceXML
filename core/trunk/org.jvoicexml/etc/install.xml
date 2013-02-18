@@ -334,6 +334,8 @@ You will need a MRCPv2 server in addition to use this implementation platform.
     </pack>
     <pack name="MMI call manager" required="no" preselected="no">
       <description>Demo call manager that allows the use of JVoiceXML as a modality component in an MMI architectural pattern compatible setting.
+
+The selection of this module requires the selection of an ETL.
       </description>
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
         <include name="mmi-callmanager.xml" />
@@ -341,6 +343,36 @@ You will need a MRCPv2 server in addition to use this implementation platform.
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
         <include name="org.jvoicexml.callmanager.mmi.jar" />
         <include name="org.jvoicexml.mmi.events.jar" />
+      </fileset>
+    </pack>
+    <pack name="Socket ETL for MMI" required="no" preselected="no">
+      <description>Event and Transportlayer based on sockets and XML documents.
+      </description>
+      <depends packname="MMI call manager"/>
+      <fileset dir="config" targetdir="$INSTALL_PATH/config">
+        <include name="mmi-callmanager.xml" />
+      </fileset>
+      <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
+        <include name="org.jvoicexml.callmanager.mmi.socket.jar" />
+      </fileset>
+    </pack>
+    <pack name="umndo ETL for MMI" required="no" preselected="no">
+      <description>Event and Transportlayer based on sockets and XML documents.
+      </description>
+      <depends packname="MMI call manager"/>
+      <fileset dir="config" targetdir="$INSTALL_PATH/config">
+        <include name="mmi-callmanager-umundo.xml" />
+      </fileset>
+      <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
+        <include name="org.jvoicexml.callmanager.mmi.umundo.jar" />
+        <include name="umundo.jar" />
+        </fileset>
+    </pack>
+    <pack name="VoiceXML Unit" required="no" preselected="no">
+      <description>Unit testing framework for VoiceXML.
+      </description>
+      <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
+        <include name="org.jvoicexml.voicexmlunit.jar" />
       </fileset>
     </pack>
     <pack name="API Documentation" required="no" preselected="no">
