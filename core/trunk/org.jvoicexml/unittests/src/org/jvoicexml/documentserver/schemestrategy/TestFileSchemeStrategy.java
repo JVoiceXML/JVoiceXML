@@ -67,7 +67,7 @@ public final class TestFileSchemeStrategy {
      */
     @Test
     public void testGetInputStream() throws Exception, JVoiceXMLEvent {
-       final File file = new File("test/config/hello.vxml");
+       final File file = new File("unittests/config/hello.vxml");
        final URI uri = file.toURI();
        InputStream in = strategy.getInputStream(null, uri, null, 5000, null);
        Assert.assertNotNull(in);
@@ -83,7 +83,7 @@ public final class TestFileSchemeStrategy {
      */
     @Test
     public void testGetInputStreamFragment() throws Exception, JVoiceXMLEvent {
-       final File file = new File("test/config/hello.vxml");
+       final File file = new File("unittests/config/hello.vxml");
        final URI uri = file.toURI();
        final URI fragmentUri = new URI(uri.toString() + "#fragment");
        InputStream in = strategy.getInputStream(null, fragmentUri, null, 5000,

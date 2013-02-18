@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -51,12 +51,12 @@ public final class TestSrgsXmlGrammarIdentifier {
     /**
      * Defines the base directory to VXML 2.1 IRP the test grammars.
      */
-    private static final String BASE21 = "test/config/irp_vxml21/";
+    private static final String BASE21 = "unittests/config/irp_vxml21/";
 
     /**
      * Defines the base directory to VXML 2.0 IRP the test grammars.
      */
-    private static final String BASE20 = "test/config/irp_vxml20/";
+    private static final String BASE20 = "unittests/config/irp_vxml20/";
 
     /**
      * Set up the test environment.
