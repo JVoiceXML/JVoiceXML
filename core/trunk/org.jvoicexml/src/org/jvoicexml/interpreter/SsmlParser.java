@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -56,6 +56,7 @@ import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Prompt;
+import org.jvoicexml.xml.vxml.Value;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -124,7 +125,7 @@ public final class SsmlParser {
     /**
      * Constructs a new object.
      *
-     * @param vxmlNode
+     * @param prompt
      *            the prompt.
      * @param interpreterContext
      *            the current VoiceXML interpreter context.
@@ -162,7 +163,8 @@ public final class SsmlParser {
         final Speak parent = document.getSpeak();
         final Locale locale = getLocale(node);
         parent.setXmlLang(locale);
-        if ((node instanceof Audio) || (node instanceof Text)) {
+        if ((node instanceof Audio) || (node instanceof Text)
+                || (node instanceof Value)) {
             cloneChildNode(document, parent, node);
         } else {
             final Collection<VoiceXmlNode> children = node.getChildren();

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -83,7 +83,7 @@ public final class TestValueStrategy extends TagStrategyTestBase
     @Test
     public void testExecuteExpr() throws Exception, JVoiceXMLEvent {
         final String name = "test";
-        final String val = "hurz";
+        final String val = "this is a test";
         final ScriptingEngine scripting = getScriptingEngine();
         scripting.setVariable(name, val);
         final Block block = createBlock();
