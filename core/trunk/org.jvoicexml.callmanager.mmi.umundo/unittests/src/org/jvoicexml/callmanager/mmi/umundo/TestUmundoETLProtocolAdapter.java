@@ -26,12 +26,10 @@
 
 package org.jvoicexml.callmanager.mmi.umundo;
 
-import static org.junit.Assert.*;
-
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
-import org.jvoicexml.mmi.events.PrepareRequest;
 import org.jvoicexml.mmi.events.PrepareResponse;
 import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents;
 import org.umundo.core.Node;
@@ -46,14 +44,14 @@ import com.google.protobuf.ExtensionRegistry;
  * @since 0.7.6
  *
  */
-public class TestUmundoETLProtocolAdapter {
+public final class TestUmundoETLProtocolAdapter {
     /** The umundo receiving node. */
     private Node receivingNode;
-    /** Synchrinzation lock. */
+    /** Synchronzation lock. */
     private Object lock;
     /** The received event. */
     private LifeCycleEvent receivedEvent;
-
+    /** A receiver for MMI events. */
     private DummyReceiver receiver;
 
     /**
@@ -65,7 +63,8 @@ public class TestUmundoETLProtocolAdapter {
     public void setUp() throws Exception {
         receivingNode = new Node();
         receiver = new DummyReceiver();
-        TypedSubscriber subscriber = new TypedSubscriber("mmi:jvoicexml", receiver);
+        TypedSubscriber subscriber =
+                new TypedSubscriber("mmi:jvoicexml", receiver);
         receivingNode.addSubscriber(subscriber);
         subscriber.registerType(LifeCycleEvents.LifeCycleEvent.class);
 
@@ -77,6 +76,20 @@ public class TestUmundoETLProtocolAdapter {
     }
 
 
+    /**
+     * Tear down the test environment.
+     * @throws Exception tear down failed
+     */
+    @After
+    public void tearDown() throws Exception {
+        receivingNode.suspend();
+    }
+
+    /**
+     * Test case for {@link UmundoETLProtocolAdapter#sendMMIEvent(Object, LifeCycleEvent)}.
+     * @throws Exception
+     *         test failed
+     */
     @Test
     public void testSendMMIEvent() throws Exception {
         final PrepareResponse response = new PrepareResponse();
@@ -93,6 +106,6 @@ public class TestUmundoETLProtocolAdapter {
         Thread.sleep(1000);
         adapter.sendMMIEvent("dummy", response);
         Thread.sleep(1000);
+        adapter.stop();
     }
-
 }

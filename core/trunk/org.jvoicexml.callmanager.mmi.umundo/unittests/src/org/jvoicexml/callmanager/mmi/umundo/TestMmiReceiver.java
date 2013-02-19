@@ -28,6 +28,7 @@ package org.jvoicexml.callmanager.mmi.umundo;
 
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
@@ -82,6 +83,16 @@ public final class TestMmiReceiver implements MMIEventListener {
     }
 
     /**
+     * Tear down the test environment.
+     * @throws Exception tear down failed
+     */
+    @After
+    public void tearDown() throws Exception {
+        receivingNode.suspend();
+        publishingNode.suspend();
+    }
+
+    /**
      * Tests for {@link MmiReceiver#receiveObject(Object, org.umundo.core.Message)}.
      * @throws Exception
      *         test failed
@@ -105,7 +116,8 @@ public final class TestMmiReceiver implements MMIEventListener {
         final LifeCycleEvents.LifeCycleRequest lifeCycleRequest =
                 LifeCycleEvents.LifeCycleRequest.newBuilder()
                 .setContext(context)
-                .setExtension(LifeCycleEvents.PrepareRequest.request, prepareRequest)
+                .setExtension(LifeCycleEvents.PrepareRequest.request,
+                        prepareRequest)
                 .build();
         final LifeCycleEvents.LifeCycleEvent event1 =
                 LifeCycleEvents.LifeCycleEvent.newBuilder()
@@ -113,7 +125,8 @@ public final class TestMmiReceiver implements MMIEventListener {
                 .setRequestID(requestId)
                 .setSource(source)
                 .setTarget(target)
-                .setExtension(LifeCycleEvents.LifeCycleRequest.request, lifeCycleRequest)
+                .setExtension(LifeCycleEvents.LifeCycleRequest.request,
+                        lifeCycleRequest)
                 .build();
         publisher.sendObject("LifeCycleEvent", event1);
         synchronized (lock) {
@@ -130,5 +143,4 @@ public final class TestMmiReceiver implements MMIEventListener {
             lock.notifyAll();
         }
     }
-
 }
