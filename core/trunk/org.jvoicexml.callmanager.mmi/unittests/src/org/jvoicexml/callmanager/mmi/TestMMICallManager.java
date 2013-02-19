@@ -45,12 +45,12 @@ import org.jvoicexml.test.DummyJvoiceXmlCore;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class TestMMICallManager {
+public final class TestMMICallManager {
     /** The test object. */
     private MMICallManager cm;
 
     /**
-     * Set up the test environment
+     * Set up the test environment.
      * @throws Exception
      *         test failed
      * @throws JVoiceXMLEvent
