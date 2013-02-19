@@ -21,7 +21,7 @@ This file runs unit tests on org.jvoicexml.callmanager.mmi.
         <!-- the class path for the test case -->
         <path id="test.classpath">
             <path refid="project.classpath" />
-            <pathelement location="${jvxml.core.dir}/test/classes"/>
+            <pathelement location="${jvxml.core.dir}/unittests/classes"/>
             <pathelement location="${build}" />
             <fileset refid="junit.lib"/>
             <fileset refid="rhino.lib" />
