@@ -190,7 +190,7 @@ public final class Scxml
      * Set the initial attribute.
      *
      * @param initial value of the initial attribute.
-     * @see #ATTRIBUTE_ALPHABET
+     * @see #ATTRIBUTE_INITIAL
      */
     public void setInitial(final String initial) {
         setAttribute(ATTRIBUTE_INITIAL, initial);

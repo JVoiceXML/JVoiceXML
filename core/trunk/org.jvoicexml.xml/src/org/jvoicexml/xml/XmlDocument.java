@@ -102,6 +102,31 @@ public abstract class XmlDocument
     /** The encapsulated document, implemented as a delegate. */
     private transient Document document;
 
+    /** The document builder. */
+    private final static DocumentBuilder BUILDER;
+
+    static {
+        final DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+
+        // Configure the factory to ignore comments
+        factory.setIgnoringComments(true);
+        DocumentBuilder builder = null;
+        try {
+            builder = factory.newDocumentBuilder();
+            final EntityResolver resolver = new IgnoringEntityResolver();
+            boolean resolveEntities =
+                Boolean.getBoolean("org.jvoicexml.xml.resolveEntities");
+            if (!resolveEntities) {
+                builder.setEntityResolver(resolver);
+            }
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        BUILDER = builder;
+    }
+
     /**
      * Creates an empty XML document.
      *
@@ -110,22 +135,18 @@ public abstract class XmlDocument
      */
     public XmlDocument()
             throws ParserConfigurationException {
-        final DocumentBuilderFactory factory =
-                DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        final DocumentBuilder builder = factory.newDocumentBuilder();
         // Check if there is a document type specified. 
         final DocumentType prototype = getDoctype();
         if (prototype == null) {
             // If there is none, simply create a new document as usual.
-            document = builder.newDocument();
+            document = BUILDER.newDocument();
             if (document != null) {
                 appendChild(createRootNode());
             }
         } else {
             // otherwise create a document with the given doctype as a
             // prototype
-            final DOMImplementation impl = builder.getDOMImplementation();
+            final DOMImplementation impl = BUILDER.getDOMImplementation();
             final DocumentType type =
                 impl.createDocumentType(prototype.getName(),
                     prototype.getPublicId(), prototype.getSystemId());
@@ -148,20 +169,7 @@ public abstract class XmlDocument
      */
     public XmlDocument(final InputSource source)
             throws ParserConfigurationException, SAXException, IOException {
-        final DocumentBuilderFactory factory =
-                DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-
-        // Configure the factory to ignore comments
-        factory.setIgnoringComments(true);
-        final DocumentBuilder builder = factory.newDocumentBuilder();
-        final EntityResolver resolver = new IgnoringEntityResolver();
-        boolean resolveEntities =
-            Boolean.getBoolean("org.jvoicexml.xml.resolveEntities");
-        if (!resolveEntities) {
-            builder.setEntityResolver(resolver);
-        }
-        document = builder.parse(source);
+        document = BUILDER.parse(source);
     }
 
     /**
