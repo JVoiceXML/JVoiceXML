@@ -23,7 +23,7 @@ This file runs unit tests on the JSAPI 1.0 implemenatation platform.
             <path refid="project.classpath" />
         	<path location="../${component}/etc" />
             <pathelement location="${build}" />
-            <pathelement location="${jvxml.core.dir}/test/classes" />
+            <pathelement location="${jvxml.core.dir}/unittests/classes" />
             <fileset refid="freetts.jsapi10.lib"/>
             <fileset refid="jlibrtp.lib"/>
             <fileset refid="junit.lib"/>
@@ -62,7 +62,7 @@ This file runs unit tests on the JSAPI 1.0 implemenatation platform.
                showoutput="yes">
             <classpath location="${test.build}" />
             <classpath refid="test.classpath" />
-            <classpath location="${test.config}" />
+            <classpath location="${basedir}/etc" />
             <classpath location="${config}" />
             <classpath>
                 <fileset refid="loggings.lib" />
@@ -84,6 +84,7 @@ This file runs unit tests on the JSAPI 1.0 implemenatation platform.
             </fileset>
             <report format="frames" todir="${test.results}/html" />
         </junitreport>
+        <echo message="${basedir}"/>
     </target>
 
     <target name="testSingle" depends="compiletests"

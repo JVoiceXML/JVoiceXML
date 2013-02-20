@@ -40,7 +40,7 @@ import org.junit.Test;
  * @version $Revision: 2153 $
  * @since 0.7
  */
-public final class TcpUriFactoryTest {
+public final class TestTcpUriFactory {
 
     /**
      * Test method for {@link org.jvoicexml.client.TcpUriFactory#createUri(java.net.InetSocketAddress)}.

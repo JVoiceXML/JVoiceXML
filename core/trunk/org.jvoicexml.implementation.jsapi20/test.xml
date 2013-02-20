@@ -21,7 +21,7 @@ This file runs unit tests on the JSAPI 2.0 implementation platform.
         <!-- the class path for the test case -->
         <path id="test.classpath">
             <path refid="project.classpath" />
-            <pathelement location="${jvxml.core.dir}/test/classes"/>
+            <pathelement location="${jvxml.core.dir}/unittests/classes"/>
             <pathelement location="${build}" />
             <fileset refid="junit.lib"/>
             <fileset refid="freetts.lib"/>

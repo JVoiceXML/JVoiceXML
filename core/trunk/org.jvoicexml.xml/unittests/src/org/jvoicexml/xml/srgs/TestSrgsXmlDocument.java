@@ -46,7 +46,7 @@ public final class TestSrgsXmlDocument {
 
     /** Base String for grammar documents. */
     private static final String BASE =
-        "../org.jvoicexml/test/config/irp_vxml21/";
+        "../org.jvoicexml/unittests/config/irp_vxml21/";
 
     /**
      * Test constructor for 'SrgsXmlDocument'.

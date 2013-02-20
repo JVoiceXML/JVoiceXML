@@ -39,7 +39,7 @@ This file runs unit tests on org.jvoicexml.client.
     <target name="compiletests"
             depends="-inittest,compile,-checkJunit"
             description="Compile the JAVA sources for the test cases">
-        <javac destdir="${test.build}"
+        <javac destdir="${test.build}" includeantruntime="false"
                optimize="off"
                debug="on"
                deprecation="on">

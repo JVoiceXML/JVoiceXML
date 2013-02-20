@@ -30,7 +30,6 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.mmi.events.StatusType;
 import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents.LifeCycleEvent.LifeCycleEventType;
 import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents.LifeCycleResponse;
 

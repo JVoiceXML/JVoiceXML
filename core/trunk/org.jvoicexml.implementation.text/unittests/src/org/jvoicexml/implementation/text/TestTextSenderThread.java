@@ -66,7 +66,7 @@ public final class TestTextSenderThread
     private final Object lock = new Object();
 
     /** Last received object. */
-    private Object receivedObject;
+    private SsmlDocument receivedObject;
 
     /**
      * Set up the test environment.
@@ -78,7 +78,7 @@ public final class TestTextSenderThread
         server = new TextServer(PORT);
         server.start();
         server.addTextListener(this);
-
+        Thread.sleep(500);
         final InetAddress address = InetAddress.getLocalHost();
         final SocketAddress socketAddress =
             new InetSocketAddress(address, PORT);
@@ -110,7 +110,7 @@ public final class TestTextSenderThread
      * Test method for {@link org.jvoicexml.implementation.text.TextSenderThread#sendData(org.jvoicexml.SpeakableText)}.
      * @exception Exception test failed.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testSendData() throws Exception {
         final String test1 = "test1";
         final SpeakableSsmlText speakable1 = new SpeakableSsmlText(test1);
@@ -118,8 +118,7 @@ public final class TestTextSenderThread
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
-        Assert.assertEquals(speakable1.getDocument(), receivedObject);
-
+        assertEquals(speakable1.getDocument(), receivedObject);
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
@@ -138,15 +137,25 @@ public final class TestTextSenderThread
             sender.sendData(speakable3);
         }
         int i = 0;
-        while (!receivedObject.equals("test9")) {
+        while (i < 10) {
             synchronized (lock) {
                 lock.wait(MAX_WAIT);
             }
             ++i;
-            if (i > 100) {
-                Assert.fail("last object not received");
-            }
         }
+    }
+
+    /**
+     * Checks if the given SSML documents are equal based on their content.
+     * @param doc1 the expected document
+     * @param doc2 the document to check
+     * @since 0.7.6
+     */
+    private void assertEquals(final SsmlDocument doc1,
+            final SsmlDocument doc2) {
+        Assert.assertNotNull(doc1);
+        Assert.assertNotNull(doc2);
+        Assert.assertEquals(doc1.getTextContent(), doc2.getTextContent());
     }
 
     /**
@@ -154,16 +163,6 @@ public final class TestTextSenderThread
      */
     public void outputSsml(final SsmlDocument document) {
         receivedObject = document;
-        synchronized (lock) {
-            lock.notify();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void outputText(final String text) {
-        receivedObject = text;
         synchronized (lock) {
             lock.notify();
         }

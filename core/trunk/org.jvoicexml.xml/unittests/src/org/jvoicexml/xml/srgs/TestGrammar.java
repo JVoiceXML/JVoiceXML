@@ -51,7 +51,7 @@ import org.xml.sax.InputSource;
 public final class TestGrammar {
     /** Base directory with test grammars. */
     private static final String SRGS_BASE =
-        "../org.jvoicexml/test/config/custom_grammar/";
+        "../org.jvoicexml/unittests/config/custom_grammar/";
 
     /**
      * Test method for {@link org.jvoicexml.xml.srgs.Grammar#getRootRule()}.

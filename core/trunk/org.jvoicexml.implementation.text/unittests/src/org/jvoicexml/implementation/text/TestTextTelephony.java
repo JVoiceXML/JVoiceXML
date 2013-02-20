@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -70,7 +70,10 @@ public final class TestTextTelephony
     private String sessionId;
 
     /** Last received object. */
-    private Object receivedObject;
+    private SsmlDocument receivedDocument;
+
+    /** The last received event. */
+    private TextRecognitionResult receivedResult;
 
     /**
      * Creates a new object.
@@ -94,7 +97,7 @@ public final class TestTextTelephony
         telephony = new TextTelephony();
         telephony.connect(client);
         server.waitConnected();
-        receivedObject = null;
+        receivedDocument = null;
         sessionId = UUID.randomUUID().toString();
     }
 
@@ -126,7 +129,7 @@ public final class TestTextTelephony
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
-        Assert.assertEquals(speakable.getDocument(), receivedObject);
+        assertEquals(speakable.getDocument(), receivedDocument);
     }
 
     /**
@@ -148,29 +151,28 @@ public final class TestTextTelephony
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
-        Assert.assertTrue("expected a recognition result but was "
-                + (receivedObject == null? "null" : receivedObject.getClass()),
-                receivedObject instanceof TextRecognitionResult);
-        final TextRecognitionResult result =
-            (TextRecognitionResult) receivedObject;
-        Assert.assertEquals(utterance, result.getUtterance());
+        Assert.assertNotNull(receivedResult);
+        Assert.assertEquals(utterance, receivedResult.getUtterance());
+    }
+
+    /**
+     * Checks if the given SSML documents are equal based on their content.
+     * @param doc1 the expected document
+     * @param doc2 the document to check
+     * @since 0.7.6
+     */
+    private void assertEquals(final SsmlDocument doc1,
+            final SsmlDocument doc2) {
+        Assert.assertNotNull(doc1);
+        Assert.assertNotNull(doc2);
+        Assert.assertEquals(doc1.getTextContent(), doc2.getTextContent());
     }
 
     /**
      * {@inheritDoc}
      */
     public void outputSsml(final SsmlDocument document) {
-        receivedObject = document;
-        synchronized (lock) {
-            lock.notifyAll();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void outputText(final String text) {
-        receivedObject = text;
+        receivedDocument = document;
         synchronized (lock) {
             lock.notifyAll();
         }
@@ -182,7 +184,7 @@ public final class TestTextTelephony
     public void inputStatusChanged(final SpokenInputEvent event) {
         final int id = event.getEvent();
         if (id == SpokenInputEvent.RESULT_ACCEPTED) {
-            receivedObject = event.getParam();
+            receivedResult = (TextRecognitionResult) event.getParam();
             synchronized (lock) {
                 lock.notifyAll();
             }
