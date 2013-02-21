@@ -1,80 +1,106 @@
 <project name="Hello World Demo" default="all" basedir=".">
-  <description>
+    <description>
 This file builds and runs the 'object'-tag demo for JVoiceXML.
     </description>
 
-  <!-- allow the user to override setting in an own propertiesfile. -->
-  <property file="../org.jvoicexml/personal-props/ant.properties" />
-  <property file="../org.jvoicexml/config-props/ant.properties" />
+    <!-- allow the user to override setting in an own propertiesfile. -->
+    <property file="../org.jvoicexml/personal-props/ant.properties" />
+    <property file="../org.jvoicexml/config-props/ant.properties" />
 
-  <!-- Load the settings for 3rdparty libraries -->
-  <import file="3rdparty-libs.xml" />
+    <!-- Load the settings for 3rdparty libraries -->
+    <import file="3rdparty-libs.xml" />
 
-  <target name="-setup" depends="-local-3rdparty-setup">
-    <property name="src" value="src" />
-    <property name="build" value="classes" />
-    <property name="config" value="config" />
+    <target name="-setup" depends="-local-3rdparty-setup">
+        <!-- The component built here-->
+        <property name="component"
+            value="org.jvoicexml.demo.objecttagdemo"/>
+        <property name="component.path"
+          value="org/jvoicexml/demo/objecttagdemo"/>
 
-    <property name="optimize" value="off" />
-    <property name="debug" value="on" />
+        <property name="src" value="src" />
+        <property name="build" value="classes" />
+        <property name="config" value="config" />
+        <property name="dist" value="${jvxml.core.dir}/dist" />
 
-    <!-- the used class path -->
-    <path id="build.classpath">
-      <path refid="jvxml.core.lib" />
-      <fileset refid="log4j.lib" />
-    </path>
+        <property name="optimize" value="off" />
+        <property name="debug" value="on" />
 
-    <path id="run.classpath">
-      <fileset refid="rhino.lib"/>
-      <path refid="build.classpath" />
-    </path>
-  </target>
+        <!-- the used class path -->
+        <path id="build.classpath">
+            <path refid="jvxml.core.lib" />
+            <fileset refid="log4j.lib" />
+        </path>
 
-  <target name="-init" depends="-setup">
-    <mkdir dir="${build}" />
-  </target>
+        <path id="run.classpath">
+            <fileset refid="rhino.lib" />
+            <path refid="build.classpath" />
+        </path>
+    </target>
 
-  <target name="-checkJVoiceXML">
-    <available classname="org.jvoicexml.JVoiceXml" property="jvoicexml.present" classpathref="build.classpath" />
-    <fail unless="jvoicexml.present">
+    <target name="-init" depends="-setup">
+        <mkdir dir="${build}" />
+    </target>
+
+    <target name="-checkJVoiceXML">
+        <available classname="org.jvoicexml.JVoiceXml" property="jvoicexml.present" classpathref="build.classpath" />
+        <fail unless="jvoicexml.present">
 Cannot find jvoicexml libraries needed to build this demo.
 Build this jar from the main project first.
     </fail>
-  </target>
+    </target>
 
-  <target name="clean" description="Remove all compiled and ditsribution files">
-    <delete dir="${build}" />
-    <delete file="${jar.file}" />
-  </target>
+    <target name="clean" description="Remove all compiled and ditsribution files">
+        <delete dir="${build}" />
+        <delete file="${jar.file}" />
+    </target>
 
-  <target name="compile" depends="-init,-checkJVoiceXML" description="Compile the JAVA sources">
-    <copy todir="${build}">
-      <fileset dir="${config}">
-        <include name="**/*.xml" />
-        <include name="**/*.properties" />
-        <include name="**/*.policy" />
-      </fileset>
-    </copy>
+    <target name="compile" depends="-init,-checkJVoiceXML" description="Compile the JAVA sources">
+        <copy todir="${build}">
+            <fileset dir="${config}">
+                <include name="**/*.xml" />
+                <include name="**/*.properties" />
+                <include name="**/*.policy" />
+            </fileset>
+        </copy>
 
-    <echo message="compiling with debug=${debug}, optimize=${optimize}" />
-    <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on"
-      includeantruntime="false">
-      <src path="${src}" />
-      <include name="**/*.java" />
-      <classpath refid="build.classpath" />
-      <compilerarg value="-Xlint:unchecked" />
-    </javac>
-  </target>
+        <echo message="compiling with debug=${debug}, optimize=${optimize}" />
+        <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" includeantruntime="false">
+            <src path="${src}" />
+            <include name="**/*.java" />
+            <classpath refid="build.classpath" />
+            <compilerarg value="-Xlint:unchecked" />
+        </javac>
+    </target>
 
-  <target name="run" description="Run the 'object tag' demo" depends="compile">
-    <java classname="org.jvoicexml.demo.objecttagdemo.ObjectTagDemo" fork="true">
-      <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
-      <classpath>
-        <path refid="run.classpath" />
-        <pathelement path="${build}" />
-      </classpath>
-    </java>
-  </target>
+    <target name="run" description="Run the 'object tag' demo" depends="compile">
+        <java classname="org.jvoicexml.demo.objecttagdemo.ObjectTagDemo" fork="true">
+            <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
+            <classpath>
+                <path refid="run.classpath" />
+                <pathelement path="${build}" />
+            </classpath>
+        </java>
+    </target>
 
-  <target name="all" depends="run" description="create binaries" />
+    <target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -initcheckstyle" if="checkstyle.present">
+        <property name="checkstyle-target.dir" value="${dist}/checkstyle/${component}" />
+        <mkdir dir="${checkstyle-target.dir}" />
+        <property name="checkstyle.data" value="${checkstyle-target.dir}/checkstyle-data.xml" />
+        <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml" failonviolation="false">
+            <classpath>
+                <pathelement path="${project.classpath}" />
+                <pathelement location="${build}" />
+            </classpath>
+            <classpath refid="jvxml.core.lib" />
+            <fileset dir="${src}">
+                <include name="${component.path}/**/*.java" />
+            </fileset>
+            <formatter type="xml" tofile="${checkstyle.data}" />
+        </checkstyle>
+        <xslt style="${jvxml.core.dir}/etc/checkstyle-frames.xsl" in="${checkstyle.data}" out="${checkstyle-target.dir}/report.html">
+            <param name="output.dir" expression="${checkstyle-target.dir}" />
+        </xslt>
+    </target>
+
+    <target name="all" depends="run" description="create binaries" />
 </project>
