@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<vxml version="2.0" xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+
+<meta name="description" content="script demo"/>
+<meta name="author" content="JVoiceXML group"/>
+<meta name="copyright" content="JVoiceXML group"/>
+
+<form id="start">
+    <script> <![CDATA[
+       function factorial(n)
+       {
+         return (n <= 1)? 1 : n * factorial(n-1);
+       }
+    ]]> </script>
+
+    <var name="target"/>
+    <var name="testvar" expr="'hello'"/>
+    <var name="fact" expr="6"/>
+
+    <block>
+        <prompt>First scripting demo:
+        <value expr="testvar"/> World!</prompt>
+        <assign name="third" expr="true"/>
+    </block>
+
+    <block name="third">
+        Third scripting demo:
+        hello + world = <value expr="'hello ' + 'world'"/>
+    </block>
+
+    <block name="second">
+        Second scripting demo:
+        <clear namelist="third"/>
+        17 + 4 = <value expr="17+4"/>
+    </block>
+
+    <block name="fourth">
+        Fourth scripting demo:
+
+        <assign name="target" expr="'fifth'"/>
+        <goto expritem="target"/>
+    </block>
+
+    <block name="sixth">
+        That's all folks!
+    </block>
+
+    <block name="fifth">
+        Fifth scripting demo:
+        <value expr="fact"/> factorial is <value expr="factorial(fact)"/>
+    </block>
+</form>
+</vxml>
