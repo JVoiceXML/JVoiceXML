@@ -86,6 +86,7 @@ final class TextReceiverThread extends Thread {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text receiver thread started");
@@ -111,10 +112,10 @@ final class TextReceiverThread extends Thread {
                     final int sequenceNumber = message.getSequenceNumber();
                     telephony.removePendingMessage(sequenceNumber);
                 }
-            } catch (IOException e) {
-                telephony.fireHungup();
-                return;
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException  e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error reading text message", e);
+                }
                 telephony.fireHungup();
                 return;
             }
