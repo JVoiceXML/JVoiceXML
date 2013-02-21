@@ -1,0 +1,238 @@
+<project name="Nightly build for JVoiceXML" default="nightly" basedir=".">
+  <description>
+This build file performs a nightly build of JVoiceXML.
+
+The updatewebsite target needs the jsch.jar in the ${ant.home}/lib folder.
+It can be downloaded from
+http://prdownloads.sourceforge.net/jsch/jsch-0.1.41.jar?download
+
+Furthermore you will need mail.jar in the ${ant.home}/lib folder.
+It can be downloaded from
+http://java.sun.com/products/javamail/downloads/index.html
+
+To run the JUnit unit tests you need the junit.jar in the
+${ant.home}/lib folder.
+It can be downloaded from
+http://junit.org
+
+The checkout target does not belong to the nightly build process, but it can be
+used to set up the nightly build environment.
+Download snvant from
+http://subclipse.tigris.org/files/documents/906/43359/svnant-1.2.1.zip
+and unzip it to this folder.
+The jars are expected to be in the same folder as this build file.
+  </description>
+
+  <!-- allow the user to override setting in an own propertiesfile. -->
+  <property file="../org.jvoicexml/personal-props/ant.properties" />
+  <property file="../org.jvoicexml/config-props/ant.properties" />
+
+  <target name="-init">
+    <tstamp />
+  </target>
+
+  <target name="checkout" depends="-init"
+      description="Checkout the SVN repository content">
+    <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
+      <classpath>
+        <fileset dir=".">
+          <include name="*.jar" />
+        </fileset>
+      </classpath>
+    </taskdef>
+    <svn javahl="true">
+      <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/" />
+    </svn>
+    <delete dir=".svn" />
+    <svn javahl="true">
+      <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/demo/trunk" />
+    </svn>
+    <delete dir=".svn" />
+    <svn javahl="true">
+      <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/systemtest/trunk" />
+    </svn>
+    <delete dir=".svn" />
+    <echo>
+Checkout complete!
+
+Adapt your settings in
+org.jvoicexml/personal-props
+
+You still need to copy the jsapi2.jar to
+org.jvoicexml.implementation.jsapi20/3rdparty/jsapi20/lib
+
+You can download the libraries form http://www.conversations.com
+    </echo>
+  </target>
+
+  <target name="test">
+    <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
+      <classpath>
+        <fileset dir="3rdparty/svnant/lib">
+          <include name="*.jar" />
+        </fileset>
+      </classpath>
+    </taskdef>
+    <svn javahl="false">
+      <wcVersion path="."/>
+    </svn>
+  </target>
+  
+  <target name="update" depends="-init"
+    description="Update the source code from the SVN repository">
+    <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
+      <classpath>
+        <fileset dir="3rdparty/svnant/lib">
+          <include name="*.jar" />
+        </fileset>
+      </classpath>
+    </taskdef>
+    <svn javahl="true">
+      <update dir="." />
+      <update dir="../org.jvoicexml.xml" />
+      <update dir="../org.jvoicexml.jndi" />
+      <update dir="../org.jvoicexml.implementation.jsapi10" />
+      <update dir="../org.jvoicexml.implementation.jsapi20" />
+      <update dir="../org.jvoicexml.implementation.jtapi" />
+      <update dir="../org.jvoicexml.implementation.mary" />
+      <update dir="../org.jvoicexml.implementation.mrcpv2" />
+      <update dir="../org.jvoicexml.implementation.text" />
+      <update dir="../org.jvoicexml.demo.helloworlddemo" />
+      <update dir="../org.jvoicexml.demo.helloworldservletdemo" />
+      <update dir="../org.jvoicexml.demo.inputdemo" />
+      <update dir="../org.jvoicexml.demo.jtapidemo" />
+      <update dir="../org.jvoicexml.demo.objecttagdemo" />
+      <update dir="../org.jvoicexml.demo.recorddemo" />
+      <update dir="../org.jvoicexml.demo.scriptdemo" />
+      <update dir="../org.jvoicexml.demo.voicexmlcreationdemo" />
+      <update dir="../org.jvoicexml.systemtest" />
+      <update dir="../org.jvoicexml.systemtest.servlet" />
+    </svn>
+  </target>
+
+  <target name="distribution" depends="update"
+    description="Create JVoiceXML distribution">
+    <ant antfile="distribution.xml">
+      <property name="jvxml.text" value="true" />
+      <property name="jvxml.jsapi10" value="true" />
+      <property name="jvxml.jsapi20" value="true" />
+      <property name="jvxml.mary" value="true" />
+      <property name="jvxml.mrcpv2" value="true" />
+      <property name="jvxml.jtapi" value="true" />
+      <property name="javadoc.access" value="protected" />
+    </ant>
+  </target>
+
+  <target name="checkstyle" depends="-init"
+      description="Perform checkstyle checks over all projects">
+    <delete dir="dist/checkstyle" failonerror="false" />
+    <ant dir="../org.jvoicexml" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.xml" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.implementation.jsapi10" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.implementation.jsapi20" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.implementation.jtapi" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.implementation.mrcpv2" inheritall="false" target="checkstyle" />
+    <ant dir="../org.jvoicexml.implementation.text" inheritall="false" target="checkstyle" />
+  </target>
+
+  <target name="unittests" depends="-init"
+      description="Perform unit tests over all projects">
+    <delete dir="dist/unittests" failonerror="false" />
+    <!-- Compile everything before running the tests. -->
+    <ant antfile="build.xml" target="jar">
+      <property name="jvxml.text" value="true" />
+      <property name="jvxml.jsapi10" value="true" />
+      <property name="jvxml.jsapi20" value="true" />
+      <property name="jvxml.mary" value="true" />
+      <property name="jvxml.mrcpv2" value="true" />
+      <property name="jvxml.jtapi" value="true" />
+      <property name="javadoc.access" value="protected" />
+    </ant>
+
+    <!-- Execute the unit tests for all sub projects. -->
+    <ant dir="../org.jvoicexml" antfile="test.xml" inheritall="false"
+      target="test" />
+    <ant dir="../org.jvoicexml.xml" antfile="test.xml" inheritall="false"
+      target="test" />
+    <ant dir="../org.jvoicexml.implementation.jsapi10" antfile="test.xml"
+      inheritall="false" target="test" />
+    <ant dir="../org.jvoicexml.implementation.jsapi20" antfile="test.xml"
+      inheritall="false" target="test" />
+    <ant dir="../org.jvoicexml.implementation.mary" antfile="test.xml"
+      inheritall="false" target="test" />
+    <ant dir="../org.jvoicexml.implementation.text" antfile="test.xml"
+      inheritall="false" target="test" />
+    <junitreport>
+      <fileset dir="dist/unittests">
+        <include name="TEST-*.xml" />
+      </fileset>
+      <report format="frames" todir="dist/unittests/html" />
+    </junitreport>
+  </target>
+
+  <target name="systemtest" depends="-init"
+      description="Run the system test">
+    <delete dir="dist/systemtest" failonerror="false" />
+    <ant dir="../org.jvoicexml.systemtest" antfile="night.xml"
+      inheritall="false" target="run">
+        <property name="jvxml.jndi.repository" value="text"/>
+    </ant>
+  </target>
+
+  <target name="updatewebsite" depends="-init"
+      description="Update the web site with the nightly build results">
+    <property name="htdocs" value="/home/groups/j/jv/jvoicexml/htdocs" />
+    <scp sftp="true" trust="true" verbose="true"
+      todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}">
+      <fileset dir="dist">
+        <include name="systemtest/*" />
+        <include name="checkstyle/**" />
+      </fileset>
+    </scp>
+    <scp sftp="true" trust="true" verbose="true"
+      todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/unittests">
+      <fileset dir="dist/unittests/html" />
+    </scp>
+    <scp sftp="true" trust="true" verbose="true"
+      todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/api-0.7.1">
+      <fileset dir="doc/api/**" />
+    </scp>
+    <scp sftp="true" trust="true" verbose="true"
+      todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/nightly/${DSTAMP}-jvxml-${jvxml.version}-src.zip" file="jvxml-${jvxml.version}-src.zip" />
+    <scp sftp="true" trust="true" verbose="true"
+      todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/nightly/${DSTAMP}-jvxml-${jvxml.version}.zip" file="jvxml-${jvxml.version}.zip" />
+  </target>
+
+  <target name="nightly" description="Run the nightly build"
+    depends="update,distribution,checkstyle,unittests,systemtest,updatewebsite">
+    <mail mailhost="${nightly.mail.host}" mailport="${nightly.mail.port}"
+      subject="JVoiceXML nightly build from ${TODAY}" charset="utf-8"
+      replyto="${nightly.mail.user}"
+      user="${nightly.mail.user}" password="${nightly.mail.password}">
+      <from address="${nightly.mail.from}" />
+      <to address="dirk.schnelle@jvoicexml.org" />
+      <cc address="jvoicexml-developer@lists.sourceforge.net" />
+      <message>
+The JVoiceXML nightly build completed successfully.
+
+The nightly build can be downloaded from
+http://jvoicexml.sourceforge.net/nightly/${DSTAMP}-jvxml-${jvxml.version}.zip
+http://jvoicexml.sourceforge.net/nightly/${DSTAMP}-jvxml-${jvxml.version}-src.zip
+
+Note that this is a snapshot from the current development trunk that may have
+several bugs.
+Feel free to report any bugs that you find at
+https://sourceforge.net/tracker2/?atid=710729&amp;group_id=128141
+
+Results of the system test can be found at
+http://jvoicexml.sourceforge.net/systemtest/index.html
+
+Results of the unit tests can be found at
+http://jvoicexml.sourceforge.net/unittests/index.html
+
+Code quality results by checkstyle can be found at
+http://jvoicexml.sourceforge.net/checkstyle/
+      </message>
+    </mail>
+  </target>
+</project>

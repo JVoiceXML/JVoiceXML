@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+  <classpath>lib/org.jvoicexml.implementation.jsapi10.jar</classpath>
+  <classpath>lib/org.jvoicexml.implementation.jsapi10-impl.jar</classpath>
+  <classpath>lib/jsapi.jar</classpath>
+  <classpath>lib/freetts-jsapi10.jar</classpath>
+  <classpath>lib/freetts.jar</classpath>
+  <classpath>lib/cmu_us_kal.jar</classpath>
+  <classpath>lib/cmulex.jar</classpath>
+  <classpath>lib/en_us.jar</classpath>
+  <classpath>lib/sphinx4.jar</classpath>
+  <classpath>lib/jsapi-1.0-base.jar</classpath>
+  <classpath>lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar</classpath>
+  <beans:bean
+    class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory">
+    <beans:property name="instances" value="1" />
+    <beans:property name="type" value="jsapi10" />
+    <beans:property name="synthesizerModeDescriptorFactory">
+      <beans:bean
+        class="org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory">
+        <beans:property name="locale">
+          <beans:bean class="java.util.Locale">
+            <beans:constructor-arg value="en" />
+            <beans:constructor-arg value="US" />
+          </beans:bean>
+        </beans:property>
+      </beans:bean>
+    </beans:property>
+  </beans:bean>
+
+  <beans:bean
+    class="org.jvoicexml.implementation.jsapi10.Jsapi10AudioFileOutputFactory">
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+
+  <beans:bean
+    class="org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4SpokenInputFactory">
+    <beans:property name="type" value="jsapi10" />
+    <beans:property name="instances" value="1" />
+    <beans:property name="recognizerModeDescriptor">
+      <beans:bean
+        class="org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4RecognizerModeDesc" />
+    </beans:property>
+  </beans:bean>
+
+  <beans:bean
+    class="org.jvoicexml.implementation.jsapi10.Jsapi10TelephonyFactory">
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+
+</implementation>

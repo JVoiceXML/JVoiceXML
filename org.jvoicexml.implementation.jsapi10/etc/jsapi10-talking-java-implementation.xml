@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+  <classpath>dist/org.jvoicexml.implementation.jsapi10.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib/cgjsapi.jar</classpath>
+  <beans:bean
+    class="org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutputFactory">
+    <beans:property name="instances" value="1" />
+    <beans:property name="type" value="jsapi10" />
+    <beans:property name="synthesizerModeDescriptorFactory">
+      <beans:bean
+        class="org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory">
+      </beans:bean>
+    </beans:property>
+  </beans:bean>
+
+  <beans:bean
+    class="org.jvoicexml.implementation.jsapi10.Jsapi10AudioFileOutputFactory">
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+
+  <beans:bean
+    class="org.jvoicexml.implementation.jsapi10.Jsapi10SpokenInputFactory">
+    <beans:property name="type" value="jsapi10" />
+    <beans:property name="instances" value="1" />
+    <beans:property name="recognizerModeDescriptorFactory">
+      <beans:bean
+        class="org.jvoicexml.implementation.jsapi10.JVoiceXmlRecognizerModeDescFactory">
+      </beans:bean>
+    </beans:property>
+  </beans:bean>
+
+  <beans:bean
+    class="org.jvoicexml.implementation.jsapi10.Jsapi10TelephonyFactory">
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+
+</implementation>
