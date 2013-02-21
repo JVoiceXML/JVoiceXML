@@ -1,0 +1,26 @@
+#ABNF 1.0 UTF-8;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en;
+mode voice;
+root $main;
+
+// meta information
+meta "description" is "implementation report test -- references to XML grammars within ABNF grammars";
+meta "in.1" is "please go ahead";
+meta "out.1" is '$main[$<politeness.grxml#startPolite>["please"],"go","ahead"]';
+meta "info.1" is "may be rejected if platform is not a conforming ABNF/XML Form Grammar Processor";
+
+// rule declarations
+public $main = $<politeness.grxml#startPolite> go ahead;

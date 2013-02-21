@@ -1,0 +1,160 @@
+<project name="HelloWorldServlet" default="war" basedir=".">
+    <description>
+This file builds the 'Hello world' demo for JVoiceXML for a servlet container.
+
+This demo consists of two servlets. The 'HelloWorldServlet' as the initial
+servlet greets the user and passes a goodbye message to the next servlet,
+the 'GoodbyServlet'.
+
+You will need a servlet container, i.e. tomcat, to run this demo.
+
+You will need to adapt the settings for your servlet container in the file
+../../jvoicexml.properties.
+Call target checkJ2EE to check the current settings.
+    </description>
+
+    <!-- allow the user to override setting in an own propertiesfile. -->
+    <!-- Use the same properties file as in the main project.         -->
+    <property file="../../jvoicexml.properties"/>
+
+    <property name="src" value="src" />
+    <property name="build" value="classes" />
+    <property name="config" value="config" />
+
+    <property name="war.file" value="helloworldservletdemo.war"/>
+
+    <property name="optimize" value="off" />
+    <property name="debug" value="on" />
+
+    <!-- third party libraries -->
+    <property name="3rdparty.dir" value="../../3rdparty"/>
+
+    <!-- log4 library -->
+    <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.13"/>
+    <property name="log4j.lib.dir" value="${log4j.dir}/lib"/>
+
+    <fileset dir="${log4j.lib.dir}" id="log4j.lib">
+        <include name="**/*.jar"/>
+    </fileset>
+
+    <!-- servlet library -->
+    <property name="servlet.lib.dir" value="C:\Programme\jboss-4.0.4.GA\server\default\lib"/>
+    <property name="servlet.include" value="javax.servlet.jar" />
+
+    <fileset dir="${servlet.lib.dir}" id="servlet.lib">
+        <include name="${servlet.include}"/>
+    </fileset>
+
+    <!-- jvoicexml library -->
+    <property name="jvoicexml.lib.dir" value="../../dist"/>
+    <property name="jvoicexml.jar" value="${jvoicexml.lib.dir}/jvxml.jar" />
+
+    <fileset dir="${jvoicexml.lib.dir}" id="jvoicexml.lib">
+        <include name="jvxml-client.jar"/>
+        <include name="jvxml-xml.jar"/>
+    </fileset>
+
+    <!-- the used class path -->
+    <path id="build.classpath">
+        <fileset refid="log4j.lib"/>
+        <fileset refid="servlet.lib" />
+        <pathelement location="../../classes"/>
+    </path>
+
+    <path id="run.classpath">
+        <fileset refid="log4j.lib"/>
+        <fileset refid="jvoicexml.lib" />
+    </path>
+
+    <target name="-init">
+        <mkdir dir="${build}" />
+    </target>
+
+    <target name="-checkJVoiceXML">
+        <available file="${jvoicexml.jar}" property="jvoicexml.present"/>
+        <fail unless="jvoicexml.present">
+Cannot find ${jvoicexml.jar} needed to build this demo.
+Build this jar from the main project first.
+        </fail>
+    </target>
+
+    <target name="checkJ2EE"
+        description="Check if the servlet api implementationis accessable">
+        <available classname="javax.servlet.http.HttpServlet"
+            property="j2ee.present">
+            <classpath refid="build.classpath" />
+        </available>
+        <fail unless="j2ee.present">
+Cannot find servlet library, which is needed to build this demo.
+
+Check the settings of your servlet container:
+servlet.lib.dir=${servlet.lib.dir}
+servlet.include=${servlet.include}
+
+Correct the settings in the file '../../jvoicexml.properties'.
+        </fail>
+
+        <echo message="servlet api implementation is accessable" />
+    </target>
+
+    <target name="clean"
+            description="Remove all compiled and ditsribution files">
+        <delete dir="${build}" />
+        <delete file="${jar.file}" />
+        <delete file="${war.file}" />
+    </target>
+
+    <target name="compile" depends="-init,-checkJVoiceXML, checkJ2EE"
+            description="Compile the JAVA sources">
+        <copy todir="${build}">
+            <fileset dir="${config}">
+                <include name="**/*.xml"/>
+                <include name="**/*.properties"/>
+                <include name="**/*.policy"/>
+            </fileset>
+        </copy>
+        <echo message="compiling with debug=${debug}, optimize=${optimize}" />
+        <javac destdir="${build}"
+               optimize="${optimize}" debug="${debug}" deprecation="on"
+               encoding="iso-8859-1">
+            <src path="${src}" />
+            <include name="**/*.java" />
+            <classpath refid="build.classpath" />
+            <compilerarg value="-Xlint:unchecked" />
+        </javac>
+    </target>
+
+    <target name="war" depends="compile"
+            description="Pack all compiled servlet files into a single war">
+        <war destfile="${war.file}" webxml="metadata/web.xml">
+            <lib dir="${jvoicexml.lib.dir}">
+                <include name="jvxml-xml.jar"/>
+            </lib>
+            <lib refid="log4j.lib"/>
+            <classes dir="${build}">
+                <include name="**/*Servlet.class" />
+            </classes>
+            <classes dir="config">
+                <include name="log4j.xml" />
+            </classes>
+        </war>
+
+        <echo message="Install ${war.file} to your servlet container!"/>
+    </target>
+
+    <target name="run" description="Run the 'hello world servlet demo' demo"
+            depends="compile">
+	    <makeurl property="codebase" file="${jvoicexml.lib.dir}/jvxml.jar"/>
+        <java classname="org.jvoicexml.demo.helloworldservletdemo.HelloWorldDemo"
+            fork="true">
+            <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
+            <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
+            <classpath>
+                <path refid="run.classpath" />
+                <pathelement path="${build}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="all" depends="run, war" description="create binaries"/>
+</project>
