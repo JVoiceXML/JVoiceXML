@@ -1,0 +1,84 @@
+<project name="JVoiceXML unit tests" default="test" basedir=".">
+    <description>
+This file runs unit tests on JVoiceXML.
+    </description>
+
+    <import file="build.xml" />
+
+    <target name="-test-setup" depends="-setup">
+        <!-- directory structure -->
+        <property name="test.src" value="unittests" />
+        <property name="test.results" value="${jvxml.core.dir}/config" />
+
+
+        <!-- the class path for the test case -->
+        <path id="test.classpath">
+            <path refid="project.classpath" />
+            <pathelement location="${build}" />
+            <pathelement location="${jvxml.core.dir}/test/classes"/>
+        </path>
+    </target>
+
+    <target name="-checkJunit">
+        <!-- Check if junit ist accessible for ant. -->
+        <available classname="junit.framework.TestCase"
+                   property="junit.present" />
+        <fail unless="junit.present">
+junit is not installed in your ANT distribution.
+Download junit.jar from http://www.junit.org and copy junit.jar into
+the lib directory of your ANT distribution.
+            
+ANT_HOME is set to '${ant.home}'.
+        </fail>
+    </target>
+
+    <target name="-inittest" depends="-test-setup">
+        <mkdir dir="${test.build}" />
+        <mkdir dir="${test.results}" />
+    </target>
+
+    <target name="cleantest">
+        <delete dir="${test.build}" />
+    </target>
+
+    <target name="compiletests"
+            depends="-inittest,compile,-checkJunit"
+            description="Compile the JAVA sources for the test cases">
+        <javac destdir="${test.build}"
+               optimize="off"
+               debug="on"
+               deprecation="on"
+               encoding="iso-8859-1">
+            <src path="${test.src}" />
+            <include name="org/jvoicexml/**/*.java" />
+            <exclude name="org/jvoicexml/interpreter/grammar/**/*.java" />
+            <classpath refid="test.classpath" />
+            <compilerarg value="-Xlint:unchecked" />
+        </javac>
+    </target>
+
+    <target name="test"
+            depends="compiletests"
+            description="run unit tests on all test cases">
+        <junit printsummary="yes"
+               fork="yes"
+               haltonfailure="no"
+               showoutput="yes">
+            <classpath location="${test.build}" />
+            <classpath refid="test.classpath" />
+            <classpath location="${config}" />
+            <classpath>
+                <fileset refid="loggings.lib" />
+            </classpath>
+
+            <formatter type="xml" />
+            <batchtest todir="${test.results}">
+                <fileset dir="${test.build}">
+                    <include name="org/jvoicexml/**/Test*" />
+                    <exclude name="org/jvoicexml/**/Test*$*" />
+                    <exclude name="org/jvoicexml/test/**" />
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+</project>

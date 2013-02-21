@@ -1,0 +1,170 @@
+<project name="JVoiceXML - 3rd party libraries" basedir=".">
+    <description>
+This file contains the 3rd party libary definitions, used by JVoiceXML.
+    </description>
+
+    <target name="-3rdparty-setup">
+        <!-- third party libraries -->
+        <property name="3rdparty.dir" value="../org.jvoicexml/3rdparty" />
+
+        <!-- log4j library -->
+        <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.15" />
+        <property name="log4j.lib.dir" value="${log4j.dir}/lib" />
+
+        <fileset dir="${log4j.lib.dir}" id="log4j.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- jsapi 1.0 library -->
+        <property name="jsapi1.dir" value="${3rdparty.dir}/jsapi1.0" />
+        <property name="jsapi1.lib.dir" value="${jsapi1.dir}/lib" />
+
+        <fileset dir="${jsapi1.lib.dir}" id="jsapi1.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- jtapi library -->
+        <property name="jtapi.dir" value="${3rdparty.dir}/jtapi1.3" />
+        <property name="jtapi.lib.dir" value="${jtapi.dir}/lib" />
+
+        <fileset dir="${jtapi.lib.dir}" id="jtapi.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- gjtapi library -->
+        <property name="gjtapi.dir" value="${3rdparty.dir}/gjtapi1.8" />
+        <property name="gjtapi.lib.dir" value="${gjtapi.dir}/lib" />
+
+        <fileset dir="${gjtapi.lib.dir}" id="gjtapi.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- freetts library -->
+        <property name="freetts.dir" value="${3rdparty.dir}/freetts1.2" />
+        <property name="freetts.lib.dir" value="${freetts.dir}/lib" />
+
+        <fileset dir="${freetts.lib.dir}" id="freetts.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- sphinx4 library -->
+        <property name="sphinx.dir" value="${3rdparty.dir}/sphinx4" />
+        <property name="sphinx.lib.dir" value="${sphinx.dir}/lib" />
+
+        <fileset dir="${sphinx.lib.dir}" id="sphinx.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- commons libraries -->
+        <property name="commons.dir" value="${3rdparty.dir}/commons" />
+
+        <!-- commons-logging library -->
+        <property name="loggings.dir" value="${commons.dir}/logging1.0.4" />
+        <property name="loggings.lib.dir" value="${loggings.dir}/lib" />
+
+        <fileset dir="${loggings.lib.dir}" id="loggings.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- commons-pool library -->
+        <property name="pool.dir" value="${commons.dir}/pool1.3" />
+        <property name="pool.lib.dir" value="${pool.dir}/lib" />
+
+        <fileset dir="${pool.lib.dir}" id="pool.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- commons-httpclient library -->
+        <property name="httpclient.dir" value="${commons.dir}/httpclient3.1" />
+        <property name="httpclient.lib.dir" value="${httpclient.dir}/lib" />
+
+        <fileset dir="${httpclient.lib.dir}" id="httpclient.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- mozilla rhino javascript library -->
+        <property name="rhino.dir" value="${3rdparty.dir}/rhino1.6R7" />
+        <property name="rhino.lib.dir" value="${rhino.dir}/lib" />
+        <fileset dir="${rhino.lib.dir}" id="rhino.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- spring framework library -->
+        <property name="spring.dir"
+                  value="${3rdparty.dir}/springframework2.0.7" />
+        <property name="spring.lib.dir" value="${spring.dir}/lib" />
+        <fileset dir="${spring.lib.dir}" id="spring.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- Java Media Framework library -->
+        <property name="jmf.dir" value="${3rdparty.dir}/jmf2.1.1e" />
+        <property name="jmf.lib.dir" value="${jmf.dir}/lib" />
+        <fileset dir="${jmf.lib.dir}" id="jmf.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- Jain-SIP 1.1 library -->
+        <property name="jainsip.dir" value="${3rdparty.dir}/jainsip1.1" />
+        <property name="jainsip.lib.dir" value="${jainsip.dir}/lib" />
+        <fileset dir="${jainsip.lib.dir}" id="jainsip.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- Stun4J library -->
+        <property name="stun4j.dir" value="${3rdparty.dir}/stun4j" />
+        <property name="stun4j.lib.dir" value="${stun4j.dir}/lib" />
+        <fileset dir="${stun4j.lib.dir}" id="stun4j.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- jlibrtp library -->
+        <property name="jlibrtp.dir" value="${3rdparty.dir}/jlibrtp" />
+        <property name="jlibrtp.lib.dir" value="${jlibrtp.dir}/lib" />
+        <fileset dir="${jlibrtp.lib.dir}" id="jlibrtp.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- jsr173 library -->
+        <property name="jsr173.dir" value="${3rdparty.dir}/jsr173" />
+        <property name="jsr173.lib.dir" value="${jsr173.dir}/lib" />
+        <fileset dir="${jsr173.lib.dir}" id="jsr173.lib">
+            <include name="**/*.jar" />
+        </fileset>
+    </target>
+
+    <target name="-checkCheckstyle">
+            <!-- checkstyle library -->
+        <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.3" />
+        <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib" />
+            
+        <path id="checkstyle.path">
+            <fileset dir="${checkstyle.lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+        </path>
+
+        <condition property="checkstyle.present">
+            <and>
+                <available file="${checkstyle.lib.dir}" type="dir" />
+                <available classpathref="checkstyle.path"
+                    classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" />
+            </and>
+        </condition>
+    </target>
+    
+    <target name="-initcheckstyle"
+            description="Setup the checkstyle task"
+            depends="-checkCheckstyle"
+            if="checkstyle.present">
+        <!-- checkstyle library -->
+        <taskdef classname="com.puppycrawl.tools.checkstyle.CheckStyleTask"
+                 name="checkstyle">
+            <classpath refid="checkstyle.path" />
+            <classpath>
+                <fileset refid="loggings.lib" />
+                <pathelement location="${checkstyle.lib.dir}/checkstyle-*.jar" />
+            </classpath>
+        </taskdef>
+    </target>
+</project>

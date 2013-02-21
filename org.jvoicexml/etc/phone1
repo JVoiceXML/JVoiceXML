@@ -1,0 +1,53 @@
+#Stack Properties
+#Mon Mar 01 21:04:07 GMT 2004
+net.java.sip.communicator.sip.TRANSPORT = UDP
+net.java.sip.communicator.sip.PUBLIC_ADDRESS=sip:jvoicexml@@sip.address@
+net.java.sip.communicator.sip.DEFAULT_DOMAIN_NAME=
+net.java.sip.communicator.sipphone.MY_SIPPHONE_URL=
+net.java.sip.communicator.media.PREFERRED_VIDEO_ENCODING=
+net.java.sip.communicator.sip.REGISTRAR_TRANSPORT=UDP
+log4j.appender.RFLogger.MaxFileSize=
+#net.java.sip.communicator.sip.DEFAULT_AUTHENTICATION_REALM=
+#net.java.sip.communicator.sip.DISPLAY_NAME=
+net.java.sip.communicator.sip.USER_NAME=
+#net.java.sip.communicator.sip.REGISTRAR_PORT=
+#net.java.sip.communicator.VOICE_MAIL_ADDRESS=
+#net.java.sip.communicator.STUN_SERVER_ADDRESS=
+#net.java.sip.communicator.sipphone.IS_RUNNING_SIPPHONE=
+net.java.sip.communicator.sip.PREFERRED_LOCAL_PORT=5064
+net.java.sip.communicator.sip.REGISTRATIONS_EXPIRATION=3600
+#net.java.sip.communicator.sipphone.USER_NAME_EXAMPLE=
+#javax.sip.RETRANSMISSON_FILTER=
+javax.sip.STACK_NAME=sip-communicator
+net.java.sip.communicator.media.AUDIO_PORT=4244
+net.java.sip.communicator.media.IP_ADDRESS=@sip.address@
+#gov.nist.javax.sip.TRACE_LEVEL=
+net.java.sip.communicator.sip.TRANSPORT=UDP
+log4j.rootLogger=net.java.sip.communicator.common.Console.TraceLevel, RFLogger
+#net.java.sip.communicator.gui.AUTH_WIN_TITLE=
+#net.java.sip.communicator.gui.PASSWORD_LABEL=
+log4j.appender.RFLogger=org.apache.log4j.RollingFileAppender
+net.java.sip.communicator.sip.STACK_PATH=gov.nist
+net.java.sip.communicator.sip.REGISTRAR_ADDRESS=
+net.java.sip.communicator.sip.PASSWORD=
+net.java.sip.communicator.sip.SAME_USER_EVERYWHERE=true
+log4j.appender.RFLogger.MaxBackupIndex=1
+net.java.sip.communicator.media.VIDEO_PORT=444
+#javax.sip.OUTBOUND_PROXY=
+#net.java.sip.communicator.STUN_SERVER_PORT=
+javax.sip.IP_ADDRESS=@sip.address@
+
+#javax.sip.ROUTER_PATH=
+#net.java.sip.communicator.media.MEDIA_SOURCE=
+log4j.appender.RFLogger.layout=org.apache.log4j.PatternLayout
+log4j.appender.RFLogger.File=log/sip-communicator.app.log
+net.java.sip.communicator.media.PREFERRED_AUDIO_ENCODING=
+javax.sip.EXTENSION_METHODS=
+net.java.sip.communicator.gui.AUTHENTICATION_PROMPT=
+net.java.sip.communicator.gui.USER_NAME_LABEL=
+net.java.sip.communicator.sip.WAIT_UNREGISTGRATION_FOR=1100
+gov.nist.javax.sip.SERVER_LOG=log/sip-communicator.stack.log
+log4j.appender.RFLogger.layout.ConversionPattern=%r [%t] %p %c{2} %x - %m%n
+
+#net.java.sip.communicator.sip.simple.MIN_EXP_TIME=120
+#net.java.sip.communicator.sip.simple.SUBSCRIPTION_EXP_TIME=0
