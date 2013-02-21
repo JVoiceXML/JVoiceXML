@@ -38,7 +38,6 @@
 	<classpathentry kind="lib" path="3rdparty/MSS/jasper.jar"/>
 	<classpathentry kind="lib" path="3rdparty/MSS/jasper-el.jar"/>
 	<classpathentry kind="lib" path="3rdparty/MSS/jsp-api.jar"/>
-	<classpathentry kind="lib" path="3rdparty/MSS/log4j.xml"/>
 	<classpathentry kind="lib" path="3rdparty/MSS/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="3rdparty/MSS/mail-1.4.jar"/>
 	<classpathentry kind="lib" path="3rdparty/MSS/mobicents-jain-sip-ext-1.1.jar"/>
