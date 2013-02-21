@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<callmanager xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
+  <repository>jtapi</repository>
+  <classpath>dist/jvxml-jtapi.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jtapi/3rdparty/jtapi1.3/lib/jtapi-1.3.1.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jtapi/3rdparty/gjtapi1.9/lib/gjtapi-1.9-rc2.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jtapi/3rdparty/gjtapi1.9/lib/gjtapi-mjsip-1.9-rc2.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jtapi/3rdparty/mjsip/lib/sip.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jtapi/3rdparty/mjsip/lib/ua.jar</classpath>
+
+  <beans:bean id="callmanager"
+    class="org.jvoicexml.callmanager.jtapi.JtapiCallManager">
+    <beans:property name="providername"
+      value="@sip.providername@" />
+    <beans:property name="connectionInformationFactory">
+      <beans:bean class="org.jvoicexml.callmanager.jtapi.JtapiConnectionInformationFactory"/>
+    </beans:property>
+    <beans:property name="applications">
+      <beans:list>
+        <beans:bean
+          class="org.jvoicexml.callmanager.ConfiguredApplication">
+          <beans:property name="terminal"
+            value="@sip.terminal@" />
+          <beans:property name="uri"
+            value="http://127.0.0.1:8080/helloworldservletdemo/HelloWorld" />
+          <beans:property name="inputType" value="@sip.inputType@" />
+          <beans:property name="outputType" value="@sip.outputType@" />
+        </beans:bean>
+      </beans:list>
+    </beans:property>
+  </beans:bean>
+
+</callmanager>

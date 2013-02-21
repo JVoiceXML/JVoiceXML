@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252"/>
+        <title>JVoiceXML Tag Support</title>
+    </head>
+    <body>
+        <h1>JVoiceXML Tag Support</h1>
+        <p>
+            JVoiceXML is in active development. Unfortunately not all tags
+            are supported completly, but we are working on it. The list below
+            gives you an impression about the current support. The good news:
+            nearly all tags are supported initially. This enables you to develop
+            VoiceXML simple application and they should behave "as expected".
+            Note, that there are also some things going on behind simply
+            reading the tags and passing them to some processing instance.
+            Please, drop us a note if you have any problems using the voice
+            browser or you discover that this description is wrong.
+        </p>
+        <h2>assign</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+        </ul>
+        <h2>audio</h2>
+        <ul>
+            <li>src: full support</li>
+            <li>expr: full support</li>
+            <li>fetchtimeout: unsupported</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <h2>block</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+            <li>cond: full support</li>
+        </ul>
+        <h2>catch</h2>
+        <ul>
+            <li>event: full support</li>
+            <li>count: full support</li>
+            <li>cond: full support</li>
+        </ul>
+        <h2>choice</h2>
+        <ul>
+            <li>dtmf: full support</li>
+            <li>accept: unsupported</li>
+            <li>next: full support</li>
+            <li>expr: unsupported</li>
+            <li>event: unsupported</li>
+            <li>eventexpr: unsupported</li>
+            <li>message: unsupported</li>
+            <li>messageexpr: unsupported</li>
+            <li>fetchaudio: unsupported</li>
+            <li>fetchtimeout: unsupported</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <h2>clear</h2>
+        <ul>
+            <li>namelist: full support</li>
+        </ul>
+        <h2>data</h2>
+        <ul>
+            <li>src: full support</li>
+            <li>name: full support</li>
+            <li>srcexpr: full support</li>
+            <li>method: full support</li>
+            <li>namelist: full support</li>
+            <li>enctype: unsupported</li>
+            <li>fetchaudio: unsupported</li>
+            <li>fetchtimeout: full support</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <h2>disconnect</h2>
+        <ul>
+            <li>namelist: unsupported</li>
+        </ul>
+        <p>
+            Check, if the final processing state is entered.
+        </p>
+        <h2>else</h2>
+        <p>
+            full support
+        </p>
+        <h2>enumerate</h2>
+        <p>
+            full support
+        </p>
+        <h2>error</h2>
+        <p>
+            full support
+        </p>
+        <h2>exit</h2>
+        <ul>
+            <li>expr: full support</li>
+            <li>namelist: full support</li>
+        </ul>
+        <p>
+            Currently drops the call.
+        </p>
+        <h2>field</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+            <li>cond: full support</li>
+            <li>type: supported: boolean, digit</li>
+            <li>slot: full support</li>
+            <li>modal: full support</li>
+        </ul>
+        <p>
+            Shadow variables are filled if this is supported by the underlying
+            implementation platform.
+        </p>
+        <h2>filled</h2>
+        <ul>
+            <li>mode: full support</li>
+            <li>namelist: full support</li>
+        </ul>
+        <h2>form</h2>
+        <ul>
+            <li>id: full support</li>
+            <li>scope: unsupported</li>
+        </ul>
+        <h2>foreach</h2>
+        <ul>
+            <li>array: full support</li>
+            <li>item: full support</li>
+        </ul>
+        <h2>goto</h2>
+        <ul>
+            <li>next: full support</li>
+            <li>expr: unsupported</li>
+            <li>nextitem: full support</li>
+            <li>expritem: full support</li>
+            <li>fetchaudio: unsupported</li>
+            <li>fetchtimeout: full support</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <h2>grammar</h2>
+        <ul>
+            <li>version: full support</li>
+            <li>scope: unsupported</li>
+            <li>mode: full support</li>
+            <li>root: full support</li>
+            <li>tag-format: full support</li>
+            <li>xml:base: unsupported</li>
+            <li>src: full support</li>
+            <li>srcexpr: unsupported</li>
+            <li>scope: unsupported</li>
+            <li>type: full support</li>
+            <li>weight: full support</li>
+            <li>fetchtimeout: full support</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <p>
+            URI fragments for src and srcexpr are currently ignored.
+            The support of weight depends on the underlying implementation
+            platform.
+        </p>
+        <h2>help</h2>
+        <ul>
+            <li>count: full support</li>
+            <li>cond: full support</li>
+        </ul>
+        <p>
+            Help is only supported if the underlying implementation platform
+            support semantic interpretation.
+        </p>
+        <h2>if</h2>
+        <ul>
+            <li>cond: full support</li>
+        </ul>
+        <h2>initial</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+            <li>cond: full support</li>
+        </ul>
+        <h2>link</h2>
+        <ul>
+            <li>dtmf: unsupported</li>
+            <li>next: unsupported</li>
+            <li>expr: unsupported</li>
+            <li>event: unsupported</li>
+            <li>eventexpr: unsupported</li>
+            <li>message: unsupported</li>
+            <li>messageexpr: unsupported</li>
+            <li>fetchaudio: unsupported</li>
+            <li>fetchtimeout: unsupported</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <h2>log</h2>
+        <ul>
+            <li>label: full support</li>
+            <li>expr: full support</li>
+        </ul>
+        <h2>mark</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>nameexpr: full support</li>
+        </ul>
+        <p>
+            The support depends on the underlying speech engine. The shadow
+            variable marktime is not filled.
+        </p>
+        <h2>menu</h2>
+        <ul>
+            <li>id: full support</li>
+            <li>scope: unsupported</li>
+            <li>dtmf: full support</li>
+            <li>accept: unsupported</li>
+        </ul>
+        <h2>meta</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>content: full support</li>
+            <li>http-equiv: full support</li>
+        </ul>
+        <h2>metadata</h2>
+        <ul>
+            <li>Creator: full support</li>
+            <li>Rights: full support</li>
+            <li>Subject: full support</li>
+        </ul>
+        <p>
+            Supported is authoring of such tags. The browser simply ignores it.
+        </p>
+        <h2>noinput</h2>
+        <ul>
+            <li>count: full support</li>
+            <li>cond: full support</li>
+        </ul>
+        <h2>nomatch</h2>
+        <ul>
+            <li>count: full support</li>
+            <li>cond: full support</li>
+        </ul>
+        <h2>object</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+            <li>cond: full support</li>
+            <li>classid: full support</li>
+            <li>codebase: unsupported</li>
+            <li>codetype: unsupported</li>
+            <li>data: full support</li>
+            <li>type: unsupported</li>
+            <li>archive: full support</li>
+            <li>fetchtimeout: unsupported</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <h2>option</h2>
+        <ul>
+            <li>dtmf: full support</li>
+            <li>accept: unsupported</li>
+            <li>value: unsupported</li>
+        </ul>
+        <h2>param</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+            <li>value: full support</li>
+            <li>valuetype: unsupported</li>
+            <li>type: unsupported</li>
+        </ul>
+        <h2>prompt</h2>
+        <ul>
+            <li>bargein: full support</li>
+            <li>bargeintype: unsupported</li>
+            <li>cond: full support</li>
+            <li>count: full support</li>
+            <li>timeout: full support</li>
+            <li>xml:lang: full support</li>
+            <li>xml:base: unsupported</li>
+        </ul>
+        <p>
+            The timeout defaults to 30s.
+        </p>
+        <h2>property</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>value: full support</li>
+        </ul>
+        <h2>record</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+            <li>cond: full support</li>
+            <li>modal: unsupported</li>
+            <li>beep: unsupported</li>
+            <li>maxtime: initial support</li>
+            <li>finalsilence: unsupported</li>
+            <li>dtmfterm: unsupported</li>
+            <li>type: unsupported</li>
+        </ul>
+        <p>
+            maxtime defaults to 30s.
+            Timing issues are not implemented fully. Finalsilence is not
+            detected, so you will have to wait until maxtime is exceeded.
+            The shadow variables are currently not set.
+        </p>
+        <h2>reprompt</h2>
+        <p>full support</p>
+        <h2>return</h2>
+        <ul>
+            <li>event: unsupported</li>
+            <li>eventexpr: unsupported</li>
+            <li>message: unsupported</li>
+            <li>messageexpr: unsupported</li>
+            <li>namelist: full support</li>
+        </ul>
+        <h2>script</h2>
+        <ul>
+            <li>src: full support</li>
+            <li>srcexpr: full support</li>
+            <li>charset: unsupported</li>
+            <li>fetchtimeout: full support</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <p>
+            The underlying java script engine is not tuned to throw an exception
+            if undeclared variables are used.
+        </p>
+        <h2>subdialog</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+            <li>cond: full support</li>
+            <li>namelist: full support</li>
+            <li>src: full support</li>
+            <li>srcexpr: unsupported</li>
+            <li>method: full support</li>
+            <li>enctype: unsupported</li>
+            <li>fetchaudio: unsupported</li>
+            <li>fetchtimeout: full support</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <h2>submit</h2>
+        <ul>
+            <li>next: full support</li>
+            <li>expr: full support</li>
+            <li>namelist: full support</li>
+            <li>method: full support</li>
+            <li>enctype: unsupported</li>
+            <li>fetchaudio: unsupported</li>
+            <li>fetchtimeout: full support</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <h2>throw</h2>
+        <ul>
+            <li>event: full support</li>
+            <li>eventexpr: full support</li>
+            <li>message: full support</li>
+            <li>messageexpr: full support</li>
+        </ul>
+        <h2>transfer</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+            <li>cond: full support</li>
+            <li>dest: initial support</li>
+            <li>destexpr: unsupported</li>
+            <li>type: unsupported</li>
+            <li>bridge: unsupported</li>
+            <li>connecttimeout: unsupported</li>
+            <li>maxtime: unsupported</li>
+            <li>transferaudio: unsupported</li>
+            <li>aai: unsupported</li>
+            <li>aaiexpr: unsupported</li>
+        </ul>
+        <p>
+            The support has been started but is not tested.
+        </p>
+        <h2>value</h2>
+        <ul>
+            <li>expr: full support</li>
+        </ul>
+        <h2>var</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+        </ul>
+        <h2>vxml</h2>
+        <ul>
+            <li>version: full support</li>
+            <li>xmlns: full support</li>
+            <li>xml:base: full support</li>
+            <li>xml:lang: initial support</li>
+            <li>application: full support</li>
+        </ul>
+        <p>
+            The used language is not forwarded to the recognizer.
+        </p>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+  <repository>jsapi20</repository>
+  <classpath>lib/org.jvoicexml.implementation.jsapi20.jar</classpath>
+  <classpath>lib/jsr113.jar</classpath>
+  <classpath>lib/org.jvoicexml.jsapi2.jar</classpath>
+  <classpath>lib/org.jvoicexml.jsapi2.jse.jar</classpath>
+  <classpath>lib/org.jvoicexml.jsapi2.sapi.jar</classpath>
+
+  <beans:bean
+    class="org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutputFactory">
+    <beans:constructor-arg type="java.lang.String"
+      value="org.jvoicexml.jsapi2.sapi.SapiEngineListFactory"/>
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+
+  <beans:bean class="org.jvoicexml.implementation.jsapi20.Jsapi20SpokenInputFactory">
+    <beans:constructor-arg type="java.lang.String"
+      value="org.jvoicexml.jsapi2.sapi.SapiEngineListFactory"/>
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+ 
+</implementation>

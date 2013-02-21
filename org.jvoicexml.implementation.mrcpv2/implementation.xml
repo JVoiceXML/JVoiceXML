@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+   <bean id="implementationplatform" class="org.jvoicexml.implementation.JVoiceXmlImplementationPlatformFactory">
+      <property name="synthesizedoutput">
+         <list>
+            <bean class="org.jvoicexml.implementation.mrcpv2.jvxml.SynthesizedOutputFactory">
+               <property name="instances" value="1"/>
+            </bean>
+         </list>        
+      </property>
+
+      <property name="spokeninput">
+         <list>
+            <bean class="org.jvoicexml.implementation.mrcpv2.jvxml.SpokenInputFactory">
+               <property name="instances" value="1"/>
+            </bean>
+         </list>
+      </property>
+      
+      <property name="telephony">
+         <list>
+            <bean class="org.jvoicexml.implementation.DummyTelephonySupportFactory">
+                <property name="instances" value="1"/>
+            </bean>
+         </list>
+      </property>
+   </bean>
+     
+        
+   <bean id="sipService" class="org.speechforge.zanzibar.sip.SipServer"
+		init-method="startup" destroy-method="shutdown">
+		<property name="mySipAddress">
+				    <value>sip:cairogate@speechforge.org</value>
+		</property>
+		<property name="stackName">
+				    <value>Mrcpv2SessionManager</value>
+		</property>
+		<property name="port">
+				    <value>5090</value>
+		</property>
+		<property name="transport">
+				    <value>UDP</value>
+		</property>
+		<property name="cairoSipAddress">
+				    <value>sip:cairo@speechforge.org</value>
+		</property>
+		<property name="cairoSipHostName">
+				    <value>localhost</value>
+		</property>
+		<property name="cairoSipPort">
+				    <value>5050</value>
+		</property>
+	</bean>
+
+</beans>

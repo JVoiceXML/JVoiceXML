@@ -1,0 +1,34 @@
+<project name="JSAPI 2.0 IP - 3rd party libraries" basedir=".">
+    <description>
+This file contains the 3rd party libary definitions, used by the Mary
+implementation platform.
+    </description>
+    <property name="jvxml.core.dir" value="../org.jvoicexml"/>
+    <import file="${jvxml.core.dir}/3rdparty-libs.xml" />
+
+    <target name="-local-3rdparty-setup" depends="-3rdparty-setup">
+        <!-- local third party libraries -->
+        <property name="local-3rdparty.dir" value="3rdparty" />
+
+	
+	
+
+        <!-- jvxml library -->
+        <path id="jvxml.core.lib">
+          <path location="${jvxml.core.dir}/classes"/>
+          <path location="../org.jvoicexml.xml/classes"/>
+        </path>
+
+
+
+        <!-- mary library -->
+        <property name="mary.dir" value="${local-3rdparty.dir}/mary4.0.0" />
+        <property name="mary.lib.dir" value="${mary.dir}/lib" />
+        <fileset dir="${mary.lib.dir}" id="mary.lib">
+            <include name="maryclient.jar" />
+		
+
+        </fileset>
+    </target>
+</project>
+

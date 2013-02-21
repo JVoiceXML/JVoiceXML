@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+    <repository>mary</repository>
+    <classpath>lib/org.jvoicexml.implementation.mary.jar</classpath>
+    <classpath>lib/maryclient.jar</classpath>
+    <beans:bean
+        class="org.jvoicexml.implementation.mary.MarySynthesizedOutputFactory">
+        <beans:property name="instances" value="1" />
+        <beans:property name="type" value="mary" />
+    </beans:bean>
+</implementation>
