@@ -1,0 +1,98 @@
+<?xml version="1.0" standalone="yes"?>
+
+<project name="howtobuild" basedir="." default="latex" >
+    <description >
+Create the document 'How to build JVoiceXML'..
+    </description>
+
+
+    <!--  allow the user to override setting in an own properties file.  -->
+    <property file="../org.jvoicexml/personal-props/ant.properties" />
+    <property file="../org.jvoicexml/config-props/ant.properties" />
+
+  <target name="-setup">
+    <property name="jvxml.core.dir" value="../org.jvoicexml"/>
+    <property name="version" value="1.9.5" />
+    <property name="basefilename" value="howtobuild" />
+    <property name="dist.ps"
+      value="${jvxml.core.dir}/doc/jvxml-${basefilename}-${jvxml.version}.ps" />
+    <property name="dist.pdf"
+      value="${jvxml.core.dir}/doc/jvxml-${basefilename}-${jvxml.version}.pdf" />
+
+    <!-- define the latex ant task -->
+    <property name="antlatex.dir"
+      value="${jvxml.core.dir}/3rdparty/antlatex0.0.9"/>
+    <property name="antlatex.lib.dir" value="${antlatex.dir}/lib"/>
+    <taskdef name="latex"
+             classname="de.dokutransdata.antlatex.LaTeX">
+        <classpath>
+            <fileset dir="${antlatex.lib.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
+
+    <echo file="version.tex">\newcommand{\jvxmlversion} {${jvxml.version}}
+</echo>
+    </target>
+
+    <target name="clean" 
+            description="Remove all compiled and preprocessed files">
+        <delete>
+            <fileset dir=".">
+                <include name="*.aux"/>
+                <include name="*.log"/>
+                <include name="*.bbl"/>
+                <include name="*.blg"/>
+                <include name="*.dvi"/>
+                <include name="*.ps"/>
+                <include name="*.pdf"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <target name="dia">
+        <apply executable="dia">
+            <fileset dir=".">
+                <include name="*.dia"/>
+            </fileset>
+            <mapper type="glob" from="*.dia" to="*.eps"/>
+            <arg value="-e"/>
+            <targetfile/>
+        </apply>
+    </target>
+
+    <target name="fig2dev">
+        <apply executable="fig2dev">
+            <fileset dir=".">
+                <include name="*.fig"/>
+            </fileset>
+            <mapper type="glob" from="*.fig" to="*.eps"/>
+            <arg value="-L"/>
+            <arg value="eps"/>
+            <srcfile/>
+            <targetfile/>
+        </apply>
+    </target>
+ 
+    <target name="latex" description="Create the dvi file" 
+            depends="-setup,dia,fig2dev">
+        <latex latexfile="${basefilename}.tex" verbose="on">
+            <bibtex />
+        </latex>
+    </target>
+
+    <target name="pdf" description="Create the pdf" depends="latex">
+        <exec executable="dvips">
+          <arg value="-o"/>
+          <arg value="${dist.ps}"/>
+          <arg value="${basefilename}.dvi"/>
+        </exec>
+
+        <exec executable="ps2pdf">
+          <arg value="${dist.ps}"/>
+          <arg value="${dist.pdf}"/>
+        </exec>
+    </target>
+</project>
+
