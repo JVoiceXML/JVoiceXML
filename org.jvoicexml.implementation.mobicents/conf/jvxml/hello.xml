@@ -1,0 +1,15 @@
+<grammar mode="voice" xml:lang="en-US" version="1.0" root="greeting">
+  <rule id="greeting" scope="public">
+    <item repeat="0-1">
+      <one-of>
+        <item> good morning </item>
+        <item> hello </item>
+      </one-of>
+    </item>
+    <one-of>
+      <item> dirk </item>
+      <item> david </item>
+      <item> renato </item>
+    </one-of>
+  </rule>
+</grammar> 
