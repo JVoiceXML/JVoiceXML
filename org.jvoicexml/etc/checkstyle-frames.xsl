@@ -57,7 +57,7 @@
  <http://www.apache.org/>.
  -->
 
-    <xsl:output method="html" indent="yes" encoding="US-ASCII"/>
+    <xsl:output method="html" indent="yes" encoding="UTF8"/>
     <xsl:decimal-format decimal-separator="." grouping-separator="," />
 
     <xsl:param name="output.dir"/>

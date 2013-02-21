@@ -182,7 +182,8 @@ public final class JVoiceXmlImplementationPlatform
             final KeyedResourcePool<SynthesizedOutput> synthesizedOutputPool,
             final KeyedResourcePool<SpokenInput> spokenInputPool,
             final ConnectionInformation connectionInformation) {
-       this(telePool, synthesizedOutputPool, spokenInputPool, new BufferedCharacterInput(), connectionInformation);
+       this(telePool, synthesizedOutputPool, spokenInputPool,
+               new BufferedCharacterInput(), connectionInformation);
     }
     
     /**
@@ -197,7 +198,7 @@ public final class JVoiceXmlImplementationPlatform
      * @param synthesizedOutputPool pool of synthesized output resource
      *        factories
      * @param spokenInputPool pool of spoken input resource factories
-     * @param characterInput buffer character input for this platform 
+     * @param bufferedCharacterInput buffer character input for this platform 
      * @param connectionInformation connection information container
      *
      * @see org.jvoicexml.Session
@@ -206,13 +207,13 @@ public final class JVoiceXmlImplementationPlatform
             final KeyedResourcePool<Telephony> telePool,
             final KeyedResourcePool<SynthesizedOutput> synthesizedOutputPool,
             final KeyedResourcePool<SpokenInput> spokenInputPool,
-            final BufferedCharacterInput characterInput,
+            final BufferedCharacterInput bufferedCharacterInput,
             final ConnectionInformation connectionInformation) {
         info = connectionInformation;
         telephonyPool = telePool;
         synthesizerPool = synthesizedOutputPool;
         recognizerPool = spokenInputPool;
-        this.characterInput = characterInput;
+        characterInput = bufferedCharacterInput;
         inputLock = new Object();
         processor = new JVoiceXmlImplementationGrammarProcessor();
         promptAccumulator = new JVoiceXmlPromptAccumulator(this);
