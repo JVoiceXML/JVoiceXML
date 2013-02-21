@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.jvoicexml.eclipse.debug.ui.launching.voiceXMLBrowser">
+      <browser
+            class="org.jvoicexml.eclipse.debug.ui.launching.jvoicexml.JVoiceXmlBrowser"
+            id="org.jvoicexml.browser"
+            name="JVoiceXML VoiceXML Browser"
+            configurationUIClass="org.jvoicexml.eclipse.debug.ui.launching.jvoicexml.JVoiceXmlBrowserUI"
+            launchInputView="true"/>
+   </extension>
+
+</plugin>
