@@ -1,0 +1,86 @@
+<?xml version="1.0" standalone="yes"?>
+
+<project name="howtobuild" basedir="." default="latex" >
+    <description >
+Create the document 'How to build JVoiceXML'..
+    </description>
+
+    <property name="version" value="1.9.3" />
+    <property name="basefilename" value="howtobuild" />
+    <property name="dist.ps" value="jvxml-${basefilename}-${version}.ps" />
+
+    <!--  allow the user to override setting in an own properties file.  -->
+    <property file="../../jvoicexml.properties" />
+
+    <!-- define the latex ant task -->
+    <property name="antlatex.dir" value="../3rdparty/antlatex0.0.9"/>
+    <property name="antlatex.lib.dir" value="${antlatex.dir}/lib"/>
+
+    <taskdef name="latex"    
+             classname="de.dokutransdata.antlatex.LaTeX">
+        <classpath>
+            <fileset dir="${antlatex.lib.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
+
+    <target name="clean" 
+            description="Remove all compiled and preprocessed files">
+        <delete>
+            <fileset dir=".">
+                <include name="*.aux"/>
+                <include name="*.log"/>
+                <include name="*.bbl"/>
+                <include name="*.blg"/>
+                <include name="*.dvi"/>
+                <include name="*.ps"/>
+                <include name="*.pdf"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <target name="dia">
+        <apply executable="dia">
+            <fileset dir=".">
+                <include name="*.dia"/>
+            </fileset>
+            <mapper type="glob" from="*.dia" to="*.eps"/>
+            <arg value="-e"/>
+            <targetfile/>
+        </apply>
+    </target>
+
+    <target name="fig2dev">
+        <apply executable="fig2dev">
+            <fileset dir=".">
+                <include name="*.fig"/>
+            </fileset>
+            <mapper type="glob" from="*.fig" to="*.eps"/>
+            <arg value="-L"/>
+            <arg value="eps"/>
+            <srcfile/>
+            <targetfile/>
+        </apply>
+    </target>
+ 
+    <target name="latex" description="Create the dvi file" 
+            depends="dia,fig2dev">
+        <latex latexfile="${basefilename}.tex" verbose="on">
+            <bibtex />
+        </latex>
+    </target>
+
+    <target name="pdf" description="Create the pdf" depends="latex">
+        <exec executable="dvips">
+          <arg value="-o"/>
+          <arg value="${dist.ps}"/>
+          <arg value="${basefilename}.dvi"/>
+        </exec>
+
+        <exec executable="ps2pdf">
+          <arg value="${dist.ps}"/>
+        </exec>
+    </target>
+</project>
+
