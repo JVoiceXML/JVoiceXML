@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    version="2.1" xml:lang="de-DE"
+    xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+    <meta content="JVoiceXML group" name="author" />
+    <meta content="2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net"
+        name="copyright" />
+    <form>
+        <var expr="42" name="a" />
+        <var expr="43" name="b" />
+        <object classid="method://org.jvoicexml.demo.objecttagdemo.Calculator#add"
+            data="classes/"
+            name="calculator">
+            <param expr="a" name="value" />
+            <param expr="b" name="value" />
+        </object>
+        <block>
+            <prompt>
+                <value expr="a" />  + <value expr="b" /> = <value expr="calculator" />
+            </prompt>
+        </block>
+        <object
+            classid="method://org.jvoicexml.demo.objecttagdemo.Calculator#getOverallSum"
+            data="classes/" name="overallSum">
+            <filled>
+                The overall sum is <value expr="overallSum" />
+            </filled>
+        </object>
+    </form>
+</vxml>
