@@ -1,0 +1,223 @@
+<project name="MRCPv2 implemenatation platform" default="jar" basedir=".">
+    <description>
+This file builds the MRCPv2 implemenation platform for JVoiceXml.
+To override the current settings follow the instructions given in
+personal-props/README.txt
+
+  </description>
+
+    <!-- allow the user to override setting in an own propertiesfile. -->
+    <property file="../org.jvoicexml/personal-props/ant.properties" />
+    <property file="../org.jvoicexml/config-props/ant.properties" />
+
+    <!-- Load the settings for 3rdparty libraries -->
+    <import file="3rdparty-libs.xml" />
+
+    <target name="-setup" depends="-local-3rdparty-setup">
+        <!-- The component built here-->
+        <property name="component"
+            value="org.jvoicexml.implementation.mrcpv2"/>
+
+            <!-- directory structure -->
+        <property name="src" value="src" />
+        <property name="build" value="classes" />
+        <property name="etc" value="etc" />
+        <property name="dist" value="${jvxml.core.dir}/dist" />
+        <property name="apidoc" value="${apidoc.basedir}/${component}" />
+        <property name="config" value="${jvxml.core.dir}/config" />
+ 
+        <condition property="windows">
+            <os family="windows" />
+        </condition>
+
+        <!-- main jar files -->
+        <property name="dist.implementation.mrcpv2.jar"
+                  value="${dist}/jvxml-mrcpv2.jar" />
+        <property name="dist.client.mrcpv2.jar"
+                  value="${dist}/jvxml-client-mrcpv2.jar" />
+
+        <!-- the class path for 3rdparty libraries -->
+        <path id="project.classpath">
+            <path refid="jvxml.core.lib" />
+            <fileset refid="log4j.lib" />
+            <fileset refid="cairo.lib" />
+            <fileset refid="mrcp4j.lib" />
+            <fileset refid="jainsip.lib" />
+        </path>
+    </target>
+
+    <target name="-checkJavaVersion">
+        <!-- Check if at least java 5 is used. -->
+        <condition property="version1.5">
+            <or>
+                <equals arg1="1.5" arg2="${ant.java.version}" />
+                <equals arg1="1.6" arg2="${ant.java.version}" />
+            </or>
+        </condition>
+
+        <fail unless="version1.5">
+You need at leasr java version 1.5 to compile this project.
+You're using ${ant.java.version}
+    </fail>
+    </target>
+
+    <target name="-init" depends="-setup">
+        <!-- Create build directories -->
+        <mkdir dir="${build}" />
+        <mkdir dir="${dist}" />
+
+    </target>
+
+  <target name="configuration" depends="-setup">
+    <copy todir="${config}" file="${etc}/mrcpv2-implementation.xml"/>
+  </target>
+
+    <target name="clean" depends="-setup"
+            description="Remove all compiled and distribution files">
+        <delete dir="${build}" failonerror="false" />
+    </target>
+
+    <target name="compile"
+            depends="-init, -checkJavaVersion"
+            description="Compile the sources">
+        <echo message="compiling mrcpv2 layer with debug=${javac.debug}, optimize=${javac.optimize}" />
+        <javac destdir="${build}"
+               optimize="${javac.optimize}"
+               debug="${javac.debug}"
+               deprecation="on"
+               encoding="iso-8859-1"
+               source="${javac.source}"
+               target="${javac.target}">
+            <src path="${src}" />
+            <include name="org/jvoicexml/implementation/mrcpv2/**/*.java" />
+            <exclude name="**/package-info.java" />
+            <classpath refid="project.classpath" />
+            <compilerarg value="-Xlint:unchecked" />
+        </javac>
+    </target>
+
+    <target name="jar"
+            depends="compile"
+            description="Pack all compiled files into jar files">
+      <!-- mrcpv2 implementation jar file -->
+      <jar jarfile="${dist.implementation.mrcpv2.jar}"
+           compress="false">
+          <fileset dir="${build}">
+              <include name="org/jvoicexml/implementation/mrcpv2/**/*.class" />
+              <exclude name="org/jvoicexml/implementation/mrcpv2/jvxml/**/*.class" />
+          </fileset>
+          <manifest>
+              <attribute name="Built-By" value="${user.name}" />
+              <section name="common">
+                  <attribute name="Implementation-Vendor"
+                             value="JVoiceXML group" />
+                  <attribute name="Implementation-Title"
+                             value="JVoiceXML MRCPv2 base layer" />
+              </section>
+          </manifest>
+      </jar>
+        <!-- mrcpv2 client jar file -->
+        <jar jarfile="${dist.client.mrcpv2.jar}" compress="false">
+            <fileset dir="${build}">
+                <include name="org/jvoicexml/client/mrcpv2/**/*.class" />
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <section name="common">
+                    <attribute name="Implementation-Vendor"
+                               value="JVoiceXML group" />
+                    <attribute name="Implementation-Title"
+                               value="JVoiceXML client files for MRCPv2 based access" />
+                </section>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="rebuild"
+            description="Rebuild the jars from scratch"
+            depends="clean,jar" />
+
+    <target name="apidoc" description="create javadoc"
+        depends="-setup">
+        <echo message="creating javadoc with access: ${javadoc.access}" />
+
+        <delete dir="${apidoc}" failonerror="false"/>
+
+        <javadoc destdir="${apidoc}"
+                 windowtitle="JVoiceXML"
+                 author="true"
+                 version="true"
+                 linksource="true"
+                 access="${javadoc.access}"
+                 use="true">
+            <packageset dir="${src}" />
+            <doctitle>
+                <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
+            </doctitle>
+            <bottom>
+                <![CDATA[<i>Copyright &#169; 2008-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+            </bottom>
+        <tag name="todo" description="Stuff to complete" />
+        <classpath>
+            <path refid="project.classpath" />
+        </classpath>
+
+        <!-- Resolve used libraries -->
+        <link offline="true"
+              href="http://java.sun.com/javase/6/docs/api/"
+              packagelistLoc="${3rdparty.dir}" />
+        <link offline="true" resolveLink="false"
+              href="${jvxml.core.apidoc}"
+              packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+        <link offline="true" 
+              href="http://logging.apache.org/log4j/docs/api/"
+              packagelistLoc="${log4j.dir}" />
+
+        <group title="MRCPv2 based implementation platform">
+            <package name="org.jvoicexml.implementation.mrcpv2*" />
+        </group>
+        <group title="MRCPv2 based client">
+            <package name="org.jvoicexml.client.mrcpv2*" />
+        </group>
+        </javadoc>
+    </target>
+
+  <target name="checkstyle"
+    description="Check for JVoiceXML coding standard"
+    depends="compile, -initcheckstyle"
+    if="checkstyle.present">
+    <property name="checkstyle-target.dir"
+      value="${dist}/checkstyle/${component}" />
+    <mkdir dir="${checkstyle-target.dir}"/>
+    <property name="checkstyle.data"
+      value="${checkstyle-target.dir}/checkstyle-data.xml" />
+    <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml"
+       failonviolation="false">
+        <classpath>
+          <pathelement path="${project.classpath}" />
+          <pathelement location="${build}" />
+        </classpath>
+        <fileset dir="${src}">
+            <include name="org/jvoicexml/**/*.java" />
+        </fileset>
+        <formatter type="xml" tofile="${checkstyle.data}"/>
+    </checkstyle>
+    <xslt style="${jvxml.core.dir}/etc/checkstyle-frames.xsl"
+          in="${checkstyle.data}"
+          out="${checkstyle-target.dir}/report.html">
+      <param name="output.dir" expression="${checkstyle-target.dir}"/>
+    </xslt>
+  </target>
+
+  <target name="distribution" depends="jar">
+    <property name="distFolder" value="${dist}/${jvxml.version}" />
+    <copy tofile="${distFolder}/config/mrcpv2-implementation.xml"
+      file="${etc}/mrcpv2-implementation-dist.xml"/>
+    <copy todir="${distFolder}/lib" file="${dist.implementation.mrcpv2.jar}"/>
+    <copy todir="${distFolder}/lib">
+      <fileset refid="cairo.lib" />
+      <fileset refid="mrcp4j.lib" />
+      <fileset refid="jainsip.lib" />
+    </copy>
+  </target>
+</project>
