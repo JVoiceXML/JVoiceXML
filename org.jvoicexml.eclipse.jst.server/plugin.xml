@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <!-- Extensions for unit testing Generic Server -->
+
+	<extension point="org.eclipse.wst.server.core.runtimeTypes">
+
+
+    	<runtimeType
+         	id="jvoicexml.runtime.id"
+         	name="JVoiceXML 0.5.5"
+         	description="The JVoiceXML Runtime Type"
+         	vendor="JVoiceXML"
+			version="0"
+			class="org.eclipse.jst.server.generic.core.internal.GenericServerRuntime">
+			
+				<moduleType
+					types="jvoicexml.module"
+					versions="1.0"/>
+			
+      	</runtimeType>
+
+    	<runtimeType
+         	id="jvoicexml06.runtime.id"
+         	name="JVoiceXML 0.6"
+         	description="The JVoiceXML Runtime Type"
+         	vendor="JVoiceXML"
+			version="0"
+			class="org.eclipse.jst.server.generic.core.internal.GenericServerRuntime">
+			
+				<moduleType
+					types="jvoicexml06.module"
+					versions="1.0"/>
+			
+      	</runtimeType>
+
+    	<runtimeType
+         	id="jvoicexml07.runtime.id"
+         	name="JVoiceXML 0.7"
+         	description="The JVoiceXML Runtime Type"
+         	vendor="JVoiceXML"
+			version="0"
+			class="org.eclipse.jst.server.generic.core.internal.GenericServerRuntime">
+			
+				<moduleType
+					types="jvoicexml07.module"
+					versions="1.0"/>
+			
+      	</runtimeType>
+
+    </extension>
+
+	<extension point="org.eclipse.wst.server.core.serverTypes">
+
+       
+
+       	<serverType
+        	runtime="true"
+	        class="org.eclipse.jst.server.generic.core.internal.GenericServer"
+	        id="jvoicexml.server.id"
+	        initialState="stopped"
+	        startBeforePublish="true"
+	        supportsRemoteHosts="false"
+	        runtimeTypeId="jvoicexml.runtime.id"
+	        description="The JVoiceXML Server"
+	        launchConfigId="org.eclipse.jst.server.generic.core.launchConfigurationType"
+	        behaviourClass="org.jvoicexml.eclipse.jst.server.JVoiceXMLServerBehaviour"
+	        name="JVoiceXML 0.5.5"
+	        hasConfiguration="false"
+	        startTimeout="60000"
+		    stopTimeout="30000"
+	        launchModes="run,debug">
+    	</serverType>
+
+       	<serverType
+        	runtime="true"
+	        class="org.eclipse.jst.server.generic.core.internal.GenericServer"
+	        id="jvoicexml06.server.id"
+	        initialState="stopped"
+	        startBeforePublish="true"
+	        supportsRemoteHosts="false"
+	        runtimeTypeId="jvoicexml06.runtime.id"
+	        description="The JVoiceXML Server"
+	        launchConfigId="org.eclipse.jst.server.generic.core.launchConfigurationType"
+	        behaviourClass="org.jvoicexml.eclipse.jst.server.JVoiceXMLServerBehaviour"
+	        name="JVoiceXML 0.6"
+	        hasConfiguration="false"
+	        startTimeout="60000"
+		    stopTimeout="30000"
+	        launchModes="run,debug">
+    	</serverType>
+
+       	<serverType
+        	runtime="true"
+	        class="org.eclipse.jst.server.generic.core.internal.GenericServer"
+	        id="jvoicexml07.server.id"
+	        initialState="stopped"
+	        startBeforePublish="true"
+	        supportsRemoteHosts="false"
+	        runtimeTypeId="jvoicexml07.runtime.id"
+	        description="The JVoiceXML Server"
+	        launchConfigId="org.eclipse.jst.server.generic.core.launchConfigurationType"
+	        behaviourClass="org.jvoicexml.eclipse.jst.server.JVoiceXMLServerBehaviour"
+	        name="JVoiceXML 0.7"
+	        hasConfiguration="false"
+	        startTimeout="60000"
+		    stopTimeout="30000"
+	        launchModes="run,debug">
+    	</serverType>
+
+
+    </extension>
+
+    <extension point="org.eclipse.jst.server.generic.core.serverdefinition">
+
+   	  <serverdefinition id="jvoicexml.runtime.id"
+          definitionfile="/server/jvoicexml-0.5.5.serverdef">
+      </serverdefinition>
+
+   	  <serverdefinition id="jvoicexml06.runtime.id"
+          definitionfile="/server/jvoicexml-0.6.serverdef">
+      </serverdefinition>
+   
+   	  <serverdefinition id="jvoicexml07.runtime.id"
+          definitionfile="/server/jvoicexml-0.7.serverdef">
+      </serverdefinition>
+
+   </extension>
+
+	<extension point="org.eclipse.wst.server.ui.serverImages">
+     <image
+         id="org.eclipse.jst.server.generic.image"
+         icon="icon/jvoicexml-logo.gif"
+         typeIds="jvoicexml.runtime.id"/>
+     <image
+         id="org.eclipse.jst.server.generic.image"
+         icon="icon/jvoicexml-logo.gif"
+         typeIds="jvoicexml.server.id"/>
+     <image
+         id="org.eclipse.jst.server.generic.image"
+         icon="icon/jvoicexml-logo.gif"
+         typeIds="jvoicexml06.runtime.id"/>
+     <image
+         id="org.eclipse.jst.server.generic.image"
+         icon="icon/jvoicexml-logo.gif"
+         typeIds="jvoicexml06.server.id"/>
+
+     <image
+         id="org.eclipse.jst.server.generic.image"
+         icon="icon/jvoicexml-logo.gif"
+         typeIds="jvoicexml07.runtime.id"/>
+     <image
+         id="org.eclipse.jst.server.generic.image"
+         icon="icon/jvoicexml-logo.gif"
+         typeIds="jvoicexml07.server.id"/>
+	</extension>
+	
+   
+   <extension point="org.eclipse.wst.server.ui.wizardFragments">
+	<fragment
+        id="org.eclipse.jst.server.jvoicexml.runtime.id"
+        typeIds="jvoicexml.runtime.id"
+        class="org.eclipse.jst.server.generic.ui.internal.GenericServerRuntimeWizardFragment"/>           
+     <fragment
+        id="org.eclipse.jst.server.jvoicexml.server.id"
+        typeIds="jvoicexml.server.id"
+        class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>   
+	<fragment
+        id="org.eclipse.jst.server.jvoicexml.runtime.id"
+        typeIds="jvoicexml06.runtime.id"
+        class="org.eclipse.jst.server.generic.ui.internal.GenericServerRuntimeWizardFragment"/>           
+     <fragment
+        id="org.eclipse.jst.server.jvoicexml.server.id"
+        typeIds="jvoicexml06.server.id"
+        class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>   
+
+	<fragment
+        id="org.eclipse.jst.server.jvoicexml.runtime.id"
+        typeIds="jvoicexml07.runtime.id"
+        class="org.eclipse.jst.server.generic.ui.internal.GenericServerRuntimeWizardFragment"/>           
+     <fragment
+        id="org.eclipse.jst.server.jvoicexml.server.id"
+        typeIds="jvoicexml07.server.id"
+        class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>   
+  </extension>
+
+</plugin>
