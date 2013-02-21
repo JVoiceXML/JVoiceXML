@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<modelVersion>4.0.0</modelVersion>
+<groupId>org.jvoicexml</groupId>
+<artifactId>org.jvoicexml.mmi.events</artifactId>
+<name>org.jvoicexml.mmi.events</name>
+<version>@version@</version>
+<packaging>jar</packaging>
+<url>http://jvoicexml.sourceforge.net</url>
+<parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+  <scm>
+    <connection>scm:svn:http://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.mmi.events</connection>
+    <developerConnection>scm:svn:http://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.mmi.events</developerConnection>
+    <url>http://svn.code.sf.net/p/jvoicexml/code/</url>
+  </scm>
+<licenses>
+<license>
+<name>GNU Lesser General Public License</name>
+<url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
+</license>
+</licenses>
+<developers>
+<developer>
+<id>Dirk</id>
+<name>Dirk Schnelle-Walka</name>
+<email>dirk.schnelle@jvoicexml.org</email>
+<timezone>Central European Time</timezone>
+</developer>
+</developers>
+	<organization>
+		<name>JVoiceXML</name>
+		<url>http://jvoicexml.sourceforge.net</url>
+	</organization>
+	<description>MMI event library</description>
+</project>

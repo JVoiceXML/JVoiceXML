@@ -1,0 +1,572 @@
+ <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<grammar xmlns="http://www.w3.org/2001/06/grammar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" mode="dtmf" root="test" version="1.0" xml:lang="en-US" xsi:schemaLocation="http://www.w3.org/2001/06/grammar http://www.w3.org/TR/speech-grammar/grammar.xsd">
+    <rule id="test">
+        <one-of>
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+        </one-of>
+    </rule>
+</grammar>
+
+
+<grammar xmlns="http://www.w3.org/2001/06/grammar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" mode="dtmf" root="phonenumber" version="1.0" xml:lang="en-US" xsi:schemaLocation="http://www.w3.org/2001/06/grammar http://www.w3.org/TR/speech-grammar/grammar.xsd">
+    <rule id="phonenumber">
+        <one-of>
+            <item>0</item>
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+            <item>4</item>
+            <item>5</item>
+            <item>6</item>
+            <item>7</item>
+            <item>8</item>
+            <item>9</item>
+        </one-of>
+    </rule>
+</grammar>
+
+
+
+ <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<grammar xmlns="http://www.w3.org/2001/06/grammar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" mode="dtmf" root="pin" version="1.0" xml:lang="en-US" xsi:schemaLocation="http://www.w3.org/2001/06/grammar http://www.w3.org/TR/speech-grammar/grammar.xsd">
+    <rule id="digit">
+        <one-of>
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+            <item>4</item>
+        </one-of>
+    </rule>
+    <rule id="pin" scope="public">
+        <item repeat="4">
+            <ruleref uri="#digit"/>
+        </item>
+    </rule>
+</grammar>
+
+
+<schema>
+    <applyto>/desktop/gnome/interface/menus_have_icons</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/devices/video/image</applyto>
+    <type>other</type>
+    <default>none</default>
+</schema>
+<schema>
+    <applyto>/desktop/gnome/url-handlers/callto/command</applyto>
+    <type>string</type>
+    <default>ekiga -c &quot;%s&quot;</default>
+</schema>
+<schema>
+    <applyto>/desktop/gnome/url-handlers/callto/needs_terminal</applyto>
+    <type>bool</type>
+    <default>false</default>
+</schema>
+<schema>
+    <applyto>/desktop/gnome/url-handlers/callto/enabled</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/desktop/gnome/url-handlers/h323/command</applyto>
+    <type>string</type>
+    <default>ekiga -c &quot;%s&quot;</default>
+</schema>
+<schema>
+    <applyto>/desktop/gnome/url-handlers/h323/needs_terminal</applyto>
+    <type>bool</type>
+    <default>false</default>
+</schema>
+<schema>
+    <applyto>/desktop/gnome/url-handlers/h323/enabled</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/desktop/gnome/url-handlers/sip/command</applyto>
+    <type>string</type>
+    <default>ekiga -c &quot;%s&quot;</default>
+</schema>
+<schema>
+    <applyto>/desktop/gnome/url-handlers/sip/needs_terminal</applyto>
+    <type>bool</type>
+    <default>false</default>
+</schema>
+<schema>
+    <applyto>/desktop/gnome/url-handlers/sip/enabled</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/version</applyto>
+    <type>int</type>
+    <default>3027</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/main_window/size</applyto>
+    <type>string</type>
+    <default>234,430</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/call_options/no_answer_timeout</applyto>
+    <type>int</type>
+    <default>45</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/kind_of_net</applyto>
+    <type>int</type>
+    <default>5</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/contacts/roster</applyto>
+    <type>string</type>
+    <default>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;list&gt;&lt;entry uri=&quot;sip:500@ekiga.net&quot;&gt;&lt;name&gt;Echo test&lt;/name&gt;&lt;group&gt;Services&lt;/group&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:501@ekiga.net&quot;&gt;&lt;name&gt;Conference room&lt;/name&gt;&lt;group&gt;Services&lt;/group&gt;&lt;/entry&gt;&lt;/list&gt;
+    </default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/contacts/call_history</applyto>
+    <type>string</type>
+    <default>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;list&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357263141&lt;/call_start&gt;&lt;call_duration&gt;00:00:48&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357263260&lt;/call_start&gt;&lt;call_duration&gt;00:00:46&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357263340&lt;/call_start&gt;&lt;call_duration&gt;00:00:39&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357263465&lt;/call_start&gt;&lt;call_duration/&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357263555&lt;/call_start&gt;&lt;call_duration&gt;00:00:21&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357263969&lt;/call_start&gt;&lt;call_duration&gt;00:00:59&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357264046&lt;/call_start&gt;&lt;call_duration&gt;00:00:26&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357264382&lt;/call_start&gt;&lt;call_duration&gt;00:00:32&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357265416&lt;/call_start&gt;&lt;call_duration&gt;00:00:59&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357265729&lt;/call_start&gt;&lt;call_duration&gt;00:04:02&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357265995&lt;/call_start&gt;&lt;call_duration&gt;00:00:32&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357267096&lt;/call_start&gt;&lt;call_duration&gt;00:00:30&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357267396&lt;/call_start&gt;&lt;call_duration&gt;00:00:27&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357267746&lt;/call_start&gt;&lt;call_duration&gt;00:00:22&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357267894&lt;/call_start&gt;&lt;call_duration&gt;00:00:26&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357267930&lt;/call_start&gt;&lt;call_duration&gt;00:00:28&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357268116&lt;/call_start&gt;&lt;call_duration&gt;00:00:25&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357268146&lt;/call_start&gt;&lt;call_duration&gt;00:00:05&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357525565&lt;/call_start&gt;&lt;call_duration&gt;00:00:37&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357526532&lt;/call_start&gt;&lt;call_duration&gt;&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357526557&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357526663&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357526899&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357527132&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357527349&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357529755&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357529845&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357529995&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357530284&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357530515&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357531520&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357542252&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357544418&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357544540&lt;/call_start&gt;&lt;call_duration&gt;00:00:08&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357544731&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357544777&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357546326&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357546382&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357550734&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357550754&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357550824&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357550953&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357551033&lt;/call_start&gt;&lt;call_duration&gt;&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357551041&lt;/call_start&gt;&lt;call_duration&gt;00:00:25&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357551126&lt;/call_start&gt;&lt;call_duration&gt;00:00:40&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357552546&lt;/call_start&gt;&lt;call_duration&gt;&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357608289&lt;/call_start&gt;&lt;call_duration&gt;00:00:43&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357613022&lt;/call_start&gt;&lt;call_duration&gt;00:00:43&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357613503&lt;/call_start&gt;&lt;call_duration&gt;00:00:38&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357613644&lt;/call_start&gt;&lt;call_duration&gt;00:00:44&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357614547&lt;/call_start&gt;&lt;call_duration&gt;00:00:49&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357614739&lt;/call_start&gt;&lt;call_duration&gt;&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357614751&lt;/call_start&gt;&lt;call_duration&gt;00:00:10&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357614854&lt;/call_start&gt;&lt;call_duration&gt;00:01:14&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357616997&lt;/call_start&gt;&lt;call_duration&gt;00:00:22&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357617246&lt;/call_start&gt;&lt;call_duration&gt;00:00:34&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357617340&lt;/call_start&gt;&lt;call_duration&gt;00:00:21&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357618620&lt;/call_start&gt;&lt;call_duration&gt;00:00:26&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357618800&lt;/call_start&gt;&lt;call_duration&gt;&lt;/call_duration&gt;&lt;/entry&gt;&lt;entry uri=&quot;sip:1234@192.168.146.146:5067&quot; type=&quot;1&quot;&gt;&lt;name&gt;1234@192.168.146.146:5067&lt;/name&gt;&lt;call_start&gt;1357618846&lt;/call_start&gt;&lt;call_duration&gt;00:00:25&lt;/call_duration&gt;&lt;/entry&gt;&lt;/list&gt;
+    </default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/contacts/ldap_servers</applyto>
+    <type>string</type>
+    <default>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;list&gt;&lt;server&gt;&lt;name&gt;Ekiga.net Directory&lt;/name&gt;&lt;uri&gt;ldap://ekiga.net/dc=ekiga,dc=net?givenName,telephoneNumber?sub?(cn=$)&lt;/uri&gt;&lt;authcID&gt;&lt;/authcID&gt;&lt;password&gt;&lt;/password&gt;&lt;/server&gt;&lt;/list&gt;
+    </default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/contacts/show_offline_contacts</applyto>
+    <type>bool</type>
+    <default>false</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/contacts/roster_folded_groups</applyto>
+    <type>list</type>
+    <default>[]</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/codecs/video/temporal_spatial_tradeoff</applyto>
+    <type>int</type>
+    <default>31</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/codecs/video/maximum_video_rx_bitrate</applyto>
+    <type>int</type>
+    <default>4096</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/codecs/video/maximum_video_tx_bitrate</applyto>
+    <type>int</type>
+    <default>64</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/codecs/video/media_list</applyto>
+    <type>list</type>
+    <default>[h264*90000*0*SIP*1,theora*90000*0*SIP*1,h261*90000*0*H.323 SIP*1,h263*90000*0*SIP*1,h263-1998*90000*0*SIP*1,MP4V-ES*90000*0*SIP*1]</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/codecs/audio/maximum_jitter_buffer</applyto>
+    <type>int</type>
+    <default>500</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/remote_video_window/position</applyto>
+    <type>string</type>
+    <default>0,0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/remote_video_window/size</applyto>
+    <type>string</type>
+    <default>176,144</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/local_video_window/position</applyto>
+    <type>string</type>
+    <default>0,0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/local_video_window/size</applyto>
+    <type>string</type>
+    <default>176,144</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/video_display/video_view_before_fullscreen</applyto>
+    <type>int</type>
+    <default>1</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/video_display/video_view</applyto>
+    <type>int</type>
+    <default>1</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/video_display/stay_on_top</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/video_display/zoom</applyto>
+    <type>int</type>
+    <default>100</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/video_display/sw_scaling_algorithm</applyto>
+    <type>int</type>
+    <default>0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/video_display/allow_pip_sw_scaling</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/video_display/disable_hw_accel</applyto>
+    <type>bool</type>
+    <default>false</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/accounts_window/size</applyto>
+    <type>string</type>
+    <default>469,251</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/accounts_window/position</applyto>
+    <type>string</type>
+    <default>445,258</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/preferences_window/size</applyto>
+    <type>string</type>
+    <default>700,396</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/preferences_window/position</applyto>
+    <type>string</type>
+    <default>370,149</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/video_settings_window/size</applyto>
+    <type>string</type>
+    <default>250,160</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/video_settings_window/position</applyto>
+    <type>string</type>
+    <default>0,0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/audio_settings_window/size</applyto>
+    <type>string</type>
+    <default>250,125</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/audio_settings_window/position</applyto>
+    <type>string</type>
+    <default>0,0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/address_book_window/size</applyto>
+    <type>string</type>
+    <default>770,470</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/address_book_window/position</applyto>
+    <type>string</type>
+    <default>0,0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/druid_window/position</applyto>
+    <type>string</type>
+    <default>0,0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/druid_window/size</applyto>
+    <type>string</type>
+    <default>525,345</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/chat_window/position</applyto>
+    <type>string</type>
+    <default>135,140</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/chat_window/size</applyto>
+    <type>string</type>
+    <default>375,400</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/log_window/position</applyto>
+    <type>string</type>
+    <default>0,0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/main_window/panel_section</applyto>
+    <type>int</type>
+    <default>2</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/main_window/show_call_panel</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/main_window/position</applyto>
+    <type>string</type>
+    <default>420,126</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/user_interface/start_hidden</applyto>
+    <type>bool</type>
+    <default>false</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/sip/binding_timeout</applyto>
+    <type>int</type>
+    <default>60</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/nat/disable_stun</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/nat/stun_server</applyto>
+    <type>string</type>
+    <default>stun.ekiga.net</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/call_forwarding/forward_on_no_answer</applyto>
+    <type>bool</type>
+    <default>false</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/call_forwarding/forward_on_busy</applyto>
+    <type>bool</type>
+    <default>false</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/call_forwarding/always_forward</applyto>
+    <type>bool</type>
+    <default>false</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/h323/forward_host</applyto>
+    <type>string</type>
+    <default>h323:</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/h323/dtmf_mode</applyto>
+    <type>int</type>
+    <default>0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/h323/enable_fast_start</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/h323/enable_early_h245</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/h323/enable_h245_tunneling</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/ports/udp_port_range</applyto>
+    <type>string</type>
+    <default>5060:5100</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/ports/tcp_port_range</applyto>
+    <type>string</type>
+    <default>30000:30010</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/h323/listen_port</applyto>
+    <type>int</type>
+    <default>1720</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/sip/dtmf_mode</applyto>
+    <type>int</type>
+    <default>0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/sip/forward_host</applyto>
+    <type>string</type>
+    <default>sip:</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/sip/outbound_proxy_host</applyto>
+    <type>string</type>
+    <default></default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/sip/listen_port</applyto>
+    <type>int</type>
+    <default>5060</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/interface</applyto>
+    <type>string</type>
+    <default></default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/protocols/accounts_list</applyto>
+    <type>list</type>
+    <default>[]</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/sound_events/busy_tone_sound</applyto>
+    <type>string</type>
+    <default>C:\Program Files (x86)\Ekiga\sounds\ekiga\busytone.wav</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/sound_events/enable_busy_tone_sound</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/sound_events/ring_tone_sound</applyto>
+    <type>string</type>
+    <default>dialtone.wav</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/sound_events/enable_ring_tone_sound</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/sound_events/enable_new_voicemail_sound</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/sound_events/new_voicemail_sound</applyto>
+    <type>string</type>
+    <default>C:\Program Files (x86)\Ekiga\sounds\ekiga\voicemail.wav</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/sound_events/enable_new_message_sound</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/sound_events/new_message_sound</applyto>
+    <type>string</type>
+    <default>newmessage.wav</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/sound_events/enable_incoming_call_sound</applyto>
+    <type>bool</type>
+    <default>true</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/sound_events/incoming_call_sound</applyto>
+    <type>string</type>
+    <default>C:\Program Files (x86)\Ekiga\sounds\ekiga\ring.wav</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/sound_events/output_device</applyto>
+    <type>string</type>
+    <default>Speakers (VIA High Definition A (PTLIB/WindowsMultimedia)</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/codecs/audio/enable_echo_cancelation</applyto>
+    <type>bool</type>
+    <default>false</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/codecs/audio/enable_silence_detection</applyto>
+    <type>bool</type>
+    <default>false</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/codecs/audio/media_list</applyto>
+    <type>list</type>
+    <default>[Speex*16000*1*H.323 SIP*1,iLBC*8000*1*H.323 SIP*0,PCMU*8000*1*H.323 SIP*1,PCMA*8000*1*H.323 SIP*1,gsm*8000*1*H.323 SIP*0,CELT*48000*1*SIP*0,CELT*32000*1*SIP*0,G722*16000*1*H.323 SIP*0,Speex*8000*1*H.323 SIP*0,G726-16*8000*1*H.323 SIP*0,G726-24*8000*1*H.323 SIP*0,G726-32*8000*1*H.323 SIP*0,G726-40*8000*1*H.323 SIP*0,ms-gsm*8000*1*H.323*0]</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/personal_data/online_custom_status</applyto>
+    <type>list</type>
+    <default>[]</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/personal_data/dnd_custom_status</applyto>
+    <type>list</type>
+    <default>[]</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/personal_data/away_custom_status</applyto>
+    <type>list</type>
+    <default>[]</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/personal_data/long_status</applyto>
+    <type>string</type>
+    <default>I&apos;m online using Ekiga</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/personal_data/short_status</applyto>
+    <type>string</type>
+    <default>online</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/general/personal_data/full_name</applyto>
+    <type>string</type>
+    <default>Tran Quyet Thang</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/devices/video/max_frame_rate</applyto>
+    <type>int</type>
+    <default>30</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/devices/video/enable_preview</applyto>
+    <type>bool</type>
+    <default>false</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/devices/video/format</applyto>
+    <type>int</type>
+    <default>0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/devices/video/channel</applyto>
+    <type>int</type>
+    <default>0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/devices/video/size</applyto>
+    <type>int</type>
+    <default>0</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/devices/video/input_device</applyto>
+    <type>string</type>
+    <default></default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/devices/audio/input_device</applyto>
+    <type>string</type>
+    <default>Default (PTLIB/WindowsMultimedia)</default>
+</schema>
+<schema>
+    <applyto>/apps/ekiga/devices/audio/output_device</applyto>
+    <type>string</type>
+    <default>Speakers (VIA High Definition A (PTLIB/WindowsMultimedia)</default>
+</schema>
+
+

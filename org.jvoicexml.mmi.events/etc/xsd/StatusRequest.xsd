@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:mmi="http://www.w3.org/2008/04/mmi-arch" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://www.w3.org/2008/04/mmi-arch" 
+    attributeFormDefault="qualified" 
+    elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+             StatusRequest schema for MMI Life cycle events version 1.0. 
+             The StatusRequest message and the corresponding StatusResponse are intended to provide keep-alive 
+             functionality, informing the Runtime Framework about the presence of the various modality components. 
+             Note that both messages are not tied to any context and may thus be sent independent of any user 
+             interaction.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="mmi-datatypes.xsd"/>
+    <xs:include schemaLocation="mmi-attribs.xsd"/>
+    
+    <xs:element name="StatusRequest">
+        <xs:complexType>
+            <xs:attributeGroup ref="mmi:context.optional.attrib"/>
+            <xs:attributeGroup ref="mmi:source.attrib"/>
+            <xs:attributeGroup ref="mmi:target.attrib"/>
+            <xs:attributeGroup ref="mmi:requestID.attrib"/>
+            <xs:attributeGroup ref="mmi:requestAutomaticUpdate.attrib"/>
+            <!-- no elements -->
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

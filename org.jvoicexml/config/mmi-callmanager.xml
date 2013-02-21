@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<callmanager xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
+  <repository>mmi</repository>
+  <classpath>dist/org.jvoicexml.mmi.events.jar</classpath>
+  <classpath>dist/org.jvoicexml.callmanager.mmi.jar</classpath>
+  <classpath>dist/org.jvoicexml.callmanager.mmi.socket.jar</classpath>
+
+  <beans:bean id="callmanager"
+    class="org.jvoicexml.callmanager.mmi.MMICallManager">
+    <!--
+      Adapt the settings to the implementation platforms that you intend to use.
+      -->
+    <beans:property name="call" value="dummy"/>
+    <beans:property name="input" value="jsapi20"/>
+    <beans:property name="output" value="jsapi20"/>
+
+    <beans:property name="connectionInformationFactory">
+       <beans:bean
+         class="org.jvoicexml.client.JVoiceXmlConnectionInformationFactory" />
+    </beans:property>
+
+    <!-- Specification of the ETL -->
+    <beans:property name="protocolAdapter">
+      <beans:bean
+       class="org.jvoicexml.callmanager.mmi.socket.SocketETLProtocolAdapter">
+        <beans:property name="port" value="4343" />
+      </beans:bean>
+    </beans:property>
+  </beans:bean>
+
+</callmanager>
