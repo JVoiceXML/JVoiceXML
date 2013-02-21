@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<variableprovider xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-variableprovider-0-7.xsd">
+  <!-- classpath>some.jar</classpath-->
+  <!-- beans:bean id="org.jvoicexml.interpreter.variables.VariableProviders"
+    class="org.jvoicexml.interpreter.variables.VariableProviders"
+    scope="singleton">
+    <beans:property name="providers">
+      <beans:list>
+        <beans:bean class="org.jvoicexml.interpreter.variables.VariableProvider">
+          <beans:constructor-arg type="java.lang.String" value="SESSION" />
+          <beans:property name="containers">
+            <beans:map>
+              <beans:entry key="env" value="org.jvoicexml.mundo.EnvironemntVarContainer"/>
+            </beans:map>
+          </beans:property>
+        </beans:bean>
+      </beans:list>
+    </beans:property>
+  </beans:bean-->
+</variableprovider>
