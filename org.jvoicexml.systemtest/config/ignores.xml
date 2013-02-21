@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+	<!--
+		list create by seach pattern from txml file. key word: initial,
+		subdialog, transfer, etc. not accuracy. keep duplicate still.
+	-->
+<ignores>
+  <!-- &lt;transfer&gt; not implemented -->
+	<ignore id="10" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="93" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="149" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="152" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="288" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="289" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="290" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="291" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="292" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="293" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="294" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="295" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="296" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="297" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="298" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="300" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="301" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="302" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="304" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="305" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="306" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="307" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="308" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="309" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="310" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="311" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="495" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="624" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1029" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1036" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1041" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1046" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1051" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1054" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1058" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1067" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1068" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1069" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1071" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1074" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1075" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1076" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1077" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1078" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1079" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1080" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1138" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1141" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1149" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1165" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1166" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1180" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1181" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1182" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1183" reason="&lt;transfer&gt; not implemented" />
+	<ignore id="1184" reason="&lt;transfer&gt; not implemented" />
+  <!-- &lt;subdialog&gt; not implemented -->
+	<ignore id="1" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="19" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="20" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="51" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="77" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="82" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="84" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="85" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="86" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="87" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="88" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="92" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="93" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="114" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="149" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="152" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="263" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="267" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="268" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="269" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="270" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="271" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="547" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="548" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="550" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="551" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="580" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="588" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="611" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="612" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="621" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="654" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="655" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="656" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1026" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1033" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1038" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1043" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1048" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1056" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1067" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1068" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1069" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1071" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1074" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1075" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1076" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1077" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1078" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1079" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1080" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1138" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1146" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1149" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1154" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1156" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1157" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1158" reason="&lt;subdialog&gt; not implemented" />
+	<ignore id="1159" reason="&lt;subdialog&gt; not implemented" />
+  <!-- &lt;initial&gt; not implemented -->
+	<ignore id="17" reason="&lt;initial&gt; not implemented" />
+	<ignore id="93" reason="&lt;initial&gt; not implemented" />
+	<ignore id="145" reason="&lt;initial&gt; not implemented" />
+	<ignore id="147" reason="&lt;initial&gt; not implemented" />
+	<ignore id="148" reason="&lt;initial&gt; not implemented" />
+	<ignore id="152" reason="&lt;initial&gt; not implemented" />
+	<ignore id="240" reason="&lt;initial&gt; not implemented" />
+	<ignore id="316" reason="&lt;initial&gt; not implemented" />
+	<ignore id="320" reason="&lt;initial&gt; not implemented" />
+	<ignore id="352" reason="&lt;initial&gt; not implemented" />
+	<ignore id="353" reason="&lt;initial&gt; not implemented" />
+	<ignore id="354" reason="&lt;initial&gt; not implemented" />
+	<ignore id="355" reason="&lt;initial&gt; not implemented" />
+	<ignore id="356" reason="&lt;initial&gt; not implemented" />
+	<ignore id="362" reason="&lt;initial&gt; not implemented" />
+	<ignore id="363" reason="&lt;initial&gt; not implemented" />
+	<ignore id="364" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1025" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1032" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1060" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1061" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1066" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1067" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1068" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1069" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1072" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1074" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1075" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1076" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1077" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1078" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1079" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1080" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1094" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1095" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1096" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1097" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1098" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1099" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1100" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1101" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1107" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1108" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1109" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1110" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1111" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1112" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1113" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1114" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1115" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1116" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1117" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1118" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1119" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1120" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1138" reason="&lt;initial&gt; not implemented" />
+	<ignore id="1149" reason="&lt;initial&gt; not implemented" />
+  <!-- recording to output streams is not supported -->
+	<ignore id="1010" reason="recording to output streams is not supported" />
+	<ignore id="1011" reason="recording to output streams is not supported" />
+	<ignore id="1013" reason="recording to output streams is not supported" />
+	<ignore id="1014" reason="recording to output streams is not supported" />
+	<ignore id="1015" reason="recording to output streams is not supported" />
+	<ignore id="1016" reason="recording to output streams is not supported" />
+	<ignore id="1017" reason="recording to output streams is not supported" />
+	<ignore id="1019" reason="recording to output streams is not supported" />
+	<ignore id="1021" reason="recording to output streams is not supported" />
+	<ignore id="1040" reason="recording to output streams is not supported" />
+	<ignore id="1045" reason="recording to output streams is not supported" />
+	<ignore id="1050" reason="recording to output streams is not supported" />
+	<ignore id="1053" reason="recording to output streams is not supported" />
+	<ignore id="1059" reason="recording to output streams is not supported" />
+	<ignore id="273" reason="recording to output streams is not supported" />
+	<ignore id="274" reason="recording to output streams is not supported" />
+	<ignore id="275" reason="recording to output streams is not supported" />
+	<ignore id="277" reason="recording to output streams is not supported" />
+	<ignore id="278" reason="recording to output streams is not supported" />
+	<ignore id="279" reason="recording to output streams is not supported" />
+	<ignore id="281" reason="recording to output streams is not supported" />
+	<ignore id="282" reason="recording to output streams is not supported" />
+	<ignore id="283" reason="recording to output streams is not supported" />
+	<ignore id="284" reason="recording to output streams is not supported" />
+	<ignore id="8" reason="recording to output streams is not supported" />
+    <!-- &lt;audio&gt; no handle at auto test. -->
+    <!-- 
+	<ignore id="2" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="12" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="36" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="112" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="306" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="336" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="339" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="367" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="370" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="493" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="545" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="600" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="625" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="634" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="1018" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="1063" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="1108" reason="&lt;audio&gt; can not handle at auto test." />
+	<ignore id="1178" reason="&lt;audio&gt; can not handle at auto test." />
+ -->
+    <!-- other, need to handle -->
+    <!-- 
+	<ignore id="1034"
+		reason="scheme 'builtin' is not supported by this implementation." />
+	<ignore id="499" reason="HTTP method GET is not supported by this URL" />
+	<ignore id="531" reason="HTTP method GET is not supported by this URL" />
+	<ignore id="532" reason="HTTP method GET is not supported by this URL" />
+	<ignore id="80" reason="HTTP method GET is not supported by this URL" />
+   -->
+    <ignore id="18" reason="Interpreter dead loop" />
+    <ignore id="75" reason="Interpreter dead loop" />
+    <ignore id="204" reason="Interpreter dead loop" />
+    <ignore id="209" reason="Interpreter dead loop" />
+    <ignore id="564" reason="Interpreter dead loop" />
+    <ignore id="1001" reason="Interpreter dead loop" />
+</ignores>

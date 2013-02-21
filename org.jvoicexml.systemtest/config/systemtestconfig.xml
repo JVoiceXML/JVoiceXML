@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+  <bean id="callmanager" class="org.jvoicexml.systemtest.SystemTestCallManager">
+    <!-- 
+    <property name="shutdownInterpreter" value="true" />
+     -->
+    <property name="textServerPort" value="5900" />
+    <property name="report">
+      <bean class="org.jvoicexml.systemtest.report.TestRecorder">
+        <property name="reportDir" value="../org.jvoicexml/dist/systemtest" />
+        <property name="reportName" value="ir-report.xml" />
+        <property name="logRoller">
+          <bean class="org.jvoicexml.systemtest.report.LogRoller">
+            <property name="host" value="localhost" />
+            <property name="port" value="5920, 5930, 5940, 5950, 5960" />
+          </bean>
+        </property>
+        <property name="logLocations">
+          <map>
+            <entry key="logTagLog"
+              value="../org.jvoicexml/logging/logtag.log.txt" />
+            <entry key="remoteLog"
+              value="../org.jvoicexml/logging/interpreter.log.txt" />
+            <entry key="errorLog"
+              value="../org.jvoicexml/logging/errorlevel.log.txt" />
+            <entry key="resourceLog"
+              value="../org.jvoicexml/logging/resource.log.txt" />
+            <entry key="localLog"
+              value="logging/systemtest.log.txt" />
+          </map>
+        </property>
+      </bean>
+    </property>
+
+    <!-- used by IRTestcaseLibrary -->
+    <property name="testcaseLibrary">
+      <bean class="org.jvoicexml.systemtest.testcase.IRTestCaseLibrary">
+        <property name="testManifest"
+          value="http://localhost:8080/irtest/irtests/manifest.xml" />
+        <property name="ignoreList" value="./config/ignores.xml" />
+        <property name="ignores" value="77, 89, 535, 564, 640, 1001, 590-599" />
+      </bean>
+    </property>
+    <property name="scriptFactory">
+      <bean class="org.jvoicexml.systemtest.script.InputScriptFactory">
+        <property name="scriptsDirectory" value="./irtest/scripts/" />
+      </bean>
+    </property>
+    <!--
+      The testcases and ignores property be set a group expression,
+      break by ','. Legal expression are : 1. a number as test case id.
+      2. two number with '-' separator as sequence test case id. 3. a
+      String with as 'SPEC=' section id like SPEC=1, SPEC=1.2,
+      SPEC=1.3.5. Above expression could be mixed. 4. 'ALL' as all test
+      cases. 'ALL' can not presence with other expression at the same
+      time.
+    -->
+    <!-- passed: 43, 44, 45, 96, 11 -->
+    <!-- fail: 564, 1001 dead loop -->
+    <property name="testcases" value="40-50" />
+  </bean>
+</beans>
