@@ -1,0 +1,113 @@
+<project name="JVoiceXML system test Run Script" default="run" basedir=".">
+    <description>
+This file provides targets to run and stop the voice browser.
+  </description>
+
+    <import file="build.xml" />
+
+    <target name="-run-setup" depends="-setup">
+        <property name="servlet.project" value="../org.jvoicexml.systemtest.servlet" />
+        <property name="results.dir" value="${jvxml.core.dir}/dist/systemtest" />
+        <path id="run.classpath">
+            <path refid="project.classpath" />
+            <fileset refid="loggings.lib" />
+            <fileset refid="spring.lib" />
+            <pathelement location="${dist}/jvxml-client-text.jar" />
+            <pathelement location="${dist}/jvxml-text.jar" />
+            <pathelement path="${build}" />
+            <pathelement path="./config" />
+            <pathelement path="${config}" />
+        </path>
+    </target>
+    
+    <target name="-init" depends="-run-setup">
+        <!-- Create results directories -->
+        <mkdir dir="${results.dir}" />
+        <copy file="./config/ir.xslt" tofile="${results.dir}/ir.xslt" />
+    </target>
+
+    <target name="stopTomcat" depends="-run-setup">
+        <ant antfile="build.xml" 
+            dir="${servlet.project}" target="shutdownTomcat"
+            inheritAll="false" inheritrefs="false"/>
+    </target>
+    
+    <target name="startTomcat" depends="-run-setup">
+        <ant antfile="build.xml" 
+            dir="${servlet.project}" target="startupTomcat"
+            inheritAll="false" inheritrefs="false"/>
+    </target>
+    
+    <target name="config.prepare" depends="-run-setup">
+        <ant antfile="configuration.xml" 
+            dir="${jvxml.core.dir}"
+            target="createConfiguration" 
+            inheritAll="false" inheritrefs="false">
+          <property name="jvxml.text" value="true"/>
+          <property name="jvxml.jsapi10" value="false"/>
+          <property name="jvxml.jsapi20" value="false"/>
+          <property name="jvxml.mrcpv2" value="false"/>
+          <property name="jvxml.jtapi" value="false"/>
+          <property name="jvxml.jndi.repository" value="text"/>
+        </ant>
+        <replace file="${jvxml.core.dir}/config/text-implementation.xml" 
+            token="value=&quot;1&quot;" 
+            value="value=&quot;8&quot;" />
+        <copy file="${jvxml.core.dir}/etc/run.xml" tofile="${jvxml.core.dir}/run.xml" />
+        <move file="${jvxml.core.dir}/config/log4j.xml" tofile="${jvxml.core.dir}/config/log4j.xml.orig"/>
+        <copy file="config/log4j-SocketHub.xml" tofile="${jvxml.core.dir}/config/log4j.xml" />
+    </target>
+    
+    <target name="config.clean" depends="-run-setup">
+        <delete file="${jvxml.core.dir}/config/implementation.xml" />
+        <delete file="${jvxml.core.dir}/run.xml" />
+        <delete file="${jvxml.core.dir}/config/log4j.xml" />
+        <move file="${jvxml.core.dir}/config/log4j.xml.orig" tofile="${jvxml.core.dir}/config/log4j.xml"/>
+    </target>
+    
+    <target name="clean" depends="config.clean">
+        <ant antfile="run.xml" 
+            dir="."
+        	target="clean" 
+            inheritAll="false" inheritrefs="false"/>
+        <delete>
+          <fileset dir="${results.dir}/systemtest" includes="*.txt"/>
+        </delete>
+
+    </target>
+
+    <target name="-parallel.task" description="system test parallel task" 
+        depends="-run-setup,compile-jvxml">
+        
+        <parallel timeout="3600000" failonany="false">
+            <sequential>
+                <echo message="start JVoiceXML interpreter." />
+                <ant antfile="run.xml" 
+                    dir="${jvxml.core.dir}"
+                    target="run"
+                    inheritAll="false" inheritrefs="false"/>
+            </sequential>
+            <sequential>
+                <echo message="start JVoiceXML system test." />
+                <ant antfile="run.xml"
+                    dir="."
+                    target="run"
+                    inheritall="false" inheritrefs="false"/>
+                <sleep seconds="10" />
+            </sequential>
+        </parallel>
+
+    </target>
+    
+    <target name="report" description="create report from xml to html" depends="-run-setup">
+        <xslt in="${results.dir}/ir-report.xml"
+          out="${results.dir}/index.html"
+          style="config/ir.xslt">
+            <factory name="com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl"/>
+        </xslt>
+    </target>
+    
+    <target name="run" description="Auto Run the VoiceXML interpreter system test"
+        depends="-init, config.prepare, startTomcat, -parallel.task, stopTomcat, report, config.clean"
+        />
+</project>

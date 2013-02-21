@@ -1,0 +1,26 @@
+<project name="jvoicexml system test" default="test" basedir=".">
+  <description>
+    test properties in two file
+    property relationship
+  </description>
+
+    <!-- allow the user to override setting in an own propertiesfile. -->
+    <property file="ant1.properties" />
+    <property file="ant2.properties" />
+
+    <target name="test">
+      <echo message="a message"/>
+      <echo message="a property not in any properties : ${noexist}"/>
+      <echo message="a property in first not in second : ${only.at.this.1}"/>
+      <echo message="a property not in first, but in second : ${only.at.this.2}"/>
+      <echo message="first is 1.5; second is 1.6 : ${javac.source}"/>
+        
+      <echo message="ref property : ${tomcat.home}"/>
+      <echo message="ref property : ${tomcat.startup}"/>
+      <echo message="ref property : ${tomcat.shutdown}"/>
+      <echo message="ref property : ${servlet.lib.dir}"/>
+
+    </target>
+
+
+</project>
