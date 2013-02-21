@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="unittests"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="3rdparty/jsapi2.0/lib/jsr113.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.jse.freetts.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.jse.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.jse.sphinx4.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.mac.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.sapi.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

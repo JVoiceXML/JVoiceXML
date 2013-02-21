@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+  <repository>marc</repository>
+  <classpath>dist/org.jvoicexml.implementation.marc.jar</classpath>
+
+  <beans:bean
+    class="org.jvoicexml.implementation.marc.MarcSynthesizedOutputFactory">
+    <beans:property name="instances" value="1" />
+    <beans:property name="host" value="127.0.0.1" />
+    <beans:property name="port" value="4010" />
+    <!-- Uncomment if you have an external marc publisher -->
+    <!-- beans:property name=externalMarcPublisher>
+        <beans:bean class="YourClassHere" />
+    </beans:property>
+  </beans:bean-->
+</implementation>
