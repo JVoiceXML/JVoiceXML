@@ -26,20 +26,20 @@
 
 package org.jvoicexml.voicexmlunit.io;
 
-
-
 public abstract class Statement implements Assertion {
-	String message;
-	
-	public Statement(String message) {
-		this.message = message;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.jvoicexml.voicexmlunit.io.Assertion#toString()
-	 */
-	@Override
-	public String toString() {
-		return message;
-	}
+    String message;
+
+    public Statement(String message) {
+        this.message = message;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.jvoicexml.voicexmlunit.io.Assertion#toString()
+     */
+    @Override
+    public String toString() {
+        return message;
+    }
 }

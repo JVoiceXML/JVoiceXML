@@ -240,24 +240,37 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
         return builder.build();
     }
 
+    /**
+     * Retrieves the type of the {@link LifeCycleEvent}.
+     * @param evt the received event
+     * @return type of the {@link LifeCycleEvent}
+     */
     private LifeCycleEvents.LifeCycleEvent.LifeCycleEventType getEventType(
             final LifeCycleEvent evt) {
         if (evt instanceof PrepareResponse) {
-            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.PREPARE_RESPONSE;
+            return LifeCycleEvents.LifeCycleEvent
+                    .LifeCycleEventType.PREPARE_RESPONSE;
         } else if (evt instanceof NewContextResponse) {
-            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.NEW_CONTEXT_RESPONSE;
+            return LifeCycleEvents.LifeCycleEvent
+                    .LifeCycleEventType.NEW_CONTEXT_RESPONSE;
         } else if (evt instanceof StartResponse) {
-            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.START_RESPONSE;
+            return LifeCycleEvents.LifeCycleEvent
+                    .LifeCycleEventType.START_RESPONSE;
         } else if (evt instanceof DoneNotification) {
-            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.DONE_NOTIFICATION;
+            return LifeCycleEvents.LifeCycleEvent
+                    .LifeCycleEventType.DONE_NOTIFICATION;
         } else if (evt instanceof CancelResponse) {
-            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.CANCEL_RESPONSE;
+            return LifeCycleEvents.LifeCycleEvent
+                    .LifeCycleEventType.CANCEL_RESPONSE;
         } else if (evt instanceof PauseResponse) {
-            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.PAUSE_RESPONSE;
+            return LifeCycleEvents.LifeCycleEvent
+                    .LifeCycleEventType.PAUSE_RESPONSE;
         } else if (evt instanceof ResumeResponse) {
-            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.RESUME_RESPONSE;
+            return LifeCycleEvents.LifeCycleEvent
+                    .LifeCycleEventType.RESUME_RESPONSE;
         } else if (evt instanceof ClearContextResponse) {
-            return LifeCycleEvents.LifeCycleEvent.LifeCycleEventType.CLEAR_CONTEXT_RESPONSE;
+            return LifeCycleEvents.LifeCycleEvent
+                    .LifeCycleEventType.CLEAR_CONTEXT_RESPONSE;
         } else if (evt instanceof StatusResponse) {
 //            LifeCycleEvents.StatusResponse statusResponse =
 //                    LifeCycleEvents.StatusResponse.newBuilder()

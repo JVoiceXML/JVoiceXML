@@ -134,12 +134,16 @@ final class TextServerThread extends Thread {
                 new InetSocketAddress(localhost, port);
         final Socket socket = new Socket();
         socket.connect(address);
-        synchronized (lock) {
-            try {
-                lock.wait();
-            } catch (InterruptedException e) {
-                return;
+        try {
+            synchronized (lock) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    return;
+                }
             }
+        } finally {
+            socket.close();
         }
     }
 }

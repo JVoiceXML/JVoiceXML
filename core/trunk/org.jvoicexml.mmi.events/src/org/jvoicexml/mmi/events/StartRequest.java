@@ -31,6 +31,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -71,7 +72,7 @@ public final class StartRequest extends LifeCycleRequest
     private static final long serialVersionUID = 5116545132217922157L;
 
     private ContentURLType contentURL;
-    private List<Object> content;
+    private AnyComplexType content;
 
     /**
      * Gets the value of the contentURL property.
@@ -133,8 +134,9 @@ public final class StartRequest extends LifeCycleRequest
      * @return possible object is {@link AnyComplexType }
      * 
      */
-    @XmlElement(name = "Content")
-    public List<Object> getContent() {
+    @XmlAttribute(name = "Context",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    public AnyComplexType getContent() {
         return content;
     }
 
@@ -145,7 +147,7 @@ public final class StartRequest extends LifeCycleRequest
      *            allowed object is {@link AnyComplexType }
      * 
      */
-    public void setContent(final List<Object> value) {
+    public void setContent(final AnyComplexType value) {
         content = value;
     }
 }

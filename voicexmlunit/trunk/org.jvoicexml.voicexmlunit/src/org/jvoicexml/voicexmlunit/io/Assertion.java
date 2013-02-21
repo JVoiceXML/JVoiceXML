@@ -30,27 +30,31 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Assertion serves as the abstract for Output and Input statements.
- *
+ * 
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
  */
 public interface Assertion {
-	
-	/**
-	 * @return the expected string
-	 */
-	String toString();
 
-	/**
-	 * Receive an output.
-	 * @param actual the output to receive
-	 */
-	void receive(final SsmlDocument actual);
+    /**
+     * @return the expected string
+     */
+    String toString();
 
-	/**
-	 * Send an input.
-	 * @param record the transaction used to input
-	 */
-	void send(Recording record);
+    /**
+     * Receive an output.
+     * 
+     * @param actual
+     *            the output to receive
+     */
+    void receive(final SsmlDocument actual);
+
+    /**
+     * Send an input.
+     * 
+     * @param record
+     *            the transaction used to input
+     */
+    void send(Recording record);
 
 }

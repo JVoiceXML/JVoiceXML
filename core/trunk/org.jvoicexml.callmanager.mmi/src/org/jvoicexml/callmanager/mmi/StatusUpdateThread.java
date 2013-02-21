@@ -42,6 +42,9 @@ import org.jvoicexml.mmi.events.StatusResponseType;
  * @since 0.7.6
  */
 final class StatusUpdateThread extends Thread {
+    /** Number of msecs to wait between two status update messages. */
+    private static final long STATUS_UPDATE_INTERVAL = 60 * 1000;
+
     /** The voice modality component. */
     private final VoiceModalityComponent mc;
 
@@ -116,7 +119,7 @@ final class StatusUpdateThread extends Thread {
             }
             if (running) {
                 try {
-                    Thread.sleep(60 * 1000);
+                    Thread.sleep(STATUS_UPDATE_INTERVAL);
                 } catch (InterruptedException e) {
                     return;
                 }

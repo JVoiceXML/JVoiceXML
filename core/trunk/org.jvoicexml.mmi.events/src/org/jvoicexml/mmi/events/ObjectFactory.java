@@ -217,14 +217,6 @@ public final class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ContentType }
-     * 
-     */
-    public ContentType createContentType() {
-        return new ContentType();
-    }
-
-    /**
      * Create an instance of {@link EmmaType }
      * 
      */

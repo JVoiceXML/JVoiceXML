@@ -209,8 +209,8 @@ public final class Supervisor implements TextListener {
      */
     public void disconnected() {
         if (statement != null) {
-            final AssertionFailedError error =
-                    new AssertionFailedError("## disconnected ##");
+            final AssertionFailedError error = new AssertionFailedError(
+                    "## disconnected ##");
             if (call == null) {
                 Assert.fail(error.getMessage());
             } else {
@@ -219,4 +219,3 @@ public final class Supervisor implements TextListener {
         }
     }
 }
-    

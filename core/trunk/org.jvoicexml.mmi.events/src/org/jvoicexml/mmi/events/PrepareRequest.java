@@ -70,7 +70,7 @@ public final class PrepareRequest extends LifeCycleRequest implements Serializab
     /** The serial version UID. */
     private static final long serialVersionUID = -5464280568730275229L;
     private ContentURLType contentURL;
-    private List<Object> content;
+    private AnyComplexType content;
 
     /**
      * Gets the value of the contentURL property.
@@ -128,8 +128,9 @@ public final class PrepareRequest extends LifeCycleRequest implements Serializab
      * @return possible object is {@link AnyComplexType }
      * 
      */
-    @XmlElement(name = "Content")
-    public List<Object> getContent() {
+    @XmlElement(name = "Content",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
+    public AnyComplexType getContent() {
         return content;
     }
 
@@ -140,7 +141,7 @@ public final class PrepareRequest extends LifeCycleRequest implements Serializab
      *            allowed object is {@link AnyComplexType }
      * 
      */
-    public void setContent(final List<Object> value) {
+    public void setContent(final AnyComplexType value) {
         content = value;
     }
 }

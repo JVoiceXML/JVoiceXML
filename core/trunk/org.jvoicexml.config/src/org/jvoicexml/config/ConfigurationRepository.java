@@ -198,15 +198,20 @@ final class ConfigurationRepository
     private void loadConfigurationFile(final File file) throws IOException {
         final byte[] readBuffer = new byte[READ_BUFFER_SIZE];
         final InputStream input = new FileInputStream(file);
-        final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        int num;
-        do {
-            num = input.read(readBuffer);
-            if (num >= 0) {
-                buffer.write(readBuffer, 0, num);
-            }
-        } while(num >= 0);
-        final byte[] bytes = buffer.toByteArray();
+        final byte[] bytes;
+        try {
+            final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            int num;
+            do {
+                num = input.read(readBuffer);
+                if (num >= 0) {
+                    buffer.write(readBuffer, 0, num);
+                }
+            } while(num >= 0);
+            bytes = buffer.toByteArray();
+        } finally {
+            input.close();
+        }
         synchronized (configurationFiles) {
             configurationFiles.put(file, bytes);
         }

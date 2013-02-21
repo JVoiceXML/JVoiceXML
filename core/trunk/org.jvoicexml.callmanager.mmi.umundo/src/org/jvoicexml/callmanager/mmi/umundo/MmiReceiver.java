@@ -30,6 +30,7 @@ import java.util.Collection;
 
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
+import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.LifeCycleRequest;
 import org.jvoicexml.mmi.events.NewContextRequest;
@@ -113,6 +114,12 @@ public final class MmiReceiver implements ITypedReceiver {
                     decodedLifeCycleRequest.getExtension(
                             LifeCycleEvents.PrepareRequest.request);
             request.setContentURL(decodedPrepareRequest.getContentURL());
+            final String content = decodedPrepareRequest.getContent();
+            if ((content != null) && !content.isEmpty()) {
+                final AnyComplexType any = new AnyComplexType();
+                any.getContent().add(content);
+                request.setContent(any);
+            }
             event = request;
         } else if (type.equals(LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
                 .NEW_CONTEXT_REQUEST)) {
@@ -124,10 +131,16 @@ public final class MmiReceiver implements ITypedReceiver {
                 final StartRequest request = new StartRequest();
                 final LifeCycleEvents.LifeCycleRequest decodedLifeCycleRequest =
                         extractContext(receivedEvent, request);
-                final LifeCycleEvents.PrepareRequest decodedPrepareRequest =
+                final LifeCycleEvents.StartRequest decodedStartRequest =
                         decodedLifeCycleRequest.getExtension(
-                                LifeCycleEvents.PrepareRequest.request);
-                request.setContentURL(decodedPrepareRequest.getContentURL());
+                                LifeCycleEvents.StartRequest.request);
+                request.setContentURL(decodedStartRequest.getContentURL());
+                final String content = decodedStartRequest.getContent();
+                if ((content != null) && !content.isEmpty()) {
+                    final AnyComplexType any = new AnyComplexType();
+                    any.getContent().add(content);
+                    request.setContent(any);
+                }
                 event = request;
         } else if (type.equals(LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
                 .CANCEL_REQUEST)) {
