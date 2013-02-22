@@ -265,7 +265,7 @@ public final class TextServer extends Thread {
 
         try {
             try {
-                while ((server != null) && !interrupted()) {
+                while ((server != null) && !isInterrupted()) {
                     client = server.accept();
                     final InetSocketAddress remote =
                         (InetSocketAddress) client.getRemoteSocketAddress();
@@ -275,7 +275,9 @@ public final class TextServer extends Thread {
                     callingId = TcpUriFactory.createUri(local);
                     LOGGER.info("connected to " + calledId);
                     fireConnected(remote);
-                    readOutput();
+                    if(readOutput()) {
+                        break;
+                    }
                 }
             } catch (IOException e) {
                 if (LOGGER.isDebugEnabled()) {
@@ -303,11 +305,11 @@ public final class TextServer extends Thread {
 
     /**
      * Reads the output from the VoiceXML interpreter.
-     *
+     * @return <code>true</code> if the server should be terminated.
      * @throws IOException
      *             Error reading.
      */
-    private void readOutput() throws IOException {
+    private boolean readOutput() throws IOException {
         if (client == null) {
             throw new IOException("no client connection");
         }
@@ -319,40 +321,46 @@ public final class TextServer extends Thread {
 
         final NonBlockingObjectInputStream oin =
             new NonBlockingObjectInputStream(in);
-        while ((client != null) && client.isConnected() && !interrupted()) {
-            try {
-                final TextMessage message = (TextMessage) oin.readObject();
-                LOGGER.info("read " + message);
-                final int code = message.getCode();
-                if (code == TextMessage.BYE) {
-                    synchronized (lock) {
-                        if (client != null) {
-                            client.close();
-                            client = null;
+        try {
+            while ((client != null) && client.isConnected() && !interrupted()) {
+                try {
+                    final TextMessage message = (TextMessage) oin.readObject();
+                    LOGGER.info("read " + message);
+                    final int code = message.getCode();
+                    if (code == TextMessage.BYE) {
+                        synchronized (lock) {
+                            if (client != null) {
+                                client.close();
+                                client = null;
+                            }
                         }
+                        fireDisconnected();
+                        return true;
                     }
-                    fireDisconnected();
-                    return;
-                }
-                if (code == TextMessage.DATA) {
-                    final Object data = message.getData();
-                    if (data instanceof SsmlDocument) {
-                        final SsmlDocument document = (SsmlDocument) data;
-                        fireOutputArrived(document);
+                    if (code == TextMessage.DATA) {
+                        final Object data = message.getData();
+                        if (data instanceof SsmlDocument) {
+                            final SsmlDocument document = (SsmlDocument) data;
+                            fireOutputArrived(document);
+                        }
+                    } else if (code == TextMessage.EXPECTING_INPUT) {
+                        fireExpectingInput();
+                    } else if (code == TextMessage.INPUT_CLOSED) {
+                        fireInputClosed();
                     }
-                } else if (code == TextMessage.EXPECTING_INPUT) {
-                    fireExpectingInput();
-                } else if (code == TextMessage.INPUT_CLOSED) {
-                    fireInputClosed();
+                    final int seq = message.getSequenceNumber();
+                    final TextMessage ack =
+                            new TextMessage(TextMessage.ACK, seq);
+                    send(ack);
+                } catch (ClassNotFoundException e) {
+                    throw new IOException(
+                            "unable to instantiate the read object", e);
                 }
-                final int seq = message.getSequenceNumber();
-                final TextMessage ack = new TextMessage(TextMessage.ACK, seq);
-                send(ack);
-            } catch (ClassNotFoundException e) {
-                throw new IOException("unable to instantiate the read object");
             }
+        } finally {
+            oin.close();
         }
-        oin.close();
+        return false;
     }
 
     /**
