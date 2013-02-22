@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -49,6 +49,12 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
  * Text based implementation for a {@link SynthesizedOutput}.
+ *
+ * <p>
+ * This implementation simply receives the {@link SpeakableText} objects from
+ * the implementation platform and queues them. The queued elements will be retrieved
+ * from the {@link TextTelephony} and sent to the client.
+ * </p> 
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
