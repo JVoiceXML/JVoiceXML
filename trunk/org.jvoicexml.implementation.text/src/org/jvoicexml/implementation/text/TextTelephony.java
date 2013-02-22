@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -52,6 +52,14 @@ import org.jvoicexml.implementation.TelephonyListener;
 
 /**
  * Text based implementation of {@link Telephony}.
+ * 
+ * <p>
+ * This class provides the basic communication means with a client. System
+ * output is taken from the {@link TextSynthesizedOutput} and handed to
+ * the {@link TextSenderThread} to send them to the client. User input
+ * is received from the {@link TextReceiverThread} to forward the received
+ * messages to the {@link TextSpokenInput}.
+ * </p>
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
