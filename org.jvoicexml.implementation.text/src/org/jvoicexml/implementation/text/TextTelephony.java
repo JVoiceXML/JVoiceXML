@@ -461,19 +461,27 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
                 sender.waitSenderTerminated();
             } catch (InterruptedException e) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("join interrupted", e);
+                    LOGGER.debug("waiting for end of sender thread interrupted",
+                            e);
                 }
             } finally {
                 if (sender.isAlive()) {
                     sender.interrupt();
                 }
-                sender = null;
             }
         }
 
         if (receiver != null) {
             receiver.interrupt();
-            receiver = null;
+            try {
+                receiver.waitReceiverTerminated();
+            } catch (InterruptedException e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug(
+                            "waiting for end of receiver thread interrupted",
+                            e);
+                }
+            }
         }
         try {
             socket.close();
@@ -482,6 +490,8 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
                 LOGGER.debug("error disconnecting", e);
             }
         }
+        receiver = null;
+        sender = null;
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("disconnected");
