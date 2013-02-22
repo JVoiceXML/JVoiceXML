@@ -21,11 +21,10 @@
  */
 package org.jvoicexml.implementation.mobicents;
 
-import org.apache.log4j.Logger;
 import java.io.File;
 import java.util.Properties;
 
-
+import org.apache.log4j.Logger;
 import org.cafesip.sipunit.SipPhone;
 import org.cafesip.sipunit.SipStack;
 import org.jvoicexml.JVoiceXmlMain;
