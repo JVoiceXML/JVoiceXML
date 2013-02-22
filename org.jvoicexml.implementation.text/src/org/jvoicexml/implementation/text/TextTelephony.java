@@ -458,8 +458,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         if (!sentHungup && sender.isAlive()) {
             sender.sendBye();
             try {
-                sender.join(3000);
-                Thread.sleep(300);
+                sender.waitSenderTerminated();
             } catch (InterruptedException e) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("join interrupted", e);

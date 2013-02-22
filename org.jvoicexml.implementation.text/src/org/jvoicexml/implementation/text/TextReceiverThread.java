@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
@@ -92,13 +93,14 @@ final class TextReceiverThread extends Thread {
             LOGGER.debug("text receiver thread started");
         }
         synchronized (this) {
-            notifyAll();
             started = true;
+            notifyAll();
         }
-        while (socket.isConnected() && !interrupted()) {
+        while (socket.isConnected() && !isInterrupted()) {
             try {
+                final InputStream stream = socket.getInputStream();
                 final ObjectInputStream in =
-                    new ObjectInputStream(socket.getInputStream());
+                    new ObjectInputStream(stream);
                 final TextMessage message = (TextMessage) in.readObject();
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("read: " + message);

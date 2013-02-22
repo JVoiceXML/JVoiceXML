@@ -51,7 +51,6 @@ final class TextSenderThread extends Thread {
             .getLogger(TextSenderThread.class);
 
     /** The socket to read from. */
-//    private final AsynchronousSocket socket;
     private final Socket socket;
 
     /** Reference to the telephony device. */
@@ -62,6 +61,9 @@ final class TextSenderThread extends Thread {
 
     /** Last used sequence number. */
     private int sequenceNumber;
+
+    /** Wait for termination semaphore. */
+    private final Object lock;
 
     /**
      * Constructs a new object.
@@ -75,6 +77,7 @@ final class TextSenderThread extends Thread {
         messages =
             new java.util.concurrent.LinkedBlockingQueue<PendingMessage>();
         sequenceNumber = 0;
+        lock = new Object();
 
         setDaemon(true);
         setName("TextSenderThread");
@@ -140,8 +143,23 @@ final class TextSenderThread extends Thread {
                     || (message.getCode() == TextMessage.BYE);
             }
         }
+        synchronized (lock) {
+            lock.notifyAll();
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text sender thread stopped");
+        }
+    }
+
+    /**
+     * Waits until the sender has been terminated.
+     * @throws InterruptedException
+     *         error waiting for the termination of the thread
+     * @since 0.7.6
+     */
+    void waitSenderTerminated() throws InterruptedException {
+        synchronized (lock) {
+            lock.wait();
         }
     }
 
