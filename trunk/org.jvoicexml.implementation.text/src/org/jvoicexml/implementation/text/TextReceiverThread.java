@@ -61,6 +61,9 @@ final class TextReceiverThread extends Thread {
     /** Set to <code>true</code> if the receiver thread is started. */
     private boolean started;
 
+    /** Wait for termination semaphore. */
+    private final Object lock;
+    
     /**
      * Constructs a new object.
      * @param asyncSocket the socket to read from.
@@ -70,6 +73,7 @@ final class TextReceiverThread extends Thread {
             final TextTelephony textTelephony) {
         socket = asyncSocket;
         telephony = textTelephony;
+        lock = new Object();
 
         setDaemon(true);
         setName("TextReceiverThread");
@@ -114,11 +118,18 @@ final class TextReceiverThread extends Thread {
                     final int sequenceNumber = message.getSequenceNumber();
                     telephony.removePendingMessage(sequenceNumber);
                 }
+                // Terminate this thread if a BYE has been received.
+                if (code == TextMessage.BYE) {
+                    break;
+                }
             } catch (IOException | ClassNotFoundException  e) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("error reading text message", e);
                 }
                 telephony.fireHungup();
+                synchronized (lock) {
+                    lock.notifyAll();
+                }
                 return;
             }
         }
@@ -126,11 +137,26 @@ final class TextReceiverThread extends Thread {
             LOGGER.debug("text receiver thread stopped");
         }
         telephony.recordStopped();
+        synchronized (lock) {
+            lock.notifyAll();
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text receiver thread stopped");
         }
     }
 
+    /**
+     * Waits until the receiver has been terminated.
+     * @throws InterruptedException
+     *         error waiting for the termination of the thread
+     * @since 0.7.6
+     */
+    void waitReceiverTerminated() throws InterruptedException {
+        synchronized (lock) {
+            lock.wait();
+        }
+    }
+    
     /**
      * Checks if the the receiver is in recording mode.
      * @return <code>true</code> if received user input is
