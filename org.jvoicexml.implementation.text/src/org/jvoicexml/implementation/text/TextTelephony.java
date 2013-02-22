@@ -71,7 +71,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             .getLogger(TextTelephony.class);
 
     /** Maximal number of milliseconds to wait for a connect. */
-    private static final int MAX_TIMEOUT_CONNECT = 10000;
+    private static final int MAX_TIMEOUT_CONNECT = 1000;
 
     /** The connection to the client. */
     private Socket socket;
