@@ -48,7 +48,6 @@ import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.Grammar;
-import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -182,9 +181,7 @@ public final class TestTextTelephony
             // create the simplest grammar
             final Grammar grammar = doc.getGrammar();
             final Rule rule = grammar.appendChild(Rule.class);
-            final Item item = rule.appendChild(Item.class);
-            item.setTextContent(utterance);
-            rule.appendChild(item);
+            rule.addText(utterance);
             rule.setId("mock");
             grammar.setRoot(rule);
 
