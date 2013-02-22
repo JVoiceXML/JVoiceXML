@@ -60,5 +60,6 @@
 	<classpathentry kind="lib" path="3rdparty/MSS/tomcat-i18n-ja.jar"/>
 	<classpathentry kind="lib" path="3rdparty/MSS/tomcat-jdbc.jar"/>
 	<classpathentry kind="lib" path="3rdparty/MSS/tomcat-util.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
