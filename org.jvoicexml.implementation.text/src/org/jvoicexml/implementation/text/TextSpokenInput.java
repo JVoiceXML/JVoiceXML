@@ -128,19 +128,29 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
             final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
         for (GrammarImplementation<?> grammar : grammars) {
-            final SrgsXmlGrammarImplementation impl =
-                (SrgsXmlGrammarImplementation) grammar;
-            if (!grammarCheckers.containsKey(impl)) {
-                final SrgsXmlDocument doc = impl.getGrammar();
-                final GrammarGraph graph = parser.parse(doc);
-                if (graph != null) {
-                    final GrammarChecker checker = new GrammarChecker(graph);
-                    grammarCheckers.put(impl, checker);
-                } else {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.warn("Cannot create a grammar graph "
-                                + "from the grammar file");
-                    }
+            activateGrammar(grammar);
+        }
+    }
+
+    /**
+     * Activates a given grammar. It's the implementation for 
+     * activateGrammars().
+     */
+    public void activateGrammar(final GrammarImplementation<?> grammar) 
+            throws BadFetchError, UnsupportedLanguageError, 
+            NoresourceError {
+        final SrgsXmlGrammarImplementation impl =
+            (SrgsXmlGrammarImplementation) grammar;
+        if (!grammarCheckers.containsKey(impl)) {
+            final SrgsXmlDocument doc = impl.getGrammar();
+            final GrammarGraph graph = parser.parse(doc);
+            if (graph != null) {
+                final GrammarChecker checker = new GrammarChecker(graph);
+                grammarCheckers.put(impl, checker);
+            } else {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.warn("Cannot create a grammar graph "
+                            + "from the grammar file");
                 }
             }
         }
