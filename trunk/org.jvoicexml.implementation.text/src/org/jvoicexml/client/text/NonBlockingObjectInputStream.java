@@ -53,7 +53,6 @@ import java.nio.channels.SelectionKey;
  * @since 0.6
  */
 public final class NonBlockingObjectInputStream extends InputStream {
-    /** Logger for this class. */
     /** The read buffer. */
     private final ReadBuffer buffer;
 
