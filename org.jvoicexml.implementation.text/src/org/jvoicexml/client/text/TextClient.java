@@ -216,31 +216,37 @@ public final class TextClient extends Thread {
         final InputStream in = socket.getInputStream();
         final NonBlockingObjectInputStream oin =
             new NonBlockingObjectInputStream(in);
-        while ((socket != null) && socket.isConnected() && !interrupted()) {
-            try {
-                final TextMessage message = (TextMessage) oin.readObject();
-                LOGGER.info("read " + message);
-                final int code = message.getCode();
-                if (code == TextMessage.BYE) {
-                    synchronized (lock) {
-                        disconnect();
+        try {
+            while ((socket != null) && socket.isConnected() && !interrupted()) {
+                try {
+                    final TextMessage message = (TextMessage) oin.readObject();
+                    LOGGER.info("read " + message);
+                    final int code = message.getCode();
+                    if (code == TextMessage.BYE) {
+                        synchronized (lock) {
+                            disconnect();
+                        }
+                        fireDisconnected();
+                        return;
                     }
-                    fireDisconnected();
-                    return;
-                }
-                if (code == TextMessage.DATA) {
-                    final Object data = message.getData();
-                    if (data instanceof SsmlDocument) {
-                        final SsmlDocument document = (SsmlDocument) data;
-                        fireOutputArrived(document);
+                    if (code == TextMessage.DATA) {
+                        final Object data = message.getData();
+                        if (data instanceof SsmlDocument) {
+                            final SsmlDocument document = (SsmlDocument) data;
+                            fireOutputArrived(document);
+                        }
                     }
+                    final int seq = message.getSequenceNumber();
+                    final TextMessage ack =
+                            new TextMessage(TextMessage.ACK, seq);
+                    send(ack);
+                } catch (ClassNotFoundException e) {
+                    throw new IOException(
+                            "unable to instantiate the read object", e);
                 }
-                final int seq = message.getSequenceNumber();
-                final TextMessage ack = new TextMessage(TextMessage.ACK, seq);
-                send(ack);
-            } catch (ClassNotFoundException e) {
-                throw new IOException("unable to instantiate the read object");
             }
+        } finally {
+            oin.close();
         }
     }
 
