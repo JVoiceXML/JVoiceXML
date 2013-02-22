@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -62,8 +62,13 @@ import org.xml.sax.SAXException;
 
 /**
  * Text based implementation for a {@link SpokenInput}.
+ * 
+ * <p>
+ * This implementation is more or less a bridge that receives its input
+ * from {@link TextTelephony} and forwards them to the voice browser.
+ * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
