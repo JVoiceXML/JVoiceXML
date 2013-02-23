@@ -70,6 +70,7 @@ public final class TextConnectionInformation
         throws UnknownHostException {
         super(RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER);
         port = clientPort;
+        // TODO Fixed to localhost for now.
         address = InetAddress.getLocalHost();
     }
 
