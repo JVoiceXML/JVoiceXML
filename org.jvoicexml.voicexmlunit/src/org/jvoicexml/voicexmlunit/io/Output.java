@@ -37,13 +37,17 @@ public class Output extends Statement {
     }
 
     public void receive(SsmlDocument actual) {
-        final String expect = toString();
         final Speak speak = actual.getSpeak();
         final String text = speak.getTextContent();
-        Assert.assertEquals(getClass().getSimpleName(), expect, text);
+        receive(text);
     }
 
     public void send(Recording record) {
         Assert.fail("Send " + getClass().getSimpleName() + ": " + toString());
+    }
+
+    public void receive(String actual) {
+        final String expect = toString();
+        Assert.assertEquals(getClass().getSimpleName(), expect, actual);
     }
 }
