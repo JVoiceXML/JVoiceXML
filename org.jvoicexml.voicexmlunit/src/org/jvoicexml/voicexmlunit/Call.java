@@ -4,6 +4,7 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.UnknownHostException;
 
@@ -115,8 +116,8 @@ public final class Call implements Runnable {
                 dialog.wait(SERVER_WAIT);
             }
             runDialog();
-        } catch (InterruptedException | UnknownHostException | ErrorEvent e) {
-            e.printStackTrace();
+        } catch (InterruptedException | IOException | ErrorEvent e) {
+             fail(new AssertionFailedError(e.getMessage()));
         } finally {
             server.stopServer();
         }
@@ -131,7 +132,7 @@ public final class Call implements Runnable {
         }
     }
 
-    private void runDialog() throws UnknownHostException, ErrorEvent {
+    private void runDialog() throws ErrorEvent, IOException {
         getVoice().connect(server.getConnectionInformation(), dialog);
     }
 
