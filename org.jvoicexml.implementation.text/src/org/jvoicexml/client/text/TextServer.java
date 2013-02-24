@@ -72,8 +72,11 @@ public final class TextServer extends Thread {
     private static final Logger LOGGER =
         Logger.getLogger(TextServer.class);
 
-        /** The port number to use. */
+    /** The port number to use. */
     private final int port;
+
+    /** The port number to use. */
+    private InetAddress address;
 
     /** Server socket. */
     private ServerSocket server;
@@ -113,6 +116,13 @@ public final class TextServer extends Thread {
      */
     public TextServer(final int serverPort) {
         port = serverPort;
+
+        // TODO Fixed to localhost for now. Remote access?
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            address = null;
+        }
 
         setDaemon(true);
         setName("JVoiceXML text server");
@@ -378,6 +388,16 @@ public final class TextServer extends Thread {
         connectionLock.release();
     }
 
+    /**
+     * Connects directly a client socket.
+     * @param socket
+     * @throws IOException 
+     * @since 0.7.6
+     */
+    public void connectClient(Socket socket) throws IOException {
+        socket.connect(new InetSocketAddress(address, port));
+    }
+    
     /**
      * Send the given input as a recognition result to JVoiceXml.
      * @param input the input to send.
