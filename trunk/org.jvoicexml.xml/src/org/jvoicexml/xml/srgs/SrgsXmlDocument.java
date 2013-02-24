@@ -141,4 +141,20 @@ public final class SrgsXmlDocument
     protected String getDefaultNamespaceURI() {
         return Grammar.DEFAULT_XMLNS;
     }
+
+    /**
+     * Sets the simplest grammar possible as root with the given id and text.
+     * @param id
+     * @param text
+     * @return the grammar
+     * @since 0.7.5
+     */
+    public Grammar setGrammarSimple(String id, String text) {
+        final Grammar grammar = getGrammar();
+        final Rule rule = grammar.appendChild(Rule.class);
+        rule.addText(text);
+        rule.setId(id);
+        grammar.setRoot(rule);
+        return grammar;
+    }
 }
