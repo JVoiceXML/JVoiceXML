@@ -26,10 +26,8 @@
 
 package org.jvoicexml.implementation.text;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -37,6 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.xml.ssml.Speak;
@@ -53,6 +52,9 @@ public final class TestTextSenderThread
     /** Maximal number of milliseconds to wait for a receipt. */
     private static final int MAX_WAIT = 1000;
 
+    /** Time to wait for the socket. */
+    private static final long SOCKET_WAIT = 100;
+
     /** Port number to use. */
     private static final int PORT = 5354;
 
@@ -67,7 +69,7 @@ public final class TestTextSenderThread
 
     /** Last received object. */
     private SsmlDocument receivedObject;
-
+    
     /**
      * Set up the test environment.
      * @exception Exception
@@ -76,14 +78,13 @@ public final class TestTextSenderThread
     @Before
     public void setUp() throws Exception {
         server = new TextServer(PORT);
+        TextConnectionInformation info = (TextConnectionInformation) server.getConnectionInformation();
         server.start();
         server.addTextListener(this);
-        Thread.sleep(500);
-        final InetAddress address = InetAddress.getLocalHost();
-        final SocketAddress socketAddress =
-            new InetSocketAddress(address, PORT);
+        //Thread.sleep(500);
         final Socket socket = new Socket();
-        socket.connect(socketAddress);
+        Thread.sleep(SOCKET_WAIT); // give time to create the socket
+        info.connectClient(socket);
         server.waitConnected();
         final TextTelephony telephony = new TextTelephony();
         sender = new TextSenderThread(socket, telephony);

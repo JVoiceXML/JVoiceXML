@@ -29,27 +29,19 @@
 
 package org.jvoicexml.implementation.text;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
-import java.util.Collection;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
-import org.jvoicexml.xml.srgs.Grammar;
-import org.jvoicexml.xml.srgs.Rule;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
  * Test cases for {@link TextReceiverThread}.
@@ -60,10 +52,13 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 public final class TestTextReceiverThread
     implements SpokenInputListener {
     /** Maximal number of milliseconds to wait for a receipt. */
-    private static final int MAX_WAIT = 1000;
+    private static final int MAX_WAIT = 9000;
+
+    /** Time to wait for the socket. */
+    private static final long SOCKET_WAIT = 100;
 
     /** Port number to use. */
-    private static final int PORT = 5353;
+    private static final int PORT = 4242;
 
     /** Text server to send the data. */
     private TextServer server;
@@ -98,11 +93,10 @@ public final class TestTextReceiverThread
     public void setUp() throws Exception, ErrorEvent {
         server = new TextServer(PORT);
         server.start();
-        final InetAddress address = InetAddress.getLocalHost();
-        final SocketAddress socketAddress =
-            new InetSocketAddress(address, PORT);
+        TextConnectionInformation info = (TextConnectionInformation) server.getConnectionInformation();
         final Socket socket = new Socket();
-        socket.connect(socketAddress);
+        Thread.sleep(SOCKET_WAIT); // give time to create the socket
+        info.connectClient(socket);
         server.waitConnected();
         final TextTelephony telephony = new TextTelephony();
         receiver = new TextReceiverThread(socket, telephony);
@@ -136,18 +130,7 @@ public final class TestTextReceiverThread
     @Test
     public void testRun() throws Exception, JVoiceXMLEvent {
         final String userInput = "test1";
-        final SrgsXmlDocument doc = new SrgsXmlDocument();
-        final Grammar grammar = doc.getGrammar();
-        grammar.setRoot("root");
-        final Rule rule = grammar.appendChild(Rule.class);
-        rule.setId("root");
-        rule.addText(userInput);
-        final SrgsXmlGrammarImplementation impl =
-            new SrgsXmlGrammarImplementation(doc);
-        final Collection<GrammarImplementation<?>> grammars
-            = new java.util.ArrayList<GrammarImplementation<?>>();
-        grammars.add(impl);
-        input.activateGrammars(grammars);
+        input.mockGrammar(userInput);
         input.startRecognition(null, null);
         server.sendInput(userInput);
         synchronized (lock) {
