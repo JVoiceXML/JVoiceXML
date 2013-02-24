@@ -38,7 +38,7 @@ public class Input extends Statement {
     }
 
     public void receive(SsmlDocument actual) {
-        Assert.fail("Receive " + getClass().getSimpleName() + ": " + actual);
+        Assert.fail("Expected " + getClass().getSimpleName() + ": " + actual);
     }
 
     public void send(Recording record) {
@@ -51,7 +51,7 @@ public class Input extends Statement {
             record.input(expect);
         } catch (IOException e) {
             e.printStackTrace();
-            Assert.fail("Send " + getClass().getSimpleName() + ": " + expect);
+            Assert.fail("Expected " + getClass().getSimpleName() + ": " + expect);
         }
     }
 }
