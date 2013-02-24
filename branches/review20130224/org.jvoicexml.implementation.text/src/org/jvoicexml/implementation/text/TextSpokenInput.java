@@ -135,6 +135,11 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * Activates a given grammar. It's the implementation for 
      * activateGrammars().
+     * @param grammar
+     * @throws BadFetchError
+     * @throws UnsupportedLanguageError
+     * @throws NoresourceError
+     * @since 0.7.6
      */
     public void activateGrammar(final GrammarImplementation<?> grammar) 
             throws BadFetchError, UnsupportedLanguageError, 
@@ -363,6 +368,28 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
             for (SpokenInputListener current : copy) {
                 current.inputStatusChanged(event);
             }
+        }
+    }
+
+    /**
+     * Mocks a grammar checker to accept the utterance 
+     * and pass it to the textInput.   
+     * @param userInput the input to assure
+     * @since 0.7.6
+     */
+    public void mockGrammar(final String userInput) {
+        try {
+            SrgsXmlDocument doc = new SrgsXmlDocument();
+            doc.setGrammarSimple("mock", userInput);
+            final SrgsXmlGrammarImplementation impl = 
+                    new SrgsXmlGrammarImplementation(doc);
+            activateGrammar(impl);
+        } catch (ParserConfigurationException | 
+                UnsupportedLanguageError | BadFetchError | 
+                NoresourceError e) {
+            // an exception is no problem, 
+            // in case we won't have any mocked grammar 
+            // and test will fail anyways
         }
     }
 }
