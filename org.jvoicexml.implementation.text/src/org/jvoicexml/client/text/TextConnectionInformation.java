@@ -26,7 +26,10 @@
 
 package org.jvoicexml.client.text;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.jvoicexml.client.BasicConnectionInformation;
@@ -99,5 +102,15 @@ public final class TextConnectionInformation
         str.append(address);
         str.append(',');
         str.append(port);
+    }
+
+    /**
+     * Connects directly a client socket.
+     * @param socket
+     * @throws IOException 
+     * @since 0.7.6
+     */
+    public void connectClient(Socket socket) throws IOException {
+        socket.connect(new InetSocketAddress(address, port));
     }
 }

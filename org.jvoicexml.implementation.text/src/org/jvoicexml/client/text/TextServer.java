@@ -389,16 +389,6 @@ public final class TextServer extends Thread {
     }
 
     /**
-     * Connects directly a client socket.
-     * @param socket
-     * @throws IOException 
-     * @since 0.7.6
-     */
-    public void connectClient(Socket socket) throws IOException {
-        socket.connect(new InetSocketAddress(address, port));
-    }
-    
-    /**
      * Send the given input as a recognition result to JVoiceXml.
      * @param input the input to send.
      * @throws IOException
