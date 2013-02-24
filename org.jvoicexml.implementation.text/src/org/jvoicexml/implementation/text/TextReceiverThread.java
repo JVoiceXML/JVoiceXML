@@ -124,7 +124,9 @@ final class TextReceiverThread extends Thread {
                 }
             } catch (IOException | ClassNotFoundException  e) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error reading text message", e);
+                    if ((socket.isConnected() && !isInterrupted())) {
+                        LOGGER.debug("error reading text message", e);
+                    }
                 }
                 telephony.fireHungup();
                 synchronized (lock) {
