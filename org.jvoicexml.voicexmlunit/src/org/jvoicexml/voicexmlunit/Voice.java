@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import java.net.URI;
+import java.net.UnknownHostException;
 
 import java.util.Properties;
 
@@ -17,7 +18,11 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 
-public class Voice {
+/**
+ * Voice provides direct access to JVoiceXML.
+ * @author thesis
+ */
+public final class Voice {
     private File configuration = null;
     private Context context = null;
     private JVoiceXml jvxml = null;
@@ -28,20 +33,21 @@ public class Voice {
     }
 
     /**
-     * Loads a configuration for JNDI from file
+     * Loads a configuration for JNDI from file.
      * 
      * @param configuration
      *            path of configuration file with settings for JNDI
      */
-    public void loadConfiguration(String path) {
+    public void loadConfiguration(final String path) {
         configuration = new File(path);
         jvxml = null;
     }
 
     /**
      * Get the JVoiceXML object
+     * @throws IOException 
      */
-    public JVoiceXml getJVoiceXml() {
+    public JVoiceXml getJVoiceXml() throws IOException {
         if (jvxml == null) {
             lookupJVoiceXML();
         }
@@ -49,9 +55,10 @@ public class Voice {
     }
 
     /**
-     * Lookup the JVoiceXML object via JNDI
+     * Lookup the JVoiceXML object via JNDI.
+     * @throws Exception 
      */
-    public void lookupJVoiceXML() {
+    public void lookupJVoiceXML() throws IOException {
         try {
             if (configuration == null) {
                 context = new InitialContext();
@@ -62,7 +69,7 @@ public class Voice {
             }
             jvxml = (JVoiceXml) context.lookup(JVoiceXml.class.getSimpleName());
         } catch (javax.naming.NamingException | IOException ne) {
-            ne.printStackTrace();
+            throw new IOException("JVoiceXML not found! Is it running?");
         }
     }
 
@@ -74,7 +81,7 @@ public class Voice {
     }
 
     /**
-     * Connects a new Session object with a dialog
+     * Connects a new Session object with a dialog.
      * 
      * @param connectionInformation
      *            the conection details of the server object
@@ -82,9 +89,10 @@ public class Voice {
      *            the dialog to use
      * @throws ErrorEvent
      *             the error happened during the session was active
+     * @throws IOException 
      */
-    public void connect(ConnectionInformation connectionInformation, URI dialog)
-            throws ErrorEvent {
+    public void connect(final ConnectionInformation connectionInformation, URI dialog)
+            throws ErrorEvent, IOException {
         session = getJVoiceXml().createSession(connectionInformation);
         session.call(dialog);
         session.waitSessionEnd();
@@ -93,7 +101,7 @@ public class Voice {
     }
 
     /**
-     * Get the currently active Session object
+     * Get the currently active Session object.
      * 
      * @return the active Session or null if there's none
      */
