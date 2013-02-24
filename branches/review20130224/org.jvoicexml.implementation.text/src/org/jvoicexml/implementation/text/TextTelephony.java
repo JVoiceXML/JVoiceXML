@@ -70,9 +70,12 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     private static final Logger LOGGER = Logger
             .getLogger(TextTelephony.class);
 
+    /** Time to wait for the socket. */
+    private static final long SOCKET_WAIT = 100;
+    
     /** Maximal number of milliseconds to wait for a connect. */
     private static final int MAX_TIMEOUT_CONNECT = 1000;
-
+    
     /** The connection to the client. */
     private Socket socket;
 
@@ -408,7 +411,12 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         final SocketAddress socketAddress =
             new InetSocketAddress(address, port);
         final Socket endpoint = new Socket();
-        endpoint.connect(socketAddress, MAX_TIMEOUT_CONNECT);
+        try {
+            Thread.sleep(SOCKET_WAIT); // give time to create the socket.
+            endpoint.connect(socketAddress, MAX_TIMEOUT_CONNECT);
+        } catch (InterruptedException e) {
+            throw new IOException(e.getMessage());
+        }
         return endpoint;
     }
 
