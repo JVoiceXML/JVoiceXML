@@ -86,8 +86,8 @@ public final class Supervisor implements TextListener {
 
         AssertionFailedError error = call.getFailure();
         if (error != null) {
-            error.printStackTrace();
-            Assert.fail(error.toString());
+            //error.printStackTrace();
+            throw error;
         }
     }
 
