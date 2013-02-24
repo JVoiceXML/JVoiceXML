@@ -43,7 +43,7 @@ public class Output extends Statement {
     }
 
     public void send(Recording record) {
-        Assert.fail("Send " + getClass().getSimpleName() + ": " + toString());
+        Assert.fail("Expected " + getClass().getSimpleName() + ": " + toString());
     }
 
     public void receive(String actual) {
