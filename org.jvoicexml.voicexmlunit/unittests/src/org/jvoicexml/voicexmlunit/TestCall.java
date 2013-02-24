@@ -99,6 +99,11 @@ public class TestCall implements TextListener {
     @Override
     public void connected(InetSocketAddress remote) {
         connected = true;
+        try {
+            Thread.sleep(500); // delay
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

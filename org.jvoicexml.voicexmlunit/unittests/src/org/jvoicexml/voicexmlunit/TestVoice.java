@@ -71,7 +71,11 @@ public class TestVoice implements TextListener {
 
     @Override
     public void connected(InetSocketAddress remote) {
-
+        try {
+            Thread.sleep(500); // delay
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
