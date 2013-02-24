@@ -18,87 +18,105 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 
 public class TestCall implements TextListener {
 	
-	private Call call;
-	private boolean started;
-	private boolean connected;
-	private boolean disconnected;
+    private static final long MAX_WAIT = 1000;
+    
+    private Call call;
+    private boolean started;
+    private boolean connected;
+    private boolean disconnected;
+    
+    @Before
+    public void setUp() throws Exception {
+        final URI dialog = new File("unittests/rc/mock.vxml").toURI();
+        call = new Call(dialog);
+    	call.setListener(this);
+
+    	started = false;
+    	connected = false;
+    	disconnected = false;
+    }
+
+    @Test
+    public void testVoice() {
+        // 1. Voice is always valid
+        Assert.assertNotNull(call.getVoice());
+        // 2. Voice can't be destroyed (self instantiated)
+        call.setVoice(null);
+        Assert.assertNotNull(call.getVoice());
+        // 3. Custom voice
+        Voice custom = new Voice();
+        call.setVoice(custom);
+        Assert.assertSame(custom, call.getVoice());
+        call.setVoice(null);
+        Assert.assertNotSame(custom, call.getVoice());
+    }
+    
+    @Test
+    public void testDialog() throws InterruptedException {
+        final Voice voice = call.getVoice();
+        voice.loadConfiguration("unittests/etc/jndi.properties");
+        voice.setPolicy("unittests/etc/jvoicexml.policy");
+
+        Assert.assertNull(call.getVoice().getSession());
+        call.run();
+	Assert.assertTrue("started", started);
+	Assert.assertTrue("connected", connected);
+	Assert.assertTrue("disconnected", disconnected);
+        Assert.assertNull(call.getFailure());
+	Assert.assertNull(call.getVoice().getSession());
+    }
+
+    @Test
+    public void testFailure() {
+        AssertionFailedError error = new AssertionFailedError();
+	call.fail(error);
+        
+	Assert.assertNotNull(call.getFailure());
+	assertDisconnectedAfterCheckFailed();
+    }
+
+    @Test
+    public void testSuccess() {
+    	call.fail(null);
+    	
+    	Assert.assertNull(call.getFailure());
+    	assertDisconnectedAfterCheckFailed();
+    }
 	
-	@Before
-	public void setUp() throws Exception {
-		URI dialog = new File("unittests/rc/mock.vxml").toURI();
-		call = new Call(dialog);
-		call.setListener(this);
-
-		started = false;
-		connected = false;
-		disconnected = false;
-		
-		final Voice voice = call.getVoice();
-		voice.loadConfiguration("unittests/etc/jndi.properties");
-		voice.setPolicy("unittests/etc/jvoicexml.policy");
-	}
-
-	@Test
-	public void testDialog() {
-		call.run();
-
-		Assert.assertEquals("started",true,started);
-		Assert.assertEquals("connected",true,connected);
-		Assert.assertEquals("disconnected",true,disconnected);
-	}
-
-	@Test
-	public void testFailure() {
-		AssertionFailedError error = new AssertionFailedError();
-		call.fail(error);
-		
-		Assert.assertNotNull(call.getFailure());
-		assertDisconnectedAfterCheckFailed();
-	}
-
-	@Test
-	public void testSuccess() {
-		call.fail(null);
-		
-		Assert.assertNull(call.getFailure());
-		assertDisconnectedAfterCheckFailed();
-	}
-	
-	/**
-	 * Assert that Call does stopServer()
-	 */
+    /**
+     * Assert that Call does stopServer().
+     */
 	private void assertDisconnectedAfterCheckFailed() {
-		//Assert.assertTrue(disconnected); // commented in Call.fail()
-	}
+    	//Assert.assertTrue(disconnected); // commented in Call.fail()
+    }
 	
-	@Override
-	public void started() {
-		call.startDialog();
-		started = true;
-	}
+    @Override
+    public void started() {
+        call.startDialog();
+        started = true;
+    }
 
-	@Override
-	public void connected(InetSocketAddress remote) {
-		connected = true;		
-	}
+    @Override
+    public void connected(InetSocketAddress remote) {
+        connected = true;
+    }
 
-	@Override
-	public void outputSsml(SsmlDocument document) {
-	
-	}
+    @Override
+    public void outputSsml(SsmlDocument document) {
+    }
 
-	@Override
-	public void expectingInput() {
+    @Override
+    public void expectingInput() {
 
-	}
+    }
 
-	@Override
-	public void inputClosed() {
+    @Override
+    public void inputClosed() {
 
-	}
+    }
 
-	@Override
-	public void disconnected() {
-		disconnected = true;
-	}
+    @Override
+    public void disconnected() {
+    	disconnected = true;
+    }
 }
