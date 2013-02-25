@@ -1,14 +1,16 @@
 package org.jvoicexml.voicexmlunit;
 
+
 import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.AssertionFailedError;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.xml.ssml.Speak;
+
+import org.jvoicexml.voicexmlunit.io.Assertion;
+import org.jvoicexml.voicexmlunit.processor.Assert;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 public class TestSupervisor {
@@ -28,27 +30,12 @@ public class TestSupervisor {
     public void testStatements() {
         Conversation conversation = initMock();
 
-        supervisor.assertStatements(0);
+        Assert.assertStatements(0, conversation);
 
         conversation.addOutput("ping"); // must have an Output before
         conversation.addInput("pong");
 
-        supervisor.assertStatements(2);
-    }
-
-    /**
-     * Creates a simple SSML document that only contains the given message.
-     * @param message the message in the SSML document
-     * @return created SSML document
-     * @throws ParserConfigurationException
-     *          error creating the SSML document
-     */
-    private SsmlDocument createSsmlDocument(final String message)
-            throws ParserConfigurationException {
-        final SsmlDocument document = new SsmlDocument();
-        final Speak speak = document.getSpeak();
-        speak.addText(message);
-        return document;
+        Assert.assertStatements(2, conversation);
     }
 
     @Test
@@ -61,8 +48,7 @@ public class TestSupervisor {
         Assert.assertEquals(message, conversation.begin().toString());
 
         simulateCall();
-        final SsmlDocument document = createSsmlDocument(message);
-        supervisor.assertOutput(document);
+        assertOutputSimple(message);
     }
 
     @Test
@@ -78,9 +64,8 @@ public class TestSupervisor {
 
         simulateCall();
 
-        final SsmlDocument document = createSsmlDocument(message);
-        supervisor.assertOutput(document);
-        supervisor.assertInput();
+        assertOutputSimple(message);
+        supervisor.expectingInput();
     }
 
     @Test
@@ -94,7 +79,7 @@ public class TestSupervisor {
         boolean failed = false;
         try {
             supervisor.disconnected();
-        } catch (AssertionFailedError e) {
+        } catch (AssertionError e) {
             failed = true;
         }
         Assert.assertTrue(failed);
@@ -110,8 +95,8 @@ public class TestSupervisor {
 
         boolean failed = false;
         try {
-            supervisor.assertInput();
-        } catch (AssertionFailedError e) {
+            supervisor.expectingInput();
+        } catch (AssertionError e) {
             failed = true;
         }
         Assert.assertTrue(failed);
@@ -128,9 +113,8 @@ public class TestSupervisor {
 
         boolean failed = false;
         try {
-            final SsmlDocument document = createSsmlDocument(message);
-            supervisor.assertOutput(document);
-        } catch (AssertionFailedError e) {
+            assertOutputSimple(message);
+        } catch (AssertionError e) {
             failed = true;
         }
         Assert.assertTrue(failed);
@@ -144,4 +128,21 @@ public class TestSupervisor {
         // no session data, but begin conversation
         supervisor.connected(null);
     }
+    
+    /**
+     * Asserts a simple message as an Output statement.
+     * @param statement
+     * @param message
+     */
+    private void assertOutputSimple(final String message) {
+        try {
+            final SsmlDocument document = new SsmlDocument();
+            document.getSpeak().addText(message);
+            supervisor.outputSsml(document);
+        } catch (ParserConfigurationException e) {
+            Assert.fail(e.getMessage());
+        }
+    }
+
+
 }
