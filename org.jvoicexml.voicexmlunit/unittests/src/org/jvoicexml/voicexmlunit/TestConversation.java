@@ -1,12 +1,12 @@
 package org.jvoicexml.voicexmlunit;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.jvoicexml.voicexmlunit.Conversation;
 import org.jvoicexml.voicexmlunit.Supervisor;
+import org.jvoicexml.voicexmlunit.processor.Assert;
 
 public class TestConversation {
 
@@ -27,20 +27,20 @@ public class TestConversation {
 		// 1. one Output
 		Conversation conversation = createConversationForSimpleTest();
 		conversation.addOutput("Test1");
-		supervisor.assertStatements(1);
+		Assert.assertStatements(1, conversation);
 		
 		// 2. one Output again
 		conversation = createConversationForSimpleTest();
 		conversation.addOutput("Test2");
-		supervisor.assertStatements(1);
+		Assert.assertStatements(1, conversation);
 		
 		// 3. both Output and Input
 		conversation.addInput("Test3");
-		supervisor.assertStatements(2);
+		Assert.assertStatements(2, conversation);
 
 		// 4. conversation gets empty again
 		conversation = createConversationForSimpleTest();
-		//supervisor.assertStatements(0);
+		//Assert.assertStatements(0, conversation);
 	}
 	
 	@Test
@@ -58,7 +58,7 @@ public class TestConversation {
 	
 	private Conversation createConversationForSimpleTest() {
 		Conversation conversation = supervisor.init(null);
-		supervisor.assertStatements(0);
+		Assert.assertStatements(0, conversation);
 		return conversation;
 	}
 }
