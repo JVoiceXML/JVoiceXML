@@ -28,14 +28,13 @@ package org.jvoicexml.voicexmlunit;
 
 import java.net.InetSocketAddress;
 
-import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 
-import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.voicexmlunit.io.Assertion;
-import org.jvoicexml.voicexmlunit.io.Input;
-import org.jvoicexml.voicexmlunit.io.Output;
-import org.jvoicexml.voicexmlunit.io.Recording;
+import org.jvoicexml.voicexmlunit.io.Nothing;
+
+import org.jvoicexml.voicexmlunit.processor.Assert;
+
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -51,7 +50,8 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @author Dirk Schnelle-Walka
  * 
  */
-public final class Supervisor implements TextListener {
+public final class Supervisor 
+implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.processor.Facade {
 
     private Call call = null;
     private Conversation conversation = null;
@@ -64,7 +64,7 @@ public final class Supervisor implements TextListener {
      *            the call object, maybe <code>null</code>
      * @return Conversation to be used and initialized by the caller
      */
-    public Conversation init(Call call) {
+    public Conversation init(final Call call) {
         this.call = call;
         if (call != null) { // null means a mock object
             call.setListener(this);
@@ -74,7 +74,7 @@ public final class Supervisor implements TextListener {
     }
 
     /**
-     * Process a VoiceXML file and generate test log
+     * Process a VoiceXML file and generate test log.
      */
     public void process() {
         if (call == null) {
@@ -91,58 +91,12 @@ public final class Supervisor implements TextListener {
         }
     }
 
-    /**
-     * Assert the expected count of conversation statements
-     * 
-     * @param expectedCount
-     *            How many statements should we have?
-     */
-    public void assertStatements(int expectedCount) throws AssertionFailedError {
-        Assert.assertEquals("Statements", expectedCount,
-                conversation.countStatements());
-    }
-
-    /**
-     * Assert that the current statement is an Output instance with the given
-     * message
-     * 
-     * @param message
-     *            Message to expect in the call
-     */
-    public void assertOutput(SsmlDocument message) throws AssertionFailedError {
-        if (statement == null) {
-            Assert.assertEquals(Output.class.getSimpleName(), message,
-                    "## nothing ##");
-        } else {
-            statement.receive(message);
-            statement = conversation.next();
-        }
-    }
-
-    /**
-     * Assert that the current statement is an Input instance and the actual
-     * message can be send.´
-     */
-    public void assertInput() throws AssertionFailedError {
-        if (statement == null) {
-            Assert.fail(Input.class.getSimpleName() + " expected");
-        } else {
-            Recording record;
-            if (call == null) {
-                record = new Recording(null, null); // mock
-            } else {
-                record = call.record();
-            }
-            statement.send(record);
-            statement = conversation.next();
-        }
-    }
-
     /*
      * (non-Javadoc)
      * 
      * @see org.jvoicexml.client.text.TextListener#started()
      */
+    @Override
     public void started() {
         call.startDialog();
     }
@@ -154,6 +108,7 @@ public final class Supervisor implements TextListener {
      * org.jvoicexml.client.text.TextListener#connected(java.net.InetSocketAddress
      * )
      */
+    @Override
     public void connected(final InetSocketAddress remote) {
         statement = conversation.begin();
     }
@@ -165,17 +120,14 @@ public final class Supervisor implements TextListener {
      * org.jvoicexml.client.text.TextListener#outputSsml(org.jvoicexml.xml.ssml
      * .SsmlDocument)
      */
+    @Override
     public void outputSsml(final SsmlDocument document) {
         // TODO better handling of the XML structure inside (xpath?)
         if (document != null) {
             try {
                 assertOutput(document);
             } catch (AssertionFailedError e) {
-                if (call == null) {
-                    Assert.fail(e.getMessage());
-                } else {
-                    call.fail(e);
-                }
+                handleError(e);
             }
         }
     }
@@ -185,11 +137,12 @@ public final class Supervisor implements TextListener {
      * 
      * @see org.jvoicexml.client.text.TextListener#expectingInput()
      */
+    @Override
     public void expectingInput() {
         try {
             assertInput();
         } catch (AssertionFailedError e) {
-            call.fail(e);
+            handleError(e);
         }
     }
 
@@ -198,6 +151,7 @@ public final class Supervisor implements TextListener {
      * 
      * @see org.jvoicexml.client.text.TextListener#inputClosed()
      */
+    @Override
     public void inputClosed() {
 
     }
@@ -207,15 +161,71 @@ public final class Supervisor implements TextListener {
      * 
      * @see org.jvoicexml.client.text.TextListener#disconnected()
      */
+    @Override
     public void disconnected() {
-        if (statement != null) {
-            final AssertionFailedError error = new AssertionFailedError(
-                    "## disconnected ##");
-            if (call == null) {
-                Assert.fail(error.getMessage());
-            } else {
-                call.fail(error);
-            }
+        try {
+            assertHangup();
+        } catch (AssertionFailedError e) {
+            handleError(e);
         }
+    }
+
+    /**
+     * Assert that the current statement is an Output instance with the given
+     * message.
+     * @param message
+     *            Message to expect in the call
+     */
+    @Override
+    public void assertOutput(final SsmlDocument message) 
+            throws AssertionFailedError {
+        if (statement == null) {
+            statement = new Nothing();
+        }
+        new Assert(statement).assertOutput(message);
+        statement = conversation.next();
+    }
+
+    /**
+     * Assert that the current statement is an Input instance and the actual
+     * message can be send.
+     */
+    @Override
+    public void assertInput() throws AssertionFailedError {
+        if (statement == null) {
+            statement = new Nothing();
+        }
+        new Assert(statement, call).assertInput();
+        statement = conversation.next();
+    }
+
+    /**
+     * Asserts a final hangup that should be always at end of the call.
+     */
+    @Override
+    public void assertHangup() {
+        if (statement != null) {
+            new Assert(statement).assertHangup();
+            statement = conversation.next();
+        }
+    }
+
+    /**
+     * Register an error with the given Exception.
+     * @param error the exception for the error
+     */
+    private void handleError(final AssertionFailedError error) {
+        if (call == null) {
+            Assert.fail(error.getMessage());
+        } else {
+            call.fail(error);
+        }
+    }
+    
+    /**
+     * @return Assertion in trouble, null if no error has occured
+     */
+    public Assertion getFailCause() {
+        return statement;
     }
 }
