@@ -29,12 +29,12 @@ package org.jvoicexml.mmi.events;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlType;
-import org.w3c.dom.Element;
 
 /**
  * <p>
@@ -55,16 +55,21 @@ import org.w3c.dom.Element;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "anyComplexType", propOrder = { "content" })
-public class AnyComplexType implements Serializable {
+public final class AnyComplexType implements Serializable {
 
+    /** The serial version UID. */
+    private static final long serialVersionUID = 2818338467950863521L;
+
+    /** The complex content of this element. */
     @XmlMixed
     @XmlAnyElement
-    protected List<Object> content;
+    private List<Object> content;
 
     /**
      * Gets the value of the content property.
@@ -84,10 +89,10 @@ public class AnyComplexType implements Serializable {
      * 
      * 
      * <p>
-     * Objects of the following type(s) are allowed in the list {@link Element }
-     * {@link String }
+     * Objects of the following type(s) are allowed in the list
+     * {@link org.w3c.dom.Element}, {@link String }
      * 
-     * 
+     * @return current content
      */
     public List<Object> getContent() {
         if (content == null) {

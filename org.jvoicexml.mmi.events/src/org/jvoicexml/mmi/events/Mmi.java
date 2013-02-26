@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>
- * Java class for anonymous complex type.
+ * Basic container of the MMI events.
  * 
  * <p>
  * The following schema fragment specifies the expected content contained within

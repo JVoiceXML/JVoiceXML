@@ -34,49 +34,32 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * <p>
- * Java class for anonymous complex type.
- * 
- * <p>
- * The following schema fragment specifies the expected content contained within
- * this class.
- * 
- * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element ref="{http://www.w3.org/2008/04/mmi-arch}statusInfo" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}automaticUpdate.attrib"/>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}context.optional.attrib"/>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}statusResponse.attrib"/>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}target.attrib"/>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}requestID.attrib"/>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}source.attrib"/>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
+ * An MMI status request.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
  */
 @XmlRootElement(name = "StatusResponse")
 public final class StatusResponse extends LifeCycleEvent
     implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = -6344529758381887906L;
+
+    /** Flag, if automatic updates should be sent. */
     private boolean automaticUpdate;
+
+    /** The context identifier, maybe, <code>null</code>. */
     private String context;
+
+    /** Status message. */
     private StatusResponseType status;
 
-
-    /** Nested data elements. */ 
+    /** Additional status info. */ 
     private AnyComplexType statusInfo;
 
     /**
      * Gets the value of the automaticUpdate property.
-     * 
+     * @return value of the automaticUpdate property
      */
     @XmlAttribute(name = "AutomaticUpdate",
             namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
@@ -86,7 +69,7 @@ public final class StatusResponse extends LifeCycleEvent
 
     /**
      * Sets the value of the automaticUpdate property.
-     * 
+     * @param value new value of the automaticUpdate property
      */
     public void setAutomaticUpdate(final boolean value) {
         this.automaticUpdate = value;
@@ -161,7 +144,7 @@ public final class StatusResponse extends LifeCycleEvent
      * Adds the value of the status info property to the given text message.
      * @param text the status message to set
      */
-    public final void addStatusInfo(final String text) {
+    public void addStatusInfo(final String text) {
         if (statusInfo == null) {
             statusInfo = new AnyComplexType();
         }

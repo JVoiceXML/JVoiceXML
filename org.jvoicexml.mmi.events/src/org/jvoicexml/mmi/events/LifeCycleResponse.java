@@ -32,10 +32,21 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+/**
+ * Base class for MMI lifecycle responses.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision: 3607 $
+ * @since 0.7.6
+ *
+ */
 public class LifeCycleResponse extends LifeCycleEvent {
-
+    /** The context identifier of this response. */ 
     private String context;
+
+    /** Status response code of the request. */
     private StatusType status;
+
+    /** Additional status info. */
     private AnyComplexType statusInfo;
 
     /**
@@ -90,13 +101,21 @@ public class LifeCycleResponse extends LifeCycleEvent {
     public final void setStatus(final StatusType value) {
         status = value;
     }
-    
+
+    /**
+     * Retrieves the status info.
+     * @return status info
+     */
     @XmlElement(name = "StatusInfo",
             namespace = "http://www.w3.org/2008/04/mmi-arch")
     public final AnyComplexType getStatusInfo() {
         return statusInfo;
     }
-    
+
+    /**
+     * Sets the status info.
+     * @param value new value of the status info
+     */
     public final void setStatusInfo(final AnyComplexType value) {
         statusInfo = value;
     }

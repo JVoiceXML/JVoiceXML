@@ -52,8 +52,8 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  *
  * <p>
  * This implementation simply receives the {@link SpeakableText} objects from
- * the implementation platform and queues them. The queued elements will be retrieved
- * from the {@link TextTelephony} and sent to the client.
+ * the implementation platform and queues them. The queued elements will be
+ * retrieved from the {@link TextTelephony} and sent to the client.
  * </p> 
  *
  * @author Dirk Schnelle-Walka

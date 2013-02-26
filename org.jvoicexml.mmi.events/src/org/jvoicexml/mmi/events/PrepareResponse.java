@@ -31,32 +31,14 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * <p>
- * Java class for anonymous complex type.
- * 
- * <p>
- * The following schema fragment specifies the expected content contained within
- * this class.
- * 
- * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="data" type="{http://www.w3.org/2008/04/mmi-arch}anyComplexType" minOccurs="0"/>
- *         &lt;element ref="{http://www.w3.org/2008/04/mmi-arch}statusInfo" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}group.allResponseEvents.attrib"/>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
+ * An MMI prepare response.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
  */
 @XmlRootElement(name = "PrepareResponse")
 public final class PrepareResponse extends LifeCycleResponse
     implements Serializable {
     /** The serial version UID. */
-    private static final long serialVersionUID = -3829525482220042243L;
+    private static final long serialVersionUID = -5792903636309992682L;
 }

@@ -75,7 +75,7 @@ public final class TextServer extends Thread {
     /** The port number to use. */
     private final int port;
 
-    /** The port number to use. */
+    /** The address to use. */
     private InetAddress address;
 
     /** Server socket. */
@@ -251,11 +251,10 @@ public final class TextServer extends Thread {
             synchronized (lock) {
                 server = new ServerSocket();
                 server.setReuseAddress(true);
-                final InetAddress localhost = InetAddress.getLocalHost();
-                final InetSocketAddress address =
-                    new InetSocketAddress(localhost, port);
-                callingId = TcpUriFactory.createUri(address);
-                server.bind(address);
+                final InetSocketAddress socketAddress =
+                    new InetSocketAddress(address, port);
+                callingId = TcpUriFactory.createUri(socketAddress);
+                server.bind(socketAddress);
             }
         } catch (IOException e) {
             if (LOGGER.isDebugEnabled()) {
@@ -285,7 +284,7 @@ public final class TextServer extends Thread {
                     callingId = TcpUriFactory.createUri(local);
                     LOGGER.info("connected to " + calledId);
                     fireConnected(remote);
-                    if(readOutput()) {
+                    if (readOutput()) {
                         break;
                     }
                 }

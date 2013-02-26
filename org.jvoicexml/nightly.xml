@@ -128,20 +128,12 @@ org.jvoicexml/personal-props
         <!-- Compile everything before running the tests. -->
         <ant antfile="build.xml" target="jar" />
 
-        <!-- Execute the unit tests for all sub projects. -->
-        <ant dir="../org.jvoicexml" antfile="test.xml" inheritall="false" inheritrefs="false" target="test" />
-        <ant dir="../org.jvoicexml.client" antfile="test.xml" inheritall="false" inheritrefs="false" target="test" />
-        <ant dir="../org.jvoicexml.config" antfile="test.xml" inheritall="false" inheritrefs="false" target="test" />
-        <ant dir="../org.jvoicexml.xml" antfile="test.xml" inheritall="false" inheritrefs="false" target="test" />
-        <ant dir="../org.jvoicexml.mmi.events" antfile="test.xml" inheritall="false" inheritrefs="false" target="test" />
-        <ant dir="../org.jvoicexml.processor.srgs" antfile="test.xml" inheritall="false" target="test" />
-        <ant dir="../org.jvoicexml.implementation.jsapi10" antfile="test.xml" inheritall="false" target="test" />
-        <ant dir="../org.jvoicexml.implementation.jsapi20" antfile="test.xml" inheritall="false" target="test" />
-        <ant dir="../org.jvoicexml.implementation.marc" antfile="test.xml" inheritall="false" target="test" />
-        <ant dir="../org.jvoicexml.implementation.mary" antfile="test.xml" inheritall="false" target="test" />
-        <ant dir="../org.jvoicexml.implementation.text" antfile="test.xml" inheritall="false" target="test" />
-        <ant dir="../org.jvoicexml.callmanager.mmi" antfile="test.xml" inheritall="false" target="test" />
-        <ant dir="../org.jvoicexml.callmanager.text" antfile="test.xml" inheritall="false" target="test" />
+        <subant target="checkstyle" inheritall="false" inheritrefs="false"
+            failonerror="false">
+            <fileset dir="..">
+                <include name="org.jvoicexml*/test.xml" />
+            </fileset>
+        </subant>
         <junitreport>
             <fileset dir="dist/unittests">
                 <include name="TEST-*.xml" />
