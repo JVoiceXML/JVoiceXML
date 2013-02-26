@@ -67,8 +67,9 @@ linkcolor=black, colorlinks=black, colorlinks=true,
 \label{sec:introduction}
 
 This documents describes the API of JVoiceXML from the user's point of
-view. It provides information about the coding of clients for
-the JVoiceXML voice browser.
+view. In this sense a user is usually a developer who uses JVoiceXML. The
+document provides information about the coding of clients for the JVoiceXML
+voice browser.
 
 JVoiceXML is a free VoiceXML~\cite{w3.org:voicexml} implementation written in 
 the JAVA programming language with an open architecture for custom
@@ -198,14 +199,14 @@ You can use the IDE of your choice to edit the sources and compile the
 demos. You can even use a simple text editor to perform this job.
 Nevertheless there are some restriction that you cannot work around.
 
-Your IDE must support at least J2SE 1.6. The demos use ANT 1.7 for compilation. 
+Your IDE must support at least J2SE 1.7. The demos use ANT 1.7 for compilation. 
 ANT is not required but used as a means of IDE independent project setup.
 
 \subsection{JAVA}
 \label{sec:java}
 
-Parts of the code of JVoiceXML are using features from the JAVA 6 API, so that
-you will need at least J2SE 1.6 to compile the code. You can download it
+Parts of the code of JVoiceXML are using features from the JAVA 7 API, so that
+you will need at least J2SE 1.7 to compile the code. You can download it
 for free from \url{http://java.sun.com}.
 
 For now, you will need to do some programming to call your applications, but
@@ -809,8 +810,8 @@ or name of that computer.
 
 The classes  that are required to access JVoiceXML, like
 \lstinline[language=Java]{org.jvoicexml.JVoiceXml}, are part of the \texttt{jvxml-client.jar} and
-\texttt{jvxml-xml.jar}, which can be found in the \texttt{lib} folder of your
-JVoiceXML installation. This jar contains all classes, that you need to write
+\texttt{org.jvoicexml.xml.jar}, which can be found in the \texttt{lib} folder of
+your JVoiceXML installation. This jar contains all classes, that you need to write
 client applications. If you are using a different implementation platform, you
 may need to add other more specific client jars in addition to these libraries.
 
@@ -955,8 +956,8 @@ public class Demo1 implements TextListener
 You will receive the system output in the methods
 \lstinline[language=Java]{outputText(String)} and
 \lstinline[language=Java]{outputSsml(SsmlDocument}. Note, that you will also
-need to include the xml library \texttt{jvxml-xml.jar}. This is, where the
-\lstinline[language=Java]{SsmlDocument} is defined.
+need to include the xml library \texttt{org.jvoicexml.xml.jar}. This is, where
+the \lstinline[language=Java]{SsmlDocument} is defined.
 
 The communication between JVoiceXML and your client is based on sockets. The
 utility class \lstinline[language=Java]{TextServer} helps you to create this
@@ -1117,14 +1118,14 @@ public class HelloServlet extends HttpServlet {
 
 Our code goes into the \lstinline[language=Java]{doGet()} method of the servlet. The tag library
 is located in the package \lstinline[language=Java]{org.jvoicexml.xml}. Hence you have to add
-\texttt{jvxml-xml.jar} to the CLASSPATH.
+\texttt{org.jvoicexml.xml.jar} to the CLASSPATH.
 
 Before using the classes you have to import the required classes by adding
 \begin{lstlisting}[language=Java]
 import org.jvoicexml.xml.*;
 \end{lstlisting}
 
-Then, the VoiceXML document can be created by adding
+Then, the VoiceXML document can be created and returned by adding
 \begin{lstlisting}[language=Java]
     public void doGet(HttpServletRequest request,
         HttpServletResponse response)
@@ -1134,6 +1135,11 @@ Then, the VoiceXML document can be created by adding
 
         Block block = form.appendChild(Block.class);
         block.addText("Hello World!");
+
+        response.setContentType("text/xml");
+        final String xml = document.toXml();
+        final PrintWriter out = response.getWriter();
+        out.println(xml);
     }
 \end{lstlisting}
 
@@ -1170,7 +1176,7 @@ container, e.g. Tomcat, is located in the \texttt{web.xml} file.
 This file has the following content for our example:
 
 \begin{lstlisting}[language=XML]
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE web-app
     PUBLIC
@@ -1205,9 +1211,7 @@ following structure
    +- classes
       +- HelloServlet.class
    +- lib
-      +- jvxml-xml.jar
-      +- jsr_173_1.0_api.jar
-      +- sjsxp.jar
+      +- org.jvoicexml.xml.jar
 \end{lstlisting}
 
 Copy the created war archive to the \texttt{\$CATALINA\_HOME/webapps}
@@ -1494,7 +1498,7 @@ The following example of a simple pizza ordering service may help to understand
 how to implement it.
 
 \begin{lstlisting}[language=XML]
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <vxml version="2.0" xmlns="http://www.w3.org/2001/vxml"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schematicLocation=
@@ -1618,7 +1622,7 @@ As an example we use a simple calculator that is able to add two number.
 Therefore create a VoiceXML document with the following contents
 
 \begin{lstlisting}[language=XML]
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <vxml version="2.0" xmlns="http://www.w3.org/2001/vxml"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schematicLocation=
