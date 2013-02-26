@@ -31,28 +31,14 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * <p>
- * Java class for anonymous complex type.
- * 
- * <p>
- * The following schema fragment specifies the expected content contained within
- * this class.
- * 
- * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}group.allEvents.attrib"/>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
+ * An MMI clear context request.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
  */
 @XmlRootElement(name = "ClearContextRequest")
 public final class ClearContextRequest extends LifeCycleRequest
         implements Serializable {
     /** The serial version UID. */
-    private static final long serialVersionUID = 1620054451277421451L;
+    private static final long serialVersionUID = -4067761985085714840L;
 }

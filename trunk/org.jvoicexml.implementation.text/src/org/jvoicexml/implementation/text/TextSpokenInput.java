@@ -118,12 +118,14 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activate() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
@@ -135,6 +137,13 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * Activates a given grammar. It's the implementation for 
      * activateGrammars().
+     * @param grammar the grammar to activate
+     * @exception BadFetchError
+     *            Grammar is not known by the recognizer.
+     * @exception UnsupportedLanguageError
+     *            The specified language is not supported.
+     * @exception NoresourceError
+     *            The input resource is not available.
      */
     public void activateGrammar(final GrammarImplementation<?> grammar) 
             throws BadFetchError, UnsupportedLanguageError, 
@@ -159,6 +168,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void deactivateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
@@ -174,6 +184,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<BargeInType> getSupportedBargeInTypes() {
         return BARGE_IN_TYPES;
     }
@@ -181,6 +192,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
         return GRAMMAR_TYPES;
     }
@@ -188,6 +200,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarImplementation<?> loadGrammar(
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
@@ -212,6 +225,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void passivate() {
         listener.clear();
         grammarCheckers.clear();
@@ -221,12 +235,14 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return TextConnectionInformation.TYPE;
     }
@@ -234,18 +250,21 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open() throws NoresourceError {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void connect(final ConnectionInformation client) throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void disconnect(final ConnectionInformation client) {
     }
 
@@ -277,6 +296,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addListener(final SpokenInputListener inputListener) {
         synchronized (listener) {
             listener.add(inputListener);
@@ -286,6 +306,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeListener(final SpokenInputListener inputListener) {
         synchronized (listener) {
             listener.remove(inputListener);
@@ -339,6 +360,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public URI getUriForNextSpokenInput() throws NoresourceError {
         return null;
     }
@@ -346,6 +368,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isBusy() {
        return recognizing;
     }

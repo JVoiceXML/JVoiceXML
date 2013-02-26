@@ -24,7 +24,6 @@
  *
  */
 
-
 package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
@@ -34,47 +33,59 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for contentURLType complex type.
+ * <p>
+ * Java class for contentURLType complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType name="contentURLType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attribute name="href" use="required" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
- *       &lt;attribute name="max-age" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="fetchtimeout" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="href" use="required"
+ *           type="{http://www.w3.org/2001/XMLSchema}anyURI" />
+ *       &lt;attribute name="max-age"
+ *           type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="fetchtimeout"
+ *           type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "contentURLType")
-public class ContentURLType
-    implements Serializable
-{
+public final class ContentURLType implements Serializable {
 
-    @XmlAttribute(name = "href", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    /** The serial version UID. */
+    private static final long serialVersionUID = -8912528620916406797L;
+    /** The referenced URI. */
+    @XmlAttribute(name = "href",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected String href;
-    @XmlAttribute(name = "max-age", namespace = "http://www.w3.org/2008/04/mmi-arch")
-    protected String maxAge;
-    @XmlAttribute(name = "fetchtimeout", namespace = "http://www.w3.org/2008/04/mmi-arch")
-    protected String fetchtimeout;
+    private String href;
+
+    /** Maximum age for caching the contents. */
+    @XmlAttribute(name = "max-age",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
+    private  String maxAge;
+
+    /** Maximum fetch time out for retrieving the content. */
+    @XmlAttribute(name = "fetchtimeout",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
+    private String fetchtimeout;
 
     /**
      * Gets the value of the href property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
+     * 
      */
     public String getHref() {
         return href;
@@ -84,21 +95,18 @@ public class ContentURLType
      * Sets the value of the href property.
      * 
      * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *            allowed object is {@link String }
+     * 
      */
-    public void setHref(String value) {
-        this.href = value;
+    public void setHref(final String value) {
+        href = value;
     }
 
     /**
      * Gets the value of the maxAge property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
+     * 
      */
     public String getMaxAge() {
         return maxAge;
@@ -108,21 +116,18 @@ public class ContentURLType
      * Sets the value of the maxAge property.
      * 
      * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *            allowed object is {@link String }
+     * 
      */
-    public void setMaxAge(String value) {
-        this.maxAge = value;
+    public void setMaxAge(final String value) {
+        maxAge = value;
     }
 
     /**
      * Gets the value of the fetchtimeout property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
+     * 
      */
     public String getFetchtimeout() {
         return fetchtimeout;
@@ -132,12 +137,11 @@ public class ContentURLType
      * Sets the value of the fetchtimeout property.
      * 
      * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *            allowed object is {@link String }
+     * 
      */
-    public void setFetchtimeout(String value) {
-        this.fetchtimeout = value;
+    public void setFetchtimeout(final String value) {
+        fetchtimeout = value;
     }
 
 }

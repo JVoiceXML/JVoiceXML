@@ -30,11 +30,27 @@ package org.jvoicexml.mmi.events;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+/**
+ * Basic MMI Lifecycle attributes.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
+ */
 public class LifeCycleEvent {
-
+    /** The request identifier. */
     private String requestID;
+
+    /**
+     * The source modality component or interaction manager issuing the event.
+     */
     private String source;
+
+    /**
+     * The target modality component or interaction manager of the event.
+     */
     private String target;
+
+    /** Arbitrary data container. */
     private AnyComplexType data;
 
     /**
@@ -112,14 +128,22 @@ public class LifeCycleEvent {
     public final void setTarget(final String value) {
         target = value;
     }
-    
+
+    /**
+     * Retrieves the data attribute.
+     * @return the data attribute
+     */
     @XmlElement(name = "Data",
             namespace = "http://www.w3.org/2008/04/mmi-arch")
     public final AnyComplexType getData() {
         return data;
     }
 
-    public void setData(final AnyComplexType value) {
+    /**
+     * Sets the data attribute.
+     * @param value new value for the data attribute
+     */
+    public final void setData(final AnyComplexType value) {
         data = value;
     }
 }

@@ -42,20 +42,6 @@ org.jvoicexml/personal-props/README.txt
         </path>
     </target>
 
-    <target name="-checkJavaVersion">
-        <!-- Check if at least java 7 is used. -->
-        <condition property="version1.7">
-            <or>
-                <equals arg1="1.7" arg2="${ant.java.version}" />
-            </or>
-        </condition>
-
-        <fail unless="version1.7">
-You need at least java version 7 to compile this project.
-You're using ${ant.java.version}
-        </fail>
-    </target>
-
   <target name="-checkProtoc">
       <!-- Check if protoc is configured. -->
       <condition property="protoc.available">

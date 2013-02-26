@@ -43,12 +43,12 @@ import javax.xml.namespace.QName;
  * groups.  Factory methods for each of these are 
  * provided in this class.
  * 
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
  */
 @XmlRegistry
 public final class ObjectFactory {
-
-    private final static QName _StatusInfo_QNAME = new QName("http://www.w3.org/2008/04/mmi-arch", "statusInfo");
-
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.jvoicexml.mmi.events.xml
      * 
@@ -214,14 +214,6 @@ public final class ObjectFactory {
      */
     public StatusResponse createStatusResponse() {
         return new StatusResponse();
-    }
-
-    /**
-     * Create an instance of {@link EmmaType }
-     * 
-     */
-    public EmmaType createEmmaType() {
-        return new EmmaType();
     }
 
 }

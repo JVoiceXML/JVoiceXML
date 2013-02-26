@@ -878,7 +878,8 @@ public final class Jsapi10SynthesizedOutput
         final Object source = event.getSource();
         if (source instanceof SsmlDocument) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("synthesis of an SSML document started: " + source);
+                LOGGER.debug("synthesis of an SSML document started: "
+                        + source);
             }
             queueingSsml = true;
         }

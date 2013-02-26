@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -684,7 +684,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      */
     @Override
     public void recognizerUpdate(final RecognizerEvent recognizerEvent) {
-        switch(recognizerEvent.getId()) {
+        final int id = recognizerEvent.getId();
+        switch(id) {
         case EngineEvent.ENGINE_ERROR:
             /*
              * quote JSAPI2-Specc: 
@@ -692,6 +693,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
              * [...] The application should deallocate the Engine in this case."
              */
             close();
+            break;
+         default:
             break;
         }
     }

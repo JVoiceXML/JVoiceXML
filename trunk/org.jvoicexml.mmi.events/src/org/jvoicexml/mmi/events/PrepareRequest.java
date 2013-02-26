@@ -29,47 +29,26 @@ package org.jvoicexml.mmi.events;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URL;
-import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * <p>
- * Java class for anonymous complex type.
- * 
- * <p>
- * The following schema fragment specifies the expected content contained within
- * this class.
- * 
- * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;choice>
- *         &lt;sequence>
- *           &lt;element name="ContentURL" type="{http://www.w3.org/2008/04/mmi-arch}contentURLType"/>
- *         &lt;/sequence>
- *         &lt;sequence>
- *           &lt;element name="Content" type="{http://www.w3.org/2008/04/mmi-arch}anyComplexType"/>
- *         &lt;/sequence>
- *         &lt;sequence>
- *           &lt;element name="Data" type="{http://www.w3.org/2008/04/mmi-arch}anyComplexType" minOccurs="0"/>
- *         &lt;/sequence>
- *       &lt;/choice>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}group.allEvents.attrib"/>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
+ * An MMI prepare request.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
  */
 @XmlRootElement(name = "PrepareRequest")
-public final class PrepareRequest extends LifeCycleRequest implements Serializable {
+public final class PrepareRequest extends LifeCycleRequest
+    implements Serializable {
     /** The serial version UID. */
-    private static final long serialVersionUID = -5464280568730275229L;
+    private static final long serialVersionUID = -6159483209265868752L;
+
+    /** The content URL. */
     private ContentURLType contentURL;
+
+    /** Arbitrary content. */
     private AnyComplexType content;
 
     /**
@@ -94,6 +73,10 @@ public final class PrepareRequest extends LifeCycleRequest implements Serializab
         contentURL = value;
     }
 
+    /**
+     * Fills the content URL with the given string.
+     * @param value the content URL
+     */
     public void setContentURL(final String value) {
         final ContentURLType type = new ContentURLType();
         type.setHref(value);
@@ -145,3 +128,4 @@ public final class PrepareRequest extends LifeCycleRequest implements Serializab
         content = value;
     }
 }
+
