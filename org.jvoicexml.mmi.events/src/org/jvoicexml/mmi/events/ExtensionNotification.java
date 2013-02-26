@@ -32,34 +32,18 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * <p>
- * Java class for anonymous complex type.
- * 
- * <p>
- * The following schema fragment specifies the expected content contained within
- * this class.
- * 
- * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="data" type="{http://www.w3.org/2008/04/mmi-arch}anyComplexType" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}group.allEvents.attrib"/>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}extension.name.attrib"/>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
+ * An MMI extension notification.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
  */
 @XmlRootElement(name = "ExtensionNotification")
 public final class ExtensionNotification extends LifeCycleRequest
         implements Serializable {
     /** The serial version UID. */
-    private static final long serialVersionUID = -9220638526537659755L;
+    private static final long serialVersionUID = -2806457933946563396L;
+
+    /** Name of the extension. */
     private String name;
 
     /**

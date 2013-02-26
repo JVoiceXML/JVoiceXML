@@ -33,28 +33,22 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for statusResponseType.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
- * <pre>
- * &lt;simpleType name="statusResponseType">
- *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="alive"/>
- *     &lt;enumeration value="dead"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
- * </pre>
- * 
+ * Enumeration of status information to be included in {@link StatusResponse}s.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
  */
 @XmlType(name = "statusResponseType")
 @XmlEnum
 public enum StatusResponseType {
-
+    /** Status alive. */
     @XmlEnumValue("alive")
     ALIVE("alive"),
+    /** Status dead. */
     @XmlEnumValue("dead")
     DEAD("dead");
+
+    /** Concrete value. */
     private final String value;
 
     StatusResponseType(String v) {

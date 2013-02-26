@@ -29,8 +29,15 @@ package org.jvoicexml.mmi.events;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
+/**
+ * Base class for MMI lifecycle requests.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
+ *
+ */
 public class LifeCycleRequest extends LifeCycleEvent {
-
+    /** The context identifier of this request. */ 
     private String context;
 
     /**

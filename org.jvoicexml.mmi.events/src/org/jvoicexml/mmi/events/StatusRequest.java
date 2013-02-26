@@ -32,39 +32,26 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * <p>
- * Java class for anonymous complex type.
- * 
- * <p>
- * The following schema fragment specifies the expected content contained within
- * this class.
- * 
- * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}target.attrib"/>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}requestID.attrib"/>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}source.attrib"/>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}requestAutomaticUpdate.attrib"/>
- *       &lt;attGroup ref="{http://www.w3.org/2008/04/mmi-arch}context.optional.attrib"/>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
+ * An MMI status request.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
  */
 @XmlRootElement(name = "StatusRequest")
-public final class StatusRequest extends LifeCycleEvent implements Serializable {
+public final class StatusRequest extends LifeCycleEvent
+    implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = 4633844966738136923L;
 
+    /** Flag, if automatic updates should be sent. */
     private boolean requestAutomaticUpdate;
+
+    /** The context identifier, maybe, <code>null</code>. */
     private String context;
 
     /**
      * Gets the value of the requestAutomaticUpdate property.
+     * @return  value of the requestAutomaticUpdate property
      * 
      */
     @XmlAttribute(name = "RequestAutomaticUpdate",
@@ -75,6 +62,7 @@ public final class StatusRequest extends LifeCycleEvent implements Serializable 
 
     /**
      * Sets the value of the requestAutomaticUpdate property.
+     * @param value new value for the requestAutomaticUpdate property
      * 
      */
     public void setRequestAutomaticUpdate(final boolean value) {
