@@ -26,21 +26,28 @@ public class TestConversation {
 	public void testConversationAdd() {
 		// 1. one Output
 		Conversation conversation = createConversationForSimpleTest();
-		conversation.addOutput("Test1");
-		Assert.assertStatements(1, conversation);
+		String expected = "Test1";
+		conversation.addOutput(expected);
+		//Assert.assertStatements(1, conversation);
+		Assert.assertEquals(expected, conversation.begin().toString());
 		
 		// 2. one Output again
 		conversation = createConversationForSimpleTest();
-		conversation.addOutput("Test2");
-		Assert.assertStatements(1, conversation);
+		expected = "Test2";
+		conversation.addOutput(expected);
+		//Assert.assertStatements(1, conversation);
+		Assert.assertEquals(expected, conversation.begin().toString());
 		
 		// 3. both Output and Input
-		conversation.addInput("Test3");
-		Assert.assertStatements(2, conversation);
+		expected = "Test3";
+		conversation.addInput(expected);
+		//Assert.assertStatements(2, conversation);
+		Assert.assertEquals(expected, conversation.next().toString());
 
 		// 4. conversation gets empty again
 		conversation = createConversationForSimpleTest();
 		//Assert.assertStatements(0, conversation);
+		Assert.assertNull(conversation.next().toString());
 	}
 	
 	@Test
