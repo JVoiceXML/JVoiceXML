@@ -3,13 +3,12 @@ package org.jvoicexml.voicexmlunit;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import junit.framework.AssertionFailedError;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.jvoicexml.voicexmlunit.io.Assertion;
+import org.jvoicexml.voicexmlunit.io.Input;
+import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.processor.Assert;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -30,12 +29,19 @@ public class TestSupervisor {
     public void testStatements() {
         Conversation conversation = initMock();
 
-        Assert.assertStatements(0, conversation);
+        //Assert.assertStatements(0, conversation);
+        Assert.assertNull(conversation.begin());
+        
+        final String prompt = "ping";
+        final String reply = "pong";
+        conversation.addOutput(prompt); // must have an Output before
+        conversation.addInput(reply);
 
-        conversation.addOutput("ping"); // must have an Output before
-        conversation.addInput("pong");
-
-        Assert.assertStatements(2, conversation);
+        //Assert.assertStatements(2, conversation);
+        Assert.assertEquals(new Output(prompt).toString(), 
+                conversation.next().toString());
+        Assert.assertEquals(new Input(reply).toString(), 
+                conversation.next().toString());
     }
 
     @Test
