@@ -174,7 +174,7 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
      * Assert that the current statement is an Output instance with the given
      * message.
      * @param message
-     *            Message to expect in the call
+     *             Message to expect in the call
      */
     @Override
     public void assertOutput(final SsmlDocument message) 
