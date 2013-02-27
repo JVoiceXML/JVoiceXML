@@ -35,7 +35,6 @@ public class HelloDemo {
 		conversation.addOutput("Hello World!");
 		conversation.addOutput("Goodbye!");
 
-		supervisor.assertStatements(2);
 		supervisor.process();
 	}
 	
@@ -44,7 +43,6 @@ public class HelloDemo {
 		Conversation conversation = supervisor.init(call);
 		conversation.addOutput("Goodbye!");
 		
-		supervisor.assertStatements(1);
 		assertFailure();
 	}
 
@@ -53,7 +51,6 @@ public class HelloDemo {
 		Conversation conversation = supervisor.init(call);
 		conversation.addOutput("Hello World!");
 
-		supervisor.assertStatements(1);
 		assertFailure();
 	}
 
@@ -63,7 +60,6 @@ public class HelloDemo {
 		
 		supervisor.connected(null); // enforce processing of an empty list
 		
-		supervisor.assertStatements(0);
 		assertFailure();
 	}
 
