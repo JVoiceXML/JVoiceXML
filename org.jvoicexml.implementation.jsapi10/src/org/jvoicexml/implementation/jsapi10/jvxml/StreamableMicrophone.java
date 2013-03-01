@@ -73,13 +73,12 @@ public final class StreamableMicrophone extends Microphone
      */
     public void writeRecognizerStream(final byte[] buffer, final int offset,
             final int length) throws IOException {
-        long collectTime = System.currentTimeMillis();
         int sampleSizeInBytes = 16;
         int sampleRate = 8000;
         double[] samples = DataUtil.bytesToValues(buffer, offset, length,
                 sampleSizeInBytes, false);
         final Data currentData =
-            new DoubleData(samples, sampleRate, collectTime, 0);
+            new DoubleData(samples, sampleRate, 0);
         data.add(currentData);
     }
 
