@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -148,7 +148,7 @@ public final class Jsapi10SpokenInput
                 LOGGER.debug("...JSAPI 1.0  recognizer allocated");
             }
         } catch (EngineException ee) {
-            throw new NoresourceError(ee);
+            throw new NoresourceError(ee.getMessage(), ee);
         }
     }
 
