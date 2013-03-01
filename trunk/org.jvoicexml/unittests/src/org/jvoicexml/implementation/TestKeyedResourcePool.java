@@ -30,7 +30,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
-import org.jvoicexml.test.implementation.DummySynthesizedOutputFactory;
+import org.jvoicexml.mock.implementation.MockSynthesizedOutputFactory;
 
 /**
  *Test cases for {@link KeyedResourcePool}.
@@ -52,8 +52,8 @@ public final class TestKeyedResourcePool {
     public void testBorrowObjectObject()  throws Exception, NoresourceError {
         final int instances = 500;
         final ResourceFactory<SynthesizedOutput> factory =
-            new DummySynthesizedOutputFactory();
-        ((DummySynthesizedOutputFactory) factory).setInstances(instances);
+            new MockSynthesizedOutputFactory();
+        ((MockSynthesizedOutputFactory) factory).setInstances(instances);
         pool = new KeyedResourcePool<SynthesizedOutput>();
         pool.addResourceFactory(factory);
         Assert.assertEquals(instances, pool.getNumIdle());
@@ -82,8 +82,8 @@ public final class TestKeyedResourcePool {
         throws Exception, NoresourceError {
         final int instances = 10;
         final ResourceFactory<SynthesizedOutput> factory =
-            new DummySynthesizedOutputFactory();
-        ((DummySynthesizedOutputFactory) factory).setInstances(instances);
+            new MockSynthesizedOutputFactory();
+        ((MockSynthesizedOutputFactory) factory).setInstances(instances);
         pool = new KeyedResourcePool<SynthesizedOutput>();
         pool.addResourceFactory(factory);
         Assert.assertEquals(instances, pool.getNumIdle());
@@ -110,12 +110,12 @@ public final class TestKeyedResourcePool {
         throws Exception, NoresourceError {
         final int instancesKey1 = 3;
         final ResourceFactory<SynthesizedOutput> factory1 =
-            new DummySynthesizedOutputFactory();
-        ((DummySynthesizedOutputFactory) factory1).setInstances(instancesKey1);
+            new MockSynthesizedOutputFactory();
+        ((MockSynthesizedOutputFactory) factory1).setInstances(instancesKey1);
         final int instancesKey2 = 5;
         final ResourceFactory<SynthesizedOutput> factory2 =
-            new DummySynthesizedOutputFactory("alt");
-        ((DummySynthesizedOutputFactory) factory2).setInstances(instancesKey2);
+            new MockSynthesizedOutputFactory("alt");
+        ((MockSynthesizedOutputFactory) factory2).setInstances(instancesKey2);
         pool = new KeyedResourcePool<SynthesizedOutput>();
         pool.addResourceFactory(factory1);
         pool.addResourceFactory(factory2);

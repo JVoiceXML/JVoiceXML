@@ -32,9 +32,9 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.config.DummyConfiguration;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.config.MockConfiguration;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -58,14 +58,14 @@ public final class TestVoiceXmlInterpreter {
      */
     @Before
     public void setUp() {
-        final ImplementationPlatform platform = new DummyImplementationPlatform();
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
         final VoiceXmlInterpreterContext context =
             new VoiceXmlInterpreterContext(session, null);
         interpreter = new VoiceXmlInterpreter(context);
-        configuration = new DummyConfiguration();
+        configuration = new MockConfiguration();
     }
 
     /**

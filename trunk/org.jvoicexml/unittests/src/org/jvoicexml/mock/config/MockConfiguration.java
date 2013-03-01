@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.test.config;
+package org.jvoicexml.mock.config;
 
 import java.util.Collection;
 
@@ -38,8 +38,8 @@ import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
 import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository;
-import org.jvoicexml.test.interpreter.tagstrategy.DummyInitializationTagStrategyFactory;
-import org.jvoicexml.test.interpreter.tagstrategy.DummyTagStrategyFactory;
+import org.jvoicexml.test.interpreter.tagstrategy.MockInitializationTagStrategyFactory;
+import org.jvoicexml.test.interpreter.tagstrategy.MockTagStrategyFactory;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
 
@@ -49,7 +49,7 @@ import org.jvoicexml.xml.vxml.Menu;
  * @version $Revision$
  * @since 0.7.4
  */
-public final class DummyConfiguration implements Configuration {
+public final class MockConfiguration implements Configuration {
     /**
      * {@inheritDoc}
      */
@@ -60,7 +60,7 @@ public final class DummyConfiguration implements Configuration {
         if (baseClass == TagStrategyFactory.class) {
             final Collection<T> col = new java.util.ArrayList<T>();
             try {
-                T value = (T) new DummyTagStrategyFactory();
+                T value = (T) new MockTagStrategyFactory();
                 col.add(value);
                 return col;
             } catch (Exception e) {
@@ -86,13 +86,13 @@ public final class DummyConfiguration implements Configuration {
     public <T> T loadObject(final Class<T> baseClass) {
         if (baseClass == InitializationTagStrategyFactory.class) {
             try {
-                return (T) new DummyInitializationTagStrategyFactory();
+                return (T) new MockInitializationTagStrategyFactory();
             } catch (Exception e) {
                 return null;
             }
         } else if (baseClass == TagStrategyFactory.class) {
             try {
-                return (T) new DummyTagStrategyFactory();
+                return (T) new MockTagStrategyFactory();
             } catch (Exception e) {
                 return null;
             }

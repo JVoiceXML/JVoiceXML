@@ -39,9 +39,9 @@ import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
-import org.jvoicexml.test.DummyConnectionInformation;
-import org.jvoicexml.test.implementation.DummySpokenInputFactory;
-import org.jvoicexml.test.implementation.DummySynthesizedOutputFactory;
+import org.jvoicexml.mock.MockConnectionInformation;
+import org.jvoicexml.mock.implementation.MockSpokenInputFactory;
+import org.jvoicexml.mock.implementation.MockSynthesizedOutputFactory;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -72,8 +72,8 @@ public final class TestJVoiceXmlImplementationPlatform {
     @Before
     public void setUp() throws Exception {
         synthesizerPool = new KeyedResourcePool<SynthesizedOutput>();
-        final DummySynthesizedOutputFactory synthesizedOutputFactory =
-            new DummySynthesizedOutputFactory();
+        final MockSynthesizedOutputFactory synthesizedOutputFactory =
+            new MockSynthesizedOutputFactory();
         synthesizedOutputFactory.setInstances(1);
         synthesizerPool.addResourceFactory(synthesizedOutputFactory);
         telephonyPool = new KeyedResourcePool<Telephony>();
@@ -82,11 +82,11 @@ public final class TestJVoiceXmlImplementationPlatform {
         telephonyFactory.setInstances(1);
         telephonyPool.addResourceFactory(telephonyFactory);
         recognizerPool = new KeyedResourcePool<SpokenInput>();
-        final DummySpokenInputFactory spokenInputFactory =
-            new DummySpokenInputFactory();
+        final MockSpokenInputFactory spokenInputFactory =
+            new MockSpokenInputFactory();
         spokenInputFactory.setInstances(1);
         recognizerPool.addResourceFactory(spokenInputFactory);
-        info = new DummyConnectionInformation();
+        info = new MockConnectionInformation();
         platform = new JVoiceXmlImplementationPlatform(telephonyPool,
                 synthesizerPool, recognizerPool, info);
     }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,47 +24,42 @@
  *
  */
 
-package org.jvoicexml.test.implementation;
+package org.jvoicexml.mock.implementation;
 
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.Telephony;
 
 /**
- * Demo implementation of a {@link SynthesizedOutput}.
+ * Demo implementation of a {@link SpokenInput}.
  *
- * @author Dirk Schnelle-Walka
+ * @author Dirk Schnelle
  * @version $Revision$
+ *
+ * <p>
+ * Copyright &copy; 2008 JVoiceXML group -
+ * <a href="http://jvoicexml.sourceforge.net">
+ * http://jvoicexml.sourceforge.net/</a>
+ * </p>
  */
-public final class DummySynthesizedOutputFactory
-    implements ResourceFactory<SynthesizedOutput> {
+public final class MockSpokenInputFactory
+    implements ResourceFactory<SpokenInput> {
     /** Number of instances that this factory will create. */
     private int instances;
 
-    /** Type of this factory. */
-    private final String type;
-
     /**
      * Constructs a new object.
      */
-    public DummySynthesizedOutputFactory() {
-        type = "dummy";
-    }
-
-    /**
-     * Constructs a new object.
-     * @param key type of this factory
-     */
-    public DummySynthesizedOutputFactory(final String key) {
-        type = key;
+    public MockSpokenInputFactory() {
     }
 
     /**
      * {@inheritDoc}
      */
-    public SynthesizedOutput createResource()
+    public SpokenInput createResource()
         throws NoresourceError {
-        return new DummySynthesizedOutput();
+        return new MockSpokenInput();
     }
 
     /**
@@ -86,13 +81,13 @@ public final class DummySynthesizedOutputFactory
      * {@inheritDoc}
      */
     public String getType() {
-        return type;
+        return "dummy";
     }
 
     /**
      * {@inheritDoc}
      */
-    public Class<SynthesizedOutput> getResourceType() {
-        return SynthesizedOutput.class;
+    public Class<SpokenInput> getResourceType() {
+        return SpokenInput.class;
     }
 }

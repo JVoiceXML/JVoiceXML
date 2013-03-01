@@ -182,6 +182,14 @@ public final class ConfigurationFolderMonitor extends Thread {
             }
             if (!found) {
                 toRemove.add(file);
+                if (LOGGER.isDebugEnabled()) {
+                    try {
+                        LOGGER.debug("removed '" + file.getCanonicalPath()
+                                + "'");
+                    } catch (IOException e) {
+                        LOGGER.warn(e.getMessage(), e);
+                    }
+                }
                 for (ConfigurationFileChangedListener listener
                         : listeners) {
                     listener.fileRemoved(file);
@@ -201,11 +209,17 @@ public final class ConfigurationFolderMonitor extends Thread {
         final long lastModified = file.lastModified();
         final Long modified = files.get(file);
         if (modified == null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added '" + file.getCanonicalPath() + "'");
+            }
             files.put(file, lastModified);
             for (ConfigurationFileChangedListener listener : listeners) {
                 listener.fileAdded(file);
             }
         } else if (modified.longValue() < lastModified) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("updated '" + file.getCanonicalPath() + "'");
+            }
             files.put(file, lastModified);
             for (ConfigurationFileChangedListener listener : listeners) {
                 listener.fileUpdated(file);

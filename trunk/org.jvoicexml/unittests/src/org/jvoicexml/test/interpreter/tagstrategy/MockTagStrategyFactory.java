@@ -42,7 +42,7 @@ import org.w3c.dom.Node;
  * @version $Revision$
  * @since 0.7.4
  */
-public class DummyTagStrategyFactory
+public class MockTagStrategyFactory
     implements TagStrategyFactory {
     /**
      * Known strategies. The known strategies are templates for the strategy to
@@ -57,7 +57,7 @@ public class DummyTagStrategyFactory
      * @throws InvocationTargetException 
      * @throws IllegalArgumentException 
      */
-    public DummyTagStrategyFactory() 
+    public MockTagStrategyFactory() 
         throws InstantiationException, IllegalAccessException,
         ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
         strategies = new java.util.HashMap<String, TagStrategy>();

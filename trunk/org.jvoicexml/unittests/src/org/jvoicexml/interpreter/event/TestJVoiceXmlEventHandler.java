@@ -59,11 +59,11 @@ import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.grammar.InternalGrammarDocument;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.DummyRecognitionResult;
-import org.jvoicexml.test.TestAppender;
-import org.jvoicexml.test.config.DummyConfiguration;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockRecognitionResult;
+import org.jvoicexml.mock.TestAppender;
+import org.jvoicexml.mock.config.MockConfiguration;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Rule;
@@ -107,7 +107,7 @@ public final class TestJVoiceXmlEventHandler {
     public static void init() throws Exception {
         final Logger logger = Logger.getRootLogger();
         logger.addAppender(new TestAppender());
-        final Configuration configuration = new DummyConfiguration();
+        final Configuration configuration = new MockConfiguration();
         factory = configuration.loadObject(
                 InitializationTagStrategyFactory.class);
     }
@@ -120,11 +120,11 @@ public final class TestJVoiceXmlEventHandler {
     @Before
     public void setUp() throws Exception {
         final ImplementationPlatform platform =
-            new DummyImplementationPlatform();
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+            new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
-        final Configuration configuration = new DummyConfiguration();
+        final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
         interpreter.init(configuration);
@@ -395,7 +395,7 @@ public final class TestJVoiceXmlEventHandler {
             new JVoiceXmlEventHandler(context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance = "this is a field level test";
         result.setUtterance(utterance);
         result.setAccepted(true);
@@ -443,7 +443,7 @@ public final class TestJVoiceXmlEventHandler {
             new JVoiceXmlEventHandler(context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance = "this is a field level test";
         result.setUtterance(utterance);
         result.setAccepted(false);
@@ -489,7 +489,7 @@ public final class TestJVoiceXmlEventHandler {
         handler.collect(context, interpreter, document);
         handler.collect(context, interpreter, fia, item);
 
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance = "this is a form level test";
         result.setUtterance(utterance);
         result.setAccepted(true);
@@ -538,7 +538,7 @@ public final class TestJVoiceXmlEventHandler {
         handler.collect(context, interpreter, dialog);
         handler.collect(context, interpreter, fia, item);
 
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance = "this is a form level test";
         result.setUtterance(utterance);
         result.setAccepted(false);
@@ -602,7 +602,7 @@ public final class TestJVoiceXmlEventHandler {
             new InitialFormItem(context, initial);
         handler.collect(context, interpreter, fia, initialItem);
 
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance1 = "input1";
         final String utterance2 = "input2";
         result.setUtterance(utterance1);
@@ -678,7 +678,7 @@ public final class TestJVoiceXmlEventHandler {
             new InitialFormItem(context, initial);
         handler.collect(context, null, fia, initialItem);
 
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance = "input2";
         result.setUtterance(utterance);
         result.setAccepted(true);
@@ -759,7 +759,7 @@ public final class TestJVoiceXmlEventHandler {
             new JVoiceXmlEventHandler(context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance = "this is a form level test";
         result.setUtterance(utterance);
         result.setAccepted(true);
@@ -806,7 +806,7 @@ public final class TestJVoiceXmlEventHandler {
             new JVoiceXmlEventHandler(context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance = "Zu Hülf!";
         result.setUtterance(utterance);
         result.setAccepted(true);
@@ -826,7 +826,7 @@ public final class TestJVoiceXmlEventHandler {
      */
     @Test(timeout = 1000)
     public void testNotifyEvent() {
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance = "test";
         result.setUtterance(utterance);
         result.setAccepted(true);
@@ -846,7 +846,7 @@ public final class TestJVoiceXmlEventHandler {
      */
     @Test(timeout = 1000)
     public void testNotifyEventCancel() {
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance = "Bloß nicht";
         result.setUtterance(utterance);
         result.setAccepted(true);
@@ -867,7 +867,7 @@ public final class TestJVoiceXmlEventHandler {
      */
     @Test(timeout = 1000)
     public void testNotifyEventHelp() {
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance = "Zu Hülf!";
         result.setUtterance(utterance);
         result.setAccepted(true);

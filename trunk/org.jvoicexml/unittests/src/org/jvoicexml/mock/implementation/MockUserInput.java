@@ -23,7 +23,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.test.implementation;
+package org.jvoicexml.mock.implementation;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -61,11 +61,11 @@ import org.xml.sax.SAXException;
  * @version $Revision$
  * @since 0.6
  */
-public class DummyUserInput
+public class MockUserInput
         implements UserInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(DummyUserInput.class);
+            Logger.getLogger(MockUserInput.class);
 
     /** Supported grammar types of this user input. */
     private static final Collection<GrammarType> SUPPORTED_GRAMMAR_TYPES;
@@ -91,7 +91,7 @@ public class DummyUserInput
     /**
      * Constructs a new object.
      */
-    public DummyUserInput() {
+    public MockUserInput() {
         this(null);
     };
 
@@ -99,7 +99,7 @@ public class DummyUserInput
      * Constructs a new object.
      * @param spokenInput the encapsulated spoken input.
      */
-    public DummyUserInput(final SpokenInput spokenInput) {
+    public MockUserInput(final SpokenInput spokenInput) {
         input = spokenInput;
         activeGrammars = new java.util.HashSet<GrammarDocument>();
         recognitionStartedLock = new Object();

@@ -32,8 +32,8 @@ import org.junit.Test;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.documentserver.schemestrategy.DummySessionIdentifierFactory;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.documentserver.schemestrategy.MockSessionIdentifierFactory;
 
 /**
  * Test case for {@link SessionStorage}.
@@ -53,11 +53,11 @@ public final class TestSessionStorage {
      */
     @Before
     public void setUp() {
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final Session session = new JVoiceXmlSession(null, jvxml, null);
         sessionId = session.getSessionID();
         final SessionIdentifierFactory<String> factory =
-            new DummySessionIdentifierFactory();
+            new MockSessionIdentifierFactory();
         storage = new SessionStorage<String>(factory);
     }
 
@@ -70,7 +70,7 @@ public final class TestSessionStorage {
         Assert.assertNotNull(id1);
         final String id2 = storage.getSessionIdentifier(sessionId);
         Assert.assertEquals(id1, id2);
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final Session session2 = new JVoiceXmlSession(null, jvxml, null);
         final String id3 = storage.getSessionIdentifier(
                 session2.getSessionID());

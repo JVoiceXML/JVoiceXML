@@ -30,7 +30,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.test.interpreter.grammar.GrammarUtil;
+import org.jvoicexml.mock.interpreter.grammar.GrammarUtil;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**

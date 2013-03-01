@@ -125,7 +125,7 @@ org.jvoicexml/personal-props
 
     <target name="unittests" depends="-init" description="Perform unit tests over all projects">
         <delete dir="dist/unittests" failonerror="false" />
-        <!-- Compile everything before running the tests. -->
+        <!-- Compile the core classes before running the tests. -->
         <ant antfile="build.xml" target="jar" />
 
         <subant target="checkstyle" inheritall="false" inheritrefs="false"
