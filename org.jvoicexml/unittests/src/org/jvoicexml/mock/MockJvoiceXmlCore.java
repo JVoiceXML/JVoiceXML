@@ -23,7 +23,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.test;
+package org.jvoicexml.mock;
 
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConnectionInformation;
@@ -41,7 +41,7 @@ import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifierCentral;
 import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 
 /**
  * This class provides a dummy implementation for {@link JVoiceXmlCore}.
@@ -50,7 +50,7 @@ import org.jvoicexml.test.implementation.DummyImplementationPlatform;
  * @version $Revision$
  * @since 0.6
  */
-public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
+public final class MockJvoiceXmlCore implements JVoiceXmlCore {
     /** The document server. */
     private JVoiceXmlDocumentServer documentServer;
 
@@ -94,7 +94,7 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
     public Session createSession(final ConnectionInformation info)
         throws ErrorEvent {
         final ImplementationPlatform platform =
-                new DummyImplementationPlatform();
+                new MockImplementationPlatform();
         return new JVoiceXmlSession(platform, this, info);
     }
 

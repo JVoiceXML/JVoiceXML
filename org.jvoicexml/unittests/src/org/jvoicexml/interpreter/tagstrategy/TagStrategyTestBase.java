@@ -44,10 +44,10 @@ import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.config.DummyConfiguration;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
-import org.jvoicexml.test.interpreter.tagstrategy.DummyInitializationTagStrategyFactory;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.config.MockConfiguration;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.test.interpreter.tagstrategy.MockInitializationTagStrategyFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
@@ -63,7 +63,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  */
 public abstract class TagStrategyTestBase {
     /** The implementation platform. */
-    private DummyImplementationPlatform platform;
+    private MockImplementationPlatform platform;
 
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
@@ -122,11 +122,11 @@ public abstract class TagStrategyTestBase {
      */
     @Before
     public final void baseSetUp() throws Exception {
-        platform = new DummyImplementationPlatform();
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        platform = new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
-        final Configuration configuration = new DummyConfiguration();
+        final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
         interpreter.init(configuration);
@@ -229,7 +229,7 @@ public abstract class TagStrategyTestBase {
     protected final void executeTagStrategy(final VoiceXmlNode node,
             final TagStrategy strategy) throws JVoiceXMLEvent, Exception {
         final InitializationTagStrategyFactory factoy =
-            new DummyInitializationTagStrategyFactory();
+            new MockInitializationTagStrategyFactory();
         if (fia != null) {
             fia.initialize(factoy);
         }

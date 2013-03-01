@@ -40,6 +40,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.jsapi10.RuleGrammarImplementation;
+import org.jvoicexml.mock.implementation.MockUserInput;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
@@ -54,7 +55,7 @@ import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
  * @version $Revision$
  * @since 0.6
  */
-public final class Jsapi10DummyUserInput extends DummyUserInput {
+public final class Jsapi10DummyUserInput extends MockUserInput {
     /** Buffer size when reading a grammar. */
     private static final int BUFFER_SIZE = 1024;
 

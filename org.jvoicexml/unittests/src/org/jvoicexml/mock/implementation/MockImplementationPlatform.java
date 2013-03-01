@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.test.implementation;
+package org.jvoicexml.mock.implementation;
 
 import java.util.List;
 
@@ -51,7 +51,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @version $Revision$
  * @since 0.6
  */
-public final class DummyImplementationPlatform
+public final class MockImplementationPlatform
         implements ImplementationPlatform {
     /** Borrowed user input. */
     private UserInput input;
@@ -79,7 +79,7 @@ public final class DummyImplementationPlatform
      */
     public CallControl getCallControl() throws NoresourceError {
         if (call == null) {
-            call = new DummyCallControl();
+            call = new MockCallControl();
         }
         return call;
     }
@@ -112,7 +112,7 @@ public final class DummyImplementationPlatform
      */
     public SystemOutput getSystemOutput() throws NoresourceError {
         if (output == null) {
-            DummySystemOutput dummyOutput = new DummySystemOutput();
+            MockSystemOutput dummyOutput = new MockSystemOutput();
             dummyOutput.addListener(outputListener);
             output = dummyOutput;
         }
@@ -130,7 +130,7 @@ public final class DummyImplementationPlatform
      */
     public UserInput getUserInput() throws NoresourceError {
         if (input == null) {
-            input = new DummyUserInput();
+            input = new MockUserInput();
         }
         return input;
     }

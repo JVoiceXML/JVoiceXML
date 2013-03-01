@@ -41,10 +41,10 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.DummyRecognitionResult;
-import org.jvoicexml.test.config.DummyConfiguration;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockRecognitionResult;
+import org.jvoicexml.mock.config.MockConfiguration;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
@@ -87,12 +87,12 @@ public final class TestFieldFormItem {
         final Form form = vxml.appendChild(Form.class);
         field = form.appendChild(Field.class);
         field.setName("testfield");
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final ImplementationPlatform platform =
-                new DummyImplementationPlatform();
+                new MockImplementationPlatform();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
-        final Configuration configuration = new DummyConfiguration();
+        final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         item = new FieldFormItem(context, field);
         final ScriptingEngine scripting = context.getScriptingEngine();
@@ -128,7 +128,7 @@ public final class TestFieldFormItem {
      */
     @Test
     public void setFormItemVariableRecognitionResult() throws JVoiceXMLEvent {
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         result.setAccepted(true);
         result.setUtterance("hans");
         item.setFormItemVariable(result);
@@ -149,7 +149,7 @@ public final class TestFieldFormItem {
     @Test
     public void setFormItemVariableRecognitionResultSemanticInterpretation()
             throws JVoiceXMLEvent {
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         result.setAccepted(true);
         result.setUtterance("yeah");
         result.setSemanticInterpretation("'yes'");
@@ -171,7 +171,7 @@ public final class TestFieldFormItem {
     @Test
     public void setFormItemVariableRecognitionResultSemanticInterpretationCompoundObject()
             throws JVoiceXMLEvent {
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         result.setAccepted(true);
         result.setUtterance("yeah");
         final ScriptingEngine scripting = context.getScriptingEngine();
@@ -201,7 +201,7 @@ public final class TestFieldFormItem {
     @Test
     public void setFormItemVariableRecognitionResultSemanticInterpretationCompoundObjectSlot()
             throws JVoiceXMLEvent {
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         result.setAccepted(true);
         result.setUtterance("yeah");
         final ScriptingEngine scripting = context.getScriptingEngine();

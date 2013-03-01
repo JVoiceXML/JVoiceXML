@@ -41,10 +41,10 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.DummyRecognitionResult;
-import org.jvoicexml.test.config.DummyConfiguration;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockRecognitionResult;
+import org.jvoicexml.mock.config.MockConfiguration;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Initial;
@@ -73,11 +73,11 @@ public final class TestFormLevelRecognitionEventStrategy {
     @Before
     public void setUp() throws Exception {
         final ImplementationPlatform platform =
-            new DummyImplementationPlatform();
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+            new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
-        final Configuration configuration = new DummyConfiguration();
+        final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
         interpreter.init(configuration);
@@ -110,7 +110,7 @@ public final class TestFormLevelRecognitionEventStrategy {
         final FormLevelRecognitionEventStrategy strategy =
             new FormLevelRecognitionEventStrategy(context, interpreter, fia,
                     dialog);
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         result.setAccepted(true);
         final String drink = "Cola";
         final String food = "Pizza";
@@ -158,7 +158,7 @@ public final class TestFormLevelRecognitionEventStrategy {
         final FormLevelRecognitionEventStrategy strategy =
             new FormLevelRecognitionEventStrategy(context, interpreter, fia,
                     dialog);
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         result.setAccepted(true);
         final String food = "Pizza";
         result.setUtterance("I want " + food);

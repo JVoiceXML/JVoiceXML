@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,28 +23,38 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+package org.jvoicexml.test.mock.scope;
 
-package org.jvoicexml.test.documentserver.schemestrategy;
+import java.util.Collection;
 
-import org.jvoicexml.documentserver.schemestrategy.SessionIdentifierFactory;
+import org.jvoicexml.interpreter.scope.ScopedSet;
+import org.jvoicexml.interpreter.scope.ScopedSetObserver;
 
 /**
- * Dummy implementation of a {@link SessionIdentifierFactory} for test purposes.
- * @author Dirk Schnelle
+ * Dummy implementation of a {@link ScopedSetObserver}.
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.7
+ * @since 0.7.3
  */
-public final class DummySessionIdentifierFactory
-    implements SessionIdentifierFactory<String> {
-    /** Counter for session identifiers. */
-    private static int count;
+public final class MockScopedSetObserver implements ScopedSetObserver<Object> {
+    /** The last removed items from a {@link ScopedSet}. */
+    private Collection<?> lastRemoved;
+
+    /**
+     * Retrieves the last removed items.
+     * @return the last removed items
+     */
+    public Collection<?> getLastRemoved() {
+        return lastRemoved;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String createSessionIdentifier(final String sessionId) {
-        ++count;
-        return "identifier" + Integer.toString(count);
+    public void scopedSetChange(final ScopedSet<Object> set,
+            final Collection<Object> removed) {
+        lastRemoved = removed;
     }
+
 }

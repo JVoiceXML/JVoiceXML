@@ -34,7 +34,7 @@ import junit.framework.TestCase;
 /**
  * Test cases for {@link JVoiceXmlSynthesizerModeDescFactory}.
  *
- * @author Dirk SChnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  *

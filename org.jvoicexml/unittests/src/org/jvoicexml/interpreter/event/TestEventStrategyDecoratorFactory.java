@@ -38,8 +38,8 @@ import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.interpreter.formitem.RecordFormItem;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Initial;
@@ -64,8 +64,8 @@ public final class TestEventStrategyDecoratorFactory {
     @Before
     public void setUp() {
         final ImplementationPlatform platform =
-            new DummyImplementationPlatform();
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+            new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
         context = new VoiceXmlInterpreterContext(session, null);

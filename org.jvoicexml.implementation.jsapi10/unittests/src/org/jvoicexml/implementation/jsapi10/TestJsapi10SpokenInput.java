@@ -69,6 +69,10 @@ public class TestJsapi10SpokenInput {
      */
     @BeforeClass
     public static void init() throws EngineException {
+        final String config = "/sphinx4.jsapi10.config";
+        final SphinxRecognizerModeDesc desc =
+                new SphinxRecognizerModeDesc(config);
+        SphinxEngineCentral.registerEngineModeDesc(desc);
         Central.registerEngineCentral(SphinxEngineCentral.class.getName());
 //        Central.registerEngineCentral(CGEngineCentral.class.getName());
     }

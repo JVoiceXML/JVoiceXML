@@ -40,9 +40,9 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.config.DummyConfiguration;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.config.MockConfiguration;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.Form;
@@ -71,11 +71,11 @@ public final class TestCatchEventStrategy {
     @Before
     public void setUp() throws Exception {
         final ImplementationPlatform platform =
-            new DummyImplementationPlatform();
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+            new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
-        final Configuration configuration = new DummyConfiguration();
+        final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
         interpreter.init(configuration);

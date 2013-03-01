@@ -51,8 +51,8 @@ import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
-import org.jvoicexml.test.TestProperties;
-import org.jvoicexml.test.implementation.DummySynthesizedOutputListener;
+import org.jvoicexml.mock.TestProperties;
+import org.jvoicexml.mock.implementation.MockSynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -81,7 +81,7 @@ public final class TestJsapi20SynthesizedOutput {
     private Jsapi20SynthesizedOutput output;
 
     /** Listener for output events. */
-    private DummySynthesizedOutputListener listener;
+    private MockSynthesizedOutputListener listener;
 
     /** The document server. */
     private DocumentServer documentServer;
@@ -122,7 +122,7 @@ public final class TestJsapi20SynthesizedOutput {
         output = new Jsapi20SynthesizedOutput(mode, null);
         output.open();
         output.activate();
-        listener = new DummySynthesizedOutputListener();
+        listener = new MockSynthesizedOutputListener();
         output.addListener(listener);
         documentServer = new JVoiceXmlDocumentServer();
         sessionId = UUID.randomUUID().toString();

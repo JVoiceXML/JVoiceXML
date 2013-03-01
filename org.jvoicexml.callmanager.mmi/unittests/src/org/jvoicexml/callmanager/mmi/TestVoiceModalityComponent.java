@@ -36,7 +36,7 @@ import org.jvoicexml.client.ConnectionInformationFactory;
 import org.jvoicexml.client.JVoiceXmlConnectionInformationFactory;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.mmi.events.StartRequest;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
 
 /**
  * Test cases for {@link VoiceModalityComponent}.
@@ -57,7 +57,7 @@ public final class TestVoiceModalityComponent {
      */
     @Before
     public void setUp() throws Exception, JVoiceXMLEvent {
-        final JVoiceXml jvxml = new DummyJvoiceXmlCore();
+        final JVoiceXml jvxml = new MockJvoiceXmlCore();
         cm = new MMICallManager();
         cm.setJVoiceXml(jvxml);
         final ETLProtocolAdapter adapter = new DummyETLProtocolAdapter();

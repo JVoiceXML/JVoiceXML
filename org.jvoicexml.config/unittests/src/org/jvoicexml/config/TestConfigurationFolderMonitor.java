@@ -46,11 +46,12 @@ public final class TestConfigurationFolderMonitor
      */
     @Test(timeout = 10000)
     public void test() throws Exception {
+        final long delay = 500;
         final File configFolder = new File(
                 "../org.jvoicexml.config/unittests/config");
         final ConfigurationFolderMonitor monitor =
                 new ConfigurationFolderMonitor(configFolder);
-        monitor.setDelay(500);
+        monitor.setDelay(delay);
         monitor.addListener(this);
         monitor.start();
         synchronized (lock) {
@@ -63,36 +64,43 @@ public final class TestConfigurationFolderMonitor
         Assert.assertEquals("added", action);
         reportedFile = null;
         action = null;
-        final File added = new File(
+        final File file = new File(
                 "../org.jvoicexml.config/unittests/config/test.xml");
-        added.deleteOnExit();
-        added.createNewFile();
+        file.deleteOnExit();
+
+        // Added
+        file.createNewFile();
         synchronized (lock) {
             lock.wait();
         }
-        LOGGER.info(action + " on " + reportedFile);
-        Assert.assertEquals(added, reportedFile);
+        LOGGER.info("observed '" + action + "' on " + reportedFile);
+        Assert.assertEquals(file, reportedFile);
         Assert.assertEquals("added", action);
         reportedFile = null;
         action = null;
-        Thread.sleep(100);
-        final FileWriter writer = new FileWriter(added);
+        Thread.sleep(delay);
+
+        // Updated
+        final FileWriter writer = new FileWriter(file);
         writer.write("test");
         writer.close();
         synchronized (lock) {
             lock.wait();
         }
-        LOGGER.info(action + " on " + reportedFile);
-        Assert.assertEquals(added, reportedFile);
+        LOGGER.info("observed '" + action + "' on " + reportedFile);
+        Assert.assertEquals(file, reportedFile);
         Assert.assertEquals("updated", action);
         reportedFile = null;
         action = null;
-        added.delete();
+        Thread.sleep(delay);
+
+        // removed
+        file.delete();
         synchronized (lock) {
             lock.wait();
         }
-        LOGGER.info(action + " on " + reportedFile);
-        Assert.assertEquals(added, reportedFile);
+        LOGGER.info("observed '" + action + "' on " + reportedFile);
+        Assert.assertEquals(file, reportedFile);
         Assert.assertEquals("deleted", action);
     }
 

@@ -45,11 +45,11 @@ import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.tagstrategy.GrammarStrategy;
 import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlInitializationTagStrategyFactory;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.DummyRecognitionResult;
-import org.jvoicexml.test.config.DummyConfiguration;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
-import org.jvoicexml.test.implementation.DummyUserInput;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockRecognitionResult;
+import org.jvoicexml.mock.config.MockConfiguration;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.mock.implementation.MockUserInput;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
@@ -85,11 +85,11 @@ public final class TestFormInterpretationAlgorithm {
      */
     @Before
     public void setUp() throws Exception {
-        platform = new DummyImplementationPlatform();
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        platform = new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
-        final Configuration configuration = new DummyConfiguration();
+        final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
         interpreter.init(configuration);
@@ -149,8 +149,8 @@ public final class TestFormInterpretationAlgorithm {
                     executableForm);
         final InputItem item = new FieldFormItem(context, field);
         fia.visitFieldFormItem(item);
-        final DummyUserInput input =
-            (DummyUserInput) platform.getUserInput();
+        final MockUserInput input =
+            (MockUserInput) platform.getUserInput();
         Assert.assertNotNull(input);
         Assert.assertTrue(input.isRecognitionStarted());
     }
@@ -202,8 +202,8 @@ public final class TestFormInterpretationAlgorithm {
             };
         };
         thread.start();
-        final DummyUserInput input =
-            (DummyUserInput) platform.getUserInput();
+        final MockUserInput input =
+            (MockUserInput) platform.getUserInput();
         input.waitRecognitionStarted();
         final Collection<GrammarDocument> activeGrammars =
                 input.getActiveGrammars();
@@ -262,8 +262,8 @@ public final class TestFormInterpretationAlgorithm {
             };
         };
         thread.start();
-        final DummyUserInput input =
-                (DummyUserInput) platform.getUserInput();
+        final MockUserInput input =
+                (MockUserInput) platform.getUserInput();
         input.waitRecognitionStarted();
         final Collection<GrammarDocument> activeGrammars =
                 input.getActiveGrammars();
@@ -342,14 +342,14 @@ public final class TestFormInterpretationAlgorithm {
             };
         };
         thread.start();
-        final DummyUserInput input =
-                (DummyUserInput) platform.getUserInput();
+        final MockUserInput input =
+                (MockUserInput) platform.getUserInput();
         input.waitRecognitionStarted();
         final Collection<GrammarDocument> activeGrammars =
                 input.getActiveGrammars();
         Assert.assertEquals(1, activeGrammars.size());
         final EventHandler handler = context.getEventHandler();
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         result.setUtterance("visa");
         result.setAccepted(true);
         result.setConfidence(1.0f);
@@ -408,8 +408,8 @@ public final class TestFormInterpretationAlgorithm {
             };
         };
         thread.start();
-        final DummyUserInput input =
-            (DummyUserInput) platform.getUserInput();
+        final MockUserInput input =
+            (MockUserInput) platform.getUserInput();
         input.waitRecognitionStarted();
         final Collection<GrammarDocument> activeGrammars =
                 input.getActiveGrammars();
@@ -468,8 +468,8 @@ public final class TestFormInterpretationAlgorithm {
             };
         };
         thread.start();
-        final DummyUserInput input =
-            (DummyUserInput) platform.getUserInput();
+        final MockUserInput input =
+            (MockUserInput) platform.getUserInput();
         input.waitRecognitionStarted();
         final Collection<GrammarDocument> activeGrammars =
                 input.getActiveGrammars();
@@ -539,8 +539,8 @@ public final class TestFormInterpretationAlgorithm {
             };
         };
         thread.start();
-        final DummyUserInput input =
-            (DummyUserInput) platform.getUserInput();
+        final MockUserInput input =
+            (MockUserInput) platform.getUserInput();
         input.waitRecognitionStarted();
         final Collection<GrammarDocument> activeGrammars =
                 input.getActiveGrammars();
@@ -597,8 +597,8 @@ public final class TestFormInterpretationAlgorithm {
             };
         };
         thread.start();
-        final DummyUserInput input =
-            (DummyUserInput) platform.getUserInput();
+        final MockUserInput input =
+            (MockUserInput) platform.getUserInput();
         input.waitRecognitionStarted();
         final Collection<GrammarDocument> activeGrammars =
                 input.getActiveGrammars();
@@ -666,8 +666,8 @@ public final class TestFormInterpretationAlgorithm {
             };
         };
         thread.start();
-        final DummyUserInput input =
-            (DummyUserInput) platform.getUserInput();
+        final MockUserInput input =
+            (MockUserInput) platform.getUserInput();
         input.waitRecognitionStarted();
         final Collection<GrammarDocument> activeGrammars =
                 input.getActiveGrammars();
@@ -745,14 +745,14 @@ public final class TestFormInterpretationAlgorithm {
             };
         };
         thread.start();
-        final DummyUserInput input =
-            (DummyUserInput) platform.getUserInput();
+        final MockUserInput input =
+            (MockUserInput) platform.getUserInput();
         input.waitRecognitionStarted();
         final Collection<GrammarDocument> activeGrammars =
                 input.getActiveGrammars();
         Assert.assertEquals(1, activeGrammars.size());
         final EventHandler handler = context.getEventHandler();
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         result.setUtterance("visa");
         final ScriptingEngine scripting = new ScriptingEngine(null);
         scripting.enterScope(null, Scope.APPLICATION);

@@ -31,7 +31,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.test.DummyRecognitionResult;
+import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Clear;
@@ -138,7 +138,7 @@ public final class TestClearStrategy
         final Field field = form.appendChild(Field.class);
         field.setName("testfield");
         final InputItem inputItem = new FieldFormItem(getContext(), field);
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         result.setUtterance("dummy");
         inputItem.setFormItemVariable(result);
         inputItem.incrementPromptCount();
@@ -177,7 +177,7 @@ public final class TestClearStrategy
         final Field field = form.appendChild(Field.class);
         field.setName("testfield");
         final InputItem inputItem = new FieldFormItem(getContext(), field);
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         result.setUtterance("dummy2");
         inputItem.setFormItemVariable(result);
         inputItem.incrementPromptCount();

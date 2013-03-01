@@ -32,8 +32,8 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.config.DummyConfiguration;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Param;
@@ -68,11 +68,11 @@ public final class TestObjectExecutorThread {
      */
     @Before
     public void setUp() throws Exception {
-        final DummyJvoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final MockJvoiceXmlCore jvxml = new MockJvoiceXmlCore();
 
         final JVoiceXmlSession session =
             new JVoiceXmlSession(null, jvxml, null);
-        final Configuration configuration = new DummyConfiguration();
+        final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
     }
 

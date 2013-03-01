@@ -31,7 +31,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.test.interpreter.scope.DummyScopedSetObserver;
+import org.jvoicexml.test.mock.scope.MockScopedSetObserver;
 
 /**
  * Test case for {@link org.jvoicexml.interpreter.scope.ScopedSet}.
@@ -111,7 +111,7 @@ public final class TestScopedSet {
     @Test
     public void testAddObserver() {
         final ScopedSet<Object> set = new ScopedSet<Object>(observer);
-        final DummyScopedSetObserver obs = new DummyScopedSetObserver();
+        final MockScopedSetObserver obs = new MockScopedSetObserver();
         set.addScopedSetObserver(obs);
         final String test1 = "test1";
         final String test2 = "test2";

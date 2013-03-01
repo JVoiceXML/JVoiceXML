@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.test.implementation;
+package org.jvoicexml.mock.implementation;
 
 import java.util.List;
 
@@ -41,11 +41,11 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @version $Revision$
  * @since 0.7
  */
-public final class DummySynthesizedOutputListener
+public final class MockSynthesizedOutputListener
         implements SynthesizedOutputListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(DummySynthesizedOutputListener.class);
+            Logger.getLogger(MockSynthesizedOutputListener.class);
 
     /** Collected events. */
     private final List<SynthesizedOutputEvent> occur;
@@ -53,7 +53,7 @@ public final class DummySynthesizedOutputListener
     /**
      * Constructs a new object.
      */
-    public DummySynthesizedOutputListener() {
+    public MockSynthesizedOutputListener() {
         occur = new java.util.ArrayList<SynthesizedOutputEvent>();
     }
 

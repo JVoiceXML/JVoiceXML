@@ -30,7 +30,7 @@ import java.io.StringReader;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.jvoicexml.test.DummyRecognitionResult;
+import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
@@ -62,15 +62,15 @@ public final class TestSrgsXmlGrammarImplementation {
         rule.addText("this is a test");
         final SrgsXmlGrammarImplementation impl =
             new SrgsXmlGrammarImplementation(document);
-        final DummyRecognitionResult result1 = new DummyRecognitionResult();
+        final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("this is a test");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
                 impl.accepts(result1));
-        final DummyRecognitionResult result2 = new DummyRecognitionResult();
+        final MockRecognitionResult result2 = new MockRecognitionResult();
         result2.setUtterance("this is");
         Assert.assertFalse(result2.getUtterance() + " should not be accepted",
                 impl.accepts(result2));
-        final DummyRecognitionResult result3 = new DummyRecognitionResult();
+        final MockRecognitionResult result3 = new MockRecognitionResult();
         result3.setUtterance("this is a test dummy");
         Assert.assertFalse(result3.getUtterance() + " should not be accepted",
                 impl.accepts(result3));
@@ -102,23 +102,23 @@ public final class TestSrgsXmlGrammarImplementation {
         item3.addText("3");
         final SrgsXmlGrammarImplementation impl =
             new SrgsXmlGrammarImplementation(document);
-        final DummyRecognitionResult result1 = new DummyRecognitionResult();
+        final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("press 1");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
                 impl.accepts(result1));
-        final DummyRecognitionResult result2 = new DummyRecognitionResult();
+        final MockRecognitionResult result2 = new MockRecognitionResult();
         result2.setUtterance("press 2");
         Assert.assertTrue(result2.getUtterance() + " should be accepted",
                 impl.accepts(result2));
-        final DummyRecognitionResult result3 = new DummyRecognitionResult();
+        final MockRecognitionResult result3 = new MockRecognitionResult();
         result3.setUtterance("press 3");
         Assert.assertTrue(result3.getUtterance() + " should be accepted",
                 impl.accepts(result3));
-        final DummyRecognitionResult result4 = new DummyRecognitionResult();
+        final MockRecognitionResult result4 = new MockRecognitionResult();
         result4.setUtterance("press 4");
         Assert.assertFalse(result4.getUtterance() + " should not be accepted",
                 impl.accepts(result4));
-        final DummyRecognitionResult result5 = new DummyRecognitionResult();
+        final MockRecognitionResult result5 = new MockRecognitionResult();
         result5.setUtterance("please press 1");
         Assert.assertTrue(result5.getUtterance() + " should be accepted",
                 impl.accepts(result5));
@@ -152,19 +152,19 @@ public final class TestSrgsXmlGrammarImplementation {
         ref2.setUri("#digit");
         final SrgsXmlGrammarImplementation impl =
             new SrgsXmlGrammarImplementation(document);
-        final DummyRecognitionResult result1 = new DummyRecognitionResult();
+        final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("2 or 3");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
                 impl.accepts(result1));
-        final DummyRecognitionResult result2 = new DummyRecognitionResult();
+        final MockRecognitionResult result2 = new MockRecognitionResult();
         result2.setUtterance("1 or 3");
         Assert.assertTrue(result2.getUtterance() + " should be accepted",
                 impl.accepts(result2));
-        final DummyRecognitionResult result3 = new DummyRecognitionResult();
+        final MockRecognitionResult result3 = new MockRecognitionResult();
         result3.setUtterance("3 or 1");
         Assert.assertTrue(result3.getUtterance() + " should be accepted",
                 impl.accepts(result3));
-        final DummyRecognitionResult result4 = new DummyRecognitionResult();
+        final MockRecognitionResult result4 = new MockRecognitionResult();
         result4.setUtterance("2 or 4");
         Assert.assertFalse(result4.getUtterance() + " should not be accepted",
                 impl.accepts(result4));
@@ -190,19 +190,19 @@ public final class TestSrgsXmlGrammarImplementation {
         final SrgsXmlDocument document = new SrgsXmlDocument(source);
         final SrgsXmlGrammarImplementation impl =
             new SrgsXmlGrammarImplementation(document);
-        final DummyRecognitionResult result1 = new DummyRecognitionResult();
+        final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("a");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
                 impl.accepts(result1));
-        final DummyRecognitionResult result2 = new DummyRecognitionResult();
+        final MockRecognitionResult result2 = new MockRecognitionResult();
         result2.setUtterance("a b");
         Assert.assertTrue(result2.getUtterance() + " should be accepted",
                 impl.accepts(result2));
-        final DummyRecognitionResult result3 = new DummyRecognitionResult();
+        final MockRecognitionResult result3 = new MockRecognitionResult();
         result3.setUtterance("b");
         Assert.assertTrue(result3.getUtterance() + " should be accepted",
                 impl.accepts(result3));
-        final DummyRecognitionResult result4 = new DummyRecognitionResult();
+        final MockRecognitionResult result4 = new MockRecognitionResult();
         result4.setUtterance("help");
         Assert.assertTrue(result4.getUtterance() + " should be accepted",
                 impl.accepts(result4));

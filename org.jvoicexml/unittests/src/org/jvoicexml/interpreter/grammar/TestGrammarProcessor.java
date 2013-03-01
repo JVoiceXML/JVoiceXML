@@ -42,8 +42,8 @@ import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
@@ -215,8 +215,8 @@ public final class TestGrammarProcessor {
 
         processor.setGrammaridentifier(identifier);
         final ImplementationPlatform platform =
-            new DummyImplementationPlatform();
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+            new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
         context = new VoiceXmlInterpreterContext(session, null);

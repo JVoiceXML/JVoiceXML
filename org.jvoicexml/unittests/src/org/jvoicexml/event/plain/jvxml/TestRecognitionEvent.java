@@ -29,7 +29,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.test.DummyRecognitionResult;
+import org.jvoicexml.mock.MockRecognitionResult;
 
 /**
  * Test case for {@link org.jvoicexml.event.plain.jvxml.RecognitionEvent}.
@@ -41,14 +41,14 @@ import org.jvoicexml.test.DummyRecognitionResult;
  */
 public final class TestRecognitionEvent {
     /** A test result. */
-    private DummyRecognitionResult result;
+    private MockRecognitionResult result;
 
     /**
      * {@inheritDoc}
      */
     @Before
     public void setUp() throws Exception {
-        result = new DummyRecognitionResult();
+        result = new MockRecognitionResult();
         result.setUtterance("test utterance");
     }
 
