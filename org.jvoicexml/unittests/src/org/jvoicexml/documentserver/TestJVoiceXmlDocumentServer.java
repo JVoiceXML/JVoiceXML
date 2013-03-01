@@ -46,8 +46,8 @@ import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -176,9 +176,9 @@ public final class TestJVoiceXmlDocumentServer {
     @Test
     public void testGetAudioInputStream() throws Exception, JVoiceXMLEvent {
         final File file = new File("unittests/config/test.wav");
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final ImplementationPlatform platform =
-            new DummyImplementationPlatform();
+            new MockImplementationPlatform();
         final Session session = new JVoiceXmlSession(platform, jvxml, null);
         final String sessionId = session.getSessionID();
         final AudioInputStream in =
@@ -200,8 +200,8 @@ public final class TestJVoiceXmlDocumentServer {
         map.addDocument(uri, document);
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final ImplementationPlatform platform =
-            new DummyImplementationPlatform();
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+            new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final Session session = new JVoiceXmlSession(platform, jvxml, null);
         final String sessionId = session.getSessionID();
         final VoiceXmlDocument retrievedDocument =
@@ -225,8 +225,8 @@ public final class TestJVoiceXmlDocumentServer {
         final DocumentDescriptor descriptor =
             new DocumentDescriptor(fragmentUri);
         final ImplementationPlatform platform =
-            new DummyImplementationPlatform();
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+            new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final Session session = new JVoiceXmlSession(platform, jvxml, null);
         final String sessionId = session.getSessionID();
         final VoiceXmlDocument retrievedDocument =
@@ -252,8 +252,8 @@ public final class TestJVoiceXmlDocumentServer {
         map.addDocument(uri, document);
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final ImplementationPlatform platform =
-            new DummyImplementationPlatform();
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+            new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final Session session = new JVoiceXmlSession(platform, jvxml, null);
         final String sessionId = session.getSessionID();
         final VoiceXmlDocument retrievedDocument =

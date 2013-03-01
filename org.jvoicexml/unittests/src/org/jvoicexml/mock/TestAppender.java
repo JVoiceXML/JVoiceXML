@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.test;
+package org.jvoicexml.mock;
 
 import java.util.Collection;
 

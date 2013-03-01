@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.test.implementation;
+package org.jvoicexml.mock.implementation;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -54,7 +54,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @version $Revision$
  * @since 0.6
  */
-public final class DummySpokenInput
+public final class MockSpokenInput
     implements SpokenInput, ObservableSpokenInput {
     /** Registered output listener. */
     private final Collection<SpokenInputListener> listener;
@@ -65,7 +65,7 @@ public final class DummySpokenInput
     /**
      * Constructs a new object.
      */
-    public DummySpokenInput() {
+    public MockSpokenInput() {
         listener = new java.util.ArrayList<SpokenInputListener>();
     }
 

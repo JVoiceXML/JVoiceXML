@@ -23,7 +23,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.test.implementation;
+package org.jvoicexml.mock.implementation;
 
 import java.io.IOException;
 import java.net.URI;
@@ -51,11 +51,11 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @version $Revision$
  * @since 0.6
  */
-public final class DummySynthesizedOutput implements SynthesizedOutput,
+public final class MockSynthesizedOutput implements SynthesizedOutput,
     ObservableSynthesizedOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(DummySynthesizedOutput.class);
+        Logger.getLogger(MockSynthesizedOutput.class);
 
     /** Registered output listener. */
     private final Collection<SynthesizedOutputListener> listener;
@@ -72,7 +72,7 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
     /**
      * Constructs a new object.
      */
-    public DummySynthesizedOutput() {
+    public MockSynthesizedOutput() {
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         speakables = new java.util.LinkedList<SpeakableText>();
         thread = new SpeechThread(this);

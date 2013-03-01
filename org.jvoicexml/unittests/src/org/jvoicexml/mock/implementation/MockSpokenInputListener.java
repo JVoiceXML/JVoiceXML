@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.test.implementation;
+package org.jvoicexml.mock.implementation;
 
 import java.util.List;
 
@@ -40,10 +40,10 @@ import org.jvoicexml.implementation.SpokenInputListener;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class DummySpokenInputListener implements SpokenInputListener {
+public class MockSpokenInputListener implements SpokenInputListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(DummySpokenInputListener.class);
+            Logger.getLogger(MockSpokenInputListener.class);
 
     /** Received events. */
     private final List<SpokenInputEvent> events;
@@ -51,7 +51,7 @@ public class DummySpokenInputListener implements SpokenInputListener {
     /**
      * Constructs a new object.
      */
-    public DummySpokenInputListener() {
+    public MockSpokenInputListener() {
         events = new java.util.ArrayList<SpokenInputEvent>();
     }
 

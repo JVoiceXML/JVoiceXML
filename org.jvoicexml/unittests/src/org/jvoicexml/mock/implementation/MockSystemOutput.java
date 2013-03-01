@@ -23,7 +23,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.test.implementation;
+package org.jvoicexml.mock.implementation;
 
 import java.util.Collection;
 
@@ -48,7 +48,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @version $Revision$
  * @since 0.6
  */
-public final class DummySystemOutput implements SystemOutput,
+public final class MockSystemOutput implements SystemOutput,
     ObservableSynthesizedOutput {
     /** Registered output listener. */
     private final Collection<SynthesizedOutputListener> listener;
@@ -65,7 +65,7 @@ public final class DummySystemOutput implements SystemOutput,
     /**
      * Constructs a new object.
      */
-    public DummySystemOutput() {
+    public MockSystemOutput() {
         this(null);
     }
 
@@ -73,7 +73,7 @@ public final class DummySystemOutput implements SystemOutput,
      * Constructs a new object.
      * @param synthesizedOutput the encapsulated synthesized output.
      */
-    public DummySystemOutput(final SynthesizedOutput synthesizedOutput) {
+    public MockSystemOutput(final SynthesizedOutput synthesizedOutput) {
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         output = synthesizedOutput;
     }

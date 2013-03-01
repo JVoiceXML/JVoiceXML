@@ -23,7 +23,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.test;
+package org.jvoicexml.mock;
 
 import java.net.URI;
 
@@ -36,7 +36,7 @@ import org.jvoicexml.ConnectionInformation;
  * @version $Revision$
  * @since 0.6
  */
-public final class DummyConnectionInformation implements ConnectionInformation {
+public final class MockConnectionInformation implements ConnectionInformation {
     /** The serial version UID. */
     private static final long serialVersionUID = -3795809583703263932L;
 

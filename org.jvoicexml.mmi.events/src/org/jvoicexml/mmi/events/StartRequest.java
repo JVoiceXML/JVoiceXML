@@ -30,7 +30,6 @@ import java.io.Serializable;
 import java.net.URI;
 import java.net.URL;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -50,7 +49,7 @@ public final class StartRequest extends LifeCycleRequest
     private ContentURLType contentURL;
 
     /** Arbitrary content. */
-    private AnyComplexType content;
+    private String content;
 
     /**
      * Gets the value of the contentURL property.
@@ -112,20 +111,18 @@ public final class StartRequest extends LifeCycleRequest
      * @return possible object is {@link AnyComplexType }
      * 
      */
-    @XmlAttribute(name = "Context",
-            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    public AnyComplexType getContent() {
+    @XmlElement(name = "ContentURL")
+    public String getContent() {
         return content;
     }
 
     /**
      * Sets the value of the content property.
      * 
-     * @param value
-     *            allowed object is {@link AnyComplexType }
+     * @param value the content that evaluates to a string
      * 
      */
-    public void setContent(final AnyComplexType value) {
+    public void setContent(final String value) {
         content = value;
     }
 }

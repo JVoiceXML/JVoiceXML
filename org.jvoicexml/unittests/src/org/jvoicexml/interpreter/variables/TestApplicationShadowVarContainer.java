@@ -32,7 +32,7 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
-import org.jvoicexml.test.DummyRecognitionResult;
+import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
@@ -79,7 +79,7 @@ public final class TestApplicationShadowVarContainer {
     @Test
     public void testGetLastresult() throws SemanticError {
         final String utterance = "this is a test";
-        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final MockRecognitionResult result = new MockRecognitionResult();
         result.setUtterance(utterance);
         result.setConfidence(0.7f);
         result.setMode(ModeType.VOICE);

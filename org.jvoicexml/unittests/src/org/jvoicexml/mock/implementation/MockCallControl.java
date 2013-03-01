@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.test.implementation;
+package org.jvoicexml.mock.implementation;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -45,7 +45,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @version $Revision$
  * @since 0.6
  */
-public final class DummyCallControl implements CallControl {
+public final class MockCallControl implements CallControl {
 
     /**
      * {@inheritDoc}

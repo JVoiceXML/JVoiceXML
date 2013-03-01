@@ -39,7 +39,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @version $Revision$
  * @since 0.7.4
  */
-public class DummyInitializationTagStrategyFactory
+public class MockInitializationTagStrategyFactory
     implements InitializationTagStrategyFactory {
     /**
      * Known strategies. The known strategies are templates for the strategy to
@@ -54,7 +54,7 @@ public class DummyInitializationTagStrategyFactory
      * @throws InvocationTargetException 
      * @throws IllegalArgumentException 
      */
-    public DummyInitializationTagStrategyFactory() 
+    public MockInitializationTagStrategyFactory() 
         throws InstantiationException, IllegalAccessException,
         ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
         strategies = new java.util.HashMap<String, TagStrategy>();

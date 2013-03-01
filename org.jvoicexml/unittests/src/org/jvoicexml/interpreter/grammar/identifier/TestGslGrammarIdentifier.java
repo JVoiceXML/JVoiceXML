@@ -33,7 +33,7 @@ import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.InternalGrammarDocument;
-import org.jvoicexml.test.interpreter.grammar.GrammarUtil;
+import org.jvoicexml.mock.interpreter.grammar.GrammarUtil;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.Form;

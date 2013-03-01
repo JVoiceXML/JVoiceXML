@@ -41,7 +41,7 @@ import javax.speech.recognition.RuleToken;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.test.DummyRecognitionResult;
+import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.test.implementation.DummyRuleGrammar;
 
 import edu.cmu.sphinx.jsapi.SphinxEngineCentral;
@@ -66,15 +66,15 @@ public final class TestRuleGrammarImplementation {
         grammar.setRule(grammar.getName(), sequence, true);
         final RuleGrammarImplementation impl =
             new RuleGrammarImplementation(grammar, grammar.toString());
-        final DummyRecognitionResult result1 = new DummyRecognitionResult();
+        final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("this is a test");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
                 impl.accepts(result1));
-        final DummyRecognitionResult result2 = new DummyRecognitionResult();
+        final MockRecognitionResult result2 = new MockRecognitionResult();
         result2.setUtterance("this is");
         Assert.assertFalse(result2.getUtterance() + " should not be accepted",
                 impl.accepts(result2));
-        final DummyRecognitionResult result3 = new DummyRecognitionResult();
+        final MockRecognitionResult result3 = new MockRecognitionResult();
         result3.setUtterance("this is a test dummy");
         Assert.assertFalse(result3.getUtterance() + " should not be accepted",
                 impl.accepts(result3));
@@ -99,19 +99,19 @@ public final class TestRuleGrammarImplementation {
         grammar.setRule(grammar.getName(), sequence, true);
         final RuleGrammarImplementation impl =
             new RuleGrammarImplementation(grammar, grammar.toString());
-        final DummyRecognitionResult result1 = new DummyRecognitionResult();
+        final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("press 1");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
                 impl.accepts(result1));
-        final DummyRecognitionResult result2 = new DummyRecognitionResult();
+        final MockRecognitionResult result2 = new MockRecognitionResult();
         result2.setUtterance("press 2");
         Assert.assertTrue(result2.getUtterance() + " should be accepted",
                 impl.accepts(result2));
-        final DummyRecognitionResult result3 = new DummyRecognitionResult();
+        final MockRecognitionResult result3 = new MockRecognitionResult();
         result3.setUtterance("press 3");
         Assert.assertTrue(result3.getUtterance() + " should be accepted",
                 impl.accepts(result3));
-        final DummyRecognitionResult result4 = new DummyRecognitionResult();
+        final MockRecognitionResult result4 = new MockRecognitionResult();
         result4.setUtterance("press 4");
         Assert.assertFalse(result4.getUtterance() + " should not be accepted",
                 impl.accepts(result4));
@@ -139,19 +139,19 @@ public final class TestRuleGrammarImplementation {
         grammar.setRule(grammar.getName(), sequence, true);
         final RuleGrammarImplementation impl =
             new RuleGrammarImplementation(grammar, grammar.toString());
-        final DummyRecognitionResult result1 = new DummyRecognitionResult();
+        final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("2 or 3");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
                 impl.accepts(result1));
-        final DummyRecognitionResult result2 = new DummyRecognitionResult();
+        final MockRecognitionResult result2 = new MockRecognitionResult();
         result2.setUtterance("1 or 3");
         Assert.assertTrue(result2.getUtterance() + " should be accepted",
                 impl.accepts(result2));
-        final DummyRecognitionResult result3 = new DummyRecognitionResult();
+        final MockRecognitionResult result3 = new MockRecognitionResult();
         result3.setUtterance("3 or 1");
         Assert.assertTrue(result3.getUtterance() + " should be accepted",
                 impl.accepts(result3));
-        final DummyRecognitionResult result4 = new DummyRecognitionResult();
+        final MockRecognitionResult result4 = new MockRecognitionResult();
         result4.setUtterance("2 or 4");
         Assert.assertFalse(result4.getUtterance() + " should not be accepted",
                 impl.accepts(result4));

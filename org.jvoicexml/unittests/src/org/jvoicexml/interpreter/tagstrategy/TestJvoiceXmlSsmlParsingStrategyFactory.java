@@ -37,8 +37,8 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.SsmlParsingStrategyFactory;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Prompt;
@@ -66,8 +66,8 @@ public final class TestJvoiceXmlSsmlParsingStrategyFactory {
     @Before
     public void setUp() throws Exception {
         final ImplementationPlatform platform =
-            new DummyImplementationPlatform();
-        final JVoiceXmlCore core = new DummyJvoiceXmlCore();
+            new MockImplementationPlatform();
+        final JVoiceXmlCore core = new MockJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, core, null);
         context = new VoiceXmlInterpreterContext(session, null);

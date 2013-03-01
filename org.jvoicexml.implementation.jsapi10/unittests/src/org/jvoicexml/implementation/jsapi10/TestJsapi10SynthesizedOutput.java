@@ -49,7 +49,7 @@ import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
-import org.jvoicexml.test.implementation.DummySynthesizedOutputListener;
+import org.jvoicexml.mock.implementation.MockSynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Break;
 import org.jvoicexml.xml.ssml.Mark;
@@ -61,6 +61,9 @@ import org.jvoicexml.xml.ssml.Voice;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
+
+import edu.cmu.sphinx.jsapi.SphinxEngineCentral;
+import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
 
 /**
  * Test cases for {@link JVoiceXmlSynthesizerModeDescFactory}.
@@ -77,7 +80,7 @@ public final class TestJsapi10SynthesizedOutput {
     private Jsapi10SynthesizedOutput synthesizer;
 
     /** Listener for output events. */
-    private DummySynthesizedOutputListener listener;
+    private MockSynthesizedOutputListener listener;
 
     /** The document server. */
     private DocumentServer documentServer;
@@ -92,6 +95,10 @@ public final class TestJsapi10SynthesizedOutput {
      */
     @BeforeClass
     public static void init() throws EngineException {
+        final String config = "/sphinx4.jsapi10.config";
+        final SphinxRecognizerModeDesc desc =
+                new SphinxRecognizerModeDesc(config);
+        SphinxEngineCentral.registerEngineModeDesc(desc);
         Central.registerEngineCentral(FreeTTSEngineCentral.class.getName());
 //        Central.registerEngineCentral("com.cloudgarden.speech.CGEngineCentral");
     }
@@ -109,7 +116,7 @@ public final class TestJsapi10SynthesizedOutput {
         synthesizer = new Jsapi10SynthesizedOutput(desc);
         synthesizer.open();
         synthesizer.activate();
-        listener = new DummySynthesizedOutputListener();
+        listener = new MockSynthesizedOutputListener();
         synthesizer.addListener(listener);
         documentServer = new JVoiceXmlDocumentServer();
         sessionId = UUID.randomUUID().toString();

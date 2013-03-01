@@ -35,7 +35,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -60,7 +60,7 @@ public final class TestJVoiceXmlPromptAccumulator {
     @Before
     public void setUp() {
         final ImplementationPlatform platform =
-                new DummyImplementationPlatform();
+                new MockImplementationPlatform();
         accumulator = new JVoiceXmlPromptAccumulator(platform);
     }
 

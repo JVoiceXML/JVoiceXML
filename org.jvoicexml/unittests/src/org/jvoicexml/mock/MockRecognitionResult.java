@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.test;
+package org.jvoicexml.mock;
 
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -36,7 +36,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @version $Revision$
  * @since 0.6
  */
-public final class DummyRecognitionResult
+public final class MockRecognitionResult
         implements RecognitionResult {
     /** The semantic interpretation of the utterance. */
     private Object interpretation;

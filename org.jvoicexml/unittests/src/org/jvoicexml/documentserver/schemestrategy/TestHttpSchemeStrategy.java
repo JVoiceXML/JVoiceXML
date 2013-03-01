@@ -34,8 +34,8 @@ import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
@@ -55,8 +55,8 @@ public final class TestHttpSchemeStrategy {
     @Test(expected = BadFetchError.class)
     public void testGetInputStream() throws Exception, BadFetchError {
         final ImplementationPlatform platform =
-            new DummyImplementationPlatform();
-        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+            new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final Session session = new JVoiceXmlSession(platform, jvxml, null);
         final HttpSchemeStrategy strategy = new HttpSchemeStrategy();
         final URI uri = new URI("http://localhost:8080?session=id");

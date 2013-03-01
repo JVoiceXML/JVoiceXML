@@ -48,7 +48,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
-import org.jvoicexml.test.TestProperties;
+import org.jvoicexml.mock.TestProperties;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Rule;
