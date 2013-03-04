@@ -128,20 +128,16 @@ public final class MmiReceiver implements ITypedReceiver {
             event = request;
         } else if (type.equals(LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
                     .START_REQUEST)) {
-                final StartRequest request = new StartRequest();
-                final LifeCycleEvents.LifeCycleRequest decodedLifeCycleRequest =
-                        extractContext(receivedEvent, request);
-                final LifeCycleEvents.StartRequest decodedStartRequest =
-                        decodedLifeCycleRequest.getExtension(
-                                LifeCycleEvents.StartRequest.request);
-                request.setContentURL(decodedStartRequest.getContentURL());
-                final String content = decodedStartRequest.getContent();
-                if ((content != null) && !content.isEmpty()) {
-                    final AnyComplexType any = new AnyComplexType();
-                    any.getContent().add(content);
-                    request.setContent(any);
-                }
-                event = request;
+            final StartRequest request = new StartRequest();
+            final LifeCycleEvents.LifeCycleRequest decodedLifeCycleRequest =
+                    extractContext(receivedEvent, request);
+            final LifeCycleEvents.StartRequest decodedStartRequest =
+                    decodedLifeCycleRequest.getExtension(
+                            LifeCycleEvents.StartRequest.request);
+            request.setContentURL(decodedStartRequest.getContentURL());
+            final String content = decodedStartRequest.getContent();
+            request.setContent(content);
+            event = request;
         } else if (type.equals(LifeCycleEvents.LifeCycleEvent.LifeCycleEventType
                 .CANCEL_REQUEST)) {
             final NewContextRequest request = new NewContextRequest();
