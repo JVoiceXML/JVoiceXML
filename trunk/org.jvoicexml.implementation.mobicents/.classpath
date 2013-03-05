@@ -24,7 +24,14 @@
 	<classpathentry kind="lib" path="3rdparty/MSS/sip-servlets-catalina-7-1.7.0.FINAL.jar"/>
 	<classpathentry kind="lib" path="3rdparty/MSS/sip-servlets-core-api-1.7.0.FINAL.jar"/>
 	<classpathentry kind="lib" path="3rdparty/GeneralLibs/sipunit.jar"/>
-	<classpathentry kind="lib" path="3rdparty/GeneralLibs/VIVRLib.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/jain-sip-ri-1.2.169.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/joda-time-2.1.jar"/>
+	<classpathentry kind="lib" path="3rdparty/MSS/concurrent-3.0.0.CR2.jar"/>
+	<classpathentry kind="lib" path="3rdparty/MSS/jsr-309-driver-3.0.0.CR2.jar"/>
+	<classpathentry kind="lib" path="3rdparty/MSS/mgcp-driver-3.0.0.CR2.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/commons-configuration-1.9.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/axis-1.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
