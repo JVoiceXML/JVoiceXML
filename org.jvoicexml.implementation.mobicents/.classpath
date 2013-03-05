@@ -29,9 +29,18 @@
 	<classpathentry kind="lib" path="3rdparty/MSS/concurrent-3.0.0.CR2.jar"/>
 	<classpathentry kind="lib" path="3rdparty/MSS/jsr-309-driver-3.0.0.CR2.jar"/>
 	<classpathentry kind="lib" path="3rdparty/MSS/mgcp-driver-3.0.0.CR2.jar"/>
-	<classpathentry kind="lib" path="3rdparty/GeneralLibs/commons-lang3-3.1.jar"/>
 	<classpathentry kind="lib" path="3rdparty/GeneralLibs/commons-configuration-1.9.jar"/>
 	<classpathentry kind="lib" path="3rdparty/GeneralLibs/axis-1.4.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/axis-jaxrpc-1.4.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/commons-lang-2.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/fluent-hc-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/httpclient-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/httpclient-cache-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/httpcore-4.2.2.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/httpmime-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib/httpcore-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib/httpcore-ab-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib/httpcore-nio-4.2.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
