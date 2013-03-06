@@ -47,7 +47,7 @@ import com.google.protobuf.ExtensionRegistry;
 public final class TestUmundoETLProtocolAdapter {
     /** The umundo receiving node. */
     private Node receivingNode;
-    /** Synchronzation lock. */
+    /** Synchronization lock. */
     private Object lock;
     /** The received event. */
     private LifeCycleEvent receivedEvent;
