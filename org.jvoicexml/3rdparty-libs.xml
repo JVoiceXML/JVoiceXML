@@ -42,7 +42,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         </fileset>
 
         <!-- commons-httpcore library -->
-        <property name="httpcore.dir" value="${commons.dir}/httpcore4.2,3" />
+        <property name="httpcore.dir" value="${commons.dir}/httpcore4.2.3" />
         <property name="httpcore.lib.dir" value="${httpcore.dir}/lib" />
         <fileset dir="${httpcore.lib.dir}" id="httpcore.lib">
             <include name="httpcore-4.2.3.jar" />
