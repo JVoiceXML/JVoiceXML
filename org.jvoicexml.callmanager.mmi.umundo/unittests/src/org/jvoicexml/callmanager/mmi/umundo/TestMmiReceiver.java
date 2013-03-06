@@ -97,7 +97,7 @@ public final class TestMmiReceiver implements MMIEventListener {
      * @throws Exception
      *         test failed
      */
-    @Test//(timeout = 5000)
+    @Test(timeout = 5000)
     public void testReceiveObject() throws Exception {
         final TypedPublisher publisher = new TypedPublisher("test");
         publishingNode.addPublisher(publisher);
