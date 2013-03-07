@@ -115,6 +115,7 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
         registry = ExtensionRegistry.newInstance();
         LifeCycleEvents.registerAllExtensions(registry);
         node.addSubscriber(subscriber);
+        subscriber.setExtensionRegistry(registry);
 
         publisher = new TypedPublisher(channel);
         node.addPublisher(publisher);
