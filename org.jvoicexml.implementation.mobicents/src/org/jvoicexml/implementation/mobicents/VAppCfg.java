@@ -4,6 +4,7 @@
  */
 package org.jvoicexml.implementation.mobicents;
 
+import com.vnxtele.util.VText;
 import java.io.*;
 import java.util.*;
 
@@ -29,6 +30,7 @@ import org.w3c.dom.NodeList;
 
 import javax.servlet.sip.SipServlet;
 import org.apache.log4j.Logger;
+import org.jvoicexml.implementation.mobicents.broadcast.DBMng;
 import org.util.ExLog;
 
 /**
@@ -131,12 +133,44 @@ public class VAppCfg implements ServletContextListener {
     /**************************/
     public static int INCOMING_CALL=1;
     public static int OUTGOING_CALL=2;
+    public static int SIP_MSG_INCOMING=3;
+    public static int SIP_MSG_OUTGOING=4;
     
     /******************************************/
     public static int conferMngRate=60;
     public static int conferExpiredTime=60;
     ///
     public static int mgcpClientMngRate=60;
+    
+    /***
+     * Voice Broadcast Config
+     * 
+     */
+    public static int vbcEnable=0;
+    public static int vbcEnaLimitConOutcalls=0;
+    public static int vbcDelayStartTime=60000;
+    public static int vbcRate=10000;
+    public static int vbcBrdcstRate=10000;
+    public static int vbcNumbThreadPool=1;
+    public static int vbcNumbBatchRecords=10;
+    public static String     vbcSqlBroadcastCMD="";
+    public static int vbcConcurrentOutcallRate=10;
+    public static int vbcLimitBroadcastQueueSize=5000;
+//    maximum time for a out call remaining in the concurrent out call list, in seconds
+    public static int expiredTime=120;
+
+    
+    /**
+     * 
+     * Audio config for storing and playing
+     */
+    //ftp: as file://// or http://
+    public static String     accessMethod="";
+    public static String     audioDir="";
+    public static String     recordDir="";
+    public static String     beepFile="";
+    
+    
     
     public static VAppCfg getInstance() {
         if (instance == null) {
@@ -189,11 +223,6 @@ public class VAppCfg implements ServletContextListener {
             } else {
                 initConfig = true;
             }
-            //telnet session
-//            LOGGER.info("crearte VTelnetD server...:from telnetCfgFile:" + telnetCfgFile);
-//            telnet = new VTelnetD();
-//            telnet.init(telnetCfgFile);
-//            telnet.start();
             //loading configuration from file
             prop = new Properties();
             LOGGER.info("reading configuration informations from file:" + genCfgFile);
@@ -202,9 +231,6 @@ public class VAppCfg implements ServletContextListener {
             prop.load(gencfgFile);
             LOGGER.info("*******print out properties from the config file: \n" + prop);
             //
-            
-            
-                    
             sipStackAddr = prop.getProperty("VNXIVR.sipStackAddr");
             LOGGER.info("sipStackAddr:" + sipStackAddr);
             
@@ -216,8 +242,6 @@ public class VAppCfg implements ServletContextListener {
 
             CA_PORT = prop.getProperty("VNXIVR.local_callAgent_port");
             LOGGER.info("CA_PORT:" + CA_PORT);
-            
-            
 
             LOCAL_MGCP_PORT = prop.getProperty("VNXIVR.local_mgcp_port");
             LOGGER.info("LOCAL_MGCP_PORT:" + LOCAL_MGCP_PORT);
@@ -255,9 +279,6 @@ public class VAppCfg implements ServletContextListener {
             INBOUND_CONTACT_IP = prop.getProperty("VNXIVR.INBOUND_CONTACT_IP");
             LOGGER.info("INBOUND_CONTACT_IP:" + INBOUND_CONTACT_IP);
             
-            
-//            loadRuleSets();
-            
             CATALINA_HOME= prop.getProperty("tomcat.home");
             LOGGER.info("CATALINA_HOME:" + CATALINA_HOME);
             projectHome= prop.getProperty("project.home");
@@ -290,22 +311,67 @@ public class VAppCfg implements ServletContextListener {
             
             digitModPattern = prop.getProperty("VNXIVR.digitModPattern");
             LOGGER.info("digitModPattern:" + digitModPattern);
-            
-            
-            
-
 
             defaulSipServlet = prop.getProperty("VNXIVR.defaulSipServlet");
             LOGGER.info("defaulSipServlet:" + defaulSipServlet);
-            
             
             conferMngRate = Integer.parseInt(prop.getProperty("VNXIVR.conferMngRate"));
             LOGGER.info("conferMngRate:" + conferMngRate);
             
             conferExpiredTime = Integer.parseInt(prop.getProperty("VNXIVR.conferExpiredTime"));
             LOGGER.info("conferExpiredTime:" + conferExpiredTime);
+            //load broadcast configurations
+            LOGGER.info("/**********************   loading broadcast configurations .....");
+            
+            vbcEnable = Integer.parseInt(prop.getProperty("vbc.enable"));
+            LOGGER.info("vbcEnable:" + vbcEnable);
+            vbcDelayStartTime = Integer.parseInt(prop.getProperty("vbc.delayStartTime"));
+            LOGGER.info("vbcDelayStartTime:" + vbcDelayStartTime);
+            vbcRate = Integer.parseInt(prop.getProperty("vbc.rate"));
+            LOGGER.info("vbcRate:" + vbcRate);
+             vbcBrdcstRate = Integer.parseInt(prop.getProperty("vbc.brdcastRate"));
+            LOGGER.info("vbcBrdcstRate:" + vbcBrdcstRate);
+            vbcNumbThreadPool = Integer.parseInt(prop.getProperty("vbc.numbThreadPool"));
+            LOGGER.info("vbcNumbThreadPool:" + vbcNumbThreadPool);
+            
+            vbcConcurrentOutcallRate = Integer.parseInt(prop.getProperty("vbc.numConcurrentOutCallRate"));
+            LOGGER.info("vbcConcurrentOutcallRate:" + vbcConcurrentOutcallRate);
+            
+            vbcEnaLimitConOutcalls = Integer.parseInt(prop.getProperty("vbc.enableLimitConOutcall"));
+            LOGGER.info("vbcEnaLimitConOutcalls:" + vbcEnaLimitConOutcalls);
+            
+            vbcSqlBroadcastCMD = prop.getProperty("vbc.sqlBroadcastCMD");
+            LOGGER.info("vbcSqlBroadcastCMD:" + vbcSqlBroadcastCMD);
+            
+            
+            vbcLimitBroadcastQueueSize = Integer.parseInt(prop.getProperty("vbc.limitBroadcastQueueSize"));
+            LOGGER.info("vbcLimitBroadcastQueueSize:" + vbcLimitBroadcastQueueSize);
+            
+            vbcNumbBatchRecords = Integer.parseInt(prop.getProperty("vbc.numbBatchRecords"));
+            LOGGER.info("vbcNumbBatchRecords:" + vbcNumbBatchRecords);
+            
+            expiredTime = Integer.parseInt(prop.getProperty("vbc.expiredTime"));
+            LOGGER.info("expiredTime:" + expiredTime);
+            
+            
+            
+            
+            
+            
+            
+            audioDir = prop.getProperty("VNXIVR.audioDir");
+            audioDir =VText.osResPath(audioDir)+"/";
+            LOGGER.info("audioDir:" + audioDir);
+            recordDir = prop.getProperty("VNXIVR.recordDir");
+            recordDir =VText.osResPath(recordDir)+"/";
+            LOGGER.info("recordDir:" + recordDir);
+            
+            accessMethod = prop.getProperty("VNXIVR.accessMethod");
+            LOGGER.info("accessMethod:" + accessMethod);
+            
+            beepFile = prop.getProperty("VNXIVR.beepFile");
+            LOGGER.info("beepFile:" + beepFile);
             initIntfs();
-
 
         } catch (Exception ex) {
             LOGGER.error("error when loading configuration from file:" + genCfgFile + ex.getMessage());
@@ -315,13 +381,15 @@ public class VAppCfg implements ServletContextListener {
 
     public static void initIntfs() {
         try {
-            LOGGER.info("initializing interface ...");
-           
+            LOGGER.info("initializing data base interface ...");
+            DBMng.getInstance();
         } catch (Exception ex) {
 
             ExLog.exception(LOGGER, ex);
         }
     }
+    
+    
 
     public static void loadRuleSets() throws Exception {
         try {

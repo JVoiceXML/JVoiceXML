@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import org.cafesip.sipunit.SipPhone;
 import org.cafesip.sipunit.SipStack;
 import org.jvoicexml.JVoiceXmlMain;
+import org.jvoicexml.implementation.mobicents.broadcast.VoiceBroadCastMng;
 import org.mobicents.servlet.sip.SipServletTestCase;
 import org.mobicents.servlet.sip.catalina.SipStandardManager;
 import org.mobicents.servlet.sip.startup.SipContextConfig;
@@ -165,6 +166,9 @@ public class VNXIVR extends SipServletTestCase {
             VNXIVR c2c = new VNXIVR("VNXIVR");
             c2c.setUp();
             //
+            VoiceBroadCastMng vbcManager = new VoiceBroadCastMng();
+            vbcManager.init();
+            vbcManager.start();
 //            jvxmlmain(args);
         } catch (Exception ex) {
             ex.printStackTrace();

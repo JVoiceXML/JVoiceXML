@@ -39,8 +39,11 @@ import javax.sound.sampled.AudioFormat;
 
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.JVoiceXmlRecordResult;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.jvxml.RecordingEvent;
 import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
@@ -48,8 +51,12 @@ import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
 import org.jvoicexml.implementation.mobicents.callmanager.MobicentsConnectionInformation;
+import org.jvoicexml.interpreter.EventHandler;
+import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpCallTerminal;
 import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpIvrEndpoint;
+import org.mobicents.servlet.sip.restcomm.media.api.Call;
+import org.mobicents.servlet.sip.restcomm.media.api.CallObserver;
 import org.util.ExLog;
 
 /**
@@ -66,12 +73,14 @@ import org.util.ExLog;
  * @since 0.6
  */
 public final class MobicentsTelephony implements Telephony,
-        ObservableTelephony, TelephonyListener {
+        ObservableTelephony, TelephonyListener,CallObserver {
     private static final Logger LOGGER = Logger.getLogger(MobicentsTelephony.class);
     /** Listener to this call control. */
     private final Collection<TelephonyListener> callControlListeners;
     /** The SIP MGCP connection. */
     private MgcpCallTerminal terminal;
+    
+    private CallControlProperties props;
 
     /**
      * Constructs a new object.
@@ -130,7 +139,7 @@ public final class MobicentsTelephony implements Telephony,
                         terminal.getIVREndPointState()!=MgcpIvrEndpoint.STOP)
                 {
                     LOGGER.debug("canceling current playing....  " );
-                    terminal.stopMedia();
+//                    terminal.stopMedia();
                 }
                 uri = output.getUriForNextSynthesisizedOutput();
             } catch (URISyntaxException e) {
@@ -158,6 +167,7 @@ public final class MobicentsTelephony implements Telephony,
             final CallControlProperties props)
             throws NoresourceError, IOException 
     {
+        LOGGER.debug(" with input:" + input + " CallControlProperties:"+props);
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
@@ -179,7 +189,9 @@ public final class MobicentsTelephony implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public AudioFormat getRecordingAudioFormat() {
+    public AudioFormat getRecordingAudioFormat() 
+    {
+        LOGGER.error("current don't support this function");
         return null;
     }
 
@@ -188,8 +200,53 @@ public final class MobicentsTelephony implements Telephony,
      */
     public void startRecording(final SpokenInput input,
             final OutputStream stream, final CallControlProperties props)
-            throws NoresourceError, IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+            throws NoresourceError, IOException 
+    {
+        LOGGER.debug("with input:" + input + " stream:"+stream + " props:"+props);
+        if (terminal == null) 
+        {
+            throw new NoresourceError("No active telephony connection!");
+        }
+        this.props = props;
+        terminal.addObserver(this);
+        //adding observer this
+        terminal.recordAfterBeep((long)props.getGenProperties(JVoiceXmlRecordResult.DURATION));
+        
+    }
+     /**
+     * 
+     * @param call 
+     * @Override
+     */
+    public void onStatusChanged(Call call) 
+    {
+        try 
+        {
+            MgcpCallTerminal term=(MgcpCallTerminal)call;
+            LOGGER.debug(" for CallControlProperties:"+props + " " + call.toString() );
+            if ((Call.Status.COMPLETED == call.getStatus() || Call.Status.IN_PROGRESS == call.getStatus())
+                    && term.getIVREndPointState() ==MgcpIvrEndpoint.IDLE
+                    && (term.getIVREndPointOldState() ==MgcpIvrEndpoint.PLAY
+                    || term.getIVREndPointOldState() ==MgcpIvrEndpoint.PLAY_COLLECT
+                    || term.getIVREndPointOldState() ==MgcpIvrEndpoint.PLAY_RECORD))
+            {
+                JVoiceXmlRecordResult result = new JVoiceXmlRecordResult();
+                long duration=(long)props.getGenProperties(JVoiceXmlRecordResult.DURATION);
+                result.setDuration(duration);
+                if(duration >= JVoiceXmlRecordResult.DEFAULT_RECORDING_MAXTIME)
+                    result.setMAXTIME("true");
+                else result.setMAXTIME("false");
+                result.setTermchar((String)props.getGenProperties(JVoiceXmlRecordResult.TERMCHAR));
+                result.setSize(-1);
+                final JVoiceXMLEvent event = new RecordingEvent(null);
+                ((RecordingEvent)event).setInputResult(result);
+                EventHandler handler=(EventHandler)props.getGenProperties("EventHandler");
+                handler.notifyEvent(event);
+            }
+        } catch (Exception ex) {
+            ExLog.exception(LOGGER, ex);
+        }
+
     }
 
     /**
@@ -199,8 +256,8 @@ public final class MobicentsTelephony implements Telephony,
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
-
-//        terminal.stopRecord();
+        LOGGER.debug(" ..." );
+        terminal.stopMedia();
     }
 
     /**
@@ -334,11 +391,14 @@ public final class MobicentsTelephony implements Telephony,
      */
     public void stopPlay() throws NoresourceError
     {
-        if (terminal == null) {
+        if (terminal == null) 
+        {
             throw new NoresourceError("No active telephony connection!");
         }
-        LOGGER.info("stop play media for terminal:"+terminal);
-//        terminal.stopMedia();
+        LOGGER.info("hangup the terminal:"+terminal);
+        terminal.stopMedia();
+//        terminal.hangup();
+        
     }
 
     /**
@@ -366,7 +426,9 @@ public final class MobicentsTelephony implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void telephonyCallAnswered(final TelephonyEvent event) {
+    public void telephonyCallAnswered(final TelephonyEvent event) 
+    {
+        LOGGER.debug("event :"+event);
         final Collection<TelephonyListener> tmp =
                 new java.util.ArrayList<TelephonyListener>(callControlListeners);
         for (TelephonyListener listener : tmp) {
@@ -377,7 +439,9 @@ public final class MobicentsTelephony implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void telephonyCallHungup(final TelephonyEvent event) {
+    public void telephonyCallHungup(final TelephonyEvent event) 
+    {
+        LOGGER.debug("event :"+event);
         final Collection<TelephonyListener> tmp =
                 new java.util.ArrayList<TelephonyListener>(callControlListeners);
         for (TelephonyListener listener : tmp) {
@@ -388,7 +452,9 @@ public final class MobicentsTelephony implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void telephonyMediaEvent(final TelephonyEvent event) {
+    public void telephonyMediaEvent(final TelephonyEvent event) 
+    {
+        LOGGER.debug("event :"+event);
         final Collection<TelephonyListener> tmp =
                 new java.util.ArrayList<TelephonyListener>(callControlListeners);
         for (TelephonyListener listener : tmp) {
@@ -400,6 +466,7 @@ public final class MobicentsTelephony implements Telephony,
      * {@inheritDoc}
      */
     public void telephonyCallTransferred(final TelephonyEvent event) {
+        LOGGER.debug("event :"+event);
     }
 
     /**
@@ -407,6 +474,7 @@ public final class MobicentsTelephony implements Telephony,
      */
     @Override
     public void telephonyError(final ErrorEvent error) {
+        LOGGER.debug("ErrorEvent :"+error);
         final Collection<TelephonyListener> tmp =
                 new java.util.ArrayList<TelephonyListener>(callControlListeners);
         for (TelephonyListener listener : tmp) {

@@ -26,6 +26,7 @@
 
 package org.jvoicexml.implementation.mobicents;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.Telephony;
@@ -41,6 +42,8 @@ import org.jvoicexml.implementation.Telephony;
  */
 public final class MobicentsTelephonyFactory
     implements ResourceFactory<Telephony> {
+    private static final Logger LOGGER = Logger
+            .getLogger(MobicentsTelephonyFactory.class);
     /** Number of instances that this factory will create. */
     private int instances;
 
@@ -67,6 +70,7 @@ public final class MobicentsTelephonyFactory
      * @param number Number of instances to create.
      */
     public void setInstances(final int number) {
+        LOGGER.debug(" setting the number of instances:"+number);
         instances = number;
     }
 
@@ -74,6 +78,7 @@ public final class MobicentsTelephonyFactory
      * {@inheritDoc}
      */
     public int getInstances() {
+        LOGGER.debug(" get the number of instances:"+instances);
         return instances;
     }
 

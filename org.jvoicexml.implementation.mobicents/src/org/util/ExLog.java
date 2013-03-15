@@ -112,14 +112,10 @@ public class ExLog
         String clsName=ste.getClassName();
         String pkage = clsName.substring(clsName.lastIndexOf(".",clsName.lastIndexOf(".")-1)+1, clsName.length());
         clsName=clsName.substring(clsName.lastIndexOf(".")+1, clsName.length());
-        System.out.println(" printing :"+clsName);
         if(clsName.isEmpty()) return;
         //get a proper instance
         Logger subLog = Logger.getRootLogger();
-        System.out.println(" subLog :"+clsName);
         if(subLog==null) return;
-        System.out.println(" subLog :"
-                +" ("+pkage+","+ste.getLineNumber()+","+ste.getMethodName()+" )"+logcontent);
         subLog.log(Level.DEBUG, " ("+pkage+","+ste.getLineNumber()+","+ste.getMethodName()+" )"+logcontent);
     }
     public static void debug(String pattern, Object ... arguments)

@@ -23,6 +23,7 @@ import org.mobicents.servlet.sip.restcomm.annotations.concurrency.ThreadSafe;
 
 /**
  * @author quintana.thomas@gmail.com (Thomas Quintana)
+ * @modified Shadowman
  */
 @ThreadSafe public final class ServiceLocator {
   private static final class SingletonHolder {

@@ -40,6 +40,7 @@ import org.mobicents.servlet.sip.restcomm.annotations.concurrency.NotThreadSafe;
   private long recordingLength;
   private String endInputKey;
   private URI recordId;
+  private boolean nonInterruptPlay;
   
   public AdvancedAudioParametersBuilder() {
     super();
@@ -57,6 +58,7 @@ import org.mobicents.servlet.sip.restcomm.annotations.concurrency.NotThreadSafe;
     recordingLength = -1;
     endInputKey = null;
     recordId = null;
+    nonInterruptPlay = false;
   }
   
   public void addAnnouncement(final URI uri) {
@@ -79,6 +81,7 @@ import org.mobicents.servlet.sip.restcomm.annotations.concurrency.NotThreadSafe;
   
   public String build() {
 	final StringBuilder buffer = new StringBuilder();
+        appendTo(buffer,buildNonInterruptPlay());
 	appendTo(buffer, buildAnnouncement());
 	appendTo(buffer, buildInitialPrompt());
 	appendTo(buffer, buildIterations());
@@ -144,6 +147,15 @@ import org.mobicents.servlet.sip.restcomm.annotations.concurrency.NotThreadSafe;
     if(clearDigitBuffer) {
       final StringBuilder buffer = new StringBuilder();
       buffer.append("cb=").append("true");
+      return buffer.toString();
+    } else {
+      return null;
+    }
+  }
+  private String buildNonInterruptPlay() {
+    if(nonInterruptPlay) {
+      final StringBuilder buffer = new StringBuilder();
+      buffer.append("ni=").append("true");
       return buffer.toString();
     } else {
       return null;
@@ -296,5 +308,9 @@ import org.mobicents.servlet.sip.restcomm.annotations.concurrency.NotThreadSafe;
   
   public void setRecordId(final URI recordId) {
     this.recordId = recordId;
+  }
+  public void setNonInterruptPlay(final boolean noninterrruptplay) 
+  {
+    this.nonInterruptPlay = noninterrruptplay;
   }
 }

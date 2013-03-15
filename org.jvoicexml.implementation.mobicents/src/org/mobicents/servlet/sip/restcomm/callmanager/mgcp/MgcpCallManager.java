@@ -16,6 +16,8 @@
  */
 package org.mobicents.servlet.sip.restcomm.callmanager.mgcp;
 
+import com.vnxtele.oracle.DBCfg;
+import com.vnxtele.util.VNXLog;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -50,6 +52,7 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -65,6 +68,11 @@ import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.callmanager.Terminal;
 import org.jvoicexml.callmanager.TerminalConnectionInformationFactory;
 import org.jvoicexml.implementation.mobicents.EmbeddedJVXML;
+import org.jvoicexml.implementation.mobicents.VAppCfg;
+import org.jvoicexml.implementation.mobicents.broadcast.BrcastObjState;
+import org.jvoicexml.implementation.mobicents.broadcast.BroadcastObj;
+import org.jvoicexml.implementation.mobicents.broadcast.DBMng;
+import org.mobicents.servlet.sip.restcomm.media.api.CallObserver;
 import org.util.ExLog;
 import org.util.SIPUtil;
 
@@ -74,9 +82,9 @@ import org.util.SIPUtil;
  * @author quintana.thomas@gmail.com (Thomas Quintana)
  */
 public final class MgcpCallManager extends SipServlet 
-    implements org.jvoicexml.CallManager,CallManager, SipApplicationSessionListener 
+    implements org.jvoicexml.CallManager,CallManager,CallObserver, SipApplicationSessionListener 
 {
-        private static final Logger LOGGER = Logger.getLogger(MgcpIvrEndpoint.class);
+        private static final Logger LOGGER = Logger.getLogger(MgcpCallManager.class);
     private static final long serialVersionUID = 4758133818077979879L;
     private static SipFactory sipFactory;
     private static Configuration configuration;
@@ -98,6 +106,8 @@ public final class MgcpCallManager extends SipServlet
     private Collection<Terminal> terminals;
     /** Established sessions. */
     private final Map<Terminal, Session> sessions;
+    /**for statistics outcall ***********************/
+    public static ConcurrentHashMap<String,Call> listCurrentOutCalls = new ConcurrentHashMap();
     public MgcpCallManager() {
         super();
         applications = new java.util.HashMap<String, ConfiguredApplication>();
@@ -115,6 +125,91 @@ public final class MgcpCallManager extends SipServlet
             throw new CallManagerException(exception);
         }
     }
+    
+    private Call createCall(BroadcastObj obj) throws CallManagerException 
+    {
+        SipServletRequest invite = null;
+        try {
+            invite = invite(obj.from_uri, obj.to_uri);
+        } catch (final ServletException exception) {
+            throw new CallManagerException(exception);
+        }
+        final MgcpServer server = servers.getMediaServer();
+        final MgcpCallTerminal call = new MgcpCallTerminal(invite, server,obj);
+        invite.getApplicationSession().setAttribute("CALL", call);
+        //update invite time
+        obj.status= BrcastObjState.INVITE;
+        obj.invite=invite;
+        if(DBMng.getInstance().updateBrcastObjSessidInvTime(obj)==0)
+            return call;
+        else 
+        {
+            LOGGER.error("can't update status for BroadcastObj:"+obj);
+            return null;
+        }
+    }
+    
+    public Call createOutCall(BroadcastObj brdobj) throws CallManagerException {
+        try 
+        {
+            Call call = null;
+            brdobj.from_uri = sipFactory.createSipURI(brdobj.caller, 
+                    VAppCfg.sipStackAddr+":"+VAppCfg.sipStackPort);
+            brdobj.to_uri = sipFactory.createSipURI(brdobj.called, VAppCfg.sipStackAddr+":"+VAppCfg.sipStackPort);
+            if(DBMng.getInstance().getCalledRoute(brdobj)==true)
+            {
+                call=createCall(brdobj);
+            }
+            else
+            {
+                LOGGER.error("can't start outgoing call fromUri: BroadcastObj:"+brdobj);
+                return null;
+            }
+            //create the call successful
+            LOGGER.debug("create outgoing call for broadcast object:"+brdobj.broadcast_id 
+                    +  " listCurrentOutCalls:"+listCurrentOutCalls.size());
+            listCurrentOutCalls.put(((MgcpCallTerminal) call).getSIPCallID(), call);
+            call.addObserver(this);
+            call.dial();
+            if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(((MgcpCallTerminal) call).getInitInvite()
+                    ,VAppCfg.SIP_MSG_OUTGOING);
+            if(DBMng.getInstance().updateBrcastObjSessidInvTime(brdobj)==0)
+                return call;
+            else 
+            {
+                LOGGER.error("can't update status for BroadcastObj:"+brdobj);
+                return null;
+            }
+        } catch (final Exception exception) {
+            VNXLog.error(exception);
+            throw new CallManagerException(exception);
+        }
+    }
+    
+    public void onStatusChanged(Call call) 
+    {
+        try 
+        {
+            LOGGER.debug("current is " + call.toString());
+            if (Call.Status.IN_PROGRESS == call.getStatus())
+            {
+                // Create a session and initiate a call at JVoiceXML.
+                LOGGER.debug("Create a session and initiate a call at JVoiceXML.");
+                embJVXML.executeBroadcast((MgcpCallTerminal)call);
+            }
+            else if (Call.Status.FAILED == call.getStatus())
+            {
+                LOGGER.error("media server has errors with call: "+call);
+                //update database
+                DBMng.getInstance().updateBrcastObjStatus(BrcastObjState.FAILE_MEDIASERVER,
+                        ((MgcpCallTerminal)call).getBroadcastID());
+                listCurrentOutCalls.remove(((MgcpCallTerminal)call).getSIPCallID());
+            }
+        } catch (Exception ex) {
+            ExLog.exception(LOGGER, ex);
+        }
+    }
+    
     
     @Override
     public Call createUserAgentCall(final String from, final String to) throws CallManagerException {
@@ -152,6 +247,8 @@ public final class MgcpCallManager extends SipServlet
         return call;
     }
     
+    
+    
     private SipServletRequest invite(final URI from, final URI to) throws ServletException {
         final SipApplicationSession application = sipFactory.createApplicationSession();
         final SipServletRequest invite = sipFactory.createRequest(application, "INVITE", from, to);
@@ -171,6 +268,7 @@ public final class MgcpCallManager extends SipServlet
     
     @Override
     protected final void doAck(final SipServletRequest request) throws ServletException, IOException {
+        
         final SipApplicationSession session = request.getApplicationSession();
         final MgcpCallTerminal call = (MgcpCallTerminal) session.getAttribute("CALL");
         call.established();
@@ -181,6 +279,7 @@ public final class MgcpCallManager extends SipServlet
     {
         try
         {
+            if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(request,VAppCfg.SIP_MSG_INCOMING);
             LOGGER.info("incoming SIPBYE:"+SIPUtil.dumpSIPMsgHdr2(request)) ;
             final SipApplicationSession session = request.getApplicationSession();
             final MgcpCallTerminal call = (MgcpCallTerminal) session.getAttribute("CALL");
@@ -202,7 +301,9 @@ public final class MgcpCallManager extends SipServlet
     }
     
     @Override
-    protected void doProvisionalResponse(SipServletResponse response) throws ServletException, IOException {
+    protected void doProvisionalResponse(SipServletResponse response) throws ServletException, IOException 
+    {
+        if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(response,VAppCfg.SIP_MSG_INCOMING);
         final SipServletRequest request = response.getRequest();
         final MgcpCallTerminal call = (MgcpCallTerminal) request.getApplicationSession().getAttribute("CALL");
         final int status = response.getStatus();
@@ -212,7 +313,10 @@ public final class MgcpCallManager extends SipServlet
     }
     
     @Override
-    protected void doErrorResponse(final SipServletResponse response) throws ServletException, IOException {
+    protected void doErrorResponse(final SipServletResponse response) throws ServletException, IOException 
+    {
+        if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(response,VAppCfg.SIP_MSG_INCOMING);
+        LOGGER.error(" "+SIPUtil.dumpSIPMsgHdr2(response)) ;
         final SipServletRequest request = response.getRequest();
         final MgcpCallTerminal call = (MgcpCallTerminal) request.getApplicationSession().getAttribute("CALL");
         final String method = request.getMethod();
@@ -274,6 +378,7 @@ public final class MgcpCallManager extends SipServlet
             IOException 
     {
         try {
+            if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(request,VAppCfg.SIP_MSG_INCOMING);
             String fromUri = request.getFrom().getURI().toString();
             SipURI toUri = (SipURI) request.getTo().getURI();
             LOGGER.info("<<<<<<<<<<< sipInfo comming:\n" + "fromUri:" + fromUri
@@ -296,13 +401,18 @@ public final class MgcpCallManager extends SipServlet
     }
     
     @Override
-    protected void doSuccessResponse(final SipServletResponse response) throws ServletException, IOException {
+    protected void doSuccessResponse(final SipServletResponse response) throws ServletException, IOException 
+    {
+        if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(response,VAppCfg.SIP_MSG_INCOMING);
+        LOGGER.info(" "+SIPUtil.dumpSIPMsgHdr2(response)) ;
         final SipServletRequest request = response.getRequest();
         final SipApplicationSession session = response.getApplicationSession();
         if (request.getMethod().equals("INVITE") && response.getStatus() == SipServletResponse.SC_OK) {
             final MgcpCallTerminal call = (MgcpCallTerminal) session.getAttribute("CALL");
             try {
+                
                 call.established(response);
+                
             } catch (final CallException exception) {
                 throw new ServletException(exception);
             }

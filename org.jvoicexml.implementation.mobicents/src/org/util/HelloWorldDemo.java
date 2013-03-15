@@ -67,7 +67,8 @@ public final class HelloWorldDemo {
                 + "http://jvoicexml.sourceforge.net/");
 
 //        final GenericClient client = new GenericClient();
-        final File file = new File("conf/jvxml/vxml/helloworld.vxml");
+        final File file = new File("conf/jvxml/vxml/CRBTPromotion.vxml");
+//        final File file = new File("conf/jvxml/vxml/CRBTPromotion.vxml");
         final URI dialog = file.toURI();
         try {
             org.util.ExLog.debug("hello you");
