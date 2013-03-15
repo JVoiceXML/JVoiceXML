@@ -17,6 +17,7 @@ public enum BrcastObjState
     QUEUE,
     SELECT,
     INVITE,
+    ANSWER,
     COMPLETE,
     FAILE_MEDIASERVER,
     UNKNOWN;
@@ -26,6 +27,7 @@ public enum BrcastObjState
         else if(this == QUEUE) return 1;        
         else if(this == SELECT) return 2;        
         else if(this == COMPLETE) return 3;                        
+        else if(this == ANSWER) return 4;                
         else return -1;
     }
     public BrcastObjState getValue(int input)
@@ -33,7 +35,8 @@ public enum BrcastObjState
         if(this == INITIAL) return INITIAL;
         else if(this == QUEUE) return QUEUE;        
         else if(this == SELECT) return SELECT;        
-        else if(this == COMPLETE) return COMPLETE;                        
+        else if(this == ANSWER) return ANSWER;                        
+        else if(this == COMPLETE) return COMPLETE;           
         else return UNKNOWN;
     }
     

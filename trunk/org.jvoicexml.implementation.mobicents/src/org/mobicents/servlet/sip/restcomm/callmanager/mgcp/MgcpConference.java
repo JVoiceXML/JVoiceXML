@@ -286,6 +286,9 @@ public final class MgcpConference extends FiniteStateMachine implements Conferen
       notify();
     }
   }
+  @Override public synchronized void operationCompleted(final MgcpIvrEndpoint endpoint,State state) {
+      
+  }
 
   @Override public synchronized void operationFailed(final MgcpIvrEndpoint endpoint) {
     setState(FAILED);

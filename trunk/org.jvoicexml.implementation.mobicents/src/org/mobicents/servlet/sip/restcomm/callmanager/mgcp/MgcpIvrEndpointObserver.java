@@ -16,10 +16,13 @@
  */
 package org.mobicents.servlet.sip.restcomm.callmanager.mgcp;
 
+import org.mobicents.servlet.sip.restcomm.State;
+
 /**
  * @author quintana.thomas@gmail.com (Thomas Quintana)
  */
 public interface MgcpIvrEndpointObserver {
   public void operationCompleted(MgcpIvrEndpoint endpoint);
+  public void operationCompleted(MgcpIvrEndpoint endpoint,State oldstate);
   public void operationFailed(MgcpIvrEndpoint endpoint);
 }

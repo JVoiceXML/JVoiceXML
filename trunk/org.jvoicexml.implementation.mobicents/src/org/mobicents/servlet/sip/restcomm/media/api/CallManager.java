@@ -16,6 +16,8 @@
  */
 package org.mobicents.servlet.sip.restcomm.media.api;
 
+import org.jvoicexml.implementation.mobicents.broadcast.BroadcastObj;
+
 /**
  * @author quintana.thomas@gmail.com (Thomas Quintana)
  */
@@ -23,4 +25,5 @@ public interface CallManager {
   public Call createExternalCall(String from, String to) throws CallManagerException;
   public Call createUserAgentCall(String from, String to) throws CallManagerException;
   public Call createCall(String from, String to) throws CallManagerException;
+  public Call createOutCall(BroadcastObj brdobj) throws CallManagerException;
 }

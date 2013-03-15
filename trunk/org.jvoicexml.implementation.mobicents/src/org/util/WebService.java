@@ -61,7 +61,7 @@ public class WebService
     {
         int errorcode = -1;
         try {
-            System.out.println("test arguments is: "+arguments);
+            LOGGER.debug("test arguments is: "+arguments);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -69,23 +69,7 @@ public class WebService
         return errorcode;
     }
     
-    public static int POSTTest(Object ... arguments) 
-    {
-        int errorcode = -1;
-        try {
-            String temp="POST Params:";
-            for(Object arg: arguments) 
-            {
-                temp+=", " + arg;
-            }
-            System.out.println("all arguments are: "+temp);
-            
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } 
-        return errorcode;
-    }
+   
     
     public boolean getHostPort(Map<String, Object> map) 
     {
@@ -201,11 +185,43 @@ public class WebService
         } 
         return false;
     }
-    
+     public static int POSTTest(Object ... arguments) 
+    {
+        int errorcode = -1;
+        try {
+            String temp="POST Params:";
+            for(Object arg: arguments) 
+            {
+                temp+=", " + arg;
+                if(arg instanceof Map)
+                {
+                    Map param= (Map)arg;
+                    if(param.containsKey("method"))
+                    {
+                        String value=(String)param.get("method");
+                        if(value.indexOf("check_receiver")!=-1)
+                            return 1111;
+                        else if(value.indexOf("check_balance")!=-1)
+                            return 0;
+                        else if(value.indexOf("set_sms")!=-1)
+                            return 0;
+                        else if(value.indexOf("processCRBTs")!=-1)
+                            return 0;
+                        //set_sms
+                    }
+                }
+            }
+            LOGGER.debug("all arguments are: "+temp);
+        } catch (Exception ex) {
+            ExLog.exception(LOGGER, ex);
+        } 
+        return errorcode;
+    }
     
     public  int POST(Object ... arguments) 
     {
-        int errorcode = -1;
+        //defaul errorcode as -1
+        int errorcode = 9999;
         int timeout=20000;
         SOAPConnectionImpl connection = null;
         try {
@@ -220,7 +236,8 @@ public class WebService
                     getResponseResult((Map)arg);
                 }
             }
-            System.out.println("remoteURL:"+remoteURL + " remoteHost:"+
+            
+            LOGGER.debug("calling a webservice with params: remoteURL:"+remoteURL + " remoteHost:"+
                     remoteHost+ " remotePort:"+remotePort+ " remoteRequestMethod:"+remoteRequestMethod
                     + " remoteResponseMethod:"+remoteResponseMethod
                     + " remoteResponseResult:"+remoteResponseResult
@@ -252,28 +269,26 @@ public class WebService
             }
             URL endpoint = new URL(remoteURL);
             connection.setTimeout(timeout);
-            System.out.println("***************************sending message:");
-            message.writeTo(System.out);
-            System.out.println();
+            LOGGER.debug(">>>>>>>>>>>>>>>>>>sending message:"+message.getSOAPPart());
+//            message.writeTo(System.out);
             SOAPMessage response = connection.call(message, endpoint);
             SOAPPart sp = response.getSOAPPart();
-            System.out.println("*************************** get response message: elapsedTime:"
+            LOGGER.debug("*************************** get response message: elapsedTime:"
                     + (System.currentTimeMillis() - starttime));
-            response.writeTo(System.out);
-            System.out.println();
+            LOGGER.debug("<<<<<<<<<<<<<<<<<<<received reponse:"+response.getSOAPPart());
+//            response.writeTo(System.out);
             SOAPEnvelope se = sp.getEnvelope();
             SOAPBody sb = se.getBody();
             Element element = (Element) sb.getElementsByTagName(remoteResponseMethod).item(0);
             Element child = (Element) element.getElementsByTagName(remoteResponseResult).item(0);
             errorcode = Integer.parseInt(getElementValue((Node) child));
-
         } catch (Exception ex) {
-            ex.printStackTrace();
+            ExLog.exception(LOGGER, ex);
         } finally {
             try {
                 connection.close();
             } catch (Exception ex) {
-                ex.printStackTrace();
+                ExLog.exception(LOGGER, ex);
             }
         }
         return errorcode;

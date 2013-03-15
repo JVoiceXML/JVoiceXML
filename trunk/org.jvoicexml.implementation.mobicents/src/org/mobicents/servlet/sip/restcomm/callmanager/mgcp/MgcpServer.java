@@ -81,11 +81,15 @@ import org.mobicents.servlet.sip.restcomm.util.RangeCounter;
 
   public MgcpServer(final String name, final InetAddress localIp, final int localPort,
       final InetAddress remoteIp, final int remotePort, final long responseTimeout,
-      final InetAddress externalIp) {
+      final InetAddress externalIp) 
+  {
     // Initialize the finite state machine.
     super(SHUTDOWN);
     addState(RUNNING);
     addState(SHUTDOWN);
+    LOGGER.info("constructing a MGCP Server : localAddress:"+localIp+":"+localPort
+            +" remotAddress:"+remoteIp+":"+remotePort+" externalIp:"+externalIp
+            +" responseTimeout:"+responseTimeout);
     // Remember the server connection information.
     this.name = name;
     this.localIp = localIp;

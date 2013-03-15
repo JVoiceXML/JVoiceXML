@@ -24,6 +24,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.interpol.ConfigurationInterpolator;
+import org.jvoicexml.implementation.mobicents.broadcast.DBMng;
 import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpConferenceCenter;
 import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpServerManager;
 import org.mobicents.servlet.sip.restcomm.media.api.CallManager;
@@ -102,6 +103,14 @@ public final class Bootstrapper
 
     private static ConferenceCenter getConferenceCenter(final MgcpServerManager serverManager) {
         return new MgcpConferenceCenter(serverManager);
+    }
+    
+     private static DBMng getDBMng() 
+     {
+        DBMng dbMng = new DBMng();
+        dbMng.init();
+        dbMng.start();
+        return dbMng;
     }
 
     

@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 
@@ -64,6 +65,8 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
+import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpCallTerminal;
+import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpIvrEndpoint;
 import org.mobicents.servlet.sip.restcomm.media.api.Call;
 import org.mobicents.servlet.sip.restcomm.media.api.CallObserver;
 import org.util.ExLog;
@@ -114,7 +117,7 @@ public final class MobicentsSynthesizedOutput
     /** Size of the read buffer when reading objects. */
     private static final int READ_BUFFER_SIZE = 1024;
     /** Number of msec to wait when waiting for an empty queue. */
-    private static final int WAIT_EMPTY_TIMEINTERVALL = 300;
+    private static final int WAIT_EMPTY_TIMEINTERVALL = 1000;
     /** The used synthesizer. */
     private Synthesizer synthesizer;
     /** The default synthesizer mode descriptor. */
@@ -293,10 +296,12 @@ public final class MobicentsSynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
         sessionId = id;
-        LOGGER.debug("offering a speakable:" + speakable + " id :" + id);
+        
         synchronized (queuedSpeakables) {
             queuedSpeakables.offer(speakable);
         }
+        LOGGER.debug("\t offered a speakable:" + speakable + " \n id :" + id
+                +" \n current queuedSpeakables:"+queuedSpeakables);
         documentServer = server;
         // Do not process the speakable if there is some ongoing processing
         synchronized (queuedSpeakables) {
@@ -494,7 +499,7 @@ public final class MobicentsSynthesizedOutput
             return;
         }
 
-        LOGGER.debug("cancelling current output...");
+        LOGGER.debug("cancelling current output with bargein is active...");
         outputCanceled = true;
         synchronized (queuedSpeakables) {
             try {
@@ -514,6 +519,7 @@ public final class MobicentsSynthesizedOutput
                     break;
                 }
             }
+            LOGGER.debug("removing all skipped:"+skipped);
             queuedSpeakables.removeAll(skipped);
             if (queuedSpeakables.isEmpty()) {
                 fireQueueEmpty();
@@ -548,33 +554,33 @@ public final class MobicentsSynthesizedOutput
 
     }
 
-    public void cancelAllSpeakers()
-            throws NoresourceError {
-        if (synthesizer == null) {
-            LOGGER.error("No synthesizer: Cannot cancel output");
-        }
-
-        LOGGER.debug("forcing current output cancelled...");
-        outputCanceled = true;
-        synchronized (queuedSpeakables) {
-            try {
-                synthesizer.cancelAll();
-            } catch (EngineStateError ee) {
-                throw new NoresourceError(ee);
-            }
-            queuedSpeakables.clear();
-            if (queuedSpeakables.isEmpty()) {
-                fireQueueEmpty();
-                synchronized (emptyLock) {
-                    emptyLock.notifyAll();
-                }
-            }
-        }
-        //reset handle
-        handler = null;
-        LOGGER.debug("...output cancelled. queuedSpeakables:" + queuedSpeakables + " handler:" + handler + " this:" + this);
-
-    }
+//    public void cancelAllSpeakers()
+//            throws NoresourceError {
+//        if (synthesizer == null) {
+//            LOGGER.error("No synthesizer: Cannot cancel output");
+//        }
+//
+//        LOGGER.debug("forcing current output cancelled...");
+//        outputCanceled = true;
+//        synchronized (queuedSpeakables) {
+//            try {
+//                synthesizer.cancelAll();
+//            } catch (EngineStateError ee) {
+//                throw new NoresourceError(ee);
+//            }
+//            queuedSpeakables.clear();
+//            if (queuedSpeakables.isEmpty()) {
+//                fireQueueEmpty();
+//                synchronized (emptyLock) {
+//                    emptyLock.notifyAll();
+//                }
+//            }
+//        }
+//        //reset handle
+//        handler = null;
+//        LOGGER.debug("...output cancelled. queuedSpeakables:" + queuedSpeakables + " handler:" + handler + " this:" + this);
+//
+//    }
 
     /**
      * Checks if there was a request to cancel the current output.
@@ -629,7 +635,8 @@ public final class MobicentsSynthesizedOutput
      * {@inheritDoc}
      */
     @Override
-    public void waitNonBargeInPlayed() {
+    public void waitNonBargeInPlayed() 
+    {
         long starttime = System.currentTimeMillis();
         if (bargein == false) {
             LOGGER.debug("waiting until all non-barge-in has been played...");
@@ -641,6 +648,8 @@ public final class MobicentsSynthesizedOutput
         while (!stopWaiting) {
             synchronized (endplayLock) {
                 try {
+                    LOGGER.debug("WAIT_EMPTY_TIMEINTERVALL or endplayLock ... "
+                            + "\n\t queuedSpeakables:"+queuedSpeakables  ); 
                     endplayLock.wait(WAIT_EMPTY_TIMEINTERVALL);
                 } catch (InterruptedException e) {
                     return;
@@ -650,16 +659,19 @@ public final class MobicentsSynthesizedOutput
                 if (queuedSpeakables.isEmpty()) {
                     stopWaiting = true;
                 } else {
-                    final SpeakableText speakable = queuedSpeakables.peek();
-                    if (speakable instanceof SpeakableSsmlText) {
-                        final SpeakableSsmlText ssml =
-                                (SpeakableSsmlText) speakable;
-                        stopWaiting = ssml.getBargeInType() == null;
-                    }
+//                    final SpeakableText speakable = queuedSpeakables.peek();
+//                    if (speakable instanceof SpeakableSsmlText) 
+//                    {
+//                        final SpeakableSsmlText ssml =
+//                                (SpeakableSsmlText) speakable;
+//                        LOGGER.debug("stopWaiting:"+stopWaiting + " getBargeInType:"+ssml.getBargeInType());
+//                        stopWaiting = ssml.getBargeInType() == null;
+//                    }
                 }
             }
         }
-        LOGGER.debug("...all non barge-in has been played: waittedTime:" + (System.currentTimeMillis() - starttime));
+        LOGGER.debug("...all non barge-in has been played: waittedTime:" 
+                + (System.currentTimeMillis() - starttime) + " queuedSpeakables:"+queuedSpeakables);
     }
 
     /**
@@ -740,11 +752,11 @@ public final class MobicentsSynthesizedOutput
         }
         info = null;
         //
-        try {
-            cancelAllSpeakers();
-        } catch (NoresourceError err) {
-            ExLog.exception(LOGGER, err);
-        }
+//        try {
+////            cancelAllSpeakers();
+//        } catch (NoresourceError err) {
+//            ExLog.exception(LOGGER, err);
+//        }
     }
 
     /**
@@ -786,15 +798,10 @@ public final class MobicentsSynthesizedOutput
     public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
         try {
             // Do not process the speakable if there is some ongoing processing
-            while (queuedSpeakables.size() > 1 || handler == null) {
-                if (handler == null) {
-                    LOGGER.warn("waiting for handling...");
-                } else {
-                    LOGGER.warn("waiting a speakable ended:" + queuedSpeakables);
-                    final SpeakableEvent event = new SpeakableEvent(documentServer, SpeakableEvent.SPEAKABLE_ENDED);
-                    speakableEnded(event);
-                }
-                Thread.sleep(10);
+            while (handler == null || queuedSpeakables.size() > 1) 
+            {
+                LOGGER.warn("waiting for handling..." + handler + " queueSpeaker:"+queuedSpeakables.size());
+                Thread.sleep(50);
             }
             if (handler != null) {
                 LOGGER.info(" handler is :" + handler
@@ -808,13 +815,16 @@ public final class MobicentsSynthesizedOutput
         } catch (Exception ex) {
             ExLog.exception(LOGGER, ex);
         }
+        
         return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void markerReached(final SpeakableEvent event) {
+    public void markerReached(final SpeakableEvent event) 
+    {
+        LOGGER.debug("... with event:"+event);
         final String mark = event.getText();
         fireMarkerReached(mark);
     }
@@ -822,13 +832,17 @@ public final class MobicentsSynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void speakableCancelled(final SpeakableEvent event) {
+    public void speakableCancelled(final SpeakableEvent event) 
+    {
+        LOGGER.debug("... with event:"+event);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void speakableEnded(final SpeakableEvent event) {
+    public void speakableEnded(final SpeakableEvent event) 
+    {
+        LOGGER.debug("... with event:"+event);
         final Object source = event.getSource();
         if (source instanceof SsmlDocument) {
             queueingSsml = false;
@@ -842,9 +856,25 @@ public final class MobicentsSynthesizedOutput
                 speakable = queuedSpeakables.poll();
             }
             if (true) {
-                if (speakable != null) {
+                if (speakable != null) 
+                {
                     LOGGER.debug("speakable ended: "
                             + speakable.getSpeakableText());
+                    if(handler !=null)
+                    {
+                        try
+                        {
+                            URI uri=handler.getUriForNextSynthesisizedOutput(info);
+                            if(speakable.getSpeakableText().indexOf(uri.toString()) != -1)
+                            {
+                                LOGGER.debug("reset  handler: "+handler + " with uri:"+uri);
+                                handler=null;
+                            }
+                        }catch(NoresourceError ex)
+                        {
+                            ExLog.exception(LOGGER, ex);
+                        }
+                    }
                 }
             }
 
@@ -876,19 +906,25 @@ public final class MobicentsSynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void speakablePaused(final SpeakableEvent event) {
+    public void speakablePaused(final SpeakableEvent event) 
+    {
+        LOGGER.debug("... with event:"+event);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void speakableResumed(final SpeakableEvent event) {
+    public void speakableResumed(final SpeakableEvent event) 
+    {
+        LOGGER.debug("... with event:"+event);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void speakableStarted(final SpeakableEvent event) {
+    public void speakableStarted(final SpeakableEvent event) 
+    {
+        LOGGER.debug("... with event:"+event);
         final Object source = event.getSource();
         if (source instanceof SsmlDocument) {
             LOGGER.debug("synthesis of an SSML document started: " + source);
@@ -993,16 +1029,51 @@ public final class MobicentsSynthesizedOutput
      * @param call 
      * @Override
      */
-    public void onStatusChanged(Call call) {
-        try {
-            LOGGER.debug("current is " + call.toString());
-            if (Call.Status.COMPLETED == call.getStatus()
-                    || Call.Status.IN_PROGRESS == call.getStatus()) {
-                if (documentServer == null) {
-                    return;
+    public void onStatusChanged(Call call) 
+    {
+        try 
+        {
+            MgcpCallTerminal term=(MgcpCallTerminal)call;
+            LOGGER.debug("current is " + call.toString() + " \n queuedSpeakables:"+queuedSpeakables);
+            if ((Call.Status.COMPLETED == call.getStatus() || Call.Status.IN_PROGRESS == call.getStatus())
+                    && term.getIVREndPointState() ==MgcpIvrEndpoint.IDLE
+                    && (term.getIVREndPointOldState() ==MgcpIvrEndpoint.PLAY
+                    || term.getIVREndPointOldState() ==MgcpIvrEndpoint.PLAY_COLLECT
+                    || term.getIVREndPointOldState() ==MgcpIvrEndpoint.PLAY_RECORD))
+            {
+                if (documentServer == null) 
+                {
+                    LOGGER.error("  documentServer is null");
                 }
-                final SpeakableEvent event = new SpeakableEvent(documentServer, SpeakableEvent.SPEAKABLE_ENDED);
-                speakableEnded(event);
+                else
+                {
+                    //must check the speaker is already play, before ended the speaker.
+                    List<URI> listURI=term.getCurrentAnnouncements();
+                    if(listURI!=null && !listURI.isEmpty())
+                    {
+                        final SpeakableText speakable;
+                        synchronized (queuedSpeakables) {
+                            speakable = queuedSpeakables.peek();
+                        }
+                        if(queuedSpeakables.isEmpty() || speakable==null ) return;
+                        for(URI uri:listURI)
+                        {
+                            if(speakable.getSpeakableText().indexOf(uri.toString()) != -1)
+                            {
+                                //if a speaker is already playing, it's will be ended by endedEvent
+                                final SpeakableEvent event = new SpeakableEvent(documentServer
+                                        , SpeakableEvent.SPEAKABLE_ENDED);
+                                speakableEnded(event);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        LOGGER.warn("  wrong mapping ended event");
+                        return;
+                    }
+                    
+                }
             }
         } catch (Exception ex) {
             ExLog.exception(LOGGER, ex);
