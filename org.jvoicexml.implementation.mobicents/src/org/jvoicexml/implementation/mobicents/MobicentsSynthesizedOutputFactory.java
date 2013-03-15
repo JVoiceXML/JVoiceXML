@@ -143,7 +143,9 @@ public class MobicentsSynthesizedOutputFactory
      * @param number
      *            Number of instances to create.
      */
-    public final void setInstances(final int number) {
+    public final void setInstances(final int number) 
+    {
+        LOGGER.debug(" setting the number of instances:"+number);
         instances = number;
     }
 
@@ -151,6 +153,7 @@ public class MobicentsSynthesizedOutputFactory
      * {@inheritDoc}
      */
     public final int getInstances() {
+        LOGGER.debug(" get the number of instances:"+instances);
         return instances;
     }
 

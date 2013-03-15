@@ -16,7 +16,9 @@
  */
 package org.mobicents.servlet.sip.restcomm.callmanager.mgcp;
 
-import org.apache.log4j.Logger;
+import com.vnxtele.oracle.DBCfg;
+import com.vnxtele.util.VDate;
+import com.vnxtele.util.VNXLog;
 import jain.protocol.ip.mgcp.message.parms.ConnectionDescriptor;
 import jain.protocol.ip.mgcp.message.parms.ConnectionMode;
 
@@ -31,6 +33,7 @@ import javax.sdp.Connection;
 import javax.sdp.SdpException;
 import javax.sdp.SdpFactory;
 import javax.sdp.SessionDescription;
+import javax.servlet.sip.SipServletMessage;
 import javax.servlet.sip.SipServletRequest;
 import javax.servlet.sip.SipServletResponse;
 import javax.servlet.sip.SipSession;
@@ -42,6 +45,10 @@ import org.joda.time.DateTime;
 import org.jvoicexml.callmanager.Terminal;
 import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.TelephonyListener;
+import org.jvoicexml.implementation.mobicents.VAppCfg;
+import org.jvoicexml.implementation.mobicents.broadcast.BrcastObjState;
+import org.jvoicexml.implementation.mobicents.broadcast.BroadcastObj;
+import org.jvoicexml.implementation.mobicents.broadcast.DBMng;
 
 import org.mobicents.servlet.sip.restcomm.FiniteStateMachine;
 import org.mobicents.servlet.sip.restcomm.Sid;
@@ -51,7 +58,9 @@ import org.mobicents.servlet.sip.restcomm.media.api.Call;
 import org.mobicents.servlet.sip.restcomm.media.api.CallException;
 import org.mobicents.servlet.sip.restcomm.media.api.CallObserver;
 import org.mobicents.servlet.sip.restcomm.util.IPUtils;
+import org.mobicents.servlet.sip.restcomm.util.TimeUtils;
 import org.util.ExLog;
+import org.util.SIPUtil;
 
 /**
  * @author quintana.thomas@gmail.com (Thomas Quintana)
@@ -122,11 +131,16 @@ public final class MgcpCallTerminal extends FiniteStateMachine
     //for jvxml
     /** CallControl Listeners. */
     private final List<TelephonyListener> callControlListeners;
+    //current URIs playing
+    List<URI> currentAnnouncements=null;
     //
     private String callID;
+    public BroadcastObj brcastObj=null;
 
-    public MgcpCallTerminal(final MgcpServer server) {
+    public MgcpCallTerminal(final MgcpServer server) 
+    {
         super(IDLE);
+        
         // Initialize the state machine.
         addState(IDLE);
         addState(QUEUED);
@@ -140,6 +154,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         addState(TRYING);
 
         this.sid = Sid.generate(Sid.Type.CALL);
+        VNXLog.debug("constructing a terminal with :"+sid);
         this.server = server;
         this.session = server.createMediaSession();
         this.observers = new ArrayList<CallObserver>();
@@ -147,6 +162,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         this.direction = Direction.INBOUND;
         callControlListeners = new ArrayList<TelephonyListener>();
         callID = "";
+        
     }
 
     public MgcpCallTerminal(final SipServletRequest initialInvite, final MgcpServer server) {
@@ -155,15 +171,29 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         this.initialInvite = initialInvite;
         setState(QUEUED);
     }
+    public MgcpCallTerminal(final SipServletRequest initialInvite, final MgcpServer server,BroadcastObj obj) {
+        this(server);
+        this.direction = Direction.OUTBOUND_DIAL;
+        this.initialInvite = initialInvite;
+        brcastObj = obj;
+        setState(QUEUED);
+    }
 
     @Override
-    public synchronized void addObserver(final CallObserver observer) {
-        observers.add(observer);
+    public synchronized void addObserver(final CallObserver observer) 
+    {
+        if(observers.contains(observer)==false)
+        {
+            VNXLog.debug("adding CallObserver:"+observer);
+            observers.add(observer);
+        }
     }
 
     private String mmsTimedOutException() {
         final StringBuilder buffer = new StringBuilder();
-        buffer.append("The server @ ").append(server.getDomainName()).append(" failed for Call-ID ").append(initialInvite.getCallId()).append(" One or all of our requests failed to receive a response in time.");
+        buffer.append("The server @ ").append(server.getDomainName()).append(" failed for Call-ID ")
+                .append(initialInvite.getCallId())
+                .append(" One or all of our requests failed to receive a response in time.");
         return buffer.toString();
     }
 
@@ -180,11 +210,14 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         }
     }
 
-    public synchronized void trying(final SipServletRequest request) throws CallException {
+    public synchronized void trying(final SipServletRequest request) throws CallException 
+    {
+        VNXLog.debug("...send trying message ...");
         assertState(IDLE);
         final SipServletResponse trying = request.createResponse(SipServletResponse.SC_TRYING);
         try {
             trying.send();
+            if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(trying,VAppCfg.SIP_MSG_OUTGOING);
             initialInvite = request;
             setState(TRYING);
             fireStatusChanged();
@@ -192,6 +225,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             if (request.getContentLength() == 0 || !"application/sdp".equalsIgnoreCase(request.getContentType())) {
                 final SipServletResponse response = request.createResponse(SipServletResponse.SC_BAD_REQUEST);
                 response.send();
+                if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(response,VAppCfg.SIP_MSG_OUTGOING);
                 throw new CallException("The remote client did not send an SDP offer with their INVITE request.");
             }
             // Establish a connection between the user agent and the media server.
@@ -211,12 +245,15 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             cleanup();
             setState(FAILED);
             fireStatusChanged();
-            LOGGER.error(exception);
+            VNXLog.error("trying error with the request:"+request);
+            VNXLog.error(exception);
             throw new CallException(exception);
         }
     }
 
-    private synchronized void alert(final SipServletRequest request) throws CallException {
+    private synchronized void alert(final SipServletRequest request) throws CallException 
+    {
+        VNXLog.debug("..send ringing...");
         assertState(TRYING);
         final SipServletResponse ringing = request.createResponse(SipServletResponse.SC_RINGING);
         try {
@@ -227,13 +264,15 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             cleanup();
             setState(FAILED);
             fireStatusChanged();
-            LOGGER.error(exception);
+            VNXLog.error(exception);
             throw new CallException(exception);
         }
     }
 
     @Override
-    public synchronized void answer() throws CallException {
+    public synchronized void answer() throws CallException 
+    {
+        VNXLog.debug("...the terminal...");
         assertState(RINGING);
         try {
             // Establish the media path way.
@@ -250,12 +289,14 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         } catch (final Exception exception) {
             fail(SipServletResponse.SC_SERVER_INTERNAL_ERROR);
             fireStatusChanged();
-            LOGGER.error(exception);
+            VNXLog.error(exception);
             throw new CallException(exception);
         }
     }
 
-    public synchronized void busy() {
+    public synchronized void busy() 
+    {
+        VNXLog.debug("...the terminal...");
         assertState(QUEUED);
         cleanup();
         setState(BUSY);
@@ -264,18 +305,30 @@ public final class MgcpCallTerminal extends FiniteStateMachine
 
     public synchronized void bye(final SipServletRequest request) throws IOException 
     {
+        VNXLog.debug("...the terminal...");
+        //
+        VNXLog.info("received a bye request :"+SIPUtil.dumpSIPMsgHdr(request));
         final List<State> possibleStates = new ArrayList<State>();
         possibleStates.add(QUEUED);
         possibleStates.add(RINGING);
         possibleStates.add(IN_PROGRESS);
         assertState(possibleStates);
         final SipServletResponse ok = request.createResponse(SipServletResponse.SC_OK);
-        try {
+        try 
+        {
             ok.send();
+            if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(ok,VAppCfg.SIP_MSG_OUTGOING);
             if (remoteConference != null) {
                 remoteConference.removeParticipant(this);
             }
-        } finally {
+        }
+        catch(Exception ex)        
+        {
+            ExLog.exception(LOGGER, ex);
+        }
+        finally 
+        {
+            VNXLog.debug("cleanup the terminal :"+this);
             cleanup();
             setState(COMPLETED);
             dateEnded = DateTime.now();
@@ -284,7 +337,9 @@ public final class MgcpCallTerminal extends FiniteStateMachine
     }
 
     @Override
-    public synchronized void cancel() throws CallException {
+    public synchronized void cancel() throws CallException 
+    {
+        VNXLog.debug("...the terminal...");
         final List<State> possibleStates = new ArrayList<State>();
         possibleStates.add(QUEUED);
         possibleStates.add(RINGING);
@@ -293,6 +348,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             final SipServletRequest cancel = initialInvite.createCancel();
             try {
                 cancel.send();
+                if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(cancel,VAppCfg.SIP_MSG_OUTGOING);
                 cleanup();
                 setState(CANCELLED);
                 fireStatusChanged();
@@ -305,7 +361,9 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         }
     }
 
-    public synchronized void cancel(final SipServletRequest request) throws IOException {
+    public synchronized void cancel(final SipServletRequest request) throws IOException 
+    {
+        VNXLog.debug("...the terminal...");
         final List<State> possibleStates = new ArrayList<State>();
         possibleStates.add(QUEUED);
         possibleStates.add(RINGING);
@@ -314,6 +372,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         final SipServletResponse ok = request.createResponse(SipServletResponse.SC_OK);
         try {
             ok.send();
+            if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(ok,VAppCfg.SIP_MSG_OUTGOING);
         } finally {
             cleanup();
             setState(CANCELLED);
@@ -334,15 +393,19 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             relayEndpoint = session.getPacketRelayEndpoint();
             userAgentConnection = session.createConnection(relayEndpoint);
             userAgentConnection.addObserver(this);
-            userAgentConnection.connect(ConnectionMode.SendRecv);
+            userAgentConnection.connect(ConnectionMode.SendRecv,initialInvite);
             block(1);
+            VNXLog.debug("...");
             if (!MgcpConnection.HALF_OPEN.equals(userAgentConnection.getState())) {
                 throw new Exception(mmsTimedOutException());
             }
-            final byte[] offer = patchMedia(server.getExternalAddress(), userAgentConnection.getLocalDescriptor().toString().getBytes());
+            final byte[] offer = patchMedia(server.getExternalAddress(), 
+                    userAgentConnection.getLocalDescriptor().toString().getBytes());
             initialInvite.setContent(offer, "application/sdp");
             initialInvite.send();
-        } catch (final Exception exception) {
+        } catch (final Exception exception) 
+        {
+            
             cleanup();
             setState(FAILED);
             fireStatusChanged();
@@ -355,17 +418,26 @@ public final class MgcpCallTerminal extends FiniteStateMachine
     }
 
     public synchronized void established() {
-        LOGGER.debug("ACK received");
+        VNXLog.debug("ACK received");
     }
 
-    public synchronized void established(final SipServletResponse successResponse) throws CallException, IOException {
+    public synchronized void established(final SipServletResponse successResponse) throws CallException, IOException 
+    {
+        VNXLog.debug("...");
         final List<State> possibleStates = new ArrayList<State>();
         possibleStates.add(QUEUED);
         possibleStates.add(RINGING);
         assertState(possibleStates);
         byte[] answer = successResponse.getRawContent();
         try {
-            if (answer != null) {
+            if (answer != null) 
+            {
+                //update status
+                
+                //update database
+                DBMng.getInstance().updateBrcastObjAnswer(BrcastObjState.ANSWER,
+                        getBroadcastID(),BroadcastObj.NORMAL_CALL_ANSWERING);
+                
                 answer = patchMedia(successResponse.getInitialRemoteAddr(), successResponse.getRawContent());
                 final ConnectionDescriptor remoteDescriptor = new ConnectionDescriptor(new String(answer));
                 userAgentConnection.modify(remoteDescriptor);
@@ -381,11 +453,16 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             fireStatusChanged();
             throw new CallException(exception);
         }
+        
         final SipServletRequest ack = successResponse.createAck();
         ack.send();
+        if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(ack,VAppCfg.SIP_MSG_OUTGOING);
+        
     }
 
-    public synchronized void failed() {
+    public synchronized void failed() 
+    {
+        VNXLog.debug("...");
         final List<State> possibleStates = new ArrayList<State>();
         possibleStates.add(QUEUED);
         possibleStates.add(RINGING);
@@ -406,13 +483,14 @@ public final class MgcpCallTerminal extends FiniteStateMachine
         try {
             fail.send();
         } catch (final IOException exception) {
-            LOGGER.error(exception);
+            VNXLog.error(exception);
         }
         cleanup();
         setState(FAILED);
     }
 
     private void fireStatusChanged() {
+        VNXLog.debug("...");
         for (final CallObserver observer : observers) {
             observer.onStatusChanged(this);
         }
@@ -474,17 +552,43 @@ public final class MgcpCallTerminal extends FiniteStateMachine
     public Status getStatus() {
         return Status.getValueOf(getState().getName());
     }
-     public State getIVREndPointState() {
-        return ivrEndpoint.getState();
+     public State getIVREndPointState() 
+     {
+        return ivrEndpoint==null?null:ivrEndpoint.getState();
+    }
+     public State getIVREndPointOldState() 
+     {
+         return ivrEndpoint==null?null:ivrEndpoint.getOldState();
     }
 
     @Override
-    public synchronized void hangup() {
-        assertState(IN_PROGRESS);
+    public synchronized void hangup() 
+    {
+        VNXLog.debug("...");
+        final List<State> possibleStates = new ArrayList<State>();
+        possibleStates.add(COMPLETED);
+        possibleStates.add(IN_PROGRESS);
+        assertState(possibleStates);
         if (remoteConference != null) {
             remoteConference.removeParticipant(this);
         }
+        MgcpCallManager.listCurrentOutCalls.remove(((MgcpCallTerminal)this).getSIPCallID());
         terminate();
+        dateEnded = DateTime.now();
+        setState(COMPLETED);
+        fireStatusChanged();
+    }
+    public synchronized void hangupFromBye() 
+    {
+        VNXLog.debug("...");
+        final List<State> possibleStates = new ArrayList<State>();
+        possibleStates.add(COMPLETED);
+        possibleStates.add(IN_PROGRESS);
+        assertState(possibleStates);
+        if (remoteConference != null) {
+            remoteConference.removeParticipant(this);
+        }
+        cleanup();
         dateEnded = DateTime.now();
         setState(COMPLETED);
         fireStatusChanged();
@@ -529,7 +633,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
                     throw new Exception(mmsTimedOutException());
                 }
             } catch (final Exception exception) {
-                LOGGER.error(exception);
+                VNXLog.error(exception);
             }
             remoteOutboundConnection.removeObserver(this);
             remoteOutboundConnection = null;
@@ -554,7 +658,9 @@ public final class MgcpCallTerminal extends FiniteStateMachine
     }
 
     private byte[] patchMedia(final String realIp, final byte[] data)
-            throws UnknownHostException, SdpException {
+            throws UnknownHostException, SdpException 
+    {
+        
         final String text = new String(data);
         final SessionDescription sdp = SdpFactory.getInstance().createSessionDescription(text);
         final Connection connection = sdp.getConnection();
@@ -566,6 +672,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
                 connection.setAddress(realIp);
             }
         }
+        VNXLog.debug("realIp:"+realIp + " with sdp:"+sdp);
         return sdp.toString().getBytes();
     }
 
@@ -577,6 +684,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             announcements.add(anounuri);
             assertState(IN_PROGRESS);
             ivrEndpoint.play(announcements, iterations);
+            currentAnnouncements=announcements;
 //            wait();
         } catch (Exception ignored) 
         {
@@ -589,6 +697,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
     public synchronized void play(final List<URI> announcements, final int iterations) throws CallException {
         assertState(IN_PROGRESS);
         ivrEndpoint.play(announcements, iterations);
+        currentAnnouncements=announcements;
         try {
             wait();
         } catch (final InterruptedException ignored) {
@@ -607,7 +716,47 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             stopMedia();
         }
     }
+    
+    public synchronized void recordAfterBeep(long recordingLength)
+    {
+        try {
+            //location for storing recorded files
+            URI recordfile = new URI(VAppCfg.accessMethod+VAppCfg.recordDir+getOriginator()
+                    +"_"+getRecipient()+"_"+VDate.now("HHmmss_yyyyMMdd")+".wav");
+            URI beepuri = new URI(VAppCfg.accessMethod+VAppCfg.audioDir+VAppCfg.beepFile);
+            final List<URI> beep = new ArrayList<URI>();
+            beep.add(beepuri);
+//            assertState(IN_PROGRESS);
+//            ivrEndpoint.playRecord(beep, recordfile, 20, recordingLength/1000, null);
+//            ivrEndpoint.playRecord(null, recordfile, 20, recordingLength/1000, null);
+            ivrEndpoint.playRecord(beep, recordfile, TimeUtils.MINUTE_IN_MILLIS * 30
+                    , recordingLength/1000, null);
+        } catch (Exception ignored) 
+        {
+            stopMedia();
+            ExLog.exception(LOGGER, ignored);
+        }
+    }
+    
+    public synchronized void recordAfterBeep(long recordingLength,String filenamepath)
+    {
+        try {
+            //location for storing recorded files
+            URI recordfile = new URI(filenamepath);
+            URI beepuri = new URI("file:////home/Audio/SMSTalk/vie_beep.wav");
+            final List<URI> beep = new ArrayList<URI>();
+            beep.add(beepuri);
+            ivrEndpoint.playRecord(beep, recordfile, TimeUtils.MINUTE_IN_MILLIS * 30
+                    , recordingLength/1000, null);
+        } catch (Exception ignored) 
+        {
+            stopMedia();
+            ExLog.exception(LOGGER, ignored);
+        }
+    }
 
+    
+    
     @Override
     public synchronized void playAndRecord(final List<URI> prompts, final URI recordId, final long postSpeechTimer,
             final long recordingLength, final String patterns) throws CallException {
@@ -621,7 +770,9 @@ public final class MgcpCallTerminal extends FiniteStateMachine
     }
 
     @Override
-    public synchronized void reject() {
+    public synchronized void reject() 
+    {
+        VNXLog.debug("...");
         assertState(RINGING);
         final SipServletResponse busy = initialInvite.createResponse(SipServletResponse.SC_BUSY_HERE);
         try {
@@ -630,11 +781,13 @@ public final class MgcpCallTerminal extends FiniteStateMachine
             cleanup();
             setState(FAILED);
             fireStatusChanged();
-            LOGGER.error(exception);
+            VNXLog.error(exception);
         }
     }
 
-    public synchronized void ringing() {
+    public synchronized void ringing() 
+    {
+        VNXLog.debug("...");
         final List<State> possibleStates = new ArrayList<State>();
         possibleStates.add(QUEUED);
         possibleStates.add(RINGING);
@@ -652,33 +805,45 @@ public final class MgcpCallTerminal extends FiniteStateMachine
     }
 
     @Override
-    public synchronized void setExpires(final int minutes) {
+    public synchronized void setExpires(final int minutes) 
+    {
         initialInvite.getApplicationSession().setExpires(minutes);
     }
 
     @Override
     public synchronized void stopMedia() 
     {
-//        assertState(IN_PROGRESS);
-        try {
+        try 
+        {
             ivrEndpoint.stop();
-        
-//            wait();
-        } catch (final Exception ignored) {
-            LOGGER.error(ignored);
+        }
+       catch(IllegalStateException illegal)
+       {
+            VNXLog.warn(illegal.getMessage());
+       }
+        catch (final Exception ignored) {
+            VNXLog.error(ignored);
         }
     }
 
-    private void terminate() {
+    private void terminate() 
+    {
         final SipSession sipSession = initialInvite.getSession();
         final SipServletRequest bye = sipSession.createRequest("BYE");
         try {
+            MgcpCallManager.listCurrentOutCalls.remove(((MgcpCallTerminal)this).getSIPCallID()) ;
+            //update database
+            DBMng.getInstance().updateBrcastObjComplete(BrcastObjState.COMPLETE,
+                        getBroadcastID(),BroadcastObj.NORMAL_CALL_CLEARING);
+            bye.addHeader("Reason", "Q.850;cause=16;text=\"Normal call clearing\"");
             bye.send();
+            if(DBCfg.dbUsed==1) DBMng.getInstance().insrSIPMsgs(bye,VAppCfg.SIP_MSG_OUTGOING);
         } catch (final IOException exception) {
-            LOGGER.error(exception);
+            VNXLog.error(exception);
         }
         cleanup();
     }
+    
 
     @Override
     public synchronized void unmute() {
@@ -695,21 +860,33 @@ public final class MgcpCallTerminal extends FiniteStateMachine
     }
 
     @Override
-    public synchronized void operationCompleted(final MgcpIvrEndpoint endpoint) {
+    public synchronized void operationCompleted(final MgcpIvrEndpoint endpoint) 
+    {
+        VNXLog.debug("...");
+        digits = endpoint.getDigits();
+        fireStatusChanged();
+        notify();
+    }
+    @Override
+    public synchronized void operationCompleted(final MgcpIvrEndpoint endpoint,State oldstate) 
+    {
+        VNXLog.debug("...");
         digits = endpoint.getDigits();
         fireStatusChanged();
         notify();
     }
 
     @Override
-    public synchronized void operationFailed(final MgcpIvrEndpoint endpoint) {
+    public synchronized void operationFailed(final MgcpIvrEndpoint endpoint) 
+    {
+        VNXLog.debug("...");
         fireStatusChanged();
         notify();
     }
 
     @Override
     public synchronized void halfOpen(final MgcpConnection connection) {
-        LOGGER.debug("halfOpen notification for connection: " + connection + ", endpoint: " + connection.getEndpoint()
+        VNXLog.debug("halfOpen notification for connection: " + connection + ", endpoint: " + connection.getEndpoint()
                 + ", state: " + connection.getState().getName());
         final List<State> impossibleStates = new ArrayList<State>();
         impossibleStates.add(COMPLETED);
@@ -736,7 +913,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
 
     @Override
     public synchronized void open(final MgcpConnection connection) {
-        LOGGER.debug("open notification for connection: " + connection + ", endpoint: " + connection.getEndpoint()
+        VNXLog.debug("open notification for connection: " + connection + ", endpoint: " + connection.getEndpoint()
                 + ", state: " + connection.getState().getName());
         final List<State> impossibleStates = new ArrayList<State>();
         impossibleStates.add(COMPLETED);
@@ -814,7 +991,7 @@ public final class MgcpCallTerminal extends FiniteStateMachine
      * @return name of the terminal
      */
     public String getName() {
-        LOGGER.error("not support yet");
+        VNXLog.error("not support yet");
         return null;
     }
 
@@ -828,14 +1005,14 @@ public final class MgcpCallTerminal extends FiniteStateMachine
      *         error waiting for connections.
      */
     public void waitForConnections() throws IOException {
-        LOGGER.error("not support yet");
+        VNXLog.error("not support yet");
     }
 
     /**
      * Stops waiting for incoming connections.
      */
     public void stopWaiting() {
-        LOGGER.error("not support yet");
+        VNXLog.error("not support yet");
     }
 
     /**
@@ -869,21 +1046,45 @@ public final class MgcpCallTerminal extends FiniteStateMachine
      * Disconnects the connection.
      * @since 0.7
      */
-    public synchronized void disconnect() {
-        LOGGER.error("not support yet");
+    public synchronized void disconnect() 
+    {
+        VNXLog.info("terminating the call "+this);
+        terminate();
     }
 
-    public void setSIPCallID(String callid) {
+    public void setSIPCallID(String callid) 
+    {
+        
         callID = callid;
     }
 
-    public String getSIPCallID() {
-        return callID;
+    public String getSIPCallID() 
+    {
+        return initialInvite!=null?initialInvite.getCallId():callID;
     }
     
+    public MgcpIvrEndpoint getIVREndpoint() {
+        return ivrEndpoint;
+    }
+    public List<URI> getCurrentAnnouncements()
+    {
+        return currentAnnouncements;
+    }
+    public int getBroadcastID()
+    {
+        return brcastObj==null?-1:brcastObj.broadcast_id;
+    }
+    public String getBroadcastVXMLFile()
+    {
+            return brcastObj==null?"":brcastObj.vxml_uri;
+    }
     public String toString()
     {
-        return " terminal:callID:" +callID+ " status:"+getStatus()
-                + " ivrEndpoint:"+ivrEndpoint;
+        return " terminal:callID:" +callID+ " status:"+getStatus() + " broadcast_id:"+getBroadcastID()
+                + " ivrEndpoint:"+ivrEndpoint + " sid:"+sid + " currentAnnouncements:"+currentAnnouncements;
+    }
+    public SipServletMessage getInitInvite()
+    {
+        return initialInvite;
     }
 }

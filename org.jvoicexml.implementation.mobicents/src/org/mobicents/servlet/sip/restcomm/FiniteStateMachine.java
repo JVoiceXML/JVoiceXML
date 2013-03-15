@@ -29,6 +29,7 @@ public class FiniteStateMachine {
         private static final Logger LOGGER = Logger.getLogger(FiniteStateMachine.class);
     private volatile State state;
     private final Set<State> states;
+    private volatile State oldState;
 
     public FiniteStateMachine(final State state) {
         super();
@@ -75,6 +76,12 @@ public class FiniteStateMachine {
 
     public synchronized State getState() {
         return state;
+    }
+    public synchronized State getOldState() {
+        return oldState;
+    }
+    public void  setOldState(State st) {
+         oldState=st;
     }
 
     protected synchronized void setState(final State state) {

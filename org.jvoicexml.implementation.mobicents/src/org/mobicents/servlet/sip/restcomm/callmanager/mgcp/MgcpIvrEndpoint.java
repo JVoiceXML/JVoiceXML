@@ -16,7 +16,6 @@
  */
 package org.mobicents.servlet.sip.restcomm.callmanager.mgcp;
 
-import org.apache.log4j.Logger;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +40,8 @@ import jain.protocol.ip.mgcp.pkg.MgcpEvent;
 import jain.protocol.ip.mgcp.pkg.PackageName;
 
 import org.apache.log4j.Logger;
+import org.mobicents.protocols.mgcp.jain.pkg.AUMgcpEvent;
+import org.mobicents.protocols.mgcp.jain.pkg.AUPackage;
 
 import org.mobicents.servlet.sip.restcomm.FiniteStateMachine;
 import org.mobicents.servlet.sip.restcomm.State;
@@ -54,7 +55,7 @@ import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.au.AdvancedAudioParam
 public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgcpListener, MgcpEndpoint {
 
     private static final Logger LOGGER = Logger.getLogger(MgcpIvrEndpoint.class);
-    private static final PackageName PACKAGE_NAME = PackageName.factory("AU");
+    private static final PackageName PACKAGE_NAME = AUPackage.AU;
     private static final RequestedEvent[] REQUESTED_EVENTS = new RequestedEvent[2];
     public static final State IDLE = new State("IDLE");
     public static final State PLAY = new State("PLAY");
@@ -64,9 +65,10 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
     public static final State FAILED = new State("FAILED");
 
     static {
-        final RequestedAction[] action = new RequestedAction[]{RequestedAction.NotifyImmediately};
-        REQUESTED_EVENTS[0] = new RequestedEvent(new EventName(PACKAGE_NAME, MgcpEvent.factory("oc")), action);
-        REQUESTED_EVENTS[1] = new RequestedEvent(new EventName(PACKAGE_NAME, MgcpEvent.factory("of")), action);
+        		final RequestedAction[] action = new RequestedAction[] { RequestedAction.NotifyImmediately };
+		REQUESTED_EVENTS[0] = new RequestedEvent(new EventName(PACKAGE_NAME, AUMgcpEvent.auoc), action);
+		REQUESTED_EVENTS[1] = new RequestedEvent(new EventName(PACKAGE_NAME, AUMgcpEvent.auof), action);
+
         IDLE.addTransition(PLAY);
         IDLE.addTransition(PLAY_COLLECT);
         IDLE.addTransition(PLAY_RECORD);
@@ -111,11 +113,13 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
         observers.add(observer);
     }
 
-    private void fireOperationCompleted() {
+     private void fireOperationCompleted(State oldstate)
+     {
+        setOldState(oldstate);
         for (final MgcpIvrEndpointObserver observer : observers) 
         {
             LOGGER.debug(" for observer:"+observer);
-            observer.operationCompleted(this);
+            observer.operationCompleted(this,oldstate);
         }
     }
 
@@ -155,7 +159,8 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
         final String parameters = builder.build();
         // Create the signal.
         final EventName[] signal = new EventName[1];
-        signal[0] = new EventName(PACKAGE_NAME, MgcpEvent.factory("pa").withParm(parameters));
+//        signal[0] = new EventName(PACKAGE_NAME, MgcpEvent.factory("pa").withParm(parameters));
+        signal[0] = new EventName(PACKAGE_NAME, AUMgcpEvent.aupa.withParm(parameters));
         // Create notification request.
         requestId = server.generateRequestIdentifier();
         final NotificationRequest request = new NotificationRequest(this, endpointId, requestId);
@@ -163,6 +168,7 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
         request.setNotifiedEntity(server.getCallAgent());
         request.setRequestedEvents(REQUESTED_EVENTS);
         // Send the request.
+        LOGGER.debug("NotificationRequest: " + request);
         server.sendCommand(request, this);
         setState(PLAY);
     }
@@ -186,7 +192,7 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
         final String parameters = builder.build();
         // Create the signal.
         final EventName[] signal = new EventName[1];
-        signal[0] = new EventName(PACKAGE_NAME, MgcpEvent.factory("pc").withParm(parameters));
+        signal[0] = new EventName(PACKAGE_NAME, AUMgcpEvent.aupc.withParm(parameters));
         // Create notification request.
         requestId = server.generateRequestIdentifier();
         final NotificationRequest request = new NotificationRequest(this, endpointId, requestId);
@@ -199,14 +205,23 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
     }
 
     public synchronized void playRecord(final List<URI> prompts, final URI recordId, final long postSpeechTimer,
-            final long recordingLength, final String patterns) {
-        assertState(IDLE);
+            final long recordingLength, final String patterns) 
+    {
+        try{
+        final List<State> possibleStates = new ArrayList<State>();
+        possibleStates.add(IDLE);
+        possibleStates.add(STOP);
+        assertState(possibleStates);
         // Create the signal parameters.
         final AdvancedAudioParametersBuilder builder = new AdvancedAudioParametersBuilder();
-        for (final URI prompt : prompts) {
-            LOGGER.debug("Prompt added: " + prompt.toString());
-            builder.addInitialPrompt(prompt);
+        if(prompts !=null)
+        {
+            for (final URI prompt : prompts) {
+                LOGGER.debug("Prompt added: " + prompt.toString());
+                builder.addInitialPrompt(prompt);
+            }
         }
+        builder.setNonInterruptPlay(true);
         builder.setClearDigitBuffer(true);
         builder.setRecordId(recordId);
         builder.setPostSpeechTimer(postSpeechTimer);
@@ -215,7 +230,7 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
         final String parameters = builder.build();
         // Create the signal.
         final EventName[] signal = new EventName[1];
-        signal[0] = new EventName(PACKAGE_NAME, MgcpEvent.factory("pr").withParm(parameters));
+        signal[0] = new EventName(PACKAGE_NAME, AUMgcpEvent.aupr.withParm(parameters));
         // Create notification request.
         requestId = server.generateRequestIdentifier();
         final NotificationRequest request = new NotificationRequest(this, endpointId, requestId);
@@ -225,6 +240,10 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
         // Send the request.
         server.sendCommand(request, this);
         setState(PLAY_RECORD);
+        }catch(Exception ex)
+        {
+            LOGGER.error(ex);
+        }
     }
 
     private Map<String, String> parseAdvancedAudioParameters(final String input) {
@@ -243,7 +262,7 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
 
     @Override
     public synchronized void processMgcpCommandEvent(final JainMgcpCommandEvent command) {
-        LOGGER.debug("incomming MGCP command event:" + command);
+        LOGGER.debug("incomming MGCP command event:" + command + " currentState:"+getState());
         final int commandValue = command.getObjectIdentifier();
         switch (commandValue) {
             case Constants.CMD_NOTIFY: {
@@ -270,7 +289,7 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
                                 }
                             }
                             setState(IDLE);
-                            fireOperationCompleted();
+                            fireOperationCompleted(currentState);
                         } else {
                             setState(FAILED);
                             fireOperationFailed();
@@ -307,7 +326,7 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
             if (STOP.equals(currentState)) 
             {
                 setState(IDLE);
-                fireOperationCompleted();
+                fireOperationCompleted(currentState);
             }
             return;
         } else {
@@ -342,7 +361,7 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
         assertState(possibleStates);
         // Create the signal.
         final EventName[] signal = new EventName[1];
-        signal[0] = new EventName(PACKAGE_NAME, MgcpEvent.factory("es"));
+        signal[0] = new EventName(PACKAGE_NAME, AUMgcpEvent.aues);
         // Create notification request.
         requestId = server.generateRequestIdentifier();
         final NotificationRequest request = new NotificationRequest(this, endpointId, requestId);
@@ -361,6 +380,7 @@ public final class MgcpIvrEndpoint extends FiniteStateMachine implements JainMgc
     
      public String toString()
     {
-        return " ivrEndpoint:" + " state:"+getState()==null?"":getState().getName();
+        return " ivrEndpoint:" + " state:"+getState()
+                + " oldstate:"+getOldState();
     }
 }

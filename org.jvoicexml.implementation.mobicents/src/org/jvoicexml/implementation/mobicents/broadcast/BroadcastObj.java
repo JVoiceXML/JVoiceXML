@@ -32,6 +32,8 @@ public class BroadcastObj
     public Timestamp answer_time;
     public Timestamp hangup_time;
     public SipServletRequest invite;
+    public static int NORMAL_CALL_CLEARING=0;
+    public static int NORMAL_CALL_ANSWERING=1;
 
     public String toString4() {
         return " BroadcastObj [[ broadcast_id:" + broadcast_id + " caller:" + caller + "  called: " + called

@@ -30,21 +30,27 @@ import java.io.File;
 import java.net.URI;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.sip.SipServletRequest;
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.Configuration;
 
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.JVoiceXmlMain;
 import org.jvoicexml.JVoiceXmlMainListener;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
-import org.jvoicexml.implementation.jvxml.JVoiceXmlSystemOutput;
+import org.jvoicexml.implementation.jvxml.BufferedCharacterInput;
+import org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatform;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.implementation.mobicents.callmanager.MobicentsConnectionInformation;
+import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.test.config.DummyConfiguration;
+import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpCallTerminal;
 import org.util.ExLog;
 
@@ -61,7 +67,7 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener
 
     /** Reference to JVoiceXML. */
     private JVoiceXmlMain jvxml;
-    private ConnectionInformation jndiClient = null;
+    private MobicentsConnectionInformation jndiClient = null;
     private ConcurrentHashMap<String, Session> listCurrentCalls = new ConcurrentHashMap();
 
     /**
@@ -121,33 +127,79 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener
             ImplementationPlatform implPlatform = ((JVoiceXmlSession) session).getImplementationPlatform();
             LOGGER.info("terminating a jvoice session:" + session + " with call:" + call
                     + " ImplementationPlatform:" + implPlatform);
-            JVoiceXmlSystemOutput sysout=(JVoiceXmlSystemOutput)implPlatform.getSystemOutput();
-            ((MobicentsSynthesizedOutput)sysout.getSynthesizedOutput()).cancelAllSpeakers();
-//            if(implPlatform!=null) 
-//            {
-//                ((JVoiceXmlImplementationPlatform)implPlatform).telephonyCallHungup(null);
-//                implPlatform.close();
-//            }
-//            ((JVoiceXmlSession) session).cleanup();
-        } catch (ConnectionDisconnectHangupEvent evnt) {
-            ExLog.exception(LOGGER, evnt);
-        } catch (NoresourceError err) {
-            ExLog.exception(LOGGER, err);
+            session.hangup();
+//            JVoiceXmlSystemOutput sysout=(JVoiceXmlSystemOutput)implPlatform.getSystemOutput();
+//            ((MobicentsSynthesizedOutput)sysout.getSynthesizedOutput()).cancelAllSpeakers();
+            if(implPlatform!=null) 
+            {
+                ((JVoiceXmlImplementationPlatform)implPlatform).telephonyCallHungup(null);
+                implPlatform.close();
+            }
         } catch (Exception ex) {
             ExLog.exception(LOGGER, ex);
         }
     }
-
-    public void execute(MgcpCallTerminal call) {
-        try {
+    public void executeBroadcast(MgcpCallTerminal call) 
+    {
+        try 
+        {
+            if(listCurrentCalls.containsKey(call.getSIPCallID())==true)
+            {
+                LOGGER.warn("call is aready excecuted a vxml script");
+                return;
+            }
+            String uri=call.getBroadcastVXMLFile();
+            if(uri==null || uri.isEmpty()==true)
+            {
+                LOGGER.error("vmxlURI is not valid for the call :"+call);
+                return;
+            }
+            LOGGER.debug("execute vxml script for a MgcpCallTerminal:" + call);
+            final URI vxmlURI = new URI(uri);
+            //get JNDI client connection;
+            jndiClient = new MobicentsConnectionInformation(call, "mobicents", "mobicents");
+            //setups some session variables here
+            jndiClient.setCalledDevice(new URI(call.getRecipient()));
+            jndiClient.setCallingDevice(new URI(call.getOriginator()));
+            jndiClient.setProtocolName("SIP");
+            jndiClient.setProtocolVersion("v2.0");
+            //
+            final Session session = jvxml.createSession(jndiClient);
+            listCurrentCalls.put(call.getSIPCallID(), session);
+            LOGGER.debug("call jxmlsession:" + session + " and initiate a call at JVoiceXML:vxmlURI:" + 
+                    vxmlURI + " callID:"+call.getSIPCallID() 
+                    +" implPlatform:"+((JVoiceXmlSession)session).getImplementationPlatform());
+            session.call(vxmlURI);
+        } catch (JVoiceXMLEvent ev) {
+            ExLog.exception(LOGGER, ev);
+        } catch (Exception ex) {
+            ExLog.exception(LOGGER, ex);
+        }
+    }
+    public void execute(MgcpCallTerminal call) 
+    {
+        try 
+        {
+            if(listCurrentCalls.containsKey(call.getSIPCallID())==true)
+            {
+                LOGGER.warn("call is aready excecuted a vxml script");
+                return;
+            }
             LOGGER.debug("execute vxml script for a MgcpCallTerminal:" + call);
 //            File dialog = new File("conf/jvxml/vxml/hello.vxml");
             //play wav and collect DTMF input
 //            File dialog = new File("conf/jvxml/vxml/hellodtmf.vxml");
             File dialog = new File("conf/jvxml/vxml/vb_sms_talk.vxml");
+//            File dialog = new File("conf/jvxml/vxml/TestRecordTag.vxml");
             final URI vxmlURI = dialog.toURI();
             //get JNDI client connection;
             jndiClient = new MobicentsConnectionInformation(call, "mobicents", "mobicents");
+            //setups some session variables here
+            jndiClient.setCalledDevice(new URI(call.getRecipient()));
+            jndiClient.setCallingDevice(new URI(call.getOriginator()));
+            jndiClient.setProtocolName("SIP");
+            jndiClient.setProtocolVersion("v2.0");
+            //
             final Session session = jvxml.createSession(jndiClient);
             listCurrentCalls.put(call.getSIPCallID(), session);
             LOGGER.debug("call jxmlsession:" + session + " and initiate a call at JVoiceXML:vxmlURI:" + vxmlURI);
@@ -161,7 +213,9 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener
         }
     }
 
-    public void procSIPInfo(SipServletRequest request) {
+    public void procSIPInfo(SipServletRequest request) 
+    {
+        BufferedCharacterInput input=null;
         try {
             Session session = listCurrentCalls.get(request.getCallId());
             LOGGER.debug("get jvxml session for sip callid:" + request.getCallId() + " jxmlsession:" + session);
@@ -172,18 +226,25 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener
             String messageContent = new String((byte[]) request.getContent());
             int idexdigit = messageContent.indexOf(VAppCfg.digitPattern);
             String signal = messageContent.substring(idexdigit + VAppCfg.digitPattern.length(), idexdigit + VAppCfg.digitPattern.length() + 2).trim();
+            input = (BufferedCharacterInput)session.getCharacterInput();
             LOGGER.info("got INFO request with following content " + messageContent
-                    + " signal:" + signal + " charAt0:" + signal.trim().charAt(0));
-            CharacterInput input = session.getCharacterInput();
+                    + " signal:" + signal + " charAt0:" + signal.trim().charAt(0) + " characterInput:"+input);
+            
+            
             if (input == null) {
                 LOGGER.error("CharacterInput is null:" + input);
             } else {
+                while(input.isStarted()==false)
+                {
+                    LOGGER.error("BufferedCharacterInput hasn't started:" + input + " callId:"+request.getCallId());
+                    Thread.sleep(1000);
+                }    
                 input.addCharacter(signal.trim().charAt(0));
             }
         } catch (JVoiceXMLEvent ev) {
             ExLog.exception(LOGGER, ev);
         } catch (Exception ex) {
-            LOGGER.error(" error when processing sip info with" + request.toString());
+            LOGGER.error(" error when processing sip info with" + request.toString() +" CharacterInput:"+input );
             ExLog.exception(LOGGER, ex);
         }
         
@@ -223,17 +284,29 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener
      * @param args
      *            Command line arguments. None expected.
      */
-    public static void main(final String[] args) {
-        final EmbeddedJVXML demo = new EmbeddedJVXML();
+    public static void main(final String[] args) throws Exception, JVoiceXMLEvent{
+//        final EmbeddedJVXML demo = new EmbeddedJVXML();
 
         try {
-            File dialog = new File("config/vxml/hello.vxml");
-            final URI uri = dialog.toURI();
-            demo.interpretDocument(uri);
-        } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
-            LOGGER.error("error processing the document", e);
-        } catch (InterruptedException e) {
-            LOGGER.error("error processing the document", e);
+//            File dialog = new File("file:////F:/WorkStation/Java/Projects/VNXIVR/MobiVXML/conf/jvxml/vxml/CRBTPromotion.vxml");
+            final URI uri = new URI("file://F:/WorkStation/Java/Projects/VNXIVR/MobiVXML/conf/jvxml/vxml/CRBTPromotion.vxml");
+            System.out.println("dialog:"+uri);
+//            URI uri = new URI
+//                    (dial);
+            final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+            final Configuration configuration = new DummyConfiguration();
+            ImplementationPlatform platform =
+            new DummyImplementationPlatform();
+            JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+            JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml, null);
+        VoiceXmlInterpreterContext context = new VoiceXmlInterpreterContext(session, configuration);
+            final VoiceXmlDocument doc = context.loadDocument(descriptor);
+            final URI resolvedUri = descriptor.getUri();
+//            demo.interpretDocument(uri);
+//        } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
+//            LOGGER.error("error processing the document", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

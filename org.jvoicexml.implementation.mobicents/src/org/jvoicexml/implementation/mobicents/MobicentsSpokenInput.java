@@ -71,6 +71,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  *
  * @author Dirk Schnelle-Walka
+ * @author Shadowman
  * @version $Revision: 2913 $
  */
 public final class MobicentsSpokenInput
@@ -88,8 +89,6 @@ public final class MobicentsSpokenInput
     /** Supported grammar types. */
     private static final Collection<GrammarType> GRAMMAR_TYPES;
 
-    /** The speech recognizer. */
-    private Recognizer recognizer;
 
     /** Listener for user input events. */
     private final Collection<SpokenInputListener> listener;
@@ -113,7 +112,6 @@ public final class MobicentsSpokenInput
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
         BARGE_IN_TYPES.add(BargeInType.SPEECH);
         BARGE_IN_TYPES.add(BargeInType.HOTWORD);
-
         GRAMMAR_TYPES = new java.util.ArrayList<GrammarType>();
         GRAMMAR_TYPES.add(GrammarType.JSGF);
     }
@@ -134,21 +132,8 @@ public final class MobicentsSpokenInput
     public void open()
             throws NoresourceError {
         try {
-            desc=new edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc("/sphinx4.mobicents.config.xml");
-            recognizer = Central.createRecognizer(desc);
-            if (recognizer == null) {
-                throw new NoresourceError("Error creating the recognizer! desc:"+desc);
-            }
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("allocating Mobicents 1.0 recognizer...");
-            }
-
-            recognizer.allocate();
-
-            if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...Mobicents 1.0  recognizer allocated");
-            }
-        } catch (EngineException ee) {
+        } catch (Exception ee) {
             LOGGER.error(ee);
             throw new NoresourceError(ee);
         }
@@ -157,28 +142,9 @@ public final class MobicentsSpokenInput
     /**
      * {@inheritDoc}
      */
-    public void close() {
-        if (recognizer == null) {
-            LOGGER.warn("no synthesizer: cannot deallocate");
-            return;
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("closing audio input...");
-            LOGGER.debug("deallocating recognizer...");
-        }
-
-        try {
-            recognizer.deallocate();
-        } catch (EngineException ee) {
-            LOGGER.error("error deallocating the recognizer", ee);
-        } finally {
-            recognizer = null;
-        }
-
-        if (LOGGER.isDebugEnabled()) {
+    public void close() 
+    {
             LOGGER.debug("audio input closed");
-        }
     }
 
     /**
@@ -212,62 +178,18 @@ public final class MobicentsSpokenInput
     @Override
     public GrammarImplementation<?> loadGrammar(final Reader reader,
             final GrammarType type)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError {
-        if (recognizer == null) {
-            throw new NoresourceError("No recognizer available!");
-        }
-
-        if (type != GrammarType.JSGF) {
-            throw new UnsupportedFormatError(
-                    "Mobicents 1.0 implementation supports only type "
-                    + GrammarType.JSGF.getType());
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("loading grammar from reader");
-        }
-        final StringBuilder jsgf = new StringBuilder();
-        final char[] buffer = new char[BUFFER_SIZE];
-        int num = 0;
-        do {
-            try {
-                num = reader.read(buffer);
-                if (num > 0) {
-                    jsgf.append(buffer, 0, num);
-                }
-            } catch (IOException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            }
-        } while (num > 0);
-        final RuleGrammar grammar;
-        final Reader jsgfReader = new StringReader(jsgf.toString());
-        try {
-            grammar = recognizer.loadJSGF(jsgfReader);
-        } catch (java.io.IOException ioe) {
-            throw new BadFetchError(ioe.getMessage(), ioe);
-        } catch (javax.speech.recognition.GrammarException ge) {
-            throw new UnsupportedFormatError(ge.getMessage(), ge);
-        }
-
-        return new RuleGrammarImplementation(grammar, jsgf.toString());
+            throws NoresourceError, BadFetchError, UnsupportedFormatError 
+    {
+        return null;
     }
 
     /**
      * Dumps all loaded grammars to the LOGGER in debug mode.
      * @since 0.7.3
      */
-    private void dumpLoadedGrammars() {
-        final RuleGrammar[] grammars = recognizer.listRuleGrammars();
-        if (grammars.length == 0) {
-            LOGGER.debug("no loaded grammars");
-        } else {
-            LOGGER.debug("loaded grammars:");
-        }
-        
-        for (RuleGrammar grammar : grammars) {
-            LOGGER.debug("- grammar '" + grammar.getName() + ", enabled:"
-                    + grammar.isEnabled());
-        }
+    private void dumpLoadedGrammars() 
+    {
+
     }
 
     /**
@@ -277,66 +199,9 @@ public final class MobicentsSpokenInput
      */
     public void activateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
-            throws BadFetchError, UnsupportedLanguageError, NoresourceError {
-        if (recognizer == null) {
-            throw new NoresourceError("No recognizer available!");
-        }
+            throws BadFetchError, UnsupportedLanguageError, NoresourceError 
+    {
 
-        boolean changedGrammar = false;
-        for (GrammarImplementation<? extends Object> current : grammars) {
-            if (current instanceof RuleGrammarImplementation) {
-                final RuleGrammarImplementation ruleGrammar =
-                    (RuleGrammarImplementation) current;
-                final String name = ruleGrammar.getName();
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("activating grammar '" + name + "'...");
-                }
-
-                RuleGrammar grammar = recognizer.getRuleGrammar(name);
-                if (grammar == null) {
-                    // If we did not find the grammar, try to restore it.
-                    // This can happen, if we get a cached grammar object
-                    // that has not been loaded by this recognizer instance.
-                    final String jsgf = ruleGrammar.getJsgf();
-                    if (jsgf == null) {
-                        throw new BadFetchError(
-                                "Unable to activate unregistered grammar '"
-                                            + name + "'!");
-                    }
-                    final Reader reader = new StringReader(jsgf);
-                    RuleGrammarImplementation impl;
-                    try {
-                        impl = (RuleGrammarImplementation) loadGrammar(reader,
-                                GrammarType.JSGF);
-                    } catch (UnsupportedFormatError e) {
-                        throw new BadFetchError(
-                                "Unable to reeactivate grammar '"
-                                + name + "'!");
-                    }
-                    grammar = impl.getGrammar();
-                }
-
-                if (!grammar.isEnabled()) {
-                    changedGrammar = true;
-                    grammar.setEnabled(true);
-                    grammar.setActivationMode(Grammar.RECOGNIZER_FOCUS);
-                }
-            }
-        }
-
-        // Commit the changes if changes were made.
-        if (changedGrammar) {
-            try {
-                recognizer.commitChanges();
-            } catch (GrammarException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            } catch (EngineStateError e) {
-                throw new BadFetchError(e.getMessage(), e);
-            }
-        }
-        if (LOGGER.isDebugEnabled()) {
-            dumpLoadedGrammars();
-        }
     }
 
     /**
@@ -346,41 +211,9 @@ public final class MobicentsSpokenInput
      */
     public void deactivateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
-            throws BadFetchError {
-        if (recognizer == null) {
-            return;
-        }
+            throws BadFetchError 
+    {
 
-        boolean changedGrammar = false;
-        for (GrammarImplementation<? extends Object> current : grammars) {
-            if (current instanceof RuleGrammarImplementation) {
-                final RuleGrammarImplementation ruleGrammar =
-                    (RuleGrammarImplementation) current;
-                final String name = ruleGrammar.getName();
-
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("deactivating grammar '" + name + "'...");
-                }
-                final RuleGrammar grammar = ruleGrammar.getGrammar();
-                if ((grammar != null) && grammar.isEnabled()) {
-                    changedGrammar = true;
-                    grammar.setEnabled(false);
-                }
-            }
-        }
-        // Commit the changes if changes were made.
-        if (changedGrammar) {
-            try {
-                recognizer.commitChanges();
-            } catch (GrammarException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            } catch (EngineStateError e) {
-                throw new BadFetchError(e.getMessage(), e);
-            }
-        }
-        if (LOGGER.isDebugEnabled()) {
-            dumpLoadedGrammars();
-        }
     }
 
     /**
@@ -388,107 +221,31 @@ public final class MobicentsSpokenInput
      * @return enabled grammars.
      * @since 0.7.3
      */
-    Collection<RuleGrammar> getActiveGrammars() {
-        final RuleGrammar[] grammars = recognizer.listRuleGrammars();
-        Collection<RuleGrammar> active =
-            new java.util.ArrayList<RuleGrammar>();
-        for (RuleGrammar grammar : grammars) {
-            if (grammar.isEnabled()) {
-                active.add(grammar);
-            }
-        }
-        return active;
+    Collection<RuleGrammar> getActiveGrammars() 
+    {
+        return null;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void startRecognition(
+    public void startRecognition
+            (
             final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf)
-            throws NoresourceError, BadFetchError {
-        if (recognizer == null) {
-            throw new NoresourceError("recognizer not available");
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("starting recognition...");
-        }
-
-        try {
-            recognizer.commitChanges();
-        } catch (GrammarException ge) {
-            throw new BadFetchError(ge.getMessage(), ge);
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            dumpLoadedGrammars();
-        }
-        recognizer.requestFocus();
-        try {
-            recognizer.waitEngineState(Recognizer.FOCUS_ON);
-            recognizer.resume();
-        } catch (AudioException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (IllegalArgumentException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (InterruptedException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
-
-        // Create a new result listener.
-        resultListener = new JVoiceXMLRecognitionListener(this);
-        recognizer.addResultListener(resultListener);
-
-        final SpokenInputEvent event =
-            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
-        fireInputEvent(event);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...recognition started");
-        }
+            throws NoresourceError, BadFetchError 
+    {
+        LOGGER.debug("starting recognition...");
+        LOGGER.debug("...recognition started");
     }
 
     /**
      * {@inheritDoc}
      */
-    public void stopRecognition() {
-        if (!recognizer.testEngineState(Recognizer.RESUMED)) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("recognition not started. No need to stop.");
-            }
-
-            return;
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("stopping recognition...");
-        }
-
-        // If a result listener exists: Remove it.
-        if (resultListener != null) {
-            recognizer.removeResultListener(resultListener);
-            resultListener = null;
-        }
-        recognizer.releaseFocus();
-        try {
-            recognizer.waitEngineState(Recognizer.FOCUS_OFF);
-        } catch (IllegalArgumentException e) {
-            LOGGER.warn(e.getMessage(), e);
-        } catch (InterruptedException e) {
-            LOGGER.warn(e.getMessage(), e);
-        }
-        recognizer.pause();
-
-        final SpokenInputEvent event =
-            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STOPPED);
-        fireInputEvent(event);
-
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...recognition stopped");
-        }
+    public void stopRecognition() 
+    {
+        LOGGER.debug("...recognition stopped");
     }
 
     /**
@@ -501,34 +258,8 @@ public final class MobicentsSpokenInput
     /**
      * {@inheritDoc}
      */
-    public void passivate() {
-        listener.clear();
-        if (resultListener != null) {
-            recognizer.removeResultListener(resultListener);
-            resultListener = null;
-        }
-        
-        handler = null;
-        info = null;
-        streamableInput = null;
-        final RuleGrammar[] grammars = recognizer.listRuleGrammars();
-        for (RuleGrammar grammar : grammars) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("deleting grammar '" + grammar.getName() + "'");
-            }
-            grammar.setEnabled(false);
-            recognizer.deleteRuleGrammar(grammar);
-        }
-        try {
-            recognizer.commitChanges();
-        } catch (GrammarException e) {
-            LOGGER.warn("error deactivating grammars", e);
-        } catch (EngineStateError e) {
-            LOGGER.warn("error deactivating grammars", e);
-        }
-        if (LOGGER.isDebugEnabled()) {
-            dumpLoadedGrammars();
-        }
+    public void passivate() 
+    {
         LOGGER.info("passivated spoken input");
     }
 
@@ -536,23 +267,16 @@ public final class MobicentsSpokenInput
      * {@inheritDoc}
      */
     public void connect(final ConnectionInformation connectionInformation)
-        throws IOException {
-        if (handler != null) {
-            handler.connect(info, this, recognizer);
-        }
-
-        info = connectionInformation;
+        throws IOException 
+    {
+        LOGGER.info("connectionInformation:"+connectionInformation);
     }
 
     /**
      * {@inheritDoc}
      */
     public void disconnect(final ConnectionInformation connectionInformation) {
-        if (handler != null) {
-            handler.disconnect(info, this, recognizer);
-        }
-
-        info = null;
+        LOGGER.info("connectionInformation:"+connectionInformation);
     }
 
     /**
@@ -592,8 +316,9 @@ public final class MobicentsSpokenInput
     /**
      * {@inheritDoc}
      */
-    public boolean isBusy() {
-        return recognizer.testEngineState(Recognizer.RESUMED);
+    public boolean isBusy() 
+    {
+        return false;
     }
 
     /**
@@ -622,8 +347,11 @@ public final class MobicentsSpokenInput
      * @param event the event.
      * @since 0.6
      */
-    void fireInputEvent(final SpokenInputEvent event) {
-        synchronized (listener) {
+    void fireInputEvent(final SpokenInputEvent event) 
+    {
+        LOGGER.info("SpokenInputEvent:"+event);
+        synchronized (listener) 
+        {
             final Collection<SpokenInputListener> copy =
                 new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listener);
