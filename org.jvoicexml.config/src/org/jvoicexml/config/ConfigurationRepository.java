@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.Map;
 
@@ -144,7 +146,7 @@ final class ConfigurationRepository
         final Collection<File> files = new java.util.ArrayList<File>();
         final DocumentBuilderFactory dbfactory =
             DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
+        final DocumentBuilder builder;
         try {
             builder = dbfactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
@@ -152,6 +154,14 @@ final class ConfigurationRepository
         }
         final EntityResolver resolver = new IgnoringEntityResolver();
         builder.setEntityResolver(resolver);
+
+        // reset class loader
+        final ClassLoader loader =
+                Thread.currentThread().getContextClassLoader();
+        final URLClassLoader urlloader = new URLClassLoader(new URL[0], loader);
+        Thread.currentThread().setContextClassLoader(urlloader);
+
+        // inspect the files
         final XPathFactory xpathFactory = XPathFactory.newInstance();
         final XPath xpath = xpathFactory.newXPath();
         for (File current : children) {
