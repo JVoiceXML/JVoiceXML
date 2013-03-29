@@ -1,0 +1,7 @@
+# cache for current jar dependecy. DO NOT EDIT.
+# format is <lastModified> <length> <SHA-1> <path>
+# Encoding is UTF-8
+1359316387000 481534 0278c9d0ae02132ab6d00e709926c227022e85a4 /Users/marcos/Documents/PFC/workspace/org.jvoicexml/3rdparty/log4j1.2.16/lib/log4j-1.2.16.jar
+1359316589000 481534 0278c9d0ae02132ab6d00e709926c227022e85a4 /Users/marcos/Documents/PFC/workspace/org.jvoicexml.android.callmanager/libs/log4j-1.2.16.jar
+1359316625000 1122370 939f05e4f3605de67c2717837f30d9fd575873dd /Users/marcos/Documents/PFC/workspace/org.jvoicexml.android.callmanager/libs/js.jar
+1359316515000 1122370 939f05e4f3605de67c2717837f30d9fd575873dd /Users/marcos/Documents/PFC/workspace/org.jvoicexml/3rdparty/rhino1.7R3/lib/js.jar
