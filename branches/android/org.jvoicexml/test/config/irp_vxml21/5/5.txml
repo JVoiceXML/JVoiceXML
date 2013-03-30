@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @ Copyright 2005 W3C (MIT, ERCIM, Keio), All Rights Reserved. See http://www.w3.org/Consortium/Legal/. @ -->
+
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:conf="http://www.w3.org/2002/vxml-conformance" version="2.1">
+  <form id="form0">
+    <var name="count" expr="0"/>
+    <var name="uri" expr="'first.grxml'"/>
+    <field name="field0">
+      <grammar srcexpr="uri"/>
+      <conf:dtmf value="1"/>
+      <nomatch count="1">
+        <assign name="uri" expr="'second.grxml'"/>
+        <assign name="count" expr="count+1"/>
+        <reprompt/>
+      </nomatch>
+      <nomatch count="2">
+        <assign name="uri" expr="'third.grxml'"/>
+        <assign name="count" expr="count+1"/>
+        <reprompt/>
+      </nomatch>
+      <nomatch count="3">
+        <conf:fail expr="'caught third ' + _event"/>
+      </nomatch>
+    </field>
+    <block>
+      <if cond="field0 &amp;&amp; count == 2">
+        <conf:pass/>
+      <else/>
+        <conf:fail expr="'postcondition failed: field0 == ' + field0 + ' and count == ' + count"/>
+      </if>
+    </block>
+  </form>
+  <catch>
+    <conf:fail expr="'caught unexpected event: ' + _event"/>
+  </catch>
+</vxml>

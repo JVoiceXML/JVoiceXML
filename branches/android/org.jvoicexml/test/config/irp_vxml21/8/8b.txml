@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!-- @ Copyright 2005 W3C (MIT, ERCIM, Keio), All Rights Reserved. See http://www.w3.org/Consortium/Legal/. @ -->
+<vxml version="2.1"
+  xmlns="http://www.w3.org/2001/vxml"
+  xmlns:conf="http://www.w3.org/2002/vxml-conformance"
+>
+
+<!-- If both src and inline grammar are included, error.badfetch is thrown --> 
+
+<catch event="error.badfetch">
+  <conf:pass/>
+</catch>
+
+<catch><conf:fail expr="'catch-all caught ' + _event"/></catch>
+
+<form id="f0">
+
+  <field name="f1">
+    <conf:dtmf value="5"/>
+    <grammar mode="dtmf" type="application/srgs+xml" src="./8.grxml">
+      <![CDATA[
+        [
+          [(hear ?one)] { <option "one A"> }
+          [(hear ?two)] { <option "two A"> }
+          [(hear ?three)] { <option "three A"> }
+          [(hear ?four)] { <option "four A"> }
+        ]
+      ]]>
+    </grammar>
+
+
+    <filled>
+        <conf:fail reason="error.badfetch should have been thrown and caught"/>
+    </filled>
+  </field>
+
+</form>
+
+</vxml>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- @ Copyright 2004 W3C (MIT, ERCIM, Keio), All Rights Reserved. See http://www.w3.org/Consortium/Legal/. @ -->
+
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:conf="http://www.w3.org/2002/vxml-conformance" version="2.1">
+
+<form id="form0">
+  <block>
+    <conf:fail reason="page loaded but should have generated error.badfetch"/>
+    <script src="10_script.js" srcexpr="'10_script.js'"/>
+  </block>
+</form>
+
+<catch event="error.badfetch">
+  <conf:pass/>
+</catch>
+
+<catch>
+    <conf:fail expr="'caught unexpected event: ' + _event"/>
+</catch>
+
+</vxml>
