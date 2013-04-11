@@ -28,6 +28,7 @@ package org.jvoicexml.callmanager.mmi.umundo;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
 import org.jvoicexml.mmi.events.AnyComplexType;
@@ -48,6 +49,10 @@ import org.umundo.s11n.ITypedReceiver;
  * @since 0.7.6
  */
 public final class MmiReceiver implements ITypedReceiver {
+    /** Logger instance. */
+    private static final Logger LOGGER = Logger
+            .getLogger(MmiReceiver.class);
+
     /** Registered listeners for MMI events. */
     private final Collection<MMIEventListener> listeners;
 
@@ -70,6 +75,9 @@ public final class MmiReceiver implements ITypedReceiver {
      */
     @Override
     public void receiveObject(final Object object, final Message msg) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("received '" + object + "'");
+        }
         final LifeCycleEvent event = convertToLifeCycleEvent(object);
         if (event == null) {
             return;
