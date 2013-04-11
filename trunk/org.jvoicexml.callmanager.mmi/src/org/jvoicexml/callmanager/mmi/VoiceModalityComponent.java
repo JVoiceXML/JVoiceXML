@@ -101,7 +101,6 @@ public final class VoiceModalityComponent
         LOGGER.info("starting ETL protocol adapter " + adapter.getClass()
                 + "'");
         adapter.start();
-        
     }
 
     /**
