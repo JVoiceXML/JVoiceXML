@@ -32,7 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
-import org.jvoicexml.callmanager.mmi.test.DummyETLProtocolAdapter;
+import org.jvoicexml.callmanager.mmi.mock.MockETLProtocolAdapter;
 import org.jvoicexml.client.ConnectionInformationFactory;
 import org.jvoicexml.client.JVoiceXmlConnectionInformationFactory;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -61,7 +61,7 @@ public final class TestMMICallManager {
         final JVoiceXml jvxml = new MockJvoiceXmlCore();
         cm = new MMICallManager();
         cm.setJVoiceXml(jvxml);
-        final ETLProtocolAdapter adapter = new DummyETLProtocolAdapter();
+        final ETLProtocolAdapter adapter = new MockETLProtocolAdapter();
         cm.setProtocolAdapter(adapter);
         final ConnectionInformationFactory factory =
                 new JVoiceXmlConnectionInformationFactory();

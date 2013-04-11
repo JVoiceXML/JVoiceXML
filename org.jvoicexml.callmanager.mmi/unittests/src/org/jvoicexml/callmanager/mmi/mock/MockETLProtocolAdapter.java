@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.callmanager.mmi.test;
+package org.jvoicexml.callmanager.mmi.mock;
 
 import java.io.IOException;
 
@@ -37,7 +37,7 @@ import org.jvoicexml.mmi.events.LifeCycleEvent;
  * @version $Revision: $
  * @since 0.7.6
  */
-public final class DummyETLProtocolAdapter implements ETLProtocolAdapter {
+public final class MockETLProtocolAdapter implements ETLProtocolAdapter {
 
     /**
      * {@inheritDoc}

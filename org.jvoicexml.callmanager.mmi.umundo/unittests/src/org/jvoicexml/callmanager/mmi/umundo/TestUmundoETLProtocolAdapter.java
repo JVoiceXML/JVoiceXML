@@ -29,6 +29,7 @@ package org.jvoicexml.callmanager.mmi.umundo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.callmanager.mmi.umundo.mock.MockReceiver;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.PrepareResponse;
 import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents;
@@ -47,12 +48,8 @@ import com.google.protobuf.ExtensionRegistry;
 public final class TestUmundoETLProtocolAdapter {
     /** The umundo receiving node. */
     private Node receivingNode;
-    /** Synchronization lock. */
-    private Object lock;
-    /** The received event. */
-    private LifeCycleEvent receivedEvent;
     /** A receiver for MMI events. */
-    private DummyReceiver receiver;
+    private MockReceiver receiver;
 
     /**
      * Set up the test environment.
@@ -62,7 +59,7 @@ public final class TestUmundoETLProtocolAdapter {
     @Before
     public void setUp() throws Exception {
         receivingNode = new Node();
-        receiver = new DummyReceiver();
+        receiver = new MockReceiver();
         TypedSubscriber subscriber =
                 new TypedSubscriber("mmi:jvoicexml", receiver);
         receivingNode.addSubscriber(subscriber);
@@ -71,8 +68,6 @@ public final class TestUmundoETLProtocolAdapter {
         ExtensionRegistry registry = ExtensionRegistry.newInstance();
         LifeCycleEvents.registerAllExtensions(registry);
         subscriber.setExtensionRegistry(registry);
-        lock = new Object();
-        receivedEvent = null;
     }
 
 
@@ -90,7 +85,7 @@ public final class TestUmundoETLProtocolAdapter {
      * @throws Exception
      *         test failed
      */
-    @Test
+    @Test(timeout = 5000)
     public void testSendMMIEvent() throws Exception {
         final PrepareResponse response = new PrepareResponse();
         final String requestId = "requestId1";
@@ -105,7 +100,8 @@ public final class TestUmundoETLProtocolAdapter {
         adapter.start();
         Thread.sleep(1000);
         adapter.sendMMIEvent("dummy", response);
-        Thread.sleep(1000);
+        receiver.waitReceivedObject();
+        final Object object = receiver.getReceivedObject();
         adapter.stop();
     }
 }
