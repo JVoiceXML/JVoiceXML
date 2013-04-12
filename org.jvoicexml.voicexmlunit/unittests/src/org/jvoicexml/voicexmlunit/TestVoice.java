@@ -41,7 +41,7 @@ public class TestVoice implements TextListener {
         Assert.assertNotNull(voice.getContext());
     }
     
-    @Test
+    @Test(timeout=3000)
     public void testSession() throws ErrorEvent, IOException, InterruptedException {
         Assert.assertNull(voice.getSession());
         
@@ -54,6 +54,9 @@ public class TestVoice implements TextListener {
         try {
             final ConnectionInformation connectionInformation = server.getConnectionInformation();;
             voice.connect(connectionInformation, dialog);
+            synchronized (dialog) {
+                dialog.wait(MAX_WAIT);
+            }
         } finally {
             server.stopServer();
         }
@@ -71,7 +74,9 @@ public class TestVoice implements TextListener {
     @Override
     public void connected(InetSocketAddress remote) {
         try {
-            Thread.sleep(500); // delay
+            synchronized (dialog) {
+                dialog.wait(MAX_WAIT);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
