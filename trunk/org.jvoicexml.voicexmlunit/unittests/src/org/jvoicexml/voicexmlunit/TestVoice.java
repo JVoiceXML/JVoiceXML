@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
-import java.net.UnknownHostException;
 
 import junit.framework.Assert;
 
