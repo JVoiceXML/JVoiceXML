@@ -77,7 +77,9 @@ public final class TestUmundoETLProtocolAdapter {
      */
     @After
     public void tearDown() throws Exception {
-        receivingNode.suspend();
+        if (receivingNode != null) {
+            receivingNode.suspend();
+        }
     }
 
     /**

@@ -77,6 +77,12 @@ public final class MmiReceiver implements ITypedReceiver {
      */
     @Override
     public void receiveObject(final Object object, final Message msg) {
+        // bugfix
+        // Java uses the system classloader when being invoked from JNI.
+        // Thereby, it forgets about all the stuff it knew before.
+        final ClassLoader loader = getClass().getClassLoader();
+        Thread.currentThread().setContextClassLoader(loader);
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("received '" + object + "'");
         }
