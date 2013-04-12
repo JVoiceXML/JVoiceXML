@@ -87,17 +87,21 @@ public final class Voice {
      *            the conection details of the server object
      * @param dialog
      *            the dialog to use
-     * @throws ErrorEvent
-     *             the error happened during the session was active
      * @throws IOException 
+     *            the error happened during the session was active
      */
     public void connect(final ConnectionInformation connectionInformation, URI dialog)
-            throws ErrorEvent, IOException {
-        session = getJVoiceXml().createSession(connectionInformation);
-        session.call(dialog);
-        session.waitSessionEnd();
-        // session.hangup();
-        session = null;
+            throws IOException {
+        try {
+            session = getJVoiceXml().createSession(connectionInformation);
+            session.call(dialog);
+            session.waitSessionEnd();
+            //session.hangup();
+        } catch (ErrorEvent e) {
+            throw new IOException(e);
+        } finally {
+            session = null;
+        }
     }
 
     /**
