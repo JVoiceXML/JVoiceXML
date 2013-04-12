@@ -28,7 +28,6 @@ package org.jvoicexml.callmanager.mmi.umundo;
 
 import java.io.File;
 
-import org.junit.After;
 import org.junit.Test;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents;
@@ -78,7 +77,8 @@ public final class TestUmundoETLProtocolAdapterClassLoader {
         final Node node = new Node();
         final TypedPublisher publisher = new TypedPublisher("mmi:jvoicexml");
         node.addPublisher(publisher);
-        publisher.sendObject(event1);
+        publisher.waitForSubscribers(1);
+        publisher.sendObject("LifeCycleEvent", event1);
         Thread.sleep(1000);
     }
 }

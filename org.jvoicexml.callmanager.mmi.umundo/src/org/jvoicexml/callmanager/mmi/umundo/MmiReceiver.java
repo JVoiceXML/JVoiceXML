@@ -26,6 +26,8 @@
 
 package org.jvoicexml.callmanager.mmi.umundo;
 
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -82,6 +84,8 @@ public final class MmiReceiver implements ITypedReceiver {
         if (event == null) {
             return;
         }
+
+        // Notify all listeners about the event
         final DecoratedMMIEvent docatedEvent = new DecoratedMMIEvent(sourceUrl,
                 event);
         synchronized (listeners) {

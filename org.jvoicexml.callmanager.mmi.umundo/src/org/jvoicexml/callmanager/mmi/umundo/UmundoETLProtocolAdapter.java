@@ -110,11 +110,11 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
     public void start() throws IOException {
         node = new Node();
         subscriber = new TypedSubscriber(channel, receiver);
-        subscriber.registerType(LifeCycleEvents.LifeCycleEvent.class);
+        node.addSubscriber(subscriber);
 
+        subscriber.registerType(LifeCycleEvents.LifeCycleEvent.class);
         registry = ExtensionRegistry.newInstance();
         LifeCycleEvents.registerAllExtensions(registry);
-        node.addSubscriber(subscriber);
         subscriber.setExtensionRegistry(registry);
 
         publisher = new TypedPublisher(channel);
