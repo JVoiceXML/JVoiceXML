@@ -104,4 +104,25 @@ public final class JVoiceXmlClassLoader extends URLClassLoader {
         }
         return loadedClass;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append(getClass());
+        str.append('[');
+        boolean first = true;
+        for (URL url : urls) {
+            if (!first) {
+                str.append(',');
+            } else {
+                first = false;
+            }
+            str.append(url);
+        }
+        str.append(']');
+        return str.toString();
+    }
 }
