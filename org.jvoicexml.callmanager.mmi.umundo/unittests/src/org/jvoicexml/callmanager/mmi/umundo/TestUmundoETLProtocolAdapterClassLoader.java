@@ -55,19 +55,19 @@ public final class TestUmundoETLProtocolAdapterClassLoader {
         final String target = "umundo://mmi/jvoicexml";
         final String context = "textctx";
         final File file = new File("unittests/vxml/hello.vxml");
-        final LifeCycleEvents.PrepareRequest prepareRequest =
-                LifeCycleEvents.PrepareRequest.newBuilder()
-                .setContentURL(file.getCanonicalPath())
+        final LifeCycleEvents.StartRequest startRequest =
+                LifeCycleEvents.StartRequest.newBuilder()
+                .setContentURL(file.toURI().toURL().toString())
                 .build();
         final LifeCycleEvents.LifeCycleRequest lifeCycleRequest =
                 LifeCycleEvents.LifeCycleRequest.newBuilder()
                 .setContext(context)
-                .setExtension(LifeCycleEvents.PrepareRequest.request,
-                        prepareRequest)
+                .setExtension(LifeCycleEvents.StartRequest.request,
+                        startRequest)
                 .build();
         final LifeCycleEvents.LifeCycleEvent event1 = 
                 LifeCycleEvents.LifeCycleEvent.newBuilder()
-                .setType(LifeCycleEventType.PREPARE_REQUEST)
+                .setType(LifeCycleEventType.START_REQUEST)
                 .setRequestID(requestId)
                 .setSource(source)
                 .setTarget(target)
