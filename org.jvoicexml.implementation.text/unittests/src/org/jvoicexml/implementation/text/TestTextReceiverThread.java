@@ -98,6 +98,7 @@ public final class TestTextReceiverThread
     public void setUp() throws Exception, ErrorEvent {
         server = new TextServer(PORT);
         server.start();
+        Thread.sleep(500);
         final InetAddress address = InetAddress.getLocalHost();
         final SocketAddress socketAddress =
             new InetSocketAddress(address, PORT);
