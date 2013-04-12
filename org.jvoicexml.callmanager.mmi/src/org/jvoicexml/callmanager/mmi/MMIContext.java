@@ -194,7 +194,11 @@ public final class MMIContext {
      *         the given value does not denote a valid URI
      */
     public void setContentURL(final String value) throws URISyntaxException {
-        final URI uri = new URI(value);
-        setContentURL(uri);
+        if ((value == null) || value.isEmpty()) {
+            contentURL = null;
+        } else {
+            final URI uri = new URI(value);
+            setContentURL(uri);
+        }
     }
 }
