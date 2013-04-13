@@ -859,7 +859,7 @@ public abstract class AbstractXmlNode
                 "UTF-8");
             transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
             transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
-            final Source source = new DOMSource(this);
+            final Source source = new DOMSource(node);
             transformer.transform(source, result);
             return out.toString(encoding);
         } catch (TransformerException e) {

@@ -1161,7 +1161,7 @@ public abstract class XmlDocument
                 transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM,
                         type.getSystemId());
             }
-            final Source source = new DOMSource(this);
+            final Source source = new DOMSource(document);
             transformer.transform(source, result);
             return out.toString(encoding);
         } catch (TransformerException e) {
