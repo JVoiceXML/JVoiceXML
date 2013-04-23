@@ -230,7 +230,7 @@ personal-props/README.txt
    </replace>
     <copy tofile="${distFolder}/config/mrcpv2-callmanager.xml"
       file="${etc}/mrcpv2-callmanager-dist.xml"/>
-    <replace file="${distFolder}/config/mrcpv2-implementation.xml">
+    <replace file="${distFolder}/config/mrcpv2-callmanager.xml">
         <replacefilter token="@mrcpv2.sip.address@"
             value="${mrcpv2.sip.address}" />
         <replacefilter token="@mrcpv2.sip.port@"
