@@ -89,7 +89,7 @@ personal-props/README.txt
       <platform name="org.jvoicexml.callmanager.mmi">
 	    <property name="jvxml.mmi.socket" value ="true" />
 	    <property name="jvxml.mmi.umundo" value ="true" />
-      </platform-->
+      </platform>
 	    	
       <platform name="org.jvoicexml.callmanager.sip" />
       <platform name="org.jvoicexml.callmanager.text" />
