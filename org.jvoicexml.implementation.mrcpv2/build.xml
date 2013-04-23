@@ -215,7 +215,9 @@ personal-props/README.txt
   <target name="distribution" depends="jar">
     <property name="distFolder" value="${dist}/${jvxml.version}" />
     <copy tofile="${distFolder}/config/mrcpv2-implementation.xml"
-      file="${etc}/mrcpv2-implementation-dist.xml"/>
+      file="${etc}/mrcpv2-implementation-dist.xml" overwrite="true" />
+    <copy tofile="${distFolder}/config/mrcpv2-callmanager.xml"
+      file="${etc}/mrcpv2-callmanager-dist.xml" overwrite="true"/>
     <replace file="${distFolder}/config/mrcpv2-callmanager.xml">
       <replacefilter token="@mrcpv2.sip.address@"
           value="${mrcpv2.sip.address}" />
@@ -228,8 +230,6 @@ personal-props/README.txt
       <replacefilter token="@mrcpv2.sip.cairo.sip.port@"
           value="${mrcpv2.sip.cairo.sip.port}" />
    </replace>
-    <copy tofile="${distFolder}/config/mrcpv2-callmanager.xml"
-      file="${etc}/mrcpv2-callmanager-dist.xml"/>
     <replace file="${distFolder}/config/mrcpv2-callmanager.xml">
         <replacefilter token="@mrcpv2.sip.address@"
             value="${mrcpv2.sip.address}" />
