@@ -3,11 +3,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
   <repository>mmi-umundo</repository>
-  <classpath>dist/org.jvoicexml.mmi.events.jar</classpath>
-  <classpath>dist/org.jvoicexml.callmanager.mmi.jar</classpath>
-  <classpath>dist/org.jvoicexml.callmanager.mmi.umundo.jar</classpath>
-  <classpath>../org.jvoicexml.callmanager.mmi.umundo/3rdparty/umundo/lib/umundo.jar</classpath>
-  <classpath>../org.jvoicexml.mmi.events/3rdparty/protobuf2.4.1/lib/protobuf-java-2.4.1.jar</classpath>
+  <classpath>lib/org.jvoicexml.mmi.events.jar</classpath>
+  <classpath>lib/org.jvoicexml.callmanager.mmi.jar</classpath>
+  <classpath>lib/org.jvoicexml.callmanager.mmi.umundo.jar</classpath>
+  <classpath>lib/umundo.jar</classpath>
+  <classpath>lib/protobuf-java-2.4.1.jar</classpath>
 
   <beans:bean id="callmanager"
     class="org.jvoicexml.callmanager.mmi.MMICallManager">
