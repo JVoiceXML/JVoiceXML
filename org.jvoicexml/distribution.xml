@@ -36,7 +36,7 @@ This file builds the distribution files for JVoiceXML.
   </target>
 
   <target name="-userdoc">
-    <ant dir="../userguide" inheritall="false" inheritrefs="false"/>
+    <ant dir="../userguide" target="distribution" inheritall="false" inheritrefs="false"/>
   </target>
 
   <target name="-prepareDistributionFolder"
