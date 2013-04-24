@@ -9,6 +9,7 @@
     <path id="jvxml.core.lib">
       <fileset dir="${lib.dir}">
         <include name="org.jvoicexml.client.jar" />
+        <include name="org.jvoicexml.jndi.jar" />
         <include name="org.jvoicexml.xml.jar" />
       </fileset>
     </path>
@@ -56,5 +57,8 @@
     <fileset dir="${lib.dir}" id="jlibrtp.lib">
         <include name="jlibrtp.jar" />
     </fileset>
+  </target>
+
+  <target name="-initcheckstyle">
   </target>
 </project>
