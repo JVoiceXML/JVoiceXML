@@ -12,8 +12,6 @@ Create the document 'JVoiceXML Userguide'..
     <target name="-setup">
       <property name="jvxml.core.dir" value="../org.jvoicexml"/>
       <property name="basefilename" value="userguide" />
-      <property name="dist.ps"
-        value="${jvxml.core.dir}/doc/jvxml-${basefilename}-${jvxml.version}.ps" />
       <property name="dist.pdf"
         value="${jvxml.core.dir}/doc/jvxml-${basefilename}-${jvxml.version}.pdf" />
 
@@ -55,6 +53,10 @@ Create the document 'JVoiceXML Userguide'..
         <latex pdftex="true"  latexfile="${basefilename}.tex" verbose="on">
             <bibtex />
         </latex>
+    </target>
+	
+	<target name="distribution" depends="latex">
+        <copy file="${basefilename}.pdf"  tofile="${dist.pdf}" overwrite="true"/>
     </target>
 </project>
 
