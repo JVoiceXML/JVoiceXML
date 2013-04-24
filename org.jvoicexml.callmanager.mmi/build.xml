@@ -206,6 +206,8 @@ org.jvoicexml/personal-props/README.txt
   </target>
 
     <target name="distribution" depends="jar">
+        <property name="distFolder" value="${dist}/${jvxml.version}" />
+  	    <copy todir="${distFolder}/lib" file="${dist.jar}"/>
         <ant dir="../org.jvoicexml.mmi.events" target="distribution"
           inheritrefs="false" inheritall="false"/>
         <ant dir="../org.jvoicexml.callmanager.mmi.socket" target="distribution"
