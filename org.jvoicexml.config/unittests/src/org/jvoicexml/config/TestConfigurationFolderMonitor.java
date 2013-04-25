@@ -51,7 +51,6 @@ public final class TestConfigurationFolderMonitor
                 "../org.jvoicexml.config/unittests/config");
         final ConfigurationFolderMonitor monitor =
                 new ConfigurationFolderMonitor(configFolder);
-        monitor.setDelay(delay);
         monitor.addListener(this);
         monitor.start();
         synchronized (lock) {
@@ -59,8 +58,8 @@ public final class TestConfigurationFolderMonitor
         }
         LOGGER.info(action + " on " + reportedFile);
         Assert.assertEquals(new File(
-            "../org.jvoicexml.config/unittests/config/test-implementation.xml"),
-            reportedFile);
+            "../org.jvoicexml.config/unittests/config/test-implementation.xml").getCanonicalPath(),
+            reportedFile.getCanonicalPath());
         Assert.assertEquals("added", action);
         reportedFile = null;
         action = null;
@@ -69,18 +68,20 @@ public final class TestConfigurationFolderMonitor
         file.deleteOnExit();
 
         // Added
+        Thread.sleep(100);
         file.createNewFile();
         synchronized (lock) {
             lock.wait();
         }
         LOGGER.info("observed '" + action + "' on " + reportedFile);
-        Assert.assertEquals(file, reportedFile);
+        Assert.assertEquals(file.getCanonicalPath(), reportedFile.getCanonicalPath());
         Assert.assertEquals("added", action);
         reportedFile = null;
         action = null;
         Thread.sleep(delay);
 
         // Updated
+        Thread.sleep(100);
         final FileWriter writer = new FileWriter(file);
         writer.write("test");
         writer.close();
@@ -95,6 +96,7 @@ public final class TestConfigurationFolderMonitor
         Thread.sleep(delay);
 
         // removed
+        Thread.sleep(100);
         file.delete();
         synchronized (lock) {
             lock.wait();
@@ -139,5 +141,4 @@ public final class TestConfigurationFolderMonitor
             lock.notifyAll();
         }
     }
-
 }
