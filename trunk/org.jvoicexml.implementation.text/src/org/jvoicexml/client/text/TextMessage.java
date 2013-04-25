@@ -39,7 +39,7 @@ public final class TextMessage implements Serializable {
     private static final long serialVersionUID = 7832004614102610277L;
 
     /**
-     * Code indicating that this message contains data. Ususally this is used
+     * Code indicating that this message contains data. Usually this is used
      * to send prompts as text or SSML 
      */
     public static final int DATA = 1;
