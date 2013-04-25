@@ -121,7 +121,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
     private final File configFolder;
 
     /** The configuration file storage. */
-    private final ConfigurationRepository configurationRepository;
+    private ConfigurationRepository configurationRepository;
 
     /** The cached SAX Parser Factory. */
     private SAXParserFactory parserFactory;
@@ -153,7 +153,12 @@ public final class JVoiceXmlConfiguration implements Configuration {
                 context = null;
             }
         }
-        configurationRepository = new ConfigurationRepository(configFolder);
+        try {
+            configurationRepository = new ConfigurationRepository(configFolder);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+            return;
+        }
     }
 
 
