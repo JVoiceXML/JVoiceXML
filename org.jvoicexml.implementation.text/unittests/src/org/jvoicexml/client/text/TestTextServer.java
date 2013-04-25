@@ -26,6 +26,7 @@
 package org.jvoicexml.client.text;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -38,44 +39,50 @@ import org.junit.Test;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
+ * Test cases for the {@link TextServer}.
  * 
- * @author thesis
+ * @author Raphael Groner
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.6
  */
 public class TestTextServer implements TextListener {
 
     private static final int PORT = 4711;
-    private static final long MAX_WAIT = 1000;
-    
+
     private TextServer server;
     private TextConnectionInformation info;
     private Socket socket;
     private boolean connected;
-    
+
+    private final Object lock = new Object();
+
     /**
+     * Set up the test environment
      * @throws java.lang.Exception
-     * @since 0.7.6
+     *          test failed
      */
     @Before
     public void setUp() throws Exception {
         server = new TextServer(PORT);
         info = (TextConnectionInformation) server.getConnectionInformation();
-        socket = new Socket();
         connected = false;
-        
+
         server.addTextListener(this);
         server.start();
-        synchronized (info) {
-            info.wait(MAX_WAIT);
+        synchronized (lock) {
+            lock.wait();
         }
-        info.connectClient(socket);
+        final InetAddress address = info.getAddress();
+        final int port = info.getPort();
+        socket = new Socket(address, port);
         server.waitConnected();
     }
 
     /**
+     * Tear down the test environment
      * @throws java.lang.Exception
-     * @since 0.7.6
+     *          tear down failed
      */
     @After
     public void tearDown() throws Exception {
@@ -83,8 +90,10 @@ public class TestTextServer implements TextListener {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.client.text.TextServer#getConnectionInformation()}.
-     * @throws UnknownHostException 
+     * Test method for
+     * {@link org.jvoicexml.client.text.TextServer#getConnectionInformation()}.
+     * 
+     * @throws UnknownHostException
      */
     @Test
     public void testGetConnectionInformation() {
@@ -100,9 +109,12 @@ public class TestTextServer implements TextListener {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.client.text.TextServer#waitConnected()} and
-     * {@link org.jvoicexml.client.text.TextServer#connectClient(java.net.Socket)}.
-     * @throws IOException 
+     * Test method for
+     * {@link org.jvoicexml.client.text.TextServer#waitConnected()} and
+     * {@link org.jvoicexml.client.text.TextServer#connectClient(java.net.Socket)}
+     * .
+     * 
+     * @throws IOException
      */
     @Test
     public void testConnection() throws IOException {
@@ -110,8 +122,10 @@ public class TestTextServer implements TextListener {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.client.text.TextServer#sendInput(java.lang.String)}.
-     * @throws IOException 
+     * Test method for
+     * {@link org.jvoicexml.client.text.TextServer#sendInput(java.lang.String)}.
+     * 
+     * @throws IOException
      */
     @Test
     public void testSendInput() throws IOException {
@@ -122,27 +136,28 @@ public class TestTextServer implements TextListener {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.client.text.TextServer#stopServer()}.
+     * Test method for {@link org.jvoicexml.client.text.TextServer#stopServer()}
+     * .
      */
     @Test
     public void testStopServer() {
         connected(null);
         server.stopServer();
         Assert.assertFalse(server.isStarted());
-        //Assert.assertFalse(server.isAlive());
+        // Assert.assertFalse(server.isAlive());
         Assert.assertFalse(connected);
     }
 
     @Override
     public void started() {
-        synchronized (info) {
-            info.notifyAll();
+        synchronized (lock) {
+            lock.notifyAll();
         }
     }
 
     @Override
     public void connected(InetSocketAddress remote) {
-        connected = true;        
+        connected = true;
     }
 
     @Override
