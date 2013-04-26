@@ -264,7 +264,7 @@ public final class NonBlockingObjectInputStream extends InputStream {
                     try {
                         readLock.wait();
                     } catch (InterruptedException e) {
-                        throw new IOException(e.getMessage());
+                        return -1;
                     }
                 }
             }
@@ -300,5 +300,14 @@ public final class NonBlockingObjectInputStream extends InputStream {
     @Override
     public int read() throws IOException {
         return buffer.read();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() throws IOException {
+        super.close();
+        buffer.close();
     }
 }
