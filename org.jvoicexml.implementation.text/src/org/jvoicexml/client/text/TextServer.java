@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 package org.jvoicexml.client.text;
 
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
@@ -361,6 +362,10 @@ public final class TextServer extends Thread {
                     final TextMessage ack =
                             new TextMessage(TextMessage.ACK, seq);
                     send(ack);
+                } catch (EOFException e) {
+                    if (isStarted()) {
+                        throw e;
+                    }
                 } catch (ClassNotFoundException e) {
                     throw new IOException(
                             "unable to instantiate the read object", e);
