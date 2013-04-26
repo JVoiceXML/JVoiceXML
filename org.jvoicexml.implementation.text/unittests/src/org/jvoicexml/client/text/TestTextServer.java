@@ -26,6 +26,7 @@
 package org.jvoicexml.client.text;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -56,6 +57,8 @@ public class TestTextServer implements TextListener {
     private boolean connected;
 
     private final Object lock = new Object();
+
+    private Object rcvd;
 
     /**
      * Set up the test environment
@@ -128,11 +131,46 @@ public class TestTextServer implements TextListener {
      * @throws IOException
      */
     @Test
-    public void testSendInput() throws IOException {
+    public void testSendInput() throws Exception {
         Assert.assertTrue(server.isStarted());
         String input = "Test123";
+        final Thread thread = new Thread() {
+            @Override
+            public void run() {
+                NonBlockingObjectInputStream oin = null;
+                try {
+                    synchronized (lock) {
+                        lock.notifyAll();
+                    }
+                    final InputStream in = socket.getInputStream();
+                    oin = new NonBlockingObjectInputStream(in);
+                    rcvd = oin.readObject();
+                    synchronized (lock) {
+                        lock.notifyAll();
+                    }
+                } catch (Exception e) {
+                    Assert.fail(e.getMessage());
+                } finally {
+                    if (oin != null) {
+                        try {
+                            oin.close();
+                        } catch (IOException e) {
+                            Assert.fail(e.getMessage());
+                        }
+                    }
+                }
+            }
+        };
+        thread.start();
+        synchronized (lock) {
+            lock.wait();
+        }
         server.sendInput(input);
-        // TODO verify that input has been received somewhere
+        synchronized (lock) {
+            lock.wait();
+        }
+        final TextMessage msg = new TextMessage(TextMessage.USER, 0, input);
+        Assert.assertEquals(msg, rcvd);
     }
 
     /**

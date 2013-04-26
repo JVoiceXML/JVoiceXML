@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -127,6 +127,51 @@ public final class TextMessage implements Serializable {
      */
     public Object getData() {
         return data;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + code;
+        result = prime * result + ((data == null) ? 0 : data.hashCode());
+        result = prime * result + seqNo;
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TextMessage other = (TextMessage) obj;
+        if (code != other.code) {
+            return false;
+        }
+        if (data == null) {
+            if (other.data != null) {
+                return false;
+            }
+        } else if (!data.equals(other.data)) {
+            return false;
+        }
+        if (seqNo != other.seqNo) {
+            return false;
+        }
+        return true;
     }
 
     /**
