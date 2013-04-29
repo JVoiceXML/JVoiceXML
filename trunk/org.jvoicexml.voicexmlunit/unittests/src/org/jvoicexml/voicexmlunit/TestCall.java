@@ -1,6 +1,5 @@
 package org.jvoicexml.voicexmlunit;
 
-
 import java.io.File;
 
 import java.net.InetSocketAddress;
@@ -15,25 +14,24 @@ import org.junit.Test;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
-
 public class TestCall implements TextListener {
-	
+
     private static final long MAX_WAIT = 1000;
-    
+
     private Call call;
     private boolean started;
     private boolean connected;
     private boolean disconnected;
-    
+
     @Before
     public void setUp() throws Exception {
         final URI dialog = new File("unittests/rc/mock.vxml").toURI();
         call = new Call(dialog);
-    	call.setListener(this);
+        call.setListener(this);
 
-    	started = false;
-    	connected = false;
-    	disconnected = false;
+        started = false;
+        connected = false;
+        disconnected = false;
     }
 
     @Test
@@ -50,8 +48,8 @@ public class TestCall implements TextListener {
         call.setVoice(null);
         Assert.assertNotSame(custom, call.getVoice());
     }
-    
-    @Test(timeout=3000)
+
+    @Test(timeout = 3000)
     public void testDialog() throws InterruptedException {
         final Voice voice = call.getVoice();
         voice.loadConfiguration("unittests/etc/jndi.properties");
@@ -59,37 +57,37 @@ public class TestCall implements TextListener {
 
         Assert.assertNull(call.getVoice().getSession());
         call.run();
-	Assert.assertTrue("started", started);
-	Assert.assertTrue("connected", connected);
-	Assert.assertTrue("disconnected", disconnected);
+        Assert.assertTrue("started", started);
+        Assert.assertTrue("connected", connected);
+        Assert.assertTrue("disconnected", disconnected);
         Assert.assertNull(call.getFailure());
-	Assert.assertNull(call.getVoice().getSession());
+        Assert.assertNull(call.getVoice().getSession());
     }
 
     @Test
     public void testFailure() {
         AssertionFailedError error = new AssertionFailedError();
-	call.fail(error);
-        
-	Assert.assertNotNull(call.getFailure());
-	assertDisconnectedAfterCheckFailed();
+        call.fail(error);
+
+        Assert.assertNotNull(call.getFailure());
+        assertDisconnectedAfterCheckFailed();
     }
 
     @Test
     public void testSuccess() {
-    	call.fail(null);
-    	
-    	Assert.assertNull(call.getFailure());
-    	assertDisconnectedAfterCheckFailed();
+        call.fail(null);
+
+        Assert.assertNull(call.getFailure());
+        assertDisconnectedAfterCheckFailed();
     }
-	
+
     /**
      * Assert that Call does stopServer().
      */
-	private void assertDisconnectedAfterCheckFailed() {
-    	//Assert.assertTrue(disconnected); // commented in Call.fail()
+    private void assertDisconnectedAfterCheckFailed() {
+        // Assert.assertTrue(disconnected); // commented in Call.fail()
     }
-	
+
     @Override
     public void started() {
         call.startDialog();
@@ -122,6 +120,6 @@ public class TestCall implements TextListener {
 
     @Override
     public void disconnected() {
-    	disconnected = true;
+        disconnected = true;
     }
 }
