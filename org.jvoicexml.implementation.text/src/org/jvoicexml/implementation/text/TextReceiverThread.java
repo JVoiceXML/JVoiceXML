@@ -63,7 +63,7 @@ final class TextReceiverThread extends Thread {
 
     /** Wait for termination semaphore. */
     private final Object lock;
-    
+
     /**
      * Constructs a new object.
      * @param asyncSocket the socket to read from.

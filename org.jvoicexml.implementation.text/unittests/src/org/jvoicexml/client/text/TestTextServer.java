@@ -54,7 +54,6 @@ public class TestTextServer implements TextListener {
     private TextServer server;
     private TextConnectionInformation info;
     private Socket socket;
-    private boolean connected;
 
     private final Object lock = new Object();
 
@@ -69,7 +68,6 @@ public class TestTextServer implements TextListener {
     public void setUp() throws Exception {
         server = new TextServer(PORT);
         info = (TextConnectionInformation) server.getConnectionInformation();
-        connected = false;
 
         server.addTextListener(this);
         server.start();
@@ -113,24 +111,11 @@ public class TestTextServer implements TextListener {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.client.text.TextServer#waitConnected()} and
-     * {@link org.jvoicexml.client.text.TextServer#connectClient(java.net.Socket)}
-     * .
-     * 
-     * @throws IOException
-     */
-    @Test
-    public void testConnection() throws IOException {
-        Assert.assertTrue(connected);
-    }
-
-    /**
-     * Test method for
      * {@link org.jvoicexml.client.text.TextServer#sendInput(java.lang.String)}.
      * 
      * @throws IOException
      */
-    @Test
+    @Test(timeout = 5000)
     public void testSendInput() throws Exception {
         Assert.assertTrue(server.isStarted());
         String input = "Test123";
@@ -179,11 +164,9 @@ public class TestTextServer implements TextListener {
      */
     @Test
     public void testStopServer() {
-        connected(null);
+        Assert.assertTrue(server.isStarted());
         server.stopServer();
         Assert.assertFalse(server.isStarted());
-        // Assert.assertFalse(server.isAlive());
-        Assert.assertFalse(connected);
     }
 
     @Override
@@ -195,7 +178,6 @@ public class TestTextServer implements TextListener {
 
     @Override
     public void connected(InetSocketAddress remote) {
-        connected = true;
     }
 
     @Override
@@ -215,7 +197,6 @@ public class TestTextServer implements TextListener {
 
     @Override
     public void disconnected() {
-        connected = false;
     }
 
 }

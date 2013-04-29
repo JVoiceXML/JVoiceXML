@@ -30,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SelectionKey;
@@ -216,6 +217,8 @@ public final class NonBlockingObjectInputStream extends InputStream {
                     synchronized (readLock) {
                         readLock.notifyAll();
                     }
+                } catch (SocketException e) {
+                    connected = false;
                 } catch (IOException e) {
                     connected = false;
                     error = e;

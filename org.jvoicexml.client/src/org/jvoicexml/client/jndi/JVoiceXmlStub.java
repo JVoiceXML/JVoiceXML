@@ -175,6 +175,9 @@ public final class JVoiceXmlStub
     public void shutdown() {
         final RemoteJVoiceXml jvxml = getSkeleton();
 
+        if (jvxml == null) {
+            return;
+        }
         try {
             jvxml.shutdown();
         } catch (java.rmi.RemoteException re) {
