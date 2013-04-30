@@ -458,7 +458,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         if (!sentHungup && sender.isAlive()) {
             sender.sendBye();
             try {
-                sender.waitSenderTerminated();
+                if (sender.isAlive()) {
+                    sender.waitSenderTerminated();
+                }
             } catch (InterruptedException e) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("waiting for end of sender thread interrupted",
@@ -474,7 +476,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         if (receiver != null) {
             receiver.interrupt();
             try {
-                receiver.waitReceiverTerminated();
+                if (receiver.isAlive()) {
+                    receiver.waitReceiverTerminated();
+                }
             } catch (InterruptedException e) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(
