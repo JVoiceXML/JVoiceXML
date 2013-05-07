@@ -89,7 +89,7 @@ public class TestCall implements TextListener {
         Assert.assertNull(voice.getSession());
         call.run();
         Assert.assertTrue("started", started);
-        Assert.assertTrue("connected", connected);
+        Assert.assertFalse("connected", connected);
         Assert.assertNull(call.getFailure());
         Assert.assertNull(voice.getSession());
     }
