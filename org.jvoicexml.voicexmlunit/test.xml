@@ -19,6 +19,7 @@ This file runs unit tests on JVoiceXML.
       <path refid="project.classpath" />
       <pathelement location="${build}" />
       <pathelement location="../org.jvoicexml.xml/classes" />
+      <pathelement location="../org.jvoicexml.jndi/classes" />
       <pathelement location="../org.jvoicexml.processor.srgs/classes" />
       <fileset refid="junit.lib"/>
     </path>
