@@ -1,3 +1,29 @@
+/*
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/client/jndi/JVoiceXmlStub.java $
+ * Version: $LastChangedRevision: 2430 $
+ * Date:    $Date: 2010-12-21 09:21:06 +0100 (Di, 21 Dez 2010) $
+ * Author:  $LastChangedBy: schnelle $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2012-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.voicexmlunit;
 
 import java.io.File;
@@ -14,15 +40,21 @@ import org.junit.Test;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
+/**
+ * Test cases for {@link Call}.
+ * @author Raphael Groner
+ *
+ */
 public class TestCall implements TextListener {
-
-    private static final long MAX_WAIT = 1000;
-
     private Call call;
     private boolean started;
     private boolean connected;
-    private boolean disconnected;
 
+    /**
+     * Set up the test environment
+     * @throws Exception
+     *         setup failed
+     */
     @Before
     public void setUp() throws Exception {
         final URI dialog = new File("unittests/rc/mock.vxml").toURI();
@@ -31,7 +63,6 @@ public class TestCall implements TextListener {
 
         started = false;
         connected = false;
-        disconnected = false;
     }
 
     @Test
@@ -55,13 +86,12 @@ public class TestCall implements TextListener {
         voice.loadConfiguration("unittests/etc/jndi.properties");
         voice.setPolicy("unittests/etc/jvoicexml.policy");
 
-        Assert.assertNull(call.getVoice().getSession());
+        Assert.assertNull(voice.getSession());
         call.run();
         Assert.assertTrue("started", started);
         Assert.assertTrue("connected", connected);
-        Assert.assertTrue("disconnected", disconnected);
         Assert.assertNull(call.getFailure());
-        Assert.assertNull(call.getVoice().getSession());
+        Assert.assertNull(voice.getSession());
     }
 
     @Test
@@ -120,6 +150,6 @@ public class TestCall implements TextListener {
 
     @Override
     public void disconnected() {
-        disconnected = true;
+        connected = false;
     }
 }

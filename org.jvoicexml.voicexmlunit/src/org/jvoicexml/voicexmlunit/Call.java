@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URI;
 import junit.framework.AssertionFailedError;
 
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
@@ -26,7 +27,8 @@ import org.jvoicexml.voicexmlunit.io.Recording;
  * of an assertion failure, you can stop the Server, therefore use the fail()
  * and getFailure() methods.
  * 
- * @author thesis
+ * @author Raphael Groner
+ * @author Dirk Schnelle-Walka
  * 
  */
 public final class Call implements Runnable {
@@ -35,24 +37,27 @@ public final class Call implements Runnable {
     private Voice voice;
     private AssertionFailedError error;
 
-    static public int SERVER_PORT = 6000; // port number must be greater than
+    public static int SERVER_PORT = 6000; // port number must be greater than
                                           // 1024
-    static public int SERVER_PORT_RANDOMIZE_COUNT = 100; // 0 means a fixed port
+    public static int SERVER_PORT_RANDOMIZE_COUNT = 100; // 0 means a fixed port
                                                          // number
-    static public long SERVER_WAIT = 5000;
+    public static long SERVER_WAIT = 5000;
+
+    /** Synchronization lock. */
+    private final Object lock;
 
     /**
      * Constructs a new call
      * 
-     * @param dialog
-     *            resource to use for the call
+     * @param uri
+     *            URI of the dialog to call call
      */
-    public Call(URI dialog) {
+    public Call(final URI uri) {
         super();
-        this.dialog = dialog;
-        this.server = new TextServer(randomizePortForServer());
-        this.voice = null;
-        this.error = null;
+        dialog = uri;
+        final int port = randomizePortForServer();
+        server = new TextServer(port);
+        lock = new Object();
     }
 
     /**
@@ -61,15 +66,15 @@ public final class Call implements Runnable {
      * @param path
      *            the path to a local file
      */
-    public Call(String path) {
-        this(new File(path).toURI());
+    public Call(final String path) {
+        this((new File(path)).toURI());
     }
 
     private int randomizePortForServer() {
         return (int) ((Math.random() * SERVER_PORT_RANDOMIZE_COUNT) + SERVER_PORT);
     }
 
-    public void setListener(TextListener listener) {
+    public void setListener(final TextListener listener) {
         server.addTextListener(listener);
     }
 
@@ -91,14 +96,12 @@ public final class Call implements Runnable {
      * @param voice
      *            the new Voice object
      */
-    public void setVoice(Voice voice) {
+    public void setVoice(final Voice voice) {
         this.voice = voice;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Runnable#run()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void run() {
@@ -111,7 +114,7 @@ public final class Call implements Runnable {
         try {
             /* wait for the server */
             synchronized (dialog) {
-                dialog.wait(SERVER_WAIT);
+                lock.wait(SERVER_WAIT);
             }
             runDialog();
         } catch (InterruptedException | IOException | ErrorEvent e) {
@@ -126,12 +129,19 @@ public final class Call implements Runnable {
      */
     public void startDialog() {
         synchronized (dialog) {
-            dialog.notifyAll();
+            lock.notifyAll();
         }
     }
 
+    /**
+     * Runs the configured dialog.
+     * @throws ErrorEvent
+     * @throws IOException
+     */
     private void runDialog() throws ErrorEvent, IOException {
-        getVoice().connect(server.getConnectionInformation(), dialog);
+        final Voice voice = getVoice();
+        final ConnectionInformation info = server.getConnectionInformation();
+        voice.connect(info, dialog);
     }
 
     /**
@@ -140,7 +150,9 @@ public final class Call implements Runnable {
      * @return transaction to use for the input
      */
     public Recording record() {
-        return new Recording(server, getVoice().getSession());
+        final Voice voice = getVoice();
+        final Session session = voice.getSession();
+        return new Recording(server, session);
     }
 
     /**
@@ -152,7 +164,8 @@ public final class Call implements Runnable {
     public void fail(final AssertionFailedError error) {
         if (this.error == null) { // only the first error
             server.interrupt();
-            final Session session = getVoice().getSession();
+            final Voice voice = getVoice();
+            final Session session = voice.getSession();
             if (session != null) {
                 session.hangup();
             }
