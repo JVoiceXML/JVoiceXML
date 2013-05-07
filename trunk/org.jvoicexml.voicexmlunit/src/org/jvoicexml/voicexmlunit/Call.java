@@ -113,7 +113,7 @@ public final class Call implements Runnable {
         server.start();
         try {
             /* wait for the server */
-            synchronized (dialog) {
+            synchronized (lock) {
                 lock.wait(SERVER_WAIT);
             }
             runDialog();
@@ -125,10 +125,10 @@ public final class Call implements Runnable {
     }
 
     /**
-     * Start the dialog
+     * Start the dialog.
      */
     public void startDialog() {
-        synchronized (dialog) {
+        synchronized (lock) {
             lock.notifyAll();
         }
     }
@@ -145,7 +145,7 @@ public final class Call implements Runnable {
     }
 
     /**
-     * Starts a transaction to send input
+     * Starts a transaction to send input.
      * 
      * @return transaction to use for the input
      */
