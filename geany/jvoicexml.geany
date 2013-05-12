@@ -14,7 +14,7 @@ indent_mode=3
 
 [project]
 name=jvoicexml
-base_path=/home/raphael/projects/jvoicexml/
+base_path=/home/raphael/development/jvoicexml/
 description=
 file_patterns=*.java;*.*xml;*.properties;*.log;*.html;
 
@@ -24,8 +24,7 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=140;XML;0;EUTF-8;0;1;0;%2Fhome%2Fraphael%2Fprojects%2Fjvoicexml%2Forg.jvoicexml%2Ftest.xml;0;2
-FILE_NAME_1=0;XML;0;EUTF-8;0;1;0;%2Fhome%2Fraphael%2Fprojects%2Fjvoicexml%2Forg.jvoicexml.implementation.text%2Fbuild.xml;0;4
+FILE_NAME_0=0;XML;0;EUTF-8;0;1;0;%2Fhome%2Fraphael%2Fdevelopment%2Fjvoicexml%2Forg.jvoicexml.voicexmlunit%2Ftest.xml;0;2
 
 [VTE]
 last_dir=/home/raphael
@@ -40,7 +39,7 @@ breaks_count=0
 
 [build-menu]
 NF_00_LB=_Make
-NF_00_CM=ant rebuild
+NF_00_CM=ant compile
 NF_00_WD=
 NF_01_LB=Test
 NF_01_CM=ant -f test.xml test
