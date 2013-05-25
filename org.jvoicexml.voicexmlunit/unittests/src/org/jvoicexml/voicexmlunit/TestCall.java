@@ -80,7 +80,7 @@ public class TestCall implements TextListener {
         Assert.assertNotSame(custom, call.getVoice());
     }
 
-    @Test(timeout = 3000)
+    @Test
     public void testDialog() throws InterruptedException {
         final Voice voice = call.getVoice();
         voice.loadConfiguration("unittests/etc/jndi.properties");
