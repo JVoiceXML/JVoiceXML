@@ -51,8 +51,6 @@ org.jvoicexml/personal-props/README.txt
 
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
-        <ant dir="../org.jvoicexml.mmi.events" target="clean"
-          inheritrefs="false"  inheritall="false"/>
         <delete dir="${build}" failonerror="false" />
         <delete file="${dist.jar}" failonerror="false"/>
     </target>
@@ -63,8 +61,6 @@ org.jvoicexml/personal-props/README.txt
     <target name="compile"
             depends="-init,-checkJavaVersion"
             description="Compile the sources">
-        <ant dir="../org.jvoicexml.mmi.events" target="jar"
-          inheritrefs="false" inheritall="false"/>
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
         <javac destdir="${build}" includeantruntime="false"
                optimize="${javac.optimize}"
@@ -91,7 +87,7 @@ org.jvoicexml/personal-props/README.txt
                     <attribute name="Implementation-Vendor"
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
-                               value="JVoiceXML MMI call manager" />
+                               value="JVoiceXML Unit Test Framework" />
                     <attribute name="Implementation-Version"
                         value="${version}" />
                 </section>
