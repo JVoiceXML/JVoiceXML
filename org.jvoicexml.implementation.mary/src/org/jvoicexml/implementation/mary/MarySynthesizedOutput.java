@@ -4,7 +4,7 @@
  * Date:    $Date$
  * Author:  $LastChangedBy$
  *
- * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,7 +38,6 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.MarkerReachedEvent;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
@@ -281,16 +280,6 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
             new OutputStartedEvent(this, null, speakable);
-        fireOutputEvent(event);
-    }
-
-    /**
-     * Notifies all listeners that the given marker has been reached.
-     * @param mark the reached marker.
-     */
-    private void fireMarkerReached(final String mark) {
-        final SynthesizedOutputEvent event =
-            new MarkerReachedEvent(this, null, mark);
         fireOutputEvent(event);
     }
 

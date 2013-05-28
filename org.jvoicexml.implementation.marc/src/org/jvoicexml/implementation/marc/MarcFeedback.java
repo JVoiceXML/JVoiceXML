@@ -83,8 +83,9 @@ class MarcFeedback extends Thread {
      */
     @Override
     public void run() {
+        DatagramSocket socket = null;
         try {
-            final DatagramSocket socket = new DatagramSocket(port);
+            socket = new DatagramSocket(port);
             LOGGER.info("receiving feedback from MARC at port " + port);
             final byte[] buffer = new byte[BUFFER_SIZE];
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -108,6 +109,10 @@ class MarcFeedback extends Thread {
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+        } finally {
+            if (socket != null) {
+                socket.close();
+            }
         }
     }
 

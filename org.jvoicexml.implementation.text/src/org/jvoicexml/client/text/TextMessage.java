@@ -138,7 +138,11 @@ public final class TextMessage implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + code;
-        result = prime * result + ((data == null) ? 0 : data.hashCode());
+        if (data == null) {
+            result = prime * result;
+        } else {
+            result = prime * result + data.hashCode();
+        }
         result = prime * result + seqNo;
         return result;
     }

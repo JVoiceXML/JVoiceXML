@@ -65,7 +65,7 @@ public final class HelloWorldDemo {
         final File file = new File("helloworld.vxml");
         final URI dialog = file.toURI();
         try {
-            Session session = client.call(dialog, "jsapi10", "jsapi10",
+            Session session = client.call(dialog, "jsapi20", "jsapi20",
                     "dummy");
             session.waitSessionEnd();
             session.hangup();
