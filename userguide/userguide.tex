@@ -1091,6 +1091,12 @@ the application. If you are successful you should hear a synthesized voice
 speaking \emph{Hello World}. The application terminates when the processing
 finishes.
 
+Depending on your configuration, it may occur that you encounter some weird
+\lstinline{ClassCastException}. In this case make sure that you are using the
+same classloader repositories for your implementation platform and the
+JNDI configuration. See section \ref{sec:classloader-repositories} for
+details.
+
 \section{Creating VoiceXML using the Tag Library}
 
 JVoiceXML features a strong tag library to author VoiceXML documents. In
@@ -1680,6 +1686,7 @@ class into this directory. Again, you will have to create an empty
 
 The use of static variables is possible, if you want
 to e.g., store some information that has to persist between two calls.
+
 \chapter{Extending JVoiceXML with an own Implementation Platform}
 
 In this section a first cookbook on how to create your own imlementation
@@ -1889,6 +1896,7 @@ Do not forget to do the same in the \texttt{jndi.properties} file of your
 clients.
 
 \subsection{Classloader Repositories}
+\label{sec:classloader-repositories}
 
 In this section, an advanced feature of JVoiceXML's class loader is described.
 This may be relevant if you discover problems with the the remote access.
