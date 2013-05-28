@@ -144,10 +144,12 @@ public final class ConfigurationFolderMonitor extends Thread {
                         if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
                             final Path path = (Path) event.context();
                                 notifyFileAdded(path);
-                        } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
+                        } else if (kind
+                                == StandardWatchEventKinds.ENTRY_DELETE) {
                             final Path path = (Path) event.context();
                             notifyFileRemoved(path);
-                        } else if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
+                        } else if (kind
+                                == StandardWatchEventKinds.ENTRY_MODIFY) {
                             final Path path = (Path) event.context();
                             notifyFileUpdated(path);
                         }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -124,6 +124,7 @@ public final class JndiRemoteShutdown implements RemoteShutdown {
             portNumber = DEFAULT_PORT;
         }
         final JndiRemoteShutdown shutdown = new JndiRemoteShutdown();
+        shutdown.setPort(portNumber);
         shutdown.shutdown();
     }
 }

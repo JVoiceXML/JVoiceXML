@@ -26,8 +26,6 @@
 
 package org.jvoicexml.callmanager.mmi.umundo;
 
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;

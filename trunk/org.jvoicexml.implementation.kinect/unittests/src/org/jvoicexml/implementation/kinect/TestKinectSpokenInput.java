@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SpokenInputEvent;
-import org.jvoicexml.test.implementation.DummySpokenInputListener;
+import org.jvoicexml.mock.implementation.MockSpokenInputListener;
 
 /**
  * Tests for {@link KinectSpokenInput}.
@@ -88,8 +88,8 @@ public class TestKinectSpokenInput {
     @Test
     public void testStartRecognition() throws JVoiceXMLEvent, Exception {
         final KinectSpokenInput input = new KinectSpokenInput();
-        final DummySpokenInputListener listener =
-                new DummySpokenInputListener();
+        final MockSpokenInputListener listener =
+                new MockSpokenInputListener();
         input.addListener(listener);
         input.open();
         input.activate();
@@ -115,8 +115,8 @@ public class TestKinectSpokenInput {
     @Test
     public void testStopRecognition() throws Exception, JVoiceXMLEvent {
         final KinectSpokenInput input = new KinectSpokenInput();
-        final DummySpokenInputListener listener =
-                new DummySpokenInputListener();
+        final MockSpokenInputListener listener =
+                new MockSpokenInputListener();
         input.addListener(listener);
         input.open();
         input.activate();
