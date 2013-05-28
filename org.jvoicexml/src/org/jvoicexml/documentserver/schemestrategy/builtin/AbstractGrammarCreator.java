@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -50,7 +50,8 @@ public abstract class AbstractGrammarCreator implements GrammarCreator {
      *         error creating the byte representation
      * @since 0.7.5
      */
-    public byte[] getBytes(final SrgsXmlDocument document) throws IOException {
+    public final byte[] getBytes(final SrgsXmlDocument document)
+            throws IOException {
         final String xml = document.toXml();
         return xml.getBytes();
     }

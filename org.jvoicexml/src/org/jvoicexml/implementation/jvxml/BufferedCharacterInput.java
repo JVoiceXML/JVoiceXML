@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -48,11 +48,9 @@ import org.jvoicexml.implementation.SpokenInputListener;
  *
  * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
- *
- *
  * @since 0.5
  */
-public class BufferedCharacterInput
+public final class BufferedCharacterInput
         implements CharacterInput, InputDevice, ObservableSpokenInput {
     /** Logger for this class. */
     private static final Logger LOGGER =

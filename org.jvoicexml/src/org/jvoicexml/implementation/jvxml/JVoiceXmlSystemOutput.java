@@ -61,9 +61,6 @@ final class JVoiceXmlSystemOutput
     /** The synthesizer output device. */
     private final SynthesizedOutput synthesizedOutput;
 
-    /** The current session. */
-    private final Session session;
-
     /**
      * Constructs a new object.
      * @param synthesizer the synthesizer output device.
@@ -72,7 +69,6 @@ final class JVoiceXmlSystemOutput
     public JVoiceXmlSystemOutput(final SynthesizedOutput synthesizer,
             final Session currentSession) {
         synthesizedOutput = synthesizer;
-        session = currentSession;
     }
 
     /**
