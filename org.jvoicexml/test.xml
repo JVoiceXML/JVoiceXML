@@ -82,7 +82,7 @@ This file runs unit tests on JVoiceXML.
         <fileset dir="${test.build}">
           <include name="org/jvoicexml/**/Test*" />
           <exclude name="org/jvoicexml/**/Test*$*" />
-          <exclude name="org/jvoicexml/test/**" />
+          <exclude name="org/jvoicexml/mock/**" />
         </fileset>
       </batchtest>
     </junit>
