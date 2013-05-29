@@ -74,7 +74,7 @@ This file runs unit tests on org.jvoicexml.callmanager.mmi.
                 <fileset dir="${test.build}">
                     <include name="org/jvoicexml/**/Test*" />
                     <exclude name="org/jvoicexml/**/Test*$*" />
-                    <exclude name="org/jvoicexml/test/**" />
+                    <exclude name="${component}/mock/**" />
                 </fileset>
             </batchtest>
         </junit>
