@@ -27,7 +27,6 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.io.File;
-
 import java.net.InetSocketAddress;
 import java.net.URI;
 
@@ -36,7 +35,6 @@ import junit.framework.AssertionFailedError;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -49,6 +47,7 @@ public class TestCall implements TextListener {
     private Call call;
     private boolean started;
     private boolean connected;
+    private boolean activated;
 
     /**
      * Set up the test environment
@@ -83,11 +82,13 @@ public class TestCall implements TextListener {
     @Test
     public void testDialog() throws InterruptedException {
         final Voice voice = call.getVoice();
-        voice.loadConfiguration("unittests/etc/jndi.properties");
+        voice.getClient().loadConfiguration("unittests/etc/jndi.properties");
         voice.setPolicy("unittests/etc/jvoicexml.policy");
 
         Assert.assertNull(voice.getSession());
+        activated = false;
         call.run();
+        Assert.assertTrue(activated);
         Assert.assertTrue("started", started);
         Assert.assertFalse("connected", connected);
         Assert.assertNull(call.getFailure());
@@ -100,7 +101,6 @@ public class TestCall implements TextListener {
         call.fail(error);
 
         Assert.assertNotNull(call.getFailure());
-        assertDisconnectedAfterCheckFailed();
     }
 
     @Test
@@ -108,39 +108,26 @@ public class TestCall implements TextListener {
         call.fail(null);
 
         Assert.assertNull(call.getFailure());
-        assertDisconnectedAfterCheckFailed();
-    }
-
-    /**
-     * Assert that Call does stopServer().
-     */
-    private void assertDisconnectedAfterCheckFailed() {
-        // Assert.assertTrue(disconnected); // commented in Call.fail()
     }
 
     @Override
     public void started() {
-        call.startDialog();
         started = true;
     }
 
     @Override
     public void connected(InetSocketAddress remote) {
         connected = true;
-        try {
-            Thread.sleep(500); // delay
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        call.startDialog();
     }
 
     @Override
     public void outputSsml(SsmlDocument document) {
+        activated = true;
     }
 
     @Override
     public void expectingInput() {
-
     }
 
     @Override

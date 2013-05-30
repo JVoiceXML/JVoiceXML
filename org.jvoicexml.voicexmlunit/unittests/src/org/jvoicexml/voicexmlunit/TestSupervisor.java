@@ -43,6 +43,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 public class TestSupervisor {
 
     private Supervisor supervisor;
+    private Conversation conversation;
 
     /**
      * Set up the test environment.
@@ -52,13 +53,12 @@ public class TestSupervisor {
     @Before
     public void setUp() throws Exception {
         supervisor = new Supervisor();
+        conversation = initMock();
     }
 
     @Test
     public void testStatements() {
-        Conversation conversation = initMock();
-
-        //Assert.assertStatements(0, conversation);
+        Assert.assertStatements(0, conversation);
         Assert.assertNull(conversation.begin());
         
         final String prompt = "ping";
@@ -66,7 +66,7 @@ public class TestSupervisor {
         conversation.addOutput(prompt); // must have an Output before
         conversation.addInput(reply);
 
-        //Assert.assertStatements(2, conversation);
+        Assert.assertStatements(2, conversation);
         Assert.assertEquals(new Output(prompt).toString(), 
                 conversation.next().toString());
         Assert.assertEquals(new Input(reply).toString(), 
@@ -75,8 +75,6 @@ public class TestSupervisor {
 
     @Test
     public void testOuput() throws Exception {
-        Conversation conversation = initMock();
-
         final String message = "bla";
         conversation.addOutput(message);
 
@@ -88,8 +86,6 @@ public class TestSupervisor {
 
     @Test
     public void testInput() throws Exception {
-        Conversation conversation = initMock();
-
         final String message = "blub";
         conversation.addOutput(message); // must have an Output before
         conversation.addInput(message);
@@ -105,8 +101,6 @@ public class TestSupervisor {
 
     @Test
     public void testDisconnect() {
-        Conversation conversation = supervisor.init(null);
-
         conversation.addOutput("hello");
 
         simulateCall();
@@ -122,8 +116,6 @@ public class TestSupervisor {
 
     @Test
     public void testInputIsOutput() {
-        Conversation conversation = supervisor.init(null);
-
         conversation.addOutput("input");
 
         simulateCall();
@@ -139,8 +131,6 @@ public class TestSupervisor {
 
     @Test
     public void testOutputIsinput() throws Exception {
-        Conversation conversation = supervisor.init(null);
-
         String message = "output";
         conversation.addInput(message);
 
@@ -153,6 +143,16 @@ public class TestSupervisor {
             failed = true;
         }
         Assert.assertTrue(failed);
+    }
+    
+    @Test
+    public void testCall() {
+        final Call call = new Call("unittests/rc/mock.vxml");
+        conversation = supervisor.init(call);
+        conversation.addOutput("test");
+        
+        supervisor.process();
+        Assert.assertNull(supervisor.getFailCause());
     }
 
     private Conversation initMock() {
