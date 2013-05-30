@@ -75,4 +75,12 @@ class PendingMessage {
     public SpeakableText getSpeakable() {
         return speakable;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return message.toString();
+    }
 }

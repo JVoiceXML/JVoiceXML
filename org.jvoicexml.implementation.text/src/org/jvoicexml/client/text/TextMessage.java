@@ -26,7 +26,11 @@
 
 package org.jvoicexml.client.text;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+
+import org.apache.log4j.Logger;
 
 /**
  * A message that is sent over the network.
@@ -38,6 +42,10 @@ public final class TextMessage implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = 7832004614102610277L;
 
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(TextMessage.class);
+    
     /**
      * Code indicating that this message contains data. Usually this is used
      * to send prompts as text or SSML 
@@ -67,7 +75,13 @@ public final class TextMessage implements Serializable {
 
     /** The message data. */
     private final Serializable data;
-
+    
+    /** size of a serialized object. */
+    private static final int SIZE_SERIALIZED_MIN = 114;
+    
+    /** Debug flag, see {@link #isStreamed(InputStream, boolean)}. */
+    private static int availableLog = -1;
+    
     /**
      * Constructs a new object.
      */
@@ -220,4 +234,25 @@ public final class TextMessage implements Serializable {
         str.append("]");
         return str.toString();
     }
+    
+    /**
+     * Checks available and completed object in a stream.
+     * @param stream the stream to check
+     * @param firstAvailable indicate the first check
+     * @return <code>true</code> if a valid object is in the stream buffer
+     * @throws IOException stream error
+     * @since 0.7.6
+     */
+    public static boolean isStreamAvailable(final InputStream stream, 
+            final boolean firstAvailable) throws IOException {
+        int available = stream.available();
+        if (LOGGER.isDebugEnabled()) {
+            if (firstAvailable || (available != availableLog)) {
+                LOGGER.debug("stream available: " + available);
+                availableLog = available;
+            }
+        }
+        // should find at least one complete object
+        return (available >= SIZE_SERIALIZED_MIN);
+     }
 }

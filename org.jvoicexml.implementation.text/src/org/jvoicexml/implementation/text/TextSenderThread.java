@@ -95,13 +95,13 @@ final class TextSenderThread extends Thread {
         while (!bye) {
             TextMessage message = null;
             try {
-                final PendingMessage pending = messages.take();
-                message = pending.getMessage();
-                synchronized (messages) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("sending " + message);
-                    }
-                    if (socket.isConnected()) {
+                if (socket.isConnected()) {
+                    synchronized (messages) {
+                        final PendingMessage pending = messages.take();
+                        message = pending.getMessage();
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("sending " + message);
+                        }
                         final int seq = message.getSequenceNumber();
                         // A bye message is not acknowledged.
                         if (message.getCode() != TextMessage.BYE) {
@@ -118,12 +118,12 @@ final class TextSenderThread extends Thread {
                         if (LOGGER.isDebugEnabled()) {
                             LOGGER.debug("... done sending output");
                         }
-                    } else {
-                        LOGGER.warn(
-                            "unable to send to client: socket disconnected");
-                        bye = true;
-                        telephony.fireHungup();
                     }
+                } else {
+                    LOGGER.warn(
+                        "unable to send to client: socket disconnected");
+                    bye = true;
+                    telephony.fireHungup();
                 }
             } catch (IOException e) {
                 if (LOGGER.isDebugEnabled()) {
