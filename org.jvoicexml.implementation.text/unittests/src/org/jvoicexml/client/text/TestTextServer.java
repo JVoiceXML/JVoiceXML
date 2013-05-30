@@ -151,8 +151,10 @@ public class TestTextServer implements TextListener {
             lock.wait();
         }
         server.sendInput(input);
-        synchronized (lock) {
-            lock.wait();
+        if (thread.isAlive()) {
+            synchronized (lock) {
+                lock.wait();
+            }
         }
         final TextMessage msg = new TextMessage(TextMessage.USER, 0, input);
         Assert.assertEquals(msg, rcvd);
