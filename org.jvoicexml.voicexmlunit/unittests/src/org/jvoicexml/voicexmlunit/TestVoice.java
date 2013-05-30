@@ -31,11 +31,12 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
+import javax.naming.NamingException;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -47,11 +48,10 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  */
 public class TestVoice implements TextListener {
-    
-    private static final long MAX_WAIT = 1000;
+
     private URI dialog;
     private Voice voice;
-    private boolean active;
+    private boolean activated;
 
     /**
      * Set up the test environment
@@ -59,24 +59,23 @@ public class TestVoice implements TextListener {
      *         error setting up the test environment
      */
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
         dialog = new File("unittests/rc/mock.vxml").toURI();
         voice = new Voice();
         voice.setPolicy("unittests/etc/jvoicexml.policy");
-        voice.loadConfiguration("unittests/etc/jndi.properties");
-        active = false;
+        voice.getClient().loadConfiguration("unittests/etc/jndi.properties");
     }
 
     /**
-     * Test case for {@link Voice#lookupJVoiceXML()}.
+     * Test case for {@link Voice#getclient()}.
      * @throws IOException
      *         test failed
      */
     @Test
-    public void testLookup() throws IOException {
+    public void testClient() throws NamingException {
         // NOTICE: JVoiceXML has to run for test success!!
-        Assert.assertNotNull(voice.getJVoiceXml());
-        Assert.assertNotNull(voice.getContext());
+        org.jvoicexml.client.GenericClient client = voice.getClient();
+        Assert.assertNotNull(client.getJVoiceXml());
     }
 
     /**
@@ -94,16 +93,16 @@ public class TestVoice implements TextListener {
         server.addTextListener(this);
         server.start();
         synchronized (dialog) {
-            dialog.wait(MAX_WAIT);
+            dialog.wait();
         }
+        activated = false;
         try {
-            final ConnectionInformation connectionInformation = server.getConnectionInformation();;
-            voice.connect(connectionInformation, dialog);
+            voice.operate(server, dialog);
         } finally {
             server.stopServer();
         }
         Assert.assertNull(voice.getSession());
-        Assert.assertTrue("active", active);
+        Assert.assertTrue(activated);
     }
 
     @Override
@@ -143,7 +142,7 @@ public class TestVoice implements TextListener {
      */
     @Override
     public void inputClosed() {
-        active = (voice.getSession() != null);
+        activated = (voice.getSession() != null);
     }
 
     /**
