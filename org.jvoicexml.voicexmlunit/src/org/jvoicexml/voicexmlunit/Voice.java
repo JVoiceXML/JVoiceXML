@@ -43,7 +43,14 @@ import org.jvoicexml.event.ErrorEvent;
  * @author Dirk Schnelle-Walka
  */
 public final class Voice {
+    /**
+     * the client to deal with.
+     */
     private GenericClient client;
+    
+    /**
+     * the session currently open.
+     */
     private Session session;
     
     /**
@@ -70,7 +77,8 @@ public final class Voice {
     public void operate(final TextServer server, final URI dialog)
             throws IOException {
         try {
-            final ConnectionInformation info = server.getConnectionInformation();
+            final ConnectionInformation info = 
+                    server.getConnectionInformation();
             session = getClient().call(dialog, info);
             server.waitConnected();
             session.waitSessionEnd();
