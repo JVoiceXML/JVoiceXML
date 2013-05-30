@@ -26,20 +26,12 @@
 
 package org.jvoicexml.voicexmlunit;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URI;
-import java.util.Properties;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.naming.spi.NamingManager;
 
 import org.jvoicexml.ConnectionInformation;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.GenericClient;
 import org.jvoicexml.client.text.TextServer;
@@ -54,6 +46,9 @@ public final class Voice {
     private GenericClient client;
     private Session session;
     
+    /**
+     * @return the client object
+     */
     public GenericClient getClient() {
         if (client == null) {
             client = new GenericClient();
@@ -62,15 +57,8 @@ public final class Voice {
     }
 
     /**
-     * Sets the given policy.
-     * @param path the policy
-     */
-    public void setPolicy(final String path) {
-        System.setProperty("java.security.policy", path);
-    }
-
-    /**
      * Connects a new Session object with a dialog and runs it.
+     * Blocks until server has connected and session will be finished.
      * 
      * @param server
      *            the server object

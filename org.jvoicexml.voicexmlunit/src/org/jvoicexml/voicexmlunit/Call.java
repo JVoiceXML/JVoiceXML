@@ -29,15 +29,13 @@ package org.jvoicexml.voicexmlunit;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+
 import junit.framework.AssertionFailedError;
 
-import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
-
 import org.jvoicexml.event.ErrorEvent;
-
 import org.jvoicexml.voicexmlunit.io.Recording;
 
 /**
