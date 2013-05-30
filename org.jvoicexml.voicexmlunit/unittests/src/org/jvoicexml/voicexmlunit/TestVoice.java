@@ -27,7 +27,6 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
@@ -37,6 +36,7 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.client.GenericClient;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -54,21 +54,20 @@ public class TestVoice implements TextListener {
     private boolean activated;
 
     /**
-     * Set up the test environment
-     * @throws IOException
-     *         error setting up the test environment
+     * Set up the test environment.
      */
     @Before
     public void setUp() {
         dialog = new File("unittests/rc/mock.vxml").toURI();
         voice = new Voice();
-        voice.setPolicy("unittests/etc/jvoicexml.policy");
-        voice.getClient().loadConfiguration("unittests/etc/jndi.properties");
+        final GenericClient client = voice.getClient();
+        client.setSecurityPolicy("unittests/etc/jvoicexml.policy");
+        client.loadConfiguration("unittests/etc/jndi.properties");
     }
 
     /**
      * Test case for {@link Voice#getclient()}.
-     * @throws IOException
+     * @throws NamingException
      *         test failed
      */
     @Test
@@ -85,7 +84,7 @@ public class TestVoice implements TextListener {
      * @throws Exception
      *         test failed
      */
-    @Test(timeout=10000)
+    @Test(timeout=20000)
     public void testSession() throws Exception, JVoiceXMLEvent {
         Assert.assertNull(voice.getSession());
         

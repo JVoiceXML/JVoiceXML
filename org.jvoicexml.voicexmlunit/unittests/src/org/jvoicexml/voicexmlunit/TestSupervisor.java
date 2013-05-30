@@ -30,6 +30,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.client.GenericClient;
 import org.jvoicexml.voicexmlunit.io.Input;
 import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.processor.Assert;
@@ -148,6 +149,9 @@ public class TestSupervisor {
     @Test
     public void testCall() {
         final Call call = new Call("unittests/rc/mock.vxml");
+        final GenericClient client = call.getVoice().getClient();
+        client.loadConfiguration("unittests/etc/jndi.properties");
+        client.setSecurityPolicy("unittests/etc/jvoicexml.policy");
         conversation = supervisor.init(call);
         conversation.addOutput("test");
         
