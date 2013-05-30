@@ -1,0 +1,2393 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite errors="0" failures="0" hostname="vxml.vbox" id="0" name="TestCall" package="org.jvoicexml.voicexmlunit" tests="4" time="9.591" timestamp="2013-05-30T20:19:35">
+      <properties>
+          <property name="apidoc" value="../org.jvoicexml/doc/api/org.jvoicexml.voicexmlunit" />
+
+          <property name="file.encoding.pkg" value="sun.io" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/build.xml" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit" value="file" />
+
+          <property name="java.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="sphinx.lib.dir" value="../org.jvoicexml/3rdparty/sphinx4/lib" />
+
+          <property name="jtapi.sip.address" value="127.0.0.1:4242" />
+
+          <property name="log4j.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16" />
+
+          <property name="tomcat.systemtest.startup" value="true" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/3rdparty-libs.xml" />
+
+          <property name="text.terminal" value="tcp://localhost:4343" />
+
+          <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/endorsed" />
+
+          <property name="sun.os.patch.level" value="unknown" />
+
+          <property name="test" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests" />
+
+          <property name="java.vendor.url" value="http://java.oracle.com/" />
+
+          <property name="nightly.mail.from" value="USER@domain.org" />
+
+          <property name="version1.7" value="true" />
+
+          <property name="java.version" value="1.7.0_06-icedtea" />
+
+          <property name="3rdparty.dir" value="../org.jvoicexml/3rdparty" />
+
+          <property name="loggings.lib.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1/lib" />
+
+          <property name="javac.debug" value="on" />
+
+          <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+
+          <property name="ant.project.invoked-targets" value="test" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit - 3rd party libraries" value="file" />
+
+          <property name="tomcat.shutdown" value="MUST BE SUPLIED DIRECTORY/bin/shutdown.sh" />
+
+          <property name="user.name" value="thesis" />
+
+          <property name="jmf.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e" />
+
+          <property name="jtapi.sip.terminal" value="sip:jvoicexml@127.0.0.1:4242" />
+
+          <property name="ant.file.JVoiceXML - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml/3rdparty-libs.xml" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="sun.jnu.encoding" value="UTF-8" />
+
+          <property name="java.runtime.name" value="OpenJDK Runtime Environment" />
+
+          <property name="servlet.include" value="servlet-api.jar" />
+
+          <property name="run.class" value="YourSingleTestClassHere" />
+
+          <property name="component.path" value="org/jvoicexml/voicexmlunit" />
+
+          <property name="jdk.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="svn.password" value="PASSWORD" />
+
+          <property name="local-3rdparty.dir" value="3rdparty" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="user.timezone" value="" />
+
+          <property name="path.separator" value=":" />
+
+          <property name="ant.file.type.JVoiceXML - 3rd party libraries" value="file" />
+
+          <property name="freetts.lib.dir" value="../org.jvoicexml/3rdparty/freetts1.2/lib" />
+
+          <property name="file.encoding" value="UTF-8" />
+
+          <property name="codec.lib.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4/lib" />
+
+          <property name="ant.file.JVoiceXML unit tests" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="ant.project.default-target" value="test" />
+
+          <property name="build" value="classes" />
+
+          <property name="rhino.lib.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3/lib" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner org.jvoicexml.voicexmlunit.TestCall filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/home/thesis/workspace/svn/org.jvoicexml/dist/unittests/TEST-org.jvoicexml.voicexmlunit.TestCall.xml crashfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junitvmwatcher8592279314271646667.properties propsfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junit8575514870412689370.properties" />
+
+          <property name="jchardet.dir" value="../org.jvoicexml/3rdparty/jchardet1.1" />
+
+          <property name="mrcpv2.sip.cairo.sip.address" value="sip:cairo@speechforge.org" />
+
+          <property name="text.inputType" value="text" />
+
+          <property name="ant.file" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="jsonsimple.lib.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1/lib" />
+
+          <property name="pool.lib.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5/lib" />
+
+          <property name="mmi.protoc" value="protoc" />
+
+          <property name="java.io.tmpdir" value="/tmp" />
+
+          <property name="user.language" value="de" />
+
+          <property name="line.separator" value="&#xa;" />
+
+          <property name="config" value="../org.jvoicexml/config" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="rhino.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3" />
+
+          <property name="jmf.lib.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.port" value="5050" />
+
+          <property name="java.vm.info" value="mixed mode" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+
+          <property name="dist.jar" value="../org.jvoicexml/dist/org.jvoicexml.voicexmlunit.jar" />
+
+          <property name="javac.optimize" value="off" />
+
+          <property name="test.src" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/src" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.8.2 compiled on January 9 2012" />
+
+          <property name="junit.lib.dir" value="../org.jvoicexml/3rdparty/junit4.8.2/lib" />
+
+          <property name="svn.username" value="USER" />
+
+          <property name="test.build" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes" />
+
+          <property name="os.name" value="Linux" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="java.vm.name" value="OpenJDK 64-Bit Server VM" />
+
+          <property name="jvxml.jndi.repository" value="text" />
+
+          <property name="nightly.mail.port" value="22" />
+
+          <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.host" value="127.0.0.1" />
+
+          <property name="ant.java.version" value="1.7" />
+
+          <property name="basedir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="java.class.version" value="51.0" />
+
+          <property name="test.results" value="../org.jvoicexml/dist/unittests" />
+
+          <property name="pool.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5" />
+
+          <property name="ant.home" value="/usr/share/ant" />
+
+          <property name="jlibrtp.dir" value="../org.jvoicexml/3rdparty/jlibrtp" />
+
+          <property name="sphinx.dir" value="../org.jvoicexml/3rdparty/sphinx4" />
+
+          <property name="proxy.enabled" value="false" />
+
+          <property name="dist" value="../org.jvoicexml/dist" />
+
+          <property name="commons.dir" value="../org.jvoicexml/3rdparty/commons" />
+
+          <property name="freetts.dir" value="../org.jvoicexml/3rdparty/freetts1.2" />
+
+          <property name="jsonsimple.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1" />
+
+          <property name="log4j.lib.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16/lib" />
+
+          <property name="sun.boot.library.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/amd64" />
+
+          <property name="httpcore.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib" />
+
+          <property name="jvxml.version" value="0.7.6.EA" />
+
+          <property name="tomcat.startup" value="MUST BE SUPLIED DIRECTORY/bin/startup.sh" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="httpcore.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3" />
+
+          <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+
+          <property name="nightly.mail.user" value="USER" />
+
+          <property name="jvxml.core.dir" value="../org.jvoicexml" />
+
+          <property name="mrcpv2.sip.port" value="4242" />
+
+          <property name="test.config" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/config" />
+
+          <property name="jtapi.sip.inputType" value="jsapi20" />
+
+          <property name="jtapi.sip.outputType" value="jsapi20" />
+
+          <property name="jtapi.sip.providername" value="net.sourceforge.gjtapi.raw.mjsip.MjSipProvider" />
+
+          <property name="ant.project.name" value="JVoiceXML unit tests" />
+
+          <property name="java.vm.specification.version" value="1.7" />
+
+          <property name="loggings.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1" />
+
+          <property name="awt.toolkit" value="sun.awt.X11.XToolkit" />
+
+          <property name="sun.cpu.isalist" value="" />
+
+          <property name="nightly.mail.host" value="host" />
+
+          <property name="java.ext.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/ext:/usr/java/packages/lib/ext" />
+
+          <property name="os.version" value="3.4.32-desktop-2.mga2" />
+
+          <property name="user.home" value="/home/thesis" />
+
+          <property name="jvxml.jndi.port" value="1099" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="text.outputType" value="text" />
+
+          <property name="nightly.sf.user" value="USERNAME" />
+
+          <property name="codec.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4" />
+
+          <property name="jchardet.lib.dir" value="../org.jvoicexml/3rdparty/jchardet1.1/lib" />
+
+          <property name="jvxml.core.apidoc" value="http://jvoicexml.sourceforge.net/api-0.7.6.EA/org.jvoicexml" />
+
+          <property name="user.dir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="jtapi.sip.port" value="4242" />
+
+          <property name="mrcpv2.sip.address" value="127.0.0.1:4242" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="javadoc.access" value="protected" />
+
+          <property name="apidoc.basedir" value="../org.jvoicexml/doc/api" />
+
+          <property name="java.vm.version" value="23.7-b01" />
+
+          <property name="java.class.path" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes:/home/thesis/workspace/svn/org.jvoicexml/classes:/home/thesis/workspace/svn/org.jvoicexml.xml/classes:/home/thesis/workspace/svn/org.jvoicexml.client/classes:/home/thesis/workspace/svn/org.jvoicexml.implementation.text/classes:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/log4j1.2.16/lib/log4j-1.2.16.jar:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/junit4.8.2/lib/junit-4.8.2.jar:/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/classes:/home/thesis/workspace/svn/org.jvoicexml.jndi/classes:/home/thesis/workspace/svn/org.jvoicexml.processor.srgs/classes:/home/thesis/workspace/svn/org.jvoicexml/config:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/commons/logging1.1.1/lib/commons-logging-1.1.1.jar:/usr/share/java/junit-3.8.2.jar:/usr/share/java/ant-launcher.jar:/usr/share/java/ant.jar:/usr/share/java/ant/ant-junit.jar" />
+
+          <property name="ant.library.dir" value="/usr/share/ant/lib" />
+
+          <property name="httpclient.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="junit.dir" value="../org.jvoicexml/3rdparty/junit4.8.2" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="jlibrtp.lib.dir" value="../org.jvoicexml/3rdparty/jlibrtp/lib" />
+
+          <property name=".terminal" value="tcp://localhost:4343" />
+
+          <property name="ant.core.lib" value="/usr/share/java/ant.jar" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="file.separator" value="/" />
+
+          <property name="junit.present" value="true" />
+
+          <property name="java.runtime.version" value="1.7.0_06-icedtea-iurt_2013_02_15_17_57-b00" />
+
+          <property name="sun.boot.class.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/resources.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rt.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jsse.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jce.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/charsets.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/netx.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/plugin.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rhino.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jfr.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/classes" />
+
+          <property name="nightly.mail.password" value="PASSWORD" />
+
+          <property name="tomcat.home" value="MUST BE SUPLIED DIRECTORY" />
+
+          <property name="servlet.lib.dir" value="MUST BE SUPLIED DIRECTORY/lib" />
+
+          <property name="nightly.sf.password" value="PASSWORD" />
+
+          <property name="etc" value="etc" />
+
+          <property name="user.country" value="DE" />
+
+          <property name="httpclient.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3" />
+
+          <property name="ant.file.type.JVoiceXML unit tests" value="file" />
+
+          <property name="component" value="org.jvoicexml.voicexmlunit" />
+
+          <property name="src" value="src" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="java.specification.version" value="1.7" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+      </properties>
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestCall" name="testVoice" time="0.431" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestCall" name="testDialog" time="8.773" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestCall" name="testFailure" time="0.002" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestCall" name="testSuccess" time="0.001" />
+
+      <system-out><![CDATA[     0 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   271)  text server started at port '6054'
+  7561 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   285)  connected to tcp://vxml.vbox:45049
+  7602 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 0
+  7809 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 114
+  7817 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   342)  read TextMessage[INPUT_CLOSED, 1, null]
+  7835 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   433)  sent TextMessage[ACK, 1, null]
+  7858 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 0
+  7973 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 209
+  8633 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   342)  read TextMessage[DATA, 2, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="en" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">test</speak>]
+  8638 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   433)  sent TextMessage[ACK, 2, null]
+  8646 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 0
+  8696 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 114
+  8711 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   342)  read TextMessage[BYE, 0, null]
+  8716 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   455)  server closed
+  8730 [main                ] INFO  oicexml.client.text.TextServer (   444)  text server stopped
+]]></system-out>
+
+      <system-err />
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="vxml.vbox" id="1" name="TestConversation" package="org.jvoicexml.voicexmlunit" tests="2" time="0.36" timestamp="2013-05-30T20:19:47">
+      <properties>
+          <property name="apidoc" value="../org.jvoicexml/doc/api/org.jvoicexml.voicexmlunit" />
+
+          <property name="file.encoding.pkg" value="sun.io" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/build.xml" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit" value="file" />
+
+          <property name="java.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="sphinx.lib.dir" value="../org.jvoicexml/3rdparty/sphinx4/lib" />
+
+          <property name="jtapi.sip.address" value="127.0.0.1:4242" />
+
+          <property name="log4j.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16" />
+
+          <property name="tomcat.systemtest.startup" value="true" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/3rdparty-libs.xml" />
+
+          <property name="text.terminal" value="tcp://localhost:4343" />
+
+          <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/endorsed" />
+
+          <property name="sun.os.patch.level" value="unknown" />
+
+          <property name="test" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests" />
+
+          <property name="java.vendor.url" value="http://java.oracle.com/" />
+
+          <property name="nightly.mail.from" value="USER@domain.org" />
+
+          <property name="version1.7" value="true" />
+
+          <property name="java.version" value="1.7.0_06-icedtea" />
+
+          <property name="3rdparty.dir" value="../org.jvoicexml/3rdparty" />
+
+          <property name="loggings.lib.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1/lib" />
+
+          <property name="javac.debug" value="on" />
+
+          <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+
+          <property name="ant.project.invoked-targets" value="test" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit - 3rd party libraries" value="file" />
+
+          <property name="tomcat.shutdown" value="MUST BE SUPLIED DIRECTORY/bin/shutdown.sh" />
+
+          <property name="user.name" value="thesis" />
+
+          <property name="jmf.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e" />
+
+          <property name="jtapi.sip.terminal" value="sip:jvoicexml@127.0.0.1:4242" />
+
+          <property name="ant.file.JVoiceXML - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml/3rdparty-libs.xml" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="sun.jnu.encoding" value="UTF-8" />
+
+          <property name="java.runtime.name" value="OpenJDK Runtime Environment" />
+
+          <property name="servlet.include" value="servlet-api.jar" />
+
+          <property name="run.class" value="YourSingleTestClassHere" />
+
+          <property name="component.path" value="org/jvoicexml/voicexmlunit" />
+
+          <property name="jdk.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="svn.password" value="PASSWORD" />
+
+          <property name="local-3rdparty.dir" value="3rdparty" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="user.timezone" value="" />
+
+          <property name="path.separator" value=":" />
+
+          <property name="ant.file.type.JVoiceXML - 3rd party libraries" value="file" />
+
+          <property name="freetts.lib.dir" value="../org.jvoicexml/3rdparty/freetts1.2/lib" />
+
+          <property name="file.encoding" value="UTF-8" />
+
+          <property name="codec.lib.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4/lib" />
+
+          <property name="ant.file.JVoiceXML unit tests" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="ant.project.default-target" value="test" />
+
+          <property name="build" value="classes" />
+
+          <property name="rhino.lib.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3/lib" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner org.jvoicexml.voicexmlunit.TestConversation filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/home/thesis/workspace/svn/org.jvoicexml/dist/unittests/TEST-org.jvoicexml.voicexmlunit.TestConversation.xml crashfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junitvmwatcher8096704191376157889.properties propsfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junit2645969542295518130.properties" />
+
+          <property name="jchardet.dir" value="../org.jvoicexml/3rdparty/jchardet1.1" />
+
+          <property name="mrcpv2.sip.cairo.sip.address" value="sip:cairo@speechforge.org" />
+
+          <property name="text.inputType" value="text" />
+
+          <property name="ant.file" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="jsonsimple.lib.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1/lib" />
+
+          <property name="pool.lib.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5/lib" />
+
+          <property name="mmi.protoc" value="protoc" />
+
+          <property name="java.io.tmpdir" value="/tmp" />
+
+          <property name="user.language" value="de" />
+
+          <property name="line.separator" value="&#xa;" />
+
+          <property name="config" value="../org.jvoicexml/config" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="rhino.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3" />
+
+          <property name="jmf.lib.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.port" value="5050" />
+
+          <property name="java.vm.info" value="mixed mode" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+
+          <property name="dist.jar" value="../org.jvoicexml/dist/org.jvoicexml.voicexmlunit.jar" />
+
+          <property name="javac.optimize" value="off" />
+
+          <property name="test.src" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/src" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.8.2 compiled on January 9 2012" />
+
+          <property name="junit.lib.dir" value="../org.jvoicexml/3rdparty/junit4.8.2/lib" />
+
+          <property name="svn.username" value="USER" />
+
+          <property name="test.build" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes" />
+
+          <property name="os.name" value="Linux" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="java.vm.name" value="OpenJDK 64-Bit Server VM" />
+
+          <property name="jvxml.jndi.repository" value="text" />
+
+          <property name="nightly.mail.port" value="22" />
+
+          <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.host" value="127.0.0.1" />
+
+          <property name="ant.java.version" value="1.7" />
+
+          <property name="basedir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="java.class.version" value="51.0" />
+
+          <property name="test.results" value="../org.jvoicexml/dist/unittests" />
+
+          <property name="pool.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5" />
+
+          <property name="ant.home" value="/usr/share/ant" />
+
+          <property name="jlibrtp.dir" value="../org.jvoicexml/3rdparty/jlibrtp" />
+
+          <property name="sphinx.dir" value="../org.jvoicexml/3rdparty/sphinx4" />
+
+          <property name="proxy.enabled" value="false" />
+
+          <property name="dist" value="../org.jvoicexml/dist" />
+
+          <property name="commons.dir" value="../org.jvoicexml/3rdparty/commons" />
+
+          <property name="freetts.dir" value="../org.jvoicexml/3rdparty/freetts1.2" />
+
+          <property name="jsonsimple.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1" />
+
+          <property name="log4j.lib.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16/lib" />
+
+          <property name="sun.boot.library.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/amd64" />
+
+          <property name="httpcore.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib" />
+
+          <property name="jvxml.version" value="0.7.6.EA" />
+
+          <property name="tomcat.startup" value="MUST BE SUPLIED DIRECTORY/bin/startup.sh" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="httpcore.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3" />
+
+          <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+
+          <property name="nightly.mail.user" value="USER" />
+
+          <property name="jvxml.core.dir" value="../org.jvoicexml" />
+
+          <property name="mrcpv2.sip.port" value="4242" />
+
+          <property name="test.config" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/config" />
+
+          <property name="jtapi.sip.inputType" value="jsapi20" />
+
+          <property name="jtapi.sip.outputType" value="jsapi20" />
+
+          <property name="jtapi.sip.providername" value="net.sourceforge.gjtapi.raw.mjsip.MjSipProvider" />
+
+          <property name="ant.project.name" value="JVoiceXML unit tests" />
+
+          <property name="java.vm.specification.version" value="1.7" />
+
+          <property name="loggings.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1" />
+
+          <property name="awt.toolkit" value="sun.awt.X11.XToolkit" />
+
+          <property name="sun.cpu.isalist" value="" />
+
+          <property name="nightly.mail.host" value="host" />
+
+          <property name="java.ext.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/ext:/usr/java/packages/lib/ext" />
+
+          <property name="os.version" value="3.4.32-desktop-2.mga2" />
+
+          <property name="user.home" value="/home/thesis" />
+
+          <property name="jvxml.jndi.port" value="1099" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="text.outputType" value="text" />
+
+          <property name="nightly.sf.user" value="USERNAME" />
+
+          <property name="codec.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4" />
+
+          <property name="jchardet.lib.dir" value="../org.jvoicexml/3rdparty/jchardet1.1/lib" />
+
+          <property name="jvxml.core.apidoc" value="http://jvoicexml.sourceforge.net/api-0.7.6.EA/org.jvoicexml" />
+
+          <property name="user.dir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="jtapi.sip.port" value="4242" />
+
+          <property name="mrcpv2.sip.address" value="127.0.0.1:4242" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="javadoc.access" value="protected" />
+
+          <property name="apidoc.basedir" value="../org.jvoicexml/doc/api" />
+
+          <property name="java.vm.version" value="23.7-b01" />
+
+          <property name="java.class.path" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes:/home/thesis/workspace/svn/org.jvoicexml/classes:/home/thesis/workspace/svn/org.jvoicexml.xml/classes:/home/thesis/workspace/svn/org.jvoicexml.client/classes:/home/thesis/workspace/svn/org.jvoicexml.implementation.text/classes:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/log4j1.2.16/lib/log4j-1.2.16.jar:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/junit4.8.2/lib/junit-4.8.2.jar:/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/classes:/home/thesis/workspace/svn/org.jvoicexml.jndi/classes:/home/thesis/workspace/svn/org.jvoicexml.processor.srgs/classes:/home/thesis/workspace/svn/org.jvoicexml/config:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/commons/logging1.1.1/lib/commons-logging-1.1.1.jar:/usr/share/java/junit-3.8.2.jar:/usr/share/java/ant-launcher.jar:/usr/share/java/ant.jar:/usr/share/java/ant/ant-junit.jar" />
+
+          <property name="ant.library.dir" value="/usr/share/ant/lib" />
+
+          <property name="httpclient.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="junit.dir" value="../org.jvoicexml/3rdparty/junit4.8.2" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="jlibrtp.lib.dir" value="../org.jvoicexml/3rdparty/jlibrtp/lib" />
+
+          <property name=".terminal" value="tcp://localhost:4343" />
+
+          <property name="ant.core.lib" value="/usr/share/java/ant.jar" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="file.separator" value="/" />
+
+          <property name="junit.present" value="true" />
+
+          <property name="java.runtime.version" value="1.7.0_06-icedtea-iurt_2013_02_15_17_57-b00" />
+
+          <property name="sun.boot.class.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/resources.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rt.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jsse.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jce.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/charsets.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/netx.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/plugin.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rhino.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jfr.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/classes" />
+
+          <property name="nightly.mail.password" value="PASSWORD" />
+
+          <property name="tomcat.home" value="MUST BE SUPLIED DIRECTORY" />
+
+          <property name="servlet.lib.dir" value="MUST BE SUPLIED DIRECTORY/lib" />
+
+          <property name="nightly.sf.password" value="PASSWORD" />
+
+          <property name="etc" value="etc" />
+
+          <property name="user.country" value="DE" />
+
+          <property name="httpclient.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3" />
+
+          <property name="ant.file.type.JVoiceXML unit tests" value="file" />
+
+          <property name="component" value="org.jvoicexml.voicexmlunit" />
+
+          <property name="src" value="src" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="java.specification.version" value="1.7" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+      </properties>
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestConversation" name="testConversationAdd" time="0.043" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestConversation" name="testConversationNext" time="0.0" />
+
+      <system-out />
+
+      <system-err />
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="vxml.vbox" id="2" name="TestSupervisor" package="org.jvoicexml.voicexmlunit" tests="7" time="5.009" timestamp="2013-05-30T20:19:49">
+      <properties>
+          <property name="apidoc" value="../org.jvoicexml/doc/api/org.jvoicexml.voicexmlunit" />
+
+          <property name="file.encoding.pkg" value="sun.io" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/build.xml" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit" value="file" />
+
+          <property name="java.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="sphinx.lib.dir" value="../org.jvoicexml/3rdparty/sphinx4/lib" />
+
+          <property name="jtapi.sip.address" value="127.0.0.1:4242" />
+
+          <property name="log4j.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16" />
+
+          <property name="tomcat.systemtest.startup" value="true" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/3rdparty-libs.xml" />
+
+          <property name="text.terminal" value="tcp://localhost:4343" />
+
+          <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/endorsed" />
+
+          <property name="sun.os.patch.level" value="unknown" />
+
+          <property name="test" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests" />
+
+          <property name="java.vendor.url" value="http://java.oracle.com/" />
+
+          <property name="nightly.mail.from" value="USER@domain.org" />
+
+          <property name="version1.7" value="true" />
+
+          <property name="java.version" value="1.7.0_06-icedtea" />
+
+          <property name="3rdparty.dir" value="../org.jvoicexml/3rdparty" />
+
+          <property name="loggings.lib.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1/lib" />
+
+          <property name="javac.debug" value="on" />
+
+          <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+
+          <property name="ant.project.invoked-targets" value="test" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit - 3rd party libraries" value="file" />
+
+          <property name="tomcat.shutdown" value="MUST BE SUPLIED DIRECTORY/bin/shutdown.sh" />
+
+          <property name="user.name" value="thesis" />
+
+          <property name="jmf.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e" />
+
+          <property name="jtapi.sip.terminal" value="sip:jvoicexml@127.0.0.1:4242" />
+
+          <property name="ant.file.JVoiceXML - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml/3rdparty-libs.xml" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="sun.jnu.encoding" value="UTF-8" />
+
+          <property name="java.runtime.name" value="OpenJDK Runtime Environment" />
+
+          <property name="servlet.include" value="servlet-api.jar" />
+
+          <property name="run.class" value="YourSingleTestClassHere" />
+
+          <property name="component.path" value="org/jvoicexml/voicexmlunit" />
+
+          <property name="jdk.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="svn.password" value="PASSWORD" />
+
+          <property name="local-3rdparty.dir" value="3rdparty" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="user.timezone" value="" />
+
+          <property name="path.separator" value=":" />
+
+          <property name="ant.file.type.JVoiceXML - 3rd party libraries" value="file" />
+
+          <property name="freetts.lib.dir" value="../org.jvoicexml/3rdparty/freetts1.2/lib" />
+
+          <property name="file.encoding" value="UTF-8" />
+
+          <property name="codec.lib.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4/lib" />
+
+          <property name="ant.file.JVoiceXML unit tests" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="ant.project.default-target" value="test" />
+
+          <property name="build" value="classes" />
+
+          <property name="rhino.lib.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3/lib" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner org.jvoicexml.voicexmlunit.TestSupervisor filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/home/thesis/workspace/svn/org.jvoicexml/dist/unittests/TEST-org.jvoicexml.voicexmlunit.TestSupervisor.xml crashfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junitvmwatcher2229056105026180098.properties propsfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junit1285395483178844488.properties" />
+
+          <property name="jchardet.dir" value="../org.jvoicexml/3rdparty/jchardet1.1" />
+
+          <property name="mrcpv2.sip.cairo.sip.address" value="sip:cairo@speechforge.org" />
+
+          <property name="text.inputType" value="text" />
+
+          <property name="ant.file" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="jsonsimple.lib.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1/lib" />
+
+          <property name="pool.lib.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5/lib" />
+
+          <property name="mmi.protoc" value="protoc" />
+
+          <property name="java.io.tmpdir" value="/tmp" />
+
+          <property name="user.language" value="de" />
+
+          <property name="line.separator" value="&#xa;" />
+
+          <property name="config" value="../org.jvoicexml/config" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="rhino.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3" />
+
+          <property name="jmf.lib.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.port" value="5050" />
+
+          <property name="java.vm.info" value="mixed mode" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+
+          <property name="dist.jar" value="../org.jvoicexml/dist/org.jvoicexml.voicexmlunit.jar" />
+
+          <property name="javac.optimize" value="off" />
+
+          <property name="test.src" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/src" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.8.2 compiled on January 9 2012" />
+
+          <property name="junit.lib.dir" value="../org.jvoicexml/3rdparty/junit4.8.2/lib" />
+
+          <property name="svn.username" value="USER" />
+
+          <property name="test.build" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes" />
+
+          <property name="os.name" value="Linux" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="java.vm.name" value="OpenJDK 64-Bit Server VM" />
+
+          <property name="jvxml.jndi.repository" value="text" />
+
+          <property name="nightly.mail.port" value="22" />
+
+          <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.host" value="127.0.0.1" />
+
+          <property name="ant.java.version" value="1.7" />
+
+          <property name="basedir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="java.class.version" value="51.0" />
+
+          <property name="test.results" value="../org.jvoicexml/dist/unittests" />
+
+          <property name="pool.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5" />
+
+          <property name="ant.home" value="/usr/share/ant" />
+
+          <property name="jlibrtp.dir" value="../org.jvoicexml/3rdparty/jlibrtp" />
+
+          <property name="sphinx.dir" value="../org.jvoicexml/3rdparty/sphinx4" />
+
+          <property name="proxy.enabled" value="false" />
+
+          <property name="dist" value="../org.jvoicexml/dist" />
+
+          <property name="commons.dir" value="../org.jvoicexml/3rdparty/commons" />
+
+          <property name="freetts.dir" value="../org.jvoicexml/3rdparty/freetts1.2" />
+
+          <property name="jsonsimple.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1" />
+
+          <property name="log4j.lib.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16/lib" />
+
+          <property name="sun.boot.library.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/amd64" />
+
+          <property name="httpcore.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib" />
+
+          <property name="jvxml.version" value="0.7.6.EA" />
+
+          <property name="tomcat.startup" value="MUST BE SUPLIED DIRECTORY/bin/startup.sh" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="httpcore.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3" />
+
+          <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+
+          <property name="nightly.mail.user" value="USER" />
+
+          <property name="jvxml.core.dir" value="../org.jvoicexml" />
+
+          <property name="mrcpv2.sip.port" value="4242" />
+
+          <property name="test.config" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/config" />
+
+          <property name="jtapi.sip.inputType" value="jsapi20" />
+
+          <property name="jtapi.sip.outputType" value="jsapi20" />
+
+          <property name="jtapi.sip.providername" value="net.sourceforge.gjtapi.raw.mjsip.MjSipProvider" />
+
+          <property name="ant.project.name" value="JVoiceXML unit tests" />
+
+          <property name="java.vm.specification.version" value="1.7" />
+
+          <property name="loggings.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1" />
+
+          <property name="awt.toolkit" value="sun.awt.X11.XToolkit" />
+
+          <property name="sun.cpu.isalist" value="" />
+
+          <property name="nightly.mail.host" value="host" />
+
+          <property name="java.ext.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/ext:/usr/java/packages/lib/ext" />
+
+          <property name="os.version" value="3.4.32-desktop-2.mga2" />
+
+          <property name="user.home" value="/home/thesis" />
+
+          <property name="jvxml.jndi.port" value="1099" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="text.outputType" value="text" />
+
+          <property name="nightly.sf.user" value="USERNAME" />
+
+          <property name="codec.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4" />
+
+          <property name="jchardet.lib.dir" value="../org.jvoicexml/3rdparty/jchardet1.1/lib" />
+
+          <property name="jvxml.core.apidoc" value="http://jvoicexml.sourceforge.net/api-0.7.6.EA/org.jvoicexml" />
+
+          <property name="user.dir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="jtapi.sip.port" value="4242" />
+
+          <property name="mrcpv2.sip.address" value="127.0.0.1:4242" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="javadoc.access" value="protected" />
+
+          <property name="apidoc.basedir" value="../org.jvoicexml/doc/api" />
+
+          <property name="java.vm.version" value="23.7-b01" />
+
+          <property name="java.class.path" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes:/home/thesis/workspace/svn/org.jvoicexml/classes:/home/thesis/workspace/svn/org.jvoicexml.xml/classes:/home/thesis/workspace/svn/org.jvoicexml.client/classes:/home/thesis/workspace/svn/org.jvoicexml.implementation.text/classes:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/log4j1.2.16/lib/log4j-1.2.16.jar:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/junit4.8.2/lib/junit-4.8.2.jar:/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/classes:/home/thesis/workspace/svn/org.jvoicexml.jndi/classes:/home/thesis/workspace/svn/org.jvoicexml.processor.srgs/classes:/home/thesis/workspace/svn/org.jvoicexml/config:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/commons/logging1.1.1/lib/commons-logging-1.1.1.jar:/usr/share/java/junit-3.8.2.jar:/usr/share/java/ant-launcher.jar:/usr/share/java/ant.jar:/usr/share/java/ant/ant-junit.jar" />
+
+          <property name="ant.library.dir" value="/usr/share/ant/lib" />
+
+          <property name="httpclient.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="junit.dir" value="../org.jvoicexml/3rdparty/junit4.8.2" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="jlibrtp.lib.dir" value="../org.jvoicexml/3rdparty/jlibrtp/lib" />
+
+          <property name=".terminal" value="tcp://localhost:4343" />
+
+          <property name="ant.core.lib" value="/usr/share/java/ant.jar" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="file.separator" value="/" />
+
+          <property name="junit.present" value="true" />
+
+          <property name="java.runtime.version" value="1.7.0_06-icedtea-iurt_2013_02_15_17_57-b00" />
+
+          <property name="sun.boot.class.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/resources.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rt.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jsse.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jce.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/charsets.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/netx.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/plugin.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rhino.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jfr.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/classes" />
+
+          <property name="nightly.mail.password" value="PASSWORD" />
+
+          <property name="tomcat.home" value="MUST BE SUPLIED DIRECTORY" />
+
+          <property name="servlet.lib.dir" value="MUST BE SUPLIED DIRECTORY/lib" />
+
+          <property name="nightly.sf.password" value="PASSWORD" />
+
+          <property name="etc" value="etc" />
+
+          <property name="user.country" value="DE" />
+
+          <property name="httpclient.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3" />
+
+          <property name="ant.file.type.JVoiceXML unit tests" value="file" />
+
+          <property name="component" value="org.jvoicexml.voicexmlunit" />
+
+          <property name="src" value="src" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="java.specification.version" value="1.7" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+      </properties>
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestSupervisor" name="testStatements" time="0.022" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestSupervisor" name="testOuput" time="0.106" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestSupervisor" name="testInput" time="0.003" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestSupervisor" name="testDisconnect" time="0.006" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestSupervisor" name="testInputIsOutput" time="0.0" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestSupervisor" name="testOutputIsinput" time="0.067" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestSupervisor" name="testCall" time="4.479" />
+
+      <system-out><![CDATA[     0 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   271)  text server started at port '6034'
+  2713 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   285)  connected to tcp://vxml.vbox:38080
+  2748 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 0
+  2987 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 114
+  3010 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   342)  read TextMessage[INPUT_CLOSED, 1, null]
+  3031 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   433)  sent TextMessage[ACK, 1, null]
+  3056 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 0
+  3217 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 209
+  3603 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   342)  read TextMessage[DATA, 2, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="en" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">test</speak>]
+  3624 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   433)  sent TextMessage[ACK, 2, null]
+  3624 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 0
+  3765 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 114
+  3766 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   342)  read TextMessage[BYE, 0, null]
+  3783 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   455)  server closed
+  3942 [main                ] INFO  oicexml.client.text.TextServer (   444)  text server stopped
+]]></system-out>
+
+      <system-err />
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="vxml.vbox" id="3" name="TestVoice" package="org.jvoicexml.voicexmlunit" tests="2" time="5.729" timestamp="2013-05-30T20:19:57">
+      <properties>
+          <property name="apidoc" value="../org.jvoicexml/doc/api/org.jvoicexml.voicexmlunit" />
+
+          <property name="file.encoding.pkg" value="sun.io" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/build.xml" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit" value="file" />
+
+          <property name="java.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="sphinx.lib.dir" value="../org.jvoicexml/3rdparty/sphinx4/lib" />
+
+          <property name="jtapi.sip.address" value="127.0.0.1:4242" />
+
+          <property name="log4j.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16" />
+
+          <property name="tomcat.systemtest.startup" value="true" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/3rdparty-libs.xml" />
+
+          <property name="text.terminal" value="tcp://localhost:4343" />
+
+          <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/endorsed" />
+
+          <property name="sun.os.patch.level" value="unknown" />
+
+          <property name="test" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests" />
+
+          <property name="java.vendor.url" value="http://java.oracle.com/" />
+
+          <property name="nightly.mail.from" value="USER@domain.org" />
+
+          <property name="version1.7" value="true" />
+
+          <property name="java.version" value="1.7.0_06-icedtea" />
+
+          <property name="3rdparty.dir" value="../org.jvoicexml/3rdparty" />
+
+          <property name="loggings.lib.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1/lib" />
+
+          <property name="javac.debug" value="on" />
+
+          <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+
+          <property name="ant.project.invoked-targets" value="test" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit - 3rd party libraries" value="file" />
+
+          <property name="tomcat.shutdown" value="MUST BE SUPLIED DIRECTORY/bin/shutdown.sh" />
+
+          <property name="user.name" value="thesis" />
+
+          <property name="jmf.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e" />
+
+          <property name="jtapi.sip.terminal" value="sip:jvoicexml@127.0.0.1:4242" />
+
+          <property name="ant.file.JVoiceXML - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml/3rdparty-libs.xml" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="sun.jnu.encoding" value="UTF-8" />
+
+          <property name="java.runtime.name" value="OpenJDK Runtime Environment" />
+
+          <property name="servlet.include" value="servlet-api.jar" />
+
+          <property name="run.class" value="YourSingleTestClassHere" />
+
+          <property name="component.path" value="org/jvoicexml/voicexmlunit" />
+
+          <property name="jdk.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="svn.password" value="PASSWORD" />
+
+          <property name="local-3rdparty.dir" value="3rdparty" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="user.timezone" value="" />
+
+          <property name="path.separator" value=":" />
+
+          <property name="ant.file.type.JVoiceXML - 3rd party libraries" value="file" />
+
+          <property name="freetts.lib.dir" value="../org.jvoicexml/3rdparty/freetts1.2/lib" />
+
+          <property name="file.encoding" value="UTF-8" />
+
+          <property name="codec.lib.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4/lib" />
+
+          <property name="ant.file.JVoiceXML unit tests" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="ant.project.default-target" value="test" />
+
+          <property name="build" value="classes" />
+
+          <property name="rhino.lib.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3/lib" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner org.jvoicexml.voicexmlunit.TestVoice filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/home/thesis/workspace/svn/org.jvoicexml/dist/unittests/TEST-org.jvoicexml.voicexmlunit.TestVoice.xml crashfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junitvmwatcher1337398791163895935.properties propsfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junit7581330627344126576.properties" />
+
+          <property name="jchardet.dir" value="../org.jvoicexml/3rdparty/jchardet1.1" />
+
+          <property name="mrcpv2.sip.cairo.sip.address" value="sip:cairo@speechforge.org" />
+
+          <property name="text.inputType" value="text" />
+
+          <property name="ant.file" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="jsonsimple.lib.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1/lib" />
+
+          <property name="pool.lib.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5/lib" />
+
+          <property name="mmi.protoc" value="protoc" />
+
+          <property name="java.io.tmpdir" value="/tmp" />
+
+          <property name="user.language" value="de" />
+
+          <property name="line.separator" value="&#xa;" />
+
+          <property name="config" value="../org.jvoicexml/config" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="rhino.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3" />
+
+          <property name="jmf.lib.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.port" value="5050" />
+
+          <property name="java.vm.info" value="mixed mode" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+
+          <property name="dist.jar" value="../org.jvoicexml/dist/org.jvoicexml.voicexmlunit.jar" />
+
+          <property name="javac.optimize" value="off" />
+
+          <property name="test.src" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/src" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.8.2 compiled on January 9 2012" />
+
+          <property name="junit.lib.dir" value="../org.jvoicexml/3rdparty/junit4.8.2/lib" />
+
+          <property name="svn.username" value="USER" />
+
+          <property name="test.build" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes" />
+
+          <property name="os.name" value="Linux" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="java.vm.name" value="OpenJDK 64-Bit Server VM" />
+
+          <property name="jvxml.jndi.repository" value="text" />
+
+          <property name="nightly.mail.port" value="22" />
+
+          <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.host" value="127.0.0.1" />
+
+          <property name="ant.java.version" value="1.7" />
+
+          <property name="basedir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="java.class.version" value="51.0" />
+
+          <property name="test.results" value="../org.jvoicexml/dist/unittests" />
+
+          <property name="pool.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5" />
+
+          <property name="ant.home" value="/usr/share/ant" />
+
+          <property name="jlibrtp.dir" value="../org.jvoicexml/3rdparty/jlibrtp" />
+
+          <property name="sphinx.dir" value="../org.jvoicexml/3rdparty/sphinx4" />
+
+          <property name="proxy.enabled" value="false" />
+
+          <property name="dist" value="../org.jvoicexml/dist" />
+
+          <property name="commons.dir" value="../org.jvoicexml/3rdparty/commons" />
+
+          <property name="freetts.dir" value="../org.jvoicexml/3rdparty/freetts1.2" />
+
+          <property name="jsonsimple.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1" />
+
+          <property name="log4j.lib.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16/lib" />
+
+          <property name="sun.boot.library.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/amd64" />
+
+          <property name="httpcore.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib" />
+
+          <property name="jvxml.version" value="0.7.6.EA" />
+
+          <property name="tomcat.startup" value="MUST BE SUPLIED DIRECTORY/bin/startup.sh" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="httpcore.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3" />
+
+          <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+
+          <property name="nightly.mail.user" value="USER" />
+
+          <property name="jvxml.core.dir" value="../org.jvoicexml" />
+
+          <property name="mrcpv2.sip.port" value="4242" />
+
+          <property name="test.config" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/config" />
+
+          <property name="jtapi.sip.inputType" value="jsapi20" />
+
+          <property name="jtapi.sip.outputType" value="jsapi20" />
+
+          <property name="jtapi.sip.providername" value="net.sourceforge.gjtapi.raw.mjsip.MjSipProvider" />
+
+          <property name="ant.project.name" value="JVoiceXML unit tests" />
+
+          <property name="java.vm.specification.version" value="1.7" />
+
+          <property name="loggings.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1" />
+
+          <property name="awt.toolkit" value="sun.awt.X11.XToolkit" />
+
+          <property name="sun.cpu.isalist" value="" />
+
+          <property name="nightly.mail.host" value="host" />
+
+          <property name="java.ext.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/ext:/usr/java/packages/lib/ext" />
+
+          <property name="os.version" value="3.4.32-desktop-2.mga2" />
+
+          <property name="user.home" value="/home/thesis" />
+
+          <property name="jvxml.jndi.port" value="1099" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="text.outputType" value="text" />
+
+          <property name="nightly.sf.user" value="USERNAME" />
+
+          <property name="codec.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4" />
+
+          <property name="jchardet.lib.dir" value="../org.jvoicexml/3rdparty/jchardet1.1/lib" />
+
+          <property name="jvxml.core.apidoc" value="http://jvoicexml.sourceforge.net/api-0.7.6.EA/org.jvoicexml" />
+
+          <property name="user.dir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="jtapi.sip.port" value="4242" />
+
+          <property name="mrcpv2.sip.address" value="127.0.0.1:4242" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="javadoc.access" value="protected" />
+
+          <property name="apidoc.basedir" value="../org.jvoicexml/doc/api" />
+
+          <property name="java.vm.version" value="23.7-b01" />
+
+          <property name="java.class.path" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes:/home/thesis/workspace/svn/org.jvoicexml/classes:/home/thesis/workspace/svn/org.jvoicexml.xml/classes:/home/thesis/workspace/svn/org.jvoicexml.client/classes:/home/thesis/workspace/svn/org.jvoicexml.implementation.text/classes:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/log4j1.2.16/lib/log4j-1.2.16.jar:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/junit4.8.2/lib/junit-4.8.2.jar:/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/classes:/home/thesis/workspace/svn/org.jvoicexml.jndi/classes:/home/thesis/workspace/svn/org.jvoicexml.processor.srgs/classes:/home/thesis/workspace/svn/org.jvoicexml/config:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/commons/logging1.1.1/lib/commons-logging-1.1.1.jar:/usr/share/java/junit-3.8.2.jar:/usr/share/java/ant-launcher.jar:/usr/share/java/ant.jar:/usr/share/java/ant/ant-junit.jar" />
+
+          <property name="ant.library.dir" value="/usr/share/ant/lib" />
+
+          <property name="httpclient.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="junit.dir" value="../org.jvoicexml/3rdparty/junit4.8.2" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="jlibrtp.lib.dir" value="../org.jvoicexml/3rdparty/jlibrtp/lib" />
+
+          <property name=".terminal" value="tcp://localhost:4343" />
+
+          <property name="ant.core.lib" value="/usr/share/java/ant.jar" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="file.separator" value="/" />
+
+          <property name="junit.present" value="true" />
+
+          <property name="java.runtime.version" value="1.7.0_06-icedtea-iurt_2013_02_15_17_57-b00" />
+
+          <property name="sun.boot.class.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/resources.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rt.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jsse.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jce.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/charsets.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/netx.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/plugin.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rhino.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jfr.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/classes" />
+
+          <property name="nightly.mail.password" value="PASSWORD" />
+
+          <property name="tomcat.home" value="MUST BE SUPLIED DIRECTORY" />
+
+          <property name="servlet.lib.dir" value="MUST BE SUPLIED DIRECTORY/lib" />
+
+          <property name="nightly.sf.password" value="PASSWORD" />
+
+          <property name="etc" value="etc" />
+
+          <property name="user.country" value="DE" />
+
+          <property name="httpclient.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3" />
+
+          <property name="ant.file.type.JVoiceXML unit tests" value="file" />
+
+          <property name="component" value="org.jvoicexml.voicexmlunit" />
+
+          <property name="src" value="src" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="java.specification.version" value="1.7" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+      </properties>
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestVoice" name="testClient" time="0.925" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.TestVoice" name="testSession" time="4.189" />
+
+      <system-out><![CDATA[     9 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   271)  text server started at port '4711'
+  1926 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   285)  connected to tcp://vxml.vbox:37772
+  1977 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 0
+  2154 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 209
+  3063 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   342)  read TextMessage[DATA, 1, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="en" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">test</speak>]
+  3074 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   433)  sent TextMessage[ACK, 1, null]
+  3081 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 0
+  3123 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 114
+  3131 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   342)  read TextMessage[INPUT_CLOSED, 2, null]
+  3132 [VoiceXML text server] INFO  oicexml.client.text.TextServer (   433)  sent TextMessage[ACK, 2, null]
+  3144 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 0
+  3287 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 4
+  3318 [VoiceXML text server] DEBUG icexml.client.text.TextMessage (   251)  stream available: 114
+  3325 [Thread-1            ] INFO  oicexml.client.text.TextServer (   455)  server closed
+  3336 [Thread-1            ] INFO  oicexml.client.text.TextServer (   444)  text server stopped
+]]></system-out>
+
+      <system-err />
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="vxml.vbox" id="4" name="TestDtmf" package="org.jvoicexml.voicexmlunit.io" tests="2" time="0.744" timestamp="2013-05-30T20:20:05">
+      <properties>
+          <property name="apidoc" value="../org.jvoicexml/doc/api/org.jvoicexml.voicexmlunit" />
+
+          <property name="file.encoding.pkg" value="sun.io" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/build.xml" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit" value="file" />
+
+          <property name="java.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="sphinx.lib.dir" value="../org.jvoicexml/3rdparty/sphinx4/lib" />
+
+          <property name="jtapi.sip.address" value="127.0.0.1:4242" />
+
+          <property name="log4j.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16" />
+
+          <property name="tomcat.systemtest.startup" value="true" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/3rdparty-libs.xml" />
+
+          <property name="text.terminal" value="tcp://localhost:4343" />
+
+          <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/endorsed" />
+
+          <property name="sun.os.patch.level" value="unknown" />
+
+          <property name="test" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests" />
+
+          <property name="java.vendor.url" value="http://java.oracle.com/" />
+
+          <property name="nightly.mail.from" value="USER@domain.org" />
+
+          <property name="version1.7" value="true" />
+
+          <property name="java.version" value="1.7.0_06-icedtea" />
+
+          <property name="3rdparty.dir" value="../org.jvoicexml/3rdparty" />
+
+          <property name="loggings.lib.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1/lib" />
+
+          <property name="javac.debug" value="on" />
+
+          <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+
+          <property name="ant.project.invoked-targets" value="test" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit - 3rd party libraries" value="file" />
+
+          <property name="tomcat.shutdown" value="MUST BE SUPLIED DIRECTORY/bin/shutdown.sh" />
+
+          <property name="user.name" value="thesis" />
+
+          <property name="jmf.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e" />
+
+          <property name="jtapi.sip.terminal" value="sip:jvoicexml@127.0.0.1:4242" />
+
+          <property name="ant.file.JVoiceXML - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml/3rdparty-libs.xml" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="sun.jnu.encoding" value="UTF-8" />
+
+          <property name="java.runtime.name" value="OpenJDK Runtime Environment" />
+
+          <property name="servlet.include" value="servlet-api.jar" />
+
+          <property name="run.class" value="YourSingleTestClassHere" />
+
+          <property name="component.path" value="org/jvoicexml/voicexmlunit" />
+
+          <property name="jdk.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="svn.password" value="PASSWORD" />
+
+          <property name="local-3rdparty.dir" value="3rdparty" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="user.timezone" value="" />
+
+          <property name="path.separator" value=":" />
+
+          <property name="ant.file.type.JVoiceXML - 3rd party libraries" value="file" />
+
+          <property name="freetts.lib.dir" value="../org.jvoicexml/3rdparty/freetts1.2/lib" />
+
+          <property name="file.encoding" value="UTF-8" />
+
+          <property name="codec.lib.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4/lib" />
+
+          <property name="ant.file.JVoiceXML unit tests" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="ant.project.default-target" value="test" />
+
+          <property name="build" value="classes" />
+
+          <property name="rhino.lib.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3/lib" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner org.jvoicexml.voicexmlunit.io.TestDtmf filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/home/thesis/workspace/svn/org.jvoicexml/dist/unittests/TEST-org.jvoicexml.voicexmlunit.io.TestDtmf.xml crashfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junitvmwatcher2714619684016812663.properties propsfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junit6233761192869863393.properties" />
+
+          <property name="jchardet.dir" value="../org.jvoicexml/3rdparty/jchardet1.1" />
+
+          <property name="mrcpv2.sip.cairo.sip.address" value="sip:cairo@speechforge.org" />
+
+          <property name="text.inputType" value="text" />
+
+          <property name="ant.file" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="jsonsimple.lib.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1/lib" />
+
+          <property name="pool.lib.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5/lib" />
+
+          <property name="mmi.protoc" value="protoc" />
+
+          <property name="java.io.tmpdir" value="/tmp" />
+
+          <property name="user.language" value="de" />
+
+          <property name="line.separator" value="&#xa;" />
+
+          <property name="config" value="../org.jvoicexml/config" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="rhino.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3" />
+
+          <property name="jmf.lib.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.port" value="5050" />
+
+          <property name="java.vm.info" value="mixed mode" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+
+          <property name="dist.jar" value="../org.jvoicexml/dist/org.jvoicexml.voicexmlunit.jar" />
+
+          <property name="javac.optimize" value="off" />
+
+          <property name="test.src" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/src" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.8.2 compiled on January 9 2012" />
+
+          <property name="junit.lib.dir" value="../org.jvoicexml/3rdparty/junit4.8.2/lib" />
+
+          <property name="svn.username" value="USER" />
+
+          <property name="test.build" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes" />
+
+          <property name="os.name" value="Linux" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="java.vm.name" value="OpenJDK 64-Bit Server VM" />
+
+          <property name="jvxml.jndi.repository" value="text" />
+
+          <property name="nightly.mail.port" value="22" />
+
+          <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.host" value="127.0.0.1" />
+
+          <property name="ant.java.version" value="1.7" />
+
+          <property name="basedir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="java.class.version" value="51.0" />
+
+          <property name="test.results" value="../org.jvoicexml/dist/unittests" />
+
+          <property name="pool.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5" />
+
+          <property name="ant.home" value="/usr/share/ant" />
+
+          <property name="jlibrtp.dir" value="../org.jvoicexml/3rdparty/jlibrtp" />
+
+          <property name="sphinx.dir" value="../org.jvoicexml/3rdparty/sphinx4" />
+
+          <property name="proxy.enabled" value="false" />
+
+          <property name="dist" value="../org.jvoicexml/dist" />
+
+          <property name="commons.dir" value="../org.jvoicexml/3rdparty/commons" />
+
+          <property name="freetts.dir" value="../org.jvoicexml/3rdparty/freetts1.2" />
+
+          <property name="jsonsimple.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1" />
+
+          <property name="log4j.lib.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16/lib" />
+
+          <property name="sun.boot.library.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/amd64" />
+
+          <property name="httpcore.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib" />
+
+          <property name="jvxml.version" value="0.7.6.EA" />
+
+          <property name="tomcat.startup" value="MUST BE SUPLIED DIRECTORY/bin/startup.sh" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="httpcore.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3" />
+
+          <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+
+          <property name="nightly.mail.user" value="USER" />
+
+          <property name="jvxml.core.dir" value="../org.jvoicexml" />
+
+          <property name="mrcpv2.sip.port" value="4242" />
+
+          <property name="test.config" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/config" />
+
+          <property name="jtapi.sip.inputType" value="jsapi20" />
+
+          <property name="jtapi.sip.outputType" value="jsapi20" />
+
+          <property name="jtapi.sip.providername" value="net.sourceforge.gjtapi.raw.mjsip.MjSipProvider" />
+
+          <property name="ant.project.name" value="JVoiceXML unit tests" />
+
+          <property name="java.vm.specification.version" value="1.7" />
+
+          <property name="loggings.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1" />
+
+          <property name="awt.toolkit" value="sun.awt.X11.XToolkit" />
+
+          <property name="sun.cpu.isalist" value="" />
+
+          <property name="nightly.mail.host" value="host" />
+
+          <property name="java.ext.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/ext:/usr/java/packages/lib/ext" />
+
+          <property name="os.version" value="3.4.32-desktop-2.mga2" />
+
+          <property name="user.home" value="/home/thesis" />
+
+          <property name="jvxml.jndi.port" value="1099" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="text.outputType" value="text" />
+
+          <property name="nightly.sf.user" value="USERNAME" />
+
+          <property name="codec.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4" />
+
+          <property name="jchardet.lib.dir" value="../org.jvoicexml/3rdparty/jchardet1.1/lib" />
+
+          <property name="jvxml.core.apidoc" value="http://jvoicexml.sourceforge.net/api-0.7.6.EA/org.jvoicexml" />
+
+          <property name="user.dir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="jtapi.sip.port" value="4242" />
+
+          <property name="mrcpv2.sip.address" value="127.0.0.1:4242" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="javadoc.access" value="protected" />
+
+          <property name="apidoc.basedir" value="../org.jvoicexml/doc/api" />
+
+          <property name="java.vm.version" value="23.7-b01" />
+
+          <property name="java.class.path" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes:/home/thesis/workspace/svn/org.jvoicexml/classes:/home/thesis/workspace/svn/org.jvoicexml.xml/classes:/home/thesis/workspace/svn/org.jvoicexml.client/classes:/home/thesis/workspace/svn/org.jvoicexml.implementation.text/classes:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/log4j1.2.16/lib/log4j-1.2.16.jar:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/junit4.8.2/lib/junit-4.8.2.jar:/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/classes:/home/thesis/workspace/svn/org.jvoicexml.jndi/classes:/home/thesis/workspace/svn/org.jvoicexml.processor.srgs/classes:/home/thesis/workspace/svn/org.jvoicexml/config:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/commons/logging1.1.1/lib/commons-logging-1.1.1.jar:/usr/share/java/junit-3.8.2.jar:/usr/share/java/ant-launcher.jar:/usr/share/java/ant.jar:/usr/share/java/ant/ant-junit.jar" />
+
+          <property name="ant.library.dir" value="/usr/share/ant/lib" />
+
+          <property name="httpclient.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="junit.dir" value="../org.jvoicexml/3rdparty/junit4.8.2" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="jlibrtp.lib.dir" value="../org.jvoicexml/3rdparty/jlibrtp/lib" />
+
+          <property name=".terminal" value="tcp://localhost:4343" />
+
+          <property name="ant.core.lib" value="/usr/share/java/ant.jar" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="file.separator" value="/" />
+
+          <property name="junit.present" value="true" />
+
+          <property name="java.runtime.version" value="1.7.0_06-icedtea-iurt_2013_02_15_17_57-b00" />
+
+          <property name="sun.boot.class.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/resources.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rt.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jsse.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jce.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/charsets.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/netx.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/plugin.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rhino.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jfr.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/classes" />
+
+          <property name="nightly.mail.password" value="PASSWORD" />
+
+          <property name="tomcat.home" value="MUST BE SUPLIED DIRECTORY" />
+
+          <property name="servlet.lib.dir" value="MUST BE SUPLIED DIRECTORY/lib" />
+
+          <property name="nightly.sf.password" value="PASSWORD" />
+
+          <property name="etc" value="etc" />
+
+          <property name="user.country" value="DE" />
+
+          <property name="httpclient.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3" />
+
+          <property name="ant.file.type.JVoiceXML unit tests" value="file" />
+
+          <property name="component" value="org.jvoicexml.voicexmlunit" />
+
+          <property name="src" value="src" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="java.specification.version" value="1.7" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+      </properties>
+
+      <testcase classname="org.jvoicexml.voicexmlunit.io.TestDtmf" name="testSend" time="0.035" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.io.TestDtmf" name="testReceive" time="0.166" />
+
+      <system-out />
+
+      <system-err />
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="vxml.vbox" id="5" name="TestInput" package="org.jvoicexml.voicexmlunit.io" tests="2" time="1.049" timestamp="2013-05-30T20:20:08">
+      <properties>
+          <property name="apidoc" value="../org.jvoicexml/doc/api/org.jvoicexml.voicexmlunit" />
+
+          <property name="file.encoding.pkg" value="sun.io" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/build.xml" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit" value="file" />
+
+          <property name="java.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="sphinx.lib.dir" value="../org.jvoicexml/3rdparty/sphinx4/lib" />
+
+          <property name="jtapi.sip.address" value="127.0.0.1:4242" />
+
+          <property name="log4j.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16" />
+
+          <property name="tomcat.systemtest.startup" value="true" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/3rdparty-libs.xml" />
+
+          <property name="text.terminal" value="tcp://localhost:4343" />
+
+          <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/endorsed" />
+
+          <property name="sun.os.patch.level" value="unknown" />
+
+          <property name="test" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests" />
+
+          <property name="java.vendor.url" value="http://java.oracle.com/" />
+
+          <property name="nightly.mail.from" value="USER@domain.org" />
+
+          <property name="version1.7" value="true" />
+
+          <property name="java.version" value="1.7.0_06-icedtea" />
+
+          <property name="3rdparty.dir" value="../org.jvoicexml/3rdparty" />
+
+          <property name="loggings.lib.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1/lib" />
+
+          <property name="javac.debug" value="on" />
+
+          <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+
+          <property name="ant.project.invoked-targets" value="test" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit - 3rd party libraries" value="file" />
+
+          <property name="tomcat.shutdown" value="MUST BE SUPLIED DIRECTORY/bin/shutdown.sh" />
+
+          <property name="user.name" value="thesis" />
+
+          <property name="jmf.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e" />
+
+          <property name="jtapi.sip.terminal" value="sip:jvoicexml@127.0.0.1:4242" />
+
+          <property name="ant.file.JVoiceXML - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml/3rdparty-libs.xml" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="sun.jnu.encoding" value="UTF-8" />
+
+          <property name="java.runtime.name" value="OpenJDK Runtime Environment" />
+
+          <property name="servlet.include" value="servlet-api.jar" />
+
+          <property name="run.class" value="YourSingleTestClassHere" />
+
+          <property name="component.path" value="org/jvoicexml/voicexmlunit" />
+
+          <property name="jdk.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="svn.password" value="PASSWORD" />
+
+          <property name="local-3rdparty.dir" value="3rdparty" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="user.timezone" value="" />
+
+          <property name="path.separator" value=":" />
+
+          <property name="ant.file.type.JVoiceXML - 3rd party libraries" value="file" />
+
+          <property name="freetts.lib.dir" value="../org.jvoicexml/3rdparty/freetts1.2/lib" />
+
+          <property name="file.encoding" value="UTF-8" />
+
+          <property name="codec.lib.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4/lib" />
+
+          <property name="ant.file.JVoiceXML unit tests" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="ant.project.default-target" value="test" />
+
+          <property name="build" value="classes" />
+
+          <property name="rhino.lib.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3/lib" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner org.jvoicexml.voicexmlunit.io.TestInput filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/home/thesis/workspace/svn/org.jvoicexml/dist/unittests/TEST-org.jvoicexml.voicexmlunit.io.TestInput.xml crashfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junitvmwatcher6561983968589866612.properties propsfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junit7242318653838832283.properties" />
+
+          <property name="jchardet.dir" value="../org.jvoicexml/3rdparty/jchardet1.1" />
+
+          <property name="mrcpv2.sip.cairo.sip.address" value="sip:cairo@speechforge.org" />
+
+          <property name="text.inputType" value="text" />
+
+          <property name="ant.file" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="jsonsimple.lib.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1/lib" />
+
+          <property name="pool.lib.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5/lib" />
+
+          <property name="mmi.protoc" value="protoc" />
+
+          <property name="java.io.tmpdir" value="/tmp" />
+
+          <property name="user.language" value="de" />
+
+          <property name="line.separator" value="&#xa;" />
+
+          <property name="config" value="../org.jvoicexml/config" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="rhino.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3" />
+
+          <property name="jmf.lib.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.port" value="5050" />
+
+          <property name="java.vm.info" value="mixed mode" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+
+          <property name="dist.jar" value="../org.jvoicexml/dist/org.jvoicexml.voicexmlunit.jar" />
+
+          <property name="javac.optimize" value="off" />
+
+          <property name="test.src" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/src" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.8.2 compiled on January 9 2012" />
+
+          <property name="junit.lib.dir" value="../org.jvoicexml/3rdparty/junit4.8.2/lib" />
+
+          <property name="svn.username" value="USER" />
+
+          <property name="test.build" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes" />
+
+          <property name="os.name" value="Linux" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="java.vm.name" value="OpenJDK 64-Bit Server VM" />
+
+          <property name="jvxml.jndi.repository" value="text" />
+
+          <property name="nightly.mail.port" value="22" />
+
+          <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.host" value="127.0.0.1" />
+
+          <property name="ant.java.version" value="1.7" />
+
+          <property name="basedir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="java.class.version" value="51.0" />
+
+          <property name="test.results" value="../org.jvoicexml/dist/unittests" />
+
+          <property name="pool.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5" />
+
+          <property name="ant.home" value="/usr/share/ant" />
+
+          <property name="jlibrtp.dir" value="../org.jvoicexml/3rdparty/jlibrtp" />
+
+          <property name="sphinx.dir" value="../org.jvoicexml/3rdparty/sphinx4" />
+
+          <property name="proxy.enabled" value="false" />
+
+          <property name="dist" value="../org.jvoicexml/dist" />
+
+          <property name="commons.dir" value="../org.jvoicexml/3rdparty/commons" />
+
+          <property name="freetts.dir" value="../org.jvoicexml/3rdparty/freetts1.2" />
+
+          <property name="jsonsimple.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1" />
+
+          <property name="log4j.lib.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16/lib" />
+
+          <property name="sun.boot.library.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/amd64" />
+
+          <property name="httpcore.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib" />
+
+          <property name="jvxml.version" value="0.7.6.EA" />
+
+          <property name="tomcat.startup" value="MUST BE SUPLIED DIRECTORY/bin/startup.sh" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="httpcore.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3" />
+
+          <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+
+          <property name="nightly.mail.user" value="USER" />
+
+          <property name="jvxml.core.dir" value="../org.jvoicexml" />
+
+          <property name="mrcpv2.sip.port" value="4242" />
+
+          <property name="test.config" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/config" />
+
+          <property name="jtapi.sip.inputType" value="jsapi20" />
+
+          <property name="jtapi.sip.outputType" value="jsapi20" />
+
+          <property name="jtapi.sip.providername" value="net.sourceforge.gjtapi.raw.mjsip.MjSipProvider" />
+
+          <property name="ant.project.name" value="JVoiceXML unit tests" />
+
+          <property name="java.vm.specification.version" value="1.7" />
+
+          <property name="loggings.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1" />
+
+          <property name="awt.toolkit" value="sun.awt.X11.XToolkit" />
+
+          <property name="sun.cpu.isalist" value="" />
+
+          <property name="nightly.mail.host" value="host" />
+
+          <property name="java.ext.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/ext:/usr/java/packages/lib/ext" />
+
+          <property name="os.version" value="3.4.32-desktop-2.mga2" />
+
+          <property name="user.home" value="/home/thesis" />
+
+          <property name="jvxml.jndi.port" value="1099" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="text.outputType" value="text" />
+
+          <property name="nightly.sf.user" value="USERNAME" />
+
+          <property name="codec.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4" />
+
+          <property name="jchardet.lib.dir" value="../org.jvoicexml/3rdparty/jchardet1.1/lib" />
+
+          <property name="jvxml.core.apidoc" value="http://jvoicexml.sourceforge.net/api-0.7.6.EA/org.jvoicexml" />
+
+          <property name="user.dir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="jtapi.sip.port" value="4242" />
+
+          <property name="mrcpv2.sip.address" value="127.0.0.1:4242" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="javadoc.access" value="protected" />
+
+          <property name="apidoc.basedir" value="../org.jvoicexml/doc/api" />
+
+          <property name="java.vm.version" value="23.7-b01" />
+
+          <property name="java.class.path" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes:/home/thesis/workspace/svn/org.jvoicexml/classes:/home/thesis/workspace/svn/org.jvoicexml.xml/classes:/home/thesis/workspace/svn/org.jvoicexml.client/classes:/home/thesis/workspace/svn/org.jvoicexml.implementation.text/classes:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/log4j1.2.16/lib/log4j-1.2.16.jar:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/junit4.8.2/lib/junit-4.8.2.jar:/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/classes:/home/thesis/workspace/svn/org.jvoicexml.jndi/classes:/home/thesis/workspace/svn/org.jvoicexml.processor.srgs/classes:/home/thesis/workspace/svn/org.jvoicexml/config:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/commons/logging1.1.1/lib/commons-logging-1.1.1.jar:/usr/share/java/junit-3.8.2.jar:/usr/share/java/ant-launcher.jar:/usr/share/java/ant.jar:/usr/share/java/ant/ant-junit.jar" />
+
+          <property name="ant.library.dir" value="/usr/share/ant/lib" />
+
+          <property name="httpclient.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="junit.dir" value="../org.jvoicexml/3rdparty/junit4.8.2" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="jlibrtp.lib.dir" value="../org.jvoicexml/3rdparty/jlibrtp/lib" />
+
+          <property name=".terminal" value="tcp://localhost:4343" />
+
+          <property name="ant.core.lib" value="/usr/share/java/ant.jar" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="file.separator" value="/" />
+
+          <property name="junit.present" value="true" />
+
+          <property name="java.runtime.version" value="1.7.0_06-icedtea-iurt_2013_02_15_17_57-b00" />
+
+          <property name="sun.boot.class.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/resources.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rt.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jsse.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jce.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/charsets.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/netx.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/plugin.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rhino.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jfr.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/classes" />
+
+          <property name="nightly.mail.password" value="PASSWORD" />
+
+          <property name="tomcat.home" value="MUST BE SUPLIED DIRECTORY" />
+
+          <property name="servlet.lib.dir" value="MUST BE SUPLIED DIRECTORY/lib" />
+
+          <property name="nightly.sf.password" value="PASSWORD" />
+
+          <property name="etc" value="etc" />
+
+          <property name="user.country" value="DE" />
+
+          <property name="httpclient.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3" />
+
+          <property name="ant.file.type.JVoiceXML unit tests" value="file" />
+
+          <property name="component" value="org.jvoicexml.voicexmlunit" />
+
+          <property name="src" value="src" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="java.specification.version" value="1.7" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+      </properties>
+
+      <testcase classname="org.jvoicexml.voicexmlunit.io.TestInput" name="testSend" time="0.046" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.io.TestInput" name="testReceive" time="0.375" />
+
+      <system-out />
+
+      <system-err />
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="vxml.vbox" id="6" name="TestOutput" package="org.jvoicexml.voicexmlunit.io" tests="2" time="0.638" timestamp="2013-05-30T20:20:11">
+      <properties>
+          <property name="apidoc" value="../org.jvoicexml/doc/api/org.jvoicexml.voicexmlunit" />
+
+          <property name="file.encoding.pkg" value="sun.io" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/build.xml" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit" value="file" />
+
+          <property name="java.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="sphinx.lib.dir" value="../org.jvoicexml/3rdparty/sphinx4/lib" />
+
+          <property name="jtapi.sip.address" value="127.0.0.1:4242" />
+
+          <property name="log4j.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16" />
+
+          <property name="tomcat.systemtest.startup" value="true" />
+
+          <property name="ant.file.org.jvoicexml.voicexmlunit - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/3rdparty-libs.xml" />
+
+          <property name="text.terminal" value="tcp://localhost:4343" />
+
+          <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/endorsed" />
+
+          <property name="sun.os.patch.level" value="unknown" />
+
+          <property name="test" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests" />
+
+          <property name="java.vendor.url" value="http://java.oracle.com/" />
+
+          <property name="nightly.mail.from" value="USER@domain.org" />
+
+          <property name="version1.7" value="true" />
+
+          <property name="java.version" value="1.7.0_06-icedtea" />
+
+          <property name="3rdparty.dir" value="../org.jvoicexml/3rdparty" />
+
+          <property name="loggings.lib.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1/lib" />
+
+          <property name="javac.debug" value="on" />
+
+          <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+
+          <property name="ant.project.invoked-targets" value="test" />
+
+          <property name="ant.file.type.org.jvoicexml.voicexmlunit - 3rd party libraries" value="file" />
+
+          <property name="tomcat.shutdown" value="MUST BE SUPLIED DIRECTORY/bin/shutdown.sh" />
+
+          <property name="user.name" value="thesis" />
+
+          <property name="jmf.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e" />
+
+          <property name="jtapi.sip.terminal" value="sip:jvoicexml@127.0.0.1:4242" />
+
+          <property name="ant.file.JVoiceXML - 3rd party libraries" value="/home/thesis/workspace/svn/org.jvoicexml/3rdparty-libs.xml" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="sun.jnu.encoding" value="UTF-8" />
+
+          <property name="java.runtime.name" value="OpenJDK Runtime Environment" />
+
+          <property name="servlet.include" value="servlet-api.jar" />
+
+          <property name="run.class" value="YourSingleTestClassHere" />
+
+          <property name="component.path" value="org/jvoicexml/voicexmlunit" />
+
+          <property name="jdk.home" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre" />
+
+          <property name="svn.password" value="PASSWORD" />
+
+          <property name="local-3rdparty.dir" value="3rdparty" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="user.timezone" value="" />
+
+          <property name="path.separator" value=":" />
+
+          <property name="ant.file.type.JVoiceXML - 3rd party libraries" value="file" />
+
+          <property name="freetts.lib.dir" value="../org.jvoicexml/3rdparty/freetts1.2/lib" />
+
+          <property name="file.encoding" value="UTF-8" />
+
+          <property name="codec.lib.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4/lib" />
+
+          <property name="ant.file.JVoiceXML unit tests" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="ant.project.default-target" value="test" />
+
+          <property name="build" value="classes" />
+
+          <property name="rhino.lib.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3/lib" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner org.jvoicexml.voicexmlunit.io.TestOutput filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/home/thesis/workspace/svn/org.jvoicexml/dist/unittests/TEST-org.jvoicexml.voicexmlunit.io.TestOutput.xml crashfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junitvmwatcher383848726375305750.properties propsfile=/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/junit996166689244545274.properties" />
+
+          <property name="jchardet.dir" value="../org.jvoicexml/3rdparty/jchardet1.1" />
+
+          <property name="mrcpv2.sip.cairo.sip.address" value="sip:cairo@speechforge.org" />
+
+          <property name="text.inputType" value="text" />
+
+          <property name="ant.file" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/test.xml" />
+
+          <property name="jsonsimple.lib.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1/lib" />
+
+          <property name="pool.lib.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5/lib" />
+
+          <property name="mmi.protoc" value="protoc" />
+
+          <property name="java.io.tmpdir" value="/tmp" />
+
+          <property name="user.language" value="de" />
+
+          <property name="line.separator" value="&#xa;" />
+
+          <property name="config" value="../org.jvoicexml/config" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="rhino.dir" value="../org.jvoicexml/3rdparty/rhino1.7R3" />
+
+          <property name="jmf.lib.dir" value="../org.jvoicexml/3rdparty/jmf2.1.1e/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.port" value="5050" />
+
+          <property name="java.vm.info" value="mixed mode" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+
+          <property name="dist.jar" value="../org.jvoicexml/dist/org.jvoicexml.voicexmlunit.jar" />
+
+          <property name="javac.optimize" value="off" />
+
+          <property name="test.src" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/src" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.8.2 compiled on January 9 2012" />
+
+          <property name="junit.lib.dir" value="../org.jvoicexml/3rdparty/junit4.8.2/lib" />
+
+          <property name="svn.username" value="USER" />
+
+          <property name="test.build" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes" />
+
+          <property name="os.name" value="Linux" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="java.vm.name" value="OpenJDK 64-Bit Server VM" />
+
+          <property name="jvxml.jndi.repository" value="text" />
+
+          <property name="nightly.mail.port" value="22" />
+
+          <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib" />
+
+          <property name="mrcpv2.sip.cairo.sip.host" value="127.0.0.1" />
+
+          <property name="ant.java.version" value="1.7" />
+
+          <property name="basedir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="java.class.version" value="51.0" />
+
+          <property name="test.results" value="../org.jvoicexml/dist/unittests" />
+
+          <property name="pool.dir" value="../org.jvoicexml/3rdparty/commons/pool1.5.5" />
+
+          <property name="ant.home" value="/usr/share/ant" />
+
+          <property name="jlibrtp.dir" value="../org.jvoicexml/3rdparty/jlibrtp" />
+
+          <property name="sphinx.dir" value="../org.jvoicexml/3rdparty/sphinx4" />
+
+          <property name="proxy.enabled" value="false" />
+
+          <property name="dist" value="../org.jvoicexml/dist" />
+
+          <property name="commons.dir" value="../org.jvoicexml/3rdparty/commons" />
+
+          <property name="freetts.dir" value="../org.jvoicexml/3rdparty/freetts1.2" />
+
+          <property name="jsonsimple.dir" value="../org.jvoicexml/3rdparty/jsonsimple1.1" />
+
+          <property name="log4j.lib.dir" value="../org.jvoicexml/3rdparty/log4j1.2.16/lib" />
+
+          <property name="sun.boot.library.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/amd64" />
+
+          <property name="httpcore.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib" />
+
+          <property name="jvxml.version" value="0.7.6.EA" />
+
+          <property name="tomcat.startup" value="MUST BE SUPLIED DIRECTORY/bin/startup.sh" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="httpcore.dir" value="../org.jvoicexml/3rdparty/commons/httpcore4.2.3" />
+
+          <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+
+          <property name="nightly.mail.user" value="USER" />
+
+          <property name="jvxml.core.dir" value="../org.jvoicexml" />
+
+          <property name="mrcpv2.sip.port" value="4242" />
+
+          <property name="test.config" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/config" />
+
+          <property name="jtapi.sip.inputType" value="jsapi20" />
+
+          <property name="jtapi.sip.outputType" value="jsapi20" />
+
+          <property name="jtapi.sip.providername" value="net.sourceforge.gjtapi.raw.mjsip.MjSipProvider" />
+
+          <property name="ant.project.name" value="JVoiceXML unit tests" />
+
+          <property name="java.vm.specification.version" value="1.7" />
+
+          <property name="loggings.dir" value="../org.jvoicexml/3rdparty/commons/logging1.1.1" />
+
+          <property name="awt.toolkit" value="sun.awt.X11.XToolkit" />
+
+          <property name="sun.cpu.isalist" value="" />
+
+          <property name="nightly.mail.host" value="host" />
+
+          <property name="java.ext.dirs" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/ext:/usr/java/packages/lib/ext" />
+
+          <property name="os.version" value="3.4.32-desktop-2.mga2" />
+
+          <property name="user.home" value="/home/thesis" />
+
+          <property name="jvxml.jndi.port" value="1099" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="text.outputType" value="text" />
+
+          <property name="nightly.sf.user" value="USERNAME" />
+
+          <property name="codec.dir" value="../org.jvoicexml/3rdparty/commons/codec1.4" />
+
+          <property name="jchardet.lib.dir" value="../org.jvoicexml/3rdparty/jchardet1.1/lib" />
+
+          <property name="jvxml.core.apidoc" value="http://jvoicexml.sourceforge.net/api-0.7.6.EA/org.jvoicexml" />
+
+          <property name="user.dir" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit" />
+
+          <property name="jtapi.sip.port" value="4242" />
+
+          <property name="mrcpv2.sip.address" value="127.0.0.1:4242" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="javadoc.access" value="protected" />
+
+          <property name="apidoc.basedir" value="../org.jvoicexml/doc/api" />
+
+          <property name="java.vm.version" value="23.7-b01" />
+
+          <property name="java.class.path" value="/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/unittests/classes:/home/thesis/workspace/svn/org.jvoicexml/classes:/home/thesis/workspace/svn/org.jvoicexml.xml/classes:/home/thesis/workspace/svn/org.jvoicexml.client/classes:/home/thesis/workspace/svn/org.jvoicexml.implementation.text/classes:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/log4j1.2.16/lib/log4j-1.2.16.jar:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/junit4.8.2/lib/junit-4.8.2.jar:/home/thesis/workspace/svn/org.jvoicexml.voicexmlunit/classes:/home/thesis/workspace/svn/org.jvoicexml.jndi/classes:/home/thesis/workspace/svn/org.jvoicexml.processor.srgs/classes:/home/thesis/workspace/svn/org.jvoicexml/config:/home/thesis/workspace/svn/org.jvoicexml/3rdparty/commons/logging1.1.1/lib/commons-logging-1.1.1.jar:/usr/share/java/junit-3.8.2.jar:/usr/share/java/ant-launcher.jar:/usr/share/java/ant.jar:/usr/share/java/ant/ant-junit.jar" />
+
+          <property name="ant.library.dir" value="/usr/share/ant/lib" />
+
+          <property name="httpclient.lib.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="junit.dir" value="../org.jvoicexml/3rdparty/junit4.8.2" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="jlibrtp.lib.dir" value="../org.jvoicexml/3rdparty/jlibrtp/lib" />
+
+          <property name=".terminal" value="tcp://localhost:4343" />
+
+          <property name="ant.core.lib" value="/usr/share/java/ant.jar" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="file.separator" value="/" />
+
+          <property name="junit.present" value="true" />
+
+          <property name="java.runtime.version" value="1.7.0_06-icedtea-iurt_2013_02_15_17_57-b00" />
+
+          <property name="sun.boot.class.path" value="/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/resources.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rt.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jsse.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jce.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/charsets.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/netx.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/plugin.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/rhino.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/lib/jfr.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.6.x86_64/jre/classes" />
+
+          <property name="nightly.mail.password" value="PASSWORD" />
+
+          <property name="tomcat.home" value="MUST BE SUPLIED DIRECTORY" />
+
+          <property name="servlet.lib.dir" value="MUST BE SUPLIED DIRECTORY/lib" />
+
+          <property name="nightly.sf.password" value="PASSWORD" />
+
+          <property name="etc" value="etc" />
+
+          <property name="user.country" value="DE" />
+
+          <property name="httpclient.dir" value="../org.jvoicexml/3rdparty/commons/httpclient4.2.3" />
+
+          <property name="ant.file.type.JVoiceXML unit tests" value="file" />
+
+          <property name="component" value="org.jvoicexml.voicexmlunit" />
+
+          <property name="src" value="src" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="java.specification.version" value="1.7" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+      </properties>
+
+      <testcase classname="org.jvoicexml.voicexmlunit.io.TestOutput" name="testSend" time="0.07" />
+
+      <testcase classname="org.jvoicexml.voicexmlunit.io.TestOutput" name="testReceive" time="0.113" />
+
+      <system-out />
+
+      <system-err />
+
+  </testsuite>
+</testsuites>
