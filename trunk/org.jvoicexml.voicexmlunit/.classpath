@@ -8,5 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.jndi"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
