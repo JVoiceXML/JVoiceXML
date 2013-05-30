@@ -64,7 +64,7 @@ public final class GenericClient {
      * Sets the security policy.
      * @param path the policy file
      */
-    public void setPolicy(final String path) {
+    public void setSecurityPolicy(final String path) {
         System.setProperty("java.security.policy", path);
     }
 
