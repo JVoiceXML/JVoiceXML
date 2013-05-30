@@ -26,12 +26,18 @@
 
 package org.jvoicexml.client;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.net.URI;
+import java.util.Properties;
 import java.util.ServiceLoader;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.naming.spi.NamingManager;
 
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
@@ -45,6 +51,9 @@ import org.jvoicexml.event.ErrorEvent;
  * @since 0.7.4
  */
 public final class GenericClient {
+    /** optional JNDI configuration file. */
+    private File configuration;
+    
     /** Reference to the JVoiceXML server. */
     private JVoiceXml jvxml;
 
@@ -52,15 +61,49 @@ public final class GenericClient {
     private ConnectionInformationController infoController;
 
     /**
+     * Sets the security policy.
+     * @param path the policy file
+     */
+    public void setPolicy(final String path) {
+        System.setProperty("java.security.policy", path);
+    }
+
+    /**
+     * Loads a configuration for JNDI from file.
+     * 
+     * @param path
+     *            path of configuration file with settings for JNDI
+     */
+    public void loadConfiguration(final String path) {
+        configuration = new File(path);
+    }
+    
+    /**
      * Retrieves a reference to the JVoiceXML server.
      * @return reference to the JVoiceXML server.
+     * @throws IOException
+     *          
      * @throws NamingException
      *         JVoiceXML server could not be found.
      */
-    private JVoiceXml getJVoiceXml() throws NamingException {
+    public JVoiceXml getJVoiceXml() throws NamingException {
         if (jvxml == null) {
-            final Context context = new InitialContext();
-            jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+            Context context;
+            if (configuration == null) {
+                context = new InitialContext();
+            } else {
+                final Properties environment = new Properties();
+                Reader reader;
+                try {
+                    reader = new FileReader(configuration);
+                    environment.load(reader);
+                } catch (IOException e) {
+                    throw new NamingException(e.getMessage());
+                }
+
+                context = NamingManager.getInitialContext(environment);
+            }
+            jvxml = (JVoiceXml) context.lookup(JVoiceXml.class.getSimpleName());
         }
         return jvxml;
     }
