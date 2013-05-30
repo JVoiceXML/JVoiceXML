@@ -35,11 +35,14 @@ import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.naming.spi.NamingManager;
 
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.client.GenericClient;
+import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
 
 /**
@@ -48,10 +51,15 @@ import org.jvoicexml.event.ErrorEvent;
  * @author Dirk Schnelle-Walka
  */
 public final class Voice {
-    private File configuration;
-    private Context context;
-    private JVoiceXml jvxml;
+    private GenericClient client;
     private Session session;
+    
+    public GenericClient getClient() {
+        if (client == null) {
+            client = new GenericClient();
+        }
+        return client;
+    }
 
     /**
      * Sets the given policy.
@@ -62,76 +70,24 @@ public final class Voice {
     }
 
     /**
-     * Loads a configuration for JNDI from file.
+     * Connects a new Session object with a dialog and runs it.
      * 
-     * @param configuration
-     *            path of configuration file with settings for JNDI
-     */
-    public void loadConfiguration(final String path) {
-        configuration = new File(path);
-        jvxml = null;
-    }
-
-    /**
-     * Retrieves the JVoiceXML object. If JVoiceXML has not been looked
-     * up, calling this method will try to connect to the JVoiceXML server.
-     * @throws IOException
-     *         error looking up JVoiceXml
-     * @see #lookupJVoiceXML()
-     */
-    public JVoiceXml getJVoiceXml() throws IOException {
-        if (jvxml == null) {
-            lookupJVoiceXML();
-        }
-        return jvxml;
-    }
-
-    /**
-     * Lookup the JVoiceXML object via JNDI.
-     * @throws Exception 
-     */
-    public void lookupJVoiceXML() throws IOException {
-        try {
-            if (configuration == null) {
-                context = new InitialContext();
-            } else {
-                final Properties environment = new Properties();
-                final Reader reader = new FileReader(configuration);
-                environment.load(reader);
-                context = NamingManager.getInitialContext(environment);
-            }
-            jvxml = (JVoiceXml) context.lookup(JVoiceXml.class.getSimpleName());
-        } catch (javax.naming.NamingException | IOException ex) {
-            throw new IOException("JVoiceXML not found! Is it running?", ex);
-        }
-    }
-
-    /**
-     * @return the recently used Context object for JNDI
-     */
-    public Context getContext() {
-        return context;
-    }
-
-    /**
-     * Connects a new Session object with a dialog.
-     * 
-     * @param connectionInformation
-     *            the connection details of the server object
+     * @param server
+     *            the server object
      * @param dialog
      *            the dialog to use
      * @throws IOException 
      *            the error happened during the session was active
      */
-    public void connect(final ConnectionInformation connectionInformation, URI dialog)
+    public void operate(final TextServer server, final URI dialog)
             throws IOException {
         try {
-            final JVoiceXml jvxml = getJVoiceXml();
-            session = jvxml.createSession(connectionInformation);
-            session.call(dialog);
+            final ConnectionInformation info = server.getConnectionInformation();
+            session = getClient().call(dialog, info);
+            server.waitConnected();
             session.waitSessionEnd();
-            //session.hangup();
-        } catch (ErrorEvent e) {
+            session.hangup();
+        } catch (NamingException | ErrorEvent e) {
             throw new IOException(e);
         } finally {
             session = null;

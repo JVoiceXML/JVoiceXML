@@ -163,8 +163,7 @@ public final class Call implements Runnable {
      */
     private void runDialog() throws ErrorEvent, IOException {
         final Voice voice = getVoice();
-        final ConnectionInformation info = server.getConnectionInformation();
-        voice.connect(info, dialog);
+        voice.operate(server, dialog);
     }
 
     /**
