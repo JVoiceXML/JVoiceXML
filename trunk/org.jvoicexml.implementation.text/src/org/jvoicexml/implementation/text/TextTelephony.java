@@ -73,6 +73,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /** Maximal number of milliseconds to wait for a connect. */
     private static final int MAX_TIMEOUT_CONNECT = 1000;
 
+    /** Maximal number of milliseconds to wait for acknowledgement. */
+    private static final int MAX_TIMEOUT_ACK = 100;
+    
     /** The connection to the client. */
     private Socket socket;
 
@@ -144,6 +147,14 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             return;
         }
         synchronized (pendingMessages) {
+            /*// wait for acknowledgement of pending messages
+            if (!pendingMessages.isEmpty()) {
+                try {
+                    pendingMessages.wait(MAX_TIMEOUT_ACK);
+                } catch (InterruptedException e) {
+                    LOGGER.warn("waiting for acknowledgement interrupted", e);
+                }
+            }*/
             final Integer object = new Integer(sequenceNumber);
             pendingMessages.put(object, message);
             if (LOGGER.isDebugEnabled()) {
@@ -160,6 +171,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     boolean removePendingMessage(final int sequenceNumber) {
         final boolean removed;
         synchronized (pendingMessages) {
+            //pendingMessages.notifyAll();
             final Integer object = new Integer(sequenceNumber);
             final PendingMessage pending = pendingMessages.remove(object);
             removed = pending != null;
@@ -453,6 +465,10 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
                 LOGGER.debug("disconnecting from '" + client.getCallingDevice()
                         + "'...");
             }
+        }
+        
+        if (!pendingMessages.isEmpty()) {
+            LOGGER.warn("pending messages: " + pendingMessages.values());
         }
 
         if (!sentHungup && sender.isAlive()) {

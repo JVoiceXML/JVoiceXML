@@ -27,7 +27,6 @@
 package org.jvoicexml.client.text;
 
 import java.io.ByteArrayOutputStream;
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
@@ -108,7 +107,7 @@ public final class TextServer extends Thread {
 
     /** <code>true</code> if the server has been started. */
     private boolean started;
-
+    
     /**
      * Constructs a new object.
      *
@@ -332,8 +331,13 @@ public final class TextServer extends Thread {
         final NonBlockingObjectInputStream oin =
             new NonBlockingObjectInputStream(in);
         try {
-            while ((client != null) && client.isConnected() && !interrupted()) {
+            boolean firstAvailable = true;
+            while (isConnected() && !interrupted()) {
                 try {
+                    if (!TextMessage.isStreamAvailable(oin, firstAvailable)) {
+                        firstAvailable = false;
+                        continue;
+                    }
                     final TextMessage message = (TextMessage) oin.readObject();
                     LOGGER.info("read " + message);
                     final int code = message.getCode();
@@ -361,8 +365,13 @@ public final class TextServer extends Thread {
                     final int seq = message.getSequenceNumber();
                     final TextMessage ack =
                             new TextMessage(TextMessage.ACK, seq);
-                    send(ack);
-                } catch (EOFException e) {
+                    if (isConnected()) {
+                        send(ack);
+                    }
+                    else {
+                        LOGGER.warn("can not acknowledge due to disconnected");
+                    }
+                } catch (IOException e) {
                     if (isStarted()) {
                         throw e;
                     }
@@ -479,5 +488,9 @@ public final class TextServer extends Thread {
             }
         }
         fireDisconnected();
+    }
+    
+    public boolean isConnected() {
+        return (client != null) && client.isConnected();
     }
 }

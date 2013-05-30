@@ -63,7 +63,7 @@ final class TextReceiverThread extends Thread {
 
     /** Wait for termination semaphore. */
     private final Object lock;
-
+    
     /**
      * Constructs a new object.
      * @param asyncSocket the socket to read from.
@@ -100,9 +100,14 @@ final class TextReceiverThread extends Thread {
             started = true;
             notifyAll();
         }
+        boolean firstAvailable = true;
         while (socket.isConnected() && !isInterrupted()) {
             try {
                 final InputStream stream = socket.getInputStream();
+                if (!TextMessage.isStreamAvailable(stream, firstAvailable)) {
+                    firstAvailable = false;
+                    continue;
+                }
                 final ObjectInputStream in =
                     new ObjectInputStream(stream);
                 final TextMessage message = (TextMessage) in.readObject();
