@@ -148,7 +148,7 @@ public final class TestTextTelephony
      * @exception JVoiceXMLEvent
      *            test failed.
      */
-    @Test
+    @Test(timeout=5000)
     public void testRecord() throws Exception, JVoiceXMLEvent {
         final TextSpokenInput textInput = new TextSpokenInput();
         textInput.startRecognition(null, null);
