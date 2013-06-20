@@ -30,7 +30,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.client.GenericClient;
+
 import org.jvoicexml.voicexmlunit.io.Input;
 import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.processor.Assert;
@@ -61,16 +61,16 @@ public class TestSupervisor {
     public void testStatements() {
         Assert.assertStatements(0, conversation);
         Assert.assertNull(conversation.begin());
-        
+
         final String prompt = "ping";
         final String reply = "pong";
         conversation.addOutput(prompt); // must have an Output before
         conversation.addInput(reply);
 
         Assert.assertStatements(2, conversation);
-        Assert.assertEquals(new Output(prompt).toString(), 
+        Assert.assertEquals(new Output(prompt).toString(),
                 conversation.next().toString());
-        Assert.assertEquals(new Input(reply).toString(), 
+        Assert.assertEquals(new Input(reply).toString(),
                 conversation.next().toString());
     }
 
@@ -145,16 +145,14 @@ public class TestSupervisor {
         }
         Assert.assertTrue(failed);
     }
-    
+
     @Test
     public void testCall() {
         final Call call = new Call("unittests/rc/mock.vxml");
-        final GenericClient client = call.getVoice().getClient();
-        client.loadConfiguration("unittests/etc/jndi.properties");
-        client.setSecurityPolicy("unittests/etc/jvoicexml.policy");
+
         conversation = supervisor.init(call);
         conversation.addOutput("test");
-        
+
         supervisor.process();
         Assert.assertNull(supervisor.getFailCause());
     }
@@ -167,7 +165,7 @@ public class TestSupervisor {
         // no session data, but begin conversation
         supervisor.connected(null);
     }
-    
+
     /**
      * Asserts a simple message as an Output statement.
      * @param statement

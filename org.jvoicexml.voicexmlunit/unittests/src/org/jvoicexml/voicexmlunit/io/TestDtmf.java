@@ -43,14 +43,14 @@ import org.xml.sax.SAXException;
  * @author thesis
  *
  */
-public class TestDtmf implements TestAssertion {
+public class TestDtmf implements AbstractTestAssertion {
 
     private static final char[] DIGITS = "1234567890".toCharArray();
-    
+
     private char digit;
     private Dtmf dtmf;
     private boolean failed;
-    
+
     @Before
     public void setUp() throws Exception {
         Integer i = (int) (Math.random() * 10);
@@ -74,6 +74,6 @@ public class TestDtmf implements TestAssertion {
     @Override
     @Test
     public void testSend() {
-        dtmf.send(new Recording(null, null));        
+        dtmf.send(new Recording(null, null));
     }
 }
