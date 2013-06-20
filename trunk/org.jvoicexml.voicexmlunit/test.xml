@@ -69,6 +69,7 @@ This file runs unit tests on JVoiceXML.
                fork="yes"
                haltonfailure="no"
                showoutput="yes">
+      <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
       <classpath location="${test.build}" />
       <classpath refid="test.classpath" />
       <classpath location="${test.config}" />
@@ -83,7 +84,6 @@ This file runs unit tests on JVoiceXML.
         <fileset dir="${test.build}">
           <include name="org/jvoicexml/**/Test*" />
           <exclude name="org/jvoicexml/**/Test*$*" />
-          <exclude name="org/jvoicexml/voicexmlunit/io/TestAssertion.class" />
           <exclude name="org/jvoicexml/test/**" />
         </fileset>
       </batchtest>
@@ -105,6 +105,7 @@ This file runs unit tests on JVoiceXML.
                fork="yes"
                haltonfailure="no"
                showoutput="yes">
+      <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
       <classpath location="${test.build}" />
       <classpath refid="test.classpath" />
       <classpath location="${test.config}" />

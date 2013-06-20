@@ -27,6 +27,8 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.io.File;
+import java.io.IOException;
+
 import java.net.InetSocketAddress;
 import java.net.URI;
 
@@ -34,9 +36,10 @@ import javax.naming.NamingException;
 
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.client.GenericClient;
+
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -60,21 +63,22 @@ public class TestVoice implements TextListener {
     public void setUp() {
         dialog = new File("unittests/rc/mock.vxml").toURI();
         voice = new Voice();
-        final GenericClient client = voice.getClient();
-        client.setSecurityPolicy("unittests/etc/jvoicexml.policy");
-        client.loadConfiguration("unittests/etc/jndi.properties");
     }
 
     /**
-     * Test case for {@link Voice#getclient()}.
-     * @throws NamingException
-     *         test failed
+     * Close the test environment.
+     */
+    @After
+    public void tearDown() {
+        voice.close();
+    }
+
+    /**
+     * Test method for {@link Voice#getClient()}.
      */
     @Test
-    public void testClient() throws NamingException {
-        // NOTICE: JVoiceXML has to run for test success!!
-        org.jvoicexml.client.GenericClient client = voice.getClient();
-        Assert.assertNotNull(client.getJVoiceXml());
+    public void testClient() {
+        Assert.assertNotNull(voice.getClient());
     }
 
     /**
@@ -87,7 +91,7 @@ public class TestVoice implements TextListener {
     @Test(timeout=20000)
     public void testSession() throws Exception, JVoiceXMLEvent {
         Assert.assertNull(voice.getSession());
-        
+
         final TextServer server = new TextServer(4711);
         server.addTextListener(this);
         server.start();
@@ -96,7 +100,7 @@ public class TestVoice implements TextListener {
         }
         activated = false;
         try {
-            voice.operate(server, dialog);
+            voice.call(server, dialog);
         } finally {
             server.stopServer();
         }

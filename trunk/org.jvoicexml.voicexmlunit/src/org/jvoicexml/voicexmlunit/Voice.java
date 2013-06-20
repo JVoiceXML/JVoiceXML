@@ -38,61 +38,87 @@ import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
 
 /**
- * Voice provides direct access to JVoiceXML.
+ * Voice provides direct access to JVoiceXML via GenericClient.
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
  */
 public final class Voice {
     /**
-     * the client to deal with.
+     * the back-end client to communicate with.
      */
     private GenericClient client;
-    
+
     /**
      * the session currently open.
      */
     private Session session;
-    
+
     /**
-     * @return the client object
+     * Set the client.
+     * @param backend the client
      */
-    public GenericClient getClient() {
-        if (client == null) {
-            client = new GenericClient();
-        }
-        return client;
+    public void setClient(final GenericClient client) {
+         this.client = client;
     }
 
     /**
-     * Connects a new Session object with a dialog and runs it.
-     * Blocks until server has connected and session will be finished.
-     * 
+     * Get the actual client.
+     */
+     public GenericClient getClient() {
+          if (client == null) {
+               setClient(new GenericClient());
+          }
+          return client;
+     }
+
+
+    /**
+     * Calls the client to get a new textual Session object for
+     * the specified dialog and runs it.
+     * Blocks while server is connected and till session ends.
+     *
      * @param server
      *            the server object
      * @param dialog
      *            the dialog to use
-     * @throws IOException 
+     * @throws IOException
      *            the error happened during the session was active
      */
-    public void operate(final TextServer server, final URI dialog)
-            throws IOException {
-        try {
-            final ConnectionInformation info = 
+     public void call(final TextServer server, final URI dialog)
+          throws IOException {
+          try {
+               final ConnectionInformation info =
                     server.getConnectionInformation();
-            session = getClient().call(dialog, info);
-            server.waitConnected();
-            session.waitSessionEnd();
-            session.hangup();
-        } catch (NamingException | ErrorEvent e) {
-            throw new IOException(e);
-        } finally {
-            session = null;
-        }
+               session = getClient().call(dialog, info);
+               server.waitConnected();
+               session.waitSessionEnd();
+               session.hangup();
+          } catch (NamingException | ErrorEvent e) {
+               throw new IOException(e);
+          } finally {
+               session = null;
+          }
+    }
+
+   /**
+     * Close the active Communication.
+     */
+     public void close() {
+         if (session != null) {
+              if (!session.hasEnded()) {
+                    session.hangup();
+              }
+              session = null;
+         }
+         if (client != null) {
+              client.close();
+              client = null;
+         }
     }
 
     /**
      * Get the currently active Session object.
-     * 
+     *
      * @return the active Session or null if there's none
      */
     public Session getSession() {
