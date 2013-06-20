@@ -33,13 +33,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-public interface TestAssertion {
+public interface AbstractTestAssertion {
 
     /**
      * Test method for {@link org.jvoicexml.voicexmlunit.io.Output#receive(org.jvoicexml.xml.ssml.SsmlDocument)}.
-     * @throws IOException 
-     * @throws SAXException 
-     * @throws ParserConfigurationException 
+     * @throws IOException
+     * @throws SAXException
+     * @throws ParserConfigurationException
      */
     @Test
     public abstract void testReceive() throws ParserConfigurationException,

@@ -36,8 +36,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
-public class TestInput implements TestAssertion {
-    
+public class TestInput implements AbstractTestAssertion {
+
     private Input in;
     boolean failed;
 

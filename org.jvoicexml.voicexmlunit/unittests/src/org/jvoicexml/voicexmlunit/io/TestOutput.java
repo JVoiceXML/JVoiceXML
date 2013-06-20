@@ -43,8 +43,8 @@ import org.xml.sax.SAXException;
  * @author thesis
  *
  */
-public class TestOutput implements TestAssertion {
-    
+public class TestOutput implements AbstractTestAssertion {
+
     private Output out;
     private boolean failed;
 
@@ -69,7 +69,7 @@ public class TestOutput implements TestAssertion {
         } catch (AssertionFailedError e) {
             failed = true;
         }
-        assertTrue(failed);    
+        assertTrue(failed);
     }
 
     /* (non-Javadoc)

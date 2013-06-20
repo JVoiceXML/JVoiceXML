@@ -47,10 +47,10 @@ import org.jvoicexml.voicexmlunit.io.Recording;
  * from Voice, you may use getVoice() to do some initialization before. In case
  * of an assertion failure, you can stop the Server, therefore use the fail()
  * and getFailure() methods.
- * 
+ *
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
- * 
+ *
  */
 public final class Call implements Runnable {
     private URI dialog;
@@ -69,7 +69,7 @@ public final class Call implements Runnable {
 
     /**
      * Constructs a new call
-     * 
+     *
      * @param uri
      *            URI of the dialog to call call
      */
@@ -83,7 +83,7 @@ public final class Call implements Runnable {
 
     /**
      * Constructs a new call
-     * 
+     *
      * @param path
      *            the path to a local file
      */
@@ -101,7 +101,7 @@ public final class Call implements Runnable {
 
     /**
      * Get the Voice object This method tries best to get a valid object.
-     * 
+     *
      * @return the actual Voice object
      */
     public Voice getVoice() {
@@ -113,7 +113,7 @@ public final class Call implements Runnable {
 
     /**
      * Set a custom Voice object
-     * 
+     *
      * @param voice
      *            the new Voice object
      */
@@ -161,12 +161,12 @@ public final class Call implements Runnable {
      */
     private void runDialog() throws ErrorEvent, IOException {
         final Voice voice = getVoice();
-        voice.operate(server, dialog);
+        voice.call(server, dialog);
     }
 
     /**
      * Starts a transaction to send input.
-     * 
+     *
      * @return transaction to use for the input
      */
     public Recording record() {
@@ -177,7 +177,7 @@ public final class Call implements Runnable {
 
     /**
      * Sets the call into failure state and terminates the call process.
-     * 
+     *
      * @param error
      *            the error that has caused the failure
      */

@@ -35,7 +35,7 @@ import junit.framework.AssertionFailedError;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.client.GenericClient;
+
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -76,6 +76,7 @@ public class TestCall implements TextListener {
         Voice custom = new Voice();
         call.setVoice(custom);
         Assert.assertSame(custom, call.getVoice());
+        // 4. Remove voice
         call.setVoice(null);
         Assert.assertNotSame(custom, call.getVoice());
     }
@@ -83,11 +84,8 @@ public class TestCall implements TextListener {
     @Test
     public void testDialog() throws InterruptedException {
         final Voice voice = call.getVoice();
-        final GenericClient client = voice.getClient();
-        client.loadConfiguration("unittests/etc/jndi.properties");
-        client.setSecurityPolicy("unittests/etc/jvoicexml.policy");
-
         Assert.assertNull(voice.getSession());
+
         activated = false;
         call.run();
         Assert.assertTrue(activated);
