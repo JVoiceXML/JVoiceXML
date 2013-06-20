@@ -275,6 +275,9 @@ servlet.include=servlet-api.jar
     <antcall target="-copyDemoProject">
       <param name="demoproject" value="org.jvoicexml.demo.subdialogdemo"/>
     </antcall>
+      <antcall target="-copyDemoProject">
+        <param name="demoproject" value="org.jvoicexml.demo.textdemo"/>
+      </antcall>
     <antcall target="-copyDemoProject">
       <param name="demoproject" value="org.jvoicexml.demo.voicexmlcreationdemo"/>
     </antcall>
