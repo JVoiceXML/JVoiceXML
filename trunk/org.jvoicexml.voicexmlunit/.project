@@ -3,6 +3,10 @@
 	<name>org.jvoicexml.voicexmlunit</name>
 	<comment></comment>
 	<projects>
+		<project>org.jvoicexml.implementation.text</project>
+		<project>org.jvoicexml.jndi</project>
+		<project>org.jvoicexml.processor.srgs</project>
+		<project>org.jvoicexml.xml</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
