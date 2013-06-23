@@ -28,7 +28,6 @@ package org.jvoicexml.client.text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
@@ -256,18 +255,13 @@ public final class TextServer extends Thread {
                 callingId = TcpUriFactory.createUri(socketAddress);
                 server.bind(socketAddress);
             }
-        } catch (IOException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("error connecting", e);
-            }
-            return;
-        } catch (URISyntaxException e) {
+        } catch (IOException | URISyntaxException e) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("error connecting", e);
             }
             return;
         }
-
+        
         LOGGER.info("text server started at port '" + port + "'");
         fireStarted();
         started = true;
@@ -322,23 +316,20 @@ public final class TextServer extends Thread {
         if (client == null) {
             throw new IOException("no client connection");
         }
-        final InputStream in = client.getInputStream();
+        final TextMessageReader reader = 
+                new TextMessageReader(client.getInputStream());
         out = client.getOutputStream();
         // We have to do the release here, since ObjectInputStream blocks
         // until the server has sent something.
         connectionLock.release();
 
-        final NonBlockingObjectInputStream oin =
-            new NonBlockingObjectInputStream(in);
         try {
-            boolean firstAvailable = true;
-            while (isConnected() && !interrupted()) {
-                try {
-                    if (!TextMessage.isStreamAvailable(oin, firstAvailable)) {
-                        firstAvailable = false;
+            try {
+                while (isConnected() && !interrupted()) {
+                    final TextMessage message = reader.getNextMessage();
+                    if (message == null) {
                         continue;
                     }
-                    final TextMessage message = (TextMessage) oin.readObject();
                     LOGGER.info("read " + message);
                     final int code = message.getCode();
                     if (code == TextMessage.BYE) {
@@ -367,21 +358,17 @@ public final class TextServer extends Thread {
                             new TextMessage(TextMessage.ACK, seq);
                     if (isConnected()) {
                         send(ack);
-                    }
-                    else {
+                    } else {
                         LOGGER.warn("can not acknowledge due to disconnected");
                     }
-                } catch (IOException e) {
-                    if (isStarted()) {
-                        throw e;
-                    }
-                } catch (ClassNotFoundException e) {
-                    throw new IOException(
-                            "unable to instantiate the read object", e);
+                }
+            } catch (IOException e) {
+                if (isStarted()) {
+                    throw e;
                 }
             }
         } finally {
-            oin.close();
+            reader.close();
         }
         return false;
     }

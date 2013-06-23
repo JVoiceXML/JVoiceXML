@@ -110,7 +110,7 @@ public final class TestTextSenderThread
      * Test method for {@link org.jvoicexml.implementation.text.TextSenderThread#sendData(org.jvoicexml.SpeakableText)}.
      * @exception Exception test failed.
      */
-    @Test(timeout = 5000)
+    @Test//(timeout = 5000)
     public void testSendData() throws Exception {
         final String test1 = "test1";
         final SpeakableSsmlText speakable1 = new SpeakableSsmlText(test1);
