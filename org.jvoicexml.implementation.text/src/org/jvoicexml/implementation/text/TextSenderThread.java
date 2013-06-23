@@ -91,57 +91,27 @@ final class TextSenderThread extends Thread {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text sender thread started");
         }
-        boolean bye = false;
-        while (!bye) {
-            TextMessage message = null;
-            try {
-                if (socket.isConnected()) {
-                    synchronized (messages) {
-                        final PendingMessage pending = messages.take();
-                        message = pending.getMessage();
-                        if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("sending " + message);
-                        }
-                        final int seq = message.getSequenceNumber();
-                        // A bye message is not acknowledged.
-                        if (message.getCode() != TextMessage.BYE) {
-                            telephony.addPendingMessage(seq, pending);
-                        } else {
-                            bye = true;
-                        }
-                        final OutputStream outputStream =
-                            socket.getOutputStream();
-                        final ObjectOutputStream out =
-                            new ObjectOutputStream(outputStream);
-                        out.writeObject(message);
-                        out.flush();
-                        if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("... done sending output");
-                        }
+        try {
+            boolean sending = true;
+            while (sending && socket.isConnected() && !interrupted()) {
+                synchronized (messages) {
+                    final PendingMessage pending = messages.take();
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("sending " + pending);
                     }
-                } else {
-                    LOGGER.warn(
-                        "unable to send to client: socket disconnected");
-                    bye = true;
-                    telephony.fireHungup();
+                    if (sendMessage(pending)) {
+                        sending = false;
+                    }
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("... done sending output");
+                    }
                 }
-            } catch (IOException e) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error sending text message", e);
-                }
-                bye = true;
-                telephony.fireHungup();
-            } catch (InterruptedException e) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error sending text message", e);
-                }
-                bye = true;
-                telephony.fireHungup();
             }
-            if (!bye) {
-                bye = (message == null)
-                    || (message.getCode() == TextMessage.BYE);
+        } catch (InterruptedException | IOException e) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("error sending text message", e);
             }
+            telephony.fireHungup();
         }
         synchronized (lock) {
             lock.notifyAll();
@@ -149,6 +119,23 @@ final class TextSenderThread extends Thread {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text sender thread stopped");
         }
+    }
+
+    /**
+     * Sends a message directly to the client.
+     * @param pending the message to send
+     * @return <code>true</code>
+     * @throws IOException stream error
+     * @since 0.7.6
+     */
+    private boolean sendMessage(final PendingMessage pending) 
+            throws IOException {
+        boolean acknowledge = telephony.addPendingMessage(pending);
+        final OutputStream outputStream = socket.getOutputStream();
+        final ObjectOutputStream out =  new ObjectOutputStream(outputStream);
+        out.writeObject(pending.getMessage());
+        out.flush();
+        return acknowledge;
     }
 
     /**
@@ -219,8 +206,6 @@ final class TextSenderThread extends Thread {
      * @return <code>true</code> if there are messages to send.
      */
     public boolean isSending() {
-        synchronized (messages) {
-            return !messages.isEmpty();
-        }
+        return !messages.isEmpty();
     }
 }

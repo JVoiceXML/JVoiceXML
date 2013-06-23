@@ -83,4 +83,16 @@ class PendingMessage {
     public String toString() {
         return message.toString();
     }
+
+    /**
+     * @return sequence number to acknowledge
+     * @since 0.7.6
+     */
+    public int getAcknoledgeNumber() {
+        // A bye message is not acknowledged.
+        if (message.getCode() == TextMessage.BYE) {
+            return -1;
+        }
+        return message.getSequenceNumber();
+    }
 }

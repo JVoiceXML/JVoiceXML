@@ -138,29 +138,22 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
 
     /**
      * Adds the given sequence number to the list of pending messages.
-     * @param sequenceNumber the sequence number to add.
      * @param message the sent message
+     * @return <code>true</code> if the message is auto-acknowledged
      */
-    void addPendingMessage(final int sequenceNumber,
-            final PendingMessage message) {
+    boolean addPendingMessage(final PendingMessage message) {
+        final int sequenceNumber = message.getAcknoledgeNumber();
         if (sequenceNumber <= 0) {
-            return;
+            return true;
         }
         synchronized (pendingMessages) {
-            /*// wait for acknowledgement of pending messages
-            if (!pendingMessages.isEmpty()) {
-                try {
-                    pendingMessages.wait(MAX_TIMEOUT_ACK);
-                } catch (InterruptedException e) {
-                    LOGGER.warn("waiting for acknowledgement interrupted", e);
-                }
-            }*/
             final Integer object = new Integer(sequenceNumber);
             pendingMessages.put(object, message);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("added pending message " + sequenceNumber);
             }
         }
+        return false;
     }
 
     /**
@@ -171,7 +164,6 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     boolean removePendingMessage(final int sequenceNumber) {
         final boolean removed;
         synchronized (pendingMessages) {
-            //pendingMessages.notifyAll();
             final Integer object = new Integer(sequenceNumber);
             final PendingMessage pending = pendingMessages.remove(object);
             removed = pending != null;
@@ -182,6 +174,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
                 }
                 if (speakable != null) {
                     textOutput.checkEmptyQueue(speakable);
+                }
+                if (pendingMessages.isEmpty()) {
+                    pendingMessages.notifyAll();
                 }
             }
         }
@@ -467,15 +462,28 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             }
         }
         
+        // delay to acknowledge pending messages
         if (!pendingMessages.isEmpty()) {
-            LOGGER.warn("pending messages: " + pendingMessages.values());
+            try {
+                synchronized (pendingMessages) {
+                    pendingMessages.wait(MAX_TIMEOUT_ACK);
+                }
+            } catch (InterruptedException e) {
+                LOGGER.warn("waiting for acknowledgement interrupted", e);
+            }
+            if (!pendingMessages.isEmpty()) {
+                LOGGER.warn("pending messages: " + pendingMessages.values());
+            }
         }
 
         if (!sentHungup && sender.isAlive()) {
             sender.sendBye();
             try {
-                if (sender.isAlive()) {
+                if (sender.isSending()) {
                     sender.waitSenderTerminated();
+                }
+                else {
+                    sender.interrupt();
                 }
             } catch (InterruptedException e) {
                 if (LOGGER.isDebugEnabled()) {

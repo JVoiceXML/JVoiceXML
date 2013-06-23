@@ -27,12 +27,11 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.net.Socket;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.client.text.TextMessage;
+import org.jvoicexml.client.text.TextMessageReader;
 
 /**
  * Reads asynchronously some text input from the client.
@@ -100,17 +99,14 @@ final class TextReceiverThread extends Thread {
             started = true;
             notifyAll();
         }
-        boolean firstAvailable = true;
-        while (socket.isConnected() && !isInterrupted()) {
-            try {
-                final InputStream stream = socket.getInputStream();
-                if (!TextMessage.isStreamAvailable(stream, firstAvailable)) {
-                    firstAvailable = false;
+        try {
+            final TextMessageReader reader = 
+                    new TextMessageReader(socket.getInputStream());
+            while (socket.isConnected() && !isInterrupted()) {
+                final TextMessage message = reader.getNextMessage();
+                if (message == null) {
                     continue;
                 }
-                final ObjectInputStream in =
-                    new ObjectInputStream(stream);
-                final TextMessage message = (TextMessage) in.readObject();
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("read: " + message);
                 }
@@ -127,28 +123,22 @@ final class TextReceiverThread extends Thread {
                 if (code == TextMessage.BYE) {
                     break;
                 }
-            } catch (IOException | ClassNotFoundException  e) {
-                if (LOGGER.isDebugEnabled()) {
-                    if ((socket.isConnected() && !isInterrupted())) {
-                        LOGGER.debug("error reading text message", e);
-                    }
-                }
-                telephony.fireHungup();
-                synchronized (lock) {
-                    lock.notifyAll();
-                }
-                return;
             }
-        }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("text receiver thread stopped");
+        } catch (IOException e) {
+            if (LOGGER.isDebugEnabled()) {
+                if ((socket.isConnected() && !isInterrupted())) {
+                    LOGGER.debug("error reading text message", e);
+                }
+            }
+        } finally {
+            telephony.fireHungup();
         }
         telephony.recordStopped();
-        synchronized (lock) {
-            lock.notifyAll();
-        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text receiver thread stopped");
+        }
+        synchronized (lock) {
+            lock.notifyAll();
         }
     }
 
