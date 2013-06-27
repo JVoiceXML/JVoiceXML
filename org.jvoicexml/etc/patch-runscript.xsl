@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
   <!--
     - Platform configurations for the JVoiceXML VoiceXML interpreter.
-    - Copyright (C) 2011 JVoiceXML group
+    - Copyright (C) 2011-2013 JVoiceXML group
     - http://jvoicexml.sourceforge.net
     -
     - This library is free software; you can redistribute it and/or
@@ -18,7 +18,6 @@
     - License along with this library; if not, write to the Free Software
     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
   -->
-
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
   <xsl:template match="platforms">
@@ -61,8 +60,41 @@
     </project>
   </xsl:template>
   
-  <!-- Adapt the jvmarg values -->
+  <!-- create the ant call for the current platform -->
   <xsl:template match="platform">
+    <xsl:param name="action"/>
+    <xsl:param name="target"/>
+    <xsl:variable name="precount" select="count(subproject[@order = 'pre'])" />
+    <xsl:if test="$precount &gt; 0">
+      <echo>handling subprojects that <xsl:value-of select="@name"/> depends on</echo>
+      <xsl:apply-templates select="*[@order = 'pre']">
+        <xsl:with-param name="target"><xsl:value-of select="$target"/></xsl:with-param>
+        <xsl:with-param name="action"><xsl:value-of select="$action"/></xsl:with-param>
+      </xsl:apply-templates>
+      <echo>done handling handling subprojects that <xsl:value-of select="@name"/> depends on</echo>
+    </xsl:if>
+    <echo>
+      <xsl:value-of select="$action"/><xsl:value-of select="concat(' ', @name)"/>
+    </echo>
+    <ant target="{$target}"
+        inheritall="false" inheritrefs="false">
+       <xsl:attribute name="dir">
+         <xsl:value-of select="concat('../', @name)"></xsl:value-of>
+       </xsl:attribute>
+       <xsl:apply-templates select="*[name() != 'subproject']"/>
+    </ant>
+    <xsl:variable name="postcount" select="count(subproject[@order = 'post'])" />
+    <xsl:if test="$postcount &gt; 0">
+      <echo>handling dependent subprojects of <xsl:value-of select="@name"/></echo>
+      <xsl:apply-templates select="*[@order = 'post']">
+        <xsl:with-param name="target"><xsl:value-of select="$target"/></xsl:with-param>
+        <xsl:with-param name="action"><xsl:value-of select="$action"/></xsl:with-param>
+      </xsl:apply-templates>
+      <echo>done handling dependent subprojects of <xsl:value-of select="@name"/></echo>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="subproject">
     <xsl:param name="action"/>
     <xsl:param name="target"/>
     <echo>

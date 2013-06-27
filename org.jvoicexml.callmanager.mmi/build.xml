@@ -48,54 +48,20 @@ org.jvoicexml/personal-props/README.txt
         <mkdir dir="${dist}" />
     </target>
 
-    <target name="-cleanSocketCallmanager" if="jvxml.mmi.umundo">
-        <ant dir="../org.jvoicexml.callmanager.mmi.socket" target="clean"
-          inheritrefs="false" inheritall="false" />
-    </target>
-
-    <target name="-cleanUmundoCallmanager" if="jvxml.mmi.umundo">
-        <ant dir="../org.jvoicexml.callmanager.mmi.umundo" target="clean"
-          inheritrefs="false" inheritall="false" />
-    </target>
-    
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
         <ant dir="../org.jvoicexml.mmi.events" target="clean"
           inheritrefs="false"  inheritall="false"/>
         <delete dir="${build}" failonerror="false" />
         <delete file="${dist.jar}" failonerror="false"/>
-        <antcall target="-cleanSocketCallmanager"/>
-        <antcall target="-cleanUmundoCallmanager"/>
     </target>
 
-    <target name="-configurationSocketCallmanager" if="jvxml.mmi.socket">
-        <ant dir="../org.jvoicexml.callmanager.mmi.socket" target="configuration"
-          inheritrefs="false" inheritall="false"/>
-    </target>
-    
-    <target name="-configurationUmundoCallmanager" if="jvxml.mmi.umundo">
-        <ant dir="../org.jvoicexml.callmanager.mmi.umundo" target="configuration"
-          inheritrefs="false" inheritall="false"/>
-    </target>
-
-    <target name="configuration" depends="-setup,-configurationUmundoCallmanager,-configurationSocketCallmanager">
-    </target>
-
-    <target name="-compileSocketCallmanager" if="jvxml.mmi.socket">
-      <ant dir="../org.jvoicexml.callmanager.mmi.socket" target="jar"
-           inheritrefs="false" inheritall="false"/>
-    </target>
-    
-    <target name="-compileUmundoCallmanager" if="jvxml.mmi.umundo">
-        <ant dir="../org.jvoicexml.callmanager.mmi.umundo" target="jar"
-          inheritrefs="false" inheritall="false"/>
+    <target name="configuration" depends="-setup">
     </target>
 
     <target name="compile"
             depends="-init,-checkJavaVersion"
             description="Compile the sources">
-        <ant dir="../org.jvoicexml.mmi.events" target="jar"
-          inheritrefs="false" inheritall="false"/>
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
         <javac destdir="${build}" includeantruntime="false"
                optimize="${javac.optimize}"
@@ -106,8 +72,6 @@ org.jvoicexml/personal-props/README.txt
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
-        <antcall target="-compileSocketCallmanager"/>
-        <antcall target="-compileUmundoCallmanager"/>
     </target>
 
     <target name="jar"
@@ -153,7 +117,7 @@ org.jvoicexml/personal-props/README.txt
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2012<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2012-2013<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <tag name="todo" description="Stuff to complete" />
         <classpath>
