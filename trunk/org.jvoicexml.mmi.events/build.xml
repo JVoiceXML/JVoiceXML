@@ -68,6 +68,9 @@ Currently it is set to '${mmi.protoc}'
         <delete file="${dist.jar}" failonerror="false"/>
     </target>
 
+    <target name="configuration" depends="-setup">
+    </target>
+
     <target name="-up2date">
       <uptodate property="schemasChanged">
         <srcfiles dir="${basedir}">

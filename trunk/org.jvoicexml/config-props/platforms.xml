@@ -20,8 +20,12 @@
   <!-- platform name="org.jvoicexml.implementation.red5"/-->
   <!-- platform name="org.jvoicexml.callmanager.sip"/-->
   <!-- platform name="org.jvoicexml.callmanager.mmi">
-    <property name="jvxml.mmi.socket" value ="false" />
-    <property name="jvxml.mmi.umundo" value ="false" />
+    <subproject name="org.jvoicexml.mmi.events" order="pre" />
+    <!-- For this platform to work you will need at least one of the following subprojects -->
+    <!-- uncomment if MMI events should be handled over umundo -->
+    <!-- subproject name="org.jvoicexml.callmanager.mmi.umundo" order="post" /-->
+    <!-- uncomment if MMI events should be handled over sockets -->
+    <!-- subproject name="org.jvoicexml.callmanager.mmi.socket" order="post" /-->
   </platform-->
   <!-- platform name="org.jvoicexml.callmanager.text"/-->
   <!-- platform name="org.jvoicexml.implementation.text"/-->
