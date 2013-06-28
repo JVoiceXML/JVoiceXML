@@ -392,6 +392,10 @@ The core of JVoiceXML comprises the following sub-projects:
 \item[org.jvoicexml.processor.srgs] SRGS processor (Required)
 \item[org.jvoicexml.callmanager.mmi] Demo implementation for the W3C MMI
 architecture.
+\item[org.jvoicexml.callmanager.mmi.umundo] Event and transport layer
+based on umundo for \texttt{org.jvoicexml.callmanager.mmi}.
+\item[org.jvoicexml.callmanager.mmi.socket] Event and transport layer
+based on sockets for \texttt{org.jvoicexml.callmanager.mmi}.
 \item[org.jvoicexml.callmanager.sip] Demo implementation for SIP based access to
 JVoiceXML.
 \item[org.jvoicexml.callmanager.text] Demo implementation for text based access to
@@ -520,8 +524,6 @@ from their repository. The presence of a snapshot is marked in the file
 \texttt{doc/libraries.xhtml} e.g. with the comment \emph{(SVN snapshot from
 <date>)}.
 
-
-
 \subsubsection{Libraries Needed to Compile JVoiceXML}
 \label{sec:libr-need-comp}
 
@@ -622,7 +624,17 @@ An example to enable the JSAPI 1.0 platform is shown below:
   <!-- platform name="org.jvoicexml.implementation.mrcpv2"/-->
   <!-- platform name="org.jvoicexml.implementation.red5"/-->
   <!-- platform name="org.jvoicexml.callmanager.sip"/-->
-  <!-- platform name="org.jvoicexml.callmanager.mmi"/-->
+  <!-- platform name="org.jvoicexml.callmanager.mmi">
+    <subproject name="org.jvoicexml.mmi.events" order="pre" />
+    <!-- For this platform to work you will need at least one of the
+         following subprojects -->
+    <!-- uncomment if MMI events should be handled over umundo -->
+    <!-- subproject name="org.jvoicexml.callmanager.mmi.umundo"
+        order="post" /-->
+    <!-- uncomment if MMI events should be handled over sockets -->
+    <!-- subproject name="org.jvoicexml.callmanager.mmi.socket"
+        order="post" /-->
+  </platform-->
   <!-- platform name="org.jvoicexml.callmanager.text"/-->
   <!-- platform name="org.jvoicexml.implementation.text"/-->
 </platforms>
@@ -630,11 +642,23 @@ An example to enable the JSAPI 1.0 platform is shown below:
 
 This will enable the JSAPI 1.0 platform to work with Sphinx 4 and FreeTTS. 
 
-
 This setting is also used if you call ant for the main build file as described
 in the following section.
 Note that you need at least one implementation platform to use the voice
 browser.
+
+An implementation platform or callmanager is configured using the
+\lstinline{platform}-tag. The name of the platform given via the
+\lstinline{name} attribute must match the name of a project, i.e. the
+platform or callmanager to configure.
+
+A \lstinline{platform}-tag may contain nested ANT tags, e.g.
+\lstinline{property}, which are copied into the resulting ANT build file. Moreover, a \lstinline{platform}-tag
+may have nested \lstinline{subproject} tags. Its \lstinline{name} attribute
+is used to identify subprojects that have to be compiled before
+(\lstinline{order} set to \texttt{pre}) or after the platform project
+(\lstinline{order} set to \texttt{post}). Again the value given at the
+\lstinline{name} attribute must match the name of the project.
 
 Once you changed the settings call
 \begin{lstlisting}
