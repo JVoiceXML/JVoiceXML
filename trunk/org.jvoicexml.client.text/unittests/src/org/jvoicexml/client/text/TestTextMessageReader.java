@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +39,7 @@ import org.junit.Test;
 /**
  * Tests for TextMessageReader.
  * @author Raphael Groner
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.6
  */
 public class TestTextMessageReader {

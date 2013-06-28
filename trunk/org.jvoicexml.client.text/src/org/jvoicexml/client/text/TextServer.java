@@ -62,6 +62,11 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * be obtained via the {@link #getConnectionInformation()} method.
  * </p>
  *
+ * <p>
+ * Not, that one instance of a {@link TextServer} can handle only one
+ * session.
+ * </p>
+ *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
@@ -476,7 +481,12 @@ public final class TextServer extends Thread {
         }
         fireDisconnected();
     }
-    
+
+    /**
+     * Checks if the server is connected to a client.
+     * @return <code>true</code> if a client is conneected
+     * @since 0.7.6
+     */
     public boolean isConnected() {
         return (client != null) && client.isConnected();
     }
