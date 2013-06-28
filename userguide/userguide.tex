@@ -271,7 +271,7 @@ from the \lstinline{$JVOICEXML_HOME/config} folder that you do not need. You
 can simply create a subfolder \lstinline{unused} in that directory and move the
 unused configuration files to this folder. The configuration files follow the
 naming convention \lstinline{<platform>-implementation.xml}. The following
-section gives a first insight into the overall configuration concept.
+section gives a first insight into the available platforms.
 
 \subsection{JSAPI 1.0 implementation platform}
 
@@ -313,9 +313,6 @@ supported.
 This is an implementation of a draft specification of JSR 113 developed under
 the Java Community Process (JCP) and is made available for testing and evaluation
 purposes only. The code is not compatible with any specification of the JCP.
-
-You will need to install the base layer for JSAPI 2 and in addition one
-speech recognizer and speech synthesizer implementation.
 
 \subsection{JTAPI implementation platform}
 
@@ -920,7 +917,8 @@ section~\ref{sec:starting-the-client}.
 The text platform sends the user output to the client and receives user input as
 pure text strings. Therefore, we need to sligtly modify our class
 \lstinline[language=Java]{Demo1} to implement
-\lstinline[language=Java]{org.jvoicexml.client.text.TextListener}. 
+\lstinline[language=Java]{org.jvoicexml.client.text.TextListener} from
+the Java archive \lstinline{org.jvoicexml.client.text}. 
 
 \begin{lstlisting}[language=Java]
 ...
@@ -939,10 +937,6 @@ public class Demo1 implements TextListener
         ...
     }
 
-    public void outputText(final String text) {
-        ...
-    }
-
     public void outputSsml(final SsmlDocument document) {
         ...
     }
@@ -953,8 +947,7 @@ public class Demo1 implements TextListener
 ...
 \end{lstlisting}
 
-You will receive the system output in the methods
-\lstinline[language=Java]{outputText(String)} and
+You will receive the system output in the method
 \lstinline[language=Java]{outputSsml(SsmlDocument}. Note, that you will also
 need to include the xml library \texttt{org.jvoicexml.xml.jar}. This is, where
 the \lstinline[language=Java]{SsmlDocument} is defined.
