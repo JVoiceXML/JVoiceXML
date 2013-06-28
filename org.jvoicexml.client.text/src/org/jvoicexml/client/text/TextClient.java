@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.text/src/org/jvoicexml/client/text/TextServer.java $
- * Version: $LastChangedRevision: 2846 $
- * Date:    $Date: 2011-10-17 09:29:03 +0200 (Mo, 17 Okt 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -47,7 +47,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * A client for the {@link org.jvoicexml.callmanager.text.TextCallManager}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.5
  */
 public final class TextClient extends Thread {

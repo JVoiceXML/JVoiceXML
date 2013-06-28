@@ -1,7 +1,7 @@
-<project name="Text IP - 3rd party libraries" basedir=".">
+<project name="org.jvoicexml.client.text - 3rd party libraries" basedir=".">
     <description>
 This file contains the 3rd party libary definitions, used by the text
-implementation platform.
+client of the text implementation platform.
     </description>
     <property name="jvxml.core.dir" value="../org.jvoicexml"/>
     <import file="${jvxml.core.dir}/3rdparty-libs.xml" />
@@ -14,13 +14,7 @@ implementation platform.
         <path id="jvxml.core.lib">
           <path location="${jvxml.core.dir}/classes"/>
           <path location="../org.jvoicexml.client/classes"/>
-          <path location="../org.jvoicexml.client.text/classes"/>
           <path location="../org.jvoicexml.xml/classes"/>
-        </path>
-
-        <!-- jvxml srgs processor library -->
-        <path id="jvxml.processor.srgs.lib">
-          <path location="../org.jvoicexml.processor.srgs/classes"/>
         </path>
     </target>
 </project>

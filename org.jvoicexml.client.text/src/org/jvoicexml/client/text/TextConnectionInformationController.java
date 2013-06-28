@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -34,7 +34,7 @@ import org.jvoicexml.client.ConnectionInformationController;
 /**
  * A {@link ConnectionInformationController} for the text platform.
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.6
  */
 class TextConnectionInformationController
