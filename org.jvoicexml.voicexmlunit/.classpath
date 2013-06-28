@@ -10,5 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.jndi"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client"/>
 	<classpathentry kind="lib" path="unittests/config"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client.text"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>

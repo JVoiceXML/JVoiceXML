@@ -15,6 +15,7 @@ callmanager.
           <path location="${jvxml.core.dir}/classes"/>
           <path location="../org.jvoicexml.xml/classes"/>
           <path location="../org.jvoicexml.client/classes"/>
+          <path location="../org.jvoicexml.client.text/classes"/>
           <path location="../org.jvoicexml.implementation.text/classes"/>
           </path>
     </target>
