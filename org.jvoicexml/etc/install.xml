@@ -334,7 +334,7 @@ You will need a MRCPv2 server in addition to use this implementation platform.
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
         <include name="org.jvoicexml.implementation.text.jar" />
-        <include name="jvxml-client-text.jar" />
+        <include name="org.jvoicexml.client.text.jar" />
       </fileset>
     </pack>
     <pack name="MMI call manager" required="no" preselected="no">

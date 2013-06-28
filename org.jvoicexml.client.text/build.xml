@@ -1,6 +1,6 @@
-<project name="org.jvoicexml.implementation.text" default="jar" basedir=".">
+<project name="org.jvoicexml.client.text" default="jar" basedir=".">
     <description>
-This file builds the text implemenation platform for JVoiceXml.
+This file builds the text client for the text implemenation platform for JVoiceXml.
 
 To override the current settings follow the instructions given in
 org.jvoicexml/personal-props/README.txt
@@ -15,9 +15,9 @@ org.jvoicexml/personal-props/README.txt
 
     <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
-        <property name="component" value="org.jvoicexml.implementation.text"/>
+        <property name="component" value="org.jvoicexml.client.text"/>
         <property name="component.path"
-           value="org/jvoicexml/implementation/text"/>
+          value="org/jvoicexml/client/text"/>
 
         <!-- directory structure -->
         <property name="src" value="src" />
@@ -38,9 +38,7 @@ org.jvoicexml/personal-props/README.txt
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
             <path refid="jvxml.core.lib" />
-            <path refid="jvxml.processor.srgs.lib" />
             <fileset refid="log4j.lib" />
-            <fileset refid="rhino.lib"/>
         </path>
     </target>
 
@@ -57,7 +55,6 @@ org.jvoicexml/personal-props/README.txt
     </target>
 
     <target name="configuration" depends="-setup">
-      <copy todir="${config}" file="${etc}/text-implementation.xml"/>
     </target>
 
     <target name="compile"
@@ -81,8 +78,7 @@ org.jvoicexml/personal-props/README.txt
         <!-- text implementation jar file -->
         <jar jarfile="${dist.jar}" compress="false">
             <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/text/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
+                <include name="${component.path}/**/*.class" />
             </fileset>
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
@@ -90,11 +86,14 @@ org.jvoicexml/personal-props/README.txt
                     <attribute name="Implementation-Vendor"
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
-                               value="JVoiceXML text base layer" />
+                        value="JVoiceXML client files for text based access" />
                     <attribute name="Implementation-Version"
                         value="${version}" />
                 </section>
             </manifest>
+            <metainf dir="etc">
+                <include name="services/*"/>
+            </metainf>
         </jar>
     </target>
 
@@ -119,7 +118,7 @@ org.jvoicexml/personal-props/README.txt
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2013<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2005-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <tag name="todo" description="Stuff to complete" />
         <classpath>
@@ -139,6 +138,9 @@ org.jvoicexml/personal-props/README.txt
 
         <group title="Text based implementation platform">
             <package name="org.jvoicexml.implementation.text*" />
+        </group>
+        <group title="Text based client">
+            <package name="org.jvoicexml.client.text*" />
         </group>
         </javadoc>
     </target>
@@ -175,6 +177,7 @@ org.jvoicexml/personal-props/README.txt
       <property name="distFolder" value="${dist}/${jvxml.version}" />
       <copy tofile="${distFolder}/config/text-implementation.xml"
         file="${etc}/text-implementation-dist.xml"/>
+      <copy todir="${distFolder}/lib" file="${dist.client.text.jar}"/>
       <copy todir="${distFolder}/lib" file="${dist.jar}"/>
     </target>
 </project>

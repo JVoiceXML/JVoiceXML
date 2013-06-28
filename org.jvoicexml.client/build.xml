@@ -49,7 +49,6 @@ org.jvoicexml/personal-props/README.txt
     </target>
 
   <target name="configuration" depends="-setup">
-    <copy todir="${config}" file="${etc}/marc-implementation.xml"/>
   </target>
 
     <target name="clean" depends="-setup"
