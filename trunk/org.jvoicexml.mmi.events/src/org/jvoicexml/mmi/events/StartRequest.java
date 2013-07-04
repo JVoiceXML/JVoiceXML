@@ -49,7 +49,7 @@ public final class StartRequest extends LifeCycleRequest
     private ContentURLType contentURL;
 
     /** Arbitrary content. */
-    private String content;
+    private AnyComplexType content;
 
     /**
      * Gets the value of the contentURL property.
@@ -112,7 +112,7 @@ public final class StartRequest extends LifeCycleRequest
      * 
      */
     @XmlElement(name = "ContentURL")
-    public String getContent() {
+    public AnyComplexType getContent() {
         return content;
     }
 
@@ -122,7 +122,7 @@ public final class StartRequest extends LifeCycleRequest
      * @param value the content that evaluates to a string
      * 
      */
-    public void setContent(final String value) {
+    public void setContent(final AnyComplexType value) {
         content = value;
     }
 }
