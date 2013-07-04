@@ -21,6 +21,7 @@
   <!-- platform name="org.jvoicexml.callmanager.sip"/-->
   <!-- platform name="org.jvoicexml.callmanager.mmi">
     <subproject name="org.jvoicexml.mmi.events" order="pre" />
+    <subproject name="org.jvoicexml.callmanager.servlet" order="pre" />
     <!-- For this platform to work you will need at least one of the following subprojects -->
     <!-- uncomment if MMI events should be handled over umundo -->
     <!-- subproject name="org.jvoicexml.callmanager.mmi.umundo" order="post" /-->

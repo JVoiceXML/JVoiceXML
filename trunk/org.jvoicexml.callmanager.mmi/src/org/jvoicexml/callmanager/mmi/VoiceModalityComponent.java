@@ -29,6 +29,7 @@ package org.jvoicexml.callmanager.mmi;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -36,6 +37,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.CancelRequest;
 import org.jvoicexml.mmi.events.CancelResponse;
 import org.jvoicexml.mmi.events.ClearContextRequest;
@@ -289,6 +291,30 @@ public final class VoiceModalityComponent
     }
 
     /**
+     * Retrieves a URI of the given prepare request.
+     * @param context current MMI context
+     * @param request the start request
+     * @return URI where to start the VoiceXML application
+     * @throws URISyntaxException
+     *         error creating the URI
+     */
+    private URI getUri(final MMIContext context, final PrepareRequest request)
+            throws URISyntaxException {
+        final ContentURLType contentUrlType = request.getContentURL();
+        if (contentUrlType != null) {
+            final String href = contentUrlType.getHref();
+            if (href != null) {
+                return new URI(href);
+            }
+        }
+        final AnyComplexType content = request.getContent();
+        if (content != null) {
+            return createTemporaryVoiceXmlDocumentUri(context, content);
+        }
+        return context.getContentURL();
+    }
+    
+    /**
      * Processes a start request.
      * @param channel the channel that was used to send the request
      * @param request the received event
@@ -317,21 +343,15 @@ public final class VoiceModalityComponent
         final String source = request.getSource();
         context.setTarget(source);
         context.setChannel(channel);
-        final ContentURLType contentUrlType = request.getContentURL();
-        URI uri = context.getContentURL();
-        if (contentUrlType != null) {
-            final String href = contentUrlType.getHref();
-            try {
-                if (href != null) {
-                    uri = new URI(href);
-                }
-            } catch (URISyntaxException e) {
-                LOGGER.error(e.getMessage(), e);
-                statusInfo = e.getMessage();
-            }
+        URI uri = null;
+        try {
+            uri = getUri(context, request);
+        } catch (URISyntaxException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
         }
         if (uri == null) {
-            statusInfo = "no URI given. Unable to start";
+            statusInfo = "Neither URI nor content given. Unable to start";
         }
         try {
             if (statusInfo == null) {
@@ -372,6 +392,55 @@ public final class VoiceModalityComponent
             LOGGER.error(e.getMessage(), e);
             removeContext(contextId);
         }
+    }
+
+    /**
+     * Retrieves a URI of the given start request.
+     * @param context current MMI context
+     * @param request the start request
+     * @return URI where to start the VoiceXML application
+     * @throws URISyntaxException
+     *         error creating the URI
+     */
+    private URI getUri(final MMIContext context, final StartRequest request)
+            throws URISyntaxException {
+        final ContentURLType contentUrlType = request.getContentURL();
+        if (contentUrlType != null) {
+            final String href = contentUrlType.getHref();
+            if (href != null) {
+                return new URI(href);
+            }
+        }
+        final AnyComplexType content = request.getContent();
+        if (content != null) {
+            return createTemporaryVoiceXmlDocumentUri(context, content);
+        }
+        return context.getContentURL();
+    }
+
+    /**
+     * Creates a URI for the markup given in the content.
+     * @param context current MMI context
+     * @param content the content from the request
+     * @return URI to point at a servlet generating a VoiceXML document
+     * for the VoiceXML snippet given in the content 
+     * @throws URISyntaxException
+     *         error creating a URI
+     */
+    private URI createTemporaryVoiceXmlDocumentUri(final MMIContext context,
+            final AnyComplexType content) throws URISyntaxException {
+        final List<Object> list = content.getContent();
+        final StringBuilder str = new StringBuilder();
+        for (Object o : list) {
+            str.append(o);
+        }
+        final String contentString = str.toString();
+        if (contentString.startsWith("<")) {
+            throw new URISyntaxException(contentString,
+                    "markup is currently not supported");
+        }
+        return new URI("http://localhost:8080/JvxmlMmi/VoiceXmlSnippet?prompt="
+                + contentString);
     }
 
     /**
