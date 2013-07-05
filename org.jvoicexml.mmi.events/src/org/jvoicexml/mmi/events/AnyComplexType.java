@@ -100,5 +100,4 @@ public final class AnyComplexType implements Serializable {
         }
         return this.content;
     }
-
 }

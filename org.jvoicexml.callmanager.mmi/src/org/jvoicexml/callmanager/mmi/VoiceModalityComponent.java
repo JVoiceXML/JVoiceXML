@@ -27,8 +27,10 @@
 package org.jvoicexml.callmanager.mmi;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +59,8 @@ import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.mmi.events.StartResponse;
 import org.jvoicexml.mmi.events.StatusRequest;
 import org.jvoicexml.mmi.events.StatusType;
+import org.jvoicexml.xml.vxml.Field;
+import org.jvoicexml.xml.vxml.Prompt;
 
 
 /**
@@ -70,6 +74,10 @@ public final class VoiceModalityComponent
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(VoiceModalityComponent.class);
+
+    /** Encoding that should be used to encode/decode URLs. */
+    private static String encoding =
+        System.getProperty("jvoicexml.xml.encoding", "UTF-8");
 
     /** Adapter for the event and transport layer. */
     private ETLProtocolAdapter adapter;
@@ -243,16 +251,14 @@ public final class VoiceModalityComponent
             statusInfo = e.getMessage();
         }
         if (statusInfo == null) {
-            final ContentURLType contentUrlType = request.getContentURL();
-            if (contentUrlType != null) {
-                final String href = contentUrlType.getHref();
-                try {
-                    context.setContentURL(href);
-                    LOGGER.info("preparing URI '" + href + "'");
-                } catch (URISyntaxException e) {
-                    LOGGER.error(e.getMessage(), e);
-                    statusInfo = e.getMessage();
-                }
+            URI uri = null;
+            try {
+                uri = getUri(context, request);
+                context.setContentURL(uri);
+                LOGGER.info("preparing URI '" + uri + "'");
+            } catch (URISyntaxException | MMIMessageException e) {
+                LOGGER.error(e.getMessage(), e);
+                statusInfo = e.getMessage();
             }
         }
         try {
@@ -297,9 +303,11 @@ public final class VoiceModalityComponent
      * @return URI where to start the VoiceXML application
      * @throws URISyntaxException
      *         error creating the URI
+     * @throws MMIMessageException
+     *         error in the MMI message
      */
     private URI getUri(final MMIContext context, final PrepareRequest request)
-            throws URISyntaxException {
+            throws URISyntaxException, MMIMessageException {
         final ContentURLType contentUrlType = request.getContentURL();
         if (contentUrlType != null) {
             final String href = contentUrlType.getHref();
@@ -346,12 +354,14 @@ public final class VoiceModalityComponent
         URI uri = null;
         try {
             uri = getUri(context, request);
-        } catch (URISyntaxException e) {
+        } catch (URISyntaxException | MMIMessageException e) {
             LOGGER.error(e.getMessage(), e);
             statusInfo = e.getMessage();
         }
         if (uri == null) {
             statusInfo = "Neither URI nor content given. Unable to start";
+        } else {
+            context.setContentURL(uri);
         }
         try {
             if (statusInfo == null) {
@@ -401,9 +411,11 @@ public final class VoiceModalityComponent
      * @return URI where to start the VoiceXML application
      * @throws URISyntaxException
      *         error creating the URI
+     * @throws MMIMessageException
+     *         error in the MMI message
      */
     private URI getUri(final MMIContext context, final StartRequest request)
-            throws URISyntaxException {
+            throws URISyntaxException, MMIMessageException {
         final ContentURLType contentUrlType = request.getContentURL();
         if (contentUrlType != null) {
             final String href = contentUrlType.getHref();
@@ -426,21 +438,60 @@ public final class VoiceModalityComponent
      * for the VoiceXML snippet given in the content 
      * @throws URISyntaxException
      *         error creating a URI
+     * @throws MMIMessageException
+     *         error in the MMI message
      */
     private URI createTemporaryVoiceXmlDocumentUri(final MMIContext context,
-            final AnyComplexType content) throws URISyntaxException {
+            final AnyComplexType content)
+                    throws URISyntaxException, MMIMessageException {
         final List<Object> list = content.getContent();
+        if (list.isEmpty()) {
+            return null;
+        }
+        Prompt prompt = null;
+        Field field = null;
         final StringBuilder str = new StringBuilder();
         for (Object o : list) {
-            str.append(o);
+            if (o instanceof Prompt) {
+                prompt = (Prompt) o;
+            } else if (o instanceof Field) {
+                field = (Field) o;
+            } else {
+                str.append(o);
+            }
+        }
+        if ((field != null) && (prompt != null)) {
+            throw new MMIMessageException(
+                    "Only one of <field> or <prompt> may be specified");
         }
         final String contentString = str.toString();
-        if (contentString.startsWith("<")) {
-            throw new URISyntaxException(contentString,
-                    "markup is currently not supported");
+        String trimmedContentString = contentString.trim();
+        if ((field == null) && (prompt == null)
+                && trimmedContentString.isEmpty()) {
+            throw new MMIMessageException("invalid markup specified: '"
+                + trimmedContentString + "'");
         }
-        return new URI("http://localhost:8080/JvxmlMmi/VoiceXmlSnippet?prompt="
-                + contentString);
+        if (prompt != null) {
+            trimmedContentString = prompt.toString();
+        } else if (field != null) {
+            trimmedContentString = field.toString();
+        }
+        String encodedContentString;
+        try {
+            encodedContentString = URLEncoder.encode(trimmedContentString,
+                    encoding);
+            if (field == null) {
+                return new URI(
+                    "http://localhost:8080/JvxmlMmi/VoiceXmlSnippet?prompt="
+                            + encodedContentString);
+            } else {
+                return new URI(
+                        "http://localhost:8080/JvxmlMmi/VoiceXmlSnippet?field="
+                                + encodedContentString);
+            }
+        } catch (UnsupportedEncodingException e) {
+            throw new URISyntaxException(contentString, e.getMessage());
+        }
     }
 
     /**
