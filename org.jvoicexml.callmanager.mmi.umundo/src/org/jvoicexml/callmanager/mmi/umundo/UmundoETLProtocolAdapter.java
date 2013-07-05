@@ -68,7 +68,7 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
     /** The subscriber to MMI events. */
     private TypedSubscriber subscriber;
     /** The receiver that effectively receives the event objects. */
-    private final MmiReceiver receiver;
+    private MmiReceiver receiver;
     /** The publisher to send MMI events. */
     private TypedPublisher publisher;
     /** The registry for protobuf extensions. */
@@ -84,7 +84,6 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
     public UmundoETLProtocolAdapter() {
         channel = "mmi:jvoicexml";
         sourceUrl = "umundo://mmi/jvoicexml";
-        receiver = new MmiReceiver(sourceUrl);
     }
 
     /**
@@ -108,6 +107,8 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void start() throws IOException {
+        receiver = new MmiReceiver(sourceUrl);
+
         node = new Node();
         subscriber = new TypedSubscriber(channel, receiver);
         node.addSubscriber(subscriber);
