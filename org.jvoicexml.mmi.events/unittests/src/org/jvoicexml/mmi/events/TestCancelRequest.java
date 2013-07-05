@@ -17,7 +17,7 @@ public class TestCancelRequest {
         request.setSource("source1");
         request.setTarget("target1");
         request.setContext("context1");
-        List data = new ArrayList();
+        List<Object> data = new ArrayList<Object>();
         final Bar bar = new Bar();
         bar.setValue("hurz");
         final Foo foo = new Foo();
@@ -28,7 +28,8 @@ public class TestCancelRequest {
         foo.setValue("lamm");
         data.add(foo);
         request.setData(any);
-        final JAXBContext ctx = JAXBContext.newInstance(Mmi.class, Foo.class, Bar.class);
+        final JAXBContext ctx = JAXBContext.newInstance(Mmi.class, Foo.class,
+                Bar.class);
         final Marshaller marshaller = ctx.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         marshaller.marshal(request, System.out);

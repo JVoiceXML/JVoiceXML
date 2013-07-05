@@ -1,31 +1,119 @@
 package org.jvoicexml.callmanager.mmi.servlet;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * A servlet that creates VoiceXML documents from snippets.
  */
 @WebServlet(description = "creation of VoiceXML documents from snippets", urlPatterns = { "/VoiceXmlSnippet" })
 public class VoiceXmlSnippet extends HttpServlet {
-
     /** The serial version UID. */
     private static final long serialVersionUID = 3445970029411929471L;
 
+    /** The document builder. */
+    private DocumentBuilder builder;
+
+    private Templates template;
+    
+    @Override
+    public void init() throws ServletException {
+        super.init();
+
+        final DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+
+        // Configure the factory to ignore comments
+        factory.setIgnoringComments(true);
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new ServletException(e.getMessage(), e);
+        }
+        TransformerFactory transFact = TransformerFactory.newInstance( );
+        String curName = null;
+        try {
+            curName = "/VoiceXmlTemplate.xsl";
+            URL xsltURL = getServletContext( ).getResource(curName);
+            String xsltSystemID = xsltURL.toExternalForm( );
+            template = transFact.newTemplates(
+                    new StreamSource(xsltSystemID));
+
+        } catch (TransformerConfigurationException tce) {
+            log("Unable to compile stylesheet", tce);
+            throw new UnavailableException("Unable to compile stylesheet");
+        } catch (MalformedURLException mue) {
+            log("Unable to locate XSLT file: " + curName);
+            throw new UnavailableException(
+                    "Unable to locate XSLT file: " + curName);
+        }    }
+
+    private VoiceXmlDocument createDocument(final String xml)
+            throws SAXException, IOException, TransformerException,
+                ParserConfigurationException {
+        final Reader reader = new StringReader(xml);
+        final InputSource source = new InputSource(reader);
+        Document document = builder.parse(source);
+        Transformer transformer = template.newTransformer();
+        final Source domSource = new DOMSource(document);
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final Result result = new StreamResult(out); 
+        transformer.transform(domSource, result);
+        final InputStream in = new ByteArrayInputStream(out.toByteArray());
+        final InputSource transformedSource = new InputSource(in);
+        return new VoiceXmlDocument(transformedSource);
+    }
+
+    /**
+     * Creates a VoiceXML for the given prompt.
+     * @param prompt the text for the prompt
+     * @return created VoiceXML document
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     * @throws TransformerException
+     */
     private VoiceXmlDocument createDocumentWithPrompt(final String prompt)
-            throws ParserConfigurationException {
+            throws ParserConfigurationException, SAXException, IOException, TransformerException {
+        if (prompt.startsWith("<")) {
+            return createDocument(prompt);
+        }
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
@@ -34,16 +122,8 @@ public class VoiceXmlSnippet extends HttpServlet {
         return document;
     }
 
-    private VoiceXmlDocument createDocumentWithField(final String field)
-        throws ParserConfigurationException {
-        final VoiceXmlDocument document = new VoiceXmlDocument();
-        
-        return document;
-    }
-
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     *      response)
+     * {@inheritDoc}
      */
     @Override
     protected void doGet(final HttpServletRequest request,
@@ -57,10 +137,10 @@ public class VoiceXmlSnippet extends HttpServlet {
             } else {
                 final String field = request.getParameter("field");
                 if (field != null) {
-                    document = createDocumentWithField(field);
+                    document = createDocument(field);
                 }
             }
-        } catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException | SAXException | TransformerException e) {
             throw new IOException(e.getMessage(), e);
         }
         if (document == null) {
@@ -73,5 +153,4 @@ public class VoiceXmlSnippet extends HttpServlet {
         final ServletOutputStream out = response.getOutputStream();
         out.print(xml);
     }
-
 }
