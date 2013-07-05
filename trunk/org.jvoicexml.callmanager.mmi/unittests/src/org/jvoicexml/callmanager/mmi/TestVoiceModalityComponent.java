@@ -27,6 +27,7 @@ package org.jvoicexml.callmanager.mmi;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,8 +36,14 @@ import org.jvoicexml.callmanager.mmi.mock.MockETLProtocolAdapter;
 import org.jvoicexml.client.ConnectionInformationFactory;
 import org.jvoicexml.client.JVoiceXmlConnectionInformationFactory;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.xml.vxml.Block;
+import org.jvoicexml.xml.vxml.Form;
+import org.jvoicexml.xml.vxml.Prompt;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Test cases for {@link VoiceModalityComponent}.
@@ -95,4 +102,45 @@ public final class TestVoiceModalityComponent {
         mc.receivedEvent(event);
     }
 
+    /**
+     * Test method for {@link org.jvoicexml.callmanager.mmi.VoiceModalityComponent#receivedEvent(org.jvoicexml.mmi.events.xml.MMIEvent)}.
+     * @throws Exception test failed
+     */
+    @Test
+    public void testReceivedEventStartRequestContent() throws Exception {
+        final VoiceModalityComponent mc = cm.getVoiceModalityComponent();
+        final StartRequest request = new StartRequest();
+        request.setContext("http://nowhere");
+        request.setRequestId("4242");
+        final AnyComplexType any = new AnyComplexType();
+        any.getContent().add("this is a test");
+        request.setContent(any);
+        final DecoratedMMIEvent event = new DecoratedMMIEvent(this, request);
+        mc.receivedEvent(event);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.callmanager.mmi.VoiceModalityComponent#receivedEvent(org.jvoicexml.mmi.events.xml.MMIEvent)}.
+     * @throws Exception test failed
+     */
+    @Test
+    public void testReceivedEventStartRequestContentPrompt() throws Exception {
+        final VoiceModalityComponent mc = cm.getVoiceModalityComponent();
+        final StartRequest request = new StartRequest();
+        request.setContext("http://nowhere");
+        request.setRequestId("4242");
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Block block = form.appendChild(Block.class);
+        final Prompt prompt = block.appendChild(Prompt.class);
+        prompt.setXmlLang(Locale.GERMAN);
+        prompt.addText("Das ist ein Test");
+        final AnyComplexType any = new AnyComplexType();
+        any.getContent().add(prompt);
+        request.setContent(any);
+        final DecoratedMMIEvent event = new DecoratedMMIEvent(this, request);
+        mc.receivedEvent(event);
+    }
+    
 }
