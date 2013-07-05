@@ -26,7 +26,29 @@
 
 package org.jvoicexml.callmanager.mmi.umundo;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.net.URL;
 import java.util.Collection;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
@@ -38,8 +60,14 @@ import org.jvoicexml.mmi.events.NewContextRequest;
 import org.jvoicexml.mmi.events.PrepareRequest;
 import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents;
+import org.jvoicexml.xml.vxml.Form;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
 import org.umundo.core.Message;
 import org.umundo.s11n.ITypedReceiver;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Receiver for MMI events over umundo.
@@ -59,15 +87,45 @@ public final class MmiReceiver implements ITypedReceiver {
     /** The used protocol adapter. */
     private final String sourceUrl;
 
+    /** The document builder. */
+    private DocumentBuilder builder;
+
+    /** The XSL template. */
+    private Templates template;
+
     /**
      * Constructs a new object.
      *
      * @param source
      *            the source URL of this endpoint
+     * @exception IOException
+     *            error creating the receiver
      */
-    public MmiReceiver(final String source) {
+    public MmiReceiver(final String source) throws IOException {
         listeners = new java.util.ArrayList<MMIEventListener>();
         sourceUrl = source;
+
+        final DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+
+        // Configure the factory to ignore comments
+        factory.setIgnoringComments(true);
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new IOException(e.getMessage(), e);
+        }
+        TransformerFactory transFact = TransformerFactory.newInstance();
+        try {
+            final URL xsltURL = UmundoETLProtocolAdapter.class.getResource(
+                    "VoiceXmlTemplate.xsl");
+            final String xsltSystemID = xsltURL.toExternalForm();
+            template = transFact.newTemplates(
+                    new StreamSource(xsltSystemID));
+        } catch (TransformerConfigurationException tce) {
+            throw new IOException("Unable to compile stylesheet", tce);
+        }
     }
 
     /**
@@ -84,7 +142,14 @@ public final class MmiReceiver implements ITypedReceiver {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("received '" + object + "'");
         }
-        final LifeCycleEvent event = convertToLifeCycleEvent(object);
+        final LifeCycleEvent event;
+        try {
+            event = convertToLifeCycleEvent(object);
+        } catch (SAXException | IOException | TransformerException
+                | ParserConfigurationException e) {
+            LOGGER.error(e.getMessage(), e);
+            return;
+        }
         if (event == null) {
             return;
         }
@@ -106,9 +171,13 @@ public final class MmiReceiver implements ITypedReceiver {
      * @return the converted lifecycle event, <code>null</code> if the
      * object could not be converted or is not addressed to this modality
      * component
+     * @throws ParserConfigurationException 
+     * @throws TransformerException 
+     * @throws IOException 
+     * @throws SAXException 
      */
     private LifeCycleEvent convertToLifeCycleEvent(
-            final Object object) {
+            final Object object) throws SAXException, IOException, TransformerException, ParserConfigurationException {
         if (!(object instanceof LifeCycleEvents.LifeCycleEvent)) {
             return null;
         }
@@ -133,7 +202,8 @@ public final class MmiReceiver implements ITypedReceiver {
             final String content = decodedPrepareRequest.getContent();
             if ((content != null) && !content.isEmpty()) {
                 final AnyComplexType any = new AnyComplexType();
-                any.getContent().add(content);
+                final Object convertedContent = convertContent(content);
+                any.getContent().add(convertedContent);
                 request.setContent(any);
             }
             event = request;
@@ -154,7 +224,8 @@ public final class MmiReceiver implements ITypedReceiver {
             final String content = decodedStartRequest.getContent();
             if ((content != null) && !content.isEmpty()) {
                 final AnyComplexType any = new AnyComplexType();
-                any.getContent().add(content);
+                final Object convertedContent = convertContent(content);
+                any.getContent().add(convertedContent);
                 request.setContent(any);
             }
             event = request;
@@ -202,6 +273,40 @@ public final class MmiReceiver implements ITypedReceiver {
                         .LifeCycleRequest.request);
         request.setContext(decodedLifeCycleRequest.getContext());
         return decodedLifeCycleRequest;
+    }
+
+    /**
+     * Creates a VoiceXML snippet that can be pasted into the content.
+     * @param xml the XML snippet
+     * @return create VoiceXML document
+     * @throws SAXException
+     * @throws IOException
+     * @throws TransformerException
+     * @throws ParserConfigurationException
+     */
+    private Object convertContent(final String xml)
+            throws SAXException, IOException, TransformerException,
+                ParserConfigurationException {
+        if (xml.startsWith("<")) {
+            final Reader reader = new StringReader(xml);
+            final InputSource source = new InputSource(reader);
+            Document document = builder.parse(source);
+            Transformer transformer = template.newTransformer();
+            final Source domSource = new DOMSource(document);
+            final ByteArrayOutputStream out = new ByteArrayOutputStream();
+            final Result result = new StreamResult(out); 
+            transformer.transform(domSource, result);
+            final InputStream in = new ByteArrayInputStream(out.toByteArray());
+            final InputSource transformedSource = new InputSource(in);
+            final VoiceXmlDocument doc =
+                    new VoiceXmlDocument(transformedSource);
+            final Vxml vxml = doc.getVxml();
+            final List<Form> forms = vxml.getForms();
+            final Form form = forms.get(0);
+            return form.getFirstChild();
+        } else {
+            return xml;
+        }
     }
 
     /**
