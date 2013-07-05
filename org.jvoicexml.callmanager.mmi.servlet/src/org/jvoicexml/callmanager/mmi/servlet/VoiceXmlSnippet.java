@@ -9,6 +9,7 @@ import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.UnavailableException;
@@ -44,11 +45,12 @@ import org.xml.sax.SAXException;
 @WebServlet(description = "creation of VoiceXML documents from snippets", urlPatterns = { "/VoiceXmlSnippet" })
 public class VoiceXmlSnippet extends HttpServlet {
     /** The serial version UID. */
-    private static final long serialVersionUID = 3445970029411929471L;
+    private static final long serialVersionUID = -1780982925617074243L;
 
     /** The document builder. */
     private DocumentBuilder builder;
 
+    /** The XSL template. */
     private Templates template;
     
     @Override
@@ -67,23 +69,28 @@ public class VoiceXmlSnippet extends HttpServlet {
             throw new ServletException(e.getMessage(), e);
         }
         TransformerFactory transFact = TransformerFactory.newInstance( );
-        String curName = null;
         try {
-            curName = "/VoiceXmlTemplate.xsl";
-            URL xsltURL = getServletContext( ).getResource(curName);
-            String xsltSystemID = xsltURL.toExternalForm( );
+            final ServletContext context = getServletContext();
+            final URL xsltURL = context.getResource("/VoiceXmlTemplate.xsl");
+            final String xsltSystemID = xsltURL.toExternalForm( );
             template = transFact.newTemplates(
                     new StreamSource(xsltSystemID));
-
         } catch (TransformerConfigurationException tce) {
-            log("Unable to compile stylesheet", tce);
             throw new UnavailableException("Unable to compile stylesheet");
         } catch (MalformedURLException mue) {
-            log("Unable to locate XSLT file: " + curName);
-            throw new UnavailableException(
-                    "Unable to locate XSLT file: " + curName);
-        }    }
+            throw new UnavailableException("Unable to locate XSLT file");
+        }
+    }
 
+    /**
+     * Creates a VoiceXML document from the given XML snippet
+     * @param xml the XML snippet
+     * @return create VoiceXML document
+     * @throws SAXException
+     * @throws IOException
+     * @throws TransformerException
+     * @throws ParserConfigurationException
+     */
     private VoiceXmlDocument createDocument(final String xml)
             throws SAXException, IOException, TransformerException,
                 ParserConfigurationException {

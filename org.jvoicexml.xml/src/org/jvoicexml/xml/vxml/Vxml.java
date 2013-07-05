@@ -31,6 +31,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -215,6 +216,22 @@ public final class Vxml
         setVersion(version);
         final Locale lang = Locale.getDefault();
         setXmlLang(lang);
+    }
+
+    /**
+     * Retrieves a list of all forms in this document.
+     * @return list of all forms
+     * @since 0.7.6
+     */
+    public List<Form> getForms() {
+        final Document document = new VoiceXmlDocument(getOwnerDocument());
+        final NodeList list = document.getElementsByTagName(Form.TAG_NAME);
+        final List<Form> forms = new java.util.ArrayList<Form>();
+        for (int i = 0; i < list.getLength(); i++) {
+            final Form form = (Form) list.item(i);
+            forms.add(form);
+        }
+        return forms;
     }
 
     /**

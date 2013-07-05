@@ -84,6 +84,7 @@ org.jvoicexml/personal-props/README.txt
         <jar jarfile="${dist.jar}" compress="false">
             <fileset dir="${build}">
               <include name="${component.path}/**/*.class" />
+                <include name="${component.path}/**/*.xsl" />
               <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>
             <manifest>
