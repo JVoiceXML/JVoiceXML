@@ -1096,16 +1096,18 @@ to provide input via Java strings.
 
 No special libraries.
 
-\subsection{MMI Implementation Platform}
+\subsection{MMI CallManager}
 \subsection{Project \texttt{org.jvoicexml.callmanger.mmi}}
 
 This callmanager allows for accessing JVoiceXML as a modality component in
-the W3C MMI architectural pattern.
+the W3C MMI architectural pattern~\cite{w3c:2012:mmi_arch}.
 
 \subsubsection{Third party libraries}
 
 This platform makes use of the \lstinline{org.jvoicexml.mmi.event} library
-to author MMI compatible events (see section\ref{sec:mmi-events}).
+to author MMI compatible events (see section~\ref{sec:mmi-events}).
+Support for VoiceXML snippets is gained by the use of the MMI Servlet
+(see section~\ref{sec:mmi-servlet}).
 In addition an implemention of an Event and Transport Layer is needed.
 
 \subsection{Project \texttt{org.jvoicexml.mmi.socket}}
@@ -1126,10 +1128,25 @@ MMI events are received as protopuf messages.
 
 \subsubsection{Third party libraries}
 
-\paragraph{protobuf2.4.1}
+\paragraph{protobuf2.5.0}
 
 Needed for MMI generation in Google's protobuf format.
 
+\subsection{Project \texttt{org.jvoicexml.callmanager.mmi.servlet}}
+\label{sec:mmi-servlet}
+
+This project adds support for VoiceXML snippets that can be received
+in the \lstinline{Content} attributes of the \lstinline{PrepareRequest}
+or \lstinline{StartRequest} of the MMI events.
+
+The resulting web archive must be deployed manually to a servlet container
+of your choice (see section \ref{sec:tomcat}).
+
+\subsubsection{Third party libraries}
+
+\paragraph{servlet API}
+
+Servlet API needed for the Servlets.
 
 \subsection{Project \texttt{org.jvoicexml.mmi.events}}
 \label{sec:mmi-events}
