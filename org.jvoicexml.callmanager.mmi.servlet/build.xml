@@ -61,6 +61,9 @@ Adapt the settings for your servlet container in the file
         <echo message="servlet.lib.dir = '${servlet.lib.dir}' usable:${servlet.available}" />
     </target>
     
+    <target name="configuratio">
+    </target>
+
     <target name="clean" depends="-setup" description="Remove all compiled and ditsribution files">
         <delete dir="${build}" />
         <delete file="${war.file}" />
