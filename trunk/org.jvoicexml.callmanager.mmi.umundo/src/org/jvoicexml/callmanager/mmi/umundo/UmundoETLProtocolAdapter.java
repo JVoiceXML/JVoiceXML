@@ -27,6 +27,7 @@
 package org.jvoicexml.callmanager.mmi.umundo;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -77,6 +78,11 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
     private String channel;
     /** The source URL of this modality component. */
     private String sourceUrl;
+    /**
+     * Event listeners that have been added before the receiver has been
+     * started.
+     */
+    private final Collection<MMIEventListener> cachedListeners;
 
     /**
      * Constructs a new object.
@@ -84,6 +90,7 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
     public UmundoETLProtocolAdapter() {
         channel = "mmi:jvoicexml";
         sourceUrl = "umundo://mmi/jvoicexml";
+        cachedListeners = new java.util.ArrayList<MMIEventListener>();
     }
 
     /**
@@ -120,6 +127,14 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
 
         publisher = new TypedPublisher(channel);
         node.addPublisher(publisher);
+
+        // Ad all listeners that have been added before the receiver was
+        // created
+        synchronized (cachedListeners) {
+            for (MMIEventListener listener : cachedListeners) {
+                receiver.addMMIEventListener(listener);
+            }
+        }
         LOGGER.info("receiving MMI events via channel '" + channel
                 + "' to '" + sourceUrl + "'");
     }
@@ -137,7 +152,13 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void addMMIEventListener(final MMIEventListener listener) {
-        receiver.addMMIEventListener(listener);
+        synchronized (cachedListeners) {
+            if (receiver == null) {
+                cachedListeners.add(listener);
+            } else {
+                receiver.addMMIEventListener(listener);
+            }
+        }
     }
 
     /**
@@ -145,7 +166,13 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void removeMMIEventListener(final MMIEventListener listener) {
-        receiver.removeMMIEventListener(listener);
+        synchronized (cachedListeners) {
+            if (receiver == null) {
+                cachedListeners.remove(listener);
+            } else {
+                receiver.removeMMIEventListener(listener);
+            }
+        }
     }
 
     /**
