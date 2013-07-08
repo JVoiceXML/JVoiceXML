@@ -76,6 +76,11 @@ org.jvoicexml/personal-props/README.txt
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
+        <copy todir="${build}" overwrite="true">
+            <fileset dir="${src}">
+                <include name="${component.path}/**/*.xsl" />
+            </fileset>
+        </copy>
     </target>
 
     <target name="jar"
@@ -83,9 +88,9 @@ org.jvoicexml/personal-props/README.txt
             description="Pack all compiled files into jar files">
         <jar jarfile="${dist.jar}" compress="false">
             <fileset dir="${build}">
-              <include name="${component.path}/**/*.class" />
+                <include name="${component.path}/**/*.class" />
                 <include name="${component.path}/**/*.xsl" />
-              <exclude name="org/jvoicexml/**/Test*.class" />
+                <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
