@@ -11,10 +11,10 @@ implementation.
       <property name="local-3rdparty.dir" value="3rdparty" />
 
       <!-- protobuf library -->
-      <property name="protobuf.dir" value="${local-3rdparty.dir}/protobuf2.4.1" />
+      <property name="protobuf.dir" value="${local-3rdparty.dir}/protobuf2.5.0" />
       <property name="protobuf.lib.dir" value="${protobuf.dir}/lib" />
       <fileset dir="${protobuf.lib.dir}" id="protobuf.lib">
-          <include name="protobuf-java-2.4.1.jar" />
+          <include name="protobuf-java-2.5.0.jar" />
       </fileset>
 
       <!-- jvxml library -->
