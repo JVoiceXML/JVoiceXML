@@ -27,10 +27,10 @@ callmanager.
         </fileset>
 
         <!-- protobuf library -->
-        <property name="protobuf.dir" value="../org.jvoicexml.mmi.events/3rdparty/protobuf2.4.1" />
+        <property name="protobuf.dir" value="../org.jvoicexml.mmi.events/3rdparty/protobuf2.5.0" />
         <property name="protobuf.lib.dir" value="${protobuf.dir}/lib" />
         <fileset dir="${protobuf.lib.dir}" id="protobuf.lib">
-            <include name="protobuf-java-2.4.1.jar" />
+            <include name="protobuf-java-2.5.0.jar" />
         </fileset>
     </target>
 </project>
