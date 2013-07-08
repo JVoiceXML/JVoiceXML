@@ -7,7 +7,7 @@
   <classpath>lib/org.jvoicexml.callmanager.mmi.jar</classpath>
   <classpath>lib/org.jvoicexml.callmanager.mmi.umundo.jar</classpath>
   <classpath>lib/umundo.jar</classpath>
-  <classpath>lib/protobuf-java-2.4.1.jar</classpath>
+  <classpath>lib/protobuf-java-2.5.0.jar</classpath>
 
   <beans:bean id="callmanager"
     class="org.jvoicexml.callmanager.mmi.MMICallManager">
