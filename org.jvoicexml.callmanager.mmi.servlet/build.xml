@@ -97,6 +97,8 @@ Adapt the settings for your servlet container in the file
         <echo message="Install ${dist.war} to your servlet container!" />
     </target>
 
+    <target name="jar" depends="war" />
+
     <target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -initcheckstyle" if="checkstyle.present">
         <property name="checkstyle-target.dir" value="${dist}/checkstyle/${component}" />
         <mkdir dir="${checkstyle-target.dir}" />
