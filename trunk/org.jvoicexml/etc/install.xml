@@ -371,8 +371,8 @@ The selection of this module requires the selection of an ETL.
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
         <include name="org.jvoicexml.callmanager.mmi.umundo.jar" />
         <include name="umundo.jar" />
-        <include name="protobuf-java-2.4.1.jar" />
-        </fileset>
+        <include name="protobuf-java-2.5.0.jar" />
+      </fileset>
     </pack>
     <pack name="VoiceXML Unit" required="no" preselected="no">
       <description>Unit testing framework for VoiceXML.
