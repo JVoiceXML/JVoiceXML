@@ -26,77 +26,82 @@
 
 package org.jvoicexml.voicexmlunit.demo.hello;
 
-
 import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.jvoicexml.voicexmlunit.Call;
-import org.jvoicexml.voicexmlunit.Voice;
-import org.jvoicexml.voicexmlunit.Supervisor;
 import org.jvoicexml.voicexmlunit.Conversation;
+import org.jvoicexml.voicexmlunit.Supervisor;
+import org.jvoicexml.voicexmlunit.Voice;
 
-
+/**
+ * Hello World demo for JVoiceXMLUnit.
+ * <p>
+ * Must be run with the system property
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
+ * the <code>etc</code> folder added to the classpath.
+ * </p>
+ * @author Raphael Groner
+ * @author Dirk Schnelle-Walka
+ * @version $Revision: 3745 $
+ * @since 0.7.6
+ */
 public class HelloDemo {
 
-	private Call call;
-	private Supervisor supervisor;
-	
-	@Before
-	public void setUp() throws Exception {
-		call = new Call("rc/helloworld.vxml");
-		
-		Voice voice = call.getVoice();
-		voice.setPolicy("etc/jvoicexml.policy");		
-		//voice.loadConfiguration("etc/jndi.properties");
+    private Call call;
+    private Supervisor supervisor;
 
-		supervisor = new Supervisor();
-	}
-	
-	@Test
-	public void testSuccess() {
-		Conversation conversation = supervisor.init(call);
-		conversation.addOutput("Hello World!");
-		conversation.addOutput("Goodbye!");
+    @Before
+    public void setUp() throws Exception {
+        call = new Call("etc/helloworld.vxml");
 
-		supervisor.process();
-	}
-	
-	@Test	
-	public void testMissingHello() {
-		Conversation conversation = supervisor.init(call);
-		conversation.addOutput("Goodbye!");
-		
-		assertFailure();
-	}
+        Voice voice = call.getVoice();
+        supervisor = new Supervisor();
+    }
 
-	@Test	
-	public void testMissingGoodbye() {
-		Conversation conversation = supervisor.init(call);
-		conversation.addOutput("Hello World!");
+    @Test
+    public void testSuccess() {
+        Conversation conversation = supervisor.init(call);
+        conversation.addOutput("Hello World!");
+        conversation.addOutput("Goodbye!");
 
-		assertFailure();
-	}
+        supervisor.process();
+    }
 
-	@Test	
-	public void testEmpty() {
-		supervisor.init(call);
-		
-		supervisor.connected(null); // enforce processing of an empty list
-		
-		assertFailure();
-	}
+    @Test
+    public void testMissingHello() {
+        Conversation conversation = supervisor.init(call);
+        conversation.addOutput("Goodbye!");
 
+        assertFailure();
+    }
 
-	private void assertFailure() {
-		boolean failed = false;
-		try {
-			supervisor.process();
-		} catch (AssertionFailedError e) {
-			failed = true;
-		}
-		Assert.assertEquals(true,failed);
-	}
+    @Test
+    public void testMissingGoodbye() {
+        Conversation conversation = supervisor.init(call);
+        conversation.addOutput("Hello World!");
+
+        assertFailure();
+    }
+
+    @Test
+    public void testEmpty() {
+        supervisor.init(call);
+
+        supervisor.connected(null); // enforce processing of an empty list
+
+        assertFailure();
+    }
+
+    private void assertFailure() {
+        boolean failed = false;
+        try {
+            supervisor.process();
+        } catch (AssertionFailedError e) {
+            failed = true;
+        }
+        Assert.assertEquals(true, failed);
+    }
 }
