@@ -30,4 +30,10 @@
   </platform-->
   <!-- platform name="org.jvoicexml.callmanager.text"/-->
   <!-- platform name="org.jvoicexml.implementation.text"/-->
+
+  <!-- JVoiceXmlUnit  -->
+  <!-- Note that enabling this component requires the text platform -->
+  <!-- platform name="org.jvoicexml.voicexmlunit">
+    <subproject name="org.jvoicexml.voicexmlunit.demo" order="post" />
+  </platform-->
 </platforms>
