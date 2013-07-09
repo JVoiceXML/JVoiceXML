@@ -55,7 +55,7 @@ public final class Voice {
 
     /**
      * Set the client.
-     * @param backend the client
+     * @param client the client
      */
     public void setClient(final GenericClient client) {
          this.client = client;
