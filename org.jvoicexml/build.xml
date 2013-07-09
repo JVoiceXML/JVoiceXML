@@ -16,6 +16,7 @@ personal-props/README.txt
     <target name="-setup" depends="-3rdparty-setup">
         <!-- The component built here-->
         <property name="component" value="org.jvoicexml"/>
+        <property name="component.path" value="org/jvoicexml"/>
 
         <!-- directory structure -->
         <property name="src" value="${basedir}/src" />
@@ -126,10 +127,9 @@ jvxml.revision=${revision.max}
         <jar jarfile="${dist.jvxml.jar}" compress="false">
             <fileset dir="${build}">
                 <include name="jvoicexml.version" />
-                <include name="org/jvoicexml/**/*.class" />
-                <include name="org/jvoicexml/**/*.xsl" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
-                <exclude name="org/jvoicexml/client/**" />
+                <include name="${component.path}/**/*.class" />
+                <include name="${component.path}/**/*.xsl" />
+                <exclude name="${component.path}/**/Test*.class" />
             </fileset>
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
