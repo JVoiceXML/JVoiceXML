@@ -48,8 +48,7 @@ personal-props/README.txt
             <fileset refid="jlibrtp.lib" />
             <fileset refid="jchardet.lib" />
             <fileset refid="spring.lib"/>
-            <pathelement location="${dist}/jvxml-client-text.jar" />
-            <pathelement location="${dist}/org.jvoicexml.implementation.text.jar" />
+            <pathelement location="${dist}/org.jvoicexml.client.text.jar" />
             <pathelement location="${build}" />
         </path>
     </target>
@@ -75,9 +74,9 @@ personal-props/README.txt
 
     <target name="createSystemTestConfiguration" depends="-setup">
         <echo file="${jvxml.core.dir}/personal-props/platforms.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-    <platforms>
-      <platform name="org.jvoicexml.implementation.text" />
-    </platforms>
+<platform name="org.jvoicexml.implementation.text">
+  <subproject name="org.jvoicexml.client.text" order="pre" />
+</platform>
 ]]>
         </echo>
         <ant antfile="${jvxml.core.dir}/configuration.xml"

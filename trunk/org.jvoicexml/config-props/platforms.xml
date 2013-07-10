@@ -19,17 +19,19 @@
   <!-- platform name="org.jvoicexml.implementation.mrcpv2"/-->
   <!-- platform name="org.jvoicexml.implementation.red5"/-->
   <!-- platform name="org.jvoicexml.callmanager.sip"/-->
-  <!-- platform name="org.jvoicexml.callmanager.mmi">
-    <subproject name="org.jvoicexml.mmi.events" order="pre" />
-    <subproject name="org.jvoicexml.callmanager.mmi.servlet" order="pre" />
+  <!-- platform name="org.jvoicexml.callmanager.mmi"-->
+    <!-- subproject name="org.jvoicexml.mmi.events" order="pre" /-->
+    <!-- subproject name="org.jvoicexml.callmanager.mmi.servlet" order="pre" /-->
     <!-- For this platform to work you will need at least one of the following subprojects -->
     <!-- uncomment if MMI events should be handled over umundo -->
     <!-- subproject name="org.jvoicexml.callmanager.mmi.umundo" order="post" /-->
     <!-- uncomment if MMI events should be handled over sockets -->
     <!-- subproject name="org.jvoicexml.callmanager.mmi.socket" order="post" /-->
-  </platform-->
+  <!-- /platform-->
   <!-- platform name="org.jvoicexml.callmanager.text"/-->
-  <!-- platform name="org.jvoicexml.implementation.text"/-->
+  <!-- platform name="org.jvoicexml.implementation.text">
+    <subproject name="org.jvoicexml.client.text" order="pre" />
+  </platform-->
 
   <!-- JVoiceXmlUnit  -->
   <!-- Note that enabling this component requires the text platform -->

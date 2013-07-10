@@ -21,6 +21,7 @@ This file builds the servlet to create MMI responses.
         <property name="src" value="src" />
         <property name="build" value="classes" />
         <property name="config" value="config" />
+        <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
 
         <property name="dist.war" value="${dist}/${component}.war" />
@@ -98,6 +99,52 @@ Adapt the settings for your servlet container in the file
     </target>
 
     <target name="jar" depends="war" />
+
+    <target name="distribution" depends="jar">
+        <copy todir="${distFolder}/lib" file="${dist.war}"/>
+    </target>
+    
+    <target name="apidoc" description="create javadoc"
+        depends="-setup">
+        <echo message="creating javadoc for ${component} with access: ${javadoc.access}" />
+
+        <delete dir="${apidoc}" failonerror="false"/>
+
+        <javadoc destdir="${apidoc}"
+                 windowtitle="JVoiceXML"
+                 author="true"
+                 version="true"
+                 access="${javadoc.access}"
+                 use="true">
+            <packageset dir="${src}" />
+            <doctitle>
+                <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
+            </doctitle>
+            <bottom>
+                <![CDATA[<i>Copyright &#169; 2013<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+            </bottom>
+        <tag name="todo" description="Stuff to complete" />
+        <classpath>
+            <path location="${build}" />
+            <path refid="build.classpath" />
+        </classpath>
+
+        <!-- Resolve used libraries -->
+        <link offline="true"
+              href="http://java.sun.com/j2se/1.5.0/docs/api/"
+              packagelistLoc="${3rdparty.dir}" />
+        <link offline="true" resolveLink="false"
+              href="${jvxml.core.apidoc}"
+              packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+        <link offline="true" 
+              href="http://logging.apache.org/log4j/docs/api/"
+              packagelistLoc="${log4j.dir}" />
+
+        <group title="MMI Callmanager Servlet">
+            <package name="${component}*" />
+        </group>
+        </javadoc>
+    </target>
 
     <target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -initcheckstyle" if="checkstyle.present">
         <property name="checkstyle-target.dir" value="${dist}/checkstyle/${component}" />

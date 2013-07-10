@@ -12,8 +12,7 @@ This file provides targets to run and stop the voice browser.
             <path refid="project.classpath" />
             <fileset refid="loggings.lib" />
             <fileset refid="spring.lib" />
-            <pathelement location="${dist}/jvxml-client-text.jar" />
-            <pathelement location="${dist}/jvxml-text.jar" />
+            <pathelement location="${dist}/org.jvoicexml.client.text.jar" />
             <pathelement path="${build}" />
             <pathelement path="./config" />
             <pathelement path="${config}" />
@@ -46,12 +45,6 @@ This file provides targets to run and stop the voice browser.
             dir="${jvxml.core.dir}"
             target="createConfiguration" 
             inheritAll="false" inheritrefs="false">
-          <property name="jvxml.text" value="true"/>
-          <property name="jvxml.jsapi10" value="false"/>
-          <property name="jvxml.jsapi20" value="false"/>
-          <property name="jvxml.mrcpv2" value="false"/>
-          <property name="jvxml.jtapi" value="false"/>
-          <property name="jvxml.jndi.repository" value="text"/>
         </ant>
         <!-- Use adapted log4 settings in the interpreter -->
         <makeurl property="log4j.configuration"

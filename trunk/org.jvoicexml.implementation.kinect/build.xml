@@ -128,7 +128,7 @@ org.jvoicexml/personal-props/README.txt
         <link offline="true" href="http://logging.apache.org/log4j/docs/api/" packagelistLoc="${log4j.dir}" />
 
         <group title="kinect based implementation platform">
-            <package name="org.jvoicexml.implementation.jsapi20*" />
+            <package name="org.jvoicexml.implementation.kinect*" />
         </group>
     </javadoc>
 </target>
@@ -155,23 +155,8 @@ org.jvoicexml/personal-props/README.txt
 
 <target name="distribution" depends="jar">
     <property name="distFolder" value="${dist}/${jvxml.version}" />
-    <copy tofile="${distFolder}/config/jsapi20-implementation.xml" file="${etc}/jsapi20-implementation-dist.xml" />
-    <copy tofile="${distFolder}/config/jsapi20-mac-implementation.xml" file="${etc}/jsapi20-mac-implementation-dist.xml" />
-    <copy tofile="${distFolder}/config/jsapi20-sapi-implementation.xml" file="${etc}/jsapi20-sapi-implementation-dist.xml" />
-    <copy todir="${distFolder}/config">
-        <fileset dir="${etc}">
-            <include name="hello.xml" />
-        </fileset>
-    </copy>
-    <copy todir="${distFolder}/lib" file="${dist}/org.jvoicexml.implementation.jsapi20.jar" />
-    <copy todir="${distFolder}/lib">
-        <fileset refid="jsapi2.lib" />
-        <fileset dir="${local-3rdparty.dir}/jsapi2.0/lib">
-            <include name="*.jar" />
-            <include name="*.dll" />
-            <include name="*.jnilib" />
-        </fileset>
-    </copy>
+    <copy tofile="${distFolder}/config/kinect-implementation.xml" file="${etc}/kinect-implementation-dist.xml" />
+    <copy todir="${distFolder}/lib" file="${dist.jar}"/>
 </target>
 
 </project>

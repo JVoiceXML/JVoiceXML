@@ -1,7 +1,7 @@
 %define name jvoicexml
 %define ver @jvxml.version@
 
-Summary: A free VoiceXML implementation.
+Summary: A free VoiceXML implementation
 Name: %name
 Version: %ver
 # This indicates changes to the spec file after last time %ver has changed.
@@ -9,7 +9,7 @@ Release: 1
 License: LGPL
 Group: Applications/Internet
 #Source: jvxml-src-%{ver}.tar.gz
-URL: http://www.jvoicexml.org/
+URL: http://jvoicexml.sourceforge.net
 BuildRoot: /var/tmp/%{name}-%{ver}
 Packager: Dirk Schnelle-Walka <dirk.schnelle@jvoicexml.org>
 Vendor: JVoiceXML group
