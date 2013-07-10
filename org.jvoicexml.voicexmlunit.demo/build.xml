@@ -5,8 +5,8 @@ This file builds and runs the 'ViceXMLUnit' demo for JVoiceXML.
 
     <!-- allow the user to override setting in an own propertiesfile. -->
     <!-- Use the same properties file as in the main project.         -->
-    <property file="../../personal-props/ant.properties" />
-    <property file="../../config-props/ant.properties" />
+    <property file="../org.jvoicexml/personal-props/ant.properties" />
+    <property file="../org.jvoicexml/config-props/ant.properties" />
 
     <!-- Load the settings for 3rdparty libraries -->
     <import file="3rdparty-libs.xml" />
@@ -21,6 +21,7 @@ This file builds and runs the 'ViceXMLUnit' demo for JVoiceXML.
         <property name="src" value="src" />
         <property name="build" value="classes" />
         <property name="config" value="config" />
+        <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
 
         <property name="optimize" value="off" />
@@ -55,6 +56,10 @@ Build this jar from the main project first.
     <target name="configuration">
     </target>
 
+    <target name="distribution">
+        <!-- TODO deploy into the demo folder. -->
+    </target>
+
     <target name="clean" depends="-setup" description="Remove all compiled and ditsribution files">
         <delete dir="${build}" />
         <delete file="${jar.file}" />
@@ -71,6 +76,47 @@ Build this jar from the main project first.
     </target>
 
     <target name="jar">
+    </target>
+
+    <target name="apidoc" description="create javadoc"
+        depends="-setup">
+        <echo message="creating javadoc for ${component} with access: ${javadoc.access}" />
+
+        <delete dir="${apidoc}" failonerror="false"/>
+
+        <javadoc destdir="${apidoc}"
+                 windowtitle="JVoiceXML"
+                 author="true"
+                 version="true"
+                 access="${javadoc.access}"
+                 use="true">
+            <packageset dir="${src}" />
+            <doctitle>
+                <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
+            </doctitle>
+            <bottom>
+                <![CDATA[<i>Copyright &#169; 2013<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+            </bottom>
+        <tag name="todo" description="Stuff to complete" />
+        <classpath>
+            <path refid="build.classpath" />
+        </classpath>
+
+        <!-- Resolve used libraries -->
+        <link offline="true"
+              href="http://java.sun.com/j2se/1.5.0/docs/api/"
+              packagelistLoc="${3rdparty.dir}" />
+        <link offline="true" resolveLink="false"
+              href="${jvxml.core.apidoc}"
+              packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+        <link offline="true" 
+              href="http://logging.apache.org/log4j/docs/api/"
+              packagelistLoc="${log4j.dir}" />
+
+        <group title="JVoiceXML Unit Demo">
+            <package name="${component}*" />
+        </group>
+        </javadoc>
     </target>
 
     <target name="runHelloWorldDemo" description="Run the 'hello world' demo" depends="compile">

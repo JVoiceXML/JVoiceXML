@@ -312,7 +312,7 @@ You will need a MRCPv2 server in addition to use this implementation platform.
         <include name="mrcpv2-callmanager.xml" />
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
-        <include name="jvxml-mrcpv2.jar" />
+        <include name="org.jvoicexml.implementation.mrcpv2.jar" />
         <include name="cairo-sip-SNAPSHOT.jar" />
         <include name="cairo-client-SNAPSHOT.jar" />
         <include name="cairo-rtp-SNAPSHOT.jar" />
@@ -347,6 +347,7 @@ The selection of this module requires the selection of an ETL.
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
         <include name="org.jvoicexml.callmanager.mmi.jar" />
+        <include name="org.jvoicexml.callmanager.mmi.servlet.war" />
         <include name="org.jvoicexml.mmi.events.jar" />
       </fileset>
     </pack>

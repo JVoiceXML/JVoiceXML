@@ -10,7 +10,7 @@
 
 <h2>Requirements</h2>
 
-<p>JVoiceXML uses features of J2SE 1.6 and will not run with
+<p>JVoiceXML uses features of Java 7 and will not run with
 versions below. Optional: ANT 1.7 
 (<a href="http://ant.apache.org">http://ant.apache.org</a>) to run the demos.
 </p>
@@ -55,6 +55,14 @@ implementation platform.
 JVoiceXML must be called with a SIP phone. We used the xlite phone which can
 be downloaded for free from
 <a href="http://www.counterpath.com">http://www.counterpath.com</a>
+</p>
+
+<h3>MMI implementation platform</h3>
+<p>
+This platform enables JVoiceXML to be used as a modality component in the
+W3C MMI architecture. You will need to have a servlet container installed in
+addition where you should deploy the org.jvoicexml.callmanager.mmi.servlet.war
+which can be found in the lib folder of your installation.
 </p>
 
 <h3>MRCPv2 implementation platform</h3>

@@ -20,7 +20,7 @@ personal-props/README.txt
         <property name="component.path"
             value="org/jvoicexml/implementation/mrcpv2"/>
 
-            <!-- directory structure -->
+        <!-- directory structure -->
         <property name="src" value="src" />
         <property name="build" value="classes" />
         <property name="etc" value="etc" />
@@ -33,7 +33,7 @@ personal-props/README.txt
         </condition>
 
         <!-- main jar files -->
-        <property name="dist.jar" value="${dist}/jvxml-mrcpv2.jar" />
+        <property name="dist.jar" value="${dist}/${component}.jar" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">

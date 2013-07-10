@@ -102,7 +102,7 @@ org.jvoicexml/personal-props/README.txt
 
     <target name="apidoc" description="create javadoc"
         depends="-setup">
-        <echo message="creating javadoc with access: ${javadoc.access}" />
+        <echo message="creating javadoc for ${component} with access: ${javadoc.access}" />
 
         <delete dir="${apidoc}" failonerror="false"/>
 
@@ -135,7 +135,7 @@ org.jvoicexml/personal-props/README.txt
               href="http://logging.apache.org/log4j/docs/api/"
               packagelistLoc="${log4j.dir}" />
 
-        <group title="SIP based call manager">
+        <group title="MMI call manager">
             <package name="${component}*" />
         </group>
         </javadoc>
