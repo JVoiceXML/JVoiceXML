@@ -97,6 +97,8 @@ public final class JVoiceXmlTagStrategyRepository
         LOGGER.info("added tag strategy factory '" + factory.getClass()
                 + "' for namespace '" + namespace + "'");
         if (namespace.toString().equals(Vxml.DEFAULT_XMLNS)) {
+            LOGGER.info("found default VoiceXML tag strategy factory '"
+                    + factory.getClass() + "'");
             vxmlFactory = factory;
         }
     }
@@ -106,6 +108,10 @@ public final class JVoiceXmlTagStrategyRepository
      */
     @Override
     public TagStrategy getTagStrategy(final Node node, final URI namespace) {
+        if (vxmlFactory == null) {
+            LOGGER.warn("no default tag strategy defined");
+            return null;
+        }
         // If there is no namespace, try to use the default factory.
         if (namespace == null) {
             return vxmlFactory.getTagStrategy(node);
@@ -116,7 +122,4 @@ public final class JVoiceXmlTagStrategyRepository
         }
         return factory.getTagStrategy(node);
     }
-
-
-    
 }
