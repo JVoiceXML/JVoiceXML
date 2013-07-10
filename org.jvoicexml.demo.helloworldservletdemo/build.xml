@@ -39,7 +39,7 @@ to run the client.
         <property name="config" value="config" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
 
-        <property name="war.file" value="${component}.war" />
+        <property name="dist.war" value="${dist}/${component}.war" />
 
         <property name="optimize" value="off" />
         <property name="debug" value="on" />
@@ -109,7 +109,7 @@ Adapt the settings for your servlet container in the file
     </target>
 
     <target name="war" depends="compile" description="Pack all compiled servlet files into a single war">
-        <war destfile="${war.file}" webxml="WebContent/WEB-INF/web.xml">
+        <war destfile="${dist.war}" webxml="WebContent/WEB-INF/web.xml">
             <lib refid="log4j.lib" />
             <lib refid="jvxml.xml.lib" />
             <classes dir="${build}">
@@ -123,7 +123,7 @@ Adapt the settings for your servlet container in the file
             </fileset>
         </war>
 
-        <echo message="Install ${war.file} to your servlet container!" />
+        <echo message="Install ${dist.war} to your servlet container!" />
         <echo message="Then call 'ant run' to run the client" />
     </target>
 

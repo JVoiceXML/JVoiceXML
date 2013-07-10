@@ -32,7 +32,7 @@ This file builds the distribution files for JVoiceXML.
       <include name="README" />
     </fileset>
 
-    <fileset dir="${etc}/legal" id="dist.files.legal" />
+    <fileset dir="doc/legal" id="dist.files.legal" />
   </target>
 
   <target name="-userdoc">
