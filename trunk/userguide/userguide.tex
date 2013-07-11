@@ -1039,6 +1039,9 @@ libraries:
 </jndi>
 \end{lstlisting}
 
+Note that a single instance of a \lstinline{TextServer} is only able to handle
+a single session. For multiple parallel sessions you will need to use multiple 
+\lstinline{TextServer} instances.
 
 \subsection{Starting the Client}
 \label{sec:starting-client}
