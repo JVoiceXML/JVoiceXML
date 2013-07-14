@@ -57,7 +57,7 @@ public class TestCall implements TextListener {
      */
     @Before
     public void setUp() throws Exception {
-        final URI dialog = new File("unittests/rc/mock.vxml").toURI();
+        final URI dialog = new File("unittests/etc/mock.vxml").toURI();
         call = new Call(dialog);
         call.setListener(this);
 
