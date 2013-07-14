@@ -99,6 +99,10 @@ final class TextSenderThread extends Thread {
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("sending " + pending);
                     }
+                    /* Currently, only the BYE message is automatically
+                     * acknowledged, so this final message means an end
+                     * of sending.
+                     */
                     if (sendMessage(pending)) {
                         sending = false;
                     }
@@ -125,7 +129,7 @@ final class TextSenderThread extends Thread {
      * Sends a message directly to the client.
      * If the message is pending, the client should acknowledge.
      * @param pending the message to send
-     * @return <code>true</code> if the message is pending
+     * @return <code>true</code> if the message is acknowledged
      * @throws IOException stream error
      * @since 0.7.6
      */
