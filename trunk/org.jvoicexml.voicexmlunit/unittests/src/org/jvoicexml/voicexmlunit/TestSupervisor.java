@@ -148,7 +148,7 @@ public class TestSupervisor {
 
     @Test
     public void testCall() {
-        final Call call = new Call("unittests/rc/mock.vxml");
+        final Call call = new Call("unittests/etc/mock.vxml");
 
         conversation = supervisor.init(call);
         conversation.addOutput("test");

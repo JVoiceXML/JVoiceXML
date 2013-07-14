@@ -61,7 +61,7 @@ public class TestVoice implements TextListener {
      */
     @Before
     public void setUp() {
-        dialog = new File("unittests/rc/mock.vxml").toURI();
+        dialog = new File("unittests/etc/mock.vxml").toURI();
         voice = new Voice();
     }
 
