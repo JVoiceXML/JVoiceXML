@@ -123,12 +123,13 @@ final class TextSenderThread extends Thread {
 
     /**
      * Sends a message directly to the client.
+     * If the message is pending, the client should acknowledge.
      * @param pending the message to send
-     * @return <code>true</code>
+     * @return <code>true</code> if the message is pending
      * @throws IOException stream error
      * @since 0.7.6
      */
-    private boolean sendMessage(final PendingMessage pending) 
+    private boolean sendMessage(final PendingMessage pending)
             throws IOException {
         boolean acknowledge = telephony.addPendingMessage(pending);
         final OutputStream outputStream = socket.getOutputStream();
@@ -170,7 +171,7 @@ final class TextSenderThread extends Thread {
 
     /**
      * Sends a message that JVoiceXML is ready to receive input.
-     * 
+     *
      * @since 0.7.6
      */
     public void sendExpectingInput() {
@@ -182,7 +183,7 @@ final class TextSenderThread extends Thread {
 
     /**
      * Sends a message that JVoiceXML is ready to receive input.
-     * 
+     *
      * @since 0.7.6
      */
     public void sendClosedInput() {
