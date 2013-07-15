@@ -27,13 +27,13 @@
 package org.jvoicexml.voicexmlunit.demo;
 
 
-import junit.framework.Assert;
-import junit.framework.AssertionFailedError;
-
-import org.junit.Before;
-import org.junit.Test;
+import java.lang.AssertionError;
 
 import org.apache.log4j.Logger;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.jvoicexml.voicexmlunit.Call;
 import org.jvoicexml.voicexmlunit.Voice;
@@ -62,19 +62,19 @@ public class TestHelloDemo {
     supervisor.process();
   }
 
-  @Test(timeout=9999)
+  @Test(timeout=9999, expected=AssertionError.class)
   public void testMissingHello() {
     conversation.addOutput("Goodbye!");
     assertFailure();
   }
 
-  @Test(timeout=9999)
+  @Test(timeout=9999, expected=AssertionError.class)
   public void testMissingGoodbye() {
     conversation.addOutput("Hello World!");
     assertFailure();
   }
 
-  @Test(timeout=9999)
+  @Test(timeout=9999, expected=AssertionError.class)
   public void testEmpty() {
     supervisor.connected(null); // enforce processing of an empty list
     assertFailure();
@@ -85,12 +85,7 @@ public class TestHelloDemo {
     logConversation();
 
     boolean failed = false;
-    try {
-      supervisor.process();
-    } catch (AssertionFailedError e) {
-      failed = true;
-    }
-    Assert.assertEquals(true,failed);
+    supervisor.process();
   }
 
   private void logConversation() {

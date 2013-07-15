@@ -1,9 +1,9 @@
 package org.jvoicexml.voicexmlunit.demo;
 
 
-import junit.framework.Assert;
-import junit.framework.AssertionFailedError;
+import java.lang.AssertionError;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,16 +28,10 @@ public class TestDtmfDemo {
     supervisor.process();
   }
 
-  @Test
+  @Test(expected=AssertionError.class)
   public void testInputNoFail() {
     createConversation('2');
-    boolean failed = false;
-    try {
-      supervisor.process();
-    } catch (AssertionFailedError e) {
-      failed = true;
-    }
-    Assert.assertEquals(true,failed);
+    supervisor.process();
   }
 
   private void createConversation(char answer) {
