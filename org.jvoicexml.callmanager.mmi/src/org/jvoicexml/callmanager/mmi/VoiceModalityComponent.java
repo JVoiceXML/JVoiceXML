@@ -419,7 +419,7 @@ public final class VoiceModalityComponent
         final ContentURLType contentUrlType = request.getContentURL();
         if (contentUrlType != null) {
             final String href = contentUrlType.getHref();
-            if (href != null) {
+            if (href != null && !href.isEmpty()) {
                 return new URI(href);
             }
         }
