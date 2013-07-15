@@ -26,7 +26,7 @@
 
 package org.jvoicexml.voicexmlunit.io;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;

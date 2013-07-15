@@ -26,15 +26,14 @@
 
 package org.jvoicexml.voicexmlunit;
 
-import java.net.InetSocketAddress;
 
-import junit.framework.AssertionFailedError;
+import java.lang.AssertionError;
+
+import java.net.InetSocketAddress;
 
 import org.jvoicexml.voicexmlunit.io.Assertion;
 import org.jvoicexml.voicexmlunit.io.Nothing;
-
 import org.jvoicexml.voicexmlunit.processor.Assert;
-
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -45,12 +44,12 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * <li>Initialize a new conversation with your Call object.</li>
  * <li>Process the given VoiceXML file.</lI>
  * </ol>
- * 
+ *
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
- * 
+ *
  */
-public final class Supervisor 
+public final class Supervisor
 implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.processor.Facade {
 
     private Call call = null;
@@ -59,7 +58,7 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
 
     /**
      * Initialize a new server conversation.
-     * 
+     *
      * @param call
      *            the call object, maybe <code>null</code>
      * @return Conversation to be used and initialized by the caller
@@ -84,7 +83,7 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
         statement = conversation.begin();
         call.run();
 
-        AssertionFailedError error = call.getFailure();
+        AssertionError error = call.getFailure();
         if (error != null) {
             //error.printStackTrace();
             throw error;
@@ -93,7 +92,7 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.jvoicexml.client.text.TextListener#started()
      */
     @Override
@@ -103,7 +102,7 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.jvoicexml.client.text.TextListener#connected(java.net.InetSocketAddress
      * )
@@ -115,7 +114,7 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.jvoicexml.client.text.TextListener#outputSsml(org.jvoicexml.xml.ssml
      * .SsmlDocument)
@@ -126,7 +125,7 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
         if (document != null) {
             try {
                 assertOutput(document);
-            } catch (AssertionFailedError e) {
+            } catch (AssertionError e) {
                 handleError(e);
             }
         }
@@ -134,21 +133,21 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.jvoicexml.client.text.TextListener#expectingInput()
      */
     @Override
     public void expectingInput() {
         try {
             assertInput();
-        } catch (AssertionFailedError e) {
+        } catch (AssertionError e) {
             handleError(e);
         }
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.jvoicexml.client.text.TextListener#inputClosed()
      */
     @Override
@@ -158,14 +157,14 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.jvoicexml.client.text.TextListener#disconnected()
      */
     @Override
     public void disconnected() {
         try {
             assertHangup();
-        } catch (AssertionFailedError e) {
+        } catch (AssertionError e) {
             handleError(e);
         }
     }
@@ -177,8 +176,8 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
      *             Message to expect in the call
      */
     @Override
-    public void assertOutput(final SsmlDocument message) 
-            throws AssertionFailedError {
+    public void assertOutput(final SsmlDocument message)
+            throws AssertionError {
         if (statement == null) {
             statement = new Nothing();
         }
@@ -191,7 +190,7 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
      * message can be send.
      */
     @Override
-    public void assertInput() throws AssertionFailedError {
+    public void assertInput() {
         if (statement == null) {
             statement = new Nothing();
         }
@@ -214,14 +213,14 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
      * Register an error with the given Exception.
      * @param error the exception for the error
      */
-    private void handleError(final AssertionFailedError error) {
+    private void handleError(final AssertionError error) {
         if (call == null) {
-            Assert.fail(error.getMessage());
+            throw error;
         } else {
             call.fail(error);
         }
     }
-    
+
     /**
      * @return Assertion in trouble, null if no error has occured
      */

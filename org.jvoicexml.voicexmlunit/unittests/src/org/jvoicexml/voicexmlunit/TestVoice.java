@@ -30,6 +30,9 @@ import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
+import javax.naming.NamingException;
+
+import org.junit.Assert;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

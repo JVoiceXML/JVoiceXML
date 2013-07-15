@@ -27,11 +27,13 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.io.File;
+
+import java.lang.AssertionError;
+
 import java.net.InetSocketAddress;
 import java.net.URI;
 
-import junit.framework.AssertionFailedError;
-
+import org.junit.Assert;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -96,7 +98,7 @@ public class TestCall implements TextListener {
 
     @Test
     public void testFailure() {
-        AssertionFailedError error = new AssertionFailedError();
+        AssertionError error = new AssertionError();
         call.fail(error);
 
         Assert.assertNotNull(call.getFailure());
