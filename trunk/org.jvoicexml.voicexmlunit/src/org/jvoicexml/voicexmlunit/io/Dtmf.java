@@ -30,7 +30,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 public class Dtmf extends Statement {
     private char dtmf;

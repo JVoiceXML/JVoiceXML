@@ -26,14 +26,15 @@
 
 package org.jvoicexml.voicexmlunit.io;
 
-import static org.junit.Assert.assertTrue;
+
+import java.lang.AssertionError;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import junit.framework.AssertionFailedError;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 public class TestInput implements AbstractTestAssertion {
@@ -48,14 +49,9 @@ public class TestInput implements AbstractTestAssertion {
     }
 
     @Override
-    @Test
+    @Test(expected=AssertionError.class)
     public void testReceive() throws ParserConfigurationException {
-        try {
-            in.receive(new SsmlDocument());
-        } catch (AssertionFailedError e) {
-            failed = true;
-        }
-        assertTrue(failed);
+        in.receive(new SsmlDocument());
     }
 
     @Override

@@ -26,11 +26,11 @@
 
 package org.jvoicexml.voicexmlunit;
 
+
 import java.io.File;
 import java.io.IOException;
+import java.lang.AssertionError;
 import java.net.URI;
-
-import junit.framework.AssertionFailedError;
 
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
@@ -56,7 +56,7 @@ public final class Call implements Runnable {
     private URI dialog;
     private TextServer server;
     private Voice voice;
-    private AssertionFailedError error;
+    private AssertionError error;
 
     public static int SERVER_PORT = 6000; // port number must be greater than
                                           // 1024
@@ -139,7 +139,7 @@ public final class Call implements Runnable {
             }
             runDialog();
         } catch (InterruptedException | IOException | ErrorEvent e) {
-             fail(new AssertionFailedError(e.getMessage()));
+             fail(new AssertionError(e.getMessage()));
         } finally {
             server.stopServer();
         }
@@ -181,7 +181,7 @@ public final class Call implements Runnable {
      * @param error
      *            the error that has caused the failure
      */
-    public void fail(final AssertionFailedError error) {
+    public void fail(final AssertionError error) {
         if (this.error == null) { // only the first error
             server.interrupt();
             final Voice voice = getVoice();
@@ -193,7 +193,7 @@ public final class Call implements Runnable {
         }
     }
 
-    public AssertionFailedError getFailure() {
+    public AssertionError getFailure() {
         return error;
     }
 }
