@@ -27,19 +27,13 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.io.File;
-import java.io.IOException;
-
 import java.net.InetSocketAddress;
 import java.net.URI;
 
-import javax.naming.NamingException;
-
-import junit.framework.Assert;
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;

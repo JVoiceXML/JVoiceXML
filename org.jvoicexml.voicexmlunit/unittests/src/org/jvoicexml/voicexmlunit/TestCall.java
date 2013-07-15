@@ -30,12 +30,11 @@ import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
-import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
