@@ -139,4 +139,5 @@ This file runs unit tests on JVoiceXML.
   <target name="testSessionDemo" description="run the session demo">
     <property name="run.class" value="org.jvoicexml.voicexmlunit.demo.TestSessionDemo" />
     <ant antfile="${ant.file}" target="testSingle" />
-  </target></project>
+  </target>
+</project>
