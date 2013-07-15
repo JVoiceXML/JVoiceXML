@@ -1,15 +1,15 @@
 package org.jvoicexml.voicexmlunit.demo;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
-import junit.framework.Assert;
-import junit.framework.AssertionFailedError;
-
+import org.junit.Assert;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.ComparisonFailure;
 import org.junit.Test;
 
 import org.jvoicexml.client.text.TextListener;
@@ -59,16 +59,10 @@ public final class TestSessionDemo implements TextListener {
     testInput("yes");
   }
 
-  @Test(timeout=10000)
+  @Test(timeout=10000, expected=ComparisonFailure.class)
     public void testInputNo() throws IOException {
     boolean failed = false;
-    try {
-      testInput("no");
-    } catch (AssertionFailedError e) {
-      failed  = true;
-    } finally {
-      Assert.assertTrue(failed);
-    }
+    testInput("no");
   }
 
   private void testInput(final String answer) throws IOException {
