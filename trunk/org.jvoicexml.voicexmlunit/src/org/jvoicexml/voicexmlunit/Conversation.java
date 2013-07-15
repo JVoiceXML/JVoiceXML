@@ -40,9 +40,9 @@ import org.jvoicexml.voicexmlunit.io.Output;
  * in the order you think to expect them coming from the VoiceXML document
  * interpreter. Output and Input are of the abstract type Statement with an
  * indivual message text.
- * 
+ *
  * @author Raphael Groner
- * 
+ *
  */
 public final class Conversation {
     private LinkedList<Assertion> history;
@@ -58,7 +58,7 @@ public final class Conversation {
 
     /**
      * Add a new Output with the expected message
-     * 
+     *
      * @param message
      *            Message to expect
      */
@@ -69,7 +69,7 @@ public final class Conversation {
 
     /**
      * Add a new Input with the message to be send
-     * 
+     *
      * @param message
      *            Message to send
      */
@@ -80,7 +80,7 @@ public final class Conversation {
 
     /**
      * Add a new Dtmf with the message to be send
-     * 
+     *
      * @param message
      *            Message to send
      */
@@ -91,7 +91,7 @@ public final class Conversation {
 
     /**
      * Begin the conversation
-     * 
+     *
      * @return First statement of the conversation
      */
     public Assertion begin() {
@@ -108,7 +108,7 @@ public final class Conversation {
      * Go to the next statement in the conversation If there are no more
      * elements left, this method invalidates the conversation and returns an
      * invalid object.
-     * 
+     *
      * @return Next statement after the previously current one
      */
     public Assertion next() {
@@ -127,5 +127,13 @@ public final class Conversation {
      */
     public int countStatements() {
         return history.size();
+    }
+
+    /**
+     * @return Representation as a String (e.g. for logging purpose).
+     */
+    public String toString() {
+        // TODO: insert individual concrete subclasses (out/in)
+        return history.toString();
     }
 }
