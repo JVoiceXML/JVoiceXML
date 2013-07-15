@@ -63,7 +63,7 @@ This file runs unit tests on JVoiceXML.
                maxmemory="256M"
                fork="yes"
                haltonfailure="no"
-               showoutput="yes">
+               showoutput="no">
       <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
       <classpath location="${test.build}" />
       <classpath refid="test.classpath" />
