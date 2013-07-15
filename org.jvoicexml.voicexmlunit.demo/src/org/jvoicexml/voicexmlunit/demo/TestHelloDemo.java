@@ -33,6 +33,8 @@ import junit.framework.AssertionFailedError;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.log4j.Logger;
+
 import org.jvoicexml.voicexmlunit.Call;
 import org.jvoicexml.voicexmlunit.Voice;
 import org.jvoicexml.voicexmlunit.Supervisor;
@@ -43,49 +45,45 @@ public class TestHelloDemo {
 
   private Call call;
   private Supervisor supervisor;
+  private Conversation conversation;
 
   @Before
   public void setUp() throws Exception {
     call = new Call("etc/helloworld.vxml");
     supervisor = new Supervisor();
+    conversation = supervisor.init(call);
   }
 
   @Test
   public void testSuccess() {
-    Conversation conversation = supervisor.init(call);
     conversation.addOutput("Hello World!");
     conversation.addOutput("Goodbye!");
-
+    logConversation();
     supervisor.process();
   }
 
   @Test(timeout=9999)
   public void testMissingHello() {
-    Conversation conversation = supervisor.init(call);
     conversation.addOutput("Goodbye!");
-
     assertFailure();
   }
 
   @Test(timeout=9999)
   public void testMissingGoodbye() {
-    Conversation conversation = supervisor.init(call);
     conversation.addOutput("Hello World!");
-
     assertFailure();
   }
 
   @Test(timeout=9999)
   public void testEmpty() {
-    supervisor.init(call);
-
     supervisor.connected(null); // enforce processing of an empty list
-
     assertFailure();
   }
 
 
   private void assertFailure() {
+    logConversation();
+
     boolean failed = false;
     try {
       supervisor.process();
@@ -93,5 +91,10 @@ public class TestHelloDemo {
       failed = true;
     }
     Assert.assertEquals(true,failed);
+  }
+
+  private void logConversation() {
+    Logger.getLogger(TestHelloDemo.class).info("Expected conversation: "
+      + conversation.toString());
   }
 }
