@@ -11,10 +11,11 @@
 
     <!-- jvxml library -->
     <path id="jvxml.core.lib">
-        <path location="${jvxml.core.dir}/dist/org.jvoicexml.client.jar" />
-        <path location="${jvxml.core.dir}/dist/org.jvoicexml.client.text.jar" />
-        <path location="${jvxml.core.dir}/dist/org.jvoicexml.xml.jar" />
-        <path location="${jvxml.core.dir}/dist/org.jvoicexml.voicexmlunit.jar" />
+      <path location="${jvxml.core.dir}/dist/org.jvoicexml.jndi.jar" />
+      <path location="${jvxml.core.dir}/dist/org.jvoicexml.client.jar" />
+      <path location="${jvxml.core.dir}/dist/org.jvoicexml.client.text.jar" />
+      <path location="${jvxml.core.dir}/dist/org.jvoicexml.xml.jar" />
+      <path location="${jvxml.core.dir}/dist/org.jvoicexml.voicexmlunit.jar" />
     </path>
   </target>
 </project>
