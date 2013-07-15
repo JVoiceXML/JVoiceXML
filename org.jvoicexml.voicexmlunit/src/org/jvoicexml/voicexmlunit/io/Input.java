@@ -30,7 +30,7 @@ import java.io.IOException;
 
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 public class Input extends Statement {
     public Input(String message) {

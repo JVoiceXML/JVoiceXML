@@ -26,17 +26,19 @@
 
 package org.jvoicexml.voicexmlunit.io;
 
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
+import java.lang.AssertionError;
+
 import javax.xml.parsers.ParserConfigurationException;
 
-import junit.framework.AssertionFailedError;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.jvoicexml.xml.ssml.SsmlDocument;
+
 import org.xml.sax.SAXException;
 
 /**
@@ -60,15 +62,10 @@ public class TestDtmf implements AbstractTestAssertion {
     }
 
     @Override
-    @Test
+    @Test(expected=AssertionError.class)
     public void testReceive() throws ParserConfigurationException,
             SAXException, IOException {
-        try {
-            dtmf.receive(new SsmlDocument()); // must fail
-        } catch (AssertionFailedError e) {
-            failed = true;
-        }
-        assertTrue(failed);
+        dtmf.receive(new SsmlDocument()); // must fail
     }
 
     @Override

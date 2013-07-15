@@ -92,7 +92,7 @@ public final class Voice {
                session = getClient().call(dialog, info);
                server.waitConnected();
                session.waitSessionEnd();
-               session.hangup();
+               //session.hangup();
           } catch (NamingException | ErrorEvent e) {
                throw new IOException(e);
           } finally {
