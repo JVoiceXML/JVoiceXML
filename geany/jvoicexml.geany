@@ -23,11 +23,15 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=0;XML;0;EUTF-8;0;1;0;%2Fhome%2Fraphael%2Fdevelopment%2Fjvoicexml%2Forg.jvoicexml.voicexmlunit%2Ftest.xml;0;2
+current_page=1
+FILE_NAME_0=2209;XML;0;EUTF-8;0;1;0;%2Fhome%2Fraphael%2Fdevelopment%2Fjvoicexml%2Forg.jvoicexml.voicexmlunit.demo%2Fbuild.xml;0;4
+FILE_NAME_1=4224;XML;0;EUTF-8;0;1;0;%2Fhome%2Fraphael%2Fdevelopment%2Fjvoicexml%2Forg.jvoicexml.voicexmlunit.demo%2Ftest.xml;0;2
+FILE_NAME_2=1526;Java;0;EUTF-8;0;1;0;%2Fhome%2Fraphael%2Fdevelopment%2Fjvoicexml%2Forg.jvoicexml.voicexmlunit.demo%2Fsrc%2Forg%2Fjvoicexml%2Fvoicexmlunit%2Fdemo%2FTestSessionDemo.java;0;2
+FILE_NAME_3=585;XML;0;EUTF-8;0;1;0;%2Fhome%2Fraphael%2Fdevelopment%2Fjvoicexml%2Forg.jvoicexml.voicexmlunit.demo%2F3rdparty-libs.xml;0;2
+FILE_NAME_4=4472;XML;0;EUTF-8;0;1;0;%2Fhome%2Fraphael%2Fdevelopment%2Fjvoicexml%2Forg.jvoicexml%2Fbuild.xml;0;4
 
 [VTE]
-last_dir=/home/raphael
+last_dir=/home/raphael/development/jvoicexml/org.jvoicexml
 
 [debugger]
 target=
@@ -42,7 +46,7 @@ NF_00_LB=_Make
 NF_00_CM=ant compile
 NF_00_WD=
 NF_01_LB=Test
-NF_01_CM=ant -f test.xml test
+NF_01_CM=ant -f test.xml 
 NF_01_WD=
 NF_02_LB=Clean
 NF_02_CM=ant clean && ant -f test.xml cleantest
