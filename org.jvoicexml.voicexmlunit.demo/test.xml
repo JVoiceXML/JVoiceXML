@@ -120,24 +120,4 @@ This file runs unit tests on JVoiceXML.
       <report format="frames" todir="${test.results}/html" />
     </junitreport>
   </target>
-
-  <target name="testHelloDemo" description="run the session demo">
-    <property name="run.class" value="org.jvoicexml.voicexmlunit.demo.TestHelloDemo" />
-    <ant antfile="${ant.file}" target="testSingle" />
-  </target>
-
-  <target name="testInputDemo" description="run the session demo">
-    <property name="run.class" value="org.jvoicexml.voicexmlunit.demo.TestInputDemo" />
-    <ant antfile="${ant.file}" target="testSingle" />
-  </target>
-
-  <target name="testDtmfDemo" description="run the session demo">
-    <property name="run.class" value="org.jvoicexml.voicexmlunit.demo.TestDtmfDemo" />
-    <ant antfile="${ant.file}" target="testSingle" />
-  </target>
-
-  <target name="testSessionDemo" description="run the session demo">
-    <property name="run.class" value="org.jvoicexml.voicexmlunit.demo.TestSessionDemo" />
-    <ant antfile="${ant.file}" target="testSingle" />
-  </target>
 </project>
