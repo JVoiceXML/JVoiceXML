@@ -57,21 +57,21 @@ public class TestHelloDemo {
 
   @Test
   public void testSuccess() {
-    addHello();
-    addGoodbye();
+    assumeHello();
+    assumeGoodbye();
     logConversation();
     supervisor.process();
   }
 
   @Test(timeout=9999, expected=AssertionError.class)
   public void testMissingHello() {
-    addGoodbye();
+    assumeGoodbye();
     assertFailure();
   }
 
   @Test(timeout=9999, expected=AssertionError.class)
   public void testMissingGoodbye() {
-    addHello();
+    assumeHello();
     assertFailure();
   }
 
@@ -94,11 +94,11 @@ public class TestHelloDemo {
       + conversation.toString());
   }
 
-  private void addHello() {
+  private void assumeHello() {
     addOutput("Hello World!");
   }
 
-  private void addGoodbye() {
+  private void assumeGoodbye() {
     addOutput("Goodbye!");
   }
 
