@@ -39,6 +39,7 @@ import org.jvoicexml.voicexmlunit.Call;
 import org.jvoicexml.voicexmlunit.Voice;
 import org.jvoicexml.voicexmlunit.Supervisor;
 import org.jvoicexml.voicexmlunit.Conversation;
+import org.jvoicexml.voicexmlunit.io.Output;
 
 
 public class TestHelloDemo {
@@ -56,21 +57,21 @@ public class TestHelloDemo {
 
   @Test
   public void testSuccess() {
-    conversation.addOutput("Hello World!");
-    conversation.addOutput("Goodbye!");
+    addHello();
+    addGoodbye();
     logConversation();
     supervisor.process();
   }
 
   @Test(timeout=9999, expected=AssertionError.class)
   public void testMissingHello() {
-    conversation.addOutput("Goodbye!");
+    addGoodbye();
     assertFailure();
   }
 
   @Test(timeout=9999, expected=AssertionError.class)
   public void testMissingGoodbye() {
-    conversation.addOutput("Hello World!");
+    addHello();
     assertFailure();
   }
 
@@ -91,5 +92,17 @@ public class TestHelloDemo {
   private void logConversation() {
     Logger.getLogger(TestHelloDemo.class).info("Expected conversation: "
       + conversation.toString());
+  }
+
+  private void addHello() {
+    addOutput("Hello World!");
+  }
+
+  private void addGoodbye() {
+    addOutput("Goodbye!");
+  }
+
+  private void addOutput(final String message) {
+    conversation.add(new Output(message));
   }
 }
