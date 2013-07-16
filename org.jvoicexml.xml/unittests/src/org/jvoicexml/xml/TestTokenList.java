@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,7 +26,9 @@
 
 package org.jvoicexml.xml;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
+
 
 /**
  * Test case for org.jvoicexml.xml.TokenList.
@@ -35,15 +37,8 @@ import junit.framework.TestCase;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestTokenList
-        extends TestCase {
+public final class TestTokenList {
     /** Test token 1. */
     private static final String TOKEN1 = "token1";
 
@@ -65,24 +60,25 @@ public final class TestTokenList
      *
      * @see TokenList#size()
      */
+    @Test
     public void testSize() {
         final TokenList list1 = new TokenList();
-        assertEquals(0, list1.size());
+        Assert.assertEquals(0, list1.size());
 
         list1.add(TOKEN1);
-        assertEquals(1, list1.size());
+        Assert.assertEquals(1, list1.size());
 
         list1.add(TOKEN2);
-        assertEquals(2, list1.size());
+        Assert.assertEquals(2, list1.size());
 
         final TokenList list2 = new TokenList(TOKEN_LIST);
-        assertEquals(TOKEN_LIST_SIZE, list2.size());
+        Assert.assertEquals(TOKEN_LIST_SIZE, list2.size());
 
         final TokenList list3 = new TokenList("");
-        assertEquals(0, list3.size());
+        Assert.assertEquals(0, list3.size());
 
         final TokenList list4 = new TokenList(null);
-        assertEquals(0, list4.size());
+        Assert.assertEquals(0, list4.size());
     }
 
     /**
@@ -90,36 +86,37 @@ public final class TestTokenList
      *
      * @see TokenList#get(int)
      */
+    @Test
     public void testGetInt() {
         final TokenList list1 = new TokenList();
 
         try {
             final String str = list1.get(0);
-            fail("retrieved str: '" + str + "'");
+            Assert.fail("retrieved str: '" + str + "'");
         } catch (IndexOutOfBoundsException ioobe) {
         }
 
         list1.add(TOKEN1);
-        assertEquals(TOKEN1, list1.get(0));
+        Assert.assertEquals(TOKEN1, list1.get(0));
         try {
             final String str = list1.get(1);
-            fail("retrieved str: '" + str + "'");
+            Assert.fail("retrieved str: '" + str + "'");
         } catch (IndexOutOfBoundsException ioobe) {
         }
 
         list1.add(TOKEN2);
-        assertEquals(TOKEN1, list1.get(0));
-        assertEquals(TOKEN2, list1.get(1));
+        Assert.assertEquals(TOKEN1, list1.get(0));
+        Assert.assertEquals(TOKEN2, list1.get(1));
         try {
             final String str = list1.get(2);
-            fail("retrieved str: '" + str + "'");
+            Assert.fail("retrieved str: '" + str + "'");
         } catch (IndexOutOfBoundsException ioobe) {
         }
 
         final TokenList list2 = new TokenList(TOKEN_LIST);
-        assertEquals(TOKEN1, list2.get(0));
-        assertEquals(TOKEN2, list2.get(1));
-        assertEquals(TOKEN3, list2.get(2));
+        Assert.assertEquals(TOKEN1, list2.get(0));
+        Assert.assertEquals(TOKEN2, list2.get(1));
+        Assert.assertEquals(TOKEN3, list2.get(2));
     }
 
     /**
@@ -127,24 +124,25 @@ public final class TestTokenList
      *
      * @see TokenList#add(String)
      */
+    @Test
     public void testAddString() {
         final TokenList list = new TokenList();
 
-        assertEquals(true, list.add(TOKEN1));
-        assertEquals(TOKEN1, list.get(list.size() - 1));
-        assertEquals(true, list.add(TOKEN2));
-        assertEquals(TOKEN2, list.get(list.size() - 1));
-        assertEquals(true, list.add(TOKEN3));
-        assertEquals(TOKEN3, list.get(list.size() - 1));
+        Assert.assertEquals(true, list.add(TOKEN1));
+        Assert.assertEquals(TOKEN1, list.get(list.size() - 1));
+        Assert.assertEquals(true, list.add(TOKEN2));
+        Assert.assertEquals(TOKEN2, list.get(list.size() - 1));
+        Assert.assertEquals(true, list.add(TOKEN3));
+        Assert.assertEquals(TOKEN3, list.get(list.size() - 1));
 
         try {
             list.add(null);
-            fail("added null");
+            Assert.fail("added null");
         } catch (NullPointerException npe) {
         }
 
-        assertEquals(false, list.add(""));
-        assertEquals(false, list.add("   "));
+        Assert.assertEquals(false, list.add(""));
+        Assert.assertEquals(false, list.add("   "));
     }
 
     /**
@@ -152,16 +150,16 @@ public final class TestTokenList
      *
      * @see TokenList#toString()
      */
+    @Test
     public void testToString() {
         final TokenList list1 = new TokenList();
         list1.add(TOKEN1);
         list1.add(TOKEN2);
         list1.add(TOKEN3);
 
-        assertEquals(TOKEN_LIST, list1.toString());
+        Assert.assertEquals(TOKEN_LIST, list1.toString());
 
         final TokenList list2 = new TokenList(TOKEN_LIST);
-        assertEquals(TOKEN_LIST, list2.toString());
-
+        Assert.assertEquals(TOKEN_LIST, list2.toString());
     }
 }

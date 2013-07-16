@@ -74,7 +74,7 @@ Adapt the settings for your servlet container in the file
         description="Compile the JAVA sources">
         <echo message="compiling with debug=${debug}, optimize=${optimize}" />
         <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" includeantruntime="false">
-            <src path="${src}" />
+              <src path="${src}" />
             <include name="**/*.java" />
             <classpath refid="build.classpath" />
             <compilerarg value="-Xlint:unchecked" />

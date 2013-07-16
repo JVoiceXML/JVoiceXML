@@ -21,6 +21,9 @@
          class="org.jvoicexml.client.JVoiceXmlConnectionInformationFactory" />
     </beans:property>
 
+    <!-- Base URI where the JVoiceXmlMMI servlet can be found. -->
+    <beans:property name="servletBaseUri" value="http://localhost:8080"/>
+
     <!-- Specification of the ETL -->
     <beans:property name="protocolAdapter">
       <beans:bean

@@ -26,7 +26,10 @@
 
 package org.jvoicexml.interpreter.scope;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 
 /**
  * Test case for org.jvoicexml.interpreter.scope.ScopeObserver.
@@ -42,30 +45,18 @@ import junit.framework.TestCase;
  * </a>
  * </p>
  */
-public final class TestScopeObserver
-        extends TestCase {
+public final class TestScopeObserver {
     /** The observer to test. */
     private ScopeObserver observer;
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment.
+     * @exception Exception set up failed
      */
-    @Override
+    @Before
     public void setUp()
             throws Exception {
-        super.setUp();
         observer = new ScopeObserver();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void tearDown()
-            throws Exception {
-        observer = null;
-
-        super.tearDown();
     }
 
     /**
@@ -74,17 +65,18 @@ public final class TestScopeObserver
      *
      * @see ScopeObserver#enterScope()
      */
+    @Test
     public void testEnterScope() {
-        assertNull(observer.currentScope());
+        Assert.assertNull(observer.currentScope());
 
         observer.enterScope(Scope.SESSION);
-        assertEquals(Scope.SESSION, observer.currentScope());
+        Assert.assertEquals(Scope.SESSION, observer.currentScope());
 
         observer.enterScope(Scope.APPLICATION);
-        assertEquals(Scope.APPLICATION, observer.currentScope());
+        Assert.assertEquals(Scope.APPLICATION, observer.currentScope());
 
         observer.enterScope(null);
-        assertEquals(Scope.APPLICATION, observer.currentScope());
+        Assert.assertEquals(Scope.APPLICATION, observer.currentScope());
     }
 
     /**
@@ -93,28 +85,29 @@ public final class TestScopeObserver
      *
      * @see ScopeObserver#enterScope()
      */
+    @Test
     public void testExitScope() {
-        assertNull(observer.currentScope());
+        Assert.assertNull(observer.currentScope());
 
         observer.enterScope(Scope.SESSION);
         observer.enterScope(Scope.APPLICATION);
-        assertEquals(Scope.APPLICATION, observer.currentScope());
+        Assert.assertEquals(Scope.APPLICATION, observer.currentScope());
 
         observer.exitScope(Scope.APPLICATION);
-        assertEquals(Scope.SESSION, observer.currentScope());
+        Assert.assertEquals(Scope.SESSION, observer.currentScope());
 
         observer.exitScope(Scope.SESSION);
-        assertNull(observer.currentScope());
+        Assert.assertNull(observer.currentScope());
 
         observer.enterScope(Scope.SESSION);
         observer.enterScope(Scope.APPLICATION);
-        assertEquals(Scope.APPLICATION, observer.currentScope());
+        Assert.assertEquals(Scope.APPLICATION, observer.currentScope());
 
         observer.exitScope(Scope.DIALOG);
-        assertEquals(Scope.APPLICATION, observer.currentScope());
+        Assert.assertEquals(Scope.APPLICATION, observer.currentScope());
 
         observer.exitScope(null);
-        assertEquals(Scope.APPLICATION, observer.currentScope());
+        Assert.assertEquals(Scope.APPLICATION, observer.currentScope());
     }
 
     /**
@@ -123,17 +116,18 @@ public final class TestScopeObserver
      *
      * @see ScopeObserver#currentScope()
      */
+    @Test
     public void testCurrentScope() {
-        assertNull(observer.currentScope());
+        Assert.assertNull(observer.currentScope());
 
         observer.enterScope(Scope.SESSION);
         observer.enterScope(Scope.APPLICATION);
-        assertEquals(Scope.APPLICATION, observer.currentScope());
+        Assert.assertEquals(Scope.APPLICATION, observer.currentScope());
 
         observer.exitScope(Scope.APPLICATION);
-        assertEquals(Scope.SESSION, observer.currentScope());
+        Assert.assertEquals(Scope.SESSION, observer.currentScope());
 
         observer.exitScope(Scope.SESSION);
-        assertNull(observer.currentScope());
+        Assert.assertNull(observer.currentScope());
     }
 }

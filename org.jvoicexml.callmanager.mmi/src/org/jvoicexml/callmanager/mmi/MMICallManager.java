@@ -74,6 +74,9 @@ public final class MMICallManager implements CallManager {
     /** Identifier for the system output to use. */
     private String output;
 
+    /** The basic URI of the MMI servlet. */
+    private String servletBaseUri;
+
     /**
      * Constructs a new object.
      */
@@ -106,6 +109,13 @@ public final class MMICallManager implements CallManager {
         output = value;
     }
 
+    /**
+     * Sets the base URI where to find the MMI servlet.
+     * @param uri base URI of the servlet
+     */
+    public void setServletBaseUri(final String uri) {
+        servletBaseUri = uri;
+    }
 
     /**
      * Sets the adapter for the ETL specific protocol.
@@ -151,7 +161,7 @@ public final class MMICallManager implements CallManager {
             throw new IOException(
                     "Unable to hook to the ETL without a protocol adapter!");
         }
-        mc = new VoiceModalityComponent(this);
+        mc = new VoiceModalityComponent(this, servletBaseUri);
         mc.startAcceptingLifecyleEvents(adapter);
     }
 

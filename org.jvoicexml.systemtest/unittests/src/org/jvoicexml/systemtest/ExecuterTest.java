@@ -4,8 +4,7 @@ import java.net.InetSocketAddress;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.xml.ssml.Speak;

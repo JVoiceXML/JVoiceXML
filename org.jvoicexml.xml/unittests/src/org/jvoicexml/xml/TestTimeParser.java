@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,43 +26,37 @@
 
 package org.jvoicexml.xml;
 
-import org.jvoicexml.xml.TimeParser;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test for {@link TimeParser}.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 
-public final class TestTimeParser extends TestCase {
+public final class TestTimeParser {
     /**
      * Test case for {@link TimeParser#parse()}.
      */
+    @Test
     public void testParse() {
         final TimeParser parser1 = new TimeParser("10s");
-        assertEquals(10000, parser1.parse());
+        Assert.assertEquals(10000, parser1.parse());
         final TimeParser parser2 = new TimeParser("2.7s");
-        assertEquals(2700, parser2.parse());
+        Assert.assertEquals(2700, parser2.parse());
         final TimeParser parser3 = new TimeParser(".5s");
-        assertEquals(500, parser3.parse());
+        Assert.assertEquals(500, parser3.parse());
         final TimeParser parser4 = new TimeParser("850ms");
-        assertEquals(850, parser4.parse());
+        Assert.assertEquals(850, parser4.parse());
         final TimeParser parser5 = new TimeParser("+1.5s");
-        assertEquals(1500, parser5.parse());
+        Assert.assertEquals(1500, parser5.parse());
         final TimeParser parser6 = new TimeParser("20");
-        assertEquals(-1, parser6.parse());
+        Assert.assertEquals(-1, parser6.parse());
         final TimeParser parser7 = new TimeParser("abcs");
-        assertEquals(-1, parser7.parse());
+        Assert.assertEquals(-1, parser7.parse());
         final TimeParser parser8 = new TimeParser(null);
-        assertEquals(0, parser8.parse());
+        Assert.assertEquals(0, parser8.parse());
     }
 }
-

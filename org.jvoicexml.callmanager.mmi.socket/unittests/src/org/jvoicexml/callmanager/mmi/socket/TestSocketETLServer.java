@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,8 +33,7 @@ import java.net.URI;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
@@ -48,7 +47,7 @@ import org.jvoicexml.mmi.events.StartRequest;
  * @version $Revision: $
  * @since 0.7.6
  */
-public class TestSocketETLServer implements MMIEventListener {
+public final class TestSocketETLServer implements MMIEventListener {
     /** Notification mechanism. */
     private Object lock;
 
@@ -56,7 +55,7 @@ public class TestSocketETLServer implements MMIEventListener {
     private DecoratedMMIEvent event;
 
     /**
-     * Set up the test environment
+     * Set up the test environment.
      */
     @Before
     public void setUp() {

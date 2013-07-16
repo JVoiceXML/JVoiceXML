@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -42,15 +42,8 @@ import com.sun.speech.freetts.audio.AudioPlayer;
 /**
  * FreeTTS {@link AudioPlayer} bsed on streams for the RTP protocol.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.6
  */
 public final class StreamableAudioPlayer implements AudioPlayer {
@@ -61,7 +54,7 @@ public final class StreamableAudioPlayer implements AudioPlayer {
     private AudioFormat currentFormat;
 
     /** Type of the audio format to send over RTP. */
-    private AudioFileFormat.Type outputType;
+    private final AudioFileFormat.Type outputType;
 
     /** Buffer to capture the FreeTTS output. */
     private ByteArrayOutputStream out;
