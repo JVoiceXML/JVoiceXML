@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,8 +26,9 @@
 
 package org.jvoicexml.implementation.text;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SynthesizedOutput;
 
@@ -36,7 +37,7 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * @author Dirk Schnelle
  *
  */
-public final class TestTextSynthesizedOutputFactory extends TestCase {
+public final class TestTextSynthesizedOutputFactory {
     /** The number of instances that this factory can create. */
     private static final int INSTANCES = 500;
 
@@ -44,10 +45,11 @@ public final class TestTextSynthesizedOutputFactory extends TestCase {
     private TextSynthesizedOutputFactory factory;
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment.
+     * @exception Exception set up failed
      */
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         factory = new TextSynthesizedOutputFactory();
         factory.setInstances(INSTANCES);
     }
@@ -59,10 +61,11 @@ public final class TestTextSynthesizedOutputFactory extends TestCase {
      * @throws NoresourceError
      *         Test failed.
      */
+    @Test
     public void testCreateResource() throws Exception, NoresourceError {
         for (int i = 0; i < INSTANCES; i++) {
             SynthesizedOutput output = factory.createResource();
-            assertEquals("text", output.getType());
+            Assert.assertEquals("text", output.getType());
         }
     }
 
@@ -70,14 +73,14 @@ public final class TestTextSynthesizedOutputFactory extends TestCase {
      * Test method for {@link org.jvoicexml.implementation.text.TextSynthesizedOutputFactory#getInstances()}.
      */
     public void testGetInstances() {
-        assertEquals(INSTANCES, factory.getInstances());
+        Assert.assertEquals(INSTANCES, factory.getInstances());
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.text.TextSynthesizedOutputFactory#getType()}.
      */
     public void testGetType() {
-        assertEquals("text", factory.getType());
+        Assert.assertEquals("text", factory.getType());
     }
 
 }

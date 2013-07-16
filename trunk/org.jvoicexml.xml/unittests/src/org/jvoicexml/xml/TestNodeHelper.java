@@ -30,8 +30,7 @@ package org.jvoicexml.xml;
 
 import java.util.Locale;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;

@@ -26,8 +26,9 @@
 
 package org.jvoicexml.interpreter.grammar;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.documentserver.ExternalGrammarDocument;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -42,26 +43,19 @@ import org.jvoicexml.xml.srgs.GrammarType;
  *
  * @author Christoph Buente
  * @author Dirk Schnelle
- *
  * @version $LastChangedRevision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestGrammarIdentifierCentral
-        extends TestCase {
+public final class TestGrammarIdentifierCentral {
 
     /** The test object. */
     private GrammarIdentifierCentral central;
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment.
+     * @exception Exception setup failed
      */
-    @Override
-    protected void setUp()
+    @Before
+    public void setUp()
             throws Exception {
         central = new GrammarIdentifierCentral();
         central.addIdentifier(new SrgsAbnfGrammarIdentifier());
@@ -81,37 +75,33 @@ public final class TestGrammarIdentifierCentral
     /**
      * Tests the functionality to identify a grammar, which is within
      * a VoiceXML document.
+     * @exception UnsupportedFormatError test failed
      */
-    public void testIdentifyInlineGrammar() {
+    @Test
+    public void testIdentifyInlineGrammar() throws UnsupportedFormatError {
         final String grammar = "<grammar type=\"application/srgs+xml\" "
             + "root=\"r2\" version=\"1.0\"></grammar>";
 
         final GrammarDocument doc = getGrammarFromString(grammar);
 
-        try {
-            final GrammarType type = central.identifyGrammar(doc,
-                    GrammarType.SRGS_XML);
-            assertEquals(GrammarType.SRGS_XML, type);
-        } catch (UnsupportedFormatError e) {
-            fail(e.getMessage());
-        }
+        final GrammarType type = central.identifyGrammar(doc,
+                GrammarType.SRGS_XML);
+        Assert.assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Tests the functionality to load and identify an externally
      * linked grammar.
+     * @exception UnsupportedFormatError test failed
      */
-    public void testIdentifyExternalGrammar() {
+    @Test
+    public void testIdentifyExternalGrammar() throws UnsupportedFormatError {
         final String grammar = "<grammar type=\"application/srgs+xml\" "
             + "root=\"r2\" src=\"grammar.grxml\" version=\"1.0\"></grammar>";
         final GrammarDocument doc = getGrammarFromString(grammar);
 
-        try {
-            final GrammarType type = central.identifyGrammar(doc,
-                    GrammarType.SRGS_XML);
-            assertEquals(GrammarType.SRGS_XML, type);
-        } catch (UnsupportedFormatError e) {
-            fail(e.getMessage());
-        }
+        final GrammarType type = central.identifyGrammar(doc,
+                GrammarType.SRGS_XML);
+        Assert.assertEquals(GrammarType.SRGS_XML, type);
     }
 }

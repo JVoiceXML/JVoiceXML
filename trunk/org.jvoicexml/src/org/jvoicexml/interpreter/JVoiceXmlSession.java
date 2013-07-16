@@ -130,7 +130,7 @@ public final class JVoiceXmlSession
             final ConnectionInformation connectionInformation) {
         // Create a unique session id
         uuid = UUID.randomUUID();
-        // Store it in the MDC
+        // Store it in the MDC so that the session Id can be used by the loggers
         MDC.put("sessionId", uuid.toString());
 
         // Initialize this object

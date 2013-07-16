@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,8 +25,8 @@
  */
 package org.jvoicexml.interpreter.formitem;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Test;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.EventCountable;
@@ -44,62 +44,73 @@ import org.jvoicexml.interpreter.EventCountable;
  * </a>
  * </p>
  */
-public final class TestEventCounter
-        extends TestCase {
+public final class TestEventCounter {
 
     /**
      * Test method for {@link org.jvoicexml.interpreter.formitem.EventCounter#incrementEventCounter(org.jvoicexml.event.JVoiceXMLEvent)}.
      */
+    @Test
     public void testIncrement() {
         final EventCountable counter = new EventCounter();
-        assertEquals(0, counter.getEventCount(""));
-        assertEquals(0, counter.getEventCount("org"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test.counter"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test2.counter"));
+        Assert.assertEquals(0, counter.getEventCount(""));
+        Assert.assertEquals(0, counter.getEventCount("org"));
+        Assert.assertEquals(0, counter.getEventCount("org.jvoicexml"));
+        Assert.assertEquals(0, counter.getEventCount("org.jvoicexml.test"));
+        Assert.assertEquals(0, counter.getEventCount(
+                "org.jvoicexml.test.counter"));
+        Assert.assertEquals(0, counter.getEventCount(
+                "org.jvoicexml.test2.counter"));
 
         final JVoiceXMLEvent event =
             new GenericVoiceXmlEvent("org.jvoicexml.test");
         counter.incrementEventCounter(event);
 
-        assertEquals(0, counter.getEventCount(""));
-        assertEquals(1, counter.getEventCount("org"));
-        assertEquals(1, counter.getEventCount("org.jvoicexml"));
-        assertEquals(1, counter.getEventCount("org.jvoicexml.test"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test.counter"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test2.counter"));
+        Assert.assertEquals(0, counter.getEventCount(""));
+        Assert.assertEquals(1, counter.getEventCount("org"));
+        Assert.assertEquals(1, counter.getEventCount("org.jvoicexml"));
+        Assert.assertEquals(1, counter.getEventCount("org.jvoicexml.test"));
+        Assert.assertEquals(0, counter.getEventCount(
+                "org.jvoicexml.test.counter"));
+        Assert.assertEquals(0, counter.getEventCount(
+                "org.jvoicexml.test2.counter"));
     }
 
     /**
      * Test method for {@link org.jvoicexml.interpreter.formitem.EventCounter#resetEventCounter()}.
      */
+    @Test
     public void testReset() {
         final EventCountable counter = new EventCounter();
-        assertEquals(0, counter.getEventCount(""));
-        assertEquals(0, counter.getEventCount("org"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test.counter"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test2.counter"));
+        Assert.assertEquals(0, counter.getEventCount(""));
+        Assert.assertEquals(0, counter.getEventCount("org"));
+        Assert.assertEquals(0, counter.getEventCount("org.jvoicexml"));
+        Assert.assertEquals(0, counter.getEventCount("org.jvoicexml.test"));
+        Assert.assertEquals(0, counter.getEventCount(
+                "org.jvoicexml.test.counter"));
+        Assert.assertEquals(0, counter.getEventCount(
+                "org.jvoicexml.test2.counter"));
 
         final JVoiceXMLEvent event =
             new GenericVoiceXmlEvent("org.jvoicexml.test");
         counter.incrementEventCounter(event);
 
-        assertEquals(0, counter.getEventCount(""));
-        assertEquals(1, counter.getEventCount("org"));
-        assertEquals(1, counter.getEventCount("org.jvoicexml"));
-        assertEquals(1, counter.getEventCount("org.jvoicexml.test"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test.counter"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test2.counter"));
+        Assert.assertEquals(0, counter.getEventCount(""));
+        Assert.assertEquals(1, counter.getEventCount("org"));
+        Assert.assertEquals(1, counter.getEventCount("org.jvoicexml"));
+        Assert.assertEquals(1, counter.getEventCount("org.jvoicexml.test"));
+        Assert.assertEquals(0, counter.getEventCount(
+                "org.jvoicexml.test.counter"));
+        Assert.assertEquals(0, counter.getEventCount(
+                "org.jvoicexml.test2.counter"));
 
         counter.resetEventCounter();
-        assertEquals(0, counter.getEventCount(""));
-        assertEquals(0, counter.getEventCount("org"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test.counter"));
-        assertEquals(0, counter.getEventCount("org.jvoicexml.test2.counter"));
+        Assert.assertEquals(0, counter.getEventCount(""));
+        Assert.assertEquals(0, counter.getEventCount("org"));
+        Assert.assertEquals(0, counter.getEventCount("org.jvoicexml"));
+        Assert.assertEquals(0, counter.getEventCount("org.jvoicexml.test"));
+        Assert.assertEquals(0, counter.getEventCount(
+                "org.jvoicexml.test.counter"));
+        Assert.assertEquals(0, counter.getEventCount(
+                "org.jvoicexml.test2.counter"));
     }
 }

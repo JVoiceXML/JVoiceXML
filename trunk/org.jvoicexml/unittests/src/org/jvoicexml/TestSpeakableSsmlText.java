@@ -36,14 +36,8 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  * @see org.jvoicexml.SpeakableSsmlText
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestSpeakableSsmlText {
     /**

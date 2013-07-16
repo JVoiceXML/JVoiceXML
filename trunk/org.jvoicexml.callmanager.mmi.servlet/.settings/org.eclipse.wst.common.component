@@ -5,7 +5,7 @@
         <dependent-module archiveName="org.jvoicexml.xml.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/org.jvoicexml.xml/org.jvoicexml.xml">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="context-root" value="JvxmlMmi"/>
         <property name="java-output-path" value="/org.jvoicexml.callmanager.mmi.servlet/build/classes"/>
+        <property name="context-root" value="JVoiceXmlMmi"/>
     </wb-module>
 </project-modules>

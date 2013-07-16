@@ -25,8 +25,7 @@
  */
 package org.jvoicexml.documentserver;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.interpreter.grammar.InternalGrammarDocument;
 import org.jvoicexml.xml.srgs.Grammar;

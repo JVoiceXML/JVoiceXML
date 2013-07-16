@@ -88,12 +88,17 @@ public final class VoiceModalityComponent
     /** Active contexts. */
     private final Map<String, MMIContext> contexts;
 
+    /** The basic URI of the MMI servlet. */
+    private final String servletBaseUri;
+
     /**
      * Constructs a new object.
      * @param cm the call manager
      */
-    public VoiceModalityComponent(final MMICallManager cm) {
+    public VoiceModalityComponent(final MMICallManager cm,
+            final String baseUri) {
         callManager = cm;
+        servletBaseUri = baseUri;
         contexts = new java.util.HashMap<String, MMIContext>();
     }
 
@@ -481,13 +486,13 @@ public final class VoiceModalityComponent
             encodedContentString = URLEncoder.encode(trimmedContentString,
                     encoding);
             if (field == null) {
-                return new URI(
-                    "http://localhost:8080/JvxmlMmi/VoiceXmlSnippet?prompt="
-                            + encodedContentString);
+                return new URI(servletBaseUri
+                        + "/JVoiceXmlMmi/VoiceXmlSnippet?prompt="
+                        + encodedContentString);
             } else {
-                return new URI(
-                        "http://localhost:8080/JvxmlMmi/VoiceXmlSnippet?field="
-                                + encodedContentString);
+                return new URI(servletBaseUri
+                        + "/JVoiceXmlMmi/VoiceXmlSnippet?field="
+                        + encodedContentString);
             }
         } catch (UnsupportedEncodingException e) {
             throw new URISyntaxException(contentString, e.getMessage());

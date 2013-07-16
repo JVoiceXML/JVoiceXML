@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,8 +26,7 @@
 
 package org.jvoicexml.implementation.jvxml;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.CallControlProperties;

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,8 +30,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URI;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.Form;
@@ -46,17 +47,15 @@ import org.xml.sax.InputSource;
  * @version $Revision$
  * @since 0.6
  */
-public final class TestMappedDocumentStrategy extends TestCase {
+public final class TestMappedDocumentStrategy {
     /** The document repository. */
     private DocumentMap map;
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         map = DocumentMap.getInstance();
         final VoiceXmlDocument doc1 = new VoiceXmlDocument();
         final Vxml vxml = doc1.getVxml();
@@ -79,6 +78,7 @@ public final class TestMappedDocumentStrategy extends TestCase {
      * @throws BadFetchError
      *         Test failed.
      */
+    @Test
     public void testGetInputStream() throws Exception, BadFetchError {
         final MappedDocumentStrategy strategy = new MappedDocumentStrategy();
         JVoiceXMLEvent error = null;
@@ -87,23 +87,23 @@ public final class TestMappedDocumentStrategy extends TestCase {
         } catch (BadFetchError e) {
             error = e;
         }
-        assertNotNull("BadFetchError expected", error);
+        Assert.assertNotNull("BadFetchError expected", error);
 
         URI uri1 = map.getUri("/doc");
         final InputStream stream1 = strategy.getInputStream(null, uri1, null,
                 0, null);
-        assertNotNull(stream1);
+        Assert.assertNotNull(stream1);
         final InputSource inputSource = new InputSource(stream1);
         final VoiceXmlDocument doc1 = new VoiceXmlDocument(inputSource);
         final Vxml vxml1 = doc1.getVxml();
-        assertTrue(vxml1.hasChildNodes());
+        Assert.assertTrue(vxml1.hasChildNodes());
 
         URI uri2 =  map.getUri("/test");
         final InputStream stream2 = strategy.getInputStream(null, uri2, null,
                 0, null);
-        assertNotNull(stream2);
+        Assert.assertNotNull(stream2);
         final String test = readString(stream2);
-        assertEquals("test", test);
+        Assert.assertEquals("test", test);
     }
 
     /**
@@ -132,5 +132,4 @@ public final class TestMappedDocumentStrategy extends TestCase {
         final byte[] readBytes = out.toByteArray();
         return new String(readBytes);
     }
-
 }
