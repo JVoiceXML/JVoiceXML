@@ -41,13 +41,13 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * Extension to Assert a statement subclass object.
  */
 public final class Assert extends org.junit.Assert implements Facade {
-    
+
     /** Current assertion under processing.  */
     private Assertion assertion;
-    
+
     /** Call object.  */
     private Call call;
-    
+
     /**
      * Set current assertion to process.
      * @param assertion the assertion to use, set to null if none
@@ -57,7 +57,7 @@ public final class Assert extends org.junit.Assert implements Facade {
         this.assertion = assertion;
         this.call = call;
     }
-    
+
     /**
      * Set current assertion to process.
      * @param assertion the assertion to use, set to null if none
@@ -65,7 +65,7 @@ public final class Assert extends org.junit.Assert implements Facade {
     public Assert(final Assertion assertion) {
         this(assertion, null);
     }
-    
+
     /**
      * Assert an Output instance with the given message.
      * @param message  Message to expect in the call
@@ -75,9 +75,9 @@ public final class Assert extends org.junit.Assert implements Facade {
         assertNotNull(assertion);
         assertion.receive(message);
     }
-    
+
     /**
-     * Assert that the statement is an Input instance and the actual message 
+     * Assert that the statement is an Input instance and the actual message
      * can be send with the given call.
      */
     @Override
@@ -104,17 +104,17 @@ public final class Assert extends org.junit.Assert implements Facade {
         } catch (ParserConfigurationException e) {
             fail(e.getMessage());
         }
-    }    
-    
+    }
+
     /**
      * Assert the expected count of conversation statements.
-     * 
+     *
      * @param expectedCount How many statements should we have?
      * @param conversation
      */
-    public static void assertStatements(final int expectedCount, 
+    public static void assertStatements(final int expectedCount,
             final Conversation conversation) {
-        assertEquals("statements", expectedCount, 
-                conversation.countStatements());
+        assertEquals("statements", expectedCount,
+                conversation.size());
     }
 }
