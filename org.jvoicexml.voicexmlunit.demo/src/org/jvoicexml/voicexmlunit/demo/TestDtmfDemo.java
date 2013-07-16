@@ -11,6 +11,8 @@ import org.jvoicexml.voicexmlunit.Call;
 import org.jvoicexml.voicexmlunit.Conversation;
 import org.jvoicexml.voicexmlunit.Supervisor;
 import org.jvoicexml.voicexmlunit.Voice;
+import org.jvoicexml.voicexmlunit.io.Output;
+import org.jvoicexml.voicexmlunit.io.Dtmf;
 
 public class TestDtmfDemo {
   private Call call;
@@ -36,8 +38,9 @@ public class TestDtmfDemo {
 
   private void createConversation(char answer) {
     Conversation conversation = supervisor.init(call);
-    conversation.addOutput("Do you like this example? Please enter 1 for yes or 2 for no");
-    conversation.addDtmf(answer);
-    conversation.addOutput("You like this example.");
+    conversation.add(new Output(
+      "Do you like this example? Please enter 1 for yes or 2 for no"));
+    conversation.add(new Dtmf(answer));
+    conversation.add(new Output("You like this example."));
   }
 }
