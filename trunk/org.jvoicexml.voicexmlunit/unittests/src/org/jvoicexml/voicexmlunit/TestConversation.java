@@ -32,16 +32,18 @@ import java.util.ConcurrentModificationException;
 import org.junit.*;
 
 import org.jvoicexml.voicexmlunit.Conversation;
+import org.jvoicexml.voicexmlunit.io.*;
 import org.jvoicexml.voicexmlunit.Supervisor;
 import org.jvoicexml.voicexmlunit.processor.Assert;
 
 public class TestConversation {
 
-    private Supervisor supervisor;
+    private Conversation conversation;
 
     @Before
     public void setUp() throws Exception {
-        supervisor = new Supervisor();
+        conversation = new Conversation();
+        Assert.assertStatements(0, conversation);
     }
 
     @After
@@ -49,46 +51,35 @@ public class TestConversation {
     }
 
     @Test
-    public void testConversationAdd() {
-        // 1. one Output
-        Conversation conversation = createConversationForSimpleTest();
-        String expected = "Test1";
-        conversation.addOutput(expected);
+    public void testConversationAddOutput() {
+        final String expected = "1";
+        addOutput(expected);
         Assert.assertStatements(1, conversation);
         Assert.assertEquals(expected, conversation.begin().toString());
+    }
 
-        // 2. one Output again
-        conversation = createConversationForSimpleTest();
-        expected = "Test2";
-        conversation.addOutput(expected);
-        Assert.assertStatements(1, conversation);
-        Assert.assertEquals(expected, conversation.begin().toString());
+    @Test
+    public void testConversationAddInput() {
+        // first element
+        addOutput("2");
+        Assert.assertNotNull(conversation.next());
+        Assert.assertNotNull(conversation.begin());
 
-        // 3. both Output and Input
-        expected = "Test3";
-        conversation.addInput(expected);
+        // second element, after cursor creation
+        final String expected = "3";
+        addInput(expected);
         Assert.assertStatements(2, conversation);
-
-        // TODO: change the following behaviour for synchronous test
-        try {
-                conversation.next(); // fails always
-                Assert.fail("Expected ConcurrentModificationException");
-        } catch (ConcurrentModificationException ignore) {
-        }
-        conversation.begin(); // prevents ConcurrentModificationException
-        Assert.assertEquals(expected, conversation.next().toString());
-
-        // 4. conversation gets empty again
-        conversation = createConversationForSimpleTest();
-        Assert.assertStatements(0, conversation);
-        Assert.assertNull(conversation.next());
+        Assert.assertNull(conversation.next()); // invalid cursor
+        Assert.assertNotNull(conversation.begin()); // validate again
+        final Assertion next = conversation.next();
+        Assert.assertEquals(next.getClass(), Input.class);
+        Assert.assertEquals(expected, next.toString());
     }
 
     @Test
     public void testConversationNext() {
-        Conversation conversation = createConversationForSimpleTest();
-        conversation.addOutput("begin");
-        conversation.addOutput("next");
+        addOutput("begin");
+        addOutput("next");
 
         Assert.assertEquals(conversation.next().toString(), "begin");
         Assert.assertEquals(conversation.begin().toString(), "begin");
@@ -96,9 +87,11 @@ public class TestConversation {
         Assert.assertNull(conversation.next());
     }
 
-    private Conversation createConversationForSimpleTest() {
-        Conversation conversation = supervisor.init(null);
-        Assert.assertStatements(0, conversation);
-        return conversation;
+    private void addOutput(final String message) {
+        conversation.addStatement(new Output(message));
+    }
+
+    private void addInput(final String message) {
+        conversation.addStatement(new Input(message));
     }
 }

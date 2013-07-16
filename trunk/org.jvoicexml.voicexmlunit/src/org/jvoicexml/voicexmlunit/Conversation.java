@@ -26,13 +26,10 @@
 
 package org.jvoicexml.voicexmlunit;
 
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Iterator;
 
-import org.jvoicexml.voicexmlunit.io.Assertion;
-import org.jvoicexml.voicexmlunit.io.Dtmf;
-import org.jvoicexml.voicexmlunit.io.Input;
-import org.jvoicexml.voicexmlunit.io.Output;
+import org.jvoicexml.voicexmlunit.io.*;
 
 /**
  * Conversation is a helper for the communication in between the processing of
@@ -45,48 +42,56 @@ import org.jvoicexml.voicexmlunit.io.Output;
  *
  */
 public final class Conversation {
-    private LinkedList<Assertion> history;
-    private ListIterator<Assertion> iterator;
+    private ConcurrentLinkedQueue<Assertion> queue;
+    private Iterator<Assertion> iterator;
 
     /**
      * Constructor
      */
     public Conversation() {
-        history = new LinkedList<Assertion>();
+        queue = new ConcurrentLinkedQueue<Assertion>();
         iterator = null;
     }
 
     /**
      * Add a new Output with the expected message
-     *
+     * Discouraged usage, better use the more generic addStatement(...)
      * @param message
      *            Message to expect
      */
-    public void addOutput(String message) {
-        Output output = new Output(message);
-        history.add(output);
+    @Deprecated
+    public void addOutput(final String message) {
+        addStatement(new Output(message));
     }
 
     /**
      * Add a new Input with the message to be send
-     *
+     * Discouraged usage, better use the more generic addStatement(...)
      * @param message
      *            Message to send
      */
-    public void addInput(String message) {
-        Input input = new Input(message);
-        history.add(input);
+    @Deprecated
+    public void addInput(final String message) {
+        addStatement(new Input(message));
     }
 
     /**
      * Add a new Dtmf with the message to be send
-     *
+     * Discouraged usage, better use the more generic addStatement(...)
      * @param message
      *            Message to send
      */
-    public void addDtmf(char message) {
-        Dtmf dtmf = new Dtmf(message);
-        history.add(dtmf);
+    @Deprecated
+    public void addDtmf(final char message) {
+        addStatement(new Dtmf(message));
+    }
+
+    /**
+     * Add a statement to the internal queue.
+     * @param s statement to add in queue
+     */
+    public boolean addStatement(final Statement s) {
+        return queue.add(s);
     }
 
     /**
@@ -95,19 +100,19 @@ public final class Conversation {
      * @return First statement of the conversation
      */
     public Assertion begin() {
-        if (history.isEmpty()) {
+        if (queue.isEmpty()) {
             iterator = null; // invalidate any existing cursor
             return null;
         } else {
-            iterator = history.listIterator(0);
+            iterator = queue.iterator();
             return iterator.next();
         }
     }
 
     /**
-     * Go to the next statement in the conversation If there are no more
-     * elements left, this method invalidates the conversation and returns an
-     * invalid object.
+     * Go to the next statement in the conversation.
+     * If there are no more elements left, this method invalidates
+     * the conversation and returns an invalid object.
      *
      * @return Next statement after the previously current one
      */
@@ -126,7 +131,7 @@ public final class Conversation {
      * @return Count of so far collected statements wit addOutput/addInput
      */
     public int countStatements() {
-        return history.size();
+        return queue.size();
     }
 
     /**
@@ -134,6 +139,6 @@ public final class Conversation {
      */
     public String toString() {
         // TODO: insert individual concrete subclasses (out/in)
-        return history.toString();
+        return queue.toString();
     }
 }
