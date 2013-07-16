@@ -61,7 +61,7 @@ public final class Conversation {
      */
     @Deprecated
     public void addOutput(final String message) {
-        addStatement(new Output(message));
+        add(new Output(message));
     }
 
     /**
@@ -72,7 +72,7 @@ public final class Conversation {
      */
     @Deprecated
     public void addInput(final String message) {
-        addStatement(new Input(message));
+        add(new Input(message));
     }
 
     /**
@@ -83,20 +83,28 @@ public final class Conversation {
      */
     @Deprecated
     public void addDtmf(final char message) {
-        addStatement(new Dtmf(message));
+        add(new Dtmf(message));
+    }
+
+    /**
+     * Discouraged usage, better use size()
+     * @return Count of so far collected statements wit addOutput/addInput
+     */
+    @Deprecated
+    public int countStatements() {
+        return size();
     }
 
     /**
      * Add a statement to the internal queue.
      * @param s statement to add in queue
      */
-    public boolean addStatement(final Statement s) {
-        return queue.add(s);
+    public boolean add(final Assertion a) {
+        return queue.add(a);
     }
 
     /**
-     * Begin the conversation
-     *
+     * Begins the conversation.
      * @return First statement of the conversation
      */
     public Assertion begin() {
@@ -113,7 +121,6 @@ public final class Conversation {
      * Go to the next statement in the conversation.
      * If there are no more elements left, this method invalidates
      * the conversation and returns an invalid object.
-     *
      * @return Next statement after the previously current one
      */
     public Assertion next() {
@@ -127,10 +134,10 @@ public final class Conversation {
         }
     }
 
-    /**
-     * @return Count of so far collected statements wit addOutput/addInput
+    /*
+     * @return current count of collected Assertions
      */
-    public int countStatements() {
+    public int size() {
         return queue.size();
     }
 

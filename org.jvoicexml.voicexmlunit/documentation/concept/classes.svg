@@ -2,21 +2,25 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
 <svg width="72cm" height="65cm" viewBox="-222 -193 1430 1299" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <g>
-    <rect style="fill: #ffffff" x="95.3376" y="-74.4682" width="256.4" height="44"/>
-    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="95.3376" y="-74.4682" width="256.4" height="44"/>
-    <text font-size="12.8" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="223.538" y="-58.4682">&lt;&lt;controller&gt;&gt;</text>
-    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="223.538" y="-39.4682">Conversation</text>
-    <rect style="fill: #ffffff" x="95.3376" y="-30.4682" width="256.4" height="20"/>
-    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="95.3376" y="-30.4682" width="256.4" height="20"/>
-    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="98.3376" y="-16.4682">-history: LinkedList&lt;Statement&gt;</text>
-    <rect style="fill: #ffffff" x="95.3376" y="-10.4682" width="256.4" height="100"/>
-    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="95.3376" y="-10.4682" width="256.4" height="100"/>
-    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="98.3376" y="3.5318">+addOutput(message:String): void</text>
-    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="98.3376" y="19.5318">+addInput(message:String): void</text>
-    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="98.3376" y="35.5318">+begin(): Assertion</text>
-    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="98.3376" y="51.5318">+next(): Assertion</text>
-    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="98.3376" y="67.5318">+countStatements(): int</text>
-    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="98.3376" y="83.5318">+toString(): String</text>
+    <rect style="fill: #ffffff" x="37.3376" y="-182.468" width="371.9" height="44"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="37.3376" y="-182.468" width="371.9" height="44"/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="223.288" y="-166.468">&lt;&lt;controller&gt;&gt;</text>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="223.288" y="-147.468">Conversation</text>
+    <rect style="fill: #ffffff" x="37.3376" y="-138.468" width="371.9" height="36"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="37.3376" y="-138.468" width="371.9" height="36"/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="40.3376" y="-124.468">-queue: ConcurrentLinkedQueue&lt;Assertion&gt;</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="40.3376" y="-108.468">-iterator: Iterator&lt;Assertion&gt;</text>
+    <rect style="fill: #ffffff" x="37.3376" y="-102.468" width="371.9" height="148"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="37.3376" y="-102.468" width="371.9" height="148"/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="40.3376" y="-88.4682"> &lt;&lt;Deprecated&gt;&gt; addOutput(message:String): void</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="40.3376" y="-72.4682"> &lt;&lt;Deprecated&gt;&gt; addInput(message:String): void</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="40.3376" y="-56.4682"> &lt;&lt;Deprecated&gt;&gt; addDtmf(message:char): void</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="40.3376" y="-40.4682"> &lt;&lt;Deprecated&gt;&gt; countStatements(): int</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="40.3376" y="-24.4682">+add(Assertion): boolean</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="40.3376" y="-8.4682">+begin(): Assertion</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="40.3376" y="7.5318">+next(): Assertion</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="40.3376" y="23.5318">+size(): int</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="40.3376" y="39.5318">+toString(): String</text>
   </g>
   <g>
     <rect style="fill: #ffffff" x="720.458" y="-38.3246" width="233.3" height="44"/>
@@ -33,11 +37,11 @@
     <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:italic;font-weight:700" x="723.458" y="71.6754">+send(record:Recording): void</text>
   </g>
   <g>
-    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="376.91,63.5318 508.998,63.5318 508.998,19.6754 719.464,19.6754 "/>
-    <polygon style="fill: #000000" points="351.738,63.5318 365.738,58.7318 379.738,63.5318 365.738,68.3318 "/>
-    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="351.738,63.5318 365.738,58.7318 379.738,63.5318 365.738,68.3318 "/>
-    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="510.998" y="38.6036">history</text>
-    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="383.738" y="60.5318"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="434.409,19.5318 508.998,19.5318 508.998,19.6754 719.464,19.6754 "/>
+    <polygon style="fill: #000000" points="409.238,19.5318 423.238,14.7318 437.238,19.5318 423.238,24.3318 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="409.238,19.5318 423.238,14.7318 437.238,19.5318 423.238,24.3318 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="510.998" y="16.6036">queue</text>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="441.238" y="16.5318"/>
     <text font-size="12.7998" style="fill: #000000;text-anchor:end;font-family:monospace;font-style:normal;font-weight:normal" x="715.464" y="16.6754">*</text>
   </g>
   <g>
@@ -92,12 +96,12 @@
     <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="702.222,59.6754 718.222,51.6754 702.222,43.6754 "/>
   </g>
   <g>
-    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="223.038,241.85 223.038,180.048 223.538,180.048 223.538,90.5257 "/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="223.038,241.85 223.038,180.048 223.288,180.048 223.288,46.5221 "/>
     <polygon style="fill: #000000" points="223.038,267.021 218.238,253.021 223.038,239.021 227.838,253.022 "/>
     <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="223.038,267.021 218.238,253.021 223.038,239.021 227.838,253.022 "/>
-    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="223.288" y="177.048">              conversation</text>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="223.163" y="177.048">              conversation</text>
     <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="234.038" y="263.021">1</text>
-    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="227.538" y="102.526"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="227.288" y="58.5221"/>
   </g>
   <g>
     <rect style="fill: #ffffff" x="58.9644" y="762.218" width="325.7" height="44"/>
@@ -185,7 +189,7 @@
     </text>
   </g>
   <g>
-    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 8; stroke: #000000" points="94.3789,7.53181 -220.842,7.53183 -220.842,108.873 -153.058,108.873 "/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 8; stroke: #000000" points="36.3406,-68.4682 -220.842,-68.4682 -220.842,108.873 -153.058,108.873 "/>
     <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="-165.706,113.873 -149.706,108.873 -165.706,103.873 "/>
   </g>
   <g>
@@ -280,10 +284,10 @@
     <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="555.298" y="393.386">send</text>
   </g>
   <g>
-    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="87.0222" y1="46.3593" x2="-115.003" y2="406.599"/>
-    <polygon style="fill: #000000" points="91.3832,48.805 94.8485,32.404 82.6612,43.9136 "/>
-    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="91.3832,48.805 94.8485,32.404 82.6612,43.9136 "/>
-    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-86.4078" y="206.5">addOutput, addInput</text>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="31.3796" y1="3.45355" x2="-119.512" y2="406.685"/>
+    <polygon style="fill: #000000" points="36.0625,5.20591 36.9871,-11.5316 26.6967,1.70119 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="36.0625,5.20591 36.9871,-11.5316 26.6967,1.70119 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-117.662" y="184.543">addOutput, addInput</text>
   </g>
   <g>
     <rect style="fill: #ffffff" x="819.236" y="574.25" width="325.7" height="44"/>
@@ -334,9 +338,9 @@
     <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 6; stroke: #000000" x="908.836" y="-170.25" width="54" height="8"/>
   </g>
   <g>
-    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 8; stroke: #000000" points="351.738,-20.4682 417.496,-20.4682 417.496,-124.25 713.855,-124.25 "/>
-    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="701.208,-119.25 717.208,-124.25 701.208,-129.25 "/>
-    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="419.496" y="-75.3591">  begin, next</text>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 8; stroke: #000000" points="410.237,-68.4682 494,-68.4682 494,-124.25 713.829,-124.25 "/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="701.181,-119.25 717.181,-124.25 701.181,-129.25 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="496" y="-99.3591">add, begin, next</text>
   </g>
   <g>
     <rect style="fill: #ffffff" x="721.536" y="445.5" width="356.5" height="44"/>
