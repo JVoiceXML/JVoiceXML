@@ -32,11 +32,8 @@ import java.net.URI;
 
 import javax.naming.NamingException;
 
-import org.junit.Assert;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -52,6 +49,8 @@ public class TestVoice implements TextListener {
     private URI dialog;
     private Voice voice;
     private boolean activated;
+    private boolean abortConnection;
+    private TextServer server;
 
     /**
      * Set up the test environment.
@@ -60,6 +59,8 @@ public class TestVoice implements TextListener {
     public void setUp() {
         dialog = new File("unittests/etc/mock.vxml").toURI();
         voice = new Voice();
+        server = new TextServer(4711);
+        server.addTextListener(this);
     }
 
     /**
@@ -71,26 +72,37 @@ public class TestVoice implements TextListener {
     }
 
     /**
-     * Test method for {@link Voice#getClient()}.
-     */
-    @Test
-    public void testClient() {
-        Assert.assertNotNull(voice.getClient());
-    }
-
-    /**
      * Test method for {@link Voice#getSession()}.
+     * Ensures a complete session run without any error.
      * @throws JVoiceXMLEvent
      *         test failed
      * @throws Exception
      *         test failed
      */
-    @Test(timeout=20000)
-    public void testSession() throws Exception, JVoiceXMLEvent {
+    @Test(timeout=9999)
+    public void testSessionSuccess() throws Exception, JVoiceXMLEvent {
+        abortConnection = false;
+        runSession();
+    }
+
+    /**
+     * Test method for {@link Voice#getSession()}.
+     * Simulates a session abort.
+     * @throws JVoiceXMLEvent
+     *         test failed
+     * @throws Exception
+     *         test failed
+     */
+    @Test(timeout=9999)
+    @Ignore // test fails due to an imperfection in JVoiceXMLSession
+    public void testSessionFailure() throws Exception, JVoiceXMLEvent {
+        abortConnection = true;
+        runSession();
+    }
+
+    private void runSession() throws Exception, JVoiceXMLEvent {
         Assert.assertNull(voice.getSession());
 
-        final TextServer server = new TextServer(4711);
-        server.addTextListener(this);
         server.start();
         synchronized (dialog) {
             dialog.wait();
@@ -101,6 +113,7 @@ public class TestVoice implements TextListener {
         } finally {
             server.stopServer();
         }
+
         Assert.assertNull(voice.getSession());
         Assert.assertTrue(activated);
     }
@@ -127,6 +140,13 @@ public class TestVoice implements TextListener {
      */
     @Override
     public void outputSsml(SsmlDocument document) {
+        if (voice.getSession() != null) {
+            activated = true;
+        }
+        if (abortConnection) {
+            server.stopServer(); // enforces session abort without BYE
+            //voice.close();
+        }
     }
 
     /**
@@ -142,7 +162,6 @@ public class TestVoice implements TextListener {
      */
     @Override
     public void inputClosed() {
-        activated = (voice.getSession() != null);
     }
 
     /**
