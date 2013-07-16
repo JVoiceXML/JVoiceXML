@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,7 +29,8 @@ import java.util.Locale;
 
 import javax.speech.synthesis.SynthesizerModeDesc;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test cases for {@link JVoiceXmlSynthesizerModeDescFactory}.
@@ -37,18 +38,12 @@ import junit.framework.TestCase;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestSynthesizerModeDescFactory
-        extends TestCase {
+public final class TestSynthesizerModeDescFactory {
     /**
      * Test method for {@link org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory#setEngineName(java.lang.String)}.
      */
+    @Test
     public void testSetEngineName() {
         final JVoiceXmlSynthesizerModeDescFactory desc1 =
             new JVoiceXmlSynthesizerModeDescFactory();
@@ -59,7 +54,7 @@ public final class TestSynthesizerModeDescFactory
         final SynthesizerModeDesc refDescriptor1 =
             new SynthesizerModeDesc(engineName, null, null, null, null);
 
-        assertEquals(refDescriptor1, desc1.createDescriptor());
+        Assert.assertEquals(refDescriptor1, desc1.createDescriptor());
 
         final SynthesizerModeDescFactory desc2 =
             new JVoiceXmlSynthesizerModeDescFactory();
@@ -67,12 +62,13 @@ public final class TestSynthesizerModeDescFactory
         final SynthesizerModeDesc refDescriptor2 =
             new SynthesizerModeDesc(null, null, null, null, null);
 
-        assertEquals(refDescriptor2, desc2.createDescriptor());
+        Assert.assertEquals(refDescriptor2, desc2.createDescriptor());
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory#setLocale(java.util.Locale)}.
      */
+    @Test
     public void testSetLocale() {
         final JVoiceXmlSynthesizerModeDescFactory desc1 =
             new JVoiceXmlSynthesizerModeDescFactory();
@@ -83,7 +79,7 @@ public final class TestSynthesizerModeDescFactory
         final SynthesizerModeDesc refDescriptor1 =
             new SynthesizerModeDesc(null, null, locale, null, null);
 
-        assertEquals(refDescriptor1, desc1.createDescriptor());
+        Assert.assertEquals(refDescriptor1, desc1.createDescriptor());
 
         final SynthesizerModeDescFactory desc2 =
             new JVoiceXmlSynthesizerModeDescFactory();
@@ -91,7 +87,7 @@ public final class TestSynthesizerModeDescFactory
         final SynthesizerModeDesc refDescriptor2 =
             new SynthesizerModeDesc(null, null, null, null, null);
 
-        assertEquals(refDescriptor2, desc2.createDescriptor());
+        Assert.assertEquals(refDescriptor2, desc2.createDescriptor());
     }
 
     /**
@@ -107,7 +103,7 @@ public final class TestSynthesizerModeDescFactory
         final SynthesizerModeDesc refDescriptor1 =
             new SynthesizerModeDesc(null, modeName, null, null, null);
 
-        assertEquals(refDescriptor1, desc1.createDescriptor());
+        Assert.assertEquals(refDescriptor1, desc1.createDescriptor());
 
         final SynthesizerModeDescFactory desc2 =
             new JVoiceXmlSynthesizerModeDescFactory();
@@ -115,7 +111,6 @@ public final class TestSynthesizerModeDescFactory
         final SynthesizerModeDesc refDescriptor2 =
             new SynthesizerModeDesc(null, null, null, null, null);
 
-        assertEquals(refDescriptor2, desc2.createDescriptor());
+        Assert.assertEquals(refDescriptor2, desc2.createDescriptor());
     }
-
 }

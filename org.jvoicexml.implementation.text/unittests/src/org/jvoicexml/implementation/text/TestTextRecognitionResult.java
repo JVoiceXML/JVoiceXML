@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,8 +26,8 @@
 
 package org.jvoicexml.implementation.text;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Test;
 import org.jvoicexml.processor.srgs.GrammarChecker;
 import org.jvoicexml.xml.srgs.ModeType;
 
@@ -38,48 +38,52 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @version $Revision: 2245 $
  * @since 0.6
  */
-public final class TestTextRecognitionResult extends TestCase {
+public final class TestTextRecognitionResult {
     
     
     /**Reference to the GrammarChecker object.*/
     private GrammarChecker grammarChecker;
+
     /**
      * Test method for {@link org.jvoicexml.implementation.text.TextRecognitionResult#TextRecognitionResult(java.lang.String)}.
      */
+    @Test
     public void testTextRecognitionResult() {
         final String utterance = "test me";
         final TextRecognitionResult result =
             new TextRecognitionResult(utterance, grammarChecker);
-        assertEquals(utterance, result.getUtterance());
-        assertEquals(ModeType.VOICE, result.getMode());
-        assertEquals(1.0f, result.getConfidence());
-        assertNull(result.getMark());
+        Assert.assertEquals(utterance, result.getUtterance());
+        Assert.assertEquals(ModeType.VOICE, result.getMode());
+        Assert.assertEquals(1.0f, result.getConfidence(), .001f);
+        Assert.assertNull(result.getMark());
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.text.TextRecognitionResult#TextRecognitionResult(java.lang.String)}.
      */
+    @Test
     public void testTextRecognitionResultNull() {
         final TextRecognitionResult result =
             new TextRecognitionResult(null, grammarChecker);
-        assertNull(result.getUtterance());
-        assertEquals(ModeType.VOICE, result.getMode());
-        assertEquals(1.0f, result.getConfidence());
-        assertNull(result.getMark());
+        Assert.assertNull(result.getUtterance());
+        Assert.assertEquals(ModeType.VOICE, result.getMode());
+        Assert.assertEquals(1.0f, result.getConfidence(), .001f);
+        Assert.assertNull(result.getMark());
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.text.TextRecognitionResult#setMark(java.lang.String)}.
      */
+    @Test
     public void testSetMark() {
         final String utterance = "test me";
         final TextRecognitionResult result =
             new TextRecognitionResult(utterance, grammarChecker);
-        assertNull(result.getMark());
+        Assert.assertNull(result.getMark());
 
         final String mark = "testmark";
         result.setMark(mark);
-        assertEquals(mark, result.getMark());
+        Assert.assertEquals(mark, result.getMark());
     }
 
 }

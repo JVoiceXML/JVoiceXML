@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: JVoiceXmlShutdownHook.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,14 +31,8 @@ import org.apache.log4j.Logger;
 /**
  * A shutdown hook, to safely terminate the main process.
  *
+ * @author Dirk Schnelle-Walka
  * @see org.jvoicexml.JVoiceXmlMain
- *
- * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.4
  */
 final class JVoiceXmlShutdownHook

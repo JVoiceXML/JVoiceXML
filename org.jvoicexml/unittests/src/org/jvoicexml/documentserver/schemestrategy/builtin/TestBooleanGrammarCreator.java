@@ -28,8 +28,7 @@ package org.jvoicexml.documentserver.schemestrategy.builtin;
 import java.io.ByteArrayInputStream;
 import java.net.URI;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.srgs.Grammar;

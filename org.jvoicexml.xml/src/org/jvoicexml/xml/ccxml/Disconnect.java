@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: Disconnect.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -50,15 +49,8 @@ import org.w3c.dom.Node;
  * Note the platform is not required to generate the connection.disconnected or
  * conference.unjoined in any particular order.
  *
- *
  * @author Steve Doyle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Disconnect
         extends AbstractCcxmlNode {
@@ -226,6 +218,7 @@ public final class Disconnect
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -233,6 +226,7 @@ public final class Disconnect
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }

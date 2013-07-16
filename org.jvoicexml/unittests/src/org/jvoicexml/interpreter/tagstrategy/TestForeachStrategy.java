@@ -70,7 +70,8 @@ public final class TestForeachStrategy extends TagStrategyTestBase
                 + "names[0] = \"Hans\";"
                 + "names[1] = \"Gabi\";"
                 + "names[2] = \"Erna\";";
-
+//        final String expr = " var " + names
+//                + " = [\"Hans\", \"Gabi\", \"Ernst\"];";
         final ScriptingEngine scripting = getScriptingEngine();
         scripting.eval(expr);
         final Block block = createBlock();

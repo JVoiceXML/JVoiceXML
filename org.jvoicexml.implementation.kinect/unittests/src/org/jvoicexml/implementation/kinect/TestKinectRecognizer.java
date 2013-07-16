@@ -26,10 +26,8 @@
 
 package org.jvoicexml.implementation.kinect;
 
-import static org.junit.Assert.fail;
-import junit.framework.Assert;
-
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.mock.implementation.MockSpokenInputListener;
@@ -139,7 +137,7 @@ public final class TestKinectRecognizer {
     }
     @Test
     public void testStopRecognition() {
-        fail("Not yet implemented");
+        Assert.fail("Not yet implemented");
     }
 
 }

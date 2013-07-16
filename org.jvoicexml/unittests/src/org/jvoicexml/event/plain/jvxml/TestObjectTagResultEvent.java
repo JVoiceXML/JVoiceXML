@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,7 +25,8 @@
  */
 package org.jvoicexml.event.plain.jvxml;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test case for {@link org.jvoicexml.event.plain.jvxml.RecognitionEvent}.
@@ -40,33 +41,34 @@ import junit.framework.TestCase;
  * </a>
  * </p>
  */
-public final class TestObjectTagResultEvent
-        extends TestCase {
+public final class TestObjectTagResultEvent {
     /** Test value. */
     private static final Object TEST_VALUE = new Long(42);
 
     /**
      * Test method for {@link org.jvoicexml.event.plain.jvxml.ObjectTagResultEvent#getEventType()}.
      */
+    @Test
     public void testGetEventType() {
         final ObjectTagResultEvent event =
             new ObjectTagResultEvent(TEST_VALUE);
-        assertEquals(ObjectTagResultEvent.EVENT_TYPE, event.getEventType());
-        assertEquals(ObjectTagResultEvent.class.getName(),
+        Assert.assertEquals(ObjectTagResultEvent.EVENT_TYPE,
+                event.getEventType());
+        Assert.assertEquals(ObjectTagResultEvent.class.getName(),
                 event.getEventType());
     }
 
     /**
      * Test method for {@link org.jvoicexml.event.plain.jvxml.ObjectTagResultEvent#getInputResult()}.
      */
+    @Test
     public void testGetInputResult() {
         final ObjectTagResultEvent event1 =
             new ObjectTagResultEvent(TEST_VALUE);
-        assertEquals(TEST_VALUE, event1.getInputResult());
+        Assert.assertEquals(TEST_VALUE, event1.getInputResult());
 
         final ObjectTagResultEvent event2 =
             new ObjectTagResultEvent(null);
-        assertNull(event2.getInputResult());
+        Assert.assertNull(event2.getInputResult());
     }
-
 }

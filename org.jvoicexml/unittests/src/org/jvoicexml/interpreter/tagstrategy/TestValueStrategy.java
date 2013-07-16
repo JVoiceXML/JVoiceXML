@@ -26,8 +26,7 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,14 +38,8 @@ import org.jvoicexml.xml.srgs.ModeType;
 /**
  * Waits for input from the recognizer.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class JVoiceXMLRecognitionListener implements ResultListener {
     /** Logger for this class. */
@@ -53,7 +47,7 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
             Logger.getLogger(JVoiceXMLRecognitionListener.class);
 
     /** The related spoken input device. */
-    private Jsapi10SpokenInput input;
+    private final Jsapi10SpokenInput input;
 
     /**
      * Constructs a new object.

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,18 +36,11 @@ import org.jvoicexml.implementation.Telephony;
  * {@link Telephony} based on JSAPI 1.0.
  *
  * <p>
- * This implementation uses the mcrophone and the speaker for audio support.
+ * This implementation uses the microphone and the speaker for audio support.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.6
  */
 public final class Jsapi10TelephonyFactory

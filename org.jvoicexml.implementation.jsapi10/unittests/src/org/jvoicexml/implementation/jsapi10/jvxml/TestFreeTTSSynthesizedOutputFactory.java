@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,28 +25,22 @@
  */
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Test;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutputFactory;
 import org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutputFactory;
 import org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory;
 
 /**
  * Test cases for {@link FreeTTSSynthesizedOutputFactory}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestFreeTTSSynthesizedOutputFactory extends TestCase {
+public final class TestFreeTTSSynthesizedOutputFactory {
     /**
      * Test method for
      * {@link org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory#createResource()}.
@@ -56,6 +50,7 @@ public final class TestFreeTTSSynthesizedOutputFactory extends TestCase {
      * @exception NoresourceError
      *                Test failed.
      */
+    @Test
     public void testCreateResource() throws Exception, NoresourceError {
         final Jsapi10SynthesizedOutputFactory factory1 =
             new FreeTTSSynthesizedOutputFactory();
@@ -63,8 +58,8 @@ public final class TestFreeTTSSynthesizedOutputFactory extends TestCase {
         factory1.setType(type);
 
         final SynthesizedOutput output1 = factory1.createResource();
-        assertNotNull(output1);
-        assertEquals(type, output1.getType());
+        Assert.assertNotNull(output1);
+        Assert.assertEquals(type, output1.getType());
 
         final Jsapi10SynthesizedOutputFactory factory2 =
             new FreeTTSSynthesizedOutputFactory();
@@ -75,33 +70,35 @@ public final class TestFreeTTSSynthesizedOutputFactory extends TestCase {
         factory2.setSynthesizerModeDescriptorFactory(descriptorFactory);
 
         final SynthesizedOutput output2 = factory2.createResource();
-        assertNotNull(output2);
-        assertEquals(type, output2.getType());
+        Assert.assertNotNull(output2);
+        Assert.assertEquals(type, output2.getType());
     }
 
     /**
      * Test method for
      * {@link org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory#setInstances(int)}.
      */
+    @Test
     public void testSetInstances() {
         final Jsapi10SynthesizedOutputFactory factory =
             new FreeTTSSynthesizedOutputFactory();
         final int instances = 42;
         factory.setInstances(instances);
 
-        assertEquals(instances, factory.getInstances());
+        Assert.assertEquals(instances, factory.getInstances());
     }
 
     /**
      * Test method for
      * {@link org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory#setType(java.lang.String)}.
      */
+    @Test
     public void testSetType() {
         final Jsapi10SynthesizedOutputFactory factory =
             new FreeTTSSynthesizedOutputFactory();
         final String type = "jsapi1.0";
         factory.setType(type);
 
-        assertEquals(type, factory.getType());
+        Assert.assertEquals(type, factory.getType());
     }
 }
