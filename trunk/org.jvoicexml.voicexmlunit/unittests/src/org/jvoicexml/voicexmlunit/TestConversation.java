@@ -88,10 +88,10 @@ public class TestConversation {
     }
 
     private void addOutput(final String message) {
-        conversation.addStatement(new Output(message));
+        conversation.add(new Output(message));
     }
 
     private void addInput(final String message) {
-        conversation.addStatement(new Input(message));
+        conversation.add(new Input(message));
     }
 }
