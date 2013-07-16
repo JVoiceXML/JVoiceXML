@@ -70,6 +70,7 @@ import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 
@@ -510,7 +511,8 @@ public final class Jsapi20SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
         final SsmlDocument ssml = speakable.getDocument();
-        final String text = ssml.getTextContent();
+        final Speak speak = ssml.getSpeak();
+        final String text = speak.getTextContent();
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("speaking '" + text + "'...");
         }
