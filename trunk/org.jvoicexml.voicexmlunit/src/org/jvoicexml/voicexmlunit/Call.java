@@ -184,11 +184,7 @@ public final class Call implements Runnable {
     public void fail(final AssertionError error) {
         if (this.error == null) { // only the first error
             server.interrupt();
-            final Voice voice = getVoice();
-            final Session session = voice.getSession();
-            if (session != null) {
-                session.hangup();
-            }
+            getVoice().close();
             this.error = error;
         }
     }
