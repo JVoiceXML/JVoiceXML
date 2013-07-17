@@ -372,7 +372,7 @@ public final class Jsapi20SynthesizedOutput
      *         error processing the speakable.
      * @since 0.7.1
      */
-    private synchronized void processNextSpeakable()
+    private void processNextSpeakable()
         throws NoresourceError, BadFetchError {
         // Check if there are more speakables to process
         final SpeakableText speakable;
