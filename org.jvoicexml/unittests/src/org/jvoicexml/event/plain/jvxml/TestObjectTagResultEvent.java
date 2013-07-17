@@ -31,15 +31,9 @@ import org.junit.Test;
 /**
  * Test case for {@link org.jvoicexml.event.plain.jvxml.RecognitionEvent}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestObjectTagResultEvent {
     /** Test value. */

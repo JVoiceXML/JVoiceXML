@@ -34,15 +34,9 @@ import org.jvoicexml.interpreter.EventCountable;
 /**
  * This class provides a test case for the {@link ClearStrategy}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestEventCounter {
 
