@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,15 +30,8 @@ package org.jvoicexml.implementation;
  * Listener for events from the Synthesizer to be used in external
  * applications, e.g. to perform facial animation in a VHML environment
  *
- * @author Renato
+ * @author Renato Cassaca
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @see org.jvoicexml.UserInput
  * @since 0.6
  */
