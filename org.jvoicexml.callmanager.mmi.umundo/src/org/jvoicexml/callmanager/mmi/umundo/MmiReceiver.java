@@ -60,6 +60,7 @@ import org.jvoicexml.mmi.events.NewContextRequest;
 import org.jvoicexml.mmi.events.PrepareRequest;
 import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents;
+import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -177,7 +178,8 @@ public final class MmiReceiver implements ITypedReceiver {
      * @throws SAXException 
      */
     private LifeCycleEvent convertToLifeCycleEvent(
-            final Object object) throws SAXException, IOException, TransformerException, ParserConfigurationException {
+            final Object object) throws SAXException, IOException,
+                TransformerException, ParserConfigurationException {
         if (!(object instanceof LifeCycleEvents.LifeCycleEvent)) {
             return null;
         }
@@ -303,7 +305,9 @@ public final class MmiReceiver implements ITypedReceiver {
             final Vxml vxml = doc.getVxml();
             final List<Form> forms = vxml.getForms();
             final Form form = forms.get(0);
-            return form.getFirstChild();
+            final Collection<Block> blocks = form.getChildNodes(Block.class);
+            final Block block = blocks.iterator().next();
+            return block.getFirstChild();
         } else {
             return xml;
         }
