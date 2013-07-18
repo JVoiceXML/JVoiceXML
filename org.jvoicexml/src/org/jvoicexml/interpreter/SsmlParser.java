@@ -50,6 +50,7 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.TextContainer;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.ssml.Audio;
@@ -265,10 +266,17 @@ public final class SsmlParser {
         } else {
             // Copy the node.
             final String tag = vxmlNode.getNodeName();
-            clonedNode = (SsmlNode) parent.addChild(tag);
-
-            // Clone all attributes.
-            cloneAttributes(document, vxmlNode, clonedNode);
+            if (tag.equals(Text.TAG_NAME)) {
+                final String text = vxmlNode.getTextContent();
+                final TextContainer container = (TextContainer) parent;
+                container.addText(text);
+                clonedNode = null;
+            } else {
+                clonedNode = (SsmlNode) parent.addChild(tag);
+    
+                // Clone all attributes.
+                cloneAttributes(document, vxmlNode, clonedNode);
+            }
         }
 
         if (clonedNode == null) {
