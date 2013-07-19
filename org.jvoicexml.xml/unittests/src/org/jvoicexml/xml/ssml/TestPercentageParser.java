@@ -45,11 +45,13 @@ public final class TestPercentageParser {
     @Test
     public void testParse() throws Exception {
         final float rate1 = 97.34f;
-        Assert.assertEquals(rate1, PercentageParser.parse(rate1 + "%"));
+        Assert.assertEquals(rate1, PercentageParser.parse(rate1 + "%"), .001);
         final float rate2 = 13f;
-        Assert.assertEquals(-rate2, PercentageParser.parse("-" + rate2 + "%"));
+        Assert.assertEquals(-rate2, PercentageParser.parse("-" + rate2 + "%"),
+                .001);
         final float rate3 = 27.2f;
-        Assert.assertEquals(rate3, PercentageParser.parse("+" + rate3 + "%"));
+        Assert.assertEquals(rate3, PercentageParser.parse("+" + rate3 + "%"),
+                .001);
     }
 
     /**
