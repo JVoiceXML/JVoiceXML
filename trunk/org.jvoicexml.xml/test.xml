@@ -45,6 +45,11 @@ This file runs unit tests on the JVoiceXML XML library.
             <classpath refid="test.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
+        <copy todir="${test.build}">
+            <fileset dir="${test.src}">
+                <include name="**/*.grxml"/>
+            </fileset>
+        </copy>
     </target>
 
     <target name="test" depends="compiletests"
