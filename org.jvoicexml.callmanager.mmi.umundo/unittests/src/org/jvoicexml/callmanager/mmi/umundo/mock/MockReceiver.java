@@ -27,7 +27,6 @@
 package org.jvoicexml.callmanager.mmi.umundo.mock;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.callmanager.mmi.umundo.UmundoETLProtocolAdapter;
 import org.umundo.core.Message;
 import org.umundo.s11n.ITypedReceiver;
 
@@ -37,7 +36,7 @@ import org.umundo.s11n.ITypedReceiver;
  * @version $LastChangedRevision: 3512 $
  * @since 0.7.6
  */
-public class MockReceiver implements ITypedReceiver {
+public final class MockReceiver implements ITypedReceiver {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(MockReceiver.class);
