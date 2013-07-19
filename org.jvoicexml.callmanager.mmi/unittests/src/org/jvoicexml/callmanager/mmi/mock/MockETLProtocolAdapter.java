@@ -65,7 +65,7 @@ public final class MockETLProtocolAdapter implements ETLProtocolAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void removeMMIEventListener(MMIEventListener listener) {
+    public void removeMMIEventListener(final MMIEventListener listener) {
     }
 
     /**
