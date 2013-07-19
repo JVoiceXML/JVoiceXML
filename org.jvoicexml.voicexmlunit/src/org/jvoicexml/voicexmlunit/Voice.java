@@ -29,8 +29,6 @@ package org.jvoicexml.voicexmlunit;
 import java.io.IOException;
 import java.net.URI;
 
-import javax.naming.NamingException;
-
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.GenericClient;
@@ -85,7 +83,7 @@ public final class Voice {
      *            the error happened during the session was active
      */
      public void call(final TextServer server, final URI dialog)
-          throws IOException {
+          throws Exception, ErrorEvent {
           try {
                final ConnectionInformation info =
                     server.getConnectionInformation();
@@ -93,27 +91,23 @@ public final class Voice {
                server.waitConnected();
                session.waitSessionEnd();
                //session.hangup();
-          } catch (NamingException | ErrorEvent e) {
-               throw new IOException(e);
           } finally {
                session = null;
           }
     }
 
-   /**
+    /**
      * Close the active Communication.
      */
-     public void close() {
-         if (session != null) {
-              if (!session.hasEnded()) {
-                    session.hangup();
-              }
-              session = null;
-         }
-         if (client != null) {
-              client.close();
-              client = null;
-         }
+    public void close() {
+          if (session != null) {
+               session.hangup();
+               session = null;
+          }
+          if (client != null) {
+               client.close();
+               client = null;
+          }
     }
 
     /**

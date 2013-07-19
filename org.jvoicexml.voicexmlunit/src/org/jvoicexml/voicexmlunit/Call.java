@@ -137,9 +137,10 @@ public final class Call implements Runnable {
             synchronized (lock) {
                 lock.wait(SERVER_WAIT);
             }
-            runDialog();
-        } catch (InterruptedException | IOException | ErrorEvent e) {
-             fail(new AssertionError(e.getMessage()));
+            getVoice().call(server, dialog); // run the dialog
+        }
+        catch (Exception | ErrorEvent error) {
+            fail(new AssertionError(error));
         } finally {
             server.stopServer();
         }
@@ -152,16 +153,6 @@ public final class Call implements Runnable {
         synchronized (lock) {
             lock.notifyAll();
         }
-    }
-
-    /**
-     * Runs the configured dialog.
-     * @throws ErrorEvent
-     * @throws IOException
-     */
-    private void runDialog() throws ErrorEvent, IOException {
-        final Voice voice = getVoice();
-        voice.call(server, dialog);
     }
 
     /**
