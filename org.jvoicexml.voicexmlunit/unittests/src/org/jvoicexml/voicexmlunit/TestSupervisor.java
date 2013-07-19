@@ -64,8 +64,8 @@ public class TestSupervisor {
 
         final String prompt = "ping";
         final String reply = "pong";
-        assumeOut(prompt); // must have an Output before
-        assumeIn(reply);
+        hears(prompt); // must have an Output before
+        says(reply);
 
         Assert.assertStatements(2, conversation);
         Assert.assertEquals(new Output(prompt).toString(),
@@ -77,7 +77,7 @@ public class TestSupervisor {
     @Test
     public void testOuput() throws Exception {
         final String message = "bla";
-        assumeOut(message);
+        hears(message);
 
         Assert.assertEquals(message, conversation.begin().toString());
 
@@ -88,8 +88,8 @@ public class TestSupervisor {
     @Test
     public void testInput() throws Exception {
         final String message = "blub";
-        assumeOut(message); // must have an Output before
-        assumeIn(message);
+        hears(message); // must have an Output before
+        says(message);
 
         Assert.assertEquals(message, conversation.begin().toString());
         Assert.assertEquals(message, conversation.next().toString());
@@ -102,7 +102,7 @@ public class TestSupervisor {
 
     @Test
     public void testDisconnect() {
-        assumeOut("hello");
+        hears("hello");
 
         simulateCall();
 
@@ -117,7 +117,7 @@ public class TestSupervisor {
 
     @Test
     public void testInputIsOutput() {
-        assumeOut("input");
+        hears("input");
 
         simulateCall();
 
@@ -133,7 +133,7 @@ public class TestSupervisor {
     @Test
     public void testOutputIsinput() throws Exception {
         String message = "output";
-        assumeIn(message);
+        says(message);
 
         simulateCall();
 
@@ -151,7 +151,7 @@ public class TestSupervisor {
         final Call call = new Call("unittests/etc/mock.vxml");
 
         conversation = supervisor.init(call);
-        assumeOut("test");
+        hears("test");
 
         supervisor.process();
         Assert.assertNull(supervisor.getFailCause());
@@ -161,11 +161,11 @@ public class TestSupervisor {
         return supervisor.init(null);
     }
 
-    private void assumeOut(final String assumption) {
+    private void hears(final String assumption) {
         conversation.add(new Output(assumption));
     }
 
-    private void assumeIn(final String assumption) {
+    private void says(final String assumption) {
         conversation.add(new Input(assumption));
     }
 
