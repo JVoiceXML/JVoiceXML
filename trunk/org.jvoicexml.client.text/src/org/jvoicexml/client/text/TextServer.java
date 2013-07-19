@@ -111,7 +111,7 @@ public final class TextServer extends Thread {
 
     /** <code>true</code> if the server has been started. */
     private boolean started;
-    
+
     /**
      * Constructs a new object.
      *
@@ -266,35 +266,33 @@ public final class TextServer extends Thread {
             }
             return;
         }
-        
+
         LOGGER.info("text server started at port '" + port + "'");
         fireStarted();
         started = true;
 
         try {
-            try {
-                while ((server != null) && !isInterrupted()) {
-                    client = server.accept();
-                    final InetSocketAddress remote =
-                        (InetSocketAddress) client.getRemoteSocketAddress();
-                    calledId = TcpUriFactory.createUri(remote);
-                    final InetSocketAddress local =
-                        (InetSocketAddress) client.getLocalSocketAddress();
-                    callingId = TcpUriFactory.createUri(local);
-                    LOGGER.info("connected to " + calledId);
-                    fireConnected(remote);
-                    if (readOutput()) {
-                        break;
-                    }
+            while ((server != null) && !isInterrupted()) {
+                client = server.accept();
+                final InetSocketAddress remote =
+                    (InetSocketAddress) client.getRemoteSocketAddress();
+                calledId = TcpUriFactory.createUri(remote);
+                final InetSocketAddress local =
+                    (InetSocketAddress) client.getLocalSocketAddress();
+                callingId = TcpUriFactory.createUri(local);
+                LOGGER.info("connected to " + calledId);
+                fireConnected(remote);
+                if (readOutput()) {
+                    break;
                 }
-            } catch (IOException e) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error reading from the socket", e);
-                }
-            } catch (URISyntaxException e) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error creating calledid or callingid", e);
-                }
+            }
+        } catch (IOException e) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("error reading from the socket", e);
+            }
+        } catch (URISyntaxException e) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("error creating calledid or callingid", e);
             }
         } finally {
             closeServer();
@@ -321,59 +319,71 @@ public final class TextServer extends Thread {
         if (client == null) {
             throw new IOException("no client connection");
         }
-        final TextMessageReader reader = 
+        final TextMessageReader reader =
                 new TextMessageReader(client.getInputStream());
-        out = client.getOutputStream();
+
         // We have to do the release here, since ObjectInputStream blocks
         // until the server has sent something.
         connectionLock.release();
 
         try {
-            try {
-                while (isConnected() && !interrupted()) {
-                    final TextMessage message = reader.getNextMessage();
-                    if (message == null) {
-                        continue;
-                    }
-                    LOGGER.info("read " + message);
-                    final int code = message.getCode();
-                    if (code == TextMessage.BYE) {
-                        synchronized (lock) {
-                            if (client != null) {
-                                client.close();
-                                client = null;
-                            }
-                        }
-                        fireDisconnected();
-                        return true;
-                    }
-                    if (code == TextMessage.DATA) {
-                        final Object data = message.getData();
-                        if (data instanceof SsmlDocument) {
-                            final SsmlDocument document = (SsmlDocument) data;
-                            fireOutputArrived(document);
-                        }
-                    } else if (code == TextMessage.EXPECTING_INPUT) {
-                        fireExpectingInput();
-                    } else if (code == TextMessage.INPUT_CLOSED) {
-                        fireInputClosed();
-                    }
-                    final int seq = message.getSequenceNumber();
-                    final TextMessage ack =
-                            new TextMessage(TextMessage.ACK, seq);
-                    if (isConnected()) {
-                        send(ack);
-                    } else {
-                        LOGGER.warn("can not acknowledge due to disconnected");
-                    }
+            while (isConnected() && !interrupted()) {
+                final TextMessage message = reader.getNextMessage();
+                if (message == null) {
+                    continue;
                 }
-            } catch (IOException e) {
-                if (isStarted()) {
-                    throw e;
+                LOGGER.info("read " + message);
+                final int code = message.getCode();
+                if (code == TextMessage.BYE) {
+                    synchronized (lock) {
+                        if (client != null) {
+                            client.close();
+                            client = null;
+                        }
+                    }
+                    fireDisconnected();
+                    return true;
                 }
+                if (code == TextMessage.DATA) {
+                    final Object data = message.getData();
+                    if (data instanceof SsmlDocument) {
+                        final SsmlDocument document = (SsmlDocument) data;
+                        fireOutputArrived(document);
+                    }
+                } else if (code == TextMessage.EXPECTING_INPUT) {
+                    fireExpectingInput();
+                } else if (code == TextMessage.INPUT_CLOSED) {
+                    fireInputClosed();
+                }
+                if (!acknowledge(message)) {
+                    LOGGER.warn("can not acknowledge due to disconnected");
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            if (isStarted()) {
+                throw e;
             }
         } finally {
             reader.close();
+        }
+        return false;
+    }
+
+    /* Acknowledges a message.
+     * @param message the message to acknowledge
+     * @return <code>true</code> if the message could be acknowledged,
+     *         <code>false</code> if connection lost
+     * @throws IOException sending error
+     */
+    private boolean acknowledge(final TextMessage message)
+            throws IOException {
+        if (isConnected()) {
+            final int seq = message.getSequenceNumber();
+            final TextMessage ack =
+                    new TextMessage(TextMessage.ACK, seq);
+            send(ack);
+            return true;
         }
         return false;
     }
@@ -412,11 +422,16 @@ public final class TextServer extends Thread {
      *         error sending the message.
      */
     private void send(final TextMessage message)
-        throws IOException {
+            throws IOException {
+        // check generally if we can send
+        final OutputStream out;
+        if (isConnected()) {
+            out = client.getOutputStream();
+        } else {
+            throw new IOException("Disconnected. No stream to send " +
+                    message.getData());
+        }
         synchronized (lock) {
-            if (out == null) {
-                throw new IOException("No stream to send " + message.getData());
-            }
             final ByteArrayOutputStream bout = new ByteArrayOutputStream();
             final ObjectOutputStream oout = new ObjectOutputStream(bout);
             oout.writeObject(message);
