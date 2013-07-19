@@ -37,6 +37,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.error.NoresourceError;
 
 /**
  * A generic client to make calls to the JVoiceXML voice browser.
@@ -127,7 +128,7 @@ public final class GenericClient {
      * configuration.
      * <p>
      * After the session has ended and {@link Session#hangup()} has been called,
-     * {@link #close()} must be called to free potentially acquired resources. 
+     * {@link #close()} must be called to free potentially acquired resources.
      * </p>
      * @param uri the URI to call
      * @param call unique identifier for the {@link org.jvoicexml.CallControl}.
@@ -135,11 +136,11 @@ public final class GenericClient {
      *  {@link org.jvoicexml.SystemOutput}.
      * @param input unique identifier for the {@link org.jvoicexml.UserInput}.
      * @return JVoiceXML session for the call
-     * @throws NamingException 
+     * @throws NamingException
      *         JVoiceXML server could not be found.
      * @throws ErrorEvent
-     *         if an error occurs when calling JVoiceXML 
-     * @throws UnsupportedResourceIdentifierException 
+     *         if an error occurs when calling JVoiceXML
+     * @throws UnsupportedResourceIdentifierException
      *         if the combination of the identifiers is invalid
      */
     public Session call(final URI uri, final String input, final String output,
@@ -162,29 +163,37 @@ public final class GenericClient {
      * @param uri the URI to call
      * @param info the connection information to use.
      * @return JVoiceXML session for the call
-     * @throws NamingException 
+     * @throws NamingException
      *         JVoiceXML server could not be found.
      * @throws ErrorEvent
-     *         if an error occurs when calling JVoiceXML 
+     *         if an error occurs when calling JVoiceXML
      */
     public Session call(final URI uri, final ConnectionInformation info)
             throws NamingException, ErrorEvent {
-        final JVoiceXml jvoicexml = getJVoiceXml();
+    final JVoiceXml jvoicexml = getJVoiceXml();
+        if (jvoicexml == null) {
+          throw new NoresourceError(
+                    "JVoiceXML server could not be found");
+        }
         final Session session = jvoicexml.createSession(info);
-        session.call(uri);
+        if (session == null) {
+          throw new NoresourceError("Session unavailable");
+        } else {
+          session.call(uri);
+        }
         return session;
     }
 
     /**
      * Release potentially acquired resources.
-     * 
+     *
      * @since 0.7.6
      */
     public void close() {
         if (infoController == null) {
             return;
         }
-        
+
         infoController.cleanup();
         infoController = null;
     }
