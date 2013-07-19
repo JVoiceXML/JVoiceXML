@@ -141,7 +141,8 @@ public abstract class XmlDocument
             // If there is none, simply create a new document as usual.
             document = BUILDER.newDocument();
             if (document != null) {
-                appendChild(createRootNode());
+                final Node root = createRootNode();
+                appendChild(root);
             }
         } else {
             // otherwise create a document with the given doctype as a
@@ -503,7 +504,8 @@ public abstract class XmlDocument
      *         <code>Elements</code>.
      */
     public final NodeList getElementsByTagName(final String tagname) {
-        return getXmlNodeList(document.getElementsByTagName(tagname));
+        final NodeList list = document.getElementsByTagName(tagname);
+        return getXmlNodeList(list);
     }
 
     /**
