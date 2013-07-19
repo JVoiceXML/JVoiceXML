@@ -36,7 +36,7 @@ import org.junit.Test;
  * @author Dirk Schnelle-Walka
  *
  */
-public class TestTextApplication {
+public final class TestTextApplication {
 
     /**
      * Test method for {@link org.jvoicexml.callmanager.text.TextApplication#getUriObject()}.
