@@ -171,7 +171,10 @@ final class VoiceXmlNodeFactory
             return (VoiceXmlNode) node;
         }
 
-        final String name = node.getLocalName();
+        String name = node.getLocalName();
+        if (name == null) {
+            name = node.getNodeName();
+        }
         final VoiceXmlNode voiceXmlNode = NODES.get(name);
         if (voiceXmlNode == null) {
             LOGGER.warning("cannot resolve node with name '" + name + "'");
