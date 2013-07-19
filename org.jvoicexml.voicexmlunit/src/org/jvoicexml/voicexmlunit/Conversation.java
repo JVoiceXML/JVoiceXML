@@ -54,48 +54,6 @@ public final class Conversation {
     }
 
     /**
-     * Add a new Output with the expected message
-     * Discouraged usage, better use the more generic addStatement(...)
-     * @param message
-     *            Message to expect
-     */
-    @Deprecated
-    public void addOutput(final String message) {
-        add(new Output(message));
-    }
-
-    /**
-     * Add a new Input with the message to be send
-     * Discouraged usage, better use the more generic addStatement(...)
-     * @param message
-     *            Message to send
-     */
-    @Deprecated
-    public void addInput(final String message) {
-        add(new Input(message));
-    }
-
-    /**
-     * Add a new Dtmf with the message to be send
-     * Discouraged usage, better use the more generic addStatement(...)
-     * @param message
-     *            Message to send
-     */
-    @Deprecated
-    public void addDtmf(final char message) {
-        add(new Dtmf(message));
-    }
-
-    /**
-     * Discouraged usage, better use size()
-     * @return Count of so far collected statements wit addOutput/addInput
-     */
-    @Deprecated
-    public int countStatements() {
-        return size();
-    }
-
-    /**
      * Add a statement to the internal queue.
      * @param s statement to add in queue
      */
