@@ -177,7 +177,8 @@ public final class GenericClient {
         }
         final Session session = jvoicexml.createSession(info);
         if (session == null) {
-          throw new NoresourceError("Session unavailable");
+          throw new NoresourceError(
+                    "Session unavailable, no usable implemention");
         } else {
           session.call(uri);
         }
