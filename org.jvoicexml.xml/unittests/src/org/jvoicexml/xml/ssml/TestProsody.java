@@ -49,7 +49,7 @@ public final class TestProsody {
         final float rate = 73f;
         prosody.setRate(rate);
         Assert.assertEquals(rate + "%", prosody.getRate());
-        Assert.assertEquals(rate, prosody.getRateFloat());
+        Assert.assertEquals(rate, prosody.getRateFloat(), .001);
     }
 
 }
