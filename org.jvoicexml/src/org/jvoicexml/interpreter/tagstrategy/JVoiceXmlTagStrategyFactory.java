@@ -87,7 +87,10 @@ public final class JVoiceXmlTagStrategyFactory
             return null;
         }
 
-        final String tagName = node.getLocalName();
+        final String tagName = node.getLocalName(); // namespace aware
+        if (tagName == null) {
+            return getTagStrategy(node.getNodeName()); // for #text etc.
+        }
         return getTagStrategy(tagName);
     }
 
