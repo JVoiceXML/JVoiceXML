@@ -101,7 +101,7 @@ public final class TextServer extends Thread {
     private final Object lock;
 
     /** Lock access to wait for connection. */
-    private final Semaphore connectionLock;
+    private final Object connectionLock;
 
     /** Registered text listeners. */
     private final Collection<TextListener> listener;
@@ -133,12 +133,7 @@ public final class TextServer extends Thread {
         listener = new java.util.ArrayList<TextListener>();
 
         lock = new Object();
-        connectionLock = new Semaphore(1);
-        try {
-            connectionLock.acquire();
-        } catch (InterruptedException e) {
-            LOGGER.error("error acquiring connection lock", e);
-        }
+        connectionLock = new Object();
     }
 
     /**
@@ -324,7 +319,9 @@ public final class TextServer extends Thread {
 
         // We have to do the release here, since ObjectInputStream blocks
         // until the server has sent something.
-        connectionLock.release();
+        synchronized (connectionLock) {
+            connectionLock.notifyAll();
+        }
 
         try {
             while (isConnected() && !interrupted()) {
@@ -395,12 +392,13 @@ public final class TextServer extends Thread {
      *         Error in connection.
      */
     public void waitConnected() throws IOException {
-        try {
-            connectionLock.acquire();
-        } catch (InterruptedException e) {
-            throw new IOException(e.getMessage());
+        synchronized (connectionLock) {
+            try {
+                connectionLock.wait();
+            } catch (InterruptedException e) {
+                throw new IOException(e.getMessage());
+            }
         }
-        connectionLock.release();
     }
 
     /**
@@ -499,7 +497,7 @@ public final class TextServer extends Thread {
 
     /**
      * Checks if the server is connected to a client.
-     * @return <code>true</code> if a client is conneected
+     * @return <code>true</code> if a client is connected
      * @since 0.7.6
      */
     public boolean isConnected() {
