@@ -113,52 +113,34 @@ If you want to stay at the current state of development you have to use
 the SVN repository from Source Forge~\cite{sourceforge}.
 This is also the preferred way.
 
-The SVN repository is organized as a multi-project repository with the following
-sub projects:
-\begin{description}
-\item[core] The core of the JVoiceXML voice browser
-\item[demo] Demo programs.
-\item[documentation] \LaTeX sources for the documentation
-\item[eclipse] Eclipse server plug-in
-\item[systemtest] Source for the VoiceXML compatibility test
-\item[voicexmlunit] Source for an approach to add unit testing capabilities to VoiceXML
-\end{description}
-
-Each subproject has its own trunk, tags, and branches folder.
-
 This section describe the parameters to access the SVN repository 
 using the command line. Feel free to grab the required parameters from
 this description and feed your favorite tool with them.
 
 \begin{lstlisting}
 svn checkout --username=<your name> \
-  https://svn.code.sf.net/p/jvoicexml/code/<subproject>/trunk
+  https://svn.code.sf.net/p/jvoicexml/code/trunk jvoicexml
 \end{lstlisting}
 
-This will check out all the projects of the \texttt{trunk} of
-the subproject \texttt{<subproject>} into the folder \texttt{jvoicexml}.
+This will check out all projects of \texttt{trunk} of
+into the folder \texttt{jvoicexml}. Please refer to
+section~\ref{sec:jvoicexml-core} if you want to checkout
+only a minimal set of projects. Here, the required projects
+to build the core project are marked as \emph{required}.
 
-Since all the third party libraries are checked in this may
+Since all the third party libraries are checked a checkout may
 take a while.
 
 An alternative way is given by using svn+ssh. In this case code is checked out
 by
 \begin{lstlisting}
 svn checkout --username=<your name>
-  svn+ssh://<your name>@svn.code.sf.net/p/jvoicexml/code/<subproject>/trunk
+  svn+ssh://<your name>@svn.code.sf.net/p/jvoicexml/code/trunk jvoicexml
 \end{lstlisting}
 
 For the eclipse users on Windows the following article might be of some interest
 \url{http://www.woodwardweb.com/java/howto_configure.html}. 
 
-Although the sub-projects are organized in folders it is expected to
-checkout \textbf{all projects into the same folder}
-regardless of the subproject folder.
-This works fine, if you are using an IDE like eclipse. In this case it is really
-straightforward, but may cause some problems if you are working from a command
-line. In the latter case remove the \texttt{.svn} folder if you checkout
-another subproject. Otherwise SVN will complain that there is already another
-one using this folder.
 A screenshot from a checkout in eclipse is shown in
 figure~\ref{fig:eclipse-projects}.
 \begin{figure}
@@ -210,7 +192,7 @@ you cannot work around.
 Your IDE must support
 
 \begin{itemize}
-\item J2SE 6
+\item JavaSE 7
 \item ANT 1.7
 \end{itemize}
 
@@ -226,9 +208,11 @@ for free from \url{http://oracle.com/technetwork/java/javase/downloads/index.htm
 \label{sec:eclipse}
 
 If you are not using eclipse as your favorite IDE, you may ignore this section.
-We are using the \emph{Eclipse IDE for Java EE Developers} version 3.5.2 for
+We are using the \emph{Eclipse IDE for Java EE Developers} version 4.2 for
 the development of JVoiceXML. The subversion repository contains the eclipse
-project settings. However you are requested to configure the execution
+project settings. This way, you there is no need to import the
+project into eclipse. The project settings will be detected 
+automatically when you checkout the projects. However you are requested to configure the execution
 environment development for Java 7 \emph{JavaSE-1.7} to point to a valid JDK.
 The use of execution environments makes the development independent of the
 used version of the Java 7 SDK.
@@ -340,6 +324,10 @@ makes it easier to find the project related to a specific Java archive.
 For instance the project name for the XML library is
 \lstinline{org.jvoicexml.xml}. It produces the jar
 \texttt{org.jvoicexml.xml.jar}.
+The drawback of this approach is that you will be confronted 
+with a huge list of projects. The minimal set of projects
+that are required to build JVoiceXML is marked in the list
+given in section~\ref{sec:jvoicexml-core}.
 
 The project names generally also reflect the overall architecture as shown in
 figure~\ref{fig:main-components}.
@@ -381,12 +369,16 @@ Demo projects may have an additional folder \texttt{config} to hold
 configurations settings. 
 
 \section{JVoiceXML Core}
+\label{sec:jvoicexml-core}
 
 The core of JVoiceXML comprises the following sub-projects:
 
 \begin{description}
 \item[org.jvoicexml] The core of the interpreter (Required)
 \item[org.jvoicexml.config] JVoiceXML configuration based on spring (Required)
+\item[org.jvoicexml.client] Client libraries to interacti with JVoiceXML remotely. (Required)
+\item[org.jvoicexml.client.text] Text client for the text based
+implementation platform.
 \item[org.jvoicexml.xml] The JVoiceXML XML library (Required)
 \item[org.jvoicexml.jndi] JNDI support for JVoiceXML (Required)
 \item[org.jvoicexml.processor.srgs] SRGS processor (Required)
@@ -582,6 +574,7 @@ This library is required by the other commons libraries.
 
 This library is required by the HTTP client to add attachments to the POST and
 GET requests.
+
 
 \subsubsection{Other Libraries}
 
