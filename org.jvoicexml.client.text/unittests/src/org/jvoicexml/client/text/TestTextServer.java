@@ -170,6 +170,9 @@ public class TestTextServer implements TextListener {
         Assert.assertFalse(server.isStarted());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void started() {
         synchronized (lock) {
@@ -177,25 +180,40 @@ public class TestTextServer implements TextListener {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void connected(InetSocketAddress remote) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void outputSsml(SsmlDocument document) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void expectingInput() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void inputClosed() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void disconnected() {
     }
