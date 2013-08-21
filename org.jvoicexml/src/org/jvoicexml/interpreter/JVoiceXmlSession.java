@@ -29,7 +29,6 @@ package org.jvoicexml.interpreter;
 import java.net.URI;
 import java.util.Collection;
 import java.util.UUID;
-import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
@@ -113,7 +112,7 @@ public final class JVoiceXmlSession
     /**
      * Semaphore to that is set while the session is running.
      */
-    private final Semaphore sem;
+    private final Object sem;
 
     /**
      * Constructs a new object.
@@ -142,7 +141,7 @@ public final class JVoiceXmlSession
         scopeObserver = new ScopeObserver();
         final Configuration configuration = jvxml.getConfiguration();
         context = new VoiceXmlInterpreterContext(this, configuration);
-        sem = new Semaphore(1);
+        sem = new Object();
         closed = false;
         sessionListeners = new ScopedCollection<SessionListener>(scopeObserver);
     }
@@ -190,7 +189,6 @@ public final class JVoiceXmlSession
         MDC.put("sessionId", uuid.toString());
 
         try {
-            sem.acquire();
             application = new JVoiceXmlApplication(scopeObserver);
             final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
             final VoiceXmlDocument doc = context.loadDocument(descriptor);
@@ -201,8 +199,6 @@ public final class JVoiceXmlSession
             setName(sessionId);
 
             start();
-        } catch (InterruptedException ie) {
-            throw new NoresourceError("error acquiring session semaphore", ie);
         } catch (ErrorEvent e) {
             LOGGER.error("error while calling '" + uri + "'", e);
             cleanup();
@@ -255,12 +251,13 @@ public final class JVoiceXmlSession
         }
 
         // Wait until the session ends.
-        try {
-            sem.acquire();
-        } catch (InterruptedException ie) {
-            throw new NoresourceError("error acquiring session semaphore", ie);
-        } finally {
-            sem.release();
+        synchronized (sem) {
+            try {
+                sem.wait();
+            } catch (InterruptedException e) {
+                throw new NoresourceError(
+                        "waiting for end of session interrupted", e);
+            }
         }
 
         LOGGER.info("...session ended");
@@ -370,7 +367,6 @@ public final class JVoiceXmlSession
 
         LOGGER.info("...session closed");
         notifySessionEnded();
-        sem.release();
     }
 
     /**
@@ -423,6 +419,7 @@ public final class JVoiceXmlSession
      * @since 0.7.3
      */
     private void notifySessionEnded() {
+        // First: notify all listeners
         final Collection<SessionListener> listeners;
         synchronized (sessionListeners) {
             listeners =
@@ -430,6 +427,11 @@ public final class JVoiceXmlSession
         }
         for (SessionListener listener : listeners) {
             listener.sessionEnded(this);
+        }
+
+        // Also notify the end of the session via the sem
+        synchronized (sem) {
+            sem.notifyAll();
         }
     }
 
