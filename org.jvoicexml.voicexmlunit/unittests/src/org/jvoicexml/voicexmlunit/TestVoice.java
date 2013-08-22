@@ -30,10 +30,13 @@ import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
-import org.junit.*;
-
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -41,7 +44,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @author Raphael Groner
  *
  */
-public class TestVoice implements TextListener {
+public final class TestVoice implements TextListener {
 
     private URI dialog;
     private Voice voice;
@@ -100,7 +103,8 @@ public class TestVoice implements TextListener {
                 dialog.wait();
             }
             voice.call(server, dialog);
-        } catch (Throwable ignore) {
+        } catch (Exception | JVoiceXMLEvent e) {
+            Assert.fail(e.getMessage());
         } finally {
             server.stopServer();
         }
