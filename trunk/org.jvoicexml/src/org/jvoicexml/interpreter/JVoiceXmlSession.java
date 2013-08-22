@@ -239,10 +239,6 @@ public final class JVoiceXmlSession
      */
     public void waitSessionEnd()
             throws ErrorEvent {
-        if (closed) {
-            throw new NoresourceError("Session is already closed");
-        }
-
         LOGGER.info("waiting for end of session...");
 
         // Do not wait, if there is already an error.
@@ -253,6 +249,10 @@ public final class JVoiceXmlSession
         // Wait until the session ends.
         synchronized (sem) {
             try {
+                if (closed) {
+                    throw new NoresourceError("Session is already closed");
+                }
+
                 sem.wait();
             } catch (InterruptedException e) {
                 throw new NoresourceError(
