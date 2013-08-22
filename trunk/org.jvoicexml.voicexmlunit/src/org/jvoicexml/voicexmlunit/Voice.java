@@ -26,7 +26,6 @@
 
 package org.jvoicexml.voicexmlunit;
 
-import java.io.IOException;
 import java.net.URI;
 
 import org.jvoicexml.ConnectionInformation;
@@ -79,20 +78,22 @@ public final class Voice {
      *            the server object
      * @param dialog
      *            the dialog to use
-     * @throws IOException
+     * @throws Exception
      *            the error happened during the session was active
      */
      public void call(final TextServer server, final URI dialog)
           throws Exception, ErrorEvent {
           try {
-               final ConnectionInformation info =
+              final ConnectionInformation info =
                     server.getConnectionInformation();
-               session = getClient().call(dialog, info);
-               server.waitConnected();
-               session.waitSessionEnd();
-               //session.hangup();
+              session = getClient().call(dialog, info);
+              server.waitConnected();
+              session.waitSessionEnd();
           } finally {
-               session = null;
+              if (session != null) {
+                  session.hangup();
+              }
+              session = null;
           }
     }
 
