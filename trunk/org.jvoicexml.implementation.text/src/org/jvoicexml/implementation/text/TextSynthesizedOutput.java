@@ -239,8 +239,11 @@ final class TextSynthesizedOutput
      * @since 0.7.1
      */
     void checkEmptyQueue(final SpeakableText speakable) {
-        fireOutputEnded(speakable);
+        if (speakable != null) {
+            fireOutputEnded(speakable);
+        }
         processingSpeakable = false;
+        System.out.println("*** " + texts.size());
         if (texts.isEmpty()) {
             fireQueueEmpty();
 
@@ -302,7 +305,7 @@ final class TextSynthesizedOutput
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("waiting for empty output queue...");
                 }
-                // Delay until the next text is removed.
+                // Delay until the next text is removed or processing ended.
                 synchronized (texts) {
                     texts.wait();
                 }
