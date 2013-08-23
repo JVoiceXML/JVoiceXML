@@ -78,6 +78,9 @@ public final class TextServer extends Thread {
     /** The port number to use. */
     private final int port;
 
+    /** Name of this host, maybe null to indicate the localhost. */
+    private final String host;
+
     /** The address to use. */
     private InetAddress address;
 
@@ -113,19 +116,28 @@ public final class TextServer extends Thread {
 
     /**
      * Constructs a new object.
-     *
-     * @param serverPort
-     *            port number to use.
+     * @param hostname the hostname to use, usually this is the localhost
+     * @param serverPort port number to use
      */
-    public TextServer(final int serverPort) {
+    public TextServer(final String hostname, final int serverPort) {
         port = serverPort;
-
+        host = hostname;
         setDaemon(true);
         setName("JVoiceXML text server");
         listener = new java.util.ArrayList<TextListener>();
 
         lock = new Object();
         connectionLock = new Object();
+    }
+
+    /**
+     * Constructs a new object.
+     *
+     * @param serverPort
+     *            port number to use.
+     */
+    public TextServer(final int serverPort) {
+        this(null, serverPort);
     }
 
     /**
@@ -234,6 +246,23 @@ public final class TextServer extends Thread {
     }
 
     /**
+     * Retrieve the address to use.
+     * @return the address to use
+     * @throws UnknownHostException
+     *         error determining the address to use
+     */
+    private InetAddress getAddress() throws UnknownHostException {
+        if (address == null) {
+            if (host == null) {
+                address = InetAddress.getLocalHost();
+            } else {
+                address = InetAddress.getByName(host);
+            }
+        }
+        return address;
+    }
+    
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -242,9 +271,9 @@ public final class TextServer extends Thread {
             synchronized (lock) {
                 server = new ServerSocket();
                 server.setReuseAddress(true);
-                address = InetAddress.getLocalHost();
+                final InetAddress addr = getAddress();
                 final InetSocketAddress socketAddress =
-                    new InetSocketAddress(address, port);
+                    new InetSocketAddress(addr, port);
                 callingId = TcpUriFactory.createUri(socketAddress);
                 server.bind(socketAddress);
             }
