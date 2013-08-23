@@ -38,7 +38,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Collection;
-import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
@@ -120,13 +119,6 @@ public final class TextServer extends Thread {
      */
     public TextServer(final int serverPort) {
         port = serverPort;
-
-        // TODO Fixed to localhost for now. Remote access?
-        try {
-            address = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            address = null;
-        }
 
         setDaemon(true);
         setName("JVoiceXML text server");
@@ -250,6 +242,7 @@ public final class TextServer extends Thread {
             synchronized (lock) {
                 server = new ServerSocket();
                 server.setReuseAddress(true);
+                address = InetAddress.getLocalHost();
                 final InetSocketAddress socketAddress =
                     new InetSocketAddress(address, port);
                 callingId = TcpUriFactory.createUri(socketAddress);
