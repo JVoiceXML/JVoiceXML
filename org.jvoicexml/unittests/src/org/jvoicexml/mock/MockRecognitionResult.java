@@ -32,7 +32,7 @@ import org.jvoicexml.xml.srgs.ModeType;
 /**
  * Demo implementation of a {@link RecognitionResult}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
@@ -58,6 +58,13 @@ public final class MockRecognitionResult
 
     /** Result rejected. */
     private boolean rejected;
+
+    /**
+     * Creates a new object.
+     */
+    public MockRecognitionResult() {
+        mode = ModeType.VOICE;
+    }
 
     /**
      * {@inheritDoc}
