@@ -41,6 +41,7 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
 import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.mock.config.MockConfiguration;
@@ -58,7 +59,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @version $Revision$
  * @since 0.7.4
  */
-public class TestInputItemRecognitionEventStrategy {
+public final class TestInputItemRecognitionEventStrategy {
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
 
@@ -105,6 +106,9 @@ public class TestInputItemRecognitionEventStrategy {
         result.setConfidence(0.55f);
         result.setAccepted(true);
         final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.createHostObject(
+                ApplicationShadowVarContainer.VARIABLE_NAME,
+                ApplicationShadowVarContainer.class);
         final FieldFormItem formItem = new FieldFormItem(context, field);
         formItem.init(scripting);
         final InputItemRecognitionEventStrategy strategy =
@@ -113,6 +117,78 @@ public class TestInputItemRecognitionEventStrategy {
         final JVoiceXMLEvent event = new RecognitionEvent(result);
         final boolean handled = strategy.handleEvent(formItem, event);
         Assert.assertTrue("event should be handled", handled);
+        Assert.assertEquals(result.getUtterance(), 
+                scripting.eval("application.lastresult$[0].utterance;"));
+    }
+
+    /**
+     * Test case for {@link InputItemRecognitionEventStrategy#handleEvent(org.jvoicexml.interpreter.formitem.FieldFormItem, JVoiceXMLEvent)}.
+     * @throws Exception
+     *         test failed
+     * @throws JVoiceXMLEvent
+     *         test failed
+     */
+    @Test
+    public void testHandleEventNotHandledNoMatch()
+            throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        
+        final Field field = form.appendChild(Field.class);
+        field.setName("field");
+        final MockRecognitionResult result = new MockRecognitionResult();
+        result.setUtterance("hello world");
+        result.setConfidence(0.55f);
+        result.setAccepted(false);
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.createHostObject(
+                ApplicationShadowVarContainer.VARIABLE_NAME,
+                ApplicationShadowVarContainer.class);
+        final FieldFormItem formItem = new FieldFormItem(context, field);
+        formItem.init(scripting);
+        final InputItemRecognitionEventStrategy strategy =
+            new InputItemRecognitionEventStrategy(context, interpreter, null,
+                    formItem);
+        final JVoiceXMLEvent event = new RecognitionEvent(result);
+        boolean handled = strategy.handleEvent(formItem, event);
+        Assert.assertFalse("event should not be handled", handled);
+        Assert.assertEquals(result.getUtterance(), 
+                scripting.eval("application.lastresult$[0].utterance;"));
+    }
+
+    /**
+     * Test case for {@link InputItemRecognitionEventStrategy#handleEvent(org.jvoicexml.interpreter.formitem.FieldFormItem, JVoiceXMLEvent)}.
+     * @throws Exception
+     *         test failed
+     * @throws JVoiceXMLEvent
+     *         test failed
+     */
+    @Test
+    public void testHandleEventNotHandledBelowConfidence()
+            throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        
+        final Field field = form.appendChild(Field.class);
+        field.setName("field");
+        
+        context.setProperty("confidencelevel", "0.5");
+        final MockRecognitionResult result = new MockRecognitionResult();
+        result.setUtterance("hello world");
+        result.setConfidence(0.55f);
+        result.setAccepted(true);
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.createHostObject(
+                ApplicationShadowVarContainer.VARIABLE_NAME,
+                ApplicationShadowVarContainer.class);
+        final FieldFormItem formItem = new FieldFormItem(context, field);
+        formItem.init(scripting);
+        final InputItemRecognitionEventStrategy strategy =
+            new InputItemRecognitionEventStrategy(context, interpreter, null,
+                    formItem);
+        final JVoiceXMLEvent event = new RecognitionEvent(result);
         context.setProperty("confidencelevel", "0.6");
         JVoiceXMLEvent nomatch = null;
         try {
@@ -121,5 +197,7 @@ public class TestInputItemRecognitionEventStrategy {
             nomatch = e;
         }
         Assert.assertNotNull("event should not be handled", nomatch);
+        Assert.assertEquals(result.getUtterance(), 
+                scripting.eval("application.lastresult$[0].utterance;"));
     }
 }
