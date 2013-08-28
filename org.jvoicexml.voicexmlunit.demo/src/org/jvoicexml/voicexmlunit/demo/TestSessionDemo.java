@@ -1,6 +1,5 @@
 package org.jvoicexml.voicexmlunit.demo;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -14,106 +13,106 @@ import org.junit.Test;
 
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.voicexmlunit.Voice;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 public final class TestSessionDemo implements TextListener {
 
-  private static final int PORT = 4243;
+    private static final int PORT = 4243;
 
-  private static final long MAX_WAIT = 1000;
+    private static final long MAX_WAIT = 1000;
 
-  private Voice voice;
+    private Voice voice;
 
-  private TextServer server;
+    private TextServer server;
 
-  private String result;
+    private String result;
 
-  private URI dialog;
+    private URI dialog;
 
-  private String input;
+    private String input;
 
-  private boolean failFirstOutput;
+    private boolean failFirstOutput;
 
-  @Before
+    @Before
     public void setUp() throws InterruptedException {
-      voice = new Voice();
-      dialog = new File("etc/input.vxml").toURI();
+        voice = new Voice();
+        dialog = new File("etc/input.vxml").toURI();
 
-      server = new TextServer(PORT);
-      server.addTextListener(this);
-      server.start();
+        server = new TextServer(PORT);
+        server.addTextListener(this);
+        server.start();
 
-      synchronized (server) {
-        server.wait(MAX_WAIT);
-      }
+        synchronized (server) {
+            server.wait(MAX_WAIT);
+        }
     }
 
-  @After
-  public void tearDown() {
-    server.stopServer();
-  }
-
-  @Test(timeout=10000)
-    public void testInputYes() throws IOException {
-    testInput("yes");
-  }
-
-  @Test(timeout=10000, expected=ComparisonFailure.class)
-    public void testInputNo() throws IOException {
-    boolean failed = false;
-    testInput("no");
-  }
-
-  private void testInput(final String answer) throws IOException {
-    input = answer;
-    failFirstOutput = false;
-    interpretDocument();
-
-    final String expected = "You like this example.";
-    Assert.assertEquals(expected, result);
-  }
-
-
-    private void interpretDocument() throws IOException {
-      voice.call(server, dialog);
+    @After
+    public void tearDown() {
+        server.stopServer();
     }
 
-  @Override
-  public void started() {
-    synchronized (server) {
-      server.notifyAll();
+    @Test(timeout = 10000)
+    public void testInputYes() throws ErrorEvent, Exception {
+        testInput("yes");
     }
-  }
 
-  @Override
-  public void connected(InetSocketAddress remote) {
-    synchronized (server) {
-      server.notifyAll();
+    @Test(timeout = 10000, expected = ComparisonFailure.class)
+    public void testInputNo() throws ErrorEvent, Exception {
+        boolean failed = false;
+        testInput("no");
     }
-  }
 
-  @Override
-  public void outputSsml(SsmlDocument document) {
-    result = document.getSpeak().getTextContent();
-  }
+    private void testInput(final String answer) throws ErrorEvent, Exception {
+        input = answer;
+        failFirstOutput = false;
+        interpretDocument();
 
-  @Override
-  public void expectingInput() {
-    try {
-      server.sendInput(input);
-    } catch (IOException e) {
-      e.printStackTrace();
+        final String expected = "You like this example.";
+        Assert.assertEquals(expected, result);
     }
-  }
 
-  @Override
-  public void inputClosed() {
+    private void interpretDocument() throws ErrorEvent, Exception {
+        voice.call(server, dialog);
+    }
 
-  }
+    @Override
+    public void started() {
+        synchronized (server) {
+            server.notifyAll();
+        }
+    }
 
-  @Override
-  public void disconnected() {
+    @Override
+    public void connected(InetSocketAddress remote) {
+        synchronized (server) {
+            server.notifyAll();
+        }
+    }
 
-  }
+    @Override
+    public void outputSsml(SsmlDocument document) {
+        result = document.getSpeak().getTextContent();
+    }
+
+    @Override
+    public void expectingInput() {
+        try {
+            server.sendInput(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void inputClosed() {
+
+    }
+
+    @Override
+    public void disconnected() {
+
+    }
 }
