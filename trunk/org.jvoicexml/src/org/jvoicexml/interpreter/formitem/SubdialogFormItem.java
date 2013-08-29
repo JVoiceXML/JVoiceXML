@@ -78,7 +78,7 @@ public final class SubdialogFormItem
     public AbstractFormItem newInstance(
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlNode voiceNode) {
-        return new BlockFormItem(ctx, voiceNode);
+        return new SubdialogFormItem(ctx, voiceNode);
     }
 
     /**
