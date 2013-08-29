@@ -22,7 +22,7 @@
             <prompt>You were born at <value expr="birthday"/></prompt>
             <prompt> Do you have a driver license?</prompt>
             <filled>
-                <if cond="go_ahead=='yes'">
+                <if cond="drivelicense=='yes'">
                     <var name="status" expr="true" />
                 <else />
                     <var name="status" expr="false" />
