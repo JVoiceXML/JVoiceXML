@@ -16,7 +16,6 @@
 	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.2.3/lib/httpcore-4.2.3.jar"/>
 	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.2.3/lib/httpcore-ab-4.2.3.jar"/>
 	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.2.3/lib/httpcore-nio-4.2.3.jar"/>
-	<classpathentry kind="lib" path="dist/org.jvoicexml.client.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="config"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
@@ -38,8 +37,5 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/rhino1.7R3/rhino1.7R3-apidoc.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="dist/org.jvoicexml.callmanager.mmi.jar"/>
-	<classpathentry kind="lib" path="dist/org.jvoicexml.callmanager.mmi.umundo.jar"/>
-	<classpathentry kind="lib" path="dist/org.jvoicexml.mmi.events.jar"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
