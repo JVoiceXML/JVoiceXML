@@ -28,11 +28,16 @@ package org.jvoicexml.interpreter.tagstrategy;
 import java.util.Collection;
 
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
+import org.jvoicexml.interpreter.TagStrategyExecutor;
+import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -50,7 +55,7 @@ import org.jvoicexml.xml.vxml.Foreach;
  * @since 0.6
  */
 final class ForeachTagStrategy
-        extends AbstractSsmlParsingStrategy
+        extends AbstractTagStrategy
         implements SsmlParsingStrategy {
     /** The ECMA script array to iteratate over. */
     private Object[] array;
@@ -106,5 +111,28 @@ final class ForeachTagStrategy
         }
 
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void execute(final VoiceXmlInterpreterContext context,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia,
+            final FormItem formItem, final VoiceXmlNode node)
+                    throws JVoiceXMLEvent {
+        final Foreach foreach = (Foreach) node;
+        final ScriptingEngine scripting = context.getScriptingEngine();
+
+        // TODO This results in a fragmentation of multiple SSML documents
+        // that will be passed to the implementation platform 
+        for (int i = 0; i < array.length; i++) {
+            final Object value = array[i];
+            scripting.setVariable(item, value);
+            final TagStrategyExecutor executor = fia.getTagStrategyExecutor();
+            executor.executeChildNodes(context, interpreter, fia, formItem,
+                    foreach);
+        }
     }
 }
