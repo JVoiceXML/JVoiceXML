@@ -40,6 +40,7 @@ import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategy;
+import org.jvoicexml.xml.ccxml.Script;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Block;
@@ -140,7 +141,38 @@ public final class TestForeachStrategy extends TagStrategyTestBase
         Assert.assertEquals(6, queuedSpeakables.size());
         Assert.assertEquals(speakable, queuedSpeakables.get(0));
     }
-    
+
+    /**
+     * Test method for {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            test failed
+     * @since 0.7.6
+     */
+    @Test
+    public void testExecuteScript() throws Exception, JVoiceXMLEvent {
+        final String names = "names";
+        final String expr = "var " + names + " = new Array(3);"
+                + "names[0] = \"Hans\";"
+                + "names[1] = \"Gabi\";"
+                + "names[2] = \"Erna\";";
+        final ScriptingEngine scripting = getScriptingEngine();
+        scripting.eval(expr);
+        scripting.eval("var count = 0;");
+        final Block block = createBlock();
+        final Foreach foreach = block.appendChild(Foreach.class);
+        foreach.setArray(names);
+        foreach.setItem("name");
+        final Script script = foreach.appendChild(Script.class);
+        script.addText(" count = count + 2;");
+        setSystemOutputListener(this);
+        final TagStrategy strategy = new ForeachTagStrategy();
+        executeTagStrategy(foreach, strategy);
+        Assert.assertEquals(0, queuedSpeakables.size());
+        Assert.assertEquals(new Double(6.0f), scripting.getVariable("count"));
+    }
+
     /**
      * {@inheritDoc}
      */
