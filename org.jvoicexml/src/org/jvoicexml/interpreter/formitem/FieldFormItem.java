@@ -275,8 +275,9 @@ public final class FieldFormItem
     }
 
     /**
-     * Check, if there are builtin grammars defined and if so, add them as
-     * custom grammars.
+     * Check, if there are builtin grammars defined by 
+     * <code>&lt;option&gt</code> tags
+     * and if so, add them as custom grammars.
      * @param grammars current grammars of the field
      * @param field the field
      * @param locale the locale to use
@@ -285,6 +286,9 @@ public final class FieldFormItem
     private void addCustomOptionGrammars(final Collection<Grammar> grammars,
             final Field field, final Locale locale) {
         final Collection<Option> options = field.getChildNodes(Option.class);
+        if (options.isEmpty()) {
+            return;
+        }
         if (converter == null) {
             if (!options.isEmpty()) {
                 LOGGER.warn("no converter defined. unable to process options");
@@ -295,11 +299,19 @@ public final class FieldFormItem
                 converter.createVoiceGrammar(options, locale);
         if (optionVoiceGrammar != null) {
             grammars.add(optionVoiceGrammar);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added voice grammar from options: "
+                        + optionVoiceGrammar);
+            }
         }
         final Grammar optionDtmfGrammar =
                 converter.createDtmfGrammar(options);
         if (optionDtmfGrammar != null) {
             grammars.add(optionDtmfGrammar);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added DTMF grammar from options: "
+                        + optionDtmfGrammar);
+            }
         }
     }
 

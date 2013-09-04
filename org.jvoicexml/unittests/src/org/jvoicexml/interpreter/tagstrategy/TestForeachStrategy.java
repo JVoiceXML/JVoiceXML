@@ -26,7 +26,10 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import java.util.List;
+
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
@@ -54,7 +57,17 @@ import org.jvoicexml.xml.vxml.Value;
 public final class TestForeachStrategy extends TagStrategyTestBase
     implements SynthesizedOutputListener {
     /** The queued speakable. */
-    private SpeakableText queuedSpeakable;
+    private List<SpeakableText> queuedSpeakables;
+
+    /**
+     * Set up the test environment.
+     * 
+     * @since 0.7.6
+     */
+    @Before
+    public void setUp() {
+        queuedSpeakables = new java.util.ArrayList<SpeakableText>();
+    }
 
     /**
      * Test method for {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
@@ -70,8 +83,6 @@ public final class TestForeachStrategy extends TagStrategyTestBase
                 + "names[0] = \"Hans\";"
                 + "names[1] = \"Gabi\";"
                 + "names[2] = \"Erna\";";
-//        final String expr = " var " + names
-//                + " = [\"Hans\", \"Gabi\", \"Ernst\"];";
         final ScriptingEngine scripting = getScriptingEngine();
         scripting.eval(expr);
         final Block block = createBlock();
@@ -90,9 +101,46 @@ public final class TestForeachStrategy extends TagStrategyTestBase
         speak.addText("Current name is Hans Current name is Gabi "
                 + "Current name is Erna");
         final SpeakableText speakable = new SpeakableSsmlText(doc);
-        Assert.assertEquals(speakable, queuedSpeakable);
+        Assert.assertEquals(1, queuedSpeakables.size());
+        Assert.assertEquals(speakable, queuedSpeakables.get(0));
     }
 
+    /**
+     * Test method for {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            test failed
+     * @since 0.7.6
+     */
+    @Test
+    public void testExecuteInBlock() throws Exception, JVoiceXMLEvent {
+        final String names = "names";
+        final String expr = "var " + names + " = new Array(3);"
+                + "names[0] = \"Hans\";"
+                + "names[1] = \"Gabi\";"
+                + "names[2] = \"Erna\";";
+        final ScriptingEngine scripting = getScriptingEngine();
+        scripting.eval(expr);
+        final Block block = createBlock();
+        final Foreach foreach = block.appendChild(Foreach.class);
+        foreach.setArray(names);
+        foreach.setItem("name");
+        foreach.addText("Current name is ");
+        final Value value = foreach.appendChild(Value.class);
+        value.setExpr("name");
+        setSystemOutputListener(this);
+        final TagStrategy strategy = new ForeachTagStrategy();
+        executeTagStrategy(foreach, strategy);
+        final SsmlDocument doc = new SsmlDocument();
+        final Speak speak = doc.getSpeak();
+        speak.addText("Current name is Hans Current name is Gabi "
+                + "Current name is Erna");
+        final SpeakableText speakable = new SpeakableSsmlText(doc);
+        Assert.assertEquals(6, queuedSpeakables.size());
+        Assert.assertEquals(speakable, queuedSpeakables.get(0));
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -101,7 +149,8 @@ public final class TestForeachStrategy extends TagStrategyTestBase
         final int id = event.getEvent();
         if (id == SynthesizedOutputEvent.OUTPUT_STARTED) {
             final OutputStartedEvent started = (OutputStartedEvent) event;
-            queuedSpeakable = started.getSpeakable();
+            final SpeakableText speakable = started.getSpeakable();
+            queuedSpeakables.add(speakable);
         }
     }
 
