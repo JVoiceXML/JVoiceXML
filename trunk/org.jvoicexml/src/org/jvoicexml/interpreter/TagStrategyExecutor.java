@@ -213,6 +213,23 @@ public final class TagStrategyExecutor implements Configurable {
         }
     }
 
+    /**
+     * Retrieves the namespace defined in the given node as an URI.
+     * @param node the node
+     * @return namespace as an URI, <code>null</code> if there is no namespace
+     * @exception URISyntaxException
+     *            error converting the namespace into an URI
+     * @since 0.7.6
+     */
+    private URI getNamespaceUri(final VoiceXmlNode node)
+            throws URISyntaxException {
+        final String namespace = node.getNamespaceURI();
+        if (namespace == null) {
+            return null;
+        } else {
+            return new URI(namespace);
+        }
+    }
 
     /**
      * Prepares the execution of the {@link TagStrategy}.
@@ -228,16 +245,11 @@ public final class TagStrategyExecutor implements Configurable {
             final VoiceXmlInterpreterContext context,
             final FormInterpretationAlgorithm fia, final VoiceXmlNode node)
             throws ErrorEvent {
-        final String namespace = node.getNamespaceURI();
         final URI uri;
-        if (namespace == null) {
-            uri = null;
-        } else {
-            try {
-                uri = new URI(namespace);
-            } catch (URISyntaxException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            }
+        try {
+            uri = getNamespaceUri(node);
+        } catch (URISyntaxException e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
         final TagStrategy strategy = repository.getTagStrategy(node, uri);
         if (strategy == null) {
