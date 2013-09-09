@@ -137,9 +137,6 @@ public final class Jsapi10SynthesizedOutput
     /** Information about the current connection. */
     private ConnectionInformation info;
 
-    /** Set to <code>true</code> if SSML output is active. */
-    private boolean queueingSsml;
-
     /**
      * Set to <code>true</code> if SSML output is active and there was a cancel
      * output request.
@@ -326,17 +323,16 @@ public final class Jsapi10SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
         sessionId = id;
+        documentServer = server;
         synchronized (queuedSpeakables) {
             queuedSpeakables.offer(speakable);
-        }
-        documentServer = server;
-        // Do not process the speakable if there is some ongoing processing
-        synchronized (queuedSpeakables) {
+
+            // Do not process the speakable if there is some ongoing processing
             if (queuedSpeakables.size() > 1) {
                 return;
             }
         }
-        outputCanceled = false;
+
         // Otherwise process the added speakable asynchronous.
         final Runnable runnable = new Runnable() {
             /**
@@ -367,14 +363,14 @@ public final class Jsapi10SynthesizedOutput
      */
     private synchronized void processNextSpeakable()
         throws NoresourceError, BadFetchError {
-        // Reset all flags of the previous output.
-        queueingSsml = false;
-        bargeInType = null;
-        bargein = false;
-
         // Check if there are more speakables to process
         final SpeakableText speakable;
         synchronized (queuedSpeakables) {
+            // Reset all flags of the previous output.
+            bargeInType = null;
+            bargein = false;
+            outputCanceled = false;
+
             if (queuedSpeakables.isEmpty()) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("no more speakables to process");
@@ -387,7 +383,6 @@ public final class Jsapi10SynthesizedOutput
             }
             speakable = queuedSpeakables.peek();
         }
-        
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("processing next speakable :" + speakable);
@@ -397,11 +392,29 @@ public final class Jsapi10SynthesizedOutput
 
         if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
-            bargein = ssml.isBargeInEnabled();
-            bargeInType = ssml.getBargeInType();
+            synchronized (queuedSpeakables) {
+                bargein = ssml.isBargeInEnabled();
+                bargeInType = ssml.getBargeInType();
+            }
             speakSSML(ssml, documentServer);
         } else {
             LOGGER.warn("unsupported speakable: " + speakable);
+        }
+
+        // remove the topmost element from the queue and notify the listeners
+        // that we are done with it
+        synchronized (queuedSpeakables) {
+            queuedSpeakables.poll();
+        }
+        fireOutputEnded(speakable);
+
+        // recursivly call this method until the queue is empty
+        try {
+            processNextSpeakable();
+        } catch (NoresourceError e) {
+            notifyError(e);
+        } catch (BadFetchError e) {
+            notifyError(e);
         }
     }
 
@@ -420,14 +433,14 @@ public final class Jsapi10SynthesizedOutput
     private void speakSSML(final SpeakableSsmlText text,
             final DocumentServer server)
         throws NoresourceError, BadFetchError {
-
+        // Retrieve the document
         final SsmlDocument document = text.getDocument();
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("speaking SSML");
             LOGGER.debug(document.toString());
         }
 
+        // Retrieve the topmost document for the speak strategies
         final SsmlNode speak = document.getSpeak();
         if (speak == null) {
             return;
@@ -437,11 +450,21 @@ public final class Jsapi10SynthesizedOutput
             SPEAK_FACTORY.getSpeakStrategy(speak);
         if (strategy != null) {
             strategy.speak(this, speak);
-        }
-        if (!outputCanceled) {
-            final SpeakableEvent event =
-                new SpeakableEvent(document, SpeakableEvent.SPEAKABLE_ENDED);
-            speakableEnded(event);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("speakable ended: " + document);
+            }
+
+            // If streaming is supported, add the stream to the queue.
+            if (streamBuffer != null) {
+                final byte[] buffer = streamBuffer.toByteArray();
+                final InputStream input = new ByteArrayInputStream(buffer);
+                try {
+                    synthesizerStreams.put(input);
+                } catch (InterruptedException e) {
+                    LOGGER.debug("unable to add a synthesizer stream", e);
+                }
+                streamBuffer = null;
+            }
         }
     }
 
@@ -726,7 +749,6 @@ public final class Jsapi10SynthesizedOutput
         // Clear all lists and reset the flags.
         listener.clear();
         queuedSpeakables.clear();
-        queueingSsml = false;
         outputCanceled = false;
         info = null;
         documentServer = null;
@@ -813,50 +835,6 @@ public final class Jsapi10SynthesizedOutput
      * {@inheritDoc}
      */
     public void speakableEnded(final SpeakableEvent event) {
-        final Object source = event.getSource();
-        if (source instanceof SsmlDocument) {
-            queueingSsml = false;
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Synthesis of an SSML document started");
-            }
-        }
-        final boolean removeSpeakable = !queueingSsml;
-        if (removeSpeakable) {
-            // TODO this will fail if we end with an audio or break tag.
-            final SpeakableText speakable;
-            synchronized (queuedSpeakables) {
-                speakable = queuedSpeakables.poll();
-            }
-            if (LOGGER.isDebugEnabled()) {
-                if (speakable != null) {
-                    LOGGER.debug("speakable ended: "
-                        + speakable.getSpeakableText());
-                }
-            }
-
-            // If streaming is supported, add the stream to the queue.
-            if (streamBuffer != null) {
-                final byte[] buffer = streamBuffer.toByteArray();
-                final InputStream input = new ByteArrayInputStream(buffer);
-                try {
-                    synthesizerStreams.put(input);
-                } catch (InterruptedException e) {
-                    LOGGER.debug("unable to add a synthesizer stream", e);
-                }
-                streamBuffer = null;
-            }
-
-            if (speakable != null) {
-                fireOutputEnded(speakable);
-            }
-            try {
-                processNextSpeakable();
-            } catch (NoresourceError e) {
-                notifyError(e);
-            } catch (BadFetchError e) {
-                notifyError(e);
-            }
-        }
     }
 
     /**
@@ -875,14 +853,6 @@ public final class Jsapi10SynthesizedOutput
      * {@inheritDoc}
      */
     public void speakableStarted(final SpeakableEvent event) {
-        final Object source = event.getSource();
-        if (source instanceof SsmlDocument) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("synthesis of an SSML document started: "
-                        + source);
-            }
-            queueingSsml = true;
-        }
     }
 
     /**

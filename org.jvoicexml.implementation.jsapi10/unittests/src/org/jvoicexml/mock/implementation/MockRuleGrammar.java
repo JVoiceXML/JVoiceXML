@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.test.implementation;
+package org.jvoicexml.mock.implementation;
 
 import com.sun.speech.engine.recognition.BaseRuleGrammar;
 
@@ -34,14 +34,14 @@ import edu.cmu.sphinx.jsgf.JSGFRuleGrammar;
  * Basic rule grammar for testing.
  * @author Dirk Schnelle-Walka
  */
-public final class DummyRuleGrammar extends BaseRuleGrammar {
+public final class MockRuleGrammar extends BaseRuleGrammar {
     /** The serial version UID. */
     private static final long serialVersionUID = 1054104353148382666L;
 
     /**
      * Constructs a new object.
      */
-    public DummyRuleGrammar() {
+    public MockRuleGrammar() {
         super(null, new JSGFRuleGrammar("dummy", null));
     }
 

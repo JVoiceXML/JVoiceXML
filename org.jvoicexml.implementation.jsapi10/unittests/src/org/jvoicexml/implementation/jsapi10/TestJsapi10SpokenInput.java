@@ -69,7 +69,7 @@ public class TestJsapi10SpokenInput {
      */
     @BeforeClass
     public static void init() throws EngineException {
-        final String config = "/sphinx4.jsapi10.config";
+        final String config = "/sphinx4.jsapi10.test.config.xml";
         final SphinxRecognizerModeDesc desc =
                 new SphinxRecognizerModeDesc(config);
         SphinxEngineCentral.registerEngineModeDesc(desc);
@@ -86,7 +86,8 @@ public class TestJsapi10SpokenInput {
      */
     @Before
     public void setUp() throws Exception, JVoiceXMLEvent {
-        final RecognizerModeDesc desc = new SphinxRecognizerModeDesc();
+        final String config = "/sphinx4.jsapi10.test.config.xml";
+        final RecognizerModeDesc desc = new SphinxRecognizerModeDesc(config);
         recognizer = new Jsapi10SpokenInput(desc);
         recognizer.open();
         recognizer.activate();
