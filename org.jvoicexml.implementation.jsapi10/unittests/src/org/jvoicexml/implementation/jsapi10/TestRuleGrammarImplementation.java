@@ -30,7 +30,6 @@ import java.io.StringReader;
 
 import javax.speech.Central;
 import javax.speech.recognition.Recognizer;
-import javax.speech.recognition.RecognizerModeDesc;
 import javax.speech.recognition.Rule;
 import javax.speech.recognition.RuleAlternatives;
 import javax.speech.recognition.RuleGrammar;
@@ -42,7 +41,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.mock.MockRecognitionResult;
-import org.jvoicexml.test.implementation.DummyRuleGrammar;
+import org.jvoicexml.mock.implementation.MockRuleGrammar;
 
 import edu.cmu.sphinx.jsapi.SphinxEngineCentral;
 import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
@@ -60,7 +59,7 @@ public final class TestRuleGrammarImplementation {
      */
     @Test
     public void testAcceptsRecognitionResult() {
-        final RuleGrammar grammar = new DummyRuleGrammar();
+        final RuleGrammar grammar = new MockRuleGrammar();
         String[] words = new String[] {"this", "is", "a", "test"};
         RuleSequence sequence = new RuleSequence(words);
         grammar.setRule(grammar.getName(), sequence, true);
@@ -87,7 +86,7 @@ public final class TestRuleGrammarImplementation {
      */
     @Test
     public void testAcceptsOneOf() throws Exception {
-        final RuleGrammar grammar = new DummyRuleGrammar();
+        final RuleGrammar grammar = new MockRuleGrammar();
         final RuleToken token1 = new RuleToken("1");
         final RuleToken token2 = new RuleToken("2");
         final RuleToken token3 = new RuleToken("3");
@@ -124,7 +123,7 @@ public final class TestRuleGrammarImplementation {
      */
     @Test
     public void testAcceptsReference() throws Exception {
-        final RuleGrammar grammar = new DummyRuleGrammar();
+        final RuleGrammar grammar = new MockRuleGrammar();
         final RuleToken token1 = new RuleToken("1");
         final RuleToken token2 = new RuleToken("2");
         final RuleToken token3 = new RuleToken("3");
@@ -165,12 +164,13 @@ public final class TestRuleGrammarImplementation {
     @Test
     public void testEquals() throws Exception {
         Central.registerEngineCentral(SphinxEngineCentral.class.getCanonicalName());
-        final RecognizerModeDesc desc =
-            new SphinxRecognizerModeDesc("/org/jvoicexml/implementation/jsapi10/sphinx4.jsapi10.config.xml");
+        final String config = "/sphinx4.jsapi10.test.config.xml";
+        final SphinxRecognizerModeDesc desc =
+                new SphinxRecognizerModeDesc(config);
         final Recognizer rec = Central.createRecognizer(desc);
         rec.allocate();
         rec.waitEngineState(Recognizer.ALLOCATED);
-        final RuleGrammar grammar = new DummyRuleGrammar();
+        final RuleGrammar grammar = new MockRuleGrammar();
         final RuleToken token1 = new RuleToken("one");
         final RuleToken token2 = new RuleToken("two");
         final RuleToken token3 = new RuleToken("three");
