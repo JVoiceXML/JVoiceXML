@@ -52,7 +52,8 @@ public final class TestTcpUriFactory {
         final InetSocketAddress address =
             new InetSocketAddress(localhost, 4242);
         final URI uri = TcpUriFactory.createUri(address);
-        Assert.assertEquals("tcp://localhost:4242", uri.toString());
+        Assert.assertEquals("tcp://" + localhost.getHostName()
+                + ":4242", uri.toString());
     }
 
 }
