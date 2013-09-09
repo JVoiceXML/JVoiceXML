@@ -21,6 +21,7 @@ This file runs unit tests on JVoiceXML.
       <pathelement location="../org.jvoicexml.xml/classes" />
       <pathelement location="../org.jvoicexml.processor.srgs/classes" />
       <fileset refid="junit.lib"/>
+      <fileset refid="loggings.lib" />
     </path>
   </target>
 
@@ -72,9 +73,6 @@ This file runs unit tests on JVoiceXML.
       <classpath refid="test.classpath" />
       <classpath location="${test.config}" />
       <classpath location="${config}" />
-      <classpath>
-        <fileset refid="loggings.lib" />
-      </classpath>
 
       <formatter type="brief" usefile="false" />
       <formatter type="xml" />
