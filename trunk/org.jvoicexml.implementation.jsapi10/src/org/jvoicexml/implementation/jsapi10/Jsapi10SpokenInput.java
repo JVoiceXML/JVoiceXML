@@ -509,6 +509,10 @@ public final class Jsapi10SpokenInput
         handler = null;
         info = null;
         streamableInput = null;
+        if (recognizer == null) {
+            LOGGER.warn("no recognizer. nothing more to passivate");
+            return;
+        }
         final RuleGrammar[] grammars = recognizer.listRuleGrammars();
         for (RuleGrammar grammar : grammars) {
             if (LOGGER.isDebugEnabled()) {

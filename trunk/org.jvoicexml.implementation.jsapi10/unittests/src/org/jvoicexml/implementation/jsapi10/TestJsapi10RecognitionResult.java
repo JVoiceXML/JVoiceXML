@@ -62,7 +62,7 @@ public class TestJsapi10RecognitionResult {
      */
     @BeforeClass
     public static void init() throws EngineException {
-        final String config = "/sphinx4.jsapi10.config";
+        final String config = "/sphinx4.jsapi10.test.config.xml";
         final SphinxRecognizerModeDesc desc =
                 new SphinxRecognizerModeDesc(config);
         SphinxEngineCentral.registerEngineModeDesc(desc);
@@ -76,7 +76,7 @@ public class TestJsapi10RecognitionResult {
      */
     @Before
     public void setUp() throws Exception {
-        final String config = "/sphinx4.jsapi10.config";
+        final String config = "/sphinx4.jsapi10.test.config.xml";
         final RecognizerModeDesc desc = new SphinxRecognizerModeDesc(config);
         recognizer = Central.createRecognizer(desc);
         recognizer.allocate();

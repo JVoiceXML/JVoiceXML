@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.test.implementation;
+package org.jvoicexml.mock.implementation;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -55,7 +55,7 @@ import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
  * @version $Revision$
  * @since 0.6
  */
-public final class Jsapi10DummyUserInput extends MockUserInput {
+public final class Jsapi10MockUserInput extends MockUserInput {
     /** Buffer size when reading a grammar. */
     private static final int BUFFER_SIZE = 1024;
 
@@ -75,7 +75,7 @@ public final class Jsapi10DummyUserInput extends MockUserInput {
     /**
      * Constructs a new object.
      */
-    public Jsapi10DummyUserInput() {
+    public Jsapi10MockUserInput() {
         addSupportedGrammarType(GrammarType.JSGF);
     }
 

@@ -212,6 +212,7 @@ public final class TestJsapi10SynthesizedOutput {
         }
         Assert.assertEquals(max, started);
         Assert.assertEquals(max, ended);
+        Assert.assertEquals(1, emptied);
     }
 
     /**
@@ -227,7 +228,7 @@ public final class TestJsapi10SynthesizedOutput {
         Speak speak = ssml.getSpeak();
         speak.addText("This is a test");
         final Break breakNode = speak.appendChild(Break.class);
-        breakNode.setTime("500ms");
+        breakNode.setTime("200ms");
         final P p1 = speak.appendChild(P.class);
         p1.addText("Text within P");
         final Mark mark = p1.appendChild(Mark.class);
@@ -259,7 +260,7 @@ public final class TestJsapi10SynthesizedOutput {
         synthesizer.waitQueueEmpty();
         Assert.assertFalse(synthesizer.isBusy());
         final int size = 4;
-        listener.waitSize(size, TIMEOUT);
+        listener.waitSize(size, size * size * TIMEOUT);
         Assert.assertEquals(size, listener.size());
         int pos = 0;
         SynthesizedOutputEvent start = listener.get(pos);

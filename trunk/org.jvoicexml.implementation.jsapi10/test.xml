@@ -8,11 +8,12 @@ This file runs unit tests on the JSAPI 1.0 implemenatation platform.
 
     <target name="-test-setup" depends="-setup">
         <!-- directory structure -->
-        <property name="test" value="unittests" />
+        <property name="test" value="${basedir}/unittests" />
 
         <property name="test.src" value="${test}/src" />
         <property name="test.results" value="${dist}/unittests" />
         <property name="test.build" value="${test}/classes" />
+        <property name="test.config" value="${test}/config" />
 
         <!-- Compile the test core classes -->
         <ant dir="${jvxml.core.dir}" antfile="test.xml" target="compiletests"
@@ -21,12 +22,13 @@ This file runs unit tests on the JSAPI 1.0 implemenatation platform.
         <!-- the class path for the test case -->
         <path id="test.classpath">
             <path refid="project.classpath" />
-        	<path location="../${component}/etc" />
             <pathelement location="${build}" />
             <pathelement location="${jvxml.core.dir}/unittests/classes" />
             <fileset refid="freetts.jsapi10.lib"/>
             <fileset refid="jlibrtp.lib"/>
             <fileset refid="junit.lib"/>
+            <fileset refid="loggings.lib" />
+            <pathelement path="../org.jvoicexml/3rdparty/sphinx4/lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar"/>
         </path>
     </target>
 
@@ -62,11 +64,8 @@ This file runs unit tests on the JSAPI 1.0 implemenatation platform.
                showoutput="yes">
             <classpath location="${test.build}" />
             <classpath refid="test.classpath" />
-            <classpath location="${basedir}/etc" />
+            <classpath location="${test.config}" />
             <classpath location="${config}" />
-            <classpath>
-                <fileset refid="loggings.lib" />
-            </classpath>
 
             <formatter type="xml" />
             <batchtest todir="${test.results}">
@@ -100,9 +99,6 @@ This file runs unit tests on the JSAPI 1.0 implemenatation platform.
             <classpath refid="test.classpath" />
             <classpath location="${test.config}" />
             <classpath location="${config}" />
-            <classpath>
-                <fileset refid="loggings.lib" />
-            </classpath>
 
             <formatter type="xml" />
             <test name="${run.class}" todir="${test.results}"/>
