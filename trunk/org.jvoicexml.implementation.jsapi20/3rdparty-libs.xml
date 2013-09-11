@@ -18,9 +18,8 @@ implementation platform.
         <fileset dir="${jsapi2.lib.dir}" id="jsapi2.lib">
             <include name="jsr113.jar" />
             <include name="org.jvoicexml.jsapi2.jar" />
-            <include name="org.jvoicexml.jsapi2.jse.jar" />
-            <include name="org.jvoicexml.jsapi2.jse.freetts.jar" />
-            <include name="org.jvoicexml.jsapi2.jse.sphinx4.jar" />
+            <include name="org.jvoicexml.jsapi2.freetts.jar" />
+            <include name="org.jvoicexml.jsapi2.sphinx4.jar" />
             <include name="org.jvoicexml.jsapi2.mac.jar" />
             <include name="org.jvoicexml.jsapi2.sapi.jar" />
         </fileset>

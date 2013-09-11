@@ -7,9 +7,8 @@
   <classpath>../org.jvoicexml/3rdparty/sphinx4/lib/sphinx4.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/jsr113.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.jse.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.mac.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.jse.sphinx4.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/org.jvoicexml.jsapi2.sphinx4.jar</classpath>
 
   <beans:bean
     class="org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutputFactory">
