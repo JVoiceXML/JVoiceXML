@@ -204,7 +204,6 @@ The code is not compatible with any specification of the JCP.
         <include name="org.jvoicexml.implementation.jsapi20.jar" />
         <include name="jsr113.jar" />
         <include name="org.jvoicexml.jsapi2.jar"/>
-        <include name="org.jvoicexml.jsapi2.jse.jar"/>
       </fileset>
     </pack>
     <pack name="FreeTTS and Sphinx 4 support for JSAPI 2.0" required="no"
@@ -218,8 +217,8 @@ Adds basic support for the JSAPI 2.0 implementation platform using FreeTTS for s
         <include name="jsapi20-implementation.xml" />
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
-        <include name="org.jvoicexml.jsapi2.jse.freetts.jar"/>
-        <include name="org.jvoicexml.jsapi2.jse.sphinx4.jar"/>
+        <include name="org.jvoicexml.jsapi2.freetts.jar"/>
+        <include name="org.jvoicexml.jsapi2.sphinx4.jar"/>
         <include name="freetts.jar" />
         <include name="cmu_us_kal.jar" />
         <include name="cmulex.jar" />
