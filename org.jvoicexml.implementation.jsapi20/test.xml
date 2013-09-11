@@ -26,6 +26,7 @@ This file runs unit tests on the JSAPI 2.0 implementation platform.
             <fileset refid="junit.lib"/>
             <fileset refid="freetts.lib"/>
             <fileset refid="sphinx4.lib"/>
+            <fileset refid="loggings.lib" />
         </path>
     </target>
 
@@ -100,9 +101,6 @@ This file runs unit tests on the JSAPI 2.0 implementation platform.
             <classpath refid="test.classpath" />
             <classpath location="${test.config}" />
             <classpath location="${config}" />
-            <classpath>
-                <fileset refid="loggings.lib" />
-            </classpath>
 
             <formatter type="xml" />
             <formatter type="brief" usefile="false" />

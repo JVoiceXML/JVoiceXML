@@ -264,7 +264,6 @@ public final class TestJsapi20SynthesizedOutput {
 
         output.queueSpeakable(speakable1, sessionId, documentServer);
         Thread.sleep(1500);
-        System.out.println("it is waiting till the output finishes");
         output.cancelOutput();
         final int size = 2;
         listener.waitSize(size, TIMEOUT);
@@ -288,24 +287,24 @@ public final class TestJsapi20SynthesizedOutput {
      * @since 0.7.5
      */
     @Test
-    public void testCancelSpeakableWithNoBargein() throws JVoiceXMLEvent, Exception {
+    public void testCancelSpeakableWithNoBargein()
+            throws JVoiceXMLEvent, Exception {
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
         speak.setXmlLang(Locale.US);
-        speak.addText("this is a test to interrupt the Text" +
-                " to Speech Engine it is a very long sentence it really" +
-                " is long very long longer than longcat");
+        speak.addText("this is a test to interrupt the Text"
+                + " to Speech Engine it is a very long sentence it really"
+                + " is long very long longer than long");
         final SpeakableText speakable1 =
                 new SpeakableSsmlText(ssml, true, BargeInType.SPEECH);
         output.queueSpeakable(speakable1, sessionId, documentServer);
         final SsmlDocument ssml2 = new SsmlDocument();
-        final Speak speak2 = ssml.getSpeak();
+        final Speak speak2 = ssml2.getSpeak();
         speak2.addText("No bargein text");
         final SpeakableText speakable2 =
                 new SpeakableSsmlText(ssml2, false, null);
         output.queueSpeakable(speakable2, sessionId, documentServer);
         Thread.sleep(1500);
-        System.out.println("it is waiting till the output finishes");
         output.cancelOutput();
         final int size = 4;
         listener.waitSize(size, TIMEOUT);

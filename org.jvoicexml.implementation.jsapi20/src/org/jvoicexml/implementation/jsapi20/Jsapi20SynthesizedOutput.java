@@ -353,7 +353,7 @@ public final class Jsapi20SynthesizedOutput
             int id = synthesizer.speakMarkup(doc, this);
             queueIds.put(ssmlText, id);
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("queued id " + id);
+                LOGGER.debug("queued id '" + id + "'");
             }
         } catch (IllegalArgumentException iae) {
             throw new BadFetchError(iae);
@@ -521,7 +521,7 @@ public final class Jsapi20SynthesizedOutput
             int id = synthesizer.speak(text, this);
             queueIds.put(speakable, id);
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("queued id " + id);
+                LOGGER.debug("queued id '" + id + "'");
             }
         } catch (EngineStateException ese) {
             throw new BadFetchError(ese);
@@ -565,7 +565,8 @@ public final class Jsapi20SynthesizedOutput
                 final Integer id = queueIds.get(speakable);
                 if (id != null) {
                     if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("cancelling queued id " + id.intValue());
+                        LOGGER.debug("cancelling queued id '"
+                                + id.intValue() + "'");
                     }
                     synthesizer.cancel(id.intValue());
                 }
@@ -747,7 +748,8 @@ public final class Jsapi20SynthesizedOutput
                 speakableText = queuedSpeakables.poll();
                 final Integer queueId = queueIds.remove(speakableText);
                 if (LOGGER.isDebugEnabled() && queueId != null) {
-                    LOGGER.debug("queued id" + queueId.intValue() + " ended ");
+                    LOGGER.debug("queued id '" + queueId.intValue()
+                            + "' ended ");
                 }
             }
 
