@@ -6,9 +6,8 @@
   <classpath>lib/org.jvoicexml.implementation.jsapi20.jar</classpath>
   <classpath>lib/jsr113.jar</classpath>
   <classpath>lib/org.jvoicexml.jsapi2.jar</classpath>
-  <classpath>lib/org.jvoicexml.jsapi2.jse.jar</classpath>
-  <classpath>lib/org.jvoicexml.jsapi2.jse.freetts.jar</classpath>
-  <classpath>lib/org.jvoicexml.jsapi2.jse.sphinx4.jar</classpath>
+  <classpath>lib/org.jvoicexml.jsapi2.freetts.jar</classpath>
+  <classpath>lib/org.jvoicexml.jsapi2.sphinx4.jar</classpath>
   <classpath>lib/freetts.jar</classpath>
   <classpath>lib/cmu_us_kal.jar</classpath>
   <classpath>lib/cmulex.jar</classpath>
