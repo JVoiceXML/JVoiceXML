@@ -87,6 +87,11 @@ public final class MockSynthesizedOutputListener
                 occur.wait(timeout);
                 long now = System.currentTimeMillis();
                 if (size < occur.size() || (now - start > timeout)) {
+                    LOGGER.error(size + " not reached within " + timeout
+                            + "msec (current: " + occur.size() + ")");
+                    for (SynthesizedOutputEvent event : occur) {
+                        LOGGER.error("- " + event);
+                    }
                     Assert.fail(size + " not reached within " + timeout
                             + "msec (current: " + occur.size() + ")");
                 }
