@@ -21,7 +21,7 @@ personal-props/README.txt
         <!-- directory structure -->
         <property name="src" value="${basedir}/src" />
         <property name="build" value="${basedir}/classes" />
-        <property name="dist" value="${basedir}/../${component}/dist" />
+        <property name="dist" value="${basedir}/dist" />
         <property name="apidoc" value="${basedir}/doc/api/${component}" />
         <property name="config" value="${basedir}/config" />
         <property name="etc" value="${basedir}/etc" />
