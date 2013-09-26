@@ -24,11 +24,7 @@
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
-      <jvmarg value="-Djavax.speech.supports.audio.management=true" />
-      <jvmarg value="-Djavax.speech.supports.audio.capture=true" />
       <jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols" />
-      <xsl:comment>Set the library path for the Jsapi2Sapi Bridge</xsl:comment>
-      <jvmarg value="-Djava.library.path={$sapibridgepath}" />
       <xsl:apply-templates select="@*|*|text()|comment()" />
     </xsl:copy>
   </xsl:template>
