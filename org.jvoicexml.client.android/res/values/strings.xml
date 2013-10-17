@@ -1,0 +1,14 @@
+<resources>
+
+    <string name="app_name">JVXML Client</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main_jvxml">MainJVXMLActivity</string>
+    <string name="start_interpret">Start</string>
+    <string name="open_vxml">Open VXML</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_open_vxml">Open VXML</string>
+    <string name="enter_url">Enter VXML URL:</string>
+    <string name="open">Open</string>
+    <string name="url_demo">http://is.muni.cz/www/282398/hello.vxml</string>
+
+</resources>
