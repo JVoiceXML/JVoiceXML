@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:onClick="startInterpreter" >
+
+    <EditText
+        android:id="@+id/textIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="74dp"
+        android:ems="10"
+        android:inputType="none"
+        android:singleLine="true" >
+    </EditText>
+
+    <TextView
+        android:id="@+id/textOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textIn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:scrollbars="vertical" />
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="54dp"
+        android:onClick="startInterpreter"
+        android:text="@string/start_interpret" />
+
+    <Button
+        android:id="@+id/openVXMLButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/startButton"
+        android:layout_alignBottom="@+id/startButton"
+        android:layout_marginLeft="22dp"
+        android:layout_toRightOf="@+id/startButton"
+        android:onClick="openVXML"
+        android:text="@string/open_vxml">
+         <requestFocus />
+     </Button>
+</RelativeLayout>
