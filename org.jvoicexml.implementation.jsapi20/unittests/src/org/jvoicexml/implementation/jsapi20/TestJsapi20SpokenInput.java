@@ -79,10 +79,6 @@ public final class TestJsapi20SpokenInput implements SpokenInputListener {
         final TestProperties properties = new TestProperties();
         final String factory = properties.get("jsapi2.asr.engineListFactory");
         EngineManager.registerEngineListFactory(factory);
-        System.setProperty("javax.speech.supports.audio.management",
-                Boolean.TRUE.toString());
-        System.setProperty("javax.speech.supports.audio.capture",
-                Boolean.TRUE.toString());
     }
 
     /**
@@ -146,7 +142,7 @@ public final class TestJsapi20SpokenInput implements SpokenInputListener {
      * @throws JVoiceXMLEvent
      *         test failed
      */
-    @Test(timeout = 2000)
+    @Test(timeout = 4000)
     public void testStartRecognition() throws Exception, JVoiceXMLEvent {
         final SrgsXmlDocument document = new SrgsXmlDocument();
         final Grammar grammar = document.getGrammar();
