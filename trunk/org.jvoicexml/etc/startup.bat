@@ -24,10 +24,6 @@ set VMOPTIONS=%VMOPTIONS% -Djava.security.policy=config/jvoicexml.policy
 rem Allow external XML-ENTITIES
 rem set VMOPTIONS=%VMOPTIONS% -Dorg.jvoicexml.xml.resolveEntities=true
 
-rem Allow JSAPI2 to access the audio sources
-set VMOPTIONS=%VMOPTIONS% -Djavax.speech.supports.audio.management=true
-set VMOPTIONS=%VMOPTIONS% -Djavax.speech.supports.audio.capture=true
-
 rem GJTAPI settings
 set VMOPTIONS=%VMOPTIONS% -Dgjtapi.sip.properties=/gjtapi-provider.properties
 
