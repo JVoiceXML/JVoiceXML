@@ -51,10 +51,6 @@ VMOPTIONS=-mx256m
 VMOPTIONS="${VMOPTIONS} -Djava.util.logging.config.file=${JVOICEXML_HOME}/config/logging.properties"
 VMOPTIONS="${VMOPTIONS} -Djava.security.policy=config/jvoicexml.policy"
 
-# Allow JSAPI2 to access the audio sources
-VMOPTIONS="${VMOPTIONS} -Djavax.speech.supports.audio.management=true"
-VMOPTIONS="${VMOPTIONS} -Djavax.speech.supports.audio.capture=true"
-
 # GJTAPI settings
 VMOPTIONS="${VMOPTIONS} -Dgjtapi.sip.properties=/gjtapi-provider.properties"
 

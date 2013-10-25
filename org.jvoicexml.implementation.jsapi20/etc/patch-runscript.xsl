@@ -23,8 +23,6 @@
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
-      <jvmarg value="-Djavax.speech.supports.audio.management=true" />
-      <jvmarg value="-Djavax.speech.supports.audio.capture=true" />
       <jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols" />
       <xsl:comment>Disallow FreeTTS to add jars to the classpath</xsl:comment>
       <jvmarg value="-Dfreetts.nocpexpansion" />
