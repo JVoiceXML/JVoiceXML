@@ -111,10 +111,11 @@ public class MainJVXMLActivity extends Activity implements TextListener {
 			lock.notifyAll();
 		}
 		serverStarted = true;
-		textIn.setEnabled(true);
-		textIn.requestFocus();
+		//manipulation with UI elements has to be done on the original (UI) thread
 		runOnUiThread(new Runnable() {
 			public void run() {
+				textIn.setEnabled(true);
+				textIn.requestFocus();
 				startButton.setEnabled(false);
 				textOut.append("--Session started.\n");
 			}
