@@ -87,13 +87,6 @@ public class MainJVXMLActivity extends Activity implements TextListener {
 		}
 	}
 
-	@Override
-	public void outputText(String outText) {
-		synchronized (textOut) {
-			textOut.append(outText + "\n");
-		}
-	}
-
 	/**
 	 * Used outside this class.
 	 * 
@@ -158,8 +151,9 @@ public class MainJVXMLActivity extends Activity implements TextListener {
 	 */
 	public void startSession() {
 		JVoiceXmlConfiguration config = new JVoiceXmlConfiguration();
-		jvxml = new JVoiceXmlMain(config);
-
+		JVoiceXmlMain jvxmlmain = new JVoiceXmlMain(config);
+		jvxmlmain.start();
+		jvxml = jvxmlmain;
 		if (jvxml == null) {
 			textOut.append("--JVXML not found!\n");
 			startButton.setEnabled(true);
@@ -246,6 +240,18 @@ public class MainJVXMLActivity extends Activity implements TextListener {
 	 */
 	public void startInterpreter(View view) {
 		startSession();
+	}
+
+	@Override
+	public void expectingInput() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void inputClosed() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
