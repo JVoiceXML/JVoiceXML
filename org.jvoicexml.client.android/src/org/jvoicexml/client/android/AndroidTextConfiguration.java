@@ -38,7 +38,6 @@ import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
 import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository;
-import org.jvoicexml.test.interpreter.tagstrategy.MockTagStrategyFactory;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
 
@@ -91,7 +90,7 @@ public final class AndroidTextConfiguration implements Configuration {
             }
         } else if (baseClass == TagStrategyFactory.class) {
             try {
-                return (T) new MockTagStrategyFactory();
+                return (T) new AndroidTagStrategyFactory();
             } catch (Exception e) {
                 return null;
             }
