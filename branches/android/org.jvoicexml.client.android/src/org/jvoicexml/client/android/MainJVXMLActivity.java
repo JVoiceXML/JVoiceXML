@@ -14,8 +14,6 @@ import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
-
 import org.jvoicexml.client.android.R;
 
 import android.os.AsyncTask;
@@ -150,10 +148,11 @@ public class MainJVXMLActivity extends Activity implements TextListener {
 	 * Starts JVXML session to process the VXML document.
 	 */
 	public void startSession() {
-		JVoiceXmlConfiguration config = new JVoiceXmlConfiguration();
+		AndroidTextConfiguration config = new AndroidTextConfiguration();
 		JVoiceXmlMain jvxmlmain = new JVoiceXmlMain(config);
 		jvxmlmain.start();
 		jvxml = jvxmlmain;
+		
 		if (jvxml == null) {
 			textOut.append("--JVXML not found!\n");
 			startButton.setEnabled(true);
