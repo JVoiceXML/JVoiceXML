@@ -122,8 +122,12 @@ public class OpenVXMLActivity extends Activity {
 
 		protected void onPostExecute(String result) {
 			if (result.equals("done")) {
-				mProgressDialog.dismiss();
-
+				if (mProgressDialog.isShowing()) {
+					try {
+						mProgressDialog.dismiss();
+					} catch (Exception ignore) {
+					}
+				}
 			}
 		}
 

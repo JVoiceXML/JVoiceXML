@@ -29,7 +29,7 @@
             android:label="@string/title_activity_open_vxml" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="cz.muni.fi.nekula.android.jvxmlclient.MainJVXMLActivity" />
+                android:value="org.jvoicexml.client.android.MainJVXMLActivity" />
         </activity>
     </application>
 

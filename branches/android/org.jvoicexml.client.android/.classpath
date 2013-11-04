@@ -5,5 +5,13 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jvoicexml"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jvoicexml.client"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jvoicexml.client.text"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jvoicexml.config"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jvoicexml.implementation.text"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jvoicexml.jndi"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jvoicexml.processor.srgs"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
