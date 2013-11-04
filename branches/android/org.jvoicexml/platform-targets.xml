@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="JVoiceXML Platforms">
+<description>
+        Generated build file to integrate the specified implementation
+        platforms into the overall build process.
+        Do not edit!
+      </description>
+<target name="-buildPlatforms">
+<echo>handling subprojects that org.jvoicexml.implementation.text depends on</echo>
+<echo>building org.jvoicexml.client.text</echo>
+<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
+<echo>done handling handling subprojects that org.jvoicexml.implementation.text depends on</echo>
+<echo>building org.jvoicexml.implementation.text</echo>
+<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.text"/>
+</target>
+<target name="-cleanPlatforms">
+<echo>handling subprojects that org.jvoicexml.implementation.text depends on</echo>
+<echo>cleaning org.jvoicexml.client.text</echo>
+<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
+<echo>done handling handling subprojects that org.jvoicexml.implementation.text depends on</echo>
+<echo>cleaning org.jvoicexml.implementation.text</echo>
+<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.text"/>
+</target>
+<target name="-apidocPlatforms">
+<echo>handling subprojects that org.jvoicexml.implementation.text depends on</echo>
+<echo>creating apidoc for org.jvoicexml.client.text</echo>
+<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
+<echo>done handling handling subprojects that org.jvoicexml.implementation.text depends on</echo>
+<echo>creating apidoc for org.jvoicexml.implementation.text</echo>
+<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.text"/>
+</target>
+<target name="-distributionPlatforms">
+<echo>handling subprojects that org.jvoicexml.implementation.text depends on</echo>
+<echo>creating distribution for org.jvoicexml.client.text</echo>
+<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
+<echo>done handling handling subprojects that org.jvoicexml.implementation.text depends on</echo>
+<echo>creating distribution for org.jvoicexml.implementation.text</echo>
+<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.text"/>
+</target>
+<target name="configurePlatforms">
+<echo>handling subprojects that org.jvoicexml.implementation.text depends on</echo>
+<echo>configuring org.jvoicexml.client.text</echo>
+<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
+<echo>done handling handling subprojects that org.jvoicexml.implementation.text depends on</echo>
+<echo>configuring org.jvoicexml.implementation.text</echo>
+<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.text"/>
+</target>
+</project>
