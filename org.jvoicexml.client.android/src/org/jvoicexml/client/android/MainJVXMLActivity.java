@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.JVoiceXmlMain;
+import org.jvoicexml.JVoiceXmlMainListener;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
@@ -20,6 +21,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -32,9 +34,10 @@ import android.widget.TextView;
  * @author macinos
  * 
  */
-public class MainJVXMLActivity extends Activity implements TextListener {
+public class MainJVXMLActivity extends Activity implements TextListener, JVoiceXmlMainListener {
 
 	private static Object lock = new Object();
+	private Object jvxmlMonitor = new Object();
 	private static TextServer server;
 	private JVoiceXml jvxml;
 	private Session session;
@@ -150,7 +153,19 @@ public class MainJVXMLActivity extends Activity implements TextListener {
 	public void startSession() {
 		AndroidTextConfiguration config = new AndroidTextConfiguration();
 		JVoiceXmlMain jvxmlmain = new JVoiceXmlMain(config);
+		jvxmlmain.addListener(this);
 		jvxmlmain.start();
+		synchronized (jvxmlMonitor) {
+			try {
+				jvxmlMonitor.wait();
+			} catch (InterruptedException e) {
+				textOut.append("jvxml not started:" + e.getMessage());
+				return;
+			}
+		}
+		if (!serverStarted) {
+			return;
+		}
 		jvxml = jvxmlmain;
 		
 		if (jvxml == null) {
@@ -249,6 +264,27 @@ public class MainJVXMLActivity extends Activity implements TextListener {
 
 	@Override
 	public void inputClosed() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void jvxmlStartupError(Throwable e) {
+		synchronized (jvxmlMonitor) {
+			jvxmlMonitor.notifyAll();
+		}
+	}
+
+	@Override
+	public void jvxmlStarted() {
+		serverStarted = true;
+		synchronized (jvxmlMonitor) {
+			jvxmlMonitor.notifyAll();
+		}
+	}
+
+	@Override
+	public void jvxmlTerminated() {
 		// TODO Auto-generated method stub
 		
 	}
