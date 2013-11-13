@@ -58,6 +58,7 @@ public class MainJVXMLActivity extends Activity implements TextListener, JVoiceX
 		textOut = (TextView) findViewById(R.id.textOut);
 		startButton = (Button) findViewById(R.id.startButton);
 		openVXMLButton = (Button) findViewById(R.id.openVXMLButton);
+		org.apache.log4j.BasicConfigurator.configure();
 	}
 
 	@Override
@@ -270,6 +271,12 @@ public class MainJVXMLActivity extends Activity implements TextListener, JVoiceX
 
 	@Override
 	public void jvxmlStartupError(Throwable e) {
+		System.out.println("jvxml startup error:" + e.getMessage());
+		runOnUiThread(new Runnable() {
+			public void run() {
+				textOut.append("jvxml startup error");
+			}
+		});
 		synchronized (jvxmlMonitor) {
 			jvxmlMonitor.notifyAll();
 		}
@@ -277,6 +284,11 @@ public class MainJVXMLActivity extends Activity implements TextListener, JVoiceX
 
 	@Override
 	public void jvxmlStarted() {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				textOut.append("jvxmlStarted");
+			}
+		});
 		serverStarted = true;
 		synchronized (jvxmlMonitor) {
 			jvxmlMonitor.notifyAll();
