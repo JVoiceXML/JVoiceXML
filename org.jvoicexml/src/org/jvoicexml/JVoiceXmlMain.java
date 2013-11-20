@@ -194,6 +194,9 @@ public final class JVoiceXmlMain
      */
     @Override
     public Configuration getConfiguration() {
+        // A configuration might be known by a previous call to this method
+        // or since it has been passed as an argument when creating this
+        // object.
         if (configuration == null) {
             final ServiceLoader<Configuration> services =
                 ServiceLoader.load(Configuration.class);
