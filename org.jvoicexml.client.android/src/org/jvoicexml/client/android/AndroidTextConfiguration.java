@@ -28,8 +28,14 @@ package org.jvoicexml.client.android;
 import java.util.Collection;
 
 import org.jvoicexml.Configuration;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.DtmfRecognizerProperties;
+import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeechRecognizerProperties;
+import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
+import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
+import org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy;
+import org.jvoicexml.implementation.text.TextPlatformFactory;
 import org.jvoicexml.interpreter.DialogFactory;
 import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyFactory;
@@ -96,6 +102,13 @@ public final class AndroidTextConfiguration implements Configuration {
             }
         } else if (baseClass == TagStrategyRepository.class) {
             return (T) new JVoiceXmlTagStrategyRepository();
+        } else if (baseClass == DocumentServer.class) {
+            final JVoiceXmlDocumentServer server = new JVoiceXmlDocumentServer();
+            server.addSchemeStrategy(new HttpSchemeStrategy());
+            server.addSchemeStrategy(new FileSchemeStrategy());
+            return (T) server;
+        } else if (baseClass == ImplementationPlatform.class) {
+            return (T) new TextPlatformFactory();
         } else if (baseClass == SpeechRecognizerProperties.class) {
             return (T) new SpeechRecognizerProperties();
         } else if (baseClass == DtmfRecognizerProperties.class) {
