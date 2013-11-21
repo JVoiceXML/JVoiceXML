@@ -120,6 +120,7 @@ Adapt the settings for your servlet container in the file
             </classes>
             <fileset dir="WebContent">
                 <include name="*.html" />
+                <include name="META-INF/**" />
             </fileset>
         </war>
 
