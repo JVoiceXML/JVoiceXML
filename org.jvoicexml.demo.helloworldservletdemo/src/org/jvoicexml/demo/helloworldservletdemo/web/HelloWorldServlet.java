@@ -6,7 +6,7 @@
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +53,8 @@ import org.jvoicexml.xml.vxml.Vxml;
  *
  * @see org.jvoicexml.demo.helloworldservletdemo.web.GoodbyeServlet
  */
+@WebServlet(displayName="HelloWorld", description="VoiceXML Hello World Demo",
+        urlPatterns="/HelloWorld")
 public final class HelloWorldServlet
         extends HttpServlet {
     /** The serial version UID. */
@@ -129,6 +132,7 @@ public final class HelloWorldServlet
      *         If an input or output error is detected when the servlet handles
      *         the GET request.
      */
+    @Override
     public void doGet(final HttpServletRequest request,
                       final HttpServletResponse response)
             throws ServletException,
