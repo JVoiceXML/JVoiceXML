@@ -72,13 +72,13 @@ personal-props/README.txt
 	    <echo file="personal-props/platforms.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 	        <platforms>
 	          <platform name="org.jvoicexml.implementation.jsapi10">
-	            <property name="jvxml.jsapi10.talkingJava" value ="false" />
+	            <property name="jvxml.jsapi10.talkingJava" value ="true" />
 	            <property name="jvxml.jsapi10.talkingJava.path"
 	                value ="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib" />
 	          </platform>
 	          <platform name="org.jvoicexml.implementation.jsapi20">
-	            <property name="jvxml.jsapi20.sapi" value ="false" />
-	            <property name="jvxml.jsapi20.mac" value ="false" />
+	            <property name="jvxml.jsapi20.sapi" value ="true" />
+	            <property name="jvxml.jsapi20.mac" value ="true" />
 	          </platform>
 	          <platform name="org.jvoicexml.implementation.jtapi"/>
 	          <platform name="org.jvoicexml.implementation.kinect"/>

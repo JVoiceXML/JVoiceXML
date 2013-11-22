@@ -33,6 +33,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;
@@ -94,7 +95,8 @@ public final class MaryAudioOutput implements LineListener {
 
         final BufferedInputStream buf = new BufferedInputStream(inputStream);
         clip = AudioSystem.getClip();
-        clip.open(AudioSystem.getAudioInputStream(buf));
+        final AudioInputStream stream = AudioSystem.getAudioInputStream(buf);
+        clip.open(stream);
         clip.addLineListener(this);
         clip.start();
     }

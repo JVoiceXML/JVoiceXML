@@ -8,7 +8,7 @@ This file runs unit tests on the SRGS processor.
 
     <target name="-test-setup" depends="-setup">
         <!-- directory structure -->
-        <property name="test" value="test" />
+        <property name="test" value="unittests" />
 
         <property name="test.src" value="${test}/src" />
         <property name="test.results" value="${dist}/unittests" />
@@ -44,7 +44,7 @@ This file runs unit tests on the SRGS processor.
                optimize="off"
                debug="on"
                deprecation="on"
-               encoding="iso-8859-1">
+               includeantruntime="false">
             <src path="${test.src}" />
             <include name="org/jvoicexml/**/*.java" />
             <classpath refid="test.classpath" />
