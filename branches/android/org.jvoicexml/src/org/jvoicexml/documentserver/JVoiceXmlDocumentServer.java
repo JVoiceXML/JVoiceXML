@@ -311,7 +311,7 @@ public final class JVoiceXmlDocumentServer
      * {@inheritDoc}
      */
     @Override
-    public AudioInputStream getAudioInputStream(final String sessionId,
+    public InputStream getInputStream(final String sessionId,
             final URI uri)
             throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
@@ -329,9 +329,7 @@ public final class JVoiceXmlDocumentServer
             // by the AudioSystem. So we use a BufferedInputStream that
             // guarantees these features.
             final BufferedInputStream buf = new BufferedInputStream(input);
-            return AudioSystem.getAudioInputStream(buf);
-        } catch (javax.sound.sampled.UnsupportedAudioFileException e) {
-            throw new BadFetchError(e.getMessage(), e);
+            return buf;        
         } catch (java.io.IOException e) {
             throw new BadFetchError(e.getMessage(), e);
         } catch (UnsupportedElementError e) {
