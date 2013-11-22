@@ -112,10 +112,10 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
       </fileset>
 
       <!-- junit library -->
-      <property name="junit.dir" value="${3rdparty.dir}/junit4.8.2" />
+      <property name="junit.dir" value="${3rdparty.dir}/junit4.11" />
       <property name="junit.lib.dir" value="${junit.dir}/lib" />
       <fileset dir="${junit.lib.dir}" id="junit.lib">
-          <include name="junit-4.8.2.jar" />
+          <include name="junit-4.11.jar" />
       </fileset>
     </target>
 
