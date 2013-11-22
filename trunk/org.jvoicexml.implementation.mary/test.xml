@@ -22,7 +22,7 @@ This file runs unit tests on the mary implemenatation platform.
         <path id="test.classpath">
             <path refid="project.classpath" />
             <pathelement location="${build}" />
-            <pathelement location="${jvxml.core.dir}/test/classes" />
+            <pathelement location="${jvxml.core.dir}/unittests/classes" />
             <fileset refid="junit.lib"/>
         </path>
     </target>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
 <installation version="1.0">
 
@@ -14,7 +14,7 @@
       <author name="and many more..." email="none"/>
     </authors>
     <url>http://www.jvoicexml.org/</url>
-    <javaversion>1.6</javaversion>
+    <javaversion>1.7</javaversion>
     <!-- webdir>http://jvoicexml.sourceforge.net/install-@{jvxml.version}</webdir-->
   </info>
 
