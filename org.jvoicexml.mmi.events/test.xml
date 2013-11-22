@@ -42,7 +42,8 @@ This file runs unit tests on org.jvoicexml.config.
         <javac destdir="${test.build}"
                optimize="off"
                debug="on"
-               deprecation="on">
+               deprecation="on"
+               includeantruntime="false">
             <src path="${test.src}" />
             <include name="${component.path}/**/*.java" />
             <classpath refid="test.classpath" />
