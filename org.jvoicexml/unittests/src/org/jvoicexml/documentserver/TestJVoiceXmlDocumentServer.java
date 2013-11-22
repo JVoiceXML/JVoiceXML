@@ -26,6 +26,7 @@
 package org.jvoicexml.documentserver;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
 
@@ -165,7 +166,7 @@ public final class TestJVoiceXmlDocumentServer {
     }
 
     /**
-     * Test method for {@link JVoiceXmlDocumentServer#getAudioInputStream(Session, URI)}.
+     * Test method for {@link JVoiceXmlDocumentServer#getInputStream(Session, URI)}.
      * 
      * @since 0.7.2
      * @exception Exception
@@ -181,8 +182,8 @@ public final class TestJVoiceXmlDocumentServer {
             new MockImplementationPlatform();
         final Session session = new JVoiceXmlSession(platform, jvxml, null);
         final String sessionId = session.getSessionID();
-        final AudioInputStream in =
-            server.getAudioInputStream(sessionId, file.toURI());
+        final InputStream in =
+            server.getInputStream(sessionId, file.toURI());
         Assert.assertNotNull(in);
     }
 

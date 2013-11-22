@@ -316,7 +316,7 @@ public class AndroidDocumentServer implements DocumentServer {
      * {@inheritDoc}
      */
     @Override
-    public InputStream getAudioInputStream(final String sessionId,
+    public InputStream getInputStream(final String sessionId,
             final URI uri) throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving audio input stream '" + uri + "'");
