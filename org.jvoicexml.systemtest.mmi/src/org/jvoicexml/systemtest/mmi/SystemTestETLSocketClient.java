@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -46,7 +46,7 @@ import org.jvoicexml.mmi.events.Mmi;
  * reads until it receives an <code>EOS</code>, i.e. the socket closed, this
  * is a one-shot asynchronous read from the socket.
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.6
  */
 final class SystemTestETLSocketClient extends Thread {
