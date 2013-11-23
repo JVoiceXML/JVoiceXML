@@ -1,8 +1,8 @@
 /*
  * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision: 2493 $
- * Date:    $Date: 2011-01-10 11:25:46 +0100 (Mo, 10 Jan 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
