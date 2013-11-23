@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.text/src/org/jvoicexml/callmanager/text/TextConnection.java $
- * Version: $LastChangedRevision: 2528 $
- * Date:    $Date: 2011-01-25 08:55:10 +0100 (Di, 25 Jan 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +39,7 @@ import org.jvoicexml.event.ErrorEvent;
 /**
  * A connection to a text client.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2528 $
+ * @version $Revision$
  * @since 0.7.3
  */
 final class TextConnection extends Thread {

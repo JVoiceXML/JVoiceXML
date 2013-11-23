@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.text/src/org/jvoicexml/callmanager/text/ConnectedTextConnectionInformation.java $
- * Version: $LastChangedRevision: 2528 $
- * Date:    $Date: 2011-01-25 08:55:10 +0100 (Di, 25 Jan 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2011-01-25 08:55:10 +0100 (Di, 25 Jan 2011) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ import org.jvoicexml.client.TcpUriFactory;
 /**
  * Connection information of a connected text based client.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2528 $
+ * @version $Revision$
  * @since 0.7.3
  */
 public final class ConnectedTextConnectionInformation
