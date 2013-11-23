@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>red5</repository>
-  <classpath>lib/org.jvoicexml.implementation.red5.jar</classpath>
+  <classpath>dist/org.jvoicexml.implementation.red5.jar</classpath>
 
   <beans:bean
     class="org.jvoicexml.implementation.red5.Red5SynthesizedOutputFactory">
