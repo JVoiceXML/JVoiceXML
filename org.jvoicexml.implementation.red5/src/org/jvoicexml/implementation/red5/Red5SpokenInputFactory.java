@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.jsapi20/src/org/jvoicexml/implementation/jsapi20/Jsapi20SpokenInputFactory.java $
- * Version: $LastChangedRevision: 2355 $
- * Date:    $LastChangedDate: 2010-10-07 20:28:03 +0200 (Do, 07 Okt 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -35,7 +35,7 @@ import org.jvoicexml.implementation.SpokenInput;
  * for the {@link SpokenInput} based on JSAPI 2.0.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2355 $
+ * @version $Revision$
  * @since 0.7.4
  */
 public final class Red5SpokenInputFactory
