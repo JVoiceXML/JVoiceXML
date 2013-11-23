@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/client/jndi/SessionStub.java $
- * Version: $LastChangedRevision: 2729 $
- * Date:    $Date: 2011-06-25 07:04:55 +0200 (Sa, 25 Jun 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -43,7 +43,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * Stub for the <code>Session</code>.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2729 $
+ * @version $Revision$
  *
  * @since 0.4
  * @see org.jvoicexml.Session

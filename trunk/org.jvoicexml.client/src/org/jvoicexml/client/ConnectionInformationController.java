@@ -7,7 +7,7 @@ import org.jvoicexml.ConnectionInformation;
  * such as lifecycle management through the {@link #cleanup()} method.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.6
  */
 public interface ConnectionInformationController {

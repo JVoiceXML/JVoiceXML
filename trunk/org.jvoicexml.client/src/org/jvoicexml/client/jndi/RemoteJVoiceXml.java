@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/client/jndi/RemoteJVoiceXml.java $
- * Version: $LastChangedRevision: 2355 $
- * Date:    $Date: 2010-10-07 20:28:03 +0200 (Do, 07 Okt 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -37,7 +37,7 @@ import org.jvoicexml.Session;
  * {@link org.jvoicexml.JVoiceXml}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2355 $
+ * @version $Revision$
  * @since 0.4
  * @see org.jvoicexml.JVoiceXml
  */
