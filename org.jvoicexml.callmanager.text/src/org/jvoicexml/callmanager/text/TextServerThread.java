@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.text/src/org/jvoicexml/callmanager/text/TextServerThread.java $
- * Version: $LastChangedRevision: 2980 $
- * Date:    $Date: 2012-02-13 09:37:27 +0100 (Mo, 13 Feb 2012) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -40,7 +40,7 @@ import org.jvoicexml.client.TcpUriFactory;
 /**
  * Server that waits for incoming connections over a socket.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2980 $
+ * @version $Revision$
  * @since 0.7.3
  */
 final class TextServerThread extends Thread {
