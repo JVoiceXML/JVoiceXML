@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.mmi.events/src/org/jvoicexml/mmi/events/ExtensionNotification.java $
- * Version: $LastChangedRevision: 3474 $
- * Date:    $Date: 2013-01-21 14:14:00 +0100 (Mo, 21 Jan 2013) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlElement;
 /**
  * Base class for MMI lifecycle responses.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3607 $
+ * @version $Revision$
  * @since 0.7.6
  *
  */
