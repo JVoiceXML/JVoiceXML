@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.text/unittests/org/jvoicexml/implementation/text/TestTextSenderThread.java $
- * Version: $LastChangedRevision: 2028 $
- * Date:    $Date: 2010-02-09 04:09:12 -0500 (Di, 09 Feb 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -45,7 +45,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 /**
  * Test cases for {@link TextSenderThread}.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2028 $
+ * @version $Revision$
  * @since 0.6
  */
 public final class TestTextSenderThread

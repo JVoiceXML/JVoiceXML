@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.text/unittests/org/jvoicexml/implementation/text/TestTextReceiverThread.java $
- * Version: $LastChangedRevision: 2564 $
- * Date:    $Date: 2011-02-04 09:08:55 +0100 (Fr, 04 Feb 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2011-02-04 09:08:55 +0100 (Fr, 04 Feb 2011) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,7 +54,7 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 /**
  * Test cases for {@link TextReceiverThread}.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2564 $
+ * @version $Revision$
  * @since 0.6
  */
 public final class TestTextReceiverThread
