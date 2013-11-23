@@ -30,6 +30,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.mock.TestAppender;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Log;
@@ -73,6 +74,36 @@ public final class TestLogStrategy
         } catch (JVoiceXMLEvent e) {
             Assert.fail(e.getMessage());
         }
+        Assert.assertTrue("message not found in appender",
+                TestAppender.containsMessage(message));
+    }
+
+    /**
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.LogStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testExecuteExpr() throws Exception {
+        final String var = "test";
+        final ScriptingEngine scripting = getScriptingEngine();
+        scripting.setVariable(var, "Horst Buchholz");
+
+        final Block block = createBlock();
+        final Log log = block.appendChild(Log.class);
+        final String expr = "'" + TestAppender.TEST_PREFIX
+                + "actor is ' + " + var;
+        log.setExpr(expr);
+
+        LogStrategy strategy = new LogStrategy();
+        try {
+            executeTagStrategy(log, strategy);
+        } catch (JVoiceXMLEvent e) {
+            Assert.fail(e.getMessage());
+        }
+        final String message = TestAppender.TEST_PREFIX
+                + "actor is Horst Buchholz"; 
         Assert.assertTrue("message not found in appender",
                 TestAppender.containsMessage(message));
     }
