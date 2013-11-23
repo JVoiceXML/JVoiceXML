@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/RecognizerModeDescFactory.java $
- * Version: $LastChangedRevision: 2686 $
- * Date:    $Date: 2011-05-31 17:11:26 +0700 (Tue, 31 May 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +39,7 @@ import javax.speech.recognition.RecognizerModeDesc;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2686 $
+ * @version $Revision$
  * @since 0.6
  */
 public interface RecognizerModeDescFactory {

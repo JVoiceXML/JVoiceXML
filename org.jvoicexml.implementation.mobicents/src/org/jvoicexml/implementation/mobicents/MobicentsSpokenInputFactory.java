@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/Jsapi10SpokenInputFactory.java $
- * Version: $LastChangedRevision: 2355 $
- * Date:    $LastChangedDate: 2010-10-08 01:28:03 +0700 (Fri, 08 Oct 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -58,7 +58,7 @@ import org.jvoicexml.implementation.SpokenInput;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2355 $
+ * @version $Revision$
  * @since 0.6
  */
 public class MobicentsSpokenInputFactory

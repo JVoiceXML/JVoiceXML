@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/Jsapi10SpokenInput.java $
- * Version: $LastChangedRevision: 2913 $
- * Date:    $Date: 2012-01-30 15:41:09 +0700 (Mon, 30 Jan 2012) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2012-01-30 15:41:09 +0700 (Mon, 30 Jan 2012) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -72,7 +72,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  *
  * @author Dirk Schnelle-Walka
  * @author Shadowman
- * @version $Revision: 2913 $
+ * @version $Revision$
  */
 public final class MobicentsSpokenInput
         implements SpokenInput, ObservableSpokenInput, StreamableSpokenInput {

@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/demo/trunk/org.jvoicexml.demo.helloworlddemo/src/org/jvoicexml/demo/helloworlddemo/HelloWorldDemo.java $
- * Version: $LastChangedRevision: 3129 $
- * Date:    $Date: 2012-05-15 16:50:15 +0700 (Tue, 15 May 2012) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
@@ -47,7 +47,7 @@ import org.jvoicexml.event.ErrorEvent;
  * the <code>config</code> folder added to the classpath.
  * </p>
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3129 $
+ * @version $Revision$
  */
 import javax.naming.Context;
 import javax.naming.InitialContext;

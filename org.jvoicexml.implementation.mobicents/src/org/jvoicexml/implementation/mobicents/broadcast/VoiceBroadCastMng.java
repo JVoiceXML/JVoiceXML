@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/demo/tags/0.7.5.GA/org.jvoicexml.demo.embedded/src/org/jvoicexml/demo/embedded/EmbeddedJVoiceXML.java $
- * Version: $LastChangedRevision: 2771 $
- * Date:    $Date: 2011-08-26 10:37:28 +0200 (Fr, 26 Aug 2011) $
- * Author:  $LastChangedBy: Shadowman $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *

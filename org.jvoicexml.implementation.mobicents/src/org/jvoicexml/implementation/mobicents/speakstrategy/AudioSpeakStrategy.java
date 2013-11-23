@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/speakstrategy/AudioSpeakStrategy.java $
- * Version: $LastChangedRevision: 2830 $
- * Date:    $Date: 2011-09-23 18:04:56 +0700 (Fri, 23 Sep 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -42,7 +42,7 @@ import org.jvoicexml.implementation.mobicents.jvxml.MobicentsConnectionHandler;
  * SSML strategy to play back an <code>&lt;audio&gt;</code> node.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2830 $
+ * @version $Revision$
  * @since 0.5
  */
 class AudioSpeakStrategy

@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jtapi/src/org/jvoicexml/callmanager/jtapi/JtapiConnectionInformationFactory.java $
- * Version: $LastChangedRevision: 3129 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $LastChangedDate $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2012-05-15 16:50:15 +0700 (Tue, 15 May 2012) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -44,7 +44,7 @@ import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpCallTerminal;
 /**
  * A factory for the {@link MobicentsConnectionInformation}.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3129 $
+ * @version $Revision$
  * @since 0.7
  */
 public final class MobicentsConnectionInformationFactory
