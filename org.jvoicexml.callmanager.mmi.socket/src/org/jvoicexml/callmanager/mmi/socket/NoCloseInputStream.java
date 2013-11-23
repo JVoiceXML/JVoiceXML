@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -31,7 +31,7 @@ import java.io.InputStream;
 /**
  * An input stream that simply ignores the close operation.
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.6
  */
 public class NoCloseInputStream extends FilterInputStream {
