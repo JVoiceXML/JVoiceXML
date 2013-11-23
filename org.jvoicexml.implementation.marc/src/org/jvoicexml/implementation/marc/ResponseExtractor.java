@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.config/src/org/jvoicexml/config/ClasspathExtractor.java $
- * Version: $LastChangedRevision: 2605 $
- * Date:    $Date: 2011-02-20 05:38:38 -0500 (So, 20 Feb 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
 /**
  * Content handler to extract the event id from a response from MARC.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2605 $
+ * @version $Revision$
  * @since 0.7
  */
 final class ResponseExtractor implements ContentHandler {
