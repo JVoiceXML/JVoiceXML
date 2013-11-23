@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.mmi.events/src/org/jvoicexml/mmi/events/CancelRequest.java $
- * Version: $LastChangedRevision: 3485 $
- * Date:    $Date: 2013-01-23 12:45:54 +0100 (Wed, 23 Jan 2013) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *

@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.mmi.events/src/org/jvoicexml/mmi/events/Mmi.java $
- * Version: $LastChangedRevision: 3651 $
- * Date:    $Date: 2013-02-27 00:16:33 +0100 (Wed, 27 Feb 2013) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
