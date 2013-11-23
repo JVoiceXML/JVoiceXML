@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/systemtest/trunk/org.jvoicexml.systemtest/src/org/jvoicexml/systemtest/testcase/IRTestCaseLibrary.java $
- * Version: $LastChangedRevision: 2996 $
- * Date:    $Date: 2012-02-15 15:02:23 +0100 (Mi, 15 Feb 2012) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
