@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -42,7 +42,7 @@ import org.jvoicexml.xml.vxml.Option;
 /**
  * An option converter for SRGS XML grammars.
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  */
 public final class SrgsXmlOptionConverter implements OptionConverter {
     /** Logger for this class. */
