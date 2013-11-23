@@ -33,6 +33,9 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Block;
+import org.jvoicexml.xml.vxml.Script;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * This class provides a test case for the {@link AssignStrategy}.
@@ -202,5 +205,45 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
         }
 
         Assert.assertNotNull("A semantic error should have been thrown", error);
+    }
+
+    /**
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.LogStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            test failed
+     * @exception JVoiceXMLEvent
+     *            test failed
+     */
+    @Test
+    public void testExecuteExprFunctionCall()
+            throws Exception, JVoiceXMLEvent {
+        final String scriptFactorial = "var a = 42;"
+                + "function factorial(n)"
+                + "{"
+                + "return (n <= 1)? 1 : n * factorial(n-1);"
+                + "}";
+        final VoiceXmlDocument doc = createDocument();
+        final Vxml vxml = doc.getVxml();
+        final Script script = vxml.appendChild(Script.class);
+        script.addCdata(scriptFactorial);
+
+        final Block block = createBlock();
+        final Assign assign = block.appendChild(Assign.class);
+        final String expr = "'6 factorial is ' + factorial(6)";
+        assign.setName("test");
+        assign.setExpr(expr);
+
+        final ScriptingEngine scripting = getScriptingEngine();
+        scripting.eval("var test;");
+        AssignStrategy strategy = new AssignStrategy();
+        try {
+            executeTagStrategy(script, new ScriptStrategy());
+            executeTagStrategy(assign, strategy);
+        } catch (JVoiceXMLEvent e) {
+            Assert.fail(e.getMessage());
+        }
+        final String message = "6 factorial is 720";
+        Assert.assertEquals(message, scripting.getVariable("test"));
     }
 }
