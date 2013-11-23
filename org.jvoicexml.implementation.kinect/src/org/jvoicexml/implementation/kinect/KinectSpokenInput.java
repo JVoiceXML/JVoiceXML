@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.kinect/src/org/jvoicexml/implementation/kinect/KinectSpokenInput.java $
- * Version: $LastChangedRevision: 3346 $
- * Date:    $Date: 2012-11-28 15:50:05 +0100 (Mi, 28 Nov 2012) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -57,7 +57,7 @@ import org.xml.sax.SAXException;
 /**
  * A spoken input implementation for the use of the Microsoft Kinect.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3346 $
+ * @version $Revision$
  * @since 0.7.6
  */
 public final class KinectSpokenInput implements SpokenInput {

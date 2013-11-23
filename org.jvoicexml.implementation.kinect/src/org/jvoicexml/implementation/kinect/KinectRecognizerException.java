@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.kinect/src/org/jvoicexml/implementation/kinect/KinectRecognizer.java $
- * Version: $LastChangedRevision: 3353 $
- * Date:    $Date: 2012-11-28 19:46:19 +0100 (Mi, 28 Nov 2012) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -29,7 +29,7 @@ package org.jvoicexml.implementation.kinect;
 /**
  * Error in the Kinect recognizer.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3346 $
+ * @version $Revision$
  * @since 0.7.6
  */
 public final class KinectRecognizerException extends Exception {
