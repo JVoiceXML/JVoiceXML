@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.text/src/org/jvoicexml/callmanager/text/TextCallManager.java $
- * Version: $LastChangedRevision: 2980 $
- * Date:    $Date: 2012-02-13 09:37:27 +0100 (Mo, 13 Feb 2012) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -38,7 +38,7 @@ import org.jvoicexml.event.error.NoresourceError;
 /**
  * A {@link org.jvoicexml.CallManager} for text based clients.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2980 $
+ * @version $Revision$
  * @since 0.7
  */
 public final class TextCallManager implements CallManager {

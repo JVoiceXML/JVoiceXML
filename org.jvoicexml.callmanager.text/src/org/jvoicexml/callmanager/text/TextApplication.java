@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.text/src/org/jvoicexml/callmanager/text/TextApplication.java $
- * Version: $LastChangedRevision: 2528 $
- * Date:    $Date: 2011-01-25 08:55:10 +0100 (Di, 25 Jan 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -32,7 +32,7 @@ import java.net.URISyntaxException;
  * A mapping of a port number to a URI that shall be called, once a connection
  * to the call manager is made.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2528 $
+ * @version $Revision$
  * @since 0.7.3
  */
 public final class TextApplication {
