@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/Jsapi10AudioFileOutput.java $
- * Version: $LastChangedRevision: 2355 $
- * Date:    $Date: 2010-10-07 20:28:03 +0200 (Do, 07 Okt 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -45,7 +45,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * Utility class to play back an audio file.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2355 $
+ * @version $Revision$
  * @since 0.6
  */
 final class AudioFilePlayer implements LineListener {
