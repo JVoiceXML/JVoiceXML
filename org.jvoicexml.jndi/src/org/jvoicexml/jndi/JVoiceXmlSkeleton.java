@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/jndi/JVoiceXmlSkeleton.java $
- * Version: $LastChangedRevision: 1874 $
- * Date:    $LastChangedDate: 2009-10-20 09:07:58 +0200 (Di, 20 Okt 2009) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -44,7 +44,7 @@ import org.jvoicexml.event.ErrorEvent;
  * Skeleton for <code>JVoiceXml</code>.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 1874 $
+ * @version $Revision$
  * @since 0.4
  * @see org.jvoicexml.JVoiceXml
  */

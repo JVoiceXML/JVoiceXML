@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/jndi/JVoiceXmlJndiSupport.java $
- * Version: $LastChangedRevision: 1496 $
- * Date:    $LastChangedDate: 2009-03-11 09:39:46 +0100 (Mi, 11 Mrz 2009) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -65,7 +65,7 @@ import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision: 1496 $
+ * @version $LastChangedRevision$
  *
  * @see Skeleton
  * @see Stub

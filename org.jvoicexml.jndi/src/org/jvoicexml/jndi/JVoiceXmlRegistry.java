@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/jndi/JVoiceXmlRegistry.java $
- * Version: $LastChangedRevision: 1718 $
- * Date:    $LastChangedDate: 2009-07-22 09:12:18 +0200 (Mi, 22 Jul 2009) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -37,7 +37,7 @@ import org.apache.log4j.Logger;
  * Starter for the RMI registry.
  *
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision: 1718 $
+ * @version $LastChangedRevision$
  * @since 0.5.1
  */
 public final class JVoiceXmlRegistry {

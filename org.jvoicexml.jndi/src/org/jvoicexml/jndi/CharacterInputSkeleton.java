@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/jndi/CharacterInputSkeleton.java $
- * Version: $LastChangedRevision: 1874 $
- * Date:    $Date: 2009-10-20 09:07:58 +0200 (Di, 20 Okt 2009) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -36,7 +36,7 @@ import org.jvoicexml.client.jndi.RemoteCharacterInput;
  * Skeleton for the {@link org.jvoicexml.CharacterInput}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 1874 $
+ * @version $Revision$
  * @since 0.5
  */
 public final class CharacterInputSkeleton
