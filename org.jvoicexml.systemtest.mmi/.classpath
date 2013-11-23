@@ -23,5 +23,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/org.jvoicexml.config/3rdparty/springframework3.2.1/lib/spring-expression-3.2.1.RELEASE.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
