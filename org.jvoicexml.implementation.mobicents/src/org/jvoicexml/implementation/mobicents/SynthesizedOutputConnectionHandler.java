@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/SynthesizedOutputConnectionHandler.java $
- * Version: $LastChangedRevision: 3191 $
- * Date:    $Date: 2012-07-30 13:23:29 +0700 (Mon, 30 Jul 2012) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -47,7 +47,7 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 3191 $
+ * @version $Revision$
  * @since 0.6
  */
 public interface SynthesizedOutputConnectionHandler {

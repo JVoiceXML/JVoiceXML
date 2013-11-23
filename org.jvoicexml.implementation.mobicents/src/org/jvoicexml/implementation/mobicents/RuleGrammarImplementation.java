@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/RuleGrammarImplementation.java $
- * Version: $LastChangedRevision: 2682 $
- * Date:    $Date: 2011-05-30 14:39:56 +0700 (Mon, 30 May 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -42,7 +42,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * Implementation of a JSGF grammar.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2682 $
+ * @version $Revision$
  * @since 0.5.5
  */
 public final class RuleGrammarImplementation

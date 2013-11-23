@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/demo/tags/0.7.5.GA/org.jvoicexml.demo.embedded/src/org/jvoicexml/demo/embedded/EmbeddedJVoiceXML.java $
- * Version: $LastChangedRevision: 2771 $
- * Date:    $Date: 2011-08-26 10:37:28 +0200 (Fr, 26 Aug 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -57,7 +57,7 @@ import org.util.ExLog;
 /**
  * Demo to show how JVoiceXML can be launched by other applications.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2771 $
+ * @version $Revision$
  * @since 0.7.5
  */
 public final class EmbeddedJVXML implements JVoiceXmlMainListener 

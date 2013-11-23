@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/VNXIVRSynthesizedOutput.java $
- * Version: $LastChangedRevision: 3164 $
- * Date:    $Date: 2012-05-30 15:24:52 +0700 (Wed, 30 May 2012) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2012-05-30 15:24:52 +0700 (Wed, 30 May 2012) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -105,7 +105,7 @@ import org.util.ExLog;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3164 $
+ * @version $Revision$
  */
 public final class MobicentsSynthesizedOutput
         implements SynthesizedOutput, ObservableSynthesizedOutput,

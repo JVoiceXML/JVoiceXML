@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/speakstrategy/SpeakStrategyBase.java $
- * Version: $LastChangedRevision: 2583 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -41,7 +41,7 @@ import org.w3c.dom.NodeList;
  * Base strategy functionality to play back a node of a SSML document via Mobicents.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2583 $
+ * @version $Revision$
  * @since 0.5
  */
 abstract class SpeakStrategyBase

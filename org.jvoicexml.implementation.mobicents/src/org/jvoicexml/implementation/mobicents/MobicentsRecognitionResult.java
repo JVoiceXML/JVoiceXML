@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/Jsapi10RecognitionResult.java $
- * Version: $LastChangedRevision: 2515 $
- * Date:    $Date: 2011-01-17 15:14:46 +0700 (Mon, 17 Jan 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -43,7 +43,7 @@ import org.mozilla.javascript.Scriptable;
  * Mobicents 1.0 implementation of the result of the recognition process.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2515 $
+ * @version $Revision$
  */
 public final class MobicentsRecognitionResult
         implements RecognitionResult {

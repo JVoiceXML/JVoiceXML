@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/jvxml/Sphinx4SpokenInputFactory.java $
- * Version: $LastChangedRevision: 2520 $
- * Date:    $LastChangedDate: 2011-01-19 16:26:12 +0700 (Wed, 19 Jan 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -40,7 +40,7 @@ import org.jvoicexml.implementation.mobicents.MobicentsSpokenInputFactory;
  * {@link org.jvoicexml.implementation.SpokenInput} based on Mobicents 1.0.
  *
  * @author Dirk Schnelle
- * @version $Revision: 2520 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group -

@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/JVoiceXMLRecognitionListener.java $
- * Version: $LastChangedRevision: 2355 $
- * Date:    $Date: 2010-10-08 01:28:03 +0700 (Fri, 08 Oct 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +39,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * Waits for input from the recognizer.
  *
  * @author Dirk Schnelle
- * @version $Revision: 2355 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2008 JVoiceXML group -
