@@ -30,10 +30,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.jvoicexml.xml.NodeHelper;
 import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.TextContainer;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
@@ -63,7 +64,7 @@ import org.w3c.dom.Node;
  * @version $Revision$
  */
 public final class Log
-        extends AbstractVoiceXmlNode {
+        extends AbstractVoiceXmlNode implements TextContainer {
 
     /** Name of the tag. */
     public static final String TAG_NAME = "log";
@@ -195,16 +196,13 @@ public final class Log
     }
 
     /**
-     * Creates a new text node.
-     * @param textValue The inbound text
-     * @return The newly created text-node
+     * Creates a new text within this logger. If the last child node already is
+     * a text node the given trimmed text is appended to that node.
+     * @param text The text to be added.
+     * @return The new created text.
      */
-    public Text addText(final String textValue) {
-        final Document document = getOwnerDocument();
-        final Node node = document.createTextNode(textValue);
-        final Text textNode = new Text(node, getNodeFactory());
-        appendChild(textNode);
-        return textNode;
+    public Text addText(final String text) {
+        return NodeHelper.addText(this, text);
     }
 
     /**
