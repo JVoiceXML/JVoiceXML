@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.text/unittests/org/jvoicexml/implementation/text/TestTextTelephony.java $
- * Version: $LastChangedRevision: 2564 $
- * Date:    $Date: 2011-02-04 03:08:55 -0500 (Fr, 04 Feb 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -55,7 +55,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 /**
  * Test case for {@link TextTelephony}.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2564 $
+ * @version $Revision$
  * @since 0.6
  */
 public final class TestTextTelephony

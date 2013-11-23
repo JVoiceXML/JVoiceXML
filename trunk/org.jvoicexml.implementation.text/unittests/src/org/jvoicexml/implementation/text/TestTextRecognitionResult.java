@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.text/unittests/org/jvoicexml/implementation/text/TestTextRecognitionResult.java $
- * Version: $LastChangedRevision: 2245 $
- * Date:    $Date: 2010-05-27 09:24:13 -0400 (Do, 27 Mai 2010) $
- * Author:  $LastChangedBy: g-assiouras $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -35,7 +35,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * Test cases for {@link TextRecognitionResult}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2245 $
+ * @version $Revision$
  * @since 0.6
  */
 public final class TestTextRecognitionResult {
