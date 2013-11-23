@@ -40,7 +40,7 @@ import java.io.PrintWriter;
  * 
  * @author <a href="mailto:smccrory@users.sourceforge.net">Scott McCrory </a>.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2645 $
+ * @version $Revision$
  */
 class StreamGobbler extends Thread {
 
