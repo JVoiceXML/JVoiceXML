@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -46,7 +46,7 @@ import org.apache.log4j.Logger;
 /**
  * A listener for SIP messages.
  * @author dirk
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.6
  */
 public class JVoiceXmlSipListener implements SipListener {
