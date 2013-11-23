@@ -188,13 +188,10 @@ final class ConfigurationRepository
                     }
                     files.add(current);
                 }
-            } catch (XPathExpressionException e) {
+            } catch (XPathExpressionException | SAXException e) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error inspecting configuration files", e);
-                }
-            } catch (SAXException e) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error inspecting configuration files", e);
+                    LOGGER.debug("error inspecting configuration file '"
+                            + current.getCanonicalPath() + "'", e);
                 }
             }
         }
