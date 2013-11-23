@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/client/RemoteMappedDocumentRepository.java $
- * Version: $LastChangedRevision: 2129 $
- * Date:    $Date: 2010-04-09 11:33:10 +0200 (Fr, 09 Apr 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -36,7 +36,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * Remote interface to enable remote method calls.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2129 $
+ * @version $Revision$
  *
  * @since 0.4
  * @see org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository

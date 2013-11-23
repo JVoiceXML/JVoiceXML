@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/client/rtp/RtpPlayer.java $
- * Version: $LastChangedRevision: 2129 $
- * Date:    $Date: 2010-04-09 11:33:10 +0200 (Fr, 09 Apr 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -44,7 +44,7 @@ import org.jlibrtp.RTPSession;
  * RTP player for playing the output on the client side.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2129 $
+ * @version $Revision$
  * @since 0.6
  */
 public final class RtpPlayer implements RTPAppIntf {

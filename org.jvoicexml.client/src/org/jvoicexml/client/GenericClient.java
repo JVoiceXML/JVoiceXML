@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/client/GenericClient.java $
- * Version: $LastChangedRevision: 2931 $
- * Date:    $Date: 2012-02-06 08:57:38 +0100 (Mo, 06 Feb 2012) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -42,7 +42,7 @@ import org.jvoicexml.event.error.NoresourceError;
 /**
  * A generic client to make calls to the JVoiceXML voice browser.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2931 $
+ * @version $Revision$
  * @since 0.7.4
  */
 public final class GenericClient {
