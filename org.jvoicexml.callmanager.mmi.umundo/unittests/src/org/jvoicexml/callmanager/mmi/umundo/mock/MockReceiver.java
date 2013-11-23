@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.callmanager.mmi.umundo/unittests/src/org/jvoicexml/callmanager/mmi/umundo/TestMmiReceiver.java $
- * Version: $LastChangedRevision: 3512 $
- * Date:    $Date: 2013-01-31 13:46:06 +0100 (Do, 31 Jan 2013) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -33,7 +33,7 @@ import org.umundo.s11n.ITypedReceiver;
 /**
  * A receiver for test purpose.
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision: 3512 $
+ * @version $LastChangedRevision$
  * @since 0.7.6
  */
 public final class MockReceiver implements ITypedReceiver {
