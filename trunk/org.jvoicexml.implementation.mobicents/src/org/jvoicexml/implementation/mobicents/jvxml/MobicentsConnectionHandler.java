@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/jvxml/FreeTTSConnectionHandler.java $
- * Version: $LastChangedRevision: 2708 $
- * Date:    $Date: 2011-06-16 14:43:35 +0700 (Thu, 16 Jun 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -42,7 +42,7 @@ import org.jvoicexml.implementation.mobicents.SynthesizedOutputConnectionHandler
  * An RTP based connection handler for FreeTTS.
  *
  * @author Dirk Schnelle
- * @version $Revision: 2708 $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>

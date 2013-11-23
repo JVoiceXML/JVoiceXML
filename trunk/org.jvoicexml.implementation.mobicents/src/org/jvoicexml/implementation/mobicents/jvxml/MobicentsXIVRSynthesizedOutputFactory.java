@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/jvxml/FreeTTSSynthesizedOutputFactory.java $
- * Version: $LastChangedRevision: 2355 $
- * Date:    $LastChangedDate: 2010-10-08 01:28:03 +0700 (Fri, 08 Oct 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -40,7 +40,7 @@ import org.jvoicexml.implementation.mobicents.MobicentsSynthesizedOutputFactory;
  * <a href="http://freetts.sourceforge.net">FreeTTS.</a>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 2355 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006-2008 JVoiceXML group -
