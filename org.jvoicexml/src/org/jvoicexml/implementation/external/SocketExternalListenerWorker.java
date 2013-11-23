@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/documentserver/schemestrategy/SessionStorage.java $
- * Version: $LastChangedRevision: 2839 $
- * Date:    $Date: 2011-10-13 09:33:06 +0200 (Do, 13 Okt 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -47,7 +47,7 @@ import org.apache.log4j.Logger;
  * 
  * @author Markus Baumgart <info@CIBEK.de>
  * @author Dirk SChnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.5
  * @see SocketExternalRecognitionListener
  * @see SocketExternalSynthesisListener

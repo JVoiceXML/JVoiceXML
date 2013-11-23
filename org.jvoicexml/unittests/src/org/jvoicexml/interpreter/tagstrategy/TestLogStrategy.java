@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/unittests/src/org/jvoicexml/interpreter/tagstrategy/TestClearStrategy.java $
- * Version: $LastChangedRevision: 3659 $
- * Date:    $Date: 2013-03-01 15:33:27 +0100 (Fri, 01 Mar 2013) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -42,7 +42,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * This class provides a test case for the {@link LogStrategy}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3659 $
+ * @version $Revision$
  * @since 0.7.6
  */
 public final class TestLogStrategy
