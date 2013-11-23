@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  * Test cases for {@link Rule}.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2325 $
+ * @version $Revision$
  * @since 0.7.5
  */
 public class TestRule {
