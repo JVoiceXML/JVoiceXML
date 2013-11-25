@@ -218,8 +218,83 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
     @Test
     public void testExecuteExprFunctionCall()
             throws Exception, JVoiceXMLEvent {
-        final String scriptFactorial = "var a = 42;"
-                + "function factorial(n)"
+        final String scriptFactorial = "function factorial(n)"
+                + "{"
+                + "return (n <= 1)? 1 : n * factorial(n-1);"
+                + "}";
+        final VoiceXmlDocument doc = createDocument();
+        final Vxml vxml = doc.getVxml();
+        final Script script = vxml.appendChild(Script.class);
+        script.addCdata(scriptFactorial);
+
+        final Block block = createBlock();
+        final Assign assign = block.appendChild(Assign.class);
+        final String expr = "factorial(6)";
+        assign.setName("test");
+        assign.setExpr(expr);
+
+        final ScriptingEngine scripting = getScriptingEngine();
+        scripting.eval("var test;");
+        AssignStrategy strategy = new AssignStrategy();
+        try {
+            executeTagStrategy(script, new ScriptStrategy());
+            executeTagStrategy(assign, strategy);
+        } catch (JVoiceXMLEvent e) {
+            Assert.fail(e.getMessage());
+        }
+        Assert.assertEquals(720, scripting.getVariable("test"));
+    }
+
+    /**
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.LogStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            test failed
+     * @exception JVoiceXMLEvent
+     *            test failed
+     */
+    @Test
+    public void testExecuteExprFunctionCallString()
+            throws Exception, JVoiceXMLEvent {
+        final String scriptFactorial = "function concat(arg)"
+                + "{"
+                + "return arg + arg;"
+                + "}";
+        final VoiceXmlDocument doc = createDocument();
+        final Vxml vxml = doc.getVxml();
+        final Script script = vxml.appendChild(Script.class);
+        script.addCdata(scriptFactorial);
+
+        final Block block = createBlock();
+        final Assign assign = block.appendChild(Assign.class);
+        final String expr = "concat('Hello')";
+        assign.setName("test");
+        assign.setExpr(expr);
+
+        final ScriptingEngine scripting = getScriptingEngine();
+        scripting.eval("var test;");
+        AssignStrategy strategy = new AssignStrategy();
+        try {
+            executeTagStrategy(script, new ScriptStrategy());
+            executeTagStrategy(assign, strategy);
+        } catch (JVoiceXMLEvent e) {
+            Assert.fail(e.getMessage());
+        }
+        Assert.assertEquals("HelloHello", scripting.getVariable("test"));
+    }
+
+    /**
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.LogStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            test failed
+     * @exception JVoiceXMLEvent
+     *            test failed
+     */
+    @Test
+    public void testExecuteExprFunctionCallPreceedingLiteral()
+            throws Exception, JVoiceXMLEvent {
+        final String scriptFactorial = "function factorial(n)"
                 + "{"
                 + "return (n <= 1)? 1 : n * factorial(n-1);"
                 + "}";
