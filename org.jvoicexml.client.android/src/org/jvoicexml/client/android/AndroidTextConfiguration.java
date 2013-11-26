@@ -39,12 +39,14 @@ import org.jvoicexml.implementation.PlatformFactory;
 import org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatformFactory;
 import org.jvoicexml.implementation.text.TextPlatformFactory;
 import org.jvoicexml.interpreter.DialogFactory;
+import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyRepository;
 import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
+import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
@@ -74,9 +76,6 @@ public final class AndroidTextConfiguration implements Configuration {
         } else if (baseClass == PlatformFactory.class) {
             T value = (T) new TextPlatformFactory();
             col.add(value);
-        }
-        if (col.isEmpty()) {
-            return null;
         }
         return col;
     }
@@ -125,6 +124,8 @@ public final class AndroidTextConfiguration implements Configuration {
             factory.addDialogMapping(Form.TAG_NAME, new ExecutablePlainForm());
             factory.addDialogMapping(Menu.TAG_NAME, new ExecutableMenuForm());
             return (T) factory;
+        } else if (baseClass == GrammarProcessor.class) {
+            return (T) new JVoiceXmlGrammarProcessor();
         }
         return null;
     }

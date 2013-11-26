@@ -13,5 +13,12 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jvoicexml.jndi"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jvoicexml.processor.srgs"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jvoicexml.xml"/>
+	<classpathentry exported="true" kind="lib" path="/org.jvoicexml/3rdparty/commons/codec1.4/lib/commons-codec-1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="/org.jvoicexml/3rdparty/commons/pool1.5.5/lib/commons-pool-1.5.5.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/commons/pool1.5.5/commons-pool-1.5.5-api.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/org.jvoicexml/3rdparty/commons/logging1.1.1/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
