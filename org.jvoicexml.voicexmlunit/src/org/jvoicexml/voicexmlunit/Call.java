@@ -56,7 +56,7 @@ public final class Call implements Runnable {
     /** The text server. */
     private TextServer server;
     /** Reference to JVoiceXml. */
-    private Voice vxml;
+    private VoiceXmlAccessor vxml;
     private AssertionError error;
 
     public static int SERVER_PORT = 6000; // port number must be greater than
@@ -105,9 +105,9 @@ public final class Call implements Runnable {
      *
      * @return the actual Voice object
      */
-    public Voice getVoice() {
+    public VoiceXmlAccessor getVoice() {
         if (vxml == null) {
-            vxml = new Voice();
+            vxml = new VoiceXmlAccessor();
         }
         return vxml;
     }
@@ -118,7 +118,7 @@ public final class Call implements Runnable {
      * @param voice
      *            the new Voice object
      */
-    public void setVoice(final Voice voice) {
+    public void setVoice(final VoiceXmlAccessor voice) {
         vxml = voice;
     }
 
@@ -137,7 +137,7 @@ public final class Call implements Runnable {
             // wait for the server
              server.waitStarted();
              // run the dialog
-             final Voice voice = getVoice();
+             final VoiceXmlAccessor voice = getVoice();
              voice.call(server, dialog);
         } catch (Exception | ErrorEvent e) {
             fail(new AssertionError(e));
@@ -152,7 +152,7 @@ public final class Call implements Runnable {
      * @return transaction to use for the input
      */
     public Recording record() {
-        final Voice voice = getVoice();
+        final VoiceXmlAccessor voice = getVoice();
         final Session session = voice.getSession();
         return new Recording(server, session);
     }
