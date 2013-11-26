@@ -34,7 +34,8 @@ import android.widget.TextView;
  * @author macinos
  * 
  */
-public class MainJVXMLActivity extends Activity implements TextListener, JVoiceXmlMainListener {
+public class MainJVXMLActivity extends Activity implements TextListener,
+		JVoiceXmlMainListener {
 
 	private static Object lock = new Object();
 	private Object jvxmlMonitor = new Object();
@@ -76,10 +77,14 @@ public class MainJVXMLActivity extends Activity implements TextListener, JVoiceX
 	public void disconnected() {
 		session.hangup();
 		connected = false;
-		startButton.setEnabled(true);
-		startButton.requestFocus();
-		textIn.setEnabled(false);
-		textOut.append("--Session ended.\n");
+		runOnUiThread(new Runnable() {
+			public void run() {
+				startButton.setEnabled(true);
+				startButton.requestFocus();
+				textIn.setEnabled(false);
+				textOut.append("--Session ended.\n");
+			}
+		});
 	}
 
 	@Override
@@ -106,7 +111,8 @@ public class MainJVXMLActivity extends Activity implements TextListener, JVoiceX
 			lock.notifyAll();
 		}
 		serverStarted = true;
-		//manipulation with UI elements has to be done on the original (UI) thread
+		// manipulation with UI elements has to be done on the original (UI)
+		// thread
 		runOnUiThread(new Runnable() {
 			public void run() {
 				textIn.setEnabled(true);
@@ -164,11 +170,9 @@ public class MainJVXMLActivity extends Activity implements TextListener, JVoiceX
 				return;
 			}
 		}
-		if (!serverStarted) {
-			return;
-		}
+
 		jvxml = jvxmlmain;
-		
+
 		if (jvxml == null) {
 			textOut.append("--JVXML not found!\n");
 			startButton.setEnabled(true);
@@ -214,7 +218,6 @@ public class MainJVXMLActivity extends Activity implements TextListener, JVoiceX
 
 			if (documentVXML != null && documentVXML.canRead()) {
 				try {
-
 					info = server.getConnectionInformation();
 					session = jvxml.createSession(info);
 					uri = documentVXML.toURI();
@@ -260,13 +263,13 @@ public class MainJVXMLActivity extends Activity implements TextListener, JVoiceX
 	@Override
 	public void expectingInput() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void inputClosed() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -289,7 +292,6 @@ public class MainJVXMLActivity extends Activity implements TextListener, JVoiceX
 				textOut.append("jvxmlStarted");
 			}
 		});
-		serverStarted = true;
 		synchronized (jvxmlMonitor) {
 			jvxmlMonitor.notifyAll();
 		}
@@ -298,7 +300,7 @@ public class MainJVXMLActivity extends Activity implements TextListener, JVoiceX
 	@Override
 	public void jvxmlTerminated() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
