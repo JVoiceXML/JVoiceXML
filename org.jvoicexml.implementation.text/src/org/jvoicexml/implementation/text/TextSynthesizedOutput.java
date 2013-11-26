@@ -243,7 +243,6 @@ final class TextSynthesizedOutput
             fireOutputEnded(speakable);
         }
         processingSpeakable = false;
-        System.out.println("*** " + texts.size());
         if (texts.isEmpty()) {
             fireQueueEmpty();
 
