@@ -71,7 +71,7 @@ public final class TestCall implements TextListener {
         call.setVoice(null);
         Assert.assertNotNull(call.getVoice());
         // 3. Custom voice
-        Voice custom = new Voice();
+        VoiceXmlAccessor custom = new VoiceXmlAccessor();
         call.setVoice(custom);
         Assert.assertSame(custom, call.getVoice());
         // 4. Remove voice
@@ -81,7 +81,7 @@ public final class TestCall implements TextListener {
 
     @Test(timeout = 5000)
     public void testDialog() throws InterruptedException {
-        final Voice voice = call.getVoice();
+        final VoiceXmlAccessor voice = call.getVoice();
         Assert.assertNull(voice.getSession());
 
         lastOutput = null;

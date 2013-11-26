@@ -39,7 +39,7 @@ import org.jvoicexml.event.ErrorEvent;
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
  */
-public final class Voice {
+public final class VoiceXmlAccessor {
     /**
      * the back-end client to communicate with.
      */
