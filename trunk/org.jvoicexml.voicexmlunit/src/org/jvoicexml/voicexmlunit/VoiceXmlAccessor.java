@@ -52,14 +52,15 @@ public final class VoiceXmlAccessor {
 
     /**
      * Set the client.
-     * @param client the client
+     * @param value the client
      */
-    public void setClient(final GenericClient client) {
-         this.client = client;
+    public void setClient(final GenericClient value) {
+         client = value;
     }
 
     /**
      * Get the actual client.
+     * @return the actual client
      */
      public GenericClient getClient() {
           if (client == null) {
