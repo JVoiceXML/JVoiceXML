@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.voicexmlunit/src/org/jvoicexml/voicexmlunit/io/Assertion.java $
+ * Version: $LastChangedRevision: 3974 $
+ * Date:    $Date: 2013-11-23 21:55:27 +0100 (Sat, 23 Nov 2013) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,29 +27,19 @@
 package org.jvoicexml.voicexmlunit.io;
 
 
-import org.junit.Before;
-import org.junit.Test;
-
 /**
- * Unit tests for {@link Input}.
- * @author Raphael Groner
+ * An input message. Input messages are those that users input to JVoiceXML.
+ * 
  * @author Dirk Schnelle-Walka
- *
  */
-public class TestInput {
+public interface InputMessage extends Message {
 
-    private Input in;
-    boolean failed;
-
-    @Before
-    public void setUp() throws Exception {
-        in = new Input("abc");
-        failed = false;
-    }
-
-    @Test
-    public void testSend() {
-        in.send(new Recording(null, null)); // mock the server
-    }
+    /**
+     * Send an input.
+     * 
+     * @param record
+     *            the transaction used to input
+     */
+    void send(Recording record);
 
 }

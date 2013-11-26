@@ -31,7 +31,7 @@ import org.junit.Assert;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
-public class Output extends Statement {
+public class Output extends Statement implements OutputMessage {
     public Output(String message) {
         super(message);
     }
