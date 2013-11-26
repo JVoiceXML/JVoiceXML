@@ -28,8 +28,6 @@ package org.jvoicexml.voicexmlunit;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.AssertionError;
 import java.net.URI;
 
 import org.jvoicexml.Session;
@@ -68,7 +66,7 @@ public final class Call implements Runnable {
     private final Object lock;
 
     /**
-     * Constructs a new call
+     * Constructs a new call.
      *
      * @param uri
      *            URI of the dialog to call call
@@ -82,7 +80,7 @@ public final class Call implements Runnable {
     }
 
     /**
-     * Constructs a new call
+     * Constructs a new call.
      *
      * @param path
      *            the path to a local file
@@ -135,12 +133,11 @@ public final class Call implements Runnable {
         try {
             /* wait for the server */
             synchronized (lock) {
-                lock.wait(SERVER_WAIT);
+                server.waitStarted();
             }
             getVoice().call(server, dialog); // run the dialog
-        }
-        catch (Exception | ErrorEvent error) {
-            fail(new AssertionError(error));
+        } catch (Exception | ErrorEvent e) {
+            fail(new AssertionError(e));
         } finally {
             server.stopServer();
         }
