@@ -40,7 +40,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
- * Test cases for {@link Voice}.
+ * Test cases for {@link VoiceXmlAccessor}.
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
  *
@@ -48,7 +48,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 public class TestVoiceHangup implements TextListener {
 
     private URI dialog;
-    private Voice voice;
+    private VoiceXmlAccessor voice;
     private boolean activated;
     private boolean abortConnection;
     private TextServer server;
@@ -59,7 +59,7 @@ public class TestVoiceHangup implements TextListener {
     @Before
     public void setUp() {
         dialog = new File("unittests/etc/mock.vxml").toURI();
-        voice = new Voice();
+        voice = new VoiceXmlAccessor();
         server = new TextServer(4711);
         server.addTextListener(this);
     }
@@ -73,7 +73,7 @@ public class TestVoiceHangup implements TextListener {
     }
 
     /**
-     * Test method for {@link Voice#getSession()}.
+     * Test method for {@link VoiceXmlAccessor#getSession()}.
      * Ensures a complete session run without any error.
      * @throws JVoiceXMLEvent
      *         test failed
@@ -87,7 +87,7 @@ public class TestVoiceHangup implements TextListener {
     }
 
     /**
-     * Test method for {@link Voice#getSession()}.
+     * Test method for {@link VoiceXmlAccessor#getSession()}.
      * Simulates a session abort.
      * @throws JVoiceXMLEvent
      *         test failed

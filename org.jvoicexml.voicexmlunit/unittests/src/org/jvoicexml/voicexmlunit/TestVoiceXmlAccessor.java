@@ -40,14 +40,14 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
- * Test cases for {@link Voice}.
+ * Test cases for {@link VoiceXmlAccessor}.
  * @author Raphael Groner
  *
  */
-public final class TestVoice implements TextListener {
+public final class TestVoiceXmlAccessor implements TextListener {
 
     private URI dialog;
-    private Voice voice;
+    private VoiceXmlAccessor voice;
     private TextServer server;
     private boolean abortConnection;
     private SsmlDocument lastOutput;
@@ -58,7 +58,7 @@ public final class TestVoice implements TextListener {
     @Before
     public void setUp() {
         dialog = new File("unittests/etc/mock.vxml").toURI();
-        voice = new Voice();
+        voice = new VoiceXmlAccessor();
         server = new TextServer(4711);
         server.addTextListener(this);
         lastOutput = null;
@@ -73,7 +73,7 @@ public final class TestVoice implements TextListener {
     }
 
     /**
-     * Test method for {@link Voice#getSession()}.
+     * Test method for {@link VoiceXmlAccessor#getSession()}.
      * Ensures a complete session run without any error.
      */
     @Test(timeout=9999)
@@ -83,7 +83,7 @@ public final class TestVoice implements TextListener {
     }
 
     /**
-     * Test method for {@link Voice#getSession()}.
+     * Test method for {@link VoiceXmlAccessor#getSession()}.
      * Simulates a session abort.
      */
     @Test(timeout=9999)
