@@ -146,7 +146,7 @@ public class TestSupervisor {
         Assert.assertTrue(failed);
     }
 
-    @Test
+    @Test//(timeout = 5000)
     public void testCall() {
         final Call call = new Call("unittests/etc/mock.vxml");
 

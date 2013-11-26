@@ -27,15 +27,20 @@
 package org.jvoicexml.voicexmlunit;
 
 
-import java.util.ConcurrentModificationException;
-
-import org.junit.*;
-
-import org.jvoicexml.voicexmlunit.Conversation;
-import org.jvoicexml.voicexmlunit.io.*;
-import org.jvoicexml.voicexmlunit.Supervisor;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.jvoicexml.voicexmlunit.io.Assertion;
+import org.jvoicexml.voicexmlunit.io.Input;
+import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.processor.Assert;
 
+/**
+ * Test cases for {@link Conversation}.
+ * @author Raphael Groner
+ * @author Dirk Schnelle-Walka
+ *
+ */
 public class TestConversation {
 
     private Conversation conversation;

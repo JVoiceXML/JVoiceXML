@@ -49,8 +49,8 @@ public final class TestVoice implements TextListener {
     private URI dialog;
     private Voice voice;
     private TextServer server;
-    private boolean activated;
     private boolean abortConnection;
+    private SsmlDocument lastOutput;
 
     /**
      * Set up the test environment.
@@ -61,8 +61,7 @@ public final class TestVoice implements TextListener {
         voice = new Voice();
         server = new TextServer(4711);
         server.addTextListener(this);
-
-        activated = false;
+        lastOutput = null;
     }
 
     /**
@@ -99,9 +98,7 @@ public final class TestVoice implements TextListener {
         server.start();
 
         try {
-            synchronized (dialog) {
-                dialog.wait();
-            }
+            server.waitStarted();
             voice.call(server, dialog);
         } catch (Exception | JVoiceXMLEvent e) {
             Assert.fail(e.getMessage());
@@ -110,34 +107,27 @@ public final class TestVoice implements TextListener {
         }
 
         Assert.assertNull(voice.getSession());
-        Assert.assertTrue(activated);
+        Assert.assertNotNull(lastOutput);
     }
 
     @Override
     public void started() {
-        synchronized (dialog) {
-            dialog.notifyAll();
-        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void connected(InetSocketAddress remote) {
-        synchronized (dialog) {
-            dialog.notifyAll();
-        }
+    public void connected(final InetSocketAddress remote) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(SsmlDocument document) {
-        if (voice.getSession() != null) {
-            activated = true;
-        }
+    public void outputSsml(final SsmlDocument document) {
+        lastOutput = document;
+
         if (abortConnection) {
             server.stopServer(); // enforces session abort without BYE
             voice.close();
