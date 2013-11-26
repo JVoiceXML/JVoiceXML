@@ -27,8 +27,6 @@
 package org.jvoicexml.voicexmlunit;
 
 
-import java.lang.AssertionError;
-
 import java.net.InetSocketAddress;
 
 import org.jvoicexml.voicexmlunit.io.Assertion;
@@ -52,9 +50,9 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 public final class Supervisor
     implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.processor.Facade {
 
-    private Call call = null;
-    private Conversation conversation = null;
-    private Assertion statement = null;
+    private Call call;
+    private Conversation conversation;
+    private Assertion statement;
 
     /**
      * Initialize a new server conversation.
@@ -85,38 +83,27 @@ public final class Supervisor
 
         AssertionError error = call.getFailure();
         if (error != null) {
-            //error.printStackTrace();
             throw error;
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.jvoicexml.client.text.TextListener#started()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void started() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.jvoicexml.client.text.TextListener#connected(java.net.InetSocketAddress
-     * )
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void connected(final InetSocketAddress remote) {
         statement = conversation.begin();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.jvoicexml.client.text.TextListener#outputSsml(org.jvoicexml.xml.ssml
-     * .SsmlDocument)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void outputSsml(final SsmlDocument document) {
@@ -130,10 +117,8 @@ public final class Supervisor
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.jvoicexml.client.text.TextListener#expectingInput()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void expectingInput() {
@@ -144,20 +129,16 @@ public final class Supervisor
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.jvoicexml.client.text.TextListener#inputClosed()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void inputClosed() {
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.jvoicexml.client.text.TextListener#disconnected()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void disconnected() {
