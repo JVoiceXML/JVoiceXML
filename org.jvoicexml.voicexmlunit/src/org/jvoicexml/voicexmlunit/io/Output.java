@@ -31,22 +31,56 @@ import org.junit.Assert;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
-public class Output extends Statement implements OutputMessage {
-    public Output(String message) {
-        super(message);
+public class Output implements OutputMessage {
+    private String message;
+    private SsmlDocument document;
+    /**
+     * Constructs a new object.
+     * @param text the text of this output.
+     */
+    public Output(final String text) {
+        message = text;
     }
 
+    /**
+     * Constructs a new object.
+     * @param doc document of the output
+     */
+    public Output(final SsmlDocument doc) {
+        document = doc;
+    }
+
+    /**
+     * Retrieves the received SSML document.
+     * @return the received SSML dcument
+     */
+    public final SsmlDocument getDocument() {
+        return document;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        if (document != null) {
+            final Speak speak = document.getSpeak();
+            return speak.getTextContent();
+        }
+        return message;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void receive(SsmlDocument actual) {
         final Speak speak = actual.getSpeak();
         final String text = speak.getTextContent();
         receive(text);
     }
 
-    public void send(Recording record) {
-        Assert.fail("Expected " + getClass().getSimpleName() + ": " + toString());
-    }
-
-    public void receive(String actual) {
+    public void receive(final String actual) {
         final String expect = toString();
         Assert.assertEquals(getClass().getSimpleName(), expect, actual);
     }
