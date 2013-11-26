@@ -33,7 +33,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * 
  * @author Raphael Groner
  */
-public interface OutputMessage {
+public interface OutputMessage extends Message {
     /**
      * Receive an output.
      * 

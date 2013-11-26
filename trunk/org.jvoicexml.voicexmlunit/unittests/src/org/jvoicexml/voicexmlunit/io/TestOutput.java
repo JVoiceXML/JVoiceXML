@@ -68,9 +68,4 @@ public class TestOutput {
     public void testReceiveEmpty() throws ParserConfigurationException, SAXException, IOException {
         out.receive(new SsmlDocument()); // must fail
     }
-
-    @Test(expected=AssertionError.class)
-    public void testSend() {
-        out.send(new Recording(null, null)); // mock the server
-    }
 }

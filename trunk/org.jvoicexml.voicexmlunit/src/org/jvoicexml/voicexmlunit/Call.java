@@ -33,7 +33,10 @@ import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.voicexmlunit.io.Output;
+import org.jvoicexml.voicexmlunit.io.OutputMessage;
 import org.jvoicexml.voicexmlunit.io.Recording;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Call simulates a real telephony call. This is done with creation of a new
@@ -56,6 +59,9 @@ public final class Call  {
     private TextServer server;
     /** Reference to JVoiceXml. */
     private VoiceXmlAccessor vxml;
+    /** Buffered messages from JVoiceXml. */
+    private final OutputMessageBuffer outputBuffer;
+
     private AssertionError error;
 
     public static int SERVER_PORT = 6000; // port number must be greater than
@@ -66,14 +72,14 @@ public final class Call  {
 
     /**
      * Constructs a new call.
-     *
-     * @param uri
-     *            URI of the dialog to call call
      */
     public Call() {
         final int port = randomizePortForServer();
         server = new TextServer(port);
+        outputBuffer = new OutputMessageBuffer();
+        server.addTextListener(outputBuffer);
     }
+
     /**
      * Creates a random port number for the text server.
      * @return random part number
@@ -133,6 +139,20 @@ public final class Call  {
         } finally {
             server.stopServer();
         }
+    }
+
+    /**
+     * Retrieves the next output.
+     * @return the next output that has been captured
+     */
+    public SsmlDocument getNextOutput() {
+        final OutputMessage message = outputBuffer.nextMessage();
+        if (message instanceof Output) {
+            final Output output = (Output) message;
+            return output.getDocument();
+        }
+        // TODO decide what to do here. Throw an exception?
+        return null;
     }
 
     /**
