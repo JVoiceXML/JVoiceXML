@@ -105,6 +105,9 @@ public final class TextServer extends Thread {
     /** Lock access to wait for connection. */
     private final Object connectionLock;
 
+    /** Lock access to wait until the server started. */
+    private final Object startedLock;
+
     /** Registered text listeners. */
     private final Collection<TextListener> listener;
 
@@ -128,6 +131,7 @@ public final class TextServer extends Thread {
 
         lock = new Object();
         connectionLock = new Object();
+        startedLock = new Object();
     }
 
     /**
@@ -160,6 +164,9 @@ public final class TextServer extends Thread {
             for (TextListener current : listener) {
                 current.started();
             }
+        }
+        synchronized (startedLock) {
+            startedLock.notifyAll();
         }
     }
 
@@ -405,6 +412,18 @@ public final class TextServer extends Thread {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Waits until the text server thread has been started and is able to
+     * accept incoming connections.
+     * @throws InterruptedException
+     *         Error waiting
+     */
+    public void waitStarted() throws InterruptedException {
+        synchronized (startedLock) {
+            startedLock.wait();
+        }
     }
 
     /**
