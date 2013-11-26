@@ -51,9 +51,12 @@ import org.jvoicexml.voicexmlunit.io.Recording;
  *
  */
 public final class Call implements Runnable {
+    /** URI of the dialog to call. */
     private URI dialog;
+    /** The text server. */
     private TextServer server;
-    private Voice voice;
+    /** Reference to JVoiceXml. */
+    private Voice vxml;
     private AssertionError error;
 
     public static int SERVER_PORT = 6000; // port number must be greater than
@@ -61,9 +64,6 @@ public final class Call implements Runnable {
     public static int SERVER_PORT_RANDOMIZE_COUNT = 100; // 0 means a fixed port
                                                          // number
     public static long SERVER_WAIT = 5000;
-
-    /** Synchronization lock. */
-    private final Object lock;
 
     /**
      * Constructs a new call.
@@ -76,7 +76,6 @@ public final class Call implements Runnable {
         dialog = uri;
         final int port = randomizePortForServer();
         server = new TextServer(port);
-        lock = new Object();
     }
 
     /**
@@ -107,20 +106,20 @@ public final class Call implements Runnable {
      * @return the actual Voice object
      */
     public Voice getVoice() {
-        if (voice == null) {
-            setVoice(new Voice());
+        if (vxml == null) {
+            vxml = new Voice();
         }
-        return voice;
+        return vxml;
     }
 
     /**
-     * Set a custom Voice object
+     * Set a custom Voice object.
      *
      * @param voice
      *            the new Voice object
      */
     public void setVoice(final Voice voice) {
-        this.voice = voice;
+        vxml = voice;
     }
 
     /**
@@ -135,11 +134,11 @@ public final class Call implements Runnable {
         error = null;
         server.start();
         try {
-            /* wait for the server */
-            synchronized (lock) {
-                server.waitStarted();
-            }
-            getVoice().call(server, dialog); // run the dialog
+            // wait for the server
+             server.waitStarted();
+             // run the dialog
+             final Voice voice = getVoice();
+             voice.call(server, dialog);
         } catch (Exception | ErrorEvent e) {
             fail(new AssertionError(e));
         } finally {
@@ -161,17 +160,22 @@ public final class Call implements Runnable {
     /**
      * Sets the call into failure state and terminates the call process.
      *
-     * @param error
+     * @param err
      *            the error that has caused the failure
      */
-    public void fail(final AssertionError error) {
-        if (this.error == null) { // only the first error
+    public void fail(final AssertionError err) {
+        if (error == null) {
+            // keep only the first error
             server.interrupt();
             getVoice().close();
-            this.error = error;
+            error = err;
         }
     }
 
+    /**
+     * Retrieves the last observer error.
+     * @return the last observed error
+     */
     public AssertionError getFailure() {
         return error;
     }
