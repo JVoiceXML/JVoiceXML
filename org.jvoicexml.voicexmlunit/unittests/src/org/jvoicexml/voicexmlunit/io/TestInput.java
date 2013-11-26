@@ -27,16 +27,18 @@
 package org.jvoicexml.voicexmlunit.io;
 
 
-import java.lang.AssertionError;
-
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
+/**
+ * Unit tests for {@link Input}.
+ * @author Raphael Groner
+ * @author Dirk Schnelle-Walka
+ *
+ */
 public class TestInput implements AbstractTestAssertion {
 
     private Input in;
