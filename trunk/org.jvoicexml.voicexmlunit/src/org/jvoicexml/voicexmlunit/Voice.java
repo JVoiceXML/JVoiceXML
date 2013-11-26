@@ -80,6 +80,8 @@ public final class Voice {
      *            the dialog to use
      * @throws Exception
      *            the error happened during the session was active
+     * @throws ErrorEvent
+     *            the error happened during execution of the dialog
      */
      public void call(final TextServer server, final URI dialog)
           throws Exception, ErrorEvent {
@@ -87,7 +89,6 @@ public final class Voice {
               final ConnectionInformation info =
                     server.getConnectionInformation();
               session = getClient().call(dialog, info);
-              server.waitConnected();
               session.waitSessionEnd();
           } finally {
               if (session != null) {

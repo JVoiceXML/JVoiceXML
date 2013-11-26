@@ -30,10 +30,10 @@ import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
-import javax.naming.NamingException;
-
-import org.junit.*;
-
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -42,9 +42,10 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 /**
  * Test cases for {@link Voice}.
  * @author Raphael Groner
+ * @author Dirk Schnelle-Walka
  *
  */
-public class TestVoice_Hangup implements TextListener {
+public class TestVoiceHangup implements TextListener {
 
     private URI dialog;
     private Voice voice;
