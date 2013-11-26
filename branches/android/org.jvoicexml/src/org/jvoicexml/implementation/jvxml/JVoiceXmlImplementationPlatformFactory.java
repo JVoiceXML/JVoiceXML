@@ -95,7 +95,7 @@ public final class JVoiceXmlImplementationPlatformFactory
      *
      * @see org.jvoicexml.JVoiceXml
      */
-    private JVoiceXmlImplementationPlatformFactory() {
+    public JVoiceXmlImplementationPlatformFactory() {
         synthesizerPool = new KeyedResourcePool<SynthesizedOutput>();
         spokenInputPool = new KeyedResourcePool<SpokenInput>();
         telephonyPool = new KeyedResourcePool<Telephony>();

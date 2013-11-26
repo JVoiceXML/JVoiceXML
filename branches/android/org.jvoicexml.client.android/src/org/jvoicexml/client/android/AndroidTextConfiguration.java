@@ -30,11 +30,13 @@ import java.util.Collection;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.DtmfRecognizerProperties;
-import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy;
+import org.jvoicexml.implementation.PlatformFactory;
+import org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatformFactory;
 import org.jvoicexml.implementation.text.TextPlatformFactory;
 import org.jvoicexml.interpreter.DialogFactory;
 import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
@@ -61,17 +63,22 @@ public final class AndroidTextConfiguration implements Configuration {
     @Override
     public <T> Collection<T> loadObjects(final Class<T> baseClass,
             final String root) {
+        final Collection<T> col = new java.util.ArrayList<T>();
         if (baseClass == TagStrategyFactory.class) {
-            final Collection<T> col = new java.util.ArrayList<T>();
             try {
                 T value = (T) new AndroidTagStrategyFactory();
                 col.add(value);
-                return col;
             } catch (Exception e) {
                 return null;
             }
+        } else if (baseClass == PlatformFactory.class) {
+            T value = (T) new TextPlatformFactory();
+            col.add(value);
         }
-        return null;
+        if (col.isEmpty()) {
+            return null;
+        }
+        return col;
     }
 
     /**
@@ -107,8 +114,8 @@ public final class AndroidTextConfiguration implements Configuration {
             server.addSchemeStrategy(new HttpSchemeStrategy());
             server.addSchemeStrategy(new FileSchemeStrategy());
             return (T) server;
-        } else if (baseClass == ImplementationPlatform.class) {
-            return (T) new TextPlatformFactory();
+        } else if (baseClass == ImplementationPlatformFactory.class) {
+            return (T) new JVoiceXmlImplementationPlatformFactory();
         } else if (baseClass == SpeechRecognizerProperties.class) {
             return (T) new SpeechRecognizerProperties();
         } else if (baseClass == DtmfRecognizerProperties.class) {
