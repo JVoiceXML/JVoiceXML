@@ -28,20 +28,18 @@ package org.jvoicexml.voicexmlunit.io;
 
 import java.io.IOException;
 
-import org.jvoicexml.xml.ssml.SsmlDocument;
-
 import org.junit.Assert;
 
-public class Input extends Statement {
+public class Input extends Statement implements InputMessage {
     public Input(String message) {
         super(message);
     }
 
-    public void receive(SsmlDocument actual) {
-        Assert.fail("Expected " + getClass().getSimpleName() + ": " + actual);
-    }
-
-    public void send(Recording record) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void send(final Recording record) {
         if (record == null) {
             return;
         }

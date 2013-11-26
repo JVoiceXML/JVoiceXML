@@ -29,10 +29,9 @@ package org.jvoicexml.voicexmlunit.io;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
-
 import org.junit.Assert;
 
-public class Dtmf extends Statement {
+public class Dtmf extends Statement implements InputMessage {
     private char dtmf;
 
     public Dtmf(char dtmf) {
@@ -40,10 +39,10 @@ public class Dtmf extends Statement {
         this.dtmf = dtmf;
     }
 
-    public void receive(SsmlDocument actual) {
-        Assert.fail("Receive " + getClass().getSimpleName() + ": " + actual);
-    }
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void send(Recording record) {
         if (record == null) {
             return;

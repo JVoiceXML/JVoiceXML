@@ -27,14 +27,8 @@
 package org.jvoicexml.voicexmlunit.io;
 
 
-import java.io.IOException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.xml.ssml.SsmlDocument;
-import org.xml.sax.SAXException;
 
 /**
  * Unit tests for {@link Dtmf}.
@@ -42,7 +36,7 @@ import org.xml.sax.SAXException;
  * @author Dirk Schnelle-Walka
  *
  */
-public class TestDtmf implements AbstractTestAssertion {
+public class TestDtmf {
 
     private static final char[] DIGITS = "1234567890".toCharArray();
 
@@ -58,14 +52,6 @@ public class TestDtmf implements AbstractTestAssertion {
         failed = false;
     }
 
-    @Override
-    @Test(expected=AssertionError.class)
-    public void testReceive() throws ParserConfigurationException,
-            SAXException, IOException {
-        dtmf.receive(new SsmlDocument()); // must fail
-    }
-
-    @Override
     @Test
     public void testSend() {
         dtmf.send(new Recording(null, null));

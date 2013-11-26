@@ -42,7 +42,7 @@ import org.xml.sax.SAXException;
  * @author Dirk Schnelle-Walka
  *
  */
-public class TestOutput implements AbstractTestAssertion {
+public class TestOutput {
 
     private Output out;
     private boolean failed;
@@ -59,7 +59,6 @@ public class TestOutput implements AbstractTestAssertion {
     /* (non-Javadoc)
      * @see org.jvoicexml.voicexmlunit.io.TestAssertion#testReceive()
      */
-    @Override
     @Test
     public void testReceive() throws ParserConfigurationException, SAXException, IOException {
         out.receive(out.toString());
@@ -70,10 +69,6 @@ public class TestOutput implements AbstractTestAssertion {
         out.receive(new SsmlDocument()); // must fail
     }
 
-    /* (non-Javadoc)
-     * @see org.jvoicexml.voicexmlunit.io.TestAssertion#testSend()
-     */
-    @Override
     @Test(expected=AssertionError.class)
     public void testSend() {
         out.send(new Recording(null, null)); // mock the server
