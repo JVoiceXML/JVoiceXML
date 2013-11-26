@@ -74,8 +74,10 @@ public final class AndroidTextConfiguration implements Configuration {
                 return null;
             }
         } else if (baseClass == PlatformFactory.class) {
-            T value = (T) new TextPlatformFactory();
-            col.add(value);
+        	final TextPlatformFactory factory = new TextPlatformFactory();
+        	factory.setInstances(1);
+      //      T value = (T) new TextPlatformFactory();
+            col.add((T)factory);
         }
         return col;
     }
