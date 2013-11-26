@@ -89,28 +89,34 @@ public final class VoiceXmlAccessor {
           try {
               final ConnectionInformation info =
                     server.getConnectionInformation();
-              session = getClient().call(dialog, info);
+              final GenericClient genericClient = getClient();
+              session = genericClient.call(dialog, info);
               session.waitSessionEnd();
           } finally {
-              if (session != null) {
-                  session.hangup();
-              }
-              session = null;
+              hangup();
           }
     }
 
+    
+    /**
+     * Issues a hangup.
+     */
+    public void hangup() {
+        if (session != null) {
+            session.hangup();
+            session = null;
+       }
+    }
     /**
      * Close the active Communication.
      */
     public void close() {
-          if (session != null) {
-               session.hangup();
-               session = null;
-          }
-          if (client != null) {
-               client.close();
-               client = null;
-          }
+        hangup();
+
+        if (client != null) {
+            client.close();
+            client = null;
+        }
     }
 
     /**
