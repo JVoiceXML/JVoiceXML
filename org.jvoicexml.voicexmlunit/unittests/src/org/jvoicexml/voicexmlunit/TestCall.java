@@ -47,6 +47,8 @@ public final class TestCall implements TextListener {
     private boolean started;
     private boolean connected;
     private SsmlDocument lastOutput;
+    /** URI of the application to call. */
+    private URI uri;
 
     /**
      * Set up the test environment.
@@ -55,8 +57,8 @@ public final class TestCall implements TextListener {
      */
     @Before
     public void setUp() throws Exception {
-        final URI dialog = new File("unittests/etc/mock.vxml").toURI();
-        call = new Call(dialog);
+        uri = new File("unittests/etc/mock.vxml").toURI();
+        call = new Call();
         call.addTextListener(this);
 
         started = false;
@@ -85,7 +87,7 @@ public final class TestCall implements TextListener {
         Assert.assertNull(voice.getSession());
 
         lastOutput = null;
-        call.run();
+        call.call(uri);;
         Assert.assertNotNull(lastOutput);
         Assert.assertTrue("started", started);
         Assert.assertFalse("connected", connected);

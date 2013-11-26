@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.voicexmlunit.Voice;
+import org.jvoicexml.voicexmlunit.VoiceXmlAccessor;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 public final class TestSessionDemo implements TextListener {
@@ -23,7 +23,7 @@ public final class TestSessionDemo implements TextListener {
 
     private static final long MAX_WAIT = 1000;
 
-    private Voice voice;
+    private VoiceXmlAccessor voice;
 
     private TextServer server;
 
@@ -37,7 +37,7 @@ public final class TestSessionDemo implements TextListener {
 
     @Before
     public void setUp() throws InterruptedException {
-        voice = new Voice();
+        voice = new VoiceXmlAccessor();
         dialog = new File("etc/input.vxml").toURI();
 
         server = new TextServer(PORT);

@@ -26,11 +26,13 @@
 
 package org.jvoicexml.voicexmlunit;
 
+import java.io.File;
+import java.net.URI;
+
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.jvoicexml.voicexmlunit.io.Input;
 import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.processor.Assert;
@@ -45,6 +47,8 @@ public class TestSupervisor {
 
     private Supervisor supervisor;
     private Conversation conversation;
+    /** URI of the application to call. */
+    private URI uri;
 
     /**
      * Set up the test environment.
@@ -55,6 +59,7 @@ public class TestSupervisor {
     public void setUp() throws Exception {
         supervisor = new Supervisor();
         conversation = initMock();
+        uri = new File("unittests/etc/mock.vxml").toURI();
     }
 
     @Test
@@ -146,14 +151,14 @@ public class TestSupervisor {
         Assert.assertTrue(failed);
     }
 
-    @Test//(timeout = 5000)
+    @Test(timeout = 5000)
     public void testCall() {
-        final Call call = new Call("unittests/etc/mock.vxml");
+        final Call call = new Call();
 
         conversation = supervisor.init(call);
         hears("test");
 
-        supervisor.process();
+        supervisor.process(uri);
         Assert.assertNull(supervisor.getFailCause());
     }
 

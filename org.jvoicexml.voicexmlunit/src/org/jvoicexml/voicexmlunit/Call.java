@@ -27,7 +27,6 @@
 package org.jvoicexml.voicexmlunit;
 
 
-import java.io.File;
 import java.net.URI;
 
 import org.jvoicexml.Session;
@@ -50,7 +49,7 @@ import org.jvoicexml.voicexmlunit.io.Recording;
  * @author Dirk Schnelle-Walka
  *
  */
-public final class Call implements Runnable {
+public final class Call  {
     /** URI of the dialog to call. */
     private URI dialog;
     /** The text server. */
@@ -71,25 +70,17 @@ public final class Call implements Runnable {
      * @param uri
      *            URI of the dialog to call call
      */
-    public Call(final URI uri) {
-        super();
-        dialog = uri;
+    public Call() {
         final int port = randomizePortForServer();
         server = new TextServer(port);
     }
-
     /**
-     * Constructs a new call.
-     *
-     * @param path
-     *            the path to a local file
+     * Creates a random port number for the text server.
+     * @return random part number
      */
-    public Call(final String path) {
-        this((new File(path)).toURI());
-    }
-
     private int randomizePortForServer() {
-        return (int) ((Math.random() * SERVER_PORT_RANDOMIZE_COUNT) + SERVER_PORT);
+        return (int) ((Math.random() * SERVER_PORT_RANDOMIZE_COUNT)
+                + SERVER_PORT);
     }
 
     /**
@@ -123,13 +114,11 @@ public final class Call implements Runnable {
     }
 
     /**
-     * {@inheritDoc}
+     * Calls the application identified by the given uri.
+     * @param uri URI of the application to call
      */
-    @Override
-    public void run() {
-        if (dialog == null) {
-            return;
-        }
+    public void call(final URI uri) {
+        dialog = uri;
 
         error = null;
         server.start();
