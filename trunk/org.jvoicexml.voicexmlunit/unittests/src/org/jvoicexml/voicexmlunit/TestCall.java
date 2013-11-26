@@ -27,13 +27,9 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.io.File;
-
-import java.lang.AssertionError;
-
 import java.net.InetSocketAddress;
 import java.net.URI;
 
-import org.junit.Assert;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,16 +39,17 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 /**
  * Test cases for {@link Call}.
  * @author Raphael Groner
+ * @author Dirk Schnelle-Walka
  *
  */
-public class TestCall implements TextListener {
+public final class TestCall implements TextListener {
     private Call call;
     private boolean started;
     private boolean connected;
-    private boolean activated;
+    private SsmlDocument lastOutput;
 
     /**
-     * Set up the test environment
+     * Set up the test environment.
      * @throws Exception
      *         setup failed
      */
@@ -60,7 +57,7 @@ public class TestCall implements TextListener {
     public void setUp() throws Exception {
         final URI dialog = new File("unittests/etc/mock.vxml").toURI();
         call = new Call(dialog);
-        call.setListener(this);
+        call.addTextListener(this);
 
         started = false;
         connected = false;
@@ -82,14 +79,14 @@ public class TestCall implements TextListener {
         Assert.assertNotSame(custom, call.getVoice());
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testDialog() throws InterruptedException {
         final Voice voice = call.getVoice();
         Assert.assertNull(voice.getSession());
 
-        activated = false;
+        lastOutput = null;
         call.run();
-        Assert.assertTrue(activated);
+        Assert.assertNotNull(lastOutput);
         Assert.assertTrue("started", started);
         Assert.assertFalse("connected", connected);
         Assert.assertNull(call.getFailure());
@@ -117,14 +114,14 @@ public class TestCall implements TextListener {
     }
 
     @Override
-    public void connected(InetSocketAddress remote) {
+    public void connected(final InetSocketAddress remote) {
         connected = true;
         call.startDialog();
     }
 
     @Override
-    public void outputSsml(SsmlDocument document) {
-        activated = true;
+    public void outputSsml(final SsmlDocument document) {
+        lastOutput = document;
     }
 
     @Override

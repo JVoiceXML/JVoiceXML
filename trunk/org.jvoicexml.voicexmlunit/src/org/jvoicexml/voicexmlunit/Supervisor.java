@@ -66,7 +66,7 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
     public Conversation init(final Call call) {
         this.call = call;
         if (call != null) { // null means a mock object
-            call.setListener(this);
+            call.addTextListener(this);
         }
         conversation = new Conversation();
         return conversation;
