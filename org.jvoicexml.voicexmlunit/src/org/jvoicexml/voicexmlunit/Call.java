@@ -148,15 +148,6 @@ public final class Call implements Runnable {
     }
 
     /**
-     * Start the dialog.
-     */
-    public void startDialog() {
-        synchronized (lock) {
-            lock.notifyAll();
-        }
-    }
-
-    /**
      * Starts a transaction to send input.
      *
      * @return transaction to use for the input

@@ -116,7 +116,6 @@ public final class TestCall implements TextListener {
     @Override
     public void connected(final InetSocketAddress remote) {
         connected = true;
-        call.startDialog();
     }
 
     @Override

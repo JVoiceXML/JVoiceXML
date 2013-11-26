@@ -50,7 +50,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  */
 public final class Supervisor
-implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.processor.Facade {
+    implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.processor.Facade {
 
     private Call call = null;
     private Conversation conversation = null;
@@ -97,7 +97,6 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
      */
     @Override
     public void started() {
-        call.startDialog();
     }
 
     /*
