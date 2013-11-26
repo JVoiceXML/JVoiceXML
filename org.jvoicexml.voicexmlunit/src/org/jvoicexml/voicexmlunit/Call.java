@@ -93,7 +93,11 @@ public final class Call implements Runnable {
         return (int) ((Math.random() * SERVER_PORT_RANDOMIZE_COUNT) + SERVER_PORT);
     }
 
-    public void setListener(final TextListener listener) {
+    /**
+     * Adds the given listener of messages received from the JVoiceXML.
+     * @param listener the listener to add
+     */
+    public void addTextListener(final TextListener listener) {
         server.addTextListener(listener);
     }
 
