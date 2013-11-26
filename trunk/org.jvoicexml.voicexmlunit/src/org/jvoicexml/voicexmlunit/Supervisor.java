@@ -28,6 +28,7 @@ package org.jvoicexml.voicexmlunit;
 
 
 import java.net.InetSocketAddress;
+import java.net.URI;
 
 import org.jvoicexml.voicexmlunit.io.Assertion;
 import org.jvoicexml.voicexmlunit.io.Nothing;
@@ -72,14 +73,15 @@ public final class Supervisor
 
     /**
      * Process a VoiceXML file and generate test log.
+     * @param uri URI of the application to call
      */
-    public void process() {
+    public void process(final URI uri) {
         if (call == null) {
             return;
         }
 
         statement = conversation.begin();
-        call.run();
+        call.call(uri);
 
         AssertionError error = call.getFailure();
         if (error != null) {

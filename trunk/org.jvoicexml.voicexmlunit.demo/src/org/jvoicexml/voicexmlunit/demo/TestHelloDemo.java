@@ -26,83 +26,80 @@
 
 package org.jvoicexml.voicexmlunit.demo;
 
-
-import java.lang.AssertionError;
+import java.io.File;
+import java.net.URI;
 
 import org.apache.log4j.Logger;
-
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.jvoicexml.voicexmlunit.Call;
-import org.jvoicexml.voicexmlunit.Voice;
-import org.jvoicexml.voicexmlunit.Supervisor;
 import org.jvoicexml.voicexmlunit.Conversation;
+import org.jvoicexml.voicexmlunit.Supervisor;
 import org.jvoicexml.voicexmlunit.io.Output;
-
 
 public class TestHelloDemo {
 
-  private Call call;
-  private Supervisor supervisor;
-  private Conversation conversation;
+    private Call call;
+    private Supervisor supervisor;
+    private Conversation conversation;
+    /** URI of the application to call. */
+    private URI uri;
 
-  @Before
-  public void setUp() throws Exception {
-    call = new Call("etc/helloworld.vxml");
-    supervisor = new Supervisor();
-    conversation = supervisor.init(call);
-  }
+    @Before
+    public void setUp() throws Exception {
+        uri = new File("etc/helloworld.vxml").toURI();
+        call = new Call();
+        supervisor = new Supervisor();
+        conversation = supervisor.init(call);
+    }
 
-  @Test
-  public void testSuccess() {
-    assumeHello();
-    assumeGoodbye();
-    logConversation();
-    supervisor.process();
-  }
+    @Test
+    public void testSuccess() {
+        assumeHello();
+        assumeGoodbye();
+        logConversation();
+        supervisor.process(uri);
+    }
 
-  @Test(timeout=9999, expected=AssertionError.class)
-  public void testMissingHello() {
-    assumeGoodbye();
-    assertFailure();
-  }
+    @Test(timeout = 9999, expected = AssertionError.class)
+    public void testMissingHello() {
+        assumeGoodbye();
+        assertFailure();
+    }
 
-  @Test(timeout=9999, expected=AssertionError.class)
-  public void testMissingGoodbye() {
-    assumeHello();
-    assertFailure();
-  }
+    @Test(timeout = 9999, expected = AssertionError.class)
+    public void testMissingGoodbye() {
+        assumeHello();
+        assertFailure();
+    }
 
-  @Test(timeout=9999, expected=AssertionError.class)
-  public void testEmpty() {
-    supervisor.connected(null); // enforce processing of an empty list
-    assertFailure();
-  }
+    @Test(timeout = 9999, expected = AssertionError.class)
+    public void testEmpty() {
+        supervisor.connected(null); // enforce processing of an empty list
+        assertFailure();
+    }
 
+    private void assertFailure() {
+        logConversation();
 
-  private void assertFailure() {
-    logConversation();
+        boolean failed = false;
+        supervisor.process(uri);
+    }
 
-    boolean failed = false;
-    supervisor.process();
-  }
+    private void logConversation() {
+        Logger.getLogger(TestHelloDemo.class).info(
+                "Expected conversation: " + conversation.toString());
+    }
 
-  private void logConversation() {
-    Logger.getLogger(TestHelloDemo.class).info("Expected conversation: "
-      + conversation.toString());
-  }
+    private void assumeHello() {
+        addOutput("Hello World!");
+    }
 
-  private void assumeHello() {
-    addOutput("Hello World!");
-  }
+    private void assumeGoodbye() {
+        addOutput("Goodbye!");
+    }
 
-  private void assumeGoodbye() {
-    addOutput("Goodbye!");
-  }
-
-  private void addOutput(final String message) {
-    conversation.add(new Output(message));
-  }
+    private void addOutput(final String message) {
+        conversation.add(new Output(message));
+    }
 }
