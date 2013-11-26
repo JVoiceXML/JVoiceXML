@@ -29,21 +29,17 @@ package org.jvoicexml.voicexmlunit.io;
 
 import java.io.IOException;
 
-import java.lang.AssertionError;
-
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ComparisonFailure;
 import org.junit.Test;
-
 import org.jvoicexml.xml.ssml.SsmlDocument;
-
 import org.xml.sax.SAXException;
 
 /**
- * @author thesis
+ * Unit tests for {@link Output}.
+ * @author Raphael Groner
+ * @author Dirk Schnelle-Walka
  *
  */
 public class TestOutput implements AbstractTestAssertion {
