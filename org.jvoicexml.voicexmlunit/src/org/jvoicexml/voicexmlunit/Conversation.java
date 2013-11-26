@@ -26,10 +26,10 @@
 
 package org.jvoicexml.voicexmlunit;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.jvoicexml.voicexmlunit.io.*;
+import org.jvoicexml.voicexmlunit.io.Assertion;
 
 /**
  * Conversation is a helper for the communication in between the processing of
