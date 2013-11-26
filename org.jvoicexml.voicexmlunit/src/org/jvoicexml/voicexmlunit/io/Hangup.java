@@ -37,12 +37,12 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class Hangup extends Output {
     
-    private Assertion assertion;
+    private Message assertion;
     
     /**
      * @param statement the final statement
      */
-    public Hangup(final Assertion assertion) {
+    public Hangup(final Message assertion) {
         super("## disconnected ##");
         this.assertion = assertion;
     }

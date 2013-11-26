@@ -31,9 +31,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.jvoicexml.voicexmlunit.Call;
 import org.jvoicexml.voicexmlunit.Conversation;
 import org.jvoicexml.voicexmlunit.io.Hangup;
+import org.jvoicexml.voicexmlunit.io.InputMessage;
+import org.jvoicexml.voicexmlunit.io.Message;
+import org.jvoicexml.voicexmlunit.io.OutputMessage;
 import org.jvoicexml.voicexmlunit.io.Recording;
-import org.jvoicexml.voicexmlunit.io.Assertion;
-
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -43,7 +44,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 public final class Assert extends org.junit.Assert implements Facade {
 
     /** Current assertion under processing.  */
-    private Assertion assertion;
+    private Message message;
 
     /** Call object.  */
     private Call call;
@@ -53,8 +54,8 @@ public final class Assert extends org.junit.Assert implements Facade {
      * @param assertion the assertion to use, set to null if none
      * @param call the Call object, null if you want a mock
      */
-    public Assert(final Assertion assertion, Call call) {
-        this.assertion = assertion;
+    public Assert(final Message assertion, Call call) {
+        this.message = assertion;
         this.call = call;
     }
 
@@ -62,7 +63,7 @@ public final class Assert extends org.junit.Assert implements Facade {
      * Set current assertion to process.
      * @param assertion the assertion to use, set to null if none
      */
-    public Assert(final Assertion assertion) {
+    public Assert(final Message assertion) {
         this(assertion, null);
     }
 
@@ -71,9 +72,11 @@ public final class Assert extends org.junit.Assert implements Facade {
      * @param message  Message to expect in the call
      */
     @Override
-    public void assertOutput(final SsmlDocument message) {
-        assertNotNull(assertion);
-        assertion.receive(message);
+    public void assertOutput(final SsmlDocument document) {
+        assertNotNull(message);
+        assertTrue(message instanceof OutputMessage);
+        final OutputMessage out = (OutputMessage) message;
+        out.receive(document);
     }
 
     /**
@@ -82,14 +85,16 @@ public final class Assert extends org.junit.Assert implements Facade {
      */
     @Override
     public void assertInput() {
-        assertNotNull(assertion);
+        assertNotNull(message);
+        assertTrue(message instanceof InputMessage);
         Recording record;
         if (call == null) {
             record = new Recording(null, null); // mock
         } else {
             record = call.record();
         }
-        assertion.send(record);
+        final InputMessage in = (InputMessage) message;
+        in.send(record);
     }
 
     /**
@@ -98,7 +103,7 @@ public final class Assert extends org.junit.Assert implements Facade {
     @Override
     public void assertHangup() {
         try {
-            Hangup hangup = new Hangup(assertion);
+            Hangup hangup = new Hangup(message);
             final SsmlDocument message = hangup.toSsml();
             hangup.receive(message); // fails always
         } catch (ParserConfigurationException e) {

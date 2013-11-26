@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.voicexmlunit/src/org/jvoicexml/voicexmlunit/io/Assertion.java $
+ * Version: $LastChangedRevision: 3974 $
+ * Date:    $Date: 2013-11-23 21:55:27 +0100 (Sat, 23 Nov 2013) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -26,29 +26,19 @@
 
 package org.jvoicexml.voicexmlunit.io;
 
-import java.io.IOException;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.junit.Test;
-import org.xml.sax.SAXException;
-
-public interface AbstractTestAssertion {
-
+/**
+ * An output message. Output messages are those that are received from JVoicXML.
+ * 
+ * @author Raphael Groner
+ */
+public interface OutputMessage {
     /**
-     * Test method for {@link org.jvoicexml.voicexmlunit.io.Output#receive(org.jvoicexml.xml.ssml.SsmlDocument)}.
-     * @throws IOException
-     * @throws SAXException
-     * @throws ParserConfigurationException
+     * Receive an output.
+     * 
+     * @param actual
+     *            the received output
      */
-    @Test
-    public abstract void testReceive() throws ParserConfigurationException,
-            SAXException, IOException;
-
-    /**
-     * Test method for {@link org.jvoicexml.voicexmlunit.io.Output#send(org.jvoicexml.voicexmlunit.io.Recording)}.
-     */
-    @Test
-    public abstract void testSend();
-
+    void receive(final SsmlDocument actual);
 }

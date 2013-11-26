@@ -29,7 +29,7 @@ package org.jvoicexml.voicexmlunit;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.jvoicexml.voicexmlunit.io.Assertion;
+import org.jvoicexml.voicexmlunit.io.Message;
 
 /**
  * Conversation is a helper for the communication in between the processing of
@@ -42,14 +42,14 @@ import org.jvoicexml.voicexmlunit.io.Assertion;
  *
  */
 public final class Conversation {
-    private ConcurrentLinkedQueue<Assertion> queue;
-    private Iterator<Assertion> iterator;
+    private ConcurrentLinkedQueue<Message> queue;
+    private Iterator<Message> iterator;
 
     /**
      * Constructor
      */
     public Conversation() {
-        queue = new ConcurrentLinkedQueue<Assertion>();
+        queue = new ConcurrentLinkedQueue<Message>();
         iterator = null;
     }
 
@@ -57,7 +57,7 @@ public final class Conversation {
      * Add a statement to the internal queue.
      * @param s statement to add in queue
      */
-    public boolean add(final Assertion a) {
+    public boolean add(final Message a) {
         return queue.add(a);
     }
 
@@ -65,7 +65,7 @@ public final class Conversation {
      * Begins the conversation.
      * @return First statement of the conversation
      */
-    public Assertion begin() {
+    public Message begin() {
         if (queue.isEmpty()) {
             iterator = null; // invalidate any existing cursor
             return null;
@@ -81,7 +81,7 @@ public final class Conversation {
      * the conversation and returns an invalid object.
      * @return Next statement after the previously current one
      */
-    public Assertion next() {
+    public Message next() {
         if (iterator == null) {
             return begin();
         } else if (iterator.hasNext()) {
@@ -92,7 +92,8 @@ public final class Conversation {
         }
     }
 
-    /*
+    /**
+     * Retrieves the size of the conversation.
      * @return current count of collected Assertions
      */
     public int size() {

@@ -30,7 +30,7 @@ package org.jvoicexml.voicexmlunit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.voicexmlunit.io.Assertion;
+import org.jvoicexml.voicexmlunit.io.Message;
 import org.jvoicexml.voicexmlunit.io.Input;
 import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.processor.Assert;
@@ -76,7 +76,7 @@ public class TestConversation {
         Assert.assertStatements(2, conversation);
         Assert.assertNull(conversation.next()); // invalid cursor
         Assert.assertNotNull(conversation.begin()); // validate again
-        final Assertion next = conversation.next();
+        final Message next = conversation.next();
         Assert.assertEquals(next.getClass(), Input.class);
         Assert.assertEquals(expected, next.toString());
     }

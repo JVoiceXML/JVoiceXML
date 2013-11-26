@@ -30,7 +30,7 @@ package org.jvoicexml.voicexmlunit;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
-import org.jvoicexml.voicexmlunit.io.Assertion;
+import org.jvoicexml.voicexmlunit.io.Message;
 import org.jvoicexml.voicexmlunit.io.Nothing;
 import org.jvoicexml.voicexmlunit.processor.Assert;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -53,7 +53,7 @@ public final class Supervisor
 
     private Call call;
     private Conversation conversation;
-    private Assertion statement;
+    private Message statement;
 
     /**
      * Initialize a new server conversation.
@@ -206,7 +206,7 @@ public final class Supervisor
     /**
      * @return Assertion in trouble, null if no error has occured
      */
-    public Assertion getFailCause() {
+    public Message getFailCause() {
         return statement;
     }
 }
