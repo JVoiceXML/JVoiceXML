@@ -26,30 +26,9 @@
 
 package org.jvoicexml.voicexmlunit.io;
 
-import java.io.IOException;
-
-import org.junit.Assert;
 
 public class Input extends Statement implements InputMessage {
     public Input(String message) {
         super(message);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void send(final Recording record) {
-        if (record == null) {
-            return;
-        }
-
-        String expect = toString();
-        try {
-            record.input(expect);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail("Expected " + getClass().getSimpleName() + ": " + expect);
-        }
     }
 }

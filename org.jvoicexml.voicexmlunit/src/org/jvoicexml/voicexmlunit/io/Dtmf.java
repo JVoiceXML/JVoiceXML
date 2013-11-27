@@ -26,10 +26,6 @@
 
 package org.jvoicexml.voicexmlunit.io;
 
-import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
-import org.jvoicexml.xml.ssml.SsmlDocument;
-import org.junit.Assert;
 
 public class Dtmf extends Statement implements InputMessage {
     private char dtmf;
@@ -37,22 +33,5 @@ public class Dtmf extends Statement implements InputMessage {
     public Dtmf(char dtmf) {
         super("DTMF '" + dtmf + "'");
         this.dtmf = dtmf;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void send(Recording record) {
-        if (record == null) {
-            return;
-        }
-
-        try {
-            record.input(dtmf);
-        } catch (NoresourceError | ConnectionDisconnectHangupEvent e) {
-            e.printStackTrace();
-            Assert.fail("Send: " + toString());
-        }
     }
 }

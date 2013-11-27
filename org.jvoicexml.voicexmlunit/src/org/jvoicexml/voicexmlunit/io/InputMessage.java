@@ -33,13 +33,4 @@ package org.jvoicexml.voicexmlunit.io;
  * @author Dirk Schnelle-Walka
  */
 public interface InputMessage extends Message {
-
-    /**
-     * Send an input.
-     * 
-     * @param record
-     *            the transaction used to input
-     */
-    void send(Recording record);
-
 }
