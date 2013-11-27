@@ -28,7 +28,6 @@ package org.jvoicexml.voicexmlunit.io;
 
 
 import org.junit.Before;
-import org.junit.Test;
 
 /**
  * Unit tests for {@link Input}.
@@ -45,11 +44,6 @@ public class TestInput {
     public void setUp() throws Exception {
         in = new Input("abc");
         failed = false;
-    }
-
-    @Test
-    public void testSend() {
-        in.send(new Recording(null, null)); // mock the server
     }
 
 }

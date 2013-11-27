@@ -86,15 +86,15 @@ public final class VoiceXmlAccessor {
      */
      public void call(final TextServer server, final URI dialog)
           throws Exception, ErrorEvent {
-          try {
+//          try {
               final ConnectionInformation info =
                     server.getConnectionInformation();
               final GenericClient genericClient = getClient();
               session = genericClient.call(dialog, info);
-              session.waitSessionEnd();
-          } finally {
-              hangup();
-          }
+//              session.waitSessionEnd();
+//          } finally {
+//              hangup();
+//          }
     }
 
     

@@ -65,50 +65,15 @@ public final class TestCall implements TextListener {
         connected = false;
     }
 
-    @Test
-    public void testVoice() {
-        // 1. Voice is always valid
-        Assert.assertNotNull(call.getVoice());
-        // 2. Voice can't be destroyed (self instantiated)
-        call.setVoice(null);
-        Assert.assertNotNull(call.getVoice());
-        // 3. Custom voice
-        VoiceXmlAccessor custom = new VoiceXmlAccessor();
-        call.setVoice(custom);
-        Assert.assertSame(custom, call.getVoice());
-        // 4. Remove voice
-        call.setVoice(null);
-        Assert.assertNotSame(custom, call.getVoice());
-    }
-
     @Test(timeout = 5000)
     public void testDialog() throws InterruptedException {
-        final VoiceXmlAccessor voice = call.getVoice();
-        Assert.assertNull(voice.getSession());
-
         lastOutput = null;
         call.call(uri);
         Assert.assertEquals(lastOutput, call.getNextOutput());
         Assert.assertTrue("started", started);
         Assert.assertFalse("connected", connected);
-        Assert.assertNull(call.getFailure());
-        Assert.assertNull(voice.getSession());
     }
 
-    @Test
-    public void testFailure() {
-        AssertionError error = new AssertionError();
-        call.fail(error);
-
-        Assert.assertNotNull(call.getFailure());
-    }
-
-    @Test
-    public void testSuccess() {
-        call.fail(null);
-
-        Assert.assertNull(call.getFailure());
-    }
 
     @Override
     public void started() {
