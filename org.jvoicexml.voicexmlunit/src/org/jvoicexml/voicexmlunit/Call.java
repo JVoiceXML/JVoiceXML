@@ -166,28 +166,19 @@ public final class Call  {
     /**
      * Sends the given utterance to JVoiceXML.
      * @param utterance the utterance to send
-     * @throws InterruptedException
-     *         waiting for jvoicexml to request for an input was interrupted
-     * @throws IOException 
-     *         error sending the utterance
      */
-    public void say(final String utterance)
-            throws InterruptedException, IOException {
+    public void say(final String utterance) {
+        try {
         inputMonitor.waitUntilExpectingInput();
-        server.sendInput(utterance); 
+        server.sendInput(utterance);
+        } catch (InterruptedException | IOException e) {
+            throw new AssertionError(e);
+        }
     }
 
     /**
      * Sends the given utterance to JVoiceXML.
      * @param digits the digits to enter
-     * @throws InterruptedException
-     *         waiting for jvoicexml to request for an input was interrupted
-     * @throws IOException 
-     *         error sending the utterance
-     * @throws ConnectionDisconnectHangupEvent
-     *         session already hung up
-     * @throws NoresourceError
-     *         text platform not available
      */
     public void enter(final String digits) {
         try {
