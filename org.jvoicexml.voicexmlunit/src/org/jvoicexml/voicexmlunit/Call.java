@@ -46,13 +46,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Call simulates a real telephony call. This is done with creation of a new
- * JVoiceXML session and a TextServer that can be used to notice all events. You
- * have to call startDialog() in the started() event handler of your
- * TextListener, otherwise the Server may fail. Your TextListener instance is
- * registered with setListener() method. Lookup of JVoiceXml is done by help
- * from Voice, you may use getVoice() to do some initialization before. In case
- * of an assertion failure, you can stop the Server, therefore use the fail()
- * and getFailure() methods.
+ * JVoiceXML session and a TextServer that can be used to notice all events.
  *
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
