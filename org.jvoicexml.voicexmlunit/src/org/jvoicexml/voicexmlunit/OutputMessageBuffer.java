@@ -29,8 +29,6 @@ package org.jvoicexml.voicexmlunit;
 import java.net.InetSocketAddress;
 
 import org.jvoicexml.client.text.TextListener;
-import org.jvoicexml.voicexmlunit.io.Output;
-import org.jvoicexml.voicexmlunit.io.OutputMessage;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -41,7 +39,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 class OutputMessageBuffer implements TextListener {
     /** The last received output message. */
-    private OutputMessage output;
+    private SsmlDocument output;
     /** Synchronization. */
     private Object monitor;
 
@@ -57,7 +55,7 @@ class OutputMessageBuffer implements TextListener {
      * @return next message, <code>null</code> if the call was interrupted.
      * @throws InterruptedException 
      */
-    public OutputMessage nextMessage() throws InterruptedException {
+    public SsmlDocument nextMessage() throws InterruptedException {
         synchronized (monitor) {
             monitor.wait();
             try {
@@ -84,9 +82,8 @@ class OutputMessageBuffer implements TextListener {
      */
     @Override
     public void outputSsml(final SsmlDocument document) {
-        final OutputMessage message = new Output(document);
         synchronized (monitor) {
-            output = message;
+            output = document;
             monitor.notifyAll();
         }
     }

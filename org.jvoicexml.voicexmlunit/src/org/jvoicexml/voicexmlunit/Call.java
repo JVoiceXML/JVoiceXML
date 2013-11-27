@@ -39,8 +39,6 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
-import org.jvoicexml.voicexmlunit.io.Output;
-import org.jvoicexml.voicexmlunit.io.OutputMessage;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -133,17 +131,11 @@ public final class Call  {
      * @return the next output that has been captured
      */
     public SsmlDocument getNextOutput() {
-        OutputMessage message = null;
         try {
-            message = outputBuffer.nextMessage();
+            return outputBuffer.nextMessage();
         } catch (InterruptedException e) {
             throw new AssertionError(e);
         }
-        if (message instanceof Output) {
-            final Output output = (Output) message;
-            return output.getDocument();
-        }
-        throw new AssertionError("next message is no output message");
     }
 
     /**
