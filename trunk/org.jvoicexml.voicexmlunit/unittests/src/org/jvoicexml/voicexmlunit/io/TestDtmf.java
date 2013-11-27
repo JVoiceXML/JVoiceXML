@@ -28,7 +28,6 @@ package org.jvoicexml.voicexmlunit.io;
 
 
 import org.junit.Before;
-import org.junit.Test;
 
 /**
  * Unit tests for {@link Dtmf}.
@@ -50,10 +49,5 @@ public class TestDtmf {
         digit = DIGITS[i];
         dtmf = new Dtmf(digit);
         failed = false;
-    }
-
-    @Test
-    public void testSend() {
-        dtmf.send(new Recording(null, null));
     }
 }

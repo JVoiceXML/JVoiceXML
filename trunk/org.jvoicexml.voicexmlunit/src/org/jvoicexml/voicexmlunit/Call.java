@@ -27,15 +27,21 @@
 package org.jvoicexml.voicexmlunit;
 
 
+import java.io.IOException;
 import java.net.URI;
 
+import org.junit.Assert;
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.io.OutputMessage;
-import org.jvoicexml.voicexmlunit.io.Recording;
+import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -61,8 +67,8 @@ public final class Call  {
     private VoiceXmlAccessor vxml;
     /** Buffered messages from JVoiceXml. */
     private final OutputMessageBuffer outputBuffer;
-
-    private AssertionError error;
+    /** Monitor to wait until JVoiceXML is ready to accept input. */
+    private InputMonitor inputMonitor;
 
     public static int SERVER_PORT = 6000; // port number must be greater than
                                           // 1024
@@ -78,6 +84,8 @@ public final class Call  {
         server = new TextServer(port);
         outputBuffer = new OutputMessageBuffer();
         server.addTextListener(outputBuffer);
+        inputMonitor = new InputMonitor();
+        server.addTextListener(inputMonitor);
     }
 
     /**
@@ -98,18 +106,6 @@ public final class Call  {
     }
 
     /**
-     * Get the Voice object This method tries best to get a valid object.
-     *
-     * @return the actual Voice object
-     */
-    public VoiceXmlAccessor getVoice() {
-        if (vxml == null) {
-            vxml = new VoiceXmlAccessor();
-        }
-        return vxml;
-    }
-
-    /**
      * Set a custom Voice object.
      *
      * @param voice
@@ -126,18 +122,15 @@ public final class Call  {
     public void call(final URI uri) {
         dialog = uri;
 
-        error = null;
         server.start();
         try {
             // wait for the server
              server.waitStarted();
              // run the dialog
-             final VoiceXmlAccessor voice = getVoice();
-             voice.call(server, dialog);
+             vxml = new VoiceXmlAccessor();
+             vxml.call(server, dialog);
         } catch (Exception | ErrorEvent e) {
-            fail(new AssertionError(e));
-        } finally {
-            server.stopServer();
+            throw new AssertionError(e);
         }
     }
 
@@ -146,46 +139,82 @@ public final class Call  {
      * @return the next output that has been captured
      */
     public SsmlDocument getNextOutput() {
-        final OutputMessage message = outputBuffer.nextMessage();
+        OutputMessage message = null;
+        try {
+            message = outputBuffer.nextMessage();
+        } catch (InterruptedException e) {
+            throw new AssertionError(e);
+        }
         if (message instanceof Output) {
             final Output output = (Output) message;
             return output.getDocument();
         }
-        // TODO decide what to do here. Throw an exception?
-        return null;
+        throw new AssertionError("next message is no output message");
     }
 
     /**
-     * Starts a transaction to send input.
-     *
-     * @return transaction to use for the input
+     * Checks if the next output matches the given utterance.
+     * @param utterance the expected utterance
      */
-    public Recording record() {
-        final VoiceXmlAccessor voice = getVoice();
-        final Session session = voice.getSession();
-        return new Recording(server, session);
+    public void hears(final String utterance) {
+        final SsmlDocument document = getNextOutput();
+        final Speak speak = document.getSpeak();
+        final String output = speak.getTextContent();
+        Assert.assertEquals(utterance, output);
     }
 
     /**
-     * Sets the call into failure state and terminates the call process.
-     *
-     * @param err
-     *            the error that has caused the failure
+     * Sends the given utterance to JVoiceXML.
+     * @param utterance the utterance to send
+     * @throws InterruptedException
+     *         waiting for jvoicexml to request for an input was interrupted
+     * @throws IOException 
+     *         error sending the utterance
      */
-    public void fail(final AssertionError err) {
-        if (error == null) {
-            // keep only the first error
-            server.interrupt();
-            getVoice().close();
-            error = err;
+    public void say(final String utterance)
+            throws InterruptedException, IOException {
+        inputMonitor.waitUntilExpectingInput();
+        server.sendInput(utterance); 
+    }
+
+    /**
+     * Sends the given utterance to JVoiceXML.
+     * @param digits the digits to enter
+     * @throws InterruptedException
+     *         waiting for jvoicexml to request for an input was interrupted
+     * @throws IOException 
+     *         error sending the utterance
+     * @throws ConnectionDisconnectHangupEvent
+     *         session already hung up
+     * @throws NoresourceError
+     *         text platform not available
+     */
+    public void enter(final String digits) {
+        try {
+            inputMonitor.waitUntilExpectingInput();
+        } catch (InterruptedException e) {
+            throw new AssertionError(e);
+        }
+        final Session session = vxml.getSession();
+        CharacterInput input = null;
+        try {
+            input = session.getCharacterInput();
+        } catch (NoresourceError | ConnectionDisconnectHangupEvent e) {
+            throw new AssertionError(e);
+        }
+        for (int i = 0; i < digits.length(); i++) {
+            final char ch = digits.charAt(i);
+            input.addCharacter(ch);
         }
     }
 
     /**
-     * Retrieves the last observer error.
-     * @return the last observed error
+     * Issues a hangup event.
+     * @throws JVoiceXMLEvent 
+     *         error hanging up
      */
-    public AssertionError getFailure() {
-        return error;
+    public void hangup() throws JVoiceXMLEvent {
+        final Session session = vxml.getSession();
+        session.hangup();
     }
 }

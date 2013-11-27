@@ -27,7 +27,6 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.BlockingQueue;
 
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.voicexmlunit.io.Output;
@@ -41,26 +40,31 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @since 0.7.6
  */
 class OutputMessageBuffer implements TextListener {
-    /** All queued messages that have been received. */
-    private final BlockingQueue<OutputMessage> messages;
+    /** The last received output message. */
+    private OutputMessage output;
+    /** Synchronization. */
+    private Object monitor;
 
     /**
      * Constructs a new object.
      */
     public OutputMessageBuffer() {
-        messages =
-                new java.util.concurrent.LinkedBlockingQueue<OutputMessage>();
+        monitor = new Object();
     }
 
     /**
      * Retrieves the next message.
      * @return next message, <code>null</code> if the call was interrupted.
+     * @throws InterruptedException 
      */
-    public OutputMessage nextMessage() {
-        try {
-            return messages.take();
-        } catch (InterruptedException e) {
-            return null;
+    public OutputMessage nextMessage() throws InterruptedException {
+        synchronized (monitor) {
+            monitor.wait();
+            try {
+                return output;
+            } finally {
+                output = null;
+            }
         }
     }
 
@@ -69,12 +73,10 @@ class OutputMessageBuffer implements TextListener {
      */
     @Override
     public void started() {
-        messages.clear();
     }
 
     @Override
     public void connected(final InetSocketAddress remote) {
-        messages.clear();
     }
 
     /**
@@ -83,7 +85,10 @@ class OutputMessageBuffer implements TextListener {
     @Override
     public void outputSsml(final SsmlDocument document) {
         final OutputMessage message = new Output(document);
-        messages.offer(message);
+        synchronized (monitor) {
+            output = message;
+            monitor.notifyAll();
+        }
     }
 
     /**
