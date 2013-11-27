@@ -62,17 +62,23 @@ public final class Call  {
     /** Monitor to wait until JVoiceXML is ready to accept input. */
     private InputMonitor inputMonitor;
 
-    public static int SERVER_PORT = 6000; // port number must be greater than
-                                          // 1024
-    public static int SERVER_PORT_RANDOMIZE_COUNT = 100; // 0 means a fixed port
-                                                         // number
-    public static long SERVER_WAIT = 5000;
+    /**
+     * Server port number to use. Port number must be greater than 1024.
+     */
+    public static final int DEFAULT_SERVER_PORT = 6000;
+
+    /**
+     * Constructs a new object with the default server port.
+     */
+    public Call() {
+        this(DEFAULT_SERVER_PORT);
+    }
 
     /**
      * Constructs a new call.
+     * @param port number to use for the {@link TextServer}.
      */
-    public Call() {
-        final int port = randomizePortForServer();
+    public Call(final int port) {
         server = new TextServer(port);
         outputBuffer = new OutputMessageBuffer();
         server.addTextListener(outputBuffer);
@@ -81,16 +87,8 @@ public final class Call  {
     }
 
     /**
-     * Creates a random port number for the text server.
-     * @return random part number
-     */
-    private int randomizePortForServer() {
-        return (int) ((Math.random() * SERVER_PORT_RANDOMIZE_COUNT)
-                + SERVER_PORT);
-    }
-
-    /**
      * Adds the given listener of messages received from the JVoiceXML.
+     * This allows for further investigation of the behavior.
      * @param listener the listener to add
      */
     public void addTextListener(final TextListener listener) {
