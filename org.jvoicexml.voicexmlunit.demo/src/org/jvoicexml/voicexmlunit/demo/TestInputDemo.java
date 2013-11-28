@@ -47,7 +47,7 @@ public final class TestInputDemo {
     /**
      * Runs a test with the option '1'.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testInputYes() {
         call.call(uri);
         call.hears("Do you like this example?");
@@ -58,7 +58,7 @@ public final class TestInputDemo {
     /**
      * Runs a test with the option '2'.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testInputNo() {
         call.call(uri);
         call.hears("Do you like this example?");

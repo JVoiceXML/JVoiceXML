@@ -46,7 +46,7 @@ public final class TestDtmfDemo {
     /**
      * Runs a test with the option '1'.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testInputYes() {
         call.call(uri);
         call.hears(
@@ -58,7 +58,7 @@ public final class TestDtmfDemo {
     /**
      * Runs a test with the option '2'.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testInputNo() {
         call.call(uri);
         call.hears(
