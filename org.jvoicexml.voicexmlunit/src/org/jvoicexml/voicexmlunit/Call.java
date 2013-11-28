@@ -139,10 +139,42 @@ public final class Call  {
     }
 
     /**
-     * Checks if the next output matches the given utterance.
+     * Retrieves the next output. This method is useful if the output should be
+     * examined in more detail
+     * @param timeout the timeout to wait at max in msec, waits forever, if
+     *          timeout is zero
+     * @return the next output that has been captured
+     */
+    public SsmlDocument getNextOutput(final long timeout) {
+        Assert.assertNotNull("no active session", session);
+        try {
+            return outputBuffer.nextMessage(timeout);
+        } catch (InterruptedException | TimeoutException e) {
+            throw new AssertionError(e);
+        }
+    }
+
+    /**
+     * Waits for the next output and checks if this output matches the given
+     * utterance.
      * @param utterance the expected utterance
      */
     public void hears(final String utterance) {
+        Assert.assertNotNull("no active session", session);
+        final SsmlDocument document = getNextOutput();
+        final Speak speak = document.getSpeak();
+        final String output = speak.getTextContent();
+        Assert.assertEquals(utterance, output);
+    }
+
+    /**
+     * Waits for the next output and checks if this output matches the given
+     * utterance. The output is expected to arrive in max timeout msec.
+     * @param utterance the expected utterance
+     * @param timeout the timeout to wait at max in msec, waits forever, if
+     *          timeout is zero
+     */
+    public void hears(final String utterance, final long timeout) {
         Assert.assertNotNull("no active session", session);
         final SsmlDocument document = getNextOutput();
         final Speak speak = document.getSpeak();
