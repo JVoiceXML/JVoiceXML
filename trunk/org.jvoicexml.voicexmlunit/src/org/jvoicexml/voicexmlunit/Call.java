@@ -30,13 +30,17 @@ package org.jvoicexml.voicexmlunit;
 import java.io.IOException;
 import java.net.URI;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
 import org.junit.Assert;
 import org.jvoicexml.CharacterInput;
+import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.xml.ssml.Speak;
@@ -51,14 +55,12 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  */
 public final class Call  {
-    /** URI of the dialog to call. */
-    private URI dialog;
     /** The text server. */
     private TextServer server;
-    /** Reference to JVoiceXml. */
-    private VoiceXmlAccessor vxml;
+    /** Used port number. */
+    private int portNumber;
     /** Buffered messages from JVoiceXml. */
-    private final OutputMessageBuffer outputBuffer;
+    private OutputMessageBuffer outputBuffer;
     /** Monitor to wait until JVoiceXML is ready to accept input. */
     private InputMonitor inputMonitor;
 
@@ -66,6 +68,8 @@ public final class Call  {
      * Server port number to use. Port number must be greater than 1024.
      */
     public static final int DEFAULT_SERVER_PORT = 6000;
+    /** The active session. */
+    private Session session;
 
     /**
      * Constructs a new object with the default server port.
@@ -79,7 +83,8 @@ public final class Call  {
      * @param port number to use for the {@link TextServer}.
      */
     public Call(final int port) {
-        server = new TextServer(port);
+        portNumber = port;
+        server = new TextServer(portNumber);
         outputBuffer = new OutputMessageBuffer();
         server.addTextListener(outputBuffer);
         inputMonitor = new InputMonitor();
@@ -96,39 +101,35 @@ public final class Call  {
     }
 
     /**
-     * Set a custom Voice object.
-     *
-     * @param voice
-     *            the new Voice object
-     */
-    public void setVoice(final VoiceXmlAccessor voice) {
-        vxml = voice;
-    }
-
-    /**
      * Calls the application identified by the given uri.
      * @param uri URI of the application to call
      */
     public void call(final URI uri) {
-        dialog = uri;
-
-        server.start();
         try {
+            final Context context = new InitialContext();
+            final JVoiceXml jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+    
+            server.start();
             // wait for the server
-             server.waitStarted();
-             // run the dialog
-             vxml = new VoiceXmlAccessor();
-             vxml.call(server, dialog);
+            server.waitStarted();
+            // run the dialog
+
+            final ConnectionInformation info =
+                   server.getConnectionInformation();
+            session = jvxml.createSession(info);
+            session.call(uri);
         } catch (Exception | ErrorEvent e) {
             throw new AssertionError(e);
         }
     }
 
     /**
-     * Retrieves the next output.
+     * Retrieves the next output. This method is useful if the output should be
+     * examined in more detail
      * @return the next output that has been captured
      */
     public SsmlDocument getNextOutput() {
+        Assert.assertNotNull("no active session", session);
         try {
             return outputBuffer.nextMessage();
         } catch (InterruptedException e) {
@@ -141,6 +142,7 @@ public final class Call  {
      * @param utterance the expected utterance
      */
     public void hears(final String utterance) {
+        Assert.assertNotNull("no active session", session);
         final SsmlDocument document = getNextOutput();
         final Speak speak = document.getSpeak();
         final String output = speak.getTextContent();
@@ -152,9 +154,10 @@ public final class Call  {
      * @param utterance the utterance to send
      */
     public void say(final String utterance) {
+        Assert.assertNotNull("no active session", session);
         try {
-        inputMonitor.waitUntilExpectingInput();
-        server.sendInput(utterance);
+            inputMonitor.waitUntilExpectingInput();
+            server.sendInput(utterance);
         } catch (InterruptedException | IOException e) {
             throw new AssertionError(e);
         }
@@ -165,12 +168,12 @@ public final class Call  {
      * @param digits the digits to enter
      */
     public void enter(final String digits) {
+        Assert.assertNotNull("no active session", session);
         try {
             inputMonitor.waitUntilExpectingInput();
         } catch (InterruptedException e) {
             throw new AssertionError(e);
         }
-        final Session session = vxml.getSession();
         CharacterInput input = null;
         try {
             input = session.getCharacterInput();
@@ -185,11 +188,13 @@ public final class Call  {
 
     /**
      * Issues a hangup event.
-     * @throws JVoiceXMLEvent 
-     *         error hanging up
      */
-    public void hangup() throws JVoiceXMLEvent {
-        final Session session = vxml.getSession();
-        session.hangup();
+    public void hangup() {
+        if (session != null) {
+            session.hangup();
+            session = null;
+        }
+
+        server.stopServer();
     }
 }
