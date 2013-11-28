@@ -27,6 +27,7 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.TimeoutException;
 
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -53,11 +54,38 @@ class OutputMessageBuffer implements TextListener {
     /**
      * Retrieves the next message.
      * @return next message, <code>null</code> if the call was interrupted.
-     * @throws InterruptedException 
+     * @throws InterruptedException
+     *          interrupted while waiting
      */
     public SsmlDocument nextMessage() throws InterruptedException {
         synchronized (monitor) {
             monitor.wait();
+            try {
+                return output;
+            } finally {
+                output = null;
+            }
+        }
+    }
+
+    /**
+     * Retrieves the next message.
+     * @return next message, <code>null</code> if the call was interrupted.
+     * @param timeout the timeout to wait at max in msec, waits forever, if
+     *          timeout is zero
+     * @throws InterruptedException
+     *         waiting interrupted
+     * @throws TimeoutException
+     *         waiting time exceeded
+     */
+    public SsmlDocument nextMessage(final long timeout)
+            throws InterruptedException, TimeoutException {
+        synchronized (monitor) {
+            monitor.wait(timeout);
+            if (output == null) {
+                throw new TimeoutException("timeout of '" + timeout
+                        + "' msec exceeded while waiting for next message");
+            }
             try {
                 return output;
             } finally {
