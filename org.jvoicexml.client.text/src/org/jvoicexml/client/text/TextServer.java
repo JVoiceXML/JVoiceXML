@@ -160,12 +160,13 @@ public final class TextServer extends Thread {
      * @since 0.7
      */
     private void fireStarted() {
-        synchronized (listener) {
-            for (TextListener current : listener) {
-                current.started();
-            }
-        }
         synchronized (startedLock) {
+            started = true;
+            synchronized (listener) {
+                for (TextListener current : listener) {
+                    current.started();
+                }
+            }
             startedLock.notifyAll();
         }
     }
@@ -293,7 +294,6 @@ public final class TextServer extends Thread {
 
         LOGGER.info("text server started at port '" + port + "'");
         fireStarted();
-        started = true;
 
         try {
             while ((server != null) && !isInterrupted()) {
@@ -422,6 +422,9 @@ public final class TextServer extends Thread {
      */
     public void waitStarted() throws InterruptedException {
         synchronized (startedLock) {
+            if (started) {
+                return;
+            }
             startedLock.wait();
         }
     }
