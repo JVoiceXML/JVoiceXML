@@ -1,6 +1,7 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.TimeoutException;
 
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -13,6 +14,8 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 public final class InputMonitor implements TextListener {
     /** Synchronization. */
     private final Object monitor;
+    /** Set to true, if input is expected. */
+    private boolean expectingInput;
 
     /**
      * Constructs a new object.
@@ -32,6 +35,26 @@ public final class InputMonitor implements TextListener {
         }
     }
 
+    /**
+     * Waits until JVoiceXml is expecting input.
+     * @param timeout the timeout to wait at max in msec, waits forever, if
+     *          timeout is zero
+     * @throws InterruptedException
+     *         waiting interrupted
+     * @throws TimeoutException
+     *         waiting time exceeded
+     */
+    public void waitUntilExpectingInput(final long timeout)
+            throws InterruptedException, TimeoutException {
+        synchronized (monitor) {
+            monitor.wait(timeout);
+            if (!expectingInput) {
+                throw new TimeoutException("timeout of '" + timeout
+                        + "' msec exceeded");
+            }
+        }
+    }
+
     @Override
     public void started() {
     }
@@ -47,6 +70,7 @@ public final class InputMonitor implements TextListener {
     @Override
     public void expectingInput() {
         synchronized (monitor) {
+            expectingInput = false;
             monitor.notifyAll();
         }
     }

@@ -29,6 +29,7 @@ package org.jvoicexml.voicexmlunit;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.TimeoutException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -150,15 +151,31 @@ public final class Call  {
     }
 
     /**
-     * Sends the given utterance to JVoiceXML.
+     * Waits until an input is expected and then sends the given utterance to
+     * JVoiceXML.
      * @param utterance the utterance to send
      */
     public void say(final String utterance) {
+        say(utterance, 0);
+    }
+
+    /**
+     * Waits until an input is expected and then sends the given utterance to
+     * JVoiceXML.
+     * @param utterance the utterance to send
+     * @param timeout max timeout to wait in msec, waits forever, if timeout is
+     *                  zero
+     */
+    public void say(final String utterance, final long timeout) {
         Assert.assertNotNull("no active session", session);
         try {
-            inputMonitor.waitUntilExpectingInput();
+            if (timeout == 0) {
+                inputMonitor.waitUntilExpectingInput();
+            } else {
+                inputMonitor.waitUntilExpectingInput(timeout);
+            }
             server.sendInput(utterance);
-        } catch (InterruptedException | IOException e) {
+        } catch (InterruptedException | IOException | TimeoutException e) {
             throw new AssertionError(e);
         }
     }
