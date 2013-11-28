@@ -50,7 +50,7 @@ public final class InputMonitor implements TextListener {
             monitor.wait(timeout);
             if (!expectingInput) {
                 throw new TimeoutException("timeout of '" + timeout
-                        + "' msec exceeded");
+                        + "' msec exceeded while waiting for expected input");
             }
         }
     }
