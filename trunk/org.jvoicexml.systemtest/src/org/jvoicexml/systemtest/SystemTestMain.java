@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -19,14 +19,15 @@
  */
 package org.jvoicexml.systemtest;
 
+import java.net.URL;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.JVoiceXmlMain;
 import org.jvoicexml.JVoiceXmlMainListener;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 /**
  * Main class of the JVoiceXML System test.
@@ -40,14 +41,14 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(SystemTestMain.class);
 
-    /** Semaphore. */
-    private final Object lock;
+    /** JVoiceXML shutdown monitor. */
+    private final Object monitor;
 
     /**
      * Construct a new object.
      */
     private SystemTestMain() {
-        lock = new Object();
+        monitor = new Object();
     }
 
     /**
@@ -72,11 +73,9 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
         try {
             final JVoiceXml interpreter = test.startInterpreter();
             cm.setJVoiceXml(interpreter);
-            cm.start();
+            cm.performTests();
             LOGGER.info("Waiting for JVoiceXML shutdown...");
-            synchronized (test.lock) {
-                test.lock.wait();
-            }
+            test.waitInterpreterShutdown();
             LOGGER.info("...JVoiceXML shutdown");
         } catch (InterruptedException e) {
             LOGGER.fatal(e.getMessage(), e);
@@ -96,11 +95,22 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
         jvxml.addListener(this);
         jvxml.start();
         LOGGER.info("Waiting for JVoiceXML startup complete...");
-        synchronized (lock) {
-            lock.wait();
+        synchronized (monitor) {
+            monitor.wait();
         }
         LOGGER.info("...JVoiceXML started");
         return jvxml;
+    }
+
+    /**
+     * Waits until the interpreter shutdown.
+     * @throws InterruptedException
+     *         waiting interrupted
+     */
+    private void waitInterpreterShutdown() throws InterruptedException {
+        synchronized (monitor) {
+            monitor.wait();
+        }
     }
 
     /**
@@ -114,15 +124,17 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
             Logger.getLogger(SystemTestConfigLoader.class);
 
         /** The factory to retrieve configured objects. */
-        private final XmlBeanFactory factory;
+        private final ApplicationContext context;
 
         /**
          * Construct a new object.
          * @param filename configuration file name.
          */
         public SystemTestConfigLoader(final String filename) {
-            final Resource res = new ClassPathResource(filename);
-            factory = new XmlBeanFactory(res);
+            final URL resource =
+                    SystemTestConfigLoader.class.getResource(filename);
+            context = new FileSystemXmlApplicationContext(
+                    resource.toExternalForm());
         }
 
         /**
@@ -142,7 +154,7 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
             final Object object;
 
             try {
-                object = factory.getBean(key, baseClass);
+                object = context.getBean(key, baseClass);
             } catch (org.springframework.beans.BeansException be) {
                 LOGGER.error(be.getMessage(), be);
                 return null;
@@ -157,8 +169,8 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
      */
     @Override
     public void jvxmlStarted() {
-        synchronized (lock) {
-            lock.notifyAll();
+        synchronized (monitor) {
+            monitor.notifyAll();
         }
     }
 
@@ -167,8 +179,8 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
      */
     @Override
     public void jvxmlTerminated() {
-        synchronized (lock) {
-            lock.notifyAll();
+        synchronized (monitor) {
+            monitor.notifyAll();
         }
     }
 

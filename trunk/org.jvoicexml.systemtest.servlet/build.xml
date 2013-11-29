@@ -117,7 +117,7 @@ You're using ${ant.java.version}
     <target name="unpack-testsuite" depends="-init,get-testsuite"
         unless="testsuite.present">
         <gunzip src="${testsuite}.tar.gz"/>
-        <untar src="${testsuite}.tar" dest="WebContent">
+        <untar src="${testsuite}.tar" dest="WebContent" overwrite="true">
           <mapper type="glob" from="${testsuite.subdirectory}/*" to="*"/>
         </untar>
         <!-- Create a jar from the obtained class files-->
@@ -142,8 +142,11 @@ You're using ${ant.java.version}
         <copy file="web.xml" todir="WebContent/WEB-INF" overwrite="true"/>
         <delete file="web.xml"/>
          <!-- Adapt the definition of umbiguous type 'Part' -->
-        <replace dir="WebContent" value=" com.oreilly.servlet.multipart.Part ">
-          <include name="**/*.ircgi"/>
+        <replace dir="WebContent" summary="true"
+            value=" com.oreilly.servlet.multipart.Part ">
+            <fileset dir="WebContent">
+                <include name="*.cgi"/>
+            </fileset>
           <replacetoken><![CDATA[ Part ]]></replacetoken>
         </replace>
     </target>
