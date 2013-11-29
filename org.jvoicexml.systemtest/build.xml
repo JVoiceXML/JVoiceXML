@@ -74,15 +74,29 @@ personal-props/README.txt
 
     <target name="createSystemTestConfiguration" depends="-setup">
         <echo file="${jvxml.core.dir}/personal-props/platforms.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<platform name="org.jvoicexml.implementation.text">
-  <subproject name="org.jvoicexml.client.text" order="pre" />
-</platform>
+<platforms>
+    <platform name="org.jvoicexml.implementation.text">
+        <subproject name="org.jvoicexml.client.text" order="pre" />
+    </platform>
+</platforms>
 ]]>
         </echo>
         <ant antfile="${jvxml.core.dir}/configuration.xml"
             inheritall="false" inheritrefs="false" dir="${jvxml.core.dir}">
           <property name="enableJndi" value="false"/>
         </ant>
+        <!-- Further adaptations to the run.xml that are not handled by
+             the configuration file -->
+        <xslt in="${jvxml.core.dir}/run.xml"
+            out="${jvxml.core.dir}/run-tmp.xml"
+        	style="${etc}/patch-runscript.xsl">
+            <outputproperty name="method" value="xml" />
+            <outputproperty name="standalone" value="no" />
+            <outputproperty name="encoding" value="UTF-8" />
+            <outputproperty name="indent" value="yes" />
+            <param name="log4j.configuration" expression="${basedir}/config/log4j.xml" />
+        </xslt>
+        <copy file="${jvxml.core.dir}/run-tmp.xml" tofile="${jvxml.core.dir}/run.xml" overwrite="true" />
       <!-- Remove classloader issues in the config file -->
       <xslt in="${config}/text-implementation.xml"
         out="${config}/text-test-implementation.xml"
@@ -93,14 +107,6 @@ personal-props/README.txt
           <outputproperty name="indent" value="yes" />
       </xslt>
       <delete file="${config}/text-implementation.xml"/>
-      <!--xslt in="${config}/log4j.xml"
-        out="config/log4j-patch.xml"
-        style="etc/patch-log4j.xsl">
-          <outputproperty name="method" value="xml" />
-          <outputproperty name="standalone" value="no" />
-          <outputproperty name="encoding" value="UTF-8" />
-          <outputproperty name="indent" value="yes" />
-      </xslt-->
     </target>
 
     <target name="compile-jvxml" depends="createSystemTestConfiguration"

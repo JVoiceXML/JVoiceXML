@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 
 /**
- * System Test configuration.
+ * Caller to JVoiceXML that actually performs the system test.
  *
  * @author Zhang Nan
  * @author Dirk Schnelle-Walka
@@ -40,33 +40,23 @@ public final class SystemTestCallManager {
     /** Reference to jvoicexml. */
     private JVoiceXml jvxml;
 
-    /**
-     * the port of text server.
-     */
+    /** The port of text server. */
     private int textServerport;
 
-    /**
-     * test cases expression.
-     */
+    /** Test cases expression. */
     private String testcases;
 
-    /**
-     * test report instance.
-     */
+    /** Test report instance. */
     private TestCaseListener listener;
 
-    /**
-     * test case library instance.
-     */
+    /** Test case library instance. */
     private TestCaseLibrary testcaseLibrary;
 
-    /**
-     * script factory.
-     */
+    /** Script factory.  */
     private ScriptFactory scriptFactory;
 
     /**
-     * Sets the refererence to JVoiceXml.
+     * Sets the reference to JVoiceXml.
      * @param jvoicexml reference to JVoiceXML.
      * @since 0.7.3
      */
@@ -77,7 +67,7 @@ public final class SystemTestCallManager {
     /**
      * Starts the test cases.
      */
-    public void start() {
+    public void performTests() {
         final Collection<TestCase> jobs = testcaseLibrary.fetch(testcases);
         LOGGER.info("There were " + jobs.size() + " test case(s).");
 
