@@ -58,6 +58,7 @@ org.jvoicexml/personal-props/README.txt
         <outputproperty name="standalone" value="no" />
         <outputproperty name="encoding" value="UTF-8" />
         <outputproperty name="indent" value="yes" />
+        <param name="spring.lib.dir" expression="${basedir}/${spring.lib.dir}" />
     </xslt>
     <copy file="${jvxml.core.dir}/run-tmp.xml"
       tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
