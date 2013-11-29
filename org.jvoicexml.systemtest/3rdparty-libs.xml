@@ -32,6 +32,7 @@ This file contains the 3rd party libary definitions, used by the systemtest.
             <include name="spring-core-3.2.1.RELEASE.jar" />
             <include name="spring-beans-3.2.1.RELEASE.jar" />
             <include name="spring-context-3.2.1.RELEASE.jar" />
+            <include name="spring-expression-3.2.1.RELEASE.jar" />
         </fileset>
     </target>
 </project>

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-20013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -26,7 +26,7 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.client.text.TextServer;
 
 /**
- * AutoTestThread as the name. It will run all of test case in testcaseList.
+ * Runs all of test case in testcaseList.
  *
  * @author Zhang Nan
  * @author Dirk Schnelle-Walka
@@ -64,7 +64,7 @@ class AutoTestThread extends Thread {
     private ScriptFactory scriptFactory;
 
     /**
-     * Construct a new object.
+     * Constructs a new object.
      *
      * @param interpreter
      *            the JVoiceXML interpreter.
@@ -106,7 +106,7 @@ class AutoTestThread extends Thread {
             final Script script = scriptFactory.create(
                     Integer.toString(testcase.getId()));
             if (script == null) {
-                final Result skip = new Skip("not found suitable script.");
+                final Result skip = new Skip("Test script not found");
                 listener.testStopped(skip);
                 continue;
             }
