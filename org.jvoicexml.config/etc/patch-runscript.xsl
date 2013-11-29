@@ -21,6 +21,7 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
+  <xsl:param name="spring.lib.dir"/>
   <!-- Adapt the jvmarg values -->
   <xsl:template match="java[@classname='org.jvoicexml.startup.Startup']">
     <xsl:copy>
@@ -29,7 +30,7 @@
         <xsl:comment>Added org.jvoicexml.config configuration settings</xsl:comment>
         <classpath>
         <pathelement location="dist/org.jvoicexml.config.jar"/>
-          <fileset dir="../org.jvoicexml.config/3rdparty/springframework3.2.1/lib">
+          <fileset dir="{$spring.lib.dir}">
             <include name="spring-core-3.2.1.RELEASE.jar" />
             <include name="spring-beans-3.2.1.RELEASE.jar" />
             <include name="spring-context-3.2.1.RELEASE.jar" />
