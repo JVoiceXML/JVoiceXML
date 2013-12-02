@@ -4,8 +4,11 @@
   </description>
 
     <!-- allow the user to override setting in an own propertiesfile. -->
-    <property file="../org.jvoicexml/personal-props/ant.properties" />
-    <property file="../org.jvoicexml/config-props/ant.properties" />
+    <property name="jvxml.core.dir" value="../org.jvoicexml"/>
+    <property file="${jvxml.core.dir}/personal-props/ant.properties" />
+    <property file="${jvxml.core.dir}/config-props/ant.properties" />
+
+    <import file="${jvxml.core.dir}/3rdparty-libs.xml"/>
 
     <target name="-probe-proxy">
       <condition property="proxy.enabled">
@@ -107,6 +110,26 @@ You're using ${ant.java.version}
         </javac>
     </target>
     
+
+    <target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -initcheckstyle" if="checkstyle.present">
+            <property name="checkstyle-target.dir" value="${jvxml.core.dir}/dist/checkstyle/${component}" />
+        <mkdir dir="${checkstyle-target.dir}" />
+        <property name="checkstyle.data" value="${checkstyle-target.dir}/checkstyle-data.xml" />
+        <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml" failonviolation="false">
+            <classpath>
+                <pathelement path="${project.classpath}" />
+                <pathelement location="${build}" />
+            </classpath>
+            <fileset dir="${src}">
+                <include name="org/jvoicexml/**/*.java" />
+            </fileset>
+            <formatter type="xml" tofile="${checkstyle.data}" />
+        </checkstyle>
+        <xslt style="${jvxml.core.dir}/etc/checkstyle-frames.xsl" in="${checkstyle.data}" out="${checkstyle-target.dir}/report.html">
+            <param name="output.dir" expression="${checkstyle-target.dir}" />
+        </xslt>
+    </target>
+
     <target name="get-testsuite" depends="-init,-proxy" unless="testsuite.present">
         <echo message="get testsuite zip file from ${testsuite.location}" />
         <get src="${testsuite.location}" 
