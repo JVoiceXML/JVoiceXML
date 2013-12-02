@@ -52,7 +52,7 @@ This file builds the distribution files for JVoiceXML.
       <replacefilter token="@jvxml.version@" value="${jvxml.version}"/>
     </replace>
 
-    <copy todir="${distFolder}/bin">
+    <copy todir="${distFolder}/bin">sr
       <fileset dir="${etc}">
         <include name="**/*.sh" />
         <include name="**/*.bat" />
@@ -304,6 +304,9 @@ servlet.include=servlet-api.jar
     </antcall>
     <antcall target="-copyComponentSourceCode">
       <param name="currentcomponent" value="org.jvoicexml.config"/>
+    </antcall>
+    <antcall target="-copyComponentSourceCode">
+      <param name="currentcomponent" value="org.jvoicexml.client"/>
     </antcall>
     <antcall target="-copyComponentSourceCode">
       <param name="currentcomponent" value="org.jvoicexml.xml"/>
