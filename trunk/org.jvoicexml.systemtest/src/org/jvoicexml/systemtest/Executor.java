@@ -84,7 +84,7 @@ public final class Executor implements TimeoutListener {
         LOGGER.info("create session and call '" + testURI + "'");
         Call call = null;
         try {
-            call = new Call();
+            call = new Call("127.0.0.1", 5000);
             call.call(testURI);
             script.perform(call);
         } catch (Throwable t) {

@@ -33,16 +33,13 @@ import org.jvoicexml.voicexmlunit.Call;
 
 
 /**
- * script for answer interpreter as input.
+ * Actual test script to be executed per test case.
  * @author lancer
  * @author Dirk Schnelle-Walka
  */
 public interface Script {
-
-    /**
-     * @return true if the game is over
-     */
-    boolean isFinished();
+    /** Default timeout for hearing utterances or waiting for expected input. */
+    long DEFAULT_TIMEOUT = 2000;
 
     /**
      * Performs the actual test.
