@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,7 +35,8 @@ import org.apache.log4j.Logger;
  */
 final class ConnectionTimeoutMonitor extends Thread implements StatusListener {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(ConnectionTimeoutMonitor.class);
+    private static final Logger LOGGER =
+            Logger.getLogger(ConnectionTimeoutMonitor.class);
 
     /** The listener to notify in case of a timeout. */
     private final TimeoutListener executor;
@@ -45,6 +46,9 @@ final class ConnectionTimeoutMonitor extends Thread implements StatusListener {
 
     /** The current status. */
     private ClientConnectionStatus status;
+
+    /** Wait lock.  */
+    private final Object waitLock;
 
     /** <code>true</code> if the monitor has been stopped. */
     private boolean stopped;
@@ -60,12 +64,9 @@ final class ConnectionTimeoutMonitor extends Thread implements StatusListener {
         setName("TimeoutMonitor");
         executor = lst;
         time = maxTime;
+        waitLock = new Object();
     }
 
-    /**
-     * wait lock.
-     */
-    private final Object waitLock = new Object();
 
     /**
      * {@inheritDoc}
@@ -110,8 +111,8 @@ final class ConnectionTimeoutMonitor extends Thread implements StatusListener {
      * Stops the timeout monitor.
      */
     public void stopMonitor() {
-        stopped = true;
         synchronized (waitLock) {
+            stopped = true;
             waitLock.notifyAll();
         }
     }
