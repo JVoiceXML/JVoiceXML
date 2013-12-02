@@ -18,11 +18,8 @@ This file contains the 3rd party libary definitions, used by the systemtest.
           <path location="../org.jvoicexml.config/classes"/>
           <path location="../org.jvoicexml.xml/classes"/>
           <path location="../org.jvoicexml.jndi/classes"/>
+          <path location="../org.jvoicexml.voicexmlunit/classes"/>
         </path>
-
-        <fileset dir="${3rdparty.dir}/junit4.4/lib" id="junit.lib">
-            <include name="**/*.jar" />
-        </fileset>
 
     	<!-- spring framework library -->
         <property name="spring.dir"
