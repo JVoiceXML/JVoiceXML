@@ -81,15 +81,24 @@ public final class Call  {
 
     /**
      * Constructs a new call.
+     * @param hostname the hostname to use for the {@link TextServer}
      * @param port number to use for the {@link TextServer}.
      */
-    public Call(final int port) {
+    public Call(final String hostname, final int port) {
         portNumber = port;
-        server = new TextServer(portNumber);
+        server = new TextServer(hostname, portNumber);
         outputBuffer = new OutputMessageBuffer();
         server.addTextListener(outputBuffer);
         inputMonitor = new InputMonitor();
         server.addTextListener(inputMonitor);
+    }
+
+    /**
+     * Constructs a new call.
+     * @param port number to use for the {@link TextServer}.
+     */
+    public Call(final int port) {
+        this(null, port);
     }
 
     /**
