@@ -172,7 +172,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("removed pending message " + sequenceNumber);
                 }
-                textOutput.checkEmptyQueue(speakable);
+                if (textOutput != null) {
+                    textOutput.checkEmptyQueue(speakable);
+                }
                 if (pendingMessages.isEmpty()) {
                     pendingMessages.notifyAll();
                 }
