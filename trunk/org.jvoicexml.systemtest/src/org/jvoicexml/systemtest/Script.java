@@ -29,6 +29,8 @@
 
 package org.jvoicexml.systemtest;
 
+import org.jvoicexml.voicexmlunit.Call;
+
 
 /**
  * script for answer interpreter as input.
@@ -43,9 +45,10 @@ public interface Script {
     boolean isFinished();
 
     /**
-     * Perform according to the event.
-     * @param event interpreter output event.
-     * @return result of perform.
+     * Performs the actual test.
+     * @param call the actual call
+     * @exception AssertionError
+     *            error processing the script
      */
-    Answer perform(final String event);
+    void perform(final Call call) throws AssertionError;
 }

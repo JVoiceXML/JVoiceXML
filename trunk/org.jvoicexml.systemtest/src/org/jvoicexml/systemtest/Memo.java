@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * the TestResult implements with recordable about communications.
+ * The TestResult implements with recordable about communications.
  * @author lancer
  *
  */

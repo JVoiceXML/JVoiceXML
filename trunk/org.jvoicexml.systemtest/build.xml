@@ -48,6 +48,7 @@ personal-props/README.txt
             <fileset refid="jlibrtp.lib" />
             <fileset refid="jchardet.lib" />
             <fileset refid="spring.lib"/>
+            <fileset refid="junit.lib"/>
             <pathelement location="${dist}/org.jvoicexml.client.text.jar" />
             <pathelement location="${build}" />
         </path>
@@ -83,7 +84,7 @@ personal-props/README.txt
         </echo>
         <ant antfile="${jvxml.core.dir}/configuration.xml"
             inheritall="false" inheritrefs="false" dir="${jvxml.core.dir}">
-          <property name="enableJndi" value="false"/>
+          <property name="enableJndi" value="true"/>
         </ant>
         <!-- Further adaptations to the run.xml that are not handled by
              the configuration file -->
