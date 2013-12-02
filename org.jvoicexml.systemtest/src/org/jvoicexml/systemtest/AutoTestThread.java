@@ -23,7 +23,6 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.client.text.TextServer;
 
 /**
  * Runs all of test case in testcaseList.
@@ -116,26 +115,19 @@ class AutoTestThread extends Thread {
             LOGGER.info("start testcase: '" + testcase.toString() + "'");
             LOGGER.info("start uri     : '" + testcase.getStartURI() + "'");
             LOGGER.info("start TextServer at port " + textServerPort);
-            final TextServer textServer = new TextServer(textServerPort);
 
             final Executor executor =
-                new Executor(testcase, script, textServer);
+                new Executor(testcase, script);
             final ConnectionTimeoutMonitor timeoutMonitor =
                 new ConnectionTimeoutMonitor(executor, 5 * 60 * 1000);
             executor.addStatusListener(timeoutMonitor);
 
-            textServer.addTextListener(executor);
             try {
                 timeoutMonitor.start();
-                textServer.start();
                 executor.execute(jvxml);
                 result = executor.getResult();
             } finally {
                 timeoutMonitor.stopMonitor();
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("stop text server");
-                }
-                textServer.stopServer();
 
                 LOGGER.info("testcase " + testcase.getId() + " finished");
                 LOGGER.info(result.toString());

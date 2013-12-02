@@ -21,8 +21,8 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
-  <!-- Remove the repository entry -->
-  <xsl:template match="repository">
+  <!-- Remove the text client jar entry -->
+  <xsl:template match="classpath[text() = '../org.jvoicexml/dist/org.jvoicexml.client.text.jar']">
   </xsl:template>
 
   <!-- This template passes anything unmatched -->

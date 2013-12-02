@@ -19,19 +19,12 @@
  */
 package org.jvoicexml.systemtest;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.Session;
-import org.jvoicexml.client.text.TextListener;
-import org.jvoicexml.client.text.TextServer;
-import org.jvoicexml.xml.ssml.Speak;
-import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.voicexmlunit.Call;
 
 /**
  * Executer for one test case.
@@ -40,68 +33,45 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @author Dirk Schnelle-Walka
  *
  */
-public final class Executor implements TextListener, TimeoutListener {
+public final class Executor implements TimeoutListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(Executor.class);
 
-    /**
-     * max wait time.
-     */
+    /** Max wait time. */
     public static final long MAX_WAIT_TIME = 5000L;
 
-    /**
-     * delay answer time.
-     */
+    /** Delay answer time. */
     public static final long DELAY_ANSWER_TIME = 500L;
 
-    /**
-     * the case be test.
-     */
+    /** The current test case. */
     private final TestCase testcase;
 
-    /**
-     * the script used with this test case.
-     */
+    /** The script used with this test case. */
     private final Script script;
-
-    /**
-     * the test server.
-     */
-    private final TextServer textServer;
-
     /**
      * the test result.
      */
     private final Memo memo = new Memo();
 
-    /**
-     * status change listeners.
-     */
+    /** Status change listeners. */
     private final List<StatusListener> listeners
         = new java.util.ArrayList<StatusListener>();
 
-    /**
-     * current status.
-     */
+    /** The current status. */
     private ClientConnectionStatus status = ClientConnectionStatus.INITIAL;
 
-    /**
-     * wait lock.
-     */
+    /** Wait lock. */
     private final Object waitLock = new Object();
 
     /**
      * Constructs a new object.
      * @param test the test case.
      * @param answerScript the answer script of this test case.
-     * @param server testServer.
      */
     public Executor(final TestCase test,
-            final Script answerScript,
-            final TextServer server) {
+            final Script answerScript) {
         testcase = test;
         script = answerScript;
-        textServer = server;
     }
 
     /**
@@ -109,24 +79,21 @@ public final class Executor implements TextListener, TimeoutListener {
      * @param jvxml the interpreter.
      */
     public void execute(final JVoiceXml jvxml) {
-        Session session = null;
         final URI testURI = testcase.getStartURI();
 
         LOGGER.info("create session and call '" + testURI + "'");
+        Call call = null;
         try {
-            final ConnectionInformation client =
-                textServer.getConnectionInformation();
-            session = jvxml.createSession(client);
-            session.call(testURI);
-            session.waitSessionEnd();
+            call = new Call();
+            call.call(testURI);
+            script.perform(call);
         } catch (Throwable t) {
             LOGGER.error("Error calling the interpreter", t);
             memo.setFail("call session '" + t.getMessage() + "'");
             return;
         } finally {
-            if (session != null) {
-                session.hangup();
-                session = null;
+            if (call != null) {
+                call.hangup();
             }
         }
     }
@@ -137,87 +104,6 @@ public final class Executor implements TextListener, TimeoutListener {
      */
     public void addStatusListener(final StatusListener listener) {
         listeners.add(listener);
-    }
-
-    // implements TextListener method.
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void outputSsml(final SsmlDocument ssml) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received SsmlDocument : " + ssml.toString());
-        }
-        final Speak speak = ssml.getSpeak();
-        final String text = speak.getTextContent();
-        processReceivedText(text);
-    }
-
-    /**
-     * Processes the received text.
-     * @param text the received text
-     * @since 0.7.3
-     */
-    private void processReceivedText(final String text) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received Text: '" + text + "'");
-        }
-        memo.appendCommMsg(text);
-
-        if (memo.getAssert() == TestResult.NEUTRAL) {
-            if (script != null && !script.isFinished()) {
-                final Answer answer = script.perform(text);
-                feedback(answer);
-            }
-        } else {
-            status = ClientConnectionStatus.WAIT_CLIENT_DISCONNECT;
-        }
-        updateStatus(status);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void started() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("text server started.");
-        }
-        memo.appendCommMsg("text server started.");
-        final ClientConnectionStatus newStatus =
-            ClientConnectionStatus.WAIT_CLIENT_CONNECT;
-        updateStatus(newStatus);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void connected(final InetSocketAddress remote) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("connected to " + remote);
-        }
-        final ClientConnectionStatus newStatus =
-            ClientConnectionStatus.WAIT_CLIENT_OUTPUT;
-        memo.appendCommMsg("connected to " + remote);
-        updateStatus(newStatus);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void disconnected() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("disconnected");
-        }
-        final ClientConnectionStatus newStatus = ClientConnectionStatus.DONE;
-        memo.appendCommMsg("disconnected.");
-        if (memo.getAssert() == TestResult.NEUTRAL) {
-            memo.setFail(Result.DISCONNECT_BEFORE_ASSERT);
-        }
-        updateStatus(newStatus);
     }
 
     /**
@@ -261,57 +147,10 @@ public final class Executor implements TextListener, TimeoutListener {
     }
 
     /**
-     * answer the interpreter output.
-     * @param answer the answer.
-     */
-    private void feedback(final Answer answer) {
-        if (answer != null) {
-            final String speak = answer.getAnswer();
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("guess answer = " + "'" + speak + "'");
-            }
-            memo.appendCommMsg("ANSWER:'" + speak + "'");
-            try {
-                Thread.sleep(DELAY_ANSWER_TIME);
-            } catch (InterruptedException e) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("interrupted in delay before an answer", e);
-                }
-                textServer.stopServer();
-                return;
-            }
-            try {
-                LOGGER.info("send : '" + speak + "'");
-                textServer.sendInput(speak);
-            } catch (IOException e) {
-                LOGGER.error("error sending output", e);
-            }
-        } else {
-            LOGGER.warn("unable to guess a suiteable answer.");
-        }
-    }
-
-    /**
      * Retrieves the intermediate result of the test case.
      * @return the result of test case.
      */
     public Result getResult() {
         return memo;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void expectingInput() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void inputClosed() {
     }
 }
