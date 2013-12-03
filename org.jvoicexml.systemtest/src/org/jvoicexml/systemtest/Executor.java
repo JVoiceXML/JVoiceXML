@@ -61,7 +61,7 @@ public final class Executor implements TimeoutListener {
     private ClientConnectionStatus status = ClientConnectionStatus.INITIAL;
 
     /** Wait lock. */
-    private final Object waitLock = new Object();
+    private final Object waitLock;
 
     /**
      * Constructs a new object.
@@ -72,6 +72,7 @@ public final class Executor implements TimeoutListener {
             final Script answerScript) {
         testcase = test;
         script = answerScript;
+        waitLock = new Object();
     }
 
     /**
@@ -95,6 +96,7 @@ public final class Executor implements TimeoutListener {
             if (call != null) {
                 call.hangup();
             }
+            updateStatus(ClientConnectionStatus.DONE);
         }
     }
 
@@ -136,12 +138,11 @@ public final class Executor implements TimeoutListener {
      * @param newStatus the new status
      */
     private void updateStatus(final ClientConnectionStatus newStatus) {
-        final ClientConnectionStatus oldStatus = status;
-        status = newStatus;
         for (StatusListener listener : listeners) {
-            listener.update(oldStatus, status);
+            listener.update(status, newStatus);
         }
         synchronized (waitLock) {
+            status = newStatus;
             waitLock.notifyAll();
         }
     }

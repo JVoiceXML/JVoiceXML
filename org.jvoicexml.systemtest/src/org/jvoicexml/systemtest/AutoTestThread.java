@@ -118,8 +118,8 @@ class AutoTestThread extends Thread {
 
             final Executor executor =
                 new Executor(testcase, script);
-            final ConnectionTimeoutMonitor timeoutMonitor =
-                new ConnectionTimeoutMonitor(executor, 5 * 60 * 1000);
+            final TimeoutMonitor timeoutMonitor =
+                new TimeoutMonitor(executor, 1 * 60 * 1000);
             executor.addStatusListener(timeoutMonitor);
 
             try {
@@ -154,7 +154,7 @@ class AutoTestThread extends Thread {
      *            create script.
      */
     public void setScriptFactory(final ScriptFactory factory) {
-        this.scriptFactory = factory;
+        scriptFactory = factory;
     }
 
     /**
