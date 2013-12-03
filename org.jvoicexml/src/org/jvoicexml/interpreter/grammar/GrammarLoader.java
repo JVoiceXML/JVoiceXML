@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -193,7 +193,7 @@ final class GrammarLoader {
             return null;
         }
         final ScriptingEngine scripting = context.getScriptingEngine();
-        final Object value = scripting.eval(srcexpr);
+        final Object value = scripting.eval(srcexpr + ";");
         if (value == null || value == Context.getUndefinedValue()) {
             LOGGER.warn("srcexpr does not describe a valid uri");
             return null;
