@@ -3,7 +3,15 @@ package org.jvoicexml.systemtest.script;
 import org.jvoicexml.systemtest.Script;
 import org.jvoicexml.voicexmlunit.Call;
 
-public final class Test40Script implements Script {
+/**
+ * The default implementation of a script that simply listens for
+ * <em>pass</em>.
+ * 
+ * @author Dirk Schnelle-Walka
+ * @version $Revision: $
+ * @since 0.7.6
+ */
+public final class DefaultScript implements Script {
     /**
      * {@inheritDoc}
      */

@@ -33,10 +33,10 @@ import org.apache.log4j.Logger;
  * @author Dirk Schnelle-Walka
  *
  */
-final class ConnectionTimeoutMonitor extends Thread implements StatusListener {
+final class TimeoutMonitor extends Thread implements StatusListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(ConnectionTimeoutMonitor.class);
+            Logger.getLogger(TimeoutMonitor.class);
 
     /** The listener to notify in case of a timeout. */
     private final TimeoutListener executor;
@@ -58,7 +58,7 @@ final class ConnectionTimeoutMonitor extends Thread implements StatusListener {
      * @param lst the listener to inform in case of a timeout
      * @param maxTime max time to wait
      */
-    public ConnectionTimeoutMonitor(final TimeoutListener lst,
+    public TimeoutMonitor(final TimeoutListener lst,
             final long maxTime) {
         setDaemon(true);
         setName("TimeoutMonitor");
@@ -74,8 +74,8 @@ final class ConnectionTimeoutMonitor extends Thread implements StatusListener {
     @Override
     public void update(final ClientConnectionStatus oldStatus,
             final ClientConnectionStatus newStatus) {
-        status = newStatus;
         synchronized (waitLock) {
+            status = newStatus;
             waitLock.notifyAll();
         }
     }

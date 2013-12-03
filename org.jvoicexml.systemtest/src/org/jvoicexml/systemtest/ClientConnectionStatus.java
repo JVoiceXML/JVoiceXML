@@ -52,6 +52,4 @@ public enum ClientConnectionStatus {
      * all step down status.
      */
     DONE;
-
-
 }
