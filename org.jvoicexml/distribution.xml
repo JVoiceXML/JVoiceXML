@@ -52,7 +52,7 @@ This file builds the distribution files for JVoiceXML.
       <replacefilter token="@jvxml.version@" value="${jvxml.version}"/>
     </replace>
 
-    <copy todir="${distFolder}/bin">sr
+    <copy todir="${distFolder}/bin">
       <fileset dir="${etc}">
         <include name="**/*.sh" />
         <include name="**/*.bat" />
