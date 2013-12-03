@@ -4,6 +4,8 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.TimeoutException;
 
 import org.jvoicexml.client.text.TextListener;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -16,6 +18,8 @@ public final class InputMonitor implements TextListener {
     private final Object monitor;
     /** Set to true, if input is expected. */
     private boolean expectingInput;
+    /** Caught event while waiting for an input. */
+    private JVoiceXMLEvent event;
 
     /**
      * Constructs a new object.
@@ -43,11 +47,16 @@ public final class InputMonitor implements TextListener {
      *         waiting interrupted
      * @throws TimeoutException
      *         waiting time exceeded
+     * @throws JVoiceXMLEvent
+     *         error while waiting
      */
     public void waitUntilExpectingInput(final long timeout)
-            throws InterruptedException, TimeoutException {
+            throws InterruptedException, TimeoutException, JVoiceXMLEvent {
         synchronized (monitor) {
             monitor.wait(timeout);
+            if (event != null) {
+                throw event;
+            }
             if (!expectingInput) {
                 throw new TimeoutException("timeout of '" + timeout
                         + "' msec exceeded while waiting for expected input");
@@ -81,6 +90,10 @@ public final class InputMonitor implements TextListener {
 
     @Override
     public void disconnected() {
+        synchronized (monitor) {
+            event = new ConnectionDisconnectHangupEvent();
+            monitor.notifyAll();
+        }
     }
 
 }
