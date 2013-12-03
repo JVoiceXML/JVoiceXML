@@ -6,7 +6,7 @@
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2010 JVoiceXML group
+ * Copyright (C) 2005-2013 JVoiceXML group
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -314,7 +314,7 @@ public final class InputDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'input' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2010 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2013 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final InputDemo demo = new InputDemo();
