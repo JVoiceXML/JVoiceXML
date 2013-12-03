@@ -30,6 +30,8 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.TimeoutException;
 
 import org.jvoicexml.client.text.TextListener;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -43,6 +45,8 @@ class OutputMessageBuffer implements TextListener {
     private SsmlDocument output;
     /** Synchronization. */
     private Object monitor;
+    /** Caught event while waiting for an input. */
+    private JVoiceXMLEvent event;
 
     /**
      * Constructs a new object.
@@ -56,14 +60,24 @@ class OutputMessageBuffer implements TextListener {
      * @return next message, <code>null</code> if the call was interrupted.
      * @throws InterruptedException
      *          interrupted while waiting
+     * @throws JVoiceXMLEvent
+     *          error waiting
      */
-    public SsmlDocument nextMessage() throws InterruptedException {
+    public SsmlDocument nextMessage()
+            throws InterruptedException, JVoiceXMLEvent {
         synchronized (monitor) {
+            if (event != null) {
+                throw event;
+            }
             monitor.wait();
+            if (event != null) {
+                throw event;
+            }
             try {
                 return output;
             } finally {
                 output = null;
+                event = null;
             }
         }
     }
@@ -135,5 +149,9 @@ class OutputMessageBuffer implements TextListener {
      */
     @Override
     public void disconnected() {
+        synchronized (monitor) {
+            event = new ConnectionDisconnectHangupEvent();
+            monitor.notifyAll();
+        }
     }
 }

@@ -42,6 +42,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.xml.ssml.Speak;
@@ -142,7 +143,16 @@ public final class Call  {
         Assert.assertNotNull("no active session", session);
         try {
             return outputBuffer.nextMessage();
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | JVoiceXMLEvent e) {
+            JVoiceXMLEvent lastError;
+            try {
+                lastError = session.getLastError();
+            } catch (ErrorEvent ex) {
+                throw new AssertionError(ex);
+            }
+            if (lastError != null) {
+                throw new AssertionError(lastError);
+            }
             throw new AssertionError(e);
         }
     }
@@ -216,7 +226,17 @@ public final class Call  {
                 inputMonitor.waitUntilExpectingInput(timeout);
             }
             server.sendInput(utterance);
-        } catch (InterruptedException | IOException | TimeoutException e) {
+        } catch (InterruptedException | IOException | TimeoutException
+                | JVoiceXMLEvent e) {
+            JVoiceXMLEvent lastError;
+            try {
+                lastError = session.getLastError();
+            } catch (ErrorEvent ex) {
+                throw new AssertionError(ex);
+            }
+            if (lastError != null) {
+                throw new AssertionError(lastError);
+            }
             throw new AssertionError(e);
         }
     }
