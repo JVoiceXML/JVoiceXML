@@ -447,9 +447,7 @@ sphinx.lib.dir=../../lib
       <svnSetting client="javahl" id="svn.settings" failonerror="false"
           username="${svn.username}" password="${svn.password}"/>
       <svn refid="svn.settings">
-        <mkdir url="${tag.dir}"
-            message="Prepare tagging of release ${jvxml.version}: create tag directory"/>
-        <copy message="Tagging release ${jvxml.version}"
+        <copy message="Tagging release ${jvxml.version}" makkeParents="true"
             srcUrl="${trunk.dir}"
             destUrl="${tag.dir}"/>
     </svn>
