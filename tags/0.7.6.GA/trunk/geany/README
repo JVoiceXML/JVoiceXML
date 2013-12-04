@@ -1,9 +1,0 @@
-Use the file jvoicexml.geany as the project file if you like to work
-with Geany as the IDE.
-
-You may have to edit the base path to point to the checkout folder.
-base_path=/home/raphael/development/jvoicexml/
-
-Copy the complete folder .config/ (with the subfolder geany) into your
-home directory to have nice settings for Geany with java and ant,
-e.g. my home is /home/raphael/ 
