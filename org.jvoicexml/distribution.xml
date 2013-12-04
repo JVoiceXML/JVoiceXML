@@ -445,13 +445,13 @@ sphinx.lib.dir=../../lib
       <property name="trunk.dir" value="${svn.base}/trunk"/>
       <property name="tag.dir" value="${svn.base}/tags/${jvxml.version}"/>
       <svnSetting client="javahl" id="svn.settings" failonerror="false"
-    	 	username="${svn.username}" password="${svn.password}"/>
+          username="${svn.username}" password="${svn.password}"/>
       <svn refid="svn.settings">
         <mkdir url="${tag.dir}"
             message="Prepare tagging of release ${jvxml.version}: create tag directory"/>
         <copy message="Tagging release ${jvxml.version}"
-            srcUrl="${trunk.dir}/org.jvoicexml"
-            destUrl="${tag.dir}/org.jvoicexml"/>
+            srcUrl="${trunk.dir}"
+            destUrl="${tag.dir}"/>
     </svn>
   </target>
 
