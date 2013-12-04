@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.config"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0"/>
+	<classpathentry kind="lib" path="3rdparty/MSS/jain-sip-api-1.2.0.jar"/>
+	<classpathentry kind="lib" path="3rdparty/MSS/sip-servlets-spec-1.7.0.FINAL.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/mscontrol-1.0.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/ucp.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/jain-mgcp-ri-1.0.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml.implementation.jsapi10/3rdparty/jsapi1.0/lib/jsapi.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.implementation.jsapi10/3rdparty/jsapi1.0/jsapi1.0-api.zip!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/freetts1.2/lib/freetts.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/sphinx4/lib/sphinx4.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml.implementation.jsapi10/3rdparty/freetts1.2/lib/freetts-jsapi10.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml.implementation.jsapi10/3rdparty/sphinx4/lib/jsapi-1.0-base.jar" sourcepath="/sphinx4"/>
+	<classpathentry kind="lib" path="3rdparty/MSS/sip-servlets-catalina-7-1.7.0.FINAL.jar"/>
+	<classpathentry kind="lib" path="3rdparty/MSS/sip-servlets-core-api-1.7.0.FINAL.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/sipunit.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/jain-sip-ri-1.2.169.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/joda-time-2.1.jar"/>
+	<classpathentry kind="lib" path="3rdparty/MSS/concurrent-3.0.0.CR2.jar"/>
+	<classpathentry kind="lib" path="3rdparty/MSS/jsr-309-driver-3.0.0.CR2.jar"/>
+	<classpathentry kind="lib" path="3rdparty/MSS/mgcp-driver-3.0.0.CR2.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/commons-configuration-1.9.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/axis-1.4.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/axis-jaxrpc-1.4.jar"/>
+	<classpathentry kind="lib" path="3rdparty/GeneralLibs/commons-lang-2.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/fluent-hc-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/httpclient-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/httpclient-cache-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/httpmime-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib/httpcore-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib/httpcore-ab-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib/httpcore-nio-4.2.3.jar"/>
+	<classpathentry kind="output" path="eclipse-compiled"/>
+</classpath>

@@ -1,0 +1,23 @@
+<?php
+    header('Content-type: text/xml');
+    echo '<?xml version="1.0" encoding="UTF-8"?>';
+ 
+    echo '<Response>';
+ 
+    $user_pushed = (int) ($_REQUEST['Digits']);
+ 
+    if ($user_pushed == 1)
+    {
+        echo '<Play>./dtmf1.wav</Play>';
+    } else if ($user_pushed == 2)
+    {
+	echo '<Play>./dtmf2.wav</Play>';
+    } else {
+        // We'll implement the rest of the functionality in the 
+        // following sections.
+	echo '<Play>./pound.wav</Play>';
+        $user_pushed = NULL;
+    }
+    echo '</Response>';
+?>
+
