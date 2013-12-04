@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:mmi="http://www.w3.org/2008/04/mmi-arch" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://www.w3.org/2008/04/mmi-arch" 
+    attributeFormDefault="qualified" 
+    elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+             ResumeRequest schema for MMI Life cycle events version 1.0. 
+             The ResumeRequest event is sent by the Runtime Framework to resume a previously suspended 
+             processing task of a Modality Component. The Modality Component must return with a 
+             ResumeResponse message. 
+        </xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="mmi-datatypes.xsd"/>
+    <xs:include schemaLocation="mmi-attribs.xsd"/>
+    <xs:include schemaLocation="mmi-elements.xsd"/>
+    
+    <xs:element name="ResumeResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="mmi:statusInfo" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="mmi:group.allResponseEvents.attrib"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
