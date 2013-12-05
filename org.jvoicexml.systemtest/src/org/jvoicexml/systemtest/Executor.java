@@ -33,7 +33,7 @@ import org.jvoicexml.voicexmlunit.Call;
  * @author Dirk Schnelle-Walka
  *
  */
-public final class Executor implements TimeoutListener {
+public final class Executor {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(Executor.class);
 
@@ -48,17 +48,16 @@ public final class Executor implements TimeoutListener {
 
     /** The script used with this test case. */
     private final Script script;
-    /**
-     * the test result.
-     */
-    private final Memo memo = new Memo();
+
+    /** Possible exception that was caught while the test was executed. */
+    private Throwable lastError;
 
     /** Status change listeners. */
     private final List<StatusListener> listeners
         = new java.util.ArrayList<StatusListener>();
 
     /** The current status. */
-    private ClientConnectionStatus status = ClientConnectionStatus.INITIAL;
+    private final ClientConnectionStatus status = ClientConnectionStatus.INITIAL;
 
     /** Wait lock. */
     private final Object waitLock;
@@ -78,8 +77,9 @@ public final class Executor implements TimeoutListener {
     /**
      * Executes the test.
      * @param jvxml the interpreter.
+     * @return result of this test
      */
-    public void execute(final JVoiceXml jvxml) {
+    public TestResult execute(final JVoiceXml jvxml) {
         final URI testURI = testcase.getStartURI();
 
         LOGGER.info("create session and call '" + testURI + "'");
@@ -88,70 +88,23 @@ public final class Executor implements TimeoutListener {
             call = new Call("127.0.0.1", 5000);
             call.call(testURI);
             script.perform(call);
+            return TestResult.PASS;
         } catch (Throwable t) {
             LOGGER.error("Error calling the interpreter", t);
-            memo.setFail("call session '" + t.getMessage() + "'");
-            return;
+            lastError = t;
+            return TestResult.FAIL;
         } finally {
             if (call != null) {
                 call.hangup();
             }
-            updateStatus(ClientConnectionStatus.DONE);
         }
     }
 
     /**
-     * add a status listener.
-     * @param listener the status listener.
+     * Retrieves the last received error while executing the test.
+     * @return last captured error, maybe <code>null</code>
      */
-    public void addStatusListener(final StatusListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void timeout(final long time) {
-        memo.appendCommMsg("timeout: " + time);
-        
-        switch (status) {
-        case INITIAL:
-        case WAIT_CLIENT_CONNECT:
-            memo.setFail(Result.TIMEOUT_WHEN_CONNECT);
-            break;
-        case WAIT_CLIENT_OUTPUT:
-            memo.setFail(Result.TIMEOUT_WHEN_WAIT_OUTPUT);
-            break;
-        case WAIT_CLIENT_DISCONNECT:
-            memo.setFail(Result.TIMEOUT_WHEN_DISCONNECT);
-            break;
-        case DONE:
-        default:
-        }
-        updateStatus(status);
-    }
-
-    /**
-     * Updates the status to the new status and notifies all registered
-     * listeners about the status change.
-     * @param newStatus the new status
-     */
-    private void updateStatus(final ClientConnectionStatus newStatus) {
-        for (StatusListener listener : listeners) {
-            listener.update(status, newStatus);
-        }
-        synchronized (waitLock) {
-            status = newStatus;
-            waitLock.notifyAll();
-        }
-    }
-
-    /**
-     * Retrieves the intermediate result of the test case.
-     * @return the result of test case.
-     */
-    public Result getResult() {
-        return memo;
+    public Throwable getLastError() {
+        return lastError;
     }
 }

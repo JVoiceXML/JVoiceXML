@@ -23,6 +23,9 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.systemtest.report.FailedResult;
+import org.jvoicexml.systemtest.report.PassedResult;
+import org.jvoicexml.systemtest.report.SkippedResult;
 
 /**
  * Runs all of test case in testcaseList.
@@ -93,11 +96,11 @@ class AutoTestThread extends Thread {
 
             listener.testStarted(testcase);
 
-            LOGGER.info("check if all resources can be accessed...");
+            LOGGER.info("checking if all resources can be accessed...");
             boolean complete = testcase.completenessCheck();
             if (!complete) {
                 final String reason = testcase.getIgnoreReason();
-                final Result skip = new Skip(reason);
+                final Result skip = new SkippedResult(reason);
                 listener.testStopped(skip);
                 continue;
             }
@@ -105,7 +108,7 @@ class AutoTestThread extends Thread {
             final Script script = scriptFactory.create(
                     Integer.toString(testcase.getId()));
             if (script == null) {
-                final Result skip = new Skip("Test script not found");
+                final Result skip = new SkippedResult("Test script not found");
                 listener.testStopped(skip);
                 continue;
             }
@@ -118,24 +121,22 @@ class AutoTestThread extends Thread {
 
             final Executor executor =
                 new Executor(testcase, script);
-            final TimeoutMonitor timeoutMonitor =
-                new TimeoutMonitor(executor, 1 * 60 * 1000);
-            executor.addStatusListener(timeoutMonitor);
-
             try {
-                timeoutMonitor.start();
-                executor.execute(jvxml);
-                result = executor.getResult();
+                TestResult testResult = executor.execute(jvxml);
+                if (testResult == TestResult.PASS) {
+                    result = new PassedResult();
+                } else {
+                    final Throwable lastError = executor.getLastError();
+                    result = new FailedResult(lastError);
+                }
             } finally {
-                timeoutMonitor.stopMonitor();
-
                 LOGGER.info("testcase " + testcase.getId() + " finished");
                 LOGGER.info(result.toString());
                 listener.testStopped(result);
             }
         }
 
-        LOGGER.info("no more test uri, exit.");
+        LOGGER.info("no more tests. exiting...");
 
         jvxml.shutdown();
     }
@@ -155,42 +156,6 @@ class AutoTestThread extends Thread {
      */
     public void setScriptFactory(final ScriptFactory factory) {
         scriptFactory = factory;
-    }
-
-    /**
-     * the result of test case be skipped.
-     * @author lancer
-     *
-     */
-    public class Skip implements Result {
-
-        /**
-         * reason of skip.
-         */
-        private final String reason;
-
-        /**
-         * @param arg0 reason of skip.
-         */
-        public Skip(final String arg0) {
-            reason = arg0;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public TestResult getAssert() {
-            return TestResult.SKIP;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String getReason() {
-            return reason;
-        }
     }
 }
 
