@@ -33,6 +33,13 @@ This file provides targets to run and stop the thes JVoiceXML System test.
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
             <classpath refid="run.classpath" />
         </java>
+        <property name="results.dir"
+            value="${jvxml.core.dir}/dist/systemtest" />
+        <xslt in="${results.dir}/ir-report.xml"
+          out="${results.dir}/index.html"
+          style="config/ir.xslt">
+            <factory name="com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl"/>
+        </xslt>
     </target>
 
     <target name="debug"

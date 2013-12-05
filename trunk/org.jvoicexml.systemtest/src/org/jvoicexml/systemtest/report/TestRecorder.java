@@ -205,15 +205,6 @@ public final class TestRecorder implements TestCaseListener {
     public void testStarted(final TestCase tc) {
         if (reportDoc == null) {
             reportDoc = new IRXMLDocument();
-//            if (logRoller != null) {
-//                logRoller.roll();
-//            }
-        }
-
-        // Check if we received a result from the previous test.
-        if (currentTestCase != null) {
-            final Result result = new FailResult("no report result");
-            testStopped(result);
         }
 
         remoteAppender.clear();

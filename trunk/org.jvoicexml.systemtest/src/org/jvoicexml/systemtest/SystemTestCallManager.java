@@ -126,9 +126,10 @@ public final class SystemTestCallManager {
     }
 
     /**
+     * Sets the script factory to use.
      * @param factory which create script.
      */
     public void setScriptFactory(final ScriptFactory factory) {
-        this.scriptFactory = factory;
+        scriptFactory = factory;
     }
 }

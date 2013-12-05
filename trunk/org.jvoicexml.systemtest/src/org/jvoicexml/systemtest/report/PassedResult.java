@@ -24,24 +24,15 @@ import org.jvoicexml.systemtest.Result;
 import org.jvoicexml.systemtest.TestResult;
 
 /**
- * A failed test.
- * @author lancer
- * @author Dirk Schnelle-Walka.
+ * The result of passed test case.
+ * @author Dirk Schnelle-Walka
  *
  */
-class FailResult implements Result {
+public final class PassedResult implements Result {
     /**
-     * reason of failed.
+     * Constructs a new objects.
      */
-    private final String reason;
-
-    /**
-     * Construct a new object.
-     *
-     * @param failReason reason of failed.
-     */
-    FailResult(final String failReason) {
-        reason = failReason;
+    public PassedResult() {
     }
 
     /**
@@ -49,7 +40,7 @@ class FailResult implements Result {
      */
     @Override
     public TestResult getAssert() {
-        return TestResult.FAIL;
+        return TestResult.PASS;
     }
 
     /**
@@ -57,6 +48,6 @@ class FailResult implements Result {
      */
     @Override
     public String getReason() {
-        return reason;
+        return "";
     }
 }
