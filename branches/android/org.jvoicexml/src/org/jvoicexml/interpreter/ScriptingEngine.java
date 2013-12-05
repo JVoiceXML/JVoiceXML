@@ -96,6 +96,9 @@ public final class ScriptingEngine
     public ScriptingEngine(final ScopeObserver observer) {
         scopes = new java.util.HashMap<Scope, Scriptable>();
         final Context context = Context.enter();
+        // Android does not support java code generation. so disable
+        // optimizations
+        context.setOptimizationLevel(-1);
 
         context.setLanguageVersion(Context.VERSION_DEFAULT);
         // create a initial scope, do NOT allow access to all java objects
