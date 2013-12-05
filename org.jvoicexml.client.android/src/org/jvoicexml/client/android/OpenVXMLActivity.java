@@ -109,12 +109,20 @@ public class OpenVXMLActivity extends Activity {
 				});
 				fos.close();
 				is.close();
-			} catch (MalformedURLException e) {
-				MainJVXMLActivity.outputTextExternal("URL fail");
-				MainJVXMLActivity.outputTextExternal(e.toString());
-			} catch (IOException e) {
-				MainJVXMLActivity.outputTextExternal("IO fail");
-				MainJVXMLActivity.outputTextExternal(e.toString());
+			} catch (final MalformedURLException e) {
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    MainJVXMLActivity.outputTextExternal("IO fail");
+                                    MainJVXMLActivity.outputTextExternal(e.toString());
+                                }
+                            });
+			} catch (final IOException e) {
+			        runOnUiThread(new Runnable() {
+			            public void run() {
+	                                MainJVXMLActivity.outputTextExternal("IO fail");
+	                                MainJVXMLActivity.outputTextExternal(e.toString());
+			            }
+			        });
 			}
 
 			return "done";
