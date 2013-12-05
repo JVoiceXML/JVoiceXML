@@ -33,7 +33,6 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
 import org.jvoicexml.Application;
-import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
@@ -332,13 +331,6 @@ public final class JVoiceXmlSession
             LOGGER.error("error processing application '"
                     + application + "'", e);
             processingError = new ExceptionWrapper(e.getMessage(), e);
-            final CallControl call;
-            try {
-                call = implementationPlatform.getCallControl();
-                call.hangup();
-            } catch (NoresourceError ignore) {
-            } catch (ConnectionDisconnectHangupEvent ignore) {
-            }
         } finally {
             cleanup();
         }

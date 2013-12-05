@@ -53,7 +53,7 @@ public interface GrammarContainer extends InputItem {
 
     /**
      * Adds the given converted grammar to the list of converted grammars
-     * for this field.
+     * for this grammar container.
      * @param document the processed grammar document
      * @since 0.7
      */

@@ -91,7 +91,15 @@ public final class ExternalGrammarDocument
         buffer = content;
     }
 
-    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCacheable() {
+        // TODO set this dependent on the storage.
+        return false;
+    }
+
     /**
      * {@inheritDoc}
      */
