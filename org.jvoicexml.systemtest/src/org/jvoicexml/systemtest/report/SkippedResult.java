@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -18,23 +18,44 @@
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-package org.jvoicexml.systemtest.script;
+package org.jvoicexml.systemtest.report;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import org.jvoicexml.systemtest.Result;
+import org.jvoicexml.systemtest.TestResult;
 
-import org.jvoicexml.systemtest.Answer;
+/**
+ * the result of test case be skipped.
+ * @author lancer
+ * @author Dirk Schnelle-Walka
+ *
+ */
+public class SkippedResult implements Result {
 
-@XmlRootElement(name = "speak")
-public final class SpeakAction extends Action {
-    @XmlAttribute(name = "words")
-    String speakWords;
+    /**
+     * reason of skip.
+     */
+    private final String reason;
+
+    /**
+     * @param arg0 reason of skip.
+     */
+    public SkippedResult(final String arg0) {
+        reason = arg0;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Answer execute(final String event) {
-        return new Answer(speakWords);
+    public TestResult getAssert() {
+        return TestResult.SKIP;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getReason() {
+        return reason;
     }
 }

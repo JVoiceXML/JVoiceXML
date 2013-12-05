@@ -42,6 +42,13 @@ public interface Script {
     long DEFAULT_TIMEOUT = 2000;
 
     /**
+     * Sets the id of this test case.
+     * @param id id of this test case.
+     * @since 0.7.6
+     */
+    void setTestId(final String id);
+
+    /**
      * Performs the actual test.
      * @param call the actual call
      * @exception AssertionError

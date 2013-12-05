@@ -29,6 +29,7 @@
 
 package org.jvoicexml.systemtest.script;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -47,17 +48,29 @@ public final class TestScriptFactory implements ScriptFactory {
     static final Logger LOGGER = Logger.getLogger(TestScriptFactory.class);
 
     /** Known test scripts. */
-    private static final Map<String, Script> SCRIPTS;
-
-    static {
-        SCRIPTS = new java.util.HashMap<String, Script>();
-        SCRIPTS.put("1", new Test1Script());
-    }
+    private final Map<String, Script> scripts;
 
     /**
      * Constructs a new object.
      */
     public TestScriptFactory() {
+        scripts = new java.util.HashMap<String, Script>();
+    }
+
+    /**
+     * Sets the known test scripts.
+     * @param newScripts the test scripts
+     */
+    public void setScripts(final Map<String, Script> newScripts) {
+        scripts.putAll(newScripts);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<String> getTestIds() {
+        return scripts.keySet();
     }
 
     /**
@@ -65,10 +78,11 @@ public final class TestScriptFactory implements ScriptFactory {
      */
     @Override
     public Script create(final String id) {
-        final Script script = SCRIPTS.get(id);
+        Script script = scripts.get(id);
         if (script == null) {
-            return new DefaultScript();
+            script = new DefaultScript();
         }
+        script.setTestId(id);
         return script;
     }
 }

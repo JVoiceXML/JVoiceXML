@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -17,29 +17,46 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.jvoicexml.systemtest;
 
-import java.util.Collection;
+package org.jvoicexml.systemtest.report;
 
+import org.jvoicexml.systemtest.Result;
+import org.jvoicexml.systemtest.TestResult;
 
 /**
- * Script Factory.
+ * A failed test.
  * @author lancer
+ * @author Dirk Schnelle-Walka.
  *
  */
-public interface ScriptFactory {
+public final class FailedResult implements Result {
     /**
-     * Retrieves the list of known tests.
-     * @return list of known tests
-     * @since 0.7.6
+     * reason of failed.
      */
-    Collection<String> getTestIds();
+    private final Throwable reason;
 
     /**
-     * create script.
-     * @param id of test case.
-     * @return script of this test case.
+     * Construct a new object.
+     *
+     * @param failReason reason of failed.
      */
-    Script create(String id);
+    public FailedResult(final Throwable failReason) {
+        reason = failReason;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestResult getAssert() {
+        return TestResult.FAIL;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getReason() {
+        return reason.getMessage();
+    }
 }
