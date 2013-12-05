@@ -54,6 +54,14 @@ import org.jvoicexml.xml.srgs.ModeType;
  */
 public interface GrammarDocument {
     /**
+     * Checks, if this grammar document can be cached or should be retrieved
+     * anew.
+     * @return <code>true</code> if this grammar document can be cached.
+     * @since 0.7.7
+     */
+    boolean isCacheable();
+
+    /**
      * Retrieves the URI of the source grammar.
      * @return URI of the grammar document.
      * @since 0.7.5

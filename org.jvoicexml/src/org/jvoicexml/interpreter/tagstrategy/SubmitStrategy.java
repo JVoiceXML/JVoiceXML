@@ -190,7 +190,8 @@ final class SubmitStrategy
         for (String name : namelist) {
             final Object value = scripting.eval(name + ";");
             if ((value == null) || (value == Context.getUndefinedValue())) {
-                throw new SemanticError("'" + name + "' is undefined!");
+                descriptor.addParameter(name, "");
+                continue;
             }
             final String str = value.toString();
             if (str.startsWith("file:/")) {

@@ -164,8 +164,9 @@ public final class FormInterpretationAlgorithm
     private Collection<EventStrategy> eventStrategies;
 
     /**
-     * Field local grammars. They have to be kept separated since processing
-     * of form items does not enter a new scope.
+     * Field local grammars that have already been processed. They have to be
+     * kept separated from the usual {@link ActiveGrammarSet} set since
+     * processing of form items does not enter a new scope.
      */
     private final Set<GrammarDocument> localGrammars;
 
@@ -851,7 +852,7 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Process the given grammar tags and add them to the
-     * {@link GrammarContainer}.
+     * {@link GrammarContainer} if it can be cached.
      * @param grammarContainer the field for which to process the grammars.
      * @param grammars grammars to process.
      * @return processed grammars
@@ -870,10 +871,19 @@ public final class FormInterpretationAlgorithm
         throws UnsupportedFormatError, NoresourceError, BadFetchError,
             SemanticError {
         final Collection<GrammarDocument> grammarDocuments =
+                new java.util.HashSet<GrammarDocument>();
+        final Collection<GrammarDocument> documents =
             grammarContainer.getGrammarDocuments();
-        if (!grammarDocuments.isEmpty() || grammars.isEmpty()) {
+        grammarDocuments.addAll(documents);
+        if (grammars.isEmpty()
+                || (grammarDocuments.size() == grammars.size())) {
             // All grammar documents are already processed or
             // no more grammars to process
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("all grammars processed (processed="
+                        + grammarDocuments.size() + ", grammars="
+                        + grammars.size() + ")");
+            }
             return grammarDocuments;
         }
 
@@ -881,7 +891,9 @@ public final class FormInterpretationAlgorithm
         for (Grammar grammar : grammars) {
             final GrammarDocument document = processGrammar(grammar);
             grammarDocuments.add(document);
-            grammarContainer.addGrammar(document);
+            if (document.isCacheable()) {
+                grammarContainer.addGrammar(document);
+            }
         }
         return grammarDocuments;
     }
@@ -1001,11 +1013,17 @@ public final class FormInterpretationAlgorithm
 
         // Process the grammars of the grammar container
         final ActiveGrammarSet activeGrammars = context.getActiveGrammarSet();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("active grammars: " + activeGrammars.size());
+        }
         if (isGrammarContainer) {
             // Add the grammars of the current form item
             final GrammarContainer grammarContainer =
                 (GrammarContainer) formItem;
             final Collection<Grammar> grammars = grammarContainer.getGrammars();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("found " + grammars.size() + " grammar node(s)");
+            }
             final Collection<GrammarDocument> processed =
                 processGrammars(grammarContainer, grammars);
             activeGrammars.addAll(processed);

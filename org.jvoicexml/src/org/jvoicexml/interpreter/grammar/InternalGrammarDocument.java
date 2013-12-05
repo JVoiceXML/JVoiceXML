@@ -102,6 +102,14 @@ public final class InternalGrammarDocument
      * {@inheritDoc}
      */
     @Override
+    public boolean isCacheable() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public URI getURI() {
         return uri;
     }
