@@ -59,8 +59,6 @@ final class GrammarLoader {
      * @param grammar
      *        The grammar to process
      * @return the transformed grammar
-     * @throws IllegalAttributeException
-     *         if no grammar is specified
      * @exception BadFetchError
      *         If the document could not be fetched successfully.
      * @exception SemanticError
@@ -72,13 +70,16 @@ final class GrammarLoader {
             final VoiceXmlInterpreterContext context,
             final FetchAttributes attributes,
             final Grammar grammar)
-        throws UnsupportedFormatError, BadFetchError, SemanticError,
-            IllegalAttributeException {
-        if (grammar.isExternalGrammar()) {
-            return loadExternalGrammar(context, attributes,
-                    grammar);
-        } else {
-            return loadInternalGrammar(grammar);
+        throws UnsupportedFormatError, BadFetchError, SemanticError {
+        try {
+            if (grammar.isExternalGrammar()) {
+                return loadExternalGrammar(context, attributes,
+                        grammar);
+            } else {
+                return loadInternalGrammar(grammar);
+            }
+        } catch (IllegalAttributeException e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
     }
 
@@ -154,9 +155,7 @@ final class GrammarLoader {
             throw new BadFetchError(e.getMessage(), e);
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("loading grammar from source: '" + src + "'");
-        }
+        LOGGER.info("loading grammar from source: '" + src + "'");
         final FetchAttributes adaptedAttributes =
             adaptFetchAttributes(attributes, grammar);
         final GrammarDocument document =
@@ -177,11 +176,13 @@ final class GrammarLoader {
      *         error creating an URI from the attribute
      * @throws SemanticError
      *         error evaluating the srcexpr attribute
+     * @throws BadFetchError
+     *         both, src and srcexpr were specified
      * @since 0.7.4
      */
     private URI getExternalUriSrc(final Grammar grammar,
             final VoiceXmlInterpreterContext context)
-        throws URISyntaxException, SemanticError {
+        throws URISyntaxException, SemanticError, BadFetchError {
         final URI src = grammar.getSrcUri();
         if (src != null) {
             return src;

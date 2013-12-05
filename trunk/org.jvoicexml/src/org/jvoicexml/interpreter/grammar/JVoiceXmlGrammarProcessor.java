@@ -38,7 +38,6 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -110,12 +109,8 @@ public final class JVoiceXmlGrammarProcessor
          * check if grammar is external or not an process with
          * appropriates methods
          */
-        final GrammarDocument document;
-        try {
-            document = loader.loadGrammarDocument(context, attributes, grammar);
-        } catch (IllegalAttributeException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        }
+        final GrammarDocument document
+            = loader.loadGrammarDocument(context, attributes, grammar);
 
         // Identify the grammar.
         identifyGrammar(grammar, document);
