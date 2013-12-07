@@ -38,6 +38,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * Buffer of messages received so far from JVoiceXml. The buffer gets filled
  * by calls to the implemented {@link TextListener}.
  * @author Dirk Schnelle-Walka
+ * @version $Revision: 3242 $
  * @since 0.7.6
  */
 class OutputMessageBuffer implements TextListener {
