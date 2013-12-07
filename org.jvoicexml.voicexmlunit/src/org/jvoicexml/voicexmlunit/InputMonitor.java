@@ -32,10 +32,16 @@ public final class InputMonitor implements TextListener {
      * Waits until JVoiceXml is expecting input.
      * @throws InterruptedException
      *         waiting interrupted
+     * @throws JVoiceXMLEvent
+     *         error while waiting
      */
-    public void waitUntilExpectingInput() throws InterruptedException {
+    public void waitUntilExpectingInput()
+            throws InterruptedException, JVoiceXMLEvent {
         synchronized (monitor) {
             monitor.wait();
+            if (event != null) {
+                throw event;
+            }
         }
     }
 
