@@ -44,8 +44,6 @@ import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -204,7 +202,7 @@ public final class Call  {
      */
     public void hears(final String utterance, final long timeout) {
         Assert.assertNotNull("no active session", session);
-        final SsmlDocument document = getNextOutput();
+        final SsmlDocument document = getNextOutput(timeout);
         final Speak speak = document.getSpeak();
         final String output = speak.getTextContent();
         Assert.assertEquals(utterance, output);
