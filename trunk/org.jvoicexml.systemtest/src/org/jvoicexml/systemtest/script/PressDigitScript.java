@@ -59,7 +59,7 @@ public final class PressDigitScript implements Script {
     @Override
     public void perform(final Call call) {
         call.hears("Press '" + dtmf + "'.", Script.DEFAULT_TIMEOUT);
-        call.enter(dtmf);
+        call.enter(dtmf, DefaultScript.DEFAULT_TIMEOUT);
         if (presses > 1) {
             call.hears("Press '" + dtmf + "' again.", Script.DEFAULT_TIMEOUT);
             call.enter(dtmf);
@@ -67,7 +67,7 @@ public final class PressDigitScript implements Script {
         if (presses > 2) {
             call.hears("Press '" + dtmf + "' one more time.",
                     Script.DEFAULT_TIMEOUT);
-            call.enter(dtmf);
+            call.enter(dtmf, DefaultScript.DEFAULT_TIMEOUT);
         }
         call.hears("assertion number " + id + ", pass", Script.DEFAULT_TIMEOUT);
     }
