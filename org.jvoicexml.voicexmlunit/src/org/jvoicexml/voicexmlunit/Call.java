@@ -29,6 +29,7 @@ package org.jvoicexml.voicexmlunit;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Collection;
 import java.util.concurrent.TimeoutException;
 
 import javax.naming.Context;
@@ -53,12 +54,14 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
- *
+ * @version $Revision$
+ * @since 0.7.6
  */
 public final class Call  {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(Call.class);
-
+    /** Known call listeners. */
+    private final Collection<CallListener> listeners;
     /** The text server. */
     private TextServer server;
     /** Used port number. */
@@ -94,6 +97,7 @@ public final class Call  {
         server.addTextListener(outputBuffer);
         inputMonitor = new InputMonitor();
         server.addTextListener(inputMonitor);
+        listeners = new java.util.ArrayList<CallListener>();
     }
 
     /**
@@ -132,8 +136,13 @@ public final class Call  {
                    server.getConnectionInformation();
             session = jvxml.createSession(info);
             session.call(uri);
+            for (CallListener listener : listeners) {
+                listener.called(uri);
+            }
         } catch (Exception | ErrorEvent e) {
-            throw new AssertionError(e);
+            final AssertionError error = new AssertionError(e);
+            notifyError(error);
+            throw error;
         }
     }
 
@@ -146,6 +155,9 @@ public final class Call  {
         Assert.assertNotNull("no active session", session);
         try {
             final SsmlDocument output = outputBuffer.nextMessage();
+            for (CallListener listener : listeners) {
+                listener.heard(output);
+            }
             LOGGER.info("heard '" + output + "'");
             return output;
         } catch (InterruptedException | JVoiceXMLEvent e) {
@@ -153,12 +165,18 @@ public final class Call  {
             try {
                 lastError = session.getLastError();
             } catch (ErrorEvent ex) {
-                throw new AssertionError(ex);
+                final AssertionError error = new AssertionError(ex);
+                notifyError(error);
+                throw error;
             }
             if (lastError != null) {
-                throw new AssertionError(lastError);
+                final AssertionError error = new AssertionError(lastError);
+                notifyError(error);
+                throw error;
             }
-            throw new AssertionError(e);
+            final AssertionError error = new AssertionError(e);
+            notifyError(error);
+            throw error;
         }
     }
 
@@ -173,10 +191,15 @@ public final class Call  {
         Assert.assertNotNull("no active session", session);
         try {
             final SsmlDocument output = outputBuffer.nextMessage(timeout);
+            for (CallListener listener : listeners) {
+                listener.heard(output);
+            }
             LOGGER.info("heard '" + output + "'");
             return output;
         } catch (InterruptedException | TimeoutException e) {
-            throw new AssertionError(e);
+            final AssertionError error = new AssertionError(e);
+            notifyError(error);
+            throw error;
         }
     }
 
@@ -233,6 +256,9 @@ public final class Call  {
                 inputMonitor.waitUntilExpectingInput(timeout);
             }
             server.sendInput(utterance);
+            for (CallListener listener : listeners) {
+                listener.said(utterance);
+            }
             LOGGER.info("say '" + utterance + "'");
         } catch (InterruptedException | IOException | TimeoutException
                 | JVoiceXMLEvent e) {
@@ -240,12 +266,18 @@ public final class Call  {
             try {
                 lastError = session.getLastError();
             } catch (ErrorEvent ex) {
-                throw new AssertionError(ex);
+                final AssertionError error = new AssertionError(ex);
+                notifyError(error);
+                throw error;
             }
             if (lastError != null) {
-                throw new AssertionError(lastError);
+                final AssertionError error = new AssertionError(lastError);
+                notifyError(error);
+                throw error;
             }
-            throw new AssertionError(e);
+            final AssertionError error = new AssertionError(e);
+            notifyError(error);
+            throw error;
         }
     }
 
@@ -265,6 +297,9 @@ public final class Call  {
         for (int i = 0; i < digits.length(); i++) {
             final char ch = digits.charAt(i);
             input.addCharacter(ch);
+        }
+        for (CallListener listener : listeners) {
+            listener.entered(digits);
         }
         LOGGER.info("entered '" + digits + "'");
     }
@@ -292,7 +327,20 @@ public final class Call  {
             final char ch = digits.charAt(i);
             input.addCharacter(ch);
         }
+        for (CallListener listener : listeners) {
+            listener.entered(digits);
+        }
         LOGGER.info("entered '" + digits + "'");
+    }
+
+    /**
+     * Notifies all listeners about the given error.
+     * @param error the caught error
+     */
+    private void notifyError(final AssertionError error) {
+        for (CallListener listener : listeners) {
+            listener.error(error);
+        }
     }
 
     /**
@@ -301,6 +349,9 @@ public final class Call  {
     public void hangup() {
         if (session != null) {
             session.hangup();
+            for (CallListener listener : listeners) {
+                listener.hungup();
+            }
             LOGGER.info("hungup");
             session = null;
         }
