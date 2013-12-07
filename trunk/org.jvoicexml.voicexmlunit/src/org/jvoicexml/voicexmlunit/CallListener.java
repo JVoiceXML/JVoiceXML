@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.voicexmlunit/src/org/jvoicexml/voicexmlunit/Call.java $
- * Version: $LastChangedRevision: 4056 $
- * Date:    $Date: 2013-12-07 05:44:39 +0100 (Sat, 07 Dec 2013) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -33,7 +33,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 /**
  * A listener to monitor the call including the conversation.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3242 $
+ * @version $Revision$
  * @since 0.7.7
  */
 public interface CallListener {
