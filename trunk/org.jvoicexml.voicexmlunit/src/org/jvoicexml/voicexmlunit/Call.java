@@ -34,6 +34,7 @@ import java.util.concurrent.TimeoutException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ConnectionInformation;
@@ -57,6 +58,9 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  */
 public final class Call  {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger.getLogger(Call.class);
+
     /** The text server. */
     private TextServer server;
     /** Used port number. */
@@ -116,15 +120,16 @@ public final class Call  {
      * @param uri URI of the application to call
      */
     public void call(final URI uri) {
+        LOGGER.info("calling '" + uri + "'");
         try {
             final Context context = new InitialContext();
             final JVoiceXml jvxml = (JVoiceXml) context.lookup("JVoiceXml");
-    
-            server.start();
-            // wait for the server
-            server.waitStarted();
-            // run the dialog
 
+            // Start the text server
+            server.start();
+            server.waitStarted();
+
+            // run the dialog
             final ConnectionInformation info =
                    server.getConnectionInformation();
             session = jvxml.createSession(info);
@@ -142,7 +147,9 @@ public final class Call  {
     public SsmlDocument getNextOutput() {
         Assert.assertNotNull("no active session", session);
         try {
-            return outputBuffer.nextMessage();
+            final SsmlDocument output = outputBuffer.nextMessage();
+            LOGGER.info("heard '" + output + "'");
+            return output;
         } catch (InterruptedException | JVoiceXMLEvent e) {
             JVoiceXMLEvent lastError;
             try {
@@ -167,7 +174,9 @@ public final class Call  {
     public SsmlDocument getNextOutput(final long timeout) {
         Assert.assertNotNull("no active session", session);
         try {
-            return outputBuffer.nextMessage(timeout);
+            final SsmlDocument output = outputBuffer.nextMessage(timeout);
+            LOGGER.info("heard '" + output + "'");
+            return output;
         } catch (InterruptedException | TimeoutException e) {
             throw new AssertionError(e);
         }
@@ -226,6 +235,7 @@ public final class Call  {
                 inputMonitor.waitUntilExpectingInput(timeout);
             }
             server.sendInput(utterance);
+            LOGGER.info("say '" + utterance + "'");
         } catch (InterruptedException | IOException | TimeoutException
                 | JVoiceXMLEvent e) {
             JVoiceXMLEvent lastError;
@@ -262,6 +272,7 @@ public final class Call  {
             final char ch = digits.charAt(i);
             input.addCharacter(ch);
         }
+        LOGGER.info("entered '" + digits + "'");
     }
 
     /**
@@ -270,9 +281,11 @@ public final class Call  {
     public void hangup() {
         if (session != null) {
             session.hangup();
+            LOGGER.info("hungup");
             session = null;
         }
 
         server.stopServer();
+        LOGGER.info("server stopped");
     }
 }
