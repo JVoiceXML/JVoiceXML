@@ -257,15 +257,37 @@ public final class Call  {
      */
     public void enter(final String digits) {
         Assert.assertNotNull("no active session", session);
-        try {
-            inputMonitor.waitUntilExpectingInput();
-        } catch (InterruptedException e) {
-            throw new AssertionError(e);
-        }
         CharacterInput input = null;
         try {
+            inputMonitor.waitUntilExpectingInput();
             input = session.getCharacterInput();
-        } catch (NoresourceError | ConnectionDisconnectHangupEvent e) {
+        } catch (JVoiceXMLEvent | InterruptedException e) {
+            throw new AssertionError(e);
+        }
+        for (int i = 0; i < digits.length(); i++) {
+            final char ch = digits.charAt(i);
+            input.addCharacter(ch);
+        }
+        LOGGER.info("entered '" + digits + "'");
+    }
+
+    /**
+     * Sends the given utterance to JVoiceXML.
+     * @param digits the digits to enter
+     * @param timeout the timeout to wait at max in msec, waits forever, if
+     *          timeout is zero
+     */
+    public void enter(final String digits, final long timeout) {
+        Assert.assertNotNull("no active session", session);
+        CharacterInput input = null;
+        try {
+            if (timeout == 0) {
+                inputMonitor.waitUntilExpectingInput();
+            } else {
+                inputMonitor.waitUntilExpectingInput(timeout);
+            }
+            input = session.getCharacterInput();
+        } catch (JVoiceXMLEvent | InterruptedException | TimeoutException e) {
             throw new AssertionError(e);
         }
         for (int i = 0; i < digits.length(); i++) {
