@@ -202,9 +202,10 @@ public final class TestRecorder implements TestCaseListener {
      * {@inheritDoc}
      */
     @Override
-    public void testStarted(final TestCase tc) {
+    public void testStarted(final TestCase tc, final String version) {
         if (reportDoc == null) {
             reportDoc = new IRXMLDocument();
+            reportDoc.setName(version);
         }
 
         remoteAppender.clear();

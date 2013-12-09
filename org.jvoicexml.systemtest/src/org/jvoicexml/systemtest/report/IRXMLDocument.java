@@ -24,7 +24,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,48 +53,50 @@ class IRXMLDocument {
      * report name attribute.
      */
     @XmlAttribute
-    String name = "JVoiceXML version : 0.6 / release:1084";
+    private String name;
 
     /**
      * report comment attribute.
      */
     @XmlElement
-    String testimonial = "YOUR-WELL-FORMED-TESTIMOMIAL-CONTENT-HERE";
+    private final String testimonial = "JVoiceXML system test";
 
     /**
      * time String of report create.
      */
     @XmlElement
-    String testStartTime;
+    private String testStartTime;
 
     /**
      * time String of tests finished.
      */
     @XmlElement
-    String testEndTime;
+    private String testEndTime;
 
     /**
      * total of tests.
      */
     @XmlElement
-    int totalOfTest;
+    private int totalOfTest;
 
     /**
      * total cost in MS of all test cases.
      */
     @XmlElement
-    long totalOfCost;
+    private long totalOfCost;
 
     /**
      * result list.
      */
     @XmlElement(name = "assert")
-    List<ResultItem> resultList = new ArrayList<ResultItem>();
+    private final List<ResultItem> resultList =
+        new java.util.ArrayList<ResultItem>();
 
     /**
      * XML document processing Instruction list.
      */
-    private final List<String> processingInstruction = new ArrayList<String>();
+    private final List<String> processingInstruction =
+            new java.util.ArrayList<String>();
 
     /**
      * time of report create.
@@ -112,6 +113,15 @@ class IRXMLDocument {
     }
 
     /**
+     * Sets the name attribute.
+     * @param value the name
+     * @since 0.7.7
+     */
+    public void setName(final String value) {
+        name = value;
+    }
+
+    /**
      * add processing Instruction.
      * @param target content of processing Instruction.
      */
@@ -124,11 +134,11 @@ class IRXMLDocument {
 
     /**
      * add new test result.
-     * @param arg0 result of test.
+     * @param result result of test.
      */
-    public final void add(final ResultItem arg0) {
-        if (arg0 != null) {
-            resultList.add(arg0);
+    public final void add(final ResultItem result) {
+        if (result != null) {
+            resultList.add(result);
         }
     }
 
