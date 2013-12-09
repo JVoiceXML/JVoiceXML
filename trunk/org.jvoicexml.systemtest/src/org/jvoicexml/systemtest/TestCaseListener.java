@@ -29,8 +29,9 @@ public interface TestCaseListener {
     /**
     * Notification that the given test case has started.
     * @param tc the started test case.
+     * @param version JVoiceXML version information
     */
-   void testStarted(TestCase tc);
+   void testStarted(TestCase tc, final String version);
 
     /**
      * Notification that the test case stopped with the result.

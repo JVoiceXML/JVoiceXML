@@ -93,8 +93,8 @@ class AutoTestThread extends Thread {
         for (TestCase testcase : testcaseList) {
             LOGGER.info("running " + testcase.getId() + "...");
             Result result = null;
-
-            listener.testStarted(testcase);
+            final String version = jvxml.getVersion();
+            listener.testStarted(testcase, "JVoiceXML " + version);
 
             LOGGER.info("checking if all resources can be accessed...");
             boolean complete = testcase.completenessCheck();
