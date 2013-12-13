@@ -1,20 +1,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:onClick="startInterpreter" >
+    android:layout_height="match_parent" >
 
     <EditText
         android:id="@+id/textIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/startButton"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="74dp"
         android:ems="10"
         android:inputType="none"
         android:singleLine="true" >
+
     </EditText>
 
     <TextView
@@ -50,4 +50,14 @@
         android:text="@string/open_vxml">
          <requestFocus />
      </Button>
+
+    <Button
+        android:id="@+id/button1"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textIn"
+        android:layout_alignParentLeft="true"
+        android:text="@string/sendMessage" />
+
 </RelativeLayout>
