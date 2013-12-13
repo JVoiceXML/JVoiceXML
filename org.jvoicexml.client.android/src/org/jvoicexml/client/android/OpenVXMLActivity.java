@@ -78,7 +78,6 @@ public class OpenVXMLActivity extends Activity {
 				c.connect();
 				String[] path = url.getPath().split("/");
 				String vxml = path[path.length - 1];
-				int lengthOfFile = c.getContentLength();
 
 				String PATH = Environment.getExternalStorageDirectory()
 						+ "/DownLoad/";

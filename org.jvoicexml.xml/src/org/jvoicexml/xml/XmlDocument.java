@@ -180,7 +180,12 @@ public abstract class XmlDocument
      *        Encapsulated document.
      */
     public XmlDocument(final Document doc) {
-        document = doc;
+        Document current = doc;
+        while (current instanceof XmlDocument) {
+            final XmlDocument xmldocument = (XmlDocument) current;
+            document = xmldocument.getDocument();
+        }
+        document = current;
     }
 
     /**
@@ -188,7 +193,12 @@ public abstract class XmlDocument
      * @return The encapsulated document.
      */
     protected final Document getDocument() {
-        return document;
+        Document current = document;
+        while (current instanceof XmlDocument) {
+            final XmlDocument xmldocument = (XmlDocument) current;
+            document = xmldocument.getDocument();
+        }
+        return current;
     }
 
     /**
@@ -1227,7 +1237,8 @@ public abstract class XmlDocument
             final String encoding = System.getProperty("jvoicexml.xml.encoding",
                 "UTF-8");
             transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
-            final Source source = new DOMSource(this);
+            final Document doc = getDocument();
+            final Source source = new DOMSource(doc);
             transformer.transform(source, result);
         } catch (TransformerException e) {
             throw new IOException(e.getMessage(), e);
