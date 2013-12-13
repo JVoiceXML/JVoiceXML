@@ -26,5 +26,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="/org.jvoicexml/3rdparty/jsonsimple1.1/lib/json_simple-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="/org.jvoicexml/3rdparty/jchardet1.1/lib/chardet.jar" sourcepath="C:/Users/dirk.TK/Downloads/jchardet-1.1/src"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
