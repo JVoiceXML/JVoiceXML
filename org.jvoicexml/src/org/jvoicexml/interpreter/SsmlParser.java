@@ -189,7 +189,8 @@ public final class SsmlParser {
                 "UTF-8");
             transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
             final Speak speak = document.getSpeak();
-            final Source source = new DOMSource(speak);
+            final Node element = speak.getNode();
+            final Source source = new DOMSource(element);
             transformer.transform(source, result);
             final ByteArrayInputStream stream =
                 new ByteArrayInputStream(buffer.toByteArray());

@@ -180,7 +180,16 @@ public abstract class XmlDocument
      *        Encapsulated document.
      */
     public XmlDocument(final Document doc) {
-        document = doc;
+        Document current = doc;
+        while (current instanceof XmlDocument) {
+            final XmlDocument xmldocument = (XmlDocument) current;
+            current = xmldocument.getDocument();
+            if (current == null) {
+                current = xmldocument;
+                break;
+            }
+        }
+        document = current;
     }
 
     /**
@@ -188,6 +197,14 @@ public abstract class XmlDocument
      * @return The encapsulated document.
      */
     protected final Document getDocument() {
+        Document current = document;
+        while (current instanceof XmlDocument) {
+            final XmlDocument xmldocument = (XmlDocument) current;
+            current = xmldocument.getDocument();
+            if (current == null) {
+                return xmldocument;
+            }
+        }
         return document;
     }
 

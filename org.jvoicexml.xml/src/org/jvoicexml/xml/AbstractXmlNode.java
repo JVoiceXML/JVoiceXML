@@ -76,7 +76,16 @@ public abstract class AbstractXmlNode
     protected AbstractXmlNode(final Node n,
                               final XmlNodeFactory<? extends XmlNode>
                               nodeFactory) {
-        node = n;
+        Node current = n;
+        while (current instanceof XmlNode) {
+            final XmlNode xmlnode = (XmlNode) current;
+            current = xmlnode.getNode();
+            if (current == null) {
+                current = xmlnode;
+                break;
+            }
+        }
+        node = current;
         factory = nodeFactory;
     }
 
@@ -94,7 +103,15 @@ public abstract class AbstractXmlNode
      * {@inheritDoc}
      */
     public final Node getNode() {
-        return node;
+        Node current = node;
+        while (current instanceof XmlNode) {
+            final XmlNode xmlnode = (XmlNode) current;
+            current = xmlnode.getNode();
+            if (current == null) {
+                return xmlnode;
+            }
+        }
+        return current;
     }
 
     /**
