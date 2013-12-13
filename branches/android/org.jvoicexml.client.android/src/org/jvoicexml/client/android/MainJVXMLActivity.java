@@ -88,10 +88,12 @@ public class MainJVXMLActivity extends Activity implements TextListener,
 	}
 
 	@Override
-	public void outputSsml(SsmlDocument doc) {
-		synchronized (textOut) {
+	public void outputSsml(final SsmlDocument doc) {
+	    runOnUiThread(new Runnable() {
+                public void run() {
 			textOut.append(doc.toString() + "\n");
 		}
+	    });
 	}
 
 	/**
