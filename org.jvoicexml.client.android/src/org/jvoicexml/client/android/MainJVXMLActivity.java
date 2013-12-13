@@ -267,6 +267,15 @@ public class MainJVXMLActivity extends Activity
     public void startInterpreter(View view) {
         startSession();
     }
+    
+    /**
+     * Sends input to text server if prompted, when pressing send button.
+     * 
+     * @param view
+     */
+    public void sendTextInput(View view) {
+        inputText();
+    }
 
     @Override
     public void expectingInput() {

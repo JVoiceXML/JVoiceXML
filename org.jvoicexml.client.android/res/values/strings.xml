@@ -10,5 +10,6 @@
     <string name="enter_url">Enter VXML URL:</string>
     <string name="open">Open</string>
     <string name="url_demo">http://is.muni.cz/www/282398/hello.vxml</string>
+    <string name="sendMessage">Send</string>
 
 </resources>
