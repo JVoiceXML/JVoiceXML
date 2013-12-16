@@ -46,7 +46,7 @@ public class OpenVXMLActivity extends Activity {
 		MainJVXMLActivity.outputTextExternal(urlAddress);
 		new Download(OpenVXMLActivity.this, urlAddress).execute();
 
-		// clientGUI.getStartButton().setEnabled(true);
+		MainJVXMLActivity.getStartButton().setEnabled(true);
 
 		this.finish();
 	}
@@ -104,6 +104,7 @@ public class OpenVXMLActivity extends Activity {
 					public void run() {
 						MainJVXMLActivity.outputTextExternal("Opened vxml: "
 								+ outputFileName);
+						
 					}
 				});
 				fos.close();
