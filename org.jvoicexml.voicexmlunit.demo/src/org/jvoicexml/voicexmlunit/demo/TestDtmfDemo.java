@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.voicexmlunit.Call;
+import org.jvoicexml.voicexmlunit.TextCall;
 
 /**
  * A demo that tests DTMF input.
@@ -30,7 +31,7 @@ public final class TestDtmfDemo {
     @Before
     public void setUp() throws Exception {
         uri = new File("etc/dtmf.vxml").toURI();
-        call = new Call();
+        call = new TextCall();
     }
 
     /**
