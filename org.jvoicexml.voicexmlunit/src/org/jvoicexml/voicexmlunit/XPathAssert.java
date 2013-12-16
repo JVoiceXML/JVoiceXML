@@ -32,8 +32,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.junit.Assert;
+import org.jvoicexml.xml.XmlDocument;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 
 /**
@@ -52,26 +52,6 @@ public final class XPathAssert {
 
     /**
      * Checks if the evaluation of <code>expression</code> on
-     * <code>document</code> node is equal
-     * to <code>expected</code>. 
-     * @param document the current XML document
-     * @param expression the XPath expression to evaluate
-     * @param expected the expected result
-     * @exception XPathExpressionException
-     *            error evaluating the XPath expression
-     */
-    public static void assertEquals(final Document document,
-            final String expression, final Node expected)
-                    throws XPathExpressionException {
-        final XPathFactory xpathFactory = XPathFactory.newInstance();
-        final XPath xpath = xpathFactory.newXPath();
-        final Node node = (Node) xpath.evaluate(expression,
-                document, XPathConstants.NODE);
-        Assert.assertEquals(expected, node);
-    }
-
-    /**
-     * Checks if the evaluation of <code>expression</code> on
      * <code>document</code> node's node value
      * is equal to <code>expected</code>. 
      * @param document the current XML document
@@ -85,9 +65,15 @@ public final class XPathAssert {
                     throws XPathExpressionException {
         final XPathFactory xpathFactory = XPathFactory.newInstance();
         final XPath xpath = xpathFactory.newXPath();
-        final Node node = (Node) xpath.evaluate(expression,
-                document, XPathConstants.NODE);
-        final String actual = node.getNodeValue();
+        final Document doc;
+        if (document instanceof XmlDocument) {
+            final XmlDocument xmldocument = (XmlDocument) document;
+            doc = xmldocument.getDocument();
+        } else {
+            doc = document;
+        }
+        final String actual = (String) xpath.evaluate(expression,
+                doc, XPathConstants.STRING);
         Assert.assertEquals(expected, actual);
     }
 }
