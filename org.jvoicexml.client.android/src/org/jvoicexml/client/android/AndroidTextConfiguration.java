@@ -36,6 +36,9 @@ import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy;
 import org.jvoicexml.implementation.PlatformFactory;
+import org.jvoicexml.implementation.grammar.GrammarTransformer;
+import org.jvoicexml.implementation.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer;
+import org.jvoicexml.implementation.jvxml.BufferedCharacterInput;
 import org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatformFactory;
 import org.jvoicexml.implementation.text.TextPlatformFactory;
 import org.jvoicexml.interpreter.DialogFactory;
@@ -46,7 +49,9 @@ import org.jvoicexml.interpreter.TagStrategyRepository;
 import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
+import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
+import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
 import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
@@ -77,6 +82,13 @@ public final class AndroidTextConfiguration implements Configuration {
             final TextPlatformFactory factory = new TextPlatformFactory();
             factory.setInstances(1);
             col.add((T)factory);
+        } else if (baseClass == GrammarIdentifier.class) {
+            final GrammarIdentifier identifier = new SrgsXmlGrammarIdentifier();
+            col.add((T) identifier);
+        } else if (baseClass == GrammarTransformer.class) {
+            final GrammarTransformer transformer =
+                    new SrgsXml2SrgsXmlGrammarTransformer();
+            col.add((T) transformer);
         }
         return col;
     }
@@ -127,6 +139,8 @@ public final class AndroidTextConfiguration implements Configuration {
             return (T) factory;
         } else if (baseClass == GrammarProcessor.class) {
             return (T) new JVoiceXmlGrammarProcessor();
+        } else if (baseClass == BufferedCharacterInput.class) {
+            return (T) new BufferedCharacterInput();
         }
         return null;
     }
