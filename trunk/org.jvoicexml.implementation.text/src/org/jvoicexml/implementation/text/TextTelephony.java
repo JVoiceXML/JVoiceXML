@@ -481,8 +481,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             try {
                 if (sender.isSending()) {
                     sender.waitSenderTerminated();
-                }
-                else {
+                } else {
                     sender.interrupt();
                 }
             } catch (InterruptedException e) {
