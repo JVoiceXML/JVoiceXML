@@ -196,7 +196,7 @@ public abstract class XmlDocument
      * Retrieves the encapsulated document.
      * @return The encapsulated document.
      */
-    protected final Document getDocument() {
+    public final Document getDocument() {
         Document current = document;
         while (current instanceof XmlDocument) {
             final XmlDocument xmldocument = (XmlDocument) current;
