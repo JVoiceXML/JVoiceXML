@@ -65,7 +65,7 @@ public final class TestJsapi20SpokenInput implements SpokenInputListener {
     private Jsapi20SpokenInput input;
 
     /** Semaphore to notify a recognition result. */
-    private final Object lock = new Object();
+    private final Object monitor = new Object();
 
     /**
      * Global initialization.
@@ -161,8 +161,8 @@ public final class TestJsapi20SpokenInput implements SpokenInputListener {
         implementations.add(impl);
         input.activateGrammars(implementations);
         input.startRecognition(null, null);
-        synchronized (lock) {
-            lock.wait();
+        synchronized (monitor) {
+            monitor.wait();
         }
     }
 
@@ -171,11 +171,9 @@ public final class TestJsapi20SpokenInput implements SpokenInputListener {
      */
     @Override
     public void inputStatusChanged(final SpokenInputEvent event) {
-        System.out.println(event);
-        synchronized (lock) {
-            lock.notifyAll();
+        synchronized (monitor) {
+            monitor.notifyAll();
         }
-        
     }
 
     /**
