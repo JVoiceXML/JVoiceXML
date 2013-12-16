@@ -150,38 +150,26 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             }
             LOGGER.info("allocating JSAPI 2.0 recognizer...");
 
-            try {
-                if (mediaLocator != null) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("using media locator '" + mediaLocator
-                                + "'");
-                    }
-                    final AudioManager manager =
-                        recognizer.getAudioManager();
-                    manager.setMediaLocator(mediaLocator);
+            if (mediaLocator != null) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("using media locator '" + mediaLocator
+                            + "'");
                 }
-                final SpeechEventExecutor executor =
-                    new SynchronousSpeechEventExecutor();
-                recognizer.setSpeechEventExecutor(executor);
-                recognizer.addRecognizerListener(this);
-                recognizer.allocate();
-                recognizer.waitEngineState(Recognizer.ALLOCATED);
-                LOGGER.info("...JSAPI 2.0 recognizer allocated");
-            } catch (EngineStateException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
-            } catch (EngineException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
-            } catch (AudioException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
-            } catch (IllegalArgumentException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
-            } catch (IllegalStateException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
-            } catch (InterruptedException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
+                final AudioManager manager =
+                    recognizer.getAudioManager();
+                manager.setMediaLocator(mediaLocator);
             }
-        } catch (EngineException ee) {
-            throw new NoresourceError(ee);
+            final SpeechEventExecutor executor =
+                new SynchronousSpeechEventExecutor();
+            recognizer.setSpeechEventExecutor(executor);
+            recognizer.addRecognizerListener(this);
+            recognizer.allocate();
+            recognizer.waitEngineState(Recognizer.ALLOCATED);
+            LOGGER.info("...JSAPI 2.0 recognizer allocated");
+        } catch (EngineException | AudioException
+                | IllegalArgumentException | IllegalStateException
+                | InterruptedException ex) {
+            throw new NoresourceError(ex.getMessage(), ex);
         }
     }
 
@@ -202,23 +190,15 @@ public final class Jsapi20SpokenInput implements SpokenInput,
 
         try {
             recognizer.deallocate();
-        } catch (EngineStateException ex) {
+        } catch (EngineStateException | EngineException | AudioException ex) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("error deallocating the recognizer", ex);
             }
-        } catch (AudioException ex) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("error deallocating the recognizer", ex);
-            }
-        } catch (EngineException ee) {
-            LOGGER.error("error deallocating the recognizer", ee);
         } finally {
             recognizer = null;
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("audio input closed");
-        }
+        LOGGER.info("JSAPI 2.0 recognizer deallocated");
     }
 
     /**
