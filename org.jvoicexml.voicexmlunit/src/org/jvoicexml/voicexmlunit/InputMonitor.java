@@ -71,18 +71,30 @@ public final class InputMonitor implements TextListener {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void started() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void connected(final InetSocketAddress remote) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void outputSsml(final SsmlDocument document) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void expectingInput() {
         synchronized (monitor) {
@@ -91,10 +103,16 @@ public final class InputMonitor implements TextListener {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void inputClosed() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void disconnected() {
         synchronized (monitor) {
@@ -102,5 +120,4 @@ public final class InputMonitor implements TextListener {
             monitor.notifyAll();
         }
     }
-
 }

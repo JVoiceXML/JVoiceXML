@@ -37,13 +37,13 @@ import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
- * Test cases for {@link Call}.
+ * Test cases for {@link TextCall}.
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
  *
  */
 public final class TestCall implements TextListener {
-    private Call call;
+    private TextCall call;
     private boolean started;
     private boolean connected;
     private SsmlDocument lastOutput;
@@ -58,7 +58,7 @@ public final class TestCall implements TextListener {
     @Before
     public void setUp() throws Exception {
         uri = new File("unittests/etc/mock.vxml").toURI();
-        call = new Call();
+        call = new TextCall();
         call.addTextListener(this);
 
         started = false;

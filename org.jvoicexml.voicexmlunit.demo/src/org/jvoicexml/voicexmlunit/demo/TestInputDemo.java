@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.voicexmlunit.Call;
+import org.jvoicexml.voicexmlunit.TextCall;
 
 /**
  * A demo that tests the venerable hello world.
@@ -31,7 +32,7 @@ public final class TestInputDemo {
     @Before
     public void setUp() throws Exception {
         uri = new File("etc/input.vxml").toURI();
-        call = new Call();
+        call = new TextCall();
     }
 
     /**
