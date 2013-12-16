@@ -382,7 +382,7 @@ public final class TextServer extends Thread {
                     fireInputClosed();
                 }
                 if (!acknowledge(message)) {
-                    LOGGER.warn("can not acknowledge due to disconnected");
+                    LOGGER.warn("can not acknowledge due to disconnect");
                     return true;
                 }
             }
