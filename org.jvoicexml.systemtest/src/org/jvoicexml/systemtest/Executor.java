@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.voicexmlunit.Call;
+import org.jvoicexml.voicexmlunit.TextCall;
 
 /**
  * Executer for one test case.
@@ -85,7 +86,7 @@ public final class Executor {
         LOGGER.info("create session and call '" + testURI + "'");
         Call call = null;
         try {
-            call = new Call("127.0.0.1", 5000);
+            call = new TextCall("127.0.0.1", 5000);
             call.call(testURI);
             script.perform(call);
             return TestResult.PASS;

@@ -37,6 +37,9 @@ public class ReportTest {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(ReportTest.class);
 
+    /** A dummy version for the start event. */
+    private static final String VERSION = "test";
+
     IRTestCaseLibrary lib = null;
     String docBase = "http://localhost:8080/irtest/irtests/";
 
@@ -75,7 +78,7 @@ public class ReportTest {
                 continue;
             }
             Assert.assertNotNull(tc);
-            report.testStarted(tc);
+            report.testStarted(tc, VERSION);
             report.testStopped(new DummyResult(TestResult.PASS, ""));
         }
     }
@@ -83,25 +86,25 @@ public class ReportTest {
     @Test
     public void testSummary() {
         TestRecorder report = new TestRecorder();
-        report.testStarted(lib.fetch(1));
+        report.testStarted(lib.fetch(1), VERSION);
         report.testStopped(new DummyResult(TestResult.PASS, ""));
-        report.testStarted(lib.fetch(2));
+        report.testStarted(lib.fetch(2), VERSION);
         report.testStopped(new DummyResult(TestResult.PASS, ""));
 
-        report.testStarted(lib.fetch(7));
+        report.testStarted(lib.fetch(7), VERSION);
         report.testStopped(new DummyResult(TestResult.FAIL, ""));
-        report.testStarted(lib.fetch(8));
+        report.testStarted(lib.fetch(8), VERSION);
         report.testStopped(new DummyResult(TestResult.FAIL, ""));
-        report.testStarted(lib.fetch(11));
+        report.testStarted(lib.fetch(11), VERSION);
         report.testStopped(new DummyResult(TestResult.FAIL, ""));
 
-        report.testStarted(lib.fetch(12));
+        report.testStarted(lib.fetch(12), VERSION);
         report.testStopped(new DummyResult(TestResult.SKIP, ""));
-        report.testStarted(lib.fetch(18));
+        report.testStarted(lib.fetch(18), VERSION);
         report.testStopped(new DummyResult(TestResult.SKIP, ""));
-        report.testStarted(lib.fetch(19));
+        report.testStarted(lib.fetch(19), VERSION);
         report.testStopped(new DummyResult(TestResult.SKIP, ""));
-        report.testStarted(lib.fetch(20));
+        report.testStarted(lib.fetch(20), VERSION);
         report.testStopped(new DummyResult(TestResult.SKIP, ""));
 
 //        report.write(System.out);
