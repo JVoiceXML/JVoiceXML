@@ -21,11 +21,12 @@
         android:id="@+id/textOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textIn"
+        android:layout_above="@+id/button1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:text="@string/welcome_message" />
 
     <Button
         android:id="@+id/startButton"
@@ -35,6 +36,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="54dp"
+        android:enabled="false"
         android:onClick="startInterpreter"
         android:text="@string/start_interpret" />
 
@@ -58,6 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textIn"
         android:layout_alignParentLeft="true"
+        android:onClick="sendTextInput"
         android:text="@string/sendMessage" />
 
 </RelativeLayout>

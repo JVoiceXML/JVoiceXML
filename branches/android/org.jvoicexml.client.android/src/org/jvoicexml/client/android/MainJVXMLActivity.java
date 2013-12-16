@@ -22,6 +22,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.text.Layout;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -49,7 +51,7 @@ public class MainJVXMLActivity extends Activity
 
     private EditText textIn;
     private static TextView textOut;
-    private Button startButton;
+    private static Button startButton;
     private Button openVXMLButton;
 
     @Override
@@ -60,6 +62,8 @@ public class MainJVXMLActivity extends Activity
         textOut = (TextView) findViewById(R.id.textOut);
         startButton = (Button) findViewById(R.id.startButton);
         openVXMLButton = (Button) findViewById(R.id.openVXMLButton);
+        //allow the text screen to scroll vertically
+        textOut.setMovementMethod(new ScrollingMovementMethod());
         org.apache.log4j.BasicConfigurator.configure();
     }
 
@@ -69,6 +73,7 @@ public class MainJVXMLActivity extends Activity
         return true;
     }
 
+    
     @Override
     public void connected(InetSocketAddress arg0) {
         connected = true;
@@ -83,7 +88,7 @@ public class MainJVXMLActivity extends Activity
                 startButton.setEnabled(true);
                 startButton.requestFocus();
                 textIn.setEnabled(false);
-                textOut.append("--Session ended.\n");
+                appendTextToTextOut("--Session ended.");
             }
         });
     }
@@ -95,7 +100,7 @@ public class MainJVXMLActivity extends Activity
         runOnUiThread(new Runnable() {
             public void run() {
                 synchronized (textOut) {                   
-                    textOut.append(text + "\n");
+                    appendTextToTextOut(text);
                 }
             }
         });
@@ -109,7 +114,25 @@ public class MainJVXMLActivity extends Activity
      */
     public static void outputTextExternal(String outTextExt) {
         synchronized (textOut) {
-            textOut.append(outTextExt + "\n");
+            appendTextToTextOut(outTextExt);
+        }
+    }
+    
+    /**
+     * Method for adding text to the main TextView, plus auto scroll.
+     * 
+     * @param text Text to be showed.
+     */
+    public static void appendTextToTextOut(String text) {
+        if(textOut != null){
+            textOut.append(text + "\n");
+            final Layout layout = textOut.getLayout();
+            if(layout != null){
+                int scrollDelta = layout.getLineBottom(textOut.getLineCount() - 1) 
+                    - textOut.getScrollY() - textOut.getHeight();
+                if(scrollDelta > 0)
+                    textOut.scrollBy(0, scrollDelta);
+            }
         }
     }
 
@@ -126,20 +149,21 @@ public class MainJVXMLActivity extends Activity
                 textIn.setEnabled(true);
                 textIn.requestFocus();
                 startButton.setEnabled(false);
-                textOut.append("--Session started.\n");
+                appendTextToTextOut("--Session started.");
+                appendTextToTextOut("--Interpreting...");
             }
         });
 
     }
 
     /**
-     * Sends user input to the interpreter. (Not used yet)
+     * Sends user input to the interpreter.
      */
     private void inputText() {
         if (connected) {
             try {
                 synchronized (textOut) {
-                    textOut.append(textIn.getText() + "\n");
+                    appendTextToTextOut(textIn.getText().toString());
                 }
                 server.sendInput(textIn.getText().toString());
             } catch (IOException ex) {
@@ -158,7 +182,7 @@ public class MainJVXMLActivity extends Activity
         documentVXML = newDocumentVXML;
     }
 
-    public Button getStartButton() {
+    public static Button getStartButton() {
         return startButton;
     }
 
@@ -174,7 +198,7 @@ public class MainJVXMLActivity extends Activity
             try {
                 jvxmlMonitor.wait();
             } catch (InterruptedException e) {
-                textOut.append("jvxml not started:" + e.getMessage());
+                appendTextToTextOut("Jvxml not started: " + e.getMessage());
                 return;
             }
         }
@@ -182,12 +206,25 @@ public class MainJVXMLActivity extends Activity
         jvxml = jvxmlmain;
 
         if (jvxml == null) {
-            textOut.append("--JVXML not found!\n");
+            appendTextToTextOut("--JVXML not found!");
             startButton.setEnabled(true);
             return;
         }
 
-        if (!serverStarted) {
+        server = new TextServer(4242);
+        server.addTextListener(this);
+        server.start();
+        synchronized (lock) {
+            try {
+                lock.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        //commented out, because the text server cannot be used 
+        //again when interpreting another document after first 
+        //one with this if/else statement, thus getting error
+/*        if (!serverStarted) {
             server = new TextServer(4242);
             server.addTextListener(this);
             server.start();
@@ -202,8 +239,8 @@ public class MainJVXMLActivity extends Activity
             startButton.setEnabled(false);
             textIn.setEnabled(true);
             textIn.requestFocus();
-            textOut.append("--Session started.\n");
-        }
+            appendTextToTextOut("--Session started.");
+        }*/
 
         // do interpretation on separate thread
         new ConnectOnBackground().execute();
@@ -294,7 +331,7 @@ public class MainJVXMLActivity extends Activity
         System.out.println("jvxml startup error:" + e.getMessage());
         runOnUiThread(new Runnable() {
             public void run() {
-                textOut.append("jvxml startup error");
+                appendTextToTextOut("Jvxml startup error.");
             }
         });
         synchronized (jvxmlMonitor) {
