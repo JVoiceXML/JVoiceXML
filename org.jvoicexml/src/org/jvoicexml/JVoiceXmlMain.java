@@ -49,6 +49,14 @@ import org.jvoicexml.interpreter.GrammarProcessor;
  * and the {@link ImplementationPlatform}.
  * </p>
  *
+ * <p>
+ * During its life, the interpreter passes several states as shown in the
+ * following figure. JVoiceXML can only process calls while it is in the
+ * running state.<br/>
+ * <img src="doc-files/interpreter-lifecycle.jpg" />
+ * </p>
+ * 
+ *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
@@ -88,6 +96,9 @@ public final class JVoiceXmlMain
     /** Registered listeners to JVoiceXml. */ 
     private final Collection<JVoiceXmlMainListener> listeners;
 
+    /** The state of the interpreter. */
+    private InterpreterState state;
+
     /**
      * Construct a new object.
      */
@@ -108,6 +119,8 @@ public final class JVoiceXmlMain
         setName(JVoiceXmlMain.class.getSimpleName());
         configuration = config;
         listeners = new java.util.ArrayList<JVoiceXmlMainListener>();
+        state = InterpreterState.STARTED;
+        LOGGER.info("interpreter state " + state);
     }
 
     /**
@@ -169,8 +182,9 @@ public final class JVoiceXmlMain
     @Override
     public Session createSession(final ConnectionInformation client)
             throws ErrorEvent {
-        if (shutdownWaiter == null) {
-            throw new NoresourceError("VoiceXML interpreter shut down!");
+        if (state != InterpreterState.RUNNING) {
+            throw new NoresourceError(
+                    "VoiceXML not running. Can't create a session!");
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -293,6 +307,9 @@ public final class JVoiceXmlMain
      */
     @Override
     public void run() {
+        state = InterpreterState.ALLOCATING_RESOURCES;
+        LOGGER.info("interpreter state " + state);
+
         // Initialize the configuration object.
         final Configuration config = getConfiguration();
         LOGGER.info("using configuration '"
@@ -346,6 +363,8 @@ public final class JVoiceXmlMain
         }
 
         shutdownWaiter.start();
+        state = InterpreterState.RUNNING;
+        LOGGER.info("interpreter state " + state);
         LOGGER.info("VoiceXML interpreter " + getVersion() + " started.");
         fireJVoiceXmlStarted();
     }
@@ -411,6 +430,10 @@ public final class JVoiceXmlMain
      */
     @Override
     public synchronized void shutdown() {
+        if ((state == InterpreterState.DEALLOCATING_RESOURCES)
+                || (state == InterpreterState.STOPPED)) {
+            return;
+        }
         if (shutdownWaiter == null) {
             return;
         }
@@ -424,6 +447,9 @@ public final class JVoiceXmlMain
      */
     void shutdownSequence() {
         LOGGER.info("shutting down JVoiceXml...");
+        state = InterpreterState.DEALLOCATING_RESOURCES;
+        LOGGER.info("interpreter state " + state);
+
         // Remove the shutdown hook.
         removeShutdownHook();
 
@@ -445,6 +471,8 @@ public final class JVoiceXmlMain
             implementationPlatformFactory = null;
         }
 
+        state = InterpreterState.STOPPED;
+        LOGGER.info("interpreter state " + state);
         LOGGER.info("shutdown of JVoiceXML complete!");
         synchronized (shutdownSemaphore) {
             shutdownSemaphore.notifyAll();
