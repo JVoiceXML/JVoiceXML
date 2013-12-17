@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.voicexmlunit/unittests/src/org/jvoicexml/voicexmlunit/TestCall.java $
- * Version: $LastChangedRevision: 4071 $
- * Date:    $Date: 2013-12-16 09:46:03 +0100 (Mon, 16 Dec 2013) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -30,7 +30,7 @@ package org.jvoicexml;
  * States of JVoiceXML that are passed throughout the lifecycle.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.7
  */
 public enum InterpreterState {
