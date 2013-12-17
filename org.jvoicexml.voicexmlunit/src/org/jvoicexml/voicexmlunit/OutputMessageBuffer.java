@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.voicexmlunit/src/org/jvoicexml/voicexmlunit/Conversation.java $
- * Version: $LastChangedRevision: 3991 $
- * Date:    $Date: 2013-11-26 16:07:42 +0100 (Tue, 26 Nov 2013) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -38,7 +38,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * Buffer of messages received so far from JVoiceXml. The buffer gets filled
  * by calls to the implemented {@link TextListener}.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3242 $
+ * @version $Revision$
  * @since 0.7.6
  */
 class OutputMessageBuffer implements TextListener {
