@@ -11,7 +11,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 /**
  * Monitor that enables delaying until JVoiceXML expects an input.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3242 $
+ * @version $Revision$
  * @since 0.7.6
  */
 public final class InputMonitor implements TextListener {

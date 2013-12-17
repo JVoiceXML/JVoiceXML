@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.voicexmlunit/src/org/jvoicexml/voicexmlunit/Call.java $
- * Version: $LastChangedRevision: 4058 $
- * Date:    $Date: 2013-12-07 06:32:30 +0100 (Sat, 07 Dec 2013) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -34,7 +34,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * Mocks a real telephone call.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4058 $
+ * @version $Revision$
  * @since 0.7.7
  */
 public final class MockCall implements Call {
