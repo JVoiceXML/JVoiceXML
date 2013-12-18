@@ -7,96 +7,173 @@
 <link href="style/cms.css" rel="stylesheet" type="text/css" media="all" />
 </head>
 <body>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td id="headerBg"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-              <tr>
-                <td align="left" valign="middle">&nbsp;</td>
-                <td width="860" height="139" align="left" valign="middle"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                      <td height="91" id="jvoiceLogo"><a href="index.php"></a></td>
+                        <td id="headerBg"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="left" valign="middle">&nbsp;</td>
+                                    <td width="860" height="139" align="left" valign="middle"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td height="91" id="jvoiceLogo"><a href="index.php"></a></td>
+                                            </tr>
+                                            <tr>
+                                                <td height="38" id="navigations"><ul>
+                                                        <li><a href="index.php"><span class="red">►</span> HOME</a></li>
+                                                        <li><a href="http://sourceforge.net/apps/mediawiki/jvoicexml/index.php?title=Main_Page"><span class="red">►</span> DOCUMENTATION</a></li>
+                                                        <li><a href="downloads.html"><span class="red">►</span> DOWNLOADS</a></li>
+                                                        <li><a href="reference.html" id="active"><span class="red">►</span> REFERENCES</a></li>
+                                                        <li><a href="wanttohelp.html"><span class="red">►</span> WANT TO HELP?</a></li>
+                                                        <li><a href="contact.html" class="last"><span class="red">►</span> CONTACT</a></li>
+                                                    </ul></td>
+                                            </tr>
+                                            <tr>
+                                                <td height="10"></td>
+                                            </tr>
+                                        </table></td>
+                                    <td align="left" valign="middle">&nbsp;</td>
+                                </tr>
+                            </table></td>
                     </tr>
                     <tr>
-                      <td height="38" id="navigations"><ul>
-                          <li><a href="index.php"><span class="red">►</span> HOME</a></li>
-                          <li><a href="http://sourceforge.net/apps/mediawiki/jvoicexml/index.php?title=Main_Page"><span class="red">►</span> DOCUMENTATION</a></li>
-                          <li><a href="downloads.html"><span class="red">►</span> DOWNLOADS</a></li>
-                          <li><a href="reference.html" id="active"><span class="red">►</span> REFERENCES</a></li>
-                          <li><a href="wanttohelp.html"><span class="red">►</span> WANT TO HELP?</a></li>
-                          <li><a href="contact.html" class="last"><span class="red">►</span> CONTACT</a></li>
-                        </ul></td>
+                        <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td class="leftShadow">&nbsp;</td>
+                                    <td width="860" valign="top" id="mainContent"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td id="contents" valign="top"><h1>References</h1>
+                                                    <p>
+                                                        This page lists publications and projects that utilize JVoiceXML and articles that have been written about JVoiceXML. Please use the following reference in your publication, if you want to refer to
+                                                        this project <a href="http://link.springer.com/article/10.1007%2Fs12193-013-0119-y">JVoiceXML as a modality component in the W3C multimodal architecture</a>
+                                                    </p>
+                                                    <p>Send me an e-mail if your article or project is missing.</p>
+                                                    <dl>
+                                                        <dt>
+                                                            <strong>Articles</strong>
+                                                        </dt>
+                                                        <dd>
+                                                            <span class="referenceTitle">Voice-based Error Recovery Strategies for Pervasive Environment</span><br /> <strong>Author:</strong>Dirk Schnelle-Walka, Stefan Radomski, Arvid Lange<br /> Errors
+                                                            in speech recognition systems severly hinder users from controlling their environment by voice since the interaction with the system usually relies on the user to repeat the wanted command until
+                                                            it is successful. Although error recovery strategies are well known and understood in telephony systems they were not adopted by such command & control scenarios. In this paper we introduce a
+                                                            system that utilizes these techniques for a better user experience where the interaction is perceived as a dialog.<br />
+                                                            <p>
+                                                                <a href="http://atlas.tk.informatik.tu-darmstadt.de/Publications/2013/TUD-CS-2013-0184.pdf">Detailed Article</a>
+                                                            </p>
+                                                        </dd>
+                                                        <dd>
+                                                            <span class="referenceTitle">Voice-Unit-Testing: Werkzeuge für Test-First-Ansätze</span><br /> <strong>Author:</strong>Dirk Schnelle-Walka, Raphael Groner<br /> VoiceXML ist als W3C-Standard die
+                                                            vorherrschende Sprache in der Entwicklung sprachbasierter Anwendungen. Im Rahmen der MMI-Ambitionen des W3C zur Unterstützung multimodaler Anwendungen wird diese Sprache voraussichtlich auch
+                                                            außerhalb der bisher im Fokus stehenden Telefonie-Anwendungen an Bedeutung gewinnen. Obwohl die Sprache VoiceXML ausgereift ist und eine große Anzahl von Anwendungen, die vornehmlich im
+                                                            industriellen Bereich für „Customer Care“ eingesetzt werden, darauf aufsetzen, existieren nur wenige Testwerkzeuge. In der Regel müssen die Entwickler selbst zum Telefonhörer greifen, um die
+                                                            korrekte Funktionsweise der Anwendung zu überprüfen. Gerade im Hinblick auf größere Anwendungen ist dieses Verfahren aber ungeeignet. In diesem Artikel werden existierende Testwerkzeuge
+                                                            vorgestellt und ihre Eignung zur Umsetzung von testgetriebener Entwicklung von Sprachanwendungen wird analysiert.<br />
+                                                            <p>
+                                                                <a href="http://www.sigs-datacom.de/fachzeitschriften/objektspektrum/archiv/artikelansicht.html?tx_mwjournals_pi1[pointer]=0&tx_mwjournals_pi1[mode]=1&tx_mwjournals_pi1[showUid]=7420">Detailed
+                                                                    Article</a>
+                                                            </p>
+                                                        </dd>
+                                                        <dd>
+                                                            <span class="referenceTitle">JVoiceXML as a Modality Component in the W3C Multimodal Architecture</span><br /> <strong>Author:</strong>Dirk Schnelle-Walka, Stefan Radomski, Max
+                                                            M&uuml;hlh&auml;user<br /> Research regarding multimodal interaction led to a multitude of proposals for suitable software architectures. With all architectures describing multimodal systems di
+                                                            erently, interoperability is severely hindered. The W3C MMI architecture is a proposed recommendation for a common architecture. In this article, we describe our experiences integrating JVoiceXML
+                                                            into the W3C MMI architecture and identify general limitations with regard to the available design space.<br />
+                                                            <p>
+                                                                <a href="http://link.springer.com/article/10.1007%2Fs12193-013-0119-y">Detailed Article</a>
+                                                            </p>
+                                                        </dd>
+                                                        <dd>
+                                                            <span class="referenceTitle">VoiceXML for Pervasive Environments</span><br /> <strong>Author:</strong>Stefan Radomski, Dirk Schnelle-Walka<br /> The language support of VoiceXML2.1 to express
+                                                            flexible dialogs in pervasive environments is still lacking key features. Missing information about the environment and the inability to react to external events leads to rigid and verbose
+                                                            dialogs. By introducing these features as ECMAScript variables and event handlers in an interpreter, dialog authors can adapt their dialogs’ behavior with regard to the users’ surroundings and
+                                                            incorporate available information from the pervasive environment. Adding these features extends the expressiveness of VoiceXML2.1 and enables the modeling of previously inexpressible, more
+                                                            flexible dialogs.<br />
+                                                            <p>
+                                                                <a href="http://www.igi-global.com/article/content/65858">Detailed Article</a>
+                                                            </p>
+                                                        </dd>
+                                                        <dd>
+                                                            <span class="referenceTitle">Zanzibar OpenIVR: an Open-Source Framework for Development of Spoken Dialog Systems</span><br /> <strong>Author:</strong>Dmytro Prylipko, Dirk Schnelle-Walka, Spencer
+                                                            Lord, Andreas Wendemuth<br /> The maturity of standards and the availability of open source components for all levels of the MRCP stack provide us with new opportunities for the development of
+                                                            spoken dialog technology. In this paper a standard-based and modular architecture for interactive voice response (IVR) systems is presented together with its implementation - Zanzibar OpenIVR. The
+                                                            architecture, described in terms of components and standards, is compared to other existing frameworks. The usage of our framework is discussed regarding di erent aspects of spoken dialog
+                                                            technology such as speech recognition and synthesis, integration of the components, dialog management, natural language understanding. It is designed to work over VoIP as well as with usual
+                                                            telephony communication channels, thus provides an ability for web based access. Zanzibar OpenIVR is able to serve as a starting point for building dialog systems and research in voice-enabled
+                                                            technologies.<br />
+                                                            <p>
+                                                                <a href="http://link.springer.com/chapter/10.1007/978-3-642-23538-2_47#page-1">Detailed Article</a>
+                                                            </p>
+                                                        </dd>
+                                                        <dd>
+                                                            <span class="referenceTitle">Augmenting VoiceXML with Information from Pervasive Environments</span><br /> <strong>Author:</strong>Dirk Schnelle Walka, Stefan Radomski<br /> The expressiveness
+                                                            of VoiceXML to describe generic, spoken dialogs is, due to its heritage from telephony applications, rather limited in scope. There is no detailed information available regarding the environment
+                                                            of the dialog partners, hindering its applicability to model dialogs in pervasive environments. By introducing this information in the form of ECMA-Script variables, dialog authors can accommodate
+                                                            for the different scenarios and use-cases in pervasive environments. Thereby, extending the expressiveness of VoiceXML to describe more generic, spoken dialogs which take the users situation into
+                                                            account.<br />
+                                                            <p>
+                                                                <a href="http://atlas.tk.informatik.tu-darmstadt.de/Publications/2011/TUD-CS-2011-0141.pdf">Detailed Article</a>
+                                                            </p>
+                                                        </dd>
+                                                        <dd>
+                                                            <span class="referenceTitle">Design und Implementierung eines Grammatikprozessors f&uuml;r einen W3C standardkonformen VoiceXML 2.0 Interpreter</span><br /> <strong>Author:</strong> Christoph
+                                                            B&uuml;nte<br /> Design und Implementierung eines Grammatikprozessors f&uuml;r einen W3C standardkonformen VoiceXML 2.0 Interpreter. Die Implementierung erfolgte in Zusammenarbeit mit dem
+                                                            JVoiceXML Open Source Projekt.<br />
+                                                            <p>
+                                                                <a href="http://www.christophbuente.de/wp-content/diplomarbeit.pdf">Detailed Article</a>
+                                                            </p>
+                                                        </dd>
+                                                        <dd>
+                                                            <span class="referenceTitle">Thai voice application gateway </span><br /> <strong>Author:</strong> Jean-Yves Delort<br /> Thai voice gateway : We propose and implement a low-cost Thai voice
+                                                            gateway that combines current technology in network systems and telephony. It enhances traditional telephony-based applications with access to resources on the Web. The system is based on open
+                                                            standards for speech technology and existing open source software. It supports the VoiceXML markup language for voice dialogs, the MRCP protocol for communication with a speech engine provider,
+                                                            and effectively recognizes and synthesizes Thai speech. The system uses a client/server architecture separated into 3 main modules: the VoiceXML interpreter, the speech engine interface, and the
+                                                            telephone integration system. The current prototype still needs improvement but is functional enough to provide a basis for future enhancement. We have released the system as open source software
+                                                            for interested developers.<br />
+                                                            <p>
+                                                                <a href="http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=4600382">Detailed Article</a>
+                                                            </p>
+                                                        </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>
+                                                            <strong>Projects</strong>
+                                                        </dt>
+                                                        <dd>
+                                                            <span class="referenceTitle">Zanzibar Open IVR</span><br /> Open source integration of Asterisk with JVoiceXML<br />
+                                                            <p>
+                                                                <a href="http://www.spokentech.org/">http://www.spokentech.org/</a>
+                                                            </p>
+                                                        </dd>
+                                                    </dl>
+                                                    <p>
+                                                        Get your article or project listed here. Contact <a href="http://sourceforge.net/sendmessage.php?touser=192116">me</a>.
+                                                    </p></td>
+                                            </tr>
+                                        </table></td>
+                                    <td class="rightShadow">&nbsp;</td>
+                                </tr>
+                            </table></td>
                     </tr>
-                    <tr>
-                      <td height="10"></td>
-                    </tr>
-                  </table></td>
-                <td align="left" valign="middle">&nbsp;</td>
-              </tr>
-            </table></td>
+                </table></td>
         </tr>
         <tr>
-          <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-              <tr>
-                <td class="leftShadow">&nbsp;</td>
-                <td width="860" valign="top" id="mainContent"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <td valign="bottom" id="footerArea"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                      <td id="contents" valign="top"><h1>References</h1>
-                        <p> This page lists projects that utilize JVoiceXML and articles that have been written about JVoiceXML. Send me an e-mail if your article or project is missing.</p>
-                     <dl>
-					 	<dt><strong>Articles</strong></dt>
-					 <dd><span class="referenceTitle">Design und Implementierung eines Grammatikprozessors f&uuml;r einen W3C standardkonformen VoiceXML 2.0 Interpreter</span><br/>
-						<strong>Author:</strong> Christoph B&uuml;nte<br />
-						Design und Implementierung eines Grammatikprozessors f&uuml;r einen W3C standardkonformen VoiceXML 2.0 Interpreter. Die Implementierung erfolgte in Zusammenarbeit mit dem JVoiceXML Open Source Projekt.<br />
-						<p><a href="http://www.christophbuente.de/wp-content/diplomarbeit.pdf">Detailed Article</a></p>
-						</dd>
-						<dd><span class="referenceTitle">Rapport de Stage
-						</span><br/>
-						<strong>Author:</strong> Jean-Yves Delort<br />
-						Dans le cadre du stage de fin &eacute;tudes du Master 2 Informatique, j'ai &eacute;t&eacute; accueilli au sein du Laboratoire d'Informatique, de Robotique et de Micro&eacute;lectronique de Montpellier (LIRMM).
-                          Ce stage s'attaque &agrave; plusieurs fronts qui s'articulent autour du langage VoiceXML &agrave; savoir la reconnaissance et la synth&egrave;se vocale d'une part et la t&eacute;l&eacute;phonie (traditionnelle ou sur IP) d'autre part, avec pour objectif leur int&eacute;gration.<br />
-						<p><a href="http://www.lirmm.fr/~delort/resources/courses2006/rapport_final.pdf">Detailed Article</a></p>
-						</dd>
-						<dd><span class="referenceTitle">Thai voice application gateway
-						</span><br/>
-						<strong>Author:</strong> Jean-Yves Delort<br />
-						Thai voice gateway : We propose and implement a low-cost Thai voice gateway that combines current technology in network systems and telephony. It enhances traditional telephony-based applications with access to resources on the Web. The system is based on open standards for speech technology and existing open source software. It supports the VoiceXML markup language for voice dialogs, the MRCP protocol for communication with a speech engine provider, and effectively recognizes and synthesizes Thai speech. The system uses a client/server architecture separated into 3 main modules: the VoiceXML interpreter, the speech engine interface, and the telephone integration system. The current prototype still needs improvement but is functional enough to provide a basis for future enhancement. We have released the system as open source software for interested developers.<br />
-						<p><a href="http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=4600382">Detailed Article</a></p>
-						</dd>
-					 </dl>
-					 <dl>
-                        <dt><strong>Projects</strong></dt>
-                        <dd><span class="referenceTitle">Zanzibar Open IVR</span><br/>
-                        Open source integration of Asterisk with JVoiceXML<br />
-                        <p><a href="http://www.spokentech.org/">http://www.spokentech.org/</a></p>
-                        </dd>
-                     </dl>
-                     <p>Get your article or project listed here. Contact <a href="http://sourceforge.net/sendmessage.php?touser=192116">me</a>.</p>
-                    </td></tr>
-                  </table></td>
-                <td class="rightShadow">&nbsp;</td>
-              </tr>
-            </table></td>
+                        <td>&nbsp;</td>
+                        <td width="860"><table border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td class="footerLogo">&nbsp;</td>
+                                    <td class="footerDivider licensedProduct" valign="middle" align="left">Licenced under GNU Lesser General Public License<br /> <a href="http://www.webworldexperts.com">Web Design &amp; Web Development by
+                                            Webworld Experts</a></td>
+                                    <td class="footerDivider" align="center"><div id="imageWrapper">
+                                            <a href="http://validator.w3.org/check?"><img src="images/w3schools.gif" align="middle" /></a> <a href="http://sourceforge.net"> <img src="images/sourceforgenet.gif" align="middle" /></a>
+                                        </div></td>
+                                </tr>
+                            </table></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table></td>
         </tr>
-      </table></td>
-  </tr>
-  <tr>
-    <td valign="bottom" id="footerArea"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-          <td>&nbsp;</td>
-          <td width="860"><table border="0" cellspacing="0" cellpadding="0">
-              <tr>
-                <td class="footerLogo">&nbsp;</td>
-                <td class="footerDivider licensedProduct" valign="middle" align="left" >Licenced under GNU Lesser General Public License<br />
-                  <a href="http://www.webworldexperts.com">Web Design &amp; Web Development by Webworld Experts</a></td>
-                <td class="footerDivider" align="center"><div id="imageWrapper"><a href="http://validator.w3.org/check?"><img src="images/w3schools.gif"  align="middle"/></a> <a href="http://sourceforge.net"> <img src="images/sourceforgenet.gif" align="middle" /></a></div></td>
-              </tr>
-            </table></td>
-          <td>&nbsp;</td>
-        </tr>
-      </table></td>
-  </tr>
-</table>
+    </table>
 </body>
 </html>
