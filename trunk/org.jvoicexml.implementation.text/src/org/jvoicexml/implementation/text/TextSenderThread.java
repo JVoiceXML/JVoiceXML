@@ -99,19 +99,15 @@ final class TextSenderThread extends Thread {
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("sending " + pending);
                     }
-                    /* Currently, only the BYE message is automatically
-                     * acknowledged, so this final message means an end
-                     * of sending.
-                     */
-                    if (sendMessage(pending)) {
-                        sending = false;
-                    }
+                    sendMessage(pending);
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("... done sending output");
                     }
+                    sending = pending.getMessageCode() == TextMessage.BYE;
                 }
             }
         } catch (InterruptedException | IOException e) {
+            messages.clear();
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("error sending text message", e);
             }
@@ -127,20 +123,18 @@ final class TextSenderThread extends Thread {
 
     /**
      * Sends a message directly to the client.
-     * If the message is pending, the client should acknowledge.
      * @param pending the message to send
-     * @return <code>true</code> if the message is acknowledged
      * @throws IOException stream error
      * @since 0.7.6
      */
-    private boolean sendMessage(final PendingMessage pending)
+    private void sendMessage(final PendingMessage pending)
             throws IOException {
-        boolean acknowledge = telephony.addPendingMessage(pending);
-        final OutputStream outputStream = socket.getOutputStream();
-        final ObjectOutputStream out =  new ObjectOutputStream(outputStream);
-        out.writeObject(pending.getMessage());
+        telephony.addPendingMessage(pending);
+        final OutputStream stream = socket.getOutputStream();
+        final ObjectOutputStream out =  new ObjectOutputStream(stream);
+        final TextMessage message = pending.getMessage();
+        out.writeObject(message);
         out.flush();
-        return acknowledge;
     }
 
     /**
@@ -150,6 +144,9 @@ final class TextSenderThread extends Thread {
      * @since 0.7.6
      */
     void waitSenderTerminated() throws InterruptedException {
+        if (!isAlive()) {
+            return;
+        }
         synchronized (lock) {
             lock.wait();
         }
@@ -201,11 +198,24 @@ final class TextSenderThread extends Thread {
      * Sends a bye message and terminates the sender thread.
      */
     public void sendBye() {
-        final TextMessage message = new TextMessage(TextMessage.BYE);
+        final TextMessage message =
+                new TextMessage(TextMessage.BYE, ++sequenceNumber);
         final PendingMessage pending = new PendingMessage(message, null);
         messages.add(pending);
     }
 
+    /**
+     * Sends a bye message and terminates the sender thread.
+     * @param message the message to acknowledge
+     */
+    public void sendAck(final TextMessage message) {
+        final int num = message.getSequenceNumber();
+        final TextMessage ack =
+                new TextMessage(TextMessage.ACK, num);
+        final PendingMessage pending = new PendingMessage(ack);
+        messages.add(pending);
+    }
+    
     /**
      * Checks if there are messages to send.
      * @return <code>true</code> if there are messages to send.
