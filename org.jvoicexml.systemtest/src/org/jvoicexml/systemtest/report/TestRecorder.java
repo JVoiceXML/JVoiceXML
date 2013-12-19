@@ -145,8 +145,13 @@ public final class TestRecorder implements TestCaseListener {
 
         // write to file.
         final File report = new File(reportDir, reportName);
-        LOGGER.info("writing report to: '" + report.getAbsolutePath() + "'");
-        writeReport(report);
+        try {
+            LOGGER.info("writing report to: '" + report.getCanonicalPath()
+                    + "'");
+            writeReport(report);
+        } catch (IOException e) {
+            LOGGER.error("error writing the report", e);
+        }
     }
 
     /**
@@ -156,7 +161,8 @@ public final class TestRecorder implements TestCaseListener {
      * @since 0.7.4
      */
     private String filterReturn(final SystemTestAppender appender) {
-        List<LoggingEvent> events = appender.getEvents();
+        List<LoggingEvent> events = new java.util.ArrayList<LoggingEvent>();
+        events.addAll(appender.getEvents());
         final StringBuilder str = new StringBuilder();
         final String lf = System.getProperty("line.separator");
         for (LoggingEvent event : events) {
@@ -178,15 +184,15 @@ public final class TestRecorder implements TestCaseListener {
     /**
      * Writes the report to the given file.
      * @param report the file where to write the report.
+     * @exception IOException
+     *            error writing the report.
      * @since 0.7.6
      */
-    private void writeReport(final File report) {
+    private void writeReport(final File report) throws IOException {
         OutputStream os = null;
         try {
             os = new FileOutputStream(report);
             reportDoc.writeXML(os);
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
         } finally {
             try {
                 if (os != null) {
