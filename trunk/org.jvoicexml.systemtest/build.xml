@@ -117,6 +117,11 @@ personal-props/README.txt
             dir="${jvxml.core.dir}"
             target="jar" 
             inheritAll="false" inheritrefs="false" />
+        <echo message="Create JVoiceXML voicexml unit" />
+        <ant antfile="../org.jvoicexml.voicexmlunit/build.xml" 
+            dir="../org.jvoicexml.voicexmlunit"
+            target="jar" 
+            inheritAll="false" inheritrefs="false" />
     </target>
 
     <target name="compile" depends="-init,-initcompile,compile-jvxml,-checkJavaVersion" 
