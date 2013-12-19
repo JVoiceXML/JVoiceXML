@@ -558,11 +558,12 @@ public final class JVoiceXmlImplementationPlatform
         if (input != null) {
             if (hungup) {
                 input.stopRecognition();
-            } 
-            try {
-                waitInputNotBusy();
-            } catch (Exception e) {
-                LOGGER.warn("error waiting for input not busy", e);
+            } else {
+                try {
+                    waitInputNotBusy();
+                } catch (Exception e) {
+                    LOGGER.warn("error waiting for input not busy", e);
+                }
             }
         }
         LOGGER.info("returning aqcuired resources");
