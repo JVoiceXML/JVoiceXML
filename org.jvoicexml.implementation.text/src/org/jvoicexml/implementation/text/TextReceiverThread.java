@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 
 import org.apache.log4j.Logger;
@@ -100,8 +101,8 @@ final class TextReceiverThread extends Thread {
             notifyAll();
         }
         try {
-            final TextMessageReader reader = 
-                    new TextMessageReader(socket.getInputStream());
+            final InputStream stream = socket.getInputStream();
+            final TextMessageReader reader = new TextMessageReader(stream);
             while (socket.isConnected() && !isInterrupted()) {
                 final TextMessage message = reader.getNextMessage();
                 if (message == null) {
@@ -115,6 +116,8 @@ final class TextReceiverThread extends Thread {
                     final String str = (String) message.getData();
                     input.notifyRecognitionResult(str);
                     input = null;
+                } else if (code == TextMessage.BYE) {
+                    telephony.addAcknowledgeMessage(message);
                 } else {
                     final int sequenceNumber = message.getSequenceNumber();
                     telephony.removePendingMessage(sequenceNumber);

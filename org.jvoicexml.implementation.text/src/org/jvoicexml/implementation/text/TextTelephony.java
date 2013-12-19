@@ -42,6 +42,7 @@ import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextConnectionInformation;
+import org.jvoicexml.client.text.TextMessage;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
@@ -139,21 +140,26 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * Adds the given sequence number to the list of pending messages.
      * @param message the sent message
-     * @return <code>true</code> if the message is auto-acknowledged
      */
-    boolean addPendingMessage(final PendingMessage message) {
-        final int sequenceNumber = message.getAcknoledgeNumber();
-        if (sequenceNumber <= 0) {
-            return true;
+    void addAcknowledgeMessage(final TextMessage message) {
+        if (sender != null) {
+            sender.sendAck(message);
         }
+    }
+
+    /**
+     * Adds the given sequence number to the list of pending messages.
+     * @param message the sent message
+     */
+    void addPendingMessage(final PendingMessage message) {
         synchronized (pendingMessages) {
+            final int sequenceNumber = message.getSequenceNumber();
             final Integer object = new Integer(sequenceNumber);
             pendingMessages.put(object, message);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("added pending message " + sequenceNumber);
             }
         }
-        return false;
     }
 
     /**
@@ -551,20 +557,21 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      * @param event the event.
      */
     private void fireTelephonyEvent(final TelephonyEvent event) {
-        synchronized (listener) {
-            final Collection<TelephonyListener> copy =
+        final Collection<TelephonyListener> copy =
                 new java.util.ArrayList<TelephonyListener>();
+        synchronized (listener) {
             copy.addAll(listener);
-            for (TelephonyListener current : copy) {
-                switch(event.getEvent()) {
-                case TelephonyEvent.ANSWERED:
-                    current.telephonyCallAnswered(event);
-                    break;
-                case TelephonyEvent.HUNGUP:
-                    current.telephonyCallHungup(event);
-                default:
-                    current.telephonyMediaEvent(event);
-                }
+        }
+        for (TelephonyListener current : copy) {
+            switch(event.getEvent()) {
+            case TelephonyEvent.ANSWERED:
+                current.telephonyCallAnswered(event);
+                break;
+            case TelephonyEvent.HUNGUP:
+                current.telephonyCallHungup(event);
+                break;
+            default:
+                current.telephonyMediaEvent(event);
             }
         }
     }

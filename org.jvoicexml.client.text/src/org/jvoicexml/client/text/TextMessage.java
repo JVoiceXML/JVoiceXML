@@ -30,7 +30,7 @@ import java.io.Serializable;
 
 /**
  * A message that is sent over the network.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
 */
@@ -56,7 +56,7 @@ public final class TextMessage implements Serializable {
     /** Code indicating that clients may send input. */
     public static final int EXPECTING_INPUT = 5;
 
-    /** Code indicating that clients may no loger send input. */
+    /** Code indicating that clients may no longer send input. */
     public static final int INPUT_CLOSED = 6;
 
     /** The message code. */
