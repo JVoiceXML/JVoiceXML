@@ -69,6 +69,15 @@ class PendingMessage {
     }
 
     /**
+     * Retrieves the message code.
+     * @return the message code.
+     * @since 0.7.7
+     */
+    public int getMessageCode() {
+        return message.getCode();
+    }
+
+    /**
      * Retrieves the speakable.
      * @return the speakable.
      */
@@ -85,14 +94,11 @@ class PendingMessage {
     }
 
     /**
-     * @return sequence number to acknowledge
-     * @since 0.7.6
+     * Retrieves the sequence number of the encapsulated message.
+     * @return sequence number
+     * @since 0.7.7
      */
-    public int getAcknoledgeNumber() {
-        // A bye message is not acknowledged.
-        if (message.getCode() == TextMessage.BYE) {
-            return -1;
-        }
+    public int getSequenceNumber() {
         return message.getSequenceNumber();
     }
 }

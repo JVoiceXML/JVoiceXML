@@ -117,6 +117,15 @@ public final class TextServer extends Thread {
     /** <code>true</code> if the server has been started. */
     private boolean started;
 
+    /** <code>true</code> if we received a bye from JVoiceXML. */
+    private boolean receivedBye;
+
+    /** <code>true</code> if we the client is about to close. */
+    private boolean closingClient;
+
+    /** Semaphore to notify about acknowledgements. */
+    private final Object acknowledgeMonitor;
+
     /**
      * Constructs a new object.
      * @param hostname the hostname to use, usually this is the localhost
@@ -132,6 +141,7 @@ public final class TextServer extends Thread {
         lock = new Object();
         connectionLock = new Object();
         startedLock = new Object();
+        acknowledgeMonitor = new Object();
     }
 
     /**
@@ -298,6 +308,8 @@ public final class TextServer extends Thread {
         try {
             while ((server != null) && !isInterrupted()) {
                 client = server.accept();
+                receivedBye = false;
+                closingClient = false;
                 final InetSocketAddress remote =
                     (InetSocketAddress) client.getRemoteSocketAddress();
                 calledId = TcpUriFactory.createUri(remote);
@@ -362,7 +374,9 @@ public final class TextServer extends Thread {
                 final int code = message.getCode();
                 if (code == TextMessage.BYE) {
                     synchronized (lock) {
+                        receivedBye = true;
                         if (client != null) {
+                            acknowledge(message);
                             client.close();
                             client = null;
                         }
@@ -380,6 +394,11 @@ public final class TextServer extends Thread {
                     fireExpectingInput();
                 } else if (code == TextMessage.INPUT_CLOSED) {
                     fireInputClosed();
+                } else if (code == TextMessage.ACK && closingClient) {
+                    synchronized (acknowledgeMonitor) {
+                        acknowledgeMonitor.notifyAll();
+                    }
+                    return true;
                 }
                 if (!acknowledge(message)) {
                     LOGGER.warn("can not acknowledge due to disconnect");
@@ -396,7 +415,8 @@ public final class TextServer extends Thread {
         return false;
     }
 
-    /* Acknowledges a message.
+    /**
+     * Acknowledges a message.
      * @param message the message to acknowledge
      * @return <code>true</code> if the message could be acknowledged,
      *         <code>false</code> if connection lost
@@ -516,11 +536,20 @@ public final class TextServer extends Thread {
      * Closes the client socket.
      */
     private void closeClient() {
+        closingClient = true;
         synchronized (lock) {
             if (out != null) {
                 try {
+                    if (!receivedBye) {
+                        final TextMessage message =
+                                new TextMessage(TextMessage.BYE);
+                        send(message);
+                        synchronized (acknowledgeMonitor) {
+                            acknowledgeMonitor.wait(2000);
+                        }
+                    }
                     out.close();
-                } catch (IOException e) {
+                } catch (IOException | InterruptedException e) {
                     LOGGER.warn("error closing the client output stream", e);
                 } finally {
                     out = null;
