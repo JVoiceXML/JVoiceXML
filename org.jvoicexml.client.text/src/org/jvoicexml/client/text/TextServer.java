@@ -42,6 +42,7 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.client.TcpUriFactory;
+import org.jvoicexml.startup.Shutdown;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -117,13 +118,16 @@ public final class TextServer extends Thread {
     /** <code>true</code> if the server has been started. */
     private boolean started;
 
+    /** <code>true</code> if the server is shutting down. */
+    private boolean stopping;
+
     /** <code>true</code> if we received a bye from JVoiceXML. */
     private boolean receivedBye;
 
     /** <code>true</code> if we the client is about to close. */
     private boolean closingClient;
 
-    /** Semaphore to notify about acknowledgements. */
+    /** Semaphore to notify about acknowledgments. */
     private final Object acknowledgeMonitor;
 
     /**
@@ -172,6 +176,7 @@ public final class TextServer extends Thread {
     private void fireStarted() {
         synchronized (startedLock) {
             started = true;
+            stopping = false;
             synchronized (listener) {
                 for (TextListener current : listener) {
                     current.started();
@@ -306,7 +311,7 @@ public final class TextServer extends Thread {
         fireStarted();
 
         try {
-            while ((server != null) && !isInterrupted()) {
+            while (!stopping && (server != null) && !isInterrupted()) {
                 client = server.accept();
                 receivedBye = false;
                 closingClient = false;
@@ -486,12 +491,13 @@ public final class TextServer extends Thread {
     private void send(final TextMessage message)
             throws IOException {
         // check generally if we can send
-        final OutputStream out;
-        if (isConnected()) {
-            out = client.getOutputStream();
-        } else {
-            throw new IOException("Disconnected. No stream to send " +
-                    message.getData());
+        if (out == null) {
+            if (isConnected()) {
+                out = client.getOutputStream();
+            } else {
+                throw new IOException("Disconnected. No stream to send " +
+                        message.getData());
+            }
         }
         synchronized (lock) {
             final ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -507,6 +513,7 @@ public final class TextServer extends Thread {
      * Stops this server.
      */
     public void stopServer() {
+        stopping = true;
         closeServer();
         closeClient();
         interrupt();
