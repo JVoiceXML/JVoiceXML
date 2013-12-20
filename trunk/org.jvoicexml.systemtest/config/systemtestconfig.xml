@@ -45,7 +45,12 @@
                         <property name="dtmf" value= "5" />
                     </bean>
                 </entry>
-            </map>
+                <entry key="8">
+                    <bean class="org.jvoicexml.systemtest.script.PressDigitScript">
+                        <property name="dtmf" value= "5" />
+                    </bean>
+                </entry>
+                </map>
         </property>
       </bean>
     </property>
@@ -61,6 +66,6 @@
     -->
     <!-- passed: 43, 44, 45, 96, 11 -->
     <!-- fail: 564, 1001 dead loop -->
-    <property name="testcases" value="1-7" />
+    <property name="testcases" value="11" />
   </bean>
 </beans>

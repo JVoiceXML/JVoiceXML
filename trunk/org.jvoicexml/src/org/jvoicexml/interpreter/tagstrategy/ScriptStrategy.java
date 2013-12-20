@@ -32,6 +32,7 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Application;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
@@ -96,6 +97,12 @@ class ScriptStrategy
     @Override
     public void validateAttributes() throws ErrorEvent {
         final String srcAttribute = (String) getAttribute(Script.ATTRIBUTE_SRC);
+        final String srcExprAttribute =
+                (String) getAttribute(Script.ATTRIBUTE_SRCEXPR);
+        if ((srcAttribute != null) && (srcExprAttribute != null)) {
+            throw new BadFetchError(
+                    "only one of src and srcexpr may be specified");
+        }
         if (srcAttribute != null) {
             try {
                 src = new URI(srcAttribute);
@@ -105,8 +112,6 @@ class ScriptStrategy
             }
         }
 
-        final String srcExprAttribute =
-            (String) getAttribute(Script.ATTRIBUTE_SRCEXPR);
         if (srcExprAttribute != null) {
             try {
                 src = new URI(srcExprAttribute);
@@ -160,7 +165,14 @@ class ScriptStrategy
             SemanticError {
         final DocumentServer server = context.getDocumentServer();
         final Session session = context.getSession();
-        final DocumentDescriptor descriptor = new DocumentDescriptor(src);
+        final Application application = context.getApplication();
+        final URI uri;
+        if (application == null) {
+            uri = src;
+        } else {
+            uri = application.resolve(src);
+        }
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final FetchAttributes attributes = getFetchAttributes();
         descriptor.setAttributes(attributes);
         final String sessionId = session.getSessionID();
