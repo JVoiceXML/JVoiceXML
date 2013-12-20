@@ -511,8 +511,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             } catch (InterruptedException e) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(
-                            "waiting for end of receiver thread interrupted",
-                            e);
+                            "waiting for end of receiver thread interrupted");
                 }
             }
         }
