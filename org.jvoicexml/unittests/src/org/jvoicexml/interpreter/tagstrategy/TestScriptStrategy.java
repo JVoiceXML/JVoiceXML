@@ -74,7 +74,6 @@ public final class TestScriptStrategy
 
         uri = map.getUri("/script");
         map.addDocument(uri, SCRIPT);
-
     }
 
     /**
@@ -151,7 +150,29 @@ public final class TestScriptStrategy
      * @exception Exception
      *            test failed
      */
-    @Test
+    @Test(expected = BadFetchError.class)
+    public void testExecuteSrcAndSrcExpr() throws JVoiceXMLEvent, Exception {
+        final ScriptingEngine scripting = getScriptingEngine();
+        scripting.setVariable("test", uri.toString());
+        final VoiceXmlDocument doc = createDocument();
+        final Vxml vxml = doc.getVxml();
+        final Script script = vxml.appendChild(Script.class);
+        script.setSrcexpr("test");
+        script.setSrc(uri);
+
+        final ScriptStrategy strategy = new ScriptStrategy();
+        executeTagStrategy(script, strategy);
+    }
+
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @throws JVoiceXMLEvent
+     *         Test failed.
+     * @exception Exception
+     *            test failed
+     */
+    @Test(expected = BadFetchError.class)
     public void testExecuteNone() throws JVoiceXMLEvent, Exception {
         final ScriptingEngine scripting = getScriptingEngine();
         scripting.setVariable("test", "'" + uri.toString() + "'");
@@ -160,12 +181,6 @@ public final class TestScriptStrategy
         final Script script = vxml.appendChild(Script.class);
 
         final ScriptStrategy strategy = new ScriptStrategy();
-        JVoiceXMLEvent error = null;
-        try {
-            executeTagStrategy(script, strategy);
-        } catch (BadFetchError e) {
-            error = e;
-        }
-        Assert.assertNotNull(error);
+        executeTagStrategy(script, strategy);
     }
 }
