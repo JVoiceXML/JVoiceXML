@@ -85,7 +85,7 @@ class CharacterInputThread extends Thread {
                 }
             } catch (InterruptedException e) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("reading DTMF interrupted", e);
+                    LOGGER.debug("reading DTMF interrupted");
                 }
                 return;
             }
