@@ -27,7 +27,7 @@ public class OpenVXMLActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_open_vxml);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		//getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override
@@ -44,13 +44,30 @@ public class OpenVXMLActivity extends Activity {
 		EditText urlText = (EditText) findViewById(R.id.vxmlURL);
 		String urlAddress = urlText.getText().toString();
 		MainJVXMLActivity.outputTextExternal(urlAddress);
-		new Download(OpenVXMLActivity.this, urlAddress).execute();
-
-		MainJVXMLActivity.getStartButton().setEnabled(true);
+		new Download(OpenVXMLActivity.this, urlAddress).execute();		
 
 		this.finish();
 	}
 
+	/**
+	 * Checks if file from URL exists.
+	 * 
+	 * @param URLName URL to be checked
+	 * @return true if file exists
+	 */
+	public static boolean exists(String URLName){
+	    try {
+	      HttpURLConnection.setFollowRedirects(false);
+	      HttpURLConnection con =
+	         (HttpURLConnection) new URL(URLName).openConnection();
+	      con.setRequestMethod("HEAD");
+	      return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+	    }
+	    catch (Exception e) {
+	       return false;
+	    }
+	  }
+	
 	private class Download extends AsyncTask<Void, Void, String> {
 		ProgressDialog mProgressDialog;
 		Context context;
@@ -70,7 +87,18 @@ public class OpenVXMLActivity extends Activity {
 		protected String doInBackground(Void... params) {
 
 			try {
-
+			        //check if file exists first
+			        if (!exists(surl)) {
+		                         runOnUiThread(new Runnable() {
+		                                    public void run() {
+		                                        MainJVXMLActivity.outputTextExternal(
+		                                                "Invalid file, enter proper address!");
+		                                        MainJVXMLActivity.getStartButton().setEnabled(false);
+		                                    }
+		                                });
+		                         return "done";
+			        }
+			        
 				URL url = new URL(surl);
 				HttpURLConnection c = (HttpURLConnection) url.openConnection();
 				c.setRequestMethod("GET");
@@ -104,7 +132,7 @@ public class OpenVXMLActivity extends Activity {
 					public void run() {
 						MainJVXMLActivity.outputTextExternal("Opened vxml: "
 								+ outputFileName);
-						
+						MainJVXMLActivity.getStartButton().setEnabled(true);
 					}
 				});
 				fos.close();
