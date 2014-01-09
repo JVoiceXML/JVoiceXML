@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentDescriptor;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.ReturnEvent;
@@ -56,8 +57,8 @@ final class SubdialogExecutorThread extends Thread {
     /** The current application. */
     private final Application application;
 
-    /** The event handler to propagate errors and results. */
-    private final EventHandler handler;
+    /** The event bus to propagate errors and results. */
+    private final EventBus eventbus;
 
     /** Parameters of the subdialog call. */
     private final Map<String, Object> parameters;
@@ -67,17 +68,16 @@ final class SubdialogExecutorThread extends Thread {
      * @param subdialogUri the URI of the subdialog
      * @param subdialogContext the context of the subdialog
      * @param appl the current application
-     * @param eventHandler the event handler to propagate errors and results
      * @param params parameters of the subdialog call
      */
     public SubdialogExecutorThread(final URI subdialogUri,
             final VoiceXmlInterpreterContext subdialogContext,
-            final Application appl, final EventHandler eventHandler,
+            final Application appl,
             final Map<String, Object> params) {
         uri = subdialogUri;
         context = subdialogContext;
         application = appl;
-        handler = eventHandler;
+        eventbus = context.getEventBus();
         parameters = params;
     }
 
@@ -106,15 +106,15 @@ final class SubdialogExecutorThread extends Thread {
             try {
                 result = getReturnObject(e);
             } catch (SemanticError sematicerror) {
-                handler.notifyEvent(sematicerror);
+                eventbus.publish(sematicerror);
                 return;
             }
             final SubdialogResultEvent event =
                 new SubdialogResultEvent(result);
-            handler.notifyEvent(event);
+            eventbus.publish(event);
             return;
         } catch (JVoiceXMLEvent e) {
-            handler.notifyEvent(e);
+            eventbus.publish(e);
             return;
         }
         // The VoiceXML spec leaves it open what shoould happen if there was no
@@ -122,7 +122,7 @@ final class SubdialogExecutorThread extends Thread {
         // processed. So we return TRUE in this case.
         final SubdialogResultEvent event =
             new SubdialogResultEvent(Boolean.TRUE);
-        handler.notifyEvent(event);
+        eventbus.publish(event);
     }
 
     /**

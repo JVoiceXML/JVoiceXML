@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -210,7 +210,7 @@ public final class TestFormInterpretationAlgorithm {
         Assert.assertEquals(1, activeGrammars.size());
         final EventHandler handler = context.getEventHandler();
         final JVoiceXMLEvent event = new CancelEvent();
-        handler.notifyEvent(event);
+        handler.onEvent(event);
     }
 
     /**
@@ -270,7 +270,7 @@ public final class TestFormInterpretationAlgorithm {
         Assert.assertEquals(1, activeGrammars.size());
         final EventHandler handler = context.getEventHandler();
         final JVoiceXMLEvent noinput = new NoinputEvent();
-        handler.notifyEvent(noinput);
+        handler.onEvent(noinput);
         input.waitRecognitionStarted();
         Collection<GrammarDocument> grammars = input.getActiveGrammars();
         for (GrammarDocument document : grammars) {
@@ -279,7 +279,7 @@ public final class TestFormInterpretationAlgorithm {
         }
         Assert.assertEquals(1, activeGrammars.size());
         final JVoiceXMLEvent cancel = new CancelEvent();
-        handler.notifyEvent(cancel);
+        handler.onEvent(cancel);
     }
 
     /**
@@ -354,11 +354,11 @@ public final class TestFormInterpretationAlgorithm {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         final JVoiceXMLEvent recognitionEvent = new RecognitionEvent(result);
-        handler.notifyEvent(recognitionEvent);
+        handler.onEvent(recognitionEvent);
         input.waitRecognitionStarted();
         Assert.assertEquals(1, activeGrammars.size());
         final JVoiceXMLEvent cancel = new CancelEvent();
-        handler.notifyEvent(cancel);
+        handler.onEvent(cancel);
     }
 
     /**
@@ -416,7 +416,7 @@ public final class TestFormInterpretationAlgorithm {
         Assert.assertEquals(1, activeGrammars.size());
         final EventHandler handler = context.getEventHandler();
         final JVoiceXMLEvent event = new CancelEvent();
-        handler.notifyEvent(event);
+        handler.onEvent(event);
     }
 
     /**
@@ -476,11 +476,11 @@ public final class TestFormInterpretationAlgorithm {
         Assert.assertEquals(1, activeGrammars.size());
         final EventHandler handler = context.getEventHandler();
         final JVoiceXMLEvent noinput = new NoinputEvent();
-        handler.notifyEvent(noinput);
+        handler.onEvent(noinput);
         input.waitRecognitionStarted();
         Assert.assertEquals(1, activeGrammars.size());
         final JVoiceXMLEvent cancel = new CancelEvent();
-        handler.notifyEvent(cancel);
+        handler.onEvent(cancel);
     }
 
     /**
@@ -547,7 +547,7 @@ public final class TestFormInterpretationAlgorithm {
         Assert.assertEquals(2, activeGrammars.size());
         final EventHandler handler = context.getEventHandler();
         final JVoiceXMLEvent event = new CancelEvent();
-        handler.notifyEvent(event);
+        handler.onEvent(event);
     }
 
     /**
@@ -558,7 +558,8 @@ public final class TestFormInterpretationAlgorithm {
      *         Test failed.
      */
     @Test
-    public void testActivateFormGrammarsInField() throws Exception, JVoiceXMLEvent {
+    public void testActivateFormGrammarsInField()
+            throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
         final Form form = vxml.appendChild(Form.class);
@@ -605,11 +606,11 @@ public final class TestFormInterpretationAlgorithm {
         Assert.assertEquals(1, activeGrammars.size());
         final EventHandler handler = context.getEventHandler();
         final JVoiceXMLEvent event = new CancelEvent();
-        handler.notifyEvent(event);
+        handler.onEvent(event);
     }
 
     /**
-     * Test method to activate a grammar with a field scope and a form scope
+     * Test method to activate a grammar with a field scope and a form scope.
      * after a noinput
      * @throws Exception
      *         Test failed.
@@ -674,11 +675,11 @@ public final class TestFormInterpretationAlgorithm {
         Assert.assertEquals(2, activeGrammars.size());
         final EventHandler handler = context.getEventHandler();
         final JVoiceXMLEvent noinput = new NoinputEvent();
-        handler.notifyEvent(noinput);
+        handler.onEvent(noinput);
         input.waitRecognitionStarted();
         Assert.assertEquals(2, activeGrammars.size());
         final JVoiceXMLEvent cancel = new CancelEvent();
-        handler.notifyEvent(cancel);
+        handler.onEvent(cancel);
     }
 
     /**
@@ -763,11 +764,11 @@ public final class TestFormInterpretationAlgorithm {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         final JVoiceXMLEvent recognitionEvent = new RecognitionEvent(result);
-        handler.notifyEvent(recognitionEvent);
+        handler.onEvent(recognitionEvent);
         input.waitRecognitionStarted();
         Assert.assertEquals(2, activeGrammars.size());
         final JVoiceXMLEvent cancel = new CancelEvent();
-        handler.notifyEvent(cancel);
+        handler.onEvent(cancel);
     }
 
     /**
