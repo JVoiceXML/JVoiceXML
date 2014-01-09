@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -44,6 +44,7 @@ import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
@@ -215,9 +216,9 @@ public final class JVoiceXmlSession
 
         // Generate a hangup event.
         LOGGER.info("initiating a hangup event");
-        final EventHandler handler = context.getEventHandler();
+        final EventBus eventbus = context.getEventBus();
         final JVoiceXMLEvent event = new ConnectionDisconnectHangupEvent();
-        handler.notifyEvent(event);
+        eventbus.publish(event);
     }
 
     /**

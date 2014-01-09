@@ -48,6 +48,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -403,16 +404,8 @@ public final class FormInterpretationAlgorithm
         String gotoFormItemName = null;
 
         do {
-            if (gotoFormItemName == null) {
-                item = select();
-            } else {
-                item = getFormItem(gotoFormItemName);
-                if (item == null) {
-                    throw new BadFetchError("unable to find form item '"
-                                            + gotoFormItemName + "'");
-                }
-                gotoFormItemName = null;
-            }
+            item = select(gotoFormItemName);
+            gotoFormItemName = null;
 
             if (item != null) {
                 final String name = item.getName();
@@ -431,23 +424,18 @@ public final class FormInterpretationAlgorithm
                 } catch (InternalExitEvent e) {
                     LOGGER.info("exiting...");
                     break;
+                } catch (GotoNextFormEvent e) {
+                    LOGGER.info("going to form '" + e.getForm() + "'...");
+                } catch (GotoNextFormItemEvent e) {
+                    gotoFormItemName = e.getItem();
+                    LOGGER.info("going to form item '" + gotoFormItemName
+                            + "'...");
                 } catch (JVoiceXMLEvent e) {
                     try {
-                        if (e instanceof GotoNextFormEvent) {
-                            final GotoNextFormEvent gotoForm =
-                                (GotoNextFormEvent) e;
-                            LOGGER.info("going to form '" + gotoForm.getForm()
-                                    + "'...");
-                        } else if (e instanceof GotoNextFormItemEvent) {
-                            final GotoNextFormItemEvent gotoItem =
-                                (GotoNextFormItemEvent) e;
-                            LOGGER.info("going to form item '"
-                                    + gotoItem.getItem() + "'...");
-                        } else if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug(
-                                    "caught JVoiceXML event while processing '"
-                                    + e.getEventType() + "'");
-                        }
+                        LOGGER.debug("caught JVoiceXML event while processing '"
+                                + e.getEventType() + "'");
+                        final EventBus eventbus = context.getEventBus();
+                        eventbus.publish(e);
                         processEvent(e);
                     } catch (GotoNextFormItemEvent ie) {
                         gotoFormItemName = ie.getItem();
@@ -511,14 +499,13 @@ public final class FormInterpretationAlgorithm
      */
     void processEvent(final JVoiceXMLEvent event)
         throws JVoiceXMLEvent {
-        final EventHandler handler = context.getEventHandler();
-        handler.notifyEvent(event);
         final InputItem inputItem;
         if (item instanceof InputItem) {
             inputItem = (InputItem) item;
         } else {
             inputItem = null;
         }
+        final EventHandler handler = context.getEventHandler();
         handler.processEvent(inputItem);
     }
 
@@ -549,18 +536,27 @@ public final class FormInterpretationAlgorithm
      * will perform an implicit <code>&lt;exit&gt;</code> operation).
      * </p>
      *
-     * @return Next unfilled {@link FormItem}, <code>null</code> if there is
+     * @param name name of the form item to select in case of a goto, maybe
+     *          <code>null</code> in case the usual select process should be
+     *          followed
+     * @return next unfilled {@link FormItem}, <code>null</code> if there is
      * none.
-     * @exception SemanticError error evaluating the form item.
+     * @exception SemanticError error evaluating the form item
+     * @exception BadFetchError if the specified form item does not exist
      */
-    private FormItem select() throws SemanticError {
+    private FormItem select(final String name)
+            throws SemanticError, BadFetchError {
         LOGGER.info("selecting next form item in dialog '" + id + "'...");
+        if (name != null) {
+            final FormItem formItem = getFormItem(name);
+            if (formItem == null) {
+                throw new BadFetchError("unable to find form item '"
+                                        + name + "'");
+            }
+        }
 
+        // Find the next selectable form item
         for (FormItem formItem : formItems) {
-            /**
-             * @todo Implement error throwing in case of an error while
-             *       evaluating the guard condition.
-             */
             if (formItem.isSelectable()) {
                 return formItem;
             }
@@ -600,7 +596,7 @@ public final class FormInterpretationAlgorithm
 
         // Clear the event handler cache.
         final EventHandler handler = context.getEventHandler();
-        handler.notifyEvent(null);
+        handler.clearEvent();
 
         // unless ( the last loop iteration ended with
         //          a catch that had no <reprompt>,
@@ -1160,7 +1156,8 @@ public final class FormInterpretationAlgorithm
 
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
-        platform.setEventHandler(handler);
+        final EventBus eventbus = context.getEventBus();
+        platform.setEventBus(eventbus);
         platform.waitNonBargeInPlayed();
 
         final UserInput input = platform.getUserInput();
@@ -1201,7 +1198,8 @@ public final class FormInterpretationAlgorithm
         final EventHandler handler = context.getEventHandler();
         eventStrategies = handler.collect(context, interpreter, this, initial);
 
-        platform.setEventHandler(handler);
+        final EventBus eventbus = context.getEventBus();
+        platform.setEventBus(eventbus);
         platform.waitNonBargeInPlayed();
 
         final CallControl call = platform.getCallControl();
@@ -1243,7 +1241,7 @@ public final class FormInterpretationAlgorithm
 
         // Execute...
         final ObjectExecutorThread objectExecutor =
-            new ObjectExecutorThread(context, object, handler);
+            new ObjectExecutorThread(context, object);
         objectExecutor.start();
     }
 
@@ -1276,8 +1274,9 @@ public final class FormInterpretationAlgorithm
         if (maxTime < 0) {
             maxTime = DEFAULT_RECORDING_MAXTIME;
         }
+        final EventBus eventbus = context.getEventBus();
         final RecordingReceiverThread recording =
-            new RecordingReceiverThread(handler, maxTime);
+            new RecordingReceiverThread(eventbus, maxTime);
         recording.start();
 
         // Start recording
@@ -1291,8 +1290,6 @@ public final class FormInterpretationAlgorithm
 
     /**
      * {@inheritDoc}
-     *
-     * @todo Implement this visitSubdialogFormItem method.
      */
     public void visitSubdialogFormItem(final SubdialogFormItem subdialog)
             throws JVoiceXMLEvent {
@@ -1331,7 +1328,7 @@ public final class FormInterpretationAlgorithm
         final VoiceXmlInterpreterContext subdialogContext =
             new VoiceXmlInterpreterContext(session, configuration, observer);
         final Thread thread = new SubdialogExecutorThread(resolvedUri,
-                subdialogContext, application, handler, parameters);
+                subdialogContext, application, parameters);
         thread.start();
     }
 
@@ -1363,7 +1360,8 @@ public final class FormInterpretationAlgorithm
         eventStrategies = handler.collect(context, interpreter, this, transfer);
         platform.waitNonBargeInPlayed();
 
-        platform.setEventHandler(handler);
+        final EventBus eventbus = context.getEventBus();
+        platform.setEventBus(eventbus);
 
         // Transfer
         call.transfer(dest);

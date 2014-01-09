@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.jvxml.RecordingEvent;
@@ -51,8 +52,8 @@ final class RecordingReceiverThread extends Thread {
     private static final Logger LOGGER =
         Logger.getLogger(RecordingReceiverThread.class);
 
-    /** The event handler to propagate the end of the recording. */
-    private final EventHandler handler;
+    /** The event bus to propagate the end of the recording. */
+    private final EventBus eventbus;
 
     /** Maximal recording time. */
     private final long maxTime;
@@ -62,13 +63,12 @@ final class RecordingReceiverThread extends Thread {
 
     /**
      * Creates a new object.
-     * @param eventHandler the event handler to propagate the end of the
-     *          recording.
+     * @param bus the event bus to propagate the end of the recording.
      * @param recordingTime maximal recording time.
      */
-    public RecordingReceiverThread(final EventHandler eventHandler,
+    public RecordingReceiverThread(final EventBus bus,
             final long recordingTime) {
-        handler = eventHandler;
+        eventbus = bus;
         maxTime = recordingTime;
         setDaemon(true);
         setName("RecordingReceiverThread");
@@ -85,14 +85,14 @@ final class RecordingReceiverThread extends Thread {
             Thread.sleep(maxTime);
         } catch (InterruptedException e) {
             final JVoiceXMLEvent event = new NoresourceError(e.getMessage(), e);
-            handler.notifyEvent(event);
+            eventbus.publish(event);
             return;
         }
 
         // Take what was recorded so far and ignore the rest.
         final byte[] buffer = out.toByteArray();
         final JVoiceXMLEvent event = new RecordingEvent(buffer);
-        handler.notifyEvent(event);
+        eventbus.publish(event);
     }
 
     /**

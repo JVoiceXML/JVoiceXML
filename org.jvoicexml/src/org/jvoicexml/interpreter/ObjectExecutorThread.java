@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2006 UCM Technologies, Inc.
  *              - Released under the terms of LGPL License
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,6 +43,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoauthorizationError;
@@ -74,8 +75,8 @@ final class ObjectExecutorThread extends Thread {
     /** The object form item to process. */
     private final ObjectFormItem object;
 
-    /** The event handler to propagate events. */
-    private final EventHandler handler;
+    /** The event bus to propagate events. */
+    private final EventBus eventbus;
 
     /** The parameters to pass to the method. */
     private final Collection<Object> parameter;
@@ -103,22 +104,20 @@ final class ObjectExecutorThread extends Thread {
      *                the current VoiceXML interpreter context.
      * @param item
      *                the object node to execute.
-     * @param evt
-     *                the event handler too propagate events.
      * @throws BadFetchError
      *                 Nested param tag does not specify all attributes.
      * @throws SemanticError
      *                 Not all attributes specified.
      */
     ObjectExecutorThread(final VoiceXmlInterpreterContext ctx,
-            final ObjectFormItem item, final EventHandler evt)
+            final ObjectFormItem item)
             throws SemanticError, BadFetchError {
         setDaemon(true);
         setName("ObjectExecutor");
 
         context = ctx;
         object = item;
-        handler = evt;
+        eventbus = context.getEventBus();
 
         // Determine the application base for the classpath
         application = context.getApplication();
@@ -155,9 +154,9 @@ final class ObjectExecutorThread extends Thread {
         try {
             final Object result = execute();
             final ObjectTagResultEvent event = new ObjectTagResultEvent(result);
-            handler.notifyEvent(event);
+            eventbus.publish(event);
         } catch (JVoiceXMLEvent e) {
-            handler.notifyEvent(e);
+            eventbus.publish(e);
         }
     }
 

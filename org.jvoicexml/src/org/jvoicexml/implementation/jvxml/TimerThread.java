@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,13 +27,13 @@
 package org.jvoicexml.implementation.jvxml;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.event.EventObserver;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.plain.NoinputEvent;
 
 /**
  * Timer to send timeout events if the user did not say anything.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 final class TimerThread
@@ -48,8 +48,8 @@ final class TimerThread
     /** Flag, if the thread has been stopped. */
     private boolean stopped;
 
-    /** The event observer to notify when the timeout expired. */
-    private final EventObserver eventObserver;
+    /** The event bus to notify when the timeout expired. */
+    private final EventBus eventbus;
 
     /** Semaphore to handle the wait/notify mechanism. */
     private final Object semaphor;
@@ -59,15 +59,15 @@ final class TimerThread
 
     /**
      * Constructs a new object.
-     * @param observer The event observer to notify when the timeout expired.
+     * @param bus the event bus to notify when the timeout expired.
      * @param delay milliseconds to wait, a value <code>&lt;0</code> indicates
      *              that the default timeout should be taken.
      */
-    public TimerThread(final EventObserver observer, final long delay) {
+    public TimerThread(final EventBus bus, final long delay) {
         setDaemon(true);
         setName("noinput-TimerThread");
 
-        eventObserver = observer;
+        eventbus = bus;
         if (delay > 0) {
             timeout = delay;
         } else {
@@ -92,15 +92,13 @@ final class TimerThread
             LOGGER.error("error waiting for input timeout");
         }
 
-        synchronized (eventObserver) {
-            if (!stopped) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("sending no input event");
-                }
-
-                final NoinputEvent event = new NoinputEvent();
-                eventObserver.notifyEvent(event);
+        if (!stopped) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("sending no input event");
             }
+
+            final NoinputEvent event = new NoinputEvent();
+            eventbus.publish(event);
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -116,10 +114,8 @@ final class TimerThread
             LOGGER.debug("stopping timer...");
         }
 
-        if (eventObserver != null) {
-            synchronized (eventObserver) {
-                stopped = true;
-            }
+        if (eventbus != null) {
+            stopped = true;
         }
 
         synchronized (semaphor) {

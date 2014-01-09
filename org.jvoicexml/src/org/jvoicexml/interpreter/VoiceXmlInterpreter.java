@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.Configurable;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -267,7 +268,8 @@ public final class VoiceXmlInterpreter implements Configurable {
                 fia.initialize(initTagFactory);
                 context.finalizedInitialization();
             } catch (JVoiceXMLEvent event) {
-                fia.processEvent(event);
+                final EventBus eventbus = context.getEventBus();
+                eventbus.publish(event);
             }
             fia.mainLoop();
         } finally {

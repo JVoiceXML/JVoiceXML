@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -401,7 +401,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         final RecognitionEvent event = new RecognitionEvent(result);
-        handler.notifyEvent(event);
+        handler.onEvent(event);
         handler.processEvent(item);
 
         final ScriptingEngine scripting = context.getScriptingEngine();
@@ -449,7 +449,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(false);
         result.setConfidence(0.2f);
         final RecognitionEvent event = new RecognitionEvent(result);
-        handler.notifyEvent(event);
+        handler.onEvent(event);
         handler.processEvent(item);
 
         Thread.sleep(500);
@@ -495,7 +495,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         final RecognitionEvent event = new RecognitionEvent(result);
-        handler.notifyEvent(event);
+        handler.onEvent(event);
         handler.processEvent(item);
 
         final ScriptingEngine scripting = context.getScriptingEngine();
@@ -544,7 +544,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(false);
         result.setConfidence(0.2f);
         final RecognitionEvent event = new RecognitionEvent(result);
-        handler.notifyEvent(event);
+        handler.onEvent(event);
         handler.processEvent(item);
 
         final ScriptingEngine scripting = context.getScriptingEngine();
@@ -616,7 +616,7 @@ public final class TestJVoiceXmlEventHandler {
             (ScriptableObject) scripting.getVariable("out");
         result.setSemanticInterpretation(interpretation);
         final RecognitionEvent event = new RecognitionEvent(result);
-        handler.notifyEvent(event);
+        handler.onEvent(event);
 
         handler.processEvent(item2);
         Assert.assertEquals(utterance1, scripting.eval(name1 + ";"));
@@ -691,7 +691,7 @@ public final class TestJVoiceXmlEventHandler {
             (ScriptableObject) scripting.getVariable("out");
         result.setSemanticInterpretation(interpretation);
         final RecognitionEvent event = new RecognitionEvent(result);
-        handler.notifyEvent(event);
+        handler.onEvent(event);
 
         handler.processEvent(item2);
         Assert.assertEquals(result.getUtterance(), scripting.eval(name1 + ";"));
@@ -765,7 +765,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         final JVoiceXMLEvent event = new GenericVoiceXmlEvent("dummy");
-        handler.notifyEvent(event);
+        handler.onEvent(event);
         JVoiceXMLEvent error = null;
         try {
             handler.processEvent(item);
@@ -813,7 +813,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setConfidence(1.0f);
         result.setSemanticInterpretation("help");
         final RecognitionEvent event = new RecognitionEvent(result);
-        handler.notifyEvent(event);
+        handler.onEvent(event);
         handler.processEvent(item);
 
         Assert.assertTrue(TestAppender.containsMessage("test: help"));
@@ -834,7 +834,7 @@ public final class TestJVoiceXmlEventHandler {
         final RecognitionEvent event = new RecognitionEvent(result);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(context.getScopeObserver());
-        handler.notifyEvent(event);
+        handler.onEvent(event);
         final JVoiceXMLEvent waitEvent = handler.waitEvent();
         Assert.assertEquals(event.getEventType(), waitEvent.getEventType());
     }
@@ -855,7 +855,7 @@ public final class TestJVoiceXmlEventHandler {
         final RecognitionEvent event = new RecognitionEvent(result);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(context.getScopeObserver());
-        handler.notifyEvent(event);
+        handler.onEvent(event);
         final JVoiceXMLEvent waitEvent = handler.waitEvent();
         Assert.assertEquals(CancelEvent.EVENT_TYPE, waitEvent.getEventType());
     }
@@ -876,7 +876,7 @@ public final class TestJVoiceXmlEventHandler {
         final RecognitionEvent event = new RecognitionEvent(result);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(context.getScopeObserver());
-        handler.notifyEvent(event);
+        handler.onEvent(event);
         final JVoiceXMLEvent waitEvent = handler.waitEvent();
         Assert.assertEquals(HelpEvent.EVENT_TYPE, waitEvent.getEventType());
     }

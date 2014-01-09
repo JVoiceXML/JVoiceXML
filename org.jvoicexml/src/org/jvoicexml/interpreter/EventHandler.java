@@ -28,7 +28,7 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
-import org.jvoicexml.event.EventObserver;
+import org.jvoicexml.event.EventSubscriber;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
@@ -80,7 +80,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @see org.jvoicexml.ImplementationPlatform
  */
 public interface EventHandler
-        extends EventObserver {
+        extends EventSubscriber {
     /**
      * Adds all event handlers defined in the given document.
      * @param context the current <code>VoiceXmlInterpreterContext</code>
@@ -136,6 +136,13 @@ public interface EventHandler
      */
     void processEvent(final CatchContainer item)
             throws JVoiceXMLEvent;
+
+    /**
+     * Removes all cached events that have been received.
+     * 
+     * @since 0.7.7
+     */
+    void clearEvent();
 
     /**
      * Adds a strategy for the given event type.

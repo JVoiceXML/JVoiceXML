@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -44,7 +44,7 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.event.EventObserver;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -130,8 +130,8 @@ public final class JVoiceXmlImplementationPlatform
     /** The calling device. */
     private JVoiceXmlCallControl call;
 
-    /** The event observer to communicate events back to the interpreter. */
-    private EventObserver eventObserver;
+    /** The event bus to communicate events back to the interpreter. */
+    private EventBus eventbus;
 
     /** A timer to get the noinput timeout. */
     private TimerThread timer;
@@ -602,8 +602,9 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public void setEventHandler(final EventObserver observer) {
-        eventObserver = observer;
+    @Override
+    public void setEventBus(final EventBus bus) {
+        eventbus = bus;
     }
 
     /**
@@ -652,12 +653,12 @@ public final class JVoiceXmlImplementationPlatform
         LOGGER.info("accepted recognition '" + result.getUtterance()
                 + "'");
 
-        if (eventObserver != null) {
+        if (eventbus != null) {
             result.setMark(markname);
 
             final RecognitionEvent recognitionEvent =
                     new RecognitionEvent(result);
-            eventObserver.notifyEvent(recognitionEvent);
+            eventbus.publish(recognitionEvent);
         }
 
         markname = null;
@@ -677,11 +678,10 @@ public final class JVoiceXmlImplementationPlatform
     public void resultRejected(final RecognitionResult result) {
         LOGGER.info("rejected recognition '" + result.getUtterance() + "'");
 
-        if (eventObserver != null) {
+        if (eventbus != null) {
             result.setMark(markname);
-
             final NomatchEvent noMatchEvent = new NomatchEvent();
-            eventObserver.notifyEvent(noMatchEvent);
+            eventbus.publish(noMatchEvent);
         }
         if (externalRecognitionListener != null) {
             externalRecognitionListener.resultRejected(result);
@@ -812,7 +812,7 @@ public final class JVoiceXmlImplementationPlatform
 
         final long timeout = promptAccumulator.getPromptTimeout();
         if (timeout > 0) {
-            timer = new TimerThread(eventObserver, timeout);
+            timer = new TimerThread(eventbus, timeout);
             timer.start();
         }
     }
@@ -868,10 +868,10 @@ public final class JVoiceXmlImplementationPlatform
     public void telephonyCallTransferred(final TelephonyEvent event) {
         LOGGER.info("call transfered to '" + event.getParam() + "'");
 
-        if (eventObserver != null) {
+        if (eventbus != null) {
             final String uri = (String) event.getParam();
             final JVoiceXMLEvent transferEvent = new TransferEvent(uri, null);
-            eventObserver.notifyEvent(transferEvent);
+            eventbus.publish(transferEvent);
         }
     }
 
@@ -955,7 +955,7 @@ public final class JVoiceXmlImplementationPlatform
             return;
         }
 
-        if (eventObserver == null) {
+        if (eventbus == null) {
             return;
         }
 
@@ -1010,13 +1010,13 @@ public final class JVoiceXmlImplementationPlatform
      * @since 0.7.4
      */
     private void reportError(final ErrorEvent error) {
-        if (eventObserver == null) {
+        if (eventbus == null) {
             LOGGER.warn(
                     "no event observer. unable to propagate an error",
                     error);
             return;
         }
-        eventObserver.notifyEvent(error);
+        eventbus.publish(error);
     }
 
     /**

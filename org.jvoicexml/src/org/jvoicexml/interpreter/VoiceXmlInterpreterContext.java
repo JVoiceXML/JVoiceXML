@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -46,6 +46,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
@@ -70,10 +71,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Component that uses a <em>VoiceXML interpreter</em> to interpret a
- * <em>VoiceXML document</em> and that may also interact with the
- * <em>implementation platform</em> independent of the <em>VoiceXML
- * interpreter</em>.
+ * Component that uses a {@link VoiceXmlInterpreter} to interpret a
+ * {@link org.jvoicexml.xml.vxml.VoiceXmlDocument} and that may also interact
+ * with the {@link org.jvoicexml.ImplementationPlatform} independent of the
+ * {@link VoiceXmlInterpreter}.
  *
  * @author Dirk Schnelle-Walka
  * @author Torben Hardt
@@ -105,6 +106,9 @@ public final class VoiceXmlInterpreterContext  {
 
     /** The scripting engine. */
     private ScriptingEngine scripting;
+
+    /** The event bus. */
+    private final EventBus eventbus;
 
     /** The event handler to use in this context. */
     private final EventHandler eventHandler;
@@ -147,9 +151,11 @@ public final class VoiceXmlInterpreterContext  {
                 new GrammarDeactivator(platform);
             grammars.addActiveGrammarSetObserver(deactivator);
         }
+        eventbus = new EventBus();
         properties = new ScopedMap<String, String>(scopeObserver);
         eventHandler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(scopeObserver);
+        eventbus.subscribe("", eventHandler);
     }
 
     /**
@@ -179,8 +185,10 @@ public final class VoiceXmlInterpreterContext  {
             grammars.addActiveGrammarSetObserver(deactivator);
         }
         properties = new ScopedMap<String, String>(scopeObserver);
+        eventbus = new EventBus();
         eventHandler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(scopeObserver);
+        eventbus.subscribe("", eventHandler);
     }
 
     /**
@@ -251,6 +259,15 @@ public final class VoiceXmlInterpreterContext  {
         }
 
         return scripting;
+    }
+
+    /**
+     * Retrieves the event bus.
+     * @return the event bus
+     * @since 0.7.7
+     */
+    public EventBus getEventBus() {
+        return eventbus;
     }
 
     /**
