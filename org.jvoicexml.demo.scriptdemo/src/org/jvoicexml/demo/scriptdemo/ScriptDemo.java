@@ -29,18 +29,17 @@
 
 package org.jvoicexml.demo.scriptdemo;
 
+import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.BasicConnectionInformation;
-import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.xml.sax.InputSource;
@@ -75,42 +74,6 @@ public final class ScriptDemo {
 
             context = null;
         }
-    }
-
-    /**
-     * Add the given document.
-     *
-     * @param path
-     *            the path where to add the document.
-     * @param document
-     *            the only document in this application.
-     * @return URI of the document.
-     */
-    private URI addDocument(final String path,
-            final VoiceXmlDocument document) {
-        MappedDocumentRepository repository;
-        try {
-            repository = (MappedDocumentRepository)
-                context.lookup("MappedDocumentRepository");
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error obtaining the documentrepository", ne);
-
-            return null;
-        } catch (Exception e) {
-            LOGGER.error("error obtaining the documentrepository", e);
-            return null;
-        }
-
-        final URI uri;
-        try {
-            uri = repository.getUri(path);
-        } catch (URISyntaxException e) {
-            LOGGER.error("error creating the URI", e);
-            return null;
-        }
-        repository.addDocument(uri, document.toString());
-
-        return uri;
     }
 
     /**
@@ -156,20 +119,12 @@ public final class ScriptDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting sripting demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2013 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2014 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final ScriptDemo demo = new ScriptDemo();
-            final InputSource rootInput = new InputSource("root.vxml");
-            final VoiceXmlDocument root = new VoiceXmlDocument(rootInput);
-            final InputSource startInput = new InputSource("scriptdemo.vxml");
-            final VoiceXmlDocument document = new VoiceXmlDocument(startInput);
-
-            demo.addDocument("/root", root);
-            final URI uri = demo.addDocument("/start", document);
-            if (uri == null) {
-                return;
-            }
+            final File file = new File("scriptdemo.vxml");
+            final URI uri = file.toURI();
 
             LOGGER.info("interpreting document '" + uri + "'...");
             demo.interpretDocument(uri);
