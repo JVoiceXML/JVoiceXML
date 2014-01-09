@@ -1,12 +1,12 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
+ * File:    $HeadURL:  $
+ * Version: $LastChangedRevision: 643 $
+ * Date:    $Date: $
+ * Author:  $LastChangedBy: $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,22 +23,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
 package org.jvoicexml.event;
 
 /**
- * Event observer to catch events generated from the
- * {@link org.jvoicexml.ImplementationPlatform}.
- *
+ * A subscriber for events.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
- *
- * @since 0.5
+ * @version $Revision: $
+ * @since 0.7.7
  */
-public interface EventObserver {
+public interface EventSubscriber {
     /**
-     * Notification about an event in the implementation platform.
-     * @param event The event.
+     * Notification about the given event.
+     * @param event the event
      */
-    void notifyEvent(final JVoiceXMLEvent event);
+    void onEvent(final JVoiceXMLEvent event);
 }

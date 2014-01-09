@@ -126,6 +126,7 @@ public final class JVoiceXmlEventHandler
     /**
      * {@inheritDoc}
      */
+    @Override
     public void collect(final VoiceXmlInterpreterContext context,
                         final VoiceXmlInterpreter interpreter,
                         final VoiceXmlDocument document) {
@@ -165,6 +166,7 @@ public final class JVoiceXmlEventHandler
     /**
      * {@inheritDoc}
      */
+    @Override
     public void collect(final VoiceXmlInterpreterContext context,
                         final VoiceXmlInterpreter interpreter,
                         final Dialog dialog) {
@@ -419,6 +421,7 @@ public final class JVoiceXmlEventHandler
     /**
      * {@inheritDoc}
      */
+    @Override
     public JVoiceXMLEvent waitEvent() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("waiting for an event...");
@@ -513,12 +516,21 @@ public final class JVoiceXmlEventHandler
     /**
      * {@inheritDoc}
      */
-    public synchronized void notifyEvent(final JVoiceXMLEvent e) {
+    @Override
+    public void clearEvent() {
+        event = null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized void onEvent(final JVoiceXMLEvent e) {
         if (e == null) {
             return;
         }
         // Allow for only one event.
-        if ((event != null) && (e != null)) {
+        if (event != null) {
             LOGGER.info("ignoring second event '" + e.getEventType()
                     + "' current  event is '" + event.getEventType() + "'");
             return;

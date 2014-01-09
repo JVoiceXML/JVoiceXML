@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,7 +26,7 @@
 
 package org.jvoicexml;
 
-import org.jvoicexml.event.EventObserver;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
@@ -126,12 +126,12 @@ public interface ImplementationPlatform extends PromptAccumulator {
     void close();
 
     /**
-     * Sets the event observer to communicate events back to the interpreter.
-     * @param observer The event observer.
+     * Sets the event bus to communicate events back to the interpreter.
+     * @param bus the event bus
      *
-     * @since 0.5
+     * @since 0.7.7
      */
-    void setEventHandler(final EventObserver observer);
+    void setEventBus(final EventBus bus);
 
     /**
      * Sets the current session.

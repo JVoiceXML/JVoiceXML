@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.Configuration;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
@@ -43,7 +44,7 @@ import org.jvoicexml.xml.vxml.Vxml;
 /**
  * Test case for {@link org.jvoicexml.interpreter.ObjectExecutorThread}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
@@ -123,10 +124,12 @@ public final class TestObjectExecutorThread {
             new FormInterpretationAlgorithm(context, null, dialog);
         final EventHandler handler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(null);
+        final EventBus eventbus = context.getEventBus();
+        eventbus.subscribe("", handler);
         handler.collect(context, null, fia, item);
 
         final ObjectExecutorThread executor =
-            new ObjectExecutorThread(context, item, handler);
+            new ObjectExecutorThread(context, item);
 
         executor.start();
         executor.join();
@@ -159,10 +162,12 @@ public final class TestObjectExecutorThread {
 
         final EventHandler handler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(null);
+        final EventBus eventbus = context.getEventBus();
+        eventbus.subscribe("", handler);
         handler.collect(context, null, fia, item);
 
         final ObjectExecutorThread executor =
-            new ObjectExecutorThread(context, item, handler);
+            new ObjectExecutorThread(context, item);
 
         executor.start();
         executor.join();
@@ -201,10 +206,12 @@ public final class TestObjectExecutorThread {
 
         final EventHandler handler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(null);
+        final EventBus eventbus = context.getEventBus();
+        eventbus.subscribe("", handler);
         handler.collect(context, null, fia, item);
 
         final ObjectExecutorThread executor =
-            new ObjectExecutorThread(context, item, handler);
+            new ObjectExecutorThread(context, item);
 
         executor.start();
         executor.join();

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,7 +37,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
-import org.jvoicexml.event.EventObserver;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
@@ -138,7 +138,7 @@ public final class MockImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public void setEventHandler(final EventObserver observer) {
+    public void setEventBus(final EventBus bus) {
     }
 
     /**
