@@ -44,8 +44,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
@@ -268,8 +270,9 @@ public final class HttpSchemeStrategy
         queryParameters.addAll(parameterList);
 
         final String query = URLEncodedUtils.format(queryParameters, encoding);
-        return URIUtils.createURI(uri.getScheme(), uri.getHost(), uri.getPort(),
-                uri.getPath(), query, uri.getFragment());
+        final URIBuilder builder = new URIBuilder(uri);
+        builder.setQuery(query);
+        return builder.build();
     }
 
     /**
@@ -290,7 +293,7 @@ public final class HttpSchemeStrategy
             if (value instanceof File) {
                 final File file = (File) value;
                 final FileEntity fileEntity = new FileEntity(file,
-                        "binary/octet-stream");
+                        ContentType.create("binary/octet-stream"));
                 post.setEntity(fileEntity);
             }
         }
