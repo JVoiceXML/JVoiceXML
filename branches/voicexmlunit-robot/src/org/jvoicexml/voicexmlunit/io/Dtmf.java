@@ -29,7 +29,7 @@ package org.jvoicexml.voicexmlunit.io;
 import org.junit.Assert;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
-import org.jvoicexml.voicexmlunit.processor.Recording;
+import org.jvoicexml.voicexmlunit.processor.Transaction;
 
 /**
  * Dtmf.
@@ -44,7 +44,7 @@ public class Dtmf extends Input {
     }
 
     @Override
-    public void send(Recording record) {
+    public void send(Transaction record) {
         if (record == null) {
             return;
         }

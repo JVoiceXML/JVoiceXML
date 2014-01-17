@@ -34,23 +34,23 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 /**
- * Recording transacts and abstracts the model for the Supervisor and the
+ * Transaction transacts and abstracts the model for the Supervisor and the
  * individual Statement it wants to send.
  * 
  * @author thesis
  * 
  */
-public class Recording {
+public class Transaction {
     private TextServer server;
     private Session session;
 
     /**
-     * Constructs a Recording
+     * Constructs a Transaction
      * 
      * @param server the server to send something
      * @param session the session connection to JVoiceXML
      */
-    public Recording(final TextServer server, final Session session) {
+    public Transaction(final TextServer server, final Session session) {
         super();
         this.server = server;
         this.session = session;

@@ -27,7 +27,7 @@
 package org.jvoicexml.voicexmlunit.io;
 
 
-import org.jvoicexml.voicexmlunit.processor.Recording;
+import org.jvoicexml.voicexmlunit.processor.Transaction;
 import java.io.IOException;
 
 import java.lang.AssertionError;
@@ -72,6 +72,6 @@ public class TestDtmf implements AbstractTestAssertion {
     @Override
     @Test
     public void testSend() {
-        dtmf.send(new Recording(null, null));
+        dtmf.send(new Transaction(null, null));
     }
 }

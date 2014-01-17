@@ -27,7 +27,7 @@
 package org.jvoicexml.voicexmlunit.processor;
 
 import org.jvoicexml.voicexmlunit.processor.Voice;
-import org.jvoicexml.voicexmlunit.processor.Call;
+import org.jvoicexml.voicexmlunit.processor.Connection;
 import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.URI;
@@ -38,12 +38,12 @@ import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
- * Test cases for {@link Call}.
+ * Test cases for {@link Connection}.
  * @author Raphael Groner
  *
  */
 public class TestCall implements TextListener {
-    private Call call;
+    private Connection call;
     private boolean started;
     private boolean connected;
     private boolean activated;
@@ -56,7 +56,7 @@ public class TestCall implements TextListener {
     @Before
     public void setUp() throws Exception {
         final URI dialog = new File("unittests/etc/mock.vxml").toURI();
-        call = new Call(dialog);
+        call = new Connection(dialog);
         call.setListener(this);
 
         started = false;

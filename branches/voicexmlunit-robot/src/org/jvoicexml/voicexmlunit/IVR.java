@@ -6,7 +6,7 @@ package org.jvoicexml.voicexmlunit;
 
 import java.net.InetSocketAddress;
 import org.jvoicexml.client.text.TextListener;
-import org.jvoicexml.voicexmlunit.processor.Call;
+import org.jvoicexml.voicexmlunit.processor.Connection;
 import org.jvoicexml.voicexmlunit.processor.Recorder;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -17,9 +17,9 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 public class IVR implements Adapter, TextListener {
     
     private final Recorder recorder;
-    private final Call call;
+    private final Connection call;
     
-    public IVR(final Call call) {
+    public IVR(final Connection call) {
         recorder = new Recorder(call.record());
         this.call = call;
     }

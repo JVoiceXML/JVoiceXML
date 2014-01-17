@@ -27,7 +27,7 @@
 package org.jvoicexml.voicexmlunit.io;
 
 
-import org.jvoicexml.voicexmlunit.processor.Recording;
+import org.jvoicexml.voicexmlunit.processor.Transaction;
 import java.lang.AssertionError;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -58,7 +58,7 @@ public class TestInput implements AbstractTestAssertion {
     @Override
     @Test
     public void testSend() {
-        in.send(new Recording(null, null)); // mock the server
+        in.send(new Transaction(null, null)); // mock the server
     }
 
 }

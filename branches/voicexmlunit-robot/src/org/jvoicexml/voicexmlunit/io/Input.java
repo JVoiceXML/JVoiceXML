@@ -28,7 +28,7 @@ package org.jvoicexml.voicexmlunit.io;
 
 import java.io.IOException;
 import org.junit.Assert;
-import org.jvoicexml.voicexmlunit.processor.Recording;
+import org.jvoicexml.voicexmlunit.processor.Transaction;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -59,7 +59,7 @@ public class Input implements Statement {
      * @param record the recording transaction
      */
     @Override
-    public void send(final Recording record) {
+    public void send(final Transaction record) {
         if (record == null) {
             return;
         }

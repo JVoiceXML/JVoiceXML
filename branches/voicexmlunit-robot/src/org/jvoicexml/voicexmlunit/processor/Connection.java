@@ -33,10 +33,10 @@ import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.voicexmlunit.processor.Recording;
+import org.jvoicexml.voicexmlunit.processor.Transaction;
 
 /**
- * Call simulates a real telephony call. This is done with creation of a new
+ * Connection simulates a real telephony call. This is done with creation of a new
  * JVoiceXML session and a TextServer that can be used to notice all events. You
  * have to call startDialog() in the started() event handler of your
  * TextListener, otherwise the Server may fail. Your TextListener instance is
@@ -49,7 +49,7 @@ import org.jvoicexml.voicexmlunit.processor.Recording;
  * @author Dirk Schnelle-Walka
  *
  */
-public final class Call implements Runnable {
+public final class Connection implements Runnable {
     private URI dialog;
     private TextServer server;
     private Voice voice;
@@ -70,7 +70,7 @@ public final class Call implements Runnable {
      * @param uri
      *            URI of the dialog to call call
      */
-    public Call(final URI uri) {
+    public Connection(final URI uri) {
         super();
         dialog = uri;
         final int port = randomizePortForServer();
@@ -147,10 +147,10 @@ public final class Call implements Runnable {
      *
      * @return transaction to use for the input
      */
-    public Recording record() {
+    public Transaction record() {
         final Voice voice = getVoice();
         final Session session = voice.getSession();
-        return new Recording(server, session);
+        return new Transaction(server, session);
     }
 
     /**

@@ -3,7 +3,7 @@ package org.jvoicexml.voicexmlunit.processor;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.jvoicexml.voicexmlunit.io.Statement;
 import org.jvoicexml.voicexmlunit.io.Statement;
-import org.jvoicexml.voicexmlunit.processor.Recording;
+import org.jvoicexml.voicexmlunit.processor.Transaction;
 
 /**
  * A type of test execution tool where inputs are recorded during manual 
@@ -22,16 +22,16 @@ public class Recorder {
     private LinkedBlockingQueue<Statement> queue;
     
     /*
-     * Recording transaction.
+     * Transaction transaction.
      */
-    private final Recording record;
+    private final Transaction record;
     
     /*
      * Construct a new recorder.
      * 
      * @param transaction the transaction for records
      */
-    public Recorder(final Recording transaction) {
+    public Recorder(final Transaction transaction) {
         queue = new LinkedBlockingQueue<>();
         record = transaction;
     }

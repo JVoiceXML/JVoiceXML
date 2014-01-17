@@ -33,7 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.voicexmlunit.io.Input;
 import org.jvoicexml.voicexmlunit.io.Output;
-import org.jvoicexml.voicexmlunit.processor.Call;
+import org.jvoicexml.voicexmlunit.processor.Connection;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -146,7 +146,7 @@ public class TestSupervisor {
 
     @Test
     public void testCall() throws URISyntaxException {
-        conversation = supervisor.init(new Call(new URI("unittests/etc/mock.vxml")));
+        conversation = supervisor.init(new Connection(new URI("unittests/etc/mock.vxml")));
         hears("test");
 
         supervisor.process();

@@ -20,7 +20,7 @@ public class TestRecorder {
     Recorder recorder;
     
     public TestRecorder() {
-        recorder = new Recorder(new Recording(null, null)); //null means mock
+        recorder = new Recorder(new Transaction(null, null)); //null means mock
     }
     
     @Before
