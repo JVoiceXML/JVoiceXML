@@ -27,27 +27,30 @@
 package org.jvoicexml.voicexmlunit.io;
 
 import org.junit.Assert;
-
-import org.jvoicexml.xml.ssml.Speak;
+import org.jvoicexml.voicexmlunit.processor.Recording;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
-public class Output extends Statement {
-    public Output(String message) {
-        super(message);
+public class Output implements Statement {
+    
+    //private SsmlDocument expectation; //TODO
+    private String expectation;
+    
+    public Output(final String message) {
+        expectation = message;
     }
 
-    public void receive(SsmlDocument actual) {
-        final Speak speak = actual.getSpeak();
-        final String text = speak.getTextContent();
+    @Override
+    public void receive(final SsmlDocument actual) {
+        final String text = actual.getSpeak().getTextContent();
         receive(text);
     }
 
-    public void send(Recording record) {
-        Assert.fail("Expected " + getClass().getSimpleName() + ": " + toString());
+    @Override
+    public void send(final Recording record) {
+        Assert.fail("Send: " + expectation);
     }
 
-    public void receive(String actual) {
-        final String expect = toString();
-        Assert.assertEquals(getClass().getSimpleName(), expect, actual);
+    public void receive(final String actual) {
+        Assert.assertEquals("Receive", expectation, actual);
     }
 }

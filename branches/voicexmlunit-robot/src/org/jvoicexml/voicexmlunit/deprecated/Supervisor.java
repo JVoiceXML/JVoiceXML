@@ -24,16 +24,13 @@
  *
  */
 
-package org.jvoicexml.voicexmlunit;
+package org.jvoicexml.voicexmlunit.deprecated;
 
-
-import java.lang.AssertionError;
 
 import java.net.InetSocketAddress;
-
-import org.jvoicexml.voicexmlunit.io.Assertion;
 import org.jvoicexml.voicexmlunit.io.Nothing;
-import org.jvoicexml.voicexmlunit.processor.Assert;
+import org.jvoicexml.voicexmlunit.io.Statement;
+import org.jvoicexml.voicexmlunit.processor.Call;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -50,11 +47,11 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  */
 public final class Supervisor
-implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.processor.Facade {
+implements org.jvoicexml.client.text.TextListener {
 
     private Call call = null;
     private Conversation conversation = null;
-    private Assertion statement = null;
+    private Statement statement = null;
 
     /**
      * Initialize a new server conversation.
@@ -175,13 +172,12 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
      * @param message
      *             Message to expect in the call
      */
-    @Override
     public void assertOutput(final SsmlDocument message)
             throws AssertionError {
         if (statement == null) {
             statement = new Nothing();
         }
-        new Assert(statement).assertOutput(message);
+        //new Assert(statement).assertOutput(message);
         statement = conversation.next();
     }
 
@@ -189,22 +185,20 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
      * Assert that the current statement is an Input instance and the actual
      * message can be send.
      */
-    @Override
     public void assertInput() {
         if (statement == null) {
             statement = new Nothing();
         }
-        new Assert(statement, call).assertInput();
+        //new Assert(statement, call).assertInput();
         statement = conversation.next();
     }
 
     /**
      * Asserts a final hangup that should be always at end of the call.
      */
-    @Override
     public void assertHangup() {
         if (statement != null) {
-            new Assert(statement).assertHangup();
+            //new Assert(statement).assertHangup();
             statement = conversation.next();
         }
     }
@@ -222,9 +216,9 @@ implements org.jvoicexml.client.text.TextListener, org.jvoicexml.voicexmlunit.pr
     }
 
     /**
-     * @return Assertion in trouble, null if no error has occured
+     * @return Statement in trouble, null if no error has occured
      */
-    public Assertion getFailCause() {
+    public Statement getFailCause() {
         return statement;
     }
 }

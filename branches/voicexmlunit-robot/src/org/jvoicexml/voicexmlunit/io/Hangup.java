@@ -27,7 +27,6 @@
 package org.jvoicexml.voicexmlunit.io;
 
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -37,12 +36,12 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class Hangup extends Output {
     
-    private Assertion assertion;
+    private Statement assertion;
     
     /**
      * @param statement the final statement
      */
-    public Hangup(final Assertion assertion) {
+    public Hangup(final Statement assertion) {
         super("## disconnected ##");
         this.assertion = assertion;
     }

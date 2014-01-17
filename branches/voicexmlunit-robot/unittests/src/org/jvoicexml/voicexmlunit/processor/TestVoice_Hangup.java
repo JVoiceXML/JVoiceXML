@@ -24,8 +24,9 @@
  *
  */
 
-package org.jvoicexml.voicexmlunit;
+package org.jvoicexml.voicexmlunit.processor;
 
+import org.jvoicexml.voicexmlunit.processor.Voice;
 import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.URI;

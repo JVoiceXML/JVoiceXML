@@ -24,16 +24,13 @@
  *
  */
 
-package org.jvoicexml.voicexmlunit;
+package org.jvoicexml.voicexmlunit.processor;
 
+import org.jvoicexml.voicexmlunit.processor.Voice;
+import org.jvoicexml.voicexmlunit.processor.Call;
 import java.io.File;
-
-import java.lang.AssertionError;
-
 import java.net.InetSocketAddress;
 import java.net.URI;
-
-import org.junit.Assert;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

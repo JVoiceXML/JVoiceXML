@@ -26,34 +26,34 @@
 
 package org.jvoicexml.voicexmlunit.io;
 
+import org.junit.Assert;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
-import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.voicexmlunit.processor.Recording;
 
-import org.junit.Assert;
-
-public class Dtmf extends Statement {
-    private char dtmf;
-
-    public Dtmf(char dtmf) {
-        super("DTMF '" + dtmf + "'");
-        this.dtmf = dtmf;
+/**
+ * Dtmf.
+ * Produces dtmf inputs and rejects outputs as failed.
+ * 
+ * @author raphael
+ */
+public class Dtmf extends Input {
+    
+    public Dtmf(char digit) {
+        super(String.valueOf(digit));
     }
 
-    public void receive(SsmlDocument actual) {
-        Assert.fail("Receive " + getClass().getSimpleName() + ": " + actual);
-    }
-
+    @Override
     public void send(Recording record) {
         if (record == null) {
             return;
         }
 
+        char digit = getExpectation().charAt(0); 
         try {
-            record.input(dtmf);
-        } catch (NoresourceError | ConnectionDisconnectHangupEvent e) {
-            e.printStackTrace();
-            Assert.fail("Send: " + toString());
+            record.input(digit);
+        } catch (NoresourceError|ConnectionDisconnectHangupEvent ex) {
+            Assert.fail("Send: " + digit);
         }
     }
 }

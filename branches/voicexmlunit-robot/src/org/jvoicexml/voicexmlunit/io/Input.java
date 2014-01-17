@@ -27,31 +27,51 @@
 package org.jvoicexml.voicexmlunit.io;
 
 import java.io.IOException;
-
+import org.junit.Assert;
+import org.jvoicexml.voicexmlunit.processor.Recording;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
-import org.junit.Assert;
-
-public class Input extends Statement {
+/**
+ * Input.
+ * Produdes input to the server and rejects consumes of outputs as failed.
+ * 
+ * @author raphael
+ */
+public class Input implements Statement {
+    private String expectation;
+    
     public Input(String message) {
-        super(message);
+        this.expectation = message;
+    }
+ 
+    /**
+     * Consume an output and fail.
+     * 
+     * @param actual the actual input
+     */
+    @Override
+    public void receive(final SsmlDocument actual) {
+        Assert.fail("Receive: " + actual);
     }
 
-    public void receive(SsmlDocument actual) {
-        Assert.fail("Expected " + getClass().getSimpleName() + ": " + actual);
-    }
-
-    public void send(Recording record) {
+    /**
+     * Produce an input.
+     * @param record the recording transaction
+     */
+    @Override
+    public void send(final Recording record) {
         if (record == null) {
             return;
         }
 
-        String expect = toString();
         try {
-            record.input(expect);
+            record.input(expectation);
         } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail("Expected " + getClass().getSimpleName() + ": " + expect);
+            Assert.fail("Send: " + expectation);
         }
+    }
+    
+    public String getExpectation() {
+        return expectation;
     }
 }

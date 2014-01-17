@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.voicexmlunit;
+package org.jvoicexml.voicexmlunit.deprecated;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.Iterator;
@@ -42,14 +42,14 @@ import org.jvoicexml.voicexmlunit.io.*;
  *
  */
 public final class Conversation {
-    private ConcurrentLinkedQueue<Assertion> queue;
-    private Iterator<Assertion> iterator;
+    private ConcurrentLinkedQueue<Statement> queue;
+    private Iterator<Statement> iterator;
 
     /**
      * Constructor
      */
     public Conversation() {
-        queue = new ConcurrentLinkedQueue<Assertion>();
+        queue = new ConcurrentLinkedQueue<Statement>();
         iterator = null;
     }
 
@@ -57,7 +57,7 @@ public final class Conversation {
      * Add a statement to the internal queue.
      * @param s statement to add in queue
      */
-    public boolean add(final Assertion a) {
+    public boolean add(final Statement a) {
         return queue.add(a);
     }
 
@@ -65,7 +65,7 @@ public final class Conversation {
      * Begins the conversation.
      * @return First statement of the conversation
      */
-    public Assertion begin() {
+    public Statement begin() {
         if (queue.isEmpty()) {
             iterator = null; // invalidate any existing cursor
             return null;
@@ -81,7 +81,7 @@ public final class Conversation {
      * the conversation and returns an invalid object.
      * @return Next statement after the previously current one
      */
-    public Assertion next() {
+    public Statement next() {
         if (iterator == null) {
             return begin();
         } else if (iterator.hasNext()) {

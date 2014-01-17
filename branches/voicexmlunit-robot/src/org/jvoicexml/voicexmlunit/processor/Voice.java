@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.voicexmlunit;
+package org.jvoicexml.voicexmlunit.processor;
 
 import java.io.IOException;
 import java.net.URI;

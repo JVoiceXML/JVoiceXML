@@ -27,6 +27,7 @@
 package org.jvoicexml.voicexmlunit.io;
 
 
+import org.jvoicexml.voicexmlunit.processor.Recording;
 import java.lang.AssertionError;
 
 import javax.xml.parsers.ParserConfigurationException;

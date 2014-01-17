@@ -27,6 +27,7 @@
 package org.jvoicexml.voicexmlunit.io;
 
 
+import org.jvoicexml.voicexmlunit.processor.Recording;
 import java.io.IOException;
 
 import java.lang.AssertionError;

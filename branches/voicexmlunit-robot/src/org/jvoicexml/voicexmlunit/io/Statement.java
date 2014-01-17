@@ -26,20 +26,41 @@
 
 package org.jvoicexml.voicexmlunit.io;
 
-public abstract class Statement implements Assertion {
-    String message;
+import org.jvoicexml.voicexmlunit.processor.Recording;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
-    public Statement(String message) {
-        this.message = message;
-    }
+/**
+ * Statement serves as abstraction for Output and Input statements.
+ * 
+ * @author Raphael Groner
+ * @author Dirk Schnelle-Walka
+ */
+public interface Statement {
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Receive an output. 
+     * This is the role consumer for output and failing producer for input.
      * 
-     * @see org.jvoicexml.voicexmlunit.io.Assertion#toString()
+     * @param actual the output to receive
+     */
+    void receive(final SsmlDocument actual);
+
+    /**
+     * Send an input. 
+     * This is the role producer for input and failing consumer for output.
+     * 
+     * @param record the transaction used to input
+     */
+    void send(final Recording record);
+    
+    
+    /**
+     * Compare to a second assertion at equal criteria.
+     * 
+     * @param other the assertion to compare with
+     * @return true if both assertions are equal
      */
     @Override
-    public String toString() {
-        return message;
-    }
+    boolean equals(final Object other);
+
 }

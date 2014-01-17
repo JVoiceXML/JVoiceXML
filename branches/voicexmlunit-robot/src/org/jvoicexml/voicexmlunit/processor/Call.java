@@ -24,19 +24,16 @@
  *
  */
 
-package org.jvoicexml.voicexmlunit;
+package org.jvoicexml.voicexmlunit.processor;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.AssertionError;
 import java.net.URI;
-
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.voicexmlunit.io.Recording;
+import org.jvoicexml.voicexmlunit.processor.Recording;
 
 /**
  * Call simulates a real telephony call. This is done with creation of a new
@@ -79,16 +76,6 @@ public final class Call implements Runnable {
         final int port = randomizePortForServer();
         server = new TextServer(port);
         lock = new Object();
-    }
-
-    /**
-     * Constructs a new call
-     *
-     * @param path
-     *            the path to a local file
-     */
-    public Call(final String path) {
-        this((new File(path)).toURI());
     }
 
     private int randomizePortForServer() {

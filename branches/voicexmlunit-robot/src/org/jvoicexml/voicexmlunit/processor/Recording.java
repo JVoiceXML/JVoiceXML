@@ -24,10 +24,9 @@
  *
  */
 
-package org.jvoicexml.voicexmlunit.io;
+package org.jvoicexml.voicexmlunit.processor;
 
 import java.io.IOException;
-
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextServer;
@@ -48,10 +47,10 @@ public class Recording {
     /**
      * Constructs a Recording
      * 
-     * @param server
-     *            the server to send something
+     * @param server the server to send something
+     * @param session the session connection to JVoiceXML
      */
-    public Recording(TextServer server, Session session) {
+    public Recording(final TextServer server, final Session session) {
         super();
         this.server = server;
         this.session = session;
