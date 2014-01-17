@@ -4,6 +4,7 @@
  */
 package org.jvoicexml.voicexmlunit;
 
+import org.jvoicexml.voicexmlunit.processor.Adapter;
 import java.net.InetSocketAddress;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.voicexmlunit.processor.Connection;

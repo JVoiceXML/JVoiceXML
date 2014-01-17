@@ -1,4 +1,4 @@
-package org.jvoicexml.voicexmlunit;
+package org.jvoicexml.voicexmlunit.processor;
 
 /**
  * Adapter for clients.

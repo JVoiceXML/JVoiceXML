@@ -1,5 +1,7 @@
 package org.jvoicexml.voicexmlunit;
 
+import org.jvoicexml.voicexmlunit.processor.Adapter;
+
 /**
  * Facade for IVR.
  * Maybe some methods could behave different.
