@@ -17,12 +17,14 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public class IVR implements Adapter, TextListener {
     
-    private final Recorder recorder;
-    private final Connection call;
+    private final Connection connection;
     
-    public IVR(final Connection call) {
-        recorder = new Recorder(call.record());
-        this.call = call;
+    /**
+     * Constructor.
+     * @param connection
+     */
+    public IVR(final Connection connection) {
+        this.connection = connection;
     }
 
     @Override

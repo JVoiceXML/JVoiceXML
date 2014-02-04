@@ -27,27 +27,19 @@
 package org.jvoicexml.voicexmlunit.io;
 
 
-import org.jvoicexml.voicexmlunit.processor.Transaction;
 import java.io.IOException;
-
-import java.lang.AssertionError;
-
 import javax.xml.parsers.ParserConfigurationException;
-
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ComparisonFailure;
 import org.junit.Test;
-
+import org.jvoicexml.voicexmlunit.processor.Dialog;
 import org.jvoicexml.xml.ssml.SsmlDocument;
-
 import org.xml.sax.SAXException;
 
 /**
  * @author thesis
  *
  */
-public class TestOutput implements AbstractTestAssertion {
+public class TestOutput {
 
     private Output out;
     private boolean failed;
@@ -64,7 +56,6 @@ public class TestOutput implements AbstractTestAssertion {
     /* (non-Javadoc)
      * @see org.jvoicexml.voicexmlunit.io.TestAssertion#testReceive()
      */
-    @Override
     @Test
     public void testReceive() throws ParserConfigurationException, SAXException, IOException {
         out.receive(out.toString());
@@ -73,14 +64,5 @@ public class TestOutput implements AbstractTestAssertion {
     @Test(expected=AssertionError.class)
     public void testReceiveEmpty() throws ParserConfigurationException, SAXException, IOException {
         out.receive(new SsmlDocument()); // must fail
-    }
-
-    /* (non-Javadoc)
-     * @see org.jvoicexml.voicexmlunit.io.TestAssertion#testSend()
-     */
-    @Override
-    @Test(expected=AssertionError.class)
-    public void testSend() {
-        out.send(new Transaction(null, null)); // mock the server
     }
 }

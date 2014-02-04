@@ -27,54 +27,39 @@
 package org.jvoicexml.voicexmlunit.processor;
 
 import java.io.File;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import org.junit.*;
-import org.jvoicexml.Session;
-import org.jvoicexml.client.text.TextServer;
-import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
- * Test cases for {@link Voice}.
+ * Test cases for {@link Connection}.
  * @author Raphael Groner
  *
  */
-public class TestVoice {
-
-    private Voice voice;
+public class TestConnection {
+    private Connection connection;
+    private boolean started;
+    private boolean connected;
+    private boolean activated;
 
     /**
-     * Set up the test environment.
+     * Set up the test environment
+     * @throws Exception
+     *         setup failed
      */
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         final File file = new File("unittests/etc/mock.vxml");
-        voice = new Voice(file.toURI());
+        final Voice mock;
+        mock = new Voice(file.toURI());
+        connection = new Connection(mock);
+
+        started = false;
+        connected = false;
     }
 
-    /**
-     * Close the test environment.
-     */
-    @After
-    public void tearDown() {
-        voice.shutdown();
-    }
-
-    /**
-     * Test method for {@link Voice#getSession()}.
-     * Ensures a complete session run without any error.
-     */
-    @Test(timeout=9999)
-    public void testSessionSuccess() throws ErrorEvent {
-        Assert.assertNull(voice.getSession());
-
-        Session session = voice.createSession(null);
-        Assert.assertNotNull(session);
-        Assert.assertEquals(voice.getSession(), session);
-        
-        session.waitSessionEnd();
-        voice.shutdown();
-        Assert.assertNull(voice.getSession());
+    @Test
+    public void test() {
+        Assert.fail("TODO");
     }
 }

@@ -26,7 +26,7 @@
 
 package org.jvoicexml.voicexmlunit.io;
 
-import org.jvoicexml.voicexmlunit.processor.Transaction;
+import org.jvoicexml.voicexmlunit.processor.Dialog;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -51,7 +51,7 @@ public interface Statement {
      * 
      * @param record the transaction used to input
      */
-    void send(final Transaction record);
+    void send(final Dialog dialog);
     
     
     /**

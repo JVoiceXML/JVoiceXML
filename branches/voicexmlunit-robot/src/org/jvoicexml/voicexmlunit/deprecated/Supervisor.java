@@ -62,9 +62,6 @@ implements org.jvoicexml.client.text.TextListener {
      */
     public Conversation init(final Connection call) {
         this.call = call;
-        if (call != null) { // null means a mock object
-            call.setListener(this);
-        }
         conversation = new Conversation();
         return conversation;
     }
@@ -79,12 +76,6 @@ implements org.jvoicexml.client.text.TextListener {
 
         statement = conversation.begin();
         call.run();
-
-        AssertionError error = call.getFailure();
-        if (error != null) {
-            //error.printStackTrace();
-            throw error;
-        }
     }
 
     /*
@@ -94,7 +85,6 @@ implements org.jvoicexml.client.text.TextListener {
      */
     @Override
     public void started() {
-        call.startDialog();
     }
 
     /*
@@ -210,8 +200,6 @@ implements org.jvoicexml.client.text.TextListener {
     private void handleError(final AssertionError error) {
         if (call == null) {
             throw error;
-        } else {
-            call.fail(error);
         }
     }
 

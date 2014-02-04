@@ -27,84 +27,27 @@
 package org.jvoicexml.voicexmlunit.processor;
 
 
-import java.io.File;
-import java.net.URI;
 import org.jvoicexml.Session;
-import org.jvoicexml.client.text.TextListener;
-import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.voicexmlunit.processor.Transaction;
 
 /**
- * Connection simulates a real telephony call. This is done with creation of a new
- * JVoiceXML session and a TextServer that can be used to notice all events. You
- * have to call startDialog() in the started() event handler of your
- * TextListener, otherwise the Server may fail. Your TextListener instance is
- * registered with setListener() method. Lookup of JVoiceXml is done by help
- * from Voice, you may use getVoice() to do some initialization before. In case
- * of an assertion failure, you can stop the Server, therefore use the fail()
- * and getFailure() methods.
+ * Connection simulates a telephony conversation.
  *
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
  *
  */
 public final class Connection implements Runnable {
-    private URI dialog;
-    private TextServer server;
+    
     private Voice voice;
-    private AssertionError error;
-
-    public static int SERVER_PORT = 6000; // port number must be greater than
-                                          // 1024
-    public static int SERVER_PORT_RANDOMIZE_COUNT = 100; // 0 means a fixed port
-                                                         // number
-    public static long SERVER_WAIT = 5000;
-
-    /** Synchronization lock. */
-    private final Object lock;
+    private ErrorEvent error;
 
     /**
      * Constructs a new call
      *
-     * @param uri
-     *            URI of the dialog to call call
+     * @param 
      */
-    public Connection(final URI uri) {
-        super();
-        dialog = uri;
-        final int port = randomizePortForServer();
-        server = new TextServer(port);
-        lock = new Object();
-    }
-
-    private int randomizePortForServer() {
-        return (int) ((Math.random() * SERVER_PORT_RANDOMIZE_COUNT) + SERVER_PORT);
-    }
-
-    public void setListener(final TextListener listener) {
-        server.addTextListener(listener);
-    }
-
-    /**
-     * Get the Voice object This method tries best to get a valid object.
-     *
-     * @return the actual Voice object
-     */
-    public Voice getVoice() {
-        if (voice == null) {
-            setVoice(new Voice());
-        }
-        return voice;
-    }
-
-    /**
-     * Set a custom Voice object
-     *
-     * @param voice
-     *            the new Voice object
-     */
-    public void setVoice(final Voice voice) {
+    public Connection(final Voice voice) {
         this.voice = voice;
     }
 
@@ -113,61 +56,17 @@ public final class Connection implements Runnable {
      */
     @Override
     public void run() {
-        if (dialog == null) {
+        if (voice == null) {
             return;
         }
 
-        error = null;
-        server.start();
         try {
-            /* wait for the server */
-            synchronized (lock) {
-                lock.wait(SERVER_WAIT);
-            }
-            getVoice().call(server, dialog); // run the dialog
-        }
-        catch (Exception | ErrorEvent error) {
-            fail(new AssertionError(error));
+            final Session session = voice.createSession(null);
+            session.waitSessionEnd();
+        } catch (ErrorEvent ex) {
+            voice.fail(ex);
         } finally {
-            server.stopServer();
+            voice.shutdown();
         }
-    }
-
-    /**
-     * Start the dialog.
-     */
-    public void startDialog() {
-        synchronized (lock) {
-            lock.notifyAll();
-        }
-    }
-
-    /**
-     * Starts a transaction to send input.
-     *
-     * @return transaction to use for the input
-     */
-    public Transaction record() {
-        final Voice voice = getVoice();
-        final Session session = voice.getSession();
-        return new Transaction(server, session);
-    }
-
-    /**
-     * Sets the call into failure state and terminates the call process.
-     *
-     * @param error
-     *            the error that has caused the failure
-     */
-    public void fail(final AssertionError error) {
-        if (this.error == null) { // only the first error
-            server.interrupt();
-            getVoice().close();
-            this.error = error;
-        }
-    }
-
-    public AssertionError getFailure() {
-        return error;
     }
 }

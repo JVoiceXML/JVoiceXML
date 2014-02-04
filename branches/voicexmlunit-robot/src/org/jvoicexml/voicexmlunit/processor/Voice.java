@@ -26,96 +26,95 @@
 
 package org.jvoicexml.voicexmlunit.processor;
 
-import java.io.IOException;
 import java.net.URI;
-
+import java.net.URISyntaxException;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.JVoiceXmlMain;
 import org.jvoicexml.Session;
-import org.jvoicexml.client.GenericClient;
-import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.interpreter.GrammarProcessor;
+import org.jvoicexml.interpreter.JVoiceXmlSession;
+import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 
 /**
  * Voice provides direct access to JVoiceXML via GenericClient.
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
  */
-public final class Voice {
-    /**
-     * the back-end client to communicate with.
-     */
-    private GenericClient client;
+public final class Voice implements JVoiceXmlCore {
 
+    private final Dialog dialog;
+    private final JVoiceXmlDocumentServer documentServer;
+    private final JVoiceXmlGrammarProcessor grammarProcessor;
+    
+    private JVoiceXmlSession session;
+    
     /**
-     * the session currently open.
-     */
-    private Session session;
-
-    /**
-     * Set the client.
-     * @param client the client
-     */
-    public void setClient(final GenericClient client) {
-         this.client = client;
-    }
-
-    /**
-     * Get the actual client.
-     */
-     public GenericClient getClient() {
-          if (client == null) {
-               setClient(new GenericClient());
-          }
-          return client;
-     }
-
-
-    /**
-     * Calls the client to get a new textual Session object for
-     * the specified dialog and runs it.
-     * Blocks while server is connected and till session ends.
      *
-     * @param server
-     *            the server object
-     * @param dialog
-     *            the dialog to use
-     * @throws IOException
-     *            the error happened during the session was active
+     * @param uri
+     * @throws JVoiceXMLEvent
      */
-     public void call(final TextServer server, final URI dialog)
-          throws Exception, ErrorEvent {
-          try {
-               final ConnectionInformation info =
-                    server.getConnectionInformation();
-               session = getClient().call(dialog, info);
-               server.waitConnected();
-               session.waitSessionEnd();
-               //session.hangup();
-          } finally {
-               session = null;
-          }
+    public Voice(final URI uri) {
+        dialog = new Dialog(uri);
+        documentServer = new JVoiceXmlDocumentServer();
+        grammarProcessor = new JVoiceXmlGrammarProcessor();
+        session = null;
     }
-
-    /**
-     * Close the active Communication.
-     */
-    public void close() {
-          if (session != null) {
-               session.hangup();
-               session = null;
-          }
-          if (client != null) {
-               client.close();
-               client = null;
-          }
-    }
-
-    /**
-     * Get the currently active Session object.
-     *
-     * @return the active Session or null if there's none
-     */
+    
     public Session getSession() {
         return session;
+    }
+
+    @Override
+    public DocumentServer getDocumentServer() {
+        return documentServer;
+    }
+
+    @Override
+    public GrammarProcessor getGrammarProcessor() {
+        return grammarProcessor;
+    }
+
+    @Override
+    public Configuration getConfiguration() {
+        return null;
+    }
+
+    @Override
+    public String getVersion() {
+        final JVoiceXmlMain main = new JVoiceXmlMain();
+        return main.getVersion();
+    }
+
+    @Override
+    public Session createSession(ConnectionInformation info) throws ErrorEvent {
+        try {
+            ImplementationPlatform platform = dialog.getPlatform();
+            session = new JVoiceXmlSession(platform, this, info);
+            session.addSessionListener(dialog);
+            session.call(dialog.getURI());
+        } catch (JVoiceXMLEvent ex) {
+            throw new NoresourceError(ex);
+        }
+        return session;
+    }
+
+    @Override
+    public void shutdown() {
+        if (session != null) {
+            session.hangup();
+            session = null;
+        }
+    }
+
+    void fail(ErrorEvent ex) {
+        
     }
 }

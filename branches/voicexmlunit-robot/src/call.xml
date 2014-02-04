@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0"
+       initialstate="idle">
+
+  <state id="idle">
+    <transition event="run" target="server.started" />
+  </state>
+
+  <state id="server.started">
+    <transition event="dialog.start" target="server.connected" />
+    <transition event="server.stop" target="idle" />
+  </state>
+
+  <state id="server.connected">
+    <transition event="dialog.run" target="session.active" />
+    <transition event="server.stop" target="idle" />
+  </state>
+
+  <state id="session.active">
+    <transition event="atm.startup" target="inService">
+    <transition event="atm.connLost" target="disconnected">
+    <transition event="atm.loadFail" target="outOfService">
+    <transition event="atm.shutdown" target="outOfService">
+      <transition event="atm.connLost" target="disconnected">  
+  </state>
+
+  <state id="disconnected" final="true">
+    <transition event="atm.connRestored" target="inService">
+  </state>
+ 
+</scxml>

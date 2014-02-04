@@ -27,7 +27,7 @@
 package org.jvoicexml.voicexmlunit.io;
 
 import org.junit.Assert;
-import org.jvoicexml.voicexmlunit.processor.Transaction;
+import org.jvoicexml.voicexmlunit.processor.Dialog;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 public class Output implements Statement {
@@ -46,7 +46,7 @@ public class Output implements Statement {
     }
 
     @Override
-    public void send(final Transaction record) {
+    public void send(final Dialog dialog) {
         Assert.fail("Send: " + expectation);
     }
 

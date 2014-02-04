@@ -2,8 +2,6 @@ package org.jvoicexml.voicexmlunit.processor;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import org.jvoicexml.voicexmlunit.io.Statement;
-import org.jvoicexml.voicexmlunit.io.Statement;
-import org.jvoicexml.voicexmlunit.processor.Transaction;
 
 /**
  * A type of test execution tool where inputs are recorded during manual 
@@ -22,37 +20,31 @@ public class Recorder {
     private LinkedBlockingQueue<Statement> queue;
     
     /*
-     * Transaction transaction.
-     */
-    private final Transaction record;
-    
-    /*
      * Construct a new recorder.
      * 
      * @param transaction the transaction for records
      */
-    public Recorder(final Transaction transaction) {
+    public Recorder() {
         queue = new LinkedBlockingQueue<>();
-        record = transaction;
     }
     
     /*
-     * Capture an output to validate it later.
-     * @param assertion the assertion to collect
+     * Capture a statement to validate it later.
+     * @param statement to insert into queue
      * @throws InterruptedException synchronization problem
      */
-    public void capture(final Statement assertion) throws InterruptedException {
-        queue.put(assertion);
+    public void capture(final Statement statement) throws InterruptedException {
+        queue.put(statement);
     }
     
     /*
-     * Replay an input that has already been recorded.
-     * @param record the record holding valid data for input processing
+     * Play back a statement that has already been recorded.
+     * @return next statement from queue
      * @throws InterruptedException synchronization problem
      */
-    public void replay() throws InterruptedException {
-       final Statement current = queue.take();
-       current.send(record);            
+    public Statement playback() throws InterruptedException {
+        final Statement statement = queue.take();
+        return statement;
     }
     
     /**

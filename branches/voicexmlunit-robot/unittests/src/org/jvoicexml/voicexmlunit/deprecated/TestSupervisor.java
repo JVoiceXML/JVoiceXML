@@ -146,7 +146,7 @@ public class TestSupervisor {
 
     @Test
     public void testCall() throws URISyntaxException {
-        conversation = supervisor.init(new Connection(new URI("unittests/etc/mock.vxml")));
+        conversation = supervisor.init(null);
         hears("test");
 
         supervisor.process();

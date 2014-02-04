@@ -2,6 +2,7 @@ package org.jvoicexml.voicexmlunit.stub;
 
 import java.net.URI;
 import org.jvoicexml.voicexmlunit.processor.Connection;
+import org.jvoicexml.voicexmlunit.processor.Voice;
 
 /**
  * Stub to build IVR objects.
@@ -16,9 +17,8 @@ public class IVR {
      * @return
      */
     public static org.jvoicexml.voicexmlunit.IVR beginCall(final URI uri) {
-        final Connection call = new Connection(uri);
-        final org.jvoicexml.voicexmlunit.IVR ivr = new org.jvoicexml.voicexmlunit.IVR(call);
-        call.setListener(ivr);
-        return ivr;
+        final Voice voice = new Voice(uri);
+        final Connection connection = new Connection(voice);
+        return new org.jvoicexml.voicexmlunit.IVR(connection);
     }
 }

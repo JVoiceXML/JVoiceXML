@@ -29,7 +29,7 @@ package org.jvoicexml.voicexmlunit.io;
 import org.junit.Assert;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
-import org.jvoicexml.voicexmlunit.processor.Transaction;
+import org.jvoicexml.voicexmlunit.processor.Dialog;
 
 /**
  * Dtmf.
@@ -44,16 +44,12 @@ public class Dtmf extends Input {
     }
 
     @Override
-    public void send(Transaction record) {
-        if (record == null) {
+    public void send(Dialog dialog) {
+        if (dialog == null) {
             return;
         }
 
         char digit = getExpectation().charAt(0); 
-        try {
-            record.input(digit);
-        } catch (NoresourceError|ConnectionDisconnectHangupEvent ex) {
-            Assert.fail("Send: " + digit);
-        }
+        Assert.fail("Send: " + String.valueOf(digit)); //TODO
     }
 }

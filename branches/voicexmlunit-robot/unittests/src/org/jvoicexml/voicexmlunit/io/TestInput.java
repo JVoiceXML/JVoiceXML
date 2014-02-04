@@ -27,15 +27,11 @@
 package org.jvoicexml.voicexmlunit.io;
 
 
-import org.jvoicexml.voicexmlunit.processor.Transaction;
-import java.lang.AssertionError;
-
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.jvoicexml.voicexmlunit.processor.Dialog;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 public class TestInput implements AbstractTestAssertion {
@@ -58,7 +54,7 @@ public class TestInput implements AbstractTestAssertion {
     @Override
     @Test
     public void testSend() {
-        in.send(new Transaction(null, null)); // mock the server
+        Assert.fail("TODO");
     }
 
 }

@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.voicexmlunit.io.Input;
 import org.jvoicexml.voicexmlunit.io.Output;
+import org.jvoicexml.voicexmlunit.io.Statement;
 
 /**
  *
@@ -20,7 +21,7 @@ public class TestRecorder {
     Recorder recorder;
     
     public TestRecorder() {
-        recorder = new Recorder(new Transaction(null, null)); //null means mock
+        recorder = new Recorder();
     }
     
     @Before
@@ -45,20 +46,21 @@ public class TestRecorder {
     }
     
     @Test
-    public void testReplayInput() throws InterruptedException {
+    public void testPlaybackInput() throws InterruptedException {
         final Input input = new Input("abc");
         recorder.capture(input);
-        recorder.replay();
+        Statement playback = recorder.playback();
+        Assert.assertEquals(input, playback);
         Assert.assertFalse(recorder.validate(input));
     }
     
     @Test
-    public void testReplayOutputWrong() throws InterruptedException {
+    public void testPlaybackOutputWrong() throws InterruptedException {
         final Output output = new Output("xyz");
         recorder.capture(output);
         boolean failed = false;
         try {
-            recorder.replay();
+            Statement playback = recorder.playback();
         } catch (AssertionError e) {
             failed = true;
         }

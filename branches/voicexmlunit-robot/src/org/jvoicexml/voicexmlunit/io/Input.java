@@ -28,7 +28,7 @@ package org.jvoicexml.voicexmlunit.io;
 
 import java.io.IOException;
 import org.junit.Assert;
-import org.jvoicexml.voicexmlunit.processor.Transaction;
+import org.jvoicexml.voicexmlunit.processor.Dialog;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -59,16 +59,11 @@ public class Input implements Statement {
      * @param record the recording transaction
      */
     @Override
-    public void send(final Transaction record) {
-        if (record == null) {
+    public void send(final Dialog dialog) {
+        if (dialog == null) {
             return;
         }
-
-        try {
-            record.input(expectation);
-        } catch (IOException e) {
-            Assert.fail("Send: " + expectation);
-        }
+        Assert.fail("TODO Send: " + expectation); //TODO
     }
     
     public String getExpectation() {
