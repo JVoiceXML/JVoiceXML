@@ -42,11 +42,8 @@ import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.jvxml.BufferedCharacterInput;
-import org.jvoicexml.voicexmlunit.io.Output;
 import org.jvoicexml.voicexmlunit.io.Statement;
-import org.mockito.Mockito;
-import org.mockito.stubbing.Answer;
- /** https://code.google.com/p/mockito/ **/
+import org.mockito.Mockito; // https://code.google.com/p/mockito/ 
 
     
 /**

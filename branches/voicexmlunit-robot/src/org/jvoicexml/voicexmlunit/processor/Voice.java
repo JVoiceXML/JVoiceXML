@@ -68,8 +68,25 @@ public final class Voice implements JVoiceXmlCore {
         session = null;
     }
     
+    public Dialog getDialog() {
+        return dialog;
+    }
+    
     public Session getSession() {
         return session;
+    }
+    
+    /**
+     * Dials to an JVoiceXML document.
+     */
+    public void dial() {
+        try {
+            session = (JVoiceXmlSession) this.createSession(null);
+            session.addSessionListener(dialog);
+            session.call(dialog.getURI());
+        } catch (JVoiceXMLEvent ex) {
+            dialog.hangup();
+        }
     }
 
     @Override
@@ -95,15 +112,7 @@ public final class Voice implements JVoiceXmlCore {
 
     @Override
     public Session createSession(ConnectionInformation info) throws ErrorEvent {
-        try {
-            ImplementationPlatform platform = dialog.getPlatform();
-            session = new JVoiceXmlSession(platform, this, info);
-            session.addSessionListener(dialog);
-            session.call(dialog.getURI());
-        } catch (JVoiceXMLEvent ex) {
-            throw new NoresourceError(ex);
-        }
-        return session;
+        return (Session) new JVoiceXmlSession(dialog.getPlatform(), this, info);
     }
 
     @Override

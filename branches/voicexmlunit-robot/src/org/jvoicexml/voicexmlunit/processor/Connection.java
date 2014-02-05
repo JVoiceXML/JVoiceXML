@@ -27,6 +27,7 @@
 package org.jvoicexml.voicexmlunit.processor;
 
 
+import junit.framework.Assert;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 
@@ -60,8 +61,11 @@ public final class Connection implements Runnable {
             return;
         }
 
+        voice.dial();
+        final Session session = voice.getSession();
+        Assert.assertNotNull("no dialer session available!", session);
         try {
-            final Session session = voice.createSession(null);
+            //final Session session = voice.createSession(null);
             session.waitSessionEnd();
         } catch (ErrorEvent ex) {
             voice.fail(ex);
