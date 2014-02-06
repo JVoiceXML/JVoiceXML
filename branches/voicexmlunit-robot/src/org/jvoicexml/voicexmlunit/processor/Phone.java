@@ -1,7 +1,7 @@
 package org.jvoicexml.voicexmlunit.processor;
 
 /**
- * Adapter for clients.
+ * Phone for clients.
  * http://javapapers.com/design-patterns/adapter-pattern/
  * 
  * This is the general interface to implement the API for clients:
@@ -9,7 +9,7 @@ package org.jvoicexml.voicexmlunit.processor;
  * 
  * @author raphael
  */
-public interface Adapter {
+public interface Phone {
     
     /*
      * Prompt Verification (Output)

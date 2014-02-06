@@ -11,10 +11,10 @@ import org.jvoicexml.voicexmlunit.io.Statement;
  * 
  * @author raphael
  */
-public class Recorder {
+public class Tape {
     
     /* 
-     * Recorder is used from different blocking threads.
+     * Tape is used from different blocking threads.
      * https://stackoverflow.com/questions/616484/how-to-use-concurrentlinkedqueue
      */
     private LinkedBlockingQueue<Statement> queue;
@@ -24,7 +24,7 @@ public class Recorder {
      * 
      * @param transaction the transaction for records
      */
-    public Recorder() {
+    public Tape() {
         queue = new LinkedBlockingQueue<>();
     }
     

@@ -18,10 +18,10 @@ import org.jvoicexml.voicexmlunit.io.Statement;
  */
 public class TestRecorder {
     
-    Recorder recorder;
+    Tape recorder;
     
     public TestRecorder() {
-        recorder = new Recorder();
+        recorder = new Tape();
     }
     
     @Before

@@ -1,6 +1,6 @@
 package org.jvoicexml.voicexmlunit;
 
-import org.jvoicexml.voicexmlunit.processor.Adapter;
+import org.jvoicexml.voicexmlunit.processor.Phone;
 
 /**
  * Facade for IVR.
@@ -8,7 +8,7 @@ import org.jvoicexml.voicexmlunit.processor.Adapter;
  * 
  * @author raphael
  */
-public class Caller implements Adapter {
+public class Caller implements Phone {
     
     private final IVR ivr;
 

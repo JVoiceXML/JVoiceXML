@@ -27,13 +27,10 @@
 package org.jvoicexml.voicexmlunit.processor;
 
 import java.io.File;
-import java.net.InetSocketAddress;
-import java.net.URI;
 import org.junit.*;
 import org.jvoicexml.Session;
-import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
  * Test cases for {@link Voice}.
@@ -48,9 +45,10 @@ public class TestVoice {
      * Set up the test environment.
      */
     @Before
-    public void setUp() {
+    public void setUp() throws JVoiceXMLEvent {
+        voice = new Voice(9999);
         final File file = new File("unittests/etc/mock.vxml");
-        voice = new Voice(file.toURI());
+        voice.getDialog(file.toURI());
     }
 
     /**

@@ -26,7 +26,7 @@
 
 package org.jvoicexml.voicexmlunit.processor;
 
-import java.io.IOException;
+import java.io.IOException; 
 import java.io.OutputStream;
 import java.net.URI;
 import javax.sound.sampled.AudioFormat;
@@ -43,7 +43,8 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.jvxml.BufferedCharacterInput;
 import org.jvoicexml.voicexmlunit.io.Statement;
-import org.mockito.Mockito; // https://code.google.com/p/mockito/ 
+import org.mockito.Mockito;
+
 
     
 /**
@@ -53,34 +54,55 @@ import org.mockito.Mockito; // https://code.google.com/p/mockito/
  * @author thesis
  * 
  */
-public class Dialog implements SessionListener, CallControl {
+public final class Dialog implements SessionListener, CallControl {
 
     private URI uri;
     private ImplementationPlatform implementation;
-    private Recorder recorder;
+    private Tape tape;
     private Session session;
     
-    public Dialog(final URI uri) {
-        this.uri = uri;
-        try {
-            implementation = Mockito.mock(ImplementationPlatform.class);
-            mock(implementation);
-        } catch (JVoiceXMLEvent ex) {
-            implementation = null;
-        }
+    public Dialog() {
     }
     
-    public ImplementationPlatform getPlatform() {
+    public Dialog(final URI uri) {
+        implementation = null;
+        set(uri);
+    }
+    
+    public void set(final URI uriNew) {
+        uri = uriNew;
+    }
+    
+    public URI get() {
+        return uri;
+    }
+    
+    public ImplementationPlatform getPlatform() throws JVoiceXMLEvent {
+        if (implementation == null) {
+            implementation = Mockito.mock(ImplementationPlatform.class);
+            mock(implementation);
+        }
         return implementation;
     }
     
-    public URI getURI() {
-        return uri;
+    public void finish() {
+        hangup();
+        if (implementation != null) {
+            implementation.close();
+            implementation = null;
+        }
+        tape = null;
     }
     
     private void mock(final ImplementationPlatform implementation) 
             throws JVoiceXMLEvent { 
-        final SystemOutput output = Mockito.mock(SystemOutput.class);
+        
+        /**
+         * https://code.google.com/p/mockito/ 
+         */
+        
+        final SystemOutput output;
+        output = Mockito.mock(SystemOutput.class);
         Mockito.when(implementation.getSystemOutput()).thenReturn(output);
 
         Mockito.when(implementation.hasUserInput()).thenReturn(true);
@@ -98,7 +120,7 @@ public class Dialog implements SessionListener, CallControl {
 
     private void consume(final Statement statement) {
         try {
-            recorder.capture(statement);
+            tape.capture(statement);
         } catch (InterruptedException ex) {
             
         }
@@ -106,7 +128,7 @@ public class Dialog implements SessionListener, CallControl {
     
     private void produce() {
         try {
-            final Statement statement = recorder.playback();
+            final Statement statement = tape.playback();
             statement.send(this);
         } catch (InterruptedException ex) {
             
@@ -168,6 +190,7 @@ public class Dialog implements SessionListener, CallControl {
 
     @Override
     public void hangup() {
+        session = null;
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

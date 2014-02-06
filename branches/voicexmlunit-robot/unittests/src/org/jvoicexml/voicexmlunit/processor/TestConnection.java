@@ -30,6 +30,7 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
  * Test cases for {@link Connection}.
@@ -48,18 +49,20 @@ public class TestConnection {
      *         setup failed
      */
     @Before
-    public void setUp() throws Exception {
-        final File file = new File("unittests/etc/mock.vxml");
+    public void setUp() throws Exception, JVoiceXMLEvent {
         final Voice mock;
-        mock = new Voice(file.toURI());
+        mock = new Voice(9999);
+        final File file = new File("unittests/etc/mock.vxml");
+        final Dialog dialog = mock.getDialog(file.toURI());
         connection = new Connection(mock);
 
         started = false;
         connected = false;
+        activated = false;
     }
 
     @Test
     public void test() {
-        Assert.fail("TODO");
+        Assert.fail("tbd");
     }
 }

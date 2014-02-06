@@ -27,11 +27,11 @@
 package org.jvoicexml.voicexmlunit.processor;
 
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.JVoiceXmlMain;
 import org.jvoicexml.Session;
@@ -50,25 +50,42 @@ import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
  */
 public final class Voice implements JVoiceXmlCore {
 
-    private final Dialog dialog;
     private final JVoiceXmlDocumentServer documentServer;
     private final JVoiceXmlGrammarProcessor grammarProcessor;
     
+    private Dialog dialog;
     private JVoiceXmlSession session;
     
+    private final Long timeout;
+    private final Object lock;
+    
+     
     /**
-     *
-     * @param uri
-     * @throws JVoiceXMLEvent
+     * Constructor.
+     * Simplest initialization.
+     *  
+     * @param timeout maximum of time (msec) to wait for fine session shutdown
      */
-    public Voice(final URI uri) {
-        dialog = new Dialog(uri);
+    public Voice(final long t) {
         documentServer = new JVoiceXmlDocumentServer();
         grammarProcessor = new JVoiceXmlGrammarProcessor();
+        dialog = null;
         session = null;
+        timeout = t;
+        lock = new Object();
     }
     
-    public Dialog getDialog() {
+    public Dialog getDialog(final URI uri) throws JVoiceXMLEvent {
+        if (dialog == null) {
+            dialog = new Dialog();
+        }
+        // is there a new uri?
+        if (0 == uri.compareTo(dialog.get())) {
+            if (dialog.getPlatform() != null) {
+                dialog.finish();
+                dialog.set(uri);
+            }
+        }
         return dialog;
     }
     
@@ -77,16 +94,27 @@ public final class Voice implements JVoiceXmlCore {
     }
     
     /**
-     * Dials to an JVoiceXML document.
+     * Dials to an internally created JVoiceXML sub application.
+     * It creates a valid session objects and connects it to JVoiceXML engine.
+     * Then, the internal dialog will be executed in a separate thread,
+     * so this function won't block till the session ends. 
+     * Session termination must be handled outside of this function.
      */
     public void dial() {
         try {
+            if (session != null) {
+                shutdown();
+            }
             session = (JVoiceXmlSession) this.createSession(null);
             session.addSessionListener(dialog);
-            session.call(dialog.getURI());
+            session.call(dialog.get());
         } catch (JVoiceXMLEvent ex) {
-            dialog.hangup();
+            shutdown();
         }
+    }
+    
+    public boolean isDialing() {
+        return (session != null) && session.isAlive() && !session.hasEnded();
     }
 
     @Override
@@ -111,19 +139,39 @@ public final class Voice implements JVoiceXmlCore {
     }
 
     @Override
-    public Session createSession(ConnectionInformation info) throws ErrorEvent {
-        return (Session) new JVoiceXmlSession(dialog.getPlatform(), this, info);
+    public Session createSession(ConnectionInformation info) 
+            throws ErrorEvent {
+        try {
+            return (Session) new JVoiceXmlSession(dialog.getPlatform(), 
+                    this, info);
+        } catch (JVoiceXMLEvent ex) {
+            throw new NoresourceError(ex);
+        }
     }
 
     @Override
     public void shutdown() {
         if (session != null) {
-            session.hangup();
-            session = null;
+            // wait till session ends or terminate it after the timeout
+            try {
+                final Runnable terminator; 
+                terminator = new Runnable() {
+                    @Override
+                    public void run() {
+                        session.hangup();
+                        synchronized (lock) {
+                            lock.notify();
+                        }
+                    }
+                };
+                new Thread(terminator).start();                        
+                synchronized (lock) {
+                    lock.wait(timeout);
+                }
+            } catch (InterruptedException ex) {
+            } finally {
+                session = null;
+            }
         }
-    }
-
-    void fail(ErrorEvent ex) {
-        
     }
 }

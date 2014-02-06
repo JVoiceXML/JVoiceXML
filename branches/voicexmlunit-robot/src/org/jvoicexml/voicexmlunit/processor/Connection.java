@@ -44,6 +44,11 @@ public final class Connection implements Runnable {
     private ErrorEvent error;
 
     /**
+     * Maximum of time in msec to wait for a session timeout/shutdown.
+     */
+    public static long SESSION_TIMEOUT = 2500;
+    
+    /**
      * Constructs a new call
      *
      * @param 
@@ -68,7 +73,7 @@ public final class Connection implements Runnable {
             //final Session session = voice.createSession(null);
             session.waitSessionEnd();
         } catch (ErrorEvent ex) {
-            voice.fail(ex);
+            
         } finally {
             voice.shutdown();
         }

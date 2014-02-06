@@ -4,18 +4,18 @@
  */
 package org.jvoicexml.voicexmlunit;
 
-import org.jvoicexml.voicexmlunit.processor.Adapter;
+import org.jvoicexml.voicexmlunit.processor.Phone;
 import java.net.InetSocketAddress;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.voicexmlunit.processor.Connection;
-import org.jvoicexml.voicexmlunit.processor.Recorder;
+import org.jvoicexml.voicexmlunit.processor.Tape;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  *
  * @author raphael
  */
-public class IVR implements Adapter, TextListener {
+public class IVR implements Phone, TextListener {
     
     private final Connection connection;
     
