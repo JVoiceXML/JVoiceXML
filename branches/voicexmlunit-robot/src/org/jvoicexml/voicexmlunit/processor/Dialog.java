@@ -85,6 +85,11 @@ public final class Dialog implements SessionListener, CallControl {
         return implementation;
     }
     
+    public Tape startTape() {
+        tape = new Tape();
+        return tape;
+    }
+    
     public void finish() {
         hangup();
         if (implementation != null) {

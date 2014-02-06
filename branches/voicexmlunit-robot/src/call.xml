@@ -3,25 +3,24 @@
        initialstate="idle">
 
   <state id="idle">
-    <transition event="run" target="server.started" />
+    <transition event="run" target="tape.started" />
   </state>
 
-  <state id="server.started">
-    <transition event="dialog.start" target="server.connected" />
-    <transition event="server.stop" target="idle" />
+  <state id="tape.started">
+    <transition event="dialog.start" target="tape.connected" />
+    <transition event="tape.stop" target="idle" />
   </state>
 
-  <state id="server.connected">
+  <state id="tape.connected">
     <transition event="dialog.run" target="session.active" />
-    <transition event="server.stop" target="idle" />
+    <transition event="tape.stop" target="idle" />
   </state>
 
   <state id="session.active">
-    <transition event="atm.startup" target="inService">
-    <transition event="atm.connLost" target="disconnected">
-    <transition event="atm.loadFail" target="outOfService">
-    <transition event="atm.shutdown" target="outOfService">
-      <transition event="atm.connLost" target="disconnected">  
+    <transition event="session.end" target="tape.connected" />
+    <transition event="dialog.consume" target="session.active" />
+    <transition event="dialog.produce" target="session.active" />
+    <transition event="session.hangup" target="tape.started">
   </state>
 
   <state id="disconnected" final="true">

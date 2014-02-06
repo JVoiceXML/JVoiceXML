@@ -16,11 +16,11 @@ import org.jvoicexml.voicexmlunit.io.Statement;
  *
  * @author raphael
  */
-public class TestRecorder {
+public class TestTape {
     
     Tape recorder;
     
-    public TestRecorder() {
+    public TestTape() {
         recorder = new Tape();
     }
     
