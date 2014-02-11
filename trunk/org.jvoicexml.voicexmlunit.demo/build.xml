@@ -18,9 +18,9 @@ This file builds and runs the 'ViceXMLUnit' demo for JVoiceXML.
         <property name="component.path"
           value="org/jvoicexml/voicexmlunit/demo"/>
 
-        <property name="src" value="src" />
-        <property name="build" value="classes" />
-        <property name="config" value="config" />
+        <property name="src" value="${basedir}/src" />
+        <property name="build" value="${basedir}/classes" />
+        <property name="config" value="${basedir}/config" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
 
@@ -38,6 +38,7 @@ This file builds and runs the 'ViceXMLUnit' demo for JVoiceXML.
             <path refid="build.classpath" />
             <pathelement path="${config}" />
             <fileset refid="rhino.lib" />
+            <fileset refid="harmcrest.lib" />
         </path>
     </target>
 
@@ -95,7 +96,7 @@ Build this jar from the main project first.
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2013<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2013-2014<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <tag name="todo" description="Stuff to complete" />
         <classpath>
@@ -119,14 +120,21 @@ Build this jar from the main project first.
         </javadoc>
     </target>
 
-    <target name="runHelloWorldDemo" description="Run the 'hello world' demo" depends="compile">
-        <java classname="org.jvoicexml.voicexmlunit.demo.HelloDemo" fork="true">
-            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
-            <classpath>
-                <path refid="run.classpath" />
-                <pathelement path="${build}" />
-            </classpath>
-        </java>
+    <target name="runHelloWorldDemo"
+        description="Run the 'hello world' demo" depends="compile">
+        <junit printsummary="yes"
+                   maxmemory="256M"
+                   fork="true"
+                   haltonfailure="false"
+                   showoutput="true">
+          <jvmarg value="-Djava.security.manager" />
+          <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
+          <classpath refid="run.classpath" />
+          <classpath location="${build}" />
+
+          <formatter type="brief" usefile="false" />
+          <test name="org.jvoicexml.voicexmlunit.demo.TestHelloDemo" />
+        </junit>
     </target>
 
     <target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -initcheckstyle" if="checkstyle.present">
