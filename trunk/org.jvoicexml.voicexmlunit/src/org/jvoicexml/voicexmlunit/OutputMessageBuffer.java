@@ -70,9 +70,11 @@ class OutputMessageBuffer implements TextListener {
             if (event != null) {
                 throw event;
             }
-            monitor.wait();
-            if (event != null) {
-                throw event;
+            if (output == null) {
+                monitor.wait();
+                if (event != null) {
+                    throw event;
+                }
             }
             try {
                 return output;
@@ -92,19 +94,27 @@ class OutputMessageBuffer implements TextListener {
      *         waiting interrupted
      * @throws TimeoutException
      *         waiting time exceeded
+     * @throws JVoiceXMLEvent
+     *          error waiting
      */
     public SsmlDocument nextMessage(final long timeout)
-            throws InterruptedException, TimeoutException {
+            throws InterruptedException, TimeoutException, JVoiceXMLEvent {
         synchronized (monitor) {
-            monitor.wait(timeout);
+            if (event != null) {
+                throw event;
+            }
             if (output == null) {
-                throw new TimeoutException("timeout of '" + timeout
-                        + "' msec exceeded while waiting for next message");
+                monitor.wait(timeout);
+                if (output == null) {
+                    throw new TimeoutException("timeout of '" + timeout
+                            + "' msec exceeded while waiting for next message");
+                }
             }
             try {
                 return output;
             } finally {
                 output = null;
+                event = null;
             }
         }
     }

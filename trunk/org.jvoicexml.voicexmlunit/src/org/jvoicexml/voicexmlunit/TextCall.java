@@ -192,7 +192,20 @@ public final class TextCall implements Call  {
             }
             LOGGER.info("heard '" + output + "'");
             return output;
-        } catch (InterruptedException | TimeoutException e) {
+        } catch (InterruptedException | TimeoutException | JVoiceXMLEvent e) {
+            JVoiceXMLEvent lastError;
+            try {
+                lastError = session.getLastError();
+            } catch (ErrorEvent ex) {
+                final AssertionError error = new AssertionError(ex);
+                notifyError(error);
+                throw error;
+            }
+            if (lastError != null) {
+                final AssertionError error = new AssertionError(lastError);
+                notifyError(error);
+                throw error;
+            }
             final AssertionError error = new AssertionError(e);
             notifyError(error);
             throw error;
