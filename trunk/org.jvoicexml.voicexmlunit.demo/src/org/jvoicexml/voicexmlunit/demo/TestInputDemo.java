@@ -12,6 +12,11 @@ import org.jvoicexml.voicexmlunit.TextCall;
 
 /**
  * A demo that tests the venerable hello world.
+ * <p>
+ * Must be run with the system property
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
+ * the <code>config</code> folder added to the classpath.
+ * </p>
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
