@@ -77,12 +77,11 @@ class OutputMessageBuffer implements TextListener {
         if (event != null) {
             throw event;
         }
-        receiveSem.acquire(1);
-        if (event != null) {
-            readSem.release();
-            throw event;
-        }
         try {
+            receiveSem.acquire();
+            if (event != null) {
+                throw event;
+            }
             return output;
         } finally {
             output = null;
@@ -108,13 +107,12 @@ class OutputMessageBuffer implements TextListener {
         if (event != null) {
             throw event;
         }
-        receiveSem.tryAcquire(timeout, TimeUnit.MILLISECONDS);
-        if (output == null) {
-            readSem.release();
-            throw new TimeoutException("timeout of '" + timeout
-                    + "' msec exceeded while waiting for next message");
-        }
         try {
+            receiveSem.tryAcquire(timeout, TimeUnit.MILLISECONDS);
+            if (output == null) {
+                throw new TimeoutException("timeout of '" + timeout
+                        + "' msec exceeded while waiting for next message");
+            }
             return output;
         } finally {
             output = null;
