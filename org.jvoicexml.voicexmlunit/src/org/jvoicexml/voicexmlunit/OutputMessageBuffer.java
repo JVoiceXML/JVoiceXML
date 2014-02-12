@@ -74,9 +74,6 @@ class OutputMessageBuffer implements TextListener {
      */
     public SsmlDocument nextMessage()
             throws InterruptedException, JVoiceXMLEvent {
-        if (event != null) {
-            throw event;
-        }
         try {
             receiveSem.acquire();
             if (event != null) {
@@ -104,11 +101,11 @@ class OutputMessageBuffer implements TextListener {
      */
     public SsmlDocument nextMessage(final long timeout)
             throws InterruptedException, TimeoutException, JVoiceXMLEvent {
-        if (event != null) {
-            throw event;
-        }
         try {
             receiveSem.tryAcquire(timeout, TimeUnit.MILLISECONDS);
+            if (event != null) {
+                throw event;
+            }
             if (output == null) {
                 throw new TimeoutException("timeout of '" + timeout
                         + "' msec exceeded while waiting for next message");
@@ -139,11 +136,12 @@ class OutputMessageBuffer implements TextListener {
     public void outputSsml(final SsmlDocument document) {
         try {
             readSem.acquire();
+            output = document;
         } catch (InterruptedException e) {
             event = new GenericVoiceXmlEvent("interrupted", e.getMessage());
+        } finally {
+            receiveSem.release();
         }
-        output = document;
-        receiveSem.release();
     }
 
     /**
