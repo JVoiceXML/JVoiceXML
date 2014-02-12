@@ -74,6 +74,4 @@ public class TestOutputMessageBuffer {
             Assert.assertEquals("test " + i, speak.getTextContent());
         }
     }
-
-
 }
