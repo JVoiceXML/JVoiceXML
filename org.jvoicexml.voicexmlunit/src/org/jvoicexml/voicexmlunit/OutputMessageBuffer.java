@@ -27,9 +27,12 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.jvoicexml.client.text.TextListener;
+import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -45,15 +48,20 @@ class OutputMessageBuffer implements TextListener {
     /** The last received output message. */
     private SsmlDocument output;
     /** Synchronization. */
-    private Object monitor;
+    private final Semaphore receiveSem;
+    private final Semaphore readSem;
     /** Caught event while waiting for an input. */
     private JVoiceXMLEvent event;
 
     /**
      * Constructs a new object.
+     * @throws InterruptedException error initializing the semaphores
      */
-    public OutputMessageBuffer() {
-        monitor = new Object();
+    public OutputMessageBuffer() throws InterruptedException {
+        receiveSem = new Semaphore(1);
+        receiveSem.acquire();
+        readSem = new Semaphore(1);
+        readSem.release();
     }
 
     /**
@@ -66,22 +74,20 @@ class OutputMessageBuffer implements TextListener {
      */
     public SsmlDocument nextMessage()
             throws InterruptedException, JVoiceXMLEvent {
-        synchronized (monitor) {
-            if (event != null) {
-                throw event;
-            }
-            if (output == null) {
-                monitor.wait();
-                if (event != null) {
-                    throw event;
-                }
-            }
-            try {
-                return output;
-            } finally {
-                output = null;
-                event = null;
-            }
+        if (event != null) {
+            throw event;
+        }
+        receiveSem.acquire(1);
+        if (event != null) {
+            readSem.release();
+            throw event;
+        }
+        try {
+            return output;
+        } finally {
+            output = null;
+            event = null;
+            readSem.release();
         }
     }
 
@@ -99,23 +105,21 @@ class OutputMessageBuffer implements TextListener {
      */
     public SsmlDocument nextMessage(final long timeout)
             throws InterruptedException, TimeoutException, JVoiceXMLEvent {
-        synchronized (monitor) {
-            if (event != null) {
-                throw event;
-            }
-            if (output == null) {
-                monitor.wait(timeout);
-                if (output == null) {
-                    throw new TimeoutException("timeout of '" + timeout
-                            + "' msec exceeded while waiting for next message");
-                }
-            }
-            try {
-                return output;
-            } finally {
-                output = null;
-                event = null;
-            }
+        if (event != null) {
+            throw event;
+        }
+        receiveSem.tryAcquire(timeout, TimeUnit.MILLISECONDS);
+        if (output == null) {
+            readSem.release();
+            throw new TimeoutException("timeout of '" + timeout
+                    + "' msec exceeded while waiting for next message");
+        }
+        try {
+            return output;
+        } finally {
+            output = null;
+            event = null;
+            readSem.release();
         }
     }
 
@@ -135,10 +139,13 @@ class OutputMessageBuffer implements TextListener {
      */
     @Override
     public void outputSsml(final SsmlDocument document) {
-        synchronized (monitor) {
-            output = document;
-            monitor.notifyAll();
+        try {
+            readSem.acquire();
+        } catch (InterruptedException e) {
+            event = new GenericVoiceXmlEvent("interrupted", e.getMessage());
         }
+        output = document;
+        receiveSem.release();
     }
 
     /**
@@ -160,9 +167,7 @@ class OutputMessageBuffer implements TextListener {
      */
     @Override
     public void disconnected() {
-        synchronized (monitor) {
-            event = new ConnectionDisconnectHangupEvent();
-            monitor.notifyAll();
-        }
+        event = new ConnectionDisconnectHangupEvent();
+        receiveSem.release();
     }
 }

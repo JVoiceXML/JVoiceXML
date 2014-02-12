@@ -80,8 +80,9 @@ public final class TextCall implements Call  {
 
     /**
      * Constructs a new object with the default server port.
+     * @throws InterruptedException error initializing the output buffer
      */
-    public TextCall() {
+    public TextCall() throws InterruptedException {
         this(DEFAULT_SERVER_PORT);
     }
 
@@ -89,8 +90,10 @@ public final class TextCall implements Call  {
      * Constructs a new call.
      * @param hostname the hostname to use for the {@link TextServer}
      * @param port number to use for the {@link TextServer}.
+     * @throws InterruptedException error initializing the output buffer
      */
-    public TextCall(final String hostname, final int port) {
+    public TextCall(final String hostname, final int port)
+            throws InterruptedException {
         portNumber = port;
         server = new TextServer(hostname, portNumber);
         outputBuffer = new OutputMessageBuffer();
@@ -103,8 +106,9 @@ public final class TextCall implements Call  {
     /**
      * Constructs a new call.
      * @param port number to use for the {@link TextServer}.
+     * @throws InterruptedException error initializing the output buffer
      */
-    public TextCall(final int port) {
+    public TextCall(final int port) throws InterruptedException {
         this(null, port);
     }
 
