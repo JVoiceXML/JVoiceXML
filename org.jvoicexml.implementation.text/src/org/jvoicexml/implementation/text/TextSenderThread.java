@@ -94,17 +94,19 @@ final class TextSenderThread extends Thread {
         try {
             boolean sending = true;
             while (sending && socket.isConnected() && !interrupted()) {
-                synchronized (messages) {
-                    final PendingMessage pending = messages.take();
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("sending " + pending);
-                    }
-                    sendMessage(pending);
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("... done sending output");
-                    }
-                    sending = pending.getMessageCode() == TextMessage.BYE;
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("trying to take next message");
                 }
+                final PendingMessage pending = messages.take();
+                telephony.addPendingMessage(pending);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("sending " + pending);
+                }
+                sendMessage(pending);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("... done sending output");
+                }
+                sending = pending.getMessageCode() == TextMessage.BYE;
             }
         } catch (InterruptedException | IOException e) {
             messages.clear();
@@ -129,7 +131,6 @@ final class TextSenderThread extends Thread {
      */
     private void sendMessage(final PendingMessage pending)
             throws IOException {
-        telephony.addPendingMessage(pending);
         final OutputStream stream = socket.getOutputStream();
         final ObjectOutputStream out =  new ObjectOutputStream(stream);
         final TextMessage message = pending.getMessage();
@@ -218,7 +219,7 @@ final class TextSenderThread extends Thread {
     
     /**
      * Checks if there are messages to send.
-     * @return <code>true</code> if there are messages to send.
+     * @return {@code true} if there are messages to send.
      */
     public boolean isSending() {
         return !messages.isEmpty();

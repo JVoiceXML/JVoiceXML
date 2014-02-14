@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -53,7 +53,7 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
- * Test case for {@link TextTelephony}.
+ * Test cases for {@link TextTelephony}.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
@@ -99,9 +99,7 @@ public final class TestTextTelephony
         server = new TextServer(PORT);
         server.addTextListener(this);
         server.start();
-        synchronized (lock) {
-            lock.wait();
-        }
+        server.waitStarted();
         final ConnectionInformation client = server.getConnectionInformation();
         telephony = new TextTelephony();
         telephony.connect(client);
@@ -128,7 +126,7 @@ public final class TestTextTelephony
      * @exception JVoiceXMLEvent
      *            test failed.
      */
-    @Test
+    @Test(timeout=5000)
     public void testPlay() throws Exception, JVoiceXMLEvent {
         final TextSynthesizedOutput textOutput = new TextSynthesizedOutput();
         final String prompt = "testPlay";

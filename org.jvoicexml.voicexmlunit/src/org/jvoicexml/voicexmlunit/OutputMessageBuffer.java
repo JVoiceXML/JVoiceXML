@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -102,11 +102,12 @@ class OutputMessageBuffer implements TextListener {
     public SsmlDocument nextMessage(final long timeout)
             throws InterruptedException, TimeoutException, JVoiceXMLEvent {
         try {
-            receiveSem.tryAcquire(timeout, TimeUnit.MILLISECONDS);
+            final boolean success =
+                    receiveSem.tryAcquire(timeout, TimeUnit.MILLISECONDS);
             if (event != null) {
                 throw event;
             }
-            if (output == null) {
+            if (!success || (output == null)) {
                 throw new TimeoutException("timeout of '" + timeout
                         + "' msec exceeded while waiting for next message");
             }
