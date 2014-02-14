@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -210,9 +210,6 @@ final class TextSynthesizedOutput
      * @return next text, <code>null</code> if there is no next output.
      */
     SpeakableText getNextText() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("retrieving next output...");
-        }
         final SpeakableText speakable;
         try {
             speakable = texts.take();
@@ -220,10 +217,6 @@ final class TextSynthesizedOutput
             fireOutputStarted(speakable);
         } catch (InterruptedException e) {
             return null;
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("next output: " + speakable);
         }
         return speakable;
     }
