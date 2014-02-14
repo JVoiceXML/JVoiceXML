@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -176,7 +176,10 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             if (removed) {
                 final SpeakableText speakable = pending.getSpeakable();
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("removed pending message " + sequenceNumber);
+                    final Collection<Integer> pengingSequenveNumbers =
+                            pendingMessages.keySet();
+                    LOGGER.debug("removed pending message " + sequenceNumber
+                            + " remaining " + pengingSequenveNumbers);
                 }
                 if (textOutput != null) {
                     textOutput.checkEmptyQueue(speakable);
@@ -467,7 +470,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
                         + "'...");
             }
         }
-        
+
         // delay to acknowledge pending messages
         if (!pendingMessages.isEmpty()) {
             try {

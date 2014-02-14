@@ -39,7 +39,6 @@ import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
-import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -78,7 +77,7 @@ public final class TestTextSenderThread
         server = new TextServer(PORT);
         server.start();
         server.addTextListener(this);
-        Thread.sleep(500);
+        server.waitStarted();
         final InetAddress address = InetAddress.getLocalHost();
         final SocketAddress socketAddress =
             new InetSocketAddress(address, PORT);
@@ -110,41 +109,42 @@ public final class TestTextSenderThread
      * Test method for {@link org.jvoicexml.implementation.text.TextSenderThread#sendData(org.jvoicexml.SpeakableText)}.
      * @exception Exception test failed.
      */
-    @Test//(timeout = 5000)
+    @Test
     public void testSendData() throws Exception {
         final String test1 = "test1";
         final SpeakableSsmlText speakable1 = new SpeakableSsmlText(test1);
         sender.sendData(speakable1);
         synchronized (lock) {
-            lock.wait(MAX_WAIT);
+            if (receivedObject != null) {
+                lock.wait(MAX_WAIT);
+            }
         }
         assertEquals(speakable1.getDocument(), receivedObject);
-        synchronized (lock) {
-            lock.wait(MAX_WAIT);
-        }
-        final SsmlDocument document = new SsmlDocument();
-        final Speak speak = document.getSpeak();
-        speak.addText("test2");
-        final SpeakableText speakable2 = new SpeakableSsmlText(document);
-        sender.sendData(speakable2);
-        synchronized (lock) {
-            lock.wait(MAX_WAIT);
-        }
+    }
 
-        for (int  i = 0; i < 10; i++) {
-            final String test3 = "test" + i;
-            final SpeakableText speakable3 = new SpeakableSsmlText(test3);
-            sender.sendData(speakable3);
+    /**
+     * Test method for {@link org.jvoicexml.implementation.text.TextSenderThread#sendData(org.jvoicexml.SpeakableText)}.
+     * @exception Exception test failed.
+     */
+    @Test
+    public void testSendDataMultiple() throws Exception {
+        final int max = 100;
+        for (int  i = 0; i < max; i++) {
+            final String test = "test " + i;
+            final SpeakableText speakable = new SpeakableSsmlText(test);
+            sender.sendData(speakable);
         }
         int i = 0;
-        while (i < 10) {
+        while (i < max) {
             synchronized (lock) {
                 lock.wait(MAX_WAIT);
             }
             ++i;
         }
+        Assert.assertEquals(max, i);
     }
 
+    
     /**
      * Checks if the given SSML documents are equal based on their content.
      * @param doc1 the expected document
@@ -164,7 +164,7 @@ public final class TestTextSenderThread
     public void outputSsml(final SsmlDocument document) {
         receivedObject = document;
         synchronized (lock) {
-            lock.notify();
+            lock.notifyAll();
         }
     }
 
