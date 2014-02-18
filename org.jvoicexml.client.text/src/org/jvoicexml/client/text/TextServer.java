@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@ package org.jvoicexml.client.text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
@@ -42,7 +43,6 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.client.TcpUriFactory;
-import org.jvoicexml.startup.Shutdown;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -198,6 +198,9 @@ public final class TextServer extends Thread {
                 current.connected(remote);
             }
         }
+        synchronized (connectionLock) {
+            connectionLock.notifyAll();
+        }
     }
 
     /**
@@ -321,8 +324,10 @@ public final class TextServer extends Thread {
                 final InetSocketAddress local =
                     (InetSocketAddress) client.getLocalSocketAddress();
                 callingId = TcpUriFactory.createUri(local);
+
                 LOGGER.info("connected to " + calledId);
                 fireConnected(remote);
+
                 if (readOutput()) {
                     break;
                 }
@@ -360,14 +365,8 @@ public final class TextServer extends Thread {
         if (client == null) {
             throw new IOException("no client connection");
         }
-        final TextMessageReader reader =
-                new TextMessageReader(client.getInputStream());
-
-        // We have to do the release here, since ObjectInputStream blocks
-        // until the server has sent something.
-        synchronized (connectionLock) {
-            connectionLock.notifyAll();
-        }
+        final InputStream input = client.getInputStream();
+        final TextMessageReader reader = new TextMessageReader(input);
 
         try {
             while (isConnected() && !interrupted()) {
@@ -461,6 +460,12 @@ public final class TextServer extends Thread {
      *         Error in connection.
      */
     public void waitConnected() throws IOException {
+        // we are connected if there is an active client connection
+        if (client != null) {
+            return;
+        }
+
+        // otherwise wait until we get one
         synchronized (connectionLock) {
             try {
                 connectionLock.wait();
@@ -491,20 +496,17 @@ public final class TextServer extends Thread {
     private void send(final TextMessage message)
             throws IOException {
         // check generally if we can send
-        if (out == null) {
-            if (isConnected()) {
-                out = client.getOutputStream();
-            } else {
-                throw new IOException("Disconnected. No stream to send " +
-                        message.getData());
-            }
-        }
         synchronized (lock) {
-            final ByteArrayOutputStream bout = new ByteArrayOutputStream();
-            final ObjectOutputStream oout = new ObjectOutputStream(bout);
+            if (out == null) {
+                if (isConnected()) {
+                    out = client.getOutputStream();
+                } else {
+                    throw new IOException("Disconnected. No stream to send " +
+                            message.getData());
+                }
+            }
+            final ObjectOutputStream oout = new ObjectOutputStream(out);
             oout.writeObject(message);
-            final byte[] bytes = bout.toByteArray();
-            out.write(bytes);
             LOGGER.info("sent " + message);
         }
     }
