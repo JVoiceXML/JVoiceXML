@@ -115,9 +115,7 @@ public final class TestTextSenderThread
         final SpeakableSsmlText speakable1 = new SpeakableSsmlText(test1);
         sender.sendData(speakable1);
         synchronized (lock) {
-            if (receivedObject != null) {
-                lock.wait(MAX_WAIT);
-            }
+            lock.wait(MAX_WAIT);
         }
         assertEquals(speakable1.getDocument(), receivedObject);
     }
@@ -163,6 +161,7 @@ public final class TestTextSenderThread
      */
     public void outputSsml(final SsmlDocument document) {
         receivedObject = document;
+        System.out.println(document);
         synchronized (lock) {
             lock.notifyAll();
         }

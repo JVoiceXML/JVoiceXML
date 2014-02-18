@@ -106,7 +106,8 @@ final class TextSenderThread extends Thread {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("... done sending output");
                 }
-                sending = pending.getMessageCode() == TextMessage.BYE;
+                final int messageCode = pending.getMessageCode();
+                sending = messageCode != TextMessage.BYE;
             }
         } catch (InterruptedException | IOException e) {
             messages.clear();
