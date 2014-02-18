@@ -441,7 +441,8 @@ hints about it.
 
 All platform configuration files are located in the \lstinline{config} folder.
 JVoiceXML scans this folder for configuration files at startup and loads all found
-implementation platforms.
+implementation platforms. A full list of the configuration files is
+given in section~\ref{sec:configuration-files}.
 
 JVoiceXML features a flexible and modular configuration concept. Each
 implementation platform can add custom libraries without the need to adapt the
@@ -474,7 +475,7 @@ this case the number of instances is limited to 1. This means that there will be
 only one instance of this platform.
 
 A closer look at certain configuration issues is given in
-section~\ref{sec:configuration}.
+section~\ref{sec:configuration}. 
 
 For the specification of objects JVoiceXML utilizes the spring framework as an
 IoC. Please refer to the spring documentation at
@@ -1918,6 +1919,47 @@ configuration file
 Make sure that the loader repository of the JNDI configuration and your
 implementation platform use the same repositories. Otherwise, you will get some
 strange \lstinline[language=Java]{ClassCastException}s.
+
+\appendix
+\chapter{Configuration Files}
+\label{sec:configuration-files}
+
+This section includes copies of the configuration files per
+implementation platform. Their content can be copied as an XML file
+into the config folder. This way, the repsective implementation
+platforms can be activated, ,iven that all referenced jars can be found.
+
+\section{JSAPI 1.0 with Sphinx and FreeTTS}
+\lstinputlisting[language=XML]{../org.jvoicexml.implementation.jsapi10/etc/jsapi10-implementation-dist.xml}
+
+\section{JSAPI 1.0 with Talking Java}
+\lstinputlisting[language=XML]{../org.jvoicexml.implementation.jsapi10/etc/jsapi10-talking-java-implementation-dist.xml}
+
+\section{JSAPI 2.0}
+\lstinputlisting[language=XML]{../org.jvoicexml.implementation.jsapi20/etc/jsapi20-implementation-dist.xml}
+
+\section{JTAPI}
+\lstinputlisting[language=XML]{../org.jvoicexml.implementation.jtapi/etc/jtapi-implementation-dist.xml}
+
+\section{MARC}
+\lstinputlisting[language=XML]{../org.jvoicexml.implementation.marc/etc/marc-implementation-dist.xml}
+
+\section{MARY}
+\lstinputlisting[language=XML]{../org.jvoicexml.implementation.mary/etc/mary-implementation-dist.xml}
+
+\section{MMI with Socket ETL}
+\lstinputlisting[language=XML]{../org.jvoicexml.callmanager.mmi.socket/etc/mmi-callmanager-dist.xml}
+
+\section{MMI with umundo ETL}
+\lstinputlisting[language=XML]{../org.jvoicexml.callmanager.mmi.umundo/etc/mmi-callmanager-umundo-dist.xml}
+
+\section{MRCPv2}
+\lstinputlisting[language=XML]{../org.jvoicexml.implementation.mrcpv2/etc/mrcpv2-callmanager-dist.xml}
+
+\lstinputlisting[language=XML]{../org.jvoicexml.implementation.mrcpv2/etc/mrcpv2-implementation-dist.xml}
+
+\section{Text}
+\lstinputlisting[language=XML]{../org.jvoicexml.implementation.text/etc/text-implementation-dist.xml}
 
 \bibliography{userguide}
 \bibliographystyle{plain}
