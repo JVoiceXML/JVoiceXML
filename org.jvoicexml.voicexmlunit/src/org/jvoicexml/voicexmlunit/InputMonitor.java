@@ -47,8 +47,7 @@ public final class InputMonitor implements TextListener {
                 if (event != null) {
                     throw event;
                 }
-            }
-            finally {
+            } finally {
                 expectingInput = false;
             }
         }
@@ -80,8 +79,7 @@ public final class InputMonitor implements TextListener {
                     throw new TimeoutException("timeout of '" + timeout
                             + "' msec exceeded while waiting for expected input");
                 }
-            }
-            finally {
+            }finally {
                 expectingInput = false;
             }
         }
