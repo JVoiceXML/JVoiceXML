@@ -39,9 +39,17 @@ public final class InputMonitor implements TextListener {
     public void waitUntilExpectingInput()
             throws InterruptedException, JVoiceXMLEvent {
         synchronized (monitor) {
-            monitor.wait();
-            if (event != null) {
-                throw event;
+            try {
+                if(expectingInput) {
+                    return;
+                }
+                monitor.wait();
+                if (event != null) {
+                    throw event;
+                }
+            }
+            finally {
+                expectingInput = false;
             }
         }
     }
@@ -60,13 +68,21 @@ public final class InputMonitor implements TextListener {
     public void waitUntilExpectingInput(final long timeout)
             throws InterruptedException, TimeoutException, JVoiceXMLEvent {
         synchronized (monitor) {
-            monitor.wait(timeout);
-            if (event != null) {
-                throw event;
+            try {
+                if(expectingInput) {
+                    return;
+                }
+                monitor.wait(timeout);
+                if (event != null) {
+                    throw event;
+                }
+                if (!expectingInput) {
+                    throw new TimeoutException("timeout of '" + timeout
+                            + "' msec exceeded while waiting for expected input");
+                }
             }
-            if (!expectingInput) {
-                throw new TimeoutException("timeout of '" + timeout
-                        + "' msec exceeded while waiting for expected input");
+            finally {
+                expectingInput = false;
             }
         }
     }
@@ -98,7 +114,7 @@ public final class InputMonitor implements TextListener {
     @Override
     public void expectingInput() {
         synchronized (monitor) {
-            expectingInput = false;
+            expectingInput = true;
             monitor.notifyAll();
         }
     }
