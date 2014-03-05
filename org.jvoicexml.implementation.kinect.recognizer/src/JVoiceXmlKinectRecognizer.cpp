@@ -83,7 +83,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     hr = NuiGetSensorCount(&iSensorCount);
     if (FAILED(hr))
     {
-		std::err << "unable to coonect to sensor" << std::endl;
+		std::cerr << "unable to connect to sensor" << std::endl;
         return hr;
     }
 
@@ -109,7 +109,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
         pNuiSensor->Release();
     }
 
-    if (NULL != m_pNuiSensor)
+    if (NULL != m_pNuiSensor) 
     {
         // Initialize the Kinect and specify that we'll be using audio signal
         hr = m_pNuiSensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_AUDIO); 
@@ -123,7 +123,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     if (NULL == m_pNuiSensor || FAILED(hr))
     {
         //SetStatusMessage(L"No ready Kinect found!");
-		std::err << "no kinect found" << std::endl;
+		std::cerr << "no kinect found" << std::endl;
         return E_FAIL;
     }
 
@@ -131,7 +131,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     if (FAILED(hr))
     {
         //SetStatusMessage(L"Could not initialize audio stream.");
-		std::err << "could not initialize audio stream" << std::endl;
+		std::cerr << "could not initialize audio stream" << std::endl;
         return hr;
     }
 
@@ -139,7 +139,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     if (FAILED(hr))
     {
         //SetStatusMessage(L"Could not create speech recognizer. Please ensure that Microsoft Speech SDK and other sample requirements are installed.");
-		std::err << "Could not create speech recognizer. Please ensure that Microsoft Speech SDK and other sample requirements are installed." << std::endl;
+		std::cerr << "Could not create speech recognizer. Please ensure that Microsoft Speech SDK and other sample requirements are installed." << std::endl;
         return hr;
     }
 
@@ -147,7 +147,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     hr = LoadSpeechGrammar();
     if (FAILED(hr))
     {
-		std::err << "Could not load speech grammar. Please ensure that grammar configuration file was properly deployed." << std::endl;
+		std::cerr << "Could not load speech grammar. Please ensure that grammar configuration file was properly deployed." << std::endl;
         //SetStatusMessage(L"Could not load speech grammar. Please ensure that grammar configuration file was properly deployed.");
         return hr;
     }
