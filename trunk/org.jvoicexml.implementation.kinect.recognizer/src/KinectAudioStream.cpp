@@ -17,7 +17,7 @@
 /// <summary>
 /// KinectAudioStream constructor.
 /// </summary>
-KinectAudioStream::KinectAudioStream(IMediaObject *pKinectDmo) :
+KinectAudioStream::KinectAudioStream(IMediaObject *mediaObject) :
       m_cRef(1),
       m_CurrentWriteBuffer(NULL),
       m_CurrentReadBuffer(NULL),
@@ -27,8 +27,8 @@ KinectAudioStream::KinectAudioStream(IMediaObject *pKinectDmo) :
       m_hDataReady(NULL),
       m_hCaptureThread(NULL)
 {
-    pKinectDmo->AddRef();
-    m_pKinectDmo = pKinectDmo;
+    m_mediaObject->AddRef();
+    m_mediaObject = mediaObject;
     InitializeCriticalSection(&m_Lock);
 }
 
@@ -37,7 +37,7 @@ KinectAudioStream::KinectAudioStream(IMediaObject *pKinectDmo) :
 /// </summary>
 KinectAudioStream::~KinectAudioStream()
 {
-    SafeRelease(m_pKinectDmo);
+    SafeRelease(m_mediaObject);
     DeleteCriticalSection(&m_Lock);
 }
 
@@ -202,7 +202,7 @@ STDMETHODIMP KinectAudioStream::Clone(IStream **)
 /// <returns>Media buffer ready for audio capture, or NULL if none was found.</returns>
 CStaticMediaBuffer *KinectAudioStream::GetWriteBuffer()
 {
-    CStaticMediaBuffer *pBuf = NULL;
+    CStaticMediaBuffer* buffer = NULL;
 
     EnterCriticalSection(&m_Lock);
 
@@ -210,20 +210,20 @@ CStaticMediaBuffer *KinectAudioStream::GetWriteBuffer()
     //from the read queue. This is a way of overwriting the oldest data
     if (m_BufferPool.size() > 0)
     {   
-        pBuf = m_BufferPool.top();
+		buffer = m_BufferPool.top();
         m_BufferPool.pop();
-        pBuf->SetLength(0);
+		buffer->SetLength(0);
     }                           
     else if (m_ReadBufferQueue.size() > 0)
     {
-        pBuf = m_ReadBufferQueue.front();
+		buffer = m_ReadBufferQueue.front();
         m_ReadBufferQueue.pop();
-        pBuf->SetLength(0);
+		buffer->SetLength(0);
     }
 
     LeaveCriticalSection(&m_Lock);
 
-    return pBuf;
+	return buffer;
 }
 
 
@@ -397,7 +397,7 @@ DWORD WINAPI KinectAudioStream::CaptureThread()
     HANDLE mmHandle = NULL;
     DWORD mmTaskIndex = 0;
     HRESULT hr = S_OK;
-    bool bContinue = true;
+    bool capturing = true;
     BYTE *pbOutputBuffer = NULL;
     CStaticMediaBuffer outputBuffer;
     DMO_OUTPUT_DATA_BUFFER OutputBufferStruct = {0};
@@ -408,11 +408,11 @@ DWORD WINAPI KinectAudioStream::CaptureThread()
     // Set high priority to avoid getting preempted while capturing sound
     mmHandle = AvSetMmThreadCharacteristics(L"Audio", &mmTaskIndex);
 
-    while (bContinue)
+	while (capturing)
     {
         if (WaitForSingleObject(m_hStopEvent, 0) == WAIT_OBJECT_0)
         {
-            bContinue = false;
+			capturing = false;
             continue;
         }
 
@@ -420,10 +420,10 @@ DWORD WINAPI KinectAudioStream::CaptureThread()
         {
             outputBuffer.Init(0);
             OutputBufferStruct.dwStatus = 0;
-            hr = m_pKinectDmo->ProcessOutput(0, 1, &OutputBufferStruct, &dwStatus);
+            hr = m_mediaObject->ProcessOutput(0, 1, &OutputBufferStruct, &dwStatus);
             if (FAILED(hr))
             {
-                bContinue = false;
+				capturing = false;
                 break;
             }
 
@@ -451,9 +451,9 @@ DWORD WINAPI KinectAudioStream::CaptureThread()
 
     if (FAILED(hr))
     {
-        return 0;
+        return S_OK;
     }
 
-    return 1;
+    return S_FALSE;
 }
 
