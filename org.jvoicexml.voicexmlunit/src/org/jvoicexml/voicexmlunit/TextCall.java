@@ -441,6 +441,13 @@ public final class TextCall implements Call  {
      */
     @Override
     public JVoiceXMLEvent getLastError() {
+        if (session != null) {
+            try {
+                return session.getLastError();
+            } catch (ErrorEvent e) {
+                return lastError;
+            }
+        }
         return lastError;
     }
 }
