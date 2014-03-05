@@ -28,6 +28,7 @@ package org.jvoicexml.voicexmlunit;
 
 import java.net.URI;
 
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -59,6 +60,14 @@ public final class MockCall implements Call {
      */
     @Override
     public SsmlDocument getNextOutput(final long timeout) {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SsmlDocument getLastOutput() {
         return null;
     }
 
@@ -123,5 +132,13 @@ public final class MockCall implements Call {
      */
     @Override
     public void hangup() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JVoiceXMLEvent getLastError() {
+        return null;
     }
 }

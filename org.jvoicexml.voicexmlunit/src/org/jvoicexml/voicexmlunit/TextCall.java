@@ -70,6 +70,10 @@ public final class TextCall implements Call  {
     private OutputMessageBuffer outputBuffer;
     /** Monitor to wait until JVoiceXML is ready to accept input. */
     private InputMonitor inputMonitor;
+    /** The last captured output. */
+    private SsmlDocument lastOutput;
+    /** The last observed error. */
+    private JVoiceXMLEvent lastError;
 
     /**
      * Server port number to use. Port number must be greater than 1024.
@@ -128,6 +132,7 @@ public final class TextCall implements Call  {
     public void call(final URI uri) {
         LOGGER.info("calling '" + uri + "'");
         try {
+            lastError = null;
             final Context context = new InitialContext();
             final JVoiceXml jvxml = (JVoiceXml) context.lookup("JVoiceXml");
 
@@ -157,14 +162,13 @@ public final class TextCall implements Call  {
     public SsmlDocument getNextOutput() {
         Assert.assertNotNull("no active session", session);
         try {
-            final SsmlDocument output = outputBuffer.nextMessage();
+            lastOutput = outputBuffer.nextMessage();
             for (CallListener listener : listeners) {
-                listener.heard(output);
+                listener.heard(lastOutput);
             }
-            LOGGER.info("heard '" + output + "'");
-            return output;
+            LOGGER.info("heard '" + lastOutput + "'");
+            return lastOutput;
         } catch (InterruptedException | JVoiceXMLEvent e) {
-            JVoiceXMLEvent lastError;
             try {
                 lastError = session.getLastError();
             } catch (ErrorEvent ex) {
@@ -190,14 +194,13 @@ public final class TextCall implements Call  {
     public SsmlDocument getNextOutput(final long timeout) {
         Assert.assertNotNull("no active session", session);
         try {
-            final SsmlDocument output = outputBuffer.nextMessage(timeout);
+            lastOutput = outputBuffer.nextMessage(timeout);
             for (CallListener listener : listeners) {
-                listener.heard(output);
+                listener.heard(lastOutput);
             }
-            LOGGER.info("heard '" + output + "'");
-            return output;
+            LOGGER.info("heard '" + lastOutput + "'");
+            return lastOutput;
         } catch (InterruptedException | TimeoutException | JVoiceXMLEvent e) {
-            JVoiceXMLEvent lastError;
             try {
                 lastError = session.getLastError();
             } catch (ErrorEvent ex) {
@@ -214,6 +217,14 @@ public final class TextCall implements Call  {
             notifyError(error);
             throw error;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SsmlDocument getLastOutput() {
+        return lastOutput;
     }
 
     /**
@@ -423,5 +434,13 @@ public final class TextCall implements Call  {
 
         server.stopServer();
         LOGGER.info("server stopped");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JVoiceXMLEvent getLastError() {
+        return lastError;
     }
 }
