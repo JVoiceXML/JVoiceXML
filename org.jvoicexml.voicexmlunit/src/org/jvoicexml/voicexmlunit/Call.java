@@ -28,6 +28,7 @@ package org.jvoicexml.voicexmlunit;
 
 import java.net.URI;
 
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -61,6 +62,12 @@ public interface Call {
      * @return the next output that has been captured
      */
     SsmlDocument getNextOutput(long timeout);
+
+    /**
+     * Retrieves the last obtained output.
+     * @return last captured output
+     */
+    SsmlDocument getLastOutput();
 
     /**
      * Waits for the next output and checks if this output matches the given
@@ -125,4 +132,10 @@ public interface Call {
      * Issues a hangup event.
      */
     void hangup();
+    
+    /**
+     * Retrieves the last observed error.
+     * @return the last observed error, {@code null} if there was no error
+     */
+    JVoiceXMLEvent getLastError();
 }
