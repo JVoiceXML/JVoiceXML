@@ -188,7 +188,7 @@ private:
     UINT                    m_cRef;
 
     // Media object used to capture audio
-    IMediaObject*           m_pKinectDmo;
+    IMediaObject*           m_mediaObject;
 
     // Event used to signal that capture thread should stop capturing audio
     HANDLE                  m_hStopEvent;
