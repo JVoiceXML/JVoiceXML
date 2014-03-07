@@ -37,12 +37,14 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Prompt;
+import org.jvoicexml.xml.vxml.Value;
 
 /**
  * Test case for {@link PromptStrategy}.
@@ -101,6 +103,40 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final Audio ssmlAudio3 = speak.appendChild(Audio.class);
         ssmlAudio3.setSrc("raiders.wav");
         ssmlAudio3.addText("raiders of the lost ark");
+
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
+        Assert.assertEquals(speakable, queuedSpeakable);
+    }
+
+    /**
+     * Test method for occurrences of a {@code value}-tag within a prompt. 
+     * @since 0.7.7
+     * @exception Exception
+     *            test failed.
+     * @exception JVoiceXMLEvent
+     *            test failed.
+     */
+    @Test
+    public void testExecuteValue() throws Exception, JVoiceXMLEvent {
+        final ScriptingEngine scripting = getScriptingEngine();
+        scripting.eval("var foo = 42;");
+        final Block block = createBlock();
+        final Prompt prompt = block.appendChild(Prompt.class);
+        prompt.addText("this is");
+        final Value value = prompt.appendChild(Value.class);
+        value.setExpr("foo");
+        prompt.addText("times");
+        setSystemOutputListener(this);
+        final PromptStrategy strategy = new PromptStrategy();
+        final ImplementationPlatform platform = getImplementationPlatform();
+        platform.setPromptTimeout(30000);
+        executeTagStrategy(prompt, strategy);
+        final CallControlProperties props = new CallControlProperties();
+        platform.renderPrompts(null, null, props);
+
+        final SsmlDocument ssml = new SsmlDocument();
+        final Speak speak = ssml.getSpeak();
+        speak.addText("this is 42 times");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
         Assert.assertEquals(speakable, queuedSpeakable);
