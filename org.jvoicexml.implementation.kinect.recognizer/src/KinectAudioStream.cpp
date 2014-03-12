@@ -27,7 +27,7 @@ KinectAudioStream::KinectAudioStream(IMediaObject *mediaObject) :
       m_hDataReady(NULL),
       m_hCaptureThread(NULL)
 {
-    m_mediaObject->AddRef();
+    mediaObject->AddRef();
     m_mediaObject = mediaObject;
     InitializeCriticalSection(&m_Lock);
 }
