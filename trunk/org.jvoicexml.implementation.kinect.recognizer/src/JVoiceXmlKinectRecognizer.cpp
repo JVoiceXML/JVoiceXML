@@ -122,7 +122,6 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
 
     if (NULL == m_pNuiSensor || FAILED(hr))
     {
-        //SetStatusMessage(L"No ready Kinect found!");
 		std::cerr << "no kinect found" << std::endl;
         return E_FAIL;
     }
@@ -130,7 +129,6 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     hr = InitializeAudioStream();
     if (FAILED(hr))
     {
-        //SetStatusMessage(L"Could not initialize audio stream.");
 		std::cerr << "could not initialize audio stream" << std::endl;
         return hr;
     }
@@ -138,7 +136,6 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     hr = CreateSpeechRecognizer();
     if (FAILED(hr))
     {
-        //SetStatusMessage(L"Could not create speech recognizer. Please ensure that Microsoft Speech SDK and other sample requirements are installed.");
 		std::cerr << "Could not create speech recognizer. Please ensure that Microsoft Speech SDK and other sample requirements are installed." << std::endl;
         return hr;
     }
@@ -148,7 +145,6 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     if (FAILED(hr))
     {
 		std::cerr << "Could not load speech grammar. Please ensure that grammar configuration file was properly deployed." << std::endl;
-        //SetStatusMessage(L"Could not load speech grammar. Please ensure that grammar configuration file was properly deployed.");
         return hr;
     }
 
@@ -290,42 +286,58 @@ HRESULT JVoiceXmlKinectRecognizer::LoadSpeechGrammar()
 /// </returns>
 HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech(RecognitionResult& result)
 {
-    HRESULT hr = m_pKinectAudioStream->StartCapture();
+	stopRequest = FALSE;
 
-    if (SUCCEEDED(hr))
-    {
-        // Specify that all top level rules in grammar are now active
-        m_pSpeechGrammar->SetRuleState(NULL, NULL, SPRS_ACTIVE);
+	HRESULT hr = m_pKinectAudioStream->StartCapture();
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
-		// Specify that engine should always be reading audio
-        m_pSpeechRecognizer->SetRecoState(SPRST_ACTIVE_ALWAYS);
+    // Specify that all top level rules in grammar are now active
+    hr = m_pSpeechGrammar->SetRuleState(NULL, NULL, SPRS_ACTIVE);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
-        // Specify that we're only interested in receiving recognition events
-        m_pSpeechContext->SetInterest(SPFEI(SPEI_RECOGNITION), SPFEI(SPEI_RECOGNITION));
+	// Specify that engine should always be reading audio
+    hr = m_pSpeechRecognizer->SetRecoState(SPRST_ACTIVE_ALWAYS);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
-        // Ensure that engine is recognizing speech and not in paused state
-        hr = m_pSpeechContext->Resume(0);
-        if (SUCCEEDED(hr))
-        {
-            m_hSpeechEvent = m_pSpeechContext->GetNotifyEventHandle();
-        }
+    // Specify that we're only interested in receiving recognition events
+    hr = m_pSpeechContext->SetInterest(SPFEI(SPEI_RECOGNITION), SPFEI(SPEI_RECOGNITION));
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
-		hr = S_FALSE;
+    // Ensure that engine is recognizing speech and not in paused state
+    hr = m_pSpeechContext->Resume(0);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
-		// wait for an event and try to look if it occured 
-		while (!stopRequest && (hr == S_FALSE))
+	m_hSpeechEvent = m_pSpeechContext->GetNotifyEventHandle();
+	hr = S_FALSE;
+
+	// wait for an event and try to look if it occured 
+	while (!stopRequest && (hr == S_FALSE))
+	{
+		hr = m_pSpeechContext->WaitForNotifyEvent(20);
+		if (hr == S_OK)
 		{
-			hr = m_pSpeechContext->WaitForNotifyEvent(20);
-			if(hr == S_OK)
+			hr = ProcessSpeech(result);
+			if (FAILED(hr))
 			{
-				hr = ProcessSpeech(result);
-				if (FAILED(hr))
-				{
-					return hr;
-				}
+				return hr;
 			}
 		}
-    }
+	}
         
     return hr;
 }
@@ -333,13 +345,12 @@ HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech(RecognitionResult& result)
 HRESULT JVoiceXmlKinectRecognizer::StopSpeechRecognition()
 {
 	stopRequest = TRUE;
-
     if (NULL != m_pKinectAudioStream)
     {
-        m_pKinectAudioStream->StopCapture();
+        return m_pKinectAudioStream->StopCapture();
     }
 
-	return S_OK;
+	return S_FALSE;
 }
 
 /// <summary>

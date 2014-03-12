@@ -161,11 +161,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="src\SpeechBasics-D2D.grxml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\JNIUtils.cpp" />
     <ClCompile Include="src\KinectAudioStream.cpp" />
     <ClCompile Include="src\JVoiceXmlKinectRecognizer.cpp" />
