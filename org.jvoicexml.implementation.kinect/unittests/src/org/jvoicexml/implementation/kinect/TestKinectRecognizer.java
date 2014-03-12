@@ -102,7 +102,7 @@ public final class TestKinectRecognizer {
         final KinectRecognizer recognizer = new KinectRecognizer(input);
         recognizer.allocate();
         recognizer.startRecognition();
-        LOGGER.info("Say something!");
+        LOGGER.info("Say 'FORWARD'!");
         listener.waitSize(1, 10000);
         final SpokenInputEvent event = listener.get(0);
         final KinectRecognitionResult result =
@@ -125,12 +125,12 @@ public final class TestKinectRecognizer {
         for (int i=0; i<3; i++) {
             listener.clear();
             recognizer.startRecognition();
-            LOGGER.info("Say something " + i);
+            LOGGER.info("Say 'one' " + i);
             listener.waitSize(1, 10000);
             final SpokenInputEvent event = listener.get(0);
             final KinectRecognitionResult result =
                     (KinectRecognitionResult) event.getParam();
-            Assert.assertEquals("FORWARD", result.getUtterance());
+            Assert.assertEquals("one", result.getUtterance());
             recognizer.stopRecognition();
         }
         recognizer.deallocate();
