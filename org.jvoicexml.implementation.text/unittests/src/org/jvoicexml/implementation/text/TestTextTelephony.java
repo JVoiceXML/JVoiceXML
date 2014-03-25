@@ -27,8 +27,8 @@
 package org.jvoicexml.implementation.text;
 
 import java.net.InetSocketAddress;
+import java.util.Collection;
 import java.util.UUID;
-
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.After;
@@ -44,6 +44,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
@@ -172,27 +173,16 @@ public final class TestTextTelephony
      * @since 0.7.6
      */
     private void mockGrammarChecker(final TextSpokenInput textInput, 
-            final String utterance) {
-        try {
+            final String utterance)
+            throws JVoiceXMLEvent, ParserConfigurationException {
             SrgsXmlDocument doc = new SrgsXmlDocument();
-            
-            // create the simplest grammar
-            final Grammar grammar = doc.getGrammar();
-            final Rule rule = grammar.appendChild(Rule.class);
-            rule.addText(utterance);
-            rule.setId("mock");
-            grammar.setRoot(rule);
-
+            doc.setGrammarSimple("mock", utterance);
             final SrgsXmlGrammarImplementation impl = 
                     new SrgsXmlGrammarImplementation(doc);
-            textInput.activateGrammar(impl);
-        } catch (ParserConfigurationException | 
-                UnsupportedLanguageError | BadFetchError | 
-                NoresourceError e) {
-            // an exception is no problem, 
-            // in case we won't have any mocked grammar 
-            // and test will fail anyways
-        }
+            final Collection<GrammarImplementation<?>> grammars;
+            grammars = new java.util.ArrayList<>();
+            grammars.add(impl);
+            textInput.activateGrammars(grammars);
     }
 
     /**

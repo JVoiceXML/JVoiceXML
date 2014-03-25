@@ -26,10 +26,15 @@
 
 package org.jvoicexml.implementation.text;
 
+import javax.xml.parsers.ParserConfigurationException;
 import org.junit.Assert;
 import org.junit.Test;
+import org.jvoicexml.implementation.GrammarsExecutor;
+import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.processor.srgs.GrammarChecker;
+import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
  * Test cases for {@link TextRecognitionResult}.
@@ -39,10 +44,6 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @since 0.6
  */
 public final class TestTextRecognitionResult {
-    
-    
-    /**Reference to the GrammarChecker object.*/
-    private GrammarChecker grammarChecker;
 
     /**
      * Test method for {@link org.jvoicexml.implementation.text.TextRecognitionResult#TextRecognitionResult(java.lang.String)}.
@@ -51,7 +52,7 @@ public final class TestTextRecognitionResult {
     public void testTextRecognitionResult() {
         final String utterance = "test me";
         final TextRecognitionResult result =
-            new TextRecognitionResult(utterance, grammarChecker);
+            new TextRecognitionResult(utterance, null);
         Assert.assertEquals(utterance, result.getUtterance());
         Assert.assertEquals(ModeType.VOICE, result.getMode());
         Assert.assertEquals(1.0f, result.getConfidence(), .001f);
@@ -64,7 +65,7 @@ public final class TestTextRecognitionResult {
     @Test
     public void testTextRecognitionResultNull() {
         final TextRecognitionResult result =
-            new TextRecognitionResult(null, grammarChecker);
+            new TextRecognitionResult(null, null);
         Assert.assertNull(result.getUtterance());
         Assert.assertEquals(ModeType.VOICE, result.getMode());
         Assert.assertEquals(1.0f, result.getConfidence(), .001f);
@@ -78,12 +79,32 @@ public final class TestTextRecognitionResult {
     public void testSetMark() {
         final String utterance = "test me";
         final TextRecognitionResult result =
-            new TextRecognitionResult(utterance, grammarChecker);
+            new TextRecognitionResult(utterance, null);
         Assert.assertNull(result.getMark());
 
         final String mark = "testmark";
         result.setMark(mark);
         Assert.assertEquals(mark, result.getMark());
+    }
+    
+    public void testAccepts() throws ParserConfigurationException {
+        final SrgsXmlDocument doc = new SrgsXmlDocument();
+        doc.setGrammarSimple("root", "adam");
+        final SrgsXmlGrammarImplementation impl = 
+                new SrgsXmlGrammarImplementation(doc);
+        final GrammarsExecutor grammars = new GrammarsExecutor();
+        grammars.getSet().add(impl);
+        
+        final TextRecognitionResult resultAccept =
+                new TextRecognitionResult("adam", grammars);
+        Assert.assertTrue(resultAccept.isAccepted());
+        Assert.assertFalse(resultAccept.isRejected());
+        
+        final TextRecognitionResult resultReject = 
+                new TextRecognitionResult("eva", grammars);
+        Assert.assertFalse(resultReject.isAccepted());
+        Assert.assertTrue(resultReject.isRejected());
+        
     }
 
 }
