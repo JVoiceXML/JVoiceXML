@@ -37,6 +37,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfRecognizerProperties;
+import org.jvoicexml.implementation.GrammarsExecutor;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.client.text.TextConnectionInformation;
@@ -82,13 +83,9 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
 
     /** Supported grammar types. */
     private static final Collection<GrammarType> GRAMMAR_TYPES;
-
-    /**Reference to the SrgsXmlGrammarParser.*/
-    private final SrgsXmlGrammarParser parser;
     
-    /** Active grammar checkers.*/
-    private final Map<SrgsXmlGrammarImplementation, GrammarChecker>
-        grammarCheckers;
+    /** Active grammars.*/
+    private final GrammarsExecutor activeGrammars;
 
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
@@ -109,10 +106,8 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
      * Constructs a new object.
      */
     public TextSpokenInput() {
-        listener = new java.util.ArrayList<SpokenInputListener>();
-        grammarCheckers = new java.util.HashMap<SrgsXmlGrammarImplementation,
-            GrammarChecker>();
-        parser = new SrgsXmlGrammarParser();
+        listener = new java.util.ArrayList<>();
+        activeGrammars = new GrammarsExecutor();
     }
 
     /**
@@ -129,40 +124,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     public void activateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
-        for (GrammarImplementation<?> grammar : grammars) {
-            activateGrammar(grammar);
-        }
-    }
-
-    /**
-     * Activates a given grammar. It's the implementation for 
-     * activateGrammars().
-     * @param grammar the grammar to activate
-     * @exception BadFetchError
-     *            Grammar is not known by the recognizer.
-     * @exception UnsupportedLanguageError
-     *            The specified language is not supported.
-     * @exception NoresourceError
-     *            The input resource is not available.
-     */
-    public void activateGrammar(final GrammarImplementation<?> grammar) 
-            throws BadFetchError, UnsupportedLanguageError, 
-            NoresourceError {
-        final SrgsXmlGrammarImplementation impl =
-            (SrgsXmlGrammarImplementation) grammar;
-        if (!grammarCheckers.containsKey(impl)) {
-            final SrgsXmlDocument doc = impl.getGrammar();
-            final GrammarGraph graph = parser.parse(doc);
-            if (graph != null) {
-                final GrammarChecker checker = new GrammarChecker(graph);
-                grammarCheckers.put(impl, checker);
-            } else {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.warn("Cannot create a grammar graph "
-                            + "from the grammar file");
-                }
-            }
-        }
+        activeGrammars.getSet().addAll(grammars);
     }
 
     /**
@@ -172,13 +134,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     public void deactivateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
-        for (GrammarImplementation<?> grammar : grammars) {
-            final SrgsXmlGrammarImplementation impl =
-                (SrgsXmlGrammarImplementation) grammar;
-            if (grammarCheckers.containsKey(impl)) {
-                grammarCheckers.remove(impl);
-            }
-        }
+        activeGrammars.getSet().removeAll(grammars);
     }
 
     /**
@@ -212,11 +168,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
         final SrgsXmlDocument doc;
         try {
             doc = new SrgsXmlDocument(inputSource);
-        } catch (ParserConfigurationException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        } catch (SAXException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        } catch (IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
         return new SrgsXmlGrammarImplementation(doc);
@@ -228,7 +180,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     @Override
     public void passivate() {
         listener.clear();
-        grammarCheckers.clear();
+        activeGrammars.getSet().clear();
         recognizing = false;
     }
 
@@ -326,35 +278,19 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
             LOGGER.debug("received utterance '" + text + "'");
         }
 
-        final SpokenInputEvent inputStartedEvent =
-            new SpokenInputEvent(this, SpokenInputEvent.INPUT_STARTED,
-                    ModeType.VOICE);
-        fireInputEvent(inputStartedEvent);
-
-        final String[] tokens = text.split(" ");
-        GrammarChecker grammarChecker = null;
-        for (GrammarChecker checker : grammarCheckers.values()) {
-            if (checker.isValid(tokens)) {
-                grammarChecker = checker;
-                break;
-            }
-        }
-        final RecognitionResult result = new TextRecognitionResult(
-                text, grammarChecker);
+        SpokenInputEvent event = new SpokenInputEvent(this, 
+                SpokenInputEvent.INPUT_STARTED, ModeType.VOICE);
+        fireInputEvent(event);
         
-        if (result.isAccepted()) {
-            final SpokenInputEvent acceptedEvent =
-                  new SpokenInputEvent(this, 
-                          SpokenInputEvent.RESULT_ACCEPTED, result);
-
-            fireInputEvent(acceptedEvent);
+        final RecognitionResult result = new TextRecognitionResult(text, null);
+        int type;
+        if (activeGrammars.isAcceptable(result)) {
+            type = SpokenInputEvent.RESULT_ACCEPTED;
         } else {
-            final SpokenInputEvent rejectedEvent =
-                new SpokenInputEvent(this, 
-                        SpokenInputEvent.RESULT_REJECTED, result);
-       
-           fireInputEvent(rejectedEvent); 
+            type = SpokenInputEvent.RESULT_REJECTED;
         }
+        event = new SpokenInputEvent(this, type, result);
+        fireInputEvent(event);
     }
 
     /**
@@ -381,7 +317,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     private void fireInputEvent(final SpokenInputEvent event) {
         synchronized (listener) {
             final Collection<SpokenInputListener> copy =
-                new java.util.ArrayList<SpokenInputListener>();
+                new java.util.ArrayList<>();
             copy.addAll(listener);
             for (SpokenInputListener current : copy) {
                 current.inputStatusChanged(event);
