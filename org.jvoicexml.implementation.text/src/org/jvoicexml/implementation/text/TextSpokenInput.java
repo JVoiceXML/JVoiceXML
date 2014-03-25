@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
 import java.util.Collection;
-import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -51,9 +50,6 @@ import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
-import org.jvoicexml.processor.srgs.GrammarChecker;
-import org.jvoicexml.processor.srgs.GrammarGraph;
-import org.jvoicexml.processor.srgs.SrgsXmlGrammarParser;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
