@@ -94,21 +94,18 @@ public final class SrgsXmlGrammarImplementation
      */
     @Override
     public boolean accepts(final RecognitionResult result) {
-        if (document == null) {
-            return false;
-        }
-        if (graph == null) {
-            final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
-            graph = parser.parse(document);
-        }
-        if (checker == null) {
-            checker = new GrammarChecker(graph);
-        }
         final String[] words = result.getWords();
-        if (words == null) {
-            return false;
+        if (words != null) {
+            if (graph == null) {
+                final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
+                graph = parser.parse(document);
+            }
+            if (checker == null) {
+                checker = new GrammarChecker(graph);
+            }
+            return checker.isValid(words);
         }
-        return checker.isValid(words);
+        return false;
     }
 
     /**
@@ -143,6 +140,10 @@ public final class SrgsXmlGrammarImplementation
             result = prime * result + graph.hashCode();
         }
         return result;
+    }
+    
+    public GrammarChecker getLastChecker() {
+        return checker;
     }
 }
 
