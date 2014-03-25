@@ -27,7 +27,6 @@
 package org.jvoicexml.processor.srgs;
 
 import java.util.Collection;
-
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
