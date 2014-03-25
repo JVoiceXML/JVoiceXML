@@ -32,6 +32,7 @@ import java.util.concurrent.BlockingQueue;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.DtmfRecognizerProperties;
+import org.jvoicexml.implementation.GrammarsExecutor;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.error.BadFetchError;
@@ -42,6 +43,7 @@ import org.jvoicexml.implementation.InputDevice;
 import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
+import org.w3c.dom.Document;
 
 /**
  * Buffered DTMF input.
@@ -63,7 +65,7 @@ public final class BufferedCharacterInput
     private final Collection<SpokenInputListener> listener;
 
     /** Active grammars. */
-    private final Collection<GrammarImplementation<?>> activeGrammars;
+    private final GrammarsExecutor activeGrammars;
 
     /** The thread reading the dtmf sequences. */
     private Thread inputThread;
@@ -78,9 +80,9 @@ public final class BufferedCharacterInput
      * Constructs a new object.
      */
     public BufferedCharacterInput() {
-        buffer = new java.util.concurrent.LinkedBlockingQueue<Character>();
-        listener = new java.util.ArrayList<SpokenInputListener>();
-        activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
+        buffer = new java.util.concurrent.LinkedBlockingQueue<>();
+        listener = new java.util.ArrayList<>();
+        activeGrammars = new GrammarsExecutor();
     }
 
     /**
@@ -100,7 +102,7 @@ public final class BufferedCharacterInput
     void activateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
-        activeGrammars.addAll(grammars);
+        activeGrammars.getSet().addAll(grammars);
         if (LOGGER.isDebugEnabled()) {
             for (GrammarImplementation<?> grammar : grammars) {
                 LOGGER.debug("activated DTMF grammar " + grammar.getGrammar());
@@ -125,7 +127,7 @@ public final class BufferedCharacterInput
     void deactivateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
-        activeGrammars.removeAll(grammars);
+        activeGrammars.getSet().removeAll(grammars);
         if (LOGGER.isDebugEnabled()) {
             for (GrammarImplementation<?> grammar : grammars) {
                 LOGGER.debug("deactivated DTMF grammar "
@@ -197,12 +199,7 @@ public final class BufferedCharacterInput
      * @since 0.7
      */
     public boolean isAccepted(final RecognitionResult result) {
-        for (GrammarImplementation<?> grammar : activeGrammars) {
-            if (grammar.accepts(result)) {
-                return true;
-            }
-        }
-        return false;
+        return activeGrammars.isAcceptable(result);
     }
 
     /**
