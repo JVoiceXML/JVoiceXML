@@ -32,9 +32,13 @@ package org.jvoicexml.implementation.text;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.implementation.GrammarsExecutor;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.implementation.GrammarImplementation;
+import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.processor.srgs.GrammarChecker;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
@@ -57,8 +61,8 @@ final class TextRecognitionResult implements RecognitionResult {
     /** The last reached mark. */
     private String mark;
 
-    /**Reference to the grammarChecker Object.*/
-    private final GrammarChecker grammarChecker;
+    /**Reference to the grammars.*/
+    private final GrammarsExecutor grammars;
        
     /**The Logger for this class.*/
     private static final Logger LOGGER =
@@ -68,12 +72,12 @@ final class TextRecognitionResult implements RecognitionResult {
     /**
      * Constructs a new object.
      * @param text the received text.
-     * @param checker the checker for the grammar.
+     * @param acceptGrammars the acceptable grammars.
      */
-    public TextRecognitionResult(final String text,
-            final GrammarChecker checker) {
+    public TextRecognitionResult(final String text, 
+            GrammarsExecutor acceptGrammars) {
         utterance = text;
-        grammarChecker = checker;
+        grammars = acceptGrammars;
     }
 
     /**
@@ -101,12 +105,7 @@ final class TextRecognitionResult implements RecognitionResult {
      * {@inheritDoc}
      */
     public boolean isAccepted() {
-        if (grammarChecker == null) {
-            return false;
-        }
-
-        final String[] utterances = utterance.split(" ");
-        return grammarChecker.isValid(utterances);
+        return grammars.isAcceptable(this);
     }
 
     /**
@@ -162,6 +161,12 @@ final class TextRecognitionResult implements RecognitionResult {
                 LOGGER.debug("creating semantic interpretation...");
             }
             
+            SrgsXmlGrammarImplementation grammar = 
+                    (SrgsXmlGrammarImplementation) grammars.getLastGrammar();
+            if (grammar == null) {
+                return null;
+            }
+            GrammarChecker grammarChecker = grammar.getLastChecker();            
             if (grammarChecker == null) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("there is no grammar graph" 
