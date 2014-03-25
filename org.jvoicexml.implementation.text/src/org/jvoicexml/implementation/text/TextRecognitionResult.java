@@ -30,15 +30,12 @@
 package org.jvoicexml.implementation.text;
 
 import java.util.Collection;
-
 import org.apache.log4j.Logger;
-import org.jvoicexml.implementation.GrammarsExecutor;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.implementation.GrammarImplementation;
+import org.jvoicexml.implementation.GrammarsExecutor;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.processor.srgs.GrammarChecker;
 import org.jvoicexml.xml.srgs.ModeType;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
