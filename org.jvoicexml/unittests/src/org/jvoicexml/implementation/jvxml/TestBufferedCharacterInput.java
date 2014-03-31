@@ -126,7 +126,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
             lock.wait();
         }
         input.stopRecognition();
-        Assert.assertTrue("result should be rejected", result.isRejected());
+        Assert.assertFalse("result should be rejected", result.isAccepted());
         Assert.assertEquals(Character.toString(invalidDtmf),
                 result.getUtterance());
     }
@@ -147,7 +147,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
             lock.wait();
         }
         input.stopRecognition();
-        Assert.assertTrue("result should be rejected", result.isRejected());
+        Assert.assertFalse("result should be rejected", result.isAccepted());
         Assert.assertEquals(Character.toString(dtmf), result.getUtterance());
     }
 
