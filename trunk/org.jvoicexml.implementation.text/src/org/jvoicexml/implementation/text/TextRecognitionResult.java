@@ -30,10 +30,9 @@
 package org.jvoicexml.implementation.text;
 
 import java.util.Collection;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.implementation.GrammarsExecutor;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.processor.srgs.GrammarChecker;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.mozilla.javascript.Context;
@@ -58,8 +57,8 @@ final class TextRecognitionResult implements RecognitionResult {
     /** The last reached mark. */
     private String mark;
 
-    /**Reference to the grammars.*/
-    private final GrammarsExecutor grammars;
+    /**Reference to the grammarChecker Object.*/
+    private final GrammarChecker grammarChecker;
        
     /**The Logger for this class.*/
     private static final Logger LOGGER =
@@ -69,12 +68,12 @@ final class TextRecognitionResult implements RecognitionResult {
     /**
      * Constructs a new object.
      * @param text the received text.
-     * @param acceptGrammars the acceptable grammars.
+     * @param checker the checker for the grammar.
      */
-    public TextRecognitionResult(final String text, 
-            GrammarsExecutor acceptGrammars) {
+    public TextRecognitionResult(final String text,
+            final GrammarChecker checker) {
         utterance = text;
-        grammars = acceptGrammars;
+        grammarChecker = checker;
     }
 
     /**
@@ -102,7 +101,12 @@ final class TextRecognitionResult implements RecognitionResult {
      * {@inheritDoc}
      */
     public boolean isAccepted() {
-        return grammars.isAcceptable(this);
+        if (grammarChecker == null) {
+            return false;
+        }
+
+        final String[] utterances = utterance.split(" ");
+        return grammarChecker.isValid(utterances);
     }
 
     /**
@@ -158,12 +162,6 @@ final class TextRecognitionResult implements RecognitionResult {
                 LOGGER.debug("creating semantic interpretation...");
             }
             
-            SrgsXmlGrammarImplementation grammar = 
-                    (SrgsXmlGrammarImplementation) grammars.getLastGrammar();
-            if (grammar == null) {
-                return null;
-            }
-            GrammarChecker grammarChecker = grammar.getLastChecker();            
             if (grammarChecker == null) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("there is no grammar graph" 
