@@ -110,12 +110,6 @@ public interface RecognitionResult {
     boolean isAccepted();
 
     /**
-     * Checks if this result is rejected.
-     * @return <code>true</code> if the result is rejected.
-     */
-    boolean isRejected();
-
-    /**
      * Sets the mark reached that is reached while playing back an
      * SSML formatted document.
      * @param mark Name of the mark.
