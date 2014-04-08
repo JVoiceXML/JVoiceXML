@@ -43,61 +43,66 @@ public:
     ~JVoiceXmlKinectRecognizer();
 
     /// <summary>
-    /// Creates the main window and begins processing
+    /// Creates the recognizer and needed resources
     /// </summary>
-    /// <param name="hInstance">handle to the application instance</param>
-    /// <param name="nCmdShow">whether to display minimized, maximized, or normally</param>
-    //int                     Run(HINSTANCE hInstance, int nCmdShow);
-
     HRESULT Allocate();
 
     /// <summary>
-    /// Start recognizing speechsynchronously.
+    /// Start recognizing speech synchronously.
     /// </summary>
     /// <returns>
     /// <para>S_OK on success, otherwise failure code.</para>
     /// </returns>
-	HRESULT                 RecognizeSpeech(RecognitionResult& result);
+	HRESULT RecognizeSpeech(RecognitionResult& result);
 
-    HRESULT                 StopSpeechRecognition();
+	/// <summary>
+	/// Stops recognizing speech synchronously.
+	/// </summary>
+	/// <returns>
+	/// <para>S_OK on success, otherwise failure code.</para>
+	/// </returns>
+	HRESULT StopSpeechRecognition();
 
-    HRESULT Deallocate();
+	/// <summary>
+	/// Releases all acquired resources.
+	/// </summary>
+	HRESULT Deallocate();
 
 private:
-    static LPCWSTR          GrammarFileName;
+    static LPCWSTR GrammarFileName;
     
     // Current Kinect sensor
-    INuiSensor*             sensor;
+    INuiSensor* sensor;
 
     // Audio stream captured from Kinect.
-    KinectAudioStream*      kinectAudioStream;
+    KinectAudioStream* kinectAudioStream;
 
     // Stream given to speech recognition engine
-    ISpStream*              speechStream;
+    ISpStream* speechStream;
 
     // Speech recognizer
-    ISpRecognizer*          recognizer;
+    ISpRecognizer* recognizer;
 
     // Speech recognizer context
-    ISpRecoContext*         speechContext;
+    ISpRecoContext*  speechContext;
 
     // Speech grammar
-    ISpRecoGrammar*         m_pSpeechGrammar;
+    ISpRecoGrammar*  m_pSpeechGrammar;
 
     // Event triggered when we detect speech recognition
-    HANDLE                  m_hSpeechEvent;
+    HANDLE speechEvent;
 
     /// <summary>
     /// Create the first connected Kinect found.
     /// </summary>
     /// <returns>S_OK on success, otherwise failure code.</returns>
-    HRESULT                 CreateFirstConnected();
+    HRESULT CreateFirstConnected();
 
     /// <summary>
     /// Initialize Kinect audio stream object.
     /// </summary>
     /// <returns>S_OK on success, otherwise failure code.</returns>
-    HRESULT                 InitializeAudioStream();
+    HRESULT InitializeAudioStream();
 
     /// <summary>
     /// Create speech recognizer that will read Kinect audio stream data.
@@ -105,7 +110,7 @@ private:
     /// <returns>
     /// <para>S_OK on success, otherwise failure code.</para>
     /// </returns>
-    HRESULT                 CreateSpeechRecognizer();
+    HRESULT CreateSpeechRecognizer();
 
     /// <summary>
     /// Load speech recognition grammar into recognizer.
@@ -113,12 +118,12 @@ private:
     /// <returns>
     /// <para>S_OK on success, otherwise failure code.</para>
     /// </returns>
-    HRESULT                 LoadSpeechGrammar();
+    HRESULT LoadSpeechGrammar();
 
     /// <summary>
     /// Process recently triggered speech recognition events.
     /// </summary>
-    HRESULT                 ProcessSpeech(RecognitionResult& result);
+    HRESULT ProcessSpeech(RecognitionResult& result);
 
 	BOOL stopRequest;
 };
