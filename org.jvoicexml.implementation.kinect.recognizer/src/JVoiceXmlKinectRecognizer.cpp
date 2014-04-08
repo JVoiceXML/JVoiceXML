@@ -25,7 +25,7 @@ JVoiceXmlKinectRecognizer::JVoiceXmlKinectRecognizer() :
     recognizer(NULL),
     speechContext(NULL),
     m_pSpeechGrammar(NULL),
-    m_hSpeechEvent(INVALID_HANDLE_VALUE),
+    speechEvent(INVALID_HANDLE_VALUE),
 	stopRequest(FALSE)
 {
 }
@@ -328,7 +328,7 @@ HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech(RecognitionResult& result)
 		return hr;
 	}
 
-	m_hSpeechEvent = speechContext->GetNotifyEventHandle();
+	speechEvent = speechContext->GetNotifyEventHandle();
 	hr = S_FALSE;
 
 	// wait for an event and try to look if it occured 
