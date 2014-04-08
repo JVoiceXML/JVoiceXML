@@ -19,11 +19,11 @@ LPCWSTR JVoiceXmlKinectRecognizer::GrammarFileName = L"SpeechBasics-D2D.grxml";
 /// Constructor
 /// </summary>
 JVoiceXmlKinectRecognizer::JVoiceXmlKinectRecognizer() :
-    m_pNuiSensor(NULL),
-    m_pKinectAudioStream(NULL),
-    m_pSpeechStream(NULL),
-    m_pSpeechRecognizer(NULL),
-    m_pSpeechContext(NULL),
+    sensor(NULL),
+	kinectAudioStream(NULL),
+	speechStream(NULL),
+    recognizer(NULL),
+    speechContext(NULL),
     m_pSpeechGrammar(NULL),
     m_hSpeechEvent(INVALID_HANDLE_VALUE),
 	stopRequest(FALSE)
@@ -35,17 +35,17 @@ JVoiceXmlKinectRecognizer::JVoiceXmlKinectRecognizer() :
 /// </summary>
 JVoiceXmlKinectRecognizer::~JVoiceXmlKinectRecognizer()
 {
-    if (m_pNuiSensor)
+    if (sensor)
     {
 		StopSpeechRecognition();
-        m_pNuiSensor->NuiShutdown();
+        sensor->NuiShutdown();
     }
 
-    SafeRelease(m_pNuiSensor);
-    SafeRelease(m_pKinectAudioStream);
-    SafeRelease(m_pSpeechStream);
-    SafeRelease(m_pSpeechRecognizer);
-    SafeRelease(m_pSpeechContext);
+    SafeRelease(sensor);
+	SafeRelease(kinectAudioStream);
+	SafeRelease(speechStream);
+	SafeRelease(recognizer);
+    SafeRelease(speechContext);
     SafeRelease(m_pSpeechGrammar);
 }
 
@@ -76,11 +76,11 @@ HRESULT JVoiceXmlKinectRecognizer::Deallocate()
 /// <returns>S_OK on success, otherwise failure code.</returns>
 HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
 {
-    INuiSensor * pNuiSensor;
+    INuiSensor * currentSensor;
     HRESULT hr;
 
-    int iSensorCount = 0;
-    hr = NuiGetSensorCount(&iSensorCount);
+    int sensorCount = 0;
+	hr = NuiGetSensorCount(&sensorCount);
     if (FAILED(hr))
     {
 		std::cerr << "unable to connect to sensor" << std::endl;
@@ -88,39 +88,39 @@ HRESULT JVoiceXmlKinectRecognizer::CreateFirstConnected()
     }
 
     // Look at each Kinect sensor
-    for (int i = 0; i < iSensorCount; ++i)
+	for (int i = 0; i < sensorCount; ++i)
     {
         // Create the sensor so we can check status, if we can't create it, move on to the next
-        hr = NuiCreateSensorByIndex(i, &pNuiSensor);
+		hr = NuiCreateSensorByIndex(i, &currentSensor);
         if (FAILED(hr))
         {
             continue;
         }
 
         // Get the status of the sensor, and if connected, then we can initialize it
-        hr = pNuiSensor->NuiStatus();
+		hr = currentSensor->NuiStatus();
         if (S_OK == hr)
         {
-            m_pNuiSensor = pNuiSensor;
+			sensor = currentSensor;
             break;
         }
 
         // This sensor wasn't OK, so release it since we're not using it
-        pNuiSensor->Release();
+		currentSensor->Release();
     }
 
-    if (NULL != m_pNuiSensor) 
+    if (NULL != sensor) 
     {
         // Initialize the Kinect and specify that we'll be using audio signal
-        hr = m_pNuiSensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_AUDIO); 
+        hr = sensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_AUDIO); 
         if (FAILED(hr))
         {
             // Some other application is streaming from the same Kinect sensor
-            SafeRelease(m_pNuiSensor);
+            SafeRelease(sensor);
         }
     }
 
-    if (NULL == m_pNuiSensor || FAILED(hr))
+    if (NULL == sensor || FAILED(hr))
     {
 		std::cerr << "no kinect found" << std::endl;
         return E_FAIL;
@@ -162,10 +162,10 @@ HRESULT JVoiceXmlKinectRecognizer::InitializeAudioStream()
     INuiAudioBeam*      pNuiAudioSource = NULL;
     IMediaObject*       pDMO = NULL;
     IPropertyStore*     pPropertyStore = NULL;
-    IStream*            pStream = NULL;
+    IStream*            stream = NULL;
 
     // Get the audio source
-    HRESULT hr = m_pNuiSensor->NuiGetAudioSource(&pNuiAudioSource);
+    HRESULT hr = sensor->NuiGetAudioSource(&pNuiAudioSource);
     if (SUCCEEDED(hr))
     {
         hr = pNuiAudioSource->QueryInterface(IID_IMediaObject, (void**)&pDMO);
@@ -203,17 +203,17 @@ HRESULT JVoiceXmlKinectRecognizer::InitializeAudioStream()
 
             if (SUCCEEDED(hr))
             {
-                m_pKinectAudioStream = new KinectAudioStream(pDMO);
+				kinectAudioStream = new KinectAudioStream(pDMO);
 
-                hr = m_pKinectAudioStream->QueryInterface(IID_IStream, (void**)&pStream);
+				hr = kinectAudioStream->QueryInterface(IID_IStream, (void**)&stream);
 
                 if (SUCCEEDED(hr))
                 {
-                    hr = CoCreateInstance(CLSID_SpStream, NULL, CLSCTX_INPROC_SERVER, __uuidof(ISpStream), (void**)&m_pSpeechStream);
+					hr = CoCreateInstance(CLSID_SpStream, NULL, CLSCTX_INPROC_SERVER, __uuidof(ISpStream), (void**)&speechStream);
 
                     if (SUCCEEDED(hr))
                     {
-                        hr = m_pSpeechStream->SetBaseStream(pStream, SPDFID_WaveFormatEx, &wfxOut);
+						hr = speechStream->SetBaseStream(stream, SPDFID_WaveFormatEx, &wfxOut);
                     }
                 }
             }
@@ -222,7 +222,7 @@ HRESULT JVoiceXmlKinectRecognizer::InitializeAudioStream()
         }
     }
 
-    SafeRelease(pStream);
+	SafeRelease(stream);
     SafeRelease(pPropertyStore);
     SafeRelease(pDMO);
     SafeRelease(pNuiAudioSource);
@@ -240,17 +240,17 @@ HRESULT JVoiceXmlKinectRecognizer::CreateSpeechRecognizer()
 {
     ISpObjectToken *pEngineToken = NULL;
     
-    HRESULT hr = CoCreateInstance(CLSID_SpInprocRecognizer, NULL, CLSCTX_INPROC_SERVER, __uuidof(ISpRecognizer), (void**)&m_pSpeechRecognizer);
+    HRESULT hr = CoCreateInstance(CLSID_SpInprocRecognizer, NULL, CLSCTX_INPROC_SERVER, __uuidof(ISpRecognizer), (void**)&recognizer);
 
     if (SUCCEEDED(hr))
     {
-        m_pSpeechRecognizer->SetInput(m_pSpeechStream, FALSE);
+		recognizer->SetInput(speechStream, FALSE);
         hr = SpFindBestToken(SPCAT_RECOGNIZERS,L"Language=409;Kinect=True",NULL,&pEngineToken);
 
         if (SUCCEEDED(hr))
         {
-            m_pSpeechRecognizer->SetRecognizer(pEngineToken);
-            hr = m_pSpeechRecognizer->CreateRecoContext(&m_pSpeechContext);
+            recognizer->SetRecognizer(pEngineToken);
+            hr = recognizer->CreateRecoContext(&speechContext);
         }
     }
 
@@ -267,7 +267,7 @@ HRESULT JVoiceXmlKinectRecognizer::CreateSpeechRecognizer()
 /// </returns>
 HRESULT JVoiceXmlKinectRecognizer::LoadSpeechGrammar()
 {
-    HRESULT hr = m_pSpeechContext->CreateGrammar(1, &m_pSpeechGrammar);
+    HRESULT hr = speechContext->CreateGrammar(1, &m_pSpeechGrammar);
 
     if (SUCCEEDED(hr))
     {
@@ -288,7 +288,13 @@ HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech(RecognitionResult& result)
 {
 	stopRequest = FALSE;
 
-	HRESULT hr = m_pKinectAudioStream->StartCapture();
+	HRESULT hr = recognizer->SetInput(speechStream, FALSE);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	hr = kinectAudioStream->StartCapture();
 	if (FAILED(hr))
 	{
 		return hr;
@@ -302,33 +308,33 @@ HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech(RecognitionResult& result)
 	}
 
 	// Specify that engine should always be reading audio
-    hr = m_pSpeechRecognizer->SetRecoState(SPRST_ACTIVE_ALWAYS);
+    hr = recognizer->SetRecoState(SPRST_ACTIVE_ALWAYS);
 	if (FAILED(hr))
 	{
 		return hr;
 	}
 
     // Specify that we're only interested in receiving recognition events
-    hr = m_pSpeechContext->SetInterest(SPFEI(SPEI_RECOGNITION), SPFEI(SPEI_RECOGNITION));
+    hr = speechContext->SetInterest(SPFEI(SPEI_RECOGNITION), SPFEI(SPEI_RECOGNITION));
 	if (FAILED(hr))
 	{
 		return hr;
 	}
 
     // Ensure that engine is recognizing speech and not in paused state
-    hr = m_pSpeechContext->Resume(0);
+    hr = speechContext->Resume(0);
 	if (FAILED(hr))
 	{
 		return hr;
 	}
 
-	m_hSpeechEvent = m_pSpeechContext->GetNotifyEventHandle();
+	m_hSpeechEvent = speechContext->GetNotifyEventHandle();
 	hr = S_FALSE;
 
 	// wait for an event and try to look if it occured 
 	while (!stopRequest && (hr == S_FALSE))
 	{
-		hr = m_pSpeechContext->WaitForNotifyEvent(20);
+		hr = speechContext->WaitForNotifyEvent(20);
 		if (hr == S_OK)
 		{
 			hr = ProcessSpeech(result);
@@ -345,9 +351,9 @@ HRESULT JVoiceXmlKinectRecognizer::RecognizeSpeech(RecognitionResult& result)
 HRESULT JVoiceXmlKinectRecognizer::StopSpeechRecognition()
 {
 	stopRequest = TRUE;
-    if (NULL != m_pKinectAudioStream)
+	if (NULL != kinectAudioStream)
     {
-        return m_pKinectAudioStream->StopCapture();
+		return kinectAudioStream->StopCapture();
     }
 
 	return S_FALSE;
@@ -364,7 +370,7 @@ HRESULT JVoiceXmlKinectRecognizer::ProcessSpeech(RecognitionResult& result)
     ULONG fetched = 0;
     HRESULT hr = S_OK;
 
-    m_pSpeechContext->GetEvents(1, &curEvent, &fetched);
+    speechContext->GetEvents(1, &curEvent, &fetched);
 
     while (fetched > 0)
     {
@@ -380,7 +386,7 @@ HRESULT JVoiceXmlKinectRecognizer::ProcessSpeech(RecognitionResult& result)
                 break;
         }
 
-        m_pSpeechContext->GetEvents(1, &curEvent, &fetched);
+        speechContext->GetEvents(1, &curEvent, &fetched);
     }
 
     return hr;
