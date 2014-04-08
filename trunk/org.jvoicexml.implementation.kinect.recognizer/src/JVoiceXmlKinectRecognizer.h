@@ -66,23 +66,20 @@ public:
 private:
     static LPCWSTR          GrammarFileName;
     
-    // Main application dialog window
-    HWND                    m_hWnd;
-
     // Current Kinect sensor
-    INuiSensor*             m_pNuiSensor;
+    INuiSensor*             sensor;
 
     // Audio stream captured from Kinect.
-    KinectAudioStream*      m_pKinectAudioStream;
+    KinectAudioStream*      kinectAudioStream;
 
     // Stream given to speech recognition engine
-    ISpStream*              m_pSpeechStream;
+    ISpStream*              speechStream;
 
     // Speech recognizer
-    ISpRecognizer*          m_pSpeechRecognizer;
+    ISpRecognizer*          recognizer;
 
     // Speech recognizer context
-    ISpRecoContext*         m_pSpeechContext;
+    ISpRecoContext*         speechContext;
 
     // Speech grammar
     ISpRecoGrammar*         m_pSpeechGrammar;
