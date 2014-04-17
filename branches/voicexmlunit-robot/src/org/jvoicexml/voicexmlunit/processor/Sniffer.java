@@ -30,22 +30,9 @@ package org.jvoicexml.voicexmlunit.processor;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jvoicexml.CallControl;
-import org.jvoicexml.CallControlProperties;
-import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ConfigurationException;
-import org.jvoicexml.DocumentServer;
-import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.Session;
-import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SystemOutput;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 /**
  * Sniffer simulates a telephony conversation.

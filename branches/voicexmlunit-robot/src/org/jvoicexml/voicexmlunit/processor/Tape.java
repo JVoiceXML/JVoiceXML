@@ -1,6 +1,5 @@
 package org.jvoicexml.voicexmlunit.processor;
 
-import java.util.concurrent.LinkedBlockingQueue;
 import org.jvoicexml.voicexmlunit.backend.Concurrency;
 import org.jvoicexml.voicexmlunit.io.Statement;
 
