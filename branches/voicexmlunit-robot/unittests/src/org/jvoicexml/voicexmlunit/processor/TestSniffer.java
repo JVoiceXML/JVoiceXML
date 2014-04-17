@@ -28,58 +28,41 @@ package org.jvoicexml.voicexmlunit.processor;
 
 import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
-import org.junit.*;
-import org.jvoicexml.ConfigurationException;
-import org.jvoicexml.Session;
-import org.jvoicexml.event.ErrorEvent;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
- * Test cases for {@link Voice}.
+ * Test cases for {@link Sniffer}.
  * @author Raphael Groner
  *
  */
-public class TestVoice {
+public class TestSniffer {
+    
+    URI mock;
+    Sniffer sniffer;
+    boolean started;
+    boolean connected;
+    boolean activated;
 
-    private Voice voice;
-    private URI uri;
 
     /**
-     * Set up the test environment.
+     * Set up the test environment
      * @throws org.jvoicexml.event.JVoiceXMLEvent
-     * @throws org.jvoicexml.ConfigurationException
-     * @throws java.net.URISyntaxException
      */
     @Before
-    public void setUp() 
-            throws JVoiceXMLEvent, ConfigurationException, URISyntaxException {
-        voice = new Voice();
-        uri = new URI("unittests/etc/mock.vxml");
+    public void setUp() throws Exception, JVoiceXMLEvent {
+        mock = new URI("unittests/etc/mock.vxml");
+        sniffer = new Sniffer();
+
+        started = false;
+        connected = false;
+        activated = false;
     }
 
-    /**
-     * Close the test environment.
-     */
-    @After
-    public void tearDown() {
-        
-    }
-
-    /**
-     * Test method for {@link Voice#getSession()}.
-     * Ensures a complete session run without any error.
-     */
-    @Test(timeout=9999)
-    public void shouldHandleSessionSuccess() throws ErrorEvent {
-        Assert.assertNull(voice.getSession());
-
-        Session session = voice.dial(uri);
-        Assert.assertNotNull(session);
-        Assert.assertEquals(voice.getSession(), session);
-        
-        session.waitSessionEnd();
-        voice.shutdown();
-        Assert.assertNull(voice.getSession());
+    @Test
+    public void test() {
+        Assert.fail("tbd");
     }
 }

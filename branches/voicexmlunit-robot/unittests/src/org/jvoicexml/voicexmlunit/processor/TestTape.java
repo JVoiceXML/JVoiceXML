@@ -33,37 +33,39 @@ public class TestTape {
     }
     
     @Test
-    public void testCaptureInput() throws InterruptedException {
+    public void shouldCaptureInputAndPlaybackInput() 
+            throws InterruptedException {
         final Input input = new Input("success");
         recorder.capture(input);
-        Assert.assertTrue(recorder.validate(input));
+        Assert.assertEquals(input, recorder.playback());
+        Assert.assertNull(recorder.playback()); // now empty
     }
     
     @Test
-    public void testCaptureOutputWrong() throws InterruptedException {
-        recorder.capture(new Output("success"));
-        Assert.assertFalse(recorder.validate(new Output("fail")));
+    public void shouldCaptureOutputWrong() throws InterruptedException {
+        final String utterance = "success";
+        recorder.capture(new Output(utterance));
+        Assert.assertNotEquals(new Input(utterance), recorder.playback());
+        Assert.assertNotEquals(new Input("fail"), recorder.playback());
     }
     
     @Test
-    public void testPlaybackInput() throws InterruptedException {
+    public void shouldCaptureOutputAndPlaybackOutput() 
+            throws InterruptedException {
         final Input input = new Input("abc");
         recorder.capture(input);
         Statement playback = recorder.playback();
         Assert.assertEquals(input, playback);
-        Assert.assertFalse(recorder.validate(input));
+        Assert.assertNull(recorder.playback()); // now empty
     }
     
     @Test
-    public void testPlaybackOutputWrong() throws InterruptedException {
-        final Output output = new Output("xyz");
-        recorder.capture(output);
-        boolean failed = false;
-        try {
-            Statement playback = recorder.playback();
-        } catch (AssertionError e) {
-            failed = true;
-        }
-        Assert.assertTrue(failed);
+    public void shouldCaptureInputWrong() throws InterruptedException {
+        final String utterance = "success";
+        final Input i = new Input(utterance);
+        recorder.capture(i);
+        Assert.assertNotEquals(new Output(utterance), recorder.playback());
+        recorder.capture(i);
+        Assert.assertNotEquals(new Output("fail"), recorder.playback());
     }
 }

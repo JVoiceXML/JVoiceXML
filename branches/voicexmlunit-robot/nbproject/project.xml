@@ -37,6 +37,14 @@
                 <id>jar</id>
             </reference>
             <reference>
+                <foreign-project>org_jvoicexml_config</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>nb-build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>org_jvoicexml_implementation_text</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>nb-build.xml</script>

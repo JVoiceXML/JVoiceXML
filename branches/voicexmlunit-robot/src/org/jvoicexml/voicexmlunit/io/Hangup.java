@@ -36,7 +36,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class Hangup extends Output {
     
-    private Statement assertion;
+    final Statement assertion;
     
     /**
      * @param statement the final statement

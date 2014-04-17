@@ -33,7 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.voicexmlunit.io.Input;
 import org.jvoicexml.voicexmlunit.io.Output;
-import org.jvoicexml.voicexmlunit.processor.Connection;
+import org.jvoicexml.voicexmlunit.processor.Sniffer;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**

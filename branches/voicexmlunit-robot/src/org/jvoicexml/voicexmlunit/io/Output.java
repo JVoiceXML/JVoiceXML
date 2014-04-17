@@ -27,13 +27,13 @@
 package org.jvoicexml.voicexmlunit.io;
 
 import org.junit.Assert;
-import org.jvoicexml.voicexmlunit.processor.Dialog;
+import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 public class Output implements Statement {
     
     //private SsmlDocument expectation; //TODO
-    private String expectation;
+    final String expectation;
     
     public Output(final String message) {
         expectation = message;
@@ -46,11 +46,11 @@ public class Output implements Statement {
     }
 
     @Override
-    public void send(final Dialog dialog) {
-        Assert.fail("Send: " + expectation);
+    public void send(final SpokenInput current) {
+        Assert.fail("Send: " + current.toString());
     }
 
-    public void receive(final String actual) {
+    protected void receive(final String actual) {
         Assert.assertEquals("Receive", expectation, actual);
     }
 }

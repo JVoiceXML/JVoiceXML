@@ -19,7 +19,8 @@ public class Caller {
      */
     public static org.jvoicexml.voicexmlunit.Caller beginCall(final URI uri) 
             throws JVoiceXMLEvent {
-        return new org.jvoicexml.voicexmlunit.Caller(
-                IVR.beginCall(uri, TIMEOUT));
+        return null;
+        //TODO, not working yet
+        //return new org.jvoicexml.voicexmlunit.Caller(new IVR(uri, TIMEOUT));
     }
 }

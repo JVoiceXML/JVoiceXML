@@ -1,8 +1,9 @@
 package org.jvoicexml.voicexmlunit.stub;
 
 import java.net.URI;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.voicexmlunit.processor.Connection;
+import org.jvoicexml.voicexmlunit.processor.Sniffer;
 import org.jvoicexml.voicexmlunit.processor.Voice;
 
 /**
@@ -19,11 +20,7 @@ public class IVR {
      * @return
      */
     public static org.jvoicexml.voicexmlunit.IVR beginCall(final URI uri, 
-            final long timeout) throws JVoiceXMLEvent {
-        final Voice voice;
-        voice = new Voice(timeout);
-        voice.getDialog(uri);
-        final Connection connection = new Connection(voice);
-        return new org.jvoicexml.voicexmlunit.IVR(connection);
+            final long timeout) throws JVoiceXMLEvent, ConfigurationException {
+        return new org.jvoicexml.voicexmlunit.IVR(uri, timeout);
     }
 }

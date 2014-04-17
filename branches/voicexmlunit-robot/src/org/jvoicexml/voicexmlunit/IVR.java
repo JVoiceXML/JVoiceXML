@@ -6,8 +6,9 @@ package org.jvoicexml.voicexmlunit;
 
 import org.jvoicexml.voicexmlunit.processor.Phone;
 import java.net.InetSocketAddress;
+import java.net.URI;
 import org.jvoicexml.client.text.TextListener;
-import org.jvoicexml.voicexmlunit.processor.Connection;
+import org.jvoicexml.voicexmlunit.processor.Sniffer;
 import org.jvoicexml.voicexmlunit.processor.Tape;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -17,14 +18,16 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public class IVR implements Phone, TextListener {
     
-    private final Connection connection;
+    private final Sniffer sniffer;
     
     /**
      * Constructor.
-     * @param connection
+     * @param uri
+     * @param timeout
      */
-    public IVR(final Connection connection) {
-        this.connection = connection;
+    public IVR(final URI uri, final long timeout) {
+        sniffer = new Sniffer();
+        sniffer.process(uri, timeout);
     }
 
     @Override

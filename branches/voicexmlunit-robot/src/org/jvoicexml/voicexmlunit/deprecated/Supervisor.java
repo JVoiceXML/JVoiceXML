@@ -30,15 +30,15 @@ package org.jvoicexml.voicexmlunit.deprecated;
 import java.net.InetSocketAddress;
 import org.jvoicexml.voicexmlunit.io.Nothing;
 import org.jvoicexml.voicexmlunit.io.Statement;
-import org.jvoicexml.voicexmlunit.processor.Connection;
+import org.jvoicexml.voicexmlunit.processor.Sniffer;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Supervisor can help you to write unit tests for VoiceXML documents. Use case
  * scenario:
  * <ol>
- * <li>Create an instance of Connection with your wished VoiceXML resource.</li>
- * <li>Initialize a new conversation with your Connection object.</li>
+ * <li>Create an instance of Sniffer with your wished VoiceXML resource.</li>
+ * <li>Initialize a new conversation with your Sniffer object.</li>
  * <li>Process the given VoiceXML file.</lI>
  * </ol>
  *
@@ -49,7 +49,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 public final class Supervisor
 implements org.jvoicexml.client.text.TextListener {
 
-    private Connection call = null;
+    private Sniffer call = null;
     private Conversation conversation = null;
     private Statement statement = null;
 
@@ -60,7 +60,7 @@ implements org.jvoicexml.client.text.TextListener {
      *            the call object, maybe <code>null</code>
      * @return Conversation to be used and initialized by the caller
      */
-    public Conversation init(final Connection call) {
+    public Conversation init(final Sniffer call) {
         this.call = call;
         conversation = new Conversation();
         return conversation;
@@ -75,7 +75,7 @@ implements org.jvoicexml.client.text.TextListener {
         }
 
         statement = conversation.begin();
-        call.run();
+        //call.run();
     }
 
     /*

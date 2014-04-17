@@ -1,12 +1,13 @@
 package org.jvoicexml.voicexmlunit.processor;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import org.jvoicexml.voicexmlunit.backend.Concurrency;
 import org.jvoicexml.voicexmlunit.io.Statement;
 
 /**
  * A type of test execution tool where inputs are recorded during manual 
  * testing in order to generate automated test scripts that can be executed 
- * lated (i.e replayed). These tools are often used to support automated 
+ * later (i.e replayed). These tools are often used to support automated 
  * regression testing.
  * 
  * @author raphael
@@ -14,18 +15,15 @@ import org.jvoicexml.voicexmlunit.io.Statement;
 public class Tape {
     
     /* 
-     * Tape is used from different blocking threads.
-     * https://stackoverflow.com/questions/616484/how-to-use-concurrentlinkedqueue
+     * Tape is used from different blocking threads, so concurrency is needed.
      */
-    private LinkedBlockingQueue<Statement> queue;
+    private Concurrency concurrency;
     
     /*
-     * Construct a new recorder.
-     * 
-     * @param transaction the transaction for records
+     * Construct a new tape.
      */
     public Tape() {
-        queue = new LinkedBlockingQueue<>();
+        concurrency = new Concurrency();
     }
     
     /*
@@ -34,7 +32,7 @@ public class Tape {
      * @throws InterruptedException synchronization problem
      */
     public void capture(final Statement statement) throws InterruptedException {
-        queue.put(statement);
+        concurrency.produce(statement);
     }
     
     /*
@@ -43,16 +41,7 @@ public class Tape {
      * @throws InterruptedException synchronization problem
      */
     public Statement playback() throws InterruptedException {
-        final Statement statement = queue.take();
+        final Statement statement = concurrency.consume();
         return statement;
     }
-    
-    /**
-     * Validate an assertion if it's already recorded.
-     * @param assertion the actual assertion
-     * @return true if the assertion was recorded
-     */
-    public boolean validate(final Statement assertion) {
-        return queue.contains(assertion);
-    }    
 }

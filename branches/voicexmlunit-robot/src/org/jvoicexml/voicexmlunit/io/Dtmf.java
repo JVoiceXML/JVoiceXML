@@ -27,9 +27,7 @@
 package org.jvoicexml.voicexmlunit.io;
 
 import org.junit.Assert;
-import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
-import org.jvoicexml.voicexmlunit.processor.Dialog;
+import org.jvoicexml.implementation.SpokenInput;
 
 /**
  * Dtmf.
@@ -39,17 +37,18 @@ import org.jvoicexml.voicexmlunit.processor.Dialog;
  */
 public class Dtmf extends Input {
     
-    public Dtmf(char digit) {
+    public Dtmf(final char digit) {
         super(String.valueOf(digit));
     }
 
     @Override
-    public void send(Dialog dialog) {
-        if (dialog == null) {
+    public void send(final SpokenInput current) {
+        if (current == null) {
             return;
         }
 
-        char digit = getExpectation().charAt(0); 
-        Assert.fail("Send: " + String.valueOf(digit)); //TODO
+        char digit = getExpectation().charAt(0);
+        //TODO
+        throw new UnsupportedOperationException("Send: " + String.valueOf(digit));
     }
 }

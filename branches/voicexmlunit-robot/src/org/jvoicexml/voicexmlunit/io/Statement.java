@@ -26,7 +26,8 @@
 
 package org.jvoicexml.voicexmlunit.io;
 
-import org.jvoicexml.voicexmlunit.processor.Dialog;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.text.TextSpokenInputFactory;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -49,9 +50,9 @@ public interface Statement {
      * Send an input. 
      * This is the role producer for input and failing consumer for output.
      * 
-     * @param record the transaction used to input
+     * @param current the input
      */
-    void send(final Dialog dialog);
+    void send(final SpokenInput current);
     
     
     /**

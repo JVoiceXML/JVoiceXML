@@ -26,9 +26,8 @@
 
 package org.jvoicexml.voicexmlunit.io;
 
-import java.io.IOException;
 import org.junit.Assert;
-import org.jvoicexml.voicexmlunit.processor.Dialog;
+import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -38,16 +37,16 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @author raphael
  */
 public class Input implements Statement {
-    private String expectation;
+    final String expectation;
     
-    public Input(String message) {
+    public Input(final String message) {
         this.expectation = message;
     }
  
     /**
      * Consume an output and fail.
      * 
-     * @param actual the actual input
+     * @param actual the output
      */
     @Override
     public void receive(final SsmlDocument actual) {
@@ -56,14 +55,15 @@ public class Input implements Statement {
 
     /**
      * Produce an input.
-     * @param record the recording transaction
+     * @param current the input
      */
     @Override
-    public void send(final Dialog dialog) {
-        if (dialog == null) {
+    public void send(final SpokenInput current) {
+        if (current == null) {
             return;
         }
-        Assert.fail("TODO Send: " + expectation); //TODO
+        //TODO
+        throw new UnsupportedOperationException("Send: " + expectation);
     }
     
     public String getExpectation() {
