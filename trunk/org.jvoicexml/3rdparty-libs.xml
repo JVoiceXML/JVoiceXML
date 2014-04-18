@@ -175,9 +175,9 @@ ANT_HOME is set to '${ant.home}'.
         <condition property="version1.7">
             <or>
                 <equals arg1="1.7" arg2="${ant.java.version}" />
+                <equals arg1="1.8" arg2="${ant.java.version}" />
             </or>
         </condition>
-
         <fail unless="version1.7">
 You need at least java version 7 to compile this project.
 You are using ${ant.java.version}.
