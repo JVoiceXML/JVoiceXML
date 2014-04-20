@@ -26,6 +26,7 @@
 
 package org.jvoicexml.voicexmlunit.processor;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.apache.log4j.BasicConfigurator;
@@ -54,8 +55,7 @@ public class TestVoice {
      * @throws java.net.URISyntaxException
      */
     @Before
-    public void setUp() 
-            throws JVoiceXMLEvent, ConfigurationException, URISyntaxException {
+    public void setUp() throws JVoiceXMLEvent, Exception {
         final Tweaker tweak = new Tweaker("../org.jvoicexml/config");
         voice = new Voice(tweak);
         uri = new URI("unittests/etc/mock.vxml");

@@ -6,6 +6,8 @@
 
 package org.jvoicexml.voicexmlunit.backend;
 
+import java.io.File;
+import java.io.IOException;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentServer;
@@ -18,7 +20,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.MockitoAnnotations.Mock;
+import org.mockito.Mock;
 
 /**
  *
@@ -33,9 +35,10 @@ public class Tweaker {
     
     Configuration config;
     
-    public Tweaker(final String path) {
+    public Tweaker(final String path) throws IOException {
         MockitoAnnotations.initMocks(this); // warning about suspection!
-        System.setProperty("jvoicexml.config", path);
+        final String pathConfig = new File(path).getCanonicalPath();
+        System.setProperty("jvoicexml.config", pathConfig);
         config = new JVoiceXmlConfiguration();
         //config = Mockito.spy(config); // TODO: final class → PowerMock
     }
