@@ -7,8 +7,6 @@
 package org.jvoicexml.voicexmlunit.backend;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.log4j.BasicConfigurator;
 import org.junit.After;
 import static org.junit.Assert.*;
@@ -20,7 +18,6 @@ import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.mockito.Mockito;
