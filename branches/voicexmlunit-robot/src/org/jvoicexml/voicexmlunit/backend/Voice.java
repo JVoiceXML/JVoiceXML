@@ -24,60 +24,39 @@
  *
  */
 
-package org.jvoicexml.voicexmlunit.processor;
+package org.jvoicexml.voicexmlunit.backend;
 
 import java.net.URI;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
-import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
-import org.jvoicexml.SystemOutput;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.MockitoAnnotations.Mock;
 
 /**
  * Voice provides direct access to JVoiceXML via some Mock.
  * @author Raphael Groner
  */
 public final class Voice {
-    
-    @Mock SystemOutput output;
-    //@Mock UserInput input;
-    //@Mock CharacterInput dtmf;
-    @Mock ImplementationPlatform platform;
-    @Mock JVoiceXmlCore jvxml;
-    
+    final ImplementationPlatform platform;
+    final JVoiceXmlCore core;
     final Configuration config;
     Session session;
 
-    public Voice() throws JVoiceXMLEvent, ConfigurationException {
-        MockitoAnnotations.initMocks(this); // warning about suspection!
-        Mockito.when(platform.getSystemOutput()).thenReturn(output);
-        //Mockito.when(platform.hasUserInput()).thenReturn(true);
-        //Mockito.when(platform.getUserInput()).thenReturn(input);
-        //Mockito.when(platform.getCharacterInput()).thenReturn(dtmf);
-
-        config = Mockito.spy(new JVoiceXmlConfiguration());
-        Mockito.when(jvxml.getConfiguration()).thenReturn(config);
+    public Voice(final Tweaker tweak) 
+            throws JVoiceXMLEvent, ConfigurationException {
+        platform = tweak.mockPlatform();
+        core = tweak.mockCore();
+        config = tweak.getConfiguration();
         
-
-        final DocumentServer server = config.loadObject(DocumentServer.class);
-        Mockito.when(jvxml.getDocumentServer()).thenReturn(server);
-        final GrammarProcessor proc = config.loadObject(GrammarProcessor.class);
-        proc.init(config);
-        Mockito.when(jvxml.getGrammarProcessor()).thenReturn(proc);
     }
-    
+  
     public Session dial(final URI uri) throws ErrorEvent {
-        session = Mockito.spy(new JVoiceXmlSession(platform, jvxml, null));
+        session = new JVoiceXmlSession(platform, core, null);
+        //session = Mockito.spy(session); // TODO: final class can not be spyed
         session.call(uri);
         return session;
      }

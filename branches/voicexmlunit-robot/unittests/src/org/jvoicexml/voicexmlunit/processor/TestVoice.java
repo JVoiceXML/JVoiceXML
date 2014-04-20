@@ -26,14 +26,16 @@
 
 package org.jvoicexml.voicexmlunit.processor;
 
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import org.apache.log4j.BasicConfigurator;
 import org.junit.*;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.voicexmlunit.backend.Tweaker;
+import org.jvoicexml.voicexmlunit.backend.Voice;
 
 /**
  * Test cases for {@link Voice}.
@@ -54,7 +56,8 @@ public class TestVoice {
     @Before
     public void setUp() 
             throws JVoiceXMLEvent, ConfigurationException, URISyntaxException {
-        voice = new Voice();
+        final Tweaker tweak = new Tweaker("../org.jvoicexml/config");
+        voice = new Voice(tweak);
         uri = new URI("unittests/etc/mock.vxml");
     }
 

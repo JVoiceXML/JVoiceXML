@@ -33,6 +33,8 @@ import java.util.logging.Logger;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.voicexmlunit.backend.Tweaker;
+import org.jvoicexml.voicexmlunit.backend.Voice;
 
 /**
  * Sniffer simulates a telephony conversation.
@@ -55,12 +57,13 @@ public final class Sniffer {
     /**
      * Constructs a new call
      *
-     * @param 
+     * @param configPath path to load configuration 
      */
-    public Sniffer() {
+    public Sniffer(final String configPath) {
+        final Tweaker tweak = new Tweaker(configPath);
         Voice currentVoice = null; // variable might not been initialized ...
         try {
-            currentVoice = new Voice();
+            currentVoice = new Voice(tweak);
         } catch (JVoiceXMLEvent|ConfigurationException ex) {
             Logger.getLogger(Sniffer.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

@@ -22,11 +22,12 @@ public class IVR implements Phone, TextListener {
     
     /**
      * Constructor.
-     * @param uri
-     * @param timeout
+     * @param configuration path to configuration folder
+     * @param uri document to process
+     * @param timeout maximal time to wait for success
      */
-    public IVR(final URI uri, final long timeout) {
-        sniffer = new Sniffer();
+    public IVR(final String configuration, final URI uri, final long timeout) {
+        sniffer = new Sniffer(configuration);
         sniffer.process(uri, timeout);
     }
 

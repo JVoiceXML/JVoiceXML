@@ -54,7 +54,7 @@ public class TestSniffer {
     @Before
     public void setUp() throws Exception, JVoiceXMLEvent {
         mock = new URI("unittests/etc/mock.vxml");
-        sniffer = new Sniffer();
+        sniffer = new Sniffer("../org.jvoicexml/config");
 
         started = false;
         connected = false;
