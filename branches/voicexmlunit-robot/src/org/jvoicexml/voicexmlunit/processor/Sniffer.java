@@ -27,6 +27,7 @@
 package org.jvoicexml.voicexmlunit.processor;
 
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,11 +61,11 @@ public final class Sniffer {
      * @param configPath path to load configuration 
      */
     public Sniffer(final String configPath) {
-        final Tweaker tweak = new Tweaker(configPath);
         Voice currentVoice = null; // variable might not been initialized ...
         try {
+            final Tweaker tweak = new Tweaker(configPath);
             currentVoice = new Voice(tweak);
-        } catch (JVoiceXMLEvent|ConfigurationException ex) {
+        } catch (JVoiceXMLEvent|Exception ex) {
             Logger.getLogger(Sniffer.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             voice = currentVoice;
