@@ -28,7 +28,7 @@ package org.jvoicexml.demo.embedded;
 
 import java.io.File;
 import java.net.URI;
-
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXmlMain;
@@ -95,15 +95,15 @@ public final class EmbeddedJVoiceXML implements JVoiceXmlMainListener {
      *            Command line arguments. None expected.
      */
     public static void main(final String[] args) {
+        BasicConfigurator.configure(); // log to console
+        
         final EmbeddedJVoiceXML demo = new EmbeddedJVoiceXML();
 
         try {
             File dialog = new File("hello.vxml");
             final URI uri = dialog.toURI();
             demo.interpretDocument(uri);
-        } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
-            LOGGER.error("error processing the document", e);
-        } catch (InterruptedException e) {
+        } catch (org.jvoicexml.event.JVoiceXMLEvent | InterruptedException e) {
             LOGGER.error("error processing the document", e);
         }
     }
@@ -126,5 +126,6 @@ public final class EmbeddedJVoiceXML implements JVoiceXmlMainListener {
     @Override
     public void jvxmlStartupError(final Throwable exception) {
         LOGGER.error("error starting JVoiceML", exception);
+        jvxmlStarted(); // cancel
     }
 }
