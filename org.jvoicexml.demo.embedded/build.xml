@@ -20,7 +20,7 @@ This file builds and runs the demo to embed JVoiceXML into opther applications.
 
         <property name="src" value="src" />
         <property name="build" value="classes" />
-        <property name="config" value="config" />
+        <property name="config" value="../org.jvoicexml/config" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
 
         <property name="optimize" value="off" />
@@ -29,7 +29,12 @@ This file builds and runs the demo to embed JVoiceXML into opther applications.
         <!-- the used class path -->
         <path id="build.classpath">
             <path refid="jvxml.core.lib" />
+            <fileset refid="spring.lib" />
             <fileset refid="log4j.lib" />
+            <fileset refid="loggings.lib" />
+            <fileset refid="httpclient.lib" />
+            <fileset refid="httpcore.lib" />
+            <fileset refid="pool.lib" />
         </path>
 
         <path id="run.classpath">
@@ -58,7 +63,8 @@ Build this jar from the main project first.
 
     <target name="compile" depends="-init,-checkJVoiceXML" description="Compile the JAVA sources">
         <echo message="compiling with debug=${debug}, optimize=${optimize}" />
-        <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1">
+        <javac destdir="${build}" includeantruntime="false"
+            optimize="${optimize}" debug="${debug}" deprecation="on">
             <src path="${src}" />
             <include name="**/*.java" />
             <classpath refid="build.classpath" />
