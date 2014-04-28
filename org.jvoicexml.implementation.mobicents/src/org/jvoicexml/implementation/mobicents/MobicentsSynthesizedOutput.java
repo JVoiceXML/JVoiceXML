@@ -108,8 +108,7 @@ import org.util.ExLog;
  * @version $Revision$
  */
 public final class MobicentsSynthesizedOutput
-        implements SynthesizedOutput, ObservableSynthesizedOutput,
-        CallObserver, StreamableSynthesizedOutput {
+        implements SynthesizedOutput, CallObserver, StreamableSynthesizedOutput {
 
     private static final Logger LOGGER = Logger.getLogger(MobicentsSynthesizedOutput.class);
     /** Factory for SSML speak strategies. */

@@ -40,6 +40,9 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
  * Demo to show how JVoiceXML can be launched by other applications.
+ * <p>
+ * This demo expects to have the JSAPI 1.0 implementation platform configured.
+ * </p>
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.5

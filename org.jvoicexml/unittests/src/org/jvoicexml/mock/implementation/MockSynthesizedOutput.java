@@ -36,7 +36,6 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
@@ -51,8 +50,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @version $Revision$
  * @since 0.6
  */
-public final class MockSynthesizedOutput implements SynthesizedOutput,
-    ObservableSynthesizedOutput {
+public final class MockSynthesizedOutput implements SynthesizedOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(MockSynthesizedOutput.class);
@@ -259,13 +257,13 @@ public final class MockSynthesizedOutput implements SynthesizedOutput,
 
     private class SpeechThread extends Thread {
         /** Reference to the container. */
-        private final ObservableSynthesizedOutput observable;
+        private final SynthesizedOutput observable;
 
         /**
          * Constructs a new object.
          * @param obs reference to the container.
          */
-        public SpeechThread(final ObservableSynthesizedOutput obs) {
+        public SpeechThread(final SynthesizedOutput obs) {
             observable = obs;
         }
 

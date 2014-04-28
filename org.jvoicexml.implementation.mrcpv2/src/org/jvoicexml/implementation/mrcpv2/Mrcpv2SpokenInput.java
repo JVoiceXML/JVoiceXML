@@ -48,7 +48,6 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.DocumentGrammarImplementation;
 import org.jvoicexml.implementation.GrammarImplementation;
-import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
@@ -77,7 +76,7 @@ import org.speechforge.cairo.client.recog.RecognitionResult;
  * @since 0.7
  */
 public final class Mrcpv2SpokenInput
-        implements SpokenInput, ObservableSpokenInput, SpeechEventListener {
+        implements SpokenInput, SpeechEventListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(Mrcpv2SpokenInput.class);

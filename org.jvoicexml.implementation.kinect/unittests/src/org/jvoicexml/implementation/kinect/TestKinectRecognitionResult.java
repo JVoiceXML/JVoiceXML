@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -201,19 +201,6 @@ public class TestKinectRecognitionResult {
                 new KinectRecognitionResult(extractor);
         Assert.assertTrue(result.isAccepted());
         
-    }
-
-    /**
-     * Test method for {@link org.jvoicexml.implementation.kinect.KinectRecognitionResult#isRejected()}.
-     * @exception Exception
-     *            test failed
-     */
-    @Test
-    public void testIsRejected() throws Exception {
-        final SmlInterpretationExtractor extractor = readSml("sml-simple.xml");
-        final KinectRecognitionResult result =
-                new KinectRecognitionResult(extractor);
-        Assert.assertFalse(result.isRejected());
     }
 
     /**

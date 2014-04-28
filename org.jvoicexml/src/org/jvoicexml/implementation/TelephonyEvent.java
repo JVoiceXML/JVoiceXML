@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -55,7 +55,7 @@ public final class TelephonyEvent {
     public static final int TRANSFERRED = RECORD_STOPPED << 1;
 
     /** Object that caused the event. */
-    private final ObservableTelephony source;
+    private final Telephony source;
 
     /** Event identifier. */
     private final int event;
@@ -69,7 +69,7 @@ public final class TelephonyEvent {
      * @param telephony object that caused the event.
      * @param eventType event identifier.
      */
-    public TelephonyEvent(final ObservableTelephony telephony,
+    public TelephonyEvent(final Telephony telephony,
             final int eventType) {
         this(telephony, eventType, null);
     }
@@ -80,7 +80,7 @@ public final class TelephonyEvent {
      * @param eventType event identifier.
      * @param parameter optional parameter.
      */
-    public TelephonyEvent(final ObservableTelephony telephony,
+    public TelephonyEvent(final Telephony telephony,
             final int eventType, final Object parameter) {
         source = telephony;
         event = eventType;
@@ -91,7 +91,7 @@ public final class TelephonyEvent {
      * Retrieves the object that caused the event.
      * @return the source object.
      */
-    public ObservableTelephony getSource() {
+    public Telephony getSource() {
         return source;
     }
 

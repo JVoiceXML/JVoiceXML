@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -55,7 +55,6 @@ import net.sourceforge.gjtapi.media.GenericMediaService;
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.CallParameters;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
 
@@ -68,8 +67,7 @@ import org.jvoicexml.implementation.TelephonyListener;
  * @since 0.6
  */
 public final class JVoiceXmlTerminal
-    implements org.jvoicexml.callmanager.Terminal, ConnectionListener,
-        ObservableTelephony {
+    implements org.jvoicexml.callmanager.Terminal, ConnectionListener {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
                                          .getLogger(JVoiceXmlTerminal.class);
@@ -167,7 +165,7 @@ public final class JVoiceXmlTerminal
         LOGGER.info("call connected from " + callingAddress.getName()
                     + " to " + calledAddress.getName());
 
-        final TelephonyEvent telephonyEvent = new TelephonyEvent(this,
+        final TelephonyEvent telephonyEvent = new TelephonyEvent(null,
                 TelephonyEvent.ANSWERED);
         fireCallAnsweredEvent(telephonyEvent);
 
@@ -178,7 +176,7 @@ public final class JVoiceXmlTerminal
         parameters.setCallerId(callingId);
         callManager.terminalConnected(this, parameters);
         if (!callManager.isConnected(this)) {
-            disconnect();
+            hangup();
             return;
         }
 
@@ -218,7 +216,7 @@ public final class JVoiceXmlTerminal
     public void connectionDisconnected(final ConnectionEvent event) {
         LOGGER.info("connection disconnected");
         try {
-            final TelephonyEvent telephonyEvent = new TelephonyEvent(this,
+            final TelephonyEvent telephonyEvent = new TelephonyEvent(null,
                     TelephonyEvent.HUNGUP);
             fireCallHungup(telephonyEvent);
 
@@ -448,10 +446,9 @@ public final class JVoiceXmlTerminal
     }
 
     /**
-     * Disconnects the connection.
-     * @since 0.7
+     * @Override
      */
-    public synchronized void disconnect() {
+    public void hangup() {
         if (currentCall != null) {
             try {
                 currentCall.drop();

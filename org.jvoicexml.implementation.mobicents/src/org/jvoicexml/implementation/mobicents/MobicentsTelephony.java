@@ -28,7 +28,6 @@
  */
 package org.jvoicexml.implementation.mobicents;
 
-import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
@@ -37,14 +36,13 @@ import java.util.Collection;
 
 import javax.sound.sampled.AudioFormat;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
-import org.jvoicexml.JVoiceXmlRecordResult;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.jvxml.RecordingEvent;
-import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
@@ -52,7 +50,6 @@ import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
 import org.jvoicexml.implementation.mobicents.callmanager.MobicentsConnectionInformation;
 import org.jvoicexml.interpreter.EventHandler;
-import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpCallTerminal;
 import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpIvrEndpoint;
 import org.mobicents.servlet.sip.restcomm.media.api.Call;
@@ -72,8 +69,7 @@ import org.util.ExLog;
  * @version $Revision$
  * @since 0.6
  */
-public final class MobicentsTelephony implements Telephony,
-        ObservableTelephony, TelephonyListener,CallObserver {
+public final class MobicentsTelephony implements Telephony, TelephonyListener,CallObserver {
     private static final Logger LOGGER = Logger.getLogger(MobicentsTelephony.class);
     /** Listener to this call control. */
     private final Collection<TelephonyListener> callControlListeners;
@@ -350,6 +346,13 @@ public final class MobicentsTelephony implements Telephony,
         for (TelephonyListener listener : tmp) {
             listener.telephonyCallHungup(event);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hangup() {
     }
 
     /**

@@ -20,9 +20,34 @@
             <include name="spring-expression-3.2.1.RELEASE.jar" />
         </fileset>
 
+        <!-- jsapi 1.0 library -->
+        <property name="jsapi1.dir" value="../org.jvoicexml.implementation.jsapi10/3rdparty/jsapi1.0" />
+        <property name="jsapi1.lib.dir" value="${jsapi1.dir}/lib" />
+
+        <fileset dir="${jsapi1.lib.dir}"  id="jsapi1.lib">
+           <include name="**/*.jar" />
+        </fileset>
+
+        <!-- freetts JSAPI 1.0 library -->
+        <property name="freetts.jsapi10.dir" value="../org.jvoicexml.implementation.jsapi10/3rdparty/freetts1.2" />
+        <property name="freetts.jsapi10.lib.dir" value="${freetts.jsapi10.dir}/lib" />
+
+        <fileset dir="${freetts.jsapi10.lib.dir}" id="freetts.jsapi10.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
+        <!-- sphinx4 JSAPI 1.0 library -->
+        <property name="sphinx4.jsapi10.dir" value="../org.jvoicexml.implementation.jsapi10/3rdparty/sphinx4" />
+        <property name="sphinx4.jsapi10.lib.dir" value="${sphinx4.jsapi10.dir}/lib" />
+
+        <fileset dir="${sphinx4.jsapi10.lib.dir}" id="sphinx4.jsapi10.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
         <!-- jvxml library -->
         <path id="jvxml.core.lib">
             <path location="${jvxml.core.dir}/dist/org.jvoicexml.jar" />
+            <path location="${jvxml.core.dir}/dist/org.jvoicexml.jndi.jar" />
             <path location="${jvxml.core.dir}/dist/org.jvoicexml.config.jar" />
             <path location="${jvxml.core.dir}/dist/org.jvoicexml.client.jar" />
             <path location="${jvxml.core.dir}/dist/org.jvoicexml.xml.jar" />

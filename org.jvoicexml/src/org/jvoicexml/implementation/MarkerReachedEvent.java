@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,7 +42,7 @@ public final class MarkerReachedEvent extends SynthesizedOutputEvent {
      * @param sessionId the session id
      * @param name name of the mark that has been reached.
      */
-    public MarkerReachedEvent(final ObservableSynthesizedOutput output,
+    public MarkerReachedEvent(final SynthesizedOutput output,
             final String sessionId, final String name) {
         super(output, SynthesizedOutputEvent.MARKER_REACHED, sessionId);
         mark = name;

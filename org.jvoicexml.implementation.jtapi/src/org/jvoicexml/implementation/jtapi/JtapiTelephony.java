@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -44,7 +44,6 @@ import org.jvoicexml.callmanager.jtapi.JVoiceXmlTerminal;
 import org.jvoicexml.callmanager.jtapi.JtapiConnectionInformation;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
@@ -64,8 +63,7 @@ import org.jvoicexml.implementation.TelephonyListener;
  * @version $Revision$
  * @since 0.6
  */
-public final class JtapiTelephony implements Telephony,
-        ObservableTelephony, TelephonyListener {
+public final class JtapiTelephony implements Telephony, TelephonyListener {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(JtapiTelephony.class);
@@ -331,7 +329,7 @@ public final class JtapiTelephony implements Telephony,
         final JtapiConnectionInformation jtapiInfo =
             (JtapiConnectionInformation) info;
         terminal = jtapiInfo.getTerminal();
-        terminal.disconnect();
+        terminal.hangup();
         terminal.removeListener(this);
     }
 
@@ -357,6 +355,17 @@ public final class JtapiTelephony implements Telephony,
         LOGGER.info("transferring to '" + dest + "'...");
         terminal.transfer(dest);
         fireTransferEvent(dest);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hangup() {
+        if (terminal == null) {
+            return;
+        }
+        terminal.hangup();
     }
 
     /**
