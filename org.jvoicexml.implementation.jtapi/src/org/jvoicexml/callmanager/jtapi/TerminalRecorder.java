@@ -94,7 +94,7 @@ class TerminalRecorder extends TerminalMedia {
      * Prepocessing.
      */
     public void onPreProcess() {
-        final TelephonyEvent event = new TelephonyEvent(terminal,
+        final TelephonyEvent event = new TelephonyEvent(null,
                 TelephonyEvent.RECORD_STARTED);
         terminal.fireMediaEvent(event);
     }
@@ -103,7 +103,7 @@ class TerminalRecorder extends TerminalMedia {
      * Postprocessing.
      */
     public void onPostProcess() {
-        final TelephonyEvent event = new TelephonyEvent(terminal,
+        final TelephonyEvent event = new TelephonyEvent(null,
                 TelephonyEvent.RECORD_STOPPED);
         terminal.fireMediaEvent(event);
     }

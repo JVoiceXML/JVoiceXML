@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -55,7 +55,6 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.GrammarImplementation;
-import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
@@ -74,7 +73,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @version $Revision$
  */
 public final class Jsapi10SpokenInput
-        implements SpokenInput, ObservableSpokenInput, StreamableSpokenInput {
+        implements SpokenInput, StreamableSpokenInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(Jsapi10SpokenInput.class);

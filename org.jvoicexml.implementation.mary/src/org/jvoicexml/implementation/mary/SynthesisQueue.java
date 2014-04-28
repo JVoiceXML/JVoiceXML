@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.QueueEmptyEvent;
@@ -37,8 +36,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @author Giannis Assiouras
  * 
  */
-final class SynthesisQueue extends Thread
-    implements ObservableSynthesizedOutput {
+final class SynthesisQueue extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(SynthesisQueue.class);
@@ -52,8 +50,11 @@ final class SynthesisQueue extends Thread
     /** The system output listener. */
     private SynthesizedOutputListener listener;
 
-    /** The Mary synthesized output resource. */
+    /** The audio player. */
     private final MaryAudioOutput audioOutput;
+
+    /** The Mary synthesized output resource. */
+    private final MarySynthesizedOutput output;
 
     /** The Mary client used to send requests to Mary server . */
     private MaryClient processor;
@@ -79,9 +80,10 @@ final class SynthesisQueue extends Thread
     /**
      * Constructs a new SynthesisQueue object.
      * .*/
-    public SynthesisQueue() {
+    public SynthesisQueue(MarySynthesizedOutput synthesizedOutput) {
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
         audioOutput = new MaryAudioOutput();
+        output = synthesizedOutput;
         setDaemon(true);
         setName("SynthesisQueueThread");
     }
@@ -223,7 +225,7 @@ final class SynthesisQueue extends Thread
      * Notifies the Listener that output queue is empty.
      */
     private void fireQueueEmpty() {
-        final SynthesizedOutputEvent event = new QueueEmptyEvent(this, null);
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(output, null);
         fireOutputEvent(event);
     }
 
@@ -241,7 +243,7 @@ final class SynthesisQueue extends Thread
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new OutputStartedEvent(this, null, speakable);
+            new OutputStartedEvent(output, null, speakable);
         fireOutputEvent(event);
     }
 
@@ -251,7 +253,7 @@ final class SynthesisQueue extends Thread
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new OutputEndedEvent(this, null, speakable);
+            new OutputEndedEvent(output, null, speakable);
         fireOutputEvent(event);
     }
 

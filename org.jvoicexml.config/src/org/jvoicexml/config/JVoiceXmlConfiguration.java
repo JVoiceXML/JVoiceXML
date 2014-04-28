@@ -136,7 +136,9 @@ public final class JVoiceXmlConfiguration implements Configuration {
         loaderRepositories =
             new java.util.HashMap<String, JVoiceXmlClassLoader>();
         final File resource = new File(configFolder, "jvoicexml.xml");
+        final File canonicalFile;
         try {
+            canonicalFile = resource.getCanonicalFile();
             LOGGER.info("loading configurations from '"
                     + configFolder.getCanonicalPath() + "'");
         } catch (IOException e) {
@@ -147,7 +149,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
         if (resource.exists()) {
             try {
                 context = new FileSystemXmlApplicationContext(
-                        resource.toURI().toString());
+                        canonicalFile.toURI().toString());
             } catch (BeansException e) {
                 LOGGER.error("unable to load configuration", e);
                 context = null;

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,7 +36,7 @@ import org.jvoicexml.event.error.NoresourceError;
 
 
 /**
- * Telephony support.
+ * Telephony support as an external resource.
  *
  * <p>
  * Objects that implement this interface are able to support making a third
@@ -61,8 +61,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public interface Telephony
-        extends ObservableTelephony, ExternalResource {
+public interface Telephony extends ExternalResource {
     /**
      * Plays a stream from the given output device.
      *
@@ -141,4 +140,24 @@ public interface Telephony
      *         Error transferring the call.
      */
     void transfer(String dest) throws NoresourceError;
+
+    /**
+     * Hangs up the current call.
+     *         Error hanging up the call.
+     */
+    void hangup();
+
+    /**
+     * Adds the given listener to the list of known listeners.
+     * @param listener
+     *            TelephonyListener
+     */
+    void addListener(final TelephonyListener listener);
+
+    /**
+     * Removes the given listener from the list of known listeners.
+     * @param listener
+     *            TelephonyListener
+     */
+    void removeListener(final TelephonyListener listener);
 }

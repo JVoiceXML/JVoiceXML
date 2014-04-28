@@ -26,22 +26,29 @@
 
 package org.jvoicexml.implementation.jvxml;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CharacterInput;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.GrammarImplementation;
-import org.jvoicexml.implementation.InputDevice;
-import org.jvoicexml.implementation.ObservableSpokenInput;
+import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Buffered DTMF input.
@@ -51,7 +58,7 @@ import org.jvoicexml.implementation.SpokenInputListener;
  * @since 0.5
  */
 public final class BufferedCharacterInput
-        implements CharacterInput, InputDevice, ObservableSpokenInput {
+        implements CharacterInput, SpokenInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(BufferedCharacterInput.class);
@@ -97,7 +104,7 @@ public final class BufferedCharacterInput
      *            The input resource is not available.
      * @since 0.7
      */
-    void activateGrammars(
+    public void activateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
         activeGrammars.addAll(grammars);
@@ -122,7 +129,7 @@ public final class BufferedCharacterInput
      *            The input resource is not available.
      * @since 0.7
      */
-    void deactivateGrammars(
+    public void deactivateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
         activeGrammars.removeAll(grammars);
@@ -256,5 +263,98 @@ public final class BufferedCharacterInput
         for (SpokenInputListener current : copy) {
             current.inputStatusChanged(event);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getType() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void open() throws NoresourceError {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void activate() throws NoresourceError {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void passivate() throws NoresourceError {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isBusy() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void connect(final ConnectionInformation client) throws IOException {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void disconnect(final ConnectionInformation client) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<GrammarType> getSupportedGrammarTypes() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GrammarImplementation<?> loadGrammar(final Reader reader,
+            final GrammarType type)
+            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<BargeInType> getSupportedBargeInTypes() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getUriForNextSpokenInput() throws NoresourceError,
+            URISyntaxException {
+        return null;
     }
 }

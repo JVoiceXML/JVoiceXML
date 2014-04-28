@@ -39,7 +39,6 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.GrammarImplementation;
-import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
@@ -55,7 +54,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @since 0.6
  */
 public final class MockSpokenInput
-    implements SpokenInput, ObservableSpokenInput {
+    implements SpokenInput {
     /** Registered output listener. */
     private final Collection<SpokenInputListener> listener;
 

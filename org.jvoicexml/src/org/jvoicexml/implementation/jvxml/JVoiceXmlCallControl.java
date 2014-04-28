@@ -28,7 +28,6 @@ package org.jvoicexml.implementation.jvxml;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collection;
 
 import javax.sound.sampled.AudioFormat;
 
@@ -38,14 +37,11 @@ import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputProvider;
 import org.jvoicexml.implementation.Telephony;
-import org.jvoicexml.implementation.TelephonyEvent;
-import org.jvoicexml.implementation.TelephonyListener;
 
 /**
  * Basic wrapper for {@link CallControl}. Method calls are forwarded to
@@ -55,7 +51,7 @@ import org.jvoicexml.implementation.TelephonyListener;
  * @version $Revision$
  * @since 0.6
  */
-final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
+final class JVoiceXmlCallControl implements CallControl {
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(JVoiceXmlCallControl.class);
@@ -63,16 +59,12 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
     /** The encapsulated telephony object. */
     private final Telephony telephony;
 
-    /** Registered output listener. */
-    private final Collection<TelephonyListener> listeners;
-
     /**
      * Constructs a new object.
      * @param tel encapsulated telephony object.
      */
     public JVoiceXmlCallControl(final Telephony tel) {
         telephony = tel;
-        listeners = new java.util.ArrayList<TelephonyListener>();
     }
 
     /**
@@ -190,34 +182,6 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addListener(final TelephonyListener listener) {
-        if (telephony instanceof ObservableTelephony) {
-            telephony.addListener(listener);
-        }
-
-        synchronized (listeners) {
-            listeners.add(listener);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void removeListener(final TelephonyListener listener) {
-        if (telephony instanceof ObservableTelephony) {
-            telephony.removeListener(listener);
-        }
-
-        synchronized (listeners) {
-            listeners.remove(listener);
-        }
-    }
-
-    /**
      * Checks if the corresponding telephony device is busy.
      * @return <code>true</code> if the telephony devices is busy.
      */
@@ -241,15 +205,7 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
                 }
             }
         }
-        synchronized (listeners) {
-            final Collection<TelephonyListener> copy =
-                new java.util.ArrayList<TelephonyListener>();
-            copy.addAll(listeners);
-            final TelephonyEvent event = new TelephonyEvent(this,
-                    TelephonyEvent.HUNGUP);
-            for (TelephonyListener listener : copy) {
-                listener.telephonyCallHungup(event);
-            }
-        }
+
+        telephony.hangup();
     }
 }

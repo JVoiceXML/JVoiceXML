@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,7 +38,6 @@ import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
@@ -59,7 +58,7 @@ import org.jvoicexml.implementation.jsapi10.StreamableSynthesizedOutput;
  * @version $Revision$
  * @since 0.6
  */
-public final class RtpTelephony implements Telephony, ObservableTelephony {
+public final class RtpTelephony implements Telephony {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(RtpTelephony.class);
@@ -276,6 +275,14 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
             LOGGER.debug("playing: " + playing + " recording: " + recording);
         }
         return playing  || recording;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hangup() {
+        // TODO Auto-generated method stub
     }
 
     /**

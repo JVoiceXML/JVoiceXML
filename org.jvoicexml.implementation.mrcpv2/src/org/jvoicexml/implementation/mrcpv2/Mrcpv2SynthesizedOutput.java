@@ -47,7 +47,6 @@ import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.MarkerReachedEvent;
-import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.OutputUpdateEvent;
@@ -78,8 +77,7 @@ import org.xml.sax.SAXException;
  * @since 0.7
  */
 public final class Mrcpv2SynthesizedOutput
-        implements SynthesizedOutput, ObservableSynthesizedOutput,
-        SpeechEventListener {
+        implements SynthesizedOutput, SpeechEventListener {
         //SpeakableListener, SynthesizerListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
