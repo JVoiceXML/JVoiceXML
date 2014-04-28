@@ -1,4 +1,4 @@
-<project name="Hello World Text  Demo" default="all" basedir=".">
+<project name="Hello World Text  Demo" default="run" basedir=".">
     <description>
 This file builds and runs the 'Hello world' text demo for JVoiceXML.
     </description>
@@ -95,6 +95,4 @@ Build this jar from the main project first.
             <param name="output.dir" expression="${checkstyle-target.dir}" />
         </xslt>
     </target>
-
-    <target name="all" depends="run" description="Run the demo" />
 </project>

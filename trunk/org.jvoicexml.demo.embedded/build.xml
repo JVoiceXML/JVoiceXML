@@ -41,6 +41,13 @@ This file builds and runs the demo to embed JVoiceXML into opther applications.
             <path refid="build.classpath" />
             <pathelement path="${config}" />
             <fileset refid="rhino.lib" />
+            <fileset refid="jsapi1.lib" />
+            <fileset refid="freetts.lib" />
+            <fileset refid="freetts.jsapi10.lib" />
+            <fileset refid="sphinx4.lib" />
+            <fileset refid="sphinx4.jsapi10.lib" />
+            <path location="${jvxml.core.dir}/dist/org.jvoicexml.implementation.jsapi10.jar" />
+            <path location="${jvxml.core.dir}/dist/org.jvoicexml.implementation.jsapi10-impl.jar" />
         </path>
     </target>
 
@@ -52,7 +59,7 @@ This file builds and runs the demo to embed JVoiceXML into opther applications.
         <available classname="org.jvoicexml.JVoiceXml" property="jvoicexml.present" classpathref="build.classpath" />
         <fail unless="jvoicexml.present">
 Cannot find jvoicexml libraries needed to build this demo.
-Build this jar from the main project first.
+Build the main project first.
         </fail>
     </target>
 

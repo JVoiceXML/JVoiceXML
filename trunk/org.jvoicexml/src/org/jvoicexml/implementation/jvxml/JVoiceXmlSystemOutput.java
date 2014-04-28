@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,7 +33,6 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.implementation.SynthesizedOutputProvider;
@@ -52,8 +51,7 @@ import org.jvoicexml.implementation.SynthesizedOutputProvider;
  * @since 0.6
  */
 final class JVoiceXmlSystemOutput
-    implements SystemOutput, ObservableSynthesizedOutput,
-        SynthesizedOutputProvider {
+    implements SystemOutput, SynthesizedOutputProvider {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(JVoiceXmlSystemOutput.class);
@@ -104,11 +102,7 @@ final class JVoiceXmlSystemOutput
      * {@inheritDoc}
      */
     public void addListener(final SynthesizedOutputListener listener) {
-        if (synthesizedOutput instanceof ObservableSynthesizedOutput) {
-            final ObservableSynthesizedOutput observable =
-                synthesizedOutput;
-            observable.addListener(listener);
-        }
+        synthesizedOutput.addListener(listener);
     }
 
     /**
@@ -116,11 +110,7 @@ final class JVoiceXmlSystemOutput
      */
     public void removeListener(
             final SynthesizedOutputListener listener) {
-        if (synthesizedOutput instanceof ObservableSynthesizedOutput) {
-            final ObservableSynthesizedOutput observable =
-                synthesizedOutput;
-            observable.removeListener(listener);
-        }
+        synthesizedOutput.removeListener(listener);
     }
 
     /**

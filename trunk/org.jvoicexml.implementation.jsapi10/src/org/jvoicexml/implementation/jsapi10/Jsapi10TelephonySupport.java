@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,7 +36,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
@@ -51,8 +50,7 @@ import org.jvoicexml.implementation.TelephonyListener;
  *
  * @since 0.6
  */
-public final class Jsapi10TelephonySupport
-    implements Telephony, ObservableTelephony {
+public final class Jsapi10TelephonySupport implements Telephony {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(Jsapi10TelephonySupport.class);
@@ -213,6 +211,13 @@ public final class Jsapi10TelephonySupport
      * {@inheritDoc}
      */
     public void transfer(final String dest) throws NoresourceError {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hangup() {
     }
 
     /**

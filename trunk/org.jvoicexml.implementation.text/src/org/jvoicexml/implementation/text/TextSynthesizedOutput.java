@@ -39,7 +39,6 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.QueueEmptyEvent;
@@ -61,7 +60,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @since 0.6
  */
 final class TextSynthesizedOutput
-    implements SynthesizedOutput, ObservableSynthesizedOutput {
+    implements SynthesizedOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(TextSynthesizedOutput.class);

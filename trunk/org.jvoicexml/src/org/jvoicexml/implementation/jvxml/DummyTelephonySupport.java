@@ -36,7 +36,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
@@ -59,7 +58,7 @@ import org.jvoicexml.implementation.TelephonyListener;
  * @since 0.5.5
  */
 public final class DummyTelephonySupport
-    implements Telephony, ObservableTelephony {
+    implements Telephony {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(DummyTelephonySupport.class);
@@ -293,6 +292,23 @@ public final class DummyTelephonySupport
      */
     @Override
     public void transfer(final String dest) throws NoresourceError {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hangup() {
+        synchronized (listener) {
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
+            copy.addAll(listener);
+            final TelephonyEvent event = new TelephonyEvent(this,
+                    TelephonyEvent.HUNGUP);
+            for (TelephonyListener current : copy) {
+                current.telephonyCallHungup(event);
+            }
+        }
     }
 
     /**

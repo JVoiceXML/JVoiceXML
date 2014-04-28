@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -62,7 +62,6 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.MarkerReachedEvent;
-import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.OutputUpdateEvent;
@@ -88,8 +87,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @since 0.6
  */
 public final class Jsapi20SynthesizedOutput
-        implements SynthesizedOutput, ObservableSynthesizedOutput,
-        SpeakableListener, SynthesizerListener {
+        implements SynthesizedOutput, SpeakableListener, SynthesizerListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(Jsapi20SynthesizedOutput.class);

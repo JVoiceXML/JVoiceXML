@@ -31,17 +31,9 @@ package org.jvoicexml.implementation.mobicents;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 import java.net.URI;
 import java.util.Collection;
 
-import javax.speech.AudioException;
-import javax.speech.Central;
-import javax.speech.EngineException;
-import javax.speech.EngineStateError;
-import javax.speech.recognition.Grammar;
-import javax.speech.recognition.GrammarException;
-import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RecognizerModeDesc;
 import javax.speech.recognition.ResultListener;
 import javax.speech.recognition.RuleGrammar;
@@ -55,7 +47,6 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.GrammarImplementation;
-import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
@@ -75,7 +66,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @version $Revision$
  */
 public final class MobicentsSpokenInput
-        implements SpokenInput, ObservableSpokenInput, StreamableSpokenInput {
+        implements SpokenInput, StreamableSpokenInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(MobicentsSpokenInput.class);

@@ -44,7 +44,6 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.client.text.TextMessage;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
@@ -66,7 +65,7 @@ import org.jvoicexml.implementation.TelephonyListener;
  * @version $Revision$
  * @since 0.6
  */
-public final class TextTelephony implements Telephony, ObservableTelephony {
+public final class TextTelephony implements Telephony {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(TextTelephony.class);
@@ -321,6 +320,16 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     @Override
     public void transfer(final String dest) throws NoresourceError {
         throw new NoresourceError("transfer is not supported!");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hangup() {
+        if (sender != null) {
+            sender.sendBye();
+        }
     }
 
     /**

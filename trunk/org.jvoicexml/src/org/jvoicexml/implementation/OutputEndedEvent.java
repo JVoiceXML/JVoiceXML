@@ -45,7 +45,7 @@ public final class OutputEndedEvent extends SynthesizedOutputEvent {
      * @param sessionId the session id
      * @param speakableText the speakable that has ended
      */
-    public OutputEndedEvent(final ObservableSynthesizedOutput output,
+    public OutputEndedEvent(final SynthesizedOutput output,
             final String sessionId, final SpeakableText speakableText) {
         super(output, SynthesizedOutputEvent.OUTPUT_ENDED, sessionId);
         speakable = speakableText;

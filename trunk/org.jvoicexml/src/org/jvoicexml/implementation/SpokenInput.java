@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,7 +39,8 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
- * Facade for easy control and monitoring of the user's speech input.
+ * Facade for easy control and monitoring of the user's speech input as an
+ * external resource.
  *
  * <p>
  * Objects that implement this interface are able to detect spoken input and to
@@ -62,7 +63,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @since 0.5
  */
 public interface SpokenInput
-        extends ExternalResource, InputDevice, ObservableSpokenInput {
+        extends ExternalResource, InputDevice {
     /**
      * Retrieves the grammar types that are supported by this implementation.
      * @return supported grammars.
@@ -174,4 +175,25 @@ public interface SpokenInput
      *         error creating the URI
      */
     URI getUriForNextSpokenInput() throws NoresourceError, URISyntaxException;
+
+    /**
+     * Adds a listener for user input events.
+     *
+     * <p>
+     * The implementation of this interface must notify the listener
+     * about all events.
+     * </p>
+     *
+     * @param listener The listener.
+     * @since 0.5
+     */
+    void addListener(final SpokenInputListener listener);
+
+    /**
+     * Removes a listener for user input events.
+     *
+     * @param listener The listener.
+     * @since 0.6
+     */
+    void removeListener(final SpokenInputListener listener);
 }

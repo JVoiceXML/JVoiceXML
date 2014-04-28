@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * Facade for easy access to the system output.
+ * Facade for easy access to the system output as an external resource.
  *
  * <p>
  * Objects that implement this interface support audio output text-to-speech
@@ -51,7 +51,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @since 0.6
  */
 public interface SynthesizedOutput
-    extends ExternalResource, OutputDevice, ObservableSynthesizedOutput {
+    extends ExternalResource, OutputDevice {
     /**
      * Obtains an URI that can be used as an input source for a
      * {@link org.jvoicexml.CallControl} object. This method is called each
@@ -96,4 +96,24 @@ public interface SynthesizedOutput
      * Convenient method to wait until all output is being played.
      */
     void waitQueueEmpty();
+
+    /**
+     * Adds the listener for system output events.
+     *
+     * <p>
+     * The implementation of this interface must notify the listener
+     * about all events.
+     * </p>
+     *
+     * @param listener the listener to add.
+     */
+    void addListener(final SynthesizedOutputListener listener);
+
+    /**
+     * Removes the listener for system output events.
+     * @param listener the listener to remove.
+     *
+     * @since 0.6
+     */
+    void removeListener(final SynthesizedOutputListener listener);
 }

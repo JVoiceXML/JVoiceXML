@@ -4,7 +4,7 @@
  * Date:    $Date$
  * Author:  $LastChangedBy$
  *
- * Copyright (C) 2010-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,7 +38,6 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.QueueEmptyEvent;
@@ -54,7 +53,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @since 0.7.3
  */
 public final class MarySynthesizedOutput implements SynthesizedOutput,
-    ObservableSynthesizedOutput, SynthesizedOutputListener {
+    SynthesizedOutputListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(MarySynthesizedOutput.class);
@@ -221,7 +220,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
     public void connect(final ConnectionInformation info)
         throws IOException {
         processor = MaryClient.getMaryClient();
-        synthesisQueue = new SynthesisQueue();
+        synthesisQueue = new SynthesisQueue(this);
         synthesisQueue.addListener(this);
         synthesisQueue.setProcessor(processor);
         synthesisQueue.setRequestParameters(maryRequestParameters);

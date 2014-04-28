@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -58,7 +58,7 @@ public class SynthesizedOutputEvent {
     public static final int OUTPUT_UPDATE = QUEUE_EMPTY << 1;
 
     /** Object that caused the event. */
-    private final ObservableSynthesizedOutput source;
+    private final SynthesizedOutput source;
 
     /** Event identifier. */
     private final int event;
@@ -77,7 +77,7 @@ public class SynthesizedOutputEvent {
      *          if an illegal event type is passed.
      */
     public SynthesizedOutputEvent(
-            final ObservableSynthesizedOutput output,
+            final SynthesizedOutput output,
             final int eventType, final String id)
         throws IllegalArgumentException {
         source = output;
@@ -96,7 +96,7 @@ public class SynthesizedOutputEvent {
      * Retrieves the object that caused the event.
      * @return the source object.
      */
-    public final ObservableSynthesizedOutput getSource() {
+    public final SynthesizedOutput getSource() {
         return source;
     }
 

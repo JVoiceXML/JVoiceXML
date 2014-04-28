@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,7 +44,6 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.ImplementationGrammarProcessor;
-import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SpokenInputProvider;
@@ -73,7 +72,7 @@ import org.xml.sax.SAXException;
  * @since 0.5
  */
 final class JVoiceXmlUserInput
-        implements UserInput, ObservableSpokenInput, SpokenInputProvider {
+        implements UserInput, SpokenInputProvider {
     /** The character input device. */
     private final BufferedCharacterInput characterInput;
 
@@ -223,37 +222,17 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    @Override
     public void addListener(final SpokenInputListener listener) {
-        if (spokenInput instanceof ObservableSpokenInput) {
-            final ObservableSpokenInput observableSpokenInput =
-                spokenInput;
-            observableSpokenInput.addListener(listener);
-        }
-
-        if (characterInput instanceof ObservableSpokenInput) {
-            final ObservableSpokenInput observableCharacterInput =
-                characterInput;
-            observableCharacterInput.addListener(listener);
-        }
+        spokenInput.addListener(listener);
+        characterInput.addListener(listener);
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public void removeListener(final SpokenInputListener listener) {
-        if (spokenInput instanceof ObservableSpokenInput) {
-            final ObservableSpokenInput observableSpokenInput =
-                spokenInput;
-            observableSpokenInput.removeListener(listener);
-        }
-
-        if (characterInput instanceof ObservableSpokenInput) {
-            final ObservableSpokenInput observableCharacterInput =
-                characterInput;
-            observableCharacterInput.removeListener(listener);
-        }
+        spokenInput.removeListener(listener);
+        characterInput.removeListener(listener);
     }
 
     /**

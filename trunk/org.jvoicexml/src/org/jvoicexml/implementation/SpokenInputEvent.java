@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -50,7 +50,7 @@ public final class SpokenInputEvent {
     public static final int RESULT_REJECTED = RESULT_ACCEPTED << 1;
 
     /** Object that caused the event. */
-    private final ObservableSpokenInput source;
+    private final SpokenInput source;
 
     /** Event identifier. */
     private final int event;
@@ -63,7 +63,7 @@ public final class SpokenInputEvent {
      * @param input object that caused the event.
      * @param eventType event identifier.
      */
-    public SpokenInputEvent(final ObservableSpokenInput input,
+    public SpokenInputEvent(final SpokenInput input,
             final int eventType) {
         this(input, eventType, null);
     }
@@ -74,7 +74,7 @@ public final class SpokenInputEvent {
      * @param eventType event identifier.
      * @param parameter optional parameter.
      */
-    public SpokenInputEvent(final ObservableSpokenInput input,
+    public SpokenInputEvent(final SpokenInput input,
             final int eventType, final Object parameter) {
         source = input;
         event = eventType;
@@ -85,7 +85,7 @@ public final class SpokenInputEvent {
      * Retrieves the object that caused the event.
      * @return the source object.
      */
-    public ObservableSpokenInput getSource() {
+    public SpokenInput getSource() {
         return source;
     }
 

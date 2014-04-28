@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/unittests/src/org/jvoicexml/mock/implementation/MockSystemOutput.java $
+ * Version: $LastChangedRevision: 4080 $
+ * Date:    $Date: 2013-12-17 09:46:17 +0100 (Tue, 17 Dec 2013) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -32,7 +32,6 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.QueueEmptyEvent;
@@ -45,11 +44,10 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * testing purposes.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
+ * @version $Revision: 4080 $
  * @since 0.6
  */
-public final class MockSystemOutput implements SystemOutput,
-    ObservableSynthesizedOutput {
+public final class MockSystemOutput implements SystemOutput {
     /** Registered output listener. */
     private final Collection<SynthesizedOutputListener> listener;
 
@@ -94,7 +92,7 @@ public final class MockSystemOutput implements SystemOutput,
         speakable = speakableText;
         sessionId = id;
         final SynthesizedOutputEvent event =
-            new OutputStartedEvent(this, sessionId, speakable);
+            new OutputStartedEvent(null, sessionId, speakable);
         fireOutputEvent(event);
     }
 
@@ -103,11 +101,11 @@ public final class MockSystemOutput implements SystemOutput,
      */
     public void outputEnded() {
         final SynthesizedOutputEvent endedEvent =
-            new OutputEndedEvent(this, sessionId, speakable);
+            new OutputEndedEvent(null, sessionId, speakable);
         fireOutputEvent(endedEvent);
         speakable = null;
         final SynthesizedOutputEvent emptyEvent =
-            new QueueEmptyEvent(this, sessionId);
+            new QueueEmptyEvent(null, sessionId);
         fireOutputEvent(emptyEvent);
     }
 
