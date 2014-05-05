@@ -20,6 +20,7 @@
     implementation platform to the interpreter
   </li>
   <li>refactoring: RecognitionResult only features a method isAccepted (removed isRejected)</li>
+  <li>safely remove shutdown hook</li>
 </ul>
 
 <h3>interpreter</h3>
@@ -80,6 +81,15 @@
   <li>
     reduced the object hierarchy and ensured that only pure nodes or documents
     are encapsulated by AbstractXmlNode and XmlDocument
+  </li>
+</ul>
+
+<h3>demos</h3>
+
+<ul>
+  <li>
+    embedded demo now uses an own configuration class rather than relying on
+    some configuration folders
   </li>
 </ul>
 

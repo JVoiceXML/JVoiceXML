@@ -7,5 +7,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.config"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.processor.srgs"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client.text"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.implementation.text"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
