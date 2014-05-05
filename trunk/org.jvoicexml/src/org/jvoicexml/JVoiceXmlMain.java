@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -510,7 +510,11 @@ public final class JVoiceXmlMain
         }
 
         final Runtime runtime = Runtime.getRuntime();
-        runtime.removeShutdownHook(shutdownHook);
+        try {
+            runtime.removeShutdownHook(shutdownHook);
+        } catch (IllegalStateException e) {
+            LOGGER.debug("shutdown already in process");
+        }
 
         shutdownHook = null;
 
