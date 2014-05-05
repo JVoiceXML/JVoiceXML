@@ -28,6 +28,8 @@ package org.jvoicexml.demo.embedded;
 
 import java.io.File;
 import java.net.URI;
+import java.net.UnknownHostException;
+
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
@@ -35,7 +37,7 @@ import org.jvoicexml.JVoiceXmlMain;
 import org.jvoicexml.JVoiceXmlMainListener;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.BasicConnectionInformation;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
+import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
@@ -72,23 +74,29 @@ public final class EmbeddedJVoiceXML implements JVoiceXmlMainListener {
      *                error processing the call.
      * @throws InterruptedException
      *                error waiting for JVoiceXML
+     * @throws UnknownHostException 
      */
     private synchronized void interpretDocument(final URI uri)
-            throws JVoiceXMLEvent, InterruptedException {
-        JVoiceXmlConfiguration config = new JVoiceXmlConfiguration();
+            throws JVoiceXMLEvent, InterruptedException, UnknownHostException {
+        final EmbeddedTextConfiguration config =
+                new EmbeddedTextConfiguration();
         jvxml = new JVoiceXmlMain(config);
         jvxml.addListener(this);
         jvxml.start();
 
         wait();
 
-        final ConnectionInformation client = new BasicConnectionInformation(
-                "dummy", "jsapi10", "jsapi10");
+        final TextServer server = new TextServer(4242);
+        server.start();
+        server.waitStarted();
+        final ConnectionInformation client = server.getConnectionInformation();
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
         session.waitSessionEnd();
         session.hangup();
+        server.stopServer();
+        jvxml.shutdown();
     }
 
     /**
@@ -106,7 +114,8 @@ public final class EmbeddedJVoiceXML implements JVoiceXmlMainListener {
             File dialog = new File("hello.vxml");
             final URI uri = dialog.toURI();
             demo.interpretDocument(uri);
-        } catch (org.jvoicexml.event.JVoiceXMLEvent | InterruptedException e) {
+        } catch (org.jvoicexml.event.JVoiceXMLEvent | InterruptedException
+                | UnknownHostException e) {
             LOGGER.error("error processing the document", e);
         }
     }

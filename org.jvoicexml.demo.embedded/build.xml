@@ -1,4 +1,4 @@
-<project name="JVoiceXML Embedding Demo" default="all" basedir=".">
+<project name="JVoiceXML Embedding Demo" default="run" basedir=".">
     <description>
 This file builds and runs the demo to embed JVoiceXML into opther applications.
     </description>
@@ -29,7 +29,6 @@ This file builds and runs the demo to embed JVoiceXML into opther applications.
         <!-- the used class path -->
         <path id="build.classpath">
             <path refid="jvxml.core.lib" />
-            <fileset refid="spring.lib" />
             <fileset refid="log4j.lib" />
             <fileset refid="loggings.lib" />
             <fileset refid="httpclient.lib" />
@@ -41,13 +40,6 @@ This file builds and runs the demo to embed JVoiceXML into opther applications.
             <path refid="build.classpath" />
             <pathelement path="${config}" />
             <fileset refid="rhino.lib" />
-            <fileset refid="jsapi1.lib" />
-            <fileset refid="freetts.lib" />
-            <fileset refid="freetts.jsapi10.lib" />
-            <fileset refid="sphinx4.lib" />
-            <fileset refid="sphinx4.jsapi10.lib" />
-            <path location="${jvxml.core.dir}/dist/org.jvoicexml.implementation.jsapi10.jar" />
-            <path location="${jvxml.core.dir}/dist/org.jvoicexml.implementation.jsapi10-impl.jar" />
         </path>
     </target>
 
@@ -108,6 +100,4 @@ Build the main project first.
             <param name="output.dir" expression="${checkstyle-target.dir}" />
         </xslt>
     </target>
-
-    <target name="all" depends="run" description="Run the demo" />
 </project>
