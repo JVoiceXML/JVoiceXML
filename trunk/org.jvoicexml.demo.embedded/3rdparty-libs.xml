@@ -9,48 +9,16 @@
         <!-- local third party libraries -->
         <property name="local-3rdparty.dir" value="3rdparty" />
 
-        <!-- spring framework library -->
-        <property name="spring.dir"
-            value="../org.jvoicexml.config/3rdparty/springframework3.2.1" />
-        <property name="spring.lib.dir" value="${spring.dir}/lib" />
-        <fileset dir="${spring.lib.dir}" id="spring.lib">
-            <include name="spring-core-3.2.1.RELEASE.jar" />
-            <include name="spring-beans-3.2.1.RELEASE.jar" />
-            <include name="spring-context-3.2.1.RELEASE.jar" />
-            <include name="spring-expression-3.2.1.RELEASE.jar" />
-        </fileset>
-
-        <!-- jsapi 1.0 library -->
-        <property name="jsapi1.dir" value="../org.jvoicexml.implementation.jsapi10/3rdparty/jsapi1.0" />
-        <property name="jsapi1.lib.dir" value="${jsapi1.dir}/lib" />
-
-        <fileset dir="${jsapi1.lib.dir}"  id="jsapi1.lib">
-           <include name="**/*.jar" />
-        </fileset>
-
-        <!-- freetts JSAPI 1.0 library -->
-        <property name="freetts.jsapi10.dir" value="../org.jvoicexml.implementation.jsapi10/3rdparty/freetts1.2" />
-        <property name="freetts.jsapi10.lib.dir" value="${freetts.jsapi10.dir}/lib" />
-
-        <fileset dir="${freetts.jsapi10.lib.dir}" id="freetts.jsapi10.lib">
-            <include name="**/*.jar" />
-        </fileset>
-
-        <!-- sphinx4 JSAPI 1.0 library -->
-        <property name="sphinx4.jsapi10.dir" value="../org.jvoicexml.implementation.jsapi10/3rdparty/sphinx4" />
-        <property name="sphinx4.jsapi10.lib.dir" value="${sphinx4.jsapi10.dir}/lib" />
-
-        <fileset dir="${sphinx4.jsapi10.lib.dir}" id="sphinx4.jsapi10.lib">
-            <include name="**/*.jar" />
-        </fileset>
-
         <!-- jvxml library -->
         <path id="jvxml.core.lib">
             <path location="${jvxml.core.dir}/dist/org.jvoicexml.jar" />
             <path location="${jvxml.core.dir}/dist/org.jvoicexml.jndi.jar" />
             <path location="${jvxml.core.dir}/dist/org.jvoicexml.config.jar" />
             <path location="${jvxml.core.dir}/dist/org.jvoicexml.client.jar" />
+            <path location="${jvxml.core.dir}/dist/org.jvoicexml.client.text.jar" />
+            <path location="${jvxml.core.dir}/dist/org.jvoicexml.implementation.text.jar" />
             <path location="${jvxml.core.dir}/dist/org.jvoicexml.xml.jar" />
+            <path location="${jvxml.core.dir}/dist/org.jvoicexml.processor.srgs.jar" />
         </path>
     </target>
 </project>
