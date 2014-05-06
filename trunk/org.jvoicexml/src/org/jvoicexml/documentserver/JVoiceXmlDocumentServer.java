@@ -350,10 +350,8 @@ public final class JVoiceXmlDocumentServer
             final DocumentDescriptor descriptor, final String type)
         throws BadFetchError {
         final URI uri = descriptor.getUri();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("retrieving object with type '" + type + "' from '"
-                    + uri + "'");
-        }
+        LOGGER.info("retrieving object with type '" + type + "' from '"
+                + uri + "'");
 
         // Determine the relevant strategy
         final RequestMethod method = descriptor.getMethod();

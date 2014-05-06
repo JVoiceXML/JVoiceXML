@@ -444,7 +444,15 @@ public final class VoiceXmlInterpreterContext  {
         return props;
     }
 
-    
+    /**
+     * Sets the current application.
+     * @param value the new application
+     * @since 0.7.7
+     */
+    public void setApplication(final Application value) {
+        application = value;
+    }
+
     /**
      * Retrieves the application.
      * @return the application.
@@ -463,7 +471,7 @@ public final class VoiceXmlInterpreterContext  {
      */
     public void process(final Application appl)
             throws ErrorEvent {
-        application = appl;
+        setApplication(appl);
         VoiceXmlDocument document = application.getCurrentDocument();
 
         enterScope(Scope.APPLICATION);
