@@ -33,7 +33,7 @@ import java.io.ObjectInputStream;
 import org.apache.log4j.Logger;
 
 /**
- * 
+ * Utility to read {@link TextMessage}s from an input stream.
  * @author Raphael Groner
  * @version $Revision$
  * @since 0.7.6
