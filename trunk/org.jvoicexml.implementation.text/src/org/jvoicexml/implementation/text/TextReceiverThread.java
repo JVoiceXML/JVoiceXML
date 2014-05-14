@@ -46,9 +46,6 @@ final class TextReceiverThread extends Thread {
     private static final Logger LOGGER = Logger
             .getLogger(TextReceiverThread.class);
 
-    /** Maximum waiting time in msec. */
-    private static final int MAX_WAIT = 300;
-
     /** The socket to read from. */
     private final Socket socket;
 
@@ -184,7 +181,10 @@ final class TextReceiverThread extends Thread {
     void waitStarted() throws InterruptedException {
         while (!isStarted()) {
             synchronized (this) {
-                wait(MAX_WAIT);
+                if (isStarted()) {
+                    return;
+                }
+                wait();
             }
         }
     }
