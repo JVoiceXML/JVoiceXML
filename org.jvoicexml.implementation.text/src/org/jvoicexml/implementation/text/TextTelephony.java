@@ -73,7 +73,7 @@ public final class TextTelephony implements Telephony {
     /** Maximal number of milliseconds to wait for a connect. */
     private static final int MAX_TIMEOUT_CONNECT = 1000;
 
-    /** Maximal number of milliseconds to wait for acknowledgement. */
+    /** Maximal number of milliseconds to wait for acknowledgment. */
     private static final int MAX_TIMEOUT_ACK = 100;
     
     /** The connection to the client. */
