@@ -137,8 +137,8 @@ public final class TextTelephony implements Telephony {
     }
 
     /**
-     * Adds the given sequence number to the list of pending messages.
-     * @param message the sent message
+     * Acknowledges the given message.
+     * @param message the message to acknowledge
      */
     void addAcknowledgeMessage(final TextMessage message) {
         if (sender != null) {
