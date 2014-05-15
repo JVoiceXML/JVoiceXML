@@ -65,6 +65,9 @@ final class TextSenderThread extends Thread {
     /** Wait for termination semaphore. */
     private final Object lock;
 
+    /** {@code true} if a bye message is acknowledged in the next send. */
+    private boolean acknowledgeBye;
+
     /**
      * Constructs a new object.
      * @param asyncSocket the socket to read from.
@@ -107,7 +110,9 @@ final class TextSenderThread extends Thread {
                     LOGGER.debug("... done sending output");
                 }
                 final int messageCode = pending.getMessageCode();
-                sending = messageCode != TextMessage.BYE;
+                sending = (messageCode != TextMessage.BYE)
+                            || (messageCode == TextMessage.ACK
+                                && acknowledgeBye);
             }
         } catch (InterruptedException | IOException e) {
             messages.clear();
@@ -207,10 +212,11 @@ final class TextSenderThread extends Thread {
     }
 
     /**
-     * Sends a bye message and terminates the sender thread.
+     * Acknowledges the given message.
      * @param message the message to acknowledge
      */
     public void sendAck(final TextMessage message) {
+        acknowledgeBye = message.getCode() == TextMessage.BYE;
         final int num = message.getSequenceNumber();
         final TextMessage ack =
                 new TextMessage(TextMessage.ACK, num);
