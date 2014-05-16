@@ -102,30 +102,35 @@ public abstract class XmlDocument
     /** The encapsulated document, implemented as a delegate. */
     private transient Document document;
 
-    /** The document builder. */
-    private final static DocumentBuilder BUILDER;
+    /**
+     * The document builder to use. Unfortunately, SAX parsing is not thread
+     * safe, so we store the builder in a thread local variable.
+     */
+    private static final ThreadLocal<DocumentBuilder> LOCAL_BUILDER
+        = new ThreadLocal<DocumentBuilder>() {
+        @Override
+        protected DocumentBuilder initialValue() {
+            final DocumentBuilderFactory factory =
+                    DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
 
-    static {
-        final DocumentBuilderFactory factory =
-                DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-
-        // Configure the factory to ignore comments
-        factory.setIgnoringComments(true);
-        DocumentBuilder builder = null;
-        try {
-            builder = factory.newDocumentBuilder();
-            final EntityResolver resolver = new IgnoringEntityResolver();
-            boolean resolveEntities =
-                Boolean.getBoolean("org.jvoicexml.xml.resolveEntities");
-            if (!resolveEntities) {
-                builder.setEntityResolver(resolver);
+            // Configure the factory to ignore comments
+            factory.setIgnoringComments(true);
+            DocumentBuilder builder = null;
+            try {
+                builder = factory.newDocumentBuilder();
+                final EntityResolver resolver = new IgnoringEntityResolver();
+                boolean resolveEntities =
+                    Boolean.getBoolean("org.jvoicexml.xml.resolveEntities");
+                if (!resolveEntities) {
+                    builder.setEntityResolver(resolver);
+                }
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
             }
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-        BUILDER = builder;
-    }
+            return builder;
+        };
+    };
 
     /**
      * Creates an empty XML document.
@@ -137,9 +142,10 @@ public abstract class XmlDocument
             throws ParserConfigurationException {
         // Check if there is a document type specified. 
         final DocumentType prototype = getDoctype();
+        final DocumentBuilder builder = LOCAL_BUILDER.get();
         if (prototype == null) {
             // If there is none, simply create a new document as usual.
-            document = BUILDER.newDocument();
+            document = builder.newDocument();
             if (document != null) {
                 final Node root = createRootNode();
                 appendChild(root);
@@ -147,7 +153,7 @@ public abstract class XmlDocument
         } else {
             // otherwise create a document with the given doctype as a
             // prototype
-            final DOMImplementation impl = BUILDER.getDOMImplementation();
+            final DOMImplementation impl = builder.getDOMImplementation();
             final DocumentType type =
                 impl.createDocumentType(prototype.getName(),
                     prototype.getPublicId(), prototype.getSystemId());
@@ -170,7 +176,8 @@ public abstract class XmlDocument
      */
     public XmlDocument(final InputSource source)
             throws ParserConfigurationException, SAXException, IOException {
-        document = BUILDER.parse(source);
+        final DocumentBuilder builder = LOCAL_BUILDER.get();
+        document = builder.parse(source);
     }
 
     /**
