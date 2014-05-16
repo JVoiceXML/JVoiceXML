@@ -82,6 +82,10 @@
     reduced the object hierarchy and ensured that only pure nodes or documents
     are encapsulated by AbstractXmlNode and XmlDocument
   </li>
+  <li>
+    bugfix: SAX parsing is not thread safe, so the builder is stored in a
+    thread local variable.
+  </li>
 </ul>
 
 <h3>demos</h3>
