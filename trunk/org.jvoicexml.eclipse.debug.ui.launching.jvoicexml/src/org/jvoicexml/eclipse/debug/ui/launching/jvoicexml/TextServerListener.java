@@ -19,6 +19,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.eclipse.debug.ui.launching.IVoiceXMLBrowserConstants;
 import org.jvoicexml.eclipse.debug.ui.launching.VoiceXMLDialogMessage;
+import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -36,20 +37,7 @@ public class TextServerListener implements TextListener {
         browser = voiceXmlBrowser;
     }
 
-    public void outputText(String document) {
-        browser.logMessage(document.toString());
-
-        final DebugEvent event[] = new DebugEvent[1];
-        event[0] = new DebugEvent(this, DebugEvent.MODEL_SPECIFIC,
-                IVoiceXMLBrowserConstants.EVENT_LOG_MESSAGE);
-
-        final VoiceXMLDialogMessage utterance = new VoiceXMLDialogMessage(
-                "System", document);
-        event[0].setData(utterance);
-
-        DebugPlugin.getDefault().fireDebugEventSet(event);
-    }
-
+    @Override
     public void outputSsml(final SsmlDocument document) {
         browser.logMessage(document.toString());
 
@@ -57,8 +45,9 @@ public class TextServerListener implements TextListener {
         event[0] = new DebugEvent(this, DebugEvent.MODEL_SPECIFIC,
                 IVoiceXMLBrowserConstants.EVENT_DIALOG_MESSAGE);
 
+        final Speak speak = document.getSpeak();
         final VoiceXMLDialogMessage utterance = new VoiceXMLDialogMessage(
-                "System", document.toString());
+                "System", speak.getTextContent());
         event[0].setData(utterance);
 
         DebugPlugin.getDefault().fireDebugEventSet(event);
@@ -77,6 +66,18 @@ public class TextServerListener implements TextListener {
 
 	@Override
 	public void started() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void expectingInput() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void inputClosed() {
 		// TODO Auto-generated method stub
 		
 	}

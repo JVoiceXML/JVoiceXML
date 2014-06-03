@@ -25,7 +25,7 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.eclipse.debug.ui.launching.IVoiceXMLBrowser;
@@ -69,8 +69,8 @@ public final class JVoiceXmlBrowser
     /** The current session. */
     private Session session;
 
-    /** The session client */
-    private RemoteClient client;
+    /** The remote connection information*/
+    private ConnectionInformation info;
     
     /** Text client port number */
     private int textPort;
@@ -129,17 +129,17 @@ public final class JVoiceXmlBrowser
         logMessage("text server started");
     }
     
-    private RemoteClient getClient() {
-        RemoteClient client = null;
+    private ConnectionInformation getClient() {
+    	ConnectionInformation info = null;
         try {
-            client = textServer.getRemoteClient();
+            info = textServer.getConnectionInformation();
         } catch (UnknownHostException uhe) {
             logMessage(uhe.getMessage());
         }
-        return client;
+        return info;
     }
     
-    private Session getSession(final Context context, RemoteClient client) {
+    private Session getSession(final Context context, ConnectionInformation info) {
         logMessage("creating a JVoiceXML session...");
         final JVoiceXml jvxml;
         try {
@@ -155,7 +155,7 @@ public final class JVoiceXmlBrowser
         }
 
         try {
-            return jvxml.createSession(client);
+            return jvxml.createSession(info);
         } catch (ErrorEvent ee) {
             logMessage(ee.getMessage());
             
@@ -234,13 +234,13 @@ public final class JVoiceXmlBrowser
 
         startTextServer();
         
-        client = getClient();
-        if(client == null) {
+        info = getClient();
+        if(info == null) {
             stop();
             return;
         }
         
-        session = getSession(context, client);
+        session = getSession(context, info);
         if (session == null) {
             stop();
             return;
