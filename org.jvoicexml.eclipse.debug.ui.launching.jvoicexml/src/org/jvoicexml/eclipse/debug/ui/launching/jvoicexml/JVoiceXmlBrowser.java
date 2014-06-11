@@ -43,8 +43,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * @author Dirk Schnelle
  * @author Aurelian Maga
  */
-public final class JVoiceXmlBrowser
-        implements IVoiceXMLBrowser {
+public final class JVoiceXmlBrowser implements IVoiceXMLBrowser {
     /** Reference to the related browserProcess. */
     protected VoiceXMLBrowserProcess browserProcess;
 
@@ -69,15 +68,15 @@ public final class JVoiceXmlBrowser
     /** The current session. */
     private Session session;
 
-    /** The remote connection information*/
+    /** The remote connection information */
     private ConnectionInformation info;
-    
+
     /** Text client port number */
     private int textPort;
-    
+
     /** The text server */
     private TextServer textServer;
-    
+
     /**
      * Constructs a new object.
      */
@@ -94,7 +93,7 @@ public final class JVoiceXmlBrowser
         logMessage("obtaining the initial context...");
         /** @todo Find a better solution to set the system properties. */
         System.setProperty("java.security.policy", policy);
-        
+
         final Hashtable<String, String> env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, initialContextFactory);
         env.put(Context.PROVIDER_URL, providerUrl);
@@ -116,7 +115,6 @@ public final class JVoiceXmlBrowser
         return context;
     }
 
-
     private void startTextServer() {
         logMessage("starting text server...");
         textServer = new TextServer(textPort);
@@ -128,9 +126,9 @@ public final class JVoiceXmlBrowser
         textServer.start();
         logMessage("text server started");
     }
-    
+
     private ConnectionInformation getClient() {
-    	ConnectionInformation info = null;
+        ConnectionInformation info = null;
         try {
             info = textServer.getConnectionInformation();
         } catch (UnknownHostException uhe) {
@@ -138,7 +136,7 @@ public final class JVoiceXmlBrowser
         }
         return info;
     }
-    
+
     private Session getSession(final Context context, ConnectionInformation info) {
         logMessage("creating a JVoiceXML session...");
         final JVoiceXml jvxml;
@@ -158,16 +156,16 @@ public final class JVoiceXmlBrowser
             return jvxml.createSession(info);
         } catch (ErrorEvent ee) {
             logMessage(ee.getMessage());
-            
+
             return null;
         }
     }
-    
+
     /**
      * Calls the voicexml interpreter context to process the given application.
      * 
      * @param context
-     *        The current JNDI context.
+     *            The current JNDI context.
      */
     private void interpret(final Context context) {
         logMessage("calling application...");
@@ -182,7 +180,6 @@ public final class JVoiceXmlBrowser
             return;
         }
 
-        
         try {
             session.call(uri);
 
@@ -233,13 +230,13 @@ public final class JVoiceXmlBrowser
         }
 
         startTextServer();
-        
+
         info = getClient();
-        if(info == null) {
+        if (info == null) {
             stop();
             return;
         }
-        
+
         session = getSession(context, info);
         if (session == null) {
             stop();
@@ -258,11 +255,11 @@ public final class JVoiceXmlBrowser
         if (browserProcess == null) {
             return;
         }
-        
-        if(textServer!=null){
+
+        if (textServer != null) {
             textServer.stopServer();
         }
-        
+
         final JVoiceXmlPlugin plugin = JVoiceXmlPlugin.getDefault();
         final LoggingReceiver receiver = plugin.getReceiver();
         receiver.close();
@@ -280,7 +277,8 @@ public final class JVoiceXmlBrowser
         } finally {
             final DebugEvent event[] = new DebugEvent[2];
             event[0] = new DebugEvent(browserProcess, DebugEvent.TERMINATE);
-            event[1] = new DebugEvent(browserProcess.getLaunch(), DebugEvent.CHANGE);
+            event[1] = new DebugEvent(browserProcess.getLaunch(),
+                    DebugEvent.CHANGE);
             DebugPlugin.getDefault().fireDebugEventSet(event);
 
             browserProcess.setTerminated(true);
@@ -295,7 +293,7 @@ public final class JVoiceXmlBrowser
         if (inputType == VoiceXMLBrowserInput.TYPE_DTMF) {
             final String dtmf = input.getInput().toString();
             sendDtmf(dtmf);
-        } else if (inputType == VoiceXMLBrowserInput.TYPE_VOICE){
+        } else if (inputType == VoiceXMLBrowserInput.TYPE_VOICE) {
             final String text = input.getInput().toString();
             sendText(text);
         }
@@ -303,20 +301,22 @@ public final class JVoiceXmlBrowser
 
     /**
      * Sends the DTMF to the browser.
-     * @param dtmf The DTMF to send.
+     * 
+     * @param dtmf
+     *            The DTMF to send.
      */
     private void sendDtmf(final String dtmf) {
         final CharacterInput input;
-        
+
         try {
             input = session.getCharacterInput();
         } catch (NoresourceError nre) {
             logMessage(nre.getMessage());
-            
+
             return;
         } catch (ConnectionDisconnectHangupEvent e) {
             logMessage(e.getMessage());
-            
+
             return;
         }
         final char dtmfChar = dtmf.charAt(0);
@@ -325,7 +325,9 @@ public final class JVoiceXmlBrowser
 
     /**
      * Sends the TEXT to the browser.
-     * @param text The TEXT to send.
+     * 
+     * @param text
+     *            The TEXT to send.
      */
     private void sendText(final String text) {
         try {
@@ -336,7 +338,6 @@ public final class JVoiceXmlBrowser
         }
     }
 
-    
     /**
      * {@inheritDoc}
      */
@@ -393,27 +394,28 @@ public final class JVoiceXmlBrowser
      * Convenience method to send a log message to the debug panel.
      * 
      * @param date
-     *        Logging time stamp.
+     *            Logging time stamp.
      * @param message
-     *        The message.
+     *            The message.
      */
     void logMessage(final Date date, final String message) {
         final DebugEvent event[] = new DebugEvent[1];
 
-        event[0] = new DebugEvent(this, DebugEvent.MODEL_SPECIFIC, IVoiceXMLBrowserConstants.EVENT_LOG_MESSAGE);
+        event[0] = new DebugEvent(this, DebugEvent.MODEL_SPECIFIC,
+                IVoiceXMLBrowserConstants.EVENT_LOG_MESSAGE);
 
         final VoiceXMLLogMessage log = new VoiceXMLLogMessage(date, message);
         event[0].setData(log);
 
         DebugPlugin.getDefault().fireDebugEventSet(event);
-       
+
     }
 
     /**
      * Convenience method to send a log message to the debug panel.
      * 
      * @param message
-     *        The message.
+     *            The message.
      */
     void logMessage(final String message) {
         if (message == null) {
@@ -423,13 +425,13 @@ public final class JVoiceXmlBrowser
         logMessage(now, message);
     }
 
-	@Override
-	public void hangup() {
-		if (session == null) {
-			return;
-		}
-		logMessage("hanging up...");
-		session.hangup();
-		session = null;
-	}
+    @Override
+    public void hangup() {
+        if (session == null) {
+            return;
+        }
+        logMessage("hanging up...");
+        session.hangup();
+        session = null;
+    }
 }

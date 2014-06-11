@@ -14,9 +14,9 @@ package org.jvoicexml.eclipse.debug.ui.launching.jvoicexml;
 
 /**
  * Constants for the plugin used in the <code>JVoiceXmlBrowser</code>.
- *
+ * 
  * @author Dirk Schnelle
- *
+ * 
  * @see org.jvoicexml.eclipse.debug.ui.launching.jvoicexml.JVoiceXmlBrowser
  */
 interface JVoiceXmlPluginConstants {
@@ -40,7 +40,7 @@ interface JVoiceXmlPluginConstants {
 
     /** Level of the logger. */
     String LOGGING_LEVEL = PREFIX + ".logging.level";
-    
+
     /** Text client port. */
     String TEXT_PORT = PREFIX + ".text.port";
 

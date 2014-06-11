@@ -19,8 +19,7 @@ import org.jvoicexml.Session;
  * 
  * @author Dirk Schnelle
  */
-class SessionListener
-        extends Thread {
+class SessionListener extends Thread {
     /** The session to listen at. */
     private final Session session;
 
@@ -31,9 +30,9 @@ class SessionListener
      * Constructs a new object.
      * 
      * @param sess
-     *        The current session.
+     *            The current session.
      * @param jvxml
-     *        The current browser.
+     *            The current browser.
      */
     public SessionListener(final Session sess, final JVoiceXmlBrowser jvxml) {
         super();
