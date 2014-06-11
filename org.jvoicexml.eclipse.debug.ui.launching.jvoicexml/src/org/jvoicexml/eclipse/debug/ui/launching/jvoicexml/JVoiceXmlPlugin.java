@@ -42,8 +42,7 @@ import org.osgi.framework.BundleContext;
  * @see org.jvoicexml.eclipse.debug.ui.launching.jvoicexml.JVoiceXmlBrowserUI
  * @see org.jvoicexml.eclipse.debug.ui.launching.jvoicexml.LoggingReceiver
  */
-public final class JVoiceXmlPlugin
-        extends AbstractUIPlugin {
+public final class JVoiceXmlPlugin extends AbstractUIPlugin {
 
     /** Name of the plugin. */
     private static final String PLUGIN_NAME = "JVoiceXml VTP Plugin";
@@ -65,14 +64,15 @@ public final class JVoiceXmlPlugin
      * This method is called upon plug-in activation.
      * 
      * @param context
-     *        The context.
+     *            The context.
      * @exception Exception
-     *            Error starting the plugin.
+     *                Error starting the plugin.
      */
     public void start(final BundleContext context) throws Exception {
         super.start(context);
         Logger root = Logger.getRootLogger();
-        PatternLayout layout = new PatternLayout("%6r [%-20.20t] %-5p %30.30c (%6L) %x %m%n");
+        PatternLayout layout = new PatternLayout(
+                "%6r [%-20.20t] %-5p %30.30c (%6L) %x %m%n");
         Appender console = new ConsoleAppender(layout);
         root.addAppender(console);
     }
@@ -81,9 +81,9 @@ public final class JVoiceXmlPlugin
      * This method is called when the plug-in is stopped.
      * 
      * @param context
-     *        The context.
+     *            The context.
      * @exception Exception
-     *            Error stopping the plugin.
+     *                Error stopping the plugin.
      */
     public void stop(final BundleContext context) throws Exception {
         super.stop(context);
@@ -110,7 +110,7 @@ public final class JVoiceXmlPlugin
      * relative path.
      * 
      * @param path
-     *        the path
+     *            the path
      * @return the image descriptor
      */
     public static ImageDescriptor getImageDescriptor(final String path) {
@@ -134,14 +134,15 @@ public final class JVoiceXmlPlugin
      * Retrieves the given file name from the plugin directory.
      * 
      * @param name
-     *        Name of the file.
+     *            Name of the file.
      * @return Full path to the given file.
      */
     public String getFile(final String name) {
         final URL url;
         try {
-            url = new URL("platform:/plugin/org.eclipse.vtp.launching.jvoicexml/"
-                    + name);
+            url = new URL(
+                    "platform:/plugin/org.eclipse.vtp.launching.jvoicexml/"
+                            + name);
         } catch (java.net.MalformedURLException mue) {
             mue.printStackTrace();
 
