@@ -12,7 +12,6 @@ package org.jvoicexml.eclipse.debug.ui.launching;
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-
 /**
  * Class to communicate dialog events from a VoiceXML Browser to any Eclipse
  * listener.

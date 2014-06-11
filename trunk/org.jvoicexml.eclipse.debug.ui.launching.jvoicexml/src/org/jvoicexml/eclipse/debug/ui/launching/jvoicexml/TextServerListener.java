@@ -55,30 +55,24 @@ public class TextServerListener implements TextListener {
 
     @Override
     public void connected(InetSocketAddress address) {
-        System.out.println("connected to " + address);
+        browser.logMessage("connected to " + address);
     }
 
     @Override
     public void disconnected() {
-        System.out.println("disconnected");
+        browser.logMessage("disconnected");
         browser.stop();
     }
 
-	@Override
-	public void started() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void started() {
+    }
 
-	@Override
-	public void expectingInput() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void expectingInput() {
+    }
 
-	@Override
-	public void inputClosed() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void inputClosed() {
+    }
 }

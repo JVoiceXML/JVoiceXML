@@ -1,4 +1,5 @@
 package org.jvoicexml.eclipse.debug.ui.launcher;
+
 /*******************************************************************************
  * Copyright (c) 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
@@ -21,15 +22,13 @@ import org.eclipse.debug.ui.ILaunchConfigurationTab;
  */
 public class VoiceXMLTabGroup extends AbstractLaunchConfigurationTabGroup {
 
-	public VoiceXMLTabGroup() {
-		super();
-	}
+    public VoiceXMLTabGroup() {
+        super();
+    }
 
-	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
-				new CommonVoiceXMLBrowserTab(),
-				new CommonTab()
-		};
-		setTabs(tabs);		
-	}
+    public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
+        ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
+                new CommonVoiceXMLBrowserTab(), new CommonTab() };
+        setTabs(tabs);
+    }
 }

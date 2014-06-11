@@ -25,13 +25,12 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.jvoicexml.Session;
 
 /**
- * Server for <code>LoggingEvent</code>s sent over the socket appender
- * of JVoiceXml.
- *
+ * Server for <code>LoggingEvent</code>s sent over the socket appender of
+ * JVoiceXml.
+ * 
  * @author Dirk Schnelle
  */
-class LoggingReceiver
-    implements Runnable {
+class LoggingReceiver implements Runnable {
     /** Reference to the browser. */
     private JVoiceXmlBrowser browser;
 
@@ -56,9 +55,9 @@ class LoggingReceiver
 
     /**
      * Sets the borwoser.
-     *
+     * 
      * @param jvxml
-     *        The browser.
+     *            The browser.
      */
     public void setBrowser(JVoiceXmlBrowser jvxml) {
         browser = jvxml;
@@ -66,9 +65,9 @@ class LoggingReceiver
 
     /**
      * Sets the current session.
-     *
+     * 
      * @param current
-     *        The current session.
+     *            The current session.
      */
     public void setSession(final Session current) {
         session = current;
@@ -76,9 +75,9 @@ class LoggingReceiver
 
     /**
      * Sets the minimal logging level.
-     *
+     * 
      * @param lev
-     *        The minimal logging level.
+     *            The minimal logging level.
      */
     public void setLevel(final String lev) {
         level = Level.toLevel(lev);
@@ -86,29 +85,29 @@ class LoggingReceiver
 
     /**
      * Connects to the JVoiceXml socket appender.
-     *
+     * 
      * <p>
      * If the connection is already established, this method returns
-     * immediately. Otherwise, a new server socket is opened, waiting for
-     * log4j to connect. This may take a while until a timeout of the
-     * socket appender occurs to reconnect.
+     * immediately. Otherwise, a new server socket is opened, waiting for log4j
+     * to connect. This may take a while until a timeout of the socket appender
+     * occurs to reconnect.
      * </p>
-     *
+     * 
      * @param port
-     *        Port to listen at.
+     *            Port to listen at.
      * @return <code>true</code> if a connection could be established.
      */
     public boolean connect(final int port) {
         if (client != null) {
-        	try {
-				client.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+            try {
+                client.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         try {
-        	InetAddress localhost = Inet4Address.getLocalHost();
+            InetAddress localhost = Inet4Address.getLocalHost();
             client = new Socket(localhost, port);
         } catch (java.io.IOException ioe) {
             ioe.printStackTrace();
@@ -120,7 +119,7 @@ class LoggingReceiver
 
     /**
      * Checks, if this thread is started.
-     *
+     * 
      * @return <code>true</code> if the thread is started.
      */
     public boolean isStarted() {
@@ -161,9 +160,9 @@ class LoggingReceiver
      * Convenience method to send a log message to the debug pane. The event is
      * displayed, if a session exists and the configured logging level is equal
      * or greater to the level of the <code>logevent</code>.
-     *
+     * 
      * @param logevent
-     *        The received logging message.
+     *            The received logging message.
      */
     private void logMessage(final LoggingEvent logevent) {
         if (session == null) {
@@ -201,7 +200,7 @@ class LoggingReceiver
             } catch (java.io.IOException ioe) {
                 ioe.printStackTrace();
             } finally {
-            	client = null;
+                client = null;
             }
 
             if (browser != null) {
