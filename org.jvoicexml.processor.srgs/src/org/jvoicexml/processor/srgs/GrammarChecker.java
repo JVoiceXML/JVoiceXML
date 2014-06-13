@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -65,10 +65,9 @@ public final class GrammarChecker {
      * @return <code>true</code> if the tokens are valid.
      */
     public boolean isValid(final String[] tokens) {
-        boolean retval; 
         matchedTokens.clear();
         final GrammarNode start = graph.getStartNode();
-        retval = isValid(start, tokens);
+        boolean retval = isValid(start, tokens);
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("isValid matched tokens size = "
                     + matchedTokens.size());
@@ -95,7 +94,7 @@ public final class GrammarChecker {
      * This is just a first attempt to go into the direction of semantic
      * interpretation and may change.
      * </p>
-     * @return interpreteration result
+     * @return interpretation result
      */
     public String[] getInterpretation() {
         Collection<String> result = new java.util.ArrayList<String>();
@@ -212,7 +211,7 @@ public final class GrammarChecker {
     
     private boolean isValid(final GrammarNode node, final String[] tokens,
             final int targetTokenCount, final boolean isRepetition) {
-        if (LOGGER.isDebugEnabled()) {
+        if (LOGGER.isTraceEnabled()) {
             printNode(node);
         }
         int i = 0;
