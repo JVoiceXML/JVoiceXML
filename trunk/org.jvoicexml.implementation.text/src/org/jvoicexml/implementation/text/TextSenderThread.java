@@ -94,13 +94,14 @@ final class TextSenderThread extends Thread {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text sender thread started");
         }
+        PendingMessage pending = null;
         try {
             boolean sending = true;
             while (sending && socket.isConnected() && !interrupted()) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("trying to take next message");
                 }
-                final PendingMessage pending = messages.take();
+                pending = messages.take();
                 telephony.addPendingMessage(pending);
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("sending " + pending);
@@ -116,8 +117,15 @@ final class TextSenderThread extends Thread {
             }
         } catch (InterruptedException | IOException e) {
             messages.clear();
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("error sending text message", e);
+            if (pending == null) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error sending text message", e);
+                }
+            } else {
+                final TextMessage message = pending.getMessage();
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error sending text message: " + message, e);
+                }
             }
             telephony.fireHungup();
         }
