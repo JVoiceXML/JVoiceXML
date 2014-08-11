@@ -153,7 +153,7 @@ final class TextSpokenInput implements SpokenInput {
             final SrgsXmlDocument doc = impl.getGrammar();
             final GrammarGraph graph = parser.parse(doc);
             if (graph != null) {
-                final GrammarChecker checker = new GrammarChecker(graph);
+                final GrammarChecker checker = new GrammarChecker(null, graph);
                 grammarCheckers.put(impl, checker);
             } else {
                 if (LOGGER.isDebugEnabled()) {

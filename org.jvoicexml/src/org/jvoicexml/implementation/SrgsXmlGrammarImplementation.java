@@ -101,7 +101,7 @@ public final class SrgsXmlGrammarImplementation
                 graph = parser.parse(document);
             }
             if (checker == null) {
-                checker = new GrammarChecker(graph);
+                checker = new GrammarChecker(null, graph);
             }
             return checker.isValid(words);
         }
