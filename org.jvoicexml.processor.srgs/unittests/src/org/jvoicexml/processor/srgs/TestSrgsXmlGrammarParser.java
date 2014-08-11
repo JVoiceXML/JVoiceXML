@@ -61,7 +61,7 @@ public final class TestSrgsXmlGrammarParser {
         rule.addText("this is a test");
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(document);
-        final GrammarChecker checker = new GrammarChecker(graph);
+        final GrammarChecker checker = new GrammarChecker(null, graph);
         final String[] words = new String[] {"this", "is", "a", "test"};
         Assert.assertTrue(checker.isValid(words));
     }
@@ -93,7 +93,7 @@ public final class TestSrgsXmlGrammarParser {
         item3.addText("3");
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(document);
-        final GrammarChecker checker = new GrammarChecker(graph);
+        final GrammarChecker checker = new GrammarChecker(null, graph);
         final String[] words1 = new String[] {"please", "press", "1"};
         Assert.assertTrue("please press 1 should be valid",
                 checker.isValid(words1));
@@ -147,7 +147,7 @@ public final class TestSrgsXmlGrammarParser {
 
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(document);
-        final GrammarChecker checker = new GrammarChecker(graph);
+        final GrammarChecker checker = new GrammarChecker(null, graph);
         final String[] words1 = new String[] {"please", "say", "one"};
         Assert.assertTrue("please say one should be valid",
                 checker.isValid(words1));
@@ -197,7 +197,7 @@ public final class TestSrgsXmlGrammarParser {
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(document);
         dump(graph, 2);
-        final GrammarChecker checker = new GrammarChecker(graph);
+        final GrammarChecker checker = new GrammarChecker(null, graph);
         final String[] words = new String[] {"2", "or", "3"};
         Assert.assertTrue("2 or 3 should be valid", checker.isValid(words));
         final String[] words2 = new String[] {"1", "or", "3"};
@@ -214,7 +214,7 @@ public final class TestSrgsXmlGrammarParser {
      *            test failed.
      */
     @Test
-    public void testParseRefereceSequence() throws Exception {
+    public void testParseReferenceSequence() throws Exception {
         final SrgsXmlDocument document = new SrgsXmlDocument();
         final Grammar grammar = document.getGrammar();
         grammar.setMode(ModeType.DTMF);
@@ -241,7 +241,7 @@ public final class TestSrgsXmlGrammarParser {
         final GrammarGraph graph = parser.parse(document);
         System.out.println("-----------");
         dump(graph, 2);
-        final GrammarChecker checker = new GrammarChecker(graph);
+        final GrammarChecker checker = new GrammarChecker(null, graph);
         final String[] words1 = new String[] {"1", "2"};
         Assert.assertTrue("12 should be valid", checker.isValid(words1));
         final String[] words2 = new String[] {"1", "2", "3", "4"};
