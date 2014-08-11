@@ -117,7 +117,7 @@ final class SubdialogExecutorThread extends Thread {
             eventbus.publish(e);
             return;
         }
-        // The VoiceXML spec leaves it open what shoould happen if there was no
+        // The VoiceXML spec leaves it open what should happen if there was no
         // return or exit and the dialog terminated because all forms were
         // processed. So we return TRUE in this case.
         final SubdialogResultEvent event =
