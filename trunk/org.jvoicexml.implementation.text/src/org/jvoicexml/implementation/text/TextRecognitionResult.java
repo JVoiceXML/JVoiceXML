@@ -177,7 +177,7 @@ final class TextRecognitionResult implements RecognitionResult {
             context.setLanguageVersion(Context.VERSION_1_6);
             
             final Scriptable scope = context.initStandardObjects();
-            context.evaluateString(scope, "out = new Object();", "expr", 1,
+            context.evaluateString(scope, "var out = new Object();", "expr", 1,
                     null);
             final Collection<String> props = new java.util.ArrayList<String>();
             for (String tag : tags) {
@@ -188,7 +188,7 @@ final class TextRecognitionResult implements RecognitionResult {
                 }
                 final String source;
                 if (pair.length < 2) {
-                    source = "out = " + pair[0] + ";";
+                    source = "out = '" + pair[0] + "';";
                 } else {
                     final String[] nestedctx = pair[0].split("\\.");
                     String seq = "";
