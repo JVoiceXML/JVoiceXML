@@ -9,7 +9,7 @@
         <one-of>
             <item>yes<tag>yes</tag></item>
             <item>yeah<tag>yes</tag></item>
-            <item>no<tag>yes</tag></item>
+            <item>no<tag>no</tag></item>
         </one-of>
     </rule>
 </grammar>
