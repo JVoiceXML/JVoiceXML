@@ -112,13 +112,6 @@ final class TextRecognitionResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
-    public boolean isRejected() {
-        return !isAccepted();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public void setMark(final String newMark) {
         mark = newMark;
     }
