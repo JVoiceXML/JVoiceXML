@@ -8,8 +8,19 @@ import javax.xml.bind.Marshaller;
 
 import org.junit.Test;
 
+/**
+ * Test cases for {@link CancelRequest}.
+ * @author Dirk Schnelle-Walka
+ * @since 0.7.6
+ *
+ */
 public class TestCancelRequest {
 
+    /**
+     * Tests the serialization of a {@link CancelRequest}.
+     * @throws Exception
+     *         test failed
+     */
     @Test
     public void testCancelRequest() throws Exception {
         final Mmi mmi = new Mmi();
