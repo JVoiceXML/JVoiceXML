@@ -119,7 +119,7 @@ import javax.xml.bind.annotation.XmlType;
         "pauseRequest", "pauseResponse", "prepareRequest", "prepareResponse",
         "resumeRequest", "resumeResponse", "startRequest", "startResponse",
         "statusRequest", "statusResponse" })
-@XmlRootElement(name = "mmi")
+@XmlRootElement(name = "mmi", namespace = "http://www.w3.org/2008/04/mmi-arch" )
 public final class Mmi implements Serializable {
 
     /** The serial version UID. */
