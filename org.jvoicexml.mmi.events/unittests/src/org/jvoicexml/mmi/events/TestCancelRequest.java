@@ -12,7 +12,9 @@ public class TestCancelRequest {
 
     @Test
     public void testCancelRequest() throws Exception {
+        final Mmi mmi = new Mmi();
         final CancelRequest request = new CancelRequest();
+        mmi.setCancelRequest(request);
         request.setRequestId("request1");
         request.setSource("source1");
         request.setTarget("target1");
@@ -32,7 +34,7 @@ public class TestCancelRequest {
                 Bar.class);
         final Marshaller marshaller = ctx.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(request, System.out);
+        marshaller.marshal(mmi, System.out);
 //        marshaller.marshal(foo, System.out);
 
     }
