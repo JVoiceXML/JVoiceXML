@@ -119,7 +119,7 @@ import javax.xml.bind.annotation.XmlType;
         "pauseRequest", "pauseResponse", "prepareRequest", "prepareResponse",
         "resumeRequest", "resumeResponse", "startRequest", "startResponse",
         "statusRequest", "statusResponse" })
-@XmlRootElement(name = "mmi", namespace = "http://www.w3.org/2008/04/mmi-arch" )
+@XmlRootElement(name = "mmi", namespace = "http://www.w3.org/2008/04/mmi-arch")
 public final class Mmi implements Serializable {
 
     /** The serial version UID. */
@@ -162,6 +162,40 @@ public final class Mmi implements Serializable {
     protected StatusResponse statusResponse;
     @XmlAttribute(name = "version", required = true)
     protected BigDecimal version;
+
+    /**
+     * Retrieves the nested {@link LifeCycleEvent}.
+     * @return the nested {@link LifeCycleEvent}
+     */
+    public LifeCycleEvent getLifeCycleEvent() {
+        if (newContextRequest != null) {
+            return newContextRequest;
+        } else if (clearContextRequest != null) {
+            return clearContextRequest;
+        } else if (cancelRequest != null) {
+            return cancelRequest;
+        } else if (doneNotification != null) {
+            return doneNotification;
+        } else if (extensionNotification != null) {
+            return extensionNotification;
+        } else if (pauseRequest != null) {
+            return pauseRequest;
+        } else if (pauseResponse != null) {
+            return pauseResponse;
+        } else if (prepareRequest != null) {
+            return prepareRequest;
+        } else if (prepareResponse != null) {
+            return prepareResponse;
+        } else if (resumeRequest != null) {
+            return resumeRequest;
+        } else if (resumeResponse != null) {
+            return prepareResponse;
+        } else if (startRequest != null) {
+            return startResponse;
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Gets the value of the newContextRequest property.
