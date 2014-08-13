@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<grammar version="1.0" root="yesno" xml:lang="en"
+    xmlns="http://www.w3.org/2001/06/grammar" mode="voice"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+                        http://www.w3.org/TR/speech-grammar/grammar.xsd"
+    tag-format="semantics/1.0">
+    <rule id="yesno" scope="public">
+        <one-of>
+            <item>yes<tag>yes</tag></item>
+            <item>yeah<tag>yes</tag></item>
+            <item>no<tag>no</tag></item>
+        </one-of>
+    </rule>
+</grammar>
