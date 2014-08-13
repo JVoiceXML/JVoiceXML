@@ -28,15 +28,12 @@ package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * An MMI done notification.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-@XmlRootElement(name = "DoneNotification")
 public final class DoneNotification extends LifeCycleResponse
     implements Serializable {
     /** The serial version UID. */

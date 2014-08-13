@@ -27,7 +27,6 @@
 package org.jvoicexml.mmi.events;
 
 import javax.xml.bind.annotation.XmlRegistry;
-import javax.xml.namespace.QName;
 
 
 /**

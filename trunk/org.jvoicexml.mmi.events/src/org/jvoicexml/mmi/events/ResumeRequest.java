@@ -28,15 +28,12 @@ package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * An MMI resume request.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-@XmlRootElement(name = "ResumeRequest")
 public final class ResumeRequest extends LifeCycleRequest
     implements Serializable {
     /** The serial version UID. */

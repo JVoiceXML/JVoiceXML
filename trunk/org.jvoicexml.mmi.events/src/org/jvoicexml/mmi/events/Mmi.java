@@ -129,43 +129,43 @@ public final class Mmi implements Serializable {
 
     /** The serial version UID. */
     private static final long serialVersionUID = 5100515080041567275L;
-    @XmlElement(name = "NewContextRequest")
+    @XmlElement(name = "NewContextRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected NewContextRequest newContextRequest;
-    @XmlElement(name = "NewContextResponse")
+    @XmlElement(name = "NewContextResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected NewContextResponse newContextResponse;
-    @XmlElement(name = "ClearContextRequest")
+    @XmlElement(name = "ClearContextRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected ClearContextRequest clearContextRequest;
-    @XmlElement(name = "ClearContextResponse")
+    @XmlElement(name = "ClearContextResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected ClearContextResponse clearContextResponse;
-    @XmlElement(name = "CancelRequest")
+    @XmlElement(name = "CancelRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected CancelRequest cancelRequest;
-    @XmlElement(name = "CancelResponse")
+    @XmlElement(name = "CancelResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected CancelResponse cancelResponse;
-    @XmlElement(name = "DoneNotification")
+    @XmlElement(name = "DoneNotification", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected DoneNotification doneNotification;
-    @XmlElement(name = "ExtensionNotification")
+    @XmlElement(name = "ExtensionNotification", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected ExtensionNotification extensionNotification;
-    @XmlElement(name = "PauseRequest")
+    @XmlElement(name = "PauseRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected PauseRequest pauseRequest;
-    @XmlElement(name = "PauseResponse")
+    @XmlElement(name = "PauseResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected PauseResponse pauseResponse;
-    @XmlElement(name = "PrepareRequest")
+    @XmlElement(name = "PrepareRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected PrepareRequest prepareRequest;
-    @XmlElement(name = "PrepareResponse")
+    @XmlElement(name = "PrepareResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected PrepareResponse prepareResponse;
-    @XmlElement(name = "ResumeRequest")
+    @XmlElement(name = "ResumeRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected ResumeRequest resumeRequest;
-    @XmlElement(name = "ResumeResponse")
+    @XmlElement(name = "ResumeResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected ResumeResponse resumeResponse;
-    @XmlElement(name = "StartRequest")
+    @XmlElement(name = "StartRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected StartRequest startRequest;
-    @XmlElement(name = "StartResponse")
+    @XmlElement(name = "StartResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected StartResponse startResponse;
-    @XmlElement(name = "StatusRequest")
+    @XmlElement(name = "StatusRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected StatusRequest statusRequest;
-    @XmlElement(name = "StatusResponse")
+    @XmlElement(name = "StatusResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected StatusResponse statusResponse;
-    @XmlAttribute(name = "version", required = true)
+    @XmlAttribute(name = "version", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     protected BigDecimal version;
 
     /**
