@@ -28,15 +28,12 @@ package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * An MMI clear context request.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-@XmlRootElement(name = "ClearContextRequest")
 public final class ClearContextRequest extends LifeCycleRequest
         implements Serializable {
     /** The serial version UID. */

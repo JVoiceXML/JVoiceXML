@@ -29,7 +29,6 @@ package org.jvoicexml.mmi.events;
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * An MMI status request.
@@ -37,7 +36,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version $Revision$
  * @since 0.7.6
  */
-@XmlRootElement(name = "StatusRequest")
 public final class StatusRequest extends LifeCycleEvent
     implements Serializable {
     /** The serial version UID. */
@@ -54,8 +52,7 @@ public final class StatusRequest extends LifeCycleEvent
      * @return  value of the requestAutomaticUpdate property
      * 
      */
-    @XmlAttribute(name = "RequestAutomaticUpdate",
-            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "RequestAutomaticUpdate", required = true)
     public boolean isRequestAutomaticUpdate() {
         return requestAutomaticUpdate;
     }
@@ -75,8 +72,7 @@ public final class StatusRequest extends LifeCycleEvent
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Context",
-            namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch")
     public String getContext() {
         return context;
     }

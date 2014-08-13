@@ -31,7 +31,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * An MMI status request.
@@ -39,7 +38,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version $Revision$
  * @since 0.7.6
  */
-@XmlRootElement(name = "StatusResponse")
 public final class StatusResponse extends LifeCycleEvent
     implements Serializable {
     /** The serial version UID. */
@@ -61,8 +59,7 @@ public final class StatusResponse extends LifeCycleEvent
      * Gets the value of the automaticUpdate property.
      * @return value of the automaticUpdate property
      */
-    @XmlAttribute(name = "AutomaticUpdate",
-            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "AutomaticUpdate", required = true)
     public boolean isAutomaticUpdate() {
         return automaticUpdate;
     }
@@ -81,8 +78,7 @@ public final class StatusResponse extends LifeCycleEvent
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Context",
-            namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch")
     public String getContext() {
         return context;
     }
@@ -104,8 +100,7 @@ public final class StatusResponse extends LifeCycleEvent
      * @return possible object is {@link StatusResponseType }
      * 
      */
-    @XmlAttribute(name = "Status",
-            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "Status", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     public StatusResponseType getStatus() {
         return status;
     }
@@ -125,8 +120,7 @@ public final class StatusResponse extends LifeCycleEvent
      * Retrieves the statusInfo property.
      * @return the statusInfo property
      */
-    @XmlElement(name = "StatusInfo",
-            namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "StatusInfo", namespace = "http://www.w3.org/2008/04/mmi-arch")
     public AnyComplexType getStatusInfo() {
         return statusInfo;
     }

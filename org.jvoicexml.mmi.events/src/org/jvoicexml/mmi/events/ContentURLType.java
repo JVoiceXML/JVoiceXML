@@ -59,26 +59,19 @@ import javax.xml.bind.annotation.XmlType;
  * @version $Revision$
  * @since 0.7.6
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "contentURLType")
 public final class ContentURLType implements Serializable {
 
     /** The serial version UID. */
     private static final long serialVersionUID = -8912528620916406797L;
+
     /** The referenced URI. */
-    @XmlAttribute(name = "href",
-            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
-    @XmlSchemaType(name = "anyURI")
     private String href;
 
     /** Maximum age for caching the contents. */
-    @XmlAttribute(name = "max-age",
-            namespace = "http://www.w3.org/2008/04/mmi-arch")
     private  String maxAge;
 
     /** Maximum fetch time out for retrieving the content. */
-    @XmlAttribute(name = "fetchtimeout",
-            namespace = "http://www.w3.org/2008/04/mmi-arch")
     private String fetchtimeout;
 
     /**
@@ -87,6 +80,8 @@ public final class ContentURLType implements Serializable {
      * @return possible object is {@link String }
      * 
      */
+    @XmlAttribute(name = "href", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlSchemaType(name = "anyURI")
     public String getHref() {
         return href;
     }
@@ -108,6 +103,7 @@ public final class ContentURLType implements Serializable {
      * @return possible object is {@link String }
      * 
      */
+    @XmlAttribute(name = "max-age", namespace = "http://www.w3.org/2008/04/mmi-arch")
     public String getMaxAge() {
         return maxAge;
     }
@@ -129,6 +125,7 @@ public final class ContentURLType implements Serializable {
      * @return possible object is {@link String }
      * 
      */
+    @XmlAttribute(name = "fetchtimeout", namespace = "http://www.w3.org/2008/04/mmi-arch")
     public String getFetchtimeout() {
         return fetchtimeout;
     }

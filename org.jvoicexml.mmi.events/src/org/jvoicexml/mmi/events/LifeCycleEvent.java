@@ -66,8 +66,7 @@ public class LifeCycleEvent {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "RequestID",
-            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "RequestID", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     public final String getRequestId() {
         return requestID;
     }
@@ -89,8 +88,7 @@ public class LifeCycleEvent {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Source",
-            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "Source", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     public final String getSource() {
         return source;
     }
@@ -112,8 +110,7 @@ public class LifeCycleEvent {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Target",
-            namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlAttribute(name = "Target", namespace = "http://www.w3.org/2008/04/mmi-arch")
     public final String getTarget() {
         return target;
     }
@@ -133,8 +130,7 @@ public class LifeCycleEvent {
      * Retrieves the data attribute.
      * @return the data attribute
      */
-    @XmlElement(name = "Data",
-            namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "Data", namespace = "http://www.w3.org/2008/04/mmi-arch")
     public final AnyComplexType getData() {
         return data;
     }
