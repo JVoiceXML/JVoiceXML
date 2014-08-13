@@ -36,7 +36,7 @@ This file builds and runs the 'subdialog' demo for JVoiceXML.
             <path refid="build.classpath" />
             <pathelement path="${config}" />
             <fileset refid="rhino.lib" />
-        </path>
+            </path>
     </target>
 
     <target name="-init" depends="-setup">
