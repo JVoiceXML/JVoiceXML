@@ -31,7 +31,6 @@ import java.net.URI;
 import java.net.URL;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * An MMI start request.
@@ -39,7 +38,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version $Revision$
  * @since 0.7.6
  */
-@XmlRootElement(name = "StartRequest")
 public final class StartRequest extends LifeCycleRequest
     implements Serializable {
     /** The serial version UID. */
@@ -57,7 +55,7 @@ public final class StartRequest extends LifeCycleRequest
      * @return possible object is {@link ContentURLType }
      * 
      */
-    @XmlElement(name = "ContentURL")
+    @XmlElement(name = "ContentURL", namespace = "http://www.w3.org/2008/04/mmi-arch")
     public ContentURLType getContentURL() {
         return contentURL;
     }
@@ -111,7 +109,7 @@ public final class StartRequest extends LifeCycleRequest
      * @return possible object is {@link AnyComplexType }
      * 
      */
-    @XmlElement(name = "ContentURL")
+    @XmlElement(name = "Content", namespace = "http://www.w3.org/2008/04/mmi-arch")
     public AnyComplexType getContent() {
         return content;
     }

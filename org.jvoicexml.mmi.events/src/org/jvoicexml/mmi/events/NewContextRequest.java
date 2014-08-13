@@ -28,15 +28,12 @@ package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * An MMI new context request.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-@XmlRootElement(name = "NewContextRequest")
 public final class NewContextRequest extends LifeCycleRequest
     implements Serializable {
     /** The serial version UID. */
