@@ -26,9 +26,13 @@
 
 package org.jvoicexml.mmi.events;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -109,8 +113,9 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7.6
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "newContextRequest", "newContextResponse",
@@ -170,10 +175,16 @@ public final class Mmi implements Serializable {
     public LifeCycleEvent getLifeCycleEvent() {
         if (newContextRequest != null) {
             return newContextRequest;
+        } else if (newContextResponse != null) {
+            return newContextResponse;
         } else if (clearContextRequest != null) {
             return clearContextRequest;
+        } else if (clearContextResponse != null) {
+            return clearContextResponse;
         } else if (cancelRequest != null) {
             return cancelRequest;
+        } else if (cancelResponse != null) {
+            return cancelResponse;
         } else if (doneNotification != null) {
             return doneNotification;
         } else if (extensionNotification != null) {
@@ -191,12 +202,62 @@ public final class Mmi implements Serializable {
         } else if (resumeResponse != null) {
             return prepareResponse;
         } else if (startRequest != null) {
+            return startRequest;
+        } else if (startResponse != null) {
             return startResponse;
+        } else if (statusRequest != null) {
+            return statusRequest;
+        } else if (statusResponse != null) {
+            return statusResponse;
         } else {
             return null;
         }
     }
 
+    /**
+     * Sets the nested {@link LifeCycleEvent}.
+     * @return the nested {@link LifeCycleEvent}
+     */
+    public void setLifeCycleEvent(final LifeCycleEvent event) {
+        if (event instanceof NewContextRequest) {
+            setNewContextRequest((NewContextRequest) event);
+        } else if (event instanceof NewContextResponse) {
+            setNewContextResponse((NewContextResponse) event);
+        } else if (event instanceof ClearContextRequest) {
+            setClearContextRequest((ClearContextRequest) event);
+        } else if (event instanceof ClearContextResponse) {
+            setClearContextResponse((ClearContextResponse) event);
+        } else if (event instanceof CancelRequest) {
+            setCancelRequest((CancelRequest) event);
+        } else if (event instanceof CancelResponse) {
+            setCancelResponse((CancelResponse) event);
+        } else if (event instanceof DoneNotification) {
+            setDoneNotification((DoneNotification) event);
+        } else if (event instanceof ExtensionNotification) {
+            setExtensionNotification((ExtensionNotification) event);
+        } else if (event instanceof PauseRequest) {
+            setPauseRequest((PauseRequest) event);
+        } else if (event instanceof PauseResponse) {
+            setPauseResponse((PauseResponse) event);
+        } else if (event instanceof PrepareRequest) {
+            setPrepareRequest((PrepareRequest) event);
+        } else if (event instanceof PrepareResponse) {
+            setPauseResponse((PauseResponse) event);
+        } else if (event instanceof ResumeRequest) {
+            setResumeRequest((ResumeRequest) event);
+        } else if (event instanceof ResumeResponse) {
+            setResumeResponse((ResumeResponse) event);
+        } else if (event instanceof StartRequest) {
+            setStartRequest((StartRequest) event);
+        } else if (event instanceof StartResponse) {
+            setStartResponse((StartResponse) event);
+        } else if (event instanceof StatusRequest) {
+            setStatusRequest((StatusRequest) event);
+        } else if (event instanceof StatusResponse) {
+            setStatusResponse((StatusResponse) event);
+        }
+    }
+    
     /**
      * Gets the value of the newContextRequest property.
      * 
@@ -596,4 +657,19 @@ public final class Mmi implements Serializable {
         this.version = value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        try {
+            JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
+            final Marshaller marshaller = ctx.createMarshaller();
+            final ByteArrayOutputStream out = new ByteArrayOutputStream();
+            marshaller.marshal(this, out);
+            return out.toString();
+        } catch (JAXBException e) {
+            return super.toString();
+        }
+    }
 }

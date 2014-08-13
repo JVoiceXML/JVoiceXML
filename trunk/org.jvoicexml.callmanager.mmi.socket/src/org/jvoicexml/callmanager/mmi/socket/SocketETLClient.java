@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -86,9 +86,10 @@ final class SocketETLClient extends Thread {
                 LOGGER.debug("expecting MMI events from '" + uri + "'");
             }
             final Object o = unmarshaller.unmarshal(in);
-            if (o instanceof LifeCycleEvent) {
-                final LifeCycleEvent evt = (LifeCycleEvent) o;
-                LOGGER.info("received MMI event: " + evt);
+            if (o instanceof Mmi) {
+            	final Mmi mmi = (Mmi) o;
+                final LifeCycleEvent evt = mmi.getLifeCycleEvent();
+                LOGGER.info("received MMI event: " + mmi);
                 final DecoratedMMIEvent event =
                         new DecoratedMMIEvent(this, evt);
                 adapter.notifyMMIEvent(event);
