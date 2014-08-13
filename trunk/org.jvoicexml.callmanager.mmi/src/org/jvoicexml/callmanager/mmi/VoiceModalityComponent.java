@@ -33,6 +33,7 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
@@ -49,6 +50,8 @@ import org.jvoicexml.mmi.events.DoneNotification;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.LifeCycleRequest;
 import org.jvoicexml.mmi.events.LifeCycleResponse;
+import org.jvoicexml.mmi.events.NewContextRequest;
+import org.jvoicexml.mmi.events.NewContextResponse;
 import org.jvoicexml.mmi.events.PauseRequest;
 import org.jvoicexml.mmi.events.PauseResponse;
 import org.jvoicexml.mmi.events.PrepareRequest;
@@ -182,6 +185,9 @@ public final class VoiceModalityComponent
         } else if (event instanceof StatusRequest) {
             final StatusRequest request = (StatusRequest) event;
             status(channel, request);
+        } else if (event instanceof NewContextRequest) {
+            final NewContextRequest request = (NewContextRequest) event;
+            newContext(channel, request);
         }
     }
 
@@ -718,6 +724,39 @@ public final class VoiceModalityComponent
         thread.start();
     }
 
+    private void newContext(final Object channel, final NewContextRequest request) {
+        String statusInfo = null;
+        final String contextId = UUID.randomUUID().toString();
+        request.setContext(contextId);
+        final String requestId = request.getRequestId();
+        LOGGER.info("received a new context request with request id "
+                + requestId);
+        try {
+            getContext(request, true);
+        } catch (MMIMessageException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
+        }
+        final NewContextResponse response = new NewContextResponse();
+        final String target = request.getSource();
+        response.setTarget(target);
+        response.setContext(contextId);
+        response.setRequestId(requestId);
+        if (statusInfo == null) {
+            response.setStatus(StatusType.SUCCESS);
+        } else {
+            LOGGER.info("new context failed: " + statusInfo);
+            response.setStatus(StatusType.FAILURE);
+            response.addStatusInfo(statusInfo);
+        }
+        try {
+            adapter.sendMMIEvent(channel, response);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+            removeContext(contextId);
+        }
+    }
+    
     /**
      * Stops accepting MMI lifecycle events.
      */
