@@ -27,6 +27,7 @@ package org.jvoicexml.callmanager.mmi.socket;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URI;
 
@@ -67,24 +68,27 @@ public final class TestSocketETLServer implements MMIEventListener {
      * @exception Exception
      *            test failed
      */
-    @Test
+    @Test(timeout = 5000)
     public void testRun() throws Exception {
         final SocketETLProtocolAdapter adapter = new SocketETLProtocolAdapter();
         adapter.addMMIEventListener(this);
         final SocketETLServer server = new SocketETLServer(adapter, 4242);
         server.start();
         Thread.sleep(500);
-        final Socket client = new Socket("localhost", 4242);
+        InetAddress address = InetAddress.getLocalHost();
+        final Socket client = new Socket(address, 4242);
+        final Mmi mmi = new Mmi();
         final StartRequest request = new StartRequest();
         request.setContext("http://nowhere");
         request.setRequestId("4242");
+        mmi.setStartRequest(request);
         final File file = new File("unittests/vxml/hello.vxml");
         final URI uri = file.toURI();
         request.setContentURL(uri.toURL());
         final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
         final Marshaller marshaller = ctx.createMarshaller();
         final OutputStream out = client.getOutputStream();
-        marshaller.marshal(request, out);
+        marshaller.marshal(mmi, out);
         out.flush();
         out.close();
         synchronized (lock) {

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -125,9 +125,11 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
         throws IOException {
         Socket client = null; 
         try {
+            final Mmi mmi = new Mmi();
+            mmi.setLifeCycleEvent(event);
             final String target = event.getTarget();
             if (target == null) {
-                LOGGER.error("unable to send MMI event '" + event
+                LOGGER.error("unable to send MMI event '" + mmi
                         + "'. No target.");
                 return;
             }
@@ -144,7 +146,7 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
             } else {
                 event.setSource(serverUri.toString());
             }
-            LOGGER.info("sending " + event + " to '" + uri + "'");
+            LOGGER.info("sending " + mmi + " to '" + uri + "'");
 
             // Send the message
             final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
