@@ -1,0 +1,89 @@
+package org.jvoicexml.callmanager.mmi.http;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Collection;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.log4j.Logger;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
+import org.jvoicexml.callmanager.mmi.MMIEventListener;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.Mmi;
+
+public class MmiHandler extends AbstractHandler {
+    /** Registered listeners for MMI events. */
+    private final Collection<MMIEventListener> listeners;
+    /** Logger instance. */
+    private static final Logger LOGGER = Logger.getLogger(MmiHandler.class);
+
+    /**
+     * Constructs a new object.
+     */
+    public MmiHandler() {
+        listeners = new java.util.ArrayList<MMIEventListener>();
+    }
+
+    public void addMMIEventListener(final MMIEventListener listener) {
+        synchronized (listeners) {
+            listeners.add(listener);
+        }
+    }
+
+    public void removeMMIEventListener(MMIEventListener listener) {
+        synchronized (listeners) {
+            listeners.remove(listener);
+        }
+    }
+
+    /**
+     * Notifies all registered listeners about a received MMI Event.
+     * 
+     * @param event
+     *            the event to notify
+     */
+    void notifyMMIEvent(final DecoratedMMIEvent event) {
+        synchronized (listeners) {
+            for (MMIEventListener listener : listeners) {
+                listener.receivedEvent(event);
+            }
+        }
+    }
+
+    @Override
+    public void handle(String target, Request baseRequest,
+            HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        LOGGER.info("request from " + request.getRemoteAddr());
+        response.setContentType("text/html;charset=utf-8");
+        final Reader reader = request.getReader();
+        try {
+            JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
+            final Unmarshaller unmarshaller = ctx.createUnmarshaller();
+            final Object o = unmarshaller.unmarshal(reader);
+            if (o instanceof Mmi) {
+                final Mmi mmi = (Mmi) o;
+                final LifeCycleEvent evt = mmi.getLifeCycleEvent();
+                LOGGER.info("received MMI event: " + mmi);
+                final DecoratedMMIEvent event = new DecoratedMMIEvent(this, evt);
+                notifyMMIEvent(event);
+            } else {
+                LOGGER.warn("received unknown MMI object: " + o);
+            }
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (JAXBException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        baseRequest.setHandled(true);
+    }
+
+}
