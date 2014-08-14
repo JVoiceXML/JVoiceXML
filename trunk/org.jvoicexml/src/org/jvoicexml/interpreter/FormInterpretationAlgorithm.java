@@ -1309,10 +1309,14 @@ public final class FormInterpretationAlgorithm
         } catch (URISyntaxException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
+
+        // Determine the URI of the subdialog to call
         final Application application = context.getApplication();
         final URI resolvedUri = application.resolve(uri);
         LOGGER.info("calling subdialog '" + subdialog.getName() + "' at '"
                 + resolvedUri + "'...");
+
+        // Prepare running the subdialog in an own thread.
         final JVoiceXmlSession session =
             (JVoiceXmlSession) context.getSession();
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
@@ -1320,6 +1324,7 @@ public final class FormInterpretationAlgorithm
         application.addDocument(resolvedUri, doc);
         final ScriptingEngine scripting = context.getScriptingEngine();
         final DocumentServer documentServer = context.getDocumentServer();
+        // Retrieve the nested param elements
         final ParamParser parser = new ParamParser(subdialog.getNode(),
                 scripting, documentServer, session);
         final Map<String, Object> parameters = parser.getParameters();
@@ -1328,6 +1333,7 @@ public final class FormInterpretationAlgorithm
         final Configuration configuration = context.getConfiguration();
         final VoiceXmlInterpreterContext subdialogContext =
             new VoiceXmlInterpreterContext(session, configuration, observer);
+        // Start the subdialog thread
         final Thread thread = new SubdialogExecutorThread(resolvedUri,
                 subdialogContext, application, parameters);
         thread.start();
