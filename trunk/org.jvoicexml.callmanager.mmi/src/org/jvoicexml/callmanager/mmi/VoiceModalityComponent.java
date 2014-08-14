@@ -814,6 +814,18 @@ public final class VoiceModalityComponent
         done.setContext(contextId);
         done.setRequestId(requestId);
         done.setTarget(target);
+        try  {
+            final ErrorEvent error = session.getLastError();
+            if (error == null) {
+                done.setStatus(StatusType.SUCCESS);
+            } else {
+                done.setStatus(StatusType.FAILURE);
+                done.addStatusInfo(error.getMessage());
+            }
+        } catch (ErrorEvent e) {
+            done.setStatus(StatusType.FAILURE);
+            done.addStatusInfo(e.getMessage());
+        }
         try {
             final Object channel = context.getChannel();
             adapter.sendMMIEvent(channel, done);
