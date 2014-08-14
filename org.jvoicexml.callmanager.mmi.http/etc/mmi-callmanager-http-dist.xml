@@ -8,6 +8,8 @@
   <classpath>lib/org.jvoicexml.callmanager.mmi.umundo.jar</classpath>
   <classpath>lib/jetty-server-9.2.2.v20140723.jar</classpath>
   <classpath>lib/jetty-util-9.2.2.v20140723.jar</classpath>
+  <classpath>lib/jetty-http-9.2.2.v20140723.jar</classpath>
+  <classpath>lib/jetty-io-9.2.2.v20140723.jar</classpath>
   <classpath>lib/servlet-api-3.1.jar</classpath>
   
   <beans:bean id="callmanager"
