@@ -78,12 +78,13 @@ public class MmiHandler extends AbstractHandler {
             } else {
                 LOGGER.warn("received unknown MMI object: " + o);
             }
+            ((Request)request).setHandled(true);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (JAXBException e) {
+            LOGGER.error("unable to read input", e);
+            ((Request)request).setHandled(true);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
-
-        baseRequest.setHandled(true);
     }
 
 }
