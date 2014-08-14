@@ -350,6 +350,24 @@ The selection of this module requires the selection of an ETL.
         <include name="org.jvoicexml.mmi.events.jar" />
       </fileset>
     </pack>
+    <pack name="HTTP ETL for MMI" required="no" preselected="no">
+      <description>Event and Transportlayer based on the HTTP protocol and XML documents.
+      </description>
+      <depends packname="MMI call manager"/>
+      <fileset dir="config" targetdir="$INSTALL_PATH/config">
+        <include name="mmi-callmanager.xml" />
+      </fileset>
+      <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
+        <include name="org.jvoicexml.callmanager.mmi.http.jar" />
+        <include name="org.jvoicexml.callmanager.mmi.jar" />
+        <include name="org.jvoicexml.callmanager.mmi.umundo.jar" />
+        <include name="jetty-server-9.2.2.v20140723.jar" />
+        <include name="jetty-util-9.2.2.v20140723.jar" />
+        <include name="jetty-http-9.2.2.v20140723.jar" />
+        <include name="jetty-io-9.2.2.v20140723.jar" />
+        <include name="servlet-api-3.1.jar" />
+      </fileset>
+    </pack>
     <pack name="Socket ETL for MMI" required="no" preselected="no">
       <description>Event and Transportlayer based on sockets and XML documents.
       </description>

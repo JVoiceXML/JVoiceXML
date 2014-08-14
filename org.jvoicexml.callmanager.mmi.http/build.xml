@@ -184,8 +184,7 @@ org.jvoicexml/personal-props/README.txt
       <property name="distFolder" value="${dist}/${jvxml.version}" />
 	  <copy todir="${distFolder}/lib" file="${dist.jar}"/>
   	  <copy todir="${distFolder}/lib">
-          <fileset refid="umundo.lib" />
-          <fileset refid="protobuf.lib" />
+          <fileset refid="jetty.lib" />
   	  </copy>
       <copy tofile="${distFolder}/config/mmi-callmanager-http.xml"
         file="${etc}/mmi-callmanager-umundo-http.xml"/>
