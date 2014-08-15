@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,6 +26,8 @@
 
 package org.jvoicexml.interpreter.variables;
 
+import org.jvoicexml.LastResult;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
@@ -154,6 +156,23 @@ public final class LastResultShadowVarContainer
      */
     public Object getInterpretation() {
         return interpretation;
+    }
+
+    /**
+     * Converts this object into a {@link LastResult}.
+     * @return converted object
+     * @since 0.7.7
+     */
+    public LastResult toLastResult() {
+        final String json;
+        if (interpretation == null) {
+            json = null;
+        } else if (interpretation instanceof ScriptableObject) {
+            json = ScriptingEngine.toJSON((ScriptableObject) interpretation);
+        } else {
+            json = interpretation.toString();
+        }
+        return new LastResult(utterance, confidence, inputmode, json);
     }
 
     /**

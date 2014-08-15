@@ -476,9 +476,15 @@ public final class VoiceXmlInterpreterContext  {
 
         enterScope(Scope.APPLICATION);
         final ScriptingEngine scriptingEngine = getScriptingEngine();
-        scriptingEngine.createHostObject(
+        final ApplicationShadowVarContainer container =
+                scriptingEngine.createHostObject(
                 ApplicationShadowVarContainer.VARIABLE_NAME,
                 ApplicationShadowVarContainer.class);
+        if (application instanceof JVoiceXmlApplication) {
+            final JVoiceXmlApplication jvxmlapp =
+                    (JVoiceXmlApplication) application;
+            jvxmlapp.setApplicationShadowVarContainer(container);
+        }
         try {
             createHostObjects(Scope.APPLICATION);
         } catch (ConfigurationException e) {
