@@ -480,17 +480,14 @@ public final class VoiceXmlInterpreterContext  {
                 scriptingEngine.createHostObject(
                 ApplicationShadowVarContainer.VARIABLE_NAME,
                 ApplicationShadowVarContainer.class);
-        if (application instanceof JVoiceXmlApplication) {
-            final JVoiceXmlApplication jvxmlapp =
-                    (JVoiceXmlApplication) application;
-            jvxmlapp.setApplicationShadowVarContainer(container);
-        }
+        container.setApplication(application);
         try {
             createHostObjects(Scope.APPLICATION);
         } catch (ConfigurationException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
 
+        // The main loop to interpret single and multi document applications
         DocumentDescriptor descriptor = null;
         while (document != null) {
             final URI rootUri = application.getApplication();
@@ -580,7 +577,7 @@ public final class VoiceXmlInterpreterContext  {
      * @param appl
      *        the application to process.
      * @param desc
-     *        the documnet descriptor for the subdialog
+     *        the document descriptor for the subdialog
      * @exception JVoiceXMLEvent
      *            Error processing the document.
      */

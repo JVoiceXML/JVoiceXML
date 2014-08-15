@@ -179,7 +179,7 @@ public final class JVoiceXmlSession
      *
      * Starts this session in a new thread.
      */
-    public void call(final URI uri)
+    public Application call(final URI uri)
             throws ErrorEvent {
         if (closed) {
             throw new NoresourceError("Session is already closed");
@@ -204,6 +204,7 @@ public final class JVoiceXmlSession
             cleanup();
             throw e;
         }
+        return application;
     }
 
     /**

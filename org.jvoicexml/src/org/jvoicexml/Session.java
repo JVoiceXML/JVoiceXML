@@ -117,7 +117,7 @@ public interface Session {
      * @exception ErrorEvent
      *            Error initiating the call.
      */
-    void call(final URI uri)
+    Application call(final URI uri)
             throws ErrorEvent;
 
 
