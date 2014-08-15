@@ -74,17 +74,24 @@ public class MmiHandler extends AbstractHandler {
                 final LifeCycleEvent evt = mmi.getLifeCycleEvent();
                 LOGGER.info("received MMI event: " + mmi);
                 final DecoratedMMIEvent event = new DecoratedMMIEvent(this, evt);
-                notifyMMIEvent(event);
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        notifyMMIEvent(event);
+                    }
+                };
+                final Thread thread = new Thread(runnable);
+                thread.start();
+                response.setStatus(HttpServletResponse.SC_OK);
             } else {
                 LOGGER.warn("received unknown MMI object: " + o);
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
-            ((Request)request).setHandled(true);
-            response.setStatus(HttpServletResponse.SC_OK);
         } catch (JAXBException e) {
             LOGGER.error("unable to read input", e);
-            ((Request)request).setHandled(true);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
+        baseRequest.setHandled(true);
     }
 
 }
