@@ -28,7 +28,9 @@ package org.jvoicexml.interpreter.variables;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.Application;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.JVoiceXmlApplication;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
@@ -68,6 +70,8 @@ public final class TestApplicationShadowVarContainer {
         application = scripting.createHostObject(
                 ApplicationShadowVarContainer.VARIABLE_NAME,
                 ApplicationShadowVarContainer.class);
+        final Application app = new JVoiceXmlApplication();
+        application.setApplication(app);
     }
 
     /**
