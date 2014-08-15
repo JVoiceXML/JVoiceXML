@@ -27,8 +27,11 @@
 package org.jvoicexml.interpreter.variables;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Application;
+import org.jvoicexml.LastResult;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.scope.Scope;
@@ -39,20 +42,19 @@ import org.mozilla.javascript.ScriptableObject;
 /**
  * Component that provides a container for the shadowed variables for the
  * standard application variables.
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
-public final class ApplicationShadowVarContainer
-        extends ScriptableObject
+public final class ApplicationShadowVarContainer extends ScriptableObject
         implements StandardSessionVariable {
     /** The serial version UID. */
     private static final long serialVersionUID = 8765875046809974399L;
 
     /** Logger instance. */
-    private static final Logger LOGGER =
-        Logger.getLogger(ApplicationShadowVarContainer.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(ApplicationShadowVarContainer.class);
 
     /** Name of the application variable. */
     public static final String VARIABLE_NAME = "application";
@@ -63,14 +65,17 @@ public final class ApplicationShadowVarContainer
     /** Reference to the scripting engine. */
     private ScriptingEngine scripting;
 
+    /** The application object related to this shadow variable container. */
+    private Application application;
+
     /**
      * Constructs a new object.
      */
     public ApplicationShadowVarContainer() {
         Method getLastresultMethod = null;
         try {
-            getLastresultMethod = ApplicationShadowVarContainer.class.getMethod(
-                    "getLastresult", (Class<?>[]) null);
+            getLastresultMethod = ApplicationShadowVarContainer.class
+                    .getMethod("getLastresult", (Class<?>[]) null);
         } catch (SecurityException e) {
             // Should not happen.
             if (LOGGER.isDebugEnabled()) {
@@ -83,13 +88,25 @@ public final class ApplicationShadowVarContainer
             }
         }
 
-        defineProperty("lastresult$", null, getLastresultMethod, null,
-                READONLY);
+        defineProperty("lastresult$", null, getLastresultMethod, null, READONLY);
+    }
+
+    /**
+     * Sets the application
+     * 
+     * @param app
+     *            the application to set
+     * @since 0.7.7
+     */
+    public void setApplication(final Application app) {
+        application = app;
     }
 
     /**
      * Sets the recognition result.
-     * @param result the recognition result.
+     * 
+     * @param result
+     *            the recognition result.
      */
     public void setRecognitionResult(final RecognitionResult result) {
         final String utterance = result.getUtterance();
@@ -97,13 +114,18 @@ public final class ApplicationShadowVarContainer
         final ModeType mode = result.getMode();
         final String[] words = result.getWords();
         final float[] wordsConfidence = result.getWordsConfidence();
-        final Object interpretation =
-            result.getSemanticInterpretation();
-        lastresults = new LastResultShadowVarContainer[1];
+        final Object interpretation = result.getSemanticInterpretation();
 
-        lastresults[0] = new LastResultShadowVarContainer(utterance,
-                confidence, mode.getMode(), words, wordsConfidence,
-                interpretation);
+        final LastResult lastresult = new LastResult(utterance, confidence,
+                mode.getMode(), interpretation);
+        lastresults = new LastResultShadowVarContainer[1];
+        lastresults[0] = new LastResultShadowVarContainer(lastresult, words,
+                wordsConfidence);
+
+        // Populate the result to the application object
+        final List<LastResult> list = new java.util.ArrayList<LastResult>();
+        list.add(lastresult);
+        application.setLastResult(list);
     }
 
     /**
@@ -115,6 +137,7 @@ public final class ApplicationShadowVarContainer
 
     /**
      * Retrieves the last result.
+     * 
      * @return the last result.
      */
     public LastResultShadowVarContainer[] getLastresult() {
@@ -131,9 +154,9 @@ public final class ApplicationShadowVarContainer
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * Retrieves a variable of application scope.
-     *
+     * 
      * @since 0.7
      */
     @Override

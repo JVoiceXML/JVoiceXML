@@ -52,7 +52,7 @@ public class LastResult {
     private final String inputmode;
 
     /** The semantic interpretation as a JSON formatted string. */
-    private final String interpretation;
+    private final Object interpretation;
 
     /**
      * Constructs a new object.
@@ -72,7 +72,7 @@ public class LastResult {
      *            the semantic interpretation
      */
     public LastResult(final String utt, final float conf, final String mode,
-            final String inter) {
+            final Object inter) {
         utterance = utt;
         confidence = conf;
         inputmode = mode;
@@ -121,7 +121,7 @@ public class LastResult {
      * 
      * @return the semantic interpretation
      */
-    public String getInterpretation() {
+    public Object getInterpretation() {
         return interpretation;
     }
 }

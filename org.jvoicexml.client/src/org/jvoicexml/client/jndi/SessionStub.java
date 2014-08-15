@@ -32,6 +32,7 @@ import java.rmi.RemoteException;
 
 import javax.naming.Context;
 
+import org.jvoicexml.Application;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
@@ -108,18 +109,19 @@ public final class SessionStub
     /**
      * {@inheritDoc}
      */
-    public void call(final URI uri)
+    public Application call(final URI uri)
             throws ErrorEvent {
         final RemoteSession session = getSkeleton(sessionID);
 
         try {
-            session.call(uri);
+            return session.call(uri);
         } catch (java.rmi.RemoteException re) {
             clearSkeleton();
 
             final ErrorEvent event = getErrorEvent(re);
             if (event == null) {
                 re.printStackTrace();
+                return null;
             } else {
                 throw event;
             }
