@@ -29,13 +29,17 @@ package org.jvoicexml.interpreter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
+import org.jvoicexml.LastResult;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
+import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
+import org.jvoicexml.interpreter.variables.LastResultShadowVarContainer;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
@@ -53,6 +57,9 @@ public final class JVoiceXmlApplication
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlApplication.class);
+
+    /** The application shadow var container. */
+    private ApplicationShadowVarContainer container;
 
     /** The root document of this application. */
     private VoiceXmlDocument root;
@@ -274,5 +281,43 @@ public final class JVoiceXmlApplication
         }
 
         return "Unknown application";
+    }
+
+    /**
+     * Retrieves the application shadow variable container.
+     * @return the application shadow variable container.
+     * @since 0.7.7
+     */
+    public ApplicationShadowVarContainer getApplicationShadowVarContainer() {
+        return container;
+    }
+
+    /**
+     * Sets the application shadow variable container.
+     * @param container the application shadow variable container
+     * @since 0.7.7
+     */
+    public void setApplicationShadowVarContainer(
+            final ApplicationShadowVarContainer value) {
+        container = value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<LastResult> getLastResult() {
+        if (container == null) {
+            return null;
+        }
+        final LastResultShadowVarContainer[] results =
+                container.getLastresult();
+        final List<LastResult> lastresults =
+                new java.util.ArrayList<LastResult>();
+        for (LastResultShadowVarContainer result : results) {
+            final LastResult lastresult = result.toLastResult();
+            lastresults.add(lastresult);
+        }
+        return lastresults;
     }
 }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 package org.jvoicexml;
 
 import java.net.URI;
+import java.util.List;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -34,7 +35,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 /**
  * An <code>Application</code> is a set of documents sharing the same
  * application root document.
- *
+ * 
  * <p>
  * Whenever the user interacts with a document in an application, its
  * application root document is also loaded. The application root document
@@ -45,7 +46,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * variables, and its grammars remain active for the duration of the
  * application.
  * </p>
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
  * @since 0.4
@@ -53,58 +54,68 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 public interface Application {
     /**
      * Adds the given document to the application.
-     *
-     * @param uri the URI of the document.
-     * @param doc the document to add.
+     * 
+     * @param uri
+     *            the URI of the document.
+     * @param doc
+     *            the document to add.
      * @exception BadFetchError
-     *            error in the document.
+     *                error in the document.
      * @since 0.6
      */
     void addDocument(final URI uri, final VoiceXmlDocument doc)
-        throws BadFetchError;
+            throws BadFetchError;
 
     /**
      * Retrieves the current document.
+     * 
      * @return the current document.
-     *
+     * 
      * @since 0.6
      */
     VoiceXmlDocument getCurrentDocument();
 
     /**
      * Retrieves the URI of the application.
+     * 
      * @return URI of the application.
-     *
+     * 
      * @since 0.6
      */
     URI getApplication();
 
     /**
      * Sets the new root document.
-     * @param document the new root document.
+     * 
+     * @param document
+     *            the new root document.
      * @exception BadFetchError
-     *            error in the document.
+     *                error in the document.
      */
     void setRootDocument(final VoiceXmlDocument document) throws BadFetchError;
 
     /**
      * Checks, if the document with the given <code>uri</code> is loaded.
-     * @param uri the URI to check.
+     * 
+     * @param uri
+     *            the URI to check.
      * @return <code>true</code> if the document is loaded.
      */
     boolean isLoaded(final URI uri);
 
     /**
      * Retrieves the base URI.
+     * 
      * @return the base URI.
      */
     URI getXmlBase();
 
     /**
      * Converts the given {@link URI} into a hierarchical URI. If the given
-     * {@link URI} is a relative URI, it is expanded using the application
-     * URI.
-     * @param uri the URI to resolve.
+     * {@link URI} is a relative URI, it is expanded using the application URI.
+     * 
+     * @param uri
+     *            the URI to resolve.
      * @return Hierarchical URI.
      */
     URI resolve(final URI uri);
@@ -113,9 +124,21 @@ public interface Application {
      * Converts the given {@link URI} into a hierarchical URI. If the given
      * {@link URI} is a relative URI, it is expanded using the
      * <code>baseUri</code>.
-     * @param baseUri the base URI.
-     * @param uri the URI to resolve.
+     * 
+     * @param baseUri
+     *            the base URI.
+     * @param uri
+     *            the URI to resolve.
      * @return Hierarchical URI.
      */
     URI resolve(final URI baseUri, final URI uri);
+    
+    /**
+     * Retrieves information about the last recognition to occur within this
+     * application. It is an array of elements where each element, represents a
+     * possible result.
+     * @return last recognition result information, maybe {@code null}.
+     * @since 0.7.7
+     */
+    List<LastResult> getLastResult();
 }

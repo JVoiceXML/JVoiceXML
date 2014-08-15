@@ -733,7 +733,7 @@ public final class FormInterpretationAlgorithm
         justFilled.add(input);
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("set just_filled for '" + input.getName() + "'");
+            LOGGER.debug("set just_filled flag for '" + input.getName() + "'");
         }
     }
 
