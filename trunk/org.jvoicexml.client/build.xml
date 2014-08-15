@@ -79,6 +79,13 @@ org.jvoicexml/personal-props/README.txt
           <fileset dir="${jvxml.core.dir}/classes">
             <include name="org/jvoicexml/JVoiceXml.class" />
             <include name="org/jvoicexml/Session.class" />
+            <include name="org/jvoicexml/Application.class" />
+            <include name="org/jvoicexml/LastResult.class" />
+            <include name="org/jvoicexml/interpreter/JVoiceXmlApplication.class" />
+            <include name="org/jvoicexml/interpreter/scope/ScopeObserver.class" />
+            <include name="org/jvoicexml/interpreter/scope/ScopePublisher.class" />
+            <include name="org/jvoicexml/interpreter/scope/ScopeSubscriber.class" />
+            <include name="org/jvoicexml/interpreter/scope/Scope.class" />
             <include name="org/jvoicexml/CallControl.class" />
             <include name="org/jvoicexml/UserInput.class" />
             <include name="org/jvoicexml/SystemOutput.class" />

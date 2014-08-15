@@ -26,6 +26,7 @@
 
 package org.jvoicexml.interpreter;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -38,8 +39,6 @@ import org.jvoicexml.LastResult;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
-import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
-import org.jvoicexml.interpreter.variables.LastResultShadowVarContainer;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
@@ -53,13 +52,13 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @since 0.5.5
  */
 public final class JVoiceXmlApplication
-        implements Application {
+        implements Application, Serializable {
+    /** The serial versio UID. */
+    private static final long serialVersionUID = 5974734039380600756L;
+
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlApplication.class);
-
-    /** The application shadow var container. */
-    private ApplicationShadowVarContainer container;
 
     /** The root document of this application. */
     private VoiceXmlDocument root;
@@ -77,7 +76,18 @@ public final class JVoiceXmlApplication
     private URI baseUri;
 
     /** The scope observer. */
-    private final ScopeObserver observer;
+    private final transient ScopeObserver observer;
+
+    /** The last results. */
+    private List<LastResult> lastresults;
+
+    /**
+     * Constructs a new object.
+     */
+    public JVoiceXmlApplication() {
+        observer = null;
+        loadedDocuments = new java.util.HashMap<URI, VoiceXmlDocument>();
+    }
 
     /**
      * Creates a new object.
@@ -284,22 +294,11 @@ public final class JVoiceXmlApplication
     }
 
     /**
-     * Retrieves the application shadow variable container.
-     * @return the application shadow variable container.
-     * @since 0.7.7
+     * {@inheritDoc}
      */
-    public ApplicationShadowVarContainer getApplicationShadowVarContainer() {
-        return container;
-    }
-
-    /**
-     * Sets the application shadow variable container.
-     * @param container the application shadow variable container
-     * @since 0.7.7
-     */
-    public void setApplicationShadowVarContainer(
-            final ApplicationShadowVarContainer value) {
-        container = value;
+    @Override
+    public void setLastResult(final List<LastResult> result) {
+        lastresults = result;
     }
 
     /**
@@ -307,17 +306,6 @@ public final class JVoiceXmlApplication
      */
     @Override
     public List<LastResult> getLastResult() {
-        if (container == null) {
-            return null;
-        }
-        final LastResultShadowVarContainer[] results =
-                container.getLastresult();
-        final List<LastResult> lastresults =
-                new java.util.ArrayList<LastResult>();
-        for (LastResultShadowVarContainer result : results) {
-            final LastResult lastresult = result.toLastResult();
-            lastresults.add(lastresult);
-        }
         return lastresults;
     }
 }

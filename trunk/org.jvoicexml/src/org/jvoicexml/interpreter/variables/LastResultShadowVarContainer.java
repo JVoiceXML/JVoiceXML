@@ -27,61 +27,45 @@
 package org.jvoicexml.interpreter.variables;
 
 import org.jvoicexml.LastResult;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Component that provides a container for the shadowed variables for the
  * standard application variables.
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
-public final class LastResultShadowVarContainer
-        extends ScriptableObject {
+public final class LastResultShadowVarContainer extends ScriptableObject {
     /** The serial version UID. */
     private static final long serialVersionUID = 1801108654062869631L;
 
-    /** The raw string of words that were recognized for this interpretation. */
-    private final String utterance;
-
-    /**
-     * The whole utterance confidence level for this interpretation from
-     * 0.0-1.0.
-     */
-    private final float confidence;
-
-    /**
-     * For this interpretation,the mode in which user input was provided:
-     * dtmf or voice.
-     */
-    private final String inputmode;
+    /** The encapsulated last result. */
+    private final LastResult lastresult;
 
     /** The utterance split in words. */
     private final WordVarContainer[] words;
 
-    /** The semantic interpretation. */
-    private final Object interpretation;
-
     /**
      * Constructs a new object.
-     * @param utt the utterance.
-     * @param conf the confidence level.
-     * @param mode the input mode.
-     * @param w the words.
-     * @param wordsConfidence the confidence of each word,
-     *        the size of this array must match the size of the word array
-     * @param inter the semantic interpretation
+     * 
+     * @param utt
+     *            the utterance.
+     * @param conf
+     *            the confidence level.
+     * @param mode
+     *            the input mode.
+     * @param w
+     *            the words.
+     * @param wordsConfidence
+     *            the confidence of each word, the size of this array must match
+     *            the size of the word array
+     * @param inter
+     *            the semantic interpretation
      */
-    public LastResultShadowVarContainer(final String utt, final float conf,
-                                        final String mode, final String[] w,
-                                        final float[] wordsConfidence,
-                                        final Object inter) {
-        utterance = utt;
-        confidence = conf;
-        inputmode = mode;
-        interpretation = inter;
+    public LastResultShadowVarContainer(final LastResult result, final String[] w, final float[] wordsConfidence) {
+        lastresult = result;
 
         if (w == null) {
             words = null;
@@ -105,8 +89,7 @@ public final class LastResultShadowVarContainer
                 READONLY);
         defineProperty("interpretation", LastResultShadowVarContainer.class,
                 READONLY);
-        defineProperty("words", LastResultShadowVarContainer.class,
-                READONLY);
+        defineProperty("words", LastResultShadowVarContainer.class, READONLY);
     }
 
     /**
@@ -118,30 +101,34 @@ public final class LastResultShadowVarContainer
 
     /**
      * Retrieves the utterance.
+     * 
      * @return the utterance.
      */
     public String getUtterance() {
-        return utterance;
+        return lastresult.getUtterance();
     }
 
     /**
      * Retrieves the utterance.
+     * 
      * @return the utterance.
      */
     public float getConfidence() {
-        return confidence;
+        return lastresult.getConfidence();
     }
 
     /**
      * Retrieves the utterance.
+     * 
      * @return the utterance.
      */
     public String getInputmode() {
-        return inputmode;
+        return lastresult.getInputmode();
     }
 
     /**
      * Retrieves the words.
+     * 
      * @return the vector of words.
      * @since 0.7
      */
@@ -151,28 +138,12 @@ public final class LastResultShadowVarContainer
 
     /**
      * Retrieves the semantic interpretation.
+     * 
      * @return the semantic interpretation
      * @since 0.7.2
      */
     public Object getInterpretation() {
-        return interpretation;
-    }
-
-    /**
-     * Converts this object into a {@link LastResult}.
-     * @return converted object
-     * @since 0.7.7
-     */
-    public LastResult toLastResult() {
-        final String json;
-        if (interpretation == null) {
-            json = null;
-        } else if (interpretation instanceof ScriptableObject) {
-            json = ScriptingEngine.toJSON((ScriptableObject) interpretation);
-        } else {
-            json = interpretation.toString();
-        }
-        return new LastResult(utterance, confidence, inputmode, json);
+        return lastresult.getInterpretation();
     }
 
     /**
