@@ -56,6 +56,7 @@ class JVoiceXmlSkeleton
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlSkeleton.class);
+
     /** The encapsulated <code>JVoiceXml</code> object. */
     private JVoiceXml jvxml;
 
