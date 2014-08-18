@@ -26,7 +26,6 @@
 
 package org.jvoicexml.interpreter;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -52,10 +51,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @since 0.5.5
  */
 public final class JVoiceXmlApplication
-        implements Application, Serializable {
-    /** The serial versio UID. */
-    private static final long serialVersionUID = 5974734039380600756L;
-
+        implements Application {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlApplication.class);

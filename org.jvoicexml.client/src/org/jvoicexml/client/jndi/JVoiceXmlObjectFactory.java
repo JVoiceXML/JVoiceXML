@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,25 +33,25 @@ import javax.naming.Name;
 import javax.naming.Reference;
 import javax.naming.spi.ObjectFactory;
 
+import org.jvoicexml.Application;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 
 /**
  * Object factory to create the stubs on the client side.
- *
+ * 
  * <p>
- * The stubs are those objects that are known in the local JNDI space.
- * They enable a remote connection via RMI to the skeleton objects.
+ * The stubs are those objects that are known in the local JNDI space. They
+ * enable a remote connection via RMI to the skeleton objects.
  * </p>
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
+ * 
  * @since 0.4
  */
-public final class JVoiceXmlObjectFactory
-        implements ObjectFactory {
+public final class JVoiceXmlObjectFactory implements ObjectFactory {
     /**
      * Constructs a new object.
      */
@@ -62,8 +62,7 @@ public final class JVoiceXmlObjectFactory
      * {@inheritDoc}
      */
     public Object getObjectInstance(final Object obj, final Name name,
-                                    final Context context,
-                                    final Hashtable<?, ?> environment)
+            final Context context, final Hashtable<?, ?> environment)
             throws Exception {
         if (obj instanceof Reference) {
             final Reference ref = (Reference) obj;
@@ -77,17 +76,19 @@ public final class JVoiceXmlObjectFactory
 
     /**
      * Retrieves an object referencing the given class name.
-     * @param className name of the class to resolve.
-     * @param context the context to use.
-     * @return Resolved stub, <code>null</code> if the name does not match
-     *         a known stub.
-     *
+     * 
+     * @param className
+     *            name of the class to resolve.
+     * @param context
+     *            the context to use.
+     * @return Resolved stub, <code>null</code> if the name does not match a
+     *         known stub.
+     * 
      * @since 0.5
      */
     private Object resolveReference(final String className,
-                                    final Context context) {
-        if (className.equals(
-                MappedDocumentRepository.class.getName())) {
+            final Context context) {
+        if (className.equals(MappedDocumentRepository.class.getName())) {
             if (context == null) {
                 return new MappedDocumentRepositoryStub();
             } else {
@@ -105,9 +106,15 @@ public final class JVoiceXmlObjectFactory
             } else {
                 return new SessionStub(context);
             }
+        } else if (className.equals(Application.class.getName())) {
+            if (context == null) {
+                return new ApplicationStub();
+            } else {
+                return new ApplicationStub(context);
+            }
         }
 
-        throw new IllegalArgumentException("unknown reference: '"
-                + className + "'");
+        throw new IllegalArgumentException("unknown reference: '" + className
+                + "'");
     }
 }
