@@ -33,8 +33,10 @@ import java.rmi.server.UnicastRemoteObject;
 import javax.naming.Context;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Application;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
+import org.jvoicexml.client.jndi.ApplicationStub;
 import org.jvoicexml.client.jndi.CharacterInputStub;
 import org.jvoicexml.client.jndi.RemoteSession;
 import org.jvoicexml.client.jndi.Stub;
@@ -98,14 +100,20 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
-    public void call(final URI uri)
+    public Application call(final URI uri)
             throws RemoteException {
         if (session == null) {
-            return;
+            return null;
         }
 
         try {
-            session.call(uri);
+            final Application application = session.call(uri);
+            final String id = session.getSessionID();
+            final ApplicationSkeleton skeleton =
+                    new ApplicationSkeleton(id, application);
+            final ApplicationStub stub = new ApplicationStub(id);
+            JVoiceXmlJndiSupport.bind(context, skeleton, stub);
+            return stub;
         } catch (ErrorEvent event) {
             LOGGER.error(event.getMessage(), event);
 
