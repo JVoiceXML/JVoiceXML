@@ -6,7 +6,6 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
     <target name="-3rdparty-setup">
         <!-- third party libraries -->
         <property name="3rdparty.dir" value="../org.jvoicexml/3rdparty" />
-
         <!-- log4j library -->
         <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.17" />
         <property name="log4j.lib.dir" value="${log4j.dir}/lib" />
@@ -70,7 +69,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         <fileset dir="${jsonsimple.lib.dir}" id="jsonsimple.lib">
             <include name="json_simple-1.1.jar" />
         </fileset>
-    	
+
         <!-- Java Media Framework library -->
         <property name="jmf.dir" value="${3rdparty.dir}/jmf2.1.1e" />
         <property name="jmf.lib.dir" value="${jmf.dir}/lib" />
@@ -79,58 +78,69 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
             <include name="sound.jar" />
         </fileset>
 
-      <!-- jlibrtp library -->
-      <property name="jlibrtp.dir" value="${3rdparty.dir}/jlibrtp" />
-      <property name="jlibrtp.lib.dir" value="${jlibrtp.dir}/lib" />
-      <fileset dir="${jlibrtp.lib.dir}" id="jlibrtp.lib">
-          <include name="jlibrtp.jar" />
-      </fileset>
+        <!-- jlibrtp library -->
+        <property name="jlibrtp.dir" value="${3rdparty.dir}/jlibrtp" />
+        <property name="jlibrtp.lib.dir" value="${jlibrtp.dir}/lib" />
+        <fileset dir="${jlibrtp.lib.dir}" id="jlibrtp.lib">
+            <include name="jlibrtp.jar" />
+        </fileset>
 
-      <!-- freetts library -->
-      <property name="freetts.dir" value="${3rdparty.dir}/freetts1.2" />
-      <property name="freetts.lib.dir" value="${freetts.dir}/lib" />
-      <fileset dir="${freetts.lib.dir}" id="freetts.lib">
-          <include name="freetts.jar" />
-          <include name="en_us.jar" />
-          <include name="cmulex.jar" />
-          <include name="cmu_us_kal.jar" />
-      </fileset>
+        <!-- freetts library -->
+        <property name="freetts.dir" value="${3rdparty.dir}/freetts1.2" />
+        <property name="freetts.lib.dir" value="${freetts.dir}/lib" />
+        <fileset dir="${freetts.lib.dir}" id="freetts.lib">
+            <include name="freetts.jar" />
+            <include name="en_us.jar" />
+            <include name="cmulex.jar" />
+            <include name="cmu_us_kal.jar" />
+        </fileset>
 
-      <!-- sphinx4 library -->
-      <property name="sphinx.dir" value="${3rdparty.dir}/sphinx4" />
-      <property name="sphinx.lib.dir" value="${sphinx.dir}/lib" />
-      <fileset dir="${sphinx.lib.dir}" id="sphinx4.lib">
-          <include name="sphinx4.jar" />
-          <include name="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar" />
-      </fileset>
+        <!-- sphinx4 library -->
+        <property name="sphinx.dir" value="${3rdparty.dir}/sphinx4" />
+        <property name="sphinx.lib.dir" value="${sphinx.dir}/lib" />
+        <fileset dir="${sphinx.lib.dir}" id="sphinx4.lib">
+            <include name="sphinx4.jar" />
+            <include name="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar" />
+        </fileset>
 
-      <!-- jchardet library -->
-      <property name="jchardet.dir" value="${3rdparty.dir}/jchardet1.1" />
-      <property name="jchardet.lib.dir" value="${jchardet.dir}/lib" />
-      <fileset dir="${jchardet.lib.dir}" id="jchardet.lib">
-          <include name="chardet.jar" />
-      </fileset>
+        <!-- jchardet library -->
+        <property name="jchardet.dir" value="${3rdparty.dir}/jchardet1.1" />
+        <property name="jchardet.lib.dir" value="${jchardet.dir}/lib" />
+        <fileset dir="${jchardet.lib.dir}" id="jchardet.lib">
+            <include name="chardet.jar" />
+        </fileset>
 
-      <!-- junit library -->
-      <property name="junit.dir" value="${3rdparty.dir}/junit4.11" />
-      <property name="junit.lib.dir" value="${junit.dir}/lib" />
-      <fileset dir="${junit.lib.dir}" id="junit.lib">
-          <include name="junit-4.11.jar" />
-      </fileset>
+        <!-- junit library -->
+        <property name="junit.dir" value="${3rdparty.dir}/junit4.11" />
+        <property name="junit.lib.dir" value="${junit.dir}/lib" />
+        <fileset dir="${junit.lib.dir}" id="junit.lib">
+            <include name="junit-4.11.jar" />
+        </fileset>
 
-      <!-- harmcrest library -->
-      <property name="harmcrest.dir" value="${3rdparty.dir}/harmcrest1.3" />
-      <property name="harmcrest.lib.dir" value="${harmcrest.dir}/lib" />
-      <fileset dir="${harmcrest.lib.dir}" id="harmcrest.lib">
-          <include name="harmcrest-core-1.3.jar" />
-      </fileset>
+        <!-- harmcrest library -->
+        <property name="harmcrest.dir" value="${3rdparty.dir}/harmcrest1.3" />
+        <property name="harmcrest.lib.dir" value="${harmcrest.dir}/lib" />
+        <fileset dir="${harmcrest.lib.dir}" id="harmcrest.lib">
+            <include name="harmcrest-core-1.3.jar" />
+        </fileset>
+
+        <!-- jetty library -->
+        <property name="jetty.dir" value="${3rdparty.dir}/jetty9.2.2" />
+        <property name="jetty.lib.dir" value="${jetty.dir}/lib" />
+        <fileset dir="${jetty.lib.dir}" id="jetty.lib">
+            <include name="jetty-server-9.2.2.v20140723.jar" />
+            <include name="jetty-util-9.2.2.v20140723.jar" />
+            <include name="jetty-http-9.2.2.v20140723.jar" />
+            <include name="jetty-io-9.2.2.v20140723.jar" />
+            <include name="servlet-api-3.1.jar" />
+        </fileset>
     </target>
 
     <target name="-checkCheckstyle">
         <!-- checkstyle library -->
         <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle5.3" />
         <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib" />
-            
+
         <path id="checkstyle.path">
             <fileset refid="loggings.lib" />
             <fileset dir="${checkstyle.lib.dir}">
@@ -146,7 +156,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
             </and>
         </condition>
     </target>
-    
+
     <target name="-initcheckstyle"
             description="Setup the checkstyle task"
             depends="-checkCheckstyle"
@@ -158,10 +168,10 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
     </target>
 
     <target name="-checkJunit">
-      <!-- Check if junit ist accessible for ant. -->
-      <available classname="junit.framework.TestCase"
+        <!-- Check if junit ist accessible for ant. -->
+        <available classname="junit.framework.TestCase"
                  property="junit.present" classpathref="test.classpath"/>
-      <fail unless="junit.present">
+        <fail unless="junit.present">
 junit is not installed in your ANT distribution.
 Download junit.jar from http://www.junit.org and copy junit.jar into
 the lib directory of your ANT distribution.
@@ -185,22 +195,22 @@ You are using ${ant.java.version}.
     </target>
 
     <target name="-version" description="Retrieve the SVN version number">
-         <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
-             <classpath>
-                 <fileset dir="../org.jvoicexml/3rdparty/svnant/lib">
-                     <include name="*.jar" />
-                 </fileset>
-             </classpath>
-         </taskdef>
-         <property name="svn.base"
+        <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
+            <classpath>
+                <fileset dir="../org.jvoicexml/3rdparty/svnant/lib">
+                    <include name="*.jar" />
+                </fileset>
+            </classpath>
+        </taskdef>
+        <property name="svn.base"
              value="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml"/>
-         <property name="trunk.core.dir"
+        <property name="trunk.core.dir"
              value="${svn.base}/core/trunk"/>
-         <property name="tag.core.dir"
+        <property name="tag.core.dir"
              value="${svn.base}/core/tags/${jvxml.version}"/>
-         <svnSetting client="javahl" id="svn.settings" failonerror="false"
+        <svnSetting client="javahl" id="svn.settings" failonerror="false"
             username="${svn.username}" password="${svn.password}"/>
-         <svn refid="svn.settings">
+        <svn refid="svn.settings">
             <wcversion path="."/>
         </svn>
     </target>
