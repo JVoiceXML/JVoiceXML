@@ -148,30 +148,37 @@ public final class SessionStub
      * {@inheritDoc}
      */
     @Override
+    public Application getApplication() {
+        final RemoteSession session = getSkeleton(sessionID);
+        try {
+            return session.getApplication();
+        } catch (java.rmi.RemoteException re) {
+            clearSkeleton();
+            return null;
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public CharacterInput getCharacterInput()
             throws NoresourceError, ConnectionDisconnectHangupEvent {
         final RemoteSession session = getSkeleton(sessionID);
-
-        CharacterInput input;
-
         try {
-            input = session.getCharacterInput();
+            return session.getCharacterInput();
         } catch (java.rmi.RemoteException re) {
             clearSkeleton();
-
             final ErrorEvent event = getErrorEvent(re);
             if ((event == null) || !(event instanceof NoresourceError)) {
                 re.printStackTrace();
-
-                input = null;
+                return null;
             } else {
                 final NoresourceError noresource = (NoresourceError) event;
 
                 throw noresource;
             }
         }
-
-        return input;
     }
 
     /**

@@ -2,7 +2,7 @@
 <callmanager xmlns:beans="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
-  <repository>mmi-umundo</repository>
+  <repository>mmi-http</repository>
   <classpath>dist/org.jvoicexml.mmi.events.jar</classpath>
   <classpath>dist/org.jvoicexml.callmanager.mmi.jar</classpath>
   <classpath>dist/org.jvoicexml.callmanager.mmi.http.jar</classpath>

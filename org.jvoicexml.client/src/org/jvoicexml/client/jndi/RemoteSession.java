@@ -38,78 +38,88 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 /**
  * Remote interface to enable remote method calls to the
  * {@link org.jvoicexml.Session}.
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.4
  * @see org.jvoicexml.Session
- *
- * TODO Remote sessions will require a unique ID
+ * 
+ *      TODO Remote sessions will require a unique ID
  */
-public interface RemoteSession
-        extends Remote {
+public interface RemoteSession extends Remote {
     /**
      * Handles a call request.
-     *
+     * 
      * <p>
      * Starts processing of the current application.
      * </p>
-     *
-     * @param uri URI of the first document to load.
-     *
+     * 
+     * @param uri
+     *            URI of the first document to load.
+     * 
      * @exception RemoteException
-     *            Error in remote method call.
+     *                Error in remote method call.
      */
-    Application call(final URI uri)
-            throws RemoteException;
+    Application call(final URI uri) throws RemoteException;
+
+    /**
+     * Retrieves the application.
+     * 
+     * @return the currently processed application
+     * @exception RemoteException
+     *                Error in remote method call.
+     * @since 0.7.7
+     */
+    Application getApplication() throws RemoteException;
 
     /**
      * Retrieves the DTMF input device.
+     * 
      * @return DTMF input device.
      * @exception RemoteException
-     *            Error in remote method call.
+     *                Error in remote method call.
      * @exception ConnectionDisconnectHangupEvent
-     *            the user hung up
+     *                the user hung up
      * @since 0.5
      */
-    CharacterInput getCharacterInput()
-            throws RemoteException, ConnectionDisconnectHangupEvent;
+    CharacterInput getCharacterInput() throws RemoteException,
+            ConnectionDisconnectHangupEvent;
 
     /**
      * Delays until the session ends.
+     * 
      * @exception RemoteException
-     *            Error in remote method call.
+     *                Error in remote method call.
      * @since 0.4
      */
-    void waitSessionEnd()
-            throws RemoteException;
+    void waitSessionEnd() throws RemoteException;
 
     /**
      * Checks if this session has ended.
+     * 
      * @return <code>true</code> if the session has ended.
      * @exception RemoteException
-     *            Error in remote method call.
+     *                Error in remote method call.
      * @since 0.7.5
      */
     boolean hasEnded() throws RemoteException;
 
     /**
      * Retrieves an error, if any, that happened during call processing.
+     * 
      * @return an error that happened during call processing, <code>null</code>
      *         if there was no error.
      * @exception RemoteException
-     *            Error in remote method call.
+     *                Error in remote method call.
      * @since 0.7
      */
-    ErrorEvent getLastError()
-        throws RemoteException;
+    ErrorEvent getLastError() throws RemoteException;
 
     /**
      * Closes this session.
-     *
+     * 
      * @exception RemoteException
-     *            Error in remote method call.
+     *                Error in remote method call.
      */
-    void hangup()
-            throws RemoteException;
+    void hangup() throws RemoteException;
 }

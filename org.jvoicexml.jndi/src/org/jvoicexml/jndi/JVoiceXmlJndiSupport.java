@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -115,6 +115,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
             registry.start();
         }
 
+        // Set the security manager
         SecurityManager securityManager = System.getSecurityManager();
         if (securityManager == null) {
             securityManager = new RMISecurityManager();
@@ -127,11 +128,11 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
             return;
         }
 
+        // Bind all JVoiceXML objects to the context
         final boolean success = bindObjects(context);
         if (!success) {
             LOGGER.warn("not all object are bound");
         }
-
         LOGGER.info("...JNDI support started");
     }
 
@@ -151,7 +152,6 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
             return new InitialContext(environment);
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining the initial context", ne);
-
             return null;
         }
     }
@@ -170,7 +170,6 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
             bind(context, skeleton, stub);
         } catch (java.rmi.RemoteException re) {
             LOGGER.error("error creating the skeleton", re);
-
             return false;
         }
 
@@ -180,7 +179,6 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
             bind(context, skeleton, stub);
         } catch (java.rmi.RemoteException re) {
             LOGGER.error("error creating the skeleton", re);
-
             return false;
         }
 
@@ -211,14 +209,12 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
         }
 
         final String stubName = stub.getStubName();
-
         try {
             context.rebind(skeletonName, skeleton);
             context.rebind(stubName, stub);
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("naming exception while exporting '" + skeletonName
                          + "'", ne);
-
             return;
         }
 
@@ -231,11 +227,9 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
      */
     public void shutdown() {
         LOGGER.info("stopping JNDI support...");
-
         if (registry != null) {
             registry.shutdown();
         }
-
         LOGGER.info("...JNDI support stopped");
     }
 }
