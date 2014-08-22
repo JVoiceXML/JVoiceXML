@@ -77,6 +77,9 @@ public final class MMICallManager implements CallManager {
     /** The basic URI of the MMI servlet. */
     private String servletBaseUri;
 
+    /** The extension notification converter. */
+    private ExtensionNotificationDataConverter converter;
+
     /**
      * Constructs a new object.
      */
@@ -126,6 +129,15 @@ public final class MMICallManager implements CallManager {
     }
 
     /**
+     * Sets the extension notification converter
+     * @param conv the converter
+     * @since 0.7.7
+     */
+    public void setExtensionNotificationDataConverter(final ExtensionNotificationDataConverter conv) {
+        converter = conv;
+    }
+
+    /**
      * Sets the connection information factory.
      * @param connectionInformationFactory the connection information factory
      * 
@@ -161,7 +173,7 @@ public final class MMICallManager implements CallManager {
             throw new IOException(
                     "Unable to hook to the ETL without a protocol adapter!");
         }
-        mc = new VoiceModalityComponent(this, servletBaseUri);
+        mc = new VoiceModalityComponent(this, converter, servletBaseUri);
         mc.startAcceptingLifecyleEvents(adapter);
     }
 

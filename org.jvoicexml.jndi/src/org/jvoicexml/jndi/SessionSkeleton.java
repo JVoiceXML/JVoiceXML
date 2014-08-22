@@ -45,21 +45,21 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 /**
- * Skeleton for the <code>Session</code>.
- *
+ * Skeleton for the {@link Session}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.4
  * @see org.jvoicexml.Session
  */
-final class SessionSkeleton
-        extends UnicastRemoteObject implements RemoteSession, Skeleton {
+final class SessionSkeleton extends UnicastRemoteObject
+        implements RemoteSession, Skeleton {
     /** The serial version UID. */
     private static final long serialVersionUID = 7903915853416003896L;
 
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(SessionSkeleton.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(SessionSkeleton.class);
     /** The encapsulated <code>ApplicationRegistry</code>. */
     private Session session;
 
@@ -68,20 +68,23 @@ final class SessionSkeleton
 
     /**
      * Constructs a new object.
+     * 
      * @throws RemoteException
-     *         Error creating the remote object.
+     *             Error creating the remote object.
      */
-    public SessionSkeleton()
-            throws RemoteException {
+    public SessionSkeleton() throws RemoteException {
         context = null;
     }
 
     /**
      * Constructs a new object with the given session.
-     * @param ctx the current JNDI context
-     * @param sess The session
+     * 
+     * @param ctx
+     *            the current JNDI context
+     * @param sess
+     *            The session
      * @throws RemoteException
-     *         Error creating the remote object.
+     *             Error creating the remote object.
      */
     public SessionSkeleton(final Context ctx, final Session sess)
             throws RemoteException {
@@ -100,8 +103,7 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
-    public Application call(final URI uri)
-            throws RemoteException {
+    public Application call(final URI uri) throws RemoteException {
         if (session == null) {
             return null;
         }
@@ -109,8 +111,8 @@ final class SessionSkeleton
         try {
             final Application application = session.call(uri);
             final String id = session.getSessionID();
-            final ApplicationSkeleton skeleton =
-                    new ApplicationSkeleton(id, application);
+            final ApplicationSkeleton skeleton = new ApplicationSkeleton(id,
+                    application);
             final ApplicationStub stub = new ApplicationStub(id);
             JVoiceXmlJndiSupport.bind(context, skeleton, stub);
             return stub;
@@ -125,8 +127,19 @@ final class SessionSkeleton
      * {@inheritDoc}
      */
     @Override
-    public CharacterInput getCharacterInput()
-            throws RemoteException {
+    public Application getApplication() throws RemoteException {
+        if (session == null) {
+            return null;
+        }
+
+        return session.getApplication();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CharacterInput getCharacterInput() throws RemoteException {
         if (session == null) {
             return null;
         }
@@ -151,8 +164,7 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
-    public void waitSessionEnd()
-            throws RemoteException {
+    public void waitSessionEnd() throws RemoteException {
         if (session == null) {
             return;
         }
@@ -165,7 +177,6 @@ final class SessionSkeleton
             throw new RemoteException(event.getMessage(), event);
         }
     }
-
 
     /**
      * {@inheritDoc}
@@ -198,8 +209,7 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
-    public void hangup()
-            throws RemoteException {
+    public void hangup() throws RemoteException {
         if (session == null) {
             return;
         }

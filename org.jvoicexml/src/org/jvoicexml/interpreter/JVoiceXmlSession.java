@@ -238,6 +238,15 @@ public final class JVoiceXmlSession
     /**
      * {@inheritDoc}
      */
+    @Override
+    public Application getApplication() {
+        return application;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void waitSessionEnd()
             throws ErrorEvent {
         LOGGER.info("waiting for end of session...");
