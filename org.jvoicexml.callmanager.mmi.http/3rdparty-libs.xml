@@ -18,16 +18,5 @@ callmanager.
             <path location="../org.jvoicexml.mmi.events/classes" />
             <path location="../org.jvoicexml.callmanager.mmi/classes" />
         </path>
-
-        <!-- jetty library -->
-        <property name="jetty.dir" value="${local-3rdparty.dir}/jetty9.2.2" />
-        <property name="jetty.lib.dir" value="${jetty.dir}/lib" />
-        <fileset dir="${jetty.lib.dir}" id="jetty.lib">
-            <include name="jetty-server-9.2.2.v20140723.jar" />
-            <include name="jetty-util-9.2.2.v20140723.jar" />
-            <include name="jetty-http-9.2.2.v20140723.jar" />
-            <include name="jetty-io-9.2.2.v20140723.jar" />
-            <include name="servlet-api-3.1.jar" />
-        </fileset>
     </target>
 </project>
