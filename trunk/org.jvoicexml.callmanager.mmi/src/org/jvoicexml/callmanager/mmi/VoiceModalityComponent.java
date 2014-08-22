@@ -36,6 +36,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Application;
+import org.jvoicexml.LastResult;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
@@ -65,22 +67,22 @@ import org.jvoicexml.mmi.events.StatusType;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Prompt;
 
-
 /**
  * The {@link VoiceModalityComponent} accepts MMI lifecycle events. Internally,
  * it speaks to JVoiceXML.
+ * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
  */
 public final class VoiceModalityComponent
-    implements MMIEventListener, SessionListener {
+        implements MMIEventListener, SessionListener {
     /** Logger instance. */
-    private static final Logger LOGGER =
-        Logger.getLogger(VoiceModalityComponent.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(VoiceModalityComponent.class);
 
     /** Encoding that should be used to encode/decode URLs. */
-    private static String encoding =
-        System.getProperty("jvoicexml.xml.encoding", "UTF-8");
+    private static String encoding = System.getProperty(
+            "jvoicexml.xml.encoding", "UTF-8");
 
     /** Adapter for the event and transport layer. */
     private ETLProtocolAdapter adapter;
@@ -94,36 +96,47 @@ public final class VoiceModalityComponent
     /** The basic URI of the MMI servlet. */
     private final String servletBaseUri;
 
+    /** The extension notification converter. */
+    private final ExtensionNotificationDataConverter converter;
+
     /**
      * Constructs a new object.
-     * @param cm the call manager
+     * 
+     * @param cm
+     *            the call manager
+     * @param conv
+     *            the extension notification converter
+     * @param baseUri
+     *            base URI of the MMI servlet
      */
     public VoiceModalityComponent(final MMICallManager cm,
-            final String baseUri) {
+            final ExtensionNotificationDataConverter conv, final String baseUri) {
         callManager = cm;
         servletBaseUri = baseUri;
+        converter = conv;
         contexts = new java.util.HashMap<String, MMIContext>();
     }
 
     /**
      * Starts accepting MMI lifecycle events asynchronously.
-     * @param protocolAdapter the adapter for the event and transport layer
+     * 
+     * @param protocolAdapter
+     *            the adapter for the event and transport layer
      * @throws IOException
-     *         error starting the modality component
+     *             error starting the modality component
      */
     public void startAcceptingLifecyleEvents(
-            final ETLProtocolAdapter protocolAdapter)
-            throws IOException {
+            final ETLProtocolAdapter protocolAdapter) throws IOException {
         adapter = protocolAdapter;
         adapter.addMMIEventListener(this);
-        LOGGER.info("starting ETL protocol adapter " + adapter.getClass()
-                + "'");
+        LOGGER.info("starting ETL protocol adapter " + adapter.getClass() + "'");
         adapter.start();
     }
 
     /**
      * Checks, if this modality component is currently accepting lifecycle
      * events.
+     * 
      * @return <code>true</code> if lifecycle events are not accepted.
      */
     boolean isAcceptingLifecycleEvents() {
@@ -132,13 +145,16 @@ public final class VoiceModalityComponent
 
     /**
      * Sends a response to the given channel.
-     * @param channel the channel to use
-     * @param event the response to send
+     * 
+     * @param channel
+     *            the channel to use
+     * @param event
+     *            the response to send
      * @exception IOException
-     *            if an error occurs when sending the response
+     *                if an error occurs when sending the response
      */
-    void sendResponse(final Object channel, final LifeCycleEvent event) 
-        throws IOException {
+    void sendResponse(final Object channel, final LifeCycleEvent event)
+            throws IOException {
         try {
             adapter.sendMMIEvent(channel, event);
         } catch (IOException e) {
@@ -193,7 +209,9 @@ public final class VoiceModalityComponent
 
     /**
      * Retrieves the MMI context for the given context id.
-     * @param contextId the context id to look up
+     * 
+     * @param contextId
+     *            the context id to look up
      * @return the context, maybe <code>null</code>
      * @since 0.7.6
      */
@@ -205,15 +223,17 @@ public final class VoiceModalityComponent
 
     /**
      * Obtains the MMI context to use for the given request. If no previous
-     * context exists for the given context id specified in the received
-     * MMI message, a new one will be created if specified and added to the
-     * list of known
-     * contexts.
-     * @param request the received MMI event
-     * @param create create a new context if it was previously unknown
+     * context exists for the given context id specified in the received MMI
+     * message, a new one will be created if specified and added to the list of
+     * known contexts.
+     * 
+     * @param request
+     *            the received MMI event
+     * @param create
+     *            create a new context if it was previously unknown
      * @return associated MMI context
      * @throws MMIMessageException
-     *         if either the context id or the request id are missing
+     *             if either the context id or the request id are missing
      */
     private MMIContext getContext(final LifeCycleRequest request,
             final boolean create) throws MMIMessageException {
@@ -245,8 +265,11 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a start request.
-     * @param channel the channel that was used to send the request
-     * @param request the received event
+     * 
+     * @param channel
+     *            the channel that was used to send the request
+     * @param request
+     *            the received event
      */
     private void prepare(final Object channel, final PrepareRequest request) {
         String statusInfo = null;
@@ -309,13 +332,16 @@ public final class VoiceModalityComponent
 
     /**
      * Retrieves a URI of the given prepare request.
-     * @param context current MMI context
-     * @param request the start request
+     * 
+     * @param context
+     *            current MMI context
+     * @param request
+     *            the start request
      * @return URI where to start the VoiceXML application
      * @throws URISyntaxException
-     *         error creating the URI
+     *             error creating the URI
      * @throws MMIMessageException
-     *         error in the MMI message
+     *             error in the MMI message
      */
     private URI getUri(final MMIContext context, final PrepareRequest request)
             throws URISyntaxException, MMIMessageException {
@@ -332,11 +358,14 @@ public final class VoiceModalityComponent
         }
         return context.getContentURL();
     }
-    
+
     /**
      * Processes a start request.
-     * @param channel the channel that was used to send the request
-     * @param request the received event
+     * 
+     * @param channel
+     *            the channel that was used to send the request
+     * @param request
+     *            the received event
      */
     private void start(final Object channel, final StartRequest request) {
         String statusInfo = null;
@@ -417,13 +446,16 @@ public final class VoiceModalityComponent
 
     /**
      * Retrieves a URI of the given start request.
-     * @param context current MMI context
-     * @param request the start request
+     * 
+     * @param context
+     *            current MMI context
+     * @param request
+     *            the start request
      * @return URI where to start the VoiceXML application
      * @throws URISyntaxException
-     *         error creating the URI
+     *             error creating the URI
      * @throws MMIMessageException
-     *         error in the MMI message
+     *             error in the MMI message
      */
     private URI getUri(final MMIContext context, final StartRequest request)
             throws URISyntaxException, MMIMessageException {
@@ -443,18 +475,21 @@ public final class VoiceModalityComponent
 
     /**
      * Creates a URI for the markup given in the content.
-     * @param context current MMI context
-     * @param content the content from the request
-     * @return URI to point at a servlet generating a VoiceXML document
-     * for the VoiceXML snippet given in the content 
+     * 
+     * @param context
+     *            current MMI context
+     * @param content
+     *            the content from the request
+     * @return URI to point at a servlet generating a VoiceXML document for the
+     *         VoiceXML snippet given in the content
      * @throws URISyntaxException
-     *         error creating a URI
+     *             error creating a URI
      * @throws MMIMessageException
-     *         error in the MMI message
+     *             error in the MMI message
      */
     private URI createTemporaryVoiceXmlDocumentUri(final MMIContext context,
-            final AnyComplexType content)
-                    throws URISyntaxException, MMIMessageException {
+            final AnyComplexType content) throws URISyntaxException,
+            MMIMessageException {
         final List<Object> list = content.getContent();
         if (list.isEmpty()) {
             return null;
@@ -480,7 +515,7 @@ public final class VoiceModalityComponent
         if ((field == null) && (prompt == null)
                 && trimmedContentString.isEmpty()) {
             throw new MMIMessageException("invalid markup specified: '"
-                + trimmedContentString + "'");
+                    + trimmedContentString + "'");
         }
         if (prompt != null) {
             trimmedContentString = prompt.toString();
@@ -507,8 +542,11 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a cancel request.
-     * @param channel the channel that was used to send the request
-     * @param request the cancel request.
+     * 
+     * @param channel
+     *            the channel that was used to send the request
+     * @param request
+     *            the cancel request.
      */
     private void cancel(final Object channel, final CancelRequest request) {
         String statusInfo = null;
@@ -534,8 +572,8 @@ public final class VoiceModalityComponent
         } else if (state == ModalityComponentState.IDLE) {
             statusInfo = "session is idle: ignoring cancel request";
         } else {
-            statusInfo =
-                    "no running session for the given context " + contextId;
+            statusInfo = "no running session for the given context "
+                    + contextId;
         }
         final CancelResponse response = new CancelResponse();
         response.setRequestId(requestId);
@@ -563,7 +601,9 @@ public final class VoiceModalityComponent
 
     /**
      * Removes the context with the given id from the list of known contexts.
-     * @param contextId the context to remove
+     * 
+     * @param contextId
+     *            the context to remove
      */
     private void removeContext(final String contextId) {
         synchronized (contexts) {
@@ -574,8 +614,11 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a clear context request.
-     * @param channel the channel that was used to send the request
-     * @param request the clear context request.
+     * 
+     * @param channel
+     *            the channel that was used to send the request
+     * @param request
+     *            the clear context request.
      */
     private void clearContext(final Object channel,
             final ClearContextRequest request) {
@@ -606,8 +649,7 @@ public final class VoiceModalityComponent
                 callManager.cleanupSession(session);
             }
         }
-        final ClearContextResponse response =
-                new ClearContextResponse();
+        final ClearContextResponse response = new ClearContextResponse();
         response.setRequestId(requestId);
         response.setContext(contextId);
         final String target = request.getSource();
@@ -628,8 +670,11 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a clear context request.
-     * @param channel the channel that was used to send the request
-     * @param request the clear context request.
+     * 
+     * @param channel
+     *            the channel that was used to send the request
+     * @param request
+     *            the clear context request.
      */
     private void pause(final Object channel, final PauseRequest request) {
         String statusInfo = null;
@@ -663,8 +708,11 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a clear context request.
-     * @param channel the channel that was used to send the request
-     * @param request the clear context request.
+     * 
+     * @param channel
+     *            the channel that was used to send the request
+     * @param request
+     *            the clear context request.
      */
     private void resume(final Object channel, final ResumeRequest request) {
         String statusInfo = null;
@@ -698,8 +746,11 @@ public final class VoiceModalityComponent
 
     /**
      * Processes a clear context request.
-     * @param channel the channel that was used to send the request
-     * @param request the clear context request.
+     * 
+     * @param channel
+     *            the channel that was used to send the request
+     * @param request
+     *            the clear context request.
      */
     private void status(final Object channel, final StatusRequest request) {
         final String contextId = request.getContext();
@@ -712,7 +763,8 @@ public final class VoiceModalityComponent
             try {
                 context = new URI(contextId);
             } catch (URISyntaxException e) {
-                LOGGER.warn("context '" + contextId
+                LOGGER.warn("context '"
+                        + contextId
                         + "' does not denote a valid URI. Unable to send status"
                         + " response messages");
                 return;
@@ -724,7 +776,8 @@ public final class VoiceModalityComponent
         thread.start();
     }
 
-    private void newContext(final Object channel, final NewContextRequest request) {
+    private void newContext(final Object channel,
+            final NewContextRequest request) {
         String statusInfo = null;
         final String contextId = UUID.randomUUID().toString();
         request.setContext(contextId);
@@ -756,14 +809,13 @@ public final class VoiceModalityComponent
             removeContext(contextId);
         }
     }
-    
+
     /**
      * Stops accepting MMI lifecycle events.
      */
     public void stopAcceptingLifecycleEvents() {
         adapter.stop();
-        LOGGER.info("stopped ETL protocol adapter " + adapter.getClass()
-                + "'");
+        LOGGER.info("stopped ETL protocol adapter " + adapter.getClass() + "'");
     }
 
     /**
@@ -775,9 +827,11 @@ public final class VoiceModalityComponent
 
     /**
      * Tries to find the context for the given session.
-     * @param session the session that maybe associated with an MMI context
+     * 
+     * @param session
+     *            the session that maybe associated with an MMI context
      * @return found context, <code>null</code> if there is no context for that
-     *          session
+     *         session
      */
     private MMIContext findContext(final Session session) {
         final String sessionId = session.getSessionID();
@@ -814,15 +868,26 @@ public final class VoiceModalityComponent
         done.setContext(contextId);
         done.setRequestId(requestId);
         done.setTarget(target);
-        try  {
+        try {
             final ErrorEvent error = session.getLastError();
             if (error == null) {
                 done.setStatus(StatusType.SUCCESS);
+                if (converter != null) {
+                    final Application application = session.getApplication();
+                    if (application != null) {
+                        final List<LastResult> lastresults =
+                                application.getLastResult();
+                        final String result =
+                                converter.convertApplicationLastResult(
+                                        lastresults);
+                        done.addStatusInfo(result);
+                    }
+                }
             } else {
                 done.setStatus(StatusType.FAILURE);
                 done.addStatusInfo(error.getMessage());
             }
-        } catch (ErrorEvent e) {
+        } catch (ErrorEvent | ConversionException e) {
             done.setStatus(StatusType.FAILURE);
             done.addStatusInfo(e.getMessage());
         }

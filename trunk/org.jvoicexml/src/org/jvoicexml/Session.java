@@ -130,6 +130,13 @@ public interface Session {
     void hangup();
 
     /**
+     * Retrieves the application that is currently being processed.
+     * @return the current application
+     * @since 0.7.7
+     */
+    Application getApplication();
+
+    /**
      * Retrieves the DTMF input device.
      * @return DTMF input device.
      * @exception NoresourceError
