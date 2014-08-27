@@ -35,7 +35,7 @@ public class EmmaExtensionNotificationDataConverter
      * {@inheritDoc}
      */
     @Override
-    public String convertApplicationLastResult(
+    public Object convertApplicationLastResult(
             final List<LastResult> lastresults) throws ConversionException {
         if (lastresults == null || lastresults.isEmpty()) {
             return null;
@@ -72,7 +72,8 @@ public class EmmaExtensionNotificationDataConverter
             addSemanticInterpretation(document, interpretation,
                     semanticInterpretation);
             emma.appendChild(interpretation);
-            return toString(document);
+            return emma;
+//            return toString(document);
         } catch (ParserConfigurationException e) {
             throw new ConversionException(e.getMessage(), e);
         }
