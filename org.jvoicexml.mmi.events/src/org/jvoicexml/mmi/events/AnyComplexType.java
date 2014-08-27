@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,7 +27,6 @@
 package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -71,33 +70,21 @@ public final class AnyComplexType implements Serializable {
     @XmlAnyElement
     private List<Object> content;
 
+    public void addContent(final Object o) {
+        if (content == null) {
+            content = new java.util.ArrayList<Object>();
+        }
+        content.add(o);
+    }
+
     /**
      * Gets the value of the content property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list, not a
-     * snapshot. Therefore any modification you make to the returned list will
-     * be present inside the JAXB object. This is why there is not a
-     * <CODE>set</CODE> method for the content property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * 
-     * <pre>
-     * getContent().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link org.w3c.dom.Element}, {@link String }
-     * 
+     * To add a new item, use {@link #addContent(Object)}.
+     * </p> 
      * @return current content
      */
     public List<Object> getContent() {
-        if (content == null) {
-            content = new ArrayList<Object>();
-        }
-        return this.content;
+        return content;
     }
 }
