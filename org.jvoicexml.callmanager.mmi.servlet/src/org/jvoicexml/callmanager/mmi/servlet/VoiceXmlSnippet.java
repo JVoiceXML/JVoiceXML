@@ -42,7 +42,8 @@ import org.xml.sax.SAXException;
 /**
  * A servlet that creates VoiceXML documents from snippets.
  */
-@WebServlet(description = "creation of VoiceXML documents from snippets", urlPatterns = { "/VoiceXmlSnippet" })
+@WebServlet(description = "creation of VoiceXML documents from snippets",
+    urlPatterns = { "/VoiceXmlSnippet" })
 public class VoiceXmlSnippet extends HttpServlet {
     /** The serial version UID. */
     private static final long serialVersionUID = -1780982925617074243L;
