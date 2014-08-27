@@ -142,7 +142,6 @@ public final class StatusResponse extends LifeCycleEvent
         if (statusInfo == null) {
             statusInfo = new AnyComplexType();
         }
-        final List<Object> infos = statusInfo.getContent();
-        infos.add(infos);
+        statusInfo.addContent(text);
     }
 }
