@@ -64,8 +64,7 @@ import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.mmi.events.StartResponse;
 import org.jvoicexml.mmi.events.StatusRequest;
 import org.jvoicexml.mmi.events.StatusType;
-import org.jvoicexml.xml.vxml.Field;
-import org.jvoicexml.xml.vxml.Prompt;
+import org.w3c.dom.Element;
 
 /**
  * The {@link VoiceModalityComponent} accepts MMI lifecycle events. Internally,
@@ -494,52 +493,56 @@ public final class VoiceModalityComponent
         if (list.isEmpty()) {
             return null;
         }
-        Prompt prompt = null;
-        Field field = null;
-        final StringBuilder str = new StringBuilder();
-        for (Object o : list) {
-            if (o instanceof Prompt) {
-                prompt = (Prompt) o;
-            } else if (o instanceof Field) {
-                field = (Field) o;
-            } else {
-                str.append(o);
-            }
-        }
-        if ((field != null) && (prompt != null)) {
-            throw new MMIMessageException(
-                    "Only one of <field> or <prompt> may be specified");
-        }
-        final String contentString = str.toString();
-        String trimmedContentString = contentString.trim();
-        if ((field == null) && (prompt == null)
-                && trimmedContentString.isEmpty()) {
-            throw new MMIMessageException("invalid markup specified: '"
-                    + trimmedContentString + "'");
-        }
-        if (prompt != null) {
-            trimmedContentString = prompt.toString();
-        } else if (field != null) {
-            trimmedContentString = field.toString();
-        }
+        final Object object = list.get(0);
+        final String str = parseContent(object);
         String encodedContentString;
         try {
-            encodedContentString = URLEncoder.encode(trimmedContentString,
+            encodedContentString = URLEncoder.encode(str,
                     encoding);
-            if (field == null) {
+            if (isField(object)) {
                 return new URI(servletBaseUri
-                        + "/JVoiceXmlMmi/VoiceXmlSnippet?prompt="
+                        + "/VoiceXmlSnippet?field="
                         + encodedContentString);
             } else {
                 return new URI(servletBaseUri
-                        + "/JVoiceXmlMmi/VoiceXmlSnippet?field="
+                        + "/VoiceXmlSnippet?prompt="
                         + encodedContentString);
             }
         } catch (UnsupportedEncodingException e) {
-            throw new URISyntaxException(contentString, e.getMessage());
+            throw new URISyntaxException(str, e.getMessage());
         }
     }
 
+    /**
+     * Parses the content of a start request into VoiceXML snippets.
+     * @param object the content element
+     * @return parsed VoiceXML snippet
+     * @since 0.7.7
+     */
+    private String parseContent(final Object object) {
+        if (object instanceof String) {
+            return (String) object;
+        } else if (object instanceof Element) {
+            final Element element = (Element) object;
+            return element.getTextContent();
+        }
+        return null;
+    }
+
+    /**
+     * Checks if a given content in a start request denotes a field.
+     * @param object the content element
+     * @return {@code true} if the content denotes a field
+     * @since 0.7.7
+     */
+    private boolean isField(final Object object) {
+        if (!(object instanceof Element)) {
+            return false;
+        }
+        final Element element = (Element) object;
+        final String name = element.getLocalName();
+        return "field".equalsIgnoreCase(name);
+    }
     /**
      * Processes a cancel request.
      * 
@@ -877,7 +880,7 @@ public final class VoiceModalityComponent
                     if (application != null) {
                         final List<LastResult> lastresults =
                                 application.getLastResult();
-                        final String result =
+                        final Object result =
                                 converter.convertApplicationLastResult(
                                         lastresults);
                         done.addStatusInfo(result);
