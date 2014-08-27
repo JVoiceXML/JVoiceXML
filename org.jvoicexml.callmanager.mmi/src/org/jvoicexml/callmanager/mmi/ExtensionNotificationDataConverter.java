@@ -47,6 +47,6 @@ public interface ExtensionNotificationDataConverter {
      * @return converted last result
      * @throws ConversionException error converting the result
      */
-    String convertApplicationLastResult(final List<LastResult> lastresult)
+    Object convertApplicationLastResult(final List<LastResult> lastresult)
             throws ConversionException;
 }
