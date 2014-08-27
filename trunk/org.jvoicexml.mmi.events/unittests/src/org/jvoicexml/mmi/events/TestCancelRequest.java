@@ -39,7 +39,7 @@ public class TestCancelRequest {
         final Foo foo = new Foo();
         final AnyComplexType any = new AnyComplexType();
 //        List<Object> bars = new ArrayList<Object>();
-        any.getContent().add(bar);
+        any.addContent(bar);
         foo.setBars(any);
         foo.setValue("lamm");
         data.add(foo);
