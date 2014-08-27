@@ -88,9 +88,9 @@ public final class Jsapi20RecognitionResult
             return null;
         }
 
+        // construct the utterance from the tokens
         final ResultToken[] tokens = result.getBestTokens();
         final StringBuilder utterance = new StringBuilder();
-
         for (int i = 0; i < tokens.length; i++) {
             utterance.append(tokens[i].getText());
             utterance.append(' ');
@@ -203,10 +203,11 @@ public final class Jsapi20RecognitionResult
                 LOGGER.debug("creating semantic interpretation...");
             }
             final FinalResult finalResult = (FinalResult) result;
-            final String[] tags = (String[]) finalResult.getTags(0);
-            if ((tags == null) || (tags.length == 0)) {
+            final Object[] objecttags = finalResult.getTags(0);
+            if ((objecttags == null) || (objecttags.length == 0)) {
                 return null;
             }
+            final String[] tags = toString(objecttags);
             for (int i = 0; i < tags.length; i++) {
                 if (tags[i].startsWith("out.")) {
                     tags[i] = tags[i].substring(tags[i].indexOf('.') + 1);
@@ -279,6 +280,23 @@ public final class Jsapi20RecognitionResult
             }
         }
         return interpretation;
+    }
+
+    /**
+     * Converts given object tags into a string representation.
+     * @param objecttags the object tags to convert.
+     * @return tags as string
+     * @since 0.7.7
+     */
+    private String[] toString(final Object[] objecttags) {
+        final String[] tags = new String[objecttags.length];
+        for (int i = 0; i<objecttags.length; i++) {
+            final Object o = objecttags[i];
+            if (o != null) {
+                tags[i] = o.toString();
+            }
+        }
+        return tags;
     }
 
     /**
