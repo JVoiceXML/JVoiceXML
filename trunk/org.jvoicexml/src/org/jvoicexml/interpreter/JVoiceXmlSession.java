@@ -60,21 +60,18 @@ import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Implementation of a {@link Session}.
- *
+ * 
  * <p>
- * Each session is started in a new thread with the session id as the
- * name.
+ * Each session is started in a new thread with the session id as the name.
  * </p>
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class JVoiceXmlSession
-    extends Thread
-        implements Session {
+public final class JVoiceXmlSession extends Thread implements Session {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlSession.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(JVoiceXmlSession.class);
 
     /** The connection info that was used when connecting to JVoiceXML. */
     private final ConnectionInformation info;
@@ -109,6 +106,9 @@ public final class JVoiceXmlSession
     /** Registered session listeners. */
     private final ScopedCollection<SessionListener> sessionListeners;
 
+    /** Registered detailed session listeners. */
+    private final Collection<DetailedSessionListener> detailedSessionListeners;
+
     /**
      * Semaphore to that is set while the session is running.
      */
@@ -116,13 +116,13 @@ public final class JVoiceXmlSession
 
     /**
      * Constructs a new object.
-     *
+     * 
      * @param ip
-     *        the implementation platform.
+     *            the implementation platform.
      * @param jvxml
-     *        the main object to retrieve further resources.
+     *            the main object to retrieve further resources.
      * @param connectionInformation
-     *        the connection information to use
+     *            the connection information to use
      */
     public JVoiceXmlSession(final ImplementationPlatform ip,
             final JVoiceXmlCore jvxml,
@@ -144,6 +144,7 @@ public final class JVoiceXmlSession
         sem = new Object();
         closed = false;
         sessionListeners = new ScopedCollection<SessionListener>(scopeObserver);
+        detailedSessionListeners = new java.util.ArrayList<DetailedSessionListener>();
     }
 
     /**
@@ -167,7 +168,30 @@ public final class JVoiceXmlSession
     }
 
     /**
+     * Adds the given session listener to the list of registered session
+     * listeners.
+     * @param listener the listener to add
+     */
+    public void addSessionListener(final DetailedSessionListener listener) {
+        synchronized (detailedSessionListeners) {
+            detailedSessionListeners.add(listener);
+        }
+    }
+
+    /**
+     * Removes the given session listener from the list of registered session
+     * listeners.
+     * @param listener the listener to remove
+     */
+    public void removeSessionListener(final DetailedSessionListener listener) {
+        synchronized (detailedSessionListeners) {
+            detailedSessionListeners.remove(listener);
+        }
+    }
+
+    /**
      * Retrieves the universal unique identifier for this session.
+     * 
      * @return Universal unique identifier for this session.
      */
     public String getSessionID() {
@@ -176,11 +200,10 @@ public final class JVoiceXmlSession
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * Starts this session in a new thread.
      */
-    public Application call(final URI uri)
-            throws ErrorEvent {
+    public Application call(final URI uri) throws ErrorEvent {
         if (closed) {
             throw new NoresourceError("Session is already closed");
         }
@@ -226,8 +249,8 @@ public final class JVoiceXmlSession
      * {@inheritDoc}
      */
     @Override
-    public CharacterInput getCharacterInput()
-            throws NoresourceError, ConnectionDisconnectHangupEvent {
+    public CharacterInput getCharacterInput() throws NoresourceError,
+            ConnectionDisconnectHangupEvent {
         if (closed) {
             throw new NoresourceError("Session is already closed");
         }
@@ -242,13 +265,12 @@ public final class JVoiceXmlSession
     public Application getApplication() {
         return application;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void waitSessionEnd()
-            throws ErrorEvent {
+    public void waitSessionEnd() throws ErrorEvent {
         LOGGER.info("waiting for end of session...");
 
         // Do not wait, if there is already an error.
@@ -287,7 +309,7 @@ public final class JVoiceXmlSession
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * Session working method.
      */
     @Override
@@ -304,28 +326,25 @@ public final class JVoiceXmlSession
             callingDevice = info.getCallingDevice();
             protocolName = info.getProtocolName();
             protocolVersion = info.getProtocolVersion();
-            LOGGER.info("start processing application '"
-                    + application + "' called from '" + callingDevice + "' to "
-                    + "'" + calledDevice + "' using protocol '"
-                    + protocolName + "' version '" + protocolVersion + "'...");
+            LOGGER.info("start processing application '" + application
+                    + "' called from '" + callingDevice + "' to " + "'"
+                    + calledDevice + "' using protocol '" + protocolName
+                    + "' version '" + protocolVersion + "'...");
         } else {
             calledDevice = null;
             callingDevice = null;
             protocolName = null;
             protocolVersion = null;
-            LOGGER.info("start processing application '"
-                    + application + "'...");
+            LOGGER.info("start processing application '" + application + "'...");
         }
 
-                
         processingError = null;
         final ScriptingEngine scripting = getScriptingEngine();
         scopeObserver.enterScope(Scope.SESSION);
         try {
-            final SessionShadowVarContainer session =
-                scripting.createHostObject(
-                        SessionShadowVarContainer.VARIABLE_NAME,
-                        SessionShadowVarContainer.class);
+            final SessionShadowVarContainer session = scripting
+                    .createHostObject(SessionShadowVarContainer.VARIABLE_NAME,
+                            SessionShadowVarContainer.class);
             session.setLocalCallerDevice(calledDevice);
             session.setRemoteCallerDevice(callingDevice);
             session.protocol(protocolName, protocolVersion);
@@ -334,13 +353,13 @@ public final class JVoiceXmlSession
             notifySessionStarted();
             context.process(application);
         } catch (ErrorEvent e) {
-            LOGGER.error("error processing application '"
-                    + application + "'", e);
+            LOGGER.error("error processing application '" + application + "'",
+                    e);
 
             processingError = e;
         } catch (Exception e) {
-            LOGGER.error("error processing application '"
-                    + application + "'", e);
+            LOGGER.error("error processing application '" + application + "'",
+                    e);
             processingError = new ExceptionWrapper(e.getMessage(), e);
         } finally {
             cleanup();
@@ -349,12 +368,13 @@ public final class JVoiceXmlSession
 
     /**
      * Releases all acquired resources.
+     * 
      * @since 0.7.5
      */
     private void cleanup() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("finished processing application '"
-                    + application + "'");
+            LOGGER.debug("finished processing application '" + application
+                    + "'");
         }
         if (closed) {
             return;
@@ -374,26 +394,25 @@ public final class JVoiceXmlSession
 
     /**
      * Creates custom host objects.
+     * 
      * @exception ConfigurationException
-     *         error loading a configuration
+     *                error loading a configuration
      * @exception SemanticError
-     *         error creating a host object
+     *                error creating a host object
      * @since 0.7.5
      */
-    private void createHostObjects()
-        throws ConfigurationException, SemanticError {
+    private void createHostObjects() throws ConfigurationException,
+            SemanticError {
         final Configuration configuration = context.getConfiguration();
         final ScriptingEngine scripting = getScriptingEngine();
-        final Collection<VariableProviders> providers =
-            configuration.loadObjects(VariableProviders.class,
-                    "variableprovider");
+        final Collection<VariableProviders> providers = configuration
+                .loadObjects(VariableProviders.class, "variableprovider");
         for (VariableProviders provider : providers) {
-            final Collection<ScriptableObject> created =
-                provider.createHostObjects(scripting, Scope.SESSION);
+            final Collection<ScriptableObject> created = provider
+                    .createHostObjects(scripting, Scope.SESSION);
             for (ScriptableObject o : created) {
                 if (o instanceof SessionListener) {
-                    final SessionListener listener =
-                        (SessionListener) o;
+                    final SessionListener listener = (SessionListener) o;
                     sessionListeners.add(listener);
                 }
             }
@@ -401,18 +420,22 @@ public final class JVoiceXmlSession
     }
 
     /**
-     * Notifies all session listeners that the session has ended.
+     * Notifies all session listeners that the session has started.
      * 
      * @since 0.7.3
      */
     private void notifySessionStarted() {
-        final Collection<SessionListener> listeners;
         synchronized (sessionListeners) {
-            listeners =
-                new java.util.ArrayList<SessionListener>(sessionListeners);
+            for (SessionListener listener : sessionListeners) {
+                listener.sessionStarted(this);
+            }
         }
-        for (SessionListener listener : listeners) {
-            listener.sessionStarted(this);
+        synchronized (detailedSessionListeners) {
+            final SessionEvent event =
+                    new SessionEvent(this, SessionEvent.SESSION_STARTED);
+            for (DetailedSessionListener listener : detailedSessionListeners) {
+                listener.sessionStarted(this, event);
+            }
         }
     }
 
@@ -423,15 +446,20 @@ public final class JVoiceXmlSession
      */
     private void notifySessionEnded() {
         // First: notify all listeners
-        final Collection<SessionListener> listeners;
         synchronized (sessionListeners) {
-            listeners =
-                new java.util.ArrayList<SessionListener>(sessionListeners);
-        }
-        for (SessionListener listener : listeners) {
-            listener.sessionEnded(this);
+            for (SessionListener listener : sessionListeners) {
+                listener.sessionEnded(this);
+            }
         }
 
+        synchronized (detailedSessionListeners) {
+            final SessionEvent event =
+                    new SessionEvent(this, SessionEvent.SESSION_ENDED);
+            for (DetailedSessionListener listener : detailedSessionListeners) {
+                listener.sessionEnded(this, event);
+            }
+        }
+        
         // Also notify the end of the session via the sem
         synchronized (sem) {
             sem.notifyAll();
@@ -440,7 +468,7 @@ public final class JVoiceXmlSession
 
     /**
      * Retrieves a reference to the used implementation platform.
-     *
+     * 
      * @return The used implementation platform.
      */
     public ImplementationPlatform getImplementationPlatform() {
@@ -449,7 +477,7 @@ public final class JVoiceXmlSession
 
     /**
      * Retrieves a reference to the document server.
-     *
+     * 
      * @return The document server.
      */
     public DocumentServer getDocumentServer() {
@@ -458,9 +486,9 @@ public final class JVoiceXmlSession
 
     /**
      * Retrieves a reference to the grammar processor.
-     *
+     * 
      * @return The grammar processor.
-     *
+     * 
      * @since 0.3
      */
     public GrammarProcessor getGrammarProcessor() {
@@ -470,7 +498,7 @@ public final class JVoiceXmlSession
     /**
      * Retrieve the <code>VoiceXmlInterpreterContext</code> related to this
      * session.
-     *
+     * 
      * @return The related context.
      */
     public VoiceXmlInterpreterContext getVoiceXmlInterpreterContext() {
@@ -479,6 +507,7 @@ public final class JVoiceXmlSession
 
     /**
      * Retrieves the scope observer for this session.
+     * 
      * @return The scope observer.
      */
     public ScopeObserver getScopeObserver() {
@@ -487,8 +516,9 @@ public final class JVoiceXmlSession
 
     /**
      * Retrieves the scripting engine.
+     * 
      * @return The scripting engine.
-     *
+     * 
      * @since 0.4
      */
     public ScriptingEngine getScriptingEngine() {

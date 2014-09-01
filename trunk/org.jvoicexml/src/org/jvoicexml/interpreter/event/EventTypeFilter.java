@@ -70,5 +70,4 @@ final class EventTypeFilter implements EventFilter {
                     + "'");
         }
     }
-
 }
