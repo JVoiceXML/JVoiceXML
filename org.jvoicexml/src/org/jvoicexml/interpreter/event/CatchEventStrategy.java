@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -85,6 +85,7 @@ final class CatchEventStrategy
     /**
      * {@inheritDoc}
      */
+    @Override
     public void process(final JVoiceXMLEvent event)
             throws JVoiceXMLEvent {
         final FormInterpretationAlgorithm fia =
