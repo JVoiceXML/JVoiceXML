@@ -113,7 +113,7 @@ final class StatusUpdateThread extends Thread {
                 }
             }
             try {
-                mc.sendResponse(channel, response);
+                mc.sendLifeCycleEvent(channel, response);
             } catch (IOException e) {
                 running = false;
             }

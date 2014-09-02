@@ -24,10 +24,11 @@
  *
  */
 
-
 package org.jvoicexml.interpreter;
 
 import java.util.EventObject;
+
+import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
  * Event that may happen while a session is being executed.
@@ -46,20 +47,42 @@ public class SessionEvent extends EventObject {
     /** The type of the event. */
     private final int type;
 
+    /** The root event that caused this event. */
+    private final JVoiceXMLEvent rootEvent;
+
     /**
      * Constructs a new object.
-     * @param source the source issuing the event
-     * @param eventType the type of the event
+     * 
+     * @param source
+     *            the source issuing the event
+     * @param eventType
+     *            the type of the event
      */
-    public SessionEvent(Object source, final int eventType) {
+    public SessionEvent(final Object source, final int eventType) {
+        this(source, eventType, null);
+    }
+
+    /**
+     * Constructs a new object.
+     * 
+     * @param source
+     *            the source issuing the event
+     * @param eventType
+     *            the type of the event
+     * @param root
+     *            the root event that caused this event
+     */
+    public SessionEvent(final Object source, final int eventType,
+            final JVoiceXMLEvent root) {
         super(source);
         type = eventType;
+        rootEvent = root;
     }
 
     /**
      * Retrieves the type of the event
-     * @return the ype of the event
-     * @since 0.7.7
+     * 
+     * @return the type of the event
      * @see #SESSION_STARTED
      * @see #SESSION_INPUT
      * @see #SESSION_OUTPUT
@@ -67,5 +90,15 @@ public class SessionEvent extends EventObject {
      */
     public int getType() {
         return type;
+    }
+
+    /**
+     * Retrieves the root event that caused this event. This may be useful to
+     * determine further parameters.
+     * 
+     * @return the root event, maybe {@code null}
+     */
+    public JVoiceXMLEvent getRootEvent() {
+        return rootEvent;
     }
 }

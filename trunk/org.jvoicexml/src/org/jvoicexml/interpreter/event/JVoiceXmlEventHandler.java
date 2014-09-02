@@ -524,22 +524,27 @@ public final class JVoiceXmlEventHandler
 
     /**
      * {@inheritDoc}
+     * 
+     * Receive the event from the {@link org.jvoicexml.event.EventBus}
+     * and handle form interpretation.
      */
     @Override
     public synchronized void onEvent(final JVoiceXMLEvent e) {
         if (e == null) {
             return;
         }
+        final String type = e.getEventType();
+        if (type.startsWith("org.jvoicexml.event.plain.implementation")) {
+            // Ignore events coming from the system output etc.
+            return;
+        }
+
         // Allow for only one event.
         if (event != null) {
-            LOGGER.info("ignoring second event '" + e.getEventType()
+            LOGGER.info("ignoring second event '" + type
                     + "' current  event is '" + event.getEventType() + "'");
             return;
         }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("notifying event '" + e.getEventType() + "'...");
-        }
-
         synchronized (semaphore) {
             event = transformEvent(e);
             LOGGER.info("notified event '" + event.getEventType() + "'");

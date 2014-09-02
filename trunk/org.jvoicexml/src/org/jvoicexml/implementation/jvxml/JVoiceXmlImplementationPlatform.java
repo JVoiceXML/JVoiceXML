@@ -885,6 +885,11 @@ public final class JVoiceXmlImplementationPlatform
      */
     @Override
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
+        // Forward this to the event bus
+        if (eventbus != null) {
+            eventbus.publish(event);
+        }
+
         if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
             final OutputStartedEvent outputStartedEvent =
                 (OutputStartedEvent) event;
