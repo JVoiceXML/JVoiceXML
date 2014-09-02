@@ -13,5 +13,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.callmanager.sip/3rdparty/jainsip1.2/jainsip1.2-api.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
