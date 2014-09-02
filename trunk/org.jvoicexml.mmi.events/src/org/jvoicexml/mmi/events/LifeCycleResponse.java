@@ -27,10 +27,10 @@
 
 package org.jvoicexml.mmi.events;
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+
+import org.w3c.dom.Element;
 
 /**
  * Base class for MMI lifecycle responses.
@@ -121,6 +121,20 @@ public class LifeCycleResponse extends LifeCycleEvent {
     }
 
     /**
+     * Adds the value of the status info.
+     * @param text the status message to set
+     */
+    public final void addStatusInfo(final Object object) {
+        if (object instanceof String) {
+            final String str = (String) object;
+            addStatusInfo(str);
+        } else if (object instanceof Element) {
+            final Element element = (Element) object;
+            addStatusInfo(element);
+        }
+    }
+    
+    /**
      * Adds the value of the status info property to the given text message.
      * @param text the status message to set
      */
@@ -129,5 +143,16 @@ public class LifeCycleResponse extends LifeCycleEvent {
             statusInfo = new AnyComplexType();
         }
         statusInfo.addContent(text);
+    }
+
+    /**
+     * Adds the value of the status info property.
+     * @param text the status message to set
+     */
+    public final void addStatusInfo(final Element element) {
+        if (statusInfo == null) {
+            statusInfo = new AnyComplexType();
+        }
+        statusInfo.addContent(element);
     }
 }
