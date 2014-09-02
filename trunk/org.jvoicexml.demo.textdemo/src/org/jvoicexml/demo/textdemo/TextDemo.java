@@ -70,21 +70,34 @@ public final class TextDemo implements TextListener {
         LOGGER.info("(c) 2013 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
-        final TextServer server = new TextServer(4242);
-        server.addTextListener(new TextDemo());
-        server.start();
+        final int MAX = 20;
+        final TextServer[] servers = new TextServer[MAX];
+        for (int i=0; i<MAX; i++) {
+            final TextServer server = new TextServer(4242 + i);
+            server.addTextListener(new TextDemo());
+            server.start();
+            servers[i] = server;
+        }
 
         try {
             final Context context = new InitialContext();
             final JVoiceXml jvxml = (JVoiceXml) context.lookup("JVoiceXml");
             final File file = new File("helloworld.vxml");
             final URI dialog = file.toURI();
-            final ConnectionInformation info =
-                    server.getConnectionInformation();
-            final Session session = jvxml.createSession(info);
-            session.call(dialog);
-            session.waitSessionEnd();
-            session.hangup();
+            final Session[] sessions = new Session[MAX];
+            for (int i=0; i<MAX; i++) {
+                final ConnectionInformation info =
+                        servers[i].getConnectionInformation();
+                final Session session = jvxml.createSession(info);
+                sessions[i] = session;
+            }
+            for (int i=0; i<MAX; i++) {
+                sessions[i].call(dialog);
+            }
+            for (int i=0; i<MAX; i++) {
+                sessions[i].waitSessionEnd();
+                sessions[i].hangup();
+            }
         } catch (NamingException e) {
             LOGGER.fatal(e.getMessage(), e);
             return;
