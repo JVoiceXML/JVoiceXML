@@ -25,6 +25,8 @@
  */
 package org.jvoicexml.implementation.jsapi20;
 
+import java.util.Locale;
+
 import javax.speech.SpeechLocale;
 import javax.speech.recognition.RecognizerMode;
 
@@ -89,6 +91,7 @@ public final class JVoiceXmlRecognizerModeFactory
      * @param loc the locale to set.
      */
     public void setLocale(final String loc) {
+        final Locale l = new Locale(loc);
         locale = new SpeechLocale(loc);
     }
 
