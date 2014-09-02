@@ -36,6 +36,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.client.GenericClient;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.error.NoresourceError;
 
 /**
  * Demo implementation of the venerable "Hello World".
@@ -44,6 +45,11 @@ import org.jvoicexml.event.ErrorEvent;
  * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
  * the <code>config</code> folder added to the classpath.
  * </p>
+ * <p>
+ * This demo requires that JVoiceXML is configured with the jsapi20
+ * implementation platform.
+ * </p>
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
@@ -71,13 +77,14 @@ public final class HelloWorldDemo {
             session.hangup();
         } catch (NamingException e) {
             LOGGER.fatal(e.getMessage(), e);
-            return;
+        } catch (NoresourceError e) {
+            LOGGER.info("do you have the jsapi20 implementation platform"
+                    + " configured?");
+            LOGGER.fatal(e.getMessage(), e);
         } catch (ErrorEvent e) {
             LOGGER.fatal(e.getMessage(), e);
-            return;
         } catch (UnsupportedResourceIdentifierException e) {
             LOGGER.fatal(e.getMessage(), e);
-            return;
         } finally {
             client.close();
         }
