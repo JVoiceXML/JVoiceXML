@@ -42,6 +42,8 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.interpreter.DetailedSessionListener;
+import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.CancelRequest;
 import org.jvoicexml.mmi.events.CancelResponse;
@@ -143,16 +145,16 @@ public final class VoiceModalityComponent
     }
 
     /**
-     * Sends a response to the given channel.
+     * Sends a {@link LifeCycleEvent} to the given channel.
      * 
      * @param channel
      *            the channel to use
      * @param event
-     *            the response to send
+     *            the event to send
      * @exception IOException
      *                if an error occurs when sending the response
      */
-    void sendResponse(final Object channel, final LifeCycleEvent event)
+    void sendLifeCycleEvent(final Object channel, final LifeCycleEvent event)
             throws IOException {
         try {
             adapter.sendMMIEvent(channel, event);
@@ -410,6 +412,10 @@ public final class VoiceModalityComponent
                     session = callManager.createSession();
                     context.setSession(session);
                 }
+                final DetailedSessionListener listener = new MmiDetailedSessionListener(
+                        adapter, context);
+                final JVoiceXmlSession jvxmlSession = (JVoiceXmlSession) session;
+                jvxmlSession.addSessionListener(listener);
                 session.call(uri);
                 session.addSessionListener(this);
             }
@@ -497,15 +503,12 @@ public final class VoiceModalityComponent
         final String str = parseContent(object);
         String encodedContentString;
         try {
-            encodedContentString = URLEncoder.encode(str,
-                    encoding);
+            encodedContentString = URLEncoder.encode(str, encoding);
             if (isField(object)) {
-                return new URI(servletBaseUri
-                        + "/VoiceXmlSnippet?field="
+                return new URI(servletBaseUri + "/VoiceXmlSnippet?field="
                         + encodedContentString);
             } else {
-                return new URI(servletBaseUri
-                        + "/VoiceXmlSnippet?prompt="
+                return new URI(servletBaseUri + "/VoiceXmlSnippet?prompt="
                         + encodedContentString);
             }
         } catch (UnsupportedEncodingException e) {
@@ -515,7 +518,9 @@ public final class VoiceModalityComponent
 
     /**
      * Parses the content of a start request into VoiceXML snippets.
-     * @param object the content element
+     * 
+     * @param object
+     *            the content element
      * @return parsed VoiceXML snippet
      * @since 0.7.7
      */
@@ -531,7 +536,9 @@ public final class VoiceModalityComponent
 
     /**
      * Checks if a given content in a start request denotes a field.
-     * @param object the content element
+     * 
+     * @param object
+     *            the content element
      * @return {@code true} if the content denotes a field
      * @since 0.7.7
      */
@@ -543,6 +550,7 @@ public final class VoiceModalityComponent
         final String name = element.getLocalName();
         return "field".equalsIgnoreCase(name);
     }
+
     /**
      * Processes a cancel request.
      * 
@@ -878,11 +886,10 @@ public final class VoiceModalityComponent
                 if (converter != null) {
                     final Application application = session.getApplication();
                     if (application != null) {
-                        final List<LastResult> lastresults =
-                                application.getLastResult();
-                        final Object result =
-                                converter.convertApplicationLastResult(
-                                        lastresults);
+                        final List<LastResult> lastresults = application
+                                .getLastResult();
+                        final Object result = converter
+                                .convertApplicationLastResult(lastresults);
                         done.addStatusInfo(result);
                     }
                 }

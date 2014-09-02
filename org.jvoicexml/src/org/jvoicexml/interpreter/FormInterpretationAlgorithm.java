@@ -1128,6 +1128,10 @@ public final class FormInterpretationAlgorithm
 
         context.enterScope(Scope.ANONYMOUS);
         block.setVisited();
+        final ImplementationPlatform platform =
+                context.getImplementationPlatform();
+        final EventBus eventbus = context.getEventBus();
+        platform.setEventBus(eventbus);
 
         try {
             executor.executeChildNodes(context, interpreter, this, block);
@@ -1238,6 +1242,8 @@ public final class FormInterpretationAlgorithm
         eventStrategies = handler.collect(context, interpreter, this, object);
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
+        final EventBus eventbus = context.getEventBus();
+        platform.setEventBus(eventbus);
         platform.waitNonBargeInPlayed();
 
         // Execute...
@@ -1276,6 +1282,7 @@ public final class FormInterpretationAlgorithm
             maxTime = DEFAULT_RECORDING_MAXTIME;
         }
         final EventBus eventbus = context.getEventBus();
+        platform.setEventBus(eventbus);
         final RecordingReceiverThread recording =
             new RecordingReceiverThread(eventbus, maxTime);
         recording.start();
@@ -1365,10 +1372,9 @@ public final class FormInterpretationAlgorithm
         // Add the handlers.
         final EventHandler handler = context.getEventHandler();
         eventStrategies = handler.collect(context, interpreter, this, transfer);
-        platform.waitNonBargeInPlayed();
-
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
+        platform.waitNonBargeInPlayed();
 
         // Transfer
         call.transfer(dest);
