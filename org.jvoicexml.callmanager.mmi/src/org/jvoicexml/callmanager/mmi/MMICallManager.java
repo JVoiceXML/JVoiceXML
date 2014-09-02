@@ -194,6 +194,7 @@ public final class MMICallManager implements CallManager {
         final ConnectionInformation info =
                 controller.getConnectionInformation();
         final Session session = jvxml.createSession(info);
+        
         sessions.put(session, controller);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("session '" + session.getSessionID() + "' created");

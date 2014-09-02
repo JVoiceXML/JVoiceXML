@@ -45,11 +45,13 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.EventBus;
+import org.jvoicexml.event.EventSubscriber;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
@@ -68,7 +70,8 @@ import org.mozilla.javascript.ScriptableObject;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class JVoiceXmlSession extends Thread implements Session {
+public final class JVoiceXmlSession extends Thread
+        implements Session, EventSubscriber {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(JVoiceXmlSession.class);
@@ -145,6 +148,8 @@ public final class JVoiceXmlSession extends Thread implements Session {
         closed = false;
         sessionListeners = new ScopedCollection<SessionListener>(scopeObserver);
         detailedSessionListeners = new java.util.ArrayList<DetailedSessionListener>();
+        final EventBus eventbus = context.getEventBus();
+        eventbus.subscribe(SynthesizedOutputEvent.EVENT_TYPE, this);
     }
 
     /**
@@ -170,7 +175,9 @@ public final class JVoiceXmlSession extends Thread implements Session {
     /**
      * Adds the given session listener to the list of registered session
      * listeners.
-     * @param listener the listener to add
+     * 
+     * @param listener
+     *            the listener to add
      */
     public void addSessionListener(final DetailedSessionListener listener) {
         synchronized (detailedSessionListeners) {
@@ -181,7 +188,9 @@ public final class JVoiceXmlSession extends Thread implements Session {
     /**
      * Removes the given session listener from the list of registered session
      * listeners.
-     * @param listener the listener to remove
+     * 
+     * @param listener
+     *            the listener to remove
      */
     public void removeSessionListener(final DetailedSessionListener listener) {
         synchronized (detailedSessionListeners) {
@@ -431,8 +440,8 @@ public final class JVoiceXmlSession extends Thread implements Session {
             }
         }
         synchronized (detailedSessionListeners) {
-            final SessionEvent event =
-                    new SessionEvent(this, SessionEvent.SESSION_STARTED);
+            final SessionEvent event = new SessionEvent(this,
+                    SessionEvent.SESSION_STARTED);
             for (DetailedSessionListener listener : detailedSessionListeners) {
                 listener.sessionStarted(this, event);
             }
@@ -453,13 +462,13 @@ public final class JVoiceXmlSession extends Thread implements Session {
         }
 
         synchronized (detailedSessionListeners) {
-            final SessionEvent event =
-                    new SessionEvent(this, SessionEvent.SESSION_ENDED);
+            final SessionEvent event = new SessionEvent(this,
+                    SessionEvent.SESSION_ENDED);
             for (DetailedSessionListener listener : detailedSessionListeners) {
                 listener.sessionEnded(this, event);
             }
         }
-        
+
         // Also notify the end of the session via the sem
         synchronized (sem) {
             sem.notifyAll();
@@ -530,5 +539,21 @@ public final class JVoiceXmlSession extends Thread implements Session {
      */
     public ErrorEvent getLastError() {
         return processingError;
+    }
+
+    /**
+     * {@inheritDoc} Notifies all detailed session listeners about relevant
+     * thing happening on the {@link EventBus}.
+     * 
+     */
+    @Override
+    public void onEvent(final JVoiceXMLEvent event) {
+        if (event instanceof SynthesizedOutputEvent) {
+            final SessionEvent sessionEvent = new SessionEvent(this,
+                    SessionEvent.SESSION_OUTPUT, event);
+            for (DetailedSessionListener listener : detailedSessionListeners) {
+                listener.sessionOutput(this, sessionEvent);
+            }
+        }
     }
 }
