@@ -1114,6 +1114,20 @@ Support for VoiceXML snippets is gained by the use of the MMI Servlet
 (see section~\ref{sec:mmi-servlet}).
 In addition an implemention of an Event and Transport Layer is needed.
 
+\subsection{Project \texttt{org.jvoicexml.mmi.http}}
+
+This project contains an implementation of the Event and Transport Layer
+via HTTP. MMI events are received as XML.
+
+\subsubsection{Third party libraries}
+
+This platform makes use of the \lstinline{org.jvoicexml.mmi.event} library
+to author MMI compatible events (see section\ref{sec:mmi-events}).
+
+\paragraph{jetty9.2.2}
+
+Used as an embedded HTTP server.
+
 \subsection{Project \texttt{org.jvoicexml.mmi.socket}}
 
 This project contains an implementation of the Event and Transport Layer
@@ -1335,7 +1349,7 @@ copyright, see section~\ref{sec:copyright}, that we use for JVoiceXML.
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - 
+ * Copyright (C) 2014 JVoiceXML group - 
  *      http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it 
