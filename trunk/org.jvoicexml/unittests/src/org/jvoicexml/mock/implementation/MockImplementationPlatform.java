@@ -112,7 +112,11 @@ public final class MockImplementationPlatform
      */
     public SystemOutput getSystemOutput() throws NoresourceError {
         if (output == null) {
-            output = new MockSystemOutput();
+            MockSystemOutput mock = new MockSystemOutput();
+            if (outputListener != null) {
+                mock.addListener(outputListener);
+            }
+            output = mock;
         }
         return output;
     }

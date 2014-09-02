@@ -1,12 +1,12 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL:  $
+ * Version: $LastChangedRevision: 643 $
+ * Date:    $Date: $
+ * Author:  $LastChangedBy: $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,24 +23,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
-package org.jvoicexml.implementation;
-
-
 /**
- * Notification that the output queue is empty.
+ * Events to transport control information from the
+ * {@link org.jvoicexml.ImplementationPlatform}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
- * @since 0.7.1
+ * @version $Revision: $
+ * @since 0.7.7
  */
-public final class QueueEmptyEvent extends SynthesizedOutputEvent {
-    /**
-     * Constructs a new object.
-     * @param output object that caused the event.
-     * @param sessionId the session id
-     */
-    public QueueEmptyEvent(final SynthesizedOutput output,
-            final String sessionId) {
-        super(output, SynthesizedOutputEvent.QUEUE_EMPTY, sessionId);
-    }
-}
+package org.jvoicexml.event.plain.implementation;

@@ -50,20 +50,21 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.NomatchEvent;
+import org.jvoicexml.event.plain.implementation.MarkerReachedEvent;
+import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
+import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
+import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
+import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.event.plain.jvxml.TransferEvent;
 import org.jvoicexml.implementation.ExternalRecognitionListener;
 import org.jvoicexml.implementation.ExternalResource;
 import org.jvoicexml.implementation.ExternalSynthesisListener;
 import org.jvoicexml.implementation.ImplementationGrammarProcessor;
-import org.jvoicexml.implementation.MarkerReachedEvent;
-import org.jvoicexml.implementation.OutputEndedEvent;
-import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.TelephonyEvent;
@@ -882,10 +883,9 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
+    @Override
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
-        final int id = event.getEvent();
-        switch (id) {
-        case SynthesizedOutputEvent.OUTPUT_STARTED:
+        if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
             final OutputStartedEvent outputStartedEvent =
                 (OutputStartedEvent) event;
             final SpeakableText startedSpeakable =
@@ -893,30 +893,23 @@ public final class JVoiceXmlImplementationPlatform
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("output started " + startedSpeakable);
             }
-            break;
-        case SynthesizedOutputEvent.OUTPUT_ENDED:
+        } else if (event.isType(OutputEndedEvent.EVENT_TYPE)) {
             final OutputEndedEvent outputEndedEvent =
                 (OutputEndedEvent) event;
             final SpeakableText endedSpeakable =
                 outputEndedEvent.getSpeakable();
             outputEnded(endedSpeakable);
-            break;
-        case SynthesizedOutputEvent.QUEUE_EMPTY:
+        } else if (event.isType(QueueEmptyEvent.EVENT_TYPE)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("output queue is empty");
             }
-            break;
-        case SynthesizedOutputEvent.MARKER_REACHED:
+        } else if (event.isType(MarkerReachedEvent.EVENT_TYPE)) {
             final MarkerReachedEvent markReachedEvent =
                 (MarkerReachedEvent) event;
             markname = markReachedEvent.getMark();
             LOGGER.info("reached mark '" + markname + "'");
-            break;
-          case SynthesizedOutputEvent.OUTPUT_UPDATE:
-            break;
-        default:
+        } else {
             LOGGER.warn("unknown synthesized output event " + event);
-            break;
         }
 
         if (externalSynthesisListener != null) {

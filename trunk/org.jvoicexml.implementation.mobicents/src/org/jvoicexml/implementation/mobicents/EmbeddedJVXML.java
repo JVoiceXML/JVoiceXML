@@ -25,13 +25,14 @@
  */
 package org.jvoicexml.implementation.mobicents;
 
-import org.apache.log4j.Logger;
 import java.io.File;
 import java.net.URI;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.servlet.sip.SipServletRequest;
-import org.jvoicexml.Configuration;
 
+import javax.servlet.sip.SipServletRequest;
+
+import org.apache.log4j.Logger;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.ImplementationPlatform;
@@ -44,12 +45,9 @@ import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.jvxml.BufferedCharacterInput;
 import org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatform;
-import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.implementation.mobicents.callmanager.MobicentsConnectionInformation;
+import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.config.DummyConfiguration;
-import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpCallTerminal;
 import org.util.ExLog;

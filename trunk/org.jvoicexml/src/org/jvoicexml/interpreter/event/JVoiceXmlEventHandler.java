@@ -61,7 +61,8 @@ import org.w3c.dom.NodeList;
 
 /**
  * Event handler to catch events generated from the
- * {@link org.jvoicexml.ImplementationPlatform}. This event handler can
+ * {@link org.jvoicexml.ImplementationPlatform} via the
+ * {@link org.jvoicexml.event.EventBus}. This event handler can
  * catch only one event at a time. The first event is propagated to the the
  * FIA while subsequent events will be ignored.
  *

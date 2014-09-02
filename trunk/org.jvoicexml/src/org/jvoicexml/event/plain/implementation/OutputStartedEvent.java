@@ -24,35 +24,56 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.event.plain.implementation;
 
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
- * Notification that the output of a {@link SpeakableText} has
- * started.
+ * Notification that the output of a {@link SpeakableText} has started.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.1
  */
+@SuppressWarnings("serial")
 public final class OutputStartedEvent extends SynthesizedOutputEvent {
+    /** The unsupported element. */
+    public static final String DETAIL = "start";
+
+    /** The detail message. */
+    public static final String EVENT_TYPE = SynthesizedOutputEvent.class
+            .getCanonicalName() + "." + DETAIL;
+
     /** The speakable. */
     private final SpeakableText speakable;
 
     /**
-     * Constructs a new object.
-     * @param output object that caused the event.
-     * @param sessionId the session id
-     * @param speakableText the speakable that has started
+     * Constructs a new event with the event type as its detail message. The
+     * cause is not initialized
+     * 
+     * <p>
+     * The {@link #DETAIL} is used to construct the event type.
+     * </p>
+     * 
+     * @see #getEventType()
+     * 
+     * @param output
+     *            object that caused the event.
+     * @param sessionId
+     *            the session id
+     * @param speakableText
+     *            the speakable that has ended
      */
     public OutputStartedEvent(final SynthesizedOutput output,
             final String sessionId, final SpeakableText speakableText) {
-        super(output, SynthesizedOutputEvent.OUTPUT_STARTED, sessionId);
+        super(output, DETAIL, sessionId);
         speakable = speakableText;
     }
 
     /**
      * Retrieves the speakable.
+     * 
      * @return the speakable
      */
     public SpeakableText getSpeakable() {
