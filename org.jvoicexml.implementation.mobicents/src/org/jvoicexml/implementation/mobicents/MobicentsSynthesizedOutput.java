@@ -28,7 +28,6 @@
  */
 package org.jvoicexml.implementation.mobicents;
 
-import org.apache.log4j.Logger;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -47,6 +46,7 @@ import javax.speech.synthesis.SpeakableEvent;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableSsmlText;
@@ -54,13 +54,12 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.MarkerReachedEvent;
-import org.jvoicexml.implementation.ObservableSynthesizedOutput;
-import org.jvoicexml.implementation.OutputEndedEvent;
-import org.jvoicexml.implementation.OutputStartedEvent;
-import org.jvoicexml.implementation.QueueEmptyEvent;
+import org.jvoicexml.event.plain.implementation.MarkerReachedEvent;
+import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
+import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
+import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
+import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;

@@ -108,6 +108,17 @@ public abstract class JVoiceXMLEvent
     public abstract String getEventType();
 
     /**
+     * Checks if the type of this event matches the given type.
+     * @param otherType the type to check for
+     * @return {@code true} if the type is the same
+     * @since 0.7.7
+     */
+    public boolean isType(final String otherType) {
+        final String type = getEventType();
+        return type.equals(otherType);
+    }
+
+    /**
      * {@inheritDoc}
      *
      * <p>
@@ -119,16 +130,12 @@ public abstract class JVoiceXMLEvent
     @Override
     public final String getMessage() {
         final StringBuilder expandedMessage = new StringBuilder();
-
         expandedMessage.append(getEventType());
-
         final String message = super.getMessage();
-
         if (message != null) {
             expandedMessage.append(": ");
             expandedMessage.append(message);
         }
-
         return expandedMessage.toString();
     }
 }

@@ -44,11 +44,11 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.MarkerReachedEvent;
-import org.jvoicexml.implementation.OutputEndedEvent;
-import org.jvoicexml.implementation.OutputStartedEvent;
-import org.jvoicexml.implementation.QueueEmptyEvent;
-import org.jvoicexml.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.event.plain.implementation.MarkerReachedEvent;
+import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
+import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
+import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
+import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.mock.implementation.MockSynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Break;
@@ -67,7 +67,7 @@ import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
 
 /**
  * Test cases for {@link JVoiceXmlSynthesizerModeDescFactory}.
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
@@ -90,25 +90,27 @@ public final class TestJsapi10SynthesizedOutput {
 
     /**
      * Global initialization.
+     * 
      * @throws EngineException
-     *         error registering the engine.
+     *             error registering the engine.
      */
     @BeforeClass
     public static void init() throws EngineException {
         final String config = "/sphinx4.jsapi10.config";
-        final SphinxRecognizerModeDesc desc =
-                new SphinxRecognizerModeDesc(config);
+        final SphinxRecognizerModeDesc desc = new SphinxRecognizerModeDesc(
+                config);
         SphinxEngineCentral.registerEngineModeDesc(desc);
         Central.registerEngineCentral(FreeTTSEngineCentral.class.getName());
-//        Central.registerEngineCentral("com.cloudgarden.speech.CGEngineCentral");
+        // Central.registerEngineCentral("com.cloudgarden.speech.CGEngineCentral");
     }
 
     /**
      * Test setup.
+     * 
      * @exception Exception
-     *            setup failed.
+     *                setup failed.
      * @throws NoresourceError
-     *         error opening the synthesizer
+     *             error opening the synthesizer
      */
     @Before
     public void setUp() throws Exception, NoresourceError {
@@ -124,8 +126,9 @@ public final class TestJsapi10SynthesizedOutput {
 
     /**
      * Test tear down.
+     * 
      * @exception Exception
-     *            tear down failed
+     *                tear down failed
      */
     @After
     public void tearDown() throws Exception {
@@ -133,11 +136,14 @@ public final class TestJsapi10SynthesizedOutput {
     }
 
     /**
-     * Test method for {@link Jsapi10SynthesizedOutput#queueSpeakable(SpeakableText, boolean, org.jvoicexml.DocumentServer)}.
+     * Test method for
+     * {@link Jsapi10SynthesizedOutput#queueSpeakable(SpeakableText, boolean, org.jvoicexml.DocumentServer)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         test failed.
+     *             test failed.
      * @throws Exception
-     *         test failed
+     *             test failed
      */
     @Test
     public void testQueueSpeakable() throws JVoiceXMLEvent, Exception {
@@ -152,27 +158,27 @@ public final class TestJsapi10SynthesizedOutput {
         listener.waitSize(size, TIMEOUT);
         Assert.assertEquals(size, listener.size());
         SynthesizedOutputEvent start = listener.get(0);
-        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_STARTED,
-                start.getEvent());
+        Assert.assertEquals(OutputStartedEvent.EVENT_TYPE, start.getEventType());
         OutputStartedEvent startedEvent = (OutputStartedEvent) start;
         Assert.assertEquals(speakable1, startedEvent.getSpeakable());
         SynthesizedOutputEvent stop = listener.get(1);
-        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_ENDED ,
-                stop.getEvent());
+        Assert.assertEquals(OutputEndedEvent.EVENT_TYPE, start.getEventType());
         OutputEndedEvent stoppedEvent = (OutputEndedEvent) stop;
         Assert.assertEquals(speakable1, stoppedEvent.getSpeakable());
         SynthesizedOutputEvent empty = listener.get(2);
-        Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY ,
-                empty.getEvent());
+        Assert.assertEquals(QueueEmptyEvent.EVENT_TYPE, start.getEventType());
         Assert.assertTrue(empty instanceof QueueEmptyEvent);
     }
 
     /**
-     * Test method for {@link Jsapi10SynthesizedOutput#queueSpeakable(SpeakableText, boolean, org.jvoicexml.DocumentServer)}.
+     * Test method for
+     * {@link Jsapi10SynthesizedOutput#queueSpeakable(SpeakableText, boolean, org.jvoicexml.DocumentServer)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         test failed.
+     *             test failed.
      * @throws Exception
-     *         test failed
+     *             test failed
      */
     @Test
     public void testQueueMultipleSpeakables() throws JVoiceXMLEvent, Exception {
@@ -195,19 +201,14 @@ public final class TestJsapi10SynthesizedOutput {
         int emptied = 0;
         for (int i = 0; i < listener.size(); i++) {
             SynthesizedOutputEvent event = listener.get(i);
-            switch (event.getEvent()) {
-            case SynthesizedOutputEvent.OUTPUT_STARTED:
+            if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
                 ++started;
-                break;
-            case SynthesizedOutputEvent.OUTPUT_ENDED:
+            } else if (event.isType(OutputEndedEvent.EVENT_TYPE)) {
                 ++ended;
-                break;
-            case SynthesizedOutputEvent.QUEUE_EMPTY:
+            } else if (event.isType(QueueEmptyEvent.EVENT_TYPE)) {
                 ++emptied;
-                break;
-            default:
-                Assert.fail("unknown event " + event.getEvent());
-                break;
+            } else {
+                Assert.fail("unknown event " + event.getEventType());
             }
         }
         Assert.assertEquals(max, started);
@@ -216,11 +217,14 @@ public final class TestJsapi10SynthesizedOutput {
     }
 
     /**
-     * Test method for {@link Jsapi10SynthesizedOutput#queueSpeakable(SpeakableText, boolean, org.jvoicexml.DocumentServer)}.
+     * Test method for
+     * {@link Jsapi10SynthesizedOutput#queueSpeakable(SpeakableText, boolean, org.jvoicexml.DocumentServer)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *             Test failed.
      * @throws Exception
-     *         Test failed.
+     *             Test failed.
      */
     @Test
     public void testQueueSpeakableSsml() throws Exception, JVoiceXMLEvent {
@@ -264,49 +268,48 @@ public final class TestJsapi10SynthesizedOutput {
         Assert.assertEquals(size, listener.size());
         int pos = 0;
         SynthesizedOutputEvent start = listener.get(pos);
-        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_STARTED,
-                start.getEvent());
+        Assert.assertEquals(OutputStartedEvent.EVENT_TYPE, start.getEventType());
         OutputStartedEvent startedEvent = (OutputStartedEvent) start;
         Assert.assertEquals(speakable, startedEvent.getSpeakable());
         SynthesizedOutputEvent markEvent = listener.get(++pos);
-        Assert.assertEquals(SynthesizedOutputEvent.MARKER_REACHED,
-                markEvent.getEvent());
+        Assert.assertEquals(MarkerReachedEvent.EVENT_TYPE, markEvent.getEventType());
         MarkerReachedEvent markReachedEvent = (MarkerReachedEvent) markEvent;
         Assert.assertEquals(mark.getName(), markReachedEvent.getMark());
         SynthesizedOutputEvent stop = listener.get(++pos);
-        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_ENDED,
-                stop.getEvent());
+        Assert.assertEquals(OutputEndedEvent.EVENT_TYPE, stop.getEventType());
         OutputEndedEvent endedEvent = (OutputEndedEvent) stop;
         Assert.assertEquals(speakable, endedEvent.getSpeakable());
         SynthesizedOutputEvent empty = listener.get(++pos);
-        Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY,
-                empty.getEvent());
+        Assert.assertEquals(QueueEmptyEvent.EVENT_TYPE, empty.getEventType());
         Assert.assertTrue(empty instanceof QueueEmptyEvent);
     }
 
     /**
      * Test case for {@link Jsapi10SynthesizedOutput#waitNonBargeInPlayed()}.
-     * @exception JVoiceXMLEvent test failed
-     * @exception Exception test failed
+     * 
+     * @exception JVoiceXMLEvent
+     *                test failed
+     * @exception Exception
+     *                test failed
      * @since 0.7.3
      */
     @Test
-    public void testWaitNonBargeInPlayed() throws JVoiceXMLEvent, Exception  {
+    public void testWaitNonBargeInPlayed() throws JVoiceXMLEvent, Exception {
         final SsmlDocument doc1 = new SsmlDocument();
         final Speak speak1 = doc1.getSpeak();
         speak1.addText("Test1");
-        final SpeakableText text1 =
-            new SpeakableSsmlText(doc1, true, BargeInType.HOTWORD);;
+        final SpeakableText text1 = new SpeakableSsmlText(doc1, true,
+                BargeInType.HOTWORD);
+        ;
         final SsmlDocument doc2 = new SsmlDocument();
         final Speak speak2 = doc2.getSpeak();
         speak2.addText("Test2");
-        final SpeakableText text2 =
-            new SpeakableSsmlText(doc2, true, BargeInType.SPEECH);
+        final SpeakableText text2 = new SpeakableSsmlText(doc2, true,
+                BargeInType.SPEECH);
         final SsmlDocument doc3 = new SsmlDocument();
         final Speak speak3 = doc3.getSpeak();
         speak3.addText("Test3");
-        final SpeakableText text3 =
-            new SpeakableSsmlText(doc3);
+        final SpeakableText text3 = new SpeakableSsmlText(doc3);
         synthesizer.queueSpeakable(text1, sessionId, documentServer);
         synthesizer.queueSpeakable(text2, sessionId, documentServer);
         synthesizer.queueSpeakable(text3, sessionId, documentServer);
@@ -315,27 +318,30 @@ public final class TestJsapi10SynthesizedOutput {
 
     /**
      * Test case for {@link Jsapi10SynthesizedOutput#cancelOutput()}.
-     * @exception JVoiceXMLEvent test failed
-     * @exception Exception test failed
+     * 
+     * @exception JVoiceXMLEvent
+     *                test failed
+     * @exception Exception
+     *                test failed
      * @since 0.7.3
      */
     @Test
-    public void testCancelOutput() throws JVoiceXMLEvent, Exception  {
+    public void testCancelOutput() throws JVoiceXMLEvent, Exception {
         final SsmlDocument doc1 = new SsmlDocument();
         final Speak speak1 = doc1.getSpeak();
         speak1.addText("Test1");
-        final SpeakableText text1 =
-            new SpeakableSsmlText(doc1, true, BargeInType.HOTWORD);;
+        final SpeakableText text1 = new SpeakableSsmlText(doc1, true,
+                BargeInType.HOTWORD);
+        ;
         final SsmlDocument doc2 = new SsmlDocument();
         final Speak speak2 = doc2.getSpeak();
         speak2.addText("Test2");
-        final SpeakableText text2 =
-            new SpeakableSsmlText(doc2, true, BargeInType.SPEECH);
+        final SpeakableText text2 = new SpeakableSsmlText(doc2, true,
+                BargeInType.SPEECH);
         final SsmlDocument doc3 = new SsmlDocument();
         final Speak speak3 = doc3.getSpeak();
         speak3.addText("Test3");
-        final SpeakableText text3 =
-            new SpeakableSsmlText(doc3);
+        final SpeakableText text3 = new SpeakableSsmlText(doc3);
         synthesizer.queueSpeakable(text1, sessionId, documentServer);
         synthesizer.queueSpeakable(text2, sessionId, documentServer);
         synthesizer.queueSpeakable(text3, sessionId, documentServer);

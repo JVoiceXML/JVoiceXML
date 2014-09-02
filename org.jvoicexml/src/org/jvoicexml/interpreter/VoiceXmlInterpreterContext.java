@@ -151,6 +151,8 @@ public final class VoiceXmlInterpreterContext  {
                 new GrammarDeactivator(platform);
             grammars.addActiveGrammarSetObserver(deactivator);
         }
+
+        // Subscribe the default event handler for all events to the event bus.
         eventbus = new EventBus();
         properties = new ScopedMap<String, String>(scopeObserver);
         eventHandler = new org.jvoicexml.interpreter.event.
@@ -185,6 +187,8 @@ public final class VoiceXmlInterpreterContext  {
             grammars.addActiveGrammarSetObserver(deactivator);
         }
         properties = new ScopedMap<String, String>(scopeObserver);
+
+        // Subscribe the default event handler for all events to the event bus.
         eventbus = new EventBus();
         eventHandler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(scopeObserver);

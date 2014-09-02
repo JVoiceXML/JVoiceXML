@@ -33,8 +33,8 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.implementation.OutputStartedEvent;
-import org.jvoicexml.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
+import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.xml.ssml.Speak;
@@ -134,8 +134,7 @@ public final class TestValueStrategy extends TagStrategyTestBase
      * {@inheritDoc}
      */
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
-        final int id = event.getEvent();
-        if (id == SynthesizedOutputEvent.OUTPUT_STARTED) {
+        if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
             final OutputStartedEvent started = (OutputStartedEvent) event;
             queuedSpeakable = started.getSpeakable();
         }

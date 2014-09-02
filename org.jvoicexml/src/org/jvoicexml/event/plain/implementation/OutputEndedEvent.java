@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,35 +24,56 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.event.plain.implementation;
 
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
- * Notification that the output of a {@link SpeakableText} has
- * ended.
+ * Notification that the output of a {@link SpeakableText} has ended.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.1
  */
+@SuppressWarnings("serial")
 public final class OutputEndedEvent extends SynthesizedOutputEvent {
+    /** The unsupported element. */
+    public static final String DETAIL = "end";
+
+    /** The detail message. */
+    public static final String EVENT_TYPE = SynthesizedOutputEvent.class
+            .getCanonicalName() + "." + DETAIL;
+    
     /** The speakable. */
     private final SpeakableText speakable;
 
     /**
-     * Constructs a new object.
-     * @param output object that caused the event.
-     * @param sessionId the session id
-     * @param speakableText the speakable that has ended
+     * Constructs a new event with the event type as its detail message. The
+     * cause is not initialized
+     * 
+     * <p>
+     * The {@link #DETAIL} is used to construct the event type.
+     * </p>
+     * 
+     * @see #getEventType()
+     * 
+     * @param output
+     *            object that caused the event.
+     * @param sessionId
+     *            the session id
+     * @param speakableText
+     *            the speakable that has ended
      */
     public OutputEndedEvent(final SynthesizedOutput output,
             final String sessionId, final SpeakableText speakableText) {
-        super(output, SynthesizedOutputEvent.OUTPUT_ENDED, sessionId);
+        super(output, DETAIL, sessionId);
         speakable = speakableText;
     }
 
     /**
      * Retrieves the speakable.
+     * 
      * @return the speakable
      */
     public SpeakableText getSpeakable() {
