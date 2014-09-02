@@ -38,11 +38,11 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.OutputEndedEvent;
-import org.jvoicexml.implementation.OutputStartedEvent;
-import org.jvoicexml.implementation.QueueEmptyEvent;
+import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
+import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
+import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
+import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
@@ -336,9 +336,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
      * @param event the event.
      */
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
-        final int id = event.getEvent();
-        switch (id) {
-        case SynthesizedOutputEvent.OUTPUT_STARTED:
+        if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
             final OutputStartedEvent outputStartedEvent =
                 (OutputStartedEvent) event;
             final SpeakableText startedSpeakable =
@@ -348,8 +346,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
             }
             isBusy = true;
             fireOutputStarted(startedSpeakable);
-            break;
-        case SynthesizedOutputEvent.OUTPUT_ENDED:
+        } else if (event.isType(OutputEndedEvent.EVENT_TYPE)) {
             final OutputEndedEvent outputEndedEvent =
                 (OutputEndedEvent) event;
             final SpeakableText endedSpeakable =
@@ -359,8 +356,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
             }
             isBusy = false;
             fireOutputEnded(endedSpeakable);
-            break;
-        case SynthesizedOutputEvent.QUEUE_EMPTY:
+        } else if (event.isType(QueueEmptyEvent.EVENT_TYPE)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("output queue is empty");
             }
@@ -369,18 +365,6 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
             synchronized (emptyLock) {
                 emptyLock.notifyAll();
             }
-            break;
-      /*  case SynthesizedOutputEvent.MARKER_REACHED:
-            final MarkerReachedEvent markReachedEvent =
-                (MarkerReachedEvent) event;
-            markname = markReachedEvent.getMark();
-            LOGGER.info("reached mark '" + markname + "'");
-            break;
-          case SynthesizedOutputEvent.OUTPUT_UPDATE:
-            break;*/
-        default:
-            fireOutputEvent(event);
-            break;
         }
     }
 

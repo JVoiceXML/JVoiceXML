@@ -30,9 +30,9 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
+import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.ExternalSynthesisListener;
-import org.jvoicexml.implementation.OutputStartedEvent;
-import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.w3c.dom.Node;
@@ -88,7 +88,7 @@ public final class SocketExternalSynthesisListener
      */
     @Override
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
-        if (event.getEvent() == SynthesizedOutputEvent.OUTPUT_STARTED) { 
+        if (event.isType(OutputStartedEvent.EVENT_TYPE)) { 
             
             SpeakableText speakable =
                 ((OutputStartedEvent) event).getSpeakable();

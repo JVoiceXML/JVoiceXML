@@ -59,12 +59,13 @@ final class EventSubscription {
     /**
      * Checks if the subscription matches the given event type.
      * @param eventType the event type to check
-     * @return <code>true</code> if the subscription matches the event type
+     * @return {@code true} if the subscription matches the event type
      * @since 0.7.7
      */
     public boolean matches(final String eventType) {
         return eventType.startsWith(type);
     }
+
     /**
      * Retrieves the subscriber.
      * @return the subscriber

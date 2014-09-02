@@ -24,41 +24,43 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.event.plain.implementation;
 
-import org.jvoicexml.SynthesisResult;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
- * Notification that the output of a {@link org.jvoicexml.SpeakableText} has
- * been updated.
- * <p>
- * This happens if the synthesizer converted the speakable into phonemes.
- * </p>
+ * Notification that the output queue is empty.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.1
  */
-public final class OutputUpdateEvent extends SynthesizedOutputEvent {
-    /** The synthesis result. */
-    private final SynthesisResult result;
+@SuppressWarnings("serial")
+public final class QueueEmptyEvent extends SynthesizedOutputEvent {
+    /** The unsupported element. */
+    public static final String DETAIL = "emptyqueue";
+
+    /** The detail message. */
+    public static final String EVENT_TYPE = SynthesizedOutputEvent.class
+            .getCanonicalName() + "." + DETAIL;
 
     /**
-     * Constructs a new object.
-     * @param output object that caused the event.
-     * @param sessionId the session id
-     * @param synthesisResult the result of speech synthesis.
+     * Constructs a new event with the event type as its detail message. The
+     * cause is not initialized
+     * 
+     * <p>
+     * The {@link #DETAIL} is used to construct the event type.
+     * </p>
+     * 
+     * @see #getEventType()
+     * 
+     * @param output
+     *            object that caused the event.
+     * @param sessionId
+     *            the session id
      */
-    public OutputUpdateEvent(final SynthesizedOutput output,
-            final String sessionId, final SynthesisResult synthesisResult) {
-        super(output, SynthesizedOutputEvent.OUTPUT_UPDATE, sessionId);
-        result = synthesisResult;
-    }
-
-    /**
-     * Retrieves the synthesis result.
-     * @return the synthesis result
-     */
-    public SynthesisResult getSynthesisResult() {
-        return result;
+    public QueueEmptyEvent(final SynthesizedOutput output,
+            final String sessionId) {
+        super(output, DETAIL, sessionId);
     }
 }

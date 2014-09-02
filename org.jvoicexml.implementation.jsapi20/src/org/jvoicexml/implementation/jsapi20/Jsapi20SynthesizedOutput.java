@@ -42,7 +42,6 @@ import javax.speech.EngineException;
 import javax.speech.EngineManager;
 import javax.speech.EngineMode;
 import javax.speech.EngineStateException;
-import javax.speech.synthesis.PhoneInfo;
 import javax.speech.synthesis.SpeakableEvent;
 import javax.speech.synthesis.SpeakableException;
 import javax.speech.synthesis.SpeakableListener;
@@ -54,33 +53,29 @@ import javax.speech.synthesis.SynthesizerMode;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.SpeakablePhoneInfo;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SynthesisResult;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.MarkerReachedEvent;
-import org.jvoicexml.implementation.OutputEndedEvent;
-import org.jvoicexml.implementation.OutputStartedEvent;
-import org.jvoicexml.implementation.OutputUpdateEvent;
-import org.jvoicexml.implementation.QueueEmptyEvent;
+import org.jvoicexml.event.plain.implementation.MarkerReachedEvent;
+import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
+import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
+import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
+import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
-
 /**
  * Audio output that uses the JSAPI 2.0 to address the TTS engine.
- *
+ * 
  * <p>
  * Handle all JSAPI calls to the TTS engine to make JSAPI transparent to the
  * interpreter.
  * </p>
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @author Renato Cassaca
  * @version $Revision$
@@ -89,12 +84,12 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 public final class Jsapi20SynthesizedOutput
         implements SynthesizedOutput, SpeakableListener, SynthesizerListener {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(Jsapi20SynthesizedOutput.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(Jsapi20SynthesizedOutput.class);
 
     /** Number of msec to wait when waiting for an empty queue. */
     private static final int WAIT_EMPTY_TIMEINTERVALL = 300;
-    
+
     /** The used synthesizer. */
     private Synthesizer synthesizer;
 
@@ -115,10 +110,10 @@ public final class Jsapi20SynthesizedOutput
 
     /** Object lock for an empty queue. */
     private final Object emptyLock;
-    
+
     /**
      * Flag to indicate that TTS output and audio can be canceled.
-     *
+     * 
      * @todo Replace this by a solution that does not cancel output without
      *       bargein, if there is mixed output.
      */
@@ -130,9 +125,6 @@ public final class Jsapi20SynthesizedOutput
     /** A map of queued speakables to their id returned in speak requests. */
     private final Map<SpeakableText, Integer> queueIds;
 
-    /** Flag if the phone info has been posted for the current speakable. */
-    private boolean hasSentPhones;
-
     /** <code>true</code> if the synthesizer supports SSML. */
     private boolean supportsMarkup;
 
@@ -141,11 +133,11 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Constructs a new audio output.
-     *
+     * 
      * @param defaultDescriptor
-     *                the default synthesizer mode descriptor.
+     *            the default synthesizer mode descriptor.
      * @param mediaLocatorFactory
-     *                factory to create a sink media locator
+     *            factory to create a sink media locator
      */
     public Jsapi20SynthesizedOutput(final SynthesizerMode defaultDescriptor,
             final OutputMediaLocatorFactory mediaLocatorFactory) {
@@ -153,14 +145,15 @@ public final class Jsapi20SynthesizedOutput
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
         queueIds = new java.util.HashMap<SpeakableText, Integer>();
-        hasSentPhones = false;
         locatorFactory = mediaLocatorFactory;
         emptyLock = new Object();
     }
 
     /**
      * Sets the media locator.
-     * @param locator the media locator to use.
+     * 
+     * @param locator
+     *            the media locator to use.
      * @since 0.7
      */
     public void setMediaLocator(final URI locator) {
@@ -182,8 +175,7 @@ public final class Jsapi20SynthesizedOutput
             LOGGER.info("allocating JSAPI 2.0 synthesizer...");
             if (mediaLocator != null) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("using media locator '" + mediaLocator
-                            + "'");
+                    LOGGER.debug("using media locator '" + mediaLocator + "'");
                 }
                 final AudioManager manager = synthesizer.getAudioManager();
                 manager.setMediaLocator(mediaLocator);
@@ -270,7 +262,7 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * Checks the type of the given speakable and forwards it either as for SSML
      * output or for plain text output.
      */
@@ -315,25 +307,23 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Queues the speakable SSML formatted text.
-     *
+     * 
      * @param ssmlText
-     *                SSML formatted text.
+     *            SSML formatted text.
      * @exception NoresourceError
-     *                    The output resource is not available.
+     *                The output resource is not available.
      * @exception BadFetchError
-     *                    Error reading from the <code>AudioStream</code>.
+     *                Error reading from the <code>AudioStream</code>.
      */
     private void speakSSML(final SpeakableSsmlText ssmlText)
-        throws NoresourceError,
-            BadFetchError {
+            throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
         if (!supportsMarkup) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(
-                 "synthesizer does not support markup. reducing to plain text");
+                LOGGER.debug("synthesizer does not support markup. reducing to plain text");
             }
             speakPlaintext(ssmlText);
             return;
@@ -364,14 +354,14 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Processes the next speakable in the queue.
+     * 
      * @throws NoresourceError
-     *         error processing the speakable.
+     *             error processing the speakable.
      * @throws BadFetchError
-     *         error processing the speakable.
+     *             error processing the speakable.
      * @since 0.7.1
      */
-    private void processNextSpeakable()
-        throws NoresourceError, BadFetchError {
+    private void processNextSpeakable() throws NoresourceError, BadFetchError {
         // Check if there are more speakables to process
         final SpeakableText speakable;
         synchronized (queuedSpeakables) {
@@ -387,7 +377,6 @@ public final class Jsapi20SynthesizedOutput
             }
             speakable = queuedSpeakables.peek();
         }
-        
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("processing next speakable: " + speakable);
@@ -404,17 +393,17 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Notifies all listeners that output has started.
-     *
+     * 
      * @param speakable
-     *                the current speakable.
+     *            the current speakable.
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event = new OutputStartedEvent(this,
                 sessionId, speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+                    listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -423,17 +412,17 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Notifies all listeners that the given marker has been reached.
-     *
+     * 
      * @param mark
-     *                the reached marker.
+     *            the reached marker.
      */
     private void fireMarkerReached(final String mark) {
         final SynthesizedOutputEvent event = new MarkerReachedEvent(this,
                 sessionId, mark);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+                    listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -442,17 +431,17 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Notifies all listeners that output has started.
-     *
+     * 
      * @param speakable
-     *                the current speakable.
+     *            the current speakable.
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         final SynthesizedOutputEvent event = new OutputEndedEvent(this,
                 sessionId, speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+                    listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -463,30 +452,12 @@ public final class Jsapi20SynthesizedOutput
      * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
-        final SynthesizedOutputEvent event =
-            new QueueEmptyEvent(this, sessionId);
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(this,
+                sessionId);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
-            for (SynthesizedOutputListener current : copy) {
-                current.outputStatusChanged(event);
-            }
-        }
-    }
-
-    /**
-     * Notifies all listeners that output has been updated.
-     * @param synthesisResult
-     *        the intermediate synthesis result
-     */
-    private void fireOutputUpdate(final SynthesisResult synthesisResult) {
-        final SynthesizedOutputEvent event = new OutputUpdateEvent(this,
-                sessionId, synthesisResult);
-
-        synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+                    listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -495,16 +466,16 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Speaks a plain text string.
-     *
+     * 
      * @param speakable
-     *                speakable containing plain text to be spoken.
+     *            speakable containing plain text to be spoken.
      * @exception NoresourceError
-     *                    No synthesizer allocated.
+     *                No synthesizer allocated.
      * @exception BadFetchError
-     *                    Synthesizer in wrong state.
+     *                Synthesizer in wrong state.
      */
     private void speakPlaintext(final SpeakableSsmlText speakable)
-        throws NoresourceError, BadFetchError {
+            throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
@@ -546,8 +517,7 @@ public final class Jsapi20SynthesizedOutput
             return;
         }
 
-        final Collection<SpeakableText> skipped =
-                new java.util.ArrayList<SpeakableText>();
+        final Collection<SpeakableText> skipped = new java.util.ArrayList<SpeakableText>();
         for (SpeakableText speakable : queuedSpeakables) {
             if (speakable.isBargeInEnabled()) {
                 skipped.add(speakable);
@@ -563,8 +533,8 @@ public final class Jsapi20SynthesizedOutput
                 final Integer id = queueIds.get(speakable);
                 if (id != null) {
                     if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("cancelling queued id '"
-                                + id.intValue() + "'");
+                        LOGGER.debug("cancelling queued id '" + id.intValue()
+                                + "'");
                     }
                     synthesizer.cancel(id.intValue());
                 }
@@ -631,9 +601,9 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * A mark in an SSML output has been reached.
-     *
+     * 
      * @param mark
-     *                Name of the mark.
+     *            Name of the mark.
      */
     public void reachedMark(final String mark) {
         if (listeners == null) {
@@ -687,9 +657,9 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Sets the type of this resource.
-     *
+     * 
      * @param resourceType
-     *                type of the resource
+     *            type of the resource
      */
     public void setType(final String resourceType) {
         type = resourceType;
@@ -699,8 +669,8 @@ public final class Jsapi20SynthesizedOutput
      * {@inheritDoc}
      */
     @Override
-    public URI getUriForNextSynthesisizedOutput()
-        throws NoresourceError, URISyntaxException {
+    public URI getUriForNextSynthesisizedOutput() throws NoresourceError,
+            URISyntaxException {
         if (synthesizer == null) {
             throw new NoresourceError("No synthesizer!");
         }
@@ -735,8 +705,6 @@ public final class Jsapi20SynthesizedOutput
         final int id = event.getId();
         SpeakableText speakableText = null;
         if (id == SpeakableEvent.SPEAKABLE_STARTED) {
-            hasSentPhones = false;
-
             synchronized (queuedSpeakables) {
                 speakableText = queuedSpeakables.peek();
             }
@@ -759,32 +727,6 @@ public final class Jsapi20SynthesizedOutput
             } catch (BadFetchError e) {
                 notifyError(e);
             }
-        } else if ((id == SpeakableEvent.PHONEME_STARTED) && !hasSentPhones) {
-            // Get speakable text that produced this output event
-            synchronized (queuedSpeakables) {
-                speakableText = queuedSpeakables.peek();
-            }
-
-            // Convert phones object types (Jsapi20 -> JVXML)
-            final PhoneInfo[] phoneInfos = event.getPhones();
-            SpeakablePhoneInfo[] speakablePhones = null;
-            if ((phoneInfos != null) && (phoneInfos.length > 0)) {
-                speakablePhones = new SpeakablePhoneInfo[phoneInfos.length];
-                for (int i = 0; i < phoneInfos.length; i++) {
-                    final SpeakablePhoneInfo spi = new SpeakablePhoneInfo(
-                            phoneInfos[i].getPhoneme(), phoneInfos[i]
-                                    .getDuration());
-
-                    speakablePhones[i] = spi;
-                }
-            }
-
-            // Make the object that holds the phones
-            final SynthesisResult result =
-                new Jsapi20SynthesisResult(speakableText, speakablePhones);
-
-            fireOutputUpdate(result);
-            hasSentPhones = true;
         }
     }
 
@@ -803,13 +745,14 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Notifies all registered listeners about the given event.
-     * @param error the error event
+     * 
+     * @param error
+     *            the error event
      * @since 0.7.4
      */
     private void notifyError(final ErrorEvent error) {
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>();
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputError(error);

@@ -24,32 +24,55 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.event.plain.implementation;
+
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * A notification that a certain mark within an SSML document has been reached.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.1
  */
+@SuppressWarnings("serial")
 public final class MarkerReachedEvent extends SynthesizedOutputEvent {
+    /** The unsupported element. */
+    public static final String DETAIL = "marker";
+
+    /** The detail message. */
+    public static final String EVENT_TYPE = SynthesizedOutputEvent.class
+            .getCanonicalName() + "." + DETAIL;
+    
     /** The reached mark. */
     private final String mark;
 
     /**
-     * Constructs a new object.
-     * @param output object that caused the event.
-     * @param sessionId the session id
-     * @param name name of the mark that has been reached.
+     * Constructs a new event with the event type as its detail message. The
+     * cause is not initialized
+     * 
+     * <p>
+     * The {@link #DETAIL} is used to construct the event type.
+     * </p>
+     * 
+     * @see #getEventType()
+     * 
+     * @param output
+     *            object that caused the event.
+     * @param sessionId
+     *            the session id
+     * @param name
+     *            name of the mark that has been reached.
      */
     public MarkerReachedEvent(final SynthesizedOutput output,
             final String sessionId, final String name) {
-        super(output, SynthesizedOutputEvent.MARKER_REACHED, sessionId);
+        super(output, DETAIL, sessionId);
         mark = name;
     }
 
     /**
      * Returns the name of the mark that has been reached.
+     * 
      * @return name of the mark.
      */
     public String getMark() {
