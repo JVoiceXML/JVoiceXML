@@ -30,7 +30,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.speech.EngineException;
-import javax.speech.EngineList;
 import javax.speech.EngineManager;
 import javax.speech.recognition.RecognizerMode;
 
@@ -109,12 +108,7 @@ public final class Jsapi20SpokenInputFactory
      * {@inheritDoc}
      */
     public SpokenInput createResource() throws NoresourceError {
-        final RecognizerMode mode = getEngineProperties();
-        if (mode == null) {
-            throw new NoresourceError(
-                    "Cannot find any suitable RecognizerMode");
-        }
-
+        final RecognizerMode mode = getEngineMode();
         final Jsapi20SpokenInput input = new Jsapi20SpokenInput(mode,
                 locatorFactory);
         input.setType(type);
@@ -146,31 +140,6 @@ public final class Jsapi20SpokenInputFactory
      */
     public int getInstances() {
         return instances;
-    }
-
-    /**
-     * Get the required engine properties.
-     *
-     * @return Required engine properties or <code>null</code> for default
-     *         engine selection
-     */
-    public RecognizerMode getEngineProperties() {
-        try {
-            final RecognizerMode mode = getEngineMode();
-            EngineList list = EngineManager.availableEngines(mode);
-            if (list.size() > 0) {
-                return (RecognizerMode) (list.elementAt(0));
-            } else {
-                LOGGER.error("no recognizer for mode '" + mode + "'");
-                return null;
-            }
-        } catch (SecurityException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-            return null;
-        } catch (IllegalArgumentException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-            return null;
-        }
     }
 
     /**
