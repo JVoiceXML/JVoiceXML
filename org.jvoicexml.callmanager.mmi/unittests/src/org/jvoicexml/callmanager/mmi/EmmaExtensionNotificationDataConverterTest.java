@@ -11,7 +11,7 @@ public class EmmaExtensionNotificationDataConverterTest {
 
     @Test
     public void testConvertApplicationLastResult() throws Exception {
-        final EmmaExtensionNotificationDataConverter converter = new EmmaExtensionNotificationDataConverter();
+        final XmlExtensionNotificationDataConverter converter = new XmlExtensionNotificationDataConverter();
         final List<LastResult> list = new java.util.ArrayList<LastResult>();
         final LastResult result = new LastResult("yes", .75f, "voice", null);
         list.add(result);
@@ -21,7 +21,7 @@ public class EmmaExtensionNotificationDataConverterTest {
     @Test
     public void testConvertApplicationLastResultSimpleSemanticInterpretation()
             throws Exception {
-        final EmmaExtensionNotificationDataConverter converter = new EmmaExtensionNotificationDataConverter();
+        final XmlExtensionNotificationDataConverter converter = new XmlExtensionNotificationDataConverter();
         final List<LastResult> list = new java.util.ArrayList<LastResult>();
         final Context context = Context.enter();
         context.setLanguageVersion(Context.VERSION_1_6);
@@ -36,7 +36,7 @@ public class EmmaExtensionNotificationDataConverterTest {
     @Test
     public void testConvertApplicationLastResultComplexSemanticInterpretation()
             throws Exception {
-        final EmmaExtensionNotificationDataConverter converter = new EmmaExtensionNotificationDataConverter();
+        final XmlExtensionNotificationDataConverter converter = new XmlExtensionNotificationDataConverter();
         final List<LastResult> list = new java.util.ArrayList<LastResult>();
         final Context context = Context.enter();
         context.setLanguageVersion(Context.VERSION_1_6);

@@ -1,3 +1,29 @@
+/*
+ * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.callmanager.mmi/src/org/jvoicexml/callmanager/mmi/DecoratedMMIEvent.java $
+ * Version: $LastChangedRevision: 3950 $
+ * Date:    $Date: 2013-11-23 21:32:07 +0100 (Sat, 23 Nov 2013) $
+ * Author:  $LastChangedBy: schnelle $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.callmanager.mmi;
 
 import java.io.ByteArrayOutputStream;
@@ -33,13 +59,14 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * Converts the extension notifications into the EMMA format.
+ * Converts the extension notifications into the XML format. Standards like
+ * <a href="http://www.w3.org/TR/emma/">EMMA</a> are used where possible.
  * 
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.7
  */
-public class EmmaExtensionNotificationDataConverter
+public class XmlExtensionNotificationDataConverter
         implements ExtensionNotificationDataConverter {
 
     /**
@@ -86,6 +113,16 @@ public class EmmaExtensionNotificationDataConverter
         }
     }
 
+    /**
+     * Possibly add semantic interpretation to the given document
+     * 
+     * @param document
+     *            the document
+     * @param parent
+     *            the parent node
+     * @param object
+     *            the sematnic interpretation to add
+     */
     private void addSemanticInterpretation(final Document document,
             final Element parent, final Object object) {
         if (object == null) {
@@ -103,6 +140,17 @@ public class EmmaExtensionNotificationDataConverter
         }
     }
 
+    /**
+     * Possibly add semantic interpretation as a compund object to the given
+     * document
+     * 
+     * @param document
+     *            the document
+     * @param parent
+     *            the parent node
+     * @param object
+     *            the semantic interpretation to add
+     */
     private void addSemanticInterpretation(final Document document,
             final Element parent, final ScriptableObject object) {
         if (object == null) {
@@ -181,6 +229,13 @@ public class EmmaExtensionNotificationDataConverter
         }
     }
 
+    /**
+     * Retrieves a {@link SpeakableText} from the received event, if present.
+     * 
+     * @param output
+     *            the received event
+     * @return the speakble if the events knows about it, {@code null} else
+     */
     private SpeakableText getSpeakable(final SynthesizedOutputEvent output) {
         if (output instanceof OutputStartedEvent) {
             final OutputStartedEvent started = (OutputStartedEvent) output;
@@ -192,6 +247,14 @@ public class EmmaExtensionNotificationDataConverter
         return null;
     }
 
+    /**
+     * Obtains the event type to send out externally for the received
+     * internally.
+     * 
+     * @param event
+     *            the received event
+     * @return the event type
+     */
     private String toEventType(final JVoiceXMLEvent event) {
         if (event instanceof OutputStartedEvent) {
             return "vxml.output.start";
@@ -203,6 +266,20 @@ public class EmmaExtensionNotificationDataConverter
         return event.getEventType();
     }
 
+    /**
+     * Converts the speakable to an XML document that can be included into the
+     * data attribute.
+     * 
+     * @param speakable
+     *            the received speakable
+     * @return the converted document
+     * @throws ParserConfigurationException
+     *             error parsing
+     * @throws SAXException
+     *             error parsing
+     * @throws IOException
+     *             error parsing
+     */
     private Document toDocument(final SpeakableText speakable)
             throws ParserConfigurationException, SAXException, IOException {
         final String text = speakable.getSpeakableText();
