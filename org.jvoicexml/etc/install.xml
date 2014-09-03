@@ -135,33 +135,6 @@ This package is required if you plan to use one of the demo implementation platf
         <include name="jsapi.jar" />
       </fileset>
     </pack>
-    <pack name="FreeTTS and Sphinx 4 support for JSAPI 1.0" required="no"
-        preselected="no">
-      <depends packname="JSAPI 1.0 implementation platform"/>
-      <description>FreeTTS and Sphinx 4 support for JSAPI 1.0.
-
-Adds basic support for the JSAPI 1.0 implementation platform using FreeTTS for speech synthesis and sphinx 4 for speech recognition.
-</description>
-      <fileset dir="config" targetdir="$INSTALL_PATH/config">
-        <include name="jsapi10-implementation.xml" />
-        <include name="jvoicexml.gram" />
-        <include name="sphinx4.jsapi10.config.xml" />
-      </fileset>
-      <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
-        <include name="org.jvoicexml.implementation.jsapi10.jar" />
-        <include name="org.jvoicexml.implementation.jsapi10.grammar.jar" />
-        <include name="org.jvoicexml.implementation.jsapi10-impl.jar" />
-        <include name="jsapi.jar" />
-        <include name="jsapi-1.0-base.jar" />
-        <include name="freetts-jsapi10.jar" />
-        <include name="freetts.jar" />
-        <include name="cmu_us_kal.jar" />
-        <include name="cmulex.jar" />
-        <include name="en_us.jar" />
-        <include name="sphinx4.jar" />
-        <include name="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar" />
-      </fileset>
-    </pack>
     <pack name="Talking Java Support for the JSAPI 1.0 implementation platform"
       required="no" os="windows" preselected="no">
       <depends packname="JSAPI 1.0 implementation platform"/>
