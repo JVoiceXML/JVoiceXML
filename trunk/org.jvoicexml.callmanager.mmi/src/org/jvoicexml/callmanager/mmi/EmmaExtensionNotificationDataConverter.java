@@ -1,6 +1,8 @@
 package org.jvoicexml.callmanager.mmi;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -16,10 +18,19 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.jvoicexml.LastResult;
+import org.jvoicexml.SpeakableText;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
+import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
+import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
+import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.mozilla.javascript.ScriptableObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.Text;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Converts the extension notifications into the EMMA format.
@@ -44,9 +55,6 @@ public class EmmaExtensionNotificationDataConverter
         final DocumentBuilderFactory factory = DocumentBuilderFactory
                 .newInstance();
         factory.setNamespaceAware(true);
-
-        // Configure the factory to ignore comments
-        factory.setIgnoringComments(true);
         DocumentBuilder builder = null;
         try {
             builder = factory.newDocumentBuilder();
@@ -73,7 +81,6 @@ public class EmmaExtensionNotificationDataConverter
                     semanticInterpretation);
             emma.appendChild(interpretation);
             return emma;
-//            return toString(document);
         } catch (ParserConfigurationException e) {
             throw new ConversionException(e.getMessage(), e);
         }
@@ -136,4 +143,75 @@ public class EmmaExtensionNotificationDataConverter
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object convertSynthesizedOutputEvent(SynthesizedOutputEvent output)
+            throws ConversionException {
+        final DocumentBuilderFactory factory = DocumentBuilderFactory
+                .newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder = null;
+        try {
+            builder = factory.newDocumentBuilder();
+            final Document document = builder.newDocument();
+            final Element data = document.createElementNS(
+                    "http://www.nowhere.org/tkmmi", "tkmmi:data");
+            final String eventType = toEventType(output);
+            data.setAttributeNS("http://www.nowhere.org/tkmmi", "tkmmi:event",
+                    eventType);
+            final SpeakableText speakable = getSpeakable(output);
+            if (speakable != null) {
+                final Document ssml = toDocument(speakable);
+                final Node speak = ssml.getFirstChild();
+                if (speak != null) {
+                    document.adoptNode(speak);
+                    data.appendChild(speak);
+                }
+            }
+            document.appendChild(data);
+            return data;
+        } catch (ParserConfigurationException e) {
+            throw new ConversionException(e.getMessage(), e);
+        } catch (SAXException e) {
+            throw new ConversionException(e.getMessage(), e);
+        } catch (IOException e) {
+            throw new ConversionException(e.getMessage(), e);
+        }
+    }
+
+    private SpeakableText getSpeakable(final SynthesizedOutputEvent output) {
+        if (output instanceof OutputStartedEvent) {
+            final OutputStartedEvent started = (OutputStartedEvent) output;
+            return started.getSpeakable();
+        } else if (output instanceof OutputEndedEvent) {
+            final OutputEndedEvent ended = (OutputEndedEvent) output;
+            return ended.getSpeakable();
+        }
+        return null;
+    }
+
+    private String toEventType(final JVoiceXMLEvent event) {
+        if (event instanceof OutputStartedEvent) {
+            return "vxml.output.start";
+        } else if (event instanceof OutputEndedEvent) {
+            return "vxml.output.end";
+        } else if (event instanceof QueueEmptyEvent) {
+            return "vxml.output.emptyqueue";
+        }
+        return event.getEventType();
+    }
+
+    private Document toDocument(final SpeakableText speakable)
+            throws ParserConfigurationException, SAXException, IOException {
+        final String text = speakable.getSpeakableText();
+        final StringReader reader = new StringReader(text);
+        final InputSource source = new InputSource(reader);
+        final DocumentBuilderFactory factory = DocumentBuilderFactory
+                .newInstance();
+        factory.setNamespaceAware(true);
+        final DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse(source);
+    }
 }

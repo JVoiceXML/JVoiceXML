@@ -29,7 +29,7 @@ import java.io.IOException;
 
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
-import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.Mmi;
 
 /**
  * Dummy implementation of an {@link ETLProtocolAdapter}.
@@ -72,7 +72,7 @@ public final class MockETLProtocolAdapter implements ETLProtocolAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void sendMMIEvent(final Object channel, final LifeCycleEvent event) {
+    public void sendMMIEvent(final Object channel, final Mmi event) {
     }
 
     /**

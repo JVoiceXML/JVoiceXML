@@ -29,7 +29,7 @@ package org.jvoicexml.callmanager.mmi;
 
 import java.io.IOException;
 
-import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.Mmi;
 
 /**
  * Adapter to the actual used protocol used in the event and transport layer
@@ -78,7 +78,7 @@ public interface ETLProtocolAdapter {
      * @exception IOException
      *            error sending the event
      */
-    void sendMMIEvent(final Object channel, final LifeCycleEvent event)
+    void sendMMIEvent(final Object channel, final Mmi event)
             throws IOException;
 
     /**
