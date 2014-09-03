@@ -25,10 +25,18 @@
  */
 package org.jvoicexml.callmanager.mmi;
 
+import java.io.IOException;
+import java.util.UUID;
+
+import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
+import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.interpreter.DetailedSessionListener;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.SessionEvent;
+import org.jvoicexml.mmi.events.AnyComplexType;
+import org.jvoicexml.mmi.events.ExtensionNotification;
+import org.jvoicexml.mmi.events.Mmi;
 
 /**
  * A detailed session listener that sends out extension notifications.
@@ -38,11 +46,18 @@ import org.jvoicexml.interpreter.SessionEvent;
  * @since 0.7.7
  */
 public class MmiDetailedSessionListener implements DetailedSessionListener {
+    /** Logger instance. */
+    private static final Logger LOGGER = Logger
+            .getLogger(MmiDetailedSessionListener.class);
+
     /** The ETL protocol adapter to send MMI events. */
     private final ETLProtocolAdapter adapter;
 
     /** The MMI context */
     private final MMIContext context;
+
+    /** The extension notification converter. */
+    private final ExtensionNotificationDataConverter converter;
 
     /**
      * Constructs a new object.
@@ -51,9 +66,10 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
      *            the adapter to send events
      */
     public MmiDetailedSessionListener(final ETLProtocolAdapter protocolAdapter,
-            final MMIContext ctx) {
+            final MMIContext ctx, final ExtensionNotificationDataConverter conv) {
         adapter = protocolAdapter;
         context = ctx;
+        converter = conv;
     }
 
     /**
@@ -68,7 +84,23 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
      */
     @Override
     public void sessionOutput(final Session session, final SessionEvent event) {
-        // TODO send extension notification
+        final Mmi mmi = new Mmi();
+        final ExtensionNotification notification = new ExtensionNotification();
+        mmi.setExtensionNotification(notification);
+        notification.setContext(context.getContextId());
+        notification.setRequestId(UUID.randomUUID().toString());
+        notification.setTarget(context.getTarget());
+        final SynthesizedOutputEvent output = (SynthesizedOutputEvent) event
+                .getRootEvent();
+        try {
+            final Object data = converter.convertSynthesizedOutputEvent(output);
+            final AnyComplexType any = new AnyComplexType();
+            any.addContent(data);
+            notification.setData(any);
+            adapter.sendMMIEvent(context.getChannel(), mmi);
+        } catch (ConversionException | IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 
     /**

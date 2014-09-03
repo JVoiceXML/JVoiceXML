@@ -28,6 +28,7 @@ package org.jvoicexml.callmanager.mmi;
 import java.util.List;
 
 import org.jvoicexml.LastResult;
+import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 
 /**
  * Converts data that is sent as extensions notification into a format that
@@ -40,13 +41,28 @@ import org.jvoicexml.LastResult;
 public interface ExtensionNotificationDataConverter {
     /**
      * Converts the last result from the corresponding shadow variable into a
-     * string.
+     * something that can be placed in the status field of the
+     * {@link org.jvoicexml.mmi.events.DoneNotification}.
      * 
      * @param lastresult
      *            the last result
      * @return converted last result
-     * @throws ConversionException error converting the result
+     * @throws ConversionException
+     *             error converting the result
      */
     Object convertApplicationLastResult(final List<LastResult> lastresult)
+            throws ConversionException;
+
+    /**
+     * Converts the given synthesized output event into the data field of an
+     * {@link org.jvoicexml.mmi.events.ExtensionNotification}.
+     * 
+     * @param event
+     *            the event
+     * @return converted last result
+     * @throws ConversionException
+     *             error converting the result
+     */
+    Object convertSynthesizedOutputEvent(final SynthesizedOutputEvent event)
             throws ConversionException;
 }

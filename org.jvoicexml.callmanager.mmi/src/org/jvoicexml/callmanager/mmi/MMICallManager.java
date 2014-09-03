@@ -42,13 +42,13 @@ import org.jvoicexml.event.error.NoresourceError;
 
 /**
  * A callmanager for MMI integration.
+ * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
  */
 public final class MMICallManager implements CallManager {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(MMICallManager.class);
+    private static final Logger LOGGER = Logger.getLogger(MMICallManager.class);
 
     /** Reference to JVoiceXML. */
     private JVoiceXml jvxml;
@@ -70,7 +70,7 @@ public final class MMICallManager implements CallManager {
 
     /** Identifier for the spoken input to use. */
     private String input;
-    
+
     /** Identifier for the system output to use. */
     private String output;
 
@@ -84,13 +84,14 @@ public final class MMICallManager implements CallManager {
      * Constructs a new object.
      */
     public MMICallManager() {
-        sessions =
-             new java.util.HashMap<Session, ConnectionInformationController>();
+        sessions = new java.util.HashMap<Session, ConnectionInformationController>();
     }
 
     /**
      * Sets the identifier for the call control.
-     * @param value identifier for the call control
+     * 
+     * @param value
+     *            identifier for the call control
      */
     public void setCall(final String value) {
         call = value;
@@ -98,7 +99,9 @@ public final class MMICallManager implements CallManager {
 
     /**
      * Sets the identifier for the spoken input.
-     * @param value identifier for the spoken input
+     * 
+     * @param value
+     *            identifier for the spoken input
      */
     public void setInput(final String value) {
         input = value;
@@ -106,7 +109,9 @@ public final class MMICallManager implements CallManager {
 
     /**
      * Sets the identifier for the system output.
-     * @param value identifier for the system output
+     * 
+     * @param value
+     *            identifier for the system output
      */
     public void setOutput(final String value) {
         output = value;
@@ -114,7 +119,9 @@ public final class MMICallManager implements CallManager {
 
     /**
      * Sets the base URI where to find the MMI servlet.
-     * @param uri base URI of the servlet
+     * 
+     * @param uri
+     *            base URI of the servlet
      */
     public void setServletBaseUri(final String uri) {
         servletBaseUri = uri;
@@ -122,7 +129,9 @@ public final class MMICallManager implements CallManager {
 
     /**
      * Sets the adapter for the ETL specific protocol.
-     * @param protocolAdapter the adapter to use.
+     * 
+     * @param protocolAdapter
+     *            the adapter to use.
      */
     public void setProtocolAdapter(final ETLProtocolAdapter protocolAdapter) {
         adapter = protocolAdapter;
@@ -130,16 +139,31 @@ public final class MMICallManager implements CallManager {
 
     /**
      * Sets the extension notification converter
-     * @param conv the converter
+     * 
+     * @param conv
+     *            the converter
      * @since 0.7.7
      */
-    public void setExtensionNotificationDataConverter(final ExtensionNotificationDataConverter conv) {
+    public void setExtensionNotificationDataConverter(
+            final ExtensionNotificationDataConverter conv) {
         converter = conv;
     }
 
     /**
+     * Retrieves the extension notification converter
+     * 
+     * @return the converter
+     * @since 0.7.7
+     */
+    public ExtensionNotificationDataConverter getExtensionNotificationDataConverter() {
+        return converter;
+    }
+
+    /**
      * Sets the connection information factory.
-     * @param connectionInformationFactory the connection information factory
+     * 
+     * @param connectionInformationFactory
+     *            the connection information factory
      * 
      */
     public void setConnectionInformationFactory(
@@ -158,7 +182,8 @@ public final class MMICallManager implements CallManager {
 
     /**
      * Retrieves the voice modality component.
-     * @return the voice modality component. 
+     * 
+     * @return the voice modality component.
      */
     VoiceModalityComponent getVoiceModalityComponent() {
         return mc;
@@ -178,23 +203,23 @@ public final class MMICallManager implements CallManager {
     }
 
     /**
-     * Creates a session. Created sessions must be
-     * cleaned up after the session has ended using
-     * {@link #cleanupSession(Session)}.
+     * Creates a session. Created sessions must be cleaned up after the session
+     * has ended using {@link #cleanupSession(Session)}.
+     * 
      * @return created session
      * @throws ErrorEvent
-     *         error creating the session 
-     * @throws UnsupportedResourceIdentifierException 
-     *         error in the URI scheme
+     *             error creating the session
+     * @throws UnsupportedResourceIdentifierException
+     *             error in the URI scheme
      */
-    public Session createSession()
-            throws ErrorEvent, UnsupportedResourceIdentifierException {
-        final ConnectionInformationController controller =
-                factory.createConnectionInformation(call, output, input);
-        final ConnectionInformation info =
-                controller.getConnectionInformation();
+    public Session createSession() throws ErrorEvent,
+            UnsupportedResourceIdentifierException {
+        final ConnectionInformationController controller = factory
+                .createConnectionInformation(call, output, input);
+        final ConnectionInformation info = controller
+                .getConnectionInformation();
         final Session session = jvxml.createSession(info);
-        
+
         sessions.put(session, controller);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("session '" + session.getSessionID() + "' created");
@@ -204,11 +229,13 @@ public final class MMICallManager implements CallManager {
 
     /**
      * Cleanup of the resources when creating the session.
-     * @param session the session
+     * 
+     * @param session
+     *            the session
      */
     public void cleanupSession(final Session session) {
-        final ConnectionInformationController controller =
-                sessions.get(session);
+        final ConnectionInformationController controller = sessions
+                .get(session);
         if (controller == null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.info("no controller for session '"

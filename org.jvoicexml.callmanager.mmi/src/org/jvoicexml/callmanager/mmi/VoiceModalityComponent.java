@@ -54,6 +54,7 @@ import org.jvoicexml.mmi.events.DoneNotification;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.LifeCycleRequest;
 import org.jvoicexml.mmi.events.LifeCycleResponse;
+import org.jvoicexml.mmi.events.Mmi;
 import org.jvoicexml.mmi.events.NewContextRequest;
 import org.jvoicexml.mmi.events.NewContextResponse;
 import org.jvoicexml.mmi.events.PauseRequest;
@@ -157,7 +158,9 @@ public final class VoiceModalityComponent
     void sendLifeCycleEvent(final Object channel, final LifeCycleEvent event)
             throws IOException {
         try {
-            adapter.sendMMIEvent(channel, event);
+            final Mmi mmi = new Mmi();
+            mmi.setLifeCycleEvent(event);
+            adapter.sendMMIEvent(channel, mmi);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             if (event instanceof LifeCycleResponse) {
@@ -323,7 +326,9 @@ public final class VoiceModalityComponent
             response.addStatusInfo(statusInfo);
         }
         try {
-            adapter.sendMMIEvent(channel, response);
+            final Mmi mmi = new Mmi();
+            mmi.setLifeCycleEvent(response);
+            adapter.sendMMIEvent(channel, mmi);
             LOGGER.info(context + ": " + ModalityComponentState.RUNNING);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -412,8 +417,10 @@ public final class VoiceModalityComponent
                     session = callManager.createSession();
                     context.setSession(session);
                 }
+                final ExtensionNotificationDataConverter converter = callManager
+                        .getExtensionNotificationDataConverter();
                 final DetailedSessionListener listener = new MmiDetailedSessionListener(
-                        adapter, context);
+                        adapter, context, converter);
                 final JVoiceXmlSession jvxmlSession = (JVoiceXmlSession) session;
                 jvxmlSession.addSessionListener(listener);
                 session.call(uri);
@@ -440,7 +447,9 @@ public final class VoiceModalityComponent
             response.addStatusInfo(statusInfo);
         }
         try {
-            adapter.sendMMIEvent(channel, response);
+            final Mmi mmi = new Mmi();
+            mmi.setLifeCycleEvent(response);
+            adapter.sendMMIEvent(channel, mmi);
             context.setState(ModalityComponentState.RUNNING);
             LOGGER.info(context + ": " + ModalityComponentState.RUNNING);
         } catch (IOException e) {
@@ -599,7 +608,9 @@ public final class VoiceModalityComponent
             response.addStatusInfo(statusInfo);
         }
         try {
-            adapter.sendMMIEvent(channel, response);
+            final Mmi mmi = new Mmi();
+            mmi.setLifeCycleEvent(response);
+            adapter.sendMMIEvent(channel, mmi);
             if (statusInfo == null) {
                 context.setState(ModalityComponentState.IDLE);
                 LOGGER.info(context + ": " + ModalityComponentState.RUNNING);
@@ -673,7 +684,9 @@ public final class VoiceModalityComponent
             response.addStatusInfo(statusInfo);
         }
         try {
-            adapter.sendMMIEvent(channel, response);
+            final Mmi mmi = new Mmi();
+            mmi.setLifeCycleEvent(response);
+            adapter.sendMMIEvent(channel, mmi);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -710,7 +723,9 @@ public final class VoiceModalityComponent
         }
         response.addStatusInfo(statusInfo);
         try {
-            adapter.sendMMIEvent(channel, response);
+            final Mmi mmi = new Mmi();
+            mmi.setLifeCycleEvent(response);
+            adapter.sendMMIEvent(channel, mmi);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             removeContext(contextId);
@@ -748,7 +763,9 @@ public final class VoiceModalityComponent
         }
         response.addStatusInfo(statusInfo);
         try {
-            adapter.sendMMIEvent(channel, response);
+            final Mmi mmi = new Mmi();
+            mmi.setLifeCycleEvent(response);
+            adapter.sendMMIEvent(channel, mmi);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             removeContext(contextId);
@@ -814,7 +831,9 @@ public final class VoiceModalityComponent
             response.addStatusInfo(statusInfo);
         }
         try {
-            adapter.sendMMIEvent(channel, response);
+            final Mmi mmi = new Mmi();
+            mmi.setLifeCycleEvent(response);
+            adapter.sendMMIEvent(channel, mmi);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             removeContext(contextId);
@@ -903,7 +922,9 @@ public final class VoiceModalityComponent
         }
         try {
             final Object channel = context.getChannel();
-            adapter.sendMMIEvent(channel, done);
+            final Mmi mmi = new Mmi();
+            mmi.setLifeCycleEvent(done);
+            adapter.sendMMIEvent(channel, mmi);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
