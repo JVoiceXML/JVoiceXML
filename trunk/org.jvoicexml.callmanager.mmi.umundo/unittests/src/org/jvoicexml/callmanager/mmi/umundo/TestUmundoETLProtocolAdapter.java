@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.callmanager.mmi.umundo.mock.MockReceiver;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.Mmi;
 import org.jvoicexml.mmi.events.PrepareResponse;
 import org.jvoicexml.mmi.events.protobuf.LifeCycleEvents;
 import org.umundo.core.Node;
@@ -89,7 +90,9 @@ public final class TestUmundoETLProtocolAdapter {
      */
     @Test(timeout = 5000)
     public void testSendMMIEvent() throws Exception {
+        final Mmi mmi = new Mmi();
         final PrepareResponse response = new PrepareResponse();
+        mmi.setLifeCycleEvent(response);
         final String requestId = "requestId1";
         final String source = "source1";
         final String target = "target1";
@@ -101,7 +104,7 @@ public final class TestUmundoETLProtocolAdapter {
         final UmundoETLProtocolAdapter adapter = new UmundoETLProtocolAdapter();
         adapter.start();
         Thread.sleep(1000);
-        adapter.sendMMIEvent("dummy", response);
+        adapter.sendMMIEvent("dummy", mmi);
         receiver.waitReceivedObject();
         final Object object = receiver.getReceivedObject();
         adapter.stop();
