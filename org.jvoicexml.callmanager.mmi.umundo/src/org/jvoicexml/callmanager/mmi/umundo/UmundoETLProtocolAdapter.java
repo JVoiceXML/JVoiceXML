@@ -39,6 +39,7 @@ import org.jvoicexml.mmi.events.ClearContextResponse;
 import org.jvoicexml.mmi.events.DoneNotification;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.LifeCycleResponse;
+import org.jvoicexml.mmi.events.Mmi;
 import org.jvoicexml.mmi.events.NewContextResponse;
 import org.jvoicexml.mmi.events.PauseResponse;
 import org.jvoicexml.mmi.events.PrepareResponse;
@@ -317,8 +318,9 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void sendMMIEvent(final Object ch, final LifeCycleEvent evt)
+    public void sendMMIEvent(final Object ch, final Mmi mmi)
             throws IOException {
+        final LifeCycleEvent evt = mmi.getLifeCycleEvent();
         LifeCycleEvents.LifeCycleResponse response =
                 createResponse(evt);
         final LifeCycleEvents.LifeCycleEvent.LifeCycleEventType type

@@ -121,11 +121,11 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void sendMMIEvent(final Object channel, final LifeCycleEvent event)
+    public void sendMMIEvent(final Object channel, final Mmi mmi)
         throws IOException {
         Socket client = null; 
         try {
-            final Mmi mmi = new Mmi();
+            final LifeCycleEvent event = mmi.getLifeCycleEvent();
             mmi.setLifeCycleEvent(event);
             final String target = event.getTarget();
             if (target == null) {
