@@ -703,23 +703,23 @@ public final class Jsapi20SynthesizedOutput
             LOGGER.debug("speakable updated: " + event);
         }
         final int id = event.getId();
-        SpeakableText speakableText = null;
+        SpeakableText speakable = null;
         if (id == SpeakableEvent.SPEAKABLE_STARTED) {
             synchronized (queuedSpeakables) {
-                speakableText = queuedSpeakables.peek();
+                speakable = queuedSpeakables.peek();
             }
-            fireOutputStarted(speakableText);
+            fireOutputStarted(speakable);
         } else if (id == SpeakableEvent.SPEAKABLE_ENDED) {
             synchronized (queuedSpeakables) {
-                speakableText = queuedSpeakables.poll();
-                final Integer queueId = queueIds.remove(speakableText);
+                speakable = queuedSpeakables.poll();
+                final Integer queueId = queueIds.remove(speakable);
                 if (LOGGER.isDebugEnabled() && queueId != null) {
                     LOGGER.debug("queued id '" + queueId.intValue()
                             + "' ended ");
                 }
             }
 
-            fireOutputEnded(speakableText);
+            fireOutputEnded(speakable);
             try {
                 processNextSpeakable();
             } catch (NoresourceError e) {
