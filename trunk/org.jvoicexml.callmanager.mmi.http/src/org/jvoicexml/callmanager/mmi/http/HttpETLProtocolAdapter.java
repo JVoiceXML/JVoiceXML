@@ -28,7 +28,6 @@ package org.jvoicexml.callmanager.mmi.http;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -46,7 +45,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
-import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.Mmi;
 
@@ -121,12 +119,11 @@ public class HttpETLProtocolAdapter implements ETLProtocolAdapter {
     }
 
     @Override
-    public void sendMMIEvent(Object channel, LifeCycleEvent event)
+    public void sendMMIEvent(Object channel, Mmi mmi)
             throws IOException {
         try {
-            final Mmi mmi = new Mmi();
-            mmi.setLifeCycleEvent(event);
             final URI source = server.getURI();
+            final LifeCycleEvent event = mmi.getLifeCycleEvent();
             event.setSource(source.toString());
             final String target = event.getTarget();
             if (target == null) {

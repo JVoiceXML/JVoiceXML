@@ -39,7 +39,7 @@
         <!-- Specification of the Extension notification converter -->
         <beans:property name="extensionNotificationDataConverter">
             <beans:bean
-                class="org.jvoicexml.callmanager.mmi.EmmaExtensionNotificationDataConverter" />
+                class="org.jvoicexml.callmanager.mmi.XmlExtensionNotificationDataConverter" />
         </beans:property>
     </beans:bean>
 </callmanager>
