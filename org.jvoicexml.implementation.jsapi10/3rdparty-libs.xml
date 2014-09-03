@@ -18,22 +18,6 @@ implementation platform.
            <include name="**/*.jar" />
         </fileset>
 
-        <!-- freetts JSAPI 1.0 library -->
-        <property name="freetts.jsapi10.dir" value="${local-3rdparty.dir}/freetts1.2" />
-        <property name="freetts.jsapi10.lib.dir" value="${freetts.jsapi10.dir}/lib" />
-
-        <fileset dir="${freetts.jsapi10.lib.dir}" id="freetts.jsapi10.lib">
-            <include name="**/*.jar" />
-        </fileset>
-
-        <!-- sphinx4 JSAPI 1.0 library -->
-        <property name="sphinx4.jsapi10.dir" value="${local-3rdparty.dir}/sphinx4" />
-        <property name="sphinx4.jsapi10.lib.dir" value="${sphinx4.jsapi10.dir}/lib" />
-
-        <fileset dir="${sphinx4.jsapi10.lib.dir}" id="sphinx4.jsapi10.lib">
-            <include name="**/*.jar" />
-        </fileset>
-
         <!-- jvxml library -->
         <path id="jvxml.core.lib">
           <path location="${jvxml.core.dir}/classes"/>
