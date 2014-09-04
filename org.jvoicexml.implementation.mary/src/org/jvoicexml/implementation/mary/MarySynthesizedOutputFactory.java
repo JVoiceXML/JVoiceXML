@@ -58,9 +58,6 @@ public class MarySynthesizedOutputFactory
     /** Name of the voice to use. */
     private String voiceName;
 
-    /** The used language. */
-    private String lang;
-
     /** Audio format to use. */
     private AudioFormat format;
 
@@ -76,7 +73,6 @@ public class MarySynthesizedOutputFactory
         output.setType(type);
         output.setAudioType(audioType);
         output.setVoiceName(voiceName);
-        output.setLang(lang);
         return output;
     }
 
@@ -145,15 +141,5 @@ public class MarySynthesizedOutputFactory
      */
     public final void setVoiceName(final String name) {
         voiceName = name;
-    }
-
-    /**
-     * Sets the language.
-     * 
-     * @param value
-     *            the new language
-     */
-    public final void setLang(final String value) {
-        lang = value;
     }
 }
