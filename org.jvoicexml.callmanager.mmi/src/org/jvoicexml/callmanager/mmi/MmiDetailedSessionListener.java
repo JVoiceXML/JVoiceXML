@@ -31,6 +31,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.DetailedSessionListener;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.SessionEvent;
@@ -108,6 +109,22 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
      */
     @Override
     public void sessionInput(final Session session, final SessionEvent event) {
+        final Mmi mmi = new Mmi();
+        final ExtensionNotification notification = new ExtensionNotification();
+        mmi.setExtensionNotification(notification);
+        notification.setContext(context.getContextId());
+        notification.setRequestId(UUID.randomUUID().toString());
+        notification.setTarget(context.getTarget());
+        final RecognitionEvent input = (RecognitionEvent) event.getRootEvent();
+        try {
+            final Object data = converter.convertRecognitionEvent(input);
+            final AnyComplexType any = new AnyComplexType();
+            any.addContent(data);
+            notification.setData(any);
+            adapter.sendMMIEvent(context.getChannel(), mmi);
+        } catch (ConversionException | IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 
     /**
