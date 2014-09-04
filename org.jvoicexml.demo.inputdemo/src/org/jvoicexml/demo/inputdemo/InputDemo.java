@@ -6,7 +6,7 @@
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2013 JVoiceXML group
+ * Copyright (C) 2005-2014 JVoiceXML group
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -69,6 +69,10 @@ import org.jvoicexml.xml.vxml.Vxml;
  * Must be run with the system property
  * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
  * the <code>config</code> folder added to the classpath.
+ * </p>
+ * <p>
+ * This demo requires that JVoiceXML is configured with the jsapi20
+ * implementation platform.
  * </p>
  *
  * @author Dirk Schnelle-Walka
@@ -267,7 +271,7 @@ public final class InputDemo {
         }
 
         final ConnectionInformation client =
-            new BasicConnectionInformation("dummy", "jsapi10", "jsapi10");
+            new BasicConnectionInformation("dummy", "jsapi20", "jsapi20");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
@@ -314,7 +318,7 @@ public final class InputDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'input' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2013 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2014 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final InputDemo demo = new InputDemo();

@@ -6,7 +6,7 @@
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2011-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -47,6 +47,10 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
  * the <code>config</code> folder added to the classpath.
  * </p>
+ * <p>
+ * This demo requires that JVoiceXML is configured with the jsapi20
+ * and marc implementation platforms.
+ * </p>
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
@@ -85,7 +89,7 @@ public final class MarcDemo {
         }
 
         final ConnectionInformation client = new BasicConnectionInformation(
-                "dummy", "marc", "jsapi10");
+                "dummy", "marc", "jsapi20");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
@@ -101,7 +105,7 @@ public final class MarcDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting marc demo for JVoiceXML...");
-        LOGGER.info("(c) 2011-2012 by JVoiceXML group - "
+        LOGGER.info("(c) 2011-2014 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         try {

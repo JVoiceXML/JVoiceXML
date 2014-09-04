@@ -7,7 +7,7 @@
     tag-format="semantics/1.0">
 	<rule id="politeness1">
 		<item repeat="0-1">
-			Ich mˆchte
+			Ich m√∂chte
 		</item>
 	</rule>
 
@@ -30,7 +30,7 @@
 			</item>
 
 			<item>
-				groﬂe
+				gro√üe
                 <tag>out = "big";</tag>
 			</item>
 		</one-of>

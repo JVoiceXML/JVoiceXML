@@ -6,7 +6,7 @@
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -53,6 +53,10 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
  * the <code>config</code> folder added to the classpath.
  * </p>
+ * <p>
+ * This demo requires that JVoiceXML is configured with the text
+ * implementation platform.
+ * </p>
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
@@ -66,8 +70,9 @@ public final class TextDemo implements TextListener {
      * @param args Command line arguments. None expected.
      */
     public static void main(final String[] args) {
-        LOGGER.info("Starting 'hello world' text demo for JVoiceXML...");
-        LOGGER.info("(c) 2013 by JVoiceXML group - "
+        LOGGER.info("Starting 'hello world' parallel text demo for "
+                + "JVoiceXML...");
+        LOGGER.info("(c) 2014 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final int MAX = 20;
@@ -84,6 +89,7 @@ public final class TextDemo implements TextListener {
             final JVoiceXml jvxml = (JVoiceXml) context.lookup("JVoiceXml");
             final File file = new File("helloworld.vxml");
             final URI dialog = file.toURI();
+            LOGGER.info("initiating " + MAX + " calls...");
             final Session[] sessions = new Session[MAX];
             for (int i=0; i<MAX; i++) {
                 final ConnectionInformation info =
@@ -94,10 +100,12 @@ public final class TextDemo implements TextListener {
             for (int i=0; i<MAX; i++) {
                 sessions[i].call(dialog);
             }
+            LOGGER.info("waiting for the end of all sessions...");
             for (int i=0; i<MAX; i++) {
                 sessions[i].waitSessionEnd();
                 sessions[i].hangup();
             }
+            LOGGER.info("...done");
         } catch (NamingException e) {
             LOGGER.fatal(e.getMessage(), e);
             return;
