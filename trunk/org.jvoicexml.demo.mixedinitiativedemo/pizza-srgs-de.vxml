@@ -40,7 +40,7 @@
             <prompt>Welchen Belag möchten Sie?</prompt>
             <nomatch>
                 Tut mir leid. Das haben wir nicht.
-                Sie können zwichen folgenden Belägen wählen: Salami, Schinken oder Pilze.
+                Sie können zwischen folgenden Belägen wählen: Salami, Schinken oder Pilze.
             </nomatch>
         </field>
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <grammar version="1.0" root="yesno" xml:lang="en"
     xmlns="http://www.w3.org/2001/06/grammar" mode="voice"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
