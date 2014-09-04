@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
     <repository>mary</repository>
     <classpath>lib/org.jvoicexml.implementation.mary.jar</classpath>
-    <classpath>lib/maryclient.jar</classpath>
+    <classpath>lib/marytts-client-5.1-jar-with-dependencies.jar</classpath>
     <beans:bean
         class="org.jvoicexml.implementation.mary.MarySynthesizedOutputFactory">
         <beans:property name="instances" value="1" />
@@ -12,5 +12,19 @@
         <beans:property name="audioType" value="WAVE"/>
         <beans:property name="lang" value="en-US"/>
         <beans:property name="voiceName" value="cmu-slt-hsmm" />
-    </beans:bean>
+        <beans:property name="audioFormat">
+            <beans:bean class="javax.sound.sampled.AudioFormat">
+                <beans:constructor-arg type="float"
+                    value="24000" />
+                <beans:constructor-arg type="int"
+                    value="32" />
+                <beans:constructor-arg type="int"
+                    value="1" />
+                <beans:constructor-arg type="boolean"
+                    value="true" />
+                <beans:constructor-arg type="boolean"
+                    value="false" />
+            </beans:bean>
+        </beans:property>
+        </beans:bean>
 </implementation>
