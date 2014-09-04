@@ -30,6 +30,8 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.sound.sampled.AudioFormat;
+
 import marytts.client.MaryClient;
 
 import org.apache.log4j.Logger;
@@ -47,16 +49,17 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
  * An implementation of the {@link SynthesizedOutput} for the Mary TTS System.
+ * 
  * @author Dirk Schnelle-Walka
  * @author Giannis Assiouras
  * @version $Revision$
  * @since 0.7.3
  */
-public final class MarySynthesizedOutput implements SynthesizedOutput,
-    SynthesizedOutputListener {
+public final class MarySynthesizedOutput
+        implements SynthesizedOutput, SynthesizedOutputListener {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(MarySynthesizedOutput.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(MarySynthesizedOutput.class);
 
     /** The system output listener. */
     private final Collection<SynthesizedOutputListener> listener;
@@ -67,45 +70,57 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
     /** Object lock for an empty queue. */
     private final Object emptyLock;
 
-    
+    /** Audio format to use. */
+    private final AudioFormat format;
+
     /**
      * Flag to indicate that TTS output and audio of the current speakable can
      * be canceled.
      */
     private boolean enableBargeIn;
 
-    /** Reference to SynthesisQueue Thread.*/
+    /** Reference to SynthesisQueue Thread. */
     private SynthesisQueue synthesisQueue;
 
     /**
-     * Reference to the MaryClient object that will be used.
-     * to send the request to Mary server
+     * Reference to the MaryClient object that will be used. to send the request
+     * to Mary server
      */
     private MaryClient processor;
 
     /**
-     * Flag that indicates that synthesisQueue Thread is Currently.
-     * processing a speakable.
+     * Flag that indicates that synthesisQueue Thread is Currently. processing a
+     * speakable.
      */
     private boolean isBusy;
 
-    /**Flag that indicates that speakable queue is empty.*/
+    /** Flag that indicates that speakable queue is empty. */
     private boolean speakableQueueEmpty = true;
 
-    /**The HashTable that contains Mary synthesis request parameters.
-     * e.g audioType,voiceName,voiceEffects and their value
+    /**
+     * The HashTable that contains Mary synthesis request parameters. e.g
+     * audioType,voiceName,voiceEffects and their value
      */
     private final Map<String, String> maryRequestParameters;
 
     /**
      * Constructs a new MarySynthesizedOutput object.
      */
-    public MarySynthesizedOutput() {
+    public MarySynthesizedOutput(final AudioFormat audioFormat) {
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         emptyLock = new Object();
         maryRequestParameters = new java.util.HashMap<String, String>();
+        format = audioFormat;
     }
 
+    /**
+     * Retrieves the audio format to use.
+     * @return the audio format
+     * @since 0.7.7
+     */
+    public AudioFormat getAudioFormat() {
+        return format;
+    }
 
     /**
      * {@inheritDoc}
@@ -116,17 +131,17 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
         return null;
     }
 
-
     /**
-     * {@inheritDoc}
-     * The queueSpeakable method simply offers a speakable to the queue.
-     * it notifies the synthesisQueue Thread and then it returns
-     * @throws NoresourceError if no MaryClient has been created
+     * {@inheritDoc} The queueSpeakable method simply offers a speakable to the
+     * queue. it notifies the synthesisQueue Thread and then it returns
+     * 
+     * @throws NoresourceError
+     *             if no MaryClient has been created
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
             final String sessionId, final DocumentServer server)
-        throws NoresourceError {
+            throws NoresourceError {
         if (processor == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
@@ -135,7 +150,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
         }
         synthesisQueue.queueSpeakables(speakable);
         speakableQueueEmpty = false;
-      }
+    }
 
     /**
      * {@inheritDoc}
@@ -177,7 +192,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
             LOGGER.debug("...audio output closed");
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -187,12 +202,11 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
 
     }
 
-
     @Override
     public void open() throws NoresourceError {
+        LOGGER.info("using audio format: " + format);
     }
 
-    
     /**
      * {@inheritDoc}
      */
@@ -213,12 +227,11 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
     }
 
     /**
-     * {@inheritDoc}
-     * It creates the MaryClient and starts the synthesisQueue thread.
+     * {@inheritDoc} It creates the MaryClient and starts the synthesisQueue
+     * thread.
      */
     @Override
-    public void connect(final ConnectionInformation info)
-        throws IOException {
+    public void connect(final ConnectionInformation info) throws IOException {
         processor = MaryClient.getMaryClient();
         synthesisQueue = new SynthesisQueue(this);
         synthesisQueue.addListener(this);
@@ -244,6 +257,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
 
     /**
      * {@inheritDoc}
+     * 
      * @return <code>true</code>
      */
     public boolean supportsBargeIn() {
@@ -254,8 +268,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     @Override
-    public void addListener(final SynthesizedOutputListener
-                outputListener) {
+    public void addListener(final SynthesizedOutputListener outputListener) {
         synchronized (listener) {
             listener.add(outputListener);
         }
@@ -265,8 +278,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     @Override
-    public void removeListener(final SynthesizedOutputListener
-            outputListener) {
+    public void removeListener(final SynthesizedOutputListener outputListener) {
         synchronized (listener) {
             listener.remove(outputListener);
         }
@@ -274,21 +286,25 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
 
     /**
      * Notifies all listeners that output has started.
-     * @param speakable the current speakable.
+     * 
+     * @param speakable
+     *            the current speakable.
      */
     private void fireOutputStarted(final SpeakableText speakable) {
-        final SynthesizedOutputEvent event =
-            new OutputStartedEvent(this, null, speakable);
+        final SynthesizedOutputEvent event = new OutputStartedEvent(this, null,
+                speakable);
         fireOutputEvent(event);
     }
 
     /**
      * Notifies all listeners that output has ended.
-     * @param speakable the current speakable.
+     * 
+     * @param speakable
+     *            the current speakable.
      */
     private void fireOutputEnded(final SpeakableText speakable) {
-        final SynthesizedOutputEvent event =
-            new OutputEndedEvent(this, null, speakable);
+        final SynthesizedOutputEvent event = new OutputEndedEvent(this, null,
+                speakable);
         fireOutputEvent(event);
     }
 
@@ -306,13 +322,14 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
 
     /**
      * Notifies all registered listeners about the given event.
-     * @param event the event.
+     * 
+     * @param event
+     *            the event.
      * @since 0.6
      */
     private void fireOutputEvent(final SynthesizedOutputEvent event) {
         synchronized (listener) {
-            final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>();
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listener);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -322,35 +339,35 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
 
     /**
      * Sets the type of this resource.
-     * @param resourceType type of the resource
+     * 
+     * @param resourceType
+     *            type of the resource
      */
     public void setType(final String resourceType) {
         type = resourceType;
     }
 
-
     /**
-     * Gets the events fired from SynthesisQueue thread and it forwards them.
-     * to ImplementationPlatform
-     * it also sets the appropriate flags
-     * @param event the event.
+     * Gets the events fired from SynthesisQueue thread and it forwards them. to
+     * ImplementationPlatform it also sets the appropriate flags
+     * 
+     * @param event
+     *            the event.
      */
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
         if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
-            final OutputStartedEvent outputStartedEvent =
-                (OutputStartedEvent) event;
-            final SpeakableText startedSpeakable =
-                outputStartedEvent.getSpeakable();
+            final OutputStartedEvent outputStartedEvent = (OutputStartedEvent) event;
+            final SpeakableText startedSpeakable = outputStartedEvent
+                    .getSpeakable();
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("output started " + startedSpeakable);
             }
             isBusy = true;
             fireOutputStarted(startedSpeakable);
         } else if (event.isType(OutputEndedEvent.EVENT_TYPE)) {
-            final OutputEndedEvent outputEndedEvent =
-                (OutputEndedEvent) event;
-            final SpeakableText endedSpeakable =
-                outputEndedEvent.getSpeakable();
+            final OutputEndedEvent outputEndedEvent = (OutputEndedEvent) event;
+            final SpeakableText endedSpeakable = outputEndedEvent
+                    .getSpeakable();
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("audio playing ended");
             }
@@ -387,6 +404,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
 
     /**
      * Stops the currently playing Audio.
+     * 
      * @throws NoresourceError .
      * */
     public void cancelAudioOutput() throws NoresourceError {
@@ -395,7 +413,9 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
 
     /**
      * Sets the audio output.
-     * @param value the new audio type
+     * 
+     * @param value
+     *            the new audio type
      */
     public void setAudioType(final String value) {
         if (value == null) {
@@ -406,20 +426,23 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
 
     /**
      * Sets the name of the voice to use.
-     * @param name the voice name
+     * 
+     * @param name
+     *            the voice name
      */
     public void setVoiceName(final String name) {
         if (name == null) {
             return;
         }
         maryRequestParameters.put("voiceName", name);
-       
-   
+
     }
 
     /**
      * Sets the language.
-     * @param lang the language
+     * 
+     * @param lang
+     *            the language
      */
     public void setLang(final String lang) {
         if (lang == null) {
@@ -428,15 +451,13 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
         maryRequestParameters.put("lang", lang);
     }
 
-
     /**
      * {@inheritDoc}
      */
     @Override
     public void outputError(final ErrorEvent error) {
         synchronized (listener) {
-            final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>();
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listener);
             for (SynthesizedOutputListener current : copy) {
                 current.outputError(error);
@@ -444,4 +465,3 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
         }
     }
 }
-

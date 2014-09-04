@@ -29,41 +29,50 @@
 
 package org.jvoicexml.implementation.mary;
 
+import javax.sound.sampled.AudioFormat;
+
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
 
-/**implementation of a.
-* {@link org.jvoicexml.implementation.ResourceFactory} for the
-* {@link SynthesizedOutput} based on MaryTTS
-* @author Dirk Schnelle-Walka
-* @author Giannis Assiouras
-**/
+/**
+ * implementation of a. {@link org.jvoicexml.implementation.ResourceFactory} for
+ * the {@link SynthesizedOutput} based on MaryTTS
+ * 
+ * @author Dirk Schnelle-Walka
+ * @author Giannis Assiouras
+ * @version $Revision$
+ */
 
-public class MarySynthesizedOutputFactory implements
-    ResourceFactory<SynthesizedOutput> {
+public class MarySynthesizedOutputFactory
+        implements ResourceFactory<SynthesizedOutput> {
     /** Number of instances that this factory will create. */
     private int instances;
 
     /** Type of the created resources. */
     private String type;
-    
-    /**Type of the output audio.*/
+
+    /** Type of the output audio. */
     private String audioType;
-   
-    /**Name of the voice to use.*/
+
+    /** Name of the voice to use. */
     private String voiceName;
 
-    /**The used language. */
+    /** The used language. */
     private String lang;
-   
+
+    /** Audio format to use. */
+    private AudioFormat format;
+
     /**
      * {@inheritDoc}
      */
     @Override
     public final SynthesizedOutput createResource() throws NoresourceError {
-
-        final MarySynthesizedOutput output = new MarySynthesizedOutput();
+        if (format == null) {
+            format = new AudioFormat(24000, 32, 1, true, false); 
+        }
+        final MarySynthesizedOutput output = new MarySynthesizedOutput(format);
         output.setType(type);
         output.setAudioType(audioType);
         output.setVoiceName(voiceName);
@@ -72,24 +81,18 @@ public class MarySynthesizedOutputFactory implements
     }
 
     @Override
-    public final int getInstances() {
-        // TODO Auto-generated method stub
-        return instances;
-    }
-
-    @Override
     public final Class<SynthesizedOutput> getResourceType() {
-        return  SynthesizedOutput.class;
+        return SynthesizedOutput.class;
     }
 
     @Override
     public final String getType() {
-        return  type;
+        return type;
     }
 
     /**
      * Sets the number of instances that this factory will create.
-     *
+     * 
      * @param number
      *            Number of instances to create.
      */
@@ -98,39 +101,57 @@ public class MarySynthesizedOutputFactory implements
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final int getInstances() {
+        return instances;
+    }
+
+    /**
+     * Sets the audio format.
+     * @param audioFormat the audio format to use
+     * @since 0.7.7
+     */
+    public void setAudioFormat(final AudioFormat audioFormat) {
+        format = audioFormat;
+    }
+    
+    /**
      * Sets the type of the resource.
-     *
+     * 
      * @param resourceType
      *            type of the resource.
      */
     public final void setType(final String resourceType) {
         type = resourceType;
-      }
+    }
 
     /**
      * Sets the type of the audio.
-     *
+     * 
      * @param value
      *            type of the audio.
      */
     public final void setAudioType(final String value) {
         audioType = value;
-      }
-    
+    }
 
     /**
      * Sets the voice that will be used from Mary server.
-     *
+     * 
      * @param name
      *            voice name.
      */
     public final void setVoiceName(final String name) {
         voiceName = name;
-      }
-    
+    }
+
     /**
      * Sets the language.
-     * @param value the new language
+     * 
+     * @param value
+     *            the new language
      */
     public final void setLang(final String value) {
         lang = value;
