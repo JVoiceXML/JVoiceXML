@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.jvoicexml.LastResult;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 
 /**
  * Converts data that is sent as extensions notification into a format that
@@ -64,5 +65,18 @@ public interface ExtensionNotificationDataConverter {
      *             error converting the result
      */
     Object convertSynthesizedOutputEvent(final SynthesizedOutputEvent event)
+            throws ConversionException;
+
+    /**
+     * Converts the given recognition event into the data field of an
+     * {@link org.jvoicexml.mmi.events.ExtensionNotification}.
+     * 
+     * @param event
+     *            the event
+     * @return converted last result
+     * @throws ConversionException
+     *             error converting the result
+     */
+    Object convertRecognitionEvent(final RecognitionEvent event)
             throws ConversionException;
 }
