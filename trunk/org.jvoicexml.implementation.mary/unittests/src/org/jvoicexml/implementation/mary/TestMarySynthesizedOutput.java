@@ -30,6 +30,8 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.sound.sampled.AudioFormat;
+
 import marytts.client.MaryClient;
 
 import org.apache.log4j.Logger;
@@ -160,7 +162,8 @@ public final class TestMarySynthesizedOutput
      */
     @Before
     public void setUp() throws Exception {
-        output = new MarySynthesizedOutput();
+        final AudioFormat format = new AudioFormat(24000, 32, 1, true, false);
+        output = new MarySynthesizedOutput(format);
         output.setAudioType("WAVE");
         output.setLang("en-US");
         output.setVoiceName("cmu-slt-hsmm");
@@ -186,7 +189,7 @@ public final class TestMarySynthesizedOutput
      * @exception Exception test failed
      * @exception JVoiceXMLEvent test failed
      */
-    @Test(timeout = 6000)
+    @Test//(timeout = 6000)
     public void testQueueSpeakable() throws Exception, JVoiceXMLEvent {
         final SpeakableSsmlText plainText =
             new SpeakableSsmlText("Hello world");
