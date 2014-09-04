@@ -182,6 +182,8 @@ final class SynthesisQueue extends Thread {
         } finally {
             out.close();
             out = null;
+            line.stop();
+            line.close();
         }
     }
 
@@ -199,16 +201,13 @@ final class SynthesisQueue extends Thread {
             throws IOException {
         final SsmlDocument document = ssml.getDocument();
         final Speak speak = document.getSpeak();
-        String lang = speak.getXmlLang();
-        if (lang == null) {
-            lang = maryRequestParameters.get("lang");
-        }
+        final String lang = speak.getXmlLang();
         final String text = document.toXml();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("synthesizing '" + text + "'");
         }
         processor.process(text, "SSML", "AUDIO",
-                maryRequestParameters.get("lang"),
+                lang,
                 maryRequestParameters.get("audioType"),
                 maryRequestParameters.get("voiceName"), out, SERVER_TIMEOUT);
     }
