@@ -52,6 +52,7 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
@@ -150,6 +151,7 @@ public final class JVoiceXmlSession extends Thread
         detailedSessionListeners = new java.util.ArrayList<DetailedSessionListener>();
         final EventBus eventbus = context.getEventBus();
         eventbus.subscribe(SynthesizedOutputEvent.EVENT_TYPE, this);
+        eventbus.subscribe(RecognitionEvent.EVENT_TYPE, this);
     }
 
     /**
@@ -553,6 +555,12 @@ public final class JVoiceXmlSession extends Thread
                     SessionEvent.SESSION_OUTPUT, event);
             for (DetailedSessionListener listener : detailedSessionListeners) {
                 listener.sessionOutput(this, sessionEvent);
+            }
+        } else if (event instanceof RecognitionEvent) {
+            final SessionEvent sessionEvent = new SessionEvent(this,
+                    SessionEvent.SESSION_INPUT, event);
+            for (DetailedSessionListener listener : detailedSessionListeners) {
+                listener.sessionInput(this, sessionEvent);
             }
         }
     }

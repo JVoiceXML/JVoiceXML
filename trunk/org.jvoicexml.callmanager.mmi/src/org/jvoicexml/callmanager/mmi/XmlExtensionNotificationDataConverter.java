@@ -26,7 +26,6 @@
 
 package org.jvoicexml.callmanager.mmi;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -34,22 +33,16 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.jvoicexml.LastResult;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.mozilla.javascript.ScriptableObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -59,8 +52,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * Converts the extension notifications into the XML format. Standards like
- * <a href="http://www.w3.org/TR/emma/">EMMA</a> are used where possible.
+ * Converts the extension notifications into the XML format. Standards like <a
+ * href="http://www.w3.org/TR/emma/">EMMA</a> are used where possible.
  * 
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
@@ -79,38 +72,44 @@ public class XmlExtensionNotificationDataConverter
             return null;
         }
         final LastResult lastresult = lastresults.get(0);
-        final DocumentBuilderFactory factory = DocumentBuilderFactory
-                .newInstance();
-        factory.setNamespaceAware(true);
-        DocumentBuilder builder = null;
+        final String utterance = lastresult.getUtterance();
+        final String mode = lastresult.getInputmode();
+        final float confidence = lastresult.getConfidence();
+        final Object interpretation = lastresult.getInterpretation();
         try {
-            builder = factory.newDocumentBuilder();
-            final Document document = builder.newDocument();
-            final Element emma = document.createElementNS(
-                    "http://www.w3.org/2003/04/emma", "emma:emma");
-            emma.setAttribute("version", "1.0");
-            document.appendChild(emma);
-            final Element interpretation = document.createElementNS(
-                    "http://www.w3.org/2003/04/emma", "emma:interpretation");
-            interpretation.setAttribute("id", "lastresult");
-            interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
-                    "emma:medium", "acoustic");
-            interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
-                    "emma:mode", lastresult.getInputmode());
-            interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
-                    "emma:confidence",
-                    Float.toString(lastresult.getConfidence()));
-            interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
-                    "emma:tokens", lastresult.getUtterance());
-            final Object semanticInterpretation = lastresult
-                    .getInterpretation();
-            addSemanticInterpretation(document, interpretation,
-                    semanticInterpretation);
-            emma.appendChild(interpretation);
-            return emma;
+            return createEmma(utterance, mode, confidence, interpretation);
         } catch (ParserConfigurationException e) {
             throw new ConversionException(e.getMessage(), e);
         }
+    }
+
+    private Element createEmma(final String utterance, final String mode,
+            final float confidence, final Object semanticInterpretation)
+            throws ParserConfigurationException {
+        final DocumentBuilderFactory factory = DocumentBuilderFactory
+                .newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        final Document document = builder.newDocument();
+        final Element emma = document.createElementNS(
+                "http://www.w3.org/2003/04/emma", "emma:emma");
+        emma.setAttribute("version", "1.0");
+        document.appendChild(emma);
+        final Element interpretation = document.createElementNS(
+                "http://www.w3.org/2003/04/emma", "emma:interpretation");
+        interpretation.setAttribute("id", "lastresult");
+        interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
+                "emma:medium", "acoustic");
+        interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
+                "emma:mode", mode);
+        interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
+                "emma:confidence", Float.toString(confidence));
+        interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
+                "emma:tokens", utterance);
+        addSemanticInterpretation(document, interpretation,
+                semanticInterpretation);
+        emma.appendChild(interpretation);
+        return emma;
     }
 
     /**
@@ -121,7 +120,7 @@ public class XmlExtensionNotificationDataConverter
      * @param parent
      *            the parent node
      * @param object
-     *            the sematnic interpretation to add
+     *            the semantic interpretation to add
      */
     private void addSemanticInterpretation(final Document document,
             final Element parent, final Object object) {
@@ -171,23 +170,6 @@ public class XmlExtensionNotificationDataConverter
                 element.appendChild(text);
                 parent.appendChild(element);
             }
-        }
-    }
-
-    public String toString(final Document document) {
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final Result result = new StreamResult(out);
-        final TransformerFactory transformerFactory = TransformerFactory
-                .newInstance();
-        try {
-            final Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
-                    "yes");
-            final Source source = new DOMSource(document);
-            transformer.transform(source, result);
-            return out.toString();
-        } catch (TransformerException e) {
-            return super.toString();
         }
     }
 
@@ -290,5 +272,23 @@ public class XmlExtensionNotificationDataConverter
         factory.setNamespaceAware(true);
         final DocumentBuilder builder = factory.newDocumentBuilder();
         return builder.parse(source);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object convertRecognitionEvent(final RecognitionEvent event)
+            throws ConversionException {
+        final RecognitionResult result = event.getRecognitionResult();
+        final String utterance = result.getUtterance();
+        final String mode = result.getMode().getMode();
+        final float confidence = result.getConfidence();
+        final Object interpretation = result.getSemanticInterpretation();
+        try {
+            return createEmma(utterance, mode, confidence, interpretation);
+        } catch (ParserConfigurationException e) {
+            throw new ConversionException(e.getMessage(), e);
+        }
     }
 }
