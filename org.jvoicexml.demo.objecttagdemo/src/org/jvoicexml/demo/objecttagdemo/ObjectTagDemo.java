@@ -50,6 +50,10 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
  * the <code>config</code> folder added to the classpath.
  * </p>
+ * <p>
+ * This demo requires that JVoiceXML is configured with the jsapi20
+ * implementation platform.
+ * </p>
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$

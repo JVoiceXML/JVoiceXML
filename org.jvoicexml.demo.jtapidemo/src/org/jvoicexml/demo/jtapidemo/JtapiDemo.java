@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -55,6 +55,10 @@ import org.apache.log4j.Logger;
 
 /**
  * Demo implementation for JTAPI access to JVoiceXML.
+ * <p>
+ * The JTAPI implementation platform is currently incomplete. So, this demo
+ * is for development, only.
+ * </p>
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
@@ -126,7 +130,7 @@ public class JtapiDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'jtapi' demo for JVoiceXML...");
-        LOGGER.info("(c) 2009-2010 by JVoiceXML group - "
+        LOGGER.info("(c) 2009-2014 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
         LOGGER.warn("This is just a starting point of a demo and may not work"
                 + " as expexected!");

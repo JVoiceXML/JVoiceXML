@@ -2,7 +2,7 @@
 <vxml version="2.1" xmlns="http://www.w3.org/2001/vxml"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.w3.org/2001/vxml
-        http://www.w3.org/TR/2007/REC-voicexml21-20070619/vxml.xsd">
+        http://www.w3.org/TR/voicexml21/vxml.xsd">
     <!-- form dialog that calls a subdialog -->
     <form>
         <subdialog name="askproduct" src="#ask">
