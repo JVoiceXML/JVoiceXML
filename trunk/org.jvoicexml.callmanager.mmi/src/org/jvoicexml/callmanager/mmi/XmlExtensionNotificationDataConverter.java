@@ -77,14 +77,16 @@ public class XmlExtensionNotificationDataConverter
         final float confidence = lastresult.getConfidence();
         final Object interpretation = lastresult.getInterpretation();
         try {
-            return createEmma(utterance, mode, confidence, interpretation);
+            return createEmma("lstresult", utterance, mode, confidence,
+                    interpretation);
         } catch (ParserConfigurationException e) {
             throw new ConversionException(e.getMessage(), e);
         }
     }
 
-    private Element createEmma(final String utterance, final String mode,
-            final float confidence, final Object semanticInterpretation)
+    private Element createEmma(final String id, final String utterance,
+            final String mode, final float confidence,
+            final Object semanticInterpretation)
             throws ParserConfigurationException {
         final DocumentBuilderFactory factory = DocumentBuilderFactory
                 .newInstance();
@@ -97,7 +99,7 @@ public class XmlExtensionNotificationDataConverter
         document.appendChild(emma);
         final Element interpretation = document.createElementNS(
                 "http://www.w3.org/2003/04/emma", "emma:interpretation");
-        interpretation.setAttribute("id", "lastresult");
+        interpretation.setAttribute("id", id);
         interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
                 "emma:medium", "acoustic");
         interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
@@ -286,7 +288,8 @@ public class XmlExtensionNotificationDataConverter
         final float confidence = result.getConfidence();
         final Object interpretation = result.getSemanticInterpretation();
         try {
-            return createEmma(utterance, mode, confidence, interpretation);
+            return createEmma("recognition", utterance, mode, confidence,
+                    interpretation);
         } catch (ParserConfigurationException e) {
             throw new ConversionException(e.getMessage(), e);
         }
