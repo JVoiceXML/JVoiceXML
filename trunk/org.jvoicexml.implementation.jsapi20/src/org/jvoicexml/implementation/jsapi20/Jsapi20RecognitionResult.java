@@ -29,9 +29,6 @@
 
 package org.jvoicexml.implementation.jsapi20;
 
-import java.util.Collection;
-import java.util.StringTokenizer;
-
 import javax.speech.recognition.FinalResult;
 import javax.speech.recognition.RecognizerProperties;
 import javax.speech.recognition.Result;
@@ -47,18 +44,17 @@ import org.mozilla.javascript.ScriptableObject;
 
 /**
  * JSAPI 20 implementation of the result of the recognition process.
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @author Markus Baumgart
  * @version $Revision$
  * @since 0.6
  */
-public final class Jsapi20RecognitionResult
-        implements RecognitionResult {
-    /**The Logger for this class.*/
-    private static final Logger LOGGER =
-        Logger.getLogger(Jsapi20RecognitionResult.class);
-    
+public final class Jsapi20RecognitionResult implements RecognitionResult {
+    /** The Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(Jsapi20RecognitionResult.class);
+
     /** The semantic interpretation of the utterance. */
     private Object interpretation;
 
@@ -70,7 +66,9 @@ public final class Jsapi20RecognitionResult
 
     /**
      * Constructs a new object.
-     * @param res The result returned by the recognizer.
+     * 
+     * @param res
+     *            The result returned by the recognizer.
      */
     public Jsapi20RecognitionResult(final Result res) {
         result = res;
@@ -79,6 +77,7 @@ public final class Jsapi20RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUtterance() {
         if (result == null) {
             return null;
@@ -102,6 +101,7 @@ public final class Jsapi20RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isAccepted() {
         if (result == null) {
             return false;
@@ -113,17 +113,7 @@ public final class Jsapi20RecognitionResult
     /**
      * {@inheritDoc}
      */
-    public boolean isRejected() {
-        if (result == null) {
-            return false;
-        }
-
-        return result.getResultState() == Result.REJECTED;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setMark(final String mark) {
         markname = mark;
     }
@@ -131,6 +121,7 @@ public final class Jsapi20RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMark() {
         return markname;
     }
@@ -138,21 +129,22 @@ public final class Jsapi20RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public float getConfidence() {
         final FinalResult finalResult = (FinalResult) result;
-        
+
         // map the actual confidence in javax.speech's range
-        // [MIN_CONFIDENCE; MAX_CONFIDENCE](int) to a new Float-value in [0; 1] 
+        // [MIN_CONFIDENCE; MAX_CONFIDENCE](int) to a new Float-value in [0; 1]
         // e.g. be MAX_CONFIDENCE = 20; MIN_CONFIDENCE = -10;
         // then, a value of 2 from the FinalResult (working in [-10; 20])
         // should be mapped to 0.4f (in [0; 1])
         // [because +2(int) is 2/5th of the complete RecognizerProperties'
         // range as is 0.4f in [0; 1]]
-        
-        //get the whole range (in the example above => 20 - -10 = 30;
+
+        // get the whole range (in the example above => 20 - -10 = 30;
         final float range = RecognizerProperties.MAX_CONFIDENCE
-            - RecognizerProperties.MIN_CONFIDENCE;
-        
+                - RecognizerProperties.MIN_CONFIDENCE;
+
         // set the value and shift it (again, with the sample above: set the
         // value from +2 in [-10; 20] to +12 [0; 30] and divide by range (30)
         final float confidence = finalResult.getConfidenceLevel();
@@ -165,6 +157,7 @@ public final class Jsapi20RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public float[] getWordsConfidence() {
         final ResultToken[] rt = result.getBestTokens();
         final float[] wordsConfidence = new float[rt.length];
@@ -177,6 +170,7 @@ public final class Jsapi20RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public String[] getWords() {
         final ResultToken[] tokens = result.getBestTokens();
         final String[] words = new String[tokens.length];
@@ -189,6 +183,7 @@ public final class Jsapi20RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public ModeType getMode() {
         return ModeType.valueOf("VOICE");
     }
@@ -208,71 +203,24 @@ public final class Jsapi20RecognitionResult
                 return null;
             }
             final String[] tags = toString(objecttags);
-            for (int i = 0; i < tags.length; i++) {
-                if (tags[i].startsWith("out.")) {
-                    tags[i] = tags[i].substring(tags[i].indexOf('.') + 1);
-                }
-            }
-                           
             final Context context = Context.enter();
             context.setLanguageVersion(Context.VERSION_1_6);
-            
+
             final Scriptable scope = context.initStandardObjects();
-            context.evaluateString(scope, "var out = new Object();", "expr",
-                    1, null);
-            final Collection<String> props = new java.util.ArrayList<String>();
+            context.evaluateString(scope, "var out = new Object();", "expr", 1,
+                    null);
             for (String tag : tags) {
-                final String source;
-                String[] pair = tag.split("=");
-                if (pair.length < 2) {
-                    source = "out = '" + pair[0] + "';"; // e.g. out = 'help';
+                if (tag.trim().endsWith(";")) {
+                    context.evaluateString(scope, tag, "expr", 1, null);
                 } else {
-                    final StringTokenizer tokenizer =
-                        new StringTokenizer(pair[0], ".");
-                    String seq = "";
-                    if (tokenizer.hasMoreTokens()) {
-                        Object o = scope.get("out", scope);
-                        if (!(o instanceof ScriptableObject)) {
-                            context.evaluateString(scope,
-                                    "var out = new Object();", "expr",
-                                    1, null);
-                        }
-                    }
-                    while (tokenizer.hasMoreTokens()) {
-                        final String part = tokenizer.nextToken();
-                        // traverse and create the nested context
-                        // (e.g. out.foo.bar)
-                        if (!seq.equals(pair[0])) {
-                            if (!seq.isEmpty()) {
-                                seq += ".";
-                            }
-                            seq += part;
-                            if (!props.contains("out." + seq)
-                                    && tokenizer.hasMoreElements()) {
-                                // the subcontext hasn't been created so let's
-                                // do this here
-                                final String expr = "out." + seq
-                                    + " = new Object();";
-                                props.add("out." + seq);
-                                if (LOGGER.isDebugEnabled()) {
-                                    LOGGER.debug("setting: '" + expr + "'");
-                                }
-                                context.evaluateString(scope, expr, "expr", 1,
-                                        null);
-                            }
-                        }
-                    }
-                    source = "out." + pair[0] + " = '" + pair[1] + "';";
+                    context.evaluateString(scope, "var out = '" + tag + "';",
+                            "expr", 1, null);
                 }
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("setting: '" + source + "'");
-                }
-                context.evaluateString(scope, source, "source", 1, null);
             }
             interpretation = scope.get("out", scope);
             if (interpretation instanceof ScriptableObject) {
-                final String json = ScriptingEngine.toJSON(
-                        (ScriptableObject) interpretation);
+                final String json = ScriptingEngine
+                        .toJSON((ScriptableObject) interpretation);
                 LOGGER.info("created semantic interpretation out=" + json);
             } else {
                 LOGGER.info("created semantic interpretation '"
@@ -284,13 +232,15 @@ public final class Jsapi20RecognitionResult
 
     /**
      * Converts given object tags into a string representation.
-     * @param objecttags the object tags to convert.
+     * 
+     * @param objecttags
+     *            the object tags to convert.
      * @return tags as string
      * @since 0.7.7
      */
     private String[] toString(final Object[] objecttags) {
         final String[] tags = new String[objecttags.length];
-        for (int i = 0; i<objecttags.length; i++) {
+        for (int i = 0; i < objecttags.length; i++) {
             final Object o = objecttags[i];
             if (o != null) {
                 tags[i] = o.toString();

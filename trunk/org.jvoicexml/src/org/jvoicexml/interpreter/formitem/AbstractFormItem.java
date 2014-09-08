@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -157,20 +157,18 @@ abstract class AbstractFormItem
      * {@inheritDoc}
      */
     @Override
-    public boolean getCondition() throws SemanticError {
+    public boolean evaluateCondition() throws SemanticError {
         final String condAttribute = node.getAttribute("cond");
         if (condAttribute == null) {
             return true;
-        } else {
-            final ScriptingEngine scripting = context.getScriptingEngine();
-            final Object condResult = scripting.eval(condAttribute + ";");
-            if (condResult == Context.getUndefinedValue()) {
-                return false;
-            } else {
-                final Boolean bool = (Boolean) condResult;
-                return bool.booleanValue();
-            }
         }
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        final Object condResult = scripting.eval(condAttribute + ";");
+        if (condResult == Context.getUndefinedValue()) {
+            return false;
+        }
+        final Boolean bool = (Boolean) condResult;
+        return bool.booleanValue();
     }
 
     /**
@@ -179,7 +177,7 @@ abstract class AbstractFormItem
     @Override
     public boolean isSelectable() throws SemanticError {
         final Object result = getFormItemVariable();
-        final boolean cond = getCondition();
+        final boolean cond = evaluateCondition();
         final boolean selectable = ((result == Context.getUndefinedValue())
                 || (result == null))
             && cond;

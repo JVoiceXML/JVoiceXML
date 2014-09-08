@@ -52,7 +52,7 @@
             <beans:bean
                 class="org.jvoicexml.implementation.jsapi20.JVoiceXmlRecognizerModeFactory">
                 <!-- beans:property name="engineName" value="anna" / -->
-                <beans:property name="locale" value="en" />
+                <beans:property name="locale" value="de" />
             </beans:bean>
         </beans:property>
         <!-- Description of the media locator -->
