@@ -39,11 +39,11 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.OutputEndedEvent;
-import org.jvoicexml.implementation.OutputStartedEvent;
-import org.jvoicexml.implementation.QueueEmptyEvent;
+import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
+import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
+import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
+import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
