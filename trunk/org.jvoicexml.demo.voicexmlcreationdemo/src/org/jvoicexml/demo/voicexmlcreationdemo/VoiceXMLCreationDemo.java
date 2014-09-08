@@ -6,7 +6,7 @@
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -249,7 +249,7 @@ public final class VoiceXMLCreationDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'creation' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2010 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2014 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final VoiceXMLCreationDemo demo = new VoiceXMLCreationDemo();
