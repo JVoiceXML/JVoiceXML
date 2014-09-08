@@ -29,8 +29,6 @@
 
 package org.jvoicexml.implementation.text;
 
-import java.util.Collection;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.processor.srgs.GrammarChecker;
@@ -179,43 +177,15 @@ final class TextRecognitionResult implements RecognitionResult {
             final Scriptable scope = context.initStandardObjects();
             context.evaluateString(scope, "var out = new Object();", "expr", 1,
                     null);
-            final Collection<String> props = new java.util.ArrayList<String>();
+            context.evaluateString(scope, "var out = new Object();", "expr", 1,
+                    null);
             for (String tag : tags) {
-                final String[] pair = tag.split("=");
-               
-                if (pair[0].endsWith("\\")) {
-                    pair[0] = pair[0].substring(0, pair[0].length() - 1);
-                }
-                final String source;
-                if (pair.length < 2) {
-                    source = "out = '" + pair[0] + "';";
+                if (tag.trim().endsWith(";")) {
+                    context.evaluateString(scope, tag, "expr", 1, null);
                 } else {
-                    final String[] nestedctx = pair[0].split("\\.");
-                    String seq = "";
-                    for (String part : nestedctx) {
-                        if (!seq.equals(pair[0])) {
-                            if (!seq.isEmpty()) {
-                                seq += ".";
-                            }
-                            seq += part;
-                            if (!props.contains("out." + seq)) {
-                                final String expr = "out." + seq
-                                    + " = new Object();";
-                                props.add("out." + seq);
-                                if (LOGGER.isDebugEnabled()) {
-                                    LOGGER.debug("setting: '" + expr + "'");
-                                }
-                                context.evaluateString(scope, expr, "expr", 1,
-                                        null);
-                            }
-                        }
-                    }
-                    source = "out." + pair[0] + " = " + pair[1] + ";";
+                    context.evaluateString(scope, "var out = '" + tag + "';",
+                            "expr", 1, null);
                 }
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("setting: '" + source + "'");
-                }
-                context.evaluateString(scope, source, "expr", 1, null);
             }
             interpretation = scope.get("out", scope);
             if (LOGGER.isDebugEnabled()) {
