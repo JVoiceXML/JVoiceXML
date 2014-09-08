@@ -61,13 +61,32 @@
             ObservableSpokenInput and ObservableSynthesizedOutput since
             all SpokenInput and SynthesizedOutput implementations must
             be observable</li>
+        <li>refactoring: synthesized output events are aligned with
+            the general event model and can now be passed over the event
+            bus</li>
+    </ul>
+
+    <h4>jsapi10 implementation platform</h4>
+
+    <ul>
+        <li>removed sphinx and freetts as implementations because
+            of sphinx refactoring</li>
+    </ul>
+
+    <h4>jsapi20 implementation platform</h4>
+
+    <ul>
+        <li>simplified evaluation of sematic interpretation</li>
+        <li>allowed for more complex constructs in semantic
+            interpretation</li>
     </ul>
 
     <h4>mary implementation platform</h4>
 
     <ul>
         <li>upgrade to mary 5.1</li>
-        <li>direct streaming of received audio into the audio system without further buffering</li>
+        <li>direct streaming of received audio into the audio
+            system without further buffering</li>
     </ul>
 
     <h4>mmi implementation platform</h4>
@@ -79,7 +98,8 @@
         <li>bugfix: status is set in the done notification, also to
             report errors</li>
         <li>initial support of an HTTP event and transport layer.</li>
-        <li>bugfix: avoided an unmarshalling error when deserializing ArrayList as content</li>
+        <li>bugfix: avoided an unmarshalling error when
+            deserializing ArrayList as content</li>
     </ul>
 
     <h4>text implementation platform</h4>
@@ -87,6 +107,9 @@
     <ul>
         <li>Sending a BYE message, when none was received before
             shutting down the client</li>
+        <li>simplified evaluation of sematic interpretation</li>
+        <li>allowed for more complex constructs in semantic
+            interpretation</li>
     </ul>
 
     <h3>xml</h3>

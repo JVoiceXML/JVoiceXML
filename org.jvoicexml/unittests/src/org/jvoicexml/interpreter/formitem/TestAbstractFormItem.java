@@ -97,50 +97,50 @@ public class TestAbstractFormItem {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#getCondition()}.
+     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}.
      * @exception JVoiceXMLEvent
      *            test failed
      */
     @Test
     public void testGetConditionNoCondition() throws JVoiceXMLEvent {
-        Assert.assertTrue(item.getCondition());
+        Assert.assertTrue(item.evaluateCondition());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#getCondition()}.
+     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}.
      * @exception JVoiceXMLEvent
      *            test failed
      */
     @Test
     public void testGetConditionFalseNumbers() throws JVoiceXMLEvent {
         field.setCond("1 == 0");
-        Assert.assertFalse(item.getCondition());
+        Assert.assertFalse(item.evaluateCondition());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#getCondition()}.
+     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}.
      * @exception JVoiceXMLEvent
      *            test failed
      */
     @Test
     public void testGetConditionTrueNumbers() throws JVoiceXMLEvent {
         field.setCond("1 == 1");
-        Assert.assertTrue(item.getCondition());
+        Assert.assertTrue(item.evaluateCondition());
     }
     
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#getCondition()}.
+     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}.
      * @exception JVoiceXMLEvent
      *            test failed
      */
     @Test
     public void testGetConditionFalseStrings() throws JVoiceXMLEvent {
         field.setCond(item.getName() + " == 'hallo'");
-        Assert.assertFalse(item.getCondition());
+        Assert.assertFalse(item.evaluateCondition());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#getCondition()}.
+     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}.
      * @exception JVoiceXMLEvent
      *            test failed
      */
@@ -149,7 +149,7 @@ public class TestAbstractFormItem {
         final ScriptingEngine scripting = context.getScriptingEngine();
         scripting.setVariable(field.getName(), "hallo");
         field.setCond(item.getName() + " == 'hallo'");
-        Assert.assertTrue(item.getCondition());
+        Assert.assertTrue(item.evaluateCondition());
     }
     
     /**
