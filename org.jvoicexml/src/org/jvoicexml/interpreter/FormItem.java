@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -110,7 +110,7 @@ public interface FormItem
     boolean isSelectable() throws SemanticError;
 
     /**
-     * Retrieves the encapsulated <code>VoiceXmlNode</code>.
+     * Retrieves the encapsulated {@link VoiceXmlNode}.
      *
      * @return Related <code>VoiceXmlNode</code>.
      */
@@ -144,7 +144,7 @@ public interface FormItem
      * @exception SemanticError
      *            error evaluating the cond attribute.
      */
-    boolean getCondition() throws SemanticError;
+    boolean evaluateCondition() throws SemanticError;
 
     /**
      * Checks if this form item is modal. This causes all grammars to be
