@@ -43,6 +43,10 @@ import org.jvoicexml.voicexmlunit.TextCall;
  * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
  * the <code>config</code> folder added to the classpath.
  * </p>
+ * <p>
+ * This demo requires that JVoiceXML is configured with the text
+ * implementation platform.
+ * </p>
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
  * @since 0.7.6

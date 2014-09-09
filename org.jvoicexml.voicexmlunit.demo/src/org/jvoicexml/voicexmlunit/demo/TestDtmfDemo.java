@@ -17,6 +17,10 @@ import org.jvoicexml.voicexmlunit.TextCall;
  * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
  * the <code>config</code> folder added to the classpath.
  * </p>
+ * <p>
+ * This demo requires that JVoiceXML is configured with the text
+ * implementation platform.
+ * </p>
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
@@ -52,7 +56,7 @@ public final class TestDtmfDemo {
     /**
      * Runs a test with the option '1'.
      */
-    @Test(timeout = 5000)
+    @Test(timeout = 10000)
     public void testInputYes() {
         call.call(uri);
         call.hears(
@@ -64,7 +68,7 @@ public final class TestDtmfDemo {
     /**
      * Runs a test with the option '2'.
      */
-    @Test(timeout = 5000)
+    @Test(timeout = 10000)
     public void testInputNo() {
         call.call(uri);
         call.hears(
