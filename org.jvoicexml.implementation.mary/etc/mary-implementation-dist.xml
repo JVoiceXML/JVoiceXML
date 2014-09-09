@@ -9,12 +9,18 @@
         class="org.jvoicexml.implementation.mary.MarySynthesizedOutputFactory">
         <beans:property name="instances" value="1" />
         <beans:property name="type" value="mary" />
-        <beans:property name="audioType" value="WAVE"/>
+        <beans:property name="audioType" value="WAVE" />
         <beans:property name="voiceName" value="cmu-slt-hsmm" />
         <beans:property name="audioFormat">
+            <!-- The output format of Open Mary depends on the selected voice -->
+            <!-- Therefore, the audio format must be adapted when selecing 
+                other voices -->
             <beans:bean class="javax.sound.sampled.AudioFormat">
+                <!-- for cmu-slt-hsmm -->
                 <beans:constructor-arg type="float"
                     value="24000" />
+                <!-- for bits1-hsmm -->
+                <!-- beans:constructor-arg type="float" value="8000" / -->
                 <beans:constructor-arg type="int"
                     value="32" />
                 <beans:constructor-arg type="int"
@@ -25,5 +31,5 @@
                     value="false" />
             </beans:bean>
         </beans:property>
-        </beans:bean>
+    </beans:bean>
 </implementation>
