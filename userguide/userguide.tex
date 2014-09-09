@@ -26,7 +26,7 @@ linkcolor=black, colorlinks=black, colorlinks=true,
 \include{version}
 
 \title{JVoiceXML \jvxmlversion \\ User Guide}
-\version{0.7.5}
+\version{0.7.7}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -92,7 +92,7 @@ It is assumed that readers are familiar with the concepts of
 VoiceXML and Java programming.
 
 This document refers to UNIX and Windows systems. JVoiceXML will work with 
-any other operating systems that support Java 6, too.
+any other operating systems that support Java 7, too.
 
 Nobody is perfect, so you may find some errors or small things to correct.
 Please let me know if you think you found something that should be written
@@ -206,7 +206,7 @@ ANT is not required but used as a means of IDE independent project setup.
 \label{sec:java}
 
 Parts of the code of JVoiceXML are using features from the JAVA 7 API, so that
-you will need at least J2SE 1.7 to compile the code. You can download it
+you will need at least J2SE 7 to compile the code. You can download it
 for free from \url{http://java.sun.com}.
 
 For now, you will need to do some programming to call your applications, but
@@ -266,8 +266,10 @@ JVoiceXML is shipped with different implementation platforms. Install only
 those platforms that you intend to use. The configuration issues of each
 platform is described in the following sections.
 
-It is also possible to install everything and drop those configuration files
-from the \lstinline{$JVOICEXML_HOME/config} folder that you do not need. You
+For this user guide, it is recommended to use the text implementation platform
+and the JSAPI 2.0 implementation platform with either the SAPI or the
+Sphinx/FreeTTS part. It is also possible to install everything and drop those
+configuration files from the \lstinline{$JVOICEXML_HOME/config} folder that you do not need. You
 can simply create a subfolder \lstinline{unused} in that directory and move the
 unused configuration files to this folder. The configuration files follow the
 naming convention \lstinline{<platform>-implementation.xml}. The following
@@ -279,7 +281,6 @@ The JSAPI 1.0 implementation platform targets JSAPI 1.0 compliant speech
 recognizers and synthesizers. JVoiceXML offers two speech engines for this
 platform:
 \begin{enumerate}
-  \item FreeTTS and Sphinx 4
   \item Talking Java
 \end{enumerate}
 
@@ -327,7 +328,7 @@ This implementation platform offers support for the OpenMary speech synthesizer.
 It requires that you have an installed mary on your computer. OpenMary can be
 downloaded for free from \url{http://mary.dfki.de}.
 
-This platform can be used in addition to other platforms, e.g. JSAPI 1.0 to
+This platform can be used in addition to other platforms, e.g. JSAPI 2.0 to
 substitute the JSAPI speech synthesizer. Note that you will need to install an
 implementation platform featuring a speech recognizer to start JVoiceXML.
 
@@ -336,8 +337,8 @@ implementation platform featuring a speech recognizer to start JVoiceXML.
 
 This implementation platform offers support for MARC, a talking
 head developed by LIMSI. MARC can be downloaded from 
-\url{http://marc.limsi.fr}. MARC requires that you have an installed mary on your computer. OpenMary can be
-downloaded for free from \url{http://mary.dfki.de}.
+\url{http://marc.limsi.fr}. MARC requires that you have an installed mary on
+your computer. OpenMary can be downloaded for free from \url{http://mary.dfki.de}.
 
 This platform can be used in addition to other platforms, e.g. JSAPI 2.0 to
 substitute the JSAPI speech synthesizer. Note that you will need to install an
@@ -442,7 +443,22 @@ hints about it.
 All platform configuration files are located in the \lstinline{config} folder.
 JVoiceXML scans this folder for configuration files at startup and loads all found
 implementation platforms. A full list of the configuration files is
-given in section~\ref{sec:configuration-files}.
+given in section~\ref{sec:configuration-files}. When it starts, JVoiceXML
+reports all available platforms in the console window. A possible output is the
+following:
+
+\begin{lstlisting}
+2467 [JVoiceXmlMain] INFO  ...  available synthesizers:
+2467 [JVoiceXmlMain] INFO  ...  - 1 instance(s) of type 'jsapi20'
+2467 [JVoiceXmlMain] INFO  ...  - 1 instance(s) of type 'text'
+2467 [JVoiceXmlMain] INFO  ...  - 1 instance(s) of type 'mary'
+2467 [JVoiceXmlMain] INFO  ...  available recognizers:
+2467 [JVoiceXmlMain] INFO  ...  - 1 instance(s) of type 'jsapi20'
+2468 [JVoiceXmlMain] INFO  ...  - 1 instance(s) of type 'text'
+2468 [JVoiceXmlMain] INFO  ...  available telephones:
+2468 [JVoiceXmlMain] INFO  ...  - 1 instance(s) of type 'text'
+2468 [JVoiceXmlMain] INFO  ...  - 1 instance(s) of type 'dummy'
+\end{lstlisting}
 
 JVoiceXML features a flexible and modular configuration concept. Each
 implementation platform can add custom libraries without the need to adapt the
@@ -465,6 +481,8 @@ based implementation platform as an example.
 </implementation>
 \end{lstlisting}
 
+This configuration file as well as all the configuration files from the
+active implementation platforms can be found in the \lstinline{config} folder.
 This configuration introduces two new Java archives to the class loader:
 \lstinline{ib/jvxml-text.jar} and \lstinline{ib/jvxml-client-text.jar}.
 
@@ -494,6 +512,7 @@ section~\ref{sec:impl-platform-config}.
 
 Having started the voice browser it is waiting for incoming requests from a
 client. Later on in this guide we will explain how to code such a client.
+Note, that there is no graphical user interface right now. 
 
 \subsection{Linux}
 
@@ -531,7 +550,7 @@ VoiceXML interpreter <version> (Revision <number>) started.
 
 The windows executable \texttt{JVoiceXML.exe} located in the \texttt{bin}
 folder of your JVoiceXML installation can be used to start the browser.
-
+However, the preferred way is to use the batch or shell scripts.
 The executable is simply a wrapped Java call and should also work with a
 double-click in the windows explorer.
 
@@ -638,7 +657,7 @@ directory \texttt{JVOICEXML\_HOME/demo}. Use the IDE of your choice
 and explore there contents. Some features of the browser can 
 become more clear with them.
 
-The demos are designed to work with the JSAPI 1.0 implementation platform. Make
+The demos are designed to work with the JSAPI 2.0 implementation platform. Make
 sure that you have this configuration enabled before running the demos.
 
 The demo programs feature an ANT script which can be used for starting.
@@ -732,6 +751,9 @@ Typically this solution needs other implementation platforms in addition. This
 may be e.g. JSAPI 2.0. Refer to section~\ref{sec:installation} for a complete
 list of available implementation platforms.
 
+Have a closer look at the \lstinline{org.jvoicexml.demo.mmi.simpledemo} for a
+start.
+
 \chapter{JVoiceXML Clients}
 \label{cha:programmatic-approach}
 
@@ -740,12 +762,19 @@ list of available implementation platforms.
 
 This example uses the VoiceXML file that has been coded in
 section~\ref{sec:hello-vxml} and shows how it can be synthesized by writing an
-own client.
+own client. 
 
 \subsection{Writing the Client}
 
-A client is a program that remotely calls JVoiceXML and initiates calls. Create 
-a Java file \texttt{Demo1.java} with the following content:
+A client is a program that remotely calls JVoiceXML and initiates calls.
+Typically, this ought to be done by a PBX like Asterisk or FreeSwitch. In
+absence of these telephony environments, it might be useful to run
+VoiceXML documents on a regular desktop PC. This enables you to play around with
+VoiceXML without the need to setup a PBX. The multitude of available
+implementation platforms makes it hard to come up with a simple solution that
+you can use to simply execute a VoiceXML file. In this section you will learn
+how to program your own \emph{generic} test environment. Therefore, create a
+Java file \texttt{Demo1.java} with the following content:
 
 \begin{lstlisting}[language=Java]
 public class Demo1 {
@@ -833,7 +862,7 @@ import org.jvoicexml.Session;
 
         final ConnectionInformation info =
             new BasicConnectionInformation(
-                "dummy", "jsapi10", "jsapi10");
+                "dummy", "jsapi20", "jsapi20");
         final Session session = 
             jvxml.createSession(info);
 
@@ -893,7 +922,7 @@ import org.jvoicexml.Session;
                 new URI("http://localhost:8080/demo1/hello.vxml");
             final GenericClient client = new GenericClient();
             final Session session =
-                client.call(uri,  "dummy", "jsapi10", "jsapi10");
+                client.call(uri,  "dummy", "jsapi20", "jsapi20");
 
             session.waitSessionEnd();
 
@@ -1256,7 +1285,7 @@ Our VoiceXML code in the file \texttt{input.vxml} looks like this:
       xml:base="http://localhost:8080/demo2/">
   <form>
     <field name="answer">
-      <grammar src="yesno.gram" type="application/x-jsgf"/>
+      <grammar src="yesno.srgs" type="application/srgs+xml"/>
       <block>Do you like this example?</block>
       <noinput>
         Please say something.
@@ -1281,32 +1310,53 @@ Our VoiceXML code in the file \texttt{input.vxml} looks like this:
 \subsection{Creating the Grammar}
 \label{sec:creating-grammar}
 
-The VoiceXML code above relates to the grammar \texttt{yesno.gram} in JSGF
-format~\cite{w3c:2000:jsgf}.
-It is also possible to have the grammar in SRGS XML format. The grammar format
-highly depends on the used implementation platform. For the implemetnation
-platforms that are shipped with the browser, these are
+The VoiceXML code above relates to the grammar \texttt{yesno.srgs} in 
+format~\cite{w3c:srgs}.
+It is also possible to have the grammar in SRGS XML format~\cite{w3c:2000:jsgf}.
+The grammar format highly depends on the used implementation platform. Some
+possible types for the implementation platforms that are shipped with the
+browser are shown in Table~\ref{tbl:grammar-types}.
 
 \begin{table}
 \begin{center}
-\begin{tabular}{|l|l|}
+\begin{tabular}{|l|l|l|}
 \hline
-Implementation platform & grammar format \\
+\textbf{Implementation platform} & \textbf{Grammar format} & \textbf{Type} \\
 \hline
 \hline
-JSAPI 1.0 & JSGF \\
+JSAPI 1.0 & JSGF & application/x-jsgf \\
 \hline
-JSAPI 2.0 & SRGS+XML \\
+JSAPI 2.0 & SRGS+XML & application/srgs+xml \\
 \hline
-Text & SRGS+XML \\
+Text & SRGS+XML & application/srgs+xml \\
 \hline
 \end{tabular}
 \end{center}
 \caption{supported grammars per implementation platform}
+\label{tbl:grammar-types}
 \end{table}
 
 
-Create a file \texttt{yesno.gram} with the following content:
+Create a file \texttt{yesno.srgs} with the following content:
+
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" root="yesno" xml:lang="en"
+    xmlns="http://www.w3.org/2001/06/grammar" mode="voice"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+        http://www.w3.org/TR/speech-grammar/grammar.xsd"
+    tag-format="semantics/1.0">
+    <rule id="yesno" scope="public">
+        <one-of>
+            <item>yes</item>
+            <item>no</item>
+        </one-of>
+    </rule>
+</grammar>
+\end{lstlisting}
+
+The same grammar in the JSGF format woould look like:
 
 \begin{lstlisting}
 #JSGF V1.0;
@@ -1342,7 +1392,7 @@ import org.jvoicexml.Session;
 
     final ConnectionInformation info =
         new BasicConnectionInformation(
-            "dummy", "jsapi10", "jsapi10");
+            "dummy", "jsapi20", "jsapi20");
     final Session session = 
         jvxml.createSession(info);
 
@@ -1436,6 +1486,8 @@ anlalog transformation for JSGF. As a workaround you will have to check for 7
 and 9 in your conditions for this platform. We will have a closer look at the
 semantic interpretation in the following section.
 
+This does not apply if you are using the SRGS grammar format.
+
 \section{Semantic Interpretation}
 \label{sec:semantic-interpretation}
 
@@ -1451,9 +1503,29 @@ The previous example used the following comparison to check if the user uttered
 \end{lstlisting}
 
 This is not very generic, especially, if the user also may want to agree by
-saying e.g. \emph{yeah}. In order to allow for other options to agree, we need
+saying e.g. \emph{sure}. In order to allow for other options to agree, we need
 a mapping mechanism. That is where semantic interpretation comes into play. We
 modify the grammar from the previous example to
+
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" root="yesno" xml:lang="en"
+    xmlns="http://www.w3.org/2001/06/grammar" mode="voice"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+        http://www.w3.org/TR/speech-grammar/grammar.xsd"
+    tag-format="semantics/1.0">
+    <rule id="yesno" scope="public">
+        <one-of>
+            <item>yes<tag>yes</tag></item>
+            <item>sure<tag>yes</tag></item>
+            <item>no<tag>no</tag></item>
+        </one-of>
+    </rule>
+</grammar>
+\end{lstlisting}
+
+Similarly, the JSGF version is
 
 \begin{lstlisting}
 #JSGF V1.0;
@@ -1476,7 +1548,8 @@ able to modify the check to
 
 JSGF has very limited capabilities to enable semantic interpretation.
 It allows only the presence of some tag strings. JVoiceXML extends this to
-support for boolean values, numbers and strings. Note that you will have to enclose the tag into simple quotes \emph{\'} for strings.
+support for boolean values, numbers and strings. Note that you will have to 
+enclose the tag into simple quotes \emph{\'} for strings.
 The following example will map the utterance to the strings \lstinline{yes}
 and \lstinline{no}:
 \begin{lstlisting}
@@ -1486,6 +1559,10 @@ grammar yesno;
 public <yesno> =  yes{'yes'} | yeah{'yes'} | no{'no'};
 \end{lstlisting}
 which will have be checked as before.
+
+Using SRGS the available options allow for more complex constructs. You can
+specify more complex semantic interpretations as explained in the following
+section.
 
 \section{Mixed Inititiative Dialogs}
 
@@ -1509,7 +1586,7 @@ how to implement it.
 
     <form id="order">
         <grammar src="pizza.gram"
-            type="application/x-jsgf" />
+            type="application/srgs+xml" />
 
         <block>
             <prompt bargein="false">
@@ -1534,17 +1611,89 @@ pizza service} before it prompts the user \emph{Which pizza do you want?}.
 
 The grammar may look as follows:
 \begin{lstlisting}
-#JSGF V1.0; 
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" root="order" xml:lang="de"
+    xmlns="http://www.w3.org/2001/06/grammar" mode="voice"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+        http://www.w3.org/TR/speech-grammar/grammar.xsd"
+    tag-format="semantics/1.0">
+    <rule id="politeness1">
+        <item repeat="0-1">
+            I want
+        </item>
+    </rule>
 
-grammar order;
+    <rule id="politeness2">
+        <item repeat="0-1">
+            <item> please </item>
+        </item>
+    </rule>
 
-<politeness1> = [I want];
-<politeness2> = [please];
-<topping> = salami | ham | mushrooms;
-<size> = small | medium | large;
-public <order> = <politeness1>
-    (<topping>|<size>|a <size> pizza with <topping>)
-    <politeness2>;
+    <rule id="size">
+        <one-of>
+            <item>
+                small
+                <tag>out = "small";</tag>
+            </item>
+
+            <item>
+                medium
+                <tag>out = "medium";</tag>
+            </item>
+
+            <item>
+                large
+                <tag>out = "big";</tag>
+            </item>
+        </one-of>
+    </rule>
+
+    <rule id="topping">
+        <one-of>
+            <item>
+                salami
+                <tag>out = "salami";</tag>
+            </item>
+            <item>
+                ham
+                <tag>out = "ham";</tag>
+            </item>
+            <item>
+                mushrooms
+                <tag>out = "mushrooms";</tag>
+            </item>
+        </one-of>
+    </rule>
+
+    <rule id="order" scope="public">
+        <tag>out = new Object(); out.order = new Object;</tag>
+        <ruleref uri="#politeness1" />
+        <one-of>
+            <item>
+                <item repeat="0-1">a</item>
+                <ruleref uri="#size" />
+                pizza
+                <tag>out.order.size = rules.size;</tag>
+            </item>
+            <item>
+                <item repeat="0-1">a</item>
+                <item repeat="0-1">pizza with</item>
+                <ruleref uri="#topping" />
+                <tag>out.order.topping = rules.topping;</tag>
+            </item>
+            <item>
+                <item repeat="0-1">a</item>
+                <ruleref uri="#size" />
+                <tag>out.order.size = rules.size;</tag>
+                pizza with
+                <ruleref uri="#topping" />
+                <tag>out.order.topping = rules.topping;</tag>
+            </item>
+        </one-of>
+        <ruleref uri="#politeness2" />
+    </rule>
+</grammar>
 \end{lstlisting}
 
 So the user may say something like
@@ -1555,6 +1704,16 @@ So the user may say something like
   \item \emph{ham}
   \item \ldots
 \end{itemize}
+
+The evaluation of the grammar turns this into a compound ECMAScript object like
+\begin{lstlisting}
+out = {
+    "order" : {
+        "size" : "medium";
+        "topping" : "mushrooms";
+    }
+}
+\end{lstlisting}  
 
 The dialog must be able to store that information into corresponding variables.
 Therefore, we extend the VoiceXML code as follows right after the initial tag
@@ -1574,24 +1733,20 @@ was closed:
 \end{lstlisting}
 
 Using the \lstinline{slot} attributes of the field, we prepared two slots where
-the result of the recognition process should go.
-To create a mapping from the recognized words to the slots, we need to modify
-our grammar accordingly:
-\begin{lstlisting}
-<topping> = (salami{order.topping\='salami'}
-    |ham{order.topping\='ham'}
-    |mushrooms{order.topping\='mushrooms'});
-<size> = (small{order.size\='small'}
-    |medium{order.size\='medium'}
-    |large{order.size\='large'});
-\end{lstlisting}
+the result of the recognition process should go. The mapping is created from 
+the path within the \lstinline{out} object. JVoiceXML will only be able to
+map an input to a field if either the field's name matches a property of the
+\lstinline{out} object or if the slot matches a possibly nested property. 
+
+Currently, the Sphinx implementation does not support \lstinline{out} objects
+per rule but uses a global \lstinline{out} object. The grammar mentioned above
+has to be adapted accordingly.
+
 The concept of the tags was extended in JVoiceXML to create a mapping from the
 tag strings to the scripting engine. In fact an ECMAScript object
 \lstinline{order} is created whose attributes \lstinline{topping} and
 \lstinline{size} are assigned the value from the right side of the equation in
-the tag. Note that a string value must be enclosed in single quotes. Refer
-to section~\ref{sec:semantic-interpretation}. This will work right away if your
-recognizer supports SRGS.
+the tag. 
 
 If a slot was filled, the corresponding field will be assigned the value. If
 only one slot was filled, the second one will remain empty and the interpreter
@@ -1929,14 +2084,14 @@ implementation platform. Their content can be copied as an XML file
 into the config folder. This way, the repsective implementation
 platforms can be activated, ,iven that all referenced jars can be found.
 
-\section{JSAPI 1.0 with Sphinx and FreeTTS}
-\lstinputlisting[language=XML]{../org.jvoicexml.implementation.jsapi10/etc/jsapi10-implementation-dist.xml}
-
 \section{JSAPI 1.0 with Talking Java}
 \lstinputlisting[language=XML]{../org.jvoicexml.implementation.jsapi10/etc/jsapi10-talking-java-implementation-dist.xml}
 
-\section{JSAPI 2.0}
+\section{JSAPI 2.0 with Sphinx and FreeTTS}
 \lstinputlisting[language=XML]{../org.jvoicexml.implementation.jsapi20/etc/jsapi20-implementation-dist.xml}
+
+\section{JSAPI 2.0 with Microsoft SAPI}
+\lstinputlisting[language=XML]{../org.jvoicexml.implementation.jsapi20/etc/jsapi20-sapi-implementation-dist.xml}
 
 \section{JTAPI}
 \lstinputlisting[language=XML]{../org.jvoicexml.implementation.jtapi/etc/jtapi-implementation-dist.xml}
@@ -1946,6 +2101,9 @@ platforms can be activated, ,iven that all referenced jars can be found.
 
 \section{MARY}
 \lstinputlisting[language=XML]{../org.jvoicexml.implementation.mary/etc/mary-implementation-dist.xml}
+
+\section{MMI with HTTP ETL}
+\lstinputlisting[language=XML]{../org.jvoicexml.callmanager.mmi.http/etc/mmi-callmanager-http-dist.xml}
 
 \section{MMI with Socket ETL}
 \lstinputlisting[language=XML]{../org.jvoicexml.callmanager.mmi.socket/etc/mmi-callmanager-dist.xml}
