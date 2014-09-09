@@ -12,8 +12,11 @@
         <beans:property name="type" value="mary" />
         <beans:property name="audioType" value="WAVE" />
         <beans:property name="voiceName" value="cmu-slt-hsmm" />
-        <!-- beans:property name="voiceName" value="bits1-hsmm" /-->
+        <!-- beans:property name="voiceName" value="bits1-hsmm" / -->
         <beans:property name="audioFormat">
+            <!-- The output format of Open Mary depends on the selected voice -->
+            <!-- Therefore, the audio format must be adapted when selecing 
+                other voices -->
             <beans:bean class="javax.sound.sampled.AudioFormat">
                 <!-- for cmu-slt-hsmm -->
                 <beans:constructor-arg type="float"
