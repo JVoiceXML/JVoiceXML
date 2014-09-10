@@ -44,7 +44,7 @@ import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.HelpEvent;
-import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -84,6 +84,7 @@ import org.xml.sax.SAXException;
 
 /**
  * Test cases for {@link JVoiceXmlEventHandler}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
@@ -100,7 +101,9 @@ public final class TestJVoiceXmlEventHandler {
 
     /**
      * Adds the test appender.
-     * @exception Exception init failed 
+     * 
+     * @exception Exception
+     *                init failed
      * @since 0.7.1
      */
     @BeforeClass
@@ -108,22 +111,22 @@ public final class TestJVoiceXmlEventHandler {
         final Logger logger = Logger.getRootLogger();
         logger.addAppender(new TestAppender());
         final Configuration configuration = new MockConfiguration();
-        factory = configuration.loadObject(
-                InitializationTagStrategyFactory.class);
+        factory = configuration
+                .loadObject(InitializationTagStrategyFactory.class);
     }
 
     /**
      * Sets up the test environment.
+     * 
      * @throws java.lang.Exception
-     *         setup failed.
+     *             setup failed.
      */
     @Before
     public void setUp() throws Exception {
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null);
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
@@ -131,11 +134,15 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.Dialog)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.Dialog)}
+     * .
      * <p>
      * Test for dialog level catches.
      * </p>
-     * @exception Exception test failed.
+     * 
+     * @exception Exception
+     *                test failed.
      */
     @Test
     public void testCollectDialog() throws Exception {
@@ -165,11 +172,15 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.Dialog)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.Dialog)}
+     * .
      * <p>
      * Test for dialog level catches.
      * </p>
-     * @exception Exception test failed.
+     * 
+     * @exception Exception
+     *                test failed.
      */
     @Test
     public void testCollectDefault() throws Exception {
@@ -199,8 +210,12 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
-     * @exception Exception test failed.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
      */
     @Test
     public void testCollect() throws Exception {
@@ -234,11 +249,15 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * .
      * <p>
      * Test for dialog changes.
      * </p>
-     * @exception Exception test failed.
+     * 
+     * @exception Exception
+     *                test failed.
      */
     @Test
     public void testCollect2FieldsContextChange() throws Exception {
@@ -261,8 +280,8 @@ public final class TestJVoiceXmlEventHandler {
         final ScopeObserver observer = new ScopeObserver();
         observer.enterScope(Scope.DIALOG);
         final FieldFormItem item1 = new FieldFormItem(context, field1);
-        final JVoiceXmlEventHandler handler =
-            new JVoiceXmlEventHandler(observer);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+                observer);
         handler.collect(context, interpreter, null, item1);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
@@ -280,16 +299,16 @@ public final class TestJVoiceXmlEventHandler {
                 containsType(strategies, RecognitionEvent.EVENT_TYPE));
 
         observer.exitScope(Scope.DIALOG);
-        final Collection<EventStrategy> strategiesLeave1 =
-            handler.getStrategies();
+        final Collection<EventStrategy> strategiesLeave1 = handler
+                .getStrategies();
         Assert.assertEquals(0, strategiesLeave1.size());
 
         observer.enterScope(Scope.DIALOG);
         final FieldFormItem item2 = new FieldFormItem(context, field2);
         handler.collect(null, null, null, item2);
 
-        final Collection<EventStrategy> strategiesEnter2 =
-            handler.getStrategies();
+        final Collection<EventStrategy> strategiesEnter2 = handler
+                .getStrategies();
         Assert.assertEquals(6, strategiesEnter2.size());
         Assert.assertTrue("expected to find type test2",
                 containsType(strategiesEnter2, "test2"));
@@ -303,14 +322,18 @@ public final class TestJVoiceXmlEventHandler {
                 + RecognitionEvent.EVENT_TYPE,
                 containsType(strategiesEnter2, RecognitionEvent.EVENT_TYPE));
         observer.exitScope(Scope.DIALOG);
-        final Collection<EventStrategy> strategiesLeave2 =
-            handler.getStrategies();
+        final Collection<EventStrategy> strategiesLeave2 = handler
+                .getStrategies();
         Assert.assertEquals(0, strategiesLeave2.size());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
-     * @exception Exception test failed.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
      */
     @Test
     public void testCollectFieldReenter() throws Exception {
@@ -346,8 +369,8 @@ public final class TestJVoiceXmlEventHandler {
 
         // Second run
         handler.collect(context, interpreter, null, item);
-        final Collection<EventStrategy> strategiesSecond =
-            handler.getStrategies();
+        final Collection<EventStrategy> strategiesSecond = handler
+                .getStrategies();
         Assert.assertEquals(6, strategiesSecond.size());
         Assert.assertTrue("expected to find type test",
                 containsType(strategiesSecond, "test"));
@@ -365,9 +388,14 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
-     * @exception Exception test failed.
-     * @exception JVoiceXMLEvent test failed.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
+     * @exception JVoiceXMLEvent
+     *                test failed.
      */
     @Test
     public void testProcessFieldLevelFilled() throws Exception, JVoiceXMLEvent {
@@ -389,10 +417,10 @@ public final class TestJVoiceXmlEventHandler {
 
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, interpreter, dialog);
-        final JVoiceXmlEventHandler handler =
-            new JVoiceXmlEventHandler(context.getScopeObserver());
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, dialog);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+                context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
         final MockRecognitionResult result = new MockRecognitionResult();
@@ -400,7 +428,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setUtterance(utterance);
         result.setAccepted(true);
         result.setConfidence(1.0f);
-        final RecognitionEvent event = new RecognitionEvent(result);
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
         handler.processEvent(item);
 
@@ -410,9 +438,14 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
-     * @exception Exception test failed.
-     * @exception JVoiceXMLEvent test failed.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
+     * @exception JVoiceXMLEvent
+     *                test failed.
      */
     @Test
     public void testProcessFieldLevelNomatch() throws Exception, JVoiceXMLEvent {
@@ -437,10 +470,10 @@ public final class TestJVoiceXmlEventHandler {
 
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, interpreter, dialog);
-        final JVoiceXmlEventHandler handler =
-            new JVoiceXmlEventHandler(context.getScopeObserver());
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, dialog);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+                context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
         final MockRecognitionResult result = new MockRecognitionResult();
@@ -448,7 +481,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setUtterance(utterance);
         result.setAccepted(false);
         result.setConfidence(0.2f);
-        final RecognitionEvent event = new RecognitionEvent(result);
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
         handler.processEvent(item);
 
@@ -457,9 +490,14 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
-     * @exception Exception test failed.
-     * @exception JVoiceXMLEvent test failed.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
+     * @exception JVoiceXMLEvent
+     *                test failed.
      */
     @Test
     public void testProcessFormLevelFilled() throws Exception, JVoiceXMLEvent {
@@ -481,11 +519,11 @@ public final class TestJVoiceXmlEventHandler {
 
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, null, dialog);
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, null, dialog);
         fia.initialize(factory);
-        final JVoiceXmlEventHandler handler =
-            new JVoiceXmlEventHandler(context.getScopeObserver());
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+                context.getScopeObserver());
         handler.collect(context, interpreter, document);
         handler.collect(context, interpreter, fia, item);
 
@@ -494,7 +532,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setUtterance(utterance);
         result.setAccepted(true);
         result.setConfidence(1.0f);
-        final RecognitionEvent event = new RecognitionEvent(result);
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
         handler.processEvent(item);
 
@@ -504,9 +542,14 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
-     * @exception Exception test failed.
-     * @exception JVoiceXMLEvent test failed.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
+     * @exception JVoiceXMLEvent
+     *                test failed.
      */
     @Test
     public void testProcessFormLevelNomatch() throws Exception, JVoiceXMLEvent {
@@ -530,11 +573,11 @@ public final class TestJVoiceXmlEventHandler {
         catchNode.setEvent("test");
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, interpreter, dialog);
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, dialog);
         fia.initialize(factory);
-        final JVoiceXmlEventHandler handler =
-            new JVoiceXmlEventHandler(context.getScopeObserver());
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+                context.getScopeObserver());
         handler.collect(context, interpreter, dialog);
         handler.collect(context, interpreter, fia, item);
 
@@ -543,23 +586,28 @@ public final class TestJVoiceXmlEventHandler {
         result.setUtterance(utterance);
         result.setAccepted(false);
         result.setConfidence(0.2f);
-        final RecognitionEvent event = new RecognitionEvent(result);
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
         handler.processEvent(item);
 
         final ScriptingEngine scripting = context.getScriptingEngine();
         Assert.assertEquals(null, scripting.eval(name + ";"));
-        // The nomatch will not be processed since there is no related FIA. 
+        // The nomatch will not be processed since there is no related FIA.
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
-     * @exception Exception test failed.
-     * @exception JVoiceXMLEvent test failed.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
+     * @exception JVoiceXMLEvent
+     *                test failed.
      */
     @Test
-    public void testProcessFormLevelFilledAll()
-        throws Exception, JVoiceXMLEvent {
+    public void testProcessFormLevelFilledAll() throws Exception,
+            JVoiceXMLEvent {
         final String name1 = "testfield1";
         final String name2 = "testfield2";
         final VoiceXmlDocument document = new VoiceXmlDocument();
@@ -593,13 +641,13 @@ public final class TestJVoiceXmlEventHandler {
 
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, interpreter, dialog);
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, dialog);
         fia.initialize(factory);
-        final JVoiceXmlEventHandler handler =
-            new JVoiceXmlEventHandler(context.getScopeObserver());
-        final InitialFormItem initialItem =
-            new InitialFormItem(context, initial);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+                context.getScopeObserver());
+        final InitialFormItem initialItem = new InitialFormItem(context,
+                initial);
         handler.collect(context, interpreter, fia, initialItem);
 
         final MockRecognitionResult result = new MockRecognitionResult();
@@ -609,13 +657,13 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("var out = new Object(); "
-                    + "out." + field1.getName() + "='" + utterance1 + "';"
-                    + "out." + field2.getName() + "='" + utterance2 + "';");
-        final ScriptableObject interpretation = 
-            (ScriptableObject) scripting.getVariable("out");
+        scripting.eval("var out = new Object(); " + "out." + field1.getName()
+                + "='" + utterance1 + "';" + "out." + field2.getName() + "='"
+                + utterance2 + "';");
+        final ScriptableObject interpretation = (ScriptableObject) scripting
+                .getVariable("out");
         result.setSemanticInterpretation(interpretation);
-        final RecognitionEvent event = new RecognitionEvent(result);
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
 
         handler.processEvent(item2);
@@ -626,13 +674,18 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
-     * @exception Exception test failed.
-     * @exception JVoiceXMLEvent test failed.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
+     * @exception JVoiceXMLEvent
+     *                test failed.
      */
     @Test
-    public void testProcessFormLevelFilledAllAny()
-        throws Exception, JVoiceXMLEvent {
+    public void testProcessFormLevelFilledAllAny() throws Exception,
+            JVoiceXMLEvent {
         final String name1 = "testfield1";
         final String name2 = "testfield2";
         final VoiceXmlDocument document = new VoiceXmlDocument();
@@ -669,13 +722,13 @@ public final class TestJVoiceXmlEventHandler {
 
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, interpreter, dialog);
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, dialog);
         fia.initialize(factory);
-        final JVoiceXmlEventHandler handler =
-            new JVoiceXmlEventHandler(context.getScopeObserver());
-        final InitialFormItem initialItem =
-            new InitialFormItem(context, initial);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+                context.getScopeObserver());
+        final InitialFormItem initialItem = new InitialFormItem(context,
+                initial);
         handler.collect(context, null, fia, initialItem);
 
         final MockRecognitionResult result = new MockRecognitionResult();
@@ -684,13 +737,12 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("var out = new Object(); "
-                    + "out." + field1.getName() + "='" + result.getUtterance()
-                    + "';");
-        final ScriptableObject interpretation = 
-            (ScriptableObject) scripting.getVariable("out");
+        scripting.eval("var out = new Object(); " + "out." + field1.getName()
+                + "='" + result.getUtterance() + "';");
+        final ScriptableObject interpretation = (ScriptableObject) scripting
+                .getVariable("out");
         result.setSemanticInterpretation(interpretation);
-        final RecognitionEvent event = new RecognitionEvent(result);
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
 
         handler.processEvent(item2);
@@ -702,36 +754,45 @@ public final class TestJVoiceXmlEventHandler {
 
     /**
      * Adds a simple rule to the grammar taking the given input.
-     * @param item the corresponding item
-     * @param field the field where to add the grammar
-     * @param input the expected input
+     * 
+     * @param item
+     *            the corresponding item
+     * @param field
+     *            the field where to add the grammar
+     * @param input
+     *            the expected input
      * @return created grammar.
      * @throws IOException
-     *         Error creating the grammar implementation.
+     *             Error creating the grammar implementation.
      * @throws SAXException
-     *         Error creating the grammar implementation.
+     *             Error creating the grammar implementation.
      * @throws ParserConfigurationException
-     *         Error creating the grammar implementation.
+     *             Error creating the grammar implementation.
      */
-    private Grammar addInputRule(final FieldFormItem item,
-            final Field field, final String input)
-        throws ParserConfigurationException, SAXException, IOException {
+    private Grammar addInputRule(final FieldFormItem item, final Field field,
+            final String input) throws ParserConfigurationException,
+            SAXException, IOException {
         final Grammar grammar = field.appendChild(Grammar.class);
         grammar.setRoot("rule");
         final Rule rule1 = grammar.appendChild(Rule.class);
         rule1.setId(grammar.getRoot());
         rule1.addText(input);
 
-        final GrammarDocument document =
-            new InternalGrammarDocument(null, grammar);
+        final GrammarDocument document = new InternalGrammarDocument(null,
+                grammar);
         item.addGrammar(document);
         return grammar;
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
-     * @exception Exception test failed.
-     * @exception JVoiceXMLEvent test failed.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
+     * @exception JVoiceXMLEvent
+     *                test failed.
      */
     @Test
     public void testProcessFormLevelUnknown() throws Exception, JVoiceXMLEvent {
@@ -752,11 +813,11 @@ public final class TestJVoiceXmlEventHandler {
         final FieldFormItem item = new FieldFormItem(context, field);
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, interpreter, dialog);
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, dialog);
         fia.initialize(factory);
-        final JVoiceXmlEventHandler handler =
-            new JVoiceXmlEventHandler(context.getScopeObserver());
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+                context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
         final MockRecognitionResult result = new MockRecognitionResult();
@@ -776,9 +837,14 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
-     * @exception Exception test failed.
-     * @exception JVoiceXMLEvent test failed.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
+     * @exception JVoiceXMLEvent
+     *                test failed.
      */
     @Test
     public void testProcessFieldLevelHelp() throws Exception, JVoiceXMLEvent {
@@ -800,10 +866,10 @@ public final class TestJVoiceXmlEventHandler {
 
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, interpreter, dialog);
-        final JVoiceXmlEventHandler handler =
-            new JVoiceXmlEventHandler(context.getScopeObserver());
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, dialog);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+                context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
         final MockRecognitionResult result = new MockRecognitionResult();
@@ -812,7 +878,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         result.setSemanticInterpretation("help");
-        final RecognitionEvent event = new RecognitionEvent(result);
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
         handler.processEvent(item);
 
@@ -820,7 +886,8 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link JVoiceXmlEventHandler#notifyEvent(JVoiceXMLEvent)}.
+     * Test method for {@link JVoiceXmlEventHandler#notifyEvent(JVoiceXMLEvent)}
+     * .
      * 
      * @since 0.7.4
      */
@@ -831,16 +898,17 @@ public final class TestJVoiceXmlEventHandler {
         result.setUtterance(utterance);
         result.setAccepted(true);
         result.setConfidence(1.0f);
-        final RecognitionEvent event = new RecognitionEvent(result);
-        final JVoiceXmlEventHandler handler =
-            new JVoiceXmlEventHandler(context.getScopeObserver());
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+                context.getScopeObserver());
         handler.onEvent(event);
         final JVoiceXMLEvent waitEvent = handler.waitEvent();
         Assert.assertEquals(event.getEventType(), waitEvent.getEventType());
     }
 
     /**
-     * Test method for {@link JVoiceXmlEventHandler#notifyEvent(JVoiceXMLEvent)}.
+     * Test method for {@link JVoiceXmlEventHandler#notifyEvent(JVoiceXMLEvent)}
+     * .
      * 
      * @since 0.7.4
      */
@@ -852,16 +920,17 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         result.setSemanticInterpretation("cancel");
-        final RecognitionEvent event = new RecognitionEvent(result);
-        final JVoiceXmlEventHandler handler =
-            new JVoiceXmlEventHandler(context.getScopeObserver());
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+                context.getScopeObserver());
         handler.onEvent(event);
         final JVoiceXMLEvent waitEvent = handler.waitEvent();
         Assert.assertEquals(CancelEvent.EVENT_TYPE, waitEvent.getEventType());
     }
 
     /**
-     * Test method for {@link JVoiceXmlEventHandler#notifyEvent(JVoiceXMLEvent)}.
+     * Test method for {@link JVoiceXmlEventHandler#notifyEvent(JVoiceXMLEvent)}
+     * .
      * 
      * @since 0.7.4
      */
@@ -873,9 +942,9 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         result.setSemanticInterpretation("help");
-        final RecognitionEvent event = new RecognitionEvent(result);
-        final JVoiceXmlEventHandler handler =
-            new JVoiceXmlEventHandler(context.getScopeObserver());
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+                context.getScopeObserver());
         handler.onEvent(event);
         final JVoiceXMLEvent waitEvent = handler.waitEvent();
         Assert.assertEquals(HelpEvent.EVENT_TYPE, waitEvent.getEventType());
@@ -884,12 +953,14 @@ public final class TestJVoiceXmlEventHandler {
     /**
      * Checks if the given type has a corresponding entry in the list of
      * strategies.
-     * @param strategies the strategies to check
-     * @param type the type to look for
+     * 
+     * @param strategies
+     *            the strategies to check
+     * @param type
+     *            the type to look for
      * @return <code>true</code> if the type is contained in the list.
      */
-    private boolean containsType(
-            final Collection<EventStrategy> strategies,
+    private boolean containsType(final Collection<EventStrategy> strategies,
             final String type) {
         for (EventStrategy strategy : strategies) {
             final String currentType = strategy.getEventType();

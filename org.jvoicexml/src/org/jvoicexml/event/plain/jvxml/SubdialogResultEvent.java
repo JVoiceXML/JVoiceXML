@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,6 +26,8 @@
 
 package org.jvoicexml.event.plain.jvxml;
 
+import org.jvoicexml.event.PlainEvent;
+
 /**
  * Result of an <code>&lt;subdialog&gt;</code> call..
  *
@@ -34,7 +36,7 @@ package org.jvoicexml.event.plain.jvxml;
  * @since 0.7.4
  */
 public final class SubdialogResultEvent
-        extends AbstractInputEvent {
+        extends PlainEvent implements InputEvent {
     /** The serial version UID. */
     private static final long serialVersionUID = 777914058767858586L;
 

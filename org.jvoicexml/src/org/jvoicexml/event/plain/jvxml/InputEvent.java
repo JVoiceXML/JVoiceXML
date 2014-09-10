@@ -26,28 +26,15 @@
 
 package org.jvoicexml.event.plain.jvxml;
 
-import org.jvoicexml.event.PlainEvent;
 
 /**
- * Base class for all events that propagate input events.
+ * Basic methods for all events that propagate input events.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
-public abstract class AbstractInputEvent
-        extends PlainEvent {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -8834314899605323439L;
-
-    /**
-     * Constructs a new event with the event type as its detail message. The
-     * cause is not initialized.
-     */
-    public AbstractInputEvent() {
-        super();
-    }
-
+public interface InputEvent {
     /**
      * Retrieves the result of the input process.
      *

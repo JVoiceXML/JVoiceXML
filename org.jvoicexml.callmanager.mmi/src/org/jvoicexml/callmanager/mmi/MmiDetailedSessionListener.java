@@ -30,8 +30,8 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
-import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.DetailedSessionListener;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.SessionEvent;

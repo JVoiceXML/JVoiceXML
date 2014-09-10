@@ -54,7 +54,7 @@ public class SynthesizedOutputEvent extends JVoiceXMLEvent {
     private final String sessionId;
 
     /**
-     * Constructs a new objec
+     * Constructs a new object.
      * 
      * @param output
      *            object that caused the event.
@@ -94,6 +94,9 @@ public class SynthesizedOutputEvent extends JVoiceXMLEvent {
         return sessionId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getEventType() {
         final StringBuilder str = new StringBuilder();

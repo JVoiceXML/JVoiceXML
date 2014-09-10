@@ -31,7 +31,7 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.event.plain.jvxml.AbstractInputEvent;
+import org.jvoicexml.event.plain.jvxml.InputEvent;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -117,7 +117,7 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
             return;
         }
 
-        final AbstractInputEvent inputEvent = (AbstractInputEvent) event;
+        final InputEvent inputEvent = (InputEvent) event;
         final Object result = inputEvent.getInputResult();
         setResult(item, inputEvent, result);
 
@@ -244,7 +244,7 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
      * @param result the input result.
      * @exception SemanticError error setting the form item variable
      */
-    protected void setResult(final T item, final AbstractInputEvent event,
+    protected void setResult(final T item, final InputEvent event,
             final Object result) throws SemanticError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("setting form item variable to '" + result + "'");

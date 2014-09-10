@@ -44,9 +44,14 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.event.plain.implementation.InputStartedEvent;
+import org.jvoicexml.event.plain.implementation.NomatchEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.processor.srgs.GrammarChecker;
@@ -63,18 +68,18 @@ import org.xml.sax.SAXException;
  * Text based implementation for a {@link SpokenInput}.
  * 
  * <p>
- * This implementation is more or less a bridge that receives its input
- * from {@link TextTelephony} and forwards them to the voice browser.
+ * This implementation is more or less a bridge that receives its input from
+ * {@link TextTelephony} and forwards them to the voice browser.
  * </p>
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
 final class TextSpokenInput implements SpokenInput {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(TextSpokenInput.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(TextSpokenInput.class);
 
     /** Supported barge-in types. */
     private static final Collection<BargeInType> BARGE_IN_TYPES;
@@ -82,12 +87,11 @@ final class TextSpokenInput implements SpokenInput {
     /** Supported grammar types. */
     private static final Collection<GrammarType> GRAMMAR_TYPES;
 
-    /**Reference to the SrgsXmlGrammarParser.*/
+    /** Reference to the SrgsXmlGrammarParser. */
     private final SrgsXmlGrammarParser parser;
-    
-    /** Active grammar checkers.*/
-    private final Map<SrgsXmlGrammarImplementation, GrammarChecker>
-        grammarCheckers;
+
+    /** Active grammar checkers. */
+    private final Map<SrgsXmlGrammarImplementation, GrammarChecker> grammarCheckers;
 
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
@@ -109,8 +113,7 @@ final class TextSpokenInput implements SpokenInput {
      */
     public TextSpokenInput() {
         listener = new java.util.ArrayList<SpokenInputListener>();
-        grammarCheckers = new java.util.HashMap<SrgsXmlGrammarImplementation,
-            GrammarChecker>();
+        grammarCheckers = new java.util.HashMap<SrgsXmlGrammarImplementation, GrammarChecker>();
         parser = new SrgsXmlGrammarParser();
     }
 
@@ -134,21 +137,21 @@ final class TextSpokenInput implements SpokenInput {
     }
 
     /**
-     * Activates a given grammar. It's the implementation for 
+     * Activates a given grammar. It's the implementation for
      * activateGrammars().
-     * @param grammar the grammar to activate
+     * 
+     * @param grammar
+     *            the grammar to activate
      * @exception BadFetchError
-     *            Grammar is not known by the recognizer.
+     *                Grammar is not known by the recognizer.
      * @exception UnsupportedLanguageError
-     *            The specified language is not supported.
+     *                The specified language is not supported.
      * @exception NoresourceError
-     *            The input resource is not available.
+     *                The input resource is not available.
      */
-    public void activateGrammar(final GrammarImplementation<?> grammar) 
-            throws BadFetchError, UnsupportedLanguageError, 
-            NoresourceError {
-        final SrgsXmlGrammarImplementation impl =
-            (SrgsXmlGrammarImplementation) grammar;
+    public void activateGrammar(final GrammarImplementation<?> grammar)
+            throws BadFetchError, UnsupportedLanguageError, NoresourceError {
+        final SrgsXmlGrammarImplementation impl = (SrgsXmlGrammarImplementation) grammar;
         if (!grammarCheckers.containsKey(impl)) {
             final SrgsXmlDocument doc = impl.getGrammar();
             final GrammarGraph graph = parser.parse(doc);
@@ -172,8 +175,7 @@ final class TextSpokenInput implements SpokenInput {
             final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
         for (GrammarImplementation<?> grammar : grammars) {
-            final SrgsXmlGrammarImplementation impl =
-                (SrgsXmlGrammarImplementation) grammar;
+            final SrgsXmlGrammarImplementation impl = (SrgsXmlGrammarImplementation) grammar;
             if (grammarCheckers.containsKey(impl)) {
                 grammarCheckers.remove(impl);
             }
@@ -200,9 +202,9 @@ final class TextSpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public GrammarImplementation<?> loadGrammar(
-            final Reader reader, final GrammarType type)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+    public GrammarImplementation<?> loadGrammar(final Reader reader,
+            final GrammarType type) throws NoresourceError, BadFetchError,
+            UnsupportedFormatError {
         if (type != GrammarType.SRGS_XML) {
             throw new UnsupportedFormatError("Only SRGS XML is supported!");
         }
@@ -271,13 +273,11 @@ final class TextSpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public void startRecognition(
-            final SpeechRecognizerProperties speech,
-            final DtmfRecognizerProperties dtmf)
-        throws NoresourceError, BadFetchError {
+    public void startRecognition(final SpeechRecognizerProperties speech,
+            final DtmfRecognizerProperties dtmf) throws NoresourceError,
+            BadFetchError {
         recognizing = true;
-        final SpokenInputEvent event =
-            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
+        final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
         fireInputEvent(event);
     }
 
@@ -287,8 +287,7 @@ final class TextSpokenInput implements SpokenInput {
     @Override
     public void stopRecognition() {
         recognizing = false;
-        final SpokenInputEvent event =
-            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STOPPED);
+        final SpokenInputEvent event = new RecognitionStoppedEvent(this, null);
         fireInputEvent(event);
     }
 
@@ -314,7 +313,9 @@ final class TextSpokenInput implements SpokenInput {
 
     /**
      * Notifies the interpreter about an observer user input.
-     * @param text received utterance.
+     * 
+     * @param text
+     *            received utterance.
      */
     void notifyRecognitionResult(final String text) {
         if (!recognizing || (listener == null)) {
@@ -325,9 +326,8 @@ final class TextSpokenInput implements SpokenInput {
             LOGGER.debug("received utterance '" + text + "'");
         }
 
-        final SpokenInputEvent inputStartedEvent =
-            new SpokenInputEvent(this, SpokenInputEvent.INPUT_STARTED,
-                    ModeType.VOICE);
+        final SpokenInputEvent inputStartedEvent = new InputStartedEvent(this,
+                null, ModeType.VOICE);
         fireInputEvent(inputStartedEvent);
 
         final String[] tokens = text.split(" ");
@@ -338,21 +338,19 @@ final class TextSpokenInput implements SpokenInput {
                 break;
             }
         }
-        final RecognitionResult result = new TextRecognitionResult(
-                text, grammarChecker);
-        
+        final RecognitionResult result = new TextRecognitionResult(text,
+                grammarChecker);
+
         if (result.isAccepted()) {
-            final SpokenInputEvent acceptedEvent =
-                  new SpokenInputEvent(this, 
-                          SpokenInputEvent.RESULT_ACCEPTED, result);
+            final SpokenInputEvent acceptedEvent = new RecognitionEvent(this,
+                    null, result);
 
             fireInputEvent(acceptedEvent);
         } else {
-            final SpokenInputEvent rejectedEvent =
-                new SpokenInputEvent(this, 
-                        SpokenInputEvent.RESULT_REJECTED, result);
-       
-           fireInputEvent(rejectedEvent); 
+            final SpokenInputEvent rejectedEvent = new NomatchEvent(this, null,
+                    result);
+
+            fireInputEvent(rejectedEvent);
         }
     }
 
@@ -369,18 +367,19 @@ final class TextSpokenInput implements SpokenInput {
      */
     @Override
     public boolean isBusy() {
-       return recognizing;
+        return recognizing;
     }
 
     /**
      * Notifies all registered listeners about the given event.
-     * @param event the event.
+     * 
+     * @param event
+     *            the event.
      * @since 0.6
      */
     private void fireInputEvent(final SpokenInputEvent event) {
         synchronized (listener) {
-            final Collection<SpokenInputListener> copy =
-                new java.util.ArrayList<SpokenInputListener>();
+            final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listener);
             for (SpokenInputListener current : copy) {
                 current.inputStatusChanged(event);

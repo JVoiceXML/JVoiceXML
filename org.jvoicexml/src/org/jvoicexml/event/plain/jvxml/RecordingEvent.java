@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,13 +26,17 @@
 
 package org.jvoicexml.event.plain.jvxml;
 
+import org.jvoicexml.event.PlainEvent;
+
 /**
  * Event indicating the end of a recording.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
-public final class RecordingEvent extends AbstractInputEvent {
+public final class RecordingEvent extends PlainEvent
+        implements InputEvent {
     /** The serial version UID. */
     private static final long serialVersionUID = -6541907735772622981L;
 
@@ -47,7 +51,9 @@ public final class RecordingEvent extends AbstractInputEvent {
 
     /**
      * Constructs a new object.
-     * @param recordingBuffer output buffer of the recording.
+     * 
+     * @param recordingBuffer
+     *            output buffer of the recording.
      */
     public RecordingEvent(final byte[] recordingBuffer) {
         buffer = recordingBuffer;
@@ -63,8 +69,9 @@ public final class RecordingEvent extends AbstractInputEvent {
 
     /**
      * Sets the input result.
+     * 
      * @param inputResult
-     *        new value for the input result.
+     *            new value for the input result.
      */
     public void setInputResult(final Object inputResult) {
         result = inputResult;
@@ -80,6 +87,7 @@ public final class RecordingEvent extends AbstractInputEvent {
 
     /**
      * Retrieves teh buffer of the recording.
+     * 
      * @return buffer of the recording.
      */
     public byte[] getRecordingBuffer() {

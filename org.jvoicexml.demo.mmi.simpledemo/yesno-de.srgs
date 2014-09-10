@@ -7,7 +7,7 @@
     tag-format="semantics/1.0">
     <rule id="yesno" scope="public">
         <one-of>
-            <item>Ja<tag>yes</tag></item>
+            <item>Ja<tag>out = new Object(); out.like = "hallo";</tag></item>
             <item>Nein<tag>no</tag></item>
         </one-of>
     </rule>

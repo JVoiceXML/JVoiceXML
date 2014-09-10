@@ -29,7 +29,8 @@ package org.jvoicexml.implementation.kinect;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
-import org.jvoicexml.implementation.SpokenInputEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
+import org.jvoicexml.event.plain.jvxml.InputEvent;
 import org.jvoicexml.mock.implementation.MockSpokenInputListener;
 
 /**
@@ -38,19 +39,21 @@ import org.jvoicexml.mock.implementation.MockSpokenInputListener;
  * Make sure that a Kinect is attached to your computer when running these
  * tests.
  * </p>
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
 public final class TestKinectRecognizer {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(TestKinectRecognizer.class);
-    
+    private static final Logger LOGGER = Logger
+            .getLogger(TestKinectRecognizer.class);
+
     /**
      * Test method for {@link KinectRecognizer#allocate()}.
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      */
     @Test
     public void testAllocate() throws Exception {
@@ -61,8 +64,9 @@ public final class TestKinectRecognizer {
 
     /**
      * Test method for {@link KinectRecognizer#deallocate()}.
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      */
     @Test
     public void testDeallocate() throws Exception {
@@ -75,29 +79,31 @@ public final class TestKinectRecognizer {
 
     /**
      * Test method for {@link KinectRecognizer#allocate()}.
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      */
     @Test
     public void testMultipleAllocates() throws Exception {
         final KinectRecognizer recognizer = new KinectRecognizer(null);
-        for (int i=0; i<10; i++) {
+        for (int i = 0; i < 10; i++) {
             recognizer.allocate();
             Assert.assertTrue(recognizer.isAllocated());
             recognizer.deallocate();
             Assert.assertFalse(recognizer.isAllocated());
         }
     }
-    
+
     /**
      * Test method fpr {@link KinectRecognizer#startRecognition()}
-     * @throws Exception test failed
+     * 
+     * @throws Exception
+     *             test failed
      */
     @Test
     public void testStartRecognition() throws Exception {
         final KinectSpokenInput input = new KinectSpokenInput();
-        final MockSpokenInputListener listener =
-                new MockSpokenInputListener();
+        final MockSpokenInputListener listener = new MockSpokenInputListener();
         input.addListener(listener);
         final KinectRecognizer recognizer = new KinectRecognizer(input);
         recognizer.allocate();
@@ -105,36 +111,40 @@ public final class TestKinectRecognizer {
         LOGGER.info("Say 'FORWARD'!");
         listener.waitSize(1, 10000);
         final SpokenInputEvent event = listener.get(0);
-        final KinectRecognitionResult result =
-                (KinectRecognitionResult) event.getParam();
+        final InputEvent inputEvent = (InputEvent) event;
+        final KinectRecognitionResult result = (KinectRecognitionResult) inputEvent
+                .getInputResult();
         Assert.assertEquals("FORWARD", result.getUtterance());
     }
 
     /**
      * Test method for {@link KinectRecognizer#startRecognition()}
-     * @throws Exception test failed
+     * 
+     * @throws Exception
+     *             test failed
      */
     @Test
     public void testStartRecognitionMultiple() throws Exception {
         final KinectSpokenInput input = new KinectSpokenInput();
-        final MockSpokenInputListener listener =
-                new MockSpokenInputListener();
+        final MockSpokenInputListener listener = new MockSpokenInputListener();
         input.addListener(listener);
         final KinectRecognizer recognizer = new KinectRecognizer(input);
         recognizer.allocate();
-        for (int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
             listener.clear();
             recognizer.startRecognition();
             LOGGER.info("Say 'one' " + i);
             listener.waitSize(1, 10000);
             final SpokenInputEvent event = listener.get(0);
-            final KinectRecognitionResult result =
-                    (KinectRecognitionResult) event.getParam();
+            final InputEvent inputEvent = (InputEvent) event;
+            final KinectRecognitionResult result = (KinectRecognitionResult) inputEvent
+                    .getInputResult();
             Assert.assertEquals("one", result.getUtterance());
             recognizer.stopRecognition();
         }
         recognizer.deallocate();
     }
+
     @Test
     public void testStopRecognition() {
         Assert.fail("Not yet implemented");

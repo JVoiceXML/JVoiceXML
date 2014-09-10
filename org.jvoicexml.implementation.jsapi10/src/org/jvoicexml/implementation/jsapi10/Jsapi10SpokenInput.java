@@ -54,29 +54,31 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Spoken input that uses the JSAPI 1.0 to address the recognition engine.
- *
+ * 
  * <p>
- * Handle all JSAPI calls to the recognizer to make JSAPI transparent
- * to the interpreter.
+ * Handle all JSAPI calls to the recognizer to make JSAPI transparent to the
+ * interpreter.
  * </p>
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class Jsapi10SpokenInput
         implements SpokenInput, StreamableSpokenInput {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(Jsapi10SpokenInput.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(Jsapi10SpokenInput.class);
 
     /** Buffer size when reading a grammar. */
     private static final int BUFFER_SIZE = 1024;
@@ -119,8 +121,9 @@ public final class Jsapi10SpokenInput
 
     /**
      * Constructs a new audio input.
+     * 
      * @param defaultDescriptor
-     *        the default recognizer mode descriptor.
+     *            the default recognizer mode descriptor.
      */
     public Jsapi10SpokenInput(final RecognizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
@@ -130,8 +133,7 @@ public final class Jsapi10SpokenInput
     /**
      * {@inheritDoc}
      */
-    public void open()
-            throws NoresourceError {
+    public void open() throws NoresourceError {
         try {
             recognizer = Central.createRecognizer(desc);
             if (recognizer == null) {
@@ -208,8 +210,8 @@ public final class Jsapi10SpokenInput
      */
     @Override
     public GrammarImplementation<?> loadGrammar(final Reader reader,
-            final GrammarType type)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+            final GrammarType type) throws NoresourceError, BadFetchError,
+            UnsupportedFormatError {
         if (recognizer == null) {
             throw new NoresourceError("No recognizer available!");
         }
@@ -217,7 +219,7 @@ public final class Jsapi10SpokenInput
         if (type != GrammarType.JSGF) {
             throw new UnsupportedFormatError(
                     "JSAPI 1.0 implementation supports only type "
-                    + GrammarType.JSGF.getType());
+                            + GrammarType.JSGF.getType());
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -251,6 +253,7 @@ public final class Jsapi10SpokenInput
 
     /**
      * Dumps all loaded grammars to the LOGGER in debug mode.
+     * 
      * @since 0.7.3
      */
     private void dumpLoadedGrammars() {
@@ -260,7 +263,7 @@ public final class Jsapi10SpokenInput
         } else {
             LOGGER.debug("loaded grammars:");
         }
-        
+
         for (RuleGrammar grammar : grammars) {
             LOGGER.debug("- grammar '" + grammar.getName() + ", enabled:"
                     + grammar.isEnabled());
@@ -282,8 +285,7 @@ public final class Jsapi10SpokenInput
         boolean changedGrammar = false;
         for (GrammarImplementation<? extends Object> current : grammars) {
             if (current instanceof RuleGrammarImplementation) {
-                final RuleGrammarImplementation ruleGrammar =
-                    (RuleGrammarImplementation) current;
+                final RuleGrammarImplementation ruleGrammar = (RuleGrammarImplementation) current;
                 final String name = ruleGrammar.getName();
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("activating grammar '" + name + "'...");
@@ -298,7 +300,7 @@ public final class Jsapi10SpokenInput
                     if (jsgf == null) {
                         throw new BadFetchError(
                                 "Unable to activate unregistered grammar '"
-                                            + name + "'!");
+                                        + name + "'!");
                     }
                     final Reader reader = new StringReader(jsgf);
                     RuleGrammarImplementation impl;
@@ -307,8 +309,7 @@ public final class Jsapi10SpokenInput
                                 GrammarType.JSGF);
                     } catch (UnsupportedFormatError e) {
                         throw new BadFetchError(
-                                "Unable to reeactivate grammar '"
-                                + name + "'!");
+                                "Unable to reeactivate grammar '" + name + "'!");
                     }
                     grammar = impl.getGrammar();
                 }
@@ -351,8 +352,7 @@ public final class Jsapi10SpokenInput
         boolean changedGrammar = false;
         for (GrammarImplementation<? extends Object> current : grammars) {
             if (current instanceof RuleGrammarImplementation) {
-                final RuleGrammarImplementation ruleGrammar =
-                    (RuleGrammarImplementation) current;
+                final RuleGrammarImplementation ruleGrammar = (RuleGrammarImplementation) current;
                 final String name = ruleGrammar.getName();
 
                 if (LOGGER.isDebugEnabled()) {
@@ -382,13 +382,13 @@ public final class Jsapi10SpokenInput
 
     /**
      * Retrieves all enabled grammars.
+     * 
      * @return enabled grammars.
      * @since 0.7.3
      */
     Collection<RuleGrammar> getActiveGrammars() {
         final RuleGrammar[] grammars = recognizer.listRuleGrammars();
-        Collection<RuleGrammar> active =
-            new java.util.ArrayList<RuleGrammar>();
+        Collection<RuleGrammar> active = new java.util.ArrayList<RuleGrammar>();
         for (RuleGrammar grammar : grammars) {
             if (grammar.isEnabled()) {
                 active.add(grammar);
@@ -401,10 +401,9 @@ public final class Jsapi10SpokenInput
      * {@inheritDoc}
      */
     @Override
-    public void startRecognition(
-            final SpeechRecognizerProperties speech,
-            final DtmfRecognizerProperties dtmf)
-            throws NoresourceError, BadFetchError {
+    public void startRecognition(final SpeechRecognizerProperties speech,
+            final DtmfRecognizerProperties dtmf) throws NoresourceError,
+            BadFetchError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
@@ -438,8 +437,7 @@ public final class Jsapi10SpokenInput
         resultListener = new JVoiceXMLRecognitionListener(this);
         recognizer.addResultListener(resultListener);
 
-        final SpokenInputEvent event =
-            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
+        final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
         fireInputEvent(event);
 
         if (LOGGER.isDebugEnabled()) {
@@ -478,10 +476,8 @@ public final class Jsapi10SpokenInput
         }
         recognizer.pause();
 
-        final SpokenInputEvent event =
-            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STOPPED);
+        final SpokenInputEvent event = new RecognitionStoppedEvent(this, null);
         fireInputEvent(event);
-
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...recognition stopped");
@@ -504,7 +500,7 @@ public final class Jsapi10SpokenInput
             recognizer.removeResultListener(resultListener);
             resultListener = null;
         }
-        
+
         handler = null;
         info = null;
         streamableInput = null;
@@ -537,7 +533,7 @@ public final class Jsapi10SpokenInput
      * {@inheritDoc}
      */
     public void connect(final ConnectionInformation connectionInformation)
-        throws IOException {
+            throws IOException {
         if (handler != null) {
             handler.connect(info, this, recognizer);
         }
@@ -572,7 +568,9 @@ public final class Jsapi10SpokenInput
 
     /**
      * Sets a custom connection handler.
-     * @param connectionHandler the connection handler.
+     * 
+     * @param connectionHandler
+     *            the connection handler.
      */
     public void setSpokenInputConnectionHandler(
             final SpokenInputConnectionHandler connectionHandler) {
@@ -599,10 +597,11 @@ public final class Jsapi10SpokenInput
 
     /**
      * Sets the streamable input.
-     * @param streamable the streamable input to set.
+     * 
+     * @param streamable
+     *            the streamable input to set.
      */
-    public void setStreamableSpokenInput(
-            final StreamableSpokenInput streamable) {
+    public void setStreamableSpokenInput(final StreamableSpokenInput streamable) {
         streamableInput = streamable;
     }
 
@@ -620,13 +619,14 @@ public final class Jsapi10SpokenInput
 
     /**
      * Notifies all registered listeners about the given event.
-     * @param event the event.
+     * 
+     * @param event
+     *            the event.
      * @since 0.6
      */
     void fireInputEvent(final SpokenInputEvent event) {
         synchronized (listener) {
-            final Collection<SpokenInputListener> copy =
-                new java.util.ArrayList<SpokenInputListener>();
+            final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listener);
             for (SpokenInputListener current : copy) {
                 current.inputStatusChanged(event);

@@ -30,7 +30,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.implementation.SpokenInputEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 
 /**

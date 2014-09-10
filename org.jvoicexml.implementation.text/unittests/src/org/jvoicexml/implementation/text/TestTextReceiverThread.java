@@ -43,8 +43,9 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
-import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -161,10 +162,10 @@ public final class TestTextReceiverThread
      * {@inheritDoc}
      */
     public void inputStatusChanged(final SpokenInputEvent event) {
-        final int id = event.getEvent();
-        if (id == SpokenInputEvent.RESULT_ACCEPTED) {
-            final RecognitionResult result =
-                (RecognitionResult) event.getParam();
+        final String type = event.getEventType();
+        if (type.equals(RecognitionEvent.EVENT_TYPE)) {
+            final RecognitionEvent recEvent = (RecognitionEvent) event;
+            final RecognitionResult result = recEvent.getRecognitionResult();
             utterance = result.getUtterance();
             synchronized (lock) {
                 lock.notifyAll();

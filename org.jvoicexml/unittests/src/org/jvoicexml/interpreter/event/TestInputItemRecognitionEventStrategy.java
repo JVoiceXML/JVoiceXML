@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,16 +26,17 @@
 
 package org.jvoicexml.interpreter.event;
 
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.Application;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.plain.NomatchEvent;
-import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.NomatchEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.interpreter.JVoiceXmlApplication;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
@@ -65,19 +66,19 @@ public final class TestInputItemRecognitionEventStrategy {
 
     /** The VoiceXML interpreter. */
     private VoiceXmlInterpreter interpreter;
-    
+
     /**
      * Set up the test environment.
+     * 
      * @throws Exception
-     *         set up failed
+     *             set up failed
      */
     @Before
     public void setUp() throws Exception {
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null);
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
@@ -85,56 +86,63 @@ public final class TestInputItemRecognitionEventStrategy {
     }
 
     /**
-     * Test case for {@link InputItemRecognitionEventStrategy#handleEvent(org.jvoicexml.interpreter.formitem.FieldFormItem, JVoiceXMLEvent)}.
+     * Test case for
+     * {@link InputItemRecognitionEventStrategy#handleEvent(org.jvoicexml.interpreter.formitem.FieldFormItem, JVoiceXMLEvent)}
+     * .
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      * @throws JVoiceXMLEvent
-     *         test failed
+     *             test failed
      */
     @Test
     public void testHandleEvent() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
-        
+
         final Field field = form.appendChild(Field.class);
         field.setName("field");
-        
+
         context.setProperty("confidencelevel", "0.5");
         final MockRecognitionResult result = new MockRecognitionResult();
         result.setUtterance("hello world");
         result.setConfidence(0.55f);
         result.setAccepted(true);
         final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.createHostObject(
-                ApplicationShadowVarContainer.VARIABLE_NAME,
-                ApplicationShadowVarContainer.class);
+        final ApplicationShadowVarContainer container = scripting
+                .createHostObject(ApplicationShadowVarContainer.VARIABLE_NAME,
+                        ApplicationShadowVarContainer.class);
+        final Application application = new JVoiceXmlApplication();
+        container.setApplication(application);
         final FieldFormItem formItem = new FieldFormItem(context, field);
         formItem.init(scripting);
-        final InputItemRecognitionEventStrategy strategy =
-            new InputItemRecognitionEventStrategy(context, interpreter, null,
-                    formItem);
-        final JVoiceXMLEvent event = new RecognitionEvent(result);
+        final InputItemRecognitionEventStrategy strategy = new InputItemRecognitionEventStrategy(
+                context, interpreter, null, formItem);
+        final JVoiceXMLEvent event = new RecognitionEvent(null, null, result);
         final boolean handled = strategy.handleEvent(formItem, event);
         Assert.assertTrue("event should be handled", handled);
-        Assert.assertEquals(result.getUtterance(), 
+        Assert.assertEquals(result.getUtterance(),
                 scripting.eval("application.lastresult$[0].utterance;"));
     }
 
     /**
-     * Test case for {@link InputItemRecognitionEventStrategy#handleEvent(org.jvoicexml.interpreter.formitem.FieldFormItem, JVoiceXMLEvent)}.
+     * Test case for
+     * {@link InputItemRecognitionEventStrategy#handleEvent(org.jvoicexml.interpreter.formitem.FieldFormItem, JVoiceXMLEvent)}
+     * .
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      * @throws JVoiceXMLEvent
-     *         test failed
+     *             test failed
      */
     @Test
-    public void testHandleEventNotHandledNoMatch()
-            throws Exception, JVoiceXMLEvent {
+    public void testHandleEventNotHandledNoMatch() throws Exception,
+            JVoiceXMLEvent {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
-        
+
         final Field field = form.appendChild(Field.class);
         field.setName("field");
         final MockRecognitionResult result = new MockRecognitionResult();
@@ -142,53 +150,58 @@ public final class TestInputItemRecognitionEventStrategy {
         result.setConfidence(0.55f);
         result.setAccepted(false);
         final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.createHostObject(
-                ApplicationShadowVarContainer.VARIABLE_NAME,
-                ApplicationShadowVarContainer.class);
+        final ApplicationShadowVarContainer container = scripting
+                .createHostObject(ApplicationShadowVarContainer.VARIABLE_NAME,
+                        ApplicationShadowVarContainer.class);
+        final Application application = new JVoiceXmlApplication();
+        container.setApplication(application);
         final FieldFormItem formItem = new FieldFormItem(context, field);
         formItem.init(scripting);
-        final InputItemRecognitionEventStrategy strategy =
-            new InputItemRecognitionEventStrategy(context, interpreter, null,
-                    formItem);
-        final JVoiceXMLEvent event = new RecognitionEvent(result);
+        final InputItemRecognitionEventStrategy strategy = new InputItemRecognitionEventStrategy(
+                context, interpreter, null, formItem);
+        final JVoiceXMLEvent event = new RecognitionEvent(null, null, result);
         boolean handled = strategy.handleEvent(formItem, event);
         Assert.assertFalse("event should not be handled", handled);
-        Assert.assertEquals(result.getUtterance(), 
+        Assert.assertEquals(result.getUtterance(),
                 scripting.eval("application.lastresult$[0].utterance;"));
     }
 
     /**
-     * Test case for {@link InputItemRecognitionEventStrategy#handleEvent(org.jvoicexml.interpreter.formitem.FieldFormItem, JVoiceXMLEvent)}.
+     * Test case for
+     * {@link InputItemRecognitionEventStrategy#handleEvent(org.jvoicexml.interpreter.formitem.FieldFormItem, JVoiceXMLEvent)}
+     * .
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      * @throws JVoiceXMLEvent
-     *         test failed
+     *             test failed
      */
     @Test
-    public void testHandleEventNotHandledBelowConfidence()
-            throws Exception, JVoiceXMLEvent {
+    public void testHandleEventNotHandledBelowConfidence() throws Exception,
+            JVoiceXMLEvent {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
-        
+
         final Field field = form.appendChild(Field.class);
         field.setName("field");
-        
+
         context.setProperty("confidencelevel", "0.5");
         final MockRecognitionResult result = new MockRecognitionResult();
         result.setUtterance("hello world");
         result.setConfidence(0.55f);
         result.setAccepted(true);
         final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.createHostObject(
-                ApplicationShadowVarContainer.VARIABLE_NAME,
-                ApplicationShadowVarContainer.class);
+        final ApplicationShadowVarContainer container = scripting
+                .createHostObject(ApplicationShadowVarContainer.VARIABLE_NAME,
+                        ApplicationShadowVarContainer.class);
+        final Application application = new JVoiceXmlApplication();
+        container.setApplication(application);
         final FieldFormItem formItem = new FieldFormItem(context, field);
         formItem.init(scripting);
-        final InputItemRecognitionEventStrategy strategy =
-            new InputItemRecognitionEventStrategy(context, interpreter, null,
-                    formItem);
-        final JVoiceXMLEvent event = new RecognitionEvent(result);
+        final InputItemRecognitionEventStrategy strategy = new InputItemRecognitionEventStrategy(
+                context, interpreter, null, formItem);
+        final JVoiceXMLEvent event = new RecognitionEvent(null, null, result);
         context.setProperty("confidencelevel", "0.6");
         JVoiceXMLEvent nomatch = null;
         try {
@@ -197,7 +210,7 @@ public final class TestInputItemRecognitionEventStrategy {
             nomatch = e;
         }
         Assert.assertNotNull("event should not be handled", nomatch);
-        Assert.assertEquals(result.getUtterance(), 
+        Assert.assertEquals(result.getUtterance(),
                 scripting.eval("application.lastresult$[0].utterance;"));
     }
 }
