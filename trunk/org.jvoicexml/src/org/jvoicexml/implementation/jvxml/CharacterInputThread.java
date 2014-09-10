@@ -28,19 +28,23 @@ package org.jvoicexml.implementation.jvxml;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DtmfRecognizerProperties;
-import org.jvoicexml.implementation.SpokenInputEvent;
-
+import org.jvoicexml.event.plain.implementation.InputStartedEvent;
+import org.jvoicexml.event.plain.implementation.NomatchEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Thread waiting for DTMF input.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
 class CharacterInputThread extends Thread {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(CharacterInputThread.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(CharacterInputThread.class);
 
     /** The related character input. */
     private final BufferedCharacterInput input;
@@ -50,8 +54,11 @@ class CharacterInputThread extends Thread {
 
     /**
      * Constructs a new object.
-     * @param characterInput the related character input.
-     * @param dtmf DTM recognition properties
+     * 
+     * @param characterInput
+     *            the related character input.
+     * @param dtmf
+     *            DTM recognition properties
      */
     public CharacterInputThread(final BufferedCharacterInput characterInput,
             final DtmfRecognizerProperties dtmf) {
@@ -103,32 +110,32 @@ class CharacterInputThread extends Thread {
 
     /**
      * Notifies all listeners that input has started.
+     * 
      * @since 0.7.5
      */
     private void notifyStartEvent() {
-        final SpokenInputEvent startedEvent =
-                new SpokenInputEvent(input,
-                        SpokenInputEvent.INPUT_STARTED);
+        final SpokenInputEvent startedEvent = new InputStartedEvent(input,
+                null, ModeType.DTMF);
         input.fireInputEvent(startedEvent);
     }
 
     /**
      * Notifies all listeners about the received input.
-     * @param utterance the received input
+     * 
+     * @param utterance
+     *            the received input
      * @since 0.7.5
      */
     private void notifyInput(final String utterance) {
-        final CharacterInputRecognitionResult result =
-            new CharacterInputRecognitionResult(utterance);
+        final CharacterInputRecognitionResult result = new CharacterInputRecognitionResult(
+                utterance);
         final boolean accepted = input.isAccepted(result);
         result.setAccepted(accepted);
         final SpokenInputEvent event;
         if (accepted) {
-            event = new SpokenInputEvent(input,
-                        SpokenInputEvent.RESULT_ACCEPTED, result);
+            event = new RecognitionEvent(input, null, result);
         } else {
-            event = new SpokenInputEvent(input,
-                    SpokenInputEvent.RESULT_REJECTED, result);
+            event = new NomatchEvent(input, null, result);
         }
         input.fireInputEvent(event);
     }

@@ -28,8 +28,8 @@ package org.jvoicexml.callmanager.mmi;
 import java.util.List;
 
 import org.jvoicexml.LastResult;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
-import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 
 /**
  * Converts data that is sent as extensions notification into a format that

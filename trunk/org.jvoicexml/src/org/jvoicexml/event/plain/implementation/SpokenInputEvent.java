@@ -24,16 +24,25 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.event.plain.implementation;
+
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.implementation.SpokenInput;
 
 /**
  * Event generated from the {@link SpokenInput} implementation.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
+ * 
  */
-public final class SpokenInputEvent {
+@SuppressWarnings("serial")
+public class SpokenInputEvent extends JVoiceXMLEvent {
+    /** The detail message. */
+    public static final String EVENT_TYPE = SpokenInputEvent.class
+            .getCanonicalName();
+
     /** The recognition process has been started. */
     public static final int RECOGNITION_STARTED = 1;
 
@@ -49,95 +58,84 @@ public final class SpokenInputEvent {
     /** The user made an utterance that did not match an active grammar. */
     public static final int RESULT_REJECTED = RESULT_ACCEPTED << 1;
 
+    /** The detailing of this event. */
+    private final String detail;
+
     /** Object that caused the event. */
     private final SpokenInput source;
 
-    /** Event identifier. */
-    private final int event;
-
-    /** Optional parameter. */
-    private final Object param;
+    /** The id of the related session. */
+    private final String sessionId;
 
     /**
      * Constructs a new object.
-     * @param input object that caused the event.
-     * @param eventType event identifier.
+     * 
+     * @param output
+     *            object that caused the event.
+     * @param eventType
+     *            event identifier, one of {@link #OUTPUT_STARTED}.
+     *            {@link #OUTPUT_ENDED}, {@link #MARKER_REACHED},
+     *            {@link #QUEUE_EMPTY} or {@link #OUTPUT_UPDATE}.
+     * @param id
+     *            the session id
+     * @exception IllegalArgumentException
+     *                if an illegal event type is passed.
      */
-    public SpokenInputEvent(final SpokenInput input,
-            final int eventType) {
-        this(input, eventType, null);
+    public SpokenInputEvent(final SpokenInput output,
+            final String detailedType, final String id)
+            throws IllegalArgumentException {
+        source = output;
+        detail = detailedType;
+        sessionId = id;
     }
 
     /**
      * Constructs a new object.
-     * @param input object that caused the event.
-     * @param eventType event identifier.
-     * @param parameter optional parameter.
+     * 
+     * @param output
+     *            object that caused the event.
+     * @param id
+     *            the session id
+     * @exception IllegalArgumentException
+     *                if an illegal event type is passed.
      */
-    public SpokenInputEvent(final SpokenInput input,
-            final int eventType, final Object parameter) {
-        source = input;
-        event = eventType;
-        param = parameter;
+    public SpokenInputEvent(final SpokenInput output, final String id)
+            throws IllegalArgumentException {
+        source = output;
+        detail = null;
+        sessionId = id;
     }
-
+    
     /**
      * Retrieves the object that caused the event.
+     * 
      * @return the source object.
      */
-    public SpokenInput getSource() {
+    public final SpokenInput getSource() {
         return source;
     }
 
     /**
-     * Retrieves the event type.
-     * @return the event type.
+     * Retrieves the session id.
+     * 
+     * @return the session id
+     * @since 0.7.7
      */
-    public int getEvent() {
-        return event;
-    }
-
-    /**
-     * Retrieves the parameter.
-     * @return the parameter, maybe <code>null</code>.
-     */
-    public Object getParam() {
-        return param;
+    public final String getSessionId() {
+        return sessionId;
     }
 
     /**
      * {@inheritDoc}
-     * @since 0.7
      */
     @Override
-    public String toString() {
+    public String getEventType() {
         final StringBuilder str = new StringBuilder();
-        str.append(getClass().getName());
-        str.append('[');
-        switch(event) {
-        case INPUT_STARTED:
-            str.append("INPUT_STARTED");
-            break;
-        case RECOGNITION_STARTED:
-            str.append("RECOGNITION_STARTED");
-            break;
-        case RECOGNITION_STOPPED:
-            str.append("RECOGNITION_STOPPED");
-            break;
-        case RESULT_ACCEPTED:
-            str.append("RESULT_ACCEPTED");
-            break;
-        case RESULT_REJECTED:
-            str.append("RESULT_REJECTED");
-            break;
-        default:
-            str.append(event);
+        str.append(EVENT_TYPE);
+        if (detail != null) {
+            str.append('.');
+            str.append(detail);
         }
-        if (param != null) {
-            str.append(',');
-            str.append(param);
-        }
-        str.append(']');
         return str.toString();
     }
 }

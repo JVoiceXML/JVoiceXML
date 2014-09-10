@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation;
 
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 
 
 /**

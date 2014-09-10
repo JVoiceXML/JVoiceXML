@@ -59,9 +59,11 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -488,8 +490,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             throw new NoresourceError(e.getMessage(), e);
         }
 
-        final SpokenInputEvent event =
-            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
+        final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
         fireInputEvent(event);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...recognition started");
@@ -551,11 +552,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         } catch (IllegalStateException e) {
             LOGGER.warn(e.getMessage(), e);
         }
-
-        final SpokenInputEvent event =
-            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STOPPED);
+        final SpokenInputEvent event = new RecognitionStoppedEvent(this, null);
         fireInputEvent(event);
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...recognition stopped");
         }

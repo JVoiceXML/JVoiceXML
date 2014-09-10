@@ -38,9 +38,11 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -166,7 +168,7 @@ public final class MockSpokenInput
         throws NoresourceError, BadFetchError {
         recognizing = true;
         final SpokenInputEvent event =
-            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
+            new RecognitionStartedEvent(this, null);
         fireInputEvent(event);
     }
 
@@ -176,7 +178,7 @@ public final class MockSpokenInput
     public void stopRecognition() {
         recognizing = false;
         final SpokenInputEvent event =
-            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STOPPED);
+            new RecognitionStoppedEvent(this, null);
         fireInputEvent(event);
     }
 

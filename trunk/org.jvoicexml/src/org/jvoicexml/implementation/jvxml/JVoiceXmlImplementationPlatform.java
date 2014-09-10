@@ -49,20 +49,22 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
-import org.jvoicexml.event.plain.NomatchEvent;
+import org.jvoicexml.event.plain.implementation.InputStartedEvent;
 import org.jvoicexml.event.plain.implementation.MarkerReachedEvent;
+import org.jvoicexml.event.plain.implementation.NomatchEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
-import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.event.plain.jvxml.TransferEvent;
 import org.jvoicexml.implementation.ExternalRecognitionListener;
 import org.jvoicexml.implementation.ExternalResource;
 import org.jvoicexml.implementation.ExternalSynthesisListener;
 import org.jvoicexml.implementation.ImplementationGrammarProcessor;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
@@ -75,28 +77,29 @@ import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Basic implementation of an {@link ImplementationPlatform}.
- *
+ * 
  * <p>
- * User actions and system output are not handled by this class but forwarded
- * to the corresponding {@link ExternalResource}s.
+ * User actions and system output are not handled by this class but forwarded to
+ * the corresponding {@link ExternalResource}s.
  * </p>
- *
+ * 
  * <p>
  * External resources are considered to be in a pool. The implementation
- * platform is able to retrieve them from the pool and push them back.
- * This means that all resources that have been borrowed from the
- * implementation platform must be returned to it if they are no longer used.
+ * platform is able to retrieve them from the pool and push them back. This
+ * means that all resources that have been borrowed from the implementation
+ * platform must be returned to it if they are no longer used.
  * </p>
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class JVoiceXmlImplementationPlatform
         implements SpokenInputListener, SynthesizedOutputListener,
-            TelephonyListener, ImplementationPlatform, Configurable {
+        TelephonyListener, ImplementationPlatform, Configurable {
 
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlImplementationPlatform.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(JVoiceXmlImplementationPlatform.class);
 
     /** Timeout in msec to wait until the resource is not busy. */
     private static final int BUSY_WAIT_TIMEOUT = 1000;
@@ -164,18 +167,21 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * Constructs a new Implementation platform.
-     *
+     * 
      * <p>
      * This method should not be called by any application. The implementation
      * platform is accessible via the <code>Session</code>
      * </p>
-     *
-     * @param telePool  pool of telephony resource factories
-     * @param synthesizedOutputPool pool of synthesized output resource
-     *        factories
-     * @param spokenInputPool pool of spoken input resource factories
-     * @param connectionInformation connection information container
-     *
+     * 
+     * @param telePool
+     *            pool of telephony resource factories
+     * @param synthesizedOutputPool
+     *            pool of synthesized output resource factories
+     * @param spokenInputPool
+     *            pool of spoken input resource factories
+     * @param connectionInformation
+     *            connection information container
+     * 
      * @see org.jvoicexml.Session
      */
     JVoiceXmlImplementationPlatform(
@@ -183,25 +189,29 @@ public final class JVoiceXmlImplementationPlatform
             final KeyedResourcePool<SynthesizedOutput> synthesizedOutputPool,
             final KeyedResourcePool<SpokenInput> spokenInputPool,
             final ConnectionInformation connectionInformation) {
-       this(telePool, synthesizedOutputPool, spokenInputPool,
-               new BufferedCharacterInput(), connectionInformation);
+        this(telePool, synthesizedOutputPool, spokenInputPool,
+                new BufferedCharacterInput(), connectionInformation);
     }
-    
+
     /**
      * Constructs a new Implementation platform.
-     *
+     * 
      * <p>
      * This method should not be called by any application. The implementation
      * platform is accessible via the <code>Session</code>
      * </p>
-     *
-     * @param telePool  pool of telephony resource factories
-     * @param synthesizedOutputPool pool of synthesized output resource
-     *        factories
-     * @param spokenInputPool pool of spoken input resource factories
-     * @param bufferedCharacterInput buffer character input for this platform 
-     * @param connectionInformation connection information container
-     *
+     * 
+     * @param telePool
+     *            pool of telephony resource factories
+     * @param synthesizedOutputPool
+     *            pool of synthesized output resource factories
+     * @param spokenInputPool
+     *            pool of spoken input resource factories
+     * @param bufferedCharacterInput
+     *            buffer character input for this platform
+     * @param connectionInformation
+     *            connection information container
+     * 
      * @see org.jvoicexml.Session
      */
     JVoiceXmlImplementationPlatform(
@@ -225,13 +235,15 @@ public final class JVoiceXmlImplementationPlatform
      */
     @Override
     public void init(final Configuration configuration)
-        throws ConfigurationException {
+            throws ConfigurationException {
         processor.init(configuration);
     }
 
     /**
      * Sets an external recognition listener and starts it.
-     * @param listener the external recognition listener.
+     * 
+     * @param listener
+     *            the external recognition listener.
      * @since 0.6
      */
     public void setExternalRecognitionListener(
@@ -248,27 +260,29 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * Sets an external synthesis listener and starts it.
-     * @param listener the external synthesis listener.
+     * 
+     * @param listener
+     *            the external synthesis listener.
      * @since 0.6
      */
     public void setExternalSynthesisListener(
             final ExternalSynthesisListener listener) {
-      externalSynthesisListener = listener;
-      if (listener != null) {
-          try {
-              externalSynthesisListener.start();
-          } catch (Throwable t) {
-              LOGGER.debug("Could not start externalSynthesisListener:", t);
-          }
-      }
+        externalSynthesisListener = listener;
+        if (listener != null) {
+            try {
+                externalSynthesisListener.start();
+            } catch (Throwable t) {
+                LOGGER.debug("Could not start externalSynthesisListener:", t);
+            }
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public SystemOutput getSystemOutput()
-            throws NoresourceError, ConnectionDisconnectHangupEvent {
+    public SystemOutput getSystemOutput() throws NoresourceError,
+            ConnectionDisconnectHangupEvent {
         synchronized (this) {
             if (hungup) {
                 throw new ConnectionDisconnectHangupEvent("caller hung up");
@@ -281,8 +295,8 @@ public final class JVoiceXmlImplementationPlatform
         final String type = info.getSystemOutput();
         synchronized (info) {
             if (output == null) {
-                final SynthesizedOutput synthesizer =
-                    getExternalResourceFromPool(synthesizerPool, type);
+                final SynthesizedOutput synthesizer = getExternalResourceFromPool(
+                        synthesizerPool, type);
                 output = new JVoiceXmlSystemOutput(synthesizer, session);
                 output.addListener(this);
                 LOGGER.info("borrowed system output of type '" + type + "'");
@@ -303,8 +317,7 @@ public final class JVoiceXmlImplementationPlatform
 
             if (!hungup && !closed && output.isBusy()) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug(
-                            "output still busy. returning when queue is empty");
+                    LOGGER.debug("output still busy. returning when queue is empty");
                 }
             } else {
                 final JVoiceXmlSystemOutput systemOutput = output;
@@ -316,10 +329,9 @@ public final class JVoiceXmlImplementationPlatform
                 }
                 systemOutput.removeListener(this);
 
-                final SynthesizedOutput synthesizedOutput =
-                    systemOutput.getSynthesizedOutput();
-                returnExternalResourceToPool(synthesizerPool,
-                        synthesizedOutput);
+                final SynthesizedOutput synthesizedOutput = systemOutput
+                        .getSynthesizedOutput();
+                returnExternalResourceToPool(synthesizerPool, synthesizedOutput);
                 LOGGER.info("returned system output of type '" + type + "'");
             }
         }
@@ -336,14 +348,13 @@ public final class JVoiceXmlImplementationPlatform
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("waiting for empty output queue...");
         }
-        final SynthesizedOutput synthesizedOutput =
-            output.getSynthesizedOutput();
+        final SynthesizedOutput synthesizedOutput = output
+                .getSynthesizedOutput();
         synthesizedOutput.waitQueueEmpty();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...output queue empty.");
         }
     }
-
 
     /**
      * {@inheritDoc}
@@ -355,8 +366,8 @@ public final class JVoiceXmlImplementationPlatform
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("waiting for non-barge-in played...");
         }
-        final SynthesizedOutput synthesizedOutput =
-            output.getSynthesizedOutput();
+        final SynthesizedOutput synthesizedOutput = output
+                .getSynthesizedOutput();
         synthesizedOutput.waitNonBargeInPlayed();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...non-barge-in played.");
@@ -367,8 +378,8 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public UserInput getUserInput()
-            throws NoresourceError, ConnectionDisconnectHangupEvent {
+    public UserInput getUserInput() throws NoresourceError,
+            ConnectionDisconnectHangupEvent {
         synchronized (this) {
             if (hungup) {
                 throw new ConnectionDisconnectHangupEvent("caller hung up");
@@ -381,8 +392,8 @@ public final class JVoiceXmlImplementationPlatform
         final String type = info.getUserInput();
         synchronized (info) {
             if (input == null) {
-                final SpokenInput spokenInput =
-                    getExternalResourceFromPool(recognizerPool, type);
+                final SpokenInput spokenInput = getExternalResourceFromPool(
+                        recognizerPool, type);
                 input = new JVoiceXmlUserInput(spokenInput, characterInput,
                         processor);
                 input.addListener(this);
@@ -414,8 +425,7 @@ public final class JVoiceXmlImplementationPlatform
 
             if (!hungup && !closed && input.isBusy()) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug(
-                    "input still busy. returning when recognition is stopped");
+                    LOGGER.debug("input still busy. returning when recognition is stopped");
                 }
             } else {
                 final JVoiceXmlUserInput userInput = input;
@@ -439,8 +449,8 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public CharacterInput getCharacterInput()
-            throws NoresourceError, ConnectionDisconnectHangupEvent {
+    public CharacterInput getCharacterInput() throws NoresourceError,
+            ConnectionDisconnectHangupEvent {
         synchronized (this) {
             if (hungup) {
                 throw new ConnectionDisconnectHangupEvent("caller hung up");
@@ -456,8 +466,8 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public CallControl getCallControl()
-            throws NoresourceError, ConnectionDisconnectHangupEvent {
+    public CallControl getCallControl() throws NoresourceError,
+            ConnectionDisconnectHangupEvent {
         synchronized (this) {
             if (hungup) {
                 throw new ConnectionDisconnectHangupEvent("caller hung up");
@@ -473,8 +483,8 @@ public final class JVoiceXmlImplementationPlatform
         final String type = info.getCallControl();
         synchronized (info) {
             if (call == null) {
-                final Telephony telephony =
-                    getExternalResourceFromPool(telephonyPool, type);
+                final Telephony telephony = getExternalResourceFromPool(
+                        telephonyPool, type);
                 call = new JVoiceXmlCallControl(telephony);
                 LOGGER.info("borrowed call control of type '" + type + "'");
             }
@@ -498,8 +508,7 @@ public final class JVoiceXmlImplementationPlatform
             // possesses it.
             if (!hungup && !closed && call.isBusy()) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug(
-                    "call control still busy. returning when queue is empty");
+                    LOGGER.debug("call control still busy. returning when queue is empty");
                 }
             } else {
                 final JVoiceXmlCallControl callControl = call;
@@ -534,12 +543,12 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("stopping externalRecognitionListener");
             externalRecognitionListener.stop();
         }
-        
+
         if (externalSynthesisListener != null) {
             LOGGER.debug("stopping externalSynthesisListener");
             externalSynthesisListener.stop();
         }
-        
+
         LOGGER.info("closing implementation platform");
         if (output != null) {
             if (!hungup) {
@@ -585,8 +594,7 @@ public final class JVoiceXmlImplementationPlatform
                     inputLock.wait(BUSY_WAIT_TIMEOUT);
                 } catch (InterruptedException e) {
                     if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug(
-                                "waiting for input not busy interrupted",
+                        LOGGER.debug("waiting for input not busy interrupted",
                                 e);
                     }
                     return;
@@ -608,7 +616,9 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * The user has started to speak.
-     * @param type the barge-in type
+     * 
+     * @param type
+     *            the barge-in type
      */
     private void inputStarted(final ModeType type) {
         if (timer != null) {
@@ -623,10 +633,10 @@ public final class JVoiceXmlImplementationPlatform
         /** @todo Check the bargein type. */
         if (LOGGER.isDebugEnabled()) {
             if (type == null) {
-                LOGGER.debug("speech started 'unknown mode':"
+                LOGGER.debug("input started 'unknown mode':"
                         + " stopping system output...");
             } else {
-                LOGGER.debug("speech started: '" + type.getMode()
+                LOGGER.debug("input started: '" + type.getMode()
                         + "' stopping system output...");
             }
         }
@@ -646,17 +656,18 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * The user made an utterance that matched an active grammar.
-     * @param result the accepted recognition result.
+     * 
+     * @param result
+     *            the accepted recognition result.
      */
     public void resultAccepted(final RecognitionResult result) {
-        LOGGER.info("accepted recognition '" + result.getUtterance()
-                + "'");
+        LOGGER.info("accepted recognition '" + result.getUtterance() + "'");
 
         if (eventbus != null) {
             result.setMark(markname);
 
-            final RecognitionEvent recognitionEvent =
-                    new RecognitionEvent(result);
+            final RecognitionEvent recognitionEvent = new RecognitionEvent(
+                    input.getSpokenInput(), session.getSessionID(), result);
             eventbus.publish(recognitionEvent);
         }
 
@@ -672,14 +683,17 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * The user made an utterance that did not match an active grammar.
-     * @param result the rejected recognition result.
+     * 
+     * @param result
+     *            the rejected recognition result.
      */
     public void resultRejected(final RecognitionResult result) {
         LOGGER.info("rejected recognition '" + result.getUtterance() + "'");
 
         if (eventbus != null) {
             result.setMark(markname);
-            final NomatchEvent noMatchEvent = new NomatchEvent();
+            final NomatchEvent noMatchEvent = new NomatchEvent(
+                    input.getSpokenInput(), session.getSessionID(), result);
             eventbus.publish(noMatchEvent);
         }
         if (externalRecognitionListener != null) {
@@ -692,18 +706,22 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * Retrieves a new {@link ExternalResource} from the pool.
-     * @param pool the resource pool.
-     * @param key key of the resource to retrieve.
-     * @param <T> type of the resource.
+     * 
+     * @param pool
+     *            the resource pool.
+     * @param key
+     *            key of the resource to retrieve.
+     * @param <T>
+     *            type of the resource.
      * @return obtained resource.
      * @throws NoresourceError
-     *         Error obtaining an instance from the pool.
-     *
+     *             Error obtaining an instance from the pool.
+     * 
      * @since 0.5.5
      */
     private <T extends ExternalResource> T getExternalResourceFromPool(
             final KeyedResourcePool<T> pool, final String key)
-        throws NoresourceError {
+            throws NoresourceError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("obtaining resource '" + key + "' from pool...");
         }
@@ -711,8 +729,7 @@ public final class JVoiceXmlImplementationPlatform
         final T resource = pool.borrowObject(key);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("connecting external resource ("
-                    + resource.getClass().getCanonicalName()
-                    + ").");
+                    + resource.getClass().getCanonicalName() + ").");
         }
         try {
             resource.connect(info);
@@ -722,8 +739,7 @@ public final class JVoiceXmlImplementationPlatform
             } catch (Exception e) {
                 LOGGER.error("error returning resource to pool", e);
             }
-            throw new NoresourceError("error connecting to resource",
-                    ioe);
+            throw new NoresourceError("error connecting to resource", ioe);
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...connected");
@@ -734,9 +750,13 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * Returns the audio file output resource to the pool.
-     * @param pool the pool to which to return the resource.
-     * @param resource the resource to return.
-     * @param <T> type of the resource.
+     * 
+     * @param pool
+     *            the pool to which to return the resource.
+     * @param resource
+     *            the resource to return.
+     * @param <T>
+     *            type of the resource.
      */
     private <T extends ExternalResource> void returnExternalResourceToPool(
             final KeyedResourcePool<T> pool, final T resource) {
@@ -744,8 +764,7 @@ public final class JVoiceXmlImplementationPlatform
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("returning external resource '" + type + "' ("
                     + resource.getClass().getCanonicalName() + ") to pool...");
-            LOGGER.debug(
-                "disconnecting external resource.");
+            LOGGER.debug("disconnecting external resource.");
         }
         resource.disconnect(info);
         if (LOGGER.isDebugEnabled()) {
@@ -765,44 +784,40 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
+    @Override
     public void inputStatusChanged(final SpokenInputEvent event) {
-        final int id = event.getEvent();
-        switch (id) {
-        case SpokenInputEvent.RECOGNITION_STARTED:
+        final String type = event.getEventType();
+        if (type.equals(InputStartedEvent.EVENT_TYPE)) {
             // Start the timer with a default timeout if there were no
             // prompts to queue.
-            final SpeakableText lastSpeakable =
-                    promptAccumulator.getLastSpeakableText();
+            final SpeakableText lastSpeakable = promptAccumulator
+                    .getLastSpeakableText();
             if (lastSpeakable == null) {
                 startTimer();
             }
-            break;
-        case SpokenInputEvent.RECOGNITION_STOPPED:
+        } else if (type.equals(RecognitionStoppedEvent.EVENT_TYPE)) {
             recognitionStopped();
-            break;
-        case SpokenInputEvent.INPUT_STARTED:
-            final ModeType type = (ModeType) event.getParam();
-            inputStarted(type);
-            break;
-        case SpokenInputEvent.RESULT_ACCEPTED:
-            final RecognitionResult acceptedResult =
-                (RecognitionResult) event.getParam();
-            resultAccepted(acceptedResult);
-            break;
-        case SpokenInputEvent.RESULT_REJECTED:
-            final RecognitionResult rejectedResult =
-                (RecognitionResult) event.getParam();
-            resultRejected(rejectedResult);
-            break;
-        default:
-            LOGGER.warn("unknown synthesized output event " + event);
-            break;
+        } else if (type.equals(InputStartedEvent.EVENT_TYPE)) {
+            final InputStartedEvent started = (InputStartedEvent) event;
+            final ModeType modeType = started.getMode();
+            inputStarted(modeType);
+        } else if (type.equals(RecognitionEvent.EVENT_TYPE)) {
+            final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
+            final RecognitionResult result = recognitionEvent.getRecognitionResult();
+            resultAccepted(result);
+        } else if (type.equals(NomatchEvent.EVENT_TYPE)) {
+            final NomatchEvent nomatch = (NomatchEvent) event;
+            final RecognitionResult result = nomatch.getRecognitionResult();
+            resultRejected(result);
+        } else {
+            LOGGER.warn("unknown spoken input event " + event);
         }
+        eventbus.publish(event);
     }
 
     /**
-     * Starts the <code>noinput</code> timer with the given timeout that
-     * has been collected by the {@link org.jvoicexml.PromptAccumulator}.
+     * Starts the <code>noinput</code> timer with the given timeout that has
+     * been collected by the {@link org.jvoicexml.PromptAccumulator}.
      */
     private synchronized void startTimer() {
         if (timer != null) {
@@ -891,26 +906,23 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
-            final OutputStartedEvent outputStartedEvent =
-                (OutputStartedEvent) event;
-            final SpeakableText startedSpeakable =
-                outputStartedEvent.getSpeakable();
+            final OutputStartedEvent outputStartedEvent = (OutputStartedEvent) event;
+            final SpeakableText startedSpeakable = outputStartedEvent
+                    .getSpeakable();
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("output started " + startedSpeakable);
             }
         } else if (event.isType(OutputEndedEvent.EVENT_TYPE)) {
-            final OutputEndedEvent outputEndedEvent =
-                (OutputEndedEvent) event;
-            final SpeakableText endedSpeakable =
-                outputEndedEvent.getSpeakable();
+            final OutputEndedEvent outputEndedEvent = (OutputEndedEvent) event;
+            final SpeakableText endedSpeakable = outputEndedEvent
+                    .getSpeakable();
             outputEnded(endedSpeakable);
         } else if (event.isType(QueueEmptyEvent.EVENT_TYPE)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("output queue is empty");
             }
         } else if (event.isType(MarkerReachedEvent.EVENT_TYPE)) {
-            final MarkerReachedEvent markReachedEvent =
-                (MarkerReachedEvent) event;
+            final MarkerReachedEvent markReachedEvent = (MarkerReachedEvent) event;
             markname = markReachedEvent.getMark();
             LOGGER.info("reached mark '" + markname + "'");
         } else {
@@ -924,7 +936,9 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * The output of the given speakable has ended.
-     * @param speakable the speakable.
+     * 
+     * @param speakable
+     *            the speakable.
      */
     private void outputEnded(final SpeakableText speakable) {
         if (LOGGER.isDebugEnabled()) {
@@ -959,8 +973,8 @@ public final class JVoiceXmlImplementationPlatform
         // Here we have only prompts which produces SSML.
         // If the platform is using JSAPI2,
         // this code must be commented.
-        final SpeakableText lastSpeakable =
-                promptAccumulator.getLastSpeakableText();
+        final SpeakableText lastSpeakable = promptAccumulator
+                .getLastSpeakableText();
         if (speakable.equals(lastSpeakable)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("reached last speakable. starting timer");
@@ -1002,13 +1016,14 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * Reports an error that happened while communicating with the user.
-     * @param error the error
+     * 
+     * @param error
+     *            the error
      * @since 0.7.4
      */
     private void reportError(final ErrorEvent error) {
         if (eventbus == null) {
-            LOGGER.warn(
-                    "no event observer. unable to propagate an error",
+            LOGGER.warn("no event observer. unable to propagate an error",
                     error);
             return;
         }
@@ -1038,7 +1053,7 @@ public final class JVoiceXmlImplementationPlatform
     public void renderPrompts(final String sessionId,
             final DocumentServer server, final CallControlProperties props)
             throws BadFetchError, NoresourceError,
-                ConnectionDisconnectHangupEvent {
+            ConnectionDisconnectHangupEvent {
         promptAccumulator.renderPrompts(sessionId, server, props);
     }
 }

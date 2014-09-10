@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,28 +26,32 @@
 
 package org.jvoicexml.event.plain.jvxml;
 
+import org.jvoicexml.event.PlainEvent;
+
 /**
  * Result of an <code>&lt;object&gt;</code> call..
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
-public final class ObjectTagResultEvent
-        extends AbstractInputEvent {
+public final class ObjectTagResultEvent extends PlainEvent
+        implements InputEvent {
     /** The serial version UID. */
     private static final long serialVersionUID = 7729582561750305473L;
 
     /** The detail message. */
-    public static final String EVENT_TYPE =
-        ObjectTagResultEvent.class.getName();
+    public static final String EVENT_TYPE = ObjectTagResultEvent.class
+            .getName();
 
     /** The result of the method call. */
     private final Object result;
 
     /**
      * Constructs a new object.
-     * @param methodResult result of the method call.
+     * 
+     * @param methodResult
+     *            result of the method call.
      */
     public ObjectTagResultEvent(final Object methodResult) {
         result = methodResult;

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,9 +43,11 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -56,18 +58,19 @@ import org.xml.sax.SAXException;
 
 /**
  * A spoken input implementation for the use of the Microsoft Kinect.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
 public final class KinectSpokenInput implements SpokenInput {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(KinectSpokenInput.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(KinectSpokenInput.class);
 
     /** Listener for user input events. */
     private final Collection<SpokenInputListener> listeners;
-    
+
     /** Type of the created resources. */
     private String type;
 
@@ -83,12 +86,14 @@ public final class KinectSpokenInput implements SpokenInput {
 
     /**
      * Sets the type.
-     * @param value new value for the type.
+     * 
+     * @param value
+     *            new value for the type.
      */
     public void setType(final String value) {
         type = value;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -106,19 +111,20 @@ public final class KinectSpokenInput implements SpokenInput {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("allocating kinect recognizer...");
         }
-//        try {
-//            recognizer.allocate();
-//        } catch (KinectRecognizerException e) {
-//            throw new NoresourceError(e.getMessage(), e);
-//        }
-//        if (LOGGER.isDebugEnabled()) {
-//            LOGGER.debug("...allocated kinect recognizer");
-//        }
+        // try {
+        // recognizer.allocate();
+        // } catch (KinectRecognizerException e) {
+        // throw new NoresourceError(e.getMessage(), e);
+        // }
+        // if (LOGGER.isDebugEnabled()) {
+        // LOGGER.debug("...allocated kinect recognizer");
+        // }
     }
 
     /**
      * Checks if this spoken input has been opened.
-     * @return <code>true</code> if the spoken input has been opened. 
+     * 
+     * @return <code>true</code> if the spoken input has been opened.
      */
     boolean isOpen() {
         return recognizer != null;
@@ -129,21 +135,22 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void activate() throws NoresourceError {
-//        if (LOGGER.isDebugEnabled()) {
-//            LOGGER.debug("allocating kinect recognizer...");
-//        }
-//        try {
-//            recognizer.allocate();
-//        } catch (KinectRecognizerException e) {
-//            throw new NoresourceError(e.getMessage(), e);
-//        }
-//        if (LOGGER.isDebugEnabled()) {
-//            LOGGER.debug("...allocated kinect recognizer");
-//        }
+        // if (LOGGER.isDebugEnabled()) {
+        // LOGGER.debug("allocating kinect recognizer...");
+        // }
+        // try {
+        // recognizer.allocate();
+        // } catch (KinectRecognizerException e) {
+        // throw new NoresourceError(e.getMessage(), e);
+        // }
+        // if (LOGGER.isDebugEnabled()) {
+        // LOGGER.debug("...allocated kinect recognizer");
+        // }
     }
 
     /**
      * Checks if the spoken input has been allocated.
+     * 
      * @return <code>true</code> if the recognizer is allocated
      */
     boolean isActivated() {
@@ -155,17 +162,17 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void passivate() throws NoresourceError {
-//        if (LOGGER.isDebugEnabled()) {
-//            LOGGER.debug("deallocating kinect recognizer...");
-//        }
-//        try {
-//            recognizer.deallocate();
-//        } catch (KinectRecognizerException e) {
-//            throw new NoresourceError(e.getMessage(), e);
-//        }
-//        if (LOGGER.isDebugEnabled()) {
-//            LOGGER.debug("...deallocated kinect recognizer");
-//        }
+        // if (LOGGER.isDebugEnabled()) {
+        // LOGGER.debug("deallocating kinect recognizer...");
+        // }
+        // try {
+        // recognizer.deallocate();
+        // } catch (KinectRecognizerException e) {
+        // throw new NoresourceError(e.getMessage(), e);
+        // }
+        // if (LOGGER.isDebugEnabled()) {
+        // LOGGER.debug("...deallocated kinect recognizer");
+        // }
     }
 
     /**
@@ -173,17 +180,17 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void close() {
-//        if (LOGGER.isDebugEnabled()) {
-//            LOGGER.debug("deallocating kinect recognizer...");
-//        }
-//        try {
-//            recognizer.deallocate();
-//        } catch (KinectRecognizerException e) {
-////            throw new NoresourceError(e.getMessage(), e);
-//        }
-//        if (LOGGER.isDebugEnabled()) {
-//            LOGGER.debug("...deallocated kinect recognizer");
-//        }
+        // if (LOGGER.isDebugEnabled()) {
+        // LOGGER.debug("deallocating kinect recognizer...");
+        // }
+        // try {
+        // recognizer.deallocate();
+        // } catch (KinectRecognizerException e) {
+        // // throw new NoresourceError(e.getMessage(), e);
+        // }
+        // if (LOGGER.isDebugEnabled()) {
+        // LOGGER.debug("...deallocated kinect recognizer");
+        // }
         recognizer = null;
     }
 
@@ -223,8 +230,7 @@ public final class KinectSpokenInput implements SpokenInput {
         }
         recognizer.startRecognition();
 
-        final SpokenInputEvent event =
-                new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
+        final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
         fireInputEvent(event);
         LOGGER.info("kinect recognition started");
     }
@@ -240,8 +246,8 @@ public final class KinectSpokenInput implements SpokenInput {
         } catch (KinectRecognizerException e) {
             LOGGER.warn(e.getMessage(), e);
         } finally {
-            final SpokenInputEvent event = new SpokenInputEvent(this,
-                            SpokenInputEvent.RECOGNITION_STOPPED);
+            final SpokenInputEvent event = new RecognitionStoppedEvent(this,
+                    null);
             fireInputEvent(event);
         }
     }
@@ -303,8 +309,7 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        final Collection<GrammarType> types =
-                new java.util.ArrayList<GrammarType>();
+        final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
         types.add(GrammarType.SRGS_XML);
         return types;
     }
@@ -338,8 +343,7 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public Collection<BargeInType> getSupportedBargeInTypes() {
-        final Collection<BargeInType> types =
-                new java.util.ArrayList<BargeInType>();
+        final Collection<BargeInType> types = new java.util.ArrayList<BargeInType>();
 
         types.add(BargeInType.SPEECH);
         types.add(BargeInType.HOTWORD);
@@ -349,13 +353,14 @@ public final class KinectSpokenInput implements SpokenInput {
 
     /**
      * Notifies all registered listeners about the given event.
-     * @param event the event.
+     * 
+     * @param event
+     *            the event.
      * @since 0.6
      */
     void fireInputEvent(final SpokenInputEvent event) {
         synchronized (listeners) {
-            final Collection<SpokenInputListener> copy =
-                new java.util.ArrayList<SpokenInputListener>();
+            final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listeners);
             for (SpokenInputListener current : copy) {
                 current.inputStatusChanged(event);
@@ -365,13 +370,14 @@ public final class KinectSpokenInput implements SpokenInput {
 
     /**
      * Notifies all registered listeners about the given error.
-     * @param error the error.
+     * 
+     * @param error
+     *            the error.
      * @since 0.6
      */
     void notifyError(final ErrorEvent error) {
         synchronized (listeners) {
-            final Collection<SpokenInputListener> copy =
-                new java.util.ArrayList<SpokenInputListener>();
+            final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listeners);
             for (SpokenInputListener current : copy) {
                 current.inputError(error);

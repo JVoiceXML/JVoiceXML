@@ -117,8 +117,8 @@ public final class SimpleMmiDemo {
         final URI target = new URI("http://localhost:9090");
         start.setContext(context);
         start.setRequestId(Integer.toString(requestId));
-        final File file = new File("simpleexample.vxml");
-//        final File file = new File("simpleexample-de.vxml");
+//        final File file = new File("simpleexample.vxml");
+        final File file = new File("simpleexample-de.vxml");
         final URI example = file.toURI();
         start.setContentURL(example);
         final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);

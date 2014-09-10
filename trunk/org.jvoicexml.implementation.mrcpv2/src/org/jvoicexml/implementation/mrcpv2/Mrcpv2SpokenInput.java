@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -46,13 +46,17 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.event.plain.implementation.InputStartedEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.DocumentGrammarImplementation;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.mrcp4j.client.MrcpInvocationException;
 import org.mrcp4j.message.header.IllegalValueException;
@@ -64,12 +68,12 @@ import org.speechforge.cairo.client.recog.RecognitionResult;
 
 /**
  * Audio input that uses a mrcpv2 client to use a recognition resource.
- *
+ * 
  * <p>
  * Handle all MRCPv2 calls to the recognizer to make MRCPv2 transparent to the
  * interpreter.
  * </p>
- *
+ * 
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -87,16 +91,16 @@ public final class Mrcpv2SpokenInput
     /** The port that will receive the stream from mrcp server. **/
     private int rtpReceiverPort;
 
-    // TODO Workaround for JMF.  Even though only sending audio,
+    // TODO Workaround for JMF. Even though only sending audio,
     // JMF rtp setup needs a local rtp port too.
     // Really should not be needed.
 
     /** The local host address. */
     private String hostAddress;
-    
+
     private String remoteRtpHost;
     private int remoteRtpPort;
-    
+
     /** Listener for user input events. */
     private final Collection<SpokenInputListener> listeners;
 
@@ -105,15 +109,15 @@ public final class Mrcpv2SpokenInput
     // TODO Handle load and activate grammars properly on the server. At
     // present the mrcpv2 server does not support it. So just saving the grammar
     // to be passed to the server with the recognize request. Should work OK for
-    // now for recognize request with a single grammar.  
-    
-    //TODO Handle multiple grammars, now just the last one activated is active.
+    // now for recognize request with a single grammar.
+
+    // TODO Handle multiple grammars, now just the last one activated is active.
     private GrammarDocument activatedGrammar;
     private int numActiveGrammars;
 
     /** The session manager. */
     private SessionManager sessionManager;
-   
+
     /** The ASR client. */
     private SpeechClient speechClient;
 
@@ -129,8 +133,8 @@ public final class Mrcpv2SpokenInput
      */
     public void open() throws NoresourceError {
         LOGGER.info("Opening mrcpv2 spoken input.");
-        //get the local host address (used for rtp audio stream)
-        //TODO Maybe the receiver (call control) could be remote -- then this
+        // get the local host address (used for rtp audio stream)
+        // TODO Maybe the receiver (call control) could be remote -- then this
         // wont work.
         try {
             InetAddress addr = InetAddress.getLocalHost();
@@ -169,8 +173,7 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     public Collection<BargeInType> getSupportedBargeInTypes() {
-        final Collection<BargeInType> types =
-            new java.util.ArrayList<BargeInType>();
+        final Collection<BargeInType> types = new java.util.ArrayList<BargeInType>();
 
         types.add(BargeInType.SPEECH);
         types.add(BargeInType.HOTWORD);
@@ -197,14 +200,13 @@ public final class Mrcpv2SpokenInput
                 if (num >= 0) {
                     str.append(buffer, 0, num);
                 }
-            } while(num >= 0);
+            } while (num >= 0);
         } catch (java.io.IOException ioe) {
             throw new BadFetchError(ioe);
         }
         final String encoding = System.getProperty("file.encoding");
-        final GrammarDocument document =
-            new ExternalGrammarDocument(null, str.toString().getBytes(),
-                    encoding, true);
+        final GrammarDocument document = new ExternalGrammarDocument(null, str
+                .toString().getBytes(), encoding, true);
         document.setMediaType(type);
         return new DocumentGrammarImplementation(document);
     }
@@ -221,8 +223,7 @@ public final class Mrcpv2SpokenInput
                 LOGGER.warn("SRGS not yet supported in mrcpv2 implementation");
             }
             if (current instanceof DocumentGrammarImplementation) {
-                final DocumentGrammarImplementation grammar =
-                    (DocumentGrammarImplementation) current;
+                final DocumentGrammarImplementation grammar = (DocumentGrammarImplementation) current;
                 activatedGrammar = grammar.getGrammar();
                 numActiveGrammars = 1;
             }
@@ -240,12 +241,11 @@ public final class Mrcpv2SpokenInput
                 LOGGER.warn("SRGS not yet supported in mrcpv2 implementation");
             }
             if (current instanceof DocumentGrammarImplementation) {
-                final DocumentGrammarImplementation grammar =
-                    (DocumentGrammarImplementation) current;
+                final DocumentGrammarImplementation grammar = (DocumentGrammarImplementation) current;
                 if (grammar.getGrammar().equals(activatedGrammar)) {
                     numActiveGrammars = 0;
                 }
-                
+
             }
         }
     }
@@ -254,10 +254,9 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     @Override
-    public void startRecognition(
-            final SpeechRecognizerProperties speech,
-            final DtmfRecognizerProperties dtmf)
-        throws NoresourceError, BadFetchError {
+    public void startRecognition(final SpeechRecognizerProperties speech,
+            final DtmfRecognizerProperties dtmf) throws NoresourceError,
+            BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("starting recognition...");
         }
@@ -265,15 +264,17 @@ public final class Mrcpv2SpokenInput
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.warn("No active grammars");
             }
-            throw new NoresourceError("No Active Grammars");   
+            throw new NoresourceError("No Active Grammars");
         }
         try {
 
             long noInputTimeout = 0;
             boolean hotword = false;
             boolean attachGrammar = true;
-            //todo: add a method in speechclient to take a string (rather than constructing readers on the fly to match the API).
-            speechClient.recognize(new StringReader(activatedGrammar.getDocument()), hotword, 
+            // todo: add a method in speechclient to take a string (rather than
+            // constructing readers on the fly to match the API).
+            speechClient.recognize(
+                    new StringReader(activatedGrammar.getDocument()), hotword,
                     attachGrammar, noInputTimeout);
         } catch (MrcpInvocationException e) {
             if (LOGGER.isDebugEnabled()) {
@@ -308,8 +309,7 @@ public final class Mrcpv2SpokenInput
             throw new NoresourceError(e);
         }
 
-        final SpokenInputEvent event = new SpokenInputEvent(this,
-                SpokenInputEvent.RECOGNITION_STARTED);
+        final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
         fireInputEvent(event);
     }
 
@@ -360,8 +360,7 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     public void connect(final ConnectionInformation client) throws IOException {
-        final Mrcpv2ConnectionInformation mrcpv2Client =
-                (Mrcpv2ConnectionInformation) client;
+        final Mrcpv2ConnectionInformation mrcpv2Client = (Mrcpv2ConnectionInformation) client;
         LOGGER.info("connecting to '" + mrcpv2Client + "'");
 
         if (mrcpv2Client.getAsrClient() != null) {
@@ -383,28 +382,19 @@ public final class Mrcpv2SpokenInput
             speechClient.removeListener(this);
             speechClient = null;
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(
-                "Disconnected the spoken input mrcpv2 client form the server");
+                LOGGER.debug("Disconnected the spoken input mrcpv2 client form the server");
             }
             return;
         }
 
-        //TODO not sure we should shut it down... can it be used later by
-        // another object?  commented it out for now.
+        // TODO not sure we should shut it down... can it be used later by
+        // another object? commented it out for now.
         /*
-        try {
-            speechClient.shutdown();
-        } catch (MrcpInvocationException e) {
-            LOGGER.info(e, e);
-        } catch (IOException e) {
-            LOGGER.info(e, e);
-        } catch (InterruptedException e) {
-            LOGGER.info(e, e);
-        } finally {
-            speechClient = null;
-        }
-        */
-        
+         * try { speechClient.shutdown(); } catch (MrcpInvocationException e) {
+         * LOGGER.info(e, e); } catch (IOException e) { LOGGER.info(e, e); }
+         * catch (InterruptedException e) { LOGGER.info(e, e); } finally {
+         * speechClient = null; }
+         */
 
     }
 
@@ -419,8 +409,7 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        final Collection<GrammarType> types =
-            new java.util.ArrayList<GrammarType>();
+        final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
         types.add(GrammarType.JSGF);
 
         return types;
@@ -457,8 +446,7 @@ public final class Mrcpv2SpokenInput
      */
     void fireInputEvent(final SpokenInputEvent event) {
         synchronized (listeners) {
-            final Collection<SpokenInputListener> copy =
-                new java.util.ArrayList<SpokenInputListener>();
+            final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listeners);
             for (SpokenInputListener current : copy) {
                 current.inputStatusChanged(event);
@@ -475,7 +463,7 @@ public final class Mrcpv2SpokenInput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Recognition event received: " + event);
         }
-        
+
         if (event == SpeechEventType.START_OF_INPUT) {
             try {
                 speechClient.sendBargeinRequest();
@@ -489,20 +477,20 @@ public final class Mrcpv2SpokenInput
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            
-            final SpokenInputEvent spokenInputEvent = new SpokenInputEvent(this,
-                    SpokenInputEvent.INPUT_STARTED);
+
+            final SpokenInputEvent spokenInputEvent = new InputStartedEvent(
+                    this, null, ModeType.VOICE);
             fireInputEvent(spokenInputEvent);
-        
+
         } else if (event == SpeechEventType.RECOGNITION_COMPLETE) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Recognition results are: " + result.getText());
             }
-            final org.jvoicexml.RecognitionResult recognitionResult =
-                new Mrcpv2RecognitionResult(result);
+            final org.jvoicexml.RecognitionResult recognitionResult = new Mrcpv2RecognitionResult(
+                    result);
 
-            final SpokenInputEvent spokenInputEvent = new SpokenInputEvent(this,
-                    SpokenInputEvent.RESULT_ACCEPTED, recognitionResult);
+            final SpokenInputEvent spokenInputEvent = new RecognitionEvent(
+                    this, null, recognitionResult);
             fireInputEvent(spokenInputEvent);
         }
     }
@@ -535,7 +523,9 @@ public final class Mrcpv2SpokenInput
 
     /**
      * Sets the RTP receiver port.
-     * @param port the rtpReceiverPort to set
+     * 
+     * @param port
+     *            the rtpReceiverPort to set
      */
     public void setRtpReceiverPort(final int port) {
         rtpReceiverPort = port;
@@ -543,6 +533,7 @@ public final class Mrcpv2SpokenInput
 
     /**
      * Retrieves the session manager.
+     * 
      * @return the sessionManager
      */
     public SessionManager getSessionManager() {
@@ -551,7 +542,9 @@ public final class Mrcpv2SpokenInput
 
     /**
      * Sets the session manager.
-     * @param manager the sessionManager to set
+     * 
+     * @param manager
+     *            the sessionManager to set
      */
     public void setSessionManager(final SessionManager manager) {
         sessionManager = manager;
