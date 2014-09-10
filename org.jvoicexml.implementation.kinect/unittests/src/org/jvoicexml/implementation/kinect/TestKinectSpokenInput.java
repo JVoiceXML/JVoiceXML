@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,22 +30,26 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.implementation.SpokenInputEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.mock.implementation.MockSpokenInputListener;
 
 /**
  * Tests for {@link KinectSpokenInput}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
 public class TestKinectSpokenInput {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(TestKinectRecognizer.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(TestKinectRecognizer.class);
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.kinect.KinectSpokenInput#getType()}.
+     * Test method for
+     * {@link org.jvoicexml.implementation.kinect.KinectSpokenInput#getType()}.
      */
     @Test
     public void testGetType() {
@@ -55,8 +59,11 @@ public class TestKinectSpokenInput {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.kinect.KinectSpokenInput#open()}.
-     * @throws JVoiceXMLEvent test failed
+     * Test method for
+     * {@link org.jvoicexml.implementation.kinect.KinectSpokenInput#open()}.
+     * 
+     * @throws JVoiceXMLEvent
+     *             test failed
      */
     @Test
     public void testOpen() throws JVoiceXMLEvent {
@@ -66,8 +73,11 @@ public class TestKinectSpokenInput {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.kinect.KinectSpokenInput#activate()}.
-     * @throws JVoiceXMLEvent test failed
+     * Test method for
+     * {@link org.jvoicexml.implementation.kinect.KinectSpokenInput#activate()}.
+     * 
+     * @throws JVoiceXMLEvent
+     *             test failed
      */
     @Test
     public void testActivate() throws JVoiceXMLEvent {
@@ -80,15 +90,19 @@ public class TestKinectSpokenInput {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.kinect.KinectSpokenInput#startRecognition(org.jvoicexml.SpeechRecognizerProperties, org.jvoicexml.DtmfRecognizerProperties)}.
-     * @throws JVoiceXMLEvent test failed
-     * @throws Exception test failed
+     * Test method for
+     * {@link org.jvoicexml.implementation.kinect.KinectSpokenInput#startRecognition(org.jvoicexml.SpeechRecognizerProperties, org.jvoicexml.DtmfRecognizerProperties)}
+     * .
+     * 
+     * @throws JVoiceXMLEvent
+     *             test failed
+     * @throws Exception
+     *             test failed
      */
     @Test
     public void testStartRecognition() throws JVoiceXMLEvent, Exception {
         final KinectSpokenInput input = new KinectSpokenInput();
-        final MockSpokenInputListener listener =
-                new MockSpokenInputListener();
+        final MockSpokenInputListener listener = new MockSpokenInputListener();
         input.addListener(listener);
         input.open();
         input.activate();
@@ -96,34 +110,36 @@ public class TestKinectSpokenInput {
         Assert.assertTrue(input.isBusy());
         listener.waitSize(1, 10000);
         final SpokenInputEvent event1 = listener.get(0);
-        final int type1 = event1.getEvent();
-        Assert.assertEquals(SpokenInputEvent.RECOGNITION_STARTED, type1);
+        Assert.assertEquals(RecognitionStartedEvent.EVENT_TYPE,
+                event1.getEventType());
         LOGGER.info("Say something!");
         listener.waitSize(2, 10000);
         final SpokenInputEvent event2 = listener.get(1);
-        final int type2 = event2.getEvent();
-        Assert.assertEquals(SpokenInputEvent.RESULT_ACCEPTED, type2);
+        Assert.assertEquals(RecognitionEvent.EVENT_TYPE, event2.getEventType());
         input.passivate();
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.kinect.KinectSpokenInput#stopRecognition()}.
-     * @throws JVoiceXMLEvent test failed
-     * @throws Exception test failed
+     * Test method for
+     * {@link org.jvoicexml.implementation.kinect.KinectSpokenInput#stopRecognition()}
+     * .
+     * 
+     * @throws JVoiceXMLEvent
+     *             test failed
+     * @throws Exception
+     *             test failed
      */
     @Test
     public void testStopRecognition() throws Exception, JVoiceXMLEvent {
         final KinectSpokenInput input = new KinectSpokenInput();
-        final MockSpokenInputListener listener =
-                new MockSpokenInputListener();
+        final MockSpokenInputListener listener = new MockSpokenInputListener();
         input.addListener(listener);
         input.open();
         input.activate();
         input.startRecognition(null, null);
         listener.waitSize(1, 10000);
         final SpokenInputEvent event1 = listener.get(0);
-        final int type1 = event1.getEvent();
-        Assert.assertEquals(SpokenInputEvent.RECOGNITION_STARTED, type1);
+        Assert.assertEquals(RecognitionEvent.EVENT_TYPE, event1.getEventType());
         LOGGER.info("Say nothing");
         Thread.sleep(5000);
         input.stopRecognition();

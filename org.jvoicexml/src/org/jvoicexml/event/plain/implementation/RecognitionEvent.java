@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,41 +24,44 @@
  *
  */
 
-package org.jvoicexml.event.plain.jvxml;
+package org.jvoicexml.event.plain.implementation;
 
-import org.jvoicexml.event.PlainEvent;
-
+import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.event.plain.jvxml.InputEvent;
+import org.jvoicexml.implementation.SpokenInput;
 
 /**
- * The call has been successfully transferred.
+ * The user has responded within the timeout interval.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.7
  */
-public final class TransferEvent
-        extends PlainEvent implements InputEvent {
-    /** The serial version UID. */
-    private static final long serialVersionUID = 7831901217953453756L;
+@SuppressWarnings("serial")
+public final class RecognitionEvent
+        extends SpokenInputEvent implements InputEvent {
 
-    /** The detail message. */
-    public static final String EVENT_TYPE = TransferEvent.class.getName();
+    /** The unsupported element. */
+    public static final String DETAIL = "accepted";
 
-    /** Destination of the transfer. */
-    private final String destination;
-
-    /** Result of the call. */
-    private final String result;
+    /** The result of the recognition process. */
+    private final RecognitionResult result;
 
     /**
      * Constructs a new event with the event type as its detail message. The
      * cause is not initialized.
-     * @param uri destination of the transfer.
-     * @param callResult result of the call.
+     *
+     * @param recognitionResult
+     *        Result of the recognition process.
      */
-    public TransferEvent(final String uri, final String callResult) {
-        destination = uri;
-        result = callResult;
+    public RecognitionEvent(final SpokenInput input,
+            final String sessionId, final RecognitionResult recognitionResult) {
+        super(input, sessionId, DETAIL);
+
+        if (recognitionResult == null) {
+            throw new IllegalArgumentException(
+                    "recognition result must not be null!");
+        }
+        result = recognitionResult;
     }
 
     /**
@@ -70,11 +73,12 @@ public final class TransferEvent
     }
 
     /**
-     * Retrieves the destination of the transfer.
-     * @return destination of the transfer.
+     * Retrieves the result of the recognition process.
+     *
+     * @return RecognitionResult
      */
-    public String getDestination() {
-        return destination;
+    public RecognitionResult getRecognitionResult() {
+        return result;
     }
 
     /**

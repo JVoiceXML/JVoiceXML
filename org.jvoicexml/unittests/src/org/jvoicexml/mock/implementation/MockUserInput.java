@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -54,18 +54,16 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * This class provides a dummy implementation of a {@link UserInput} for
- * testing purposes.
- *
+ * This class provides a dummy implementation of a {@link UserInput} for testing
+ * purposes.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
-public class MockUserInput
-        implements UserInput {
+public class MockUserInput implements UserInput {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(MockUserInput.class);
+    private static final Logger LOGGER = Logger.getLogger(MockUserInput.class);
 
     /** Supported grammar types of this user input. */
     private static final Collection<GrammarType> SUPPORTED_GRAMMAR_TYPES;
@@ -97,7 +95,9 @@ public class MockUserInput
 
     /**
      * Constructs a new object.
-     * @param spokenInput the encapsulated spoken input.
+     * 
+     * @param spokenInput
+     *            the encapsulated spoken input.
      */
     public MockUserInput(final SpokenInput spokenInput) {
         input = spokenInput;
@@ -115,8 +115,7 @@ public class MockUserInput
      * {@inheritDoc}
      */
     @Override
-    public void activateGrammars(
-            final Collection<GrammarDocument> grammars)
+    public void activateGrammars(final Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
         if (activeGrammars.addAll(grammars)) {
             for (GrammarDocument document : grammars) {
@@ -133,8 +132,7 @@ public class MockUserInput
      * {@inheritDoc}
      */
     @Override
-    public void deactivateGrammars(
-            final Collection<GrammarDocument> grammars)
+    public void deactivateGrammars(final Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError {
         for (GrammarDocument document : activeGrammars) {
             LOGGER.info("deactivate: " + document + ", " + document.hashCode());
@@ -152,12 +150,14 @@ public class MockUserInput
 
     /**
      * Retrieves all active grammars.
+     * 
      * @return all active grammars
      * @since 0.7.6
      */
     public Collection<GrammarDocument> getActiveGrammars() {
         return activeGrammars;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -167,7 +167,9 @@ public class MockUserInput
 
     /**
      * Adds the given grammar type to the list of supported grammar types.
-     * @param type type to add
+     * 
+     * @param type
+     *            type to add
      * @since 0.7
      */
     public void addSupportedGrammarType(final GrammarType type) {
@@ -179,34 +181,31 @@ public class MockUserInput
     /**
      * {@inheritDoc}
      */
-    public Collection<GrammarType> getSupportedGrammarTypes(
-            final ModeType type) {
+    public Collection<GrammarType> getSupportedGrammarTypes(final ModeType type) {
         return SUPPORTED_GRAMMAR_TYPES;
     }
 
     /**
      * Can be used to handle loading of special grammar types.
+     * 
      * @param reader
      * @param type
      * @return
      * @throws NoresourceError
      * @throws BadFetchError
      */
-    protected GrammarImplementation<?> handleLoadGrammar(
-            final Reader reader, final GrammarType type)
-            throws NoresourceError, BadFetchError {
+    protected GrammarImplementation<?> handleLoadGrammar(final Reader reader,
+            final GrammarType type) throws NoresourceError, BadFetchError {
         return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<?> loadGrammar(
-            final Reader reader, final GrammarType type)
-            throws NoresourceError, BadFetchError,
+    public GrammarImplementation<?> loadGrammar(final Reader reader,
+            final GrammarType type) throws NoresourceError, BadFetchError,
             UnsupportedFormatError {
-        final GrammarImplementation<?> impl =
-            handleLoadGrammar(reader, type);
+        final GrammarImplementation<?> impl = handleLoadGrammar(reader, type);
         if (impl != null) {
             return impl;
         }
@@ -217,7 +216,7 @@ public class MockUserInput
             try {
                 doc = new SrgsXmlDocument(inputSource);
             } catch (ParserConfigurationException e) {
-               throw new BadFetchError(e.getMessage(), e);
+                throw new BadFetchError(e.getMessage(), e);
             } catch (SAXException e) {
                 throw new BadFetchError(e.getMessage(), e);
             } catch (IOException e) {
@@ -233,7 +232,7 @@ public class MockUserInput
      * {@inheritDoc}
      */
     public GrammarImplementation<?> newGrammar(final GrammarType type)
-        throws NoresourceError, UnsupportedFormatError {
+            throws NoresourceError, UnsupportedFormatError {
         if (type == GrammarType.SRGS_XML) {
             return new SrgsXmlGrammarImplementation(null);
         }
@@ -283,8 +282,8 @@ public class MockUserInput
      */
     @Override
     public void startRecognition(final SpeechRecognizerProperties speech,
-            final DtmfRecognizerProperties dtmf)
-        throws NoresourceError, BadFetchError {
+            final DtmfRecognizerProperties dtmf) throws NoresourceError,
+            BadFetchError {
         recognitionStarted = true;
         synchronized (recognitionStartedLock) {
             recognitionStartedLock.notifyAll();
@@ -293,19 +292,24 @@ public class MockUserInput
 
     /**
      * Delays until the recognition process hass started.
+     * 
      * @throws InterruptedException
-     *         error waiting
+     *             error waiting
      * 
      * @since 0.7.6
      */
     public void waitRecognitionStarted() throws InterruptedException {
         synchronized (recognitionStartedLock) {
+            if (recognitionStarted) {
+                return;
+            }
             recognitionStartedLock.wait();
         }
     }
 
     /**
      * Check if the recognition has been started.
+     * 
      * @return <code>true</code> if the recognition has been started.
      */
     public boolean isRecognitionStarted() {

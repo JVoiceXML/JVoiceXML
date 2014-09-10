@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,8 +30,8 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.event.plain.NomatchEvent;
-import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.NomatchEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -44,14 +44,14 @@ import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
 /**
  * Strategy to process a recognition event coming from the implementation
  * platform.
- *
+ * 
  * <p>
- * A {@link InputItemRecognitionEventStrategy} may be responsible to handle events
- * for an input item.
- * Grammars specified within an input item produce a field-level result which
- * may fill only the particular input item in which they are contained. 
+ * A {@link InputItemRecognitionEventStrategy} may be responsible to handle
+ * events for an input item. Grammars specified within an input item produce a
+ * field-level result which may fill only the particular input item in which
+ * they are contained.
  * </p>
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.2
@@ -61,8 +61,8 @@ final class InputItemRecognitionEventStrategy
         extends AbstractInputItemEventStrategy<FieldFormItem>
         implements EventStrategyPrototype {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(InputItemRecognitionEventStrategy.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(InputItemRecognitionEventStrategy.class);
 
     /**
      * Constructs a new object.
@@ -72,44 +72,41 @@ final class InputItemRecognitionEventStrategy
 
     /**
      * Constructs a new object.
-     *
+     * 
      * @param ctx
-     *        The VoiceXML interpreter context.
+     *            The VoiceXML interpreter context.
      * @param interpreter
-     *        The VoiceXML interpreter.
+     *            The VoiceXML interpreter.
      * @param algorithm
-     *        The FIA.
+     *            The FIA.
      * @param formItem
-     *        The current form item.
+     *            The current form item.
      */
     public InputItemRecognitionEventStrategy(
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm algorithm,
-            final FormItem formItem) {
+            final FormInterpretationAlgorithm algorithm, final FormItem formItem) {
         super(ctx, interpreter, algorithm, formItem,
                 RecognitionEvent.EVENT_TYPE);
     }
 
     /**
      * Sets the result in the application shadow variable.
-     * @param result the current recognition result.
+     * 
+     * @param result
+     *            the current recognition result.
      * @throws SemanticError
-     *         Error creating the shadow variable.
+     *             Error creating the shadow variable.
      * @since 0.6
      */
     private void setApplicationLastResult(final RecognitionResult result)
-        throws SemanticError {
-        final VoiceXmlInterpreterContext context =
-            getVoiceXmlInterpreterContext();
+            throws SemanticError {
+        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
         final ScriptingEngine scripting = context.getScriptingEngine();
-        if (scripting.isVariableDefined(
-                ApplicationShadowVarContainer.VARIABLE_NAME)) {
-            final ApplicationShadowVarContainer application =
-                (ApplicationShadowVarContainer)
-                scripting.eval(ApplicationShadowVarContainer.VARIABLE_NAME
-                        + ";");
-
+        if (scripting
+                .isVariableDefined(ApplicationShadowVarContainer.VARIABLE_NAME)) {
+            final ApplicationShadowVarContainer application = (ApplicationShadowVarContainer) scripting
+                    .eval(ApplicationShadowVarContainer.VARIABLE_NAME + ";");
             application.setRecognitionResult(result);
         }
     }
@@ -121,35 +118,34 @@ final class InputItemRecognitionEventStrategy
     protected boolean handleEvent(final FieldFormItem field,
             final JVoiceXMLEvent event) throws JVoiceXMLEvent {
         final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
-        final RecognitionResult result =
-                recognitionEvent.getRecognitionResult();
+        final RecognitionResult result = recognitionEvent
+                .getRecognitionResult();
 
         setApplicationLastResult(result);
-        
+
         // Check if a (correct) confidencelevel was specified.
         // If there was no confidencelevel set, refer to the default of 0.5
         // see http://www.w3.org/TR/voicexml20/#dml6.3.2
         final VoiceXmlInterpreterContext ctx = getVoiceXmlInterpreterContext();
-        final String confidencelevel = ctx.getProperty("confidencelevel",
-                "0.5");
+        final String confidencelevel = ctx
+                .getProperty("confidencelevel", "0.5");
         float level;
         try {
             level = Float.parseFloat(confidencelevel);
         } catch (Exception e) {
-            throw new SemanticError(
-                    "The <property>'s confidencelevel '" + confidencelevel
-                    + "'could not be parsed.", e);
+            throw new SemanticError("The <property>'s confidencelevel '"
+                    + confidencelevel + "'could not be parsed.", e);
         }
         if (result.getConfidence() < level) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("result not accepted: "
-                                + "confidence was too low: "
-                                + "expected: " + level + ", "
-                                + "actual: " + result.getConfidence());
+                        + "confidence was too low: " + "expected: " + level
+                        + ", " + "actual: " + result.getConfidence());
             }
-            throw new NomatchEvent();
+            throw new NomatchEvent(recognitionEvent.getSource(),
+                    recognitionEvent.getSessionId(), result);
         }
-        
+
         if (!result.isAccepted()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("result not accepted");
@@ -157,7 +153,7 @@ final class InputItemRecognitionEventStrategy
 
             return false;
         }
-        
+
         final String markname = result.getMark();
         if (markname != null) {
             field.setMarkname(markname);
@@ -170,11 +166,9 @@ final class InputItemRecognitionEventStrategy
      * {@inheritDoc}
      */
     @Override
-    public EventStrategy newInstance(
-            final VoiceXmlInterpreterContext ctx,
+    public EventStrategy newInstance(final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia,
-            final FormItem item) {
+            final FormInterpretationAlgorithm fia, final FormItem item) {
         return new InputItemRecognitionEventStrategy(ctx, interpreter, fia,
                 item);
     }

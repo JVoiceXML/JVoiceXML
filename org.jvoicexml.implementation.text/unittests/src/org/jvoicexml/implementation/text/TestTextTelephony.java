@@ -29,6 +29,7 @@ package org.jvoicexml.implementation.text;
 import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.UUID;
+
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.After;
@@ -41,15 +42,11 @@ import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
-import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
-import org.jvoicexml.xml.srgs.Grammar;
-import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -212,9 +209,10 @@ public final class TestTextTelephony
      * {@inheritDoc}
      */
     public void inputStatusChanged(final SpokenInputEvent event) {
-        final int id = event.getEvent();
-        if (id == SpokenInputEvent.RESULT_ACCEPTED) {
-            receivedResult = (TextRecognitionResult) event.getParam();
+        final String type = event.getEventType();
+        if (type.equals(RecognitionEvent.EVENT_TYPE)) {
+            final RecognitionEvent recEvent = (RecognitionEvent) event;
+            receivedResult = (TextRecognitionResult) recEvent.getRecognitionResult();
             synchronized (lock) {
                 lock.notifyAll();
             }

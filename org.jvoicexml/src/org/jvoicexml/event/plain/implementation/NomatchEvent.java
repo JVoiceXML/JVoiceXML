@@ -1,12 +1,13 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
+ * File:    $RCSfile: NomatchEvent.java,v $
+ * Version: $Revision$
  * Date:    $Date$
- * Author:  $LastChangedBy$
+ * Author:  $Author$
+ * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,41 +25,37 @@
  *
  */
 
-package org.jvoicexml.event.plain.jvxml;
+package org.jvoicexml.event.plain.implementation;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.event.plain.jvxml.InputEvent;
+import org.jvoicexml.implementation.SpokenInput;
 
 /**
- * The user has responded within the timeout interval.
- *
+ * The user input something, but it was not recognized.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class RecognitionEvent
-        extends AbstractInputEvent {
+public class NomatchEvent extends SpokenInputEvent implements InputEvent {
     /** The serial version UID. */
-    private static final long serialVersionUID = 3361398923732732646L;
+    private static final long serialVersionUID = 776343576316001103L;
 
     /** The detail message. */
-    public static final String EVENT_TYPE = RecognitionEvent.class.getName();
+    public static final String EVENT_TYPE = "nomatch";
 
     /** The result of the recognition process. */
     private final RecognitionResult result;
 
     /**
-     * Constructs a new event with the event type as its detail message. The
-     * cause is not initialized.
-     *
+     * Constructs a new event with the specified detail message and cause.
+     * 
      * @param recognitionResult
-     *        Result of the recognition process.
+     *            teh recognition result
      */
-    public RecognitionEvent(final RecognitionResult recognitionResult) {
-        super();
-
-        if (recognitionResult == null) {
-            throw new IllegalArgumentException(
-                    "recognition result must not be null!");
-        }
+    public NomatchEvent(final SpokenInput input, final String sessionId,
+            final RecognitionResult recognitionResult) {
+        super(input, sessionId);
         result = recognitionResult;
     }
 
@@ -66,14 +63,15 @@ public final class RecognitionEvent
      * {@inheritDoc}
      */
     @Override
-    public String getEventType() {
+    public final String getEventType() {
         return EVENT_TYPE;
     }
 
     /**
      * Retrieves the result of the recognition process.
-     *
+     * 
      * @return RecognitionResult
+     * @since 0.7.7
      */
     public RecognitionResult getRecognitionResult() {
         return result;

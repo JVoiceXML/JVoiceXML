@@ -34,8 +34,9 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.HelpEvent;
-import org.jvoicexml.event.plain.NomatchEvent;
-import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.NomatchEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.jvxml.InputEvent;
 import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventCountable;
@@ -62,19 +63,18 @@ import org.w3c.dom.NodeList;
 /**
  * Event handler to catch events generated from the
  * {@link org.jvoicexml.ImplementationPlatform} via the
- * {@link org.jvoicexml.event.EventBus}. This event handler can
- * catch only one event at a time. The first event is propagated to the the
- * FIA while subsequent events will be ignored.
- *
+ * {@link org.jvoicexml.event.EventBus}. This event handler can catch only one
+ * event at a time. The first event is propagated to the the FIA while
+ * subsequent events will be ignored.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @see org.jvoicexml.ImplementationPlatform
  */
-public final class JVoiceXmlEventHandler
-        implements EventHandler {
+public final class JVoiceXmlEventHandler implements EventHandler {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlEventHandler.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(JVoiceXmlEventHandler.class);
 
     /** Input item strategy factory. */
     private final EventStrategyDecoratorFactory inputItemFactory;
@@ -85,7 +85,7 @@ public final class JVoiceXmlEventHandler
     /** Event filter chain to determine the relevant event strategy. */
     private final Collection<EventFilter> filters;
 
-    /** 
+    /**
      * Event filter chain to determine the relevant event strategy if no input
      * item is given.
      */
@@ -101,7 +101,9 @@ public final class JVoiceXmlEventHandler
 
     /**
      * Construct a new object.
-     * @param observer the scope observer.
+     * 
+     * @param observer
+     *            the scope observer.
      */
     public JVoiceXmlEventHandler(final ScopeObserver observer) {
         strategies = new ScopedCollection<EventStrategy>(observer);
@@ -118,6 +120,7 @@ public final class JVoiceXmlEventHandler
 
     /**
      * Retrieves the strategies to execute.
+     * 
      * @return the strategies to execute.
      */
     Collection<EventStrategy> getStrategies() {
@@ -129,17 +132,15 @@ public final class JVoiceXmlEventHandler
      */
     @Override
     public void collect(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final VoiceXmlDocument document) {
+            final VoiceXmlInterpreter interpreter,
+            final VoiceXmlDocument document) {
         final Vxml vxml = document.getVxml();
-        final Collection<AbstractCatchElement> catches =
-            new java.util.ArrayList<AbstractCatchElement>();
+        final Collection<AbstractCatchElement> catches = new java.util.ArrayList<AbstractCatchElement>();
         final NodeList children = vxml.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
             if (child instanceof AbstractCatchElement) {
-                final AbstractCatchElement catchElement =
-                    (AbstractCatchElement) child;
+                final AbstractCatchElement catchElement = (AbstractCatchElement) child;
                 catches.add(catchElement);
             }
         }
@@ -159,7 +160,7 @@ public final class JVoiceXmlEventHandler
             final TokenList events = catchElement.getEventList();
             for (String eventType : events) {
                 addCustomEvents(context, interpreter, fia, null, catchElement,
-                                eventType);
+                        eventType);
             }
         }
     }
@@ -169,24 +170,23 @@ public final class JVoiceXmlEventHandler
      */
     @Override
     public void collect(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final Dialog dialog) {
+            final VoiceXmlInterpreter interpreter, final Dialog dialog) {
         // Retrieve the specified catch elements.
-        final Collection<AbstractCatchElement> catches =
-            dialog.getCatchElements();
+        final Collection<AbstractCatchElement> catches = dialog
+                .getCatchElements();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("found " + catches.size()
                     + " catch elements in dialog '" + dialog.getId() + "'");
         }
 
         // Transform them into event handlers.
-        final FormInterpretationAlgorithm fia =
-            interpreter.getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia = interpreter
+                .getFormInterpretationAlgorithm();
         for (AbstractCatchElement catchElement : catches) {
             final TokenList events = catchElement.getEventList();
             for (String eventType : events) {
                 addCustomEvents(context, interpreter, fia, null, catchElement,
-                                eventType);
+                        eventType);
             }
         }
     }
@@ -197,17 +197,15 @@ public final class JVoiceXmlEventHandler
     @Override
     public Collection<EventStrategy> collect(
             final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
-                        final CatchContainer item) {
-        final Collection<EventStrategy> added =
-            new java.util.ArrayList<EventStrategy>();
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final CatchContainer item) {
+        final Collection<EventStrategy> added = new java.util.ArrayList<EventStrategy>();
         // Retrieve the specified catch elements.
-        final Collection<AbstractCatchElement> catches =
-            item.getCatchElements();
+        final Collection<AbstractCatchElement> catches = item
+                .getCatchElements();
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("found " + catches.size() + " catch elements in item '"
-                    + item.getName() + "'");
+            LOGGER.debug("found " + catches.size()
+                    + " catch elements in item '" + item.getName() + "'");
         }
 
         // Transform them into event handlers.
@@ -221,23 +219,21 @@ public final class JVoiceXmlEventHandler
                     LOGGER.warn("Initial form items must not have catches for "
                             + "filled: ignoring...");
                 } else {
-                    final EventStrategy strategy =
-                        addCustomEvents(context, interpreter, fia, item,
-                            catchElement, eventType);
+                    final EventStrategy strategy = addCustomEvents(context,
+                            interpreter, fia, item, catchElement, eventType);
                     added.add(strategy);
                 }
             }
         }
 
         // Add the default strategies for input items.
-        Collection<EventStrategy> defaultStrategies =
-            addDefaultStrategies(context, interpreter, fia, item);
+        Collection<EventStrategy> defaultStrategies = addDefaultStrategies(
+                context, interpreter, fia, item);
         added.addAll(defaultStrategies);
 
         // Add an input item strategy
-        final EventStrategy itemStrategy =
-            inputItemFactory.getDecorator(context, interpreter, fia,
-                    item);
+        final EventStrategy itemStrategy = inputItemFactory.getDecorator(
+                context, interpreter, fia, item);
         boolean add = addStrategy(itemStrategy);
         if (add) {
             added.add(itemStrategy);
@@ -247,31 +243,28 @@ public final class JVoiceXmlEventHandler
 
     /**
      * Adds an event handler defined for the current input item.
-     *
+     * 
      * @param context
-     *        The current <code>VoiceXmlInterpreterContext</code>
+     *            The current <code>VoiceXmlInterpreterContext</code>
      * @param interpreter
-     *        The current <code>VoiceXmlInterpreter</code>
+     *            The current <code>VoiceXmlInterpreter</code>
      * @param fia
-     *        The <code>FormInterpretationAlgorithm</code>
+     *            The <code>FormInterpretationAlgorithm</code>
      * @param item
-     *        The visited input item.
+     *            The visited input item.
      * @param catchElement
-     *        The node where the catch is defined.
+     *            The node where the catch is defined.
      * @param eventType
-     *        Name of the event to find a suitable strategy.
+     *            Name of the event to find a suitable strategy.
      * @return added strategy.
      */
     private EventStrategy addCustomEvents(
             final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia,
-            final FormItem item,
-            final AbstractCatchElement catchElement,
-            final String eventType) {
-        final EventStrategy strategy =
-                new CatchEventStrategy(context, interpreter, fia, item,
-                                       catchElement, eventType);
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final AbstractCatchElement catchElement, final String eventType) {
+        final EventStrategy strategy = new CatchEventStrategy(context,
+                interpreter, fia, item, catchElement, eventType);
         addStrategy(strategy);
         return strategy;
     }
@@ -279,60 +272,54 @@ public final class JVoiceXmlEventHandler
     /**
      * Adds the missing event handlers that are defined by default.
      * <p>
-     * The default event handlers are specified at
-     * <a href="http://www.w3.org/TR/2004/REC-voicexml20-20040316#dml5.2.5">
+     * The default event handlers are specified at <a
+     * href="http://www.w3.org/TR/2004/REC-voicexml20-20040316#dml5.2.5">
      * http://www.w3.org/TR/2004/REC-voicexml20-20040316#dml5.2.5</a>
      * </p>
-     *
+     * 
      * @param context
-     *        The current <code>VoiceXmlInterpreterContext</code>
+     *            The current <code>VoiceXmlInterpreterContext</code>
      * @param interpreter
-     *        The current <code>VoiceXmlInterpreter</code>
+     *            The current <code>VoiceXmlInterpreter</code>
      * @param fia
-     *        The <code>FormInterpretationAlgorithm</code>
+     *            The <code>FormInterpretationAlgorithm</code>
      * @param item
-     *        The visited input item.
+     *            The visited input item.
      * @since 0.7
      * @return added strategies
      */
     private Collection<EventStrategy> addDefaultStrategies(
             final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia,
-            final CatchContainer item) {
-        final Collection<EventStrategy> added =
-            new java.util.ArrayList<EventStrategy>();
+            final FormInterpretationAlgorithm fia, final CatchContainer item) {
+        final Collection<EventStrategy> added = new java.util.ArrayList<EventStrategy>();
         if (!containsStrategy(Noinput.TAG_NAME)) {
-            final EventStrategy strategy =
-                new DefaultRepromptEventStrategy(context, interpreter,
-                        fia, item, Noinput.TAG_NAME);
+            final EventStrategy strategy = new DefaultRepromptEventStrategy(
+                    context, interpreter, fia, item, Noinput.TAG_NAME);
             final boolean add = addStrategy(strategy);
             if (add) {
                 added.add(strategy);
             }
         }
         if (!containsStrategy(Nomatch.TAG_NAME)) {
-            final EventStrategy strategy =
-                new DefaultRepromptEventStrategy(context, interpreter,
-                        fia, item, Nomatch.TAG_NAME);
+            final EventStrategy strategy = new DefaultRepromptEventStrategy(
+                    context, interpreter, fia, item, Nomatch.TAG_NAME);
             final boolean add = addStrategy(strategy);
             if (add) {
                 added.add(strategy);
             }
         }
         if (!containsStrategy(Help.TAG_NAME)) {
-            final EventStrategy strategy =
-                new DefaultRepromptEventStrategy(context, interpreter,
-                        fia, item, Help.TAG_NAME);
+            final EventStrategy strategy = new DefaultRepromptEventStrategy(
+                    context, interpreter, fia, item, Help.TAG_NAME);
             final boolean add = addStrategy(strategy);
             if (add) {
                 added.add(strategy);
             }
         }
         if (!containsStrategy("cancel")) {
-            final EventStrategy strategy =
-                new DefaultCancelEventStrategy(context, interpreter,
-                        fia, item, "cancel");
+            final EventStrategy strategy = new DefaultCancelEventStrategy(
+                    context, interpreter, fia, item, "cancel");
             final boolean add = addStrategy(strategy);
             if (add) {
                 added.add(strategy);
@@ -373,12 +360,10 @@ public final class JVoiceXmlEventHandler
      */
     @Override
     public void clean(final FormItem item) {
-        final Collection<EventStrategy> toremove =
-            new java.util.ArrayList<EventStrategy>();
+        final Collection<EventStrategy> toremove = new java.util.ArrayList<EventStrategy>();
         for (EventStrategy strategy : strategies) {
             if (strategy instanceof AbstractEventStrategy) {
-                final AbstractEventStrategy eventStrategy =
-                    (AbstractEventStrategy) strategy;
+                final AbstractEventStrategy eventStrategy = (AbstractEventStrategy) strategy;
                 final FormItem strategyItem = eventStrategy.getFormItem();
                 if (item == strategyItem) {
                     toremove.add(eventStrategy);
@@ -395,7 +380,9 @@ public final class JVoiceXmlEventHandler
 
     /**
      * Retrieves the first {@link EventStrategy} with the given type.
-     * @param type event type to look for.
+     * 
+     * @param type
+     *            event type to look for.
      * @return found strategy, <code>null</code> if no strategy was found.
      */
     private EventStrategy getStrategy(final String type) {
@@ -410,7 +397,9 @@ public final class JVoiceXmlEventHandler
 
     /**
      * Checks if there exists an {@link EventStrategy} for the given type.
-     * @param type event type to look for.
+     * 
+     * @param type
+     *            event type to look for.
      * @return <code>true</code> if there is a strategy.
      * @since 0.7
      */
@@ -449,13 +438,11 @@ public final class JVoiceXmlEventHandler
     }
 
     /**
-     * {@inheritDoc}
-     * The relevant {@link EventStrategy} is determined via a chaining of
-     * {@link EventFilter}s.
+     * {@inheritDoc} The relevant {@link EventStrategy} is determined via a
+     * chaining of {@link EventFilter}s.
      */
     @Override
-    public void processEvent(final CatchContainer item)
-            throws JVoiceXMLEvent {
+    public void processEvent(final CatchContainer item) throws JVoiceXMLEvent {
         if (event == null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("no event: nothing to do");
@@ -474,8 +461,8 @@ public final class JVoiceXmlEventHandler
         }
 
         final Collection<EventFilter> eventFilters;
-        final Collection<EventStrategy> matchingStrategies =
-                new java.util.ArrayList<EventStrategy>(strategies);
+        final Collection<EventStrategy> matchingStrategies = new java.util.ArrayList<EventStrategy>(
+                strategies);
         if (item == null) {
             eventFilters = filtersNoinput;
         } else {
@@ -496,8 +483,7 @@ public final class JVoiceXmlEventHandler
         }
 
         // Select the first remaining matching strategy.
-        final Iterator<EventStrategy> iterator =
-            matchingStrategies.iterator();
+        final Iterator<EventStrategy> iterator = matchingStrategies.iterator();
         final EventStrategy strategy = iterator.next();
         try {
             strategy.process(event);
@@ -525,8 +511,8 @@ public final class JVoiceXmlEventHandler
     /**
      * {@inheritDoc}
      * 
-     * Receive the event from the {@link org.jvoicexml.event.EventBus}
-     * and handle form interpretation.
+     * Receive the event from the {@link org.jvoicexml.event.EventBus} and
+     * handle form interpretation.
      */
     @Override
     public synchronized void onEvent(final JVoiceXMLEvent e) {
@@ -534,9 +520,11 @@ public final class JVoiceXmlEventHandler
             return;
         }
         final String type = e.getEventType();
-        if (type.startsWith("org.jvoicexml.event.plain.implementation")) {
-            // Ignore events coming from the system output etc.
-            return;
+        if (!(e instanceof InputEvent)) {
+            if (type.startsWith("org.jvoicexml.event.plain.implementation")) {
+                // Ignore events coming from the system output etc.
+                return;
+            }
         }
 
         // Allow for only one event.
@@ -553,13 +541,15 @@ public final class JVoiceXmlEventHandler
     }
 
     /**
-     * Transforms the given event into another event by evaluating a
-     * possibly present semantic interpretation. For instance, help and
-     * cancel requests by the user must be transformed into
-     * {@link HelpEvent}s and {@link CancelEvent}.
-     * @param e the source event
+     * Transforms the given event into another event by evaluating a possibly
+     * present semantic interpretation. For instance, help and cancel requests
+     * by the user must be transformed into {@link HelpEvent}s and
+     * {@link CancelEvent}.
+     * 
+     * @param e
+     *            the source event
      * @return the transformed event, <code>e</code> if there was no
-     *          transformation.
+     *         transformation.
      * @since 0.7.4
      */
     private JVoiceXMLEvent transformEvent(final JVoiceXMLEvent e) {
@@ -567,8 +557,7 @@ public final class JVoiceXmlEventHandler
             return e;
         }
         final RecognitionEvent recevent = (RecognitionEvent) e;
-        final RecognitionResult result =
-            recevent.getRecognitionResult();
+        final RecognitionResult result = recevent.getRecognitionResult();
         final Object interpretation = result.getSemanticInterpretation();
         if (interpretation == null) {
             return e;
@@ -596,8 +585,7 @@ public final class JVoiceXmlEventHandler
      * {@inheritDoc}
      */
     @Override
-    public boolean removeStrategies(
-            final Collection<EventStrategy> strats) {
+    public boolean removeStrategies(final Collection<EventStrategy> strats) {
         if (strats == null) {
             return false;
         }

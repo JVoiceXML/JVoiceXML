@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,10 +29,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.mock.MockRecognitionResult;
 
 /**
- * Test case for {@link org.jvoicexml.event.plain.jvxml.RecognitionEvent}.
+ * Test case for {@link org.jvoicexml.event.plain.implementation.RecognitionEvent}.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -53,33 +54,30 @@ public final class TestRecognitionEvent {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.event.plain.jvxml.RecognitionEvent#getEventType()}.
+     * Test method for {@link org.jvoicexml.event.plain.implementation.RecognitionEvent#getEventType()}.
      */
     @Test
     public void testGetEventType() {
-        final RecognitionEvent event = new RecognitionEvent(result);
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
         Assert.assertEquals(RecognitionEvent.EVENT_TYPE, event.getEventType());
-        Assert.assertEquals(RecognitionEvent.class.getName(),
-                event.getEventType());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.event.plain.jvxml.RecognitionEvent#getInputResult()}.
+     * Test method for {@link org.jvoicexml.event.plain.implementation.RecognitionEvent#getInputResult()}.
      */
     @Test
-    public void testGetInputResult() {
-        final RecognitionEvent event = new RecognitionEvent(result);
-        final RecognitionResult currentResult =
-            (RecognitionResult) event.getInputResult();
+    public void testRecognitionResult() {
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
+        final RecognitionResult currentResult = event.getRecognitionResult();
         Assert.assertEquals("test utterance", currentResult.getUtterance());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.event.plain.jvxml.RecognitionEvent#getRecognitionResult()}.
+     * Test method for {@link org.jvoicexml.event.plain.implementation.RecognitionEvent#getRecognitionResult()}.
      */
     @Test
     public void testGetRecognitionResult() {
-        final RecognitionEvent event = new RecognitionEvent(result);
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
         Assert.assertEquals(result, event.getRecognitionResult());
     }
 }

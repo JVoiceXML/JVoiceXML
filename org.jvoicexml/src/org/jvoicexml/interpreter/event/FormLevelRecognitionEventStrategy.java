@@ -33,7 +33,7 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;

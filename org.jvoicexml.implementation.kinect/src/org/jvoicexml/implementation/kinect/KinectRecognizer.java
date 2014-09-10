@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,28 +38,30 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.implementation.SpokenInputEvent;
-
+import org.jvoicexml.event.plain.implementation.NomatchEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 
 /**
  * A Kinect Recognizer.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
- *
+ * 
  */
 public final class KinectRecognizer {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(KinectRecognizer.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(KinectRecognizer.class);
 
     static {
-        //Check the processor architecture
+        // Check the processor architecture
         if (System.getProperty("os.arch").equalsIgnoreCase("x86")) {
             System.loadLibrary("JVoiceXmlKinectRecognizer");
         } else {
             System.loadLibrary("JVoiceXmlKinectRecognizer");
-//            System.loadLibrary("JVoiceXmlKinectRecognizer_x64");
+            // System.loadLibrary("JVoiceXmlKinectRecognizer_x64");
         }
     }
 
@@ -77,7 +79,9 @@ public final class KinectRecognizer {
 
     /**
      * Constructs a new object.
-     * @param spokenInput the spoken input
+     * 
+     * @param spokenInput
+     *            the spoken input
      */
     public KinectRecognizer(final KinectSpokenInput spokenInput) {
         input = spokenInput;
@@ -85,8 +89,9 @@ public final class KinectRecognizer {
 
     /**
      * Allocates this recognizer.
+     * 
      * @throws KinectRecognizerException
-     *         error allocating the recognizer.
+     *             error allocating the recognizer.
      */
     public void allocate() throws KinectRecognizerException {
         handle = kinectAllocate();
@@ -94,14 +99,16 @@ public final class KinectRecognizer {
 
     /**
      * Native method call to startup the kinect recognizer.
+     * 
      * @return kinect handle
      * @exception KinectRecognizerException
-     *          if the recognizer could not be allocated
+     *                if the recognizer could not be allocated
      */
     private native long kinectAllocate() throws KinectRecognizerException;
 
     /**
      * Checks if the recognizer is allocated.
+     * 
      * @return <code>true</code> if the recognizer is allocated
      */
     public boolean isAllocated() {
@@ -110,8 +117,9 @@ public final class KinectRecognizer {
 
     /**
      * Starts the recognition process.
+     * 
      * @throws KinectRecognizerException
-     *         error starting the recognizer
+     *             error starting the recognizer
      */
     public void startRecognition() {
         recognitionThread = new KinectRecognitionThread(this);
@@ -121,12 +129,12 @@ public final class KinectRecognizer {
 
     /**
      * Internal call to start the recognition.
+     * 
      * @return recognition result
      * @throws KinectRecognizerException
-     *         error recognizing
+     *             error recognizing
      */
-    RecognitionResult recognize()
-            throws KinectRecognizerException {
+    RecognitionResult recognize() throws KinectRecognizerException {
         if (handle == 0) {
             throw new KinectRecognizerException("no recognizer allocated!");
         }
@@ -136,7 +144,9 @@ public final class KinectRecognizer {
 
     /**
      * Native method call to start the recognition process
-     * @param handle handle to the kinect recognizer
+     * 
+     * @param handle
+     *            handle to the kinect recognizer
      * @return result of the recognition process
      */
     private native RecognitionResult kinectRecognizeSpeech(long handle)
@@ -144,11 +154,13 @@ public final class KinectRecognizer {
 
     /**
      * Reports the result of the recognition process.
-     * @param result the obtained result.
+     * 
+     * @param result
+     *            the obtained result.
      */
     void reportResult(final RecognitionResult result) {
         isRecognizing = false;
-        
+
         if (result == null) {
             final ErrorEvent error = new BadFetchError("No result obtained!");
             input.notifyError(error);
@@ -159,15 +171,13 @@ public final class KinectRecognizer {
             final String sml = result.getSml();
             LOGGER.info("recognized '" + sml + "'");
             final SmlInterpretationExtractor extractor = parseSml(sml);
-            final KinectRecognitionResult kinectResult =
-                    new KinectRecognitionResult(extractor);
+            final KinectRecognitionResult kinectResult = new KinectRecognitionResult(
+                    extractor);
             final SpokenInputEvent event;
             if (kinectResult.isAccepted()) {
-                event = new SpokenInputEvent(input,
-                        SpokenInputEvent.RESULT_ACCEPTED, kinectResult);
+                event = new RecognitionEvent(input, null, kinectResult);
             } else {
-                event = new SpokenInputEvent(input,
-                        SpokenInputEvent.RESULT_REJECTED, kinectResult);
+                event = new NomatchEvent(input, null, kinectResult);
             }
             input.fireInputEvent(event);
         } catch (TransformerException ex) {
@@ -178,15 +188,16 @@ public final class KinectRecognizer {
 
     /**
      * Parses the given SML string.
-     * @param sml the SML to parse
+     * 
+     * @param sml
+     *            the SML to parse
      * @return the parsed information
      * @throws TransformerException
-     *         error parsing
+     *             error parsing
      */
     private SmlInterpretationExtractor parseSml(final String sml)
             throws TransformerException {
-        final SmlInterpretationExtractor extractor =
-                new SmlInterpretationExtractor();
+        final SmlInterpretationExtractor extractor = new SmlInterpretationExtractor();
         if (sml == null) {
             return extractor;
         }
@@ -198,10 +209,12 @@ public final class KinectRecognizer {
         transformer.transform(source, result);
         return extractor;
     }
-    
+
     /**
      * Reports the result of the recognition process.
-     * @param e error while recognizing
+     * 
+     * @param e
+     *            error while recognizing
      */
     void reportResult(final KinectRecognizerException e) {
         isRecognizing = false;
@@ -212,6 +225,7 @@ public final class KinectRecognizer {
 
     /**
      * Checks if the recognizer is currently recognizing.
+     * 
      * @return <code>true</code> if the recognizer is current recognizing.
      */
     public boolean isRecognizing() {
@@ -220,8 +234,9 @@ public final class KinectRecognizer {
 
     /**
      * Stops the recognition process.
+     * 
      * @throws KinectRecognizerException
-     *         error stopping the recognizer
+     *             error stopping the recognizer
      */
     public void stopRecognition() throws KinectRecognizerException {
         if (handle == 0) {
@@ -240,19 +255,22 @@ public final class KinectRecognizer {
 
     /**
      * Native method call to stop the recognition process
-     * @param handle handle to the kinect recognizer
+     * 
+     * @param handle
+     *            handle to the kinect recognizer
      * @exception KinectRecognizerException
-     *          recognition could not be stopped
+     *                recognition could not be stopped
      */
     private native void kinectStopRecognition(long handle)
             throws KinectRecognizerException;
 
     /**
      * Deallocates the kinect recognizer.
+     * 
      * @exception KinectRecognizerException
-     *          recognizer could not be deallocated
+     *                recognizer could not be deallocated
      */
-    public void deallocate() throws KinectRecognizerException{
+    public void deallocate() throws KinectRecognizerException {
         if (handle == 0) {
             return;
         }
@@ -265,13 +283,15 @@ public final class KinectRecognizer {
 
     /**
      * Native method call to shutdown the kinect recognizer.
-     * @param handle handle to the kinect recognizer
+     * 
+     * @param handle
+     *            handle to the kinect recognizer
      * @exception KinectRecognizerException
-     *          if the recognizer could not be deallocated
+     *                if the recognizer could not be deallocated
      */
     private native void kinectDeallocate(long handle)
             throws KinectRecognizerException;
-    
+
     /**
      * Final clean-up.
      */

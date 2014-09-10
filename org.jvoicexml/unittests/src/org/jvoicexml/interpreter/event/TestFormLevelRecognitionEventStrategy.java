@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
@@ -53,6 +53,7 @@ import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Test cases for {@link FormLevelRecognitionEventStrategy}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.2
@@ -66,16 +67,16 @@ public final class TestFormLevelRecognitionEventStrategy {
 
     /**
      * Prepares the testing environment.
+     * 
      * @exception Exception
-     *            error setting up the test environment
+     *                error setting up the test environment
      */
     @Before
     public void setUp() throws Exception {
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null);
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
@@ -83,11 +84,14 @@ public final class TestFormLevelRecognitionEventStrategy {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.FormLevelRecognitionEventStrategy#process(org.jvoicexml.event.JVoiceXMLEvent)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.FormLevelRecognitionEventStrategy#process(org.jvoicexml.event.JVoiceXMLEvent)}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testProcess() throws Exception, JVoiceXMLEvent {
@@ -104,11 +108,10 @@ public final class TestFormLevelRecognitionEventStrategy {
         field2.setSlot("order.food");
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, interpreter, dialog);
-        final FormLevelRecognitionEventStrategy strategy =
-            new FormLevelRecognitionEventStrategy(context, interpreter, fia,
-                    dialog);
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, dialog);
+        final FormLevelRecognitionEventStrategy strategy = new FormLevelRecognitionEventStrategy(
+                context, interpreter, fia, dialog);
         final MockRecognitionResult result = new MockRecognitionResult();
         result.setAccepted(true);
         final String drink = "Cola";
@@ -117,12 +120,12 @@ public final class TestFormLevelRecognitionEventStrategy {
 
         final ScriptingEngine scripting = context.getScriptingEngine();
         scripting.eval("var out = new Object(); out.order = new Object();"
-                    + "out.order." + field1.getName() + "='" + drink + "';"
-                    + "out.order." + field2.getName() + "='" + food + "';");
-        final ScriptableObject interpretation = 
-            (ScriptableObject) scripting.getVariable("out");
+                + "out.order." + field1.getName() + "='" + drink + "';"
+                + "out.order." + field2.getName() + "='" + food + "';");
+        final ScriptableObject interpretation = (ScriptableObject) scripting
+                .getVariable("out");
         result.setSemanticInterpretation(interpretation);
-        final RecognitionEvent event = new RecognitionEvent(result);
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
         strategy.process(event);
         Assert.assertEquals(drink, scripting.getVariable(field1.getName()));
         Assert.assertEquals(food, scripting.getVariable(field2.getName()));
@@ -131,11 +134,14 @@ public final class TestFormLevelRecognitionEventStrategy {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.FormLevelRecognitionEventStrategy#process(org.jvoicexml.event.JVoiceXMLEvent)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.FormLevelRecognitionEventStrategy#process(org.jvoicexml.event.JVoiceXMLEvent)}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testProcessOneFilled() throws Exception, JVoiceXMLEvent {
@@ -152,11 +158,10 @@ public final class TestFormLevelRecognitionEventStrategy {
         field2.setSlot("order.food");
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, interpreter, dialog);
-        final FormLevelRecognitionEventStrategy strategy =
-            new FormLevelRecognitionEventStrategy(context, interpreter, fia,
-                    dialog);
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, dialog);
+        final FormLevelRecognitionEventStrategy strategy = new FormLevelRecognitionEventStrategy(
+                context, interpreter, fia, dialog);
         final MockRecognitionResult result = new MockRecognitionResult();
         result.setAccepted(true);
         final String food = "Pizza";
@@ -164,11 +169,11 @@ public final class TestFormLevelRecognitionEventStrategy {
 
         final ScriptingEngine scripting = context.getScriptingEngine();
         scripting.eval("var out = new Object(); out.order = new Object();"
-                    + "out.order." + field2.getName() + "='" + food + "';");
-        final ScriptableObject interpretation = 
-            (ScriptableObject) scripting.getVariable("out");
+                + "out.order." + field2.getName() + "='" + food + "';");
+        final ScriptableObject interpretation = (ScriptableObject) scripting
+                .getVariable("out");
         result.setSemanticInterpretation(interpretation);
-        final RecognitionEvent event = new RecognitionEvent(result);
+        final RecognitionEvent event = new RecognitionEvent(null, null, result);
         strategy.process(event);
         Assert.assertNull(scripting.getVariable(field1.getName()));
         Assert.assertEquals(food, scripting.getVariable(field2.getName()));

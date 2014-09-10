@@ -29,7 +29,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test case for {@link org.jvoicexml.event.plain.jvxml.RecognitionEvent}.
+ * Test case for {@link org.jvoicexml.event.plain.implementation.RecognitionEvent}.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
