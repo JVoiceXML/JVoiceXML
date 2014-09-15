@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation.jvxml;
+package org.jvoicexml.implementation.dtmf;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DtmfRecognizerProperties;

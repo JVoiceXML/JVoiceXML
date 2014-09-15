@@ -48,6 +48,7 @@ import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
+import org.jvoicexml.implementation.dtmf.BufferedCharacterInput;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;

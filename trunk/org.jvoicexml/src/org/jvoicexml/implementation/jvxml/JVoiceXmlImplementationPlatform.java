@@ -60,9 +60,7 @@ import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.event.plain.jvxml.TransferEvent;
-import org.jvoicexml.implementation.ExternalRecognitionListener;
 import org.jvoicexml.implementation.ExternalResource;
-import org.jvoicexml.implementation.ExternalSynthesisListener;
 import org.jvoicexml.implementation.ImplementationGrammarProcessor;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
@@ -71,6 +69,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
+import org.jvoicexml.implementation.dtmf.BufferedCharacterInput;
 import org.jvoicexml.implementation.grammar.JVoiceXmlImplementationGrammarProcessor;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -142,12 +141,6 @@ public final class JVoiceXmlImplementationPlatform
 
     /** The name of the mark last executed by the SSML processor. */
     private String markname;
-
-    /** An external recognition listener. */
-    private ExternalRecognitionListener externalRecognitionListener;
-
-    /** An external synthesis listener. */
-    private ExternalSynthesisListener externalSynthesisListener;
 
     /**
      * Flag set to <code>true</code> if the implementation platform is closed.
@@ -237,44 +230,6 @@ public final class JVoiceXmlImplementationPlatform
     public void init(final Configuration configuration)
             throws ConfigurationException {
         processor.init(configuration);
-    }
-
-    /**
-     * Sets an external recognition listener and starts it.
-     * 
-     * @param listener
-     *            the external recognition listener.
-     * @since 0.6
-     */
-    public void setExternalRecognitionListener(
-            final ExternalRecognitionListener listener) {
-        externalRecognitionListener = listener;
-        if (listener != null) {
-            try {
-                externalRecognitionListener.start();
-            } catch (Throwable t) {
-                LOGGER.debug("Could not start externalRecognitionListener:", t);
-            }
-        }
-    }
-
-    /**
-     * Sets an external synthesis listener and starts it.
-     * 
-     * @param listener
-     *            the external synthesis listener.
-     * @since 0.6
-     */
-    public void setExternalSynthesisListener(
-            final ExternalSynthesisListener listener) {
-        externalSynthesisListener = listener;
-        if (listener != null) {
-            try {
-                externalSynthesisListener.start();
-            } catch (Throwable t) {
-                LOGGER.debug("Could not start externalSynthesisListener:", t);
-            }
-        }
     }
 
     /**
@@ -539,16 +494,6 @@ public final class JVoiceXmlImplementationPlatform
             closed = true;
         }
 
-        if (externalRecognitionListener != null) {
-            LOGGER.debug("stopping externalRecognitionListener");
-            externalRecognitionListener.stop();
-        }
-
-        if (externalSynthesisListener != null) {
-            LOGGER.debug("stopping externalSynthesisListener");
-            externalSynthesisListener.stop();
-        }
-
         LOGGER.info("closing implementation platform");
         if (output != null) {
             if (!hungup) {
@@ -673,9 +618,6 @@ public final class JVoiceXmlImplementationPlatform
 
         markname = null;
 
-        if (externalRecognitionListener != null) {
-            externalRecognitionListener.resultAccepted(result);
-        }
         synchronized (inputLock) {
             inputLock.notifyAll();
         }
@@ -695,9 +637,6 @@ public final class JVoiceXmlImplementationPlatform
             final NomatchEvent noMatchEvent = new NomatchEvent(
                     input.getSpokenInput(), session.getSessionID(), result);
             eventbus.publish(noMatchEvent);
-        }
-        if (externalRecognitionListener != null) {
-            externalRecognitionListener.resultRejected(result);
         }
         synchronized (inputLock) {
             inputLock.notifyAll();
@@ -739,7 +678,8 @@ public final class JVoiceXmlImplementationPlatform
             } catch (Exception e) {
                 LOGGER.error("error returning resource to pool", e);
             }
-            throw new NoresourceError("error connecting to resource", ioe);
+            throw new NoresourceError("error connecting to resource: "
+                    + ioe.getMessage(), ioe);
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...connected");
@@ -927,10 +867,6 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.info("reached mark '" + markname + "'");
         } else {
             LOGGER.warn("unknown synthesized output event " + event);
-        }
-
-        if (externalSynthesisListener != null) {
-            externalSynthesisListener.outputStatusChanged(event);
         }
     }
 
