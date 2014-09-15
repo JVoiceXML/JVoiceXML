@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,37 +35,36 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ExternalRecognitionListener;
 import org.jvoicexml.implementation.ExternalResource;
-import org.jvoicexml.implementation.ExternalSynthesisListener;
 import org.jvoicexml.implementation.PlatformFactory;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.implementation.dtmf.BufferedCharacterInput;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
 
 /**
  * Basic implementation of an {@link ImplementationPlatformFactory}.
- *
+ * 
  * <p>
- * This implementation manages a pool of resource factories which are
- * delivered to each created {@link ImplementationPlatform}.
+ * This implementation manages a pool of resource factories which are delivered
+ * to each created {@link ImplementationPlatform}.
  * </p>
- *
+ * 
  * <p>
  * In {@link #init(Configuration)} the resources are acquired as
  * {@link PlatformFactory}s and {@link ResourceFactory}s.
  * </p>
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class JVoiceXmlImplementationPlatformFactory
-    implements ImplementationPlatformFactory {
+        implements ImplementationPlatformFactory {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(JVoiceXmlImplementationPlatformFactory.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(JVoiceXmlImplementationPlatformFactory.class);
 
     /** Pool of synthesizer output resource factories. */
     private final KeyedResourcePool<SynthesizedOutput> synthesizerPool;
@@ -76,23 +75,17 @@ public final class JVoiceXmlImplementationPlatformFactory
     /** Pool of user calling resource factories. */
     private final KeyedResourcePool<Telephony> telephonyPool;
 
-    /** An external recognition listener. */
-    private ExternalRecognitionListener externalRecognitionListener;
-
-    /** An external synthesis listener. */
-    private ExternalSynthesisListener externalSynthesisListener;
-
     /** The JVoiceXML configuration. */
     private Configuration configuration;
 
     /**
      * Constructs a new object.
-     *
+     * 
      * <p>
      * This method should not be called by any application. This resource is
      * controlled by the <code>JvoiceXml</code> object.
      * </p>
-     *
+     * 
      * @see org.jvoicexml.JVoiceXml
      */
     public JVoiceXmlImplementationPlatformFactory() {
@@ -102,8 +95,7 @@ public final class JVoiceXmlImplementationPlatformFactory
     }
 
     /**
-     * {@inheritDoc}
-     * This implementation loads all {@link PlatformFactory}s and
+     * {@inheritDoc} This implementation loads all {@link PlatformFactory}s and
      * {@link ResourceFactory}s. They can also be set manually by
      * {@link #addPlatform(PlatformFactory)},
      * {@link #addSpokenInputFactory(ResourceFactory)},
@@ -111,10 +103,9 @@ public final class JVoiceXmlImplementationPlatformFactory
      * {@link #addTelephonyFactory(ResourceFactory)}.
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void init(final Configuration config)
-        throws ConfigurationException {
-        final Collection<PlatformFactory> factories =
-            config.loadObjects(PlatformFactory.class, "implementation");
+    public void init(final Configuration config) throws ConfigurationException {
+        final Collection<PlatformFactory> factories = config.loadObjects(
+                PlatformFactory.class, "implementation");
         for (PlatformFactory factory : factories) {
             try {
                 addPlatform(factory);
@@ -122,12 +113,12 @@ public final class JVoiceXmlImplementationPlatformFactory
                 throw new ConfigurationException(e.getMessage(), e);
             }
         }
-        final Collection<ResourceFactory> resourceFactories =
-            config.loadObjects(ResourceFactory.class, "implementation");
+        final Collection<ResourceFactory> resourceFactories = config
+                .loadObjects(ResourceFactory.class, "implementation");
         try {
             for (ResourceFactory resourceFactory : resourceFactories) {
-                final Class<ExternalResource> clazz =
-                    resourceFactory.getResourceType();
+                final Class<ExternalResource> clazz = resourceFactory
+                        .getResourceType();
                 if (clazz.equals(SpokenInput.class)) {
                     addSpokenInputFactory(resourceFactory);
                 } else if (clazz.equals(SynthesizedOutput.class)) {
@@ -160,8 +151,7 @@ public final class JVoiceXmlImplementationPlatformFactory
             LOGGER.info("available synthesizers:");
             for (String key : synthesizers) {
                 final int avail = synthesizerPool.getNumIdle(key);
-                LOGGER.info("- " + avail + " instance(s) of type '" + key
-                        + "'");
+                LOGGER.info("- " + avail + " instance(s) of type '" + key + "'");
             }
         }
         final Collection<String> recognizers = spokenInputPool.getKeys();
@@ -171,8 +161,7 @@ public final class JVoiceXmlImplementationPlatformFactory
             LOGGER.info("available recognizers:");
             for (String key : recognizers) {
                 final int avail = spokenInputPool.getNumIdle(key);
-                LOGGER.info("- " + avail + " instance(s) of type '" + key
-                        + "'");
+                LOGGER.info("- " + avail + " instance(s) of type '" + key + "'");
             }
         }
         final Collection<String> telephones = telephonyPool.getKeys();
@@ -182,65 +171,46 @@ public final class JVoiceXmlImplementationPlatformFactory
             LOGGER.info("available telephones:");
             for (String key : telephones) {
                 final int avail = telephonyPool.getNumIdle(key);
-                LOGGER.info("- " + avail + " instance(s) of type '" + key
-                        + "'");
+                LOGGER.info("- " + avail + " instance(s) of type '" + key + "'");
             }
         }
     }
 
     /**
-     * Sets an external recognition listener.
-     * @param listener the external recognition listener.
-     * @since 0.6
-     */
-    public void setExternalRecognitionListener(
-            final ExternalRecognitionListener listener) {
-        externalRecognitionListener = listener;
-    }
-
-    /**
-     * Sets an external synthesis listener.
-     * @param listener the external synthesis listener.
-     * @since 0.6
-     */
-    public void setExternalSynthesisListener(
-            final ExternalSynthesisListener listener) {
-        externalSynthesisListener = listener;
-    }
-
-
-    /**
      * Adds the given platform factory to the list of known factories.
-     * @param platform the platform factory to add.
+     * 
+     * @param platform
+     *            the platform factory to add.
      * @exception Exception
-     *            error adding the platform
+     *                error adding the platform
      * @since 0.7
      */
     public void addPlatform(final PlatformFactory platform) throws Exception {
-        final ResourceFactory<SynthesizedOutput> synthesizedOutputFactory =
-            platform.getSynthesizedoutput();
+        final ResourceFactory<SynthesizedOutput> synthesizedOutputFactory = platform
+                .getSynthesizedoutput();
         if (synthesizedOutputFactory != null) {
             addSynthesizedOutputFactory(synthesizedOutputFactory);
         }
-        final ResourceFactory<SpokenInput> spokenInputFactory =
-            platform.getSpokeninput();
+        final ResourceFactory<SpokenInput> spokenInputFactory = platform
+                .getSpokeninput();
         if (spokenInputFactory != null) {
             addSpokenInputFactory(spokenInputFactory);
         }
-        final ResourceFactory<Telephony> telephonyFactory =
-            platform.getTelephony();
+        final ResourceFactory<Telephony> telephonyFactory = platform
+                .getTelephony();
         if (telephonyFactory != null) {
             addTelephonyFactory(telephonyFactory);
         }
     }
 
     /**
-     * Adds the given {@link ResourceFactory} for {@link SynthesizedOutput}
-     * to the list of know factories.
+     * Adds the given {@link ResourceFactory} for {@link SynthesizedOutput} to
+     * the list of know factories.
+     * 
      * @param factory
-     *        the factory to add.
+     *            the factory to add.
      * @exception Exception
-     *            error creating the pool
+     *                error creating the pool
      * @since 0.6
      */
     private void addSynthesizedOutputFactory(
@@ -248,21 +218,22 @@ public final class JVoiceXmlImplementationPlatformFactory
         final String type = factory.getType();
         synthesizerPool.addResourceFactory(factory);
 
-        LOGGER.info("added synthesized output factory "
-                + factory.getClass() + " for type '" + type + "'");
+        LOGGER.info("added synthesized output factory " + factory.getClass()
+                + " for type '" + type + "'");
     }
 
     /**
-     * Adds the given {@link ResourceFactory} for {@link SpokenInput}
-     * to the list of know factories.
+     * Adds the given {@link ResourceFactory} for {@link SpokenInput} to the
+     * list of know factories.
+     * 
      * @param factory
-     *        the factory to add.
+     *            the factory to add.
      * @exception Exception
-     *            error adding the factory
+     *                error adding the factory
      * @since 0.6
      */
-    public void addSpokenInputFactory(
-            final ResourceFactory<SpokenInput> factory) throws Exception {
+    public void addSpokenInputFactory(final ResourceFactory<SpokenInput> factory)
+            throws Exception {
         final String type = factory.getType();
         spokenInputPool.addResourceFactory(factory);
 
@@ -271,16 +242,17 @@ public final class JVoiceXmlImplementationPlatformFactory
     }
 
     /**
-     * Adds the given {@link ResourceFactory} for {@link Telephony}
-     * to the list of know factories.
+     * Adds the given {@link ResourceFactory} for {@link Telephony} to the list
+     * of know factories.
+     * 
      * @param factory
-     *        the factory to add.
+     *            the factory to add.
      * @exception Exception
-     *            error adding the factory
+     *                error adding the factory
      * @since 0.6
      */
     public void addTelephonyFactory(final ResourceFactory<Telephony> factory)
-        throws Exception {
+            throws Exception {
         final String type = factory.getType();
         telephonyPool.addResourceFactory(factory);
         LOGGER.info("added telephony factory " + factory.getClass()
@@ -291,8 +263,7 @@ public final class JVoiceXmlImplementationPlatformFactory
      * {@inheritDoc}
      */
     public synchronized ImplementationPlatform getImplementationPlatform(
-            final ConnectionInformation info)
-        throws NoresourceError {
+            final ConnectionInformation info) throws NoresourceError {
         if (info == null) {
             throw new NoresourceError("No connection information given!");
         }
@@ -302,11 +273,8 @@ public final class JVoiceXmlImplementationPlatformFactory
         } catch (ConfigurationException e1) {
             e1.printStackTrace();
         }
-        final JVoiceXmlImplementationPlatform platform =
-            new JVoiceXmlImplementationPlatform(telephonyPool, synthesizerPool,
-                spokenInputPool, input, info);
-        platform.setExternalRecognitionListener(externalRecognitionListener);
-        platform.setExternalSynthesisListener(externalSynthesisListener);
+        final JVoiceXmlImplementationPlatform platform = new JVoiceXmlImplementationPlatform(
+                telephonyPool, synthesizerPool, spokenInputPool, input, info);
         try {
             platform.init(configuration);
         } catch (ConfigurationException e) {
@@ -352,9 +320,8 @@ public final class JVoiceXmlImplementationPlatformFactory
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("telephony pool has "
-                    + telephonyPool.getNumActive() + " active/"
-                    + telephonyPool.getNumIdle() + " idle objects");
+            LOGGER.debug("telephony pool has " + telephonyPool.getNumActive()
+                    + " active/" + telephonyPool.getNumIdle() + " idle objects");
         }
         try {
             telephonyPool.close();

@@ -41,6 +41,7 @@ import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
+import org.jvoicexml.implementation.dtmf.BufferedCharacterInput;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -86,7 +87,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.implementation.jvxml.BufferedCharacterInput#addCharacter(char)}
+     * {@link org.jvoicexml.implementation.dtmf.BufferedCharacterInput#addCharacter(char)}
      * .
      * 
      * @exception JVoiceXMLEvent
@@ -144,7 +145,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.implementation.jvxml.BufferedCharacterInput#addCharacter(char)}
+     * {@link org.jvoicexml.implementation.dtmf.BufferedCharacterInput#addCharacter(char)}
      * .
      * 
      * @exception JVoiceXMLEvent
