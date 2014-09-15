@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -64,6 +64,12 @@
         <li>refactoring: synthesized output events are aligned with
             the general event model and can now be passed over the event
             bus</li>
+        <li>Delivering the error message in the detailed message,
+            if a resource can not be obtained</li>
+        <li>refactoring: removed external recognition and synthesis
+            listeners since these can be handled better by a detailed
+            session listener</li>
+        <li>refactoring: moved DTMF recognizer into an own package</li>
     </ul>
 
     <h4>jsapi10 implementation platform</h4>
@@ -119,6 +125,7 @@
             work again</li>
     </ul>
 
+    o
     <h3>xml</h3>
 
     <ul>

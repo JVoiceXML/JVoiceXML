@@ -30,7 +30,9 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.interpreter.DetailedSessionListener;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
@@ -115,14 +117,31 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
         notification.setContext(context.getContextId());
         notification.setRequestId(UUID.randomUUID().toString());
         notification.setTarget(context.getTarget());
-        final RecognitionEvent input = (RecognitionEvent) event.getRootEvent();
+        final JVoiceXMLEvent rootEvent = event.getRootEvent();
+        final Object data;
+        if (rootEvent instanceof RecognitionEvent) {
+            final RecognitionEvent input = (RecognitionEvent) rootEvent;
+            try {
+                data = converter.convertRecognitionEvent(input);
+            } catch (ConversionException e) {
+                LOGGER.error(e.getMessage(), e);
+                return;
+            }
+        } else {
+            final SpokenInputEvent input = (SpokenInputEvent) rootEvent;
+            try {
+                data = converter.convertSpokenInputEvent(input);
+            } catch (ConversionException e) {
+                LOGGER.error(e.getMessage(), e);
+                return;
+            }
+        }
+        final AnyComplexType any = new AnyComplexType();
+        any.addContent(data);
+        notification.setData(any);
         try {
-            final Object data = converter.convertRecognitionEvent(input);
-            final AnyComplexType any = new AnyComplexType();
-            any.addContent(data);
-            notification.setData(any);
             adapter.sendMMIEvent(context.getChannel(), mmi);
-        } catch (ConversionException | IOException e) {
+        } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -132,6 +151,8 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
      */
     @Override
     public void sessionEnded(final Session session, final SessionEvent event) {
+        // Remove this instance asynchronously to avoid a concurrent
+        // modification exception
         final DetailedSessionListener listener = this;
         final Thread thread = new Thread() {
             @Override

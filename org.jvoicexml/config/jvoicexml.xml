@@ -188,12 +188,6 @@
   -->
  <bean id="org.jvoicexml.ImplementationPlatformFactory"
   class="org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatformFactory">
-    <!-- property name="externalRecognitionListener">
-        <bean class="YourClas" />
-    </property>
-    <property name="externalSynthesisListener">
-        <bean class="YourClas" />
-    </property-->
  </bean>
  
  <!--

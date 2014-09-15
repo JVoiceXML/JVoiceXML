@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.jvoicexml.LastResult;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 
 /**
@@ -73,10 +74,23 @@ public interface ExtensionNotificationDataConverter {
      * 
      * @param event
      *            the event
-     * @return converted last result
+     * @return converted recognition event
      * @throws ConversionException
      *             error converting the result
      */
     Object convertRecognitionEvent(final RecognitionEvent event)
+            throws ConversionException;
+
+    /**
+     * Converts the given spoken input event into the data field of an
+     * {@link org.jvoicexml.mmi.events.ExtensionNotification}.
+     * 
+     * @param event
+     *            the event
+     * @return converted spoken input event
+     * @throws ConversionException
+     *             error converting the result
+     */
+    Object convertSpokenInputEvent(final SpokenInputEvent input)
             throws ConversionException;
 }

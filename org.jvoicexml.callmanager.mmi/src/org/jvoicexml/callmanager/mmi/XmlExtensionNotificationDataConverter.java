@@ -38,10 +38,14 @@ import org.jvoicexml.LastResult;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.implementation.InputStartedEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
+import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.mozilla.javascript.ScriptableObject;
 import org.w3c.dom.Document;
@@ -61,6 +65,8 @@ import org.xml.sax.SAXException;
  */
 public class XmlExtensionNotificationDataConverter
         implements ExtensionNotificationDataConverter {
+    /** The EMMA namespace. */
+    private static final String EMMA_NAMESPACE = "http://www.w3.org/2003/04/emma";
 
     /**
      * {@inheritDoc}
@@ -84,30 +90,44 @@ public class XmlExtensionNotificationDataConverter
         }
     }
 
+    /**
+     * Creates a semantic interpretation from the given recognition result
+     * 
+     * @param id
+     *            the emma id
+     * @param utterance
+     *            the recognized utterance
+     * @param mode
+     *            the input mode
+     * @param confidence
+     *            the confidence value
+     * @param semanticInterpretation
+     *            the semantic interpretation
+     * @return emma document
+     * @throws ParserConfigurationException
+     *             error creating an EMMA document
+     */
     private Element createEmma(final String id, final String utterance,
             final String mode, final float confidence,
             final Object semanticInterpretation)
             throws ParserConfigurationException {
         final DocumentBuilderFactory factory = DocumentBuilderFactory
                 .newInstance();
-        factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
         final Document document = builder.newDocument();
-        final Element emma = document.createElementNS(
-                "http://www.w3.org/2003/04/emma", "emma:emma");
+        final Element emma = document.createElementNS(EMMA_NAMESPACE,
+                "emma:emma");
         emma.setAttribute("version", "1.0");
         document.appendChild(emma);
-        final Element interpretation = document.createElementNS(
-                "http://www.w3.org/2003/04/emma", "emma:interpretation");
+        final Element interpretation = document.createElementNS(EMMA_NAMESPACE,
+                "emma:interpretation");
         interpretation.setAttribute("id", id);
-        interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
-                "emma:medium", "acoustic");
-        interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
-                "emma:mode", mode);
-        interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
-                "emma:confidence", Float.toString(confidence));
-        interpretation.setAttributeNS("http://www.w3.org/2003/04/emma",
-                "emma:tokens", utterance);
+        interpretation
+                .setAttributeNS(EMMA_NAMESPACE, "emma:medium", "acoustic");
+        interpretation.setAttributeNS(EMMA_NAMESPACE, "emma:mode", mode);
+        interpretation.setAttributeNS(EMMA_NAMESPACE, "emma:confidence",
+                Float.toString(confidence));
+        interpretation.setAttributeNS(EMMA_NAMESPACE, "emma:tokens", utterance);
         addSemanticInterpretation(document, interpretation,
                 semanticInterpretation);
         emma.appendChild(interpretation);
@@ -133,8 +153,8 @@ public class XmlExtensionNotificationDataConverter
             final ScriptableObject scriptable = (ScriptableObject) object;
             addSemanticInterpretation(document, parent, scriptable);
         } else {
-            final Element literal = document.createElementNS(
-                    "http://www.w3.org/2003/04/emma", "emma:literal");
+            final Element literal = document.createElementNS(EMMA_NAMESPACE,
+                    "emma:literal");
             final Text text = document.createTextNode(object.toString());
             literal.appendChild(text);
             parent.appendChild(literal);
@@ -142,7 +162,7 @@ public class XmlExtensionNotificationDataConverter
     }
 
     /**
-     * Possibly add semantic interpretation as a compund object to the given
+     * Possibly add semantic interpretation as a compound object to the given
      * document
      * 
      * @param document
@@ -157,6 +177,9 @@ public class XmlExtensionNotificationDataConverter
         if (object == null) {
             return;
         }
+
+        // Recursively retrieve the properties of the ECMAScript object and
+        // add them as nested tags
         final Object[] ids = ScriptableObject.getPropertyIds(object);
         for (Object id : ids) {
             final String key = id.toString();
@@ -183,16 +206,16 @@ public class XmlExtensionNotificationDataConverter
             throws ConversionException {
         final DocumentBuilderFactory factory = DocumentBuilderFactory
                 .newInstance();
-        factory.setNamespaceAware(true);
+        // factory.setNamespaceAware(true);
         DocumentBuilder builder = null;
         try {
             builder = factory.newDocumentBuilder();
             final Document document = builder.newDocument();
             final Element data = document.createElementNS(
-                    "http://www.nowhere.org/tkmmi", "tkmmi:data");
+                    "http://www.nowhere.org/jvmxlmmi", "jvxmlmmi:data");
             final String eventType = toEventType(output);
-            data.setAttributeNS("http://www.nowhere.org/tkmmi", "tkmmi:event",
-                    eventType);
+            data.setAttributeNS("http://www.nowhere.org/jvxmlmmi",
+                    "jvxmlmmi:event", eventType);
             final SpeakableText speakable = getSpeakable(output);
             if (speakable != null) {
                 final Document ssml = toDocument(speakable);
@@ -218,7 +241,7 @@ public class XmlExtensionNotificationDataConverter
      * 
      * @param output
      *            the received event
-     * @return the speakble if the events knows about it, {@code null} else
+     * @return the speakable if the events knows about it, {@code null} else
      */
     private SpeakableText getSpeakable(final SynthesizedOutputEvent output) {
         if (output instanceof OutputStartedEvent) {
@@ -246,6 +269,12 @@ public class XmlExtensionNotificationDataConverter
             return "vxml.output.end";
         } else if (event instanceof QueueEmptyEvent) {
             return "vxml.output.emptyqueue";
+        } else if (event instanceof RecognitionStartedEvent) {
+            return "vxml.input.start";
+        } else if (event instanceof RecognitionStoppedEvent) {
+            return "vxml.input.end";
+        } else if (event instanceof InputStartedEvent) {
+            return "vxml.input.speaking";
         }
         return event.getEventType();
     }
@@ -271,9 +300,32 @@ public class XmlExtensionNotificationDataConverter
         final InputSource source = new InputSource(reader);
         final DocumentBuilderFactory factory = DocumentBuilderFactory
                 .newInstance();
-        factory.setNamespaceAware(true);
         final DocumentBuilder builder = factory.newDocumentBuilder();
         return builder.parse(source);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object convertSpokenInputEvent(final SpokenInputEvent input)
+            throws ConversionException {
+        final DocumentBuilderFactory factory = DocumentBuilderFactory
+                .newInstance();
+        DocumentBuilder builder = null;
+        try {
+            builder = factory.newDocumentBuilder();
+            final Document document = builder.newDocument();
+            final Element data = document.createElementNS(
+                    "http://www.nowhere.org/jvxmlmmi", "jvxmlmmi:data");
+            final String eventType = toEventType(input);
+            data.setAttributeNS("http://www.nowhere.org/jvxmlmmi",
+                    "jvxmlmmi:event", eventType);
+            document.appendChild(data);
+            return data;
+        } catch (ParserConfigurationException e) {
+            throw new ConversionException(e.getMessage(), e);
+        }
     }
 
     /**
