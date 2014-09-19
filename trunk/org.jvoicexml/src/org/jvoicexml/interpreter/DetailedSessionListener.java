@@ -27,9 +27,10 @@
 package org.jvoicexml.interpreter;
 
 import org.jvoicexml.Session;
+import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
- * A listener to {@link SessionEvent}s. In contrast to the 
+ * A listener to {@link SessionEvent}s. In contrast to the
  * {@link org.jvoicexml.SessionListener} the events are not exposed remotely.
  * 
  * @author Dirk Schnelle-Walka
@@ -39,29 +40,27 @@ import org.jvoicexml.Session;
 public interface DetailedSessionListener {
     /**
      * The session has started.
-     * @param session the session
-     * @param event the event with detailed data
+     * 
+     * @param session
+     *            the session
      */
-    void sessionStarted(final Session session, final SessionEvent event);
-    
+    void sessionStarted(final Session session);
+
     /**
-     * A system output has happened.
-     * @param session the session
-     * @param event the event with detailed data
+     * An event was sent over the {@link org.jvoicexml.event.EventBus}.
+     * 
+     * @param session
+     *            the session
+     * @param event
+     *            the event with detailed data
      */
-    void sessionOutput(final Session session, final SessionEvent event);
-    
-    /**
-     * A user entered data.
-     * @param session the session
-     * @param event the event with detailed data
-     */
-    void sessionInput(final Session session, final SessionEvent event);
-    
+    void sessionEvent(final Session session, final JVoiceXMLEvent event);
+
     /**
      * The session has ended.
-     * @param session the session
-     * @param event the event with detailed data
+     * 
+     * @param session
+     *            the session
      */
-    void sessionEnded(final Session session, final SessionEvent event);
+    void sessionEnded(final Session session);
 }

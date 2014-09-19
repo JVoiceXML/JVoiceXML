@@ -113,7 +113,8 @@ public class XmlExtensionNotificationDataConverter
             throws ParserConfigurationException {
         final DocumentBuilderFactory factory = DocumentBuilderFactory
                 .newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
+        factory.setNamespaceAware(true);
+        final DocumentBuilder builder = factory.newDocumentBuilder();
         final Document document = builder.newDocument();
         final Element emma = document.createElementNS(EMMA_NAMESPACE,
                 "emma:emma");
@@ -204,18 +205,19 @@ public class XmlExtensionNotificationDataConverter
     @Override
     public Object convertSynthesizedOutputEvent(SynthesizedOutputEvent output)
             throws ConversionException {
+
         final DocumentBuilderFactory factory = DocumentBuilderFactory
                 .newInstance();
-        // factory.setNamespaceAware(true);
-        DocumentBuilder builder = null;
+        factory.setNamespaceAware(true);
         try {
-            builder = factory.newDocumentBuilder();
+            final DocumentBuilder builder = factory.newDocumentBuilder();
             final Document document = builder.newDocument();
             final Element data = document.createElementNS(
-                    "http://www.nowhere.org/jvmxlmmi", "jvxmlmmi:data");
+                    "http://www.nowhere.org/jvxmlmmi", "jvxmlmmi:data");
             final String eventType = toEventType(output);
             data.setAttributeNS("http://www.nowhere.org/jvxmlmmi",
                     "jvxmlmmi:event", eventType);
+            document.appendChild(data);
             final SpeakableText speakable = getSpeakable(output);
             if (speakable != null) {
                 final Document ssml = toDocument(speakable);
@@ -225,7 +227,6 @@ public class XmlExtensionNotificationDataConverter
                     data.appendChild(speak);
                 }
             }
-            document.appendChild(data);
             return data;
         } catch (ParserConfigurationException e) {
             throw new ConversionException(e.getMessage(), e);
@@ -312,6 +313,7 @@ public class XmlExtensionNotificationDataConverter
             throws ConversionException {
         final DocumentBuilderFactory factory = DocumentBuilderFactory
                 .newInstance();
+        factory.setNamespaceAware(true);
         DocumentBuilder builder = null;
         try {
             builder = factory.newDocumentBuilder();

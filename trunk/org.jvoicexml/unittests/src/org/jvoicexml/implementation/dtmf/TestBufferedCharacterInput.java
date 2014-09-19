@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation.jvxml;
+package org.jvoicexml.implementation.dtmf;
 
 import java.util.Collection;
 

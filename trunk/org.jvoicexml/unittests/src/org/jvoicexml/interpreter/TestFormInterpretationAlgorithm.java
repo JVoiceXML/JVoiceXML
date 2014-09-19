@@ -677,6 +677,9 @@ public final class TestFormInterpretationAlgorithm {
     @Test
     public void testActivateInitialFieldGrammars() throws Exception,
             JVoiceXMLEvent {
+        // Create a document with
+        // - 1 form level grammar
+        // - 2 fields (1 with an grammar)
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
         final Form form = vxml.appendChild(Form.class);
@@ -727,11 +730,13 @@ public final class TestFormInterpretationAlgorithm {
             };
         };
         thread.start();
+        // There should be only 1 grammar when we start
         final MockUserInput input = (MockUserInput) platform.getUserInput();
         input.waitRecognitionStarted();
         final Collection<GrammarDocument> activeGrammars = input
                 .getActiveGrammars();
         Assert.assertEquals(1, activeGrammars.size());
+        // Fake an input to fill one of the fields using the form grammar
         final EventHandler handler = context.getEventHandler();
         final MockRecognitionResult result = new MockRecognitionResult();
         result.setUtterance("visa");
@@ -745,9 +750,13 @@ public final class TestFormInterpretationAlgorithm {
         result.setConfidence(1.0f);
         final JVoiceXMLEvent recognitionEvent = new RecognitionEvent(null,
                 null, result);
+        input.stopRecognition();
         handler.onEvent(recognitionEvent);
+        // Processing should continue with the second field
+        // from level grammar and field grammar should be active
         input.waitRecognitionStarted();
         Assert.assertEquals(2, activeGrammars.size());
+        // hangup
         final JVoiceXMLEvent cancel = new CancelEvent();
         handler.onEvent(cancel);
     }
