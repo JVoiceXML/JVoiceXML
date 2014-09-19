@@ -37,10 +37,10 @@ import org.apache.log4j.Logger;
 class InterdigitTimeoutThread extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(CharacterInputThread.class);
+            Logger.getLogger(DtmfInputThread.class);
 
     /** The related character input. */
-    private final BufferedCharacterInput input;
+    private final BufferedDtmfInput input;
 
     /** Set to true if a digit has been entered. */
     private boolean enteredDigit;
@@ -64,7 +64,7 @@ class InterdigitTimeoutThread extends Thread {
      * @param term the terminate character
      */
     public InterdigitTimeoutThread(
-            final BufferedCharacterInput characterInput,
+            final BufferedDtmfInput characterInput,
             final long timeout, final char term) {
         setDaemon(true);
         setName("InterdigitTimeoutThread");
@@ -97,7 +97,7 @@ class InterdigitTimeoutThread extends Thread {
                 }
             }
         } while (enteredDigit);
-        input.addCharacter(termchar);
+        input.addDtmf(termchar);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("interdigit timeout thread terminated");
         }

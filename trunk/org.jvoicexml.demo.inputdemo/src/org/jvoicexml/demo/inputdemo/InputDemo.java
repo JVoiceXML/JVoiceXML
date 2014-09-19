@@ -40,7 +40,7 @@ import javax.naming.InitialContext;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
@@ -280,8 +280,8 @@ public final class InputDemo {
 
         LOGGER.info("sending DTMF '" + dtmf + "'");
 
-        CharacterInput input = session.getCharacterInput();
-        input.addCharacter(dtmf);
+        DtmfInput input = session.getDtmfInput();
+        input.addDtmf(dtmf);
 
         session.waitSessionEnd();
 

@@ -191,10 +191,11 @@
  </bean>
  
  <!--
-   Implementation of BufferCharacterInput to use
+   Implementation of DtmfInput to use
  --> 
- <bean id="org.jvoicexml.implementation.dtmf.BufferedCharacterInput"
-   class="org.jvoicexml.implementation.dtmf.BufferedCharacterInput">
+ <!-- uncomment to generally disable DTMF recognition -->
+ <bean id="org.jvoicexml.implementation.dtmf.BufferedDtmfInput"
+   class="org.jvoicexml.implementation.dtmf.BufferedDtmfInput">
  </bean>
  
 </beans>

@@ -24,7 +24,6 @@
  *
  */
 
-
 package org.jvoicexml.implementation.jvxml;
 
 import java.io.IOException;
@@ -33,7 +32,7 @@ import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.SpeechRecognizerProperties;
@@ -48,7 +47,7 @@ import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
-import org.jvoicexml.implementation.dtmf.BufferedCharacterInput;
+import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
@@ -56,26 +55,24 @@ import org.jvoicexml.xml.vxml.BargeInType;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-
 /**
  * Basic wrapper for {@link UserInput}.
- *
+ * 
  * <p>
  * The {@link UserInput} encapsulates two external resources. A basic
- * implementation for the {@link CharacterInput} is provided by the
- * interpreter. The unknown resource is the spoken input, which must be obtained
- * from a resource pool. This class combines these two as the {@link UserInput}
- * which is been used by the rest of the interpreter.
+ * implementation for the {@link DtmfInput} is provided by the interpreter.
+ * The unknown resource is the spoken input, which must be obtained from a
+ * resource pool. This class combines these two as the {@link UserInput} which
+ * is been used by the rest of the interpreter.
  * </p>
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.5
  */
-final class JVoiceXmlUserInput
-        implements UserInput, SpokenInputProvider {
+final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
     /** The character input device. */
-    private final BufferedCharacterInput characterInput;
+    private final BufferedDtmfInput dtmfInput;
 
     /** The spoken input device. */
     private final SpokenInput spokenInput;
@@ -85,22 +82,27 @@ final class JVoiceXmlUserInput
 
     /**
      * Constructs a new object.
-     * @param input the spoken input implementation.
-     * @param character the buffered character input.
-     * @param proc the grammar processor
+     * 
+     * @param input
+     *            the spoken input implementation.
+     * @param dtmf
+     *            the buffered character input.
+     * @param proc
+     *            the grammar processor
      */
     public JVoiceXmlUserInput(final SpokenInput input,
-            final BufferedCharacterInput character,
+            final BufferedDtmfInput dtmf,
             final ImplementationGrammarProcessor proc) {
         spokenInput = input;
-        characterInput = character;
+        dtmfInput = dtmf;
         processor = proc;
     }
 
     /**
      * Retrieves the spoken input.
+     * 
      * @return spoken input.
-     *
+     * 
      * @since 0.5.5
      */
     @Override
@@ -110,31 +112,29 @@ final class JVoiceXmlUserInput
 
     /**
      * Retrieves the character input.
+     * 
      * @return character input.
-     *
+     * 
      * @since 0.5.5
      */
-    public CharacterInput getCharacterInput() {
-        return characterInput;
+    public DtmfInput getDtmfInput() {
+        return dtmfInput;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void activateGrammars(
-            final Collection<GrammarDocument> grammars)
+    public void activateGrammars(final Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError,
-                UnsupportedFormatError {
-        final Collection<GrammarImplementation<?>> voiceGrammars =
-            new java.util.ArrayList<GrammarImplementation<?>>();
-        final Collection<GrammarImplementation<?>> dtmfGrammars =
-            new java.util.ArrayList<GrammarImplementation<?>>();
+            UnsupportedFormatError {
+        final Collection<GrammarImplementation<?>> voiceGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
+        final Collection<GrammarImplementation<?>> dtmfGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
 
         for (GrammarDocument grammar : grammars) {
             final ModeType type = grammar.getModeType();
-            final GrammarImplementation<?> impl =
-                processor.process(this, grammar);
+            final GrammarImplementation<?> impl = processor.process(this,
+                    grammar);
             // A grammar is voice by default.
             if (type == ModeType.DTMF) {
                 dtmfGrammars.add(impl);
@@ -143,11 +143,11 @@ final class JVoiceXmlUserInput
             }
         }
 
-        if (voiceGrammars.size() > 0) {
+        if (!voiceGrammars.isEmpty()) {
             spokenInput.activateGrammars(voiceGrammars);
         }
-        if (dtmfGrammars.size() > 0) {
-            characterInput.activateGrammars(dtmfGrammars);
+        if ((dtmfInput != null) && !dtmfGrammars.isEmpty()) {
+            dtmfInput.activateGrammars(dtmfGrammars);
         }
     }
 
@@ -155,13 +155,10 @@ final class JVoiceXmlUserInput
      * {@inheritDoc}
      */
     @Override
-    public void deactivateGrammars(
-            final Collection<GrammarDocument> grammars)
+    public void deactivateGrammars(final Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError {
-        final Collection<GrammarImplementation<?>> voiceGrammars =
-            new java.util.ArrayList<GrammarImplementation<?>>();
-        final Collection<GrammarImplementation<?>> dtmfGrammars =
-            new java.util.ArrayList<GrammarImplementation<?>>();
+        final Collection<GrammarImplementation<?>> voiceGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
+        final Collection<GrammarImplementation<?>> dtmfGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
 
         for (GrammarDocument grammar : grammars) {
             GrammarImplementation<?> impl;
@@ -180,11 +177,11 @@ final class JVoiceXmlUserInput
             }
         }
 
-        if (voiceGrammars.size() > 0) {
+        if (!voiceGrammars.isEmpty()) {
             spokenInput.deactivateGrammars(voiceGrammars);
         }
-        if (dtmfGrammars.size() > 0) {
-            characterInput.deactivateGrammars(dtmfGrammars);
+        if ((dtmfInput != null) && !dtmfGrammars.isEmpty()) {
+            dtmfInput.deactivateGrammars(dtmfGrammars);
         }
     }
 
@@ -200,16 +197,16 @@ final class JVoiceXmlUserInput
      * {@inheritDoc}
      */
     @Override
-    public GrammarImplementation<?> loadGrammar(
-            final Reader reader, final GrammarType type)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+    public GrammarImplementation<?> loadGrammar(final Reader reader,
+            final GrammarType type) throws NoresourceError, BadFetchError,
+            UnsupportedFormatError {
         if (type == GrammarType.SRGS_XML) {
             final InputSource inputSource = new InputSource(reader);
             final SrgsXmlDocument doc;
             try {
                 doc = new SrgsXmlDocument(inputSource);
             } catch (ParserConfigurationException e) {
-               throw new BadFetchError(e.getMessage(), e);
+                throw new BadFetchError(e.getMessage(), e);
             } catch (SAXException e) {
                 throw new BadFetchError(e.getMessage(), e);
             } catch (IOException e) {
@@ -225,7 +222,9 @@ final class JVoiceXmlUserInput
      */
     public void addListener(final SpokenInputListener listener) {
         spokenInput.addListener(listener);
-        characterInput.addListener(listener);
+        if (dtmfInput != null) {
+            dtmfInput.addListener(listener);
+        }
     }
 
     /**
@@ -233,7 +232,9 @@ final class JVoiceXmlUserInput
      */
     public void removeListener(final SpokenInputListener listener) {
         spokenInput.removeListener(listener);
-        characterInput.removeListener(listener);
+        if (dtmfInput != null) {
+            dtmfInput.removeListener(listener);
+        }
     }
 
     /**
@@ -241,10 +242,12 @@ final class JVoiceXmlUserInput
      */
     @Override
     public void startRecognition(final SpeechRecognizerProperties speech,
-            final DtmfRecognizerProperties dtmf)
-            throws NoresourceError, BadFetchError {
+            final DtmfRecognizerProperties dtmf) throws NoresourceError,
+            BadFetchError {
         spokenInput.startRecognition(speech, dtmf);
-        characterInput.startRecognition(speech, dtmf);
+        if (dtmfInput != null) {
+            dtmfInput.startRecognition(speech, dtmf);
+        }
     }
 
     /**
@@ -253,17 +256,18 @@ final class JVoiceXmlUserInput
     @Override
     public void stopRecognition() {
         spokenInput.stopRecognition();
-        characterInput.stopRecognition();
+        if (dtmfInput != null) {
+            dtmfInput.stopRecognition();
+        }
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public Collection<GrammarType> getSupportedGrammarTypes(
-            final ModeType mode) {
+    public Collection<GrammarType> getSupportedGrammarTypes(final ModeType mode) {
         if (mode == ModeType.DTMF) {
-            final Collection<GrammarType> types =
-                new java.util.ArrayList<GrammarType>();
+            final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
             types.add(GrammarType.SRGS_XML);
             return types;
         } else {
@@ -271,9 +275,9 @@ final class JVoiceXmlUserInput
         }
     }
 
-
     /**
      * Checks if the corresponding input device is busy.
+     * 
      * @return <code>true</code> if the input devices is busy.
      */
     public boolean isBusy() {

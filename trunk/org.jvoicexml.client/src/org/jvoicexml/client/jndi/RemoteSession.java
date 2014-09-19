@@ -31,7 +31,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import org.jvoicexml.Application;
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
@@ -82,7 +82,7 @@ public interface RemoteSession extends Remote {
      *                the user hung up
      * @since 0.5
      */
-    CharacterInput getCharacterInput() throws RemoteException,
+    DtmfInput getDtmfInput() throws RemoteException,
             ConnectionDisconnectHangupEvent;
 
     /**

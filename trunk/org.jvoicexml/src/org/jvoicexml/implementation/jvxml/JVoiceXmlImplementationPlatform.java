@@ -31,7 +31,7 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.Configurable;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
@@ -69,7 +69,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
-import org.jvoicexml.implementation.dtmf.BufferedCharacterInput;
+import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;
 import org.jvoicexml.implementation.grammar.JVoiceXmlImplementationGrammarProcessor;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -128,7 +128,7 @@ public final class JVoiceXmlImplementationPlatform
     private final Object inputLock;
 
     /** Support for DTMF input. */
-    private final BufferedCharacterInput characterInput;
+    private final BufferedDtmfInput dtmfInput;
 
     /** The calling device. */
     private JVoiceXmlCallControl call;
@@ -183,7 +183,7 @@ public final class JVoiceXmlImplementationPlatform
             final KeyedResourcePool<SpokenInput> spokenInputPool,
             final ConnectionInformation connectionInformation) {
         this(telePool, synthesizedOutputPool, spokenInputPool,
-                new BufferedCharacterInput(), connectionInformation);
+                new BufferedDtmfInput(), connectionInformation);
     }
 
     /**
@@ -211,13 +211,13 @@ public final class JVoiceXmlImplementationPlatform
             final KeyedResourcePool<Telephony> telePool,
             final KeyedResourcePool<SynthesizedOutput> synthesizedOutputPool,
             final KeyedResourcePool<SpokenInput> spokenInputPool,
-            final BufferedCharacterInput bufferedCharacterInput,
+            final BufferedDtmfInput bufferedCharacterInput,
             final ConnectionInformation connectionInformation) {
         info = connectionInformation;
         telephonyPool = telePool;
         synthesizerPool = synthesizedOutputPool;
         recognizerPool = spokenInputPool;
-        characterInput = bufferedCharacterInput;
+        dtmfInput = bufferedCharacterInput;
         inputLock = new Object();
         processor = new JVoiceXmlImplementationGrammarProcessor();
         promptAccumulator = new JVoiceXmlPromptAccumulator(this);
@@ -349,7 +349,7 @@ public final class JVoiceXmlImplementationPlatform
             if (input == null) {
                 final SpokenInput spokenInput = getExternalResourceFromPool(
                         recognizerPool, type);
-                input = new JVoiceXmlUserInput(spokenInput, characterInput,
+                input = new JVoiceXmlUserInput(spokenInput, dtmfInput,
                         processor);
                 input.addListener(this);
                 LOGGER.info("borrowed user input of type '" + type + "'");
@@ -363,7 +363,7 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public boolean hasUserInput() {
+    public boolean isUserInputActive() {
         synchronized (info) {
             return input != null;
         }
@@ -404,7 +404,7 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public CharacterInput getCharacterInput() throws NoresourceError,
+    public DtmfInput getCharacterInput() throws NoresourceError,
             ConnectionDisconnectHangupEvent {
         synchronized (this) {
             if (hungup) {
@@ -414,7 +414,7 @@ public final class JVoiceXmlImplementationPlatform
                 throw new NoresourceError("implementation platform closed");
             }
         }
-        return characterInput;
+        return dtmfInput;
     }
 
     /**

@@ -30,7 +30,7 @@ import java.net.URI;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 
@@ -73,7 +73,7 @@ public interface RemoteSession
      *
      * @since 0.5
      */
-    CharacterInput getCharacterInput()
+    DtmfInput getCharacterInput()
             throws RemoteException, NoresourceError;
 
     /**

@@ -28,18 +28,18 @@ package org.jvoicexml.client.jndi;
 
 import java.io.Serializable;
 
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DtmfInput;
 
 /**
- * Stub for the {@link CharacterInput}.
+ * Stub for the {@link DtmfInput}.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.5
  */
-public final class CharacterInputStub
-        extends AbstractStub<RemoteCharacterInput>
-        implements CharacterInput, Stub, Serializable {
+public final class DtmfInputStub
+        extends AbstractStub<RemoteDtmfInput>
+        implements DtmfInput, Stub, Serializable {
     /**
      * The serial version UID.
      */
@@ -51,14 +51,14 @@ public final class CharacterInputStub
     /**
      * Constructs a new object.
      */
-    public CharacterInputStub() {
+    public DtmfInputStub() {
     }
 
     /**
      * Constructs a new object.
      * @param id The session ID.
      */
-    public CharacterInputStub(final String id) {
+    public DtmfInputStub(final String id) {
         sessionID = id;
     }
 
@@ -67,29 +67,29 @@ public final class CharacterInputStub
      */
     @Override
     protected Class<?> getLocalClass() {
-        return CharacterInput.class;
+        return DtmfInput.class;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected Class<RemoteCharacterInput> getRemoteClass() {
-        return RemoteCharacterInput.class;
+    protected Class<RemoteDtmfInput> getRemoteClass() {
+        return RemoteDtmfInput.class;
     }
 
     /**
      * {@inheritDoc}
      */
     public String getStubName() {
-        return CharacterInput.class.getSimpleName() + "." + sessionID;
+        return DtmfInput.class.getSimpleName() + "." + sessionID;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void addCharacter(final char dtmf) {
-        final RemoteCharacterInput input = getSkeleton(sessionID);
+    public void addDtmf(final char dtmf) {
+        final RemoteDtmfInput input = getSkeleton(sessionID);
         try {
             input.addCharacter(dtmf);
         } catch (java.rmi.RemoteException re) {
