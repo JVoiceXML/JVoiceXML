@@ -1,13 +1,34 @@
 package org.jvoicexml.callmanager.mmi;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.junit.Test;
 import org.jvoicexml.LastResult;
+import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import org.w3c.dom.Element;
 
-public class EmmaExtensionNotificationDataConverterTest {
+public class XmlExtensionNotificationDataConverterTest {
+
+    @Test
+    public void testQueueEmpty() throws Exception {
+        final XmlExtensionNotificationDataConverter converter = new XmlExtensionNotificationDataConverter();
+        final QueueEmptyEvent empty = new QueueEmptyEvent(null, null);
+        Element element = (Element) converter
+                .convertSynthesizedOutputEvent(empty);
+        System.out.println(toString(element));
+    }
 
     @Test
     public void testConvertApplicationLastResult() throws Exception {
@@ -55,7 +76,26 @@ public class EmmaExtensionNotificationDataConverterTest {
         final Object out = scope.get("out", scope);
         final LastResult result = new LastResult("yes", .75f, "voice", out);
         list.add(result);
-        converter.convertApplicationLastResult(list);
+        final Element element = (Element) converter
+                .convertApplicationLastResult(list);
+        System.out.println(toString(element));
+    }
+
+    public String toString(Element element) {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final Result result = new StreamResult(out);
+        final TransformerFactory transformerFactory = TransformerFactory
+                .newInstance();
+        try {
+            final Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
+                    "yes");
+            final Source source = new DOMSource(element);
+            transformer.transform(source, result);
+            return out.toString();
+        } catch (TransformerException e) {
+            return super.toString();
+        }
     }
 
 }

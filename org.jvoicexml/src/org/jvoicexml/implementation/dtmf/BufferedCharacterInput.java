@@ -57,7 +57,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @version $LastChangedRevision$
  * @since 0.5
  */
-public final class BufferedCharacterInput
+public class BufferedCharacterInput
         implements CharacterInput, SpokenInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
