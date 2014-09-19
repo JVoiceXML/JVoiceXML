@@ -44,7 +44,7 @@ package org.jvoicexml;
  * @version $Revision$
  * @since 0.5
  */
-public interface CharacterInput {
+public interface DtmfInput {
     /**
      * The user entered a DTMF.
      *
@@ -52,5 +52,5 @@ public interface CharacterInput {
      * @throws IllegalArgumentException if the char is not one of
      *         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, #, *.
      */
-    void addCharacter(final char dtmf) throws IllegalArgumentException;
+    void addDtmf(final char dtmf) throws IllegalArgumentException;
 }

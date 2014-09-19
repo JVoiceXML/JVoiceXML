@@ -37,7 +37,7 @@ import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
@@ -303,16 +303,16 @@ public final class TextCall implements Call  {
     @Override
     public void enter(final String digits) {
         Assert.assertNotNull("no active session", session);
-        CharacterInput input = null;
+        DtmfInput input = null;
         try {
             inputMonitor.waitUntilExpectingInput();
-            input = session.getCharacterInput();
+            input = session.getDtmfInput();
         } catch (JVoiceXMLEvent | InterruptedException e) {
             throw new AssertionError(e);
         }
         for (int i = 0; i < digits.length(); i++) {
             final char ch = digits.charAt(i);
-            input.addCharacter(ch);
+            input.addDtmf(ch);
         }
         for (CallListener listener : listeners) {
             listener.entered(digits);
@@ -326,20 +326,20 @@ public final class TextCall implements Call  {
     @Override
     public void enter(final String digits, final long timeout) {
         Assert.assertNotNull("no active session", session);
-        CharacterInput input = null;
+        DtmfInput input = null;
         try {
             if (timeout == 0) {
                 inputMonitor.waitUntilExpectingInput();
             } else {
                 inputMonitor.waitUntilExpectingInput(timeout);
             }
-            input = session.getCharacterInput();
+            input = session.getDtmfInput();
         } catch (JVoiceXMLEvent | InterruptedException | TimeoutException e) {
             throw new AssertionError(e);
         }
         for (int i = 0; i < digits.length(); i++) {
             final char ch = digits.charAt(i);
-            input.addCharacter(ch);
+            input.addDtmf(ch);
         }
         for (CallListener listener : listeners) {
             listener.entered(digits);

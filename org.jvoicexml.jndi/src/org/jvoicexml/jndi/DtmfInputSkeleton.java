@@ -29,23 +29,23 @@ package org.jvoicexml.jndi;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import org.jvoicexml.CharacterInput;
-import org.jvoicexml.client.jndi.RemoteCharacterInput;
+import org.jvoicexml.DtmfInput;
+import org.jvoicexml.client.jndi.RemoteDtmfInput;
 
 /**
- * Skeleton for the {@link org.jvoicexml.CharacterInput}.
+ * Skeleton for the {@link org.jvoicexml.DtmfInput}.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.5
  */
-public final class CharacterInputSkeleton
-        extends UnicastRemoteObject implements RemoteCharacterInput, Skeleton {
+public final class DtmfInputSkeleton
+        extends UnicastRemoteObject implements RemoteDtmfInput, Skeleton {
     /** The serial version UID. */
     private static final long serialVersionUID = -5497137347016070409L;
 
     /** The character input device. */
-    private final CharacterInput input;
+    private final DtmfInput input;
 
     /** The session ID. */
     private String sessionID;
@@ -55,7 +55,7 @@ public final class CharacterInputSkeleton
      * @throws RemoteException
      *         Error creating the skeleton.
      */
-    public CharacterInputSkeleton()
+    public DtmfInputSkeleton()
             throws RemoteException {
         input = null;
     }
@@ -67,8 +67,8 @@ public final class CharacterInputSkeleton
      * @throws RemoteException
      *         Error creating the skeleton.
      */
-    public CharacterInputSkeleton(final String id,
-                                  final CharacterInput characterInput)
+    public DtmfInputSkeleton(final String id,
+                                  final DtmfInput characterInput)
             throws RemoteException {
         sessionID = id;
         input = characterInput;
@@ -83,7 +83,7 @@ public final class CharacterInputSkeleton
             throw new RemoteException("No input! Cannot process dtmf: "
                     + dtmf);
         }
-        input.addCharacter(dtmf);
+        input.addDtmf(dtmf);
     }
 
     /**
@@ -91,6 +91,6 @@ public final class CharacterInputSkeleton
      */
     public String getSkeletonName()
             throws RemoteException {
-        return RemoteCharacterInput.class.getSimpleName() + "." + sessionID;
+        return RemoteDtmfInput.class.getSimpleName() + "." + sessionID;
     }
 }

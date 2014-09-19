@@ -41,13 +41,13 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @version $Revision$
  * @since 0.7
  */
-class CharacterInputThread extends Thread {
+class DtmfInputThread extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
-            .getLogger(CharacterInputThread.class);
+            .getLogger(DtmfInputThread.class);
 
     /** The related character input. */
-    private final BufferedCharacterInput input;
+    private final BufferedDtmfInput input;
 
     /** Reference to the current DTMF recognition properties. */
     private final DtmfRecognizerProperties props;
@@ -60,7 +60,7 @@ class CharacterInputThread extends Thread {
      * @param dtmf
      *            DTM recognition properties
      */
-    public CharacterInputThread(final BufferedCharacterInput characterInput,
+    public DtmfInputThread(final BufferedDtmfInput characterInput,
             final DtmfRecognizerProperties dtmf) {
         setDaemon(true);
         setName("CharacterInput");
@@ -127,7 +127,7 @@ class CharacterInputThread extends Thread {
      * @since 0.7.5
      */
     private void notifyInput(final String utterance) {
-        final CharacterInputRecognitionResult result = new CharacterInputRecognitionResult(
+        final DtmfInputResult result = new DtmfInputResult(
                 utterance);
         final boolean accepted = input.isAccepted(result);
         result.setAccepted(accepted);

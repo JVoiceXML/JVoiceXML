@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
@@ -94,7 +94,7 @@ public final class MockImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public CharacterInput getCharacterInput() throws NoresourceError {
+    public DtmfInput getCharacterInput() throws NoresourceError {
         return null;
     }
 
@@ -166,7 +166,7 @@ public final class MockImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public boolean hasUserInput() {
+    public boolean isUserInputActive() {
         return input != null;
     }
 

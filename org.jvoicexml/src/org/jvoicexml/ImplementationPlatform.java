@@ -82,7 +82,7 @@ public interface ImplementationPlatform extends PromptAccumulator {
      * @return <code>true</code> if there is an acquired user input device. 
      * @since 0.7.3
      */
-    boolean hasUserInput();
+    boolean isUserInputActive();
 
     /**
      * Retrieves the user input device.
@@ -105,7 +105,7 @@ public interface ImplementationPlatform extends PromptAccumulator {
      * @exception ConnectionDisconnectHangupEvent
      *            the user hung up
      */
-    CharacterInput getCharacterInput()
+    DtmfInput getCharacterInput()
         throws NoresourceError, ConnectionDisconnectHangupEvent;
 
     /**

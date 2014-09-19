@@ -79,7 +79,7 @@ org.jvoicexml/personal-props/README.txt
                 <include name="org/jvoicexml/CallControl.class" />
                 <include name="org/jvoicexml/UserInput.class" />
                 <include name="org/jvoicexml/SystemOutput.class" />
-                <include name="org/jvoicexml/CharacterInput.class" />
+                <include name="org/jvoicexml/DtmfInput.class" />
                 <include name="org/jvoicexml/ConnectionInformation.class" />
                 <include name="org/jvoicexml/RemoteConnectable.class" />
                 <include name="org/jvoicexml/SessionListener.class" />
