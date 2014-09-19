@@ -313,14 +313,18 @@ public class MockUserInput implements UserInput {
      * @return <code>true</code> if the recognition has been started.
      */
     public boolean isRecognitionStarted() {
-        return recognitionStarted;
+        synchronized (recognitionStartedLock) {
+            return recognitionStarted;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void stopRecognition() {
-        recognitionStarted = false;
+        synchronized (recognitionStartedLock) {
+            recognitionStarted = false;
+        }
     }
 
     /**

@@ -444,10 +444,8 @@ public final class JVoiceXmlSession extends Thread
             }
         }
         synchronized (detailedSessionListeners) {
-            final SessionEvent event = new SessionEvent(this,
-                    SessionEvent.SESSION_STARTED);
             for (DetailedSessionListener listener : detailedSessionListeners) {
-                listener.sessionStarted(this, event);
+                listener.sessionStarted(this);
             }
         }
     }
@@ -466,10 +464,8 @@ public final class JVoiceXmlSession extends Thread
         }
 
         synchronized (detailedSessionListeners) {
-            final SessionEvent event = new SessionEvent(this,
-                    SessionEvent.SESSION_ENDED);
             for (DetailedSessionListener listener : detailedSessionListeners) {
-                listener.sessionEnded(this, event);
+                listener.sessionEnded(this);
             }
         }
 
@@ -552,18 +548,8 @@ public final class JVoiceXmlSession extends Thread
      */
     @Override
     public void onEvent(final JVoiceXMLEvent event) {
-        if (event instanceof SynthesizedOutputEvent) {
-            final SessionEvent sessionEvent = new SessionEvent(this,
-                    SessionEvent.SESSION_OUTPUT, event);
-            for (DetailedSessionListener listener : detailedSessionListeners) {
-                listener.sessionOutput(this, sessionEvent);
-            }
-        } else if (event instanceof SpokenInputEvent) {
-            final SessionEvent sessionEvent = new SessionEvent(this,
-                    SessionEvent.SESSION_INPUT, event);
-            for (DetailedSessionListener listener : detailedSessionListeners) {
-                listener.sessionInput(this, sessionEvent);
-            }
+        for (DetailedSessionListener listener : detailedSessionListeners) {
+            listener.sessionEvent(this, event);
         }
     }
 }

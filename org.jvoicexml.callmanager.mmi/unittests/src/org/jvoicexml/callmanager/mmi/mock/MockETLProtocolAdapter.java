@@ -25,7 +25,12 @@
  */
 package org.jvoicexml.callmanager.mmi.mock;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
@@ -33,11 +38,13 @@ import org.jvoicexml.mmi.events.Mmi;
 
 /**
  * Dummy implementation of an {@link ETLProtocolAdapter}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
 public final class MockETLProtocolAdapter implements ETLProtocolAdapter {
+    private Mmi mmi;
 
     /**
      * {@inheritDoc}
@@ -73,6 +80,26 @@ public final class MockETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void sendMMIEvent(final Object channel, final Mmi event) {
+        mmi = event;
+    }
+
+    /**
+     * Retrieves the last sent MMI event.
+     * 
+     * @return the last sent MMI event.
+     * @since 0.7.7
+     */
+    public Mmi getMmi() {
+        return mmi;
+    }
+
+
+    public String getMmiAsString() throws JAXBException {
+        final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
+        final Marshaller marshaller = ctx.createMarshaller();
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        marshaller.marshal(mmi, out);
+        return out.toString();
     }
 
     /**

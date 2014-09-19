@@ -36,7 +36,6 @@ import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.interpreter.DetailedSessionListener;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.jvoicexml.interpreter.SessionEvent;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.Mmi;
@@ -79,56 +78,38 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
      * {@inheritDoc}
      */
     @Override
-    public void sessionStarted(final Session session, final SessionEvent event) {
+    public void sessionStarted(final Session session) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void sessionOutput(final Session session, final SessionEvent event) {
+    public void sessionEvent(final Session session, final JVoiceXMLEvent event) {
         final Mmi mmi = new Mmi();
         final ExtensionNotification notification = new ExtensionNotification();
         mmi.setExtensionNotification(notification);
         notification.setContext(context.getContextId());
         notification.setRequestId(UUID.randomUUID().toString());
         notification.setTarget(context.getTarget());
-        final SynthesizedOutputEvent output = (SynthesizedOutputEvent) event
-                .getRootEvent();
-        try {
-            final Object data = converter.convertSynthesizedOutputEvent(output);
-            final AnyComplexType any = new AnyComplexType();
-            any.addContent(data);
-            notification.setData(any);
-            adapter.sendMMIEvent(context.getChannel(), mmi);
-        } catch (ConversionException | IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void sessionInput(final Session session, final SessionEvent event) {
-        final Mmi mmi = new Mmi();
-        final ExtensionNotification notification = new ExtensionNotification();
-        mmi.setExtensionNotification(notification);
-        notification.setContext(context.getContextId());
-        notification.setRequestId(UUID.randomUUID().toString());
-        notification.setTarget(context.getTarget());
-        final JVoiceXMLEvent rootEvent = event.getRootEvent();
-        final Object data;
-        if (rootEvent instanceof RecognitionEvent) {
-            final RecognitionEvent input = (RecognitionEvent) rootEvent;
+        Object data = null;
+        if (event instanceof SynthesizedOutputEvent) {
+            final SynthesizedOutputEvent output = (SynthesizedOutputEvent) event;
+            try {
+                data = converter.convertSynthesizedOutputEvent(output);
+            } catch (ConversionException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        } else if (event instanceof RecognitionEvent) {
+            final RecognitionEvent input = (RecognitionEvent) event;
             try {
                 data = converter.convertRecognitionEvent(input);
             } catch (ConversionException e) {
                 LOGGER.error(e.getMessage(), e);
                 return;
             }
-        } else {
-            final SpokenInputEvent input = (SpokenInputEvent) rootEvent;
+        } else if (event instanceof SpokenInputEvent) {
+            final SpokenInputEvent input = (SpokenInputEvent) event;
             try {
                 data = converter.convertSpokenInputEvent(input);
             } catch (ConversionException e) {
@@ -136,11 +117,14 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
                 return;
             }
         }
-        final AnyComplexType any = new AnyComplexType();
-        any.addContent(data);
-        notification.setData(any);
+        if (data != null) {
+            final AnyComplexType any = new AnyComplexType();
+            any.addContent(data);
+            notification.setData(any);
+        }
         try {
-            adapter.sendMMIEvent(context.getChannel(), mmi);
+            final Object channel = context.getChannel();
+            adapter.sendMMIEvent(channel, mmi);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -150,7 +134,7 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
      * {@inheritDoc}
      */
     @Override
-    public void sessionEnded(final Session session, final SessionEvent event) {
+    public void sessionEnded(final Session session) {
         // Remove this instance asynchronously to avoid a concurrent
         // modification exception
         final DetailedSessionListener listener = this;

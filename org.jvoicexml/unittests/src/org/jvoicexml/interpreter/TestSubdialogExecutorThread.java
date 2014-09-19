@@ -33,6 +33,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.Configuration;
+import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.ReturnEvent;
@@ -40,6 +41,7 @@ import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
 import org.jvoicexml.mock.config.MockConfiguration;
+import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
@@ -51,7 +53,7 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Test case for {@link org.jvoicexml.interpreter.SubdialogExecutorThread}.
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision: 4097 $
  * @since 0.7.7
@@ -63,28 +65,32 @@ public class TestSubdialogExecutorThread {
 
     /**
      * Set up the test environment.
+     * 
      * @exception Exception
-     *            set up failed
+     *                set up failed
      */
     @Before
     public void setUp() throws Exception {
         final MockJvoiceXmlCore jvxml = new MockJvoiceXmlCore();
-
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(null, jvxml, null);
+        final ImplementationPlatform platform = new MockImplementationPlatform();
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.ObjectExecutorThread#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.ObjectFormItem)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.ObjectExecutorThread#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.ObjectFormItem)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test
-    public void testExecute()throws Exception, JVoiceXMLEvent  {
+    public void testExecute() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
         final Form form = vxml.appendChild(Form.class);
@@ -100,13 +106,13 @@ public class TestSubdialogExecutorThread {
         assign.setExpr("testparam * 2");
         final Return ret = block.appendChild(Return.class);
         ret.setNamelist("testparam");
-        final SubdialogFormItem item = new SubdialogFormItem(context, subdialog); 
+        final SubdialogFormItem item = new SubdialogFormItem(context, subdialog);
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, null, dialog);
-        final EventHandler handler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler(null);
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, null, dialog);
+        final EventHandler handler = new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
+                null);
         final EventBus eventbus = context.getEventBus();
         eventbus.subscribe("", handler);
         handler.collect(context, null, fia, item);
@@ -117,8 +123,8 @@ public class TestSubdialogExecutorThread {
         final JVoiceXmlApplication application = new JVoiceXmlApplication(null);
         application.addDocument(new URI("test"), doc);
 
-        final SubdialogExecutorThread executor =
-            new SubdialogExecutorThread(uri, context, application, params);
+        final SubdialogExecutorThread executor = new SubdialogExecutorThread(
+                uri, context, application, params);
 
         executor.start();
         executor.join();
