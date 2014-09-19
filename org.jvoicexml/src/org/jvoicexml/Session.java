@@ -145,7 +145,7 @@ public interface Session {
      *            the user hung up
      * @since 0.5
      */
-    CharacterInput getCharacterInput()
+    DtmfInput getDtmfInput()
             throws NoresourceError, ConnectionDisconnectHangupEvent;
 
     /**

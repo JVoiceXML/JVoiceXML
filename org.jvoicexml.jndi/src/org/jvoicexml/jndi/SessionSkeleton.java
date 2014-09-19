@@ -34,10 +34,10 @@ import javax.naming.Context;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.jndi.ApplicationStub;
-import org.jvoicexml.client.jndi.CharacterInputStub;
+import org.jvoicexml.client.jndi.DtmfInputStub;
 import org.jvoicexml.client.jndi.RemoteSession;
 import org.jvoicexml.client.jndi.Stub;
 import org.jvoicexml.event.ErrorEvent;
@@ -139,16 +139,16 @@ final class SessionSkeleton extends UnicastRemoteObject
      * {@inheritDoc}
      */
     @Override
-    public CharacterInput getCharacterInput() throws RemoteException {
+    public DtmfInput getDtmfInput() throws RemoteException {
         if (session == null) {
             return null;
         }
 
         try {
             final String id = session.getSessionID();
-            final CharacterInput input = session.getCharacterInput();
-            final Skeleton skeleton = new CharacterInputSkeleton(id, input);
-            final CharacterInput characterInput = new CharacterInputStub(id);
+            final DtmfInput input = session.getDtmfInput();
+            final Skeleton skeleton = new DtmfInputSkeleton(id, input);
+            final DtmfInput characterInput = new DtmfInputStub(id);
             final Stub stub = (Stub) characterInput;
 
             JVoiceXmlJndiSupport.bind(context, skeleton, stub);

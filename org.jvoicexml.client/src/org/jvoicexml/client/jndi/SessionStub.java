@@ -33,7 +33,7 @@ import java.rmi.RemoteException;
 import javax.naming.Context;
 
 import org.jvoicexml.Application;
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.event.ErrorEvent;
@@ -162,11 +162,11 @@ public final class SessionStub
      * {@inheritDoc}
      */
     @Override
-    public CharacterInput getCharacterInput()
+    public DtmfInput getDtmfInput()
             throws NoresourceError, ConnectionDisconnectHangupEvent {
         final RemoteSession session = getSkeleton(sessionID);
         try {
-            return session.getCharacterInput();
+            return session.getDtmfInput();
         } catch (java.rmi.RemoteException re) {
             clearSkeleton();
             final ErrorEvent event = getErrorEvent(re);

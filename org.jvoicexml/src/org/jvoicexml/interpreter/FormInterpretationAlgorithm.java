@@ -670,7 +670,7 @@ public final class FormInterpretationAlgorithm
         // Do some cleanup before continuing.
         final ImplementationPlatform platform =
                 context.getImplementationPlatform();
-        final boolean hasUserInput = platform.hasUserInput();
+        final boolean hasUserInput = platform.isUserInputActive();
         if (hasUserInput) {
             final UserInput userInput = platform.getUserInput();
             userInput.stopRecognition();

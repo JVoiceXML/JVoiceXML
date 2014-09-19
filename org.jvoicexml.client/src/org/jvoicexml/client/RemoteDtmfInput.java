@@ -48,7 +48,7 @@ import java.rmi.RemoteException;
  *
  * @since 0.5
  */
-public interface RemoteCharacterInput
+public interface RemoteDtmfInput
         extends Remote {
     /**
      * The user entered a DTMF.

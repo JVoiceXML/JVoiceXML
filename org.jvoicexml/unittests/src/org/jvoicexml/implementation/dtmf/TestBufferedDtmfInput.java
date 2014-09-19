@@ -41,7 +41,7 @@ import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
-import org.jvoicexml.implementation.dtmf.BufferedCharacterInput;
+import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -51,15 +51,15 @@ import org.jvoicexml.xml.srgs.Ruleref;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
- * Test case for the {@link BufferedCharacterInput}.
+ * Test case for the {@link BufferedDtmfInput}.
  * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-public final class TestBufferedCharacterInput implements SpokenInputListener {
+public final class TestBufferedDtmfInput implements SpokenInputListener {
     /** The test object. */
-    private BufferedCharacterInput input;
+    private BufferedDtmfInput input;
 
     /** Synchronisation. */
     private Object lock;
@@ -79,7 +79,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
     @Before
     public void setUp() throws Exception {
         lock = new Object();
-        input = new BufferedCharacterInput();
+        input = new BufferedDtmfInput();
         input.addListener(this);
         dtmfProps = new DtmfRecognizerProperties();
         dtmfProps.setInterdigittimeout("1s");
@@ -87,7 +87,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.implementation.dtmf.BufferedCharacterInput#addCharacter(char)}
+     * {@link org.jvoicexml.implementation.dtmf.BufferedDtmfInput#addDtmf(char)}
      * .
      * 
      * @exception JVoiceXMLEvent
@@ -118,7 +118,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
 
         input.startRecognition(null, dtmfProps);
         final char dtmf = '2';
-        input.addCharacter(dtmf);
+        input.addDtmf(dtmf);
         while (result == null) {
             synchronized (lock) {
                 lock.wait();
@@ -130,7 +130,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
 
         input.startRecognition(null, dtmfProps);
         final char invalidDtmf = '4';
-        input.addCharacter(invalidDtmf);
+        input.addDtmf(invalidDtmf);
 
         while (result == null) {
             synchronized (lock) {
@@ -145,7 +145,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.implementation.dtmf.BufferedCharacterInput#addCharacter(char)}
+     * {@link org.jvoicexml.implementation.dtmf.BufferedDtmfInput#addDtmf(char)}
      * .
      * 
      * @exception JVoiceXMLEvent
@@ -157,7 +157,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
     public void testAddCharacterNoGrammar() throws JVoiceXMLEvent, Exception {
         input.startRecognition(null, dtmfProps);
         final char dtmf = '2';
-        input.addCharacter(dtmf);
+        input.addDtmf(dtmf);
         synchronized (lock) {
             lock.wait();
         }
@@ -167,7 +167,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
     }
 
     /**
-     * Test case for {@link BufferedCharacterInput#addCharacter(char)} with a
+     * Test case for {@link BufferedDtmfInput#addDtmf(char)} with a
      * 4-digit PIN.
      * 
      * @exception JVoiceXMLEvent
@@ -208,13 +208,13 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
 
         input.startRecognition(null, dtmfProps);
         final char dtmf1 = '1';
-        input.addCharacter(dtmf1);
+        input.addDtmf(dtmf1);
         final char dtmf2 = '2';
-        input.addCharacter(dtmf2);
+        input.addDtmf(dtmf2);
         final char dtmf3 = '3';
-        input.addCharacter(dtmf3);
+        input.addDtmf(dtmf3);
         final char dtmf4 = '4';
-        input.addCharacter(dtmf4);
+        input.addDtmf(dtmf4);
         synchronized (lock) {
             lock.wait();
         }

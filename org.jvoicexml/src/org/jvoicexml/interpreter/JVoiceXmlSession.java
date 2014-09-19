@@ -33,7 +33,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
 import org.jvoicexml.Application;
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.ConnectionInformation;
@@ -262,7 +262,7 @@ public final class JVoiceXmlSession extends Thread
      * {@inheritDoc}
      */
     @Override
-    public CharacterInput getCharacterInput() throws NoresourceError,
+    public DtmfInput getDtmfInput() throws NoresourceError,
             ConnectionDisconnectHangupEvent {
         if (closed) {
             throw new NoresourceError("Session is already closed");

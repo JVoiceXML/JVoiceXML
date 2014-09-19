@@ -28,6 +28,7 @@
     <ul>
         <li>bugfix: transformer in SsmlParser uses the encapsulated
             node</li>
+        <li>refactoring: renamed CharacterInput to DtmfInput</li>
         <li>more support for
             <ul>
                 <li>grammar
@@ -70,6 +71,11 @@
             listeners since these can be handled better by a detailed
             session listener</li>
         <li>refactoring: moved DTMF recognizer into an own package</li>
+        <li>refactoring: renamed
+            ImplementationPlatform.hasUserInput to
+            ImplemenetationPlatform.isUserInputActive to describe the
+            meaning of the method better</li>
+        <li>DTMF recognition can be generally disabled</li>
     </ul>
 
     <h4>jsapi10 implementation platform</h4>

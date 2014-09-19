@@ -36,7 +36,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @version $Revision$
  * @since 0.5
  */
-class CharacterInputRecognitionResult
+class DtmfInputResult
         implements RecognitionResult {
     /** The recognized DTMF string. */
     private final String utterance;
@@ -51,7 +51,7 @@ class CharacterInputRecognitionResult
      * Constructs a new accepted result..
      * @param dtmf the recognized DTMF string.
      */
-    public CharacterInputRecognitionResult(final String dtmf) {
+    public DtmfInputResult(final String dtmf) {
         utterance = dtmf;
     }
 
@@ -61,7 +61,7 @@ class CharacterInputRecognitionResult
      * @param isAccepted <code>true</code> if the result is accepted.
      * @since 0.7
      */
-    public CharacterInputRecognitionResult(final String dtmf,
+    public DtmfInputResult(final String dtmf,
             final boolean isAccepted) {
         utterance = dtmf;
         accepted = isAccepted;

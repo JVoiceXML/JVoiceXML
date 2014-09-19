@@ -26,48 +26,35 @@
 
 package org.jvoicexml.implementation.jsapi20;
 
-import org.jvoicexml.SpeakablePhoneInfo;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SynthesisResult;
 
 /**
  * Implementation of a {@link SynthesisResult} for the JSAPI 20 platform.
- *
+ * 
  * @author Renato Cassaca
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
-public final class Jsapi20SynthesisResult implements SynthesisResult {
+public final class Jsapi20SynthesisResult {
     /** The spoken text. */
     private final SpeakableText speakableText;
 
-    /** Associated phone info. */
-    private final SpeakablePhoneInfo[] speakablePhoneInfos;
-
     /**
      * Constructs a new object.
-     * @param speakable the speakable text.
-     * @param phoneInfos related phone infos.
+     * 
+     * @param speakable
+     *            the speakable text.
+     * @param phoneInfos
+     *            related phone infos.
      */
-    public Jsapi20SynthesisResult(final SpeakableText speakable,
-            final SpeakablePhoneInfo[] phoneInfos) {
+    public Jsapi20SynthesisResult(final SpeakableText speakable) {
         speakableText = speakable;
-        speakablePhoneInfos = phoneInfos;
-    }
-
-    /**
-     * Returns the phones generated.
-     *
-     * @return PhoneInfo[]
-     */
-    public SpeakablePhoneInfo[] getPhonesInfo() {
-        return speakablePhoneInfos;
     }
 
     /**
      * Returns the speakable that produced this result.
-     *
+     * 
      * @return SpeakableText
      */
     public SpeakableText getSpeakable() {

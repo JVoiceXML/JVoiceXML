@@ -41,7 +41,7 @@ import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
-import org.jvoicexml.implementation.dtmf.BufferedCharacterInput;
+import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
 
 /**
@@ -267,20 +267,18 @@ public final class JVoiceXmlImplementationPlatformFactory
         if (info == null) {
             throw new NoresourceError("No connection information given!");
         }
-        BufferedCharacterInput input = null;
+
         try {
-            input = configuration.loadObject(BufferedCharacterInput.class);
-        } catch (ConfigurationException e1) {
-            e1.printStackTrace();
-        }
-        final JVoiceXmlImplementationPlatform platform = new JVoiceXmlImplementationPlatform(
-                telephonyPool, synthesizerPool, spokenInputPool, input, info);
-        try {
+            final BufferedDtmfInput input = configuration
+                    .loadObject(BufferedDtmfInput.class);
+            final JVoiceXmlImplementationPlatform platform = new JVoiceXmlImplementationPlatform(
+                    telephonyPool, synthesizerPool, spokenInputPool, input,
+                    info);
             platform.init(configuration);
+            return platform;
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
         }
-        return platform;
     }
 
     /**

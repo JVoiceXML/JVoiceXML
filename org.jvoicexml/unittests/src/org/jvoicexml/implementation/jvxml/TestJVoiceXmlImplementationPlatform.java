@@ -140,7 +140,7 @@ public final class TestJVoiceXmlImplementationPlatform {
     }
 
     /**
-     * Test method for {@link JVoiceXmlImplementationPlatform#hasUserInput()}.
+     * Test method for {@link JVoiceXmlImplementationPlatform#isUserInputActive()}.
      * @exception JVoiceXMLEvent
      *            Test failed.
      * 
@@ -148,9 +148,9 @@ public final class TestJVoiceXmlImplementationPlatform {
      */
     @Test
     public void testHasUserInput() throws JVoiceXMLEvent {
-       Assert.assertFalse(platform.hasUserInput());
+       Assert.assertFalse(platform.isUserInputActive());
        platform.getUserInput();
-       Assert.assertTrue(platform.hasUserInput());
+       Assert.assertTrue(platform.isUserInputActive());
     }
 
     /**
