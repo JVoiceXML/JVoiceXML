@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -53,18 +53,16 @@ import org.jvoicexml.xml.vxml.Prompt;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;prompt&gt;</code> node.
- *
+ * 
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.Prompt
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-class PromptStrategy
-        extends AbstractTagStrategy {
+class PromptStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(ValueStrategy.class);
+    private static final Logger LOGGER = Logger.getLogger(ValueStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -95,40 +93,40 @@ class PromptStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes()
-            throws ErrorEvent {
-        final String enableBargein = 
-            (String) getAttribute(Prompt.ATTRIBUTE_BARGEIN);
+    public void validateAttributes() throws ErrorEvent {
+        final String enableBargein = (String) getAttribute(Prompt.ATTRIBUTE_BARGEIN);
         bargein = Boolean.valueOf(enableBargein);
     }
 
-
     /**
      * {@inheritDoc}
-     *
+     * 
      * Play the prompt.
      */
     @Override
     public void execute(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
-                        final FormItem item,
-                        final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
         final Object cond = getAttribute(Prompt.ATTRIBUTE_COND);
         if (Boolean.FALSE.equals(cond)) {
             LOGGER.info("cond '" + cond
                     + "' evaluates to false: skipping prompt");
             return;
         }
-        final SsmlParser parser = new SsmlParser(node, context);
-        final SsmlDocument document;
 
+        // Create an SSML document from the prompt node
+        // Make sure to cast to prompt to access the correct constructor since
+        // the VoiceXmlNode constructor does not keep namespaces
+        final Prompt prompt = (Prompt) node;
+        final SsmlParser parser = new SsmlParser(prompt, context);
+        final SsmlDocument document;
         try {
             document = parser.getDocument();
         } catch (javax.xml.parsers.ParserConfigurationException pce) {
             throw new BadFetchError("Error converting to SSML!", pce);
         }
+
         // Set the locale
         final Speak speak = document.getSpeak();
         final String lang = (String) getAttribute(Prompt.ATTRIBUTE_XML_LANG);
@@ -136,13 +134,13 @@ class PromptStrategy
             speak.setXmlLang(lang);
         }
         final BargeInType bargeInType = getBargeInType();
-        final SpeakableSsmlText speakable =
-            new SpeakableSsmlText(document, bargein, bargeInType);
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(document,
+                bargein, bargeInType);
         final long timeout = getTimeout();
         speakable.setTimeout(timeout);
         if (!speakable.isSpeakableTextEmpty()) {
-            final ImplementationPlatform platform =
-                    context.getImplementationPlatform();
+            final ImplementationPlatform platform = context
+                    .getImplementationPlatform();
             if (!fia.isQueuingPrompts()) {
                 platform.setPromptTimeout(-1);
             }
@@ -152,8 +150,8 @@ class PromptStrategy
                 final Session session = context.getSession();
                 final String sessionId = session.getSessionID();
                 try {
-                    final CallControlProperties callProps =
-                            context.getCallControlProperties(fia);
+                    final CallControlProperties callProps = context
+                            .getCallControlProperties(fia);
                     platform.renderPrompts(sessionId, server, callProps);
                 } catch (ConfigurationException ex) {
                     throw new NoresourceError(ex.getMessage(), ex);
@@ -164,12 +162,12 @@ class PromptStrategy
 
     /**
      * Retrieves the barge-in type.
+     * 
      * @return the barge-in type.
      * @since 0.7.1
      */
     private BargeInType getBargeInType() {
-        final String bargeInType =
-            (String) getAttribute(Prompt.ATTRIBUTE_BARGEINTYPE);
+        final String bargeInType = (String) getAttribute(Prompt.ATTRIBUTE_BARGEINTYPE);
         if (bargeInType == null) {
             return null;
         }
@@ -179,12 +177,12 @@ class PromptStrategy
 
     /**
      * Retrieves the timeout attribute.
+     * 
      * @return timeout to use for this prompt.
      * @since 0.7
      */
     private long getTimeout() {
-        final String timeoutAttribute =
-            (String) getAttribute(Prompt.ATTRIBUTE_TIMEOUT);
+        final String timeoutAttribute = (String) getAttribute(Prompt.ATTRIBUTE_TIMEOUT);
         if (timeoutAttribute == null) {
             return -1;
         } else {

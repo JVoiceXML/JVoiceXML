@@ -1,6 +1,6 @@
-<project name="Hello World Demo" default="all" basedir=".">
+<project name="MARC Demo" default="all" basedir=".">
     <description>
-This file builds and runs the 'Hello world' demo for JVoiceXML.
+This file builds and runs the 'MARC' demo for JVoiceXML.
     </description>
 
     <!-- allow the user to override setting in an own propertiesfile. -->

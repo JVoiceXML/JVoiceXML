@@ -41,7 +41,7 @@ import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
- * Demo implementation of the venerable "Hello World".
+ * Demo implementation that uses MARC as a synthesizer.
  * <p>
  * Must be run with the system property
  * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
@@ -50,6 +50,9 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * <p>
  * This demo requires that JVoiceXML is configured with the jsapi20
  * and marc implementation platforms.
+ * </p>
+ * <p>
+ * MARC must be up and running to run this demo
  * </p>
  * @author Dirk Schnelle-Walka
  * @version $Revision$
