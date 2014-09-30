@@ -207,7 +207,6 @@ public final class JVoiceXMLResultListener implements ResultListener {
         }
 
         final Result result = (Result) resultEvent.getSource();
-
         final RecognitionResult recognitionResult = new Jsapi20RecognitionResult(
                 result);
         final SpokenInputEvent event = new NomatchEvent(input, null,
