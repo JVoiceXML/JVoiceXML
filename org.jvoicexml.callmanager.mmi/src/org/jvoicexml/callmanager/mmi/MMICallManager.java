@@ -219,7 +219,6 @@ public final class MMICallManager implements CallManager {
         final ConnectionInformation info = controller
                 .getConnectionInformation();
         final Session session = jvxml.createSession(info);
-
         sessions.put(session, controller);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("session '" + session.getSessionID() + "' created");
@@ -238,12 +237,16 @@ public final class MMICallManager implements CallManager {
                 .get(session);
         if (controller == null) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.info("no controller for session '"
+                LOGGER.info("no controller known for session '"
                         + session.getSessionID() + "'");
             }
             return;
         }
-        controller.cleanup();
+        try {
+            controller.cleanup();
+        } finally {
+            sessions.remove(session);
+        }
     }
 
     /**
@@ -254,6 +257,11 @@ public final class MMICallManager implements CallManager {
         if (mc == null) {
             return;
         }
-        mc.stopAcceptingLifecycleEvents();
+        try {
+            mc.stopAcceptingLifecycleEvents();
+        } finally {
+            mc = null;
+        }
+        
     }
 }
