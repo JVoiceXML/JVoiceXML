@@ -36,7 +36,8 @@ public class XmlExtensionNotificationDataConverterTest {
         final List<LastResult> list = new java.util.ArrayList<LastResult>();
         final LastResult result = new LastResult("yes", .75f, "voice", null);
         list.add(result);
-        converter.convertApplicationLastResult(list);
+        final Element element = (Element) converter.convertApplicationLastResult(list);
+        System.out.println(toString(element));
     }
 
     @Test
@@ -49,9 +50,10 @@ public class XmlExtensionNotificationDataConverterTest {
         final Scriptable scope = context.initStandardObjects();
         context.evaluateString(scope, "var out = 'yes';", "expr", 1, null);
         final Object out = scope.get("out", scope);
-        final LastResult result = new LastResult("yes", .75f, "voice", out);
+        final LastResult result = new LastResult("yeah", .75f, "voice", out);
         list.add(result);
-        converter.convertApplicationLastResult(list);
+        Element element = (Element) converter.convertApplicationLastResult(list);
+        System.out.println(toString(element));
     }
 
     @Test
