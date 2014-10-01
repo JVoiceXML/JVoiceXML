@@ -46,31 +46,31 @@ import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Scripting engine.
- *
+ * 
  * <p>
- * This is a simple wrapper around the Rhino scripting engine to simplify
- * the handling and to maintain scope aspects.
+ * This is a simple wrapper around the <a
+ * href="https://developer.mozilla.org/de/docs/Rhino">Rhino</a> scripting engine
+ * to simplify the handling and to maintain scope aspects.
  * </p>
- *
+ * 
  * <p>
- * The main aspect is that it is necessary to observe changes in the scope
- * and to adapt the scope stack accordingly.
+ * The main aspect is that it is necessary to observe changes in the scope and
+ * to adapt the scope stack accordingly.
  * </p>
  * <p>
- * Note, that all access to the scripting engine must happen in the same
- * thread. Otherwise, rhino will treat them differently.
+ * Note, that all access to the scripting engine must happen in the same thread.
+ * Otherwise, rhino will treat them differently.
  * </p>
- *
+ * 
  * @author Torben Hardt
  * @author Dirk Schnelle-Walka
- *
+ * 
  * @version $Revision$
  */
-public final class ScriptingEngine
-    implements ScopeSubscriber {
+public final class ScriptingEngine implements ScopeSubscriber {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(ScriptingEngine.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(ScriptingEngine.class);
 
     /** The parent block's scope. */
     private final Scriptable scriptGlobalScope;
@@ -88,10 +88,11 @@ public final class ScriptingEngine
         ContextFactory.initGlobal(new JVoiceXmlContextFactory());
     }
 
-
     /**
      * Constructs a new object.
-     * @param observer the scope observer.
+     * 
+     * @param observer
+     *            the scope observer.
      */
     public ScriptingEngine(final ScopeObserver observer) {
         scopes = new java.util.HashMap<Scope, Scriptable>();
@@ -113,7 +114,9 @@ public final class ScriptingEngine
 
     /**
      * Transforms the given {@link ScriptableObject} into a JSON string.
-     * @param object the object to serialize 
+     * 
+     * @param object
+     *            the object to serialize
      * @return JSON formatted string
      * @since 0.7.5
      */
@@ -127,7 +130,9 @@ public final class ScriptingEngine
 
     /**
      * Transforms the given {@link ScriptableObject} into a JSON object.
-     * @param object the object to serialize 
+     * 
+     * @param object
+     *            the object to serialize
      * @return JSON object
      * @since 0.7.5
      */
@@ -154,13 +159,14 @@ public final class ScriptingEngine
 
     /**
      * Evaluates the given expression.
-     * @param expr The expression to evaluate.
+     * 
+     * @param expr
+     *            The expression to evaluate.
      * @return Evaluated result.
      * @exception SemanticError
-     *            Error evaluating the expression.
+     *                Error evaluating the expression.
      */
-    public Object eval(final String expr)
-            throws SemanticError {
+    public Object eval(final String expr) throws SemanticError {
         // get the expr-attribute
         if (expr == null) {
             if (LOGGER.isDebugEnabled()) {
@@ -215,9 +221,11 @@ public final class ScriptingEngine
 
     /**
      * Sets an existing variable to a new value.
-     *
-     * @param name unique identifier
-     * @param value the new value of the variable
+     * 
+     * @param name
+     *            unique identifier
+     * @param value
+     *            the new value of the variable
      */
     public void setVariable(final String name, final Object value) {
         if (name == null) {
@@ -249,10 +257,13 @@ public final class ScriptingEngine
 
     /**
      * Sets an existing variable to a new value ath teh given scope.
-     *
-     * @param scope the scope where to put the variable
-     * @param name unique identifier
-     * @param value the new value of the variable
+     * 
+     * @param scope
+     *            the scope where to put the variable
+     * @param name
+     *            unique identifier
+     * @param value
+     *            the new value of the variable
      * @since 0.7.5
      */
     public void setVariable(final Scope scope, final String name,
@@ -286,9 +297,13 @@ public final class ScriptingEngine
 
     /**
      * Traverse the scope stack and set the variable.
-     * @param name name of the variable to set.
-     * @param value value of the variable.
-     * @param scope start scope.
+     * 
+     * @param name
+     *            name of the variable to set.
+     * @param value
+     *            value of the variable.
+     * @param scope
+     *            start scope.
      * @return <code>true</code> if the variable was set.
      * @since 0.6
      */
@@ -307,10 +322,11 @@ public final class ScriptingEngine
 
     /**
      * Gets the variables current value.
-     *
-     * @param name unique identifier
-     * @return the variables value object, <code>null</code> if the
-     *         variable is not defined.
+     * 
+     * @param name
+     *            unique identifier
+     * @return the variables value object, <code>null</code> if the variable is
+     *         not defined.
      */
     public Object getVariable(final String name) {
         final Scriptable scope = getScope();
@@ -323,12 +339,14 @@ public final class ScriptingEngine
     }
 
     /**
-     * Retrieves the current value of a variable starting with the
-     * given scope.
-     * @param scope the scope
-     * @param name name of the variable
-     * @return the variables value object, <code>null</code> if the
-     *         variable is not defined.
+     * Retrieves the current value of a variable starting with the given scope.
+     * 
+     * @param scope
+     *            the scope
+     * @param name
+     *            name of the variable
+     * @return the variables value object, <code>null</code> if the variable is
+     *         not defined.
      * @since 0.7.5
      */
     public Object getVariable(final Scope scope, final String name) {
@@ -346,8 +364,11 @@ public final class ScriptingEngine
 
     /**
      * Traverse the scope stack and retrieve the value of the variable.
-     * @param name name of the variable.
-     * @param scope start scope.
+     * 
+     * @param name
+     *            name of the variable.
+     * @param scope
+     *            start scope.
      * @return value of the variable.
      * @since 0.6
      */
@@ -364,11 +385,12 @@ public final class ScriptingEngine
 
     /**
      * Gets the variables current value as an array.
-     *
-     * @param name unique identifier
+     * 
+     * @param name
+     *            unique identifier
      * @return the variables value object.
      * @exception SemanticError
-     *            Error retrieving the value for <code>name</code>.
+     *                Error retrieving the value for <code>name</code>.
      * @since 0.6
      */
     public Object[] getVariableAsArray(final String name) throws SemanticError {
@@ -390,8 +412,9 @@ public final class ScriptingEngine
 
     /**
      * Removes the given variable from the vault.
-     *
-     * @param name unique identifier.
+     * 
+     * @param name
+     *            unique identifier.
      */
     public void removeVariable(final String name) {
         if (name == null) {
@@ -406,8 +429,11 @@ public final class ScriptingEngine
 
     /**
      * Traverses the scope stack and removes the variable.
-     * @param name name of the variable to remove.
-     * @param scope start scope.
+     * 
+     * @param name
+     *            name of the variable to remove.
+     * @param scope
+     *            start scope.
      * @since 0.6
      */
     private void removeVariable(final String name, final Scriptable scope) {
@@ -424,8 +450,10 @@ public final class ScriptingEngine
 
     /**
      * Checks, if the given variable is defined.
-     * @param name Name of the variable to check.
-     *
+     * 
+     * @param name
+     *            Name of the variable to check.
+     * 
      * @return <code>true</code> if the variable is defined.
      */
     public boolean isVariableDefined(final String name) {
@@ -439,13 +467,15 @@ public final class ScriptingEngine
 
     /**
      * Traverses the scope stack and checks if the variable is defined.
-     * @param name name of the variable to check.
-     * @param scope start scope.
+     * 
+     * @param name
+     *            name of the variable to check.
+     * @param scope
+     *            start scope.
      * @return <code>true</code> if the variable is defined.
      * @since 0.6
      */
-    private boolean isVariableDefined(final String name,
-            final Scriptable scope) {
+    private boolean isVariableDefined(final String name, final Scriptable scope) {
         if (scope.has(name, scope)) {
             return true;
         }
@@ -484,6 +514,7 @@ public final class ScriptingEngine
 
     /**
      * Retrieves the current scriptable scope.
+     * 
      * @return Current scriptable scope.
      */
     private Scriptable getScope() {
@@ -492,20 +523,23 @@ public final class ScriptingEngine
 
     /**
      * Creates a host object in the scripting engine from the given java object.
-     * @param <T> Type of the host object.
-     * @param name Name of the shadow variable.
-     * @param template Base class of the host object.
-     *
+     * 
+     * @param <T>
+     *            Type of the host object.
+     * @param name
+     *            Name of the shadow variable.
+     * @param template
+     *            Base class of the host object.
+     * 
      * @return Created object.
-     *
+     * 
      * @exception SemanticError
-     *            Error converting the given object to a host object.
+     *                Error converting the given object to a host object.
      * @since 0.3.1
      */
     @SuppressWarnings("unchecked")
     public <T extends Object> T createHostObject(final String name,
-                                                 final Class<T> template)
-            throws SemanticError {
+            final Class<T> template) throws SemanticError {
         if (template == null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("cannot create null host object");
@@ -515,8 +549,8 @@ public final class ScriptingEngine
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("creating host object for '" + name + "'"
-                         + " from '" + template + "'...");
+            LOGGER.debug("creating host object for '" + name + "'" + " from '"
+                    + template + "'...");
         }
 
         final Scriptable parentScope = scriptGlobalScope;
@@ -539,13 +573,12 @@ public final class ScriptingEngine
         final Context context = Context.getCurrentContext();
         final Scriptable scope = getScope();
 
-        final Scriptable scriptable =
-                context.newObject(scope, template.getSimpleName());
+        final Scriptable scriptable = context.newObject(scope,
+                template.getSimpleName());
         scope.put(name, scope, scriptable);
 
         if (scriptable instanceof StandardSessionVariable) {
-            final StandardSessionVariable reference =
-                (StandardSessionVariable) scriptable;
+            final StandardSessionVariable reference = (StandardSessionVariable) scriptable;
             reference.setScripting(this);
         }
         return template.cast(scriptable);
