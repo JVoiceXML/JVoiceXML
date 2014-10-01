@@ -72,9 +72,9 @@ public final class ApplicationShadowVarContainer extends ScriptableObject
      * Constructs a new object.
      */
     public ApplicationShadowVarContainer() {
-        Method getLastresultMethod = null;
+        Method getLastresultArrayMethod = null;
         try {
-            getLastresultMethod = ApplicationShadowVarContainer.class
+            getLastresultArrayMethod = ApplicationShadowVarContainer.class
                     .getMethod("getLastresult", (Class<?>[]) null);
         } catch (SecurityException e) {
             // Should not happen.
@@ -88,7 +88,7 @@ public final class ApplicationShadowVarContainer extends ScriptableObject
             }
         }
 
-        defineProperty("lastresult$", null, getLastresultMethod, null, READONLY);
+        defineProperty("lastresult$", null, getLastresultArrayMethod, null, READONLY);
     }
 
     /**
@@ -136,12 +136,25 @@ public final class ApplicationShadowVarContainer extends ScriptableObject
     }
 
     /**
-     * Retrieves the last result.
+     * Retrieves the last result as an array property.
      * 
      * @return the last result.
      */
-    public LastResultShadowVarContainer[] getLastresult() {
+    public LastResultShadowVarContainer[] getLastresultArray() {
         return lastresults;
+    }
+
+    /**
+     * Retrieves the last result.
+     * @return the last results
+     * @since 0.7.7
+     */
+    public LastResultShadowVarContainer getLastResult() {
+        // TODO find a proper way to adress this issue
+        if (lastresults == null) {
+            return null;
+        }
+        return lastresults[0];
     }
 
     /**
@@ -161,6 +174,7 @@ public final class ApplicationShadowVarContainer extends ScriptableObject
      */
     @Override
     public Object get(final String name, final Scriptable start) {
+        System.out.println("*** '" + name + "'");
         if (scripting == null || has(name, start)) {
             return super.get(name, start);
         }
