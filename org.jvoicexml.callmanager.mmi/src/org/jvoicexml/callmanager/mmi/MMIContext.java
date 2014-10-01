@@ -32,7 +32,7 @@ import org.jvoicexml.Session;
 
 /**
  * Associated a communication channel object with MMI request identifiers.
- * @author Dirk Schnelle-walka
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */

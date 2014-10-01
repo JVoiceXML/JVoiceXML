@@ -83,7 +83,7 @@ public class XmlExtensionNotificationDataConverter
         final float confidence = lastresult.getConfidence();
         final Object interpretation = lastresult.getInterpretation();
         try {
-            return createEmma("lstresult", utterance, mode, confidence,
+            return createEmma("lastresult", utterance, mode, confidence,
                     interpretation);
         } catch (ParserConfigurationException e) {
             throw new ConversionException(e.getMessage(), e);
