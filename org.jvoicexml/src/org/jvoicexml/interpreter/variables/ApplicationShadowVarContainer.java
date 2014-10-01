@@ -59,14 +59,14 @@ public final class ApplicationShadowVarContainer extends ScriptableObject
     /** Name of the application variable. */
     public static final String VARIABLE_NAME = "application";
 
-    /** The raw string of words that were recognized for this interpretation. */
-    private LastResultShadowVarContainer[] lastresults;
-
     /** Reference to the scripting engine. */
     private ScriptingEngine scripting;
 
     /** The application object related to this shadow variable container. */
     private Application application;
+
+    /** The last result array. */
+    private LastResultArray lastresult;
 
     /**
      * Constructs a new object.
@@ -88,7 +88,8 @@ public final class ApplicationShadowVarContainer extends ScriptableObject
             }
         }
 
-        defineProperty("lastresult$", null, getLastresultArrayMethod, null, READONLY);
+        defineProperty("lastresult$", null, getLastresultArrayMethod, null,
+                READONLY);
     }
 
     /**
@@ -116,15 +117,16 @@ public final class ApplicationShadowVarContainer extends ScriptableObject
         final float[] wordsConfidence = result.getWordsConfidence();
         final Object interpretation = result.getSemanticInterpretation();
 
-        final LastResult lastresult = new LastResult(utterance, confidence,
+        final LastResult last = new LastResult(utterance, confidence,
                 mode.getMode(), interpretation);
-        lastresults = new LastResultShadowVarContainer[1];
-        lastresults[0] = new LastResultShadowVarContainer(lastresult, words,
+        LastResultShadowVarContainer[] lastresults = new LastResultShadowVarContainer[1];
+        lastresults[0] = new LastResultShadowVarContainer(last, words,
                 wordsConfidence);
+        lastresult = new LastResultArray(lastresults);
 
         // Populate the result to the application object
         final List<LastResult> list = new java.util.ArrayList<LastResult>();
-        list.add(lastresult);
+        list.add(last);
         application.setLastResult(list);
     }
 
@@ -140,21 +142,8 @@ public final class ApplicationShadowVarContainer extends ScriptableObject
      * 
      * @return the last result.
      */
-    public LastResultShadowVarContainer[] getLastresultArray() {
-        return lastresults;
-    }
-
-    /**
-     * Retrieves the last result.
-     * @return the last results
-     * @since 0.7.7
-     */
-    public LastResultShadowVarContainer getLastResult() {
-        // TODO find a proper way to adress this issue
-        if (lastresults == null) {
-            return null;
-        }
-        return lastresults[0];
+    public LastResultArray getLastresult() {
+        return lastresult;
     }
 
     /**
@@ -174,7 +163,6 @@ public final class ApplicationShadowVarContainer extends ScriptableObject
      */
     @Override
     public Object get(final String name, final Scriptable start) {
-        System.out.println("*** '" + name + "'");
         if (scripting == null || has(name, start)) {
             return super.get(name, start);
         }

@@ -97,7 +97,6 @@ public final class ScriptingEngine implements ScopeSubscriber {
     public ScriptingEngine(final ScopeObserver observer) {
         scopes = new java.util.HashMap<Scope, Scriptable>();
         final Context context = Context.enter();
-
         context.setLanguageVersion(Context.VERSION_DEFAULT);
         // create a initial scope, do NOT allow access to all java objects
         // check later if sealed initial scope should be used.
