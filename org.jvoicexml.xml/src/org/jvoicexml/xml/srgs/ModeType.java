@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,28 +29,35 @@ package org.jvoicexml.xml.srgs;
 /**
  * The mode of a grammar indicates the type of input that the user agent should
  * be detecting.
- *
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
 public enum ModeType {
     /**
-     * Speech recognition grammar.
+     * Voice input.
      */
     VOICE("voice"),
 
     /**
-     * DTMF grammar.
+     * DTMF input.
      */
-    DTMF("dtmf");
+    DTMF("dtmf"),
+
+    /**
+     * External input.
+     */
+    EXTERNAL("external");
 
     /** Name of the mode. */
     private final String mode;
 
     /**
      * Do not create from outside.
-     * @param name name of the mode.
+     * 
+     * @param name
+     *            name of the mode.
      */
     private ModeType(final String name) {
         mode = name;
@@ -58,6 +65,7 @@ public enum ModeType {
 
     /**
      * Retrieves the name of this barge-in type.
+     * 
      * @return Name of this type.
      */
     public String getMode() {

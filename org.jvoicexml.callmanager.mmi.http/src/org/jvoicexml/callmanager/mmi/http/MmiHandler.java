@@ -16,7 +16,6 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
-import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.Mmi;
 
 public class MmiHandler extends AbstractHandler {
@@ -71,9 +70,8 @@ public class MmiHandler extends AbstractHandler {
             final Object o = unmarshaller.unmarshal(reader);
             if (o instanceof Mmi) {
                 final Mmi mmi = (Mmi) o;
-                final LifeCycleEvent evt = mmi.getLifeCycleEvent();
                 LOGGER.info("received MMI event: " + mmi);
-                final DecoratedMMIEvent event = new DecoratedMMIEvent(this, evt);
+                final DecoratedMMIEvent event = new DecoratedMMIEvent(this, mmi);
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {

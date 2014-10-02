@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.callmanager.mmi;
+package org.jvoicexml.callmanager.mmi.xml;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -37,6 +37,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.jvoicexml.LastResult;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.callmanager.mmi.ConversionException;
+import org.jvoicexml.callmanager.mmi.ExtensionNotificationDataConverter;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.implementation.InputStartedEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
@@ -65,6 +67,7 @@ import org.xml.sax.SAXException;
  */
 public class XmlExtensionNotificationDataConverter
         implements ExtensionNotificationDataConverter {
+    public static final String JVXML_MMI_NAMESPACE = "http://www.nowhere.org/jvxmlmmi";
     /** The EMMA namespace. */
     private static final String EMMA_NAMESPACE = "http://www.w3.org/2003/04/emma";
 
@@ -213,9 +216,9 @@ public class XmlExtensionNotificationDataConverter
             final DocumentBuilder builder = factory.newDocumentBuilder();
             final Document document = builder.newDocument();
             final Element data = document.createElementNS(
-                    "http://www.nowhere.org/jvxmlmmi", "jvxmlmmi:data");
+                    JVXML_MMI_NAMESPACE, "jvxmlmmi:data");
             final String eventType = toEventType(output);
-            data.setAttributeNS("http://www.nowhere.org/jvxmlmmi",
+            data.setAttributeNS(JVXML_MMI_NAMESPACE,
                     "jvxmlmmi:event", eventType);
             document.appendChild(data);
             final SpeakableText speakable = getSpeakable(output);
@@ -319,9 +322,9 @@ public class XmlExtensionNotificationDataConverter
             builder = factory.newDocumentBuilder();
             final Document document = builder.newDocument();
             final Element data = document.createElementNS(
-                    "http://www.nowhere.org/jvxmlmmi", "jvxmlmmi:data");
+                    JVXML_MMI_NAMESPACE, "jvxmlmmi:data");
             final String eventType = toEventType(input);
-            data.setAttributeNS("http://www.nowhere.org/jvxmlmmi",
+            data.setAttributeNS(JVXML_MMI_NAMESPACE,
                     "jvxmlmmi:event", eventType);
             document.appendChild(data);
             return data;

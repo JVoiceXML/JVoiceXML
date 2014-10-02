@@ -25,13 +25,15 @@
  */
 package org.jvoicexml.callmanager.mmi;
 
+import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.Mmi;
 
 /**
- * An {@link LifeCycleEvent} decorated with a channel. A channel can
- * uniquely be identified within an {@link ETLProtocolAdapter}. Usually
- * this will be the instance that received the request and should send a
- * response.
+ * An {@link LifeCycleEvent} decorated with a channel. A channel can uniquely be
+ * identified within an {@link ETLProtocolAdapter}. Usually this will be the
+ * instance that received the request and should send a response.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
@@ -43,20 +45,24 @@ public final class DecoratedMMIEvent {
     private final Object channel;
 
     /** The received MMI event. */
-    private final LifeCycleEvent event;
+    private final Mmi mmi;
 
     /**
      * Constructs a new object.
-     * @param ch channel over which the {@link LifeCycleEvent} was received 
-     * @param evt received MMI event
+     * 
+     * @param ch
+     *            channel over which the {@link LifeCycleEvent} was received
+     * @param evt
+     *            received MMI event
      */
-    public DecoratedMMIEvent(final Object ch, final LifeCycleEvent evt) {
+    public DecoratedMMIEvent(final Object ch, final Mmi evt) {
         channel = ch;
-        event = evt;
+        mmi = evt;
     }
 
     /**
      * Retrieves the channel over which the {@link LifeCycleEvent} was received.
+     * 
      * @return the channel
      */
     public Object getChannel() {
@@ -64,10 +70,31 @@ public final class DecoratedMMIEvent {
     }
 
     /**
-     * Retrieves the received MMI event.
-     * @return the event
+     * Retrieves the MMI event.
+     * 
+     * @return the MMI event
+     * @since 0.7.7
      */
-    public LifeCycleEvent getEvent() {
-        return event;
+    public Mmi getMmi() {
+        return mmi;
+    }
+
+    /**
+     * Retrieves the received MMI lifecyle event.
+     * 
+     * @return the lifecycle event, maybe {@code null}
+     */
+    public LifeCycleEvent getLifeCycleEvent() {
+        return mmi.getLifeCycleEvent();
+    }
+
+    /**
+     * Retrieves the extension notification.
+     * 
+     * @return the extension notification, maybe {@code null}
+     * @since 0.7.7
+     */
+    public ExtensionNotification getExtensionNotification() {
+        return mmi.getExtensionNotification();
     }
 }
