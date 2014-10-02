@@ -117,10 +117,15 @@ public final class SimpleMmiDemo {
         final URI target = new URI("http://localhost:9090");
         start.setContext(context);
         start.setRequestId(Integer.toString(requestId));
-//        final File file = new File("simpleexample.vxml");
+        // final File file = new File("simpleexample.vxml");
         final File file = new File("simpleexample-de.vxml");
         final URI example = file.toURI();
         start.setContentURL(example);
+        send(mmi, target);
+    }
+
+    public void send(final Mmi mmi, final URI target) throws JAXBException,
+            IOException {
         final JAXBContext ctx = JAXBContext.newInstance(Mmi.class);
         final Marshaller marshaller = ctx.createMarshaller();
         final ByteArrayOutputStream out = new ByteArrayOutputStream();

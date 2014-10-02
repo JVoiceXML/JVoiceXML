@@ -219,6 +219,9 @@ public final class Mmi implements Serializable {
      * @return the nested {@link LifeCycleEvent}
      */
     public void setLifeCycleEvent(final LifeCycleEvent event) {
+        if (event == null) {
+            return;
+        }
         if (event instanceof NewContextRequest) {
             setNewContextRequest((NewContextRequest) event);
         } else if (event instanceof NewContextResponse) {

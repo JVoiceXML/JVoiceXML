@@ -137,7 +137,7 @@ public final class TestMmiReceiver implements MMIEventListener {
 
     @Override
     public void receivedEvent(final DecoratedMMIEvent event) {
-        receivedEvent = event.getEvent();
+        receivedEvent = event.getLifeCycleEvent();
         synchronized (lock) {
             lock.notifyAll();
         }

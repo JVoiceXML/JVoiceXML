@@ -94,7 +94,7 @@ public final class TestSocketETLServer implements MMIEventListener {
         synchronized (lock) {
             lock.wait();
         }
-        Assert.assertTrue(event.getEvent() instanceof StartRequest);
+        Assert.assertTrue(event.getLifeCycleEvent() instanceof StartRequest);
         client.close();
     }
 

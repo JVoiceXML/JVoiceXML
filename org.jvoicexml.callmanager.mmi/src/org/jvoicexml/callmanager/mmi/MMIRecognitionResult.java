@@ -113,8 +113,7 @@ public class MMIRecognitionResult implements RecognitionResult {
      */
     @Override
     public ModeType getMode() {
-        // TODO Auto-generated method stub
-        return null;
+        return ModeType.EXTERNAL;
     }
 
     /**

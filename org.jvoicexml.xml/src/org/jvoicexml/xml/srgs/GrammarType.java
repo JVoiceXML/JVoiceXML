@@ -29,7 +29,7 @@ package org.jvoicexml.xml.srgs;
 import java.util.ServiceLoader;
 
 /**
- * Defintion of the type of the grammar.
+ * Definition of the type of the grammar.
  *
  * <p>
  * In order to define custom grammar types this class must be derived. In

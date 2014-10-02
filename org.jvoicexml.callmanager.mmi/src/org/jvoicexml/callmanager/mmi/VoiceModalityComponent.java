@@ -38,12 +38,16 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.LastResult;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.EventBus;
+import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.DetailedSessionListener;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
+import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.CancelRequest;
 import org.jvoicexml.mmi.events.CancelResponse;
@@ -51,6 +55,7 @@ import org.jvoicexml.mmi.events.ClearContextRequest;
 import org.jvoicexml.mmi.events.ClearContextResponse;
 import org.jvoicexml.mmi.events.ContentURLType;
 import org.jvoicexml.mmi.events.DoneNotification;
+import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.LifeCycleRequest;
 import org.jvoicexml.mmi.events.LifeCycleResponse;
@@ -98,8 +103,11 @@ public final class VoiceModalityComponent
     /** The basic URI of the MMI servlet. */
     private final String servletBaseUri;
 
-    /** The extension notification converter. */
+    /** The extension notification data converter. */
     private final ExtensionNotificationDataConverter converter;
+
+    /** The extension notification data extractor. */
+    private final ExtensionNotificationDataExtractor extractor;
 
     /**
      * Constructs a new object.
@@ -107,15 +115,19 @@ public final class VoiceModalityComponent
      * @param cm
      *            the call manager
      * @param conv
-     *            the extension notification converter
+     *            the extension notification data converter
+     * @param ext
+     *            the extension notification data extractor
      * @param baseUri
      *            base URI of the MMI servlet
      */
     public VoiceModalityComponent(final MMICallManager cm,
-            final ExtensionNotificationDataConverter conv, final String baseUri) {
+            final ExtensionNotificationDataConverter conv,
+            final ExtensionNotificationDataExtractor ext, final String baseUri) {
         callManager = cm;
         servletBaseUri = baseUri;
         converter = conv;
+        extractor = ext;
         contexts = new java.util.HashMap<String, MMIContext>();
     }
 
@@ -179,7 +191,7 @@ public final class VoiceModalityComponent
      */
     @Override
     public void receivedEvent(final DecoratedMMIEvent evt) {
-        final LifeCycleEvent event = evt.getEvent();
+        final LifeCycleEvent event = evt.getLifeCycleEvent();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("received new MMI event: " + event);
         }
@@ -208,6 +220,26 @@ public final class VoiceModalityComponent
         } else if (event instanceof NewContextRequest) {
             final NewContextRequest request = (NewContextRequest) event;
             newContext(channel, request);
+        } else if (evt.getExtensionNotification() != null) {
+            final Mmi mmi = evt.getMmi();
+            final ExtensionNotification ext = evt.getExtensionNotification();
+            extensionInformation(channel, mmi, ext);
+        } else {
+            LOGGER.warn("unable to handle that MMI event: " + event);
+        }
+    }
+
+    /**
+     * Retrieves the MMI context for the given context id.
+     * 
+     * @param contextId
+     *            the context id to look up
+     * @return the context, maybe <code>null</code>
+     * @since 0.7.7
+     */
+    private MMIContext getContext(final String contextId) {
+        synchronized (contexts) {
+            return contexts.get(contextId);
         }
     }
 
@@ -220,9 +252,8 @@ public final class VoiceModalityComponent
      * @since 0.7.6
      */
     MMIContext getContext(final URI contextId) {
-        synchronized (contexts) {
-            return contexts.get(contextId.toString());
-        }
+        final String str = contextId.toString();
+        return getContext(str);
     }
 
     /**
@@ -246,10 +277,7 @@ public final class VoiceModalityComponent
         if (requestId == null || requestId.isEmpty()) {
             throw new MMIMessageException("No request id given");
         }
-        MMIContext context;
-        synchronized (contexts) {
-            context = contexts.get(contextId);
-        }
+        MMIContext context = getContext(contextId);
         if (context == null) {
             if (!create) {
                 throw new MMIMessageException("Context '" + contextId
@@ -510,6 +538,9 @@ public final class VoiceModalityComponent
         }
         final Object object = list.get(0);
         final String str = parseContent(object);
+        if (str == null) {
+            return null;
+        }
         String encodedContentString;
         try {
             encodedContentString = URLEncoder.encode(str, encoding);
@@ -802,6 +833,43 @@ public final class VoiceModalityComponent
         final StatusUpdateThread thread = new StatusUpdateThread(this, channel,
                 target, context, requestId, automaticUpdate);
         thread.start();
+    }
+
+    /**
+     * Handles an extension notification.
+     * 
+     * @param channel
+     *            the channel that was used to send the request
+     * @param request
+     *            the extension notification
+     * @since 0.7.7
+     */
+    public void extensionInformation(final Object channel, final Mmi mmi,
+            final ExtensionNotification ext) {
+        final String contextId = ext.getContext();
+        final String requestId = ext.getRequestId();
+        LOGGER.info("received an extension notification for context "
+                + contextId + " with request id " + requestId);
+        try {
+            final RecognitionResult result = extractor.getRecognitionResult(
+                    mmi, ext);
+            final MMIContext context = getContext(contextId);
+            if (context == null) {
+                LOGGER.error("no context with id '" + contextId
+                        + "' known. Ignoring event");
+                return;
+            }
+            final JVoiceXmlSession session = (JVoiceXmlSession) context
+                    .getSession();
+            final VoiceXmlInterpreterContext interpreterContext = session
+                    .getVoiceXmlInterpreterContext();
+            final EventBus bus = interpreterContext.getEventBus();
+            final RecognitionEvent event = new RecognitionEvent(null,
+                    session.getSessionID(), result);
+            bus.publish(event);
+        } catch (ConversionException e) {
+            LOGGER.error("error parsing the recognition result", e);
+        }
     }
 
     /**

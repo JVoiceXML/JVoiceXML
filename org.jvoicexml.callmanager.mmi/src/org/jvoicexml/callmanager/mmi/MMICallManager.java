@@ -80,6 +80,9 @@ public final class MMICallManager implements CallManager {
     /** The extension notification converter. */
     private ExtensionNotificationDataConverter converter;
 
+    /** The extension notification data extractor. */
+    private ExtensionNotificationDataExtractor extractor;
+
     /**
      * Constructs a new object.
      */
@@ -138,7 +141,7 @@ public final class MMICallManager implements CallManager {
     }
 
     /**
-     * Sets the extension notification converter
+     * Sets the extension notification data converter
      * 
      * @param conv
      *            the converter
@@ -147,6 +150,18 @@ public final class MMICallManager implements CallManager {
     public void setExtensionNotificationDataConverter(
             final ExtensionNotificationDataConverter conv) {
         converter = conv;
+    }
+
+    /**
+     * Sets the extension notification data converter
+     * 
+     * @param conv
+     *            the converter
+     * @since 0.7.7
+     */
+    public void setExtensionNotificationDataExtractor(
+            final ExtensionNotificationDataExtractor ext) {
+        extractor = ext;
     }
 
     /**
@@ -198,7 +213,8 @@ public final class MMICallManager implements CallManager {
             throw new IOException(
                     "Unable to hook to the ETL without a protocol adapter!");
         }
-        mc = new VoiceModalityComponent(this, converter, servletBaseUri);
+        mc = new VoiceModalityComponent(this, converter, extractor,
+                servletBaseUri);
         mc.startAcceptingLifecyleEvents(adapter);
     }
 
@@ -262,6 +278,6 @@ public final class MMICallManager implements CallManager {
         } finally {
             mc = null;
         }
-        
+
     }
 }

@@ -56,6 +56,7 @@ import org.jvoicexml.callmanager.mmi.MMIEventListener;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.LifeCycleRequest;
+import org.jvoicexml.mmi.events.Mmi;
 import org.jvoicexml.mmi.events.NewContextRequest;
 import org.jvoicexml.mmi.events.PrepareRequest;
 import org.jvoicexml.mmi.events.StartRequest;
@@ -151,13 +152,12 @@ public final class MmiReceiver implements ITypedReceiver {
             LOGGER.error(e.getMessage(), e);
             return;
         }
-        if (event == null) {
-            return;
-        }
 
         // Notify all listeners about the event
+        final Mmi mmi = new Mmi();
+        mmi.setLifeCycleEvent(event);
         final DecoratedMMIEvent docatedEvent = new DecoratedMMIEvent(sourceUrl,
-                event);
+                mmi);
         synchronized (listeners) {
             for (MMIEventListener listener : listeners) {
                 listener.receivedEvent(docatedEvent);
