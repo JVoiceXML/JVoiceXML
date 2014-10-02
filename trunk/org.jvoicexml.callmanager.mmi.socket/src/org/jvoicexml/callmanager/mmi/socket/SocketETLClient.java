@@ -88,10 +88,9 @@ final class SocketETLClient extends Thread {
             final Object o = unmarshaller.unmarshal(in);
             if (o instanceof Mmi) {
             	final Mmi mmi = (Mmi) o;
-                final LifeCycleEvent evt = mmi.getLifeCycleEvent();
                 LOGGER.info("received MMI event: " + mmi);
                 final DecoratedMMIEvent event =
-                        new DecoratedMMIEvent(this, evt);
+                        new DecoratedMMIEvent(this, mmi);
                 adapter.notifyMMIEvent(event);
             } else {
                 LOGGER.warn("received unknown MMI object: " + o);

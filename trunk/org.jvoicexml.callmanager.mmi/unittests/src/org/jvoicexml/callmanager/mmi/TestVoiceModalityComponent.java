@@ -37,6 +37,7 @@ import org.jvoicexml.client.ConnectionInformationFactory;
 import org.jvoicexml.client.JVoiceXmlConnectionInformationFactory;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.mmi.events.AnyComplexType;
+import org.jvoicexml.mmi.events.Mmi;
 import org.jvoicexml.mmi.events.StartRequest;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
 import org.jvoicexml.xml.vxml.Block;
@@ -92,13 +93,15 @@ public final class TestVoiceModalityComponent {
     @Test
     public void testReceivedEvent() throws Exception {
         final VoiceModalityComponent mc = cm.getVoiceModalityComponent();
+        final Mmi mmi = new Mmi();
         final StartRequest request = new StartRequest();
+        mmi.setStartRequest(request);
         request.setContext("http://nowhere");
         request.setRequestId("4242");
         final File file = new File("unittests/vxml/hello.vxml");
         final URL url = file.toURI().toURL();
         request.setContentURL(url);
-        final DecoratedMMIEvent event = new DecoratedMMIEvent(this, request);
+        final DecoratedMMIEvent event = new DecoratedMMIEvent(this, mmi);
         mc.receivedEvent(event);
     }
 
@@ -109,13 +112,15 @@ public final class TestVoiceModalityComponent {
     @Test
     public void testReceivedEventStartRequestContent() throws Exception {
         final VoiceModalityComponent mc = cm.getVoiceModalityComponent();
+        final Mmi mmi = new Mmi();
         final StartRequest request = new StartRequest();
+        mmi.setStartRequest(request);
         request.setContext("http://nowhere");
         request.setRequestId("4242");
         final AnyComplexType any = new AnyComplexType();
-        any.getContent().add("this is a test");
+        any.addContent("this is a test");
         request.setContent(any);
-        final DecoratedMMIEvent event = new DecoratedMMIEvent(this, request);
+        final DecoratedMMIEvent event = new DecoratedMMIEvent(this, mmi);
         mc.receivedEvent(event);
     }
 
@@ -126,7 +131,9 @@ public final class TestVoiceModalityComponent {
     @Test
     public void testReceivedEventStartRequestContentPrompt() throws Exception {
         final VoiceModalityComponent mc = cm.getVoiceModalityComponent();
+        final Mmi mmi = new Mmi();
         final StartRequest request = new StartRequest();
+        mmi.setStartRequest(request);
         request.setContext("http://nowhere");
         request.setRequestId("4242");
         final VoiceXmlDocument document = new VoiceXmlDocument();
@@ -137,9 +144,9 @@ public final class TestVoiceModalityComponent {
         prompt.setXmlLang(Locale.GERMAN);
         prompt.addText("Das ist ein Test");
         final AnyComplexType any = new AnyComplexType();
-        any.getContent().add(prompt);
+        any.addContent(prompt.getNode());
         request.setContent(any);
-        final DecoratedMMIEvent event = new DecoratedMMIEvent(this, request);
+        final DecoratedMMIEvent event = new DecoratedMMIEvent(this, mmi);
         mc.receivedEvent(event);
     }
     

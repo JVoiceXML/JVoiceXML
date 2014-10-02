@@ -39,7 +39,12 @@
         <!-- Specification of the Extension notification converter -->
         <beans:property name="extensionNotificationDataConverter">
             <beans:bean
-                class="org.jvoicexml.callmanager.mmi.XmlExtensionNotificationDataConverter" />
+                class="org.jvoicexml.callmanager.mmi.xml.XmlExtensionNotificationDataConverter" />
+        </beans:property>
+        <!-- Specification of the Extension notification data extractor -->
+        <beans:property name="extensionNotificationDataExtractor">
+            <beans:bean
+                class="org.jvoicexml.callmanager.mmi.xml.XmlExtensionNotificationDataExtractor" />
         </beans:property>
     </beans:bean>
 </callmanager>
