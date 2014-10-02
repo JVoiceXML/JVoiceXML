@@ -57,7 +57,10 @@ public class TestJsapi20RecognitionResult {
                 "test");
         final RuleComponent[] components = new RuleComponent[] {
                 new RuleToken("test"),
-                new RuleTag("out = new Object(); out.test='hello';") };
+                new RuleTag("out = new Object(); out.order = new Object();"),
+                new RuleTag("out.order.topping=\"salami\";"),
+                new RuleTag("out.order.size=\"medium\";"),
+                new RuleTag("out.date=\"now\";")};
         final RuleSequence sequence = new RuleSequence(components);
         final Rule root = new Rule("test", sequence, Rule.PUBLIC);
         grammar.addRule(root);
@@ -66,7 +69,7 @@ public class TestJsapi20RecognitionResult {
         final Jsapi20RecognitionResult res = new Jsapi20RecognitionResult(
                 result);
         final Object interpretation = res.getSemanticInterpretation();
-        Assert.assertEquals("{\"test\":\"hello\"}",
+        Assert.assertEquals("{\"order\":{\"topping\":\"salami\",\"size\":\"medium\"},\"date\":\"now\"}",
                 ScriptingEngine.toJSON((ScriptableObject) interpretation));
     }
 
