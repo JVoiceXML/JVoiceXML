@@ -122,7 +122,7 @@ public class LifeCycleResponse extends LifeCycleEvent {
 
     /**
      * Adds the value of the status info.
-     * @param text the status message to set
+     * @param object the status message to set
      */
     public final void addStatusInfo(final Object object) {
         if (object instanceof String) {
@@ -147,7 +147,7 @@ public class LifeCycleResponse extends LifeCycleEvent {
 
     /**
      * Adds the value of the status info property.
-     * @param text the status message to set
+     * @param element the status message to set
      */
     public final void addStatusInfo(final Element element) {
         if (statusInfo == null) {
