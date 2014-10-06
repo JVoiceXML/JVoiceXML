@@ -840,7 +840,9 @@ public final class VoiceModalityComponent
      * 
      * @param channel
      *            the channel that was used to send the request
-     * @param request
+     * @param mmi
+     *            the original incoming MMI message
+     * @param ext
      *            the extension notification
      * @since 0.7.7
      */
