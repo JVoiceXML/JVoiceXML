@@ -187,6 +187,6 @@ org.jvoicexml/personal-props/README.txt
           <fileset refid="jetty.lib" />
   	  </copy>
       <copy tofile="${distFolder}/config/mmi-callmanager-http.xml"
-        file="${etc}/mmi-callmanager-umundo-http.xml"/>
+        file="${etc}/mmi-callmanager-http-dist.xml"/>
     </target>
 </project>
