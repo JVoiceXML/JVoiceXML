@@ -72,10 +72,8 @@ public class SpokenInputEvent extends JVoiceXMLEvent {
      * 
      * @param output
      *            object that caused the event.
-     * @param eventType
-     *            event identifier, one of {@link #OUTPUT_STARTED}.
-     *            {@link #OUTPUT_ENDED}, {@link #MARKER_REACHED},
-     *            {@link #QUEUE_EMPTY} or {@link #OUTPUT_UPDATE}.
+     * @param detailedType
+     *            detailed message
      * @param id
      *            the session id
      * @exception IllegalArgumentException
@@ -105,7 +103,7 @@ public class SpokenInputEvent extends JVoiceXMLEvent {
         detail = null;
         sessionId = id;
     }
-    
+
     /**
      * Retrieves the object that caused the event.
      * 

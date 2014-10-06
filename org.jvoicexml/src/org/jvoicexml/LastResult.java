@@ -63,11 +63,6 @@ public class LastResult {
      *            the confidence level.
      * @param mode
      *            the input mode.
-     * @param w
-     *            the words.
-     * @param wordsConfidence
-     *            the confidence of each word, the size of this array must match
-     *            the size of the word array
      * @param inter
      *            the semantic interpretation
      */

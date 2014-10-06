@@ -50,21 +50,14 @@ public final class LastResultShadowVarContainer extends ScriptableObject {
     /**
      * Constructs a new object.
      * 
-     * @param utt
-     *            the utterance.
-     * @param conf
-     *            the confidence level.
-     * @param mode
-     *            the input mode.
      * @param w
      *            the words.
      * @param wordsConfidence
      *            the confidence of each word, the size of this array must match
      *            the size of the word array
-     * @param inter
-     *            the semantic interpretation
      */
-    public LastResultShadowVarContainer(final LastResult result, final String[] w, final float[] wordsConfidence) {
+    public LastResultShadowVarContainer(final LastResult result,
+            final String[] w, final float[] wordsConfidence) {
         lastresult = result;
 
         if (w == null) {

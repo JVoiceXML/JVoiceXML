@@ -58,10 +58,8 @@ public class SynthesizedOutputEvent extends JVoiceXMLEvent {
      * 
      * @param output
      *            object that caused the event.
-     * @param eventType
-     *            event identifier, one of {@link #OUTPUT_STARTED}.
-     *            {@link #OUTPUT_ENDED}, {@link #MARKER_REACHED},
-     *            {@link #QUEUE_EMPTY} or {@link #OUTPUT_UPDATE}.
+     * @param detailedType
+     *            the detailed message
      * @param id
      *            the session id
      * @exception IllegalArgumentException

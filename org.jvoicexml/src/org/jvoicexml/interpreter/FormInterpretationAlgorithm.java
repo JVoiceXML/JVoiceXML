@@ -583,7 +583,7 @@ public final class FormInterpretationAlgorithm
      *
      * @exception JVoiceXMLEvent
      *            Error or event visiting the {@link FormItem}.
-     * @see #select()
+     * @see #select(String)
      */
     private void collect(final FormItem formItem)
             throws JVoiceXMLEvent {
