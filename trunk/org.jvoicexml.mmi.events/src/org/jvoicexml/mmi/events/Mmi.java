@@ -113,6 +113,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
@@ -170,6 +171,7 @@ public final class Mmi implements Serializable {
 
     /**
      * Retrieves the nested {@link LifeCycleEvent}.
+     * 
      * @return the nested {@link LifeCycleEvent}
      */
     public LifeCycleEvent getLifeCycleEvent() {
@@ -216,7 +218,9 @@ public final class Mmi implements Serializable {
 
     /**
      * Sets the nested {@link LifeCycleEvent}.
-     * @return the nested {@link LifeCycleEvent}
+     * 
+     * @param event
+     *            the event to set
      */
     public void setLifeCycleEvent(final LifeCycleEvent event) {
         if (event == null) {
@@ -260,7 +264,7 @@ public final class Mmi implements Serializable {
             setStatusResponse((StatusResponse) event);
         }
     }
-    
+
     /**
      * Gets the value of the newContextRequest property.
      * 
