@@ -85,8 +85,8 @@ public interface ExtensionNotificationDataConverter {
      * Converts the given spoken input event into the data field of an
      * {@link org.jvoicexml.mmi.events.ExtensionNotification}.
      * 
-     * @param event
-     *            the event
+     * @param input
+     *            the input event
      * @return converted spoken input event
      * @throws ConversionException
      *             error converting the result

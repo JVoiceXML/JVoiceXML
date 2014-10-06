@@ -153,10 +153,10 @@ public final class MMICallManager implements CallManager {
     }
 
     /**
-     * Sets the extension notification data converter
+     * Sets the extension notification data extractor
      * 
-     * @param conv
-     *            the converter
+     * @param ext
+     *            the data extractor
      * @since 0.7.7
      */
     public void setExtensionNotificationDataExtractor(
