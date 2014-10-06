@@ -30,7 +30,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
- * A listener to {@link SessionEvent}s. In contrast to the
+ * A listener to session events. In contrast to the
  * {@link org.jvoicexml.SessionListener} the events are not exposed remotely.
  * 
  * @author Dirk Schnelle-Walka
