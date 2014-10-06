@@ -32,11 +32,11 @@ import javax.speech.synthesis.Voice;
 import org.apache.log4j.Logger;
 
 /**
- * A {@link SynthesizerModeDesc} that can be read by the configuration.
+ * A {@link SynthesizerMode} descriptor that can be read by the configuration.
  *
  * <p>
  * This is mainly a storage for the settings that can be passed to the
- * constructor of a {@link SynthesizerModeDesc} which can be retrieved
+ * constructor of a {@link SynthesizerMode} descriptor which can be retrieved
  * by the factory method {@link #createDescriptor()}.
  * </p>
  *
