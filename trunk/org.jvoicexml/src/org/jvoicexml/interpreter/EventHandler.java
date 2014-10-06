@@ -35,7 +35,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 /**
  * Event handler to catch events generated from the
  * {@link org.jvoicexml.ImplementationPlatform} and propagated via
- * {@link #notifyEvent(org.jvoicexml.event.JVoiceXMLEvent)}.
+ * the {@link org.jvoicexml.event.EventBus}.
  *
  * <p>
  * When an event is thrown, the scope in which the event is handled and its
