@@ -1,8 +1,8 @@
 /*
  * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision: 4242 $
- * Date:    $Date: 2014-09-03 11:42:42 +0200 (Wed, 03 Sep 2014) $
- * Author:  $LastChangedBy: schnelle $
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -34,7 +34,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * component.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.7
  */
 public class MMIRecognitionResult implements RecognitionResult {

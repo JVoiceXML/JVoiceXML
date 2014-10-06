@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/formitem/FieldShadowVarContainer.java $
- * Version: $LastChangedRevision: 4080 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -41,7 +41,7 @@ import org.xml.sax.SAXException;
  * Content handler to parse any EMMA formatted semantic interpretation. 
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.7
  */
 public class EmmaSemanticInterpretationExtractor implements ContentHandler {

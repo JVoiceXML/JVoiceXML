@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.callmanager.mmi/src/org/jvoicexml/callmanager/mmi/DecoratedMMIEvent.java $
- * Version: $LastChangedRevision: 3950 $
- * Date:    $Date: 2013-11-23 21:32:07 +0100 (Sat, 23 Nov 2013) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -62,7 +62,7 @@ import org.xml.sax.SAXException;
  * href="http://www.w3.org/TR/emma/">EMMA</a> are used where possible.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.7
  */
 public class XmlExtensionNotificationDataConverter
