@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.demo.helloworlddemo/src/org/jvoicexml/demo/helloworlddemo/HelloWorldDemo.java $
- * Version: $LastChangedRevision: 4210 $
- * Date:    $Date: 2014-08-15 14:24:56 +0200 (Fri, 15 Aug 2014) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
@@ -59,7 +59,7 @@ import org.jvoicexml.mmi.events.StartRequest;
  * </p>
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4210 $
+ * @version $Revision$
  */
 public final class SimpleMmiDemo {
     /** Logger for this class. */
