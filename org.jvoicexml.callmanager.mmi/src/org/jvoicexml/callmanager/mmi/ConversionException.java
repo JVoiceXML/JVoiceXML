@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.callmanager.mmi/src/org/jvoicexml/callmanager/mmi/MMIMessageException.java $
- * Version: $LastChangedRevision: 3950 $
- * Date:    $Date: 2013-11-23 21:32:07 +0100 (Sat, 23 Nov 2013) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -28,7 +28,7 @@ package org.jvoicexml.callmanager.mmi;
 /**
  * Error converting an extension notification.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3950 $
+ * @version $Revision$
  * @since 0.7.7
  */
 public class ConversionException extends Exception {

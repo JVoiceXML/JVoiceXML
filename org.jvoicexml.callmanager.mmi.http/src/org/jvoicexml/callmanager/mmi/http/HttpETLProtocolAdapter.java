@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.callmanager.mmi.socket/src/org/jvoicexml/callmanager/mmi/socket/NoCloseInputStream.java $
- * Version: $LastChangedRevision: 3952 $
- * Date:    $Date: 2013-11-23 21:34:11 +0100 (Sat, 23 Nov 2013) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -52,7 +52,7 @@ import org.jvoicexml.mmi.events.Mmi;
  * A protocol adapter using the HTTP protocol.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3952 $
+ * @version $Revision$
  * @since 0.7.7
  */
 public class HttpETLProtocolAdapter implements ETLProtocolAdapter {
