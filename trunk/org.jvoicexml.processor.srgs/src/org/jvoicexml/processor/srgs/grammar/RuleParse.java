@@ -54,6 +54,7 @@ public class RuleParse extends RuleComponent {
         return tags;
     }
 
+    @SuppressWarnings("unchecked")
     private void addTags(Vector tags, RuleComponent component) {
         if (component instanceof RuleTag) {
             final RuleTag tag = (RuleTag) component;
