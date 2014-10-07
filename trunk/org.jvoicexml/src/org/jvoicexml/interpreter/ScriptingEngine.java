@@ -231,7 +231,6 @@ public final class ScriptingEngine implements ScopeSubscriber {
     public void setVariable(final String name, final Object value) {
         if (name == null) {
             LOGGER.warn("ignoring empty name to set");
-
             return;
         }
 
@@ -257,7 +256,7 @@ public final class ScriptingEngine implements ScopeSubscriber {
     }
 
     /**
-     * Sets an existing variable to a new value ath teh given scope.
+     * Sets an existing variable to a new value at the given scope.
      * 
      * @param scope
      *            the scope where to put the variable
@@ -271,7 +270,6 @@ public final class ScriptingEngine implements ScopeSubscriber {
             final Object value) {
         if (name == null) {
             LOGGER.warn("ignoring empty name to set");
-
             return;
         }
 
@@ -297,7 +295,7 @@ public final class ScriptingEngine implements ScopeSubscriber {
     }
 
     /**
-     * Traverse the scope stack and set the variable.
+     * Traverse the scope stack and set the variable in the appropriate scope.
      * 
      * @param name
      *            name of the variable to set.
