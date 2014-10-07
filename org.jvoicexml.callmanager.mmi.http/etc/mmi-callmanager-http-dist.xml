@@ -36,10 +36,15 @@
             </beans:bean>
         </beans:property>
 
-        <!-- Specification of the Extension notification converter -->
+        <!-- Specification of the MMI Extension notification data converter -->
+        <!-- Used to convert incoming extension notifications -->
         <beans:property name="extensionNotificationDataConverter">
+            <!-- Use EMMA format as far as possible -->
             <beans:bean
                 class="org.jvoicexml.callmanager.mmi.xml.XmlExtensionNotificationDataConverter" />
+            <!-- Use some custom JSON structure -->
+            <!-- beans:bean class="org.jvoicexml.callmanager.mmi.json.JsonExtensionNotificationDataConverter" 
+                / -->
         </beans:property>
         <!-- Specification of the Extension notification data extractor -->
         <beans:property name="extensionNotificationDataExtractor">
