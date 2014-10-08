@@ -27,18 +27,15 @@ package org.jvoicexml.callmanager.mmi.json;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.LastResult;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.callmanager.mmi.ConversionException;
 import org.jvoicexml.callmanager.mmi.ExtensionNotificationDataConverter;
-import org.jvoicexml.event.plain.implementation.InputStartedEvent;
-import org.jvoicexml.event.plain.implementation.NomatchEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
-import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
-import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.interpreter.ScriptingEngine;
@@ -55,6 +52,9 @@ import org.mozilla.javascript.ScriptableObject;
  */
 public class JsonExtensionNotificationDataConverter
         implements ExtensionNotificationDataConverter {
+    /** Logger instance. */
+    private static final Logger LOGGER = Logger
+            .getLogger(JsonExtensionNotificationDataConverter.class);
 
     /**
      * Constructs a new object.
@@ -83,18 +83,19 @@ public class JsonExtensionNotificationDataConverter
         ScriptableObject.putProperty(vxml, "mode", lastresult.getInputmode());
         ScriptableObject.putProperty(vxml, "interpretation",
                 lastresult.getInterpretation());
-        return "vxml.input = "
-                + ScriptingEngine.toJSON((ScriptableObject) vxml);
+        return ScriptingEngine.toJSON((ScriptableObject) vxml);
     }
 
     /**
      * Packs the given SSML document into a JSON structure.
      * 
+     * @param name
+     *            the name of the event
      * @param speakable
      *            the speakable with the SSML document
      * @return JSON formatted string
      */
-    private String toJson(final SpeakableText speakable) {
+    private String toJson(final String name, final SpeakableText speakable) {
         final Context context = Context.enter();
         context.setLanguageVersion(Context.VERSION_DEFAULT);
         final ScriptableObject scope = context.initStandardObjects();
@@ -113,12 +114,13 @@ public class JsonExtensionNotificationDataConverter
         if (event instanceof OutputStartedEvent) {
             final OutputStartedEvent started = (OutputStartedEvent) event;
             final SpeakableText speakable = started.getSpeakable();
-            return "vxml.output.start = " + toJson(speakable);
+            return toJson("vxml.output.start", speakable);
         } else if (event instanceof OutputEndedEvent) {
             final OutputEndedEvent ended = (OutputEndedEvent) event;
             final SpeakableText speakable = ended.getSpeakable();
-            return "vxml.output.end = " + toJson(speakable);
+            return toJson("vxml.output.end", speakable);
         }
+        LOGGER.info("not sending synthesized output event: " + event);
         return null;
     }
 
@@ -139,25 +141,17 @@ public class JsonExtensionNotificationDataConverter
         ScriptableObject.putProperty(vxml, "mode", result.getMode());
         ScriptableObject.putProperty(vxml, "interpretation",
                 result.getSemanticInterpretation());
-        return "vxml.input = "
-                + ScriptingEngine.toJSON((ScriptableObject) vxml);
+        return ScriptingEngine.toJSON((ScriptableObject) vxml);
     }
 
     /**
      * {@inheritDoc}
+     * 
+     * Does nothing since no data is required
      */
     @Override
     public Object convertSpokenInputEvent(final SpokenInputEvent input)
             throws ConversionException {
-        if (input instanceof InputStartedEvent) {
-            return "vxml.input.speech.start";
-        } else if (input instanceof RecognitionStartedEvent) {
-            return "vxml.input.start";
-        } else if (input instanceof RecognitionStoppedEvent) {
-            return "vxml.input.end";
-        } else if (input instanceof NomatchEvent) {
-            return "vxml.input.nomatch";
-        }
         return null;
     }
 }
