@@ -31,7 +31,14 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.implementation.InputStartedEvent;
+import org.jvoicexml.event.plain.implementation.NomatchEvent;
+import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
+import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
+import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.interpreter.DetailedSessionListener;
@@ -92,6 +99,12 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
         notification.setContext(context.getContextId());
         notification.setRequestId(UUID.randomUUID().toString());
         notification.setTarget(context.getTarget());
+        final String name = getExtensionNotificationName(event);
+        if (name == null) {
+            LOGGER.warn("no name for event " + event + " not sending");
+            return;
+        }
+        notification.setName(name);
         Object data = null;
         if (event instanceof SynthesizedOutputEvent) {
             final SynthesizedOutputEvent output = (SynthesizedOutputEvent) event;
@@ -146,5 +159,25 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
             }
         };
         thread.start();
+    }
+
+    private String getExtensionNotificationName(final JVoiceXMLEvent event) {
+        if (event instanceof OutputStartedEvent) {
+            return "vxml.output.start";
+        } else if (event instanceof OutputEndedEvent) {
+            return "vxml.output.end";
+        } else if (event instanceof QueueEmptyEvent) {
+            return "vxml.output.emptyQueue";
+        } else if (event instanceof InputStartedEvent) {
+            return "vxml.input.speech.start";
+        } else if (event instanceof RecognitionStartedEvent) {
+            return "vxml.input.start";
+        } else if (event instanceof RecognitionStoppedEvent) {
+            return "vxml.input.end";
+        } else if (event instanceof NomatchEvent) {
+            return "vxml.input.nomatch";
+        }
+
+        return null;
     }
 }

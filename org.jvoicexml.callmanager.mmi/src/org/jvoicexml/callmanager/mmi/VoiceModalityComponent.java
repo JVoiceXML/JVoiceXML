@@ -687,6 +687,11 @@ public final class VoiceModalityComponent
             LOGGER.error(e.getMessage(), e);
             statusInfo = e.getMessage();
         }
+        if (context == null) {
+            LOGGER.error("Context '" + contextId
+                    + "' refers to an unknown context");
+            return;
+        }
         if (statusInfo != null) {
             removeContext(contextId);
             final ModalityComponentState state = context.getState();
