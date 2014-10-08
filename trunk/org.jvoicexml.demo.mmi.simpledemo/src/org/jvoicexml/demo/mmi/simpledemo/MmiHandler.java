@@ -5,7 +5,6 @@ import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -145,14 +144,23 @@ public class MmiHandler extends AbstractHandler {
         if (info.isEmpty()) {
             return false;
         }
-        final Element element = (Element) info.get(0);
-        final Attr attr = element.getAttributeNodeNS(JVXML_MMI_NAMESPACE,
-                "event");
-        if (attr == null) {
+        final Object data = info.get(0);
+        if (data instanceof Element) {
+            final Element element = (Element) info.get(0);
+            final Attr attr = element.getAttributeNodeNS(JVXML_MMI_NAMESPACE,
+                    "event");
+            if (attr == null) {
+                return false;
+            }
+            final String value = attr.getNodeValue();
+            return value.equals("vxml.input.start");
+        } else if (data instanceof String) {
+            System.out.println("*** '" + data + "'");
+            return data.equals("vxml.input.start");
+        } else {
+            System.out.println("unknown data format: " + data);
             return false;
         }
-        final String value = attr.getNodeValue();
-        return value.equals("vxml.input.start");
     }
 
     private void sendYes(final String contextId, final String source,
