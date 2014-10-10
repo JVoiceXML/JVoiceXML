@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
     <repository>mary</repository>
     <classpath>dist/org.jvoicexml.implementation.mary.jar</classpath>
-    <classpath>../org.jvoicexml.implementation.mary/3rdparty/mary5.1/lib/marytts-client-5.1-jar-with-dependencies.jar
+    <classpath>../org.jvoicexml.implementation.mary/3rdparty/mary5.1/lib/marytts-client-5.2-SNAPSHOT-jar-with-dependencies.jar
     </classpath>
     <beans:bean
         class="org.jvoicexml.implementation.mary.MarySynthesizedOutputFactory">
@@ -13,26 +13,6 @@
         <beans:property name="audioType" value="WAVE" />
         <beans:property name="voiceName" value="cmu-slt-hsmm" />
         <!-- beans:property name="voiceName" value="bits1-hsmm" / -->
-        <beans:property name="audioFormat">
-            <!-- The output format of Open Mary depends on the selected voice -->
-            <!-- Therefore, the audio format must be adapted when selecing 
-                other voices -->
-            <beans:bean class="javax.sound.sampled.AudioFormat">
-                <!-- for cmu-slt-hsmm -->
-                <beans:constructor-arg type="float"
-                    value="24000" />
-                <!-- for bits1-hsmm -->
-                <!-- beans:constructor-arg type="float" value="8000" / -->
-                <beans:constructor-arg type="int"
-                    value="32" />
-                <beans:constructor-arg type="int"
-                    value="1" />
-                <beans:constructor-arg type="boolean"
-                    value="true" />
-                <beans:constructor-arg type="boolean"
-                    value="false" />
-            </beans:bean>
-        </beans:property>
     </beans:bean>
 </implementation>
 
