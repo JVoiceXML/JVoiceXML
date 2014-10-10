@@ -29,8 +29,6 @@
 
 package org.jvoicexml.implementation.mary;
 
-import javax.sound.sampled.AudioFormat;
-
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
@@ -58,18 +56,12 @@ public class MarySynthesizedOutputFactory
     /** Name of the voice to use. */
     private String voiceName;
 
-    /** Audio format to use. */
-    private AudioFormat format;
-
     /**
      * {@inheritDoc}
      */
     @Override
     public final SynthesizedOutput createResource() throws NoresourceError {
-        if (format == null) {
-            format = new AudioFormat(24000, 32, 1, true, false); 
-        }
-        final MarySynthesizedOutput output = new MarySynthesizedOutput(format);
+        final MarySynthesizedOutput output = new MarySynthesizedOutput();
         output.setType(type);
         output.setAudioType(audioType);
         output.setVoiceName(voiceName);
@@ -104,15 +96,6 @@ public class MarySynthesizedOutputFactory
         return instances;
     }
 
-    /**
-     * Sets the audio format.
-     * @param audioFormat the audio format to use
-     * @since 0.7.7
-     */
-    public void setAudioFormat(final AudioFormat audioFormat) {
-        format = audioFormat;
-    }
-    
     /**
      * Sets the type of the resource.
      * 

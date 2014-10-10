@@ -20,7 +20,7 @@ implementation platform.
         <property name="mary.dir" value="${local-3rdparty.dir}/mary5.1" />
         <property name="mary.lib.dir" value="${mary.dir}/lib" />
         <fileset dir="${mary.lib.dir}" id="mary.lib">
-            <include name="marytts-client-5.1-jar-with-dependencies.jar" />
+            <include name="marytts-client-5.2-SNAPSHOT-jar-with-dependencies.jar" />
         </fileset>
     </target>
 </project>

@@ -6,12 +6,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Queue;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
-
 import marytts.client.MaryClient;
 
 import org.apache.log4j.Logger;
@@ -75,7 +69,7 @@ final class SynthesisQueue extends Thread {
     private boolean enableBargeIn;
 
     /** The line output stream. */
-    private LineOutputStream out;
+    private LineAudioFormatOutputStream out;
 
     /**
      * Constructs a new SynthesisQueue object. .
@@ -114,6 +108,7 @@ final class SynthesisQueue extends Thread {
                 } catch (BadFetchError e) {
                     listener.outputError(e);
                 } catch (IOException e) {
+                    LOGGER.error(e.getMessage(), e);
                     final BadFetchError error = new BadFetchError(
                             e.getMessage(), e);
                     listener.outputError(error);
@@ -146,30 +141,8 @@ final class SynthesisQueue extends Thread {
     private void passSpeakableToMary(final SpeakableText speakable)
             throws BadFetchError, IOException {
         fireOutputStarted(speakable);
-
         enableBargeIn = speakable.isBargeInEnabled();
-        final AudioFormat format = output.getAudioFormat();
-        LOGGER.info("using audio format: " + format);
-        final DataLine.Info info = new DataLine.Info(SourceDataLine.class,
-                format);
-
-        // Checks if line is supported
-        if (!AudioSystem.isLineSupported(info)) {
-            throw new IOException("Cannot open the requested line: "
-                    + info.toString());
-        }
-
-        // Obtain, open and start the line.
-        final SourceDataLine line;
-        try {
-            line = (SourceDataLine) AudioSystem.getLine(info);
-            line.open(format, AudioSystem.NOT_SPECIFIED);
-            line.start();
-        } catch (LineUnavailableException e) {
-            throw new IOException(e.getMessage(), e);
-        }
-
-        out = new LineOutputStream(line);
+        out = new LineAudioFormatOutputStream();
         try {
             if (speakable instanceof SpeakableSsmlText) {
                 final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
@@ -182,8 +155,6 @@ final class SynthesisQueue extends Thread {
         } finally {
             out.close();
             out = null;
-            line.stop();
-            line.close();
         }
     }
 
