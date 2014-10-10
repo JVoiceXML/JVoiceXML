@@ -30,8 +30,6 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.sound.sampled.AudioFormat;
-
 import marytts.client.MaryClient;
 
 import org.apache.log4j.Logger;
@@ -70,9 +68,6 @@ public final class MarySynthesizedOutput
     /** Object lock for an empty queue. */
     private final Object emptyLock;
 
-    /** Audio format to use. */
-    private final AudioFormat format;
-
     /**
      * Flag to indicate that TTS output and audio of the current speakable can
      * be canceled.
@@ -106,20 +101,10 @@ public final class MarySynthesizedOutput
     /**
      * Constructs a new MarySynthesizedOutput object.
      */
-    public MarySynthesizedOutput(final AudioFormat audioFormat) {
+    public MarySynthesizedOutput() {
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         emptyLock = new Object();
         maryRequestParameters = new java.util.HashMap<String, String>();
-        format = audioFormat;
-    }
-
-    /**
-     * Retrieves the audio format to use.
-     * @return the audio format
-     * @since 0.7.7
-     */
-    public AudioFormat getAudioFormat() {
-        return format;
     }
 
     /**
@@ -202,14 +187,17 @@ public final class MarySynthesizedOutput
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void open() throws NoresourceError {
-        LOGGER.info("using audio format: " + format);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void passivate() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivating output...");

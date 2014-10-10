@@ -30,8 +30,6 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.UUID;
 
-import javax.sound.sampled.AudioFormat;
-
 import marytts.client.MaryClient;
 
 import org.apache.log4j.Logger;
@@ -162,8 +160,7 @@ public final class TestMarySynthesizedOutput
      */
     @Before
     public void setUp() throws Exception {
-        final AudioFormat format = new AudioFormat(24000, 32, 1, true, false);
-        output = new MarySynthesizedOutput(format);
+        output = new MarySynthesizedOutput();
         output.setAudioType("WAVE");
         output.setLang("en-US");
         output.setVoiceName("cmu-slt-hsmm");
