@@ -1,4 +1,4 @@
-<project name="org.jvoicexml.demo.simpleinputdemo" default="all" basedir=".">
+<project name="org.jvoicexml.demo.simpleinputdemo" default="run" basedir=".">
     <description>
 This file builds and runs the 'Simple MMI demo' demo for JVoiceXML.
     </description>
@@ -68,7 +68,7 @@ Build this jar from the main project first.
     </target>
 
     <target name="run" description="Run the 'Simple MMI' demo" depends="compile">
-        <java classname="org.jvoicexml.demo.mmi.simpledemo.SimpleMmiDemo" fork="true">
+        <java classname="org.jvoicexml.demo.simpleinputdemo.SimpleInputDemo" fork="true">
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
             <classpath>
                 <path refid="run.classpath" />
@@ -96,6 +96,4 @@ Build this jar from the main project first.
             <param name="output.dir" expression="${checkstyle-target.dir}" />
         </xslt>
     </target>
-
-    <target name="all" depends="run" description="Run the demo" />
 </project>
