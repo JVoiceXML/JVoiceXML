@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,16 +35,18 @@ import org.jvoicexml.ConnectionInformation;
  *
  * <p>
  * This implementation is designed to transfer the minimum of the needed
- * information from the client to the JVoiceXml server. It may be
- * extended by custom implementations to transfer other client settings
- * that is needed by custom implementation platforms.
+ * information from the client to the JVoiceXml server. It may be extended by
+ * custom implementations to transfer other client settings that is needed by
+ * custom implementation platforms.
  * </p>
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
-public class BasicConnectionInformation implements ConnectionInformation {
+public class BasicConnectionInformation
+        implements ConnectionInformation,
+        ConnectionInformationCallMetadataModifiable {
     /**
      * The serial version UID.
      */
@@ -73,10 +75,13 @@ public class BasicConnectionInformation implements ConnectionInformation {
 
     /**
      * Constructs a new object.
-     * @param call unique identifier for the {@link org.jvoicexml.CallControl}.
-     * @param output unique identifier for the
-     *  {@link org.jvoicexml.SystemOutput}.
-     * @param input unique identifier for the {@link org.jvoicexml.UserInput}.
+     * 
+     * @param call
+     *            unique identifier for the {@link org.jvoicexml.CallControl}.
+     * @param output
+     *            unique identifier for the {@link org.jvoicexml.SystemOutput}.
+     * @param input
+     *            unique identifier for the {@link org.jvoicexml.UserInput}.
      */
     public BasicConnectionInformation(final String call, final String output,
             final String input) {
@@ -116,9 +121,9 @@ public class BasicConnectionInformation implements ConnectionInformation {
     }
 
     /**
-     * Sets the called device.
-     * @param device the called device to set
+     * {@inheritDoc}
      */
+    @Override
     public final void setCalledDevice(final URI device) {
         calledDevice = device;
     }
@@ -132,9 +137,9 @@ public class BasicConnectionInformation implements ConnectionInformation {
     }
 
     /**
-     * Sets the calling device.
-     * @param device the calling device to set
+     * {@inheritDoc}
      */
+    @Override
     public final void setCallingDevice(final URI device) {
         callingDevice = device;
     }
@@ -148,9 +153,9 @@ public class BasicConnectionInformation implements ConnectionInformation {
     }
 
     /**
-     * Sets the protocol name.
-     * @param name the protocol name to set
+     * {@inheritDoc}
      */
+    @Override
     public final void setProtocolName(final String name) {
         protocolName = name;
     }
@@ -164,9 +169,9 @@ public class BasicConnectionInformation implements ConnectionInformation {
     }
 
     /**
-     * Sets the protocol version.
-     * @param version the protocol version to set
+     * {@inheritDoc}
      */
+    @Override
     public final void setProtocolVersion(final String version) {
         protocolVersion = version;
     }
@@ -176,7 +181,9 @@ public class BasicConnectionInformation implements ConnectionInformation {
      * {@link BasicConnectionInformation#toString()} method. Subclasses are
      * requested to add their member variables in the following form
      * <code>,&lt;value&gt;</code>.
-     * @param str {@link StringBuilder} to add to
+     * 
+     * @param str
+     *            {@link StringBuilder} to add to
      * @since 0.7.5
      */
     protected void addToString(final StringBuilder str) {
