@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,16 +26,20 @@
 
 package org.jvoicexml.callmanager.mmi;
 
-
 /**
  * A listener to MMI events.
+ * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
  */
 public interface MMIEventListener {
     /**
      * Notification that the given MMI event has been received.
-     * @param event the received MMI event
+     * 
+     * @param event
+     *            the received MMI event
+     * @param data
+     *            call meta data
      */
-    void receivedEvent(final DecoratedMMIEvent event);
+    void receivedEvent(final DecoratedMMIEvent event, final CallMetadata data);
 }
