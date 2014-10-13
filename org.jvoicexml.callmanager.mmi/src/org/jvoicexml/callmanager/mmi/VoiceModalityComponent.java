@@ -190,7 +190,8 @@ public final class VoiceModalityComponent
      * {@inheritDoc}
      */
     @Override
-    public void receivedEvent(final DecoratedMMIEvent evt) {
+    public void receivedEvent(final DecoratedMMIEvent evt,
+            final CallMetadata data) {
         final LifeCycleEvent event = evt.getLifeCycleEvent();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("received new MMI event: " + event);
@@ -198,10 +199,10 @@ public final class VoiceModalityComponent
         final Object channel = evt.getChannel();
         if (event instanceof PrepareRequest) {
             final PrepareRequest request = (PrepareRequest) event;
-            prepare(channel, request);
+            prepare(channel, request, data);
         } else if (event instanceof StartRequest) {
             final StartRequest request = (StartRequest) event;
-            start(channel, request);
+            start(channel, request, data);
         } else if (event instanceof CancelRequest) {
             final CancelRequest request = (CancelRequest) event;
             cancel(channel, request);
@@ -296,14 +297,35 @@ public final class VoiceModalityComponent
     }
 
     /**
+     * Copies source and target of the request into the metadata.
+     * 
+     * @param event
+     *            the received event
+     * @param data
+     *            the container to copy the call meta data
+     * @throws URISyntaxException
+     * @since 0.7.7
+     */
+    private void copyCallMetadata(final LifeCycleEvent event,
+            final CallMetadata data) throws URISyntaxException {
+        final String source = event.getSource();
+        data.setCallingDevice(source);
+        final String target = event.getTarget();
+        data.setCalledDevice(target);
+    }
+
+    /**
      * Processes a start request.
      * 
      * @param channel
      *            the channel that was used to send the request
      * @param request
      *            the received event
+     * @param data
+     *            call meta data
      */
-    private void prepare(final Object channel, final PrepareRequest request) {
+    private void prepare(final Object channel, final PrepareRequest request,
+            final CallMetadata data) {
         String statusInfo = null;
         final String contextId = request.getContext();
         final String requestId = request.getRequestId();
@@ -331,13 +353,17 @@ public final class VoiceModalityComponent
             if (statusInfo == null) {
                 final URI uri = context.getContentURL();
                 LOGGER.info("creating session for URI '" + uri + "'");
-                final Session session = callManager.createSession();
+                copyCallMetadata(request, data);
+                final Session session = callManager.createSession(data);
                 context.setSession(session);
             }
         } catch (ErrorEvent e) {
             LOGGER.error(e.getMessage(), e);
             statusInfo = e.getMessage();
         } catch (UnsupportedResourceIdentifierException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
+        } catch (URISyntaxException e) {
             LOGGER.error(e.getMessage(), e);
             statusInfo = e.getMessage();
         }
@@ -400,8 +426,11 @@ public final class VoiceModalityComponent
      *            the channel that was used to send the request
      * @param request
      *            the received event
+     * @param data
+     *            the call meta data
      */
-    private void start(final Object channel, final StartRequest request) {
+    private void start(final Object channel, final StartRequest request,
+            final CallMetadata data) {
         String statusInfo = null;
         final String contextId = request.getContext();
         final String requestId = request.getRequestId();
@@ -442,7 +471,8 @@ public final class VoiceModalityComponent
                 LOGGER.info("calling '" + uri + "'");
                 Session session = context.getSession();
                 if (session == null) {
-                    session = callManager.createSession();
+                    copyCallMetadata(request, data);
+                    session = callManager.createSession(data);
                     context.setSession(session);
                 }
                 final ExtensionNotificationDataConverter converter = callManager
@@ -458,6 +488,9 @@ public final class VoiceModalityComponent
             LOGGER.error(e.getMessage(), e);
             statusInfo = e.getMessage();
         } catch (UnsupportedResourceIdentifierException e) {
+            LOGGER.error(e.getMessage(), e);
+            statusInfo = e.getMessage();
+        } catch (URISyntaxException e) {
             LOGGER.error(e.getMessage(), e);
             statusInfo = e.getMessage();
         }

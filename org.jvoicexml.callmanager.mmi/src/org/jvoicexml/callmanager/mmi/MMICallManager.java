@@ -34,6 +34,7 @@ import org.jvoicexml.CallManager;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.client.ConnectionInformationCallMetadataModifiable;
 import org.jvoicexml.client.ConnectionInformationController;
 import org.jvoicexml.client.ConnectionInformationFactory;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
@@ -228,12 +229,19 @@ public final class MMICallManager implements CallManager {
      * @throws UnsupportedResourceIdentifierException
      *             error in the URI scheme
      */
-    public Session createSession() throws ErrorEvent,
+    public Session createSession(final CallMetadata data) throws ErrorEvent,
             UnsupportedResourceIdentifierException {
         final ConnectionInformationController controller = factory
                 .createConnectionInformation(call, output, input);
         final ConnectionInformation info = controller
                 .getConnectionInformation();
+        if (info instanceof ConnectionInformationCallMetadataModifiable) {
+            final ConnectionInformationCallMetadataModifiable modifiable = (ConnectionInformationCallMetadataModifiable) info;
+            modifiable.setCalledDevice(data.getCalledDevice());
+            modifiable.setCallingDevice(data.getCallingDevice());
+            modifiable.setProtocolName(data.getProtocolName());
+            modifiable.setProtocolVersion(data.getProtocolVersion());
+        }
         final Session session = jvxml.createSession(info);
         sessions.put(session, controller);
         if (LOGGER.isDebugEnabled()) {
