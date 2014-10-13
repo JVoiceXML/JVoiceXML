@@ -51,6 +51,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.callmanager.mmi.CallMetadata;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
 import org.jvoicexml.mmi.events.AnyComplexType;
@@ -158,9 +159,11 @@ public final class MmiReceiver implements ITypedReceiver {
         mmi.setLifeCycleEvent(event);
         final DecoratedMMIEvent docatedEvent = new DecoratedMMIEvent(sourceUrl,
                 mmi);
+        final CallMetadata data = new CallMetadata();
+        data.setProtocolName("umundo");
         synchronized (listeners) {
             for (MMIEventListener listener : listeners) {
-                listener.receivedEvent(docatedEvent);
+                listener.receivedEvent(docatedEvent, data);
             }
         }
     }
