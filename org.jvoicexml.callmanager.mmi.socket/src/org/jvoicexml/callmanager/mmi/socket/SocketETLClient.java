@@ -27,8 +27,12 @@ package org.jvoicexml.callmanager.mmi.socket;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketOption;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -37,6 +41,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.callmanager.mmi.CallMetadata;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
@@ -91,7 +96,8 @@ final class SocketETLClient extends Thread {
                 LOGGER.info("received MMI event: " + mmi);
                 final DecoratedMMIEvent event =
                         new DecoratedMMIEvent(this, mmi);
-                adapter.notifyMMIEvent(event);
+                final CallMetadata data = getCallMetadata();
+                adapter.notifyMMIEvent(event, data);
             } else {
                 LOGGER.warn("received unknown MMI object: " + o);
             }
@@ -108,5 +114,21 @@ final class SocketETLClient extends Thread {
                 LOGGER.warn(e.getMessage(), e);
             }
         }
+    }
+    
+    /**
+     * Retrieves the call meta data from the socket.
+     * @return call meta data
+     */
+    private CallMetadata getCallMetadata() {
+        final CallMetadata data = new CallMetadata();
+        data.setProtocolName("TCP");
+        final InetAddress address = socket.getInetAddress();
+        if (address instanceof Inet4Address) {
+            data.setProtocolVersion("IPv4");
+        } else if (address instanceof Inet6Address) {
+            data.setProtocolVersion("IPv6");
+        }
+        return data;
     }
 }
