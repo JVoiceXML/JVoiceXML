@@ -188,13 +188,6 @@ public final class TestMarySynthesizedOutput
      */
     @Test//(timeout = 6000)
     public void testQueueSpeakable() throws Exception, JVoiceXMLEvent {
-        final SpeakableSsmlText plainText =
-            new SpeakableSsmlText("Hello world");
- 
-        output.queueSpeakable(plainText, sessionId, documentServer);
-        synchronized (outputEndedLock) {
-            outputEndedLock.wait();
-        }
         final SsmlDocument doc = new SsmlDocument();
         final Speak speak = doc.getSpeak();
         speak.setXmlLang(Locale.US);
