@@ -395,7 +395,7 @@ sphinx.lib.dir=../../lib
     </target>
 
     <target name="copyRpmFiles" description="Copy all files for the RPM" depends="distributionFolder" unless="windows">
-        <property name="rpm.build" value="${distRpmFolder}/BUILDROOT/jvoicexml-${jvxml.version}-1.noarch" />
+        <property name="rpm.build" value="${distRpmFolder}/BUILDROOT/jvoicexml-${jvxml.version.raw}-1.noarch" />
 
         <delete dir="${rpm.build}" />
         <mkdir dir="${rpm.build}/usr/local/jvoicexml" />
@@ -420,6 +420,7 @@ sphinx.lib.dir=../../lib
         <copy todir="${distRpmFolder}/SPECS" file="${etc}/jvoicexml.spec" />
         <replace file="${distRpmFolder}/SPECS/jvoicexml.spec">
             <replacefilter token="@jvxml.version@" value="${jvxml.version}" />
+            <replacefilter token="@jvxml.version.raw@" value="${jvxml.version.raw}" />
         </replace>
         <rpm topdir="${distRpmFolder}" specFile="jvoicexml.spec" command="--target noarch -bb" />
         <copy todir="${basedir}" file="${distRpmFolder}/RPMS/noarch/jvoicexml-${jvxml.version}-1.noarch.rpm" />
