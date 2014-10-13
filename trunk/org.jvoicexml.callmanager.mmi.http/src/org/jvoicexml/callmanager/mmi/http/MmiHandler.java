@@ -14,6 +14,7 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.jvoicexml.callmanager.mmi.CallMetadata;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
 import org.jvoicexml.mmi.events.Mmi;
@@ -49,10 +50,14 @@ public class MmiHandler extends AbstractHandler {
      * @param event
      *            the event to notify
      */
-    void notifyMMIEvent(final DecoratedMMIEvent event) {
+    void notifyMMIEvent(final String protocol, final DecoratedMMIEvent event) {
+        final CallMetadata data = new CallMetadata();
+        final String[] str = protocol.split("/"); 
+        data.setProtocolName(str[0]);
+        data.setProtocolVersion(str[1]);
         synchronized (listeners) {
             for (MMIEventListener listener : listeners) {
-                listener.receivedEvent(event);
+                listener.receivedEvent(event, data);
             }
         }
     }
@@ -71,11 +76,12 @@ public class MmiHandler extends AbstractHandler {
             if (o instanceof Mmi) {
                 final Mmi mmi = (Mmi) o;
                 LOGGER.info("received MMI event: " + mmi);
+                final String protocol = request.getProtocol();
                 final DecoratedMMIEvent event = new DecoratedMMIEvent(this, mmi);
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        notifyMMIEvent(event);
+                        notifyMMIEvent(protocol, event);
                     }
                 };
                 final Thread thread = new Thread(runnable);
