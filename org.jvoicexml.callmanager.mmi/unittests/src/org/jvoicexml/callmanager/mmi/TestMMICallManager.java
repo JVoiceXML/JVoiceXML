@@ -87,7 +87,7 @@ public final class TestMMICallManager {
      */
     @Test
     public void testCreateSession() throws Exception, JVoiceXMLEvent {
-        final Session session = cm.createSession();
+        final Session session = cm.createSession(null);
         Assert.assertNotNull(session);
         cm.cleanupSession(session);
     }

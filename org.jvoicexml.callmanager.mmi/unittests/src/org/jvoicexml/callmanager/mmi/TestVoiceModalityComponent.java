@@ -102,7 +102,8 @@ public final class TestVoiceModalityComponent {
         final URL url = file.toURI().toURL();
         request.setContentURL(url);
         final DecoratedMMIEvent event = new DecoratedMMIEvent(this, mmi);
-        mc.receivedEvent(event);
+        final CallMetadata data = new CallMetadata();
+        mc.receivedEvent(event, data);
     }
 
     /**
@@ -121,7 +122,8 @@ public final class TestVoiceModalityComponent {
         any.addContent("this is a test");
         request.setContent(any);
         final DecoratedMMIEvent event = new DecoratedMMIEvent(this, mmi);
-        mc.receivedEvent(event);
+        final CallMetadata data = new CallMetadata();
+        mc.receivedEvent(event, data);
     }
 
     /**
@@ -147,7 +149,8 @@ public final class TestVoiceModalityComponent {
         any.addContent(prompt.getNode());
         request.setContent(any);
         final DecoratedMMIEvent event = new DecoratedMMIEvent(this, mmi);
-        mc.receivedEvent(event);
+        final CallMetadata data = new CallMetadata();
+        mc.receivedEvent(event, data);
     }
     
 }
