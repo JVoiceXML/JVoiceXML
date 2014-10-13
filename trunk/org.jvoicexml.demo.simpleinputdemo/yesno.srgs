@@ -7,9 +7,9 @@
     tag-format="semantics/1.0">
     <rule id="yesno" scope="public">
         <one-of>
-            <item>yes<tag>yes</tag></item>
-            <item>sure<tag>yes</tag></item>
-            <item>no<tag>no</tag></item>
+            <item>yes<tag>Y</tag></item>
+            <item>sure<tag>Y</tag></item>
+            <item>no<tag>N</tag></item>
         </one-of>
     </rule>
 </grammar>

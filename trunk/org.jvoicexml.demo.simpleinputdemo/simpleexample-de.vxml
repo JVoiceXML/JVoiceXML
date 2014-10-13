@@ -12,7 +12,7 @@
                 Gefällt dir dieses Beispiel?
             </prompt>
             <filled>
-                <if expr="like == 'yes'">
+                <if expr="like == 'Y'">
                     Dir gefällt das Beispiel.
                     <else />
                     Du kannst das Beispiel nicht leiden.
