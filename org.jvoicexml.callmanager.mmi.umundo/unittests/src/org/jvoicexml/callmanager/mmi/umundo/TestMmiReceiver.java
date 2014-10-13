@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.callmanager.mmi.CallMetadata;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
@@ -44,6 +45,7 @@ import com.google.protobuf.ExtensionRegistry;
 
 /**
  * Test cases for the {@link MmiReceiver}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
  * @since 0.7.6
@@ -61,8 +63,9 @@ public final class TestMmiReceiver implements MMIEventListener {
 
     /**
      * Set up the test environment.
+     * 
      * @throws Exception
-     *         set up failed
+     *             set up failed
      */
     @Before
     public void setUp() throws Exception {
@@ -83,7 +86,9 @@ public final class TestMmiReceiver implements MMIEventListener {
 
     /**
      * Tear down the test environment.
-     * @throws Exception tear down failed
+     * 
+     * @throws Exception
+     *             tear down failed
      */
     @After
     public void tearDown() throws Exception {
@@ -92,9 +97,11 @@ public final class TestMmiReceiver implements MMIEventListener {
     }
 
     /**
-     * Tests for {@link MmiReceiver#receiveObject(Object, org.umundo.core.Message)}.
+     * Tests for
+     * {@link MmiReceiver#receiveObject(Object, org.umundo.core.Message)}.
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      */
     @Test(timeout = 5000)
     public void testReceiveObject() throws Exception {
@@ -107,26 +114,22 @@ public final class TestMmiReceiver implements MMIEventListener {
         final String context = "context1";
         final String content = "content1";
         final String contentUrl = "contentUrl1";
-        final LifeCycleEvents.PrepareRequest prepareRequest =
-                LifeCycleEvents.PrepareRequest.newBuilder()
-                .setContent(content)
-                .setContentURL(contentUrl)
+        final LifeCycleEvents.PrepareRequest prepareRequest = LifeCycleEvents.PrepareRequest
+                .newBuilder().setContent(content).setContentURL(contentUrl)
                 .build();
-        final LifeCycleEvents.LifeCycleRequest lifeCycleRequest =
-                LifeCycleEvents.LifeCycleRequest.newBuilder()
+        final LifeCycleEvents.LifeCycleRequest lifeCycleRequest = LifeCycleEvents.LifeCycleRequest
+                .newBuilder()
                 .setContext(context)
                 .setExtension(LifeCycleEvents.PrepareRequest.request,
-                        prepareRequest)
-                .build();
-        final LifeCycleEvents.LifeCycleEvent event1 =
-                LifeCycleEvents.LifeCycleEvent.newBuilder()
+                        prepareRequest).build();
+        final LifeCycleEvents.LifeCycleEvent event1 = LifeCycleEvents.LifeCycleEvent
+                .newBuilder()
                 .setType(LifeCycleEventType.PREPARE_REQUEST)
                 .setRequestID(requestId)
                 .setSource(source)
                 .setTarget(target)
                 .setExtension(LifeCycleEvents.LifeCycleRequest.request,
-                        lifeCycleRequest)
-                .build();
+                        lifeCycleRequest).build();
         publisher.sendObject("LifeCycleEvent", event1);
         synchronized (lock) {
             lock.wait();
@@ -136,7 +139,8 @@ public final class TestMmiReceiver implements MMIEventListener {
     }
 
     @Override
-    public void receivedEvent(final DecoratedMMIEvent event) {
+    public void receivedEvent(final DecoratedMMIEvent event,
+            final CallMetadata data) {
         receivedEvent = event.getLifeCycleEvent();
         synchronized (lock) {
             lock.notifyAll();
