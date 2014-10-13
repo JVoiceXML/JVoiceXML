@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,6 +37,7 @@ import javax.xml.bind.Marshaller;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.callmanager.mmi.CallMetadata;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
 import org.jvoicexml.mmi.events.Mmi;
@@ -44,6 +45,7 @@ import org.jvoicexml.mmi.events.StartRequest;
 
 /**
  * Test cases for {@link SocketETLServer}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
@@ -64,9 +66,11 @@ public final class TestSocketETLServer implements MMIEventListener {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.callmanager.mmi.SocketETLServer#run()}.
+     * Test method for
+     * {@link org.jvoicexml.callmanager.mmi.SocketETLServer#run()}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test(timeout = 5000)
     public void testRun() throws Exception {
@@ -102,7 +106,8 @@ public final class TestSocketETLServer implements MMIEventListener {
      * {@inheritDoc}
      */
     @Override
-    public void receivedEvent(final DecoratedMMIEvent evt) {
+    public void receivedEvent(final DecoratedMMIEvent evt,
+            final CallMetadata data) {
         event = evt;
         synchronized (lock) {
             lock.notifyAll();

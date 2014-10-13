@@ -38,6 +38,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.callmanager.mmi.CallMetadata;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
 import org.jvoicexml.callmanager.mmi.MMIEventListener;
@@ -47,14 +48,15 @@ import org.jvoicexml.mmi.events.Mmi;
 
 /**
  * A protocol adapter using plain sockets.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
 public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
     /** Logger instance. */
-    private static final Logger LOGGER =
-        Logger.getLogger(SocketETLProtocolAdapter.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(SocketETLProtocolAdapter.class);
 
     /** Registered listeners for MMI events. */
     private final Collection<MMIEventListener> listeners;
@@ -74,7 +76,9 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
 
     /**
      * sets the port number to listen on.
-     * @param portNumber the port number
+     * 
+     * @param portNumber
+     *            the port number
      */
     public void setPort(final int portNumber) {
         port = portNumber;
@@ -122,8 +126,8 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      */
     @Override
     public void sendMMIEvent(final Object channel, final Mmi mmi)
-        throws IOException {
-        Socket client = null; 
+            throws IOException {
+        Socket client = null;
         try {
             final LifeCycleEvent event = mmi.getLifeCycleEvent();
             mmi.setLifeCycleEvent(event);
@@ -140,8 +144,8 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
             client = new Socket(host, targetPort);
             final URI serverUri = server.getUri();
             if (serverUri == null) {
-                final URI clientUri = TcpUriFactory.createUri(
-                        client.getInetAddress());
+                final URI clientUri = TcpUriFactory.createUri(client
+                        .getInetAddress());
                 event.setSource(clientUri.toString());
             } else {
                 event.setSource(serverUri.toString());
@@ -166,12 +170,16 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
 
     /**
      * Notifies all registered listeners about a received MMI Event.
-     * @param event the event to notify
+     * 
+     * @param event
+     *            the event to notify
+     * @param data
+     *            call meta data
      */
-    void notifyMMIEvent(final DecoratedMMIEvent event) {
+    void notifyMMIEvent(final DecoratedMMIEvent event, final CallMetadata data) {
         synchronized (listeners) {
             for (MMIEventListener listener : listeners) {
-                listener.receivedEvent(event);
+                listener.receivedEvent(event, data);
             }
         }
     }
