@@ -115,6 +115,7 @@ public final class SimpleMmiDemo {
         final URI source = new URI("http://localhost:9092");
         start.setSource(source.toString());
         final URI target = new URI("http://localhost:9090");
+        start.setTarget(target.toString());
         start.setContext(context);
         start.setRequestId(Integer.toString(requestId));
         // final File file = new File("simpleexample.vxml");
