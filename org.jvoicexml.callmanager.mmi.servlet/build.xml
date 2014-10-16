@@ -101,6 +101,7 @@ Adapt the settings for your servlet container in the file
     <target name="jar" depends="war" />
 
     <target name="distribution" depends="jar">
+        <property name="distFolder" value="${dist}/${jvxml.version}" />
         <copy todir="${distFolder}/lib" file="${dist.war}"/>
     </target>
     
