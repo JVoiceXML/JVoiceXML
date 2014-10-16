@@ -42,150 +42,168 @@ import org.mobicents.servlet.sip.restcomm.callmanager.mgcp.MgcpCallTerminal;
  * @version $Revision$
  * @since 0.6
  */
-public final class MobicentsConnectionInformation implements ConnectionInformation {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -2292816741245233245L;
+public final class MobicentsConnectionInformation implements
+		ConnectionInformation {
+	/** The serial version UID. */
+	private static final long serialVersionUID = -2292816741245233245L;
 
-    /** A terminal for a SIP MGCP connection. */
-    private final MgcpCallTerminal terminal;
+	/** A terminal for a SIP MGCP connection. */
+	private final MgcpCallTerminal terminal;
 
-    /** Type of the {@link org.jvoicexml.SystemOutput} resource. */
-    private final String output;
+	/** Type of the {@link org.jvoicexml.SystemOutput} resource. */
+	private final String output;
 
-    /** Type of the {@link org.jvoicexml.UserInput} resource. */
-    private final String input;
+	/** Type of the {@link org.jvoicexml.UserInput} resource. */
+	private final String input;
 
-    /** URI of the local interpreter context device. */
-    private URI calledDevice;
+	/** URI of the local interpreter context device. */
+	private URI calledDevice;
 
-    /** URI of the remote caller device. */
-    private URI callingDevice;
+	/** URI of the remote caller device. */
+	private URI callingDevice;
 
-    /** Name of the connection protocol. */
-    private String protocolName;
+	/** Name of the connection protocol. */
+	private String protocolName;
 
-    /** Version of the connection protocol. */
-    private String protocolVersion;
+	/** Version of the connection protocol. */
+	private String protocolVersion;
 
-    /**
-     * Constructs a new object.
-     *
-     * @param term
-     *            the vnxivr terminal.
-     * @param outputType
-     *            type of the {@link org.jvoicexml.SystemOutput} resource
-     * @param inputType
-     *            type of the {@link org.jvoicexml.UserInput} resource
-     * @throws UnknownHostException
-     *         Error determining the local IP address.
-     */
-    public MobicentsConnectionInformation(final MgcpCallTerminal term,
-            final String outputType, final String inputType)
-        throws UnknownHostException {
-        terminal = term;
-        output = outputType;
-        input = inputType;
-    }
+	/**
+	 * Constructs a new object.
+	 *
+	 * @param term
+	 *            the vnxivr terminal.
+	 * @param outputType
+	 *            type of the {@link org.jvoicexml.SystemOutput} resource
+	 * @param inputType
+	 *            type of the {@link org.jvoicexml.UserInput} resource
+	 * @throws UnknownHostException
+	 *             Error determining the local IP address.
+	 */
+	public MobicentsConnectionInformation(final MgcpCallTerminal term,
+			final String outputType, final String inputType)
+			throws UnknownHostException {
+		terminal = term;
+		output = outputType;
+		input = inputType;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getCallControl() {
-        return "mobicents";
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getProfile() {
+		return "VoiceXML21";
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getSystemOutput() {
-        return output;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getCallControl() {
+		return "mobicents";
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getUserInput() {
-        return input;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getSystemOutput() {
+		return output;
+	}
 
-    /**
-     * Retrieves the terminal name.
-     *
-     * @return name of the terminal.
-     */
-    public String getTerminalName() {
-        return terminal.getTerminalName();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getUserInput() {
+		return input;
+	}
 
-    /**
-     * Retrieves the terminal.
-     * @return the terminal.
-     */
-    public MgcpCallTerminal getTerminal() {
-        return terminal;
-    }
+	/**
+	 * Retrieves the terminal name.
+	 *
+	 * @return name of the terminal.
+	 */
+	public String getTerminalName() {
+		return terminal.getTerminalName();
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getCalledDevice() {
-        return calledDevice;
-    }
+	/**
+	 * Retrieves the terminal.
+	 * 
+	 * @return the terminal.
+	 */
+	public MgcpCallTerminal getTerminal() {
+		return terminal;
+	}
 
-    /**
-     * Sets the called device.
-     * @param device the called device to set
-     */
-    public void setCalledDevice(final URI device) {
-        calledDevice = device;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public URI getCalledDevice() {
+		return calledDevice;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getCallingDevice() {
-        return callingDevice;
-    }
+	/**
+	 * Sets the called device.
+	 * 
+	 * @param device
+	 *            the called device to set
+	 */
+	public void setCalledDevice(final URI device) {
+		calledDevice = device;
+	}
 
-    /**
-     * Sets the calling device.
-     * @param device the calling device to set
-     */
-    public void setCallingDevice(final URI device) {
-        callingDevice = device;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public URI getCallingDevice() {
+		return callingDevice;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getProtocolName() {
-        return protocolName;
-    }
+	/**
+	 * Sets the calling device.
+	 * 
+	 * @param device
+	 *            the calling device to set
+	 */
+	public void setCallingDevice(final URI device) {
+		callingDevice = device;
+	}
 
-    /**
-     * Sets the protocol name.
-     * @param name the protocol name to set
-     */
-    public void setProtocolName(final String name) {
-        protocolName = name;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getProtocolName() {
+		return protocolName;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getProtocolVersion() {
-        return protocolVersion;
-    }
+	/**
+	 * Sets the protocol name.
+	 * 
+	 * @param name
+	 *            the protocol name to set
+	 */
+	public void setProtocolName(final String name) {
+		protocolName = name;
+	}
 
-    /**
-     * Sets the protocol version.
-     * @param version the protocol version to set
-     */
-    public void setProtocolVersion(final String version) {
-        protocolVersion = version;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getProtocolVersion() {
+		return protocolVersion;
+	}
+
+	/**
+	 * Sets the protocol version.
+	 * 
+	 * @param version
+	 *            the protocol version to set
+	 */
+	public void setProtocolVersion(final String version) {
+		protocolVersion = version;
+	}
 }

@@ -43,7 +43,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.implementation.jvxml.BufferedCharacterInput;
+import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;
 import org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatform;
 import org.jvoicexml.implementation.mobicents.callmanager.MobicentsConnectionInformation;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
@@ -213,7 +213,7 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener
 
     public void procSIPInfo(SipServletRequest request) 
     {
-        BufferedCharacterInput input=null;
+        BufferedDtmfInput input=null;
         try {
             Session session = listCurrentCalls.get(request.getCallId());
             LOGGER.debug("get jvxml session for sip callid:" + request.getCallId() + " jxmlsession:" + session);
@@ -224,7 +224,7 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener
             String messageContent = new String((byte[]) request.getContent());
             int idexdigit = messageContent.indexOf(VAppCfg.digitPattern);
             String signal = messageContent.substring(idexdigit + VAppCfg.digitPattern.length(), idexdigit + VAppCfg.digitPattern.length() + 2).trim();
-            input = (BufferedCharacterInput)session.getCharacterInput();
+            input = (BufferedDtmfInput)session.getDtmfInput();
             LOGGER.info("got INFO request with following content " + messageContent
                     + " signal:" + signal + " charAt0:" + signal.trim().charAt(0) + " characterInput:"+input);
             
@@ -237,7 +237,7 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener
                     LOGGER.error("BufferedCharacterInput hasn't started:" + input + " callId:"+request.getCallId());
                     Thread.sleep(1000);
                 }    
-                input.addCharacter(signal.trim().charAt(0));
+                input.addDtmf(signal.trim().charAt(0));
             }
         } catch (JVoiceXMLEvent ev) {
             ExLog.exception(LOGGER, ev);
