@@ -26,13 +26,12 @@
 
 package org.jvoicexml.interpreter.event;
 
-import org.apache.log4j.Logger;
-import org.jvoicexml.Configuration;
-import org.jvoicexml.ConfigurationException;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
+import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategyExecutor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
@@ -46,18 +45,14 @@ import org.jvoicexml.xml.vxml.Catch;
  * {@link JVoiceXmlEventHandler}.
  *
  * <p>
- * Typically, an {@link AbstractEventStrategy} is responsible to handle
- * events for a single {@link FormItem}.
+ * Typically, an {@link AbstractEventStrategy} is responsible to handle events
+ * for a single {@link FormItem}.
  * </p>
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 abstract class AbstractEventStrategy implements EventStrategy {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(AbstractEventStrategy.class);
-
     /** Base hash code. */
     private static final int HASH_CODE_BASE = 3;
 
@@ -102,27 +97,26 @@ abstract class AbstractEventStrategy implements EventStrategy {
      * Constructs a new object.
      *
      * @param ctx
-     *        the VoiceXML interpreter context.
+     *            the VoiceXML interpreter context.
      * @param ip
-     *        the VoiceXML interpreter.
+     *            the VoiceXML interpreter.
      * @param algorithm
-     *        the FIA, maybe <code>null</code>. If a <code>null</code> value is
-     *        provided the strategy obtains the current FIA from the
-     *        interpreter in the processing state.
+     *            the FIA, maybe <code>null</code>. If a <code>null</code> value
+     *            is provided the strategy obtains the current FIA from the
+     *            interpreter in the processing state.
      * @param formItem
-     *        the current form item, maybe <code>null</code>. If a
-     *        <code>null</code> value is provided, the strategy tries to obtain
-     *        the current item from the FIA in the processing state.
+     *            the current form item, maybe <code>null</code>. If a
+     *            <code>null</code> value is provided, the strategy tries to
+     *            obtain the current item from the FIA in the processing state.
      * @param n
-     *        the child node with which to continue.
+     *            the child node with which to continue.
      * @param type
-     *        the event type.
+     *            the event type.
      */
     protected AbstractEventStrategy(final VoiceXmlInterpreterContext ctx,
-                                    final VoiceXmlInterpreter ip,
-                                    final FormInterpretationAlgorithm algorithm,
-                                    final FormItem formItem,
-                                    final VoiceXmlNode n, final String type) {
+            final VoiceXmlInterpreter ip,
+            final FormInterpretationAlgorithm algorithm,
+            final FormItem formItem, final VoiceXmlNode n, final String type) {
         context = ctx;
         interpreter = ip;
         fia = algorithm;
@@ -133,8 +127,8 @@ abstract class AbstractEventStrategy implements EventStrategy {
         if (node == null) {
             count = 1;
         } else {
-            final String countAttribute =
-                    node.getAttribute(Catch.ATTRIBUTE_COUNT);
+            final String countAttribute = node
+                    .getAttribute(Catch.ATTRIBUTE_COUNT);
             if (countAttribute == null) {
                 count = 1;
             } else {
@@ -166,8 +160,7 @@ abstract class AbstractEventStrategy implements EventStrategy {
      *
      * @return The current FIA.
      */
-    protected final FormInterpretationAlgorithm
-            getFormInterpretationAlgorithm() {
+    protected final FormInterpretationAlgorithm getFormInterpretationAlgorithm() {
         // If there was no FIA, try to obtain one from the interpreter.
         if (fia == null) {
             if (interpreter == null) {
@@ -181,20 +174,16 @@ abstract class AbstractEventStrategy implements EventStrategy {
     /**
      * Retrieves the tag strategy executor. If a FIA is present the executor is
      * obtained from the FIA, a new one is created otherwise.
+     * 
      * @return the tag strategy executor.
      * @since 0.7
      */
     protected TagStrategyExecutor getTagStrategyExecutor() {
         if (fia == null) {
-            final Configuration configuration = context.getConfiguration();
-            final TagStrategyExecutor executor =
-                new TagStrategyExecutor();
-            try {
-                executor.init(configuration);
-            } catch (ConfigurationException e) {
-                LOGGER.warn(e.getMessage(), e);
-            }
-            return executor;
+            final JVoiceXmlSession session = (JVoiceXmlSession) context
+                    .getSession();
+            final Profile profile = session.getProfile();
+            return new TagStrategyExecutor(profile);
         } else {
             return fia.getTagStrategyExecutor();
         }
@@ -207,8 +196,7 @@ abstract class AbstractEventStrategy implements EventStrategy {
      */
     protected FormItem getCurrentFormItem() {
         if (item == null) {
-            FormInterpretationAlgorithm algorithm =
-                getFormInterpretationAlgorithm();
+            FormInterpretationAlgorithm algorithm = getFormInterpretationAlgorithm();
             if (algorithm == null) {
                 return null;
             }
@@ -219,8 +207,9 @@ abstract class AbstractEventStrategy implements EventStrategy {
     }
 
     /**
-     * Retrieves the assocaited form item. This may be different to what
-     * is returned by {@link #getCurrentFormItem()}.
+     * Retrieves the assocaited form item. This may be different to what is
+     * returned by {@link #getCurrentFormItem()}.
+     * 
      * @return associated form item, <code>null</code> if there is none.
      */
     public FormItem getFormItem() {
@@ -272,9 +261,9 @@ abstract class AbstractEventStrategy implements EventStrategy {
         return Boolean.TRUE.equals(result);
     }
 
-    
     /**
      * {@inheritDoc}
+     * 
      * @since 0.7
      */
     @Override

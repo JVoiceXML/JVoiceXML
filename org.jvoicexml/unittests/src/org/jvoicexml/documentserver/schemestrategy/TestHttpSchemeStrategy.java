@@ -40,33 +40,36 @@ import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
  * Test cases for {@link HttpSchemeStrategy}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.3
  */
 public final class TestHttpSchemeStrategy {
     /**
-     * Test method for {@link org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy#getInputStream(org.jvoicexml.Session, java.net.URI, org.jvoicexml.xml.vxml.RequestMethod, long, java.util.Map)}.
+     * Test method for
+     * {@link org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy#getInputStream(org.jvoicexml.Session, java.net.URI, org.jvoicexml.xml.vxml.RequestMethod, long, java.util.Map)}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception BadFetchError
-     *            expected error
+     *                expected error
      */
     @Test(expected = BadFetchError.class)
     public void testGetInputStream() throws Exception, BadFetchError {
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Session session = new JVoiceXmlSession(platform, jvxml, null);
+        final Session session = new JVoiceXmlSession(platform, jvxml, null,
+                null);
         final HttpSchemeStrategy strategy = new HttpSchemeStrategy();
         final URI uri = new URI("http://localhost:8080?session=id");
-        final Map<String, Object> parameters =
-            new java.util.HashMap<String, Object>();
+        final Map<String, Object> parameters = new java.util.HashMap<String, Object>();
         parameters.put("firstName", "Horst");
         parameters.put("lastName", "Buchholz");
         final String sessionId = session.getSessionID();
-        strategy.getInputStream(sessionId, uri, RequestMethod.GET,
-                0, parameters);
+        strategy.getInputStream(sessionId, uri, RequestMethod.GET, 0,
+                parameters);
     }
 
 }

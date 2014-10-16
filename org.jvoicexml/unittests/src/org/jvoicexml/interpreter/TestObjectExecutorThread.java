@@ -72,7 +72,7 @@ public final class TestObjectExecutorThread {
         final MockJvoiceXmlCore jvxml = new MockJvoiceXmlCore();
 
         final JVoiceXmlSession session =
-            new JVoiceXmlSession(null, jvxml, null);
+            new JVoiceXmlSession(null, jvxml, null, null);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
     }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,6 +35,7 @@ import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Profile;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -43,6 +44,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -217,8 +219,9 @@ public final class TestGrammarProcessor {
         final ImplementationPlatform platform =
             new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
+        final Profile profile = new MockProfile();
         final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null);
+            new JVoiceXmlSession(platform, jvxml, null, profile);
         context = new VoiceXmlInterpreterContext(session, null);
     }
 }

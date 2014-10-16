@@ -40,6 +40,7 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
@@ -48,7 +49,6 @@ import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
@@ -60,6 +60,7 @@ import org.jvoicexml.interpreter.grammar.InternalGrammarDocument;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.mock.TestAppender;
 import org.jvoicexml.mock.config.MockConfiguration;
@@ -90,14 +91,14 @@ import org.xml.sax.SAXException;
  * @since 0.6
  */
 public final class TestJVoiceXmlEventHandler {
-    /** The tag initialization factory. */
-    private static InitializationTagStrategyFactory factory;
-
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
 
     /** The VoiceXML interpreter. */
     private VoiceXmlInterpreter interpreter;
+
+    /** the test profile. */
+    private Profile profile;
 
     /**
      * Adds the test appender.
@@ -110,9 +111,6 @@ public final class TestJVoiceXmlEventHandler {
     public static void init() throws Exception {
         final Logger logger = Logger.getRootLogger();
         logger.addAppender(new TestAppender());
-        final Configuration configuration = new MockConfiguration();
-        factory = configuration
-                .loadObject(InitializationTagStrategyFactory.class);
     }
 
     /**
@@ -125,12 +123,12 @@ public final class TestJVoiceXmlEventHandler {
     public void setUp() throws Exception {
         final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
+        profile = new MockProfile();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null);
+                null, profile);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
-        interpreter.init(configuration);
     }
 
     /**
@@ -472,6 +470,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
+        fia.initialize(profile);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
                 context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
@@ -521,7 +520,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, null, dialog);
-        fia.initialize(factory);
+        fia.initialize(profile);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
                 context.getScopeObserver());
         handler.collect(context, interpreter, document);
@@ -575,7 +574,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(factory);
+        fia.initialize(profile);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
                 context.getScopeObserver());
         handler.collect(context, interpreter, dialog);
@@ -643,7 +642,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(factory);
+        fia.initialize(profile);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
                 context.getScopeObserver());
         final InitialFormItem initialItem = new InitialFormItem(context,
@@ -724,7 +723,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(factory);
+        fia.initialize(profile);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
                 context.getScopeObserver());
         final InitialFormItem initialItem = new InitialFormItem(context,
@@ -815,7 +814,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(factory);
+        fia.initialize(profile);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
                 context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);

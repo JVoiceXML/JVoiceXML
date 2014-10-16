@@ -82,11 +82,14 @@ public final class TestJVoiceXmlDocumentServer {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#getObject(java.net.URI, java.lang.String)}.
+     * Test method for
+     * {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#getObject(java.net.URI, java.lang.String)}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed.
+     *                test failed.
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testGetObjectTextPlain() throws JVoiceXMLEvent, Exception {
@@ -101,11 +104,14 @@ public final class TestJVoiceXmlDocumentServer {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#getObject(java.net.URI, java.lang.String)}.
+     * Test method for
+     * {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#getObject(java.net.URI, java.lang.String)}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      * @throws Exception
-     *            Test failed.
+     *             Test failed.
      * @since 0.7
      */
     @Test
@@ -129,11 +135,14 @@ public final class TestJVoiceXmlDocumentServer {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#getObject(java.net.URI, java.lang.String)}.
+     * Test method for
+     * {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#getObject(java.net.URI, java.lang.String)}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      * @throws Exception
-     *            Test failed.
+     *             Test failed.
      * @since 0.7.5
      */
     @Test
@@ -148,11 +157,14 @@ public final class TestJVoiceXmlDocumentServer {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#storeAudio(AudioInputStream)}.
+     * Test method for
+     * {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#storeAudio(AudioInputStream)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test
     public void testStoreAudio() throws Exception, JVoiceXMLEvent {
@@ -165,33 +177,36 @@ public final class TestJVoiceXmlDocumentServer {
     }
 
     /**
-     * Test method for {@link JVoiceXmlDocumentServer#getAudioInputStream(Session, URI)}.
+     * Test method for
+     * {@link JVoiceXmlDocumentServer#getAudioInputStream(Session, URI)}.
      * 
      * @since 0.7.2
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test
     public void testGetAudioInputStream() throws Exception, JVoiceXMLEvent {
         final File file = new File("unittests/config/test.wav");
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
-        final Session session = new JVoiceXmlSession(platform, jvxml, null);
+        final ImplementationPlatform platform = new MockImplementationPlatform();
+        final Session session = new JVoiceXmlSession(platform, jvxml, null,
+                null);
         final String sessionId = session.getSessionID();
-        final AudioInputStream in =
-            server.getAudioInputStream(sessionId, file.toURI());
+        final AudioInputStream in = server.getAudioInputStream(sessionId,
+                file.toURI());
         Assert.assertNotNull(in);
     }
 
     /**
-     * Test case for {@link JVoiceXmlDocumentServer#getDocument(Session, DocumentDescriptor)}.
+     * Test case for
+     * {@link JVoiceXmlDocumentServer#getDocument(Session, DocumentDescriptor)}.
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      * @throws JVoiceXMLEvent
-     *         test failed
+     *             test failed
      */
     @Test
     public void testGetDocument() throws Exception, JVoiceXMLEvent {
@@ -199,22 +214,24 @@ public final class TestJVoiceXmlDocumentServer {
         final URI uri = map.getUri("/test");
         map.addDocument(uri, document);
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Session session = new JVoiceXmlSession(platform, jvxml, null);
+        final Session session = new JVoiceXmlSession(platform, jvxml, null,
+                null);
         final String sessionId = session.getSessionID();
-        final VoiceXmlDocument retrievedDocument =
-            server.getDocument(sessionId, descriptor);
+        final VoiceXmlDocument retrievedDocument = server.getDocument(
+                sessionId, descriptor);
         Assert.assertEquals(document.toString(), retrievedDocument.toString());
     }
 
     /**
-     * Test case for {@link JVoiceXmlDocumentServer#getDocument(Session, DocumentDescriptor)}.
+     * Test case for
+     * {@link JVoiceXmlDocumentServer#getDocument(Session, DocumentDescriptor)}.
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      * @throws JVoiceXMLEvent
-     *         test failed
+     *             test failed
      */
     @Test
     public void testGetDocumentFragment() throws Exception, JVoiceXMLEvent {
@@ -222,42 +239,44 @@ public final class TestJVoiceXmlDocumentServer {
         final URI uri = map.getUri("/test");
         map.addDocument(uri, document);
         final URI fragmentUri = new URI(uri.toString() + "#fragment");
-        final DocumentDescriptor descriptor =
-            new DocumentDescriptor(fragmentUri);
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
+        final DocumentDescriptor descriptor = new DocumentDescriptor(
+                fragmentUri);
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Session session = new JVoiceXmlSession(platform, jvxml, null);
+        final Session session = new JVoiceXmlSession(platform, jvxml, null,
+                null);
         final String sessionId = session.getSessionID();
-        final VoiceXmlDocument retrievedDocument =
-            server.getDocument(sessionId, descriptor);
+        final VoiceXmlDocument retrievedDocument = server.getDocument(
+                sessionId, descriptor);
         Assert.assertEquals(document.toString(), retrievedDocument.toString());
     }
 
     /**
-     * Test case for {@link JVoiceXmlDocumentServer#getDocument(Session, DocumentDescriptor)}.
+     * Test case for
+     * {@link JVoiceXmlDocumentServer#getDocument(Session, DocumentDescriptor)}.
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      * @throws JVoiceXMLEvent
-     *         test failed
+     *             test failed
      */
     @Test(expected = BadFetchError.class)
     public void testGetInvalidDocument() throws Exception, JVoiceXMLEvent {
         final String str = "<vxml><form><block><prompt>test</prompt>"
-            + "</block></form></vxml>";
+                + "</block></form></vxml>";
         final StringReader reader = new StringReader(str);
         final InputSource input = new InputSource(reader);
         final VoiceXmlDocument document = new VoiceXmlDocument(input);
         final URI uri = map.getUri("/test");
         map.addDocument(uri, document);
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Session session = new JVoiceXmlSession(platform, jvxml, null);
+        final Session session = new JVoiceXmlSession(platform, jvxml, null,
+                null);
         final String sessionId = session.getSessionID();
-        final VoiceXmlDocument retrievedDocument =
-            server.getDocument(sessionId, descriptor);
+        final VoiceXmlDocument retrievedDocument = server.getDocument(
+                sessionId, descriptor);
         Assert.assertEquals(document, retrievedDocument);
     }
 }

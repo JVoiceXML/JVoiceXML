@@ -38,12 +38,12 @@ import org.w3c.dom.Node;
 
 /**
  * Dummy {@link TagStrategyFactory} for test purposes.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.4
  */
-public class MockTagStrategyFactory
-    implements TagStrategyFactory {
+public class MockTagStrategyFactory implements TagStrategyFactory {
     /**
      * Known strategies. The known strategies are templates for the strategy to
      * be executed by the <code>ForminterpreteationAlgorithm</code>.
@@ -52,78 +52,102 @@ public class MockTagStrategyFactory
 
     /**
      * Creates a new object.
-     * @throws NoSuchMethodException 
-     * @throws SecurityException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
+     * 
+     * @throws NoSuchMethodException
+     * @throws SecurityException
+     * @throws InvocationTargetException
+     * @throws IllegalArgumentException
      */
-    public MockTagStrategyFactory() 
-        throws InstantiationException, IllegalAccessException,
-        ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
+    public MockTagStrategyFactory() throws InstantiationException,
+            IllegalAccessException, ClassNotFoundException, SecurityException,
+            NoSuchMethodException, IllegalArgumentException,
+            InvocationTargetException {
         strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put("assign",
-         loadStrategy("org.jvoicexml.interpreter.tagstrategy.AssignStrategy"));
-        strategies.put("audio",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.AudioTagStrategy"));
-        strategies.put("clear",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ClearStrategy"));
-        strategies.put("data",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.DataStrategy"));
-        strategies.put("disconnect",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.DisconnectStrategy"));
-        strategies.put("exit",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ExitStrategy"));
-        strategies.put("goto",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.GotoStrategy"));
-        strategies.put("grammar",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.GrammarStrategy"));
-        strategies.put("if",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.IfStrategy"));
-        strategies.put("log",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.LogStrategy"));
-        strategies.put("prompt",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.PromptStrategy"));
-        strategies.put("reprompt",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.RepromptStrategy"));
-        strategies.put("return",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ReturnStrategy"));
-        strategies.put("script",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ScriptStrategy"));
-        strategies.put("submit",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.SubmitStrategy"));
-        strategies.put("#text",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.TextStrategy"));
-        strategies.put("throw",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ThrowStrategy"));
-        strategies.put("submit",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.SubmitStrategy"));
-        strategies.put("value",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ValueStrategy"));
-        strategies.put("valvarue",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.VarStrategy"));
+        strategies
+                .put("assign",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.AssignStrategy"));
+        strategies
+                .put("audio",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.AudioTagStrategy"));
+        strategies
+                .put("clear",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.ClearStrategy"));
+        strategies
+                .put("data",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.DataStrategy"));
+        strategies
+                .put("disconnect",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.DisconnectStrategy"));
+        strategies
+                .put("exit",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.ExitStrategy"));
+        strategies
+                .put("goto",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.GotoStrategy"));
+        strategies
+                .put("grammar",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.GrammarStrategy"));
+        strategies
+                .put("if",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.IfStrategy"));
+        strategies
+                .put("log",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.LogStrategy"));
+        strategies
+                .put("prompt",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.PromptStrategy"));
+        strategies
+                .put("reprompt",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.RepromptStrategy"));
+        strategies
+                .put("return",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.ReturnStrategy"));
+        strategies
+                .put("script",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.ScriptStrategy"));
+        strategies
+                .put("submit",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.SubmitStrategy"));
+        strategies
+                .put("#text",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.TextStrategy"));
+        strategies
+                .put("throw",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.ThrowStrategy"));
+        strategies
+                .put("submit",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.SubmitStrategy"));
+        strategies
+                .put("value",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.ValueStrategy"));
+        strategies
+                .put("valvarue",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.VarStrategy"));
     }
 
     /**
      * Loads the specified tag strategy.
-     * @param name name of the class to load
+     * 
+     * @param name
+     *            name of the class to load
      * @return loaded tag strategy
      * @throws InstantiationException
-     *         unable to create the tag strategy
+     *             unable to create the tag strategy
      * @throws IllegalAccessException
-     *         unable to create the tag strategy
+     *             unable to create the tag strategy
      * @throws ClassNotFoundException
-     *         unable to create the tag strategy
-     * @throws NoSuchMethodException 
-     *         unable to create the tag strategy
-     * @throws SecurityException 
-     *         unable to create the tag strategy
-     * @throws InvocationTargetException 
-     *         unable to create the tag strategy
-     * @throws IllegalArgumentException 
-     *         unable to create the tag strategy
+     *             unable to create the tag strategy
+     * @throws NoSuchMethodException
+     *             unable to create the tag strategy
+     * @throws SecurityException
+     *             unable to create the tag strategy
+     * @throws InvocationTargetException
+     *             unable to create the tag strategy
+     * @throws IllegalArgumentException
+     *             unable to create the tag strategy
      */
     private TagStrategy loadStrategy(final String name)
-        throws InstantiationException, IllegalAccessException,
+            throws InstantiationException, IllegalAccessException,
             ClassNotFoundException, SecurityException, NoSuchMethodException,
             IllegalArgumentException, InvocationTargetException {
         final Class<?> clazz = Class.forName(name);

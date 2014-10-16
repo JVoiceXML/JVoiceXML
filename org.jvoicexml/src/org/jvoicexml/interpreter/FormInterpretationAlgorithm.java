@@ -45,6 +45,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.Profile;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
@@ -89,10 +90,10 @@ import org.mozilla.javascript.Context;
  * Interpreting a form item generally involves:
  * <ul>
  * <li>Selecting and playing one or more prompts.</li>
- * <li> Collecting a user input, either a response that fills in one ore more
- * input items, or a throwing of some event (help, for instance). </li>
- * <li> Interpreting any <code>&lt;filled&gt;</code> action that pertained todo 
- * the newly filled in input items. </li>
+ * <li>Collecting a user input, either a response that fills in one ore more
+ * input items, or a throwing of some event (help, for instance).</li>
+ * <li>Interpreting any <code>&lt;filled&gt;</code> action that pertained todo
+ * the newly filled in input items.</li>
  * </ul>
  * </p>
  *
@@ -111,11 +112,10 @@ import org.mozilla.javascript.Context;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class FormInterpretationAlgorithm
-        implements FormItemVisitor {
+public final class FormInterpretationAlgorithm implements FormItemVisitor {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(FormInterpretationAlgorithm.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(FormInterpretationAlgorithm.class);
 
     /** The default prompt timeout in msec. */
     private static final int DEFAULT_PROMPT_TIMEOUT = 30000;
@@ -144,12 +144,15 @@ public final class FormInterpretationAlgorithm
     /** The current VoiceXML interpreter. */
     private final VoiceXmlInterpreter interpreter;
 
+    /** The profile to use. */
+    private Profile profile;
+
     /** Tag strategy executor. */
-    private final TagStrategyExecutor executor;
+    private TagStrategyExecutor executor;
 
     /**
-     * <code>true</code> if the last loop iteration ended with a catch that
-     * had no <code>&lt;reprompt&gt;</code>.
+     * <code>true</code> if the last loop iteration ended with a catch that had
+     * no <code>&lt;reprompt&gt;</code>.
      */
     private boolean reprompt;
 
@@ -181,15 +184,14 @@ public final class FormInterpretationAlgorithm
      * Construct a new FIA object.
      *
      * @param ctx
-     *        the VoiceXML interpreter context.
+     *            the VoiceXML interpreter context.
      * @param ip
-     *        the VoiceXML interpreter.
+     *            the VoiceXML interpreter.
      * @param currentDialog
-     *        the dialog to be interpreted.
+     *            the dialog to be interpreted.
      */
     public FormInterpretationAlgorithm(final VoiceXmlInterpreterContext ctx,
-                                       final VoiceXmlInterpreter ip,
-                                       final Dialog currentDialog) {
+            final VoiceXmlInterpreter ip, final Dialog currentDialog) {
         context = ctx;
         interpreter = ip;
         dialog = currentDialog;
@@ -200,19 +202,13 @@ public final class FormInterpretationAlgorithm
         id = dialog.getId();
 
         justFilled = new java.util.LinkedHashSet<InputItem>();
-        final Configuration configuration = ctx.getConfiguration();
-        executor = new TagStrategyExecutor();
-        try {
-            executor.init(configuration);
-        } catch (ConfigurationException e) {
-            LOGGER.warn(e.getMessage(), e);
-        }
         localGrammars = new java.util.HashSet<GrammarDocument>();
         localProperties = new java.util.HashMap<String, String>();
     }
 
     /**
      * Retrieves the current dialog.
+     * 
      * @return the current dialog.
      */
     public Dialog getDialog() {
@@ -230,6 +226,7 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Retrieves the tag strategy executor.
+     * 
      * @return the tag strategy executor.
      * @since 0.7
      */
@@ -244,16 +241,24 @@ public final class FormInterpretationAlgorithm
      * Whenever a dialog is entered, it is initialized. Internal prompt counter
      * variables (in the dialog's dialog scope) are reset to 1. Each variable
      * (form level <code>&lt;var&gt;</code> elements and {@link FormItem}
-     * variable is initialized, in document order, to undefined or to the
-     * value of the relevant <code>&lt;expr&gt;</code> attribute.
+     * variable is initialized, in document order, to undefined or to the value
+     * of the relevant <code>&lt;expr&gt;</code> attribute.
      * </p>
-     * @param factory the tag initialization tag factory
+     * 
+     * @param prof
+     *            the profile
      * @throws JVoiceXMLEvent
-     *         Error initializing the {@link FormItem}s.
+     *             Error initializing the {@link FormItem}s.
      */
-    public void initialize(final InitializationTagStrategyFactory factory)
-        throws JVoiceXMLEvent {
-        LOGGER.info("initializing FIA for dialog '" + id + "'...");
+    public void initialize(final Profile prof) throws JVoiceXMLEvent {
+        profile = prof;
+        if (profile == null) {
+            throw new BadFetchError("No profile given."
+                    + " Unable to initialize form '" + id + "'");
+        }
+        executor = new TagStrategyExecutor(profile);
+        LOGGER.info("initializing FIA for dialog '" + id + "' using profile '"
+                + profile.getName() + "'...");
 
         // Initialize internal variables.
         reprompt = false;
@@ -262,18 +267,14 @@ public final class FormInterpretationAlgorithm
         formItemMap.clear();
 
         // Initialize the form items.
-        final Collection<FormItem> dialogItems =
-            dialog.getFormItems(context);
+        final Collection<FormItem> dialogItems = dialog.getFormItems(context);
         for (FormItem current : dialogItems) {
             initFormItem(current);
         }
 
-        if (factory == null) {
-            throw new BadFetchError("No initialization factory given." 
-                    + " Unable to initialize form '" + id + "'");
-        }
-
         // Initialize variables etc.
+        final TagStrategyFactory factory = profile
+                .getInitializationTagStrategyFactory();
         final Collection<XmlNode> children = dialog.getChildNodes();
         for (XmlNode currentNode : children) {
             if (currentNode instanceof VoiceXmlNode) {
@@ -286,8 +287,7 @@ public final class FormInterpretationAlgorithm
                         strategy.dumpNode(node);
                     }
                     strategy.validateAttributes();
-                    strategy.execute(context, interpreter, this, null,
-                            node);
+                    strategy.execute(context, interpreter, this, null, node);
                 }
             }
         }
@@ -302,21 +302,20 @@ public final class FormInterpretationAlgorithm
      * Initializes the given {@link FormItem}.
      *
      * @param formItem
-     *        The item to initialize.
+     *            The item to initialize.
      * @since 0.4
      * @exception SemanticError
-     *         error initializing the {@link FormItem}s.
+     *                error initializing the {@link FormItem}s.
      * @exception BadFetchError
-     *         error initializing the {@link FormItem}s.
+     *                error initializing the {@link FormItem}s.
      */
-    private void initFormItem(final FormItem formItem)
-        throws SemanticError, BadFetchError {
+    private void initFormItem(final FormItem formItem) throws SemanticError,
+            BadFetchError {
         final String name = formItem.getName();
         formItems.add(formItem);
         final FormItem previousItem = formItemMap.put(name, formItem);
         if (previousItem != null) {
-            throw new BadFetchError("Duplicate form item name '"
-                    + name + "'");
+            throw new BadFetchError("Duplicate form item name '" + name + "'");
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -327,10 +326,9 @@ public final class FormInterpretationAlgorithm
         if (formItem instanceof FieldFormItem) {
             final Configuration configuration = context.getConfiguration();
             try {
-                final OptionConverter converter =
-                        configuration.loadObject(OptionConverter.class);
-                final FieldFormItem fieldFormItem =
-                        (FieldFormItem) formItem;
+                final OptionConverter converter = configuration
+                        .loadObject(OptionConverter.class);
+                final FieldFormItem fieldFormItem = (FieldFormItem) formItem;
                 fieldFormItem.setOptionConverter(converter);
             } catch (ConfigurationException e) {
                 throw new BadFetchError(e.getMessage(), e);
@@ -342,7 +340,7 @@ public final class FormInterpretationAlgorithm
      * Retrieves the {@link FormItem} with the given name.
      *
      * @param name
-     *        Name of the {@link FormItem}
+     *            Name of the {@link FormItem}
      * @return Corresponding {@link FormItem}, <code>null</code> if it does not
      *         exist.
      * @since 0.3.1
@@ -364,6 +362,7 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Retrieves the currently processed {@link FormItem}.
+     * 
      * @return the current form item.
      * @since 0.7
      */
@@ -375,29 +374,29 @@ public final class FormInterpretationAlgorithm
      * The main loop of the FIA has three phases:
      *
      * <p>
-     * The <em>select</em> phase: The next unfilled {@link FormItem} for visiting.
+     * The <em>select</em> phase: The next unfilled {@link FormItem} for
+     * visiting.
      * </p>
      *
      * <p>
-     * The <em>collect</em> phase: the selected {@link FormItem} is visited, which
-     * prompts the user for input, enables the appropriate grammars, and then
-     * waits for and collects an <em>input</em> (such as a spoken phrase or
+     * The <em>collect</em> phase: the selected {@link FormItem} is visited,
+     * which prompts the user for input, enables the appropriate grammars, and
+     * then waits for and collects an <em>input</em> (such as a spoken phrase or
      * DTMF key presses) or an <em>event</em> (such as a request for help or a
      * no input timeout.
      * </p>
      *
      * <p>
-     * The <em>process</em> phase: an input is processed by filling {@link FormItem}s
-     * and executing <code>&lt;var&gt;</code> elements to perform input
-     * validation. An event is processed by executing the appropriate event
-     * handler for that event type.
+     * The <em>process</em> phase: an input is processed by filling
+     * {@link FormItem}s and executing <code>&lt;var&gt;</code> elements to
+     * perform input validation. An event is processed by executing the
+     * appropriate event handler for that event type.
      * </p>
      *
      * @exception JVoiceXMLEvent
-     *            Error or event processing the dialog.
+     *                Error or event processing the dialog.
      */
-    public void mainLoop()
-            throws JVoiceXMLEvent {
+    public void mainLoop() throws JVoiceXMLEvent {
         LOGGER.info("starting main loop for form '" + id + "'...");
 
         String lastFormItem = null;
@@ -409,8 +408,8 @@ public final class FormInterpretationAlgorithm
 
             if (item != null) {
                 final String name = item.getName();
-                LOGGER.info("next form item in form '" + id + "' is '"
-                        + name + "'");
+                LOGGER.info("next form item in form '" + id + "' is '" + name
+                        + "'");
 
                 activeDialogChanged = !name.equals(lastFormItem);
                 lastFormItem = name;
@@ -440,8 +439,8 @@ public final class FormInterpretationAlgorithm
                         processEvent(e);
                     } catch (GotoNextFormItemEvent ie) {
                         gotoFormItemName = ie.getItem();
-                        LOGGER.info("going to form item '"
-                                + gotoFormItemName + "'...");
+                        LOGGER.info("going to form item '" + gotoFormItemName
+                                + "'...");
                     } finally {
                         final EventHandler handler = context.getEventHandler();
                         handler.clean(item);
@@ -456,19 +455,19 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Deactivates the local grammars.
+     * 
      * @throws BadFetchError
-     *         error deactivating the grammar
+     *             error deactivating the grammar
      * @throws NoresourceError
-     *         error accessing the implementation platform
+     *             error accessing the implementation platform
      * @throws UnsupportedLanguageError
-     *         language of the grammar is not supported
+     *             language of the grammar is not supported
      * @throws ConnectionDisconnectHangupEvent
-     *         the user already hung up
+     *             the user already hung up
      * @since 0.7.3
      */
-    private void deactivateLocalGrammars()
-        throws UnsupportedLanguageError, BadFetchError, NoresourceError,
-        ConnectionDisconnectHangupEvent {
+    private void deactivateLocalGrammars() throws UnsupportedLanguageError,
+            BadFetchError, NoresourceError, ConnectionDisconnectHangupEvent {
         if (localGrammars.isEmpty()) {
             return;
         }
@@ -493,13 +492,15 @@ public final class FormInterpretationAlgorithm
     /**
      * Tries to process the given event with the help of the
      * {@link EventHandler}.
-     * @param event the event to process.
-     * @exception JVoiceXMLEvent the input event if the handler was not able to
-     *            process the given event.
+     * 
+     * @param event
+     *            the event to process.
+     * @exception JVoiceXMLEvent
+     *                the input event if the handler was not able to process the
+     *                given event.
      * @since 0.7
      */
-    void processEvent(final JVoiceXMLEvent event)
-        throws JVoiceXMLEvent {
+    void processEvent(final JVoiceXMLEvent event) throws JVoiceXMLEvent {
         final InputItem inputItem;
         if (item instanceof InputItem) {
             inputItem = (InputItem) item;
@@ -514,8 +515,8 @@ public final class FormInterpretationAlgorithm
      * Implementation of the <em>select</em> phase: the next unfilled dialog
      * item is selected for visiting.
      * <p>
-     * The purpose of the select phase is to select the next {@link FormItem}
-     *  to visit. This is done as follows:
+     * The purpose of the select phase is to select the next {@link FormItem} to
+     * visit. This is done as follows:
      * </p>
      * <p>
      * If a <code>&lt;goto&gt;</code> from the last main loop iteration's
@@ -537,22 +538,25 @@ public final class FormInterpretationAlgorithm
      * will perform an implicit <code>&lt;exit&gt;</code> operation).
      * </p>
      *
-     * @param name name of the form item to select in case of a goto, maybe
-     *          <code>null</code> in case the usual select process should be
-     *          followed
+     * @param name
+     *            name of the form item to select in case of a goto, maybe
+     *            <code>null</code> in case the usual select process should be
+     *            followed
      * @return next unfilled {@link FormItem}, <code>null</code> if there is
-     * none.
-     * @exception SemanticError error evaluating the form item
-     * @exception BadFetchError if the specified form item does not exist
+     *         none.
+     * @exception SemanticError
+     *                error evaluating the form item
+     * @exception BadFetchError
+     *                if the specified form item does not exist
      */
-    private FormItem select(final String name)
-            throws SemanticError, BadFetchError {
+    private FormItem select(final String name) throws SemanticError,
+            BadFetchError {
         LOGGER.info("selecting next form item in dialog '" + id + "'...");
         if (name != null) {
             final FormItem formItem = getFormItem(name);
             if (formItem == null) {
-                throw new BadFetchError("unable to find form item '"
-                                        + name + "'");
+                throw new BadFetchError("unable to find form item '" + name
+                        + "'");
             }
         }
 
@@ -567,11 +571,11 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Implementation of the <em>collect</em> phase: the selected {@link FormItem} is
-     * visited, which prompts the user for input, enables the appropriate
-     * grammars, and then waits for and collects an <em>input</em> (such as a
-     * spoken phrase or DTMF key presses) or an <em>event</em> (such as a
-     * request for help or a no input timeout).<br>
+     * Implementation of the <em>collect</em> phase: the selected
+     * {@link FormItem} is visited, which prompts the user for input, enables
+     * the appropriate grammars, and then waits for and collects an
+     * <em>input</em> (such as a spoken phrase or DTMF key presses) or an
+     * <em>event</em> (such as a request for help or a no input timeout).<br>
      * <p>
      * The purpose of the collect phase is to collect an input or an event. The
      * selected {@link FormItem} is visited, which performs actions that depend
@@ -579,14 +583,13 @@ public final class FormInterpretationAlgorithm
      * </p>
      *
      * @param formItem
-     *        The {@link FormItem} to visit.
+     *            The {@link FormItem} to visit.
      *
      * @exception JVoiceXMLEvent
-     *            Error or event visiting the {@link FormItem}.
+     *                Error or event visiting the {@link FormItem}.
      * @see #select(String)
      */
-    private void collect(final FormItem formItem)
-            throws JVoiceXMLEvent {
+    private void collect(final FormItem formItem) throws JVoiceXMLEvent {
         if (formItem == null) {
             LOGGER.warn("no item given: cannot collect.");
 
@@ -600,8 +603,8 @@ public final class FormInterpretationAlgorithm
         handler.clearEvent();
 
         // unless ( the last loop iteration ended with
-        //          a catch that had no <reprompt>,
-        //          and the active dialog was not changed )
+        // a catch that had no <reprompt>,
+        // and the active dialog was not changed )
         if (!(!reprompt && !activeDialogChanged)) {
             if (formItem instanceof PromptCountable) {
                 final PromptCountable countable = (PromptCountable) formItem;
@@ -634,18 +637,17 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Implementation of the <em>process</em> phase. The purpose of the
-     * process phase is to process the input or event collected during the
-     * previous phases
+     * Implementation of the <em>process</em> phase. The purpose of the process
+     * phase is to process the input or event collected during the previous
+     * phases
      *
      * @param formItem
-     *        The current {@link FormItem}.
+     *            The current {@link FormItem}.
      *
      * @exception JVoiceXMLEvent
-     *            Error processing the event.
+     *                Error processing the event.
      */
-    private void process(final FormItem formItem)
-            throws JVoiceXMLEvent {
+    private void process(final FormItem formItem) throws JVoiceXMLEvent {
         interpreter.setState(InterpreterState.TRANSITIONING);
 
         LOGGER.info("processing '" + formItem.getName() + "'...");
@@ -668,8 +670,8 @@ public final class FormInterpretationAlgorithm
         }
 
         // Do some cleanup before continuing.
-        final ImplementationPlatform platform =
-                context.getImplementationPlatform();
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
         final boolean hasUserInput = platform.isUserInputActive();
         if (hasUserInput) {
             final UserInput userInput = platform.getUserInput();
@@ -706,26 +708,29 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Executes local tags.
-     * @param formItem the current form item.
+     * 
+     * @param formItem
+     *            the current form item.
      * @throws JVoiceXMLEvent
-     *         error executing a local tag strategy.
+     *             error executing a local tag strategy.
      * @since 0.7.5
      */
     private void executeLocalTags(final FormItem formItem)
-        throws JVoiceXMLEvent {
+            throws JVoiceXMLEvent {
         if (!(formItem instanceof FormItemLocalExecutableTagContainer)) {
             return;
         }
         localProperties.clear();
-        final FormItemLocalExecutableTagContainer container =
-            (FormItemLocalExecutableTagContainer) formItem;
+        final FormItemLocalExecutableTagContainer container = (FormItemLocalExecutableTagContainer) formItem;
         executor.executeChildNodesLocal(context, interpreter, this, formItem,
                 container);
     }
 
     /**
      * Sets the <code>just_filled</code> flag for the given input item.
-     * @param input the input item.
+     * 
+     * @param input
+     *            the input item.
      *
      * @since 0.5.1
      */
@@ -738,9 +743,11 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Checks, if the <code>just_filled</code> flag is set for the given
-     * input item.
-     * @param input the input item
+     * Checks, if the <code>just_filled</code> flag is set for the given input
+     * item.
+     * 
+     * @param input
+     *            the input item
      * @return <code>true</code> if the flag is set.
      * @since 0.7
      */
@@ -750,32 +757,31 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Selects the appropriate prompts for an input item or
-     * <code>&lt;initial&gt;</code>. Queue the selected prompts for play
-     * prior to the next collect operation.
+     * <code>&lt;initial&gt;</code>. Queue the selected prompts for play prior
+     * to the next collect operation.
      *
      * @param formItem
-     *        the current {@link FormItem}.
+     *            the current {@link FormItem}.
      * @param countable
-     *        the prompt countable.
+     *            the prompt countable.
      * @throws JVoiceXMLEvent
-     *         Error collecting the prompts or in prompt evaluation.
+     *             Error collecting the prompts or in prompt evaluation.
      */
     private void queuePrompts(final FormItem formItem,
-            final PromptCountable countable)
-            throws JVoiceXMLEvent {
+            final PromptCountable countable) throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("queuing prompts...");
         }
         queuingPrompts = true;
 
         // Collect all prompts to be queued
-        final PromptChooser promptChooser =
-                new PromptChooser(countable, context);
+        final PromptChooser promptChooser = new PromptChooser(countable,
+                context);
         final Collection<Prompt> prompts = promptChooser.collect();
 
         // Set the timeout to use for the prompts
-        final ImplementationPlatform platform =
-                context.getImplementationPlatform();
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
         final long timeout = getPromptTimeout();
         platform.setPromptTimeout(timeout);
 
@@ -788,8 +794,8 @@ public final class FormInterpretationAlgorithm
         final Session session = context.getSession();
         final String sessionId = session.getSessionID();
         try {
-            final CallControlProperties callProps =
-                    context.getCallControlProperties(this);
+            final CallControlProperties callProps = context
+                    .getCallControlProperties(this);
             platform.renderPrompts(sessionId, server, callProps);
         } catch (ConfigurationException ex) {
             throw new NoresourceError(ex.getMessage(), ex);
@@ -803,15 +809,16 @@ public final class FormInterpretationAlgorithm
     /**
      * Checks if the FIA is currently queuing prompts. The behaviour of the
      * {@link TagStrategy}s might be different dependent on the queuing mode.
+     * 
      * @return <code>true</code> if the FIA is currently queiung prompts.
      */
     public boolean isQueuingPrompts() {
         return queuingPrompts;
     }
 
-
     /**
      * Retrieves the default timeout.
+     * 
      * @return the default timeout.
      */
     private long getPromptTimeout() {
@@ -824,21 +831,22 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Process the given grammar tag and add it to the
-     * {@link ActiveGrammarSet}.
-     * @param grammar grammar to process.
+     * Process the given grammar tag and add it to the {@link ActiveGrammarSet}.
+     * 
+     * @param grammar
+     *            grammar to process.
      * @return the processed grammar.
      * @exception NoresourceError
-     *         Error accessing the input device.
+     *                Error accessing the input device.
      * @exception UnsupportedFormatError
-     *         If an unsupported grammar has to be processed.
+     *                If an unsupported grammar has to be processed.
      * @exception BadFetchError
-     *         If the document could not be fetched successfully.
+     *                If the document could not be fetched successfully.
      * @exception SemanticError
-     *         if there was an error evaluating a scripting expression
+     *                if there was an error evaluating a scripting expression
      */
     public GrammarDocument processGrammar(final Grammar grammar)
-        throws UnsupportedFormatError, NoresourceError, BadFetchError,
+            throws UnsupportedFormatError, NoresourceError, BadFetchError,
             SemanticError {
         final GrammarProcessor processor = context.getGrammarProcessor();
         if (LOGGER.isDebugEnabled()) {
@@ -850,30 +858,30 @@ public final class FormInterpretationAlgorithm
     /**
      * Process the given grammar tags and add them to the
      * {@link GrammarContainer} if it can be cached.
-     * @param grammarContainer the field for which to process the grammars.
-     * @param grammars grammars to process.
+     * 
+     * @param grammarContainer
+     *            the field for which to process the grammars.
+     * @param grammars
+     *            grammars to process.
      * @return processed grammars
      * @exception NoresourceError
-     *         Error accessing the input device.
+     *                Error accessing the input device.
      * @exception UnsupportedFormatError
-     *         If an unsupported grammar has to be processed.
+     *                If an unsupported grammar has to be processed.
      * @exception BadFetchError
-     *         If the document could not be fetched successfully.
+     *                If the document could not be fetched successfully.
      * @exception SemanticError
-     *         if there was an error evaluating a scripting expression
+     *                if there was an error evaluating a scripting expression
      */
     private Collection<GrammarDocument> processGrammars(
             final GrammarContainer grammarContainer,
-            final Collection<Grammar> grammars)
-        throws UnsupportedFormatError, NoresourceError, BadFetchError,
-            SemanticError {
-        final Collection<GrammarDocument> grammarDocuments =
-                new java.util.HashSet<GrammarDocument>();
-        final Collection<GrammarDocument> documents =
-            grammarContainer.getGrammarDocuments();
+            final Collection<Grammar> grammars) throws UnsupportedFormatError,
+            NoresourceError, BadFetchError, SemanticError {
+        final Collection<GrammarDocument> grammarDocuments = new java.util.HashSet<GrammarDocument>();
+        final Collection<GrammarDocument> documents = grammarContainer
+                .getGrammarDocuments();
         grammarDocuments.addAll(documents);
-        if (grammars.isEmpty()
-                || (grammarDocuments.size() == grammars.size())) {
+        if (grammars.isEmpty() || (grammarDocuments.size() == grammars.size())) {
             // All grammar documents are already processed or
             // no more grammars to process
             if (LOGGER.isDebugEnabled()) {
@@ -899,9 +907,9 @@ public final class FormInterpretationAlgorithm
      * Activates grammars for the {@link FormItem}.
      *
      * <p>
-     * Set the active grammar set to the {@link FormItem} grammars and any grammars
-     * scoped to the dialog, the current document, and the application root
-     * document.
+     * Set the active grammar set to the {@link FormItem} grammars and any
+     * grammars scoped to the dialog, the current document, and the application
+     * root document.
      * </p>
      *
      * <p>
@@ -909,24 +917,25 @@ public final class FormInterpretationAlgorithm
      * </p>
      *
      * @param formItem
-     *        The {@link FormItem} for which the grammars should be activated.
+     *            The {@link FormItem} for which the grammars should be
+     *            activated.
      * @exception BadFetchError
-     *            Error retrieving the grammar from the given URI.
+     *                Error retrieving the grammar from the given URI.
      * @exception UnsupportedLanguageError
-     *            The specified language is not supported.
+     *                The specified language is not supported.
      * @exception NoresourceError
-     *            The input resource is not available.
+     *                The input resource is not available.
      * @exception UnsupportedFormatError
-     *            Error in the grammar's format.
+     *                Error in the grammar's format.
      * @exception ConnectionDisconnectHangupEvent
-     *            the user hung up
+     *                the user hung up
      * @exception SemanticError
-     *         if there was an error evaluating a scripting expression
+     *                if there was an error evaluating a scripting expression
      */
     private void activateModalGrammars(final FormItem formItem)
             throws BadFetchError, ConnectionDisconnectHangupEvent,
             UnsupportedLanguageError, NoresourceError, UnsupportedFormatError,
-                SemanticError {
+            SemanticError {
         if (!(formItem instanceof GrammarContainer)) {
             return;
         }
@@ -950,14 +959,14 @@ public final class FormInterpretationAlgorithm
             return;
         }
         // Process the grammars of the container.
-        final Collection<GrammarDocument> processedGrammars =
-            processGrammars(grammarContainer, grammars);
+        final Collection<GrammarDocument> processedGrammars = processGrammars(
+                grammarContainer, grammars);
 
         // Activate all grammars of the container and deactivate all other
         // active grammars.
         final ActiveGrammarSet activeGrammars = context.getActiveGrammarSet();
-        final Collection<GrammarDocument> grammarsToDeactivate =
-            activeGrammars.getGrammars();
+        final Collection<GrammarDocument> grammarsToDeactivate = activeGrammars
+                .getGrammars();
         deactivateGrammars(grammarsToDeactivate);
         activateGrammars(processedGrammars);
         localGrammars.addAll(processedGrammars);
@@ -971,9 +980,9 @@ public final class FormInterpretationAlgorithm
      * Activates grammars for the {@link FormItem}.
      *
      * <p>
-     * Set the active grammar set to the {@link FormItem} grammars and any grammars
-     * scoped to the dialog, the current document, and the application root
-     * document.
+     * Set the active grammar set to the {@link FormItem} grammars and any
+     * grammars scoped to the dialog, the current document, and the application
+     * root document.
      * </p>
      *
      * <p>
@@ -981,19 +990,20 @@ public final class FormInterpretationAlgorithm
      * </p>
      *
      * @param formItem
-     *        The {@link FormItem} for which the grammars should be activated.
+     *            The {@link FormItem} for which the grammars should be
+     *            activated.
      * @exception BadFetchError
-     *            Error retrieving the grammar from the given URI.
+     *                Error retrieving the grammar from the given URI.
      * @exception UnsupportedLanguageError
-     *            The specified language is not supported.
+     *                The specified language is not supported.
      * @exception NoresourceError
-     *            The input resource is not available.
+     *                The input resource is not available.
      * @exception UnsupportedFormatError
-     *            Error in the grammar's format.
+     *                Error in the grammar's format.
      * @exception ConnectionDisconnectHangupEvent
-     *            the user hung up
+     *                the user hung up
      * @exception SemanticError
-     *            if there are no grammars to activate
+     *                if there are no grammars to activate
      */
     private void activateGrammars(final FormItem formItem)
             throws BadFetchError, ConnectionDisconnectHangupEvent,
@@ -1015,14 +1025,13 @@ public final class FormInterpretationAlgorithm
         }
         if (isGrammarContainer) {
             // Add the grammars of the current form item
-            final GrammarContainer grammarContainer =
-                (GrammarContainer) formItem;
+            final GrammarContainer grammarContainer = (GrammarContainer) formItem;
             final Collection<Grammar> grammars = grammarContainer.getGrammars();
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("found " + grammars.size() + " grammar node(s)");
             }
-            final Collection<GrammarDocument> processed =
-                processGrammars(grammarContainer, grammars);
+            final Collection<GrammarDocument> processed = processGrammars(
+                    grammarContainer, grammars);
             activeGrammars.addAll(processed);
             localGrammars.addAll(processed);
         }
@@ -1032,31 +1041,33 @@ public final class FormInterpretationAlgorithm
         if (activeGrammars.size() == 0) {
             throw new SemanticError(
                     "No grammars defined for the input of form item '"
-                    + formItem.getName() + "'!");
+                            + formItem.getName() + "'!");
         }
-        final Collection<GrammarDocument> documents =
-            activeGrammars.getGrammars();
+        final Collection<GrammarDocument> documents = activeGrammars
+                .getGrammars();
         activateGrammars(documents);
     }
 
     /**
      * Activates the given grammars.
-     * @param grammarsToActivate the grammars to activate
+     * 
+     * @param grammarsToActivate
+     *            the grammars to activate
      * @throws BadFetchError
-     *         error activating the grammar
+     *             error activating the grammar
      * @throws NoresourceError
-     *         error accessing the implementation platform
+     *             error accessing the implementation platform
      * @throws UnsupportedLanguageError
-     *         language of the grammar is not supported
+     *             language of the grammar is not supported
      * @throws ConnectionDisconnectHangupEvent
-     *         the user already hung up
+     *             the user already hung up
      * @throws UnsupportedFormatError
-     *         if the requested grammar type is not supported
+     *             if the requested grammar type is not supported
      * @since 0.7.3
      */
     private void activateGrammars(
             final Collection<GrammarDocument> grammarsToActivate)
-        throws BadFetchError, NoresourceError, UnsupportedLanguageError,
+            throws BadFetchError, NoresourceError, UnsupportedLanguageError,
             ConnectionDisconnectHangupEvent, UnsupportedFormatError {
         if (grammarsToActivate.isEmpty()) {
             if (LOGGER.isDebugEnabled()) {
@@ -1064,8 +1075,8 @@ public final class FormInterpretationAlgorithm
             }
             return;
         }
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
         final UserInput input = platform.getUserInput();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("activating " + grammarsToActivate.size()
@@ -1079,20 +1090,22 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Deactivates the given grammars.
-     * @param grammarsToDeactivate the grammars to activate
+     * 
+     * @param grammarsToDeactivate
+     *            the grammars to activate
      * @throws BadFetchError
-     *         error deactivating the grammar
+     *             error deactivating the grammar
      * @throws NoresourceError
-     *         error accessing the implementation platform
+     *             error accessing the implementation platform
      * @throws UnsupportedLanguageError
-     *         language of the grammar is not supported
+     *             language of the grammar is not supported
      * @throws ConnectionDisconnectHangupEvent
-     *         the user already hung up
+     *             the user already hung up
      * @since 0.7.3
      */
     private void deactivateGrammars(
             final Collection<GrammarDocument> grammarsToDeactivate)
-        throws BadFetchError, NoresourceError, UnsupportedLanguageError,
+            throws BadFetchError, NoresourceError, UnsupportedLanguageError,
             ConnectionDisconnectHangupEvent {
         if (grammarsToDeactivate.isEmpty()) {
             if (LOGGER.isDebugEnabled()) {
@@ -1100,8 +1113,8 @@ public final class FormInterpretationAlgorithm
             }
             return;
         }
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
         final UserInput input = platform.getUserInput();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("deactivating " + grammarsToDeactivate.size()
@@ -1128,8 +1141,8 @@ public final class FormInterpretationAlgorithm
 
         context.enterScope(Scope.ANONYMOUS);
         block.setVisited();
-        final ImplementationPlatform platform =
-                context.getImplementationPlatform();
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
 
@@ -1143,14 +1156,13 @@ public final class FormInterpretationAlgorithm
     /**
      * {@inheritDoc}
      *
-     * If a <code>&lt;field&gt;</code> is visited, the FIA selects and queues
-     * up any prompts based on the item's prompt counter and prompt conditions.
+     * If a <code>&lt;field&gt;</code> is visited, the FIA selects and queues up
+     * any prompts based on the item's prompt counter and prompt conditions.
      * Then it activates and listens for the field level grammar(s) and any
      * higher-level grammars, and waits for the item to be filled or for some
      * events to be generated.
      */
-    public void visitFieldFormItem(final InputItem field)
-            throws JVoiceXMLEvent {
+    public void visitFieldFormItem(final InputItem field) throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("visiting field '" + field.getName() + "'...");
         }
@@ -1159,8 +1171,8 @@ public final class FormInterpretationAlgorithm
         final EventHandler handler = context.getEventHandler();
         eventStrategies = handler.collect(context, interpreter, this, field);
 
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
         platform.waitNonBargeInPlayed();
@@ -1169,14 +1181,14 @@ public final class FormInterpretationAlgorithm
         final CallControl call = platform.getCallControl();
         try {
             if (call != null) {
-                final CallControlProperties callProps =
-                        context.getCallControlProperties(this);
+                final CallControlProperties callProps = context
+                        .getCallControlProperties(this);
                 call.record(input, callProps);
             }
-            final SpeechRecognizerProperties speech =
-                context.getSpeechRecognizerProperties(this);
-            final DtmfRecognizerProperties dtmf =
-                context.getDtmfRecognizerProperties(this);
+            final SpeechRecognizerProperties speech = context
+                    .getSpeechRecognizerProperties(this);
+            final DtmfRecognizerProperties dtmf = context
+                    .getDtmfRecognizerProperties(this);
             input.startRecognition(speech, dtmf);
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
@@ -1191,12 +1203,12 @@ public final class FormInterpretationAlgorithm
     public void visitInitialFormItem(final InitialFormItem initial)
             throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("visiting initial form item '"
-                    + initial.getName() + "'...");
+            LOGGER.debug("visiting initial form item '" + initial.getName()
+                    + "'...");
         }
 
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
         final UserInput input = platform.getUserInput();
 
         // Add the handlers.
@@ -1217,10 +1229,10 @@ public final class FormInterpretationAlgorithm
         }
 
         try {
-            final SpeechRecognizerProperties speech =
-                context.getSpeechRecognizerProperties(this);
-            final DtmfRecognizerProperties dtmf =
-                context.getDtmfRecognizerProperties(this);
+            final SpeechRecognizerProperties speech = context
+                    .getSpeechRecognizerProperties(this);
+            final DtmfRecognizerProperties dtmf = context
+                    .getDtmfRecognizerProperties(this);
             input.startRecognition(speech, dtmf);
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
@@ -1234,21 +1246,21 @@ public final class FormInterpretationAlgorithm
             throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("visiting object form item '" + object.getName()
-                         + "'...");
+                    + "'...");
         }
 
         // Add the handlers.
         final EventHandler handler = context.getEventHandler();
         eventStrategies = handler.collect(context, interpreter, this, object);
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
         platform.waitNonBargeInPlayed();
 
         // Execute...
-        final ObjectExecutorThread objectExecutor =
-            new ObjectExecutorThread(context, object);
+        final ObjectExecutorThread objectExecutor = new ObjectExecutorThread(
+                context, object);
         objectExecutor.start();
     }
 
@@ -1259,12 +1271,12 @@ public final class FormInterpretationAlgorithm
             throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("visiting record form item '" + record.getName()
-                         + "'...");
+                    + "'...");
         }
 
         // Obtain the needed resources.
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
         final CallControl call = platform.getCallControl();
         final UserInput input = platform.getUserInput();
 
@@ -1283,8 +1295,8 @@ public final class FormInterpretationAlgorithm
         }
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
-        final RecordingReceiverThread recording =
-            new RecordingReceiverThread(eventbus, maxTime);
+        final RecordingReceiverThread recording = new RecordingReceiverThread(
+                eventbus, maxTime);
         recording.start();
 
         // Start recording
@@ -1303,12 +1315,12 @@ public final class FormInterpretationAlgorithm
             throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("visiting subdialog form item '" + subdialog.getName()
-                         + "'...");
+                    + "'...");
         }
         // Add the handlers.
         final EventHandler handler = context.getEventHandler();
-        eventStrategies = handler.collect(context, interpreter, this,
-                subdialog);
+        eventStrategies = handler
+                .collect(context, interpreter, this, subdialog);
 
         final URI uri;
         try {
@@ -1324,8 +1336,8 @@ public final class FormInterpretationAlgorithm
                 + resolvedUri + "'...");
 
         // Prepare running the subdialog in an own thread.
-        final JVoiceXmlSession session =
-            (JVoiceXmlSession) context.getSession();
+        final JVoiceXmlSession session = (JVoiceXmlSession) context
+                .getSession();
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final VoiceXmlDocument doc = context.loadDocument(descriptor);
         application.addDocument(resolvedUri, doc);
@@ -1338,14 +1350,13 @@ public final class FormInterpretationAlgorithm
         final ScopeObserver observer = new ScopeObserver();
         // TODO aquire the configuration object
         final Configuration configuration = context.getConfiguration();
-        final VoiceXmlInterpreterContext subdialogContext =
-            new VoiceXmlInterpreterContext(session, configuration, observer);
+        final VoiceXmlInterpreterContext subdialogContext = new VoiceXmlInterpreterContext(
+                session, configuration, observer);
         // Start the subdialog thread
         final Thread thread = new SubdialogExecutorThread(resolvedUri,
                 subdialogContext, application, parameters);
         thread.start();
     }
-
 
     /**
      * {@inheritDoc}
@@ -1356,8 +1367,8 @@ public final class FormInterpretationAlgorithm
     public void visitTransferFormItem(final TransferFormItem transfer)
             throws JVoiceXMLEvent {
 
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
 
         final CallControl call = platform.getCallControl();
 
@@ -1385,7 +1396,7 @@ public final class FormInterpretationAlgorithm
      * that had no <code>&lt;reprompt&gt;</code>.
      *
      * @param on
-     *        <code>true</code> if a catch occurred that had no reprompt.
+     *            <code>true</code> if a catch occurred that had no reprompt.
      */
     public void setReprompt(final boolean on) {
         reprompt = on;
@@ -1393,7 +1404,9 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Retrieves the value of the given property.
-     * @param name Name of the property.
+     * 
+     * @param name
+     *            Name of the property.
      * @return Value of the property.
      * @since 0.7.5
      */
@@ -1403,8 +1416,11 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Sets the property with the given name to the given value.
-     * @param name Name of the property.
-     * @param value Value of the property.
+     * 
+     * @param name
+     *            Name of the property.
+     * @param value
+     *            Value of the property.
      * @since 0.7.5
      */
     public void setLocalProperty(final String name, final String value) {
@@ -1413,6 +1429,7 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Retrieves the form item local properties.
+     * 
      * @return the form item local properties.
      * @since 0.7.5
      */

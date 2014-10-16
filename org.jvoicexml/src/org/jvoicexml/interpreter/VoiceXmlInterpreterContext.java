@@ -42,6 +42,7 @@ import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.Profile;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.SpeechRecognizerProperties;
@@ -81,10 +82,10 @@ import org.w3c.dom.NodeList;
  *
  * @version $LastChangedRevision$
  */
-public final class VoiceXmlInterpreterContext  {
+public final class VoiceXmlInterpreterContext {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(VoiceXmlInterpreterContext.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(VoiceXmlInterpreterContext.class);
 
     /** Reference to the related session. */
     private final JVoiceXmlSession session;
@@ -126,9 +127,9 @@ public final class VoiceXmlInterpreterContext  {
      * Create a new object.
      *
      * @param currentSession
-     *        the current session
+     *            the current session
      * @param config
-     *        the configuration to use.
+     *            the configuration to use.
      */
     public VoiceXmlInterpreterContext(final JVoiceXmlSession currentSession,
             final Configuration config) {
@@ -145,18 +146,18 @@ public final class VoiceXmlInterpreterContext  {
         if (session != null) {
             // Add a grammar deactivator as observer to the active grammar set
             // who will deactivate grammars once a scope is left.
-            final ImplementationPlatform platform =
-                session.getImplementationPlatform();
-            final GrammarDeactivator deactivator =
-                new GrammarDeactivator(platform);
+            final ImplementationPlatform platform = session
+                    .getImplementationPlatform();
+            final GrammarDeactivator deactivator = new GrammarDeactivator(
+                    platform);
             grammars.addActiveGrammarSetObserver(deactivator);
         }
 
         // Subscribe the default event handler for all events to the event bus.
         eventbus = new EventBus();
         properties = new ScopedMap<String, String>(scopeObserver);
-        eventHandler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler(scopeObserver);
+        eventHandler = new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
+                scopeObserver);
         eventbus.subscribe("", eventHandler);
     }
 
@@ -164,11 +165,11 @@ public final class VoiceXmlInterpreterContext  {
      * Create a new object.
      *
      * @param currentSession
-     *        The current session
+     *            The current session
      * @param config
-     *        the configuration to use.
+     *            the configuration to use.
      * @param observer
-     *        the scope observer (not taken from the session).
+     *            the scope observer (not taken from the session).
      */
     public VoiceXmlInterpreterContext(final JVoiceXmlSession currentSession,
             final Configuration config, final ScopeObserver observer) {
@@ -180,23 +181,24 @@ public final class VoiceXmlInterpreterContext  {
         if (session != null) {
             // Add a grammar deactivator as observer to the active grammar set
             // who will deactivate grammars once a scope is left.
-            final ImplementationPlatform platform =
-                session.getImplementationPlatform();
-            final GrammarDeactivator deactivator =
-                new GrammarDeactivator(platform);
+            final ImplementationPlatform platform = session
+                    .getImplementationPlatform();
+            final GrammarDeactivator deactivator = new GrammarDeactivator(
+                    platform);
             grammars.addActiveGrammarSetObserver(deactivator);
         }
         properties = new ScopedMap<String, String>(scopeObserver);
 
         // Subscribe the default event handler for all events to the event bus.
         eventbus = new EventBus();
-        eventHandler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler(scopeObserver);
+        eventHandler = new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
+                scopeObserver);
         eventbus.subscribe("", eventHandler);
     }
 
     /**
      * Retrieves the current session.
+     * 
      * @return the current session.
      * @since 0.7
      */
@@ -206,6 +208,7 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Retrieves the scope observer for this session.
+     * 
      * @return The scope observer.
      */
     public ScopeObserver getScopeObserver() {
@@ -234,6 +237,7 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Retrieves the configuration.
+     * 
      * @return the configuration
      * @since 0.7.4
      */
@@ -243,6 +247,7 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Lazy instantiation of the scripting engine.
+     * 
      * @return the scripting engine.
      *
      * @since 0.3.1
@@ -267,6 +272,7 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Retrieves the event bus.
+     * 
      * @return the event bus
      * @since 0.7.7
      */
@@ -276,6 +282,7 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Retrieves the event handler to use in this context.
+     * 
      * @return the event handler.
      * @since 0.7
      */
@@ -286,7 +293,9 @@ public final class VoiceXmlInterpreterContext  {
     /**
      * Enter a new scope for resolving variables. this is useful if we enter a
      * new block, but at least every file should have it's own scope.
-     * @param scope the new scope.
+     * 
+     * @param scope
+     *            the new scope.
      */
     public void enterScope(final Scope scope) {
         if (scopeObserver == null) {
@@ -302,7 +311,9 @@ public final class VoiceXmlInterpreterContext  {
     /**
      * Return from a previously created scope. i.e. pop current scope from
      * stack.
-     * @param scope The scope which was left.
+     * 
+     * @param scope
+     *            The scope which was left.
      */
     public void exitScope(final Scope scope) {
         if (scopeObserver == null) {
@@ -324,6 +335,7 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Retrieves the active grammar set.
+     * 
      * @return the active grammar set.
      */
     public ActiveGrammarSet getActiveGrammarSet() {
@@ -332,8 +344,11 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Sets the property with the given name to the given value.
-     * @param name Name of the property.
-     * @param value Value of the property.
+     * 
+     * @param name
+     *            Name of the property.
+     * @param value
+     *            Value of the property.
      */
     public void setProperty(final String name, final String value) {
         properties.put(name, value);
@@ -341,7 +356,9 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Retrieves the value of the given property.
-     * @param name Name of the property.
+     * 
+     * @param name
+     *            Name of the property.
      * @return Value of the property.
      */
     public String getProperty(final String name) {
@@ -350,8 +367,11 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Retrieves the value of the given property.
-     * @param name name of the property.
-     * @param defValue the default value, if the property is not defined.
+     * 
+     * @param name
+     *            name of the property.
+     * @param defValue
+     *            the default value, if the property is not defined.
      * @return value of the property or default value if no property is defined
      * @since 0.7.4
      */
@@ -365,19 +385,21 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Loads the speech recognizer properties. The values from the configuration
-     * are replaced by property settings if any. 
-     * @param fia the current form interpretation algorithm, maybe
-     *        <code>null</code>.
+     * are replaced by property settings if any.
+     * 
+     * @param fia
+     *            the current form interpretation algorithm, maybe
+     *            <code>null</code>.
      * @return the speech recognizer properties
      * @throws ConfigurationException
-     *         if the object could not be loaded.
+     *             if the object could not be loaded.
      * @since 0.7.5
      */
     public SpeechRecognizerProperties getSpeechRecognizerProperties(
             final FormInterpretationAlgorithm fia)
-        throws ConfigurationException {
-        final SpeechRecognizerProperties speech =
-            configuration.loadObject(SpeechRecognizerProperties.class);
+            throws ConfigurationException {
+        final SpeechRecognizerProperties speech = configuration
+                .loadObject(SpeechRecognizerProperties.class);
         final Map<String, String> props = getProperties(fia);
         speech.setProperties(props);
         return speech;
@@ -385,19 +407,21 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Loads the DTMF recognizer properties. The values from the configuration
-     * are replaced by property settings if any. 
-     * @param fia the current form interpretation algorithm, maybe
-     *        <code>null</code>.
+     * are replaced by property settings if any.
+     * 
+     * @param fia
+     *            the current form interpretation algorithm, maybe
+     *            <code>null</code>.
      * @return the DTMF recognizer properties
      * @throws ConfigurationException
-     *         if the object could not be loaded.
+     *             if the object could not be loaded.
      * @since 0.7.5
      */
     public DtmfRecognizerProperties getDtmfRecognizerProperties(
             final FormInterpretationAlgorithm fia)
-        throws ConfigurationException {
-        final DtmfRecognizerProperties dtmf =
-            configuration.loadObject(DtmfRecognizerProperties.class);
+            throws ConfigurationException {
+        final DtmfRecognizerProperties dtmf = configuration
+                .loadObject(DtmfRecognizerProperties.class);
         final Map<String, String> props = getProperties(fia);
         dtmf.setProperties(props);
         return dtmf;
@@ -405,19 +429,21 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Loads the speech recognizer properties. The values from the configuration
-     * are replaced by property settings if any. 
-     * @param fia the current form interpretation algorithm, maybe
-     *        <code>null</code>.
+     * are replaced by property settings if any.
+     * 
+     * @param fia
+     *            the current form interpretation algorithm, maybe
+     *            <code>null</code>.
      * @return the speech recognizer properties
      * @throws ConfigurationException
-     *         if the object could not be loaded.
+     *             if the object could not be loaded.
      * @since 0.7.5
      */
     public CallControlProperties getCallControlProperties(
             final FormInterpretationAlgorithm fia)
-        throws ConfigurationException {
-        final CallControlProperties call =
-            configuration.loadObject(CallControlProperties.class);
+            throws ConfigurationException {
+        final CallControlProperties call = configuration
+                .loadObject(CallControlProperties.class);
         if (call == null) {
             return null;
         }
@@ -425,24 +451,25 @@ public final class VoiceXmlInterpreterContext  {
         call.setProperties(props);
         return call;
     }
-    
+
     /**
      * Retrieves the currently defined properties.
-     * @param fia the current form interpretation algorithm, maybe
-     *        <code>null</code>.
+     * 
+     * @param fia
+     *            the current form interpretation algorithm, maybe
+     *            <code>null</code>.
      * @return the currently defined properties
      * @since 0.7.5
      */
     private Map<String, String> getProperties(
             final FormInterpretationAlgorithm fia) {
-        final Map<String, String> props =
-            new java.util.HashMap<String, String>();
+        final Map<String, String> props = new java.util.HashMap<String, String>();
         if (properties != null) {
             props.putAll(properties);
         }
         if (fia != null) {
-            final Map<String, String> localProperties =
-                fia.getLocalProperties();
+            final Map<String, String> localProperties = fia
+                    .getLocalProperties();
             props.putAll(localProperties);
         }
         return props;
@@ -450,7 +477,9 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Sets the current application.
-     * @param value the new application
+     * 
+     * @param value
+     *            the new application
      * @since 0.7.7
      */
     public void setApplication(final Application value) {
@@ -459,6 +488,7 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Retrieves the application.
+     * 
      * @return the application.
      */
     public Application getApplication() {
@@ -469,21 +499,19 @@ public final class VoiceXmlInterpreterContext  {
      * Starts processing the given application.
      *
      * @param appl
-     *        The application to process.
+     *            The application to process.
      * @exception ErrorEvent
-     *            Error processing the document.
+     *                Error processing the document.
      */
-    public void process(final Application appl)
-            throws ErrorEvent {
+    public void process(final Application appl) throws ErrorEvent {
         setApplication(appl);
         VoiceXmlDocument document = application.getCurrentDocument();
 
         enterScope(Scope.APPLICATION);
         final ScriptingEngine scriptingEngine = getScriptingEngine();
-        final ApplicationShadowVarContainer container =
-                scriptingEngine.createHostObject(
-                ApplicationShadowVarContainer.VARIABLE_NAME,
-                ApplicationShadowVarContainer.class);
+        final ApplicationShadowVarContainer container = scriptingEngine
+                .createHostObject(ApplicationShadowVarContainer.VARIABLE_NAME,
+                        ApplicationShadowVarContainer.class);
         container.setApplication(application);
         try {
             createHostObjects(Scope.APPLICATION);
@@ -519,8 +547,9 @@ public final class VoiceXmlInterpreterContext  {
                 } else {
                     document = application.getCurrentDocument();
                     final URI uri = descriptor.getUri();
-                    if ((document != null) && (descriptor.isForceLoad()
-                            || !application.isLoaded(uri))) {
+                    if ((document != null)
+                            && (descriptor.isForceLoad() || !application
+                                    .isLoaded(uri))) {
                         document = loadDocument(descriptor);
                     }
                 }
@@ -547,28 +576,28 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Creates custom host objects.
-     * @param scope the current scope
+     * 
+     * @param scope
+     *            the current scope
      * @exception ConfigurationException
-     *         error loading a configuration
+     *                error loading a configuration
      * @exception SemanticError
-     *         error creating a host object
+     *                error creating a host object
      * @since 0.7.5
      */
     private void createHostObjects(final Scope scope)
-        throws ConfigurationException, SemanticError {
-        final Collection<VariableProviders> providers =
-            configuration.loadObjects(VariableProviders.class,
-                    "variableprovider");
+            throws ConfigurationException, SemanticError {
+        final Collection<VariableProviders> providers = configuration
+                .loadObjects(VariableProviders.class, "variableprovider");
         if (providers == null) {
             return;
         }
         for (VariableProviders provider : providers) {
-            final Collection<ScriptableObject> created =
-                provider.createHostObjects(scripting, Scope.SESSION);
+            final Collection<ScriptableObject> created = provider
+                    .createHostObjects(scripting, Scope.SESSION);
             for (ScriptableObject o : created) {
                 if (o instanceof SessionListener) {
-                    final SessionListener listener =
-                        (SessionListener) o;
+                    final SessionListener listener = (SessionListener) o;
                     session.addSessionListener(listener);
                 }
             }
@@ -579,15 +608,14 @@ public final class VoiceXmlInterpreterContext  {
      * Starts processing the given application.
      *
      * @param appl
-     *        the application to process.
+     *            the application to process.
      * @param desc
-     *        the document descriptor for the subdialog
+     *            the document descriptor for the subdialog
      * @exception JVoiceXMLEvent
-     *            Error processing the document.
+     *                Error processing the document.
      */
     public void processSubdialog(final Application appl,
-            final DocumentDescriptor desc)
-            throws JVoiceXMLEvent {
+            final DocumentDescriptor desc) throws JVoiceXMLEvent {
         initializingSubdialog = true;
         application = appl;
         VoiceXmlDocument document = application.getCurrentDocument();
@@ -617,8 +645,7 @@ public final class VoiceXmlInterpreterContext  {
                     }
                 }
             } catch (InternalExitEvent e) {
-                LOGGER.info(
-                        "exit request. terminating processing of subdialog");
+                LOGGER.info("exit request. terminating processing of subdialog");
                 document = null;
             } finally {
                 exitScope(Scope.DOCUMENT);
@@ -627,10 +654,10 @@ public final class VoiceXmlInterpreterContext  {
     }
 
     /**
-     * Checks if the interpreter is in the initialzing phase of a
-     * subdialog.
+     * Checks if the interpreter is in the initialzing phase of a subdialog.
+     * 
      * @return <code>true</code> if the interpreter is in the initialzing phase
-     *          of a subdialog.
+     *         of a subdialog.
      * @since 0.7.4
      */
     public boolean isInitializingSubdialog() {
@@ -639,6 +666,7 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * The FIA finalized the initialization phase.
+     * 
      * @since 0.7.4
      */
     void finalizedInitialization() {
@@ -647,15 +675,17 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Loads the root document with the given <code>URI</code>.
-     * @param uri the URI of the root document.
+     * 
+     * @param uri
+     *            the URI of the root document.
      * @exception BadFetchError
-     *            Error loading the root document.
+     *                Error loading the root document.
      * @exception SemanticError
-     *            The document contains semantic errors.
+     *                The document contains semantic errors.
      * @since 0.6
      */
-    private void loadRootDocument(final URI uri)
-        throws BadFetchError, SemanticError {
+    private void loadRootDocument(final URI uri) throws BadFetchError,
+            SemanticError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading root document...");
         }
@@ -698,15 +728,16 @@ public final class VoiceXmlInterpreterContext  {
      * If an application is active, the descriptor is also modified to contain
      * the resolved URI.
      * </p>
+     * 
      * @param descriptor
-     *        descriptor of the next document to process.
+     *            descriptor of the next document to process.
      * @return VoiceXML document with the given URI
      * @exception BadFetchError
-     *            Error retrieving the document.
+     *                Error retrieving the document.
      * @since 0.7
      */
     public VoiceXmlDocument loadDocument(final DocumentDescriptor descriptor)
-        throws BadFetchError {
+            throws BadFetchError {
         final VoiceXmlDocument doc = acquireVoiceXmlDocument(descriptor);
         final URI uri = descriptor.getUri();
         if (application != null) {
@@ -718,6 +749,7 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Retrieves a reference to the document server.
+     * 
      * @return Reference to the document server.
      */
     public DocumentServer getDocumentServer() {
@@ -728,19 +760,18 @@ public final class VoiceXmlInterpreterContext  {
      * Acquires the VoiceXML document with the given URI.
      *
      * <p>
-     * If a relative URI is given, the scheme and authority of the last
-     * document are used to create a hierarchical URI for the next document.
+     * If a relative URI is given, the scheme and authority of the last document
+     * are used to create a hierarchical URI for the next document.
      * </p>
      *
      * @param descriptor
-     *        descriptor of the next document to process.
+     *            descriptor of the next document to process.
      * @return VoiceXML document with the given URI
      * @exception BadFetchError
-     *            Error retrieving the document.
+     *                Error retrieving the document.
      */
     public VoiceXmlDocument acquireVoiceXmlDocument(
-            final DocumentDescriptor descriptor)
-            throws BadFetchError {
+            final DocumentDescriptor descriptor) throws BadFetchError {
         final URI uri = descriptor.getUri();
         final URI nextUri;
         if (application == null) {
@@ -758,24 +789,23 @@ public final class VoiceXmlInterpreterContext  {
      * Acquire the VoiceXML document with the given URI.
      *
      * <p>
-     * If a relative URI is given, the scheme and authority of the last
-     * document are used to create a hierarchical URI for the next document.
+     * If a relative URI is given, the scheme and authority of the last document
+     * are used to create a hierarchical URI for the next document.
      * </p>
      *
      * @param uri
-     *        URI of the next document to process.
+     *            URI of the next document to process.
      * @param attributes
-     *        attributes governing the fetch.
+     *            attributes governing the fetch.
      *
      * @return Grammar document with the given URI.
      * @exception BadFetchError
-     *            Error retrieving the document.
+     *                Error retrieving the document.
      *
      * @since 0.3
      */
     public GrammarDocument acquireExternalGrammar(final URI uri,
-            final FetchAttributes attributes)
-            throws BadFetchError {
+            final FetchAttributes attributes) throws BadFetchError {
         final DocumentServer server = session.getDocumentServer();
         final URI grammarUri;
         if (application == null) {
@@ -791,20 +821,18 @@ public final class VoiceXmlInterpreterContext  {
      * Interprets the given VoiceXML document.
      *
      * @param document
-     *        VoiceXML document to interpret.
+     *            VoiceXML document to interpret.
      * @param startDialog
-     *        the dialog where to start interpretation
+     *            the dialog where to start interpretation
      * @return Descriptor of the next document to process or <code>null</code>
-     *          if there is no next document.
+     *         if there is no next document.
      * @exception JVoiceXMLEvent
-     *            Error or event processing the document.
+     *                Error or event processing the document.
      */
     private DocumentDescriptor interpret(final VoiceXmlDocument document,
-            final String startDialog)
-            throws JVoiceXMLEvent {
+            final String startDialog) throws JVoiceXMLEvent {
         final VoiceXmlInterpreter interpreter = new VoiceXmlInterpreter(this);
         try {
-            interpreter.init(configuration);
             interpreter.setDocument(document, startDialog, configuration);
         } catch (ConfigurationException e) {
             throw new ExceptionWrapper(e.getMessage(), e);
@@ -853,10 +881,13 @@ public final class VoiceXmlInterpreterContext  {
 
     /**
      * Initializes the given document.
-     * @param document the document to initialize.
-     * @param interpreter the current interpreter, if any.
+     * 
+     * @param document
+     *            the document to initialize.
+     * @param interpreter
+     *            the current interpreter, if any.
      * @exception JVoiceXMLEvent
-     *            error initializing document
+     *                error initializing document
      * @since 0.6
      */
     private void initDocument(final VoiceXmlDocument document,
@@ -867,13 +898,10 @@ public final class VoiceXmlInterpreterContext  {
 
         final Vxml vxml = document.getVxml();
         final NodeList list = vxml.getChildNodes();
-        final InitializationTagStrategyFactory factory;
-        try {
-            factory = configuration.loadObject(
-                    InitializationTagStrategyFactory.class);
-        } catch (ConfigurationException e) {
-            throw new ExceptionWrapper(e.getMessage(), e);
-        }
+        final JVoiceXmlSession session = (JVoiceXmlSession) getSession();
+        final Profile profile = session.getProfile();
+        final TagStrategyFactory factory = profile
+                .getInitializationTagStrategyFactory();
         for (int i = 0; i < list.getLength(); i++) {
             final Node currentNode = list.item(i);
             if (currentNode instanceof VoiceXmlNode) {

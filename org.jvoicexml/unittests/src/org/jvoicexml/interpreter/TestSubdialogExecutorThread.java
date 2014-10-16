@@ -34,12 +34,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.ReturnEvent;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.Assign;
@@ -73,8 +75,9 @@ public class TestSubdialogExecutorThread {
     public void setUp() throws Exception {
         final MockJvoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final ImplementationPlatform platform = new MockImplementationPlatform();
+        final Profile profile = new MockProfile();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null);
+                null, profile);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
     }
