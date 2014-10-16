@@ -510,8 +510,25 @@ described in the following sections.
 Make sure that you have your configuration right as described in
 section~\ref{sec:impl-platform-config}.
 
-Having started the voice browser it is waiting for incoming requests from a
-client. Later on in this guide we will explain how to code such a client.
+JVoiceXML features two modes
+\begin{enumerate}
+  \item as a server using so called \lstinline{CallManager}s and
+  \item controlled by a client program.
+\end{enumerate}
+
+The first mode is pretty much what is known from other voice browsers. Here,
+you usually initiate a call and JVoiceXML maps the incoming call to a VoiceXML
+document. This is explained in more detail in chapter~\ref{cha:callmanager}.
+
+The second mode provides some more control over the execution of a session with
+the voice browser. Here, you remotely create a session and specify the VoiceXML
+document to process. For now, this is the most advanced and preferred way.
+This is explained in more detail in chapter~\ref{cha:programmatic-approach}.
+
+Having started the voice browser it is waiting for incoming requests in either
+case. Later on in this guide you will learn how to start sessions
+programmatically.
+
 Note, that there is no graphical user interface right now. 
 
 \subsection{Linux}
