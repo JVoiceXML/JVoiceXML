@@ -23,13 +23,14 @@
     <classpath>3rdparty/sphinx4/lib/speechdata2014.cd_cont_2000.jar
     </classpath>
 
+    <!-- TTS Configuration -->
     <beans:bean
         class="org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutputFactory">
         <beans:constructor-arg type="java.lang.String"
             value="org.jvoicexml.jsapi2.synthesis.freetts.FreeTTSEngineListFactory" />
         <beans:property name="instances" value="1" />
         <beans:property name="type" value="jsapi20" />
-        <!-- Describtion of the synthesizer to use -->
+        <!-- Description of the synthesizer to use -->
         <!-- beans:property name="engineModeFactory"> <beans:bean class="org.jvoicexml.implementation.jsapi20.JVoiceXmlSynthesizerModeFactory"> 
             <beans:property name="engineName" value="anna"/> <beans:property name="locale" 
             value="en"/> <beans:property name="voiceName" value="anna"/> </beans:bean> 
@@ -41,18 +42,19 @@
             name="keepAlive" value="true" /> </beans:bean> </beans:property -->
     </beans:bean>
 
+    <!-- ASR configuration -->
     <beans:bean
         class="org.jvoicexml.implementation.jsapi20.Jsapi20SpokenInputFactory">
         <beans:constructor-arg type="java.lang.String"
             value="org.jvoicexml.jsapi2.recognition.sphinx4.SphinxEngineListFactory" />
         <beans:property name="instances" value="1" />
         <beans:property name="type" value="jsapi20" />
-        <!-- Describtion of the synthesizer to use -->
+        <!-- Description of the recognizer to use -->
         <beans:property name="engineModeFactory">
             <beans:bean
                 class="org.jvoicexml.implementation.jsapi20.JVoiceXmlRecognizerModeFactory">
                 <!-- beans:property name="engineName" value="anna" / -->
-                <beans:property name="locale" value="de" />
+                <!-- beans:property name="locale" value="de" / -->
             </beans:bean>
         </beans:property>
         <!-- Description of the media locator -->
