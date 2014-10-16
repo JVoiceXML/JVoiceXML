@@ -29,16 +29,14 @@ import java.util.Collection;
 
 import org.jvoicexml.Configuration;
 import org.jvoicexml.DtmfRecognizerProperties;
+import org.jvoicexml.Profile;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.interpreter.DialogFactory;
-import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyFactory;
-import org.jvoicexml.interpreter.TagStrategyRepository;
 import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
-import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository;
-import org.jvoicexml.test.interpreter.tagstrategy.MockInitializationTagStrategyFactory;
+import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.test.interpreter.tagstrategy.MockTagStrategyFactory;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
@@ -84,9 +82,9 @@ public final class MockConfiguration implements Configuration {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T loadObject(final Class<T> baseClass) {
-        if (baseClass == InitializationTagStrategyFactory.class) {
+        if (baseClass == Profile.class) {
             try {
-                return (T) new MockInitializationTagStrategyFactory();
+                return (T) new MockProfile();
             } catch (Exception e) {
                 return null;
             }
@@ -96,8 +94,8 @@ public final class MockConfiguration implements Configuration {
             } catch (Exception e) {
                 return null;
             }
-        } else if (baseClass == TagStrategyRepository.class) {
-            return (T) new JVoiceXmlTagStrategyRepository();
+        } else if (baseClass == Profile.class) {
+            return (T) new MockProfile();
         } else if (baseClass == SpeechRecognizerProperties.class) {
             return (T) new SpeechRecognizerProperties();
         } else if (baseClass == DtmfRecognizerProperties.class) {

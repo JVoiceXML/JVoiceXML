@@ -33,14 +33,15 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
 import org.jvoicexml.Application;
-import org.jvoicexml.DtmfInput;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Profile;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.event.ErrorEvent;
@@ -114,6 +115,9 @@ public final class JVoiceXmlSession extends Thread
     /** Registered detailed session listeners. */
     private final Collection<DetailedSessionListener> detailedSessionListeners;
 
+    /** The profile to use. */
+    private final Profile profile;
+
     /**
      * Semaphore to that is set while the session is running.
      */
@@ -128,10 +132,12 @@ public final class JVoiceXmlSession extends Thread
      *            the main object to retrieve further resources.
      * @param connectionInformation
      *            the connection information to use
+     * @param prof
+     *            the profile
      */
     public JVoiceXmlSession(final ImplementationPlatform ip,
             final JVoiceXmlCore jvxml,
-            final ConnectionInformation connectionInformation) {
+            final ConnectionInformation connectionInformation, Profile prof) {
         // Create a unique session id
         uuid = UUID.randomUUID();
         // Store it in the MDC so that the session Id can be used by the loggers
@@ -139,6 +145,7 @@ public final class JVoiceXmlSession extends Thread
 
         // Initialize this object
         info = connectionInformation;
+        profile = prof;
         implementationPlatform = ip;
         documentServer = jvxml.getDocumentServer();
         application = null;
@@ -209,6 +216,15 @@ public final class JVoiceXmlSession extends Thread
      */
     public String getSessionID() {
         return uuid.toString();
+    }
+
+    /**
+     * Retrieves the profile.
+     * @return the profile
+     * @since 0.7.7
+     */
+    public Profile getProfile() {
+        return profile;
     }
 
     /**

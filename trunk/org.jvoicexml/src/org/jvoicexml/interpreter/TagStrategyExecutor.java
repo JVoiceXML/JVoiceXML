@@ -26,70 +26,52 @@
 
 package org.jvoicexml.interpreter;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.Configurable;
-import org.jvoicexml.Configuration;
-import org.jvoicexml.ConfigurationException;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.w3c.dom.NodeList;
 
 /**
  * Executor for {@link TagStrategy}s.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
 
-public final class TagStrategyExecutor implements Configurable {
+public final class TagStrategyExecutor {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(TagStrategyExecutor.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(TagStrategyExecutor.class);
 
     /** The factory for tag strategies. */
-    private static TagStrategyRepository repository;
+    private final TagStrategyFactory factory;
 
     /**
      * Constructs a new object.
      */
-    public TagStrategyExecutor() {
+    public TagStrategyExecutor(final Profile profile) {
+        factory = profile.getTagStrategyFactory();
     }
 
-
-    /**
-     * {@inheritDoc}
-     * 
-     * Loads all {@link org.jvoicexml.interpreter.TagStrategyFactory}s.
-     */
-    @Override
-    public void init(final Configuration configuration)
-        throws ConfigurationException {
-        if (repository == null) {
-            try {
-                repository = configuration.loadObject(
-                        TagStrategyRepository.class);
-                repository.init(configuration);
-            } catch (Exception e) {
-                LOGGER.fatal(e.getMessage(), e);
-            }
-        }
-    }
-    
     /**
      * Execute the {@link TagStrategy}s for all child nodes of the given
      * {@link FormItem}.
-     * @param context the current VoiceXML interpreter context
-     * @param interpreter the current VoiceXML interpreter
-     * @param fia the current Form Interpretation Algorithm
-     * @param formItem the current {@link FormItem}.
+     * 
+     * @param context
+     *            the current VoiceXML interpreter context
+     * @param interpreter
+     *            the current VoiceXML interpreter
+     * @param fia
+     *            the current Form Interpretation Algorithm
+     * @param formItem
+     *            the current {@link FormItem}.
      * @exception JVoiceXMLEvent
-     *            Error or event executing the child node.
+     *                Error or event executing the child node.
      */
     public void executeChildNodes(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
@@ -102,57 +84,63 @@ public final class TagStrategyExecutor implements Configurable {
     }
 
     /**
-     * Execute the {@link TagStrategy}s for all child nodes of the given
-     * parent node.
+     * Execute the {@link TagStrategy}s for all child nodes of the given parent
+     * node.
      *
-     * @param context the current VoiceXML interpreter context
-     * @param interpreter the current VoiceXML interpreter
-     * @param fia the current Form Interpretation Algorithm
+     * @param context
+     *            the current VoiceXML interpreter context
+     * @param interpreter
+     *            the current VoiceXML interpreter
+     * @param fia
+     *            the current Form Interpretation Algorithm
      * @param formItem
-     *        The current {@link FormItem}.
+     *            The current {@link FormItem}.
      * @param parent
-     *        The parent node, which is in fact a child to item.
+     *            The parent node, which is in fact a child to item.
      * @exception JVoiceXMLEvent
-     *            Error or event executing the child node.
+     *                Error or event executing the child node.
      *
      * @see org.jvoicexml.interpreter.TagStrategy
      */
     public void executeChildNodes(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem formItem,
-            final VoiceXmlNode parent)
-            throws JVoiceXMLEvent {
+            final VoiceXmlNode parent) throws JVoiceXMLEvent {
         final NodeList children = parent.getChildNodes();
 
         executeChildNodes(context, interpreter, fia, formItem, children);
     }
 
     /**
-     * Execute the {@link TagStrategy}s for all child nodes of the given
-     * parent node.
+     * Execute the {@link TagStrategy}s for all child nodes of the given parent
+     * node.
      *
-     * @param context the current VoiceXML interpreter context
-     * @param interpreter the current VoiceXML interpreter
-     * @param fia the current Form Interpretation Algorithm
+     * @param context
+     *            the current VoiceXML interpreter context
+     * @param interpreter
+     *            the current VoiceXML interpreter
+     * @param fia
+     *            the current Form Interpretation Algorithm
      * @param formItem
-     *        The current {@link FormItem}.
+     *            The current {@link FormItem}.
      * @param container
-     *        the local form item container
+     *            the local form item container
      * @exception JVoiceXMLEvent
-     *            Error or event executing the child node.
+     *                Error or event executing the child node.
      *
      * @see org.jvoicexml.interpreter.TagStrategy
      */
-    public void executeChildNodesLocal(final VoiceXmlInterpreterContext context,
+    public void executeChildNodesLocal(
+            final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem formItem,
             final FormItemLocalExecutableTagContainer container)
             throws JVoiceXMLEvent {
-        final Collection<VoiceXmlNode> nodes =
-            container.getLocalExecutableTags();
+        final Collection<VoiceXmlNode> nodes = container
+                .getLocalExecutableTags();
         for (VoiceXmlNode node : nodes) {
-            final TagStrategy strategy = prepareTagStrategyExecution(
-                    context, fia, node);
+            final TagStrategy strategy = prepareTagStrategyExecution(context,
+                    fia, node);
             if (strategy != null) {
                 strategy.execute(context, interpreter, fia, formItem, node);
             }
@@ -162,24 +150,26 @@ public final class TagStrategyExecutor implements Configurable {
     /**
      * Execute the {@link TagStrategy}s for all nodes of the given list.
      *
-     * @param context the current VoiceXML interpreter context
-     * @param interpreter the current VoiceXML interpreter
-     * @param fia the current Form Interpretation Algorithm
+     * @param context
+     *            the current VoiceXML interpreter context
+     * @param interpreter
+     *            the current VoiceXML interpreter
+     * @param fia
+     *            the current Form Interpretation Algorithm
      * @param formItem
-     *        The current {@link FormItem}.
+     *            The current {@link FormItem}.
      * @param list
-     *        The list of nodes to execute.
+     *            The list of nodes to execute.
      *
      * @exception JVoiceXMLEvent
-     *            Error or event executing the child node.
+     *                Error or event executing the child node.
      *
      * @see org.jvoicexml.interpreter.TagStrategy
      */
     public void executeChildNodes(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem formItem,
-            final NodeList list)
-            throws JVoiceXMLEvent {
+            final NodeList list) throws JVoiceXMLEvent {
         if (list == null) {
             return;
         }
@@ -192,66 +182,51 @@ public final class TagStrategyExecutor implements Configurable {
 
     /**
      * Executes the {@link TagStrategy} for the given node.
-     * @param context the current VoiceXML interpreter context
-     * @param interpreter the current VoiceXML interpreter
-     * @param fia the current Form Interpretation Algorithm
-     * @param formItem the current {@link FormItem}
-     * @param node the node to execute.
+     * 
+     * @param context
+     *            the current VoiceXML interpreter context
+     * @param interpreter
+     *            the current VoiceXML interpreter
+     * @param fia
+     *            the current Form Interpretation Algorithm
+     * @param formItem
+     *            the current {@link FormItem}
+     * @param node
+     *            the node to execute.
      * @throws JVoiceXMLEvent
-     *            Error or event executing the child node.
+     *             Error or event executing the child node.
      * @since 0.6
      */
     public void executeTagStrategy(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia,  final FormItem formItem,
-            final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
-        final TagStrategy strategy = prepareTagStrategyExecution(context,
-                fia, node);
+            final FormInterpretationAlgorithm fia, final FormItem formItem,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
+        final TagStrategy strategy = prepareTagStrategyExecution(context, fia,
+                node);
         if (strategy != null) {
             strategy.execute(context, interpreter, fia, formItem, node);
         }
     }
 
     /**
-     * Retrieves the namespace defined in the given node as an URI.
-     * @param node the node
-     * @return namespace as an URI, <code>null</code> if there is no namespace
-     * @exception URISyntaxException
-     *            error converting the namespace into an URI
-     * @since 0.7.6
-     */
-    private URI getNamespaceUri(final VoiceXmlNode node)
-            throws URISyntaxException {
-        final String namespace = node.getNamespaceURI();
-        if (namespace == null) {
-            return null;
-        } else {
-            return new URI(namespace);
-        }
-    }
-
-    /**
      * Prepares the execution of the {@link TagStrategy}.
-     * @param context the current VoiceXML interpreter context
-     * @param fia the current Form Interpretation Algorithm
-     * @param node the node to execute.
+     * 
+     * @param context
+     *            the current VoiceXML interpreter context
+     * @param fia
+     *            the current Form Interpretation Algorithm
+     * @param node
+     *            the node to execute.
      * @return tag strategy to execute
      * @throws ErrorEvent
-     *         error preparing the execution of the tag strategy
+     *             error preparing the execution of the tag strategy
      * @since 0.7.5
      */
     private TagStrategy prepareTagStrategyExecution(
             final VoiceXmlInterpreterContext context,
             final FormInterpretationAlgorithm fia, final VoiceXmlNode node)
             throws ErrorEvent {
-        final URI uri;
-        try {
-            uri = getNamespaceUri(node);
-        } catch (URISyntaxException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        }
-        final TagStrategy strategy = repository.getTagStrategy(node, uri);
+        final TagStrategy strategy = factory.getTagStrategy(node);
         if (strategy == null) {
             return null;
         }

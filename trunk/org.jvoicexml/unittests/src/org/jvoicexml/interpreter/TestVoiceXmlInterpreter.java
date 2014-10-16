@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,7 +32,9 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Profile;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.Form;
@@ -60,10 +62,11 @@ public final class TestVoiceXmlInterpreter {
     public void setUp() {
         final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null);
-        final VoiceXmlInterpreterContext context =
-            new VoiceXmlInterpreterContext(session, null);
+        final Profile profile = new MockProfile();
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null, profile);
+        final VoiceXmlInterpreterContext context = new VoiceXmlInterpreterContext(
+                session, null);
         interpreter = new VoiceXmlInterpreter(context);
         configuration = new MockConfiguration();
     }
@@ -74,15 +77,15 @@ public final class TestVoiceXmlInterpreter {
     @Test
     public void testSetState() {
         interpreter.setState(InterpreterState.TRANSITIONING);
-        Assert.assertEquals(InterpreterState.TRANSITIONING, interpreter
-                .getState());
+        Assert.assertEquals(InterpreterState.TRANSITIONING,
+                interpreter.getState());
     }
 
     /**
      * Test method for {@link VoiceXmlInterpreter#setDocument()}.
      *
      * @exception Exception
-     *                    test failed
+     *                test failed
      */
     @Test
     public void testSetDocument() throws Exception {
@@ -101,7 +104,7 @@ public final class TestVoiceXmlInterpreter {
      * Test method for {@link VoiceXmlInterpreter#setDocument()} with 2 forms.
      *
      * @exception Exception
-     *                    test failed
+     *                test failed
      */
     @Test
     public void testSetDocument2Forms() throws Exception {
@@ -124,7 +127,7 @@ public final class TestVoiceXmlInterpreter {
      * Test method for {@link VoiceXmlInterpreter#setDocument()} without forms.
      *
      * @exception Exception
-     *                    test failed
+     *                test failed
      */
     @Test
     public void testSetDocumentNoForm() throws Exception {
@@ -140,7 +143,7 @@ public final class TestVoiceXmlInterpreter {
      * document.
      *
      * @exception Exception
-     *                    test failed
+     *                test failed
      */
     @Test
     public void testSetDocumentNull() throws Exception {
@@ -154,7 +157,7 @@ public final class TestVoiceXmlInterpreter {
      * Test method for {@link VoiceXmlInterpreter#getDialog(java.lang.String}.
      *
      * @exception Exception
-     *                    test failed
+     *                test failed
      */
     @Test
     public void testGetDialog() throws Exception {
@@ -184,7 +187,7 @@ public final class TestVoiceXmlInterpreter {
      * without a document.
      *
      * @exception Exception
-     *                    test failed
+     *                test failed
      */
     @Test
     public void testGetDialogNoDocument() throws Exception {

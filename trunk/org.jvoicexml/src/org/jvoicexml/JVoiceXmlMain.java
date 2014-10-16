@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 import java.util.ServiceLoader;
 
@@ -42,17 +43,17 @@ import org.jvoicexml.interpreter.GrammarProcessor;
  * Main class of the JVoiceXML VoiceXML interpreter.
  *
  * <p>
- * This class manages all central resources and serves as a Session
- * factory. It is implemented as a singleton and cannot be instantiated
- * from outside. On startup, it acquires all needed resources and serves
- * in turn as a source to retrieve references to the {@link DocumentServer}
- * and the {@link ImplementationPlatform}.
+ * This class manages all central resources and serves as a Session factory. It
+ * is implemented as a singleton and cannot be instantiated from outside. On
+ * startup, it acquires all needed resources and serves in turn as a source to
+ * retrieve references to the {@link DocumentServer} and the
+ * {@link ImplementationPlatform}.
  * </p>
  *
  * <p>
  * During its life, the interpreter passes several states as shown in the
- * following figure. JVoiceXML can only process calls while it is in the
- * running state.<br/>
+ * following figure. JVoiceXML can only process calls while it is in the running
+ * state.<br/>
  * <img src="doc-files/interpreter-lifecycle.jpg" />
  * </p>
  * 
@@ -60,9 +61,7 @@ import org.jvoicexml.interpreter.GrammarProcessor;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class JVoiceXmlMain
-        extends Thread
-        implements JVoiceXmlCore {
+public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(JVoiceXmlMain.class);
 
@@ -84,6 +83,9 @@ public final class JVoiceXmlMain
     /** The call managers. */
     private Collection<CallManager> callManagers;
 
+    /** Known profiles. */
+    private final Map<String, Profile> profiles;
+
     /** The shutdown hook. */
     private Thread shutdownHook;
 
@@ -93,7 +95,7 @@ public final class JVoiceXmlMain
     /** The used configuration object. */
     private Configuration configuration;
 
-    /** Registered listeners to JVoiceXml. */ 
+    /** Registered listeners to JVoiceXml. */
     private final Collection<JVoiceXmlMainListener> listeners;
 
     /** The state of the interpreter. */
@@ -108,17 +110,19 @@ public final class JVoiceXmlMain
 
     /**
      * Construct a new object with the given configuration object.
-     * @param config the initial configuration
+     * 
+     * @param config
+     *            the initial configuration
      */
     public JVoiceXmlMain(final Configuration config) {
         LOGGER.info("----------------------------------------------------");
-        LOGGER.info("starting VoiceXML interpreter " + getVersion()
-                + "...");
+        LOGGER.info("starting VoiceXML interpreter " + getVersion() + "...");
 
         shutdownSemaphore = new Object();
         setName(JVoiceXmlMain.class.getSimpleName());
         configuration = config;
         listeners = new java.util.ArrayList<JVoiceXmlMainListener>();
+        profiles = new java.util.HashMap<String, Profile>();
         state = InterpreterState.STARTED;
         LOGGER.info("interpreter state " + state);
     }
@@ -126,15 +130,14 @@ public final class JVoiceXmlMain
     /**
      * {@inheritDoc}
      *
-     * The version information is created by
-     * <code>
+     * The version information is created by <code>
      * &lt;VERSION_MAJOR&gt>.&lt;VERSION_MINOR&gt;.&lt;VERSION_BUGFIX_LEVEL&gt;
      * .&lt;EA|GA&gt;[.&lt;BUILD_NUMBER&gt;]
      * </code>.
      */
     public String getVersion() {
-        InputStream in =
-            JVoiceXml.class.getResourceAsStream("/jvoicexml.version");
+        InputStream in = JVoiceXml.class
+                .getResourceAsStream("/jvoicexml.version");
         if (in == null) {
             return "unmanaged version";
         }
@@ -159,7 +162,9 @@ public final class JVoiceXmlMain
 
     /**
      * Adds the given listener.
-     * @param listener the listener to add.
+     * 
+     * @param listener
+     *            the listener to add.
      */
     public void addListener(final JVoiceXmlMainListener listener) {
         synchronized (listeners) {
@@ -169,18 +174,21 @@ public final class JVoiceXmlMain
 
     /**
      * removes the given listener.
-     * @param listener the listener to remove.
+     * 
+     * @param listener
+     *            the listener to remove.
      */
     public void removeListener(final JVoiceXmlMainListener listener) {
         synchronized (listeners) {
             listeners.remove(listener);
         }
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public Session createSession(final ConnectionInformation client)
+    public Session createSession(final ConnectionInformation info)
             throws ErrorEvent {
         if (state != InterpreterState.RUNNING) {
             throw new NoresourceError(
@@ -190,14 +198,13 @@ public final class JVoiceXmlMain
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("creating new session...");
         }
-
-        final ImplementationPlatform platform =
-            implementationPlatformFactory.getImplementationPlatform(client);
-        final Session session =
-                new org.jvoicexml.interpreter.JVoiceXmlSession(platform, this,
-                        client);
+        final String profileName = info.getProfile();
+        final Profile profile = profiles.get(profileName);
+        final ImplementationPlatform platform = implementationPlatformFactory
+                .getImplementationPlatform(info);
+        final Session session = new org.jvoicexml.interpreter.JVoiceXmlSession(
+                platform, this, info, profile);
         platform.setSession(session);
-
         LOGGER.info("created session " + session.getSessionID());
 
         return session;
@@ -212,8 +219,8 @@ public final class JVoiceXmlMain
         // or since it has been passed as an argument when creating this
         // object.
         if (configuration == null) {
-            final ServiceLoader<Configuration> services =
-                ServiceLoader.load(Configuration.class);
+            final ServiceLoader<Configuration> services = ServiceLoader
+                    .load(Configuration.class);
             for (Configuration config : services) {
                 configuration = config;
                 break;
@@ -245,7 +252,9 @@ public final class JVoiceXmlMain
 
     /**
      * Sets the document server.
-     * @param server the document server
+     * 
+     * @param server
+     *            the document server
      * @since 0.7.4
      */
     public void setDocumentServer(final DocumentServer server) {
@@ -258,7 +267,9 @@ public final class JVoiceXmlMain
      * The factory may need further configuration. See
      * {@link ImplementationPlatformFactory#init(Configuration)}.
      * </p>
-     * @param factory the implementation platform factory
+     * 
+     * @param factory
+     *            the implementation platform factory
      * @since 0.7.4
      */
     public void setImplementationPlatformFactory(
@@ -272,7 +283,9 @@ public final class JVoiceXmlMain
      * The factory may need further configuration. See
      * {@link GrammarProcessor#init(Configuration)}.
      * </p>
-     * @param processor the grammar processor.
+     * 
+     * @param processor
+     *            the grammar processor.
      * @since 0.7.4
      */
     public void setGrammarProcessor(final GrammarProcessor processor) {
@@ -281,15 +294,17 @@ public final class JVoiceXmlMain
 
     /**
      * Set the call managers to use.
-     * @param managers the call managers.
+     * 
+     * @param managers
+     *            the call managers.
      * @throws IOException
-     *         error starting a call manager.
-     * @throws NoresourceError 
-     *         error starting a call manager.
+     *             error starting a call manager.
+     * @throws NoresourceError
+     *             error starting a call manager.
      * @since 0.7.4
      */
     public void setCallManager(final Collection<CallManager> managers)
-        throws IOException, NoresourceError {
+            throws IOException, NoresourceError {
         callManagers = managers;
         for (CallManager manager : callManagers) {
             manager.setJVoiceXml(this);
@@ -322,22 +337,13 @@ public final class JVoiceXmlMain
         try {
             // Load configuration
             documentServer = config.loadObject(DocumentServer.class);
-            implementationPlatformFactory = configuration.loadObject(
-                    ImplementationPlatformFactory.class);
+            implementationPlatformFactory = configuration
+                    .loadObject(ImplementationPlatformFactory.class);
             implementationPlatformFactory.init(config);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            synchronized (shutdownSemaphore) {
-                shutdownSemaphore.notifyAll();
-            }
-            fireJVoiceXmlStartupError(e);
-            return;
-        }
-
-        try {
             grammarProcessor = config.loadObject(GrammarProcessor.class);
             grammarProcessor.init(config);
             initCallManager(config);
+            initProfiles(config);
             initJndi(config);
         } catch (NoresourceError e) {
             LOGGER.fatal(e.getMessage(), e);
@@ -371,14 +377,18 @@ public final class JVoiceXmlMain
 
     /**
      * Initialization of the JNDI hook.
-     * @param config current configuration.
-     * @exception IOException error starting the JNDI support
-     * @exception ConfigurationException error loading the configuration
+     * 
+     * @param config
+     *            current configuration.
+     * @exception IOException
+     *                error starting the JNDI support
+     * @exception ConfigurationException
+     *                error loading the configuration
      */
-    private void initJndi(final Configuration config)
-        throws IOException, ConfigurationException {
-        final Collection<JndiSupport> jndis =
-            config.loadObjects(JndiSupport.class, "jndi");
+    private void initJndi(final Configuration config) throws IOException,
+            ConfigurationException {
+        final Collection<JndiSupport> jndis = config.loadObjects(
+                JndiSupport.class, "jndi");
         if (jndis == null) {
             return;
         }
@@ -392,17 +402,19 @@ public final class JVoiceXmlMain
 
     /**
      * Initializes the call manager.
-     * @param config current configuration.
+     * 
+     * @param config
+     *            current configuration.
      * @exception NoresourceError
-     *            error starting the call manager
+     *                error starting the call manager
      * @exception IOException
-     *            unable to start a terminal in the call manager
-     * @exception ConfigurationException error loading the configuration
+     *                unable to start a terminal in the call manager
+     * @exception ConfigurationException
+     *                error loading the configuration
      */
     private void initCallManager(final Configuration config)
-        throws NoresourceError, IOException, ConfigurationException {
-        callManagers =
-            config.loadObjects(CallManager.class, "callmanager");
+            throws NoresourceError, IOException, ConfigurationException {
+        callManagers = config.loadObjects(CallManager.class, "callmanager");
         if (callManagers == null) {
             return;
         }
@@ -410,6 +422,33 @@ public final class JVoiceXmlMain
             manager.setJVoiceXml(this);
             manager.start();
             LOGGER.info("started call manager '" + manager + "'");
+        }
+    }
+
+    /**
+     * Initializes the call manager.
+     * 
+     * @param config
+     *            current configuration.
+     * @exception NoresourceError
+     *                error starting the call manager
+     * @exception IOException
+     *                unable to start a terminal in the call manager
+     * @exception ConfigurationException
+     *                error loading the configuration
+     */
+    private void initProfiles(final Configuration config)
+            throws NoresourceError, IOException, ConfigurationException {
+        final Collection<Profile> loadedProfiles = config.loadObjects(
+                Profile.class, "profile");
+        if (loadedProfiles == null) {
+            LOGGER.warn("no profiles configure");
+            return;
+        }
+        for (Profile profile : loadedProfiles) {
+            final String name = profile.getName();
+            profiles.put(name, profile);
+            LOGGER.info("added profile '" + name + "'");
         }
     }
 
@@ -486,8 +525,7 @@ public final class JVoiceXmlMain
      * @since 0.4
      */
     private void addShutdownHook() {
-        final JVoiceXmlShutdownHook hook =
-                new JVoiceXmlShutdownHook(this);
+        final JVoiceXmlShutdownHook hook = new JVoiceXmlShutdownHook(this);
         shutdownHook = new Thread(hook);
         shutdownHook.setName("ShutdownHook");
 
@@ -541,7 +579,9 @@ public final class JVoiceXmlMain
     /**
      * Notifies all registered listener about an error when trying to startup
      * JVoiceXML.
-     * @param exception the causing error
+     * 
+     * @param exception
+     *            the causing error
      * 
      * @since 0.7.6
      */

@@ -37,6 +37,7 @@ import org.jvoicexml.mock.documentserver.schemestrategy.MockSessionIdentifierFac
 
 /**
  * Test case for {@link SessionStorage}.
+ * 
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.7
@@ -54,15 +55,16 @@ public final class TestSessionStorage {
     @Before
     public void setUp() {
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Session session = new JVoiceXmlSession(null, jvxml, null);
+        final Session session = new JVoiceXmlSession(null, jvxml, null, null);
         sessionId = session.getSessionID();
-        final SessionIdentifierFactory<String> factory =
-            new MockSessionIdentifierFactory();
+        final SessionIdentifierFactory<String> factory = new MockSessionIdentifierFactory();
         storage = new SessionStorage<String>(factory);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.documentserver.schemestrategy.SessionStorage#getSessionIdentifier(org.jvoicexml.Session)}.
+     * Test method for
+     * {@link org.jvoicexml.documentserver.schemestrategy.SessionStorage#getSessionIdentifier(org.jvoicexml.Session)}
+     * .
      */
     @Test
     public void testGetSessionIdentifier() {
@@ -71,16 +73,18 @@ public final class TestSessionStorage {
         final String id2 = storage.getSessionIdentifier(sessionId);
         Assert.assertEquals(id1, id2);
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Session session2 = new JVoiceXmlSession(null, jvxml, null);
-        final String id3 = storage.getSessionIdentifier(
-                session2.getSessionID());
+        final Session session2 = new JVoiceXmlSession(null, jvxml, null, null);
+        final String id3 = storage
+                .getSessionIdentifier(session2.getSessionID());
         Assert.assertNotSame(id1, id3);
         final String id4 = storage.getSessionIdentifier(null);
         Assert.assertNull("expected to retrieve a null identifer", id4);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.documentserver.schemestrategy.SessionStorage#releaseSession(org.jvoicexml.Session)}.
+     * Test method for
+     * {@link org.jvoicexml.documentserver.schemestrategy.SessionStorage#releaseSession(org.jvoicexml.Session)}
+     * .
      */
     @Test
     public void testReleaseSession() {

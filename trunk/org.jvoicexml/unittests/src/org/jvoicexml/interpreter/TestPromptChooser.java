@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,9 +34,11 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.Field;
@@ -46,7 +48,8 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
 /**
- * Test cases for {@link PromptChooser}. 
+ * Test cases for {@link PromptChooser}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
@@ -58,13 +61,14 @@ public final class TestPromptChooser {
     private VoiceXmlDocument document;
     /** The field for that field form item to test. */
     private Field field;
-    
+
     /**
      * Set up the test environment.
+     * 
      * @throws Exception
-     *         set up failed
-     * @throws JVoiceXMLEvent 
-     *         set up failed
+     *             set up failed
+     * @throws JVoiceXMLEvent
+     *             set up failed
      */
     @Before
     public void setUp() throws Exception, JVoiceXMLEvent {
@@ -75,18 +79,20 @@ public final class TestPromptChooser {
         field = form.appendChild(Field.class);
         field.setName("testfield");
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final ImplementationPlatform platform =
-                new MockImplementationPlatform();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null);
+        final ImplementationPlatform platform = new MockImplementationPlatform();
+        final Profile profile = new MockProfile();
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null, profile);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.PromptChooser#collect()}.
+     * Test method for {@link org.jvoicexml.interpreter.PromptChooser#collect()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testCollect() throws JVoiceXMLEvent {
@@ -94,7 +100,7 @@ public final class TestPromptChooser {
         prompt1.addText("prompt 1");
         final Prompt prompt2 = field.appendChild(Prompt.class);
         prompt2.addText("prompt 2");
-        final PromptCountable countable = new FieldFormItem(context, field); 
+        final PromptCountable countable = new FieldFormItem(context, field);
         final PromptChooser chooser = new PromptChooser(countable, context);
         final Collection<Prompt> prompts = chooser.collect();
         Assert.assertEquals(2, prompts.size());
@@ -104,9 +110,11 @@ public final class TestPromptChooser {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.PromptChooser#collect()}.
+     * Test method for {@link org.jvoicexml.interpreter.PromptChooser#collect()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testCollectCond() throws JVoiceXMLEvent {
@@ -116,7 +124,7 @@ public final class TestPromptChooser {
         final Prompt prompt2 = field.appendChild(Prompt.class);
         prompt2.addText("prompt 2");
         prompt2.setCond("2 == 2");
-        final PromptCountable countable = new FieldFormItem(context, field); 
+        final PromptCountable countable = new FieldFormItem(context, field);
         final PromptChooser chooser = new PromptChooser(countable, context);
         final Collection<Prompt> prompts = chooser.collect();
         Assert.assertEquals(1, prompts.size());

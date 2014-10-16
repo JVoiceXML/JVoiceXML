@@ -27,7 +27,6 @@
 package org.jvoicexml.interpreter;
 
 import java.util.Collection;
-import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -36,6 +35,7 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.NoinputEvent;
@@ -43,9 +43,8 @@ import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.scope.Scope;
-import org.jvoicexml.interpreter.tagstrategy.GrammarStrategy;
-import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlInitializationTagStrategyFactory;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
@@ -79,6 +78,9 @@ public final class TestFormInterpretationAlgorithm {
     /** The implementation platform. */
     private ImplementationPlatform platform;
 
+    /** The mock profile. */
+    private Profile profile;
+
     /**
      * Set up the test environment.
      * 
@@ -89,12 +91,12 @@ public final class TestFormInterpretationAlgorithm {
     public void setUp() throws Exception {
         platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
+        profile = new MockProfile();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null);
+                null, profile);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
-        interpreter.init(configuration);
     }
 
     /**
@@ -189,15 +191,11 @@ public final class TestFormInterpretationAlgorithm {
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, executableForm);
-        final JVoiceXmlInitializationTagStrategyFactory factory = new JVoiceXmlInitializationTagStrategyFactory();
-        final Map<String, TagStrategy> strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put(Grammar.TAG_NAME, new GrammarStrategy());
-        factory.setTagStrategies(strategies);
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 try {
-                    fia.initialize(factory);
+                    fia.initialize(profile);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -246,15 +244,11 @@ public final class TestFormInterpretationAlgorithm {
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, executableForm);
-        final JVoiceXmlInitializationTagStrategyFactory factory = new JVoiceXmlInitializationTagStrategyFactory();
-        final Map<String, TagStrategy> strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put(Grammar.TAG_NAME, new GrammarStrategy());
-        factory.setTagStrategies(strategies);
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 try {
-                    fia.initialize(factory);
+                    fia.initialize(profile);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -323,15 +317,11 @@ public final class TestFormInterpretationAlgorithm {
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, executableForm);
-        final JVoiceXmlInitializationTagStrategyFactory factory = new JVoiceXmlInitializationTagStrategyFactory();
-        final Map<String, TagStrategy> strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put(Grammar.TAG_NAME, new GrammarStrategy());
-        factory.setTagStrategies(strategies);
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 try {
-                    fia.initialize(factory);
+                    fia.initialize(profile);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -366,7 +356,7 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testActivateFormGrammars() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -387,15 +377,11 @@ public final class TestFormInterpretationAlgorithm {
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, executableForm);
-        final JVoiceXmlInitializationTagStrategyFactory factory = new JVoiceXmlInitializationTagStrategyFactory();
-        final Map<String, TagStrategy> strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put(Grammar.TAG_NAME, new GrammarStrategy());
-        factory.setTagStrategies(strategies);
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 try {
-                    fia.initialize(factory);
+                    fia.initialize(profile);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -444,15 +430,11 @@ public final class TestFormInterpretationAlgorithm {
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, executableForm);
-        final JVoiceXmlInitializationTagStrategyFactory factory = new JVoiceXmlInitializationTagStrategyFactory();
-        final Map<String, TagStrategy> strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put(Grammar.TAG_NAME, new GrammarStrategy());
-        factory.setTagStrategies(strategies);
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 try {
-                    fia.initialize(factory);
+                    fia.initialize(profile);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -513,15 +495,11 @@ public final class TestFormInterpretationAlgorithm {
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, executableForm);
-        final JVoiceXmlInitializationTagStrategyFactory factory = new JVoiceXmlInitializationTagStrategyFactory();
-        final Map<String, TagStrategy> strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put(Grammar.TAG_NAME, new GrammarStrategy());
-        factory.setTagStrategies(strategies);
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 try {
-                    fia.initialize(factory);
+                    fia.initialize(profile);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -547,7 +525,7 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testActivateFormGrammarsInField() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -569,15 +547,11 @@ public final class TestFormInterpretationAlgorithm {
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, executableForm);
-        final JVoiceXmlInitializationTagStrategyFactory factory = new JVoiceXmlInitializationTagStrategyFactory();
-        final Map<String, TagStrategy> strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put(Grammar.TAG_NAME, new GrammarStrategy());
-        factory.setTagStrategies(strategies);
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 try {
-                    fia.initialize(factory);
+                    fia.initialize(profile);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -604,7 +578,7 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testReentrantActivateFormFieldGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -635,15 +609,11 @@ public final class TestFormInterpretationAlgorithm {
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, executableForm);
-        final JVoiceXmlInitializationTagStrategyFactory factory = new JVoiceXmlInitializationTagStrategyFactory();
-        final Map<String, TagStrategy> strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put(Grammar.TAG_NAME, new GrammarStrategy());
-        factory.setTagStrategies(strategies);
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 try {
-                    fia.initialize(factory);
+                    fia.initialize(profile);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -674,7 +644,7 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testActivateInitialFieldGrammars() throws Exception,
             JVoiceXMLEvent {
         // Create a document with
@@ -714,15 +684,11 @@ public final class TestFormInterpretationAlgorithm {
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, executableForm);
-        final JVoiceXmlInitializationTagStrategyFactory factory = new JVoiceXmlInitializationTagStrategyFactory();
-        final Map<String, TagStrategy> strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put(Grammar.TAG_NAME, new GrammarStrategy());
-        factory.setTagStrategies(strategies);
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 try {
-                    fia.initialize(factory);
+                    fia.initialize(profile);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());

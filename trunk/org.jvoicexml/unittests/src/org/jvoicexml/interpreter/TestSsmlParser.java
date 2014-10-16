@@ -37,8 +37,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.ssml.Audio;
@@ -82,8 +84,9 @@ public final class TestSsmlParser {
         final ImplementationPlatform platform =
             new MockImplementationPlatform();
         final JVoiceXmlCore core = new MockJvoiceXmlCore();
+        final Profile profile = new MockProfile();
         final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, core, null);
+            new JVoiceXmlSession(platform, core, null, profile);
         context = new VoiceXmlInterpreterContext(session, null);
         scripting = context.getScriptingEngine();
     }
