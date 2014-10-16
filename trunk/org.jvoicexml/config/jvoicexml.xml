@@ -47,7 +47,7 @@
               property to get an exception when trying to submit a compound
               object. -->
             <bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/>
-            <!-- bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/-->
+            <!-- bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.JSONSerializer"/-->
           </property>
         </bean>
         <bean
