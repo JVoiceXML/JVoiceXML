@@ -52,7 +52,7 @@ public class VoiceXmlSnippet extends HttpServlet {
     private DocumentBuilder builder;
 
     /** The XSL template. */
-    private Templates template;
+    private Templates promptTemplate;
     
     @Override
     public void init() throws ServletException {
@@ -72,9 +72,9 @@ public class VoiceXmlSnippet extends HttpServlet {
         TransformerFactory transFact = TransformerFactory.newInstance( );
         try {
             final ServletContext context = getServletContext();
-            final URL xsltURL = context.getResource("/VoiceXmlTemplate.xsl");
-            final String xsltSystemID = xsltURL.toExternalForm( );
-            template = transFact.newTemplates(
+            final URL xsltURL = context.getResource("/VoiceXmlPromptTemplate.xsl");
+            final String xsltSystemID = xsltURL.toExternalForm();
+            promptTemplate = transFact.newTemplates(
                     new StreamSource(xsltSystemID));
         } catch (TransformerConfigurationException tce) {
             throw new UnavailableException("Unable to compile stylesheet");
@@ -98,7 +98,7 @@ public class VoiceXmlSnippet extends HttpServlet {
         final Reader reader = new StringReader(xml);
         final InputSource source = new InputSource(reader);
         Document document = builder.parse(source);
-        Transformer transformer = template.newTransformer();
+        Transformer transformer = promptTemplate.newTransformer();
         final Source domSource = new DOMSource(document);
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final Result result = new StreamResult(out); 

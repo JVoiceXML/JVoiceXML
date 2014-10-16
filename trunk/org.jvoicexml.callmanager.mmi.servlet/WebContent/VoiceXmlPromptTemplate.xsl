@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
   <!--
     - Platform configurations for the JVoiceXML VoiceXML interpreter.
-    - Copyright (C) 2011-2013 JVoiceXML group
+    - Copyright (C) 2011-2014 JVoiceXML group
     - http://jvoicexml.sourceforge.net
     -
     - This library is free software; you can redistribute it and/or
