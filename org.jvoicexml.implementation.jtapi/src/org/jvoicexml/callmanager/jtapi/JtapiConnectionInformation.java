@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -89,6 +89,15 @@ public final class JtapiConnectionInformation implements ConnectionInformation {
     /**
      * {@inheritDoc}
      */
+    @Override
+    public String getProfile() {
+        return "VoiceXML21";
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getCallControl() {
         return "jtapi";
     }
@@ -96,6 +105,7 @@ public final class JtapiConnectionInformation implements ConnectionInformation {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSystemOutput() {
         return output;
     }
@@ -103,6 +113,7 @@ public final class JtapiConnectionInformation implements ConnectionInformation {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUserInput() {
         return input;
     }
