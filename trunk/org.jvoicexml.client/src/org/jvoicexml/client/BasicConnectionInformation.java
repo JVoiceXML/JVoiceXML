@@ -40,6 +40,9 @@ import org.jvoicexml.ConnectionInformation;
  * custom implementation platforms.
  * </p>
  *
+ * <p>
+ * By default the {@code VoiceXML21} profile is used.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
@@ -51,6 +54,9 @@ public class BasicConnectionInformation
      * The serial version UID.
      */
     private static final long serialVersionUID = -382549466379933472L;
+
+    /** The profile name. */
+    private String profile;
 
     /** Unique identifier for the call control. */
     private final String callControl;
@@ -88,6 +94,26 @@ public class BasicConnectionInformation
         callControl = call;
         systemOutput = output;
         userInput = input;
+        profile = "VoiceXML21";
+    }
+
+    /**
+     * Sets the profile name.
+     * 
+     * @param value
+     *            name of the profile
+     * @since 0.7.7
+     */
+    public void setProfile(final String value) {
+        profile = value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getProfile() {
+        return profile;
     }
 
     /**
