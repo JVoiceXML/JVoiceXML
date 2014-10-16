@@ -31,11 +31,13 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.Field;
@@ -45,6 +47,7 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Test cases for {@link AbstractFormItem}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
@@ -62,10 +65,11 @@ public class TestAbstractFormItem {
 
     /**
      * Set up the test environment.
+     * 
      * @throws Exception
-     *         set up failed
-     * @throws JVoiceXMLEvent 
-     *         set up failed
+     *             set up failed
+     * @throws JVoiceXMLEvent
+     *             set up failed
      * @since 0.7.6
      */
     @Before
@@ -77,10 +81,10 @@ public class TestAbstractFormItem {
         field = form.appendChild(Field.class);
         field.setName("testfield");
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final ImplementationPlatform platform =
-                new MockImplementationPlatform();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null);
+        final ImplementationPlatform platform = new MockImplementationPlatform();
+        final Profile profile = new MockProfile();
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null, profile);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         item = new FieldFormItem(context, field);
@@ -89,7 +93,8 @@ public class TestAbstractFormItem {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#getName()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#getName()}.
      */
     @Test
     public void testGetName() {
@@ -97,9 +102,12 @@ public class TestAbstractFormItem {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testGetConditionNoCondition() throws JVoiceXMLEvent {
@@ -107,9 +115,12 @@ public class TestAbstractFormItem {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testGetConditionFalseNumbers() throws JVoiceXMLEvent {
@@ -118,20 +129,26 @@ public class TestAbstractFormItem {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testGetConditionTrueNumbers() throws JVoiceXMLEvent {
         field.setCond("1 == 1");
         Assert.assertTrue(item.evaluateCondition());
     }
-    
+
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testGetConditionFalseStrings() throws JVoiceXMLEvent {
@@ -140,9 +157,12 @@ public class TestAbstractFormItem {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testGetConditionTrueStrings() throws JVoiceXMLEvent {
@@ -151,11 +171,14 @@ public class TestAbstractFormItem {
         field.setCond(item.getName() + " == 'hallo'");
         Assert.assertTrue(item.evaluateCondition());
     }
-    
+
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testIsSelectable() throws JVoiceXMLEvent {
@@ -163,9 +186,12 @@ public class TestAbstractFormItem {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testIsSelectableVariableSet() throws JVoiceXMLEvent {
@@ -173,11 +199,14 @@ public class TestAbstractFormItem {
         scripting.setVariable(field.getName(), "hallo");
         Assert.assertFalse(item.isSelectable());
     }
-    
+
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testIsSelectableFalseNumbers() throws JVoiceXMLEvent {
@@ -186,9 +215,12 @@ public class TestAbstractFormItem {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testIsSelectableTrueNumbers() throws JVoiceXMLEvent {
@@ -197,9 +229,12 @@ public class TestAbstractFormItem {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testIsSelectableFalseString() throws JVoiceXMLEvent {
@@ -208,9 +243,12 @@ public class TestAbstractFormItem {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testIsSelectableTrueString() throws JVoiceXMLEvent {

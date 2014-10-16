@@ -33,11 +33,11 @@ import org.junit.Before;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategy;
@@ -45,9 +45,9 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
-import org.jvoicexml.test.interpreter.tagstrategy.MockInitializationTagStrategyFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
@@ -73,6 +73,9 @@ public abstract class TagStrategyTestBase {
 
     /** The fia. */
     private FormInterpretationAlgorithm fia;
+
+    /** The profile. */
+    private Profile profile;
 
     /** The scripting engine. */
     private ScriptingEngine scripting;
@@ -123,12 +126,12 @@ public abstract class TagStrategyTestBase {
     public final void baseSetUp() throws Exception {
         platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
+        profile = new MockProfile();
         final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null);
+            new JVoiceXmlSession(platform, jvxml, null, profile);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
-        interpreter.init(configuration);
         scripting = context.getScriptingEngine();
     }
 
@@ -227,10 +230,8 @@ public abstract class TagStrategyTestBase {
      */
     protected final void executeTagStrategy(final VoiceXmlNode node,
             final TagStrategy strategy) throws JVoiceXMLEvent, Exception {
-        final InitializationTagStrategyFactory factoy =
-            new MockInitializationTagStrategyFactory();
         if (fia != null) {
-            fia.initialize(factoy);
+            fia.initialize(profile);
         }
         strategy.getAttributes(context, fia, node);
         strategy.evalAttributes(context);

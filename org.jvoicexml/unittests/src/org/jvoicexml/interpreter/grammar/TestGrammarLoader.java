@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,10 +33,12 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -47,6 +49,7 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Test cases for {@link GrammarLoader}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.5
@@ -60,25 +63,27 @@ public final class TestGrammarLoader {
 
     /**
      * Set up the test environment.
+     * 
      * @throws java.lang.Exception
-     *         set up failed
+     *             set up failed
      */
     @Before
     public void setUp() throws Exception {
         loader = new GrammarLoader();
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null);
+        final Profile profile = new MockProfile();
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null, profile);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
     }
 
     /**
      * Tear down the test environment.
+     * 
      * @throws java.lang.Exception
-     *         tear down failed.
+     *             tear down failed.
      */
     @After
     public void tearDown() throws Exception {
@@ -86,11 +91,14 @@ public final class TestGrammarLoader {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.grammar.GrammarLoader#loadGrammarDocument(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.FetchAttributes, org.jvoicexml.xml.srgs.Grammar)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.grammar.GrammarLoader#loadGrammarDocument(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.FetchAttributes, org.jvoicexml.xml.srgs.Grammar)}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testLoadGrammarDocument() throws Exception, JVoiceXMLEvent {
@@ -105,8 +113,8 @@ public final class TestGrammarLoader {
         str.append("grammar jvoicexml;" + cr);
         str.append("public <boolean> = yes{true}|no{false};");
         grammar.addCData(str.toString());
-        final GrammarDocument grammarDocument =
-            loader.loadGrammarDocument(context, null, grammar);
+        final GrammarDocument grammarDocument = loader.loadGrammarDocument(
+                context, null, grammar);
         Assert.assertEquals(grammar.toString(), grammarDocument.getDocument());
     }
 

@@ -27,20 +27,22 @@ package org.jvoicexml.test.interpreter.tagstrategy;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
-import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategy;
-import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.interpreter.TagStrategyFactory;
+import org.w3c.dom.Node;
 
 /**
  * Dummy {@link InitializationTagStrategyFactory} for test purposes.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.4
  */
-public class MockInitializationTagStrategyFactory
-    implements InitializationTagStrategyFactory {
+public class MockInitializationTagStrategyFactory implements TagStrategyFactory {
     /**
      * Known strategies. The known strategies are templates for the strategy to
      * be executed by the <code>ForminterpreteationAlgorithm</code>.
@@ -49,50 +51,60 @@ public class MockInitializationTagStrategyFactory
 
     /**
      * Creates a new object.
-     * @throws NoSuchMethodException 
-     * @throws SecurityException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
+     * 
+     * @throws NoSuchMethodException
+     * @throws SecurityException
+     * @throws InvocationTargetException
+     * @throws IllegalArgumentException
      */
-    public MockInitializationTagStrategyFactory() 
-        throws InstantiationException, IllegalAccessException,
-        ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
+    public MockInitializationTagStrategyFactory()
+            throws InstantiationException, IllegalAccessException,
+            ClassNotFoundException, SecurityException, NoSuchMethodException,
+            IllegalArgumentException, InvocationTargetException {
         strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put("grammar",
-         loadStrategy("org.jvoicexml.interpreter.tagstrategy.GrammarStrategy"));
-        strategies.put("meta",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.MetaStrategy"));
-        strategies.put("property",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.PropertyStrategy"));
-        strategies.put("script",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ScriptStrategy"));
-        strategies.put("#text",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.TextStrategy"));
-        strategies.put("var",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.VarStrategy"));
+        strategies
+                .put("grammar",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.GrammarStrategy"));
+        strategies
+                .put("meta",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.MetaStrategy"));
+        strategies
+                .put("property",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.PropertyStrategy"));
+        strategies
+                .put("script",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.ScriptStrategy"));
+        strategies
+                .put("#text",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.TextStrategy"));
+        strategies
+                .put("var",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.VarStrategy"));
     }
 
     /**
      * Loads the specified tag strategy.
-     * @param name name of the class to laod
+     * 
+     * @param name
+     *            name of the class to laod
      * @return loaded tag strategy
      * @throws InstantiationException
-     *         unable to create the tag strategy
+     *             unable to create the tag strategy
      * @throws IllegalAccessException
-     *         unable to create the tag strategy
+     *             unable to create the tag strategy
      * @throws ClassNotFoundException
-     *         unable to create the tag strategy
-     * @throws NoSuchMethodException 
-     *         unable to create the tag strategy
-     * @throws SecurityException 
-     *         unable to create the tag strategy
-     * @throws InvocationTargetException 
-     *         unable to create the tag strategy
-     * @throws IllegalArgumentException 
-     *         unable to create the tag strategy
+     *             unable to create the tag strategy
+     * @throws NoSuchMethodException
+     *             unable to create the tag strategy
+     * @throws SecurityException
+     *             unable to create the tag strategy
+     * @throws InvocationTargetException
+     *             unable to create the tag strategy
+     * @throws IllegalArgumentException
+     *             unable to create the tag strategy
      */
     private TagStrategy loadStrategy(final String name)
-        throws InstantiationException, IllegalAccessException,
+            throws InstantiationException, IllegalAccessException,
             ClassNotFoundException, SecurityException, NoSuchMethodException,
             IllegalArgumentException, InvocationTargetException {
         final Class<?> clazz = Class.forName(name);
@@ -100,19 +112,6 @@ public class MockInitializationTagStrategyFactory
         final Constructor constructor = clazz.getDeclaredConstructor();
         constructor.setAccessible(true);
         return (TagStrategy) constructor.newInstance();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public TagStrategy getTagStrategy(final VoiceXmlNode node) {
-        if (node == null) {
-            return null;
-        }
-
-        final String tagName = node.getTagName();
-        return getTagStrategy(tagName);
     }
 
     /**
@@ -129,6 +128,18 @@ public class MockInitializationTagStrategyFactory
         }
 
         return strategy.newInstance();
+    }
+
+    @Override
+    public URI getTagNamespace() throws URISyntaxException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public TagStrategy getTagStrategy(Node node) {
+        final String tag = node.getLocalName();
+        return strategies.get(tag);
     }
 
 }

@@ -7,7 +7,7 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
-*
+ *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
  *  License as published by the Free Software Foundation; either
@@ -39,6 +39,14 @@ import org.jvoicexml.ConnectionInformation;
 public final class MockConnectionInformation implements ConnectionInformation {
     /** The serial version UID. */
     private static final long serialVersionUID = -3795809583703263932L;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getProfile() {
+        return "VoiceXML21";
+    }
 
     /**
      * {@inheritDoc}

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,9 +31,9 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.Configurable;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -46,10 +46,10 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class VoiceXmlInterpreter implements Configurable {
+public final class VoiceXmlInterpreter {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(VoiceXmlInterpreter.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(VoiceXmlInterpreter.class);
 
     /** Reference to the VoiceXML interpreter context. */
     private final VoiceXmlInterpreterContext context;
@@ -84,33 +84,19 @@ public final class VoiceXmlInterpreter implements Configurable {
      */
     private boolean finalProcessingState;
 
-    /** The tag initialization factory. */
-    private InitializationTagStrategyFactory initTagFactory;
-
     /**
      * Constructs a new object.
      *
      * @param ctx
-     *        The VoiceXML interpreter context.
+     *            The VoiceXML interpreter context.
      */
     public VoiceXmlInterpreter(final VoiceXmlInterpreterContext ctx) {
         context = ctx;
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * Loads the {@link InitializationTagStrategyFactory}.
-     */
-    @Override
-    public void init(final Configuration configuration)
-        throws ConfigurationException {
-        initTagFactory = configuration.loadObject(
-                InitializationTagStrategyFactory.class);
-    }
-
-    /**
      * Retrieves the current FIA.
+     * 
      * @return the FIA while the interpreter is processing, <code>null</code>
      *         otherwise.
      * @since 0.7
@@ -121,6 +107,7 @@ public final class VoiceXmlInterpreter implements Configurable {
 
     /**
      * Retrieves the interpreter state.
+     * 
      * @return the interpreter state.
      * @since 0.6
      */
@@ -130,7 +117,9 @@ public final class VoiceXmlInterpreter implements Configurable {
 
     /**
      * Sets the interpreter state.
-     * @param newState the new interpreter state.
+     * 
+     * @param newState
+     *            the new interpreter state.
      * @since 0.6
      */
     public void setState(final InterpreterState newState) {
@@ -153,17 +142,16 @@ public final class VoiceXmlInterpreter implements Configurable {
      * </p>
      *
      * @param doc
-     *        the next VoiceXML document.
+     *            the next VoiceXML document.
      * @param startDialog
-     *        the dialog where to start interpretation
+     *            the dialog where to start interpretation
      * @param configuration
-     *        the configuration to use to load firther components
+     *            the configuration to use to load firther components
      * @throws ConfigurationException
-     *         if the needed configration parts could not be loaded 
+     *             if the needed configration parts could not be loaded
      */
     void setDocument(final VoiceXmlDocument doc, final String startDialog,
-            final Configuration configuration)
-        throws ConfigurationException {
+            final Configuration configuration) throws ConfigurationException {
         if (doc == null) {
             document = null;
             return;
@@ -177,8 +165,8 @@ public final class VoiceXmlInterpreter implements Configurable {
         }
 
         // Determine all dialogs of the current document.
-        final DialogFactory factory =
-            configuration.loadObject(DialogFactory.class);
+        final DialogFactory factory = configuration
+                .loadObject(DialogFactory.class);
         dialogs = factory.getDialogs(vxml);
 
         if (startDialog == null) {
@@ -216,9 +204,11 @@ public final class VoiceXmlInterpreter implements Configurable {
 
     /**
      * Retrieves the dialog with the given id.
-     * @param id Id of the form to find.
+     * 
+     * @param id
+     *            Id of the form to find.
      * @return form with the given id, <code>null</code> if there is no dialog
-     * with that id.
+     *         with that id.
      *
      * @since 0.3
      */
@@ -228,8 +218,7 @@ public final class VoiceXmlInterpreter implements Configurable {
             return null;
         }
         if (dialogs == null) {
-            LOGGER.warn(
-                    "dialogs not initialized. can not determine dialog with "
+            LOGGER.warn("dialogs not initialized. can not determine dialog with "
                     + "id '" + id + "'");
             return null;
         }
@@ -248,24 +237,26 @@ public final class VoiceXmlInterpreter implements Configurable {
      * Process the given dialog.
      *
      * @param dialog
-     *        the dialog to be processed.
+     *            the dialog to be processed.
      * @exception JVoiceXMLEvent
-     *            Error or event processing the dialog.
+     *                Error or event processing the dialog.
      */
-    public void process(final Dialog dialog)
-            throws JVoiceXMLEvent {
+    public void process(final Dialog dialog) throws JVoiceXMLEvent {
         // There is no next dialog by default.
         nextDialog = null;
-        fia =  new FormInterpretationAlgorithm(context, this, dialog);
+        fia = new FormInterpretationAlgorithm(context, this, dialog);
 
         // Collect dialog level catches.
         final EventHandler eventHandler = context.getEventHandler();
         eventHandler.collect(context, this, dialog);
 
+        final JVoiceXmlSession session = (JVoiceXmlSession) context
+                .getSession();
+        final Profile profile = session.getProfile();
         // Start the fia.
         try {
             try {
-                fia.initialize(initTagFactory);
+                fia.initialize(profile);
                 context.finalizedInitialization();
             } catch (JVoiceXMLEvent event) {
                 final EventBus eventbus = context.getEventBus();
@@ -280,11 +271,11 @@ public final class VoiceXmlInterpreter implements Configurable {
     /**
      * Under certain circumstances (in particular, while the VoiceXML
      * interpreter is processing a disconnect event) the interpreter may
-     * continue executing in the final processing state after there is no
-     * longer a connection to allow the interpreter to interact with the end
-     * user. The purpose of this state is to allow the VoiceXML application to
-     * perform any necessary final cleanup, such as submitting information to
-     * the application server.
+     * continue executing in the final processing state after there is no longer
+     * a connection to allow the interpreter to interact with the end user. The
+     * purpose of this state is to allow the VoiceXML application to perform any
+     * necessary final cleanup, such as submitting information to the
+     * application server.
      */
     public void enterFinalProcessingState() {
         LOGGER.info("entered final processing state");
@@ -294,8 +285,9 @@ public final class VoiceXmlInterpreter implements Configurable {
 
     /**
      * Checks, if the interpreter is in the final processing state.
+     * 
      * @return <code>true</code> if the interpreter is in the final processing
-     * state.
+     *         state.
      */
     public boolean isInFinalProcessingState() {
         return finalProcessingState;
@@ -304,11 +296,12 @@ public final class VoiceXmlInterpreter implements Configurable {
     /**
      * Retrieves the language of the current VoiceXML document.
      * <p>
-     * If the language is not set, the system's default locale is used
-     * by calling <code>Locale.getDefault()</code>.
+     * If the language is not set, the system's default locale is used by
+     * calling <code>Locale.getDefault()</code>.
      * </p>
-     * @return language of the VoiceXML document, <code>null</code> if
-     * there is no document.
+     * 
+     * @return language of the VoiceXML document, <code>null</code> if there is
+     *         no document.
      * @since 0.7.3
      */
     public Locale getLanguage() {

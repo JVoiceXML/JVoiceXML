@@ -15,8 +15,8 @@ personal-props/README.txt
 
     <target name="-setup" depends="-3rdparty-setup">
         <!-- The component built here-->
-        <property name="component" value="org.jvoicexml"/>
-        <property name="component.path" value="org/jvoicexml"/>
+        <property name="component" value="org.jvoicexml" />
+        <property name="component.path" value="org/jvoicexml" />
 
         <!-- directory structure -->
         <property name="src" value="${basedir}/src" />
@@ -50,21 +50,36 @@ personal-props/README.txt
         <mkdir dir="${dist}" />
     </target>
 
-	<!-- Clean targets of the configured components. -->
+    <!-- Clean targets of the configured components. -->
     <target name="-cleancomponents" depends="-cleanPlatforms">
-        <ant dir="../org.jvoicexml.xml" inheritall="false" inheritrefs="false"
-            target="clean"/>
-        <ant dir="../org.jvoicexml.processor.srgs" inheritall="false"
-            inheritrefs="false" target="clean"/>
-        <ant dir="../org.jvoicexml.config" inheritall="false"
-            inheritrefs="false" target="clean"/>
-      <ant dir="../org.jvoicexml.client" inheritall="false"
-          inheritrefs="false" target="clean"/>
-        <ant dir="../org.jvoicexml.jndi" inheritall="false" inheritrefs="false" 
-            target="clean"/>
+        <ant dir="../org.jvoicexml.xml"
+             inheritall="false"
+             inheritrefs="false"
+             target="clean" />
+        <ant dir="../org.jvoicexml.processor.srgs"
+             inheritall="false"
+             inheritrefs="false"
+             target="clean" />
+        <ant dir="../org.jvoicexml.config"
+             inheritall="false"
+             inheritrefs="false"
+             target="clean" />
+        <ant dir="../org.jvoicexml.client"
+             inheritall="false"
+             inheritrefs="false"
+             target="clean" />
+        <ant dir="../org.jvoicexml.jndi"
+             inheritall="false"
+             inheritrefs="false"
+             target="clean" />
+        <ant dir="../org.jvoicexml.profile.vxml21"
+             target="clean"
+             inheritall="false"
+             inheritrefs="false" />
     </target>
 
-    <target name="clean" depends="-cleancomponents"
+    <target name="clean"
+            depends="-cleancomponents"
             description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
         <delete failonerror="false">
@@ -74,15 +89,19 @@ personal-props/README.txt
         </delete>
     </target>
 
-  
+
     <target name="-compile"
             depends="-init,-checkJavaVersion,-version"
             description="Compile the core JAVA sources">
-      <!-- Build components that are used by the core -->
-      <ant dir="../org.jvoicexml.xml" target="jar"
-            inheritall="false" inheritrefs="false"/>
-      <ant dir="../org.jvoicexml.processor.srgs" target="jar"
-          inheritall="false" inheritrefs="false"/>
+        <!-- Build components that are used by the core -->
+        <ant dir="../org.jvoicexml.xml"
+             target="jar"
+             inheritall="false"
+             inheritrefs="false" />
+        <ant dir="../org.jvoicexml.processor.srgs"
+             target="jar"
+             inheritall="false"
+             inheritrefs="false" />
 
         <!-- Build the core -->
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
@@ -90,29 +109,40 @@ personal-props/README.txt
 jvxml.version=${jvxml.version}
 jvxml.revision=${revision.max}
         </echo>
-        <javac destdir="${build}" includeantruntime="false"
+        <javac destdir="${build}"
+               includeantruntime="false"
                optimize="${javac.optimize}"
                debug="${javac.debug}"
                deprecation="on">
             <src path="${src}" />
             <classpath refid="project.classpath" />
-            <classpath location="../org.jvoicexml.xml/classes"/>
-            <classpath location="../org.jvoicexml.processor.srgs/classes"/>
+            <classpath location="../org.jvoicexml.xml/classes" />
+            <classpath location="../org.jvoicexml.processor.srgs/classes" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
         <copy todir="${build}">
             <fileset dir="${src}">
-                <include name="**/*.xsl"/>
+                <include name="**/*.xsl" />
             </fileset>
         </copy>
 
-      <!-- Build components that are dependent on the core -->
-      <ant dir="../org.jvoicexml.config" target="jar"
-            inheritall="false" inheritrefs="false"/>
-      <ant dir="../org.jvoicexml.client" target="jar"
-            inheritall="false" inheritrefs="false"/>
-      <ant dir="../org.jvoicexml.jndi" target="jar"
-            inheritall="false" inheritrefs="false"/>
+        <!-- Build components that are dependent on the core -->
+        <ant dir="../org.jvoicexml.config"
+             target="jar"
+             inheritall="false"
+             inheritrefs="false" />
+        <ant dir="../org.jvoicexml.client"
+             target="jar"
+             inheritall="false"
+             inheritrefs="false" />
+        <ant dir="../org.jvoicexml.jndi"
+             target="jar"
+             inheritall="false"
+             inheritrefs="false" />
+        <ant dir="../org.jvoicexml.profile.vxml21"
+             target="jar"
+             inheritall="false"
+             inheritrefs="false" />
     </target>
 
     <target name="compile"
@@ -139,7 +169,7 @@ jvxml.revision=${revision.max}
                     <attribute name="Implementation-Title"
                                value="JVoiceXML main" />
                     <attribute name="Implementation-Version"
-                        value="${version}" />
+                               value="${version}" />
                 </section>
             </manifest>
         </jar>
@@ -155,9 +185,7 @@ jvxml.revision=${revision.max}
         <ant antfile="run.xml" target="run" />
     </target>
 
-    <target name="shutdown"
-            description="Shutdown JVoiceXML"
-            depends="jar">
+    <target name="shutdown" description="Shutdown JVoiceXML" depends="jar">
         <ant antfile="run.xml" target="shutdown" />
     </target>
 
@@ -174,11 +202,15 @@ jvxml.revision=${revision.max}
     </target>
 
     <target name="coreapidoc" depends="-setup">
-        <echo message="creating apidoc for org.jvoicexml.xml"/>
-        <ant dir="../org.jvoicexml.xml" target="apidoc"
-            inheritall="false" inheritrefs="false"/>
-        <ant dir="../org.jvoicexml.processor.srgs" target="apidoc"
-            inheritall="false" inheritrefs="false"/>
+        <echo message="creating apidoc for org.jvoicexml.xml" />
+        <ant dir="../org.jvoicexml.xml"
+             target="apidoc"
+             inheritall="false"
+             inheritrefs="false" />
+        <ant dir="../org.jvoicexml.processor.srgs"
+             target="apidoc"
+             inheritall="false"
+             inheritrefs="false" />
         <echo message="creating javadoc with access: ${javadoc.access}" />
         <delete dir="${apidoc}" />
         <javadoc destdir="${apidoc}"
@@ -190,8 +222,8 @@ jvxml.revision=${revision.max}
                  use="true">
             <packageset dir="${src}" />
             <classpath refid="project.classpath" />
-            <classpath location="../org.jvoicexml.xml/classes"/>
-            <classpath location="../org.jvoicexml.processor.srgs/classes"/>
+            <classpath location="../org.jvoicexml.xml/classes" />
+            <classpath location="../org.jvoicexml.processor.srgs/classes" />
             <doctitle>
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
@@ -207,16 +239,18 @@ jvxml.revision=${revision.max}
         <link offline="true"
               href="http://java.sun.com/javase/6/docs/api/"
               packagelistLoc="${3rdparty.dir}" />
-        <link offline="true" resolveLink="false"
+        <link offline="true"
+              resolveLink="false"
               href="${jvxml.core.apidoc}.xml"
               packagelistLoc="${apidoc.basedir}/org.jvoicexml.xml" />
-        <link offline="true" resolveLink="false"
+        <link offline="true"
+              resolveLink="false"
               href="${jvxml.core.apidoc}.processor.srgs"
               packagelistLoc="${apidoc.basedir}/org.jvoicexml.processor.srgs" />
         <link offline="true"
               href="http://www.mozilla.org/rhino/apidocs/"
               packagelistLoc="${rhino.dir}" />
-        <link offline="true" 
+        <link offline="true"
               href="http://logging.apache.org/log4j/docs/api/"
               packagelistLoc="${log4j.dir}" />
         <link offline="true"
@@ -242,46 +276,52 @@ jvxml.revision=${revision.max}
         <group title="Main package containing the VoiceXML interpreter">
             <package name="org.jvoicexml.interpreter*" />
         </group>
-        </javadoc>
+    </javadoc>
 
-        <!-- Create apidoc for directly dependent components -->
-        <ant dir="../org.jvoicexml.config" target="apidoc"
-            inheritall="false" inheritrefs="false"/>
-        <ant dir="../org.jvoicexml.client" target="apidoc"
-          inheritall="false" inheritrefs="false"/>
-        <ant dir="../org.jvoicexml.jndi" target="apidoc"
-            inheritall="false" inheritrefs="false"/>
-    </target>
+    <!-- Create apidoc for directly dependent components -->
+    <ant dir="../org.jvoicexml.config"
+         target="apidoc"
+         inheritall="false"
+         inheritrefs="false" />
+    <ant dir="../org.jvoicexml.client"
+         target="apidoc"
+         inheritall="false"
+         inheritrefs="false" />
+    <ant dir="../org.jvoicexml.jndi"
+         target="apidoc"
+         inheritall="false"
+         inheritrefs="false" />
+</target>
 
-    <target name="apidoc" depends="coreapidoc,-apidocPlatforms"
-        description="Create JAVADOC documentation"/>
+<target name="apidoc"
+        depends="coreapidoc,-apidocPlatforms"
+        description="Create JAVADOC documentation" />
 
-    <target name="checkstyle"
+<target name="checkstyle"
         description="Check for JVoiceXML coding standard"
         depends="compile, -initcheckstyle"
         if="checkstyle.present">
-        <property name="checkstyle-target.dir"
-          value="${dist}/checkstyle/${component}" />
-        <mkdir dir="${checkstyle-target.dir}"/>
-        <property name="checkstyle.data"
-          value="${checkstyle-target.dir}/checkstyle-data.xml" />
-        <checkstyle config="${etc}/jvoicexml-checks.xml"
-            failonviolation="false">
-            <classpath>
-                <pathelement path="${project.classpath}" />
-                <pathelement location="../org.jvoicexml.xml/classes"/>
-                <pathelement location="../org.jvoicexml.processor.srgs/classes"/>
-                <pathelement location="${build}" />
-            </classpath>
-            <fileset dir="${src}">
-                <include name="org/jvoicexml/**/*.java" />
-            </fileset>
-            <formatter type="xml" tofile="${checkstyle.data}"/>
-        </checkstyle>
-        <xslt style="${etc}/checkstyle-frames.xsl"
-              in="${checkstyle.data}"
-              out="${checkstyle-target.dir}/report.html">
-          <param name="output.dir" expression="${checkstyle-target.dir}"/>
-        </xslt>
-    </target>
+    <property name="checkstyle-target.dir"
+              value="${dist}/checkstyle/${component}" />
+    <mkdir dir="${checkstyle-target.dir}" />
+    <property name="checkstyle.data"
+              value="${checkstyle-target.dir}/checkstyle-data.xml" />
+    <checkstyle config="${etc}/jvoicexml-checks.xml" failonviolation="false">
+        <classpath>
+            <pathelement path="${project.classpath}" />
+            <pathelement location="../org.jvoicexml.xml/classes" />
+            <pathelement location="../org.jvoicexml.processor.srgs/classes" />
+            <pathelement location="${build}" />
+        </classpath>
+        <fileset dir="${src}">
+            <include name="org/jvoicexml/**/*.java" />
+        </fileset>
+        <formatter type="xml" tofile="${checkstyle.data}" />
+    </checkstyle>
+    <xslt style="${etc}/checkstyle-frames.xsl"
+          in="${checkstyle.data}"
+          out="${checkstyle-target.dir}/report.html">
+        <param name="output.dir" expression="${checkstyle-target.dir}" />
+    </xslt>
+</target>
 </project>

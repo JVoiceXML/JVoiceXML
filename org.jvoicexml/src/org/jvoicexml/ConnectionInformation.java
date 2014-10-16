@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,24 +35,23 @@ import java.net.URI;
  * {@link CallControl} to the client.
  *
  * <p>
- * The resources are identified using strings, e.g. <code>jsapi10</code>
- * for an implementation based on JSAPI 1.0.
+ * The resources are identified using strings, e.g. <code>jsapi10</code> for an
+ * implementation based on JSAPI 1.0.
  * </p>
  *
  * <p>
- * The implementing object is created at the client side and transferred
- * to the the JVoiceXml server via serialization. The implementation
- * platform then calls the {@link RemoteConnectable#connect(ConnectionInformation)}
- * method to start the communication of the client with the server side
- * resources.
+ * The implementing object is created at the client side and transferred to the
+ * the JVoiceXml server via serialization. The implementation platform then
+ * calls the {@link RemoteConnectable#connect(ConnectionInformation)} method to
+ * start the communication of the client with the server side resources.
  * </p>
  *
  * <p>
  * A {@link ConnectionInformation}> may also specify the server side resource it
  * wants to use. Each {@link SystemOutput}, {@link UserInput}, and
  * {@link CallControl} can be identified using a unique string. If the
- * {@link ConnectionInformation} does not specify a resource, the default resource
- * is taken.
+ * {@link ConnectionInformation} does not specify a resource, the default
+ * resource is taken.
  * </p>
  *
  * @see RemoteConnectable
@@ -63,28 +62,40 @@ import java.net.URI;
  */
 public interface ConnectionInformation extends Serializable {
     /**
+     * Retrieves the profile to use
+     * 
+     * @return the profile
+     * @since 0.7.7
+     */
+    String getProfile();
+
+    /**
      * Retrieves a unique identifier for the {@link SystemOutput} to use.
-     * @return Identifier for the {@link SystemOutput}, or <code>null</code>
-     * if the default resource should be used.
+     * 
+     * @return Identifier for the {@link SystemOutput}, or <code>null</code> if
+     *         the default resource should be used.
      */
     String getSystemOutput();
 
     /**
      * Retrieves a unique identifier for the {@link UserInput} to use.
-     * @return Identifier for the {@link UserInput}, or <code>null</code>
-     * if the default resource should be used.
+     * 
+     * @return Identifier for the {@link UserInput}, or <code>null</code> if the
+     *         default resource should be used.
      */
     String getUserInput();
 
     /**
      * Retrieves a unique identifier for the {@link CallControl} to use.
-     * @return Identifier for the {@link CallControl}, or <code>null</code>
-     * if the default resource should be used.
+     * 
+     * @return Identifier for the {@link CallControl}, or <code>null</code> if
+     *         the default resource should be used.
      */
     String getCallControl();
 
     /**
      * Retrieves the URI of the caller device.
+     * 
      * @return URI of the caller device.
      * @since 0.7
      */
@@ -92,6 +103,7 @@ public interface ConnectionInformation extends Serializable {
 
     /**
      * Retrieves the URI of the calling device.
+     * 
      * @return URI of the calling device.
      * @since 0.7
      */
@@ -100,9 +112,10 @@ public interface ConnectionInformation extends Serializable {
     /**
      * Retrieves the name of the connection protocol.
      * <p>
-     * The returned URI should be a URL for telephone calls as specified in
-     * <a href="http://www.ietf.org/rfc/rfc2806.txt">IETF RFC 2806</a>.
+     * The returned URI should be a URL for telephone calls as specified in <a
+     * href="http://www.ietf.org/rfc/rfc2806.txt">IETF RFC 2806</a>.
      * </p>
+     * 
      * @return name of the connection protocol.
      * @since 0.7
      */
@@ -110,11 +123,13 @@ public interface ConnectionInformation extends Serializable {
 
     /**
      * Retrieves the version of the connection protocol.
+     * 
      * @return version of the connection protocol.
-     * <p>
-     * The returned URI should be a URL for telephone calls as specified in
-     * <a href="http://www.ietf.org/rfc/rfc2806.txt">IETF RFC 2806</a>.
-     * </p>
+     *         <p>
+     *         The returned URI should be a URL for telephone calls as specified
+     *         in <a href="http://www.ietf.org/rfc/rfc2806.txt">IETF RFC
+     *         2806</a>.
+     *         </p>
      * @since 0.7
      */
     String getProtocolVersion();

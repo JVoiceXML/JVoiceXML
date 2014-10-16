@@ -30,6 +30,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Profile;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
@@ -95,7 +96,8 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
         throws ErrorEvent {
         final ImplementationPlatform platform =
                 new MockImplementationPlatform();
-        return new JVoiceXmlSession(platform, this, info);
+        final Profile profile = new MockProfile();
+        return new JVoiceXmlSession(platform, this, info, profile);
     }
 
     /**

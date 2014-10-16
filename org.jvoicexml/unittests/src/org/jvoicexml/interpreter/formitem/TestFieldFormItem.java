@@ -36,11 +36,13 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
+import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
@@ -72,10 +74,11 @@ public final class TestFieldFormItem {
 
     /**
      * Set up the test environment.
+     * 
      * @throws Exception
-     *         set up failed
-     * @throws JVoiceXMLEvent 
-     *         set up failed
+     *             set up failed
+     * @throws JVoiceXMLEvent
+     *             set up failed
      * @since 0.7.6
      */
     @Before
@@ -87,10 +90,10 @@ public final class TestFieldFormItem {
         field = form.appendChild(Field.class);
         field.setName("testfield");
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final ImplementationPlatform platform =
-                new MockImplementationPlatform();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null);
+        final ImplementationPlatform platform = new MockImplementationPlatform();
+        final Profile profile = new MockProfile();
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null, profile);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         item = new FieldFormItem(context, field);
@@ -102,8 +105,9 @@ public final class TestFieldFormItem {
 
     /**
      * Test case for {@link FieldFormItem#getFormItemVariable()}.
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      * @since 0.7.6
      */
     @Test
@@ -121,8 +125,9 @@ public final class TestFieldFormItem {
 
     /**
      * Test case for {@link FieldFormItem#getFormItemVariable()}.
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      * @since 0.7.6
      */
     @Test
@@ -141,8 +146,9 @@ public final class TestFieldFormItem {
 
     /**
      * Test case for {@link FieldFormItem#getFormItemVariable()}.
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      * @since 0.7.6
      */
     @Test
@@ -163,8 +169,9 @@ public final class TestFieldFormItem {
 
     /**
      * Test case for {@link FieldFormItem#getFormItemVariable()}.
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      * @since 0.7.6
      */
     @Test
@@ -177,8 +184,8 @@ public final class TestFieldFormItem {
         scripting.eval("var out = new Object();");
         scripting.eval("out.number = 3;");
         scripting.eval("out.size = 'large';");
-        final ScriptableObject interpretation =
-                (ScriptableObject) scripting.getVariable("out");
+        final ScriptableObject interpretation = (ScriptableObject) scripting
+                .getVariable("out");
         result.setSemanticInterpretation(interpretation);
         field.setName("size");
         item.setFormItemVariable(result);
@@ -193,8 +200,9 @@ public final class TestFieldFormItem {
 
     /**
      * Test case for {@link FieldFormItem#getFormItemVariable()}.
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      * @since 0.7.6
      */
     @Test
@@ -208,8 +216,8 @@ public final class TestFieldFormItem {
         scripting.eval("out.pizza = new Object();");
         scripting.eval("out.pizza.number = 3;");
         scripting.eval("out.pizza.size = 'large';");
-        final ScriptableObject interpretation =
-                (ScriptableObject) scripting.getVariable("out");
+        final ScriptableObject interpretation = (ScriptableObject) scripting
+                .getVariable("out");
         result.setSemanticInterpretation(interpretation);
         field.setSlot("pizza.size");
         item.setFormItemVariable(result);
@@ -224,8 +232,9 @@ public final class TestFieldFormItem {
 
     /**
      * Test case for {@link FieldFormItem#getGrammars()}.
+     * 
      * @throws Exception
-     *         test failed.
+     *             test failed.
      * @since 0.7.1
      */
     @Test
@@ -249,8 +258,9 @@ public final class TestFieldFormItem {
 
     /**
      * Test case for {@link FieldFormItem#getGrammars()}.
+     * 
      * @throws Exception
-     *         test failed.
+     *             test failed.
      * @since 0.7.1
      */
     @Test
@@ -276,8 +286,9 @@ public final class TestFieldFormItem {
 
     /**
      * Test case for {@link FieldFormItem#getGrammars()}.
+     * 
      * @throws Exception
-     *         test failed.
+     *             test failed.
      * @since 0.7.1
      */
     @Test
@@ -302,8 +313,9 @@ public final class TestFieldFormItem {
 
     /**
      * Test case for {@link FieldFormItem#getSlot()}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @since 0.7.2
      */
     @Test
