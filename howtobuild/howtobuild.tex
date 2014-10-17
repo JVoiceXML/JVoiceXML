@@ -388,6 +388,8 @@ implementation platform.
 \item[org.jvoicexml.processor.srgs] SRGS processor (Required)
 \item[org.jvoicexml.callmanager.mmi] Demo implementation for the W3C MMI
 architecture.
+\item[org.jvoicexml.callmanager.mmi.http] Event and transport layer
+based on HTTP for \texttt{org.jvoicexml.callmanager.mmi}.
 \item[org.jvoicexml.callmanager.mmi.umundo] Event and transport layer
 based on umundo for \texttt{org.jvoicexml.callmanager.mmi}.
 \item[org.jvoicexml.callmanager.mmi.socket] Event and transport layer
@@ -411,7 +413,32 @@ MRCPv2.
 \item[org.jvoicexml.implementation.text] Demo implementation platform for
 text based access.
 \item[org.jvoicexml.mmi.events] A library to author MMI events.
+\item[org.jvoicexml.profile.vxml21] VoiceXML 2.1 profile for JVoiceXML.
 \end{description}
+
+The most convenient configuration setting is the one for \emph{JSAPI 2.0}. Here,
+you will need to checkout the folloging projects:
+\begin{itemize}
+  \item org.jvoicexml
+  \item org.jvoicexml.client
+  \item org.jvoicexml.config
+  \item org.jvoicexml.implementation.jsapi20
+  \item org.jvoicexml.jndi
+  \item org.jvoicexml.processor.srgs.jar
+  \item org.jvoicexml.xml
+\end{itemize}
+
+For a \emph{text} based configuration you will need
+\begin{itemize}
+  \item org.jvoicexml
+  \item org.jvoicexml.client
+  \item org.jvoicexml.client.text
+  \item org.jvoicexml.config
+  \item org.jvoicexml.implementation.text
+  \item org.jvoicexml.jndi
+  \item org.jvoicexml.processor.srgs.jar
+  \item org.jvoicexml.xml
+\end{itemize}
 
 \subsection{Project \texttt{org.jvoicexml}}
 
