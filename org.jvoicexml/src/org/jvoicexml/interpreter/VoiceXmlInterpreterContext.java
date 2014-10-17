@@ -207,6 +207,15 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
+     * Retrieves the active profile.
+     * @return the profile
+     * @since 0.7.7
+     */
+    public Profile getProfile() {
+        return session.getProfile();
+    }
+
+    /**
      * Retrieves the scope observer for this session.
      * 
      * @return The scope observer.

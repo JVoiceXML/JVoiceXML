@@ -119,7 +119,8 @@ public final class TestSsmlParser {
         final Prompt prompt = createPrompt();
         prompt.addText("This is a test");
 
-        SsmlParser parser = new SsmlParser(prompt, context);
+        final Profile profile = new MockProfile();
+        SsmlParser parser = new SsmlParser(profile, prompt, context);
 
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
@@ -144,7 +145,8 @@ public final class TestSsmlParser {
         final Form form = vxml.appendChild(Form.class);
         final Block block = form.appendChild(Block.class);
         final Text text = block.addText("this is a plain text test");
-        SsmlParser parser = new SsmlParser(text, context);
+        final Profile profile = new MockProfile();
+        SsmlParser parser = new SsmlParser(profile, text, context);
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
         speak.setXmlLang(Locale.US);
@@ -171,7 +173,8 @@ public final class TestSsmlParser {
         value.setExpr(testVar);
         prompt.addText("with an inserted value");
 
-        SsmlParser parser = new SsmlParser(prompt, context);
+        final Profile profile = new MockProfile();
+        SsmlParser parser = new SsmlParser(profile, prompt, context);
 
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
@@ -219,7 +222,8 @@ public final class TestSsmlParser {
         submit.setMethod(RequestMethod.POST);
         submit.setNamelist("maincourse");
 
-        SsmlParser parser = new SsmlParser(prompt, context);
+        final Profile profile = new MockProfile();
+        SsmlParser parser = new SsmlParser(profile, prompt, context);
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
         speak.addText("Please select an entree. Today, we are featuring");
@@ -270,7 +274,8 @@ public final class TestSsmlParser {
         final Value value = audio.appendChild(Value.class);
         value.setExpr("thePrompt.tts");
 
-        final SsmlParser parser = new SsmlParser(prompt, context);
+        final Profile profile = new MockProfile();
+        final SsmlParser parser = new SsmlParser(profile, prompt, context);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
@@ -311,7 +316,8 @@ public final class TestSsmlParser {
         final Value value = audio.appendChild(Value.class);
         value.setExpr(testVar);
 
-        SsmlParser parser = new SsmlParser(prompt, context);
+        final Profile profile = new MockProfile();
+        SsmlParser parser = new SsmlParser(profile, prompt, context);
 
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
@@ -346,7 +352,8 @@ public final class TestSsmlParser {
         final Block block = blocks.iterator().next();
         final Collection<Prompt> prompts = block.getChildNodes(Prompt.class);
         final Prompt prompt = prompts.iterator().next();
-        final SsmlParser parser = new SsmlParser(prompt, context);
+        final Profile profile = new MockProfile();
+        final SsmlParser parser = new SsmlParser(profile, prompt, context);
         System.out.println(parser.getDocument());
     }
 }
