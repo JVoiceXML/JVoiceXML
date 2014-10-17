@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -46,6 +46,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.jvoicexml.Application;
+import org.jvoicexml.Profile;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.SsmlNode;
@@ -84,7 +85,7 @@ import org.xml.sax.SAXException;
  */
 public final class SsmlParser {
     /** Factory for parsing strategies. */
-    private static final SsmlParsingStrategyFactory FACTORY;
+    private final SsmlParsingStrategyFactory factory;
 
     /** The prompt to convert. */
     private final VoiceXmlNode node;
@@ -101,25 +102,24 @@ public final class SsmlParser {
     /** Declared namespaces. */
     private final Map<String, String> namespaces;
 
-    static {
-        FACTORY = new org.jvoicexml.interpreter.tagstrategy.JvoiceXmlSsmlParsingStrategyFactory();
-    }
-
     /**
      * Constructs a new object.
      * 
+     * @param profile
+     *            the current profile
      * @param vxmlNode
-     *            the node to parse.
+     *            the node to parse
      * @param interpreterContext
-     *            the current VoiceXML interpreter context.
+     *            the current VoiceXML interpreter context
      */
-    public SsmlParser(final VoiceXmlNode vxmlNode,
+    public SsmlParser(final Profile profile, final VoiceXmlNode vxmlNode,
             final VoiceXmlInterpreterContext interpreterContext) {
         node = vxmlNode;
         context = interpreterContext;
         scripting = context.getScriptingEngine();
         namespaces = new java.util.HashMap<String, String>();
         baseUri = null;
+        factory = profile.getSsmlParsingStrategyFactory();
     }
 
     /**
@@ -128,14 +128,16 @@ public final class SsmlParser {
      * All namespace definitions within a prompt will be copied.
      * </p>
      * 
+     * @param profile
+     *            the current profile
      * @param prompt
      *            the prompt.
      * @param interpreterContext
      *            the current VoiceXML interpreter context.
      */
-    public SsmlParser(final Prompt prompt,
+    public SsmlParser(final Profile profile, final Prompt prompt,
             final VoiceXmlInterpreterContext interpreterContext) {
-        this((VoiceXmlNode) prompt, interpreterContext);
+        this(profile, (VoiceXmlNode) prompt, interpreterContext);
 
         // save the namespace prefixes
         final Collection<String> attributes = prompt.getDefinedAttributeNames();
@@ -256,7 +258,7 @@ public final class SsmlParser {
         if ((parent == null) || (vxmlNode == null)) {
             return null;
         }
-        final SsmlParsingStrategy strategy = FACTORY
+        final SsmlParsingStrategy strategy = factory
                 .getParsingStrategy(vxmlNode);
         final SsmlNode clonedNode;
         if (strategy != null) {

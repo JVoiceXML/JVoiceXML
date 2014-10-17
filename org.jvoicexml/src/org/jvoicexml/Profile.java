@@ -25,6 +25,7 @@
  */
 package org.jvoicexml;
 
+import org.jvoicexml.interpreter.SsmlParsingStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.TagStrategyFactory;
 
@@ -61,4 +62,10 @@ public interface Profile {
      * @return the tag strategy factory.
      */
     TagStrategyFactory getTagStrategyFactory();
+    
+    /**
+     * Retrieves the parsing strategy to parse nodes into SSML document.
+     * @return
+     */
+    SsmlParsingStrategyFactory getSsmlParsingStrategyFactory();
 }
