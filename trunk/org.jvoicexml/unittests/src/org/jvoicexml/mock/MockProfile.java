@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Assert;
 import org.jvoicexml.Profile;
+import org.jvoicexml.interpreter.SsmlParsingStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.test.interpreter.tagstrategy.MockInitializationTagStrategyFactory;
 import org.jvoicexml.test.interpreter.tagstrategy.MockTagStrategyFactory;
@@ -44,4 +45,9 @@ public class MockProfile implements Profile {
         }
     }
 
+    @Override
+    public SsmlParsingStrategyFactory getSsmlParsingStrategyFactory() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
