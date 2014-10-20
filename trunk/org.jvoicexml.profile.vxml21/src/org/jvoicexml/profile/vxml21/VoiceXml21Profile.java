@@ -29,6 +29,7 @@ package org.jvoicexml.profile.vxml21;
 import org.jvoicexml.Profile;
 import org.jvoicexml.interpreter.SsmlParsingStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyFactory;
+import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.profile.vxml21.tagstrategy.JvoiceXmlSsmlParsingStrategyFactory;
 
 /**
@@ -62,6 +63,20 @@ public class VoiceXml21Profile implements Profile {
     @Override
     public String getName() {
         return "VoiceXML21";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void initialize(final VoiceXmlInterpreterContext context) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void terminate(VoiceXmlInterpreterContext context) {
     }
 
     /**
