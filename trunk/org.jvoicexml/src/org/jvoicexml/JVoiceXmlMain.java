@@ -198,6 +198,8 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("creating new session...");
         }
+
+        // Create the session and link it with the implementation platform
         final String profileName = info.getProfile();
         final Profile profile = profiles.get(profileName);
         final ImplementationPlatform platform = implementationPlatformFactory
