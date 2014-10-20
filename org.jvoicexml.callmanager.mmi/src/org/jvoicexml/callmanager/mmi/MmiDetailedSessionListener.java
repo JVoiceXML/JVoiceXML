@@ -46,7 +46,7 @@ import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.Mmi;
-import org.jvoicexml.profile.mmi.ExtensionNotificationJVoiceXmlEvent;
+import org.jvoicexml.profile.mmi.OutgoingExtensionNotificationJVoiceXmlEvent;
 
 /**
  * A detailed session listener that sends out extension notifications.
@@ -113,8 +113,8 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
      */
     private Mmi convertJVoiceXMLEvent(final JVoiceXMLEvent event) {
         // Simply retrieve an encapsulated event to handle a send tag.
-        if (event instanceof ExtensionNotificationJVoiceXmlEvent) {
-            final ExtensionNotificationJVoiceXmlEvent ext = (ExtensionNotificationJVoiceXmlEvent) event;
+        if (event instanceof OutgoingExtensionNotificationJVoiceXmlEvent) {
+            final OutgoingExtensionNotificationJVoiceXmlEvent ext = (OutgoingExtensionNotificationJVoiceXmlEvent) event;
             return ext.getExtensionNotification();
         }
 
