@@ -39,6 +39,12 @@ import org.jvoicexml.ConnectionInformation;
  */
 public interface ConnectionInformationCallMetadataModifiable {
     /**
+     * Sets the profile.
+     * @param profile the profile
+     */
+    void setProfile(final String profile);
+
+    /**
      * Sets the called device.
      * 
      * @param device
