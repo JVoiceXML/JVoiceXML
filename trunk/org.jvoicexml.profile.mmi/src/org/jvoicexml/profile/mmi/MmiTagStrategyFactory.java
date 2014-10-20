@@ -49,6 +49,9 @@ public final class MmiTagStrategyFactory implements TagStrategyFactory {
     private static final Logger LOGGER = Logger
             .getLogger(MmiTagStrategyFactory.class);
 
+    /** The profile. */
+    private MmiProfile profile;
+
     /**
      * Known strategies. The known strategies are templates for the strategy to
      * be executed by the <code>ForminterpreteationAlgorithm</code>.
@@ -59,6 +62,14 @@ public final class MmiTagStrategyFactory implements TagStrategyFactory {
      * Construct a new object.
      */
     public MmiTagStrategyFactory() {
+    }
+
+    /**
+     * Sets the profile.
+     * @param value the profile
+     */
+    public void setProfle(final MmiProfile value) {
+        profile = value;
     }
 
     /**
@@ -118,7 +129,12 @@ public final class MmiTagStrategyFactory implements TagStrategyFactory {
             return null;
         }
 
-        return strategy.newInstance();
+        final TagStrategy tagstrategy = strategy.newInstance();
+        if (tagstrategy instanceof ProfileAwareTagStrategy) {
+            final ProfileAwareTagStrategy profileAwareTagStrategy = (ProfileAwareTagStrategy) tagstrategy;
+            profileAwareTagStrategy.setProfile(profile);
+        }
+        return tagstrategy;
     }
 
     /**
