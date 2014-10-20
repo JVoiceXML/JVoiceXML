@@ -31,15 +31,16 @@ import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.Mmi;
 
 /**
- * Encapsulates an MMI event into a JVoiceXML structure so that it can be
- * delivered over the {@link org.jvoicexml.event.EventBus}.
+ * Encapsulates an MMI event received from an external modality component or
+ * interaction manager into a JVoiceXML structure so that it can be delivered
+ * over the {@link org.jvoicexml.event.EventBus}.
  * 
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.7
  */
 @SuppressWarnings("serial")
-public class ExtensionNotificationJVoiceXmlEvent extends JVoiceXMLEvent {
+public class IncomingExtensionNotificationJVoiceXmlEvent extends JVoiceXMLEvent {
     /** The encapsulated MMI event. */
     private final Mmi notification;
 
@@ -49,12 +50,13 @@ public class ExtensionNotificationJVoiceXmlEvent extends JVoiceXMLEvent {
      * @param mmi
      *            the MMI event
      */
-    public ExtensionNotificationJVoiceXmlEvent(final Mmi mmi) {
+    public IncomingExtensionNotificationJVoiceXmlEvent(final Mmi mmi) {
         notification = mmi;
     }
 
     /**
      * Retrieves the encapsulated extension notification.
+     * 
      * @return encapsulated extension notification
      */
     public Mmi getExtensionNotification() {

@@ -30,17 +30,19 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.mmi.events.AnyComplexType;
-import org.jvoicexml.mmi.events.ExtensionNotification;
-import org.jvoicexml.mmi.events.Mmi;
-import org.jvoicexml.profile.mmi.OutgoingExtensionNotificationJVoiceXmlEvent;
+import org.jvoicexml.profile.mmi.LastMessage;
+import org.jvoicexml.profile.mmi.MmiProfile;
+import org.jvoicexml.profile.mmi.ProfileAwareTagStrategy;
+import org.jvoicexml.profile.mmi.ReceiveEventQueue;
 import org.jvoicexml.profile.vxml21.tagstrategy.AbstractTagStrategy;
+import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
@@ -53,9 +55,11 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @version $Revision: 4080 $
  * @since 0.7.7
  */
-final class SendStrategy extends AbstractTagStrategy {
+final class ReceiveStrategy extends AbstractTagStrategy
+        implements ProfileAwareTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(SendStrategy.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(ReceiveStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -63,25 +67,27 @@ final class SendStrategy extends AbstractTagStrategy {
     static {
         EVAL_ATTRIBUTES = new java.util.ArrayList<String>();
 
-        EVAL_ATTRIBUTES.add("contenttypeexpr");
-        EVAL_ATTRIBUTES.add("bodyexpr");
-        EVAL_ATTRIBUTES.add("bodyexpr");
-        EVAL_ATTRIBUTES.add("targetexpr");
+        EVAL_ATTRIBUTES.add("maxtimeexpr");
     }
 
-    /** Data to be sent in the body of the message. */
-    private Object body;
-
-    /** Name of the event to send. */
-    private String event;
+    /** The profile. */
+    private MmiProfile profile;
 
     /** URI to which the event is sent. */
-    private String target;
+    private long maxtime;
 
     /**
      * Constructs a new object.
      */
-    SendStrategy() {
+    ReceiveStrategy() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setProfile(final MmiProfile value) {
+        profile = value;
     }
 
     /**
@@ -96,10 +102,14 @@ final class SendStrategy extends AbstractTagStrategy {
      */
     @Override
     public void validateAttributes() throws ErrorEvent {
-        body = getAttributeWithAlternativeExpr("body", "bodyexpr");
-        event = (String) getAttributeWithAlternativeExpr("event", "eventexpr");
-        target = (String) getAttributeWithAlternativeExpr("target",
-                "targetexpr");
+        if (isAttributeDefined("maxtime") || isAttributeDefined("maxtimeexpr")) {
+            final Object value = getAttributeWithAlternativeExpr("maxtime",
+                    "maxtimeexpr");
+            final TimeParser parser = new TimeParser(value.toString());
+            maxtime = parser.parse();
+        } else {
+            maxtime = -1;
+        }
     }
 
     /**
@@ -111,22 +121,13 @@ final class SendStrategy extends AbstractTagStrategy {
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem item,
             final VoiceXmlNode node) throws JVoiceXMLEvent {
-        // Construct an MMI event
-        final Mmi mmi = new Mmi();
-        final ExtensionNotification ext = new ExtensionNotification();
-        mmi.setExtensionNotification(ext);
-        ext.setTarget(target);
-        ext.setName(event);
-        final AnyComplexType any = new AnyComplexType();
-        any.addContent(body);
-        ext.setData(any);
-
-        LOGGER.info("sending " + mmi);
-
-        // Deliver it over the event bus
-        final OutgoingExtensionNotificationJVoiceXmlEvent jvxmlevent = new OutgoingExtensionNotificationJVoiceXmlEvent(
-                mmi);
-        final EventBus bus = context.getEventBus();
-        bus.publish(jvxmlevent);
+        final ReceiveEventQueue queue = profile.getEventQueue(context);
+        final LastMessage message = queue.getNextLastMessage(maxtime);
+        if (message == null) {
+            throw new BadFetchError("receive: no message available after "
+                    + maxtime + " msec!");
+        }
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.setVariable("application.lastmessage$", message);
     }
 }

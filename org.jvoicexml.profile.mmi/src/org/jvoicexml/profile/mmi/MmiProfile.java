@@ -26,9 +26,13 @@
 
 package org.jvoicexml.profile.mmi;
 
+import java.util.Map;
+
 import org.jvoicexml.Profile;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.interpreter.SsmlParsingStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyFactory;
+import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.profile.vxml21.tagstrategy.JvoiceXmlSsmlParsingStrategyFactory;
 
 /**
@@ -41,9 +45,9 @@ import org.jvoicexml.profile.vxml21.tagstrategy.JvoiceXmlSsmlParsingStrategyFact
  * @since 0.7.7
  */
 public class MmiProfile implements Profile {
-    /** Name of th eprofile. */
+    /** Name of the profile. */
     public final static String NAME = "MMI";
-            
+
     /** The initialization tag strategy factory. */
     private TagStrategyFactory initializationTagStrategyFactory;
 
@@ -53,11 +57,15 @@ public class MmiProfile implements Profile {
     /** The SSML parsing strategy factory. */
     private final SsmlParsingStrategyFactory ssmlParsingStrategyFactory;
 
+    /** Active queues. */
+    private final Map<VoiceXmlInterpreterContext, ReceiveEventQueue> queues;
+
     /**
      * Constructs a new object.
      */
     public MmiProfile() {
         ssmlParsingStrategyFactory = new JvoiceXmlSsmlParsingStrategyFactory();
+        queues = new java.util.HashMap<VoiceXmlInterpreterContext, ReceiveEventQueue>();
     }
 
     /**
@@ -66,6 +74,43 @@ public class MmiProfile implements Profile {
     @Override
     public String getName() {
         return NAME;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void initialize(final VoiceXmlInterpreterContext context) {
+        final EventBus bus = context.getEventBus();
+        final ReceiveEventQueue queue = new ReceiveEventQueue(context);
+        synchronized (queues) {
+            queues.put(context, queue);
+        }
+        bus.subscribe("", queue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void terminate(VoiceXmlInterpreterContext context) {
+        synchronized (queues) {
+            queues.remove(context);
+        }
+    }
+
+    /**
+     * Retrieves the event queue for the given context.
+     * 
+     * @param context
+     *            the active context
+     * @return corresponding event queue.
+     */
+    public ReceiveEventQueue getEventQueue(
+            final VoiceXmlInterpreterContext context) {
+        synchronized (queues) {
+            return queues.get(context);
+        }
     }
 
     /**
@@ -95,6 +140,10 @@ public class MmiProfile implements Profile {
      */
     public void setTagStrategyFactory(final TagStrategyFactory factory) {
         tagStrategyFactory = factory;
+        if (tagStrategyFactory instanceof MmiTagStrategyFactory) {
+            MmiTagStrategyFactory mmiTagStrategyFactory = (MmiTagStrategyFactory) tagStrategyFactory;
+            mmiTagStrategyFactory.setProfle(this);
+        }
     }
 
     /**
