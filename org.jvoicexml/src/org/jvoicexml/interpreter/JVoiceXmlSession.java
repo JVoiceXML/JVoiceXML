@@ -151,16 +151,23 @@ public final class JVoiceXmlSession extends Thread
         application = null;
         grammarProcessor = jvxml.getGrammarProcessor();
         scopeObserver = new ScopeObserver();
+        
+        // Create a new context.
         final Configuration configuration = jvxml.getConfiguration();
         context = new VoiceXmlInterpreterContext(this, configuration);
         sem = new Object();
         closed = false;
         sessionListeners = new ScopedCollection<SessionListener>(scopeObserver);
         detailedSessionListeners = new java.util.ArrayList<DetailedSessionListener>();
+        
+        // Subscribe to the event bus.
         final EventBus eventbus = context.getEventBus();
         eventbus.subscribe(SynthesizedOutputEvent.EVENT_TYPE, this);
         eventbus.subscribe(SpokenInputEvent.EVENT_TYPE, this);
         eventbus.subscribe(NomatchEvent.EVENT_TYPE, this);
+        
+        // initialize the profile
+        profile.initialize(context);
     }
 
     /**
@@ -220,6 +227,7 @@ public final class JVoiceXmlSession extends Thread
 
     /**
      * Retrieves the profile.
+     * 
      * @return the profile
      * @since 0.7.7
      */
@@ -411,6 +419,7 @@ public final class JVoiceXmlSession extends Thread
         closed = true;
         LOGGER.info("closing session...");
 
+        profile.terminate(context);
         implementationPlatform.close();
         final String sessionId = getSessionID();
         documentServer.sessionClosed(sessionId);
