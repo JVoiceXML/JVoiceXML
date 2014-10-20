@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,6 +32,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -50,11 +51,10 @@ import org.mozilla.javascript.ScriptableObject;
  * @version $Revision: 4080 $
  * @since 0.3.1
  */
-abstract public class AbstractTagStrategy
-        implements Cloneable, TagStrategy {
+abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(AbstractTagStrategy.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(AbstractTagStrategy.class);
 
     /** Map with evaluated attributes. */
     private Map<String, Object> attributes;
@@ -77,17 +77,15 @@ abstract public class AbstractTagStrategy
      * {@inheritDoc}
      *
      * <p>
-     * Retrieves all attributes of the current tag and store their values
-     * in the attributes map. If there is no value in the prompt, the method
-     * tries to find a value that has been set via a
-     * <code>&lt;property&gt;</code> tag.<br>
+     * Retrieves all attributes of the current tag and store their values in the
+     * attributes map. If there is no value in the prompt, the method tries to
+     * find a value that has been set via a <code>&lt;property&gt;</code> tag.<br>
      * Implementations are requested to obtain the values via the
      * {@link #getAttribute(String)} method.
      * </p>
      */
     public void getAttributes(final VoiceXmlInterpreterContext context,
-                              final FormInterpretationAlgorithm fia,
-                              final VoiceXmlNode node) {
+            final FormInterpretationAlgorithm fia, final VoiceXmlNode node) {
         if (node == null) {
             LOGGER.warn("cannot get attributes from null");
         }
@@ -140,8 +138,7 @@ abstract public class AbstractTagStrategy
     /**
      * {@inheritDoc}
      */
-    public void validateAttributes()
-            throws ErrorEvent {
+    public void validateAttributes() throws ErrorEvent {
     }
 
     /**
@@ -155,8 +152,8 @@ abstract public class AbstractTagStrategy
 
         try {
             strategy = (AbstractTagStrategy) super.clone();
-            strategy.attributes =
-                new java.util.HashMap<String, Object>(attributes);
+            strategy.attributes = new java.util.HashMap<String, Object>(
+                    attributes);
         } catch (CloneNotSupportedException cnse) {
             LOGGER.fatal("clone failed", cnse);
             return null;
@@ -167,18 +164,54 @@ abstract public class AbstractTagStrategy
 
     /**
      * Retrieves the value of the given attribute.
-     * @param name Name of the attribute.
-     * @return Value of the attribute, <code>null</code> if the attribute
-     * has no associated value.
+     * 
+     * @param name
+     *            Name of the attribute.
+     * @return Value of the attribute, <code>null</code> if the attribute has no
+     *         associated value.
      */
     protected Object getAttribute(final String name) {
         return attributes.get(name);
     }
 
     /**
+     * Retrieves the value of an attribute that may alternatively defined by an
+     * evaluated expression.
+     * 
+     * @param pure
+     *            the original name of the attribute
+     * @param expr
+     *            the name of the attribute that has been evaluated by the
+     *            scripting engine
+     * @return value of the attribute
+     * @throws BadFetchError
+     *             if both or none of the attributes are defined
+     * @since 0.7.7
+     */
+    protected Object getAttributeWithAlternativeExpr(final String pure,
+            final String expr) throws BadFetchError {
+        final boolean pureDefined = isAttributeDefined(pure);
+        final boolean exprDefined = isAttributeDefined(expr);
+
+        // None or both are defined
+        if ((pureDefined && exprDefined) || (!pureDefined && !exprDefined)) {
+            throw new BadFetchError("Exactly one of '" + pure + "' or '" + expr
+                    + "' must be defined!");
+        }
+
+        if (pureDefined) {
+            return getAttribute(pure);
+        }
+
+        return getAttribute(expr);
+    }
+
+    /**
      * Checks if the given attribute is defined, this means, neither
      * <code>null</code> nor <code>Context.getUndefinedValue()</code>.
-     * @param name Name of the attribute.
+     * 
+     * @param name
+     *            Name of the attribute.
      * @return <code>true</code> if the attribute is defined.
      */
     protected boolean isAttributeDefined(final String name) {
@@ -226,7 +259,6 @@ abstract public class AbstractTagStrategy
     public void executeLocal(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem item,
-            final VoiceXmlNode node)
-       throws JVoiceXMLEvent {
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
     }
 }
