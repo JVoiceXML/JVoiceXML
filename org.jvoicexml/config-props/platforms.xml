@@ -21,6 +21,7 @@
   <!-- platform name="org.jvoicexml.callmanager.mmi"-->
     <!-- subproject name="org.jvoicexml.mmi.events" order="pre" /-->
     <!-- subproject name="org.jvoicexml.callmanager.mmi.servlet" order="pre" /-->
+    <!-- subproject name="org.jvoicexml.profile.mmi" order="pre" /-->
     <!-- For this platform to work you will need at least one of the following subprojects -->
     <!-- uncomment if MMI events should be handled over HTTP -->
     <!-- subproject name="org.jvoicexml.callmanager.mmi.http" order="post" /-->
