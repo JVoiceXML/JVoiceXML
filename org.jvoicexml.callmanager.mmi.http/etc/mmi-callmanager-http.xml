@@ -6,6 +6,8 @@
     <classpath>dist/org.jvoicexml.mmi.events.jar</classpath>
     <classpath>dist/org.jvoicexml.callmanager.mmi.jar</classpath>
     <classpath>dist/org.jvoicexml.callmanager.mmi.http.jar</classpath>
+    <classpath>dist/org.jvoicexml.profile.mmi.jar</classpath>
+    <classpath>dist/org.jvoicexml.profile.vxml21.jar</classpath>
     <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/jetty-server-9.2.2.v20140723.jar
     </classpath>
     <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/jetty-util-9.2.2.v20140723.jar
