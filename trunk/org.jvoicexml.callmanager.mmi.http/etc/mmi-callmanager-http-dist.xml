@@ -5,7 +5,9 @@
     <repository>mmi-hhtp</repository>
     <classpath>lib/org.jvoicexml.mmi.events.jar</classpath>
     <classpath>lib/org.jvoicexml.callmanager.mmi.jar</classpath>
-    <classpath>lib/org.jvoicexml.callmanager.mmi.umundo.jar</classpath>
+    <classpath>lib/org.jvoicexml.callmanager.mmi.http.jar</classpath>
+    <classpath>lib/org.jvoicexml.profile.mmi.jar</classpath>
+    <classpath>lib/org.jvoicexml.profile.vxml21.jar</classpath>
     <classpath>lib/jetty-server-9.2.2.v20140723.jar</classpath>
     <classpath>lib/jetty-util-9.2.2.v20140723.jar</classpath>
     <classpath>lib/jetty-http-9.2.2.v20140723.jar</classpath>
