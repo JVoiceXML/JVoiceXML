@@ -28,6 +28,7 @@ package org.jvoicexml;
 import org.jvoicexml.interpreter.SsmlParsingStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.TagStrategyFactory;
+import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 
 /**
  * A profile follows the thought of the profiles as they are specified in <a
@@ -47,6 +48,26 @@ public interface Profile {
      * @return name of this profile.
      */
     String getName();
+
+    /**
+     * Initialized this profile once a session is created.
+     * <p>
+     * Note, that profiles are shared among all sessions and that any properties
+     * may be overwritten by sessions that are created in parallel.
+     * </p>
+     * @param context the context for the created session.
+     */
+    void initialize(final VoiceXmlInterpreterContext context);
+
+    /**
+     * Initialized this profile once a session is closed.
+     * <p>
+     * Note, that profiles are shared among all sessions and that any properties
+     * may be overwritten by sessions that are created in parallel.
+     * </p>
+     * @param context the context for the closed session.
+     */
+    void terminate(final VoiceXmlInterpreterContext context);
 
     /**
      * Retrieves the tag strategy factory Factory for {@link TagStrategy}s that
