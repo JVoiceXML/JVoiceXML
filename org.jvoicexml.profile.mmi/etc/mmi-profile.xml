@@ -138,6 +138,10 @@
                             <beans:bean
                                 class="org.jvoicexml.profile.mmi.tagstrategy.SendStrategy" />
                         </beans:entry>
+                        <beans:entry key="receive">
+                            <beans:bean
+                                class="org.jvoicexml.profile.mmi.tagstrategy.ReceiveStrategy" />
+                        </beans:entry>
                     </beans:map>
                 </beans:property>
             </beans:bean>
