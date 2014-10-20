@@ -98,12 +98,9 @@ public class BasicConnectionInformation
     }
 
     /**
-     * Sets the profile name.
-     * 
-     * @param value
-     *            name of the profile
-     * @since 0.7.7
+     * {@inheritDoc}
      */
+    @Override
     public void setProfile(final String value) {
         profile = value;
     }
