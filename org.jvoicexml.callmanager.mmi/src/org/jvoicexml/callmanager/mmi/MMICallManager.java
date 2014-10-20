@@ -40,6 +40,7 @@ import org.jvoicexml.client.ConnectionInformationFactory;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.profile.mmi.MmiProfile;
 
 /**
  * A callmanager for MMI integration.
@@ -237,6 +238,7 @@ public final class MMICallManager implements CallManager {
                 .getConnectionInformation();
         if (info instanceof ConnectionInformationCallMetadataModifiable) {
             final ConnectionInformationCallMetadataModifiable modifiable = (ConnectionInformationCallMetadataModifiable) info;
+            modifiable.setProfile(MmiProfile.NAME);
             modifiable.setCalledDevice(data.getCalledDevice());
             modifiable.setCallingDevice(data.getCallingDevice());
             modifiable.setProtocolName(data.getProtocolName());
