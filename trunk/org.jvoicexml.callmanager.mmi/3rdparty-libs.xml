@@ -3,7 +3,7 @@
 This file contains the 3rd party libary definitions, used by the text
 callmanager.
     </description>
-    <property name="jvxml.core.dir" value="../org.jvoicexml"/>
+    <property name="jvxml.core.dir" value="../org.jvoicexml" />
     <import file="${jvxml.core.dir}/3rdparty-libs.xml" />
 
     <target name="-local-3rdparty-setup" depends="-3rdparty-setup">
@@ -12,10 +12,11 @@ callmanager.
 
         <!-- jvxml library -->
         <path id="jvxml.core.lib">
-          <path location="${jvxml.core.dir}/classes"/>
-          <path location="../org.jvoicexml.xml/classes"/>
-          <path location="../org.jvoicexml.client/classes"/>
-          <path location="../org.jvoicexml.mmi.events/classes"/>
+            <path location="${jvxml.core.dir}/classes" />
+            <path location="../org.jvoicexml.xml/classes" />
+            <path location="../org.jvoicexml.client/classes" />
+            <path location="../org.jvoicexml.mmi.events/classes" />
+            <path location="../org.jvoicexml.profile.mmi/classes" />
         </path>
     </target>
 </project>

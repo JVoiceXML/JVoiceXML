@@ -46,6 +46,7 @@ import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.Mmi;
+import org.jvoicexml.profile.mmi.ExtensionNotificationJVoiceXmlEvent;
 
 /**
  * A detailed session listener that sends out extension notifications.
@@ -93,6 +94,31 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
      */
     @Override
     public void sessionEvent(final Session session, final JVoiceXMLEvent event) {
+        final Mmi mmi = convertJVoiceXMLEvent(event);
+        try {
+            final Object channel = context.getChannel();
+            adapter.sendMMIEvent(channel, mmi);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Converts the given event into an extension notification.
+     * 
+     * @param event
+     *            the received event.
+     * @return extension notification
+     * @since 0.7.7
+     */
+    private Mmi convertJVoiceXMLEvent(final JVoiceXMLEvent event) {
+        // Simply retrieve an encapsulated event to handle a send tag.
+        if (event instanceof ExtensionNotificationJVoiceXmlEvent) {
+            final ExtensionNotificationJVoiceXmlEvent ext = (ExtensionNotificationJVoiceXmlEvent) event;
+            return ext.getExtensionNotification();
+        }
+
+        // Convert it into something appropriate
         final Mmi mmi = new Mmi();
         final ExtensionNotification notification = new ExtensionNotification();
         mmi.setExtensionNotification(notification);
@@ -102,7 +128,7 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
         final String name = getExtensionNotificationName(event);
         if (name == null) {
             LOGGER.warn("no name for event " + event + " not sending");
-            return;
+            return null;
         }
         notification.setName(name);
         Object data = null;
@@ -119,7 +145,7 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
                 data = converter.convertRecognitionEvent(input);
             } catch (ConversionException e) {
                 LOGGER.error(e.getMessage(), e);
-                return;
+                return null;
             }
         } else if (event instanceof SpokenInputEvent) {
             final SpokenInputEvent input = (SpokenInputEvent) event;
@@ -127,7 +153,7 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
                 data = converter.convertSpokenInputEvent(input);
             } catch (ConversionException e) {
                 LOGGER.error(e.getMessage(), e);
-                return;
+                return null;
             }
         }
         if (data != null) {
@@ -135,12 +161,7 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
             any.addContent(data);
             notification.setData(any);
         }
-        try {
-            final Object channel = context.getChannel();
-            adapter.sendMMIEvent(channel, mmi);
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
+        return mmi;
     }
 
     /**
