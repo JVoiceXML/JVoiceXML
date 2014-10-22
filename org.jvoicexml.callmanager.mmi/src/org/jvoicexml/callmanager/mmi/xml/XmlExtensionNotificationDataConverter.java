@@ -39,14 +39,9 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.callmanager.mmi.ConversionException;
 import org.jvoicexml.callmanager.mmi.ExtensionNotificationDataConverter;
-import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.plain.implementation.InputStartedEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
-import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
-import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
-import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.mozilla.javascript.ScriptableObject;
@@ -217,9 +212,6 @@ public class XmlExtensionNotificationDataConverter
             final Document document = builder.newDocument();
             final Element data = document.createElementNS(
                     JVXML_MMI_NAMESPACE, "jvxmlmmi:data");
-            final String eventType = toEventType(output);
-            data.setAttributeNS(JVXML_MMI_NAMESPACE,
-                    "jvxmlmmi:event", eventType);
             document.appendChild(data);
             final SpeakableText speakable = getSpeakable(output);
             if (speakable != null) {
@@ -259,31 +251,6 @@ public class XmlExtensionNotificationDataConverter
     }
 
     /**
-     * Obtains the event type to send out externally for the received
-     * internally.
-     * 
-     * @param event
-     *            the received event
-     * @return the event type
-     */
-    private String toEventType(final JVoiceXMLEvent event) {
-        if (event instanceof OutputStartedEvent) {
-            return "vxml.output.start";
-        } else if (event instanceof OutputEndedEvent) {
-            return "vxml.output.end";
-        } else if (event instanceof QueueEmptyEvent) {
-            return "vxml.output.emptyqueue";
-        } else if (event instanceof RecognitionStartedEvent) {
-            return "vxml.input.start";
-        } else if (event instanceof RecognitionStoppedEvent) {
-            return "vxml.input.end";
-        } else if (event instanceof InputStartedEvent) {
-            return "vxml.input.speaking";
-        }
-        return event.getEventType();
-    }
-
-    /**
      * Converts the speakable to an XML document that can be included into the
      * data attribute.
      * 
@@ -314,23 +281,7 @@ public class XmlExtensionNotificationDataConverter
     @Override
     public Object convertSpokenInputEvent(final SpokenInputEvent input)
             throws ConversionException {
-        final DocumentBuilderFactory factory = DocumentBuilderFactory
-                .newInstance();
-        factory.setNamespaceAware(true);
-        DocumentBuilder builder = null;
-        try {
-            builder = factory.newDocumentBuilder();
-            final Document document = builder.newDocument();
-            final Element data = document.createElementNS(
-                    JVXML_MMI_NAMESPACE, "jvxmlmmi:data");
-            final String eventType = toEventType(input);
-            data.setAttributeNS(JVXML_MMI_NAMESPACE,
-                    "jvxmlmmi:event", eventType);
-            document.appendChild(data);
-            return data;
-        } catch (ParserConfigurationException e) {
-            throw new ConversionException(e.getMessage(), e);
-        }
+        return null;
     }
 
     /**
