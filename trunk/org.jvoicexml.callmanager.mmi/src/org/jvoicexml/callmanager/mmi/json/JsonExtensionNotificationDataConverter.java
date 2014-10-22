@@ -95,7 +95,7 @@ public class JsonExtensionNotificationDataConverter
      *            the speakable with the SSML document
      * @return JSON formatted string
      */
-    private String toJson(final String name, final SpeakableText speakable) {
+    private String toJson(final SpeakableText speakable) {
         final Context context = Context.enter();
         context.setLanguageVersion(Context.VERSION_DEFAULT);
         final ScriptableObject scope = context.initStandardObjects();
@@ -114,11 +114,11 @@ public class JsonExtensionNotificationDataConverter
         if (event instanceof OutputStartedEvent) {
             final OutputStartedEvent started = (OutputStartedEvent) event;
             final SpeakableText speakable = started.getSpeakable();
-            return toJson("vxml.output.start", speakable);
+            return toJson(speakable);
         } else if (event instanceof OutputEndedEvent) {
             final OutputEndedEvent ended = (OutputEndedEvent) event;
             final SpeakableText speakable = ended.getSpeakable();
-            return toJson("vxml.output.end", speakable);
+            return toJson(speakable);
         }
         LOGGER.info("not sending synthesized output event: " + event);
         return null;
