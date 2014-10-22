@@ -30,6 +30,7 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.implementation.InputStartedEvent;
 import org.jvoicexml.event.plain.implementation.NomatchEvent;
@@ -50,6 +51,28 @@ import org.jvoicexml.profile.mmi.OutgoingExtensionNotificationJVoiceXmlEvent;
 
 /**
  * A detailed session listener that sends out extension notifications.
+ * 
+ * The following events will be mapped to extension notifications:
+ * <dl>
+ * <dt>{@link OutputStartedEvent}</dt>
+ * <dd>{@code vxml.output.start} The data tag will contain the SSML to speak.</dd>
+ * <dt>{@link OutputEndedEvent}</dt>
+ * <dd>{@code vxml.output.end} The data tag will contain the spoken SSML.</dd>
+ * <dt>{@link QueueEmptyEvent}</dt>
+ * <dd>{@code vxml.output.emptyQueue}</dd>
+ * <dt>{@link RecognitionStartedEvent}</dt>
+ * <dd>{@code vxml.input.start}</dd>
+ * <dt>{@link InputStartedEvent}</dt>
+ * <dd>{@code vxml.input.speech.start}</dd>
+ * <dt>{@link RecognitionStoppedEvent}</dt>
+ * <dd>{@code vxml.input}</dd>
+ * <dt>{@link RecognitionEvent}</dt>
+ * <dd>{@code vxml.input.end} The data tag will contain the recognition result.</dd>
+ * <dt>{@link NomatchEvent}</dt>
+ * <dd>{@code vxml.input.nomatch}</dd>
+ * <dt>{@link ErrorEvent}</dt>
+ * <dd>{@code "vxml" + error.getEventType()}</dd>
+ * </dl>
  * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -193,10 +216,14 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
             return "vxml.input.speech.start";
         } else if (event instanceof RecognitionStartedEvent) {
             return "vxml.input.start";
+        } else if (event instanceof RecognitionEvent) {
+            return "vxml.input";
         } else if (event instanceof RecognitionStoppedEvent) {
             return "vxml.input.end";
         } else if (event instanceof NomatchEvent) {
             return "vxml.input.nomatch";
+        } else if (event instanceof ErrorEvent) {
+            return "vxml" + event.getEventType();
         }
 
         return null;
