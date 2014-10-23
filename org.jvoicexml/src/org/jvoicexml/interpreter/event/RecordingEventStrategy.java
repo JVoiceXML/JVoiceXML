@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,9 +36,12 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.Session;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.event.plain.implementation.RecordingStoppedEvent;
 import org.jvoicexml.event.plain.jvxml.RecordingEvent;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -58,8 +61,8 @@ final class RecordingEventStrategy
         extends AbstractInputItemEventStrategy<RecordFormItem>
         implements EventStrategyPrototype {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(RecordingEventStrategy.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(RecordingEventStrategy.class);
 
     /** Audio format to use for recording. */
     private final AudioFormat format;
@@ -75,23 +78,21 @@ final class RecordingEventStrategy
      * Constructs a new object.
      *
      * @param ctx
-     *        The VoiceXML interpreter context.
+     *            The VoiceXML interpreter context.
      * @param interpreter
-     *        The VoiceXML interpreter.
+     *            The VoiceXML interpreter.
      * @param algorithm
-     *        The FIA.
+     *            The FIA.
      * @param formItem
-     *        The current form item.
+     *            The current form item.
      * @param recordingFormat
-     *        audio format to use for recording.
+     *            audio format to use for recording.
      */
     public RecordingEventStrategy(final VoiceXmlInterpreterContext ctx,
-                                    final VoiceXmlInterpreter interpreter,
-                                    final FormInterpretationAlgorithm algorithm,
-                                    final FormItem formItem,
-                                    final AudioFormat recordingFormat) {
-        super(ctx, interpreter, algorithm, formItem,
-                RecordingEvent.EVENT_TYPE);
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm algorithm,
+            final FormItem formItem, final AudioFormat recordingFormat) {
+        super(ctx, interpreter, algorithm, formItem, RecordingEvent.EVENT_TYPE);
         format = recordingFormat;
     }
 
@@ -100,13 +101,11 @@ final class RecordingEventStrategy
      */
     @Override
     protected boolean handleEvent(final RecordFormItem record,
-            final JVoiceXMLEvent event)
-            throws JVoiceXMLEvent {
+            final JVoiceXMLEvent event) throws JVoiceXMLEvent {
         final RecordingEvent recordingEvent = (RecordingEvent) event;
         final byte[] buffer = recordingEvent.getRecordingBuffer();
         final ByteArrayInputStream in = new ByteArrayInputStream(buffer);
-        final VoiceXmlInterpreterContext context =
-                getVoiceXmlInterpreterContext();
+        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
         final DocumentServer server = context.getDocumentServer();
 
         // Store the recording.
@@ -116,6 +115,13 @@ final class RecordingEventStrategy
 
         // Save the URI in the event for later retrieval.
         recordingEvent.setInputResult(result);
+
+        // Notify that recording has stopped.
+        final Session session = context.getSession();
+        final RecordingStoppedEvent stopped = new RecordingStoppedEvent(
+                session.getSessionID(), result);
+        final EventBus bus = context.getEventBus();
+        bus.publish(stopped);
         return true;
     }
 
@@ -123,13 +129,10 @@ final class RecordingEventStrategy
      * {@inheritDoc}
      */
     @Override
-    public EventStrategy newInstance(
-            final VoiceXmlInterpreterContext ctx,
+    public EventStrategy newInstance(final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia,
-            final FormItem item) {
-        final ImplementationPlatform platform =
-            ctx.getImplementationPlatform();
+            final FormInterpretationAlgorithm fia, final FormItem item) {
+        final ImplementationPlatform platform = ctx.getImplementationPlatform();
         CallControl call = null;
         try {
             call = platform.getCallControl();
