@@ -32,6 +32,8 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.HelpEvent;
+import org.jvoicexml.event.plain.NoinputEvent;
 import org.jvoicexml.event.plain.implementation.InputStartedEvent;
 import org.jvoicexml.event.plain.implementation.NomatchEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
@@ -40,6 +42,8 @@ import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
+import org.jvoicexml.event.plain.implementation.RecordingStartedEvent;
+import org.jvoicexml.event.plain.implementation.RecordingStoppedEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.interpreter.DetailedSessionListener;
@@ -70,8 +74,17 @@ import org.jvoicexml.profile.mmi.OutgoingExtensionNotificationJVoiceXmlEvent;
  * <dd>{@code vxml.input.end} The data tag will contain the recognition result.</dd>
  * <dt>{@link NomatchEvent}</dt>
  * <dd>{@code vxml.input.nomatch}</dd>
+ * <dt>{@link NoinputEvent}</dt>
+ * <dd>{@code vxml.input.noinput}</dd>
+ * <dt>{@link HelpEvent}</dt>
+ * <dd>{@code vxml.input.help}</dd>
+ * <dt>{@link RecordingStartedEvent}</dt>
+ * <dd>{@code vxml.record.start}</dd>
+ * <dt>{@link RecordingStoppedEvent}</dt>
+ * <dd>{@code vxml.record.end} The data tag will contain the URI of the recorded
+ * audio file</dd>
  * <dt>{@link ErrorEvent}</dt>
- * <dd>{@code "vxml" + error.getEventType()}</dd>
+ * <dd>{@code "vxml" + error.getEventType()} The data tag will detail the error</dd>
  * </dl>
  * 
  * @author Dirk Schnelle-Walka
@@ -178,6 +191,12 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
                 LOGGER.error(e.getMessage(), e);
                 return null;
             }
+        } else if (event instanceof RecordingStoppedEvent) {
+            final RecordingStoppedEvent stopped = (RecordingStoppedEvent) event;
+            data = stopped.getUri().toString();
+        } else if (event instanceof ErrorEvent) {
+            final ErrorEvent error = (ErrorEvent) event;
+            data = error.getMessage();
         }
         if (data != null) {
             final AnyComplexType any = new AnyComplexType();
@@ -205,6 +224,15 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
         thread.start();
     }
 
+    /**
+     * Retrieves the name for the extension notification for the given event
+     * type.
+     * 
+     * @param event
+     *            the event
+     * @return name for the extension notification, {@code null} if there is no
+     *         matching name
+     */
     private String getExtensionNotificationName(final JVoiceXMLEvent event) {
         if (event instanceof OutputStartedEvent) {
             return "vxml.output.start";
@@ -222,6 +250,14 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
             return "vxml.input.end";
         } else if (event instanceof NomatchEvent) {
             return "vxml.input.nomatch";
+        } else if (event instanceof NoinputEvent) {
+            return "vxml.input.noinput";
+        } else if (event instanceof HelpEvent) {
+            return "vxml.input.help";
+        } else if (event instanceof RecordingStartedEvent) {
+            return "vxml.record.start";
+        } else if (event instanceof RecordingStoppedEvent) {
+            return "vxml.record.end";
         } else if (event instanceof ErrorEvent) {
             return "vxml" + event.getEventType();
         }
