@@ -86,7 +86,7 @@ public final class RecordingEvent extends PlainEvent
     }
 
     /**
-     * Retrieves teh buffer of the recording.
+     * Retrieves the buffer of the recording.
      * 
      * @return buffer of the recording.
      */

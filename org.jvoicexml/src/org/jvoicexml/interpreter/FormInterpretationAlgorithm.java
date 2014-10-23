@@ -57,6 +57,7 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.event.plain.implementation.RecordingStartedEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
@@ -1295,8 +1296,16 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         }
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
+
+        // Notify that the recording has started
         final RecordingReceiverThread recording = new RecordingReceiverThread(
                 eventbus, maxTime);
+        final Session session = context.getSession();
+        final String id = session.getSessionID();
+        final RecordingStartedEvent started = new RecordingStartedEvent(id);
+        eventbus.publish(started);
+
+        // Actually start the recording
         recording.start();
 
         // Start recording

@@ -37,7 +37,7 @@ import org.jvoicexml.implementation.SpokenInput;
  */
 @SuppressWarnings("serial")
 public final class RecognitionStoppedEvent extends SpokenInputEvent {
-    /** The unsupported element. */
+    /** The detailing part. */
     public static final String DETAIL = "stop";
 
     /** The detail message. */
