@@ -18,7 +18,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/freetts1.2/lib/freetts.jar"/>
-	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/sphinx4/lib/sphinx4.jar"/>
 	<classpathentry kind="lib" path="/org.jvoicexml.implementation.jsapi10/3rdparty/freetts1.2/lib/freetts-jsapi10.jar"/>
 	<classpathentry kind="lib" path="/org.jvoicexml.implementation.jsapi10/3rdparty/sphinx4/lib/jsapi-1.0-base.jar" sourcepath="/sphinx4"/>
 	<classpathentry kind="lib" path="3rdparty/MSS/sip-servlets-catalina-7-1.7.0.FINAL.jar"/>
@@ -41,5 +40,6 @@
 	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib/httpcore-4.2.3.jar"/>
 	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib/httpcore-ab-4.2.3.jar"/>
 	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib/httpcore-nio-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/sphinx4/lib/sphinx4-core-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
