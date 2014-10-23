@@ -46,7 +46,7 @@ import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
- * Strategy to send events, similar to what is defined in the VoiceXML 3
+ * Strategy to receive events, similar to what is defined in the VoiceXML 3
  * standard at <a
  * href="http://www.w3.org/TR/voicexml30/#ExternalCommunicationModule:Send"
  * >http://www.w3.org/TR/voicexml30/#ExternalCommunicationModule:Send</a>.
