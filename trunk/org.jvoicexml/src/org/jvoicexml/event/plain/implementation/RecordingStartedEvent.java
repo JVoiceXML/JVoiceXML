@@ -26,27 +26,26 @@
 
 package org.jvoicexml.event.plain.implementation;
 
-import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
- * Notification that the the user started to speak.
+ * Notification that the recoding has started.
  * 
  * @author Dirk Schnelle-Walka
  * @version $Revision: 4233 $
  * @since 0.7.7
  */
 @SuppressWarnings("serial")
-public final class InputStartedEvent extends SpokenInputEvent {
+public final class RecordingStartedEvent extends JVoiceXMLEvent {
     /** The detailing part. */
-    public static final String DETAIL = "inputstart";
+    public static final String DETAIL = "start";
 
     /** The detail message. */
-    public static final String EVENT_TYPE = SpokenInputEvent.class
+    public static final String EVENT_TYPE = RecordingStartedEvent.class
             .getCanonicalName() + "." + DETAIL;
 
-    /** The mode type. */
-    private final ModeType mode;
+    /** The id of the related session. */
+    private final String sessionId;
 
     /**
      * Constructs a new event with the event type as its detail message. The
@@ -58,22 +57,27 @@ public final class InputStartedEvent extends SpokenInputEvent {
      * 
      * @see #getEventType()
      * 
-     * @param input
-     *            object that caused the event.
      * @param sessionId
      *            the session id
      */
-    public InputStartedEvent(final SpokenInput input,
-            final String sessionId, final ModeType modeType) {
-        super(input, DETAIL, sessionId);
-        mode = modeType;
+    public RecordingStartedEvent(final String id) {
+        sessionId = id;
     }
 
     /**
-     * Retrieves the mode type.
-     * @return the mode type
+     * Retrieves the session id.
+     * 
+     * @return the session id
      */
-    public ModeType getMode() {
-        return mode;
+    public final String getSessionId() {
+        return sessionId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getEventType() {
+        return EVENT_TYPE;
     }
 }
