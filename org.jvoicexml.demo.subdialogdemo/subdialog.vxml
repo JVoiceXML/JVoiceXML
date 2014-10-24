@@ -8,19 +8,41 @@
         <subdialog name="askproduct" src="#ask">
             <param name="product" expr="'cake'" />
             <filled>
-                OK. You said <value expr="askproduct" />
+                OK. You said
+                <value expr="askproduct" />
             </filled>
         </subdialog>
     </form>
 
-    <!-- subdialog to get drivers license -->
+    <!-- subdialog to ask a question -->
     <form id="ask">
         <var name="product" />
         <field name="yesno">
             <grammar src="yesno.srgs" type="application/srgs+xml" />
             <prompt>
-                Do you have want <value expr="product" />?
+                Do you have want
+                <value expr="product" />
+                ?
             </prompt>
+            <noinput>
+                <reprompt />
+            </noinput>
+            <noinput count="3">
+                <prompt>
+                    I asked three times. So you do not want
+                    <value expr="product" />
+                </prompt>
+                <assign name="yesno" expr="'no'" />
+                <return namelist="yesno" />
+            </noinput>
+            <nomatch>
+                <prompt>
+                    No valid input, no
+                    <value expr="product" />
+                </prompt>
+                <assign name="yesno" expr="'no'" />
+                <return namelist="yesno" />
+            </nomatch>
             <filled>
                 <return namelist="yesno" />
             </filled>
