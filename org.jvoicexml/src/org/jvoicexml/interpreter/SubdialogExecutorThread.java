@@ -39,14 +39,15 @@ import org.jvoicexml.event.plain.jvxml.SubdialogResultEvent;
 
 /**
  * Asynchronous execution of a subdialog.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.4
  */
 final class SubdialogExecutorThread extends Thread {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(SubdialogExecutorThread.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(SubdialogExecutorThread.class);
 
     /** The URI of the subdialog. */
     private final URI uri;
@@ -65,19 +66,27 @@ final class SubdialogExecutorThread extends Thread {
 
     /**
      * Constructs a new object.
-     * @param subdialogUri the URI of the subdialog
-     * @param subdialogContext the context of the subdialog
-     * @param appl the current application
-     * @param params parameters of the subdialog call
+     * 
+     * @param subdialogUri
+     *            the URI of the subdialog
+     * @param subdialogContext
+     *            the context of the subdialog
+     * @param appl
+     *            the current application
+     * @param params
+     *            parameters of the subdialog call
+     * @param bus
+     *            the event bus of the calling context to correctly propagate
+     *            messages
      */
     public SubdialogExecutorThread(final URI subdialogUri,
             final VoiceXmlInterpreterContext subdialogContext,
-            final Application appl,
-            final Map<String, Object> params) {
+            final Application appl, final Map<String, Object> params,
+            final EventBus bus) {
         uri = subdialogUri;
         context = subdialogContext;
         application = appl;
-        eventbus = context.getEventBus();
+        eventbus = bus;
         parameters = params;
     }
 
@@ -98,8 +107,7 @@ final class SubdialogExecutorThread extends Thread {
             LOGGER.debug("...initialized parameters");
         }
         try {
-            final DocumentDescriptor descriptor =
-                new DocumentDescriptor(uri);
+            final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
             context.processSubdialog(application, descriptor);
         } catch (ReturnEvent e) {
             final Object result;
@@ -109,8 +117,7 @@ final class SubdialogExecutorThread extends Thread {
                 eventbus.publish(sematicerror);
                 return;
             }
-            final SubdialogResultEvent event =
-                new SubdialogResultEvent(result);
+            final SubdialogResultEvent event = new SubdialogResultEvent(result);
             eventbus.publish(event);
             return;
         } catch (JVoiceXMLEvent e) {
@@ -120,20 +127,22 @@ final class SubdialogExecutorThread extends Thread {
         // The VoiceXML spec leaves it open what should happen if there was no
         // return or exit and the dialog terminated because all forms were
         // processed. So we return TRUE in this case.
-        final SubdialogResultEvent event =
-            new SubdialogResultEvent(Boolean.TRUE);
+        final SubdialogResultEvent event = new SubdialogResultEvent(
+                Boolean.TRUE);
         eventbus.publish(event);
     }
 
     /**
      * Creates the value for the returned result.
-     * @param event caught event.
+     * 
+     * @param event
+     *            caught event.
      * @return return result.
      * @throws SemanticError
-     *         if a variable could not be evaluated 
+     *             if a variable could not be evaluated
      */
     private Object getReturnObject(final ReturnEvent event)
-        throws SemanticError {
+            throws SemanticError {
         final StringBuilder str = new StringBuilder();
         str.append("var out = new Object();");
         final Map<String, Object> variables = event.getVariables();
