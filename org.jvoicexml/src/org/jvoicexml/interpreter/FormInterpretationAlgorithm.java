@@ -1361,9 +1361,10 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final Configuration configuration = context.getConfiguration();
         final VoiceXmlInterpreterContext subdialogContext = new VoiceXmlInterpreterContext(
                 session, configuration, observer);
+        final EventBus bus = context.getEventBus();
         // Start the subdialog thread
         final Thread thread = new SubdialogExecutorThread(resolvedUri,
-                subdialogContext, application, parameters);
+                subdialogContext, application, parameters, bus);
         thread.start();
     }
 

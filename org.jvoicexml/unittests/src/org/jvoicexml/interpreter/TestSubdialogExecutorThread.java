@@ -127,7 +127,7 @@ public class TestSubdialogExecutorThread {
         application.addDocument(new URI("test"), doc);
 
         final SubdialogExecutorThread executor = new SubdialogExecutorThread(
-                uri, context, application, params);
+                uri, context, application, params, eventbus);
 
         executor.start();
         executor.join();
