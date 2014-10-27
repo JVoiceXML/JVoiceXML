@@ -30,8 +30,16 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
             <include name="commons-pool-1.5.5.jar" />
         </fileset>
 
+        <!-- commons-lang library -->
+        <property name="lang.dir" value="${commons.dir}/lang3.3.2" />
+        <property name="lang.lib.dir" value="${lang.dir}/lib" />
+        <fileset dir="${lang.lib.dir}" id="lang.lib">
+            <include name="commons-lang3-3.3.2.jar" />
+        </fileset>
+
         <!-- commons-httpclient library -->
-        <property name="httpclient.dir" value="${commons.dir}/httpclient4.2.3" />
+        <property name="httpclient.dir"
+                  value="${commons.dir}/httpclient4.2.3" />
         <property name="httpclient.lib.dir" value="${httpclient.dir}/lib" />
         <fileset dir="${httpclient.lib.dir}" id="httpclient.lib">
             <include name="httpclient-4.2.3.jar" />
@@ -152,7 +160,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
             <and>
                 <available file="${checkstyle.lib.dir}" type="dir" />
                 <available classpathref="checkstyle.path"
-                    classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" />
+                           classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" />
             </and>
         </condition>
     </target>
@@ -170,7 +178,8 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
     <target name="-checkJunit">
         <!-- Check if junit ist accessible for ant. -->
         <available classname="junit.framework.TestCase"
-                 property="junit.present" classpathref="test.classpath"/>
+                   property="junit.present"
+                   classpathref="test.classpath" />
         <fail unless="junit.present">
 junit is not installed in your ANT distribution.
 Download junit.jar from http://www.junit.org and copy junit.jar into
@@ -203,15 +212,17 @@ You are using ${ant.java.version}.
             </classpath>
         </taskdef>
         <property name="svn.base"
-             value="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml"/>
-        <property name="trunk.core.dir"
-             value="${svn.base}/core/trunk"/>
+                  value="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml" />
+        <property name="trunk.core.dir" value="${svn.base}/core/trunk" />
         <property name="tag.core.dir"
-             value="${svn.base}/core/tags/${jvxml.version}"/>
-        <svnSetting client="javahl" id="svn.settings" failonerror="false"
-            username="${svn.username}" password="${svn.password}"/>
+                  value="${svn.base}/core/tags/${jvxml.version}" />
+        <svnSetting client="javahl"
+                    id="svn.settings"
+                    failonerror="false"
+                    username="${svn.username}"
+                    password="${svn.password}" />
         <svn refid="svn.settings">
-            <wcversion path="."/>
+            <wcversion path="." />
         </svn>
     </target>
 </project>
