@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: IfStrategy.java,v $
- * Version: $Revision: 4080 $
+ * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/GrammarStrategy.java $
+ * Version: $LastChangedRevision: 4080 $
  * Date:    $Date: 2013-12-17 09:46:17 +0100 (Tue, 17 Dec 2013) $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -116,7 +115,6 @@ public final class IfStrategy
     private NodeList getListToExecute(final VoiceXmlInterpreterContext context,
                                       final VoiceXmlNode node)
             throws SemanticError {
-
         final NodeList children = node.getChildNodes();
         if (checkCondition(context, node)) {
             return collect(children, 0);
@@ -124,7 +122,6 @@ public final class IfStrategy
 
         for (int i = 0; i < children.getLength(); i++) {
             final VoiceXmlNode child = (VoiceXmlNode) children.item(i);
-
             final String name = child.getTagName();
             if (Else.TAG_NAME.equalsIgnoreCase(name)
                 || Elseif.TAG_NAME.equalsIgnoreCase(name)) {
