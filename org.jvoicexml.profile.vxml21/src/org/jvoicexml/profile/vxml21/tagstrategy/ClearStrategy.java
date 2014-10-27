@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -42,7 +42,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Clear;
-import org.mozilla.javascript.Context;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;clear&gt;</code> node.
@@ -53,11 +52,9 @@ import org.mozilla.javascript.Context;
  * @author Dirk Schnelle-Walka
  * @version $Revision: 4080 $
  */
-final class ClearStrategy
-        extends AbstractTagStrategy {
+final class ClearStrategy extends AbstractTagStrategy {
     /** Logger instance. */
-    private static final Logger LOGGER =
-        Logger.getLogger(ClearStrategy.class);
+    private static final Logger LOGGER = Logger.getLogger(ClearStrategy.class);
 
     /** Names to clear. */
     private TokenList namelist;
@@ -79,8 +76,7 @@ final class ClearStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes()
-            throws ErrorEvent {
+    public void validateAttributes() throws ErrorEvent {
         final String names = (String) getAttribute(Clear.ATTRIBUTE_NAMELIST);
 
         if (names == null) {
@@ -94,11 +90,9 @@ final class ClearStrategy
      * {@inheritDoc}
      */
     public void execute(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
-                        final FormItem item,
-                        final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
         if ((namelist == null) || namelist.isEmpty()) {
             clearAllFormItems(context, fia);
         } else {
@@ -109,8 +103,11 @@ final class ClearStrategy
 
     /**
      * Clear all form items.
-     * @param context The current VoiceXML interpreter context.
-     * @param fia The current form interpretation algorithm
+     * 
+     * @param context
+     *            The current VoiceXML interpreter context.
+     * @param fia
+     *            The current form interpretation algorithm
      *
      * @since 0.3.1
      */
@@ -125,7 +122,7 @@ final class ClearStrategy
 
         for (FormItem item : items) {
             final String name = item.getName();
-            scripting.setVariable(name, Context.getUndefinedValue());
+            scripting.setVariable(name, ScriptingEngine.getUndefinedValue());
             resetCounter(scripting, name);
         }
     }
@@ -133,11 +130,13 @@ final class ClearStrategy
     /**
      * Resets the counter if an
      * {@link org.jvoicexml.interpreter.formitem.AbstractInputItem} exists.
-     * @param scripting scripting engine.
-     * @param name name of the variable.
+     * 
+     * @param scripting
+     *            scripting engine.
+     * @param name
+     *            name of the variable.
      */
-    private void resetCounter(final ScriptingEngine scripting,
-            final String name) {
+    private void resetCounter(final ScriptingEngine scripting, final String name) {
         // TODO Remove the knowledge, that a shadow var ends with $.
         final Object value = scripting.getVariable(name + "$");
         if (value instanceof EventCountable) {
@@ -152,15 +151,17 @@ final class ClearStrategy
 
     /**
      * Clear all specified variables.
-     * @param context The current VoiceXML interpreter context.
-     * @param fia The current form interpretation algorithm
+     * 
+     * @param context
+     *            The current VoiceXML interpreter context.
+     * @param fia
+     *            The current form interpretation algorithm
      * @exception SemanticError
-     *            A variable is not defined.
+     *                A variable is not defined.
      * @since 0.3.1
      */
     private void clearVariables(final VoiceXmlInterpreterContext context,
-                                final FormInterpretationAlgorithm fia)
-            throws SemanticError {
+            final FormInterpretationAlgorithm fia) throws SemanticError {
         final ScriptingEngine scripting = context.getScriptingEngine();
 
         /** @todo If namelist is not specified: Clear all form items. */
@@ -170,7 +171,7 @@ final class ClearStrategy
             }
 
             resetCounter(scripting, name);
-            scripting.setVariable(name, Context.getUndefinedValue());
+            scripting.setVariable(name, ScriptingEngine.getUndefinedValue());
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("cleared var '" + name + "'");
             }

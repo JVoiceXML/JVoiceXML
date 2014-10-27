@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.InputItem;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.xml.TokenList;
@@ -49,13 +50,14 @@ import org.mozilla.javascript.Context;
  * @version $Revision: 4080 $
  * @since 0.6
  */
-public final class TestClearStrategy
-        extends TagStrategyTestBase {
+public final class TestClearStrategy extends TagStrategyTestBase {
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testExecute() throws Exception {
@@ -74,15 +76,17 @@ public final class TestClearStrategy
             Assert.fail(e.getMessage());
         }
 
-        Assert.assertEquals(Context.getUndefinedValue(), getScriptingEngine()
-                .getVariable(var));
+        Assert.assertEquals(ScriptingEngine.getUndefinedValue(),
+                getScriptingEngine().getVariable(var));
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testExecuteMultiple() throws Exception {
@@ -102,12 +106,9 @@ public final class TestClearStrategy
         getScriptingEngine().setVariable(var2, "assigned2");
         getScriptingEngine().setVariable(var3, "assigned3");
 
-        Assert.assertEquals("assigned1",
-                getScriptingEngine().getVariable(var1));
-        Assert.assertEquals("assigned2",
-                getScriptingEngine().getVariable(var2));
-        Assert.assertEquals("assigned3",
-                getScriptingEngine().getVariable(var3));
+        Assert.assertEquals("assigned1", getScriptingEngine().getVariable(var1));
+        Assert.assertEquals("assigned2", getScriptingEngine().getVariable(var2));
+        Assert.assertEquals("assigned3", getScriptingEngine().getVariable(var3));
 
         ClearStrategy strategy = new ClearStrategy();
         try {
@@ -116,19 +117,23 @@ public final class TestClearStrategy
             Assert.fail(e.getMessage());
         }
 
-        Assert.assertEquals(Context.getUndefinedValue(), getScriptingEngine()
-                .getVariable(var1));
-        Assert.assertEquals(Context.getUndefinedValue(), getScriptingEngine()
-                .getVariable(var2));
-        Assert.assertEquals(Context.getUndefinedValue(), getScriptingEngine()
-                .getVariable(var3));
+        Assert.assertEquals(ScriptingEngine.getUndefinedValue(),
+                getScriptingEngine().getVariable(var1));
+        Assert.assertEquals(ScriptingEngine.getUndefinedValue(),
+                getScriptingEngine().getVariable(var2));
+        Assert.assertEquals(ScriptingEngine.getUndefinedValue(),
+                getScriptingEngine().getVariable(var3));
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
-     * @exception JVoiceXMLEvent test failed
-     * @exception Exception test failed
+     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
+     * @exception JVoiceXMLEvent
+     *                test failed
+     * @exception Exception
+     *                test failed
      */
     @Test
     public void testExecuteInputItem() throws JVoiceXMLEvent, Exception {
@@ -158,16 +163,20 @@ public final class TestClearStrategy
             Assert.fail(e.getMessage());
         }
 
-        Assert.assertEquals(Context.getUndefinedValue(), getScriptingEngine()
-                .getVariable(var));
+        Assert.assertEquals(ScriptingEngine.getUndefinedValue(),
+                getScriptingEngine().getVariable(var));
         Assert.assertEquals(1, inputItem.getPromptCount());
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
-     * @exception JVoiceXMLEvent test failed
-     * @exception Exception test failed
+     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
+     * @exception JVoiceXMLEvent
+     *                test failed
+     * @exception Exception
+     *                test failed
      */
     @Test
     public void testExecuteInputEmpty() throws JVoiceXMLEvent, Exception {
@@ -199,16 +208,18 @@ public final class TestClearStrategy
             Assert.fail(e.getMessage());
         }
 
-        Assert.assertEquals(Context.getUndefinedValue(), getScriptingEngine()
-                .getVariable(var));
+        Assert.assertEquals(ScriptingEngine.getUndefinedValue(),
+                getScriptingEngine().getVariable(var));
         Assert.assertEquals(1, inputItem.getPromptCount());
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testExecuteNotDeclared() throws Exception {

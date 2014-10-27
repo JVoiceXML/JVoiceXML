@@ -47,7 +47,6 @@ import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.Submit;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
@@ -59,11 +58,9 @@ import org.mozilla.javascript.ScriptableObject;
  * @author Dirk Schnelle-Walka
  * @version $Revision: 4080 $
  */
-final class SubmitStrategy
-        extends AbstractTagStrategy {
+final class SubmitStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(SubmitStrategy.class);
+    private static final Logger LOGGER = Logger.getLogger(SubmitStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -100,20 +97,18 @@ final class SubmitStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes()
-            throws ErrorEvent {
+    public void validateAttributes() throws ErrorEvent {
         final String names = (String) getAttribute(Submit.ATTRIBUTE_NAMELIST);
         namelist = new TokenList(names);
 
-        final String requestMethod = (String) getAttribute(
-                Submit.ATTRIBUTE_METHOD);
+        final String requestMethod = (String) getAttribute(Submit.ATTRIBUTE_METHOD);
         if (requestMethod == null) {
             method = RequestMethod.GET;
         } else if (RequestMethod.POST.getMethod().equalsIgnoreCase(
                 requestMethod)) {
             method = RequestMethod.POST;
-        } else if (RequestMethod.GET.getMethod().equalsIgnoreCase(
-                requestMethod)) {
+        } else if (RequestMethod.GET.getMethod()
+                .equalsIgnoreCase(requestMethod)) {
             method = RequestMethod.GET;
         } else {
             throw new SemanticError("Method must be one of '"
@@ -121,32 +116,28 @@ final class SubmitStrategy
         }
 
         final boolean srcDefined = isAttributeDefined(Submit.ATTRIBUTE_NEXT);
-        final boolean srcexprDefined =
-            isAttributeDefined(Submit.ATTRIBUTE_EXPR);
+        final boolean srcexprDefined = isAttributeDefined(Submit.ATTRIBUTE_EXPR);
         if (srcDefined == srcexprDefined) {
             throw new BadFetchError(
                     "Exactly one of 'next' or 'expr' must be specified");
         }
 
-        final String nextAttribute =
-            (String) getAttribute(Submit.ATTRIBUTE_NEXT);
+        final String nextAttribute = (String) getAttribute(Submit.ATTRIBUTE_NEXT);
         if (nextAttribute != null) {
             try {
                 next = new URI(nextAttribute);
             } catch (URISyntaxException e) {
-                throw new SemanticError(
-                        "'" + nextAttribute + "' is no valid uri!");
+                throw new SemanticError("'" + nextAttribute
+                        + "' is no valid uri!");
             }
             return;
         }
 
-        final String exprAttribute =
-            (String) getAttribute(Submit.ATTRIBUTE_EXPR);
+        final String exprAttribute = (String) getAttribute(Submit.ATTRIBUTE_EXPR);
         try {
             next = new URI(exprAttribute);
         } catch (URISyntaxException e) {
-            throw new SemanticError(
-                    "'" + exprAttribute + "' is no valid uri!");
+            throw new SemanticError("'" + exprAttribute + "' is no valid uri!");
         }
     }
 
@@ -158,16 +149,14 @@ final class SubmitStrategy
      * @todo Extend to process all settings.
      */
     public void execute(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
-                        final FormItem item,
-                        final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("submitting to uri '" + next.toString() + "'...");
         }
-        final DocumentDescriptor descriptor =
-            new DocumentDescriptor(next, method, true);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(next,
+                method, true);
         appendVariables(context, descriptor);
         throw new SubmitEvent(descriptor);
     }
@@ -176,20 +165,20 @@ final class SubmitStrategy
      * Expand the variables of the namelist to the descriptor.
      *
      * @param context
-     *        the current <code>VoiceXmlInterpreterContext</code>.
+     *            the current <code>VoiceXmlInterpreterContext</code>.
      * @param descriptor
-     *        the document descriptor where to add the resolved parameters
+     *            the document descriptor where to add the resolved parameters
      * @exception SemanticError
-     *            A referenced variable is undefined
+     *                A referenced variable is undefined
      */
     private void appendVariables(final VoiceXmlInterpreterContext context,
-                                final DocumentDescriptor descriptor)
-            throws SemanticError {
+            final DocumentDescriptor descriptor) throws SemanticError {
         final ScriptingEngine scripting = context.getScriptingEngine();
 
         for (String name : namelist) {
             final Object value = scripting.eval(name + ";");
-            if ((value == null) || (value == Context.getUndefinedValue())) {
+            if ((value == null)
+                    || (value == ScriptingEngine.getUndefinedValue())) {
                 descriptor.addParameter(name, "");
                 continue;
             }

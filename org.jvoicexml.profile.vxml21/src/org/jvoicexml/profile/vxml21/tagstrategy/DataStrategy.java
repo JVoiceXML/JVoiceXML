@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -51,7 +51,6 @@ import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Data;
 import org.jvoicexml.xml.vxml.RequestMethod;
-import org.mozilla.javascript.Context;
 import org.w3c.dom.Document;
 
 /**
@@ -64,11 +63,9 @@ import org.w3c.dom.Document;
  * @version $Revision: 4080 $
  * @since 0.7.1
  */
-final class DataStrategy
-        extends AbstractTagStrategy {
+final class DataStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(DataStrategy.class);
+    private static final Logger LOGGER = Logger.getLogger(DataStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -105,20 +102,18 @@ final class DataStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes()
-            throws ErrorEvent {
+    public void validateAttributes() throws ErrorEvent {
         final String names = (String) getAttribute(Data.ATTRIBUTE_NAMELIST);
         namelist = new TokenList(names);
 
-        final String requestMethod = (String) getAttribute(
-                Data.ATTRIBUTE_METHOD);
+        final String requestMethod = (String) getAttribute(Data.ATTRIBUTE_METHOD);
         if (requestMethod == null) {
             method = RequestMethod.GET;
         } else if (RequestMethod.POST.getMethod().equalsIgnoreCase(
                 requestMethod)) {
             method = RequestMethod.POST;
-        } else if (RequestMethod.GET.getMethod().equalsIgnoreCase(
-                requestMethod)) {
+        } else if (RequestMethod.GET.getMethod()
+                .equalsIgnoreCase(requestMethod)) {
             method = RequestMethod.GET;
         } else {
             throw new SemanticError("Method must be one of '"
@@ -126,30 +121,27 @@ final class DataStrategy
         }
 
         final boolean srcDefined = isAttributeDefined(Data.ATTRIBUTE_SRC);
-        final boolean srcexprDefined =
-            isAttributeDefined(Data.ATTRIBUTE_SRCEXPR);
+        final boolean srcexprDefined = isAttributeDefined(Data.ATTRIBUTE_SRCEXPR);
         if (srcDefined == srcexprDefined) {
             throw new BadFetchError(
                     "Exactly one of 'src' or 'srcexpr' must be specified");
         }
-        final String srcAttribute =
-            (String) getAttribute(Data.ATTRIBUTE_SRC);
+        final String srcAttribute = (String) getAttribute(Data.ATTRIBUTE_SRC);
         if (srcAttribute != null) {
             try {
                 src = new URI(srcAttribute);
             } catch (URISyntaxException e) {
-                throw new SemanticError(
-                        "'" + srcAttribute + "' is no valid uri!");
+                throw new SemanticError("'" + srcAttribute
+                        + "' is no valid uri!");
             }
             return;
         }
-        final String srcExprAttribute =
-            (String) getAttribute(Data.ATTRIBUTE_SRCEXPR);
+        final String srcExprAttribute = (String) getAttribute(Data.ATTRIBUTE_SRCEXPR);
         try {
             src = new URI(srcExprAttribute);
         } catch (URISyntaxException e) {
-            throw new SemanticError(
-                    "'" + srcExprAttribute + "' is no valid uri!");
+            throw new SemanticError("'" + srcExprAttribute
+                    + "' is no valid uri!");
         }
     }
 
@@ -157,11 +149,9 @@ final class DataStrategy
      * {@inheritDoc}
      */
     public void execute(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
-                        final FormItem item,
-                        final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
         final DocumentServer server = context.getDocumentServer();
         final Session session = context.getSession();
 
@@ -173,15 +163,14 @@ final class DataStrategy
             uri = application.resolve(src);
         }
         LOGGER.info("obtaining data from '" + uri + "'");
-        final DocumentDescriptor descriptor =
-            new DocumentDescriptor(uri, method);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                method);
         appendVariables(context, descriptor);
         final FetchAttributes attributes = getFetchAttributes();
         descriptor.setAttributes(attributes);
         final String sessionId = session.getSessionID();
-        final Document document =
-            (Document) server.getObject(sessionId, descriptor,
-                    DocumentServer.TEXT_XML);
+        final Document document = (Document) server.getObject(sessionId,
+                descriptor, DocumentServer.TEXT_XML);
         final String name = (String) getAttribute(Data.ATTRIBUTE_NAME);
         if (name == null) {
             return;
@@ -194,20 +183,20 @@ final class DataStrategy
      * Expand the variables of the namelist to the descriptor.
      *
      * @param context
-     *        the current <code>VoiceXmlInterpreterContext</code>.
+     *            the current <code>VoiceXmlInterpreterContext</code>.
      * @param descriptor
-     *        the document descriptor where to add the resolved parameters
+     *            the document descriptor where to add the resolved parameters
      * @exception SemanticError
-     *            A referenced variable is undefined
+     *                A referenced variable is undefined
      */
     private void appendVariables(final VoiceXmlInterpreterContext context,
-                                final DocumentDescriptor descriptor)
-            throws SemanticError {
+            final DocumentDescriptor descriptor) throws SemanticError {
         final ScriptingEngine scripting = context.getScriptingEngine();
 
         for (String name : namelist) {
             final Object value = scripting.eval(name + ";");
-            if ((value == null) || (value == Context.getUndefinedValue())) {
+            if ((value == null)
+                    || (value == ScriptingEngine.getUndefinedValue())) {
                 throw new SemanticError("'" + name + "' is undefined!");
             }
 
@@ -227,17 +216,16 @@ final class DataStrategy
 
     /**
      * Determines the fetch attributes from the current node.
+     * 
      * @return fetch attributes to use.
      */
     private FetchAttributes getFetchAttributes() {
         final FetchAttributes attributes = new FetchAttributes();
-        final String fetchHint =
-            (String) getAttribute(Data.ATTRIBUTE_FETCHHINT);
+        final String fetchHint = (String) getAttribute(Data.ATTRIBUTE_FETCHHINT);
         if (fetchHint != null) {
             attributes.setFetchHint(fetchHint);
         }
-        final String fetchTimeout =
-            (String) getAttribute(Data.ATTRIBUTE_FETCHTIMEOUT);
+        final String fetchTimeout = (String) getAttribute(Data.ATTRIBUTE_FETCHTIMEOUT);
         if (fetchTimeout != null) {
             final TimeParser parser = new TimeParser(fetchTimeout);
             final long seconds = parser.parse();
