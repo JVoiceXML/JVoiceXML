@@ -21,7 +21,8 @@
             isAccepted (removed isRejected)</li>
         <li>safely remove shutdown hook</li>
         <li>provided client libraries via maven on sonatype</li>
-        <li>refactoring: introduced the concpets or profiles similar to VoiceXML 3</li>
+        <li>refactoring: introduced the concepts or profiles
+            similar to VoiceXML 3</li>
     </ul>
 
     <h3>interpreter</h3>
@@ -32,6 +33,10 @@
         <li>refactoring: renamed CharacterInput to DtmfInput</li>
         <li>added support for direct access to properties of
             application.lastresult$ not only via the array.</li>
+        <li>logging the expression in case of an error while
+            evaluating a script expression</li>
+        <li>unescapping XML expressions before evaluating them as
+            script</li>
         <li>more support for
             <ul>
                 <li>grammar
@@ -121,7 +126,8 @@
         <li>initial support of an HTTP event and transport layer.</li>
         <li>bugfix: avoided an unmarshalling error when
             deserializing ArrayList as content</li>
-        <li>added support for access to the used protocol in VoiceXML documents</li>
+        <li>added support for access to the used protocol in
+            VoiceXML documents</li>
     </ul>
 
     <h4>text implementation platform</h4>

@@ -16,6 +16,11 @@
 	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.2.3/lib/httpcore-4.2.3.jar"/>
 	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.2.3/lib/httpcore-ab-4.2.3.jar"/>
 	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.2.3/lib/httpcore-nio-4.2.3.jar"/>
+	<classpathentry kind="lib" path="3rdparty/commons/lang3.3.2/lib/commons-lang3-3.3.2.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/commons/lang3.3.2/commons-lang3-3.3.2-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="config"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>

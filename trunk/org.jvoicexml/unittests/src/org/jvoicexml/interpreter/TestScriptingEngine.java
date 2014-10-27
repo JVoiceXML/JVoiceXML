@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,7 +32,6 @@ import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.Scope;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
@@ -47,12 +46,12 @@ public final class TestScriptingEngine {
 
     /**
      * Set up the test environment.
+     * 
      * @exception Exception
-     *            set up failed
+     *                set up failed
      */
     @Before
-    public void setUp()
-            throws Exception {
+    public void setUp() throws Exception {
         scripting = new ScriptingEngine(null);
     }
 
@@ -93,9 +92,10 @@ public final class TestScriptingEngine {
     }
 
     /**
-     * Test method for  {@link ScriptingEngine#getVariable(String)}.
+     * Test method for {@link ScriptingEngine#getVariable(String)}.
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testGetVariable() throws JVoiceXMLEvent {
@@ -133,7 +133,7 @@ public final class TestScriptingEngine {
     }
 
     /**
-     * Test method for  {@link ScriptingEngine#isVariableDefined(String)}.
+     * Test method for {@link ScriptingEngine#isVariableDefined(String)}.
      */
     @Test
     public void testIsVariableDefined() {
@@ -155,9 +155,10 @@ public final class TestScriptingEngine {
     }
 
     /**
-     * Test method for  {@link ScriptingEngine#isVariableDefined(String)}.
+     * Test method for {@link ScriptingEngine#isVariableDefined(String)}.
+     * 
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test
     public void testEval() throws JVoiceXMLEvent {
@@ -165,8 +166,7 @@ public final class TestScriptingEngine {
         final String value1 = "value1";
         scripting.setVariable(name1, value1);
         Assert.assertTrue(scripting.isVariableDefined(name1));
-        Assert.assertEquals(Boolean.TRUE,
-                scripting.eval(name1 + "=='value1';"));
+        Assert.assertEquals(Boolean.TRUE, scripting.eval(name1 + "=='value1';"));
 
         SemanticError error = null;
         try {
@@ -180,7 +180,7 @@ public final class TestScriptingEngine {
     }
 
     /**
-     * Test method for  {@link ScriptingEngine#removeVariable(String)}.
+     * Test method for {@link ScriptingEngine#removeVariable(String)}.
      */
     @Test
     public void testRemoveVariable() {
@@ -217,9 +217,11 @@ public final class TestScriptingEngine {
 
     /**
      * Test method for
-     * {@link ScriptingEngine#enterScope(org.jvoicexml.interpreter.scope.Scope, org.jvoicexml.interpreter.scope.Scope)}.
+     * {@link ScriptingEngine#enterScope(org.jvoicexml.interpreter.scope.Scope, org.jvoicexml.interpreter.scope.Scope)}
+     * .
+     * 
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test
     public void testEnterScope() throws JVoiceXMLEvent {
@@ -229,26 +231,26 @@ public final class TestScriptingEngine {
         Assert.assertEquals(value1, scripting.getVariable(name1));
 
         final String name2 = "name2";
-        final Object value2 = Context.getUndefinedValue();
+        final Object value2 = ScriptingEngine.getUndefinedValue();
         scripting.setVariable(name2, value2);
         Assert.assertEquals(value2, scripting.getVariable(name2));
-        Assert.assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
-                + name1 + ";"));
+        Assert.assertEquals(Boolean.TRUE,
+                scripting.eval("'" + value1 + "' == " + name1 + ";"));
 
         scripting.enterScope(Scope.APPLICATION, Scope.SESSION);
         Assert.assertTrue(scripting.isVariableDefined(name1));
         Assert.assertEquals(value1, scripting.getVariable(name1));
         Assert.assertEquals(value2, scripting.getVariable(name2));
-        Assert.assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
-                + name1 + ";"));
+        Assert.assertEquals(Boolean.TRUE,
+                scripting.eval("'" + value1 + "' == " + name1 + ";"));
 
         final String name3 = "name3";
         final String value3 = "value3";
         scripting.setVariable(name3, value3);
         Assert.assertTrue(scripting.isVariableDefined(name3));
         Assert.assertEquals(value3, scripting.getVariable(name3));
-        Assert.assertEquals(Boolean.FALSE, scripting.eval(name3 + " == "
-                + name1 + ";"));
+        Assert.assertEquals(Boolean.FALSE,
+                scripting.eval(name3 + " == " + name1 + ";"));
 
         final String value4 = "value4";
         scripting.setVariable(name2, value4);
@@ -259,12 +261,12 @@ public final class TestScriptingEngine {
         Assert.assertEquals(value1, scripting.getVariable(name1));
         Assert.assertEquals(value4, scripting.getVariable(name2));
         Assert.assertNull(scripting.getVariable(name3));
-        Assert.assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
-                + name1 + ";"));
+        Assert.assertEquals(Boolean.TRUE,
+                scripting.eval("'" + value1 + "' == " + name1 + ";"));
         JVoiceXMLEvent error = null;
         try {
-            Assert.assertEquals(Boolean.FALSE, scripting.eval(name3 + " == "
-                    + name1 + ";"));
+            Assert.assertEquals(Boolean.FALSE,
+                    scripting.eval(name3 + " == " + name1 + ";"));
         } catch (SemanticError e) {
             error = e;
         }
@@ -272,8 +274,11 @@ public final class TestScriptingEngine {
     }
 
     /**
-     * Test method for {@link ScriptingEngine#toJSON(org.mozilla.javascript.ScriptableObject)}.
-     * @exception JVoiceXMLEvent test failed
+     * Test method for
+     * {@link ScriptingEngine#toJSON(org.mozilla.javascript.ScriptableObject)}.
+     * 
+     * @exception JVoiceXMLEvent
+     *                test failed
      * @since 0.7.5
      */
     @Test
@@ -282,8 +287,8 @@ public final class TestScriptingEngine {
         scripting.eval("A.B = 'test';");
         scripting.eval("A.C = new Object();");
         scripting.eval("A.C.D = 5;");
-        final ScriptableObject object =
-            (ScriptableObject) scripting.getVariable("A");
+        final ScriptableObject object = (ScriptableObject) scripting
+                .getVariable("A");
         Assert.assertEquals("{\"B\":\"test\",\"C\":{\"D\":5}}",
                 scripting.toJSON(object));
     }
