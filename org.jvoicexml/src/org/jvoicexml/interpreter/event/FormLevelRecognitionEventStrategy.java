@@ -49,7 +49,6 @@ import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.FilledMode;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
@@ -66,12 +65,11 @@ import org.mozilla.javascript.ScriptableObject;
  *
  * @see org.jvoicexml.ImplementationPlatform
  */
-final class FormLevelRecognitionEventStrategy
-        extends AbstractEventStrategy
+final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
         implements EventStrategyPrototype {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(FormLevelRecognitionEventStrategy.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(FormLevelRecognitionEventStrategy.class);
 
     /** The current dialog. */
     private final Dialog dialog;
@@ -93,19 +91,18 @@ final class FormLevelRecognitionEventStrategy
      * Constructs a new object.
      *
      * @param ctx
-     *        The VoiceXML interpreter context.
+     *            The VoiceXML interpreter context.
      * @param interpreter
-     *        The VoiceXML interpreter.
+     *            The VoiceXML interpreter.
      * @param algorithm
-     *        The FIA.
+     *            The FIA.
      * @param dlg
-     *        The current dialog.
+     *            The current dialog.
      */
     public FormLevelRecognitionEventStrategy(
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm algorithm,
-            final Dialog dlg) {
+            final FormInterpretationAlgorithm algorithm, final Dialog dlg) {
         super(ctx, interpreter, algorithm, null, null,
                 RecognitionEvent.EVENT_TYPE);
         dialog = dlg;
@@ -113,14 +110,14 @@ final class FormLevelRecognitionEventStrategy
 
     /**
      * Retrieves the input items of the dialog.
+     * 
      * @return input items
      * @exception BadFetchError
-     *        error obtaining the input items
+     *                error obtaining the input items
      */
     private Collection<InputItem> getInputItems() throws BadFetchError {
         if (inputItems == null) {
-            final VoiceXmlInterpreterContext ctx =
-                getVoiceXmlInterpreterContext();
+            final VoiceXmlInterpreterContext ctx = getVoiceXmlInterpreterContext();
             final Collection<FormItem> formItems = dialog.getFormItems(ctx);
             inputItems = new java.util.ArrayList<InputItem>();
             for (FormItem formItem : formItems) {
@@ -135,14 +132,14 @@ final class FormLevelRecognitionEventStrategy
 
     /**
      * Retrieves the initial form items of the dialog.
+     * 
      * @return initial form items
      * @exception BadFetchError
-     *        error obtaining the initial form items
+     *                error obtaining the initial form items
      */
     private Collection<InitialFormItem> getInitialItems() throws BadFetchError {
         if (initalItems == null) {
-            final VoiceXmlInterpreterContext ctx =
-                getVoiceXmlInterpreterContext();
+            final VoiceXmlInterpreterContext ctx = getVoiceXmlInterpreterContext();
             final Collection<FormItem> formItems = dialog.getFormItems(ctx);
             initalItems = new java.util.ArrayList<InitialFormItem>();
             for (FormItem formItem : formItems) {
@@ -157,22 +154,21 @@ final class FormLevelRecognitionEventStrategy
 
     /**
      * Sets the result in the application shadow variable.
-     * @param result the current recognition result.
+     * 
+     * @param result
+     *            the current recognition result.
      * @throws SemanticError
-     *         Error creating the shadow variable.
+     *             Error creating the shadow variable.
      * @since 0.6
      */
     private void setApplicationLastResult(final RecognitionResult result)
-        throws SemanticError {
-        final VoiceXmlInterpreterContext context =
-            getVoiceXmlInterpreterContext();
+            throws SemanticError {
+        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
         final ScriptingEngine scripting = context.getScriptingEngine();
-        if (scripting.isVariableDefined(
-                ApplicationShadowVarContainer.VARIABLE_NAME)) {
-            final ApplicationShadowVarContainer application =
-                (ApplicationShadowVarContainer)
-                scripting.eval(ApplicationShadowVarContainer.VARIABLE_NAME
-                        + ";");
+        if (scripting
+                .isVariableDefined(ApplicationShadowVarContainer.VARIABLE_NAME)) {
+            final ApplicationShadowVarContainer application = (ApplicationShadowVarContainer) scripting
+                    .eval(ApplicationShadowVarContainer.VARIABLE_NAME + ";");
 
             application.setRecognitionResult(result);
         }
@@ -184,8 +180,8 @@ final class FormLevelRecognitionEventStrategy
             LOGGER.debug("processing event " + event + "...");
         }
         final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
-        final RecognitionResult result =
-                recognitionEvent.getRecognitionResult();
+        final RecognitionResult result = recognitionEvent
+                .getRecognitionResult();
 
         final Collection<InputItem> filtered = filterEvent(result);
         if ((filtered == null) || filtered.isEmpty()) {
@@ -200,13 +196,10 @@ final class FormLevelRecognitionEventStrategy
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("executing filled elements...");
         }
-        final Collection<Filled> filledElements =
-            dialog.getFilledElements();
-        final VoiceXmlInterpreterContext context =
-            getVoiceXmlInterpreterContext();
+        final Collection<Filled> filledElements = dialog.getFilledElements();
+        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
         final ScriptingEngine scripting = context.getScriptingEngine();
-        final FormInterpretationAlgorithm fia =
-            getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
         final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
         final TagStrategyExecutor executor = getTagStrategyExecutor();
         for (Filled filled : filledElements) {
@@ -222,15 +215,17 @@ final class FormLevelRecognitionEventStrategy
 
     /**
      * Checks if the filled node should be executed.
-     * @param filled the filled node to check
-     * @param scripting the scripting engine
+     * 
+     * @param filled
+     *            the filled node to check
+     * @param scripting
+     *            the scripting engine
      * @return <code>true</code> if the filled node should be executed.
      */
     private boolean shouldExecute(final Filled filled,
             final ScriptingEngine scripting) {
         final FilledMode mode = filled.getModeObject();
-        final FormInterpretationAlgorithm fia =
-            getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
         final TokenList tokens = filled.getNameListObject();
         final Collection<FormItem> formItems = fia.getFormItems();
         if (tokens.isEmpty()) {
@@ -251,8 +246,11 @@ final class FormLevelRecognitionEventStrategy
 
     /**
      * Checks if all of the tokens are contained in the just filled items.
-     * @param tokens tokens to be processed.
-     * @param scripting the scripting engine
+     * 
+     * @param tokens
+     *            tokens to be processed.
+     * @param scripting
+     *            the scripting engine
      * @return <code>true</code> if all input items are filled
      * @since 0.7.3
      */
@@ -264,7 +262,8 @@ final class FormLevelRecognitionEventStrategy
         }
         for (String token : tokens) {
             final Object object = scripting.getVariable(token);
-            if ((object == null) || (object == Context.getUndefinedValue())) {
+            if ((object == null)
+                    || (object == ScriptingEngine.getUndefinedValue())) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("not all filled: '" + token
                             + "' is not defined");
@@ -278,8 +277,11 @@ final class FormLevelRecognitionEventStrategy
 
     /**
      * Checks if any of the tokens are contained in the just filled items.
-     * @param tokens tokens to be processed.
-     * @param scripting the scripting engine
+     * 
+     * @param tokens
+     *            tokens to be processed.
+     * @param scripting
+     *            the scripting engine
      * @return <code>true</code> if any input items are filled
      * @since 0.7.3
      */
@@ -291,7 +293,8 @@ final class FormLevelRecognitionEventStrategy
         }
         for (String token : tokens) {
             final Object object = scripting.getVariable(token);
-            if ((object != null) && (object != Context.getUndefinedValue())) {
+            if ((object != null)
+                    && (object != ScriptingEngine.getUndefinedValue())) {
                 LOGGER.info("any filled: '" + token + "' is defined");
                 return true;
             }
@@ -304,18 +307,20 @@ final class FormLevelRecognitionEventStrategy
 
     /**
      * Sets all filled input items.
-     * @param result the current recognition result
-     * @param filtered input items to be set
+     * 
+     * @param result
+     *            the current recognition result
+     * @param filtered
+     *            input items to be set
      * @throws SemanticError
-     *         error setting the input item
+     *             error setting the input item
      */
     private void setFilledInputItems(final RecognitionResult result,
             final Collection<InputItem> filtered) throws SemanticError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("setting the filled form items...");
         }
-        final FormInterpretationAlgorithm fia =
-            getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
         setApplicationLastResult(result);
         for (InputItem item : filtered) {
             if (LOGGER.isDebugEnabled()) {
@@ -333,13 +338,15 @@ final class FormLevelRecognitionEventStrategy
 
     /**
      * Determines all input items that can be filled using the given event.
-     * @param result the recognition result
+     * 
+     * @param result
+     *            the recognition result
      * @return filtered input items
      * @exception BadFetchError
-     *        error obtaining the form items
+     *                error obtaining the form items
      */
     private Collection<InputItem> filterEvent(final RecognitionResult result)
-        throws BadFetchError {
+            throws BadFetchError {
         if (!result.isAccepted()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("result not accepted");
@@ -348,8 +355,7 @@ final class FormLevelRecognitionEventStrategy
             return null;
         }
 
-        final Object interpretation =
-            result.getSemanticInterpretation();
+        final Object interpretation = result.getSemanticInterpretation();
         if (interpretation == null) {
             LOGGER.warn("result has no sematic interpretation: "
                     + "can not be processed!");
@@ -365,8 +371,7 @@ final class FormLevelRecognitionEventStrategy
         final String str = ScriptingEngine.toJSON(inter);
         LOGGER.info("semantic interpretation: '" + str + "'");
         final Collection<String> props = getResultProperties(inter);
-        final Collection<InputItem> filtered =
-            new java.util.ArrayList<InputItem>();
+        final Collection<InputItem> filtered = new java.util.ArrayList<InputItem>();
         final Collection<InputItem> items = getInputItems();
         for (InputItem item : items) {
             final String slot;
@@ -385,8 +390,8 @@ final class FormLevelRecognitionEventStrategy
                     if (prop.equals(slot)) {
                         filtered.add(item);
                         if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("added input item '"
-                                    + item.getName() + "'");
+                            LOGGER.debug("added input item '" + item.getName()
+                                    + "'");
                         }
                         break;
                     }
@@ -398,8 +403,10 @@ final class FormLevelRecognitionEventStrategy
 
     /**
      * Retrieves all result properties from the given object.
-     * @param interpretation the semantic interpretation
-     * @return result properties 
+     * 
+     * @param interpretation
+     *            the semantic interpretation
+     * @return result properties
      */
     private Collection<String> getResultProperties(
             final ScriptableObject interpretation) {
@@ -407,7 +414,7 @@ final class FormLevelRecognitionEventStrategy
         addResultProperties(interpretation, "", props);
         if (LOGGER.isDebugEnabled()) {
             for (String prop : props) {
-                LOGGER.debug("result property '" + prop + "'"); 
+                LOGGER.debug("result property '" + prop + "'");
             }
         }
         return props;
@@ -415,14 +422,17 @@ final class FormLevelRecognitionEventStrategy
 
     /**
      * Iterate through the given object to determine all nested properties.
-     * @param object the current scriptable
-     * @param prefix the current prefix
-     * @param props collected properties
+     * 
+     * @param object
+     *            the current scriptable
+     * @param prefix
+     *            the current prefix
+     * @param props
+     *            collected properties
      * @since 0.7.1
      */
     private void addResultProperties(final ScriptableObject object,
-            final String prefix,
-            final Collection<String> props) {
+            final String prefix, final Collection<String> props) {
         final Object[] ids = object.getAllIds();
         for (Object o : ids) {
             final String name;
@@ -442,10 +452,11 @@ final class FormLevelRecognitionEventStrategy
 
     /**
      * Sets all initial form items to {@code true}.
+     * 
      * @exception BadFetchError
-     *        error obtaining the form items
+     *                error obtaining the form items
      * @exception SemanticError
-     *        error setting the value of the form item
+     *                error setting the value of the form item
      */
     private void setInitialFormItems() throws BadFetchError, SemanticError {
         final Collection<InitialFormItem> items = getInitialItems();
@@ -460,8 +471,7 @@ final class FormLevelRecognitionEventStrategy
     @Override
     public EventStrategy newInstance(final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm algorithm,
-            final FormItem formItem) {
+            final FormInterpretationAlgorithm algorithm, final FormItem formItem) {
         final Dialog currentDialog;
         if (algorithm == null) {
             currentDialog = null;

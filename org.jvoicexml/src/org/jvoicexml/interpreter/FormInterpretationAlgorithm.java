@@ -77,7 +77,6 @@ import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-import org.mozilla.javascript.Context;
 
 /**
  * Forms are interpreted by an implicit form interpretation algorithm (FIA). The
@@ -697,12 +696,12 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("reprompt: clearing all just filled elements");
             }
-            final Object undefined = Context.getUndefinedValue();
             final ScriptingEngine scripting = context.getScriptingEngine();
 
             for (InputItem input : justFilled) {
                 final String name = input.getName();
-                scripting.setVariable(name, undefined);
+                scripting
+                        .setVariable(name, ScriptingEngine.getUndefinedValue());
             }
         }
     }
