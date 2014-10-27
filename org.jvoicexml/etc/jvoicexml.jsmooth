@@ -25,6 +25,7 @@
 <classPath>..\lib\commons-logging-1.1.1.jar</classPath>
 <classPath>..\lib\commons-pool-1.5.5.jar</classPath>
 <classPath>..\lib\commons-codec-1.4.jar</classPath>
+<classPath>..\lib\commons-lang3-3.3.2.jar</classPath>
 <classPath>..\lib\org.jvoicexml.jar</classPath>
 <classPath>..\lib\org.jvoicexml.xml.jar</classPath>
 <classPath>..\lib\org.jvoicexml.config.jar</classPath>
