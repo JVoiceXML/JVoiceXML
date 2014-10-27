@@ -37,7 +37,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Property;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -45,8 +44,8 @@ import org.w3c.dom.NodeList;
 /**
  * Base functionality of a {@link FormItem}.
  * <p>
- * Each {@link FormItem} has an associated variable with its name
- * that can be retrieved by {@link #getName()} in the {@link ScriptingEngine}.
+ * Each {@link FormItem} has an associated variable with its name that can be
+ * retrieved by {@link #getName()} in the {@link ScriptingEngine}.
  * </p>
  *
  * @author Dirk Schnelle-Walka
@@ -55,8 +54,8 @@ import org.w3c.dom.NodeList;
 abstract class AbstractFormItem
         implements FormItem, FormItemLocalExecutableTagContainer {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(AbstractFormItem.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(AbstractFormItem.class);
 
     /** The current <code>VoiceXmlInterpreterContext</code>. */
     private final VoiceXmlInterpreterContext context;
@@ -83,12 +82,12 @@ abstract class AbstractFormItem
      * Create a new form item.
      *
      * @param ctx
-     *        The current <code>VoiceXmlInterpreterContext</code>.
+     *            The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
-     *        The corresponding XML node in the VoiceXML document.
+     *            The corresponding XML node in the VoiceXML document.
      */
     public AbstractFormItem(final VoiceXmlInterpreterContext ctx,
-                            final VoiceXmlNode voiceNode) {
+            final VoiceXmlNode voiceNode) {
         node = voiceNode;
         context = ctx;
         name = FormItemNameFactory.getName(node);
@@ -96,10 +95,11 @@ abstract class AbstractFormItem
 
     /**
      * Factory method to create a new instance from a template.
+     * 
      * @param ctx
-     *        The current <code>VoiceXmlInterpreterContext</code>.
+     *            The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
-     *        The corresponding XML node in the VoiceXML document.
+     *            The corresponding XML node in the VoiceXML document.
      * @return created form item
      * @since 0.7.6
      */
@@ -108,6 +108,7 @@ abstract class AbstractFormItem
 
     /**
      * {@inheritDoc}
+     * 
      * @return retrieves the value of the associated variable in the
      *         {@link ScriptingEngine}.
      */
@@ -123,7 +124,7 @@ abstract class AbstractFormItem
             }
         }
 
-        return Context.getUndefinedValue();
+        return ScriptingEngine.getUndefinedValue();
     }
 
     /**
@@ -164,7 +165,8 @@ abstract class AbstractFormItem
         }
         final ScriptingEngine scripting = context.getScriptingEngine();
         final Object condResult = scripting.eval(condAttribute + ";");
-        if (condResult == Context.getUndefinedValue()) {
+        if ((condResult == ScriptingEngine.getUndefinedValue())
+                || (condResult == null)) {
             return false;
         }
         final Boolean bool = (Boolean) condResult;
@@ -178,9 +180,8 @@ abstract class AbstractFormItem
     public boolean isSelectable() throws SemanticError {
         final Object result = getFormItemVariable();
         final boolean cond = evaluateCondition();
-        final boolean selectable = ((result == Context.getUndefinedValue())
-                || (result == null))
-            && cond;
+        final boolean selectable = ((result == ScriptingEngine
+                .getUndefinedValue()) || (result == null)) && cond;
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("checking if selectable");
@@ -229,6 +230,7 @@ abstract class AbstractFormItem
 
     /**
      * Retrieves all nested catch elements.
+     * 
      * @return all nested catch elements
      */
     public Collection<AbstractCatchElement> getCatchElements() {
@@ -236,14 +238,12 @@ abstract class AbstractFormItem
             return null;
         }
 
-        final Collection<AbstractCatchElement> catches =
-                new java.util.ArrayList<AbstractCatchElement>();
+        final Collection<AbstractCatchElement> catches = new java.util.ArrayList<AbstractCatchElement>();
         final NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
             if (child instanceof AbstractCatchElement) {
-                final AbstractCatchElement catchElement =
-                        (AbstractCatchElement) child;
+                final AbstractCatchElement catchElement = (AbstractCatchElement) child;
                 catches.add(catchElement);
             }
         }
@@ -259,8 +259,7 @@ abstract class AbstractFormItem
             return null;
         }
 
-        final Collection<VoiceXmlNode> nodes =
-                new java.util.ArrayList<VoiceXmlNode>();
+        final Collection<VoiceXmlNode> nodes = new java.util.ArrayList<VoiceXmlNode>();
         final NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);

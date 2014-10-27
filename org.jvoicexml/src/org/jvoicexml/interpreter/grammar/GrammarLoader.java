@@ -38,10 +38,10 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.srgs.Grammar;
-import org.mozilla.javascript.Context;
 
 /**
  * Loads external and external grammars.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.5
@@ -52,29 +52,28 @@ final class GrammarLoader {
 
     /**
      * Loads the document that is specified by the given grammar.
+     * 
      * @param context
-     *        The current context.
+     *            The current context.
      * @param attributes
-     *        attributes governing the fetch.
+     *            attributes governing the fetch.
      * @param grammar
-     *        The grammar to process
+     *            The grammar to process
      * @return the transformed grammar
      * @exception BadFetchError
-     *         If the document could not be fetched successfully.
+     *                If the document could not be fetched successfully.
      * @exception SemanticError
-     *         if there was an error evaluating a scripting expression
+     *                if there was an error evaluating a scripting expression
      * @exception UnsupportedFormatError
-     *         If an unsupported grammar has to be loaded.
+     *                If an unsupported grammar has to be loaded.
      */
     public GrammarDocument loadGrammarDocument(
             final VoiceXmlInterpreterContext context,
-            final FetchAttributes attributes,
-            final Grammar grammar)
-        throws UnsupportedFormatError, BadFetchError, SemanticError {
+            final FetchAttributes attributes, final Grammar grammar)
+            throws UnsupportedFormatError, BadFetchError, SemanticError {
         try {
             if (grammar.isExternalGrammar()) {
-                return loadExternalGrammar(context, attributes,
-                        grammar);
+                return loadExternalGrammar(context, attributes, grammar);
             } else {
                 return loadInternalGrammar(grammar);
             }
@@ -84,22 +83,20 @@ final class GrammarLoader {
     }
 
     /**
-     * Takes the route of processing an inline grammar. In fact, it
-     * just identifies the grammar and puts it into a temporary
-     * container. The container used is the ExternalGrammar, that can
-     * hold the grammar as a String representation as well as the
-     * corresponding media type, if one is applicable.
+     * Takes the route of processing an inline grammar. In fact, it just
+     * identifies the grammar and puts it into a temporary container. The
+     * container used is the ExternalGrammar, that can hold the grammar as a
+     * String representation as well as the corresponding media type, if one is
+     * applicable.
      *
      * @param grammar
-     *        Takes a VoiceXML Node and processes the contained
-     *        grammar.
+     *            Takes a VoiceXML Node and processes the contained grammar.
      *
-     * @return The result of the processing. A grammar
-     *         representation which can be used to transform into a
-     *         RuleGrammar.
+     * @return The result of the processing. A grammar representation which can
+     *         be used to transform into a RuleGrammar.
      * @throws UnsupportedFormatError
-     *         If the grammar could not be identified. This means, the
-     *         grammar is not valid or (even worse) not supported.
+     *             If the grammar could not be identified. This means, the
+     *             grammar is not valid or (even worse) not supported.
      */
     private GrammarDocument loadInternalGrammar(final Grammar grammar)
             throws UnsupportedFormatError {
@@ -115,21 +112,21 @@ final class GrammarLoader {
      * Take the route of processing an external grammar.
      *
      * @param context
-     *        The current context
+     *            The current context
      * @param attributes
-     *        attributes governing the fetch.
+     *            attributes governing the fetch.
      * @param grammar
-     *        The grammar to be processed.
+     *            The grammar to be processed.
      *
-     * @return Is just the string representation of the
-     *         grammar as well as the type.
+     * @return Is just the string representation of the grammar as well as the
+     *         type.
      *
      * @throws UnsupportedFormatError
-     *         If an unsupported grammar has to be processed.
+     *             If an unsupported grammar has to be processed.
      * @throws BadFetchError
-     *         If the document could not be fetched successfully.
+     *             If the document could not be fetched successfully.
      * @throws SemanticError
-     *         if the srcexpr attribute could not be evaluated
+     *             if the srcexpr attribute could not be evaluated
      */
     private GrammarDocument loadExternalGrammar(
             final VoiceXmlInterpreterContext context,
@@ -148,18 +145,19 @@ final class GrammarLoader {
                 // TODO add support for URI fragments
                 LOGGER.warn("URI fragments are currently not supported: "
                         + "ignoring fragment");
-                src = new URI(src.getScheme(), src.getUserInfo(), src.getHost(),
-                        src.getPort(), src.getPath(), src.getQuery(), null);
+                src = new URI(src.getScheme(), src.getUserInfo(),
+                        src.getHost(), src.getPort(), src.getPath(),
+                        src.getQuery(), null);
             }
         } catch (java.net.URISyntaxException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
 
         LOGGER.info("loading grammar from source: '" + src + "'");
-        final FetchAttributes adaptedAttributes =
-            adaptFetchAttributes(attributes, grammar);
-        final GrammarDocument document =
-                context.acquireExternalGrammar(src, adaptedAttributes);
+        final FetchAttributes adaptedAttributes = adaptFetchAttributes(
+                attributes, grammar);
+        final GrammarDocument document = context.acquireExternalGrammar(src,
+                adaptedAttributes);
         if (document == null) {
             throw new BadFetchError("Unable to load grammar '" + src + "'!");
         }
@@ -167,22 +165,25 @@ final class GrammarLoader {
     }
 
     /**
-     * Retrieves the URI from the grammar node by either returning the
-     * src attribute or by evaluating the srcexpr attribut.
-     * @param grammar the current grammar node
-     * @param context the VoiceXML interpreter context
+     * Retrieves the URI from the grammar node by either returning the src
+     * attribute or by evaluating the srcexpr attribut.
+     * 
+     * @param grammar
+     *            the current grammar node
+     * @param context
+     *            the VoiceXML interpreter context
      * @return grammar URI, <code>null</code> if there is no value defined
      * @throws URISyntaxException
-     *         error creating an URI from the attribute
+     *             error creating an URI from the attribute
      * @throws SemanticError
-     *         error evaluating the srcexpr attribute
+     *             error evaluating the srcexpr attribute
      * @throws BadFetchError
-     *         both, src and srcexpr were specified
+     *             both, src and srcexpr were specified
      * @since 0.7.4
      */
     private URI getExternalUriSrc(final Grammar grammar,
             final VoiceXmlInterpreterContext context)
-        throws URISyntaxException, SemanticError, BadFetchError {
+            throws URISyntaxException, SemanticError, BadFetchError {
         final URI src = grammar.getSrcUri();
         if (src != null) {
             return src;
@@ -195,7 +196,7 @@ final class GrammarLoader {
         }
         final ScriptingEngine scripting = context.getScriptingEngine();
         final Object value = scripting.eval(srcexpr + ";");
-        if (value == null || value == Context.getUndefinedValue()) {
+        if ((value == null) || (value == ScriptingEngine.getUndefinedValue())) {
             LOGGER.warn("srcexpr does not describe a valid uri");
             return null;
         }
@@ -203,10 +204,13 @@ final class GrammarLoader {
     }
 
     /**
-     * Extracts the fetch attributes from the grammar and overrides the
-     * settings of the document default fetch attributes.
-     * @param docAttributes fetch attributes for the document.
-     * @param grammar the current grammar.
+     * Extracts the fetch attributes from the grammar and overrides the settings
+     * of the document default fetch attributes.
+     * 
+     * @param docAttributes
+     *            fetch attributes for the document.
+     * @param grammar
+     *            the current grammar.
      * @return attributes governing the fetch.
      */
     private FetchAttributes adaptFetchAttributes(

@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter;
 import java.util.Map;
 import java.util.Stack;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.jvoicexml.event.error.SemanticError;
@@ -114,6 +115,16 @@ public final class ScriptingEngine implements ScopeSubscriber {
     }
 
     /**
+     * Retrieves the value for undefined.
+     * 
+     * @return undefined value
+     * @since 0.7.7
+     */
+    public static Object getUndefinedValue() {
+        return Context.getUndefinedValue();
+    }
+
+    /**
      * Transforms the given {@link ScriptableObject} into a JSON string.
      * 
      * @param object
@@ -183,8 +194,10 @@ public final class ScriptingEngine implements ScopeSubscriber {
             }
             return Context.getUndefinedValue();
         }
+        final String unescapedTrimmedExpr = StringEscapeUtils
+                .unescapeXml(trimmedExpr);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("evaluating '" + trimmedExpr + "'...");
+            LOGGER.debug("evaluating '" + unescapedTrimmedExpr + "'...");
         }
 
         final Object result;
@@ -192,10 +205,13 @@ public final class ScriptingEngine implements ScopeSubscriber {
         final Scriptable scope = getScope();
         // evaluate expr with parent nodes scope
         try {
-            result = ctx.evaluateString(scope, trimmedExpr, "expr", 1, null);
+            result = ctx.evaluateString(scope, unescapedTrimmedExpr, "expr", 1,
+                    null);
         } catch (EcmaError e) {
+            LOGGER.warn("error evaluating '" + unescapedTrimmedExpr + "'");
             throw new SemanticError(e.getMessage(), e);
         } catch (EvaluatorException e) {
+            LOGGER.warn("error evaluating '" + unescapedTrimmedExpr + "'");
             StringBuilder sb = new StringBuilder();
             sb.append(e.getMessage());
             sb.append(" at line ");
