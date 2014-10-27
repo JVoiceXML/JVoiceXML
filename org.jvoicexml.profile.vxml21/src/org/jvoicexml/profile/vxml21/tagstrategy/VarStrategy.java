@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,7 +38,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Var;
-import org.mozilla.javascript.Context;
 
 /**
  * Strategy of the FIA to execute the <code>&lt;var&gt;</code> node within a
@@ -52,11 +51,9 @@ import org.mozilla.javascript.Context;
  *
  * @version $Revision: 4080 $
  */
-final class VarStrategy
-        extends AbstractTagStrategy {
+final class VarStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(VarStrategy.class);
+    private static final Logger LOGGER = Logger.getLogger(VarStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -90,8 +87,7 @@ final class VarStrategy
     }
 
     /**
-     * {@inheritDoc}
-     * Does nothing if called in a subdialog context.
+     * {@inheritDoc} Does nothing if called in a subdialog context.
      */
     @Override
     public void evalAttributes(final VoiceXmlInterpreterContext context)
@@ -106,19 +102,18 @@ final class VarStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes()
-            throws SemanticError {
+    public void validateAttributes() throws SemanticError {
         name = (String) getAttribute(Var.ATTRIBUTE_NAME);
 
         /**
-         *  @todo Check if the name specifies a scope prefix and throw an
-         * error.semantic in that case.
-         * Check if this is handled by the scripting environment.
+         * @todo Check if the name specifies a scope prefix and throw an
+         *       error.semantic in that case. Check if this is handled by the
+         *       scripting environment.
          */
         if (!isSubdialog) {
             value = getAttribute(Var.ATTRIBUTE_EXPR);
             if (value == null) {
-                value = Context.getUndefinedValue();
+                value = ScriptingEngine.getUndefinedValue();
             }
         }
     }
@@ -129,11 +124,9 @@ final class VarStrategy
      * Create the variable with the given value.
      */
     public void execute(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
-                        final FormItem item,
-                        final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
         if (isSubdialog) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("ignoring expr of name '" + name

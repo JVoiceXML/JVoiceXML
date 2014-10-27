@@ -41,7 +41,6 @@ import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
@@ -208,7 +207,7 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
 
     /**
      * Checks if the given attribute is defined, this means, neither
-     * <code>null</code> nor <code>Context.getUndefinedValue()</code>.
+     * <code>null</code> nor <code>ScriptingEngine.getUndefinedValue()</code>.
      * 
      * @param name
      *            Name of the attribute.
@@ -220,7 +219,7 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
             return false;
         }
 
-        return Context.getUndefinedValue() != value;
+        return ScriptingEngine.getUndefinedValue() != value;
     }
 
     /**

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,7 +37,6 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.mozilla.javascript.Context;
 
 /**
  * Skeleton for a {@link SsmlParsingStrategy}.
@@ -49,8 +48,8 @@ import org.mozilla.javascript.Context;
 abstract class AbstractSsmlParsingStrategy
         implements Cloneable, SsmlParsingStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(AbstractSsmlParsingStrategy.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(AbstractSsmlParsingStrategy.class);
 
     /** Map with evaluated attributes. */
     private Map<String, Object> attributes;
@@ -66,18 +65,16 @@ abstract class AbstractSsmlParsingStrategy
      * {@inheritDoc}
      *
      * <p>
-     * Retrieves all attributes of the current tag and store their values
-     * in the attributes map. If there is no value in the prompt, the method
-     * tries to find a value that has been set via a
-     * <code>&lt;property&gt;</code> tag.<br>
+     * Retrieves all attributes of the current tag and store their values in the
+     * attributes map. If there is no value in the prompt, the method tries to
+     * find a value that has been set via a <code>&lt;property&gt;</code> tag.<br>
      * Implementations are requested to obtain the values via the
      * {@link #getAttribute(String)} method.
      * </p>
      */
     @Override
     public void getAttributes(final VoiceXmlInterpreterContext context,
-                              final FormInterpretationAlgorithm fia,
-                              final VoiceXmlNode node) {
+            final FormInterpretationAlgorithm fia, final VoiceXmlNode node) {
         if (node == null) {
             LOGGER.warn("cannot get attributes from null");
         }
@@ -118,7 +115,7 @@ abstract class AbstractSsmlParsingStrategy
                 final String exprstring = expr.toString();
                 Object value = scripting.eval(exprstring);
                 if (value == null) {
-                    value = Context.getUndefinedValue();
+                    value = ScriptingEngine.getUndefinedValue();
                 }
 
                 attributes.put(name, value);
@@ -130,8 +127,7 @@ abstract class AbstractSsmlParsingStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes()
-            throws ErrorEvent {
+    public void validateAttributes() throws ErrorEvent {
     }
 
     /**
@@ -145,8 +141,8 @@ abstract class AbstractSsmlParsingStrategy
 
         try {
             strategy = (AbstractSsmlParsingStrategy) super.clone();
-            strategy.attributes =
-                new java.util.HashMap<String, Object>(attributes);
+            strategy.attributes = new java.util.HashMap<String, Object>(
+                    attributes);
         } catch (CloneNotSupportedException cnse) {
             LOGGER.fatal("clone failed", cnse);
             return null;
@@ -157,9 +153,11 @@ abstract class AbstractSsmlParsingStrategy
 
     /**
      * Retrieves the value of the given attribute.
-     * @param name Name of the attribute.
-     * @return Value of the attribute, <code>null</code> if the attribute
-     * has no associated value.
+     * 
+     * @param name
+     *            Name of the attribute.
+     * @return Value of the attribute, <code>null</code> if the attribute has no
+     *         associated value.
      */
     protected final Object getAttribute(final String name) {
         return attributes.get(name);
@@ -167,8 +165,10 @@ abstract class AbstractSsmlParsingStrategy
 
     /**
      * Checks if the given attribute is defined, this means, neither
-     * <code>null</code> nor <code>Context.getUndefinedValue()</code>.
-     * @param name Name of the attribute.
+     * <code>null</code> nor <code>ScriptingEngine.getUndefinedValue()</code>.
+     * 
+     * @param name
+     *            Name of the attribute.
      * @return <code>true</code> if the attribute is defined.
      */
     protected final boolean isAttributeDefined(final String name) {
@@ -177,7 +177,7 @@ abstract class AbstractSsmlParsingStrategy
             return false;
         }
 
-        return Context.getUndefinedValue() != value;
+        return ScriptingEngine.getUndefinedValue() != value;
     }
 
 }
