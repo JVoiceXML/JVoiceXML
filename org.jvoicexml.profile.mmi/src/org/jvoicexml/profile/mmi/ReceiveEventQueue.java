@@ -27,7 +27,6 @@
 package org.jvoicexml.profile.mmi;
 
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +41,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.Mmi;
-import org.mozilla.javascript.Context;
 import org.w3c.dom.Node;
 
 /**
@@ -98,7 +96,9 @@ public class ReceiveEventQueue implements EventSubscriber {
 
     /**
      * Converts the received message into a last message.
-     * @param event the event to convert
+     * 
+     * @param event
+     *            the event to convert
      * @return the converted message
      * @since 0.7.7
      */
@@ -133,11 +133,11 @@ public class ReceiveEventQueue implements EventSubscriber {
                 }
             } else {
                 contentType = null;
-                content = Context.getUndefinedValue();
+                content = ScriptingEngine.getUndefinedValue();
             }
         } else {
             contentType = null;
-            content = Context.getUndefinedValue();
+            content = ScriptingEngine.getUndefinedValue();
         }
         return new LastMessage(contentType, name, content);
     }
