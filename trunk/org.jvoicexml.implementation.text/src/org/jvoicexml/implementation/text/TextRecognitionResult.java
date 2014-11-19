@@ -31,15 +31,15 @@ package org.jvoicexml.implementation.text;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.processor.srgs.GrammarChecker;
 import org.jvoicexml.xml.srgs.ModeType;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
 
 /**
- * A recognition result for text based input. Since textual input is less
- * error prone than pure speech recognition we will always accept the
- * result with full confidence.
+ * A recognition result for text based input. Since textual input is less error
+ * prone than pure speech recognition we will always accept the result with full
+ * confidence.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -55,21 +55,22 @@ final class TextRecognitionResult implements RecognitionResult {
     /** The last reached mark. */
     private String mark;
 
-    /**Reference to the grammarChecker Object.*/
+    /** Reference to the grammarChecker Object. */
     private final GrammarChecker grammarChecker;
-       
-    /**The Logger for this class.*/
-    private static final Logger LOGGER =
-        Logger.getLogger(TextRecognitionResult.class);
-    
-    
+
+    /** The Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(TextRecognitionResult.class);
+
     /**
      * Constructs a new object.
-     * @param text the received text.
-     * @param checker the checker for the grammar.
+     * 
+     * @param text
+     *            the received text.
+     * @param checker
+     *            the checker for the grammar.
      */
-    public TextRecognitionResult(final String text,
-            final GrammarChecker checker) {
+    public TextRecognitionResult(final String text, final GrammarChecker checker) {
         utterance = text;
         grammarChecker = checker;
     }
@@ -147,21 +148,18 @@ final class TextRecognitionResult implements RecognitionResult {
      * {@inheritDoc}
      */
     @Override
-    public Object getSemanticInterpretation() {
+    public Object getSemanticInterpretation(final DataModel model)
+            throws SemanticError {
         if (interpretation == null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("creating semantic interpretation...");
-            }
-            
             if (grammarChecker == null) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("there is no grammar graph" 
+                    LOGGER.debug("there is no grammar graph"
                             + " cannot get semantic interpretation");
                 }
                 return null;
             }
 
-            final String[] tags =  grammarChecker.getInterpretation();
+            final String[] tags = grammarChecker.getInterpretation();
             if ((tags == null) || (tags.length == 0)) {
                 return null;
             }
@@ -170,28 +168,19 @@ final class TextRecognitionResult implements RecognitionResult {
                     tags[i] = tags[i].substring(tags[i].indexOf('.') + 1);
                 }
             }
-                           
-            final Context context = Context.enter();
-            context.setLanguageVersion(Context.VERSION_1_6);
-            
-            final Scriptable scope = context.initStandardObjects();
-            context.evaluateString(scope, "var out = new Object();", "expr", 1,
-                    null);
-            context.evaluateString(scope, "var out = new Object();", "expr", 1,
-                    null);
+
+            model.createVariable("out");
             for (String tag : tags) {
                 if (tag.trim().endsWith(";")) {
-                    context.evaluateString(scope, tag, "expr", 1, null);
+                    model.evaluateExpression(tag, Object.class);
                 } else {
-                    context.evaluateString(scope, "var out = '" + tag + "';",
-                            "expr", 1, null);
+                    model.updateVariable("out", tag);
                 }
             }
-            interpretation = scope.get("out", scope);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...created semantic interpretation");
-            }
+            interpretation = model.readVariable("out", Object.class);
+            final String log = model.toString(interpretation);
+            LOGGER.info("created semantic interpretation '" + log + "'");
         }
-        return interpretation;   
+        return interpretation;
     }
 }
