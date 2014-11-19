@@ -27,6 +27,7 @@
 package org.jvoicexml.mock;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
@@ -36,8 +37,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @version $Revision$
  * @since 0.6
  */
-public final class MockRecognitionResult
-        implements RecognitionResult {
+public final class MockRecognitionResult implements RecognitionResult {
     /** The semantic interpretation of the utterance. */
     private Object interpretation;
 
@@ -96,7 +96,9 @@ public final class MockRecognitionResult
 
     /**
      * Sets the utterance.
-     * @param utt new value for the utterance.
+     * 
+     * @param utt
+     *            new value for the utterance.
      */
     public void setUtterance(final String utt) {
         utterance = utt;
@@ -118,7 +120,9 @@ public final class MockRecognitionResult
 
     /**
      * Sets this result accept status flag.
-     * @param value new value for accepted.
+     * 
+     * @param value
+     *            new value for accepted.
      */
     public void setAccepted(final boolean value) {
         accepted = value;
@@ -186,18 +190,19 @@ public final class MockRecognitionResult
         return confidences;
     }
 
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public Object getSemanticInterpretation() {
+    public Object getSemanticInterpretation(final DataModel model) {
         return interpretation;
     }
 
     /**
      * Sets the semantic interpretation.
-     * @param value the semantic interpretation
+     * 
+     * @param value
+     *            the semantic interpretation
      */
     public void setSemanticInterpretation(final Object value) {
         interpretation = value;

@@ -56,6 +56,29 @@ public class LastResult {
 
     /**
      * Constructs a new object.
+     */
+    public LastResult() {
+        utterance = null;
+        confidence = 0;
+        inputmode = null;
+        interpretation = null;
+    }
+
+    /**
+     * Constructs a new object.
+     * 
+     * @param utt
+     *            the utterance.
+     */
+    public LastResult(final String utt) {
+        utterance = utt;
+        confidence = 1.0f;
+        inputmode = null;
+        interpretation = null;
+    }
+
+    /**
+     * Constructs a new object.
      * 
      * @param utt
      *            the utterance.
@@ -72,16 +95,6 @@ public class LastResult {
         confidence = conf;
         inputmode = mode;
         interpretation = inter;
-    }
-
-    /**
-     * Constructs a new object.
-     */
-    public LastResult() {
-        utterance = null;
-        confidence = 0;
-        inputmode = null;
-        interpretation = null;
     }
 
     /**

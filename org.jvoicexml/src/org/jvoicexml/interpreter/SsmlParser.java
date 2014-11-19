@@ -49,6 +49,7 @@ import org.jvoicexml.Application;
 import org.jvoicexml.Profile;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.TextContainer;
@@ -94,7 +95,7 @@ public final class SsmlParser {
     private final VoiceXmlInterpreterContext context;
 
     /** Scripting engine to evaluate scripting expressions. */
-    private final ScriptingEngine scripting;
+    private final DataModel model;
 
     /** The base URI to convert a given URI into a hierarchical URI. */
     private URI baseUri;
@@ -116,7 +117,7 @@ public final class SsmlParser {
             final VoiceXmlInterpreterContext interpreterContext) {
         node = vxmlNode;
         context = interpreterContext;
-        scripting = context.getScriptingEngine();
+        model = context.getDataModel();
         namespaces = new java.util.HashMap<String, String>();
         baseUri = null;
         factory = profile.getSsmlParsingStrategyFactory();
@@ -265,7 +266,7 @@ public final class SsmlParser {
             strategy.getAttributes(context, null, vxmlNode);
             strategy.evalAttributes(context);
             try {
-                strategy.validateAttributes();
+                strategy.validateAttributes(model);
             } catch (SemanticError e) {
                 // Catch the semantic error since this one is also an
                 // ErrorEvent.
@@ -274,7 +275,7 @@ public final class SsmlParser {
                 throw new SemanticError(e);
             }
 
-            clonedNode = strategy.cloneNode(this, scripting, document, parent,
+            clonedNode = strategy.cloneNode(this, model, document, parent,
                     vxmlNode);
         } else {
             // Copy the node.

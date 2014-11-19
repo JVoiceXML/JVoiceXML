@@ -31,11 +31,12 @@ import java.util.Collection;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
- * Strategy to execute a node representing executable content.
- * This can happen in the following cases:
+ * Strategy to execute a node representing executable content. This can happen
+ * in the following cases:
  * <ol>
  * <li>Form initialization</li>
  * <li>Tag execution by the FIA</li>
@@ -45,18 +46,17 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * <p>
  * <b>Form initialization</b><br/>
  * Strategy of the interpreter and the FIA to initialize a form. When the
- * {@link VoiceXmlInterpreter} iterates overall VoiceXML
- * tags, and asks a {@link TagStrategyFactory} for a strategy
- * how to initialize the current node. If a matching strategy was found, it
- * is executed.
+ * {@link VoiceXmlInterpreter} iterates overall VoiceXML tags, and asks a
+ * {@link TagStrategyFactory} for a strategy how to initialize the current node.
+ * If a matching strategy was found, it is executed.
  * </p>
  *
  * <p>
  * <b>Tag execution by the FIA</b><br/>
  * Strategy of the FIA to execute a Node. When the
- * {@link FormInterpretationAlgorithm} comes to a VoiceXML tag, it asks
- * a {@link TagStrategyFactory} for a strategy how to process the
- * current node. If a matching strategy was found, the strategy is executed.
+ * {@link FormInterpretationAlgorithm} comes to a VoiceXML tag, it asks a
+ * {@link TagStrategyFactory} for a strategy how to process the current node. If
+ * a matching strategy was found, the strategy is executed.
  * </p>
  *
  * <p>
@@ -65,34 +65,27 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * <ol>
  * <li>
  * {@link #newInstance newInstance}<br>
- * Create a working copy from the template.
- * </li>
+ * Create a working copy from the template.</li>
  * <li>
  * {@link #getAttributes(VoiceXmlInterpreterContext, FormInterpretationAlgorithm, VoiceXmlNode)
  * getAttributes}<br>
- * Retrieve the current attributes from the node.
- * </li>
+ * Retrieve the current attributes from the node.</li>
  * <li>
  * {@link #evalAttributes(org.jvoicexml.interpreter.VoiceXmlInterpreterContext)
  * evalAttributes}<br>
- * Evaluate attributes, that need to be evaluated by the current script
- * context
- * </li>
+ * Evaluate attributes, that need to be evaluated by the current script context</li>
  * <li>
  * {@link #validateAttributes() validateAttributes}<br>
- * Check, if all necessary information are present.
- * </li>
+ * Check, if all necessary information are present.</li>
  * <li>
  * {@link #execute(VoiceXmlInterpreterContext, VoiceXmlInterpreter, FormInterpretationAlgorithm, FormItem, VoiceXmlNode)
  * execute}<br>
- * Process the node.
- * </li>
+ * Process the node.</li>
  * </ol>
  * </p>
  *
  * <p>
- * The tags for which a <code>TagStrategy</code> exists are executable
- * content.
+ * The tags for which a <code>TagStrategy</code> exists are executable content.
  * Executable content refers to a block of procedural logic. Such logic appears
  * in:
  * <ul>
@@ -100,9 +93,8 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * <li>The <code>&lt;filled&gt;</code> actions in <code>form</code>s and
  * <code>InputItem</code>s.</li>
  * <li>
- * Event handlers (<code>&lt;catch&gt;</code>, <code>&lt;help&gt;</code>,
- * et cetera).
- * </li>
+ * Event handlers (<code>&lt;catch&gt;</code>, <code>&lt;help&gt;</code>, et
+ * cetera).</li>
  * </ul>
  * Executable elements are executed in document order in their block of
  * procedural logic. If an executable element generates an error, that error is
@@ -131,106 +123,112 @@ public interface TagStrategy {
     TagStrategy newInstance();
 
     /**
-     * Retrieves the names of all attributes, which have to be evaluated
-     * by the scripting environment.
-     * @return Names of all attributes to be evaluated, <code>null</code>
-     *         if the related node has not attributes to be evaluated.
+     * Retrieves the names of all attributes, which have to be evaluated by the
+     * scripting environment.
+     * 
+     * @return Names of all attributes to be evaluated, <code>null</code> if the
+     *         related node has not attributes to be evaluated.
      * @since 0.3.1
      */
     Collection<String> getEvalAttributes();
 
     /**
-     * Retrieves all attributes specified by the given node or by
-     * a <code>&lt;property&gt;</code> tag and stores their
-     * values in the working copy of this strategy.
+     * Retrieves all attributes specified by the given node or by a
+     * <code>&lt;property&gt;</code> tag and stores their values in the working
+     * copy of this strategy.
      *
-     * @param context The current VoiceXML interpreter context.
+     * @param context
+     *            The current VoiceXML interpreter context.
      * @param fia
-     *        The current form interpretation algorithm, maybe <code>null</code>
-     *        if there is no current fia.
-     * @param node The node to process.
+     *            The current form interpretation algorithm, maybe
+     *            <code>null</code> if there is no current fia.
+     * @param node
+     *            The node to process.
      * @since 0.3.1
      */
     void getAttributes(final VoiceXmlInterpreterContext context,
-                       final FormInterpretationAlgorithm fia,
-                       final VoiceXmlNode node);
+            final FormInterpretationAlgorithm fia, final VoiceXmlNode node);
 
     /**
      * Evaluates all attributes which have to be evaluated by the scripting
      * environment.
-     * @param context The current VoiceXML interpreter context.
+     * 
+     * @param context
+     *            The current VoiceXML interpreter context.
      * @throws SemanticError
-     *         Error evaluating a variable.
+     *             Error evaluating a variable.
      * @since 0.3.1
      */
     void evalAttributes(final VoiceXmlInterpreterContext context)
             throws SemanticError;
 
     /**
-     * Validates the attributes of the current node. Check, if all
-     * needed attributes are provided.
+     * Validates the attributes of the current node. Check, if all needed
+     * attributes are provided.
      *
+     * @param model
+     *            the employed data model
      * @throws ErrorEvent
-     *         Validation failed.
+     *             Validation failed.
      * @since 0.3.1
      */
-    void validateAttributes()
-            throws ErrorEvent;
+    void validateAttributes(final DataModel model) throws ErrorEvent;
 
     /**
      * Executes the strategy with the current parameters.
      *
      * @param context
-     *        The VoiceXML interpreter context.
+     *            The VoiceXML interpreter context.
      * @param interpreter
-     *        The current VoiceXML interpreter.
+     *            The current VoiceXML interpreter.
      * @param fia
-     *        The current form interpretation algorithm, maybe <code>null</code>
-     *        if there is no current fia.
+     *            The current form interpretation algorithm, maybe
+     *            <code>null</code> if there is no current fia.
      * @param item
-     *        The current form item,maybe <code>null</code> if there is no
-     *        current form item.
+     *            The current form item,maybe <code>null</code> if there is no
+     *            current form item.
      * @param node
-     *        The current child node.
+     *            The current child node.
      * @throws JVoiceXMLEvent
-     *         Error while executing this strategy.
+     *             Error while executing this strategy.
      */
     void execute(final VoiceXmlInterpreterContext context,
-                 final VoiceXmlInterpreter interpreter,
-                 final FormInterpretationAlgorithm fia, final FormItem item,
-                 final VoiceXmlNode node)
-            throws JVoiceXMLEvent;
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent;
 
     /**
      * Executes the strategy with the current parameters local to a form item.
      *
      * @param context
-     *        The VoiceXML interpreter context.
+     *            The VoiceXML interpreter context.
      * @param interpreter
-     *        The current VoiceXML interpreter.
+     *            The current VoiceXML interpreter.
      * @param fia
-     *        The current form interpretation algorithm, maybe <code>null</code>
-     *        if there is no current fia.
+     *            The current form interpretation algorithm, maybe
+     *            <code>null</code> if there is no current fia.
      * @param item
-     *        The current form item,maybe <code>null</code> if there is no
-     *        current form item.
+     *            The current form item,maybe <code>null</code> if there is no
+     *            current form item.
      * @param node
-     *        The current child node.
+     *            The current child node.
      * @throws JVoiceXMLEvent
-     *         Error while executing this strategy.
+     *             Error while executing this strategy.
      */
     void executeLocal(final VoiceXmlInterpreterContext context,
-                 final VoiceXmlInterpreter interpreter,
-                 final FormInterpretationAlgorithm fia, final FormItem item,
-                 final VoiceXmlNode node)
-            throws JVoiceXMLEvent;
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent;
 
     /**
-     * Debugging facility to display the contents of all attributes in the
-     * node.
-     * @param node The current node.
+     * Debugging facility to display the contents of all attributes in the node.
+     * 
+     * @param model
+     *            the current data model
+     * @param node
+     *            the current node
      *
      * @since 0.4
      */
-    void dumpNode(final VoiceXmlNode node);
+    void dumpNode(final DataModel model, final VoiceXmlNode node);
 }

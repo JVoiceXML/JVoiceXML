@@ -61,6 +61,7 @@ import org.jvoicexml.event.plain.implementation.RecordingStartedEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.BlockFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
@@ -276,6 +277,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final TagStrategyFactory factory = profile
                 .getInitializationTagStrategyFactory();
         final Collection<XmlNode> children = dialog.getChildNodes();
+        final DataModel model = context.getDataModel();
         for (XmlNode currentNode : children) {
             if (currentNode instanceof VoiceXmlNode) {
                 final VoiceXmlNode node = (VoiceXmlNode) currentNode;
@@ -284,9 +286,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                     strategy.getAttributes(context, this, node);
                     strategy.evalAttributes(context);
                     if (LOGGER.isDebugEnabled()) {
-                        strategy.dumpNode(node);
+                        strategy.dumpNode(model, node);
                     }
-                    strategy.validateAttributes();
+                    strategy.validateAttributes(model);
                     strategy.execute(context, interpreter, this, null, node);
                 }
             }
@@ -321,8 +323,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("initializing form item '" + name + "'");
         }
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        formItem.init(scripting);
+        final DataModel model = context.getDataModel();
+        formItem.init(model);
         if (formItem instanceof FieldFormItem) {
             final Configuration configuration = context.getConfiguration();
             try {
@@ -696,13 +698,12 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("reprompt: clearing all just filled elements");
             }
-            final ScriptingEngine scripting = context.getScriptingEngine();
-
+            // Clear all just-filled attributes
+            final DataModel model = context.getDataModel();
             for (InputItem input : justFilled) {
                 final String name = input.getName();
-                scripting
-                        .setVariable(name, ScriptingEngine.getUndefinedValue());
-            }
+                model.deleteVariable(name);
+           }
         }
     }
 
@@ -1349,11 +1350,11 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final VoiceXmlDocument doc = context.loadDocument(descriptor);
         application.addDocument(resolvedUri, doc);
-        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DataModel model = context.getDataModel();
         final DocumentServer documentServer = context.getDocumentServer();
         // Retrieve the nested param elements
         final ParamParser parser = new ParamParser(subdialog.getNode(),
-                scripting, documentServer, session);
+                model, documentServer, session);
         final Map<String, Object> parameters = parser.getParameters();
         final ScopeObserver observer = new ScopeObserver();
         // TODO aquire the configuration object

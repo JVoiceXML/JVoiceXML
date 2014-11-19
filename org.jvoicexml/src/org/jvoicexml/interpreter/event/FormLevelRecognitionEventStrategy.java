@@ -39,17 +39,16 @@ import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.InputItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategyExecutor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
-import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.FilledMode;
-import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Strategy to process a recognition event coming from the implementation
@@ -164,14 +163,24 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
     private void setApplicationLastResult(final RecognitionResult result)
             throws SemanticError {
         final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        if (scripting
-                .isVariableDefined(ApplicationShadowVarContainer.VARIABLE_NAME)) {
-            final ApplicationShadowVarContainer application = (ApplicationShadowVarContainer) scripting
-                    .eval(ApplicationShadowVarContainer.VARIABLE_NAME + ";");
-
-            application.setRecognitionResult(result);
-        }
+        final DataModel model = context.getDataModel();
+        model.resizeArray("lastresult$", 1, Scope.APPLICATION);
+        final Object value = model.readArray("lastresult$", 0,
+                Scope.APPLICATION, Object.class);
+        model.createVariableFor(value, "confidence", result.getConfidence());
+        model.createVariableFor(value, "utterance", result.getUtterance());
+        model.createVariableFor(value, "inputmode", result.getMode().name());
+        model.createVariableFor(value, "interpretation",
+                result.getSemanticInterpretation(model));
+        model.updateArray("lastresult$", 0, value, Scope.APPLICATION);
+        model.createVariable("lastresult$.interpretation",
+                result.getSemanticInterpretation(model), Scope.APPLICATION);
+        model.createVariable("lastresult$.confidence", result.getConfidence(),
+                Scope.APPLICATION);
+        model.createVariable("lastresult$.utterance", result.getUtterance(),
+                Scope.APPLICATION);
+        model.createVariable("lastresult$.inputmode", result.getMode().name(),
+                Scope.APPLICATION);
     }
 
     @Override
@@ -182,8 +191,10 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
         final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
         final RecognitionResult result = recognitionEvent
                 .getRecognitionResult();
-
-        final Collection<InputItem> filtered = filterEvent(result);
+        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
+        final DataModel model = context.getDataModel();
+        setApplicationLastResult(result);
+        final Collection<InputItem> filtered = filterEvent(model, result);
         if ((filtered == null) || filtered.isEmpty()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("no matching form items: processing aborted");
@@ -197,13 +208,11 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
             LOGGER.debug("executing filled elements...");
         }
         final Collection<Filled> filledElements = dialog.getFilledElements();
-        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
-        final ScriptingEngine scripting = context.getScriptingEngine();
         final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
         final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
         final TagStrategyExecutor executor = getTagStrategyExecutor();
         for (Filled filled : filledElements) {
-            if (shouldExecute(filled, scripting)) {
+            if (shouldExecute(filled, model)) {
                 executor.executeChildNodes(context, interpreter, fia, null,
                         filled);
             }
@@ -218,12 +227,14 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
      * 
      * @param filled
      *            the filled node to check
-     * @param scripting
-     *            the scripting engine
+     * @param model
+     *            the employed data model
      * @return <code>true</code> if the filled node should be executed.
+     * @throws SemanticError
+     *             error evaluating the variables in the namelist
      */
-    private boolean shouldExecute(final Filled filled,
-            final ScriptingEngine scripting) {
+    private boolean shouldExecute(final Filled filled, final DataModel model)
+            throws SemanticError {
         final FilledMode mode = filled.getModeObject();
         final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
         final TokenList tokens = filled.getNameListObject();
@@ -238,9 +249,9 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
         }
         // TODO check if control items are references
         if (mode == FilledMode.ALL) {
-            return areAllFilled(tokens, scripting);
+            return areAllFilled(tokens, model);
         } else {
-            return isAnyFilled(tokens, scripting);
+            return isAnyFilled(tokens, model);
         }
     }
 
@@ -249,21 +260,22 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
      * 
      * @param tokens
      *            tokens to be processed.
-     * @param scripting
-     *            the scripting engine
+     * @param model
+     *            the employed data model the scripting engine
      * @return <code>true</code> if all input items are filled
+     * @throws SemanticError
+     *             if one of the tokens could not be evaluated
      * @since 0.7.3
      */
-    private boolean areAllFilled(final TokenList tokens,
-            final ScriptingEngine scripting) {
+    private boolean areAllFilled(final TokenList tokens, final DataModel model)
+            throws SemanticError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("checking if all input items of '" + tokens
                     + "' are filled");
         }
         for (String token : tokens) {
-            final Object object = scripting.getVariable(token);
-            if ((object == null)
-                    || (object == ScriptingEngine.getUndefinedValue())) {
+            final Object object = model.readVariable(token, Object.class);
+            if ((object == null) || (object == model.getUndefinedValue())) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("not all filled: '" + token
                             + "' is not defined");
@@ -280,21 +292,22 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
      * 
      * @param tokens
      *            tokens to be processed.
-     * @param scripting
-     *            the scripting engine
+     * @param model
+     *            the employed data model
      * @return <code>true</code> if any input items are filled
+     * @throws SemanticError
+     *             if one of the tokens could not be evaluated
      * @since 0.7.3
      */
-    private boolean isAnyFilled(final TokenList tokens,
-            final ScriptingEngine scripting) {
+    private boolean isAnyFilled(final TokenList tokens, final DataModel model)
+            throws SemanticError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("checking if any input items of '" + tokens
                     + "' are filled");
         }
         for (String token : tokens) {
-            final Object object = scripting.getVariable(token);
-            if ((object != null)
-                    && (object != ScriptingEngine.getUndefinedValue())) {
+            final Object object = model.readVariable(token, Object.class);
+            if ((object != null) && (object != model.getUndefinedValue())) {
                 LOGGER.info("any filled: '" + token + "' is defined");
                 return true;
             }
@@ -321,7 +334,6 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
             LOGGER.debug("setting the filled form items...");
         }
         final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
-        setApplicationLastResult(result);
         for (InputItem item : filtered) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("setting form item variable to '" + result + "'");
@@ -339,38 +351,33 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
     /**
      * Determines all input items that can be filled using the given event.
      * 
+     * @param model
+     *            the employed data model
      * @param result
      *            the recognition result
      * @return filtered input items
      * @exception BadFetchError
      *                error obtaining the form items
+     * @exception SemanticError
+     *                error evaluating the semantic interpretation
      */
-    private Collection<InputItem> filterEvent(final RecognitionResult result)
-            throws BadFetchError {
+    private Collection<InputItem> filterEvent(final DataModel model,
+            final RecognitionResult result) throws BadFetchError, SemanticError {
         if (!result.isAccepted()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("result not accepted");
             }
-
             return null;
         }
 
-        final Object interpretation = result.getSemanticInterpretation();
+        final Object interpretation = result.getSemanticInterpretation(model);
         if (interpretation == null) {
             LOGGER.warn("result has no sematic interpretation: "
                     + "can not be processed!");
             return null;
         }
-        if (!(interpretation instanceof ScriptableObject)) {
-            LOGGER.warn("a structured object is expected at form level: "
-                    + " semantic interpretation '" + interpretation
-                    + "' can not be processed!");
-            return null;
-        }
-        final ScriptableObject inter = (ScriptableObject) interpretation;
-        final String str = ScriptingEngine.toJSON(inter);
+        final String str = model.toString(interpretation);
         LOGGER.info("semantic interpretation: '" + str + "'");
-        final Collection<String> props = getResultProperties(inter);
         final Collection<InputItem> filtered = new java.util.ArrayList<InputItem>();
         final Collection<InputItem> items = getInputItems();
         for (InputItem item : items) {
@@ -385,69 +392,21 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
                 LOGGER.debug("checking input item '" + item.getName()
                         + "' with slot '" + slot + "'");
             }
-            if (props != null) {
-                for (String prop : props) {
-                    if (prop.equals(slot)) {
-                        filtered.add(item);
-                        if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("added input item '" + item.getName()
-                                    + "'");
-                        }
-                        break;
+            try {
+                final Object value = model.readVariable(
+                        "application.lastresult$.interpretation" + slot,
+                        Object.class);
+                if (value != null) {
+                    filtered.add(item);
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("added input item '" + item.getName()
+                                + "'");
                     }
                 }
+            } catch (SemanticError ignore) {
             }
         }
         return filtered;
-    }
-
-    /**
-     * Retrieves all result properties from the given object.
-     * 
-     * @param interpretation
-     *            the semantic interpretation
-     * @return result properties
-     */
-    private Collection<String> getResultProperties(
-            final ScriptableObject interpretation) {
-        final Collection<String> props = new java.util.ArrayList<String>();
-        addResultProperties(interpretation, "", props);
-        if (LOGGER.isDebugEnabled()) {
-            for (String prop : props) {
-                LOGGER.debug("result property '" + prop + "'");
-            }
-        }
-        return props;
-    }
-
-    /**
-     * Iterate through the given object to determine all nested properties.
-     * 
-     * @param object
-     *            the current scriptable
-     * @param prefix
-     *            the current prefix
-     * @param props
-     *            collected properties
-     * @since 0.7.1
-     */
-    private void addResultProperties(final ScriptableObject object,
-            final String prefix, final Collection<String> props) {
-        final Object[] ids = object.getAllIds();
-        for (Object o : ids) {
-            final String name;
-            if (prefix.isEmpty()) {
-                name = o.toString();
-            } else {
-                name = prefix + "." + o.toString();
-            }
-            props.add(name);
-            final Object value = object.get(name, null);
-            if (value instanceof ScriptableObject) {
-                final ScriptableObject scriptable = (ScriptableObject) value;
-                addResultProperties(scriptable, name, props);
-            }
-        }
     }
 
     /**

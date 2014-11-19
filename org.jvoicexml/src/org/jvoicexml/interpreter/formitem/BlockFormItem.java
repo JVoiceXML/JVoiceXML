@@ -33,8 +33,8 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItemVisitor;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Block;
@@ -47,11 +47,9 @@ import org.jvoicexml.xml.vxml.Block;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class BlockFormItem
-        extends AbstractControlItem {
+public final class BlockFormItem extends AbstractControlItem {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(BlockFormItem.class);
+    private static final Logger LOGGER = Logger.getLogger(BlockFormItem.class);
 
     /**
      * Constructs a new object as a template.
@@ -63,15 +61,14 @@ public final class BlockFormItem
      * Create a new block form item.
      *
      * @param context
-     *        The current <code>VoiceXmlInterpreterContext</code>.
+     *            The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
-     *        The corresponding XML node in the VoiceXML document.
+     *            The corresponding XML node in the VoiceXML document.
      * @throws IllegalArgumentException
-     *         if the given node is not a {@link Block}
+     *             if the given node is not a {@link Block}
      */
     public BlockFormItem(final VoiceXmlInterpreterContext context,
-                         final VoiceXmlNode voiceNode)
-                                 throws IllegalArgumentException {
+            final VoiceXmlNode voiceNode) throws IllegalArgumentException {
         super(context, voiceNode);
         if (!(voiceNode instanceof Block)) {
             throw new IllegalArgumentException("Node must be a <block>");
@@ -82,8 +79,7 @@ public final class BlockFormItem
      * {@inheritDoc}
      */
     @Override
-    public AbstractFormItem newInstance(
-            final VoiceXmlInterpreterContext ctx,
+    public AbstractFormItem newInstance(final VoiceXmlInterpreterContext ctx,
             final VoiceXmlNode voiceNode) {
         return new BlockFormItem(ctx, voiceNode);
     }
@@ -107,16 +103,15 @@ public final class BlockFormItem
     /**
      * {@inheritDoc}
      */
-    public void accept(final FormItemVisitor visitor)
-            throws JVoiceXMLEvent {
+    public void accept(final FormItemVisitor visitor) throws JVoiceXMLEvent {
         visitor.visitBlockFormItem(this);
     }
 
     /**
      * {@inheritDoc}
      *
-     * @return <code>null</code>, since a <code>&lt;block&gt;</code> must
-     *         not contain nested catches.
+     * @return <code>null</code>, since a <code>&lt;block&gt;</code> must not
+     *         contain nested catches.
      */
     @Override
     public Collection<AbstractCatchElement> getCatchElements() {
@@ -134,15 +129,10 @@ public final class BlockFormItem
      * {@inheritDoc}
      */
     @Override
-    public void init(final ScriptingEngine scripting) throws SemanticError,
-            BadFetchError {
+    public void init(final DataModel model) throws SemanticError, BadFetchError {
         final String name = getName();
-        final Object expression = evaluateExpression(scripting);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("initializing form item '" + name + "'");
-        }
-        scripting.setVariable(name, expression);
+        final Object expression = evaluateExpression(model);
+        model.createVariable(name, expression);
         LOGGER.info("initialized block form item '" + name + "' with '"
                 + expression + "'");
     }

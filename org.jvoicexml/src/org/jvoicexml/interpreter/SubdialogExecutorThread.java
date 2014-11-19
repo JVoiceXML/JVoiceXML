@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter;
 import java.net.URI;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentDescriptor;
@@ -36,6 +37,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.ReturnEvent;
 import org.jvoicexml.event.plain.jvxml.SubdialogResultEvent;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 
 /**
  * Asynchronous execution of a subdialog.
@@ -95,13 +97,13 @@ final class SubdialogExecutorThread extends Thread {
      */
     @Override
     public void run() {
-        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DataModel model = context.getDataModel();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("initializing parameters...");
         }
         for (String name : parameters.keySet()) {
             final Object value = parameters.get(name);
-            scripting.setVariable(name, value);
+            model.createVariable(name, value);
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...initialized parameters");
@@ -160,9 +162,10 @@ final class SubdialogExecutorThread extends Thread {
             }
             str.append(";");
         }
-        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DataModel model = context.getDataModel();
         final String expr = str.toString();
-        scripting.eval(expr);
-        return scripting.getVariable("out");
+        final String unescapedExpr = StringEscapeUtils.unescapeXml(expr);
+        model.evaluateExpression(unescapedExpr, Object.class);
+        return model.readVariable("out", Object.class);
     }
 }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group
+ * Copyright (C) 2005-2014 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,12 +26,13 @@
 
 package org.jvoicexml.interpreter.formitem;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItemVisitor;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Transfer;
 
@@ -43,8 +44,7 @@ import org.jvoicexml.xml.vxml.Transfer;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class TransferFormItem
-        extends AbstractGrammarContainer {
+public final class TransferFormItem extends AbstractGrammarContainer {
     /**
      * Constructs a new object as a template.
      */
@@ -55,15 +55,14 @@ public final class TransferFormItem
      * Create a new transfer input item.
      *
      * @param context
-     *        The current <code>VoiceXmlInterpreterContext</code>.
+     *            The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
-     *        The corresponding xml node in the VoiceXML document.
+     *            The corresponding xml node in the VoiceXML document.
      * @throws IllegalArgumentException
-     *         if the given node is not a {@link Transfer}
+     *             if the given node is not a {@link Transfer}
      */
     public TransferFormItem(final VoiceXmlInterpreterContext context,
-                         final VoiceXmlNode voiceNode)
-                                 throws IllegalArgumentException {
+            final VoiceXmlNode voiceNode) throws IllegalArgumentException {
         super(context, voiceNode);
         if (!(voiceNode instanceof Transfer)) {
             throw new IllegalArgumentException("Node must be a <transfer>");
@@ -74,8 +73,7 @@ public final class TransferFormItem
      * {@inheritDoc}
      */
     @Override
-    public AbstractFormItem newInstance(
-            final VoiceXmlInterpreterContext ctx,
+    public AbstractFormItem newInstance(final VoiceXmlInterpreterContext ctx,
             final VoiceXmlNode voiceNode) {
         return new TransferFormItem(ctx, voiceNode);
     }
@@ -83,36 +81,20 @@ public final class TransferFormItem
     /**
      * {@inheritDoc}
      */
-    public void accept(final FormItemVisitor visitor)
-            throws JVoiceXMLEvent {
+    public void accept(final FormItemVisitor visitor) throws JVoiceXMLEvent {
         visitor.visitTransferFormItem(this);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void resetShadowVarContainer() throws SemanticError {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class<? extends Object> getShadowVariableContainer() {
-        return TransferShadowVarContainer.class;
     }
 
     /**
      * Retrieves the destination of this transfer by evaluating the
      * <code>dest</code> and the <code>destexpr</code> attributes.
+     * 
      * @return destination of this transfer.
      * @throws SemanticError
-     *         Error evaluating the <code>destexpr</code> attribute.
+     *             Error evaluating the <code>destexpr</code> attribute.
      * @throws BadFetchError
-     *         No destination specified.
-     * @since 0.7
-     * TODO evaluate the telephone URI after RFC2806
+     *             No destination specified.
+     * @since 0.7 TODO evaluate the telephone URI after RFC2806
      */
     public String getDest() throws SemanticError, BadFetchError {
         final Transfer transfer = getTransfer();
@@ -128,13 +110,15 @@ public final class TransferFormItem
             throw new BadFetchError("Either one of \"dest\" or \"destexpr\""
                     + " must be specified!");
         }
+        final String unescapedDestexpr = StringEscapeUtils.unescapeXml(dest);
         final VoiceXmlInterpreterContext context = getContext();
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        return (String) scripting.eval(dest + ";");
+        final DataModel model = context.getDataModel();
+        return model.evaluateExpression(unescapedDestexpr, String.class);
     }
 
     /**
      * Checks if the requested transfer is a bridge transfer.
+     * 
      * @return <code>true</code> if the requested transfer is bridged.
      */
     public boolean isBridged() {
@@ -150,7 +134,7 @@ public final class TransferFormItem
      * Gets the transfer node belonging to this {@link TransferFormItem}.
      *
      * @return The related transfer node or <code>null</code> if there is no
-     *          node.
+     *         node.
      * @since 0.7
      */
     private Transfer getTransfer() {

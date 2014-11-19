@@ -35,11 +35,11 @@ import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
+import org.jvoicexml.interpreter.scope.Scope;
 
 /**
  * Strategy to process a recognition event coming from the implementation
@@ -102,13 +102,24 @@ final class InputItemRecognitionEventStrategy
     private void setApplicationLastResult(final RecognitionResult result)
             throws SemanticError {
         final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        if (scripting
-                .isVariableDefined(ApplicationShadowVarContainer.VARIABLE_NAME)) {
-            final ApplicationShadowVarContainer application = (ApplicationShadowVarContainer) scripting
-                    .eval(ApplicationShadowVarContainer.VARIABLE_NAME + ";");
-            application.setRecognitionResult(result);
-        }
+        final DataModel model = context.getDataModel();
+        model.resizeArray("lastresult$", 1, Scope.APPLICATION);
+        final Object value = model.readArray("lastresult$", 0,
+                Scope.APPLICATION, Object.class);
+        model.createVariableFor(value, "confidence", result.getConfidence());
+        model.createVariableFor(value, "utterance", result.getUtterance());
+        model.createVariableFor(value, "inputmode", result.getMode().name());
+        model.createVariableFor(value, "interpretation",
+                result.getSemanticInterpretation(model));
+        model.updateArray("lastresult$", 0, value, Scope.APPLICATION);
+        model.createVariable("lastresult$.interpretation",
+                result.getSemanticInterpretation(model), Scope.APPLICATION);
+        model.createVariable("lastresult$.confidence", result.getConfidence(),
+                Scope.APPLICATION);
+        model.createVariable("lastresult$.utterance", result.getUtterance(),
+                Scope.APPLICATION);
+        model.createVariable("lastresult$.inputmode", result.getMode().name(),
+                Scope.APPLICATION);
     }
 
     /**
@@ -120,7 +131,6 @@ final class InputItemRecognitionEventStrategy
         final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
         final RecognitionResult result = recognitionEvent
                 .getRecognitionResult();
-
         setApplicationLastResult(result);
 
         // Check if a (correct) confidencelevel was specified.
@@ -153,12 +163,6 @@ final class InputItemRecognitionEventStrategy
 
             return false;
         }
-
-        final String markname = result.getMark();
-        if (markname != null) {
-            field.setMarkname(markname);
-        }
-
         return true;
     }
 

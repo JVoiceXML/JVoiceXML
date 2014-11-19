@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 package org.jvoicexml.mock;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.jvoicexml.ConnectionInformation;
 
@@ -77,7 +78,11 @@ public final class MockConnectionInformation implements ConnectionInformation {
      */
     @Override
     public URI getCalledDevice() {
-        return null;
+        try {
+            return new URI("http://called/nowhere");
+        } catch (URISyntaxException e) {
+            return null;
+        }
     }
 
     /**
@@ -85,7 +90,11 @@ public final class MockConnectionInformation implements ConnectionInformation {
      */
     @Override
     public URI getCallingDevice() {
-        return null;
+        try {
+            return new URI("http://calling/nowhere");
+        } catch (URISyntaxException e) {
+            return null;
+        }
     }
 
     /**
@@ -93,7 +102,7 @@ public final class MockConnectionInformation implements ConnectionInformation {
      */
     @Override
     public String getProtocolName() {
-        return null;
+        return "http";
     }
 
     /**
@@ -101,7 +110,7 @@ public final class MockConnectionInformation implements ConnectionInformation {
      */
     @Override
     public String getProtocolVersion() {
-        return null;
+        return "1/1";
     }
 
 }
