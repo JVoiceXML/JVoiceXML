@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,11 +41,11 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Audio;
@@ -76,6 +76,7 @@ final class AudioTagStrategy
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<String> getEvalAttributes() {
         return EVAL_ATTRIBUTES;
     }
@@ -83,6 +84,7 @@ final class AudioTagStrategy
     /**
      * {@inheritDoc}
      */
+    @Override
     public void execute(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem item,
@@ -122,7 +124,7 @@ final class AudioTagStrategy
      * {@inheritDoc}
      */
     public SsmlNode cloneNode(final SsmlParser parser,
-            final ScriptingEngine scripting, final SsmlDocument document,
+            final DataModel model, final SsmlDocument document,
             final SsmlNode parent, final VoiceXmlNode node)
         throws SemanticError {
         final Audio audio = (Audio) parent.addChild(Audio.TAG_NAME);

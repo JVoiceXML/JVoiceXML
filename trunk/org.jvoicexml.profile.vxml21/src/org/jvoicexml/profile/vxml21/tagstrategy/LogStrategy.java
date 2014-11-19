@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,18 +27,18 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Log;
 import org.jvoicexml.xml.vxml.Value;
-import org.mozilla.javascript.ScriptableObject;
 import org.w3c.dom.NodeList;
 
 /**
@@ -51,11 +51,9 @@ import org.w3c.dom.NodeList;
  * @author Dirk Schnelle
  * @version $Revision: 4080 $
  */
-final class LogStrategy
-        extends AbstractTagStrategy {
+final class LogStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(LogStrategy.class);
+    private static final Logger LOGGER = Logger.getLogger(LogStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -85,11 +83,9 @@ final class LogStrategy
      * Logs the containing text as a message.
      */
     public void execute(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
-                        final FormItem item,
-                        final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
         final NodeList list = node.getChildNodes();
         final StringBuilder outputText = new StringBuilder();
 
@@ -106,11 +102,9 @@ final class LogStrategy
         }
 
         // process children
-        final ScriptingEngine scripting = context.getScriptingEngine();
-
+        final DataModel model = context.getDataModel();
         for (int i = 0; i < list.getLength(); i++) {
             final VoiceXmlNode current = (VoiceXmlNode) list.item(i);
-
             if (current instanceof Text) {
                 // text node handling
                 final Text text = (Text) current;
@@ -127,18 +121,15 @@ final class LogStrategy
                 final Value value = (Value) current;
                 String currentExpr = value.getExpr();
                 if (currentExpr != null) {
+                    final String unescapedCurrentExpr = StringEscapeUtils
+                            .unescapeXml(currentExpr);
                     if (!currentExpr.endsWith(";")) {
                         currentExpr += ";";
                     }
-                    final Object eval = scripting.eval(currentExpr);
-                    if (eval instanceof ScriptableObject) {
-                        final ScriptableObject scriptable =
-                                (ScriptableObject) eval;
-                        final String json = ScriptingEngine.toJSON(scriptable);
-                        outputText.append(json);
-                    } else {
-                        outputText.append(eval.toString());
-                    }
+                    final Object eval = model.evaluateExpression(
+                            unescapedCurrentExpr, Object.class);
+                    final String evalReadable = model.toString(eval);
+                    outputText.append(evalReadable);
                 }
             }
         }

@@ -29,9 +29,9 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 import java.util.Collection;
 
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Mark;
@@ -47,8 +47,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @version $Revision: 4080 $
  * @since 0.7.4
  */
-final class MarkStrategy
-        extends AbstractSsmlParsingStrategy
+final class MarkStrategy extends AbstractSsmlParsingStrategy
         implements SsmlParsingStrategy {
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -75,10 +74,9 @@ final class MarkStrategy
     /**
      * {@inheritDoc}
      */
-    public SsmlNode cloneNode(final SsmlParser parser,
-            final ScriptingEngine scripting, final SsmlDocument document,
-            final SsmlNode parent, final VoiceXmlNode node)
-        throws SemanticError {
+    public SsmlNode cloneNode(final SsmlParser parser, final DataModel model,
+            final SsmlDocument document, final SsmlNode parent,
+            final VoiceXmlNode node) throws SemanticError {
         final Mark mark = (Mark) parent.addChild(Mark.TAG_NAME);
 
         // Copy all attributes into the new node and replace the name
@@ -88,7 +86,8 @@ final class MarkStrategy
             Object value = getAttribute(name);
             if (value != null) {
                 if (name.equals(Mark.ATTRIBUTE_NAMEEXPR)) {
-                    value = scripting.eval(value.toString());
+                    value = model.evaluateExpression(value.toString(),
+                            Object.class);
                     name = Mark.ATTRIBUTE_NAME;
                 }
                 mark.setAttribute(name, value.toString());

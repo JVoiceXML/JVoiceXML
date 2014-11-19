@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,6 +35,7 @@ import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Property;
 
@@ -48,11 +49,10 @@ import org.jvoicexml.xml.vxml.Property;
  * @version $Revision: 4080 $
  * @since 0.5
  */
-class PropertyStrategy
-        extends AbstractTagStrategy {
+class PropertyStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(PropertyStrategy.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(PropertyStrategy.class);
 
     /** Name of the property. */
     private String name;
@@ -77,8 +77,7 @@ class PropertyStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes()
-            throws SemanticError {
+    public void validateAttributes(final DataModel model) throws SemanticError {
         name = (String) getAttribute(Property.ATTRIBUTE_NAME);
         value = (String) getAttribute(Property.ATTRIBUTE_VALUE);
         if (name == null) {
@@ -93,13 +92,11 @@ class PropertyStrategy
      * {@inheritDoc}
      */
     public void execute(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
-                        final FormItem item, final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
         context.setProperty(name, value);
-        LOGGER.info("set property '" + name + "' to value '" + value
-                     + "'");
+        LOGGER.info("set property '" + name + "' to value '" + value + "'");
     }
 
     /**
@@ -109,10 +106,8 @@ class PropertyStrategy
     public void executeLocal(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem item,
-            final VoiceXmlNode node)
-       throws JVoiceXMLEvent {
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
         fia.setLocalProperty(name, value);
-        LOGGER.info("set property '" + name + "' to value '" + value
-                     + "'");
+        LOGGER.info("set property '" + name + "' to value '" + value + "'");
     }
 }

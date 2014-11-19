@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -42,6 +42,7 @@ import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Goto;
@@ -56,11 +57,9 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @author Dirk Schnelle-Walka
  * @version $Revision: 4080 $
  */
-final class GotoStrategy
-        extends AbstractTagStrategy {
+final class GotoStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(GotoStrategy.class);
+    private static final Logger LOGGER = Logger.getLogger(GotoStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -95,63 +94,37 @@ final class GotoStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes()
-            throws ErrorEvent {
-        next = (String) getAttribute(Goto.ATTRIBUTE_NEXT);
-        if (next != null) {
-            return;
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
+        next = (String) getAndCheckAttributeWithAlternativeExpr(model,
+                Goto.ATTRIBUTE_NEXT, Goto.ATTRIBUTE_EXPR);
+        nextItem = (String) getAndCheckAttributeWithAlternativeExpr(model,
+                Goto.ATTRIBUTE_NEXTITEM, Goto.ATTRIBUTE_EXPRITEM);
+        if (next == null && nextItem == null) {
+            throw new BadFetchError(
+                    "goto: Exactly one of 'next', 'expr', 'nextitem' or"
+                            + " 'expritem' must be specified!");
         }
-
-        if (isAttributeDefined(Goto.ATTRIBUTE_EXPR)) {
-            next = (String) getAttribute(Goto.ATTRIBUTE_EXPR);
-            if (next != null) {
-                return;
-            }
-        }
-
-        nextItem = (String) getAttribute(Goto.ATTRIBUTE_NEXTITEM);
-        if (nextItem != null) {
-            return;
-        }
-
-        if (isAttributeDefined(Goto.ATTRIBUTE_EXPRITEM)) {
-            final Object expritem = getAttribute(Goto.ATTRIBUTE_EXPRITEM);
-            if (expritem != null) {
-                nextItem = expritem.toString();
-
-                return;
-            }
-        }
-
-        throw new BadFetchError(
-                "goto: Exactly one of 'next', 'expr', 'nextitem' or 'expritem' "
-                + "must be specified!");
     }
 
     /**
      * {@inheritDoc}
      */
     public void execute(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
-                        final FormItem item,
-                        final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
         if (nextItem != null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("going to item '" + nextItem + "'...");
             }
-
             throw new GotoNextFormItemEvent(nextItem);
         }
 
         if (next.startsWith("#")) {
             final String nextForm = next.substring(1);
-
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("going to form '" + nextForm + "'...");
             }
-
             throw new GotoNextFormEvent(nextForm);
         } else {
             final URI uri;
@@ -168,8 +141,7 @@ final class GotoStrategy
             final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
             final FetchAttributes attributes = getFetchAttributes();
             descriptor.setAttributes(attributes);
-            final VoiceXmlDocument document =
-                context.loadDocument(descriptor);
+            final VoiceXmlDocument document = context.loadDocument(descriptor);
             final URI resolvedUri = descriptor.getUri();
             throw new GotoNextDocumentEvent(resolvedUri, document);
         }
@@ -177,18 +149,17 @@ final class GotoStrategy
 
     /**
      * Determines the fetch attributes from the current node.
+     * 
      * @return fetch attributes to use.
      * @since 0.7
      */
     private FetchAttributes getFetchAttributes() {
         final FetchAttributes attributes = new FetchAttributes();
-        final String fetchHint =
-            (String) getAttribute(Goto.ATTRIBUTE_FETCHHINT);
+        final String fetchHint = (String) getAttribute(Goto.ATTRIBUTE_FETCHHINT);
         if (fetchHint != null) {
             attributes.setFetchHint(fetchHint);
         }
-        final String fetchTimeout =
-            (String) getAttribute(Goto.ATTRIBUTE_FETCHTIMEOUT);
+        final String fetchTimeout = (String) getAttribute(Goto.ATTRIBUTE_FETCHTIMEOUT);
         if (fetchTimeout != null) {
             final TimeParser parser = new TimeParser(fetchTimeout);
             final long seconds = parser.parse();

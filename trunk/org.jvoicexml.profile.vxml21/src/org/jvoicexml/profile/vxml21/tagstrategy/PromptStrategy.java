@@ -45,6 +45,7 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Speak;
@@ -94,7 +95,7 @@ class PromptStrategy extends AbstractTagStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes() throws ErrorEvent {
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
         final String enableBargein = (String) getAttribute(Prompt.ATTRIBUTE_BARGEIN);
         bargein = Boolean.valueOf(enableBargein);
     }

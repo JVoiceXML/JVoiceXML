@@ -29,13 +29,14 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
@@ -103,21 +104,21 @@ abstract class AbstractSsmlParsingStrategy
     @Override
     public void evalAttributes(final VoiceXmlInterpreterContext context)
             throws SemanticError {
+        final DataModel model = context.getDataModel();
         final Collection<String> evalAttributes = getEvalAttributes();
         if (evalAttributes == null) {
             return;
         }
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
+        // Actually evalute the attributes
         for (String name : evalAttributes) {
             final Object expr = attributes.get(name);
             if (expr != null) {
                 final String exprstring = expr.toString();
-                Object value = scripting.eval(exprstring);
-                if (value == null) {
-                    value = ScriptingEngine.getUndefinedValue();
-                }
-
+                final String unescapedExprstring = StringEscapeUtils
+                        .unescapeXml(exprstring);
+                Object value = model.evaluateExpression(unescapedExprstring,
+                        Object.class);
                 attributes.put(name, value);
             }
         }
@@ -127,7 +128,7 @@ abstract class AbstractSsmlParsingStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes() throws ErrorEvent {
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
     }
 
     /**
@@ -167,17 +168,17 @@ abstract class AbstractSsmlParsingStrategy
      * Checks if the given attribute is defined, this means, neither
      * <code>null</code> nor <code>ScriptingEngine.getUndefinedValue()</code>.
      * 
+     * @param model
+     *            the data model to use
      * @param name
      *            Name of the attribute.
      * @return <code>true</code> if the attribute is defined.
      */
-    protected final boolean isAttributeDefined(final String name) {
+    protected boolean isAttributeDefined(DataModel model, final String name) {
         final Object value = attributes.get(name);
         if (value == null) {
             return false;
         }
-
-        return ScriptingEngine.getUndefinedValue() != value;
+        return model.getUndefinedValue() != value;
     }
-
 }

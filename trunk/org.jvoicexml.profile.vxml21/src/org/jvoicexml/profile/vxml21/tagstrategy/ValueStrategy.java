@@ -28,6 +28,7 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConfigurationException;
@@ -42,11 +43,11 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.TextContainer;
 import org.jvoicexml.xml.TimeParser;
@@ -152,8 +153,7 @@ final class ValueStrategy extends AbstractTagStrategy
      */
     private String getOutput() throws SemanticError {
         final Object result = getAttribute(Value.ATTRIBUTE_EXPR);
-
-        if ((result == null) || (result == ScriptingEngine.getUndefinedValue())) {
+        if (result == null) {
             LOGGER.warn("ignoring empty value result");
 
             return null;
@@ -167,14 +167,14 @@ final class ValueStrategy extends AbstractTagStrategy
             return null;
         }
 
-        return cleaned;
+        return StringEscapeUtils.unescapeXml(cleaned);
     }
 
     /**
      * {@inheritDoc}
      */
     public SsmlNode cloneNode(final SsmlParser parser,
-            final ScriptingEngine scripting, final SsmlDocument document,
+            final DataModel model, final SsmlDocument document,
             final SsmlNode parent, final VoiceXmlNode node)
             throws SemanticError {
         final String text = getOutput();

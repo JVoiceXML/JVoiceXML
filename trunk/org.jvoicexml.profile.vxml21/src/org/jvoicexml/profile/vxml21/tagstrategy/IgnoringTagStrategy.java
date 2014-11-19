@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,11 +36,13 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
- * A {@link TagStrategy} that simply does nothing, but ignoring the
- * current node.
+ * A {@link TagStrategy} that simply does nothing, but ignoring the current
+ * node.
+ * 
  * @author Dirk Schnelle_Walka
  * @version $Revision: 4080 $
  * @since 0.7
@@ -50,12 +52,14 @@ final class IgnoringTagStrategy implements TagStrategy {
     /**
      * {@inheritDoc}
      */
-    public void dumpNode(final VoiceXmlNode node) {
+    @Override
+    public void dumpNode(final DataModel model, final VoiceXmlNode node) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void evalAttributes(final VoiceXmlInterpreterContext context)
             throws SemanticError {
     }
@@ -65,22 +69,22 @@ final class IgnoringTagStrategy implements TagStrategy {
      */
     public void execute(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia,
-            final FormItem item, final VoiceXmlNode node)
-        throws JVoiceXMLEvent {
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void getAttributes(final VoiceXmlInterpreterContext context,
-            final FormInterpretationAlgorithm fia,
-            final VoiceXmlNode node) {
+            final FormInterpretationAlgorithm fia, final VoiceXmlNode node) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<String> getEvalAttributes() {
         return null;
     }
@@ -88,6 +92,7 @@ final class IgnoringTagStrategy implements TagStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public TagStrategy newInstance() {
         return new IgnoringTagStrategy();
     }
@@ -95,16 +100,17 @@ final class IgnoringTagStrategy implements TagStrategy {
     /**
      * {@inheritDoc}
      */
-    public void validateAttributes() throws ErrorEvent {
+    @Override
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void executeLocal(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem item,
-            final VoiceXmlNode node)
-       throws JVoiceXMLEvent {
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
     }
 }
