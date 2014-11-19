@@ -27,6 +27,7 @@
 package org.jvoicexml.callmanager.mmi;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
@@ -64,7 +65,7 @@ public class MMIRecognitionResult implements RecognitionResult {
      * {@inheritDoc}
      */
     @Override
-    public Object getSemanticInterpretation() {
+    public Object getSemanticInterpretation(final DataModel model) {
         return interpretation;
     }
 

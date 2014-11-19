@@ -48,6 +48,7 @@ import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.interpreter.DetailedSessionListener;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.Mmi;
@@ -130,7 +131,8 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
      */
     @Override
     public void sessionEvent(final Session session, final JVoiceXMLEvent event) {
-        final Mmi mmi = convertJVoiceXMLEvent(event);
+        final DataModel model = ((JVoiceXmlSession) session).getDataModel();
+        final Mmi mmi = convertJVoiceXMLEvent(model, event);
         try {
             final Object channel = context.getChannel();
             adapter.sendMMIEvent(channel, mmi);
@@ -147,7 +149,8 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
      * @return extension notification
      * @since 0.7.7
      */
-    private Mmi convertJVoiceXMLEvent(final JVoiceXMLEvent event) {
+    private Mmi convertJVoiceXMLEvent(final DataModel model,
+            final JVoiceXMLEvent event) {
         // Simply retrieve an encapsulated event to handle a send tag.
         if (event instanceof OutgoingExtensionNotificationJVoiceXmlEvent) {
             final OutgoingExtensionNotificationJVoiceXmlEvent ext = (OutgoingExtensionNotificationJVoiceXmlEvent) event;
@@ -178,7 +181,7 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
         } else if (event instanceof RecognitionEvent) {
             final RecognitionEvent input = (RecognitionEvent) event;
             try {
-                data = converter.convertRecognitionEvent(input);
+                data = converter.convertRecognitionEvent(model, input);
             } catch (ConversionException e) {
                 LOGGER.error(e.getMessage(), e);
                 return null;
