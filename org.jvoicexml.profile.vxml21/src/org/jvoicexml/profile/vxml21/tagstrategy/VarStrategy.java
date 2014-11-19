@@ -33,9 +33,9 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Var;
 
@@ -102,7 +102,7 @@ final class VarStrategy extends AbstractTagStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes() throws SemanticError {
+    public void validateAttributes(final DataModel model) throws SemanticError {
         name = (String) getAttribute(Var.ATTRIBUTE_NAME);
 
         /**
@@ -112,9 +112,6 @@ final class VarStrategy extends AbstractTagStrategy {
          */
         if (!isSubdialog) {
             value = getAttribute(Var.ATTRIBUTE_EXPR);
-            if (value == null) {
-                value = ScriptingEngine.getUndefinedValue();
-            }
         }
     }
 
@@ -138,12 +135,15 @@ final class VarStrategy extends AbstractTagStrategy {
             // The VXML specification leaves it undefined, what happens, if
             // no name is given. So we simply ignore it.
             LOGGER.warn("ignoring emtpy var");
-
             return;
         }
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.setVariable(name, value);
+        final DataModel model = context.getDataModel();
+        if (value == null) {
+            model.createVariable(name);
+        } else {
+            model.createVariable(name, value);
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("created var name '" + name + "': '" + value + "'");
         }

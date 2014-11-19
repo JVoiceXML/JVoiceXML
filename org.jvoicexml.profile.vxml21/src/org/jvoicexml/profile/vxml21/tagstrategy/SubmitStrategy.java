@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,19 +35,17 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.Submit;
-import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;submit&gt;</code> node.
@@ -97,7 +95,7 @@ final class SubmitStrategy extends AbstractTagStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes() throws ErrorEvent {
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
         final String names = (String) getAttribute(Submit.ATTRIBUTE_NAMELIST);
         namelist = new TokenList(names);
 
@@ -115,29 +113,12 @@ final class SubmitStrategy extends AbstractTagStrategy {
                     + RequestMethod.GET + "' or '" + RequestMethod.POST + "'!");
         }
 
-        final boolean srcDefined = isAttributeDefined(Submit.ATTRIBUTE_NEXT);
-        final boolean srcexprDefined = isAttributeDefined(Submit.ATTRIBUTE_EXPR);
-        if (srcDefined == srcexprDefined) {
-            throw new BadFetchError(
-                    "Exactly one of 'next' or 'expr' must be specified");
-        }
-
-        final String nextAttribute = (String) getAttribute(Submit.ATTRIBUTE_NEXT);
-        if (nextAttribute != null) {
-            try {
-                next = new URI(nextAttribute);
-            } catch (URISyntaxException e) {
-                throw new SemanticError("'" + nextAttribute
-                        + "' is no valid uri!");
-            }
-            return;
-        }
-
-        final String exprAttribute = (String) getAttribute(Submit.ATTRIBUTE_EXPR);
+        final String nextAttribute = (String) getAttributeWithAlternativeExpr(
+                model, Submit.ATTRIBUTE_NEXT, Submit.ATTRIBUTE_EXPR);
         try {
-            next = new URI(exprAttribute);
+            next = new URI(nextAttribute);
         } catch (URISyntaxException e) {
-            throw new SemanticError("'" + exprAttribute + "' is no valid uri!");
+            throw new SemanticError("'" + nextAttribute + "' is no valid uri!");
         }
     }
 
@@ -173,12 +154,10 @@ final class SubmitStrategy extends AbstractTagStrategy {
      */
     private void appendVariables(final VoiceXmlInterpreterContext context,
             final DocumentDescriptor descriptor) throws SemanticError {
-        final ScriptingEngine scripting = context.getScriptingEngine();
-
+        final DataModel model = context.getDataModel();
         for (String name : namelist) {
-            final Object value = scripting.eval(name + ";");
-            if ((value == null)
-                    || (value == ScriptingEngine.getUndefinedValue())) {
+            final Object value = model.readVariable(name, Object.class);
+            if (value == null) {
                 descriptor.addParameter(name, "");
                 continue;
             }
@@ -186,10 +165,8 @@ final class SubmitStrategy extends AbstractTagStrategy {
             if (str.startsWith("file:/")) {
                 final File file = new File(str);
                 descriptor.addParameter(name, file);
-            } else if (value instanceof ScriptableObject) {
-                descriptor.addParameter(name, value);
             } else {
-                descriptor.addParameter(name, str);
+                descriptor.addParameter(name, value);
             }
         }
     }

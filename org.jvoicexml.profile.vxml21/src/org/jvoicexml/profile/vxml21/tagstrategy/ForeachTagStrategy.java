@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,12 +33,12 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.TagStrategyExecutor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -54,8 +54,7 @@ import org.jvoicexml.xml.vxml.Foreach;
  * @version $Revision: 4080 $
  * @since 0.6
  */
-final class ForeachTagStrategy
-        extends AbstractTagStrategy
+final class ForeachTagStrategy extends AbstractTagStrategy
         implements SsmlParsingStrategy {
     /** The ECMA script array to iteratate over. */
     private Object[] array;
@@ -78,18 +77,20 @@ final class ForeachTagStrategy
             throws SemanticError {
         super.evalAttributes(context);
         final String arrayName = (String) getAttribute(Foreach.ATTRIBUTE_ARRAY);
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        array = scripting.getVariableAsArray(arrayName);
+        if (arrayName == null) {
+            throw new SemanticError("Both item and array must be specified");
+        }
+        final DataModel model = context.getDataModel();
+        array = model.readVariable(arrayName, Object[].class);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes() throws ErrorEvent {
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
         item = (String) getAttribute(Foreach.ATTRIBUTE_ITEM);
-
-        if ((item == null) || (array == null)) {
+        if ((item == null) && (array == null)) {
             throw new BadFetchError("Both item and array must be specified");
         }
     }
@@ -97,16 +98,13 @@ final class ForeachTagStrategy
     /**
      * {@inheritDoc}
      */
-    public SsmlNode cloneNode(final SsmlParser parser,
-            final ScriptingEngine scripting, final SsmlDocument document,
-            final SsmlNode parent, final VoiceXmlNode node)
-        throws SemanticError {
+    public SsmlNode cloneNode(final SsmlParser parser, final DataModel model,
+            final SsmlDocument document, final SsmlNode parent,
+            final VoiceXmlNode node) throws SemanticError {
         final Foreach foreach = (Foreach) node;
-
         for (int i = 0; i < array.length; i++) {
             final Object value = array[i];
-            scripting.setVariable(item, value);
-
+            model.updateVariable(item, value);
             parser.cloneNode(document, parent, foreach);
         }
 
@@ -119,17 +117,15 @@ final class ForeachTagStrategy
     @Override
     public void execute(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia,
-            final FormItem formItem, final VoiceXmlNode node)
-                    throws JVoiceXMLEvent {
+            final FormInterpretationAlgorithm fia, final FormItem formItem,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
         final Foreach foreach = (Foreach) node;
-        final ScriptingEngine scripting = context.getScriptingEngine();
-
+        final DataModel model = context.getDataModel();
         // TODO This results in a fragmentation of multiple SSML documents
-        // that will be passed to the implementation platform 
+        // that will be passed to the implementation platform
         for (int i = 0; i < array.length; i++) {
             final Object value = array[i];
-            scripting.setVariable(item, value);
+            model.updateVariable(item, value);
             final TagStrategyExecutor executor = fia.getTagStrategyExecutor();
             executor.executeChildNodes(context, interpreter, fia, formItem,
                     foreach);

@@ -28,15 +28,16 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategyExecutor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNodeList;
 import org.jvoicexml.xml.vxml.Else;
@@ -48,9 +49,9 @@ import org.w3c.dom.NodeList;
  * Strategy of the FIA to execute an <code>&lt;if&gt;</code> node.
  *
  * <p>
- * This class is also responsible to handle the <code>&lt;else&gt;</code>
- * and <code>&lt;elseif&gt;</code> tags since they can appear only as
- * children of the <code>&lt;if&gt;</code> tag.
+ * This class is also responsible to handle the <code>&lt;else&gt;</code> and
+ * <code>&lt;elseif&gt;</code> tags since they can appear only as children of
+ * the <code>&lt;if&gt;</code> tag.
  * </p>
  *
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
@@ -59,11 +60,9 @@ import org.w3c.dom.NodeList;
  * @author Dirk Schnelle-Walka
  * @version $Revision: 4080 $
  */
-public final class IfStrategy
-        extends AbstractTagStrategy {
+public final class IfStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(IfStrategy.class);
+    private static final Logger LOGGER = Logger.getLogger(IfStrategy.class);
 
     /**
      * Constructs a new object.
@@ -89,11 +88,9 @@ public final class IfStrategy
      * Find the child nodes to execute and execute them.
      */
     public void execute(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
-                        final FormItem item,
-                        final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
         final NodeList list = getListToExecute(context, node);
         if (list == null) {
             LOGGER.info("no condition evaluated to true");
@@ -106,15 +103,17 @@ public final class IfStrategy
 
     /**
      * Retrieves a list of follow-on nodes to execute.
-     * @param context The current VoiceXML interpreter context.
-     * @param node The current node.
+     * 
+     * @param context
+     *            The current VoiceXML interpreter context.
+     * @param node
+     *            The current node.
      * @return List of nodes to execute.
      * @exception SemanticError
-     *            Error evaluating the <code>cond</code> expression.
+     *                Error evaluating the <code>cond</code> expression.
      */
     private NodeList getListToExecute(final VoiceXmlInterpreterContext context,
-                                      final VoiceXmlNode node)
-            throws SemanticError {
+            final VoiceXmlNode node) throws SemanticError {
         final NodeList children = node.getChildNodes();
         if (checkCondition(context, node)) {
             return collect(children, 0);
@@ -124,7 +123,7 @@ public final class IfStrategy
             final VoiceXmlNode child = (VoiceXmlNode) children.item(i);
             final String name = child.getTagName();
             if (Else.TAG_NAME.equalsIgnoreCase(name)
-                || Elseif.TAG_NAME.equalsIgnoreCase(name)) {
+                    || Elseif.TAG_NAME.equalsIgnoreCase(name)) {
                 if (checkCondition(context, child)) {
                     return collect(children, i + 1);
                 }
@@ -137,36 +136,35 @@ public final class IfStrategy
     /**
      * Checks the condition of the given node.
      *
-     * @param context The current VoiceXML interpreter context
-     * @param node The node with a cond.
+     * @param context
+     *            The current VoiceXML interpreter context
+     * @param node
+     *            The node with a cond.
      * @return <code>true</code> if the cond expression evaluates to true.
      *
      * @exception SemanticError
-     *            Error evaluating the cond expression.
+     *                Error evaluating the cond expression.
      */
     private boolean checkCondition(final VoiceXmlInterpreterContext context,
-                                   final VoiceXmlNode node)
-            throws SemanticError {
+            final VoiceXmlNode node) throws SemanticError {
         final String cond = node.getAttribute(If.ATTRIBUTE_COND);
         if (cond == null) {
             // This holds only for the else cases.
             return true;
         }
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final Object result = scripting.eval(cond + ";");
-        if (!(result instanceof Boolean)) {
-            throw new SemanticError("condition '" + cond
-                    + "' does evaluate to a boolean value");
-        }
-        return Boolean.TRUE.equals(result);
+        final DataModel model = context.getDataModel();
+        final String unescapedCond = StringEscapeUtils.unescapeXml(cond);
+        return model.evaluateExpression(unescapedCond, Boolean.class);
     }
 
     /**
      * Collects all children, which belong to the current case.
      *
-     * @param children Child nodes of the <code>&lt;if&gt;</code> tag.
-     * @param start Start number of the first child after the expression.
+     * @param children
+     *            Child nodes of the <code>&lt;if&gt;</code> tag.
+     * @param start
+     *            Start number of the first child after the expression.
      *
      * @return List of follow on nodes to execute.
      */
@@ -178,7 +176,7 @@ public final class IfStrategy
 
             final String name = node.getTagName();
             if (Else.TAG_NAME.equalsIgnoreCase(name)
-                || Elseif.TAG_NAME.equalsIgnoreCase(name)) {
+                    || Elseif.TAG_NAME.equalsIgnoreCase(name)) {
                 break;
             }
 

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,9 +34,9 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Assign;
 
@@ -49,11 +49,9 @@ import org.jvoicexml.xml.vxml.Assign;
  * @author Dirk Schnelle-Walka
  * @version $Revision: 4080 $
  */
-final class AssignStrategy
-        extends AbstractTagStrategy {
+final class AssignStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(AssignStrategy.class);
+    private static final Logger LOGGER = Logger.getLogger(AssignStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -87,13 +85,11 @@ final class AssignStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes()
-            throws ErrorEvent {
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
         name = (String) getAttribute(Assign.ATTRIBUTE_NAME);
         if (name == null) {
             throw new SemanticError("No name given to assign a value!");
         }
-
         expr = getAttribute(Assign.ATTRIBUTE_EXPR);
     }
 
@@ -103,21 +99,14 @@ final class AssignStrategy
      * Assigns the values to the variable.
      */
     public void execute(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
-                        final FormItem item,
-                        final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        if (expr instanceof String) {
-            scripting.eval(name + " = '" + expr + "';");
-        } else {
-            scripting.eval(name + " = " + expr + ";");
-        }
-
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
+        final DataModel model = context.getDataModel();
+        model.updateVariable(name, expr);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("assigned var '" + name + "' to value: '" + expr
-                         + "'");
+            final String log = model.toString(expr);
+            LOGGER.debug("assigned var '" + name + "' to value: '" + log + "'");
         }
     }
 }

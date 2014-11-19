@@ -43,9 +43,9 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -102,10 +102,9 @@ final class DataStrategy extends AbstractTagStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes() throws ErrorEvent {
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
         final String names = (String) getAttribute(Data.ATTRIBUTE_NAMELIST);
         namelist = new TokenList(names);
-
         final String requestMethod = (String) getAttribute(Data.ATTRIBUTE_METHOD);
         if (requestMethod == null) {
             method = RequestMethod.GET;
@@ -120,8 +119,9 @@ final class DataStrategy extends AbstractTagStrategy {
                     + RequestMethod.GET + "' or '" + RequestMethod.POST + "'!");
         }
 
-        final boolean srcDefined = isAttributeDefined(Data.ATTRIBUTE_SRC);
-        final boolean srcexprDefined = isAttributeDefined(Data.ATTRIBUTE_SRCEXPR);
+        final boolean srcDefined = isAttributeDefined(model, Data.ATTRIBUTE_SRC);
+        final boolean srcexprDefined = isAttributeDefined(model,
+                Data.ATTRIBUTE_SRCEXPR);
         if (srcDefined == srcexprDefined) {
             throw new BadFetchError(
                     "Exactly one of 'src' or 'srcexpr' must be specified");
@@ -148,6 +148,7 @@ final class DataStrategy extends AbstractTagStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void execute(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem item,
@@ -175,8 +176,8 @@ final class DataStrategy extends AbstractTagStrategy {
         if (name == null) {
             return;
         }
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.setVariable(name, document);
+        final DataModel model = context.getDataModel();
+        model.updateVariable(name, document);
     }
 
     /**
@@ -191,15 +192,9 @@ final class DataStrategy extends AbstractTagStrategy {
      */
     private void appendVariables(final VoiceXmlInterpreterContext context,
             final DocumentDescriptor descriptor) throws SemanticError {
-        final ScriptingEngine scripting = context.getScriptingEngine();
-
+        final DataModel model = context.getDataModel();
         for (String name : namelist) {
-            final Object value = scripting.eval(name + ";");
-            if ((value == null)
-                    || (value == ScriptingEngine.getUndefinedValue())) {
-                throw new SemanticError("'" + name + "' is undefined!");
-            }
-
+            final Object value = model.readVariable(name, Object.class);
             if (value instanceof String) {
                 String str = (String) value;
                 if (str.startsWith("file:/")) {
