@@ -5,7 +5,7 @@
             <grammar src="yesno.srgs" type="application/srgs+xml" />
             <prompt>Do you like this example?</prompt>
             <filled>
-                <log expr="application.lastresult$[0].utterance"/>
+                <log expr="application.lastresult$.utterance"/>
                 <if cond="answer=='yes'">
                     You like this example.
                     <else />
