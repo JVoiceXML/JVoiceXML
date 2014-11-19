@@ -14,7 +14,7 @@
             <beans:bean
                 class="org.jvoicexml.profile.mmi.MmiTagStrategyFactory">
                 <beans:property name="tagStrategies">
-                    <bean   s:map>
+                    <beans:map>
                         <beans:entry key="data">
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.DataStrategy" />

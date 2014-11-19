@@ -36,8 +36,8 @@ import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.EventSubscriber;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.Mmi;
@@ -81,13 +81,9 @@ public class ReceiveEventQueue implements EventSubscriber {
      * @return boolean value of the variable
      */
     private boolean evaluate(final String name) {
-        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DataModel model = context.getDataModel();
         try {
-            final Object object = scripting.eval(name + ";");
-            if (object instanceof Boolean) {
-                final Boolean value = (Boolean) object;
-                return value.booleanValue();
-            }
+            return model.readVariable(name, Boolean.class);
         } catch (SemanticError e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -133,11 +129,11 @@ public class ReceiveEventQueue implements EventSubscriber {
                 }
             } else {
                 contentType = null;
-                content = ScriptingEngine.getUndefinedValue();
+                content = null;
             }
         } else {
             contentType = null;
-            content = ScriptingEngine.getUndefinedValue();
+            content = null;
         }
         return new LastMessage(contentType, name, content);
     }

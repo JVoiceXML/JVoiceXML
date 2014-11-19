@@ -36,6 +36,7 @@ import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.Mmi;
@@ -95,10 +96,10 @@ final class SendStrategy extends AbstractTagStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes() throws ErrorEvent {
-        body = getAttributeWithAlternativeExpr("body", "bodyexpr");
-        event = (String) getAttributeWithAlternativeExpr("event", "eventexpr");
-        target = (String) getAttributeWithAlternativeExpr("target",
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
+        body = getAttributeWithAlternativeExpr(model, "body", "bodyexpr");
+        event = (String) getAttributeWithAlternativeExpr(model, "event", "eventexpr");
+        target = (String) getAttributeWithAlternativeExpr(model, "target",
                 "targetexpr");
     }
 

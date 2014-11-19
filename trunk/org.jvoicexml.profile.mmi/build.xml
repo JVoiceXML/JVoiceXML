@@ -37,6 +37,7 @@ org.jvoicexml/personal-props/README.txt
             <path refid="jvxml.core.lib" />
             <fileset refid="log4j.lib" />
             <fileset refid="rhino.lib" />
+            <fileset refid="lang.lib" />
         </path>
     </target>
 
