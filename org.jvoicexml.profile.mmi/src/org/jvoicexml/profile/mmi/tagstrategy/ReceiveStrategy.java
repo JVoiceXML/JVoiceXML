@@ -34,9 +34,9 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.profile.mmi.LastMessage;
 import org.jvoicexml.profile.mmi.MmiProfile;
 import org.jvoicexml.profile.mmi.ProfileAwareTagStrategy;
@@ -101,10 +101,11 @@ final class ReceiveStrategy extends AbstractTagStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes() throws ErrorEvent {
-        if (isAttributeDefined("maxtime") || isAttributeDefined("maxtimeexpr")) {
-            final Object value = getAttributeWithAlternativeExpr("maxtime",
-                    "maxtimeexpr");
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
+        if (isAttributeDefined(model, "maxtime")
+                || isAttributeDefined(model, "maxtimeexpr")) {
+            final Object value = getAttributeWithAlternativeExpr(model,
+                    "maxtime", "maxtimeexpr");
             final TimeParser parser = new TimeParser(value.toString());
             maxtime = parser.parse();
         } else {
@@ -127,7 +128,7 @@ final class ReceiveStrategy extends AbstractTagStrategy
             throw new BadFetchError("receive: no message available after "
                     + maxtime + " msec!");
         }
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.setVariable("application.lastmessage$", message);
+        final DataModel model = context.getDataModel();
+        model.updateVariable("application.lastmessage$", message);
     }
 }
