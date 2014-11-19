@@ -31,11 +31,13 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Param;
 import org.jvoicexml.xml.vxml.ParamValueType;
@@ -64,7 +66,7 @@ class ParamParser {
     private final VoiceXmlNode node;
 
     /** The scripting engine for expression evaluation. */
-    private final ScriptingEngine scripting;
+    private final DataModel model;
 
     /** The document server to retrieve references values. */
     private final DocumentServer server;
@@ -74,39 +76,39 @@ class ParamParser {
 
     /**
      * Constructs a new object.
+     * 
      * @param vxml
-     *        the node to parse.
-     * @param scriptingEngine
-     *        the scripting engine to evaluate expressions.
+     *            the node to parse.
+     * @param dataModel
+     *            the data model to evaluate expressions.
      * @param documentServer
-     *        the document server to retrieve ref values.
+     *            the document server to retrieve ref values.
      * @param currentSession
-     *        the current JVoiceXML session
+     *            the current JVoiceXML session
      */
-    public ParamParser(final VoiceXmlNode vxml,
-            final ScriptingEngine scriptingEngine,
+    public ParamParser(final VoiceXmlNode vxml, final DataModel dataModel,
             final DocumentServer documentServer, final Session currentSession) {
         node = vxml;
-        scripting = scriptingEngine;
+        model = dataModel;
         server = documentServer;
         sessionId = currentSession.getSessionID();
     }
 
     /**
      * Retrieve all parameters defined in the current tag.
+     * 
      * @return Mapping of parameter names to their values.
      * @throws SemanticError
-     *         Error evaluating an expression of a <code>&lt;param&gt;</code>
-     *         tag.
+     *             Error evaluating an expression of a
+     *             <code>&lt;param&gt;</code> tag.
      * @throws BadFetchError
-     *         A param tag features neither a value nor an expr attribute.
+     *             A param tag features neither a value nor an expr attribute.
      */
-    public Map<String, Object> getParameters()
-        throws SemanticError, BadFetchError {
+    public Map<String, Object> getParameters() throws SemanticError,
+            BadFetchError {
         final Collection<Param> paramtags = node.getChildNodes(Param.class);
 
-        final Map<String, Object> parameters =
-                new java.util.HashMap<String, Object>();
+        final Map<String, Object> parameters = new java.util.HashMap<String, Object>();
 
         for (Param param : paramtags) {
             final String name = param.getName();
@@ -117,7 +119,9 @@ class ParamParser {
                     throw new BadFetchError("Exactly one of \"value\" or "
                             + "\"expr\" must be specified in a param tag!");
                 }
-                value = scripting.eval(expr + ";");
+                final String unescapedExpr = StringEscapeUtils
+                        .unescapeXml(expr);
+                value = model.evaluateExpression(unescapedExpr, Object.class);
             } else {
                 final ParamValueType valueType = param.getValuetype();
                 if (valueType == ParamValueType.REF) {
@@ -129,8 +133,8 @@ class ParamParser {
                                 + "' is not a valid URI");
                     }
                     final String type = param.getType();
-                    final DocumentDescriptor descriptor =
-                        new DocumentDescriptor(uri);
+                    final DocumentDescriptor descriptor = new DocumentDescriptor(
+                            uri);
                     value = server.getObject(sessionId, descriptor, type);
                 }
             }
@@ -142,20 +146,20 @@ class ParamParser {
 
     /**
      * Retrieve all parameters defined in the current tag.
+     * 
      * @return collection of all parameters.
      * @throws SemanticError
-     *         Error evaluating an expression of a <code>&lt;param&gt;</code>
-     *         tag.
+     *             Error evaluating an expression of a
+     *             <code>&lt;param&gt;</code> tag.
      * @throws BadFetchError
-     *         A <code>&lt;param&gt;</code> tag features neither a value nor an
-     *         <code>expr</code> attribute.
+     *             A <code>&lt;param&gt;</code> tag features neither a value nor
+     *             an <code>expr</code> attribute.
      */
-    public Collection<Object> getParameterValues()
-        throws SemanticError, BadFetchError {
+    public Collection<Object> getParameterValues() throws SemanticError,
+            BadFetchError {
         final Collection<Param> paramtags = node.getChildNodes(Param.class);
 
-        final Collection<Object> parameters =
-                new java.util.ArrayList<Object>();
+        final Collection<Object> parameters = new java.util.ArrayList<Object>();
 
         for (Param param : paramtags) {
             Object value = param.getValue();
@@ -165,7 +169,9 @@ class ParamParser {
                     throw new BadFetchError("Exactly one of \"value\" or "
                             + "\"expr\" must be specified in a param tag!");
                 }
-                value = scripting.eval(expr + ";");
+                final String unescapedExpr = StringEscapeUtils
+                        .unescapeXml(expr);
+                value = model.evaluateExpression(unescapedExpr, Object.class);
             } else {
                 final ParamValueType valueType = param.getValuetype();
                 if (valueType == ParamValueType.REF) {
@@ -177,8 +183,8 @@ class ParamParser {
                                 + "' is not a valid URI");
                     }
                     final String type = param.getType();
-                    final DocumentDescriptor descriptor =
-                        new DocumentDescriptor(uri);
+                    final DocumentDescriptor descriptor = new DocumentDescriptor(
+                            uri);
                     value = server.getObject(sessionId, descriptor, type);
                 }
             }

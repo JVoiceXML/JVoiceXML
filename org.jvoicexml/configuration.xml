@@ -78,6 +78,10 @@ personal-props/README.txt
              target="configuration"
              inheritall="false"
              inheritrefs="false" />
+        <ant dir="../org.jvoicexml.interpreter.datamodel.ecmascript"
+             target="configuration"
+             inheritall="false"
+             inheritrefs="false" />
     </target>
 
     <target name="createDistributionConfiguration">

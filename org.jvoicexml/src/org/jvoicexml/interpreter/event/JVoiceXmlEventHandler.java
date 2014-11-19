@@ -32,6 +32,7 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.HelpEvent;
 import org.jvoicexml.event.plain.implementation.NomatchEvent;
@@ -46,6 +47,7 @@ import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
@@ -99,13 +101,19 @@ public final class JVoiceXmlEventHandler implements EventHandler {
     /** Semaphore to handle the wait/notify mechanism. */
     private final Object semaphore;
 
+    /** The employed data model. */
+    private final DataModel model;
+
     /**
      * Construct a new object.
-     * 
+     *
+     * @param dataModel
+     *            the emplyoed data model
      * @param observer
      *            the scope observer.
      */
-    public JVoiceXmlEventHandler(final ScopeObserver observer) {
+    public JVoiceXmlEventHandler(final DataModel dataModel,
+            final ScopeObserver observer) {
         strategies = new ScopedCollection<EventStrategy>(observer);
         inputItemFactory = new EventStrategyDecoratorFactory();
         semaphore = new Object();
@@ -116,6 +124,7 @@ public final class JVoiceXmlEventHandler implements EventHandler {
         filters.add(new HighestCountEventTypeFilter());
         filtersNoinput = new java.util.ArrayList<EventFilter>();
         filtersNoinput.add(new EventTypeFilter());
+        model = dataModel;
     }
 
     /**
@@ -534,9 +543,14 @@ public final class JVoiceXmlEventHandler implements EventHandler {
             return;
         }
         synchronized (semaphore) {
-            event = transformEvent(e);
-            LOGGER.info("notified event '" + event.getEventType() + "'");
-            semaphore.notify();
+            try {
+                event = transformEvent(model, e);
+                LOGGER.info("notified event '" + event.getEventType() + "'");
+            } catch (SemanticError semanticError) {
+                event = semanticError;
+            } finally {
+                semaphore.notify();
+            }
         }
     }
 
@@ -546,19 +560,24 @@ public final class JVoiceXmlEventHandler implements EventHandler {
      * by the user must be transformed into {@link HelpEvent}s and
      * {@link CancelEvent}.
      * 
+     * @param model
+     *            the emplyoed data model
      * @param e
      *            the source event
      * @return the transformed event, <code>e</code> if there was no
-     *         transformation.
+     *         transformation
+     * @exception SemanticError
+     *                error evaluating the semantic interpretation
      * @since 0.7.4
      */
-    private JVoiceXMLEvent transformEvent(final JVoiceXMLEvent e) {
+    private JVoiceXMLEvent transformEvent(final DataModel model,
+            final JVoiceXMLEvent e) throws SemanticError {
         if (!(e instanceof RecognitionEvent)) {
             return e;
         }
         final RecognitionEvent recevent = (RecognitionEvent) e;
         final RecognitionResult result = recevent.getRecognitionResult();
-        final Object interpretation = result.getSemanticInterpretation();
+        final Object interpretation = result.getSemanticInterpretation(model);
         if (interpretation == null) {
             return e;
         }

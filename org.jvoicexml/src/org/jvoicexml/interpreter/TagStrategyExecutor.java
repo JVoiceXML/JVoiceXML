@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.Profile;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.w3c.dom.NodeList;
 
@@ -234,10 +235,11 @@ public final class TagStrategyExecutor {
         // Execute the node.
         strategy.getAttributes(context, fia, node);
         strategy.evalAttributes(context);
+        final DataModel model = context.getDataModel();
         if (LOGGER.isDebugEnabled()) {
-            strategy.dumpNode(node);
+            strategy.dumpNode(model, node);
         }
-        strategy.validateAttributes();
+        strategy.validateAttributes(model);
         return strategy;
     }
 }

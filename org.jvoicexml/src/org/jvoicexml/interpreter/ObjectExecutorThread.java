@@ -51,6 +51,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedObjectnameError;
 import org.jvoicexml.event.plain.jvxml.ObjectTagResultEvent;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.xml.vxml.ObjectTag;
 
@@ -86,7 +87,7 @@ final class ObjectExecutorThread extends Thread {
 
     /** The application base URL. */
     private final URL applicationBase;
-    
+
     /** The class loader to use. */
     private static final ClassLoader LOADER;
 
@@ -100,18 +101,18 @@ final class ObjectExecutorThread extends Thread {
 
     /**
      * Constructs a new object.
+     * 
      * @param ctx
-     *                the current VoiceXML interpreter context.
+     *            the current VoiceXML interpreter context.
      * @param item
-     *                the object node to execute.
+     *            the object node to execute.
      * @throws BadFetchError
-     *                 Nested param tag does not specify all attributes.
+     *             Nested param tag does not specify all attributes.
      * @throws SemanticError
-     *                 Not all attributes specified.
+     *             Not all attributes specified.
      */
     ObjectExecutorThread(final VoiceXmlInterpreterContext ctx,
-            final ObjectFormItem item)
-            throws SemanticError, BadFetchError {
+            final ObjectFormItem item) throws SemanticError, BadFetchError {
         setDaemon(true);
         setName("ObjectExecutor");
 
@@ -138,11 +139,10 @@ final class ObjectExecutorThread extends Thread {
         // The parameter parsing has to be done here, since the thread
         // will not know about the original scripting context.
         final ObjectTag tag = (ObjectTag) object.getNode();
-        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DataModel model = context.getDataModel();
         final DocumentServer server = context.getDocumentServer();
         final Session session = context.getSession();
-        final ParamParser parser = new ParamParser(tag, scripting,
-                server, session);
+        final ParamParser parser = new ParamParser(tag, model, server, session);
         parameter = parser.getParameterValues();
     }
 
@@ -166,15 +166,15 @@ final class ObjectExecutorThread extends Thread {
      *
      * @return invocation result.
      * @throws SemanticError
-     *                 Not all attributes specified.
+     *             Not all attributes specified.
      * @throws NoresourceError
-     *                 Error instantiating the object.
+     *             Error instantiating the object.
      * @exception NoauthorizationError
-     *                    Error accessing or executing a method.
+     *                Error accessing or executing a method.
      * @throws BadFetchError
-     *                 Nested param tag does not specify all attributes.
+     *             Nested param tag does not specify all attributes.
      * @throws UnsupportedObjectnameError
-     *         scheme is not supported.
+     *             scheme is not supported.
      */
     private Object execute() throws SemanticError, NoresourceError,
             NoauthorizationError, BadFetchError, UnsupportedObjectnameError {
@@ -202,14 +202,14 @@ final class ObjectExecutorThread extends Thread {
      * <code>ObjectTag.ATTRIBUTE_CLASSID</code>.
      *
      * @param tag
-     *                The object tag.
+     *            The object tag.
      * @return The object to call.
      * @throws SemanticError
-     *                 <code>ObjectTag.ATTRIBUTE_CLASSID</code> not specified.
+     *             <code>ObjectTag.ATTRIBUTE_CLASSID</code> not specified.
      * @throws NoresourceError
-     *                 Error instantiating the object.
+     *             Error instantiating the object.
      * @throws UnsupportedObjectnameError
-     *         scheme is not supported.
+     *             scheme is not supported.
      */
     private Object getInvocationTarget(final ObjectTag tag)
             throws SemanticError, NoresourceError, UnsupportedObjectnameError {
@@ -244,7 +244,7 @@ final class ObjectExecutorThread extends Thread {
         } catch (URISyntaxException e) {
             throw new SemanticError(
                     "Must specify a comma separated list of valid URIs for: "
-                    + ObjectTag.ATTRIBUTE_ARCHIVE);
+                            + ObjectTag.ATTRIBUTE_ARCHIVE);
         }
         try {
             final URI data = tag.getDataUri();
@@ -266,14 +266,13 @@ final class ObjectExecutorThread extends Thread {
                 LOGGER.debug("Created instance of '" + cls.getName() + "'");
             }
         } catch (ClassNotFoundException e) {
-            throw new NoresourceError("class not found '" + className + "'",
-                    e);
+            throw new NoresourceError("class not found '" + className + "'", e);
         } catch (IllegalAccessException iae) {
             throw new NoresourceError("unable to access '" + className + "'",
                     iae);
         } catch (InstantiationException ie) {
-            throw new NoresourceError(
-                    "unable to instantiate '" + className + "'", ie);
+            throw new NoresourceError("unable to instantiate '" + className
+                    + "'", ie);
         }
 
         return invocationTarget;
@@ -281,14 +280,16 @@ final class ObjectExecutorThread extends Thread {
 
     /**
      * Retrieves the class loader to use.
-     * @param uris URIs to be added to the classpath.
+     * 
+     * @param uris
+     *            URIs to be added to the classpath.
      * @return class loader to use.
      * @throws SemanticError
-     *         if the URI is not valid
+     *             if the URI is not valid
      * @since 0.7.2
      */
     private synchronized ClassLoader getClassLoader(final Collection<URI> uris)
-        throws SemanticError {
+            throws SemanticError {
         if (uris == null || uris.isEmpty()) {
             if (applicationBase == null) {
                 return LOADER;
@@ -296,7 +297,7 @@ final class ObjectExecutorThread extends Thread {
                 LOGGER.info("adding '" + applicationBase + "' to CLASSPATH");
                 final URL[] urls = new URL[1];
                 urls[0] = applicationBase;
-                return new URLClassLoader(urls, LOADER); 
+                return new URLClassLoader(urls, LOADER);
             }
         }
         ClassLoader loader = LOADERS.get(uris);
@@ -312,8 +313,7 @@ final class ObjectExecutorThread extends Thread {
                 urls[i] = resolved.toURL();
                 i++;
             } catch (MalformedURLException e) {
-                throw new SemanticError(
-                        "Must specify a valid URI for: "
+                throw new SemanticError("Must specify a valid URI for: "
                         + ObjectTag.ATTRIBUTE_DATA);
             }
         }
@@ -324,14 +324,15 @@ final class ObjectExecutorThread extends Thread {
 
     /**
      * Retrieves the method to execute.
-     * @param tag the current tag.
-     * @return the method name to execute, <code>invoke</code> if no
-     *         method name is specified.
+     * 
+     * @param tag
+     *            the current tag.
+     * @return the method name to execute, <code>invoke</code> if no method name
+     *         is specified.
      * @throws URISyntaxException
-     *         classid does not denote a valid URI.
+     *             classid does not denote a valid URI.
      */
-    private String getMethodName(final ObjectTag tag)
-        throws URISyntaxException {
+    private String getMethodName(final ObjectTag tag) throws URISyntaxException {
         final URI classid = tag.getClassidUri();
         final String fragment = classid.getFragment();
         if (fragment == null) {
@@ -346,11 +347,12 @@ final class ObjectExecutorThread extends Thread {
      * given parameters.
      *
      * @param invocationTarget
-     *                The object to call.
-     * @param methodName name of the method to call.
+     *            The object to call.
+     * @param methodName
+     *            name of the method to call.
      * @return invocation result.
      * @exception NoauthorizationError
-     *                    Error accessing or executing a method.
+     *                Error accessing or executing a method.
      */
     private Object targetExecute(final Object invocationTarget,
             final String methodName) throws NoauthorizationError {

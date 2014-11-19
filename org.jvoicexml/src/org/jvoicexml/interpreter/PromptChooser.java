@@ -27,8 +27,10 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Prompt;
 
@@ -152,11 +154,12 @@ final class PromptChooser {
             throws SemanticError {
         final Collection<Prompt> filteredPrompts =
                 new java.util.ArrayList<Prompt>();
-        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DataModel model = context.getDataModel();
         for (Prompt prompt : prompts) {
             final String cond = prompt.getCond();
-            final Object result = scripting.eval(cond + ";");
-            if (Boolean.TRUE.equals(result)) {
+            final String unescapedCond = StringEscapeUtils.unescapeXml(cond);
+            final boolean result = model.evaluateExpression(unescapedCond, Boolean.class);
+            if (result) {
                 filteredPrompts.add(prompt);
             }
         }

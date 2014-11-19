@@ -28,16 +28,16 @@ package org.jvoicexml.interpreter.formitem;
 
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.FormItemLocalExecutableTagContainer;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Property;
-import org.mozilla.javascript.ScriptableObject;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -110,13 +110,13 @@ abstract class AbstractFormItem
      * {@inheritDoc}
      * 
      * @return retrieves the value of the associated variable in the
-     *         {@link ScriptingEngine}.
+     *         {@link DataModel}
      */
     @Override
     public final Object getFormItemVariable() {
-        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DataModel model = context.getDataModel();
         try {
-            return scripting.eval(name + ";");
+            return model.readVariable(name, Object.class);
         } catch (SemanticError ignore) {
             // In this case, the form item variable is simply undefined.
             if (LOGGER.isDebugEnabled()) {
@@ -124,7 +124,7 @@ abstract class AbstractFormItem
             }
         }
 
-        return ScriptingEngine.getUndefinedValue();
+        return null;
     }
 
     /**
@@ -132,8 +132,8 @@ abstract class AbstractFormItem
      */
     @Override
     public void setFormItemVariable(final Object value) throws SemanticError {
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.setVariable(name, value);
+        final DataModel model = context.getDataModel();
+        model.updateVariable(name, value);
     }
 
     /**
@@ -148,10 +148,11 @@ abstract class AbstractFormItem
      * {@inheritDoc}
      */
     @Override
-    public final Object evaluateExpression(final ScriptingEngine scripting)
+    public final Object evaluateExpression(final DataModel model)
             throws SemanticError {
         final String expr = node.getAttribute("expr");
-        return scripting.eval(expr + ";");
+        final String unescapedExpr = StringEscapeUtils.unescapeXml(expr);
+        return model.evaluateExpression(unescapedExpr, Object.class);
     }
 
     /**
@@ -163,14 +164,10 @@ abstract class AbstractFormItem
         if (condAttribute == null) {
             return true;
         }
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final Object condResult = scripting.eval(condAttribute + ";");
-        if ((condResult == ScriptingEngine.getUndefinedValue())
-                || (condResult == null)) {
-            return false;
-        }
-        final Boolean bool = (Boolean) condResult;
-        return bool.booleanValue();
+        final String unescapedCond = StringEscapeUtils
+                .unescapeXml(condAttribute);
+        final DataModel model = context.getDataModel();
+        return model.evaluateExpression(unescapedCond, Boolean.class);
     }
 
     /**
@@ -180,18 +177,13 @@ abstract class AbstractFormItem
     public boolean isSelectable() throws SemanticError {
         final Object result = getFormItemVariable();
         final boolean cond = evaluateCondition();
-        final boolean selectable = ((result == ScriptingEngine
-                .getUndefinedValue()) || (result == null)) && cond;
+        final DataModel model = context.getDataModel();
+        final boolean selectable = ((result == model.getUndefinedValue()) || (result == null))
+                && cond;
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("checking if selectable");
-            final Object logResult;
-            if (result instanceof ScriptableObject) {
-                final ScriptableObject scriptable = (ScriptableObject) result;
-                logResult = ScriptingEngine.toJSON(scriptable);
-            } else {
-                logResult = result;
-            }
+            final String logResult = model.toString(result);
             LOGGER.debug("value of   '" + name + "': '" + logResult + "'");
             LOGGER.debug("cond of    '" + name + "': '" + cond + "'");
             LOGGER.debug("selectable '" + name + "': " + selectable);
