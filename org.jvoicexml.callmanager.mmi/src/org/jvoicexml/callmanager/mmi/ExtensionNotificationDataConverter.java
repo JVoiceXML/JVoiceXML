@@ -31,6 +31,7 @@ import org.jvoicexml.LastResult;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 
 /**
  * Converts data that is sent as extensions notification into a format that
@@ -71,15 +72,17 @@ public interface ExtensionNotificationDataConverter {
     /**
      * Converts the given recognition event into the data field of an
      * {@link org.jvoicexml.mmi.events.ExtensionNotification}.
-     * 
+     *
+     * @param model
+     *            the employed data model
      * @param event
      *            the event
      * @return converted recognition event
      * @throws ConversionException
      *             error converting the result
      */
-    Object convertRecognitionEvent(final RecognitionEvent event)
-            throws ConversionException;
+    Object convertRecognitionEvent(final DataModel model,
+            final RecognitionEvent event) throws ConversionException;
 
     /**
      * Converts the given spoken input event into the data field of an

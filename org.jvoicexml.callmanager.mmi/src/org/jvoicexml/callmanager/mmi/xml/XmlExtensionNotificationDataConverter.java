@@ -39,11 +39,13 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.callmanager.mmi.ConversionException;
 import org.jvoicexml.callmanager.mmi.ExtensionNotificationDataConverter;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.mozilla.javascript.ScriptableObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -210,8 +212,8 @@ public class XmlExtensionNotificationDataConverter
         try {
             final DocumentBuilder builder = factory.newDocumentBuilder();
             final Document document = builder.newDocument();
-            final Element data = document.createElementNS(
-                    JVXML_MMI_NAMESPACE, "jvxmlmmi:data");
+            final Element data = document.createElementNS(JVXML_MMI_NAMESPACE,
+                    "jvxmlmmi:data");
             document.appendChild(data);
             final SpeakableText speakable = getSpeakable(output);
             if (speakable != null) {
@@ -288,17 +290,17 @@ public class XmlExtensionNotificationDataConverter
      * {@inheritDoc}
      */
     @Override
-    public Object convertRecognitionEvent(final RecognitionEvent event)
-            throws ConversionException {
+    public Object convertRecognitionEvent(final DataModel model,
+            final RecognitionEvent event) throws ConversionException {
         final RecognitionResult result = event.getRecognitionResult();
         final String utterance = result.getUtterance();
         final String mode = result.getMode().getMode();
         final float confidence = result.getConfidence();
-        final Object interpretation = result.getSemanticInterpretation();
         try {
+            final Object interpretation = result.getSemanticInterpretation(model);
             return createEmma("recognition", utterance, mode, confidence,
                     interpretation);
-        } catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException | SemanticError e) {
             throw new ConversionException(e.getMessage(), e);
         }
     }
