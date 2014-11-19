@@ -28,17 +28,19 @@ package org.jvoicexml.callmanager.mmi.json;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
 import org.jvoicexml.LastResult;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.callmanager.mmi.ConversionException;
 import org.jvoicexml.callmanager.mmi.ExtensionNotificationDataConverter;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
-import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -83,7 +85,7 @@ public class JsonExtensionNotificationDataConverter
         ScriptableObject.putProperty(vxml, "mode", lastresult.getInputmode());
         ScriptableObject.putProperty(vxml, "interpretation",
                 lastresult.getInterpretation());
-        return ScriptingEngine.toJSON((ScriptableObject) vxml);
+        return toJSON(vxml);
     }
 
     /**
@@ -102,7 +104,7 @@ public class JsonExtensionNotificationDataConverter
         final String ssml = speakable.getSpeakableText();
         final Scriptable vxml = context.newObject(scope);
         ScriptableObject.putProperty(vxml, "ssml", ssml);
-        return ScriptingEngine.toJSON((ScriptableObject) vxml);
+        return toJSON(vxml);
     }
 
     /**
@@ -128,8 +130,8 @@ public class JsonExtensionNotificationDataConverter
      * {@inheritDoc}
      */
     @Override
-    public Object convertRecognitionEvent(final RecognitionEvent event)
-            throws ConversionException {
+    public Object convertRecognitionEvent(final DataModel model,
+            final RecognitionEvent event) throws ConversionException {
         final RecognitionResult result = event.getRecognitionResult();
         final Context context = Context.enter();
         context.setLanguageVersion(Context.VERSION_DEFAULT);
@@ -139,9 +141,13 @@ public class JsonExtensionNotificationDataConverter
         ScriptableObject
                 .putProperty(vxml, "confidence", result.getConfidence());
         ScriptableObject.putProperty(vxml, "mode", result.getMode());
-        ScriptableObject.putProperty(vxml, "interpretation",
-                result.getSemanticInterpretation());
-        return ScriptingEngine.toJSON((ScriptableObject) vxml);
+        try {
+            ScriptableObject.putProperty(vxml, "interpretation",
+                    result.getSemanticInterpretation(model));
+        } catch (SemanticError e) {
+            throw new ConversionException(e.getMessage(), e);
+        }
+        return toJSON(vxml);
     }
 
     /**
@@ -153,5 +159,50 @@ public class JsonExtensionNotificationDataConverter
     public Object convertSpokenInputEvent(final SpokenInputEvent input)
             throws ConversionException {
         return null;
+    }
+
+    /**
+     * Transforms the given {@link ScriptableObject} into a JSON string.
+     * 
+     * @param object
+     *            the object to serialize
+     * @return JSON formatted string
+     * @since 0.7.5
+     */
+    public String toJSON(final Scriptable object) {
+        final JSONObject json = toJSONObject(object);
+        if (json == null) {
+            return null;
+        }
+        return json.toJSONString();
+    }
+
+    /**
+     * Transforms the given {@link ScriptableObject} into a JSON object.
+     * 
+     * @param object
+     *            the object to serialize
+     * @return JSON object
+     * @since 0.7.5
+     */
+    @SuppressWarnings("unchecked")
+    private JSONObject toJSONObject(final Scriptable object) {
+        if (object == null) {
+            return null;
+        }
+        final Object[] ids = ScriptableObject.getPropertyIds(object);
+        JSONObject json = new JSONObject();
+        for (Object id : ids) {
+            final String key = id.toString();
+            Object value = object.get(key, object);
+            if (value instanceof ScriptableObject) {
+                final ScriptableObject scriptable = (ScriptableObject) value;
+                final JSONObject subvalue = toJSONObject(scriptable);
+                json.put(key, subvalue);
+            } else {
+                json.put(key, value);
+            }
+        }
+        return json;
     }
 }
