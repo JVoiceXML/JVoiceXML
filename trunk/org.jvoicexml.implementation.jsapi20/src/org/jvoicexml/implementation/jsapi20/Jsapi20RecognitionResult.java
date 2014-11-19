@@ -36,11 +36,9 @@ import javax.speech.recognition.ResultToken;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.ModeType;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
 
 /**
  * JSAPI 20 implementation of the result of the recognition process.
@@ -192,40 +190,26 @@ public final class Jsapi20RecognitionResult implements RecognitionResult {
      * {@inheritDoc}
      */
     @Override
-    public Object getSemanticInterpretation() {
+    public Object getSemanticInterpretation(final DataModel model)
+            throws SemanticError {
         if (interpretation == null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("creating semantic interpretation...");
-            }
             final FinalResult finalResult = (FinalResult) result;
             final Object[] objecttags = finalResult.getTags(0);
             if ((objecttags == null) || (objecttags.length == 0)) {
                 return null;
             }
             final String[] tags = toString(objecttags);
-            final Context context = Context.enter();
-            context.setLanguageVersion(Context.VERSION_1_6);
-
-            final Scriptable scope = context.initStandardObjects();
-            context.evaluateString(scope, "var out = new Object();", "expr", 1,
-                    null);
+            model.createVariable("out");
             for (String tag : tags) {
                 if (tag.trim().endsWith(";")) {
-                    context.evaluateString(scope, tag, "expr", 1, null);
+                    model.evaluateExpression(tag, Object.class);
                 } else {
-                    context.evaluateString(scope, "var out = '" + tag + "';",
-                            "expr", 1, null);
+                    model.updateVariable("out", tag);
                 }
             }
-            interpretation = scope.get("out", scope);
-            if (interpretation instanceof ScriptableObject) {
-                final String json = ScriptingEngine
-                        .toJSON((ScriptableObject) interpretation);
-                LOGGER.info("created semantic interpretation out=" + json);
-            } else {
-                LOGGER.info("created semantic interpretation '"
-                        + interpretation + "'");
-            }
+            interpretation = model.readVariable("out", Object.class);
+            final String log = model.toString(interpretation);
+            LOGGER.info("created semantic interpretation '" + log + "'");
         }
         return interpretation;
     }
