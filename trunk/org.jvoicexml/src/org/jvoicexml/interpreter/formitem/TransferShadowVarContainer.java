@@ -25,8 +25,6 @@
  */
 package org.jvoicexml.interpreter.formitem;
 
-import org.mozilla.javascript.ScriptableObject;
-
 /**
  * Component that provides a container for the shadowed variables of a transfer.
  *
@@ -34,17 +32,14 @@ import org.mozilla.javascript.ScriptableObject;
  * @version $Revision$
  * @since 0.7
  */
-public final class TransferShadowVarContainer
-        extends ScriptableObject {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -4956090062682936882L;
+public final class TransferShadowVarContainer {
 
     /** The duration of a call transfer in seconds. */
     private long duration;
 
     /**
-     * The input mode of the terminating command (DTMF or voice) or undefined
-     * if the transfer was not terminated by a grammar match.
+     * The input mode of the terminating command (DTMF or voice) or undefined if
+     * the transfer was not terminated by a grammar match.
      */
     private String inputmode;
 
@@ -58,21 +53,11 @@ public final class TransferShadowVarContainer
      * Constructs a new object.
      */
     public TransferShadowVarContainer() {
-        defineProperty("duration", TransferShadowVarContainer.class, READONLY);
-        defineProperty("inputmode", TransferShadowVarContainer.class, READONLY);
-        defineProperty("utterance", TransferShadowVarContainer.class,
-                READONLY);
-    }
-
-    /**
-     * This method is a callback for rhino which gets called on instantiation.
-     * (virtual js constructor)
-     */
-    public void jsContructor() {
     }
 
     /**
      * Gets the duration.
+     * 
      * @return the duration
      */
     public long getDuration() {
@@ -81,7 +66,9 @@ public final class TransferShadowVarContainer
 
     /**
      * Sets the duration.
-     * @param secs the new duration
+     * 
+     * @param secs
+     *            the new duration
      */
     public void setDuration(final long secs) {
         duration = secs;
@@ -89,6 +76,7 @@ public final class TransferShadowVarContainer
 
     /**
      * Gets the current inputmode.
+     * 
      * @return the current inputmode
      */
     public String getInputmode() {
@@ -97,7 +85,9 @@ public final class TransferShadowVarContainer
 
     /**
      * Sets the current inputmode.
-     * @param mode the input mode.
+     * 
+     * @param mode
+     *            the input mode.
      */
     public void setInputmode(final String mode) {
         inputmode = mode;
@@ -105,6 +95,7 @@ public final class TransferShadowVarContainer
 
     /**
      * Gets the current utterance.
+     * 
      * @return the current utterance
      */
     public String getUtterance() {
@@ -113,19 +104,11 @@ public final class TransferShadowVarContainer
 
     /**
      * Sets the utterance.
-     * @param utter the new utterance
+     * 
+     * @param utter
+     *            the new utterance
      */
     public void setUtterance(final String utter) {
         utterance = utter;
-    }
-
-    /**
-     * Return the name of the class. This is typically the same name as the
-     * constructor.
-     * @return Name of the class.
-     */
-    @Override
-    public String getClassName() {
-        return TransferShadowVarContainer.class.getSimpleName();
     }
 }

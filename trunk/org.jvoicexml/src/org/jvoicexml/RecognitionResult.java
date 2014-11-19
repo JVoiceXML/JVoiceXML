@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,6 +26,8 @@
 
 package org.jvoicexml;
 
+import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
@@ -38,36 +40,43 @@ import org.jvoicexml.xml.srgs.ModeType;
 public interface RecognitionResult {
     /**
      * Retrieves the semantic interpretation of the utterance.
+     * 
+     * @param model
+     *            the employed data model
      * @return the semantic interpretation of the utterance
+     * @exception SemanticError
+     *                error creating the semantic interpretation
      * @since 0.7
      */
-    Object getSemanticInterpretation();
+    Object getSemanticInterpretation(final DataModel model)
+            throws SemanticError;
 
     /**
      * Retrieves the result as a single string.
-     * @return Result, obtained from the recognizer, <code>null</code> if
-     * no result is given or the result is not accepted.
+     * 
+     * @return Result, obtained from the recognizer, <code>null</code> if no
+     *         result is given or the result is not accepted.
      */
     String getUtterance();
 
     /**
-     * Retrieves an array of the distinct words in {@link #getUtterance()}. 
+     * Retrieves an array of the distinct words in {@link #getUtterance()}.
      * <p>
      * The length of the returned array must match the size of the array
      * returned by {@link #getWordsConfidence()}.
      * </p>
+     * 
      * @return String[].
      */
     String[] getWords();
-
 
     /**
      * Retrieves the whole utterance confidence level for this interpretation
      * from <code>0.0</code> - <code>1.0</code>.
      *
      * <p>
-     * A confidence level of <code>0.0</code> denotes the lowest confidence
-     * and a level of <code>1.0</code> denotes the highest confidence.
+     * A confidence level of <code>0.0</code> denotes the lowest confidence and
+     * a level of <code>1.0</code> denotes the highest confidence.
      * </p>
      *
      * @return confidence level.
@@ -81,8 +90,8 @@ public interface RecognitionResult {
      * interpretation from <code>0.0</code> - <code>1.0</code>.
      *
      * <p>
-     * A confidence level of <code>0.0</code> denotes the lowest confidence
-     * and a level of <code>1.0</code> denotes the highest confidence.
+     * A confidence level of <code>0.0</code> denotes the lowest confidence and
+     * a level of <code>1.0</code> denotes the highest confidence.
      * </p>
      * <p>
      * The length of the returned array must match the size of the array
@@ -97,6 +106,7 @@ public interface RecognitionResult {
 
     /**
      * Retrieves the mode in which user input was provided: dtmf or voice.
+     * 
      * @return mode.
      *
      * @since 0.6
@@ -105,20 +115,24 @@ public interface RecognitionResult {
 
     /**
      * Checks if this result is accepted.
+     * 
      * @return <code>true</code> if the result is accepted.
      */
     boolean isAccepted();
 
     /**
-     * Sets the mark reached that is reached while playing back an
-     * SSML formatted document.
-     * @param mark Name of the mark.
+     * Sets the mark reached that is reached while playing back an SSML
+     * formatted document.
+     * 
+     * @param mark
+     *            Name of the mark.
      */
     void setMark(final String mark);
 
     /**
-     * Retrieves the name of the mark, that has been reached while playing
-     * back an SSML formatted document.
+     * Retrieves the name of the mark, that has been reached while playing back
+     * an SSML formatted document.
+     * 
      * @return name of the mark.
      */
     String getMark();

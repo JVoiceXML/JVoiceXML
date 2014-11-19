@@ -36,10 +36,10 @@ import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.InputItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategyExecutor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.FilledMode;
@@ -131,12 +131,12 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
             filledElements.addAll(dialogFilledElements);
         }
         final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
-        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DataModel model = context.getDataModel();
         final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
         final TagStrategyExecutor executor = getTagStrategyExecutor();
         if (fia.isJustFilled(item)) {
             for (Filled filled : filledElements) {
-                if (shouldExecute(filled, scripting)) {
+                if (shouldExecute(filled, model)) {
                     executor.executeChildNodes(context, interpreter, fia, item,
                             filled);
                 }
@@ -155,9 +155,11 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
      * @param scripting
      *            the scripting engine
      * @return <code>true</code> if the filled node should be executed.
+     * @throws SemanticError
+     *             if one of the defined variables could not be evaluated
      */
-    private boolean shouldExecute(final Filled filled,
-            final ScriptingEngine scripting) {
+    private boolean shouldExecute(final Filled filled, final DataModel model)
+            throws SemanticError {
         final Node parent = filled.getParentNode();
         if (!(parent instanceof Form)) {
             return true;
@@ -176,9 +178,9 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
         }
         // TODO check if control items are references
         if (mode == FilledMode.ALL) {
-            return areAllFilled(tokens, scripting);
+            return areAllFilled(tokens, model);
         } else {
-            return isAnyFilled(tokens, scripting);
+            return isAnyFilled(tokens, model);
         }
     }
 
@@ -187,21 +189,22 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
      * 
      * @param tokens
      *            tokens to be processed.
-     * @param scripting
-     *            the scripting engine
+     * @param model
+     *            the employed data model
      * @return <code>true</code> if all input items are filled
+     * @throws SemanticError
+     *             if one of the token could not be evaluated
      * @since 0.7.3
      */
-    private boolean areAllFilled(final TokenList tokens,
-            final ScriptingEngine scripting) {
+    private boolean areAllFilled(final TokenList tokens, final DataModel model)
+            throws SemanticError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("checking if all input items of '" + tokens
                     + "' are filled");
         }
         for (String token : tokens) {
-            final Object object = scripting.getVariable(token);
-            if ((object == null)
-                    || (object == ScriptingEngine.getUndefinedValue())) {
+            final Object object = model.readVariable(token, Object.class);
+            if ((object == null) || (object == model.getUndefinedValue())) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("not all filled: '" + token
                             + "' is not defined");
@@ -218,20 +221,22 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
      * 
      * @param tokens
      *            tokens to be processed.
-     * @param scripting
-     *            the scripting engine
+     * @param model
+     *            the employed data model
      * @return <code>true</code> if any input items are filled
+     * @throws SemanticError
+     *             if one of the token could not be evaluated
      * @since 0.7.3
      */
-    private boolean isAnyFilled(final TokenList tokens,
-            final ScriptingEngine scripting) {
+    private boolean isAnyFilled(final TokenList tokens, final DataModel model)
+            throws SemanticError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("checking if any input items of '" + tokens
                     + "' are filled");
         }
         for (String token : tokens) {
-            final Object object = scripting.getVariable(token);
-            if ((object != null) && (object != ScriptingEngine.getUndefinedValue())) {
+            final Object object = model.readVariable(token, Object.class);
+            if ((object != null) && (object != model.getUndefinedValue())) {
                 LOGGER.info("any filled: '" + token + "' is defined");
                 return true;
             }

@@ -28,14 +28,15 @@ package org.jvoicexml.interpreter.grammar;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.srgs.Grammar;
 
@@ -194,13 +195,15 @@ final class GrammarLoader {
                     + "neither a src nor a srcexpr found");
             return null;
         }
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final Object value = scripting.eval(srcexpr + ";");
-        if ((value == null) || (value == ScriptingEngine.getUndefinedValue())) {
+        final String unescapedSrcexpr = StringEscapeUtils.unescapeXml(srcexpr);
+        final DataModel model = context.getDataModel();
+        final String value = model.evaluateExpression(unescapedSrcexpr,
+                String.class);
+        if ((value == null) || (value == model.getUndefinedValue())) {
             LOGGER.warn("srcexpr does not describe a valid uri");
             return null;
         }
-        return new URI(value.toString());
+        return new URI(value);
     }
 
     /**

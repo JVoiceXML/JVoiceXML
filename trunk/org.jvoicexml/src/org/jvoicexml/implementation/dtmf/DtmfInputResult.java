@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation.dtmf;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
@@ -36,8 +37,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @version $Revision$
  * @since 0.5
  */
-class DtmfInputResult
-        implements RecognitionResult {
+class DtmfInputResult implements RecognitionResult {
     /** The recognized DTMF string. */
     private final String utterance;
 
@@ -49,7 +49,9 @@ class DtmfInputResult
 
     /**
      * Constructs a new accepted result..
-     * @param dtmf the recognized DTMF string.
+     * 
+     * @param dtmf
+     *            the recognized DTMF string.
      */
     public DtmfInputResult(final String dtmf) {
         utterance = dtmf;
@@ -57,12 +59,14 @@ class DtmfInputResult
 
     /**
      * Constructs a new object.
-     * @param dtmf the recognized DTMF string.
-     * @param isAccepted <code>true</code> if the result is accepted.
+     * 
+     * @param dtmf
+     *            the recognized DTMF string.
+     * @param isAccepted
+     *            <code>true</code> if the result is accepted.
      * @since 0.7
      */
-    public DtmfInputResult(final String dtmf,
-            final boolean isAccepted) {
+    public DtmfInputResult(final String dtmf, final boolean isAccepted) {
         utterance = dtmf;
         accepted = isAccepted;
     }
@@ -83,7 +87,9 @@ class DtmfInputResult
 
     /**
      * Marks the result as accepted.
-     * @param isAccepted <code>true</code>  if the result is accepted.
+     * 
+     * @param isAccepted
+     *            <code>true</code> if the result is accepted.
      * @since 0.7
      */
     public void setAccepted(final boolean isAccepted) {
@@ -106,7 +112,7 @@ class DtmfInputResult
 
     /**
      * {@inheritDoc}
-    */
+     */
     public void setMark(final String mark) {
         marker = mark;
     }
@@ -152,7 +158,7 @@ class DtmfInputResult
      * {@inheritDoc}
      */
     @Override
-    public Object getSemanticInterpretation() {
+    public Object getSemanticInterpretation(final DataModel model) {
         return null;
     }
 }

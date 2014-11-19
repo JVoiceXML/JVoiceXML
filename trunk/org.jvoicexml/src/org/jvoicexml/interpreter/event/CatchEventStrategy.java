@@ -30,10 +30,10 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategyExecutor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.xml.VoiceXmlNode;
 
@@ -102,9 +102,9 @@ final class CatchEventStrategy
 
         // Declare the special variable _event which contains the name of the
         // event that was thrown.
-        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DataModel model = context.getDataModel();
         final String name = event.getEventType();
-        scripting.setVariable("_event", name);
+        model.updateVariable("_event", name);
 
         final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
         final TagStrategyExecutor executor = getTagStrategyExecutor();

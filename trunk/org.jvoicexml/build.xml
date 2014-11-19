@@ -77,6 +77,10 @@ personal-props/README.txt
              target="clean"
              inheritall="false"
              inheritrefs="false" />
+        <ant dir="../org.jvoicexml.interpreter.datamodel.ecmascript"
+             target="clean"
+             inheritall="false"
+             inheritrefs="false" />
     </target>
 
     <target name="clean"
@@ -141,6 +145,10 @@ jvxml.revision=${revision.max}
              inheritall="false"
              inheritrefs="false" />
         <ant dir="../org.jvoicexml.profile.vxml21"
+             target="jar"
+             inheritall="false"
+             inheritrefs="false" />
+        <ant dir="../org.jvoicexml.interpreter.datamodel.ecmascript"
              target="jar"
              inheritall="false"
              inheritrefs="false" />
@@ -289,6 +297,14 @@ jvxml.revision=${revision.max}
          inheritall="false"
          inheritrefs="false" />
     <ant dir="../org.jvoicexml.jndi"
+         target="apidoc"
+         inheritall="false"
+         inheritrefs="false" />
+    <ant dir="../org.jvoicexml.profile.vxml21"
+         target="apidoc"
+         inheritall="false"
+         inheritrefs="false" />
+    <ant dir="../org.jvoicexml.interpreter.datamodel.ecmascript"
          target="apidoc"
          inheritall="false"
          inheritrefs="false" />

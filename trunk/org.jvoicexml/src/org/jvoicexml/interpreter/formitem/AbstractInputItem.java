@@ -34,8 +34,8 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.InputItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Filled;
 
@@ -45,11 +45,10 @@ import org.jvoicexml.xml.vxml.Filled;
  * @version $Revision$
  * @author Dirk Schnelle-Walka
  */
-abstract class AbstractInputItem
-        extends AbstractFormItem implements InputItem {
+abstract class AbstractInputItem extends AbstractFormItem implements InputItem {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(AbstractInputItem.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(AbstractInputItem.class);
 
     /** The maintained event counter. */
     private final EventCountable eventCounter;
@@ -70,12 +69,12 @@ abstract class AbstractInputItem
      * Create a new input item.
      *
      * @param context
-     *        The current <code>VoiceXmlInterpreterContext</code>.
+     *            The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
-     *        The corresponding XML node in the VoiceXML document.
+     *            The corresponding XML node in the VoiceXML document.
      */
     public AbstractInputItem(final VoiceXmlInterpreterContext context,
-                     final VoiceXmlNode voiceNode) {
+            final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
 
         eventCounter = new EventCounter();
@@ -87,12 +86,12 @@ abstract class AbstractInputItem
      * event or have a name that is a prefix of the given event.
      *
      * @param event
-     *        Event to increment.
+     *            Event to increment.
      */
     public final void incrementEventCounter(final JVoiceXMLEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("incrementing event counter for '" + getName()
-                         + "'...");
+                    + "'...");
         }
 
         eventCounter.incrementEventCounter(event);
@@ -106,7 +105,7 @@ abstract class AbstractInputItem
         if (LOGGER.isDebugEnabled()) {
             final String name = getName();
             LOGGER.debug("resetted event counter for input item '" + name
-                         + "'...");
+                    + "'...");
         }
     }
 
@@ -134,8 +133,8 @@ abstract class AbstractInputItem
         promptCounter = 1;
         if (LOGGER.isDebugEnabled()) {
             final String name = getName();
-            LOGGER.debug("initialized prompt counter for input item '"
-                         + name + "'");
+            LOGGER.debug("initialized prompt counter for input item '" + name
+                    + "'");
         }
     }
 
@@ -143,7 +142,7 @@ abstract class AbstractInputItem
      * Retrieve the counter for the given event type.
      *
      * @param type
-     *        Event type.
+     *            Event type.
      * @return Count for the given event type.
      */
     public final int getEventCount(final String type) {
@@ -152,6 +151,7 @@ abstract class AbstractInputItem
 
     /**
      * Retrieves the name of the corresponding shadow var container name.
+     * 
      * @return Name of the shadow var container.
      *
      * @since 0.3.1
@@ -164,51 +164,10 @@ abstract class AbstractInputItem
         return str.toString();
     }
 
-    
-    /**
-     * Reset the shadow var container.
-     * @throws SemanticError
-     *         error resetting the shadow var container.
-     * @since 0.7.3
-     */
-    protected abstract void resetShadowVarContainer() throws SemanticError;
-
-    /**
-     * Retrieves the implementation of the shadow var container for this
-     * input item.
-     * @return Class of the shadow var container, <code>null</code> if there
-     *         is no shadow var container.
-     *
-     * @since 0.3.1
-     */
-    protected abstract Class<?> getShadowVariableContainer();
-
-    /**
-     * Creates a corresponding shadow var container.
-     *
-     * @return The created host object.
-     * @throws SemanticError
-     *         Error creating a host object.
-     *
-     * @since 0.5.5
-     */
-    protected final Object createShadowVarContainer()
-            throws SemanticError {
-        final Class<?> shadowVarContainer = getShadowVariableContainer();
-        if (shadowVarContainer == null) {
-            return null;
-        }
-        final String shadowVarContainerName = getShadowVarContainerName();
-        final VoiceXmlInterpreterContext context = getContext();
-        final ScriptingEngine scripting = context.getScriptingEngine();
-
-        return scripting.createHostObject(shadowVarContainerName,
-                                          shadowVarContainer);
-    }
-
     /**
      * {@inheritDoc}
      */
+    @Override
     public final Collection<Filled> getFilledElements() {
         final VoiceXmlNode node = getNode();
         if (node == null) {
@@ -222,21 +181,19 @@ abstract class AbstractInputItem
      * {@inheritDoc}
      */
     @Override
-    public void init(final ScriptingEngine scripting) throws SemanticError,
-            BadFetchError {
+    public void init(final DataModel model) throws SemanticError, BadFetchError {
+        // Create the variable
         final String name = getName();
-        final Object expression = evaluateExpression(scripting);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("initializing form item '" + name + "'");
-        }
-        scripting.setVariable(name, expression);
+        final Object expression = evaluateExpression(model);
+        model.createVariable(name, expression);
+        final String shadowVariableName = getShadowVarContainerName();
+        model.createVariable(shadowVariableName);
         LOGGER.info("initialized input form item '" + name + "' with '"
                 + expression + "'");
 
+        // Reset the counters
         resetPromptCount();
         resetEventCounter();
-        resetShadowVarContainer();
     }
 
 }

@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -44,7 +45,6 @@ import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Profile;
 import org.jvoicexml.Session;
-import org.jvoicexml.SessionListener;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.EventBus;
@@ -57,17 +57,14 @@ import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
 import org.jvoicexml.event.plain.jvxml.SubmitEvent;
+import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.interpreter.datamodel.DataModelScopeSubscriber;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedMap;
-import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
-import org.jvoicexml.interpreter.variables.DialogShadowVarContainer;
-import org.jvoicexml.interpreter.variables.DocumentShadowVarContainer;
-import org.jvoicexml.interpreter.variables.VariableProviders;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
-import org.mozilla.javascript.ScriptableObject;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -105,8 +102,8 @@ public final class VoiceXmlInterpreterContext {
     /** The current application to process. */
     private Application application;
 
-    /** The scripting engine. */
-    private ScriptingEngine scripting;
+    /** The employed data model. */
+    private DataModel model;
 
     /** The event bus. */
     private final EventBus eventbus;
@@ -157,7 +154,7 @@ public final class VoiceXmlInterpreterContext {
         eventbus = new EventBus();
         properties = new ScopedMap<String, String>(scopeObserver);
         eventHandler = new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
-                scopeObserver);
+                model, scopeObserver);
         eventbus.subscribe("", eventHandler);
     }
 
@@ -192,7 +189,7 @@ public final class VoiceXmlInterpreterContext {
         // Subscribe the default event handler for all events to the event bus.
         eventbus = new EventBus();
         eventHandler = new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
-                scopeObserver);
+                model, scopeObserver);
         eventbus.subscribe("", eventHandler);
     }
 
@@ -208,6 +205,7 @@ public final class VoiceXmlInterpreterContext {
 
     /**
      * Retrieves the active profile.
+     * 
      * @return the profile
      * @since 0.7.7
      */
@@ -255,28 +253,35 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Lazy instantiation of the scripting engine.
+     * Lazy instantiation of the data model.
      * 
-     * @return the scripting engine.
-     *
-     * @since 0.3.1
+     * @return the data model.
+     * @since 0.7.7
      */
-    public ScriptingEngine getScriptingEngine() {
+    public DataModel getDataModel() {
         // TODO make sure that all accesses to the scripting engine
         // are related to one thread per session.
-        if (scripting == null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("creating scripting engine...");
+        if (model == null) {
+            try {
+                final Collection<DataModel> models = configuration.loadObjects(
+                        DataModel.class, "datamodel");
+                if (models.isEmpty()) {
+                    LOGGER.warn("no data model configured");
+                    return null;
+                }
+                final Iterator<DataModel> iterator = models.iterator();
+                model = iterator.next();
+                LOGGER.info("loaded data model '" + model + "'");
+            } catch (ConfigurationException e) {
+                LOGGER.error("error loading data model: " + e.getMessage(), e);
+                return null;
             }
-
-            scripting = new ScriptingEngine(scopeObserver);
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...scripting engine created");
-            }
+            final DataModelScopeSubscriber subscriber = new DataModelScopeSubscriber(
+                    model);
+            scopeObserver.addScopeSubscriber(subscriber);
         }
 
-        return scripting;
+        return model;
     }
 
     /**
@@ -517,18 +522,26 @@ public final class VoiceXmlInterpreterContext {
         VoiceXmlDocument document = application.getCurrentDocument();
 
         enterScope(Scope.APPLICATION);
-        final ScriptingEngine scriptingEngine = getScriptingEngine();
-        final ApplicationShadowVarContainer container = scriptingEngine
-                .createHostObject(ApplicationShadowVarContainer.VARIABLE_NAME,
-                        ApplicationShadowVarContainer.class);
-        container.setApplication(application);
-        try {
-            createHostObjects(Scope.APPLICATION);
-        } catch (ConfigurationException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        }
 
-        // The main loop to interpret single and multi document applications
+        model.createVariableFor("lastresult$.confidence",
+                null, Scope.APPLICATION);
+        model.createVariableFor("lastresult$.utterance",
+                null, Scope.APPLICATION);
+        model.createVariableFor("lastresult$.inputmode",
+                null, Scope.APPLICATION);
+        model.createVariableFor("lastresult$.interpretation",
+                null, Scope.APPLICATION);
+        model.createArray("lastresult$", 0);
+//        model.createVariable("application.lastresult$[0].confidence",
+//                null, Scope.APPLICATION);
+//        model.createVariable("application.lastresult$[0].utterance",
+//                null, Scope.APPLICATION);
+//        model.createVariable("application.lastresult$[0].inputmode",
+//                null, Scope.APPLICATION);
+//        model.createVariable("application.lastresult$[0].interpretation",
+//                null, Scope.APPLICATION);
+
+        // The main loop to interpret single- and multi-document applications
         DocumentDescriptor descriptor = null;
         while (document != null) {
             final URI rootUri = application.getApplication();
@@ -539,10 +552,6 @@ public final class VoiceXmlInterpreterContext {
             }
             try {
                 enterScope(Scope.DOCUMENT);
-                scriptingEngine.createHostObject(
-                        DocumentShadowVarContainer.VARIABLE_NAME,
-                        DocumentShadowVarContainer.class);
-                createHostObjects(Scope.APPLICATION);
                 final String dialog;
                 if (descriptor != null) {
                     final URI uri = descriptor.getUri();
@@ -573,44 +582,12 @@ public final class VoiceXmlInterpreterContext {
             } catch (JVoiceXMLEvent e) {
                 throw new BadFetchError("unhandled event '" + e.getEventType()
                         + "'", e);
-            } catch (ConfigurationException e) {
-                throw new BadFetchError(e.getMessage(), e);
             } finally {
                 exitScope(Scope.DOCUMENT);
             }
         }
         LOGGER.info("no more documents to process for '" + application + "'");
         exitScope(Scope.APPLICATION);
-    }
-
-    /**
-     * Creates custom host objects.
-     * 
-     * @param scope
-     *            the current scope
-     * @exception ConfigurationException
-     *                error loading a configuration
-     * @exception SemanticError
-     *                error creating a host object
-     * @since 0.7.5
-     */
-    private void createHostObjects(final Scope scope)
-            throws ConfigurationException, SemanticError {
-        final Collection<VariableProviders> providers = configuration
-                .loadObjects(VariableProviders.class, "variableprovider");
-        if (providers == null) {
-            return;
-        }
-        for (VariableProviders provider : providers) {
-            final Collection<ScriptableObject> created = provider
-                    .createHostObjects(scripting, Scope.SESSION);
-            for (ScriptableObject o : created) {
-                if (o instanceof SessionListener) {
-                    final SessionListener listener = (SessionListener) o;
-                    session.addSessionListener(listener);
-                }
-            }
-        }
     }
 
     /**
@@ -628,14 +605,10 @@ public final class VoiceXmlInterpreterContext {
         initializingSubdialog = true;
         application = appl;
         VoiceXmlDocument document = application.getCurrentDocument();
-        final ScriptingEngine scriptingEngine = getScriptingEngine();
         DocumentDescriptor descriptor = desc;
         while (document != null) {
             try {
                 enterScope(Scope.DOCUMENT);
-                scriptingEngine.createHostObject(
-                        DocumentShadowVarContainer.VARIABLE_NAME,
-                        DocumentShadowVarContainer.class);
                 final String dialog;
                 if (descriptor != null) {
                     final URI uri = descriptor.getUri();
@@ -860,10 +833,6 @@ public final class VoiceXmlInterpreterContext {
         while (dialog != null) {
             try {
                 enterScope(Scope.DIALOG);
-                scripting.createHostObject(
-                        DialogShadowVarContainer.VARIABLE_NAME,
-                        DialogShadowVarContainer.class);
-                createHostObjects(Scope.DIALOG);
                 interpreter.process(dialog);
                 dialog = interpreter.getNextDialog();
             } catch (GotoNextFormEvent e) {
@@ -878,8 +847,6 @@ public final class VoiceXmlInterpreterContext {
                 return new DocumentDescriptor(uri);
             } catch (SubmitEvent e) {
                 return e.getDocumentDescriptor();
-            } catch (ConfigurationException e) {
-                throw new ExceptionWrapper(e.getMessage(), e);
             } finally {
                 exitScope(Scope.DIALOG);
             }
@@ -920,9 +887,9 @@ public final class VoiceXmlInterpreterContext {
                     strategy.getAttributes(this, null, node);
                     strategy.evalAttributes(this);
                     if (LOGGER.isDebugEnabled()) {
-                        strategy.dumpNode(node);
+                        strategy.dumpNode(model, node);
                     }
-                    strategy.validateAttributes();
+                    strategy.validateAttributes(model);
                     strategy.execute(this, interpreter, null, null, node);
                 }
             }

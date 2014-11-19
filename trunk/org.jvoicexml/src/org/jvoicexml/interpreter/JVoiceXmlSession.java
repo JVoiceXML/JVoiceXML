@@ -34,7 +34,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
 import org.jvoicexml.Application;
 import org.jvoicexml.Configuration;
-import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
@@ -49,19 +48,17 @@ import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.EventSubscriber;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.implementation.NomatchEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.interpreter.datamodel.Connection;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
-import org.jvoicexml.interpreter.variables.SessionShadowVarContainer;
-import org.jvoicexml.interpreter.variables.VariableProviders;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Implementation of a {@link Session}.
@@ -151,7 +148,7 @@ public final class JVoiceXmlSession extends Thread
         application = null;
         grammarProcessor = jvxml.getGrammarProcessor();
         scopeObserver = new ScopeObserver();
-        
+
         // Create a new context.
         final Configuration configuration = jvxml.getConfiguration();
         context = new VoiceXmlInterpreterContext(this, configuration);
@@ -159,13 +156,13 @@ public final class JVoiceXmlSession extends Thread
         closed = false;
         sessionListeners = new ScopedCollection<SessionListener>(scopeObserver);
         detailedSessionListeners = new java.util.ArrayList<DetailedSessionListener>();
-        
+
         // Subscribe to the event bus.
         final EventBus eventbus = context.getEventBus();
         eventbus.subscribe(SynthesizedOutputEvent.EVENT_TYPE, this);
         eventbus.subscribe(SpokenInputEvent.EVENT_TYPE, this);
         eventbus.subscribe(NomatchEvent.EVENT_TYPE, this);
-        
+
         // initialize the profile
         profile.initialize(context);
     }
@@ -376,18 +373,13 @@ public final class JVoiceXmlSession extends Thread
         }
 
         processingError = null;
-        final ScriptingEngine scripting = getScriptingEngine();
+        final DataModel model = getDataModel();
         scopeObserver.enterScope(Scope.SESSION);
+        final Connection connection = new Connection(info);
+        model.createVariable("session.connection", connection, Scope.SESSION);
+        model.createVariable("session.sessionid", uuid, Scope.SESSION);
+        notifySessionStarted();
         try {
-            final SessionShadowVarContainer session = scripting
-                    .createHostObject(SessionShadowVarContainer.VARIABLE_NAME,
-                            SessionShadowVarContainer.class);
-            session.setLocalCallerDevice(calledDevice);
-            session.setRemoteCallerDevice(callingDevice);
-            session.protocol(protocolName, protocolVersion);
-            session.setSessionIdentifier(uuid);
-            createHostObjects();
-            notifySessionStarted();
             context.process(application);
         } catch (ErrorEvent e) {
             LOGGER.error("error processing application '" + application + "'",
@@ -428,33 +420,6 @@ public final class JVoiceXmlSession extends Thread
 
         LOGGER.info("...session closed");
         notifySessionEnded();
-    }
-
-    /**
-     * Creates custom host objects.
-     * 
-     * @exception ConfigurationException
-     *                error loading a configuration
-     * @exception SemanticError
-     *                error creating a host object
-     * @since 0.7.5
-     */
-    private void createHostObjects() throws ConfigurationException,
-            SemanticError {
-        final Configuration configuration = context.getConfiguration();
-        final ScriptingEngine scripting = getScriptingEngine();
-        final Collection<VariableProviders> providers = configuration
-                .loadObjects(VariableProviders.class, "variableprovider");
-        for (VariableProviders provider : providers) {
-            final Collection<ScriptableObject> created = provider
-                    .createHostObjects(scripting, Scope.SESSION);
-            for (ScriptableObject o : created) {
-                if (o instanceof SessionListener) {
-                    final SessionListener listener = (SessionListener) o;
-                    sessionListeners.add(listener);
-                }
-            }
-        }
     }
 
     /**
@@ -549,14 +514,14 @@ public final class JVoiceXmlSession extends Thread
     }
 
     /**
-     * Retrieves the scripting engine.
+     * Retrieves the data model.
      * 
-     * @return The scripting engine.
+     * @return the data model
      * 
-     * @since 0.4
+     * @since 0.7.7
      */
-    public ScriptingEngine getScriptingEngine() {
-        return context.getScriptingEngine();
+    public DataModel getDataModel() {
+        return context.getDataModel();
     }
 
     /**

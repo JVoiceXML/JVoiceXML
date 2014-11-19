@@ -34,15 +34,15 @@ import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.FormItemVisitor;
 import org.jvoicexml.interpreter.PromptCountable;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Initial;
 
 /**
- * This element controls the initial interaction in a mixed initiative form.
- * Its prompts should be written to encourage the user to say something matching
- * a form level grammar. When at least one input item variable is filled as a
+ * This element controls the initial interaction in a mixed initiative form. Its
+ * prompts should be written to encourage the user to say something matching a
+ * form level grammar. When at least one input item variable is filled as a
  * result of recognition during an <code>&lt;initial&gt;</code> element, the
  * form item variable of <code>&lt;initial&gt;</code> becomes <code>true</code>,
  * thus removing it as an alternative for the FIA.
@@ -50,12 +50,11 @@ import org.jvoicexml.xml.vxml.Initial;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class InitialFormItem
-        extends AbstractControlItem 
+public final class InitialFormItem extends AbstractControlItem
         implements CatchContainer, PromptCountable, EventCountable {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(InitialFormItem.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(InitialFormItem.class);
 
     /** The maintained prompt counter. */
     private int promptCounter;
@@ -63,7 +62,7 @@ public final class InitialFormItem
     /** The maintained event counter. */
     private final EventCountable eventCounter;
 
-        /**
+    /**
      * Constructs a new object as a template.
      */
     public InitialFormItem() {
@@ -75,15 +74,14 @@ public final class InitialFormItem
      * Create a new initial form item.
      *
      * @param context
-     *        The current <code>VoiceXmlInterpreterContext</code>.
+     *            The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
-     *        The corresponding xml node in the VoiceXML document.
+     *            The corresponding xml node in the VoiceXML document.
      * @throws IllegalArgumentException
-     *         if the given node is not a {@link Initial}
+     *             if the given node is not a {@link Initial}
      */
     public InitialFormItem(final VoiceXmlInterpreterContext context,
-                         final VoiceXmlNode voiceNode)
-                                 throws IllegalArgumentException {
+            final VoiceXmlNode voiceNode) throws IllegalArgumentException {
         super(context, voiceNode);
         if (!(voiceNode instanceof Initial)) {
             throw new IllegalArgumentException("Node must be a <initial>");
@@ -96,8 +94,7 @@ public final class InitialFormItem
      * {@inheritDoc}
      */
     @Override
-    public AbstractFormItem newInstance(
-            final VoiceXmlInterpreterContext ctx,
+    public AbstractFormItem newInstance(final VoiceXmlInterpreterContext ctx,
             final VoiceXmlNode voiceNode) {
         return new InitialFormItem(ctx, voiceNode);
     }
@@ -105,8 +102,7 @@ public final class InitialFormItem
     /**
      * {@inheritDoc}
      */
-    public void accept(final FormItemVisitor visitor)
-            throws JVoiceXMLEvent {
+    public void accept(final FormItemVisitor visitor) throws JVoiceXMLEvent {
         visitor.visitInitialFormItem(this);
     }
 
@@ -145,7 +141,7 @@ public final class InitialFormItem
      * Retrieve the counter for the given event type.
      *
      * @param type
-     *        Event type.
+     *            Event type.
      * @return Count for the given event type.
      */
     public int getEventCount(final String type) {
@@ -157,12 +153,12 @@ public final class InitialFormItem
      * event or have a name that is a prefix of the given event.
      *
      * @param event
-     *        Event to increment.
+     *            Event to increment.
      */
     public void incrementEventCounter(final JVoiceXMLEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("incrementing event counter for '" + getName()
-                         + "'...");
+                    + "'...");
         }
 
         eventCounter.incrementEventCounter(event);
@@ -184,18 +180,15 @@ public final class InitialFormItem
      * {@inheritDoc}
      */
     @Override
-    public void init(final ScriptingEngine scripting) throws SemanticError,
-            BadFetchError {
+    public void init(final DataModel model) throws SemanticError, BadFetchError {
+        // Create the variable
         final String name = getName();
-        final Object expression = evaluateExpression(scripting);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("initializing form item '" + name + "'");
-        }
-        scripting.setVariable(name, expression);
+        final Object expression = evaluateExpression(model);
+        model.createVariable(name, expression);
         LOGGER.info("initialized initial form item '" + name + "' with '"
                 + expression + "'");
 
+        // Reset the counters
         resetPromptCount();
         resetEventCounter();
     }
