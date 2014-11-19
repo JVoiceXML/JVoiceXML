@@ -36,9 +36,9 @@ import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.PromptCountable;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Clear;
@@ -76,9 +76,8 @@ final class ClearStrategy extends AbstractTagStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes() throws ErrorEvent {
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
         final String names = (String) getAttribute(Clear.ATTRIBUTE_NAMELIST);
-
         if (names == null) {
             namelist = null;
         } else {
@@ -108,22 +107,23 @@ final class ClearStrategy extends AbstractTagStrategy {
      *            The current VoiceXML interpreter context.
      * @param fia
      *            The current form interpretation algorithm
+     * @throws SemanticError
+     *             error resseting the counter
      *
      * @since 0.3.1
      */
     private void clearAllFormItems(final VoiceXmlInterpreterContext context,
-            final FormInterpretationAlgorithm fia) {
+            final FormInterpretationAlgorithm fia) throws SemanticError {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("celaring all form items");
+            LOGGER.debug("clearing all form items");
         }
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DataModel model = context.getDataModel();
         final Collection<FormItem> items = fia.getFormItems();
-
         for (FormItem item : items) {
             final String name = item.getName();
-            scripting.setVariable(name, ScriptingEngine.getUndefinedValue());
-            resetCounter(scripting, name);
+            model.deleteVariable(name);
+            resetCounter(model, name);
         }
     }
 
@@ -131,14 +131,16 @@ final class ClearStrategy extends AbstractTagStrategy {
      * Resets the counter if an
      * {@link org.jvoicexml.interpreter.formitem.AbstractInputItem} exists.
      * 
-     * @param scripting
-     *            scripting engine.
+     * @param model
+     *            the employed data model
      * @param name
      *            name of the variable.
+     * @throws SemanticError
+     *             error reading the variable
      */
-    private void resetCounter(final ScriptingEngine scripting, final String name) {
-        // TODO Remove the knowledge, that a shadow var ends with $.
-        final Object value = scripting.getVariable(name + "$");
+    private void resetCounter(final DataModel model, final String name)
+            throws SemanticError {
+        final Object value = model.readVariable(name + "$", Object.class);
         if (value instanceof EventCountable) {
             final EventCountable countable = (EventCountable) value;
             countable.resetEventCounter();
@@ -162,16 +164,10 @@ final class ClearStrategy extends AbstractTagStrategy {
      */
     private void clearVariables(final VoiceXmlInterpreterContext context,
             final FormInterpretationAlgorithm fia) throws SemanticError {
-        final ScriptingEngine scripting = context.getScriptingEngine();
-
-        /** @todo If namelist is not specified: Clear all form items. */
+        final DataModel model = context.getDataModel();
         for (String name : namelist) {
-            if (!scripting.isVariableDefined(name)) {
-                throw new SemanticError("'" + name + "' is not defined!");
-            }
-
-            resetCounter(scripting, name);
-            scripting.setVariable(name, ScriptingEngine.getUndefinedValue());
+            resetCounter(model, name);
+            model.updateVariable(name, null);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("cleared var '" + name + "'");
             }

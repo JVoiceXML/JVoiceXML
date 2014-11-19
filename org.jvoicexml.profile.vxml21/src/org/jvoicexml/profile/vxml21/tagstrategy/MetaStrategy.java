@@ -34,6 +34,7 @@ import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Meta;
 
@@ -67,7 +68,7 @@ final class MetaStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes()
+    public void validateAttributes(final DataModel model)
             throws ErrorEvent {
         final Object name = getAttribute(Meta.ATTRIBUTE_NAME);
         final Object httpEquiv = getAttribute(Meta.ATTRIBUTE_HTTP_EQUIV);

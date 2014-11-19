@@ -32,11 +32,11 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Throw;
 
@@ -89,29 +89,11 @@ final class ThrowStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes()
+    public void validateAttributes(final DataModel model)
             throws ErrorEvent {
-        event = (String) getAttribute(Throw.ATTRIBUTE_EVENT);
-
-        if (isAttributeDefined(Throw.ATTRIBUTE_EVENTEXPR)) {
-            if (event != null) {
-                throw new BadFetchError("exactly one of \"event\" or "
-                                        + "\"eventexpr\" must be specified!");
-            }
-
-            event = (String) getAttribute(Throw.ATTRIBUTE_EVENTEXPR);
-        }
-
-        message = (String) getAttribute(Throw.ATTRIBUTE_MESSAGE);
-
-        if (isAttributeDefined(Throw.ATTRIBUTE_MESSAGEEXPR)) {
-            if (message != null) {
-                throw new BadFetchError("exactly one of \"message\" or "
-                                        + "\"messageexpr\" must be specified!");
-            }
-
-            message = (String) getAttribute(Throw.ATTRIBUTE_MESSAGEEXPR);
-        }
+        event = (String) getAttributeWithAlternativeExpr(model, Throw.ATTRIBUTE_EVENT, Throw.ATTRIBUTE_EVENTEXPR);
+        message = (String) getAttributeWithAlternativeExpr(model,
+                Throw.ATTRIBUTE_MESSAGE, Throw.ATTRIBUTE_MESSAGEEXPR); 
     }
 
     /**

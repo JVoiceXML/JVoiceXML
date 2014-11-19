@@ -29,6 +29,7 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -36,12 +37,11 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Skeleton for a {@link TagStrategy}.
@@ -123,12 +123,15 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
             return;
         }
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DataModel model = context.getDataModel();
         for (String name : evalAttributes) {
             final Object expr = attributes.get(name);
             if (expr != null) {
                 final String exprstring = expr.toString();
-                final Object value = scripting.eval(exprstring + ";");
+                final String cleanedExprstring = StringEscapeUtils
+                        .unescapeXml(exprstring);
+                final Object value = model.evaluateExpression(
+                        cleanedExprstring, Object.class);
                 attributes.put(name, value);
             }
         }
@@ -137,7 +140,8 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
     /**
      * {@inheritDoc}
      */
-    public void validateAttributes() throws ErrorEvent {
+    @Override
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
     }
 
     /**
@@ -187,10 +191,10 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
      *             if both or none of the attributes are defined
      * @since 0.7.7
      */
-    protected Object getAttributeWithAlternativeExpr(final String pure,
-            final String expr) throws BadFetchError {
-        final boolean pureDefined = isAttributeDefined(pure);
-        final boolean exprDefined = isAttributeDefined(expr);
+    protected Object getAttributeWithAlternativeExpr(final DataModel model,
+            final String pure, final String expr) throws BadFetchError {
+        final boolean pureDefined = isAttributeDefined(model, pure);
+        final boolean exprDefined = isAttributeDefined(model, expr);
 
         // None or both are defined
         if ((pureDefined && exprDefined) || (!pureDefined && !exprDefined)) {
@@ -206,26 +210,57 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
     }
 
     /**
+     * Retrieves the value of an attribute that may alternatively defined by an
+     * evaluated expression.
+     * 
+     * @param pure
+     *            the original name of the attribute
+     * @param expr
+     *            the name of the attribute that has been evaluated by the
+     *            scripting engine
+     * @return value of the attribute, {@code null} if both or none of the
+     *         attributes are defined
+     * @since 0.7.7
+     */
+    protected Object getAndCheckAttributeWithAlternativeExpr(
+            final DataModel model, final String pure, final String expr) {
+        final boolean pureDefined = isAttributeDefined(model, pure);
+        final boolean exprDefined = isAttributeDefined(model, expr);
+
+        // None or both are defined
+        if ((pureDefined && exprDefined) || (!pureDefined && !exprDefined)) {
+            return null;
+        }
+
+        if (pureDefined) {
+            return getAttribute(pure);
+        }
+
+        return getAttribute(expr);
+    }
+
+    /**
      * Checks if the given attribute is defined, this means, neither
      * <code>null</code> nor <code>ScriptingEngine.getUndefinedValue()</code>.
      * 
+     * @param model
+     *            the data model to use
      * @param name
      *            Name of the attribute.
      * @return <code>true</code> if the attribute is defined.
      */
-    protected boolean isAttributeDefined(final String name) {
+    protected boolean isAttributeDefined(DataModel model, final String name) {
         final Object value = attributes.get(name);
         if (value == null) {
             return false;
         }
-
-        return ScriptingEngine.getUndefinedValue() != value;
+        return model.getUndefinedValue() != value;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void dumpNode(final VoiceXmlNode node) {
+    public void dumpNode(final DataModel model, final VoiceXmlNode node) {
         final StringBuilder str = new StringBuilder();
 
         str.append("node: '");
@@ -239,13 +274,8 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
             str.append(" ");
             str.append(attribute);
             str.append(": '");
-            if (value instanceof ScriptableObject) {
-                final ScriptableObject scriptable = (ScriptableObject) value;
-                final String json = ScriptingEngine.toJSON(scriptable);
-                str.append(json);
-            } else {
-                str.append(value);
-            }
+            final String converted = model.toString(value);
+            str.append(converted);
             str.append("'");
         }
 

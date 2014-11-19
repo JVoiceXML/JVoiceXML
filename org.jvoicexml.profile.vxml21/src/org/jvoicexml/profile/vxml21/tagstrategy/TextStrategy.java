@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -42,11 +42,11 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.TextContainer;
 import org.jvoicexml.xml.TimeParser;
@@ -62,12 +62,10 @@ import org.jvoicexml.xml.vxml.Prompt;
  * @author Dirk Schnelle-Walka
  * @version $Revision: 4080 $
  */
-final class TextStrategy
-        extends AbstractTagStrategy
+final class TextStrategy extends AbstractTagStrategy
         implements SsmlParsingStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
-            .getLogger(TextStrategy.class);
+    private static final Logger LOGGER = Logger.getLogger(TextStrategy.class);
 
     /**
      * Creates a new object.
@@ -109,13 +107,13 @@ final class TextStrategy
         } catch (javax.xml.parsers.ParserConfigurationException pce) {
             throw new BadFetchError("Error converting to SSML!", pce);
         }
-        final SpeakableSsmlText speakable =
-            new SpeakableSsmlText(document, false, null);
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(document,
+                false, null);
         final long timeout = getTimeout();
         speakable.setTimeout(timeout);
         if (!speakable.isSpeakableTextEmpty()) {
-            final ImplementationPlatform platform =
-                    context.getImplementationPlatform();
+            final ImplementationPlatform platform = context
+                    .getImplementationPlatform();
             if (!fia.isQueuingPrompts()) {
                 platform.setPromptTimeout(-1);
             }
@@ -123,8 +121,8 @@ final class TextStrategy
             final Session session = context.getSession();
             final String sessionId = session.getSessionID();
             try {
-                final CallControlProperties callProps =
-                        context.getCallControlProperties(fia);
+                final CallControlProperties callProps = context
+                        .getCallControlProperties(fia);
                 final DocumentServer server = context.getDocumentServer();
                 platform.renderPrompts(sessionId, server, callProps);
             } catch (ConfigurationException ex) {
@@ -162,10 +160,9 @@ final class TextStrategy
     /**
      * {@inheritDoc}
      */
-    public SsmlNode cloneNode(final SsmlParser parser,
-            final ScriptingEngine scripting, final SsmlDocument document,
-            final SsmlNode parent, final VoiceXmlNode node)
-        throws SemanticError {
+    public SsmlNode cloneNode(final SsmlParser parser, final DataModel model,
+            final SsmlDocument document, final SsmlNode parent,
+            final VoiceXmlNode node) throws SemanticError {
         final String text = getOutput(node);
         if (text != null) {
             if (parent instanceof TextContainer) {
@@ -181,12 +178,12 @@ final class TextStrategy
 
     /**
      * Retrieves the timeout attribute.
+     * 
      * @return timeout to use for this prompt.
      * @since 0.7
      */
     private long getTimeout() {
-        final String timeoutAttribute =
-            (String) getAttribute(Prompt.ATTRIBUTE_TIMEOUT);
+        final String timeoutAttribute = (String) getAttribute(Prompt.ATTRIBUTE_TIMEOUT);
         if (timeoutAttribute == null) {
             return -1;
         } else {
