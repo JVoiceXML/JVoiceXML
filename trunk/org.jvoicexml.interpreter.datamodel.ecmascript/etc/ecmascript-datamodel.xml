@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datamodel xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="jvxml-datamodel-0-7.xsd">
+    <classpath>dist/org.jvoicexml.interpreter.datamodel.ecmascript.jar
+    </classpath>
+    <classpath>3rdparty/rhino1.7R4/lib/js.jar
+    </classpath>
+    <classpath>3rdparty/jsonsimple1.1.1/lib/json-simple-1.1.1.jar
+    </classpath>
+
+    <!-- The ECMA Script data model -->
+    <beans:bean id="org.jvoicexml.interpreter.datamodel.DataModel"
+        class="org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel" />
+</datamodel>
