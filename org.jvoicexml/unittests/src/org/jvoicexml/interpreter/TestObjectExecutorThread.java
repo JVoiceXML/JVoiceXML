@@ -28,18 +28,20 @@ package org.jvoicexml.interpreter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.Configuration;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.EventBus;
+import org.jvoicexml.event.EventSubscriber;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.jvxml.ObjectTagResultEvent;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
-import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Param;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link org.jvoicexml.interpreter.ObjectExecutorThread}.
@@ -48,15 +50,17 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @version $Revision$
  * @since 0.6
  */
-public final class TestObjectExecutorThread {
-    /**
-     * Test return value.
-     */
+public final class TestObjectExecutorThread implements EventSubscriber {
+    /** The received event. */
+    private JVoiceXMLEvent event;
+
+    /** Synchronization lock. */
+    private Object lock;
+
+    /** Test return value. */
     private static final String STRING_VALUE = "dummy value";
 
-    /**
-     * Test return value.
-     */
+    /** Test return value. */
     private static final Long LONG_VALUE = new Long(42);
 
     /** The VoiceXML interpreter context. */
@@ -64,21 +68,26 @@ public final class TestObjectExecutorThread {
 
     /**
      * Set up the test environment.
+     * 
      * @exception Exception
-     *            set up failed
+     *                set up failed
      */
     @Before
     public void setUp() throws Exception {
-        final MockJvoiceXmlCore jvxml = new MockJvoiceXmlCore();
+        lock = new Object();
+        event = null;
 
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(null, jvxml, null, null);
-        final Configuration configuration = new MockConfiguration();
-        context = new VoiceXmlInterpreterContext(session, configuration);
+        // Create mock objects for the tests
+        context = Mockito.mock(VoiceXmlInterpreterContext.class);
+        final EventBus bus = new EventBus();
+        Mockito.when(context.getEventBus()).thenReturn(bus);
+        final Session session = Mockito.mock(Session.class);
+        Mockito.when(context.getSession()).thenReturn(session);
     }
 
     /**
      * Test method to call.
+     * 
      * @return dummy result.
      */
     public String invoke() {
@@ -87,6 +96,7 @@ public final class TestObjectExecutorThread {
 
     /**
      * Other test method to call.
+     * 
      * @return dummy result.
      */
     public Long anotherMethod() {
@@ -95,7 +105,9 @@ public final class TestObjectExecutorThread {
 
     /**
      * Other test method to call.
-     * @param value test argument.
+     * 
+     * @param value
+     *            test argument.
      * @return dummy result.
      */
     public int increment(final Integer value) {
@@ -103,14 +115,17 @@ public final class TestObjectExecutorThread {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.ObjectExecutorThread#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.ObjectFormItem)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.ObjectExecutorThread#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.ObjectFormItem)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
-    @Test
-    public void testExecute()throws Exception, JVoiceXMLEvent  {
+    @Test(timeout = 2000)
+    public void testExecute() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
         final Form form = vxml.appendChild(Form.class);
@@ -120,33 +135,35 @@ public final class TestObjectExecutorThread {
         final ObjectFormItem item = new ObjectFormItem(context, object);
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, null, dialog);
-        final EventHandler handler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler(null, null);
         final EventBus eventbus = context.getEventBus();
-        eventbus.subscribe("", handler);
-        handler.collect(context, null, fia, item);
+        eventbus.subscribe("", this);
 
-        final ObjectExecutorThread executor =
-            new ObjectExecutorThread(context, item);
+        final ObjectExecutorThread executor = new ObjectExecutorThread(context,
+                item);
 
         executor.start();
-        executor.join();
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        handler.processEvent(item);
-        Assert.assertEquals(STRING_VALUE, scripting.getVariable("test"));
+        synchronized (lock) {
+            lock.wait();
+        }
+        Assert.assertNotNull("no event received", event);
+        Assert.assertTrue("expected an object result",
+                event instanceof ObjectTagResultEvent);
+        final ObjectTagResultEvent result = (ObjectTagResultEvent) event;
+        Assert.assertEquals(STRING_VALUE, result.getInputResult());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.ObjectExecutorThread#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.ObjectFormItem)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.ObjectExecutorThread#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.ObjectFormItem)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
-    @Test
-    public void testExecuteMethodName()throws Exception, JVoiceXMLEvent  {
+    @Test(timeout = 2000)
+    public void testExecuteMethodName() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
         final Form form = vxml.appendChild(Form.class);
@@ -157,36 +174,39 @@ public final class TestObjectExecutorThread {
         final ObjectFormItem item = new ObjectFormItem(context, object);
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, null, dialog);
-
-        final EventHandler handler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler(null, null);
         final EventBus eventbus = context.getEventBus();
-        eventbus.subscribe("", handler);
-        handler.collect(context, null, fia, item);
+        eventbus.subscribe("", this);
 
-        final ObjectExecutorThread executor =
-            new ObjectExecutorThread(context, item);
+        final ObjectExecutorThread executor = new ObjectExecutorThread(context,
+                item);
 
         executor.start();
-        executor.join();
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        handler.processEvent(item);
-        Assert.assertEquals(LONG_VALUE, scripting.getVariable("test"));
+        synchronized (lock) {
+            lock.wait();
+        }
+        Assert.assertNotNull("no event received", event);
+        Assert.assertTrue("expected an object result",
+                event instanceof ObjectTagResultEvent);
+        final ObjectTagResultEvent result = (ObjectTagResultEvent) event;
+        Assert.assertEquals(LONG_VALUE, result.getInputResult());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.ObjectExecutorThread#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.ObjectFormItem)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.ObjectExecutorThread#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.ObjectFormItem)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
-    @Test
-    public void testExecuteParam()throws Exception, JVoiceXMLEvent  {
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.setVariable("testvalue", new Integer(1));
+    @Test(timeout = 2000)
+    public void testExecuteParam() throws Exception, JVoiceXMLEvent {
+        final DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(model.evaluateExpression("testvalue", Object.class))
+                .thenReturn(new Integer(1));
+        Mockito.when(context.getDataModel()).thenReturn(model);
 
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -201,21 +221,29 @@ public final class TestObjectExecutorThread {
         final ObjectFormItem item = new ObjectFormItem(context, object);
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, null, dialog);
-
-        final EventHandler handler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler(null, null);
         final EventBus eventbus = context.getEventBus();
-        eventbus.subscribe("", handler);
-        handler.collect(context, null, fia, item);
+        eventbus.subscribe("", this);
 
-        final ObjectExecutorThread executor =
-            new ObjectExecutorThread(context, item);
+        final ObjectExecutorThread executor = new ObjectExecutorThread(context,
+                item);
 
         executor.start();
-        executor.join();
-        handler.processEvent(item);
-        Assert.assertEquals(2, scripting.getVariable("test"));
+        synchronized (lock) {
+            lock.wait();
+        }
+        Assert.assertNotNull("no event received", event);
+        Assert.assertTrue("expected an object result",
+                event instanceof ObjectTagResultEvent);
+        final ObjectTagResultEvent result = (ObjectTagResultEvent) event;
+        Assert.assertEquals(2, result.getInputResult());
     }
+
+    @Override
+    public void onEvent(final JVoiceXMLEvent e) {
+        synchronized (lock) {
+            event = e;
+            lock.notifyAll();
+        }
+    }
+
 }
