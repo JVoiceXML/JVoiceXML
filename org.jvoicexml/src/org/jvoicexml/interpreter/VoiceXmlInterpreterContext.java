@@ -79,7 +79,7 @@ import org.w3c.dom.NodeList;
  *
  * @version $LastChangedRevision$
  */
-public final class VoiceXmlInterpreterContext {
+public class VoiceXmlInterpreterContext {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(VoiceXmlInterpreterContext.class);
