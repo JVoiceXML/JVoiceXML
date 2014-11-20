@@ -122,9 +122,8 @@ abstract class AbstractFormItem
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("retrieved undefined form item variable");
             }
+            return null;
         }
-
-        return null;
     }
 
     /**

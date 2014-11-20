@@ -132,4 +132,59 @@ public class LastResult {
     public Object getInterpretation() {
         return interpretation;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Float.floatToIntBits(confidence);
+        result = prime * result
+                + ((inputmode == null) ? 0 : inputmode.hashCode());
+        result = prime * result
+                + ((interpretation == null) ? 0 : interpretation.hashCode());
+        result = prime * result
+                + ((utterance == null) ? 0 : utterance.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final LastResult other = (LastResult) obj;
+        if (Float.floatToIntBits(confidence) != Float
+                .floatToIntBits(other.confidence)) {
+            return false;
+        }
+        if (inputmode == null) {
+            if (other.inputmode != null) {
+                return false;
+            }
+        } else if (!inputmode.equals(other.inputmode)) {
+            return false;
+        }
+        if (interpretation == null) {
+            if (other.interpretation != null) {
+                return false;
+            }
+        } else if (!interpretation.equals(other.interpretation)) {
+            return false;
+        }
+        if (utterance == null) {
+            if (other.utterance != null) {
+                return false;
+            }
+        } else if (!utterance.equals(other.utterance)) {
+            return false;
+        }
+        return true;
+    }
+
 }
