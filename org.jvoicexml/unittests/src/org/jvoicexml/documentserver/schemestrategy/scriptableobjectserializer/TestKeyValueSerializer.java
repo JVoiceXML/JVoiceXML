@@ -33,7 +33,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.documentserver.schemestrategy.ScriptableObjectSerializer;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.mozilla.javascript.ScriptableObject;
 
 /**

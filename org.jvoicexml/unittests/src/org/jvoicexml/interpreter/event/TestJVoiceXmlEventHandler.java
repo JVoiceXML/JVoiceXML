@@ -50,7 +50,6 @@ import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
@@ -156,7 +155,8 @@ public final class TestJVoiceXmlEventHandler {
 
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
+                null);
         handler.collect(context, interpreter, dialog);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
@@ -190,7 +190,8 @@ public final class TestJVoiceXmlEventHandler {
         catchNode.setEvent("test");
 
         final FieldFormItem item = new FieldFormItem(context, field);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
+                null);
         handler.collect(null, null, null, item);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
@@ -228,7 +229,8 @@ public final class TestJVoiceXmlEventHandler {
         catchNode.setEvent("test");
 
         final FieldFormItem item = new FieldFormItem(context, field);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
+                null);
         handler.collect(context, interpreter, null, item);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
@@ -278,7 +280,7 @@ public final class TestJVoiceXmlEventHandler {
         final ScopeObserver observer = new ScopeObserver();
         observer.enterScope(Scope.DIALOG);
         final FieldFormItem item1 = new FieldFormItem(context, field1);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
                 observer);
         handler.collect(context, interpreter, null, item1);
 
@@ -346,7 +348,8 @@ public final class TestJVoiceXmlEventHandler {
         catchNode.setEvent("test");
 
         final FieldFormItem item = new FieldFormItem(context, field);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
+                null);
         handler.collect(context, interpreter, null, item);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
@@ -418,7 +421,7 @@ public final class TestJVoiceXmlEventHandler {
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
-                context.getScopeObserver());
+                null, context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
         final MockRecognitionResult result = new MockRecognitionResult();
@@ -472,7 +475,7 @@ public final class TestJVoiceXmlEventHandler {
                 context, interpreter, dialog);
         fia.initialize(profile);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
-                context.getScopeObserver());
+                null, context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
         final MockRecognitionResult result = new MockRecognitionResult();
