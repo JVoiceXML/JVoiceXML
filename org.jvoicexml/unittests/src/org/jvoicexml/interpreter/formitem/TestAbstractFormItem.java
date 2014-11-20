@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,21 +28,14 @@ package org.jvoicexml.interpreter.formitem;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.Configuration;
-import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
-import org.jvoicexml.mock.config.MockConfiguration;
-import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * Test cases for {@link AbstractFormItem}.
@@ -73,22 +66,17 @@ public class TestAbstractFormItem {
      */
     @Before
     public void setUp() throws Exception, JVoiceXMLEvent {
+        // Create a test field
         document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         vxml.setXmlLang("en");
         final Form form = vxml.appendChild(Form.class);
         field = form.appendChild(Field.class);
         field.setName("testfield");
-        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final ImplementationPlatform platform = new MockImplementationPlatform();
-        final Profile profile = new MockProfile();
-        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null, profile);
-        final Configuration configuration = new MockConfiguration();
-        context = new VoiceXmlInterpreterContext(session, configuration);
+
+        // Create mock objects for the tests
+        context = Mockito.mock(VoiceXmlInterpreterContext.class);
         item = new FieldFormItem(context, field);
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        item.init(scripting);
     }
 
     /**
@@ -122,35 +110,12 @@ public class TestAbstractFormItem {
      *                test failed
      */
     @Test
-    public void testGetConditionFalseNumbers() throws JVoiceXMLEvent {
-        field.setCond("1 == 0");
-        Assert.assertFalse(item.evaluateCondition());
-    }
-
-    /**
-     * Test method for
-     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}
-     * .
-     * 
-     * @exception JVoiceXMLEvent
-     *                test failed
-     */
-    @Test
-    public void testGetConditionTrueNumbers() throws JVoiceXMLEvent {
-        field.setCond("1 == 1");
-        Assert.assertTrue(item.evaluateCondition());
-    }
-
-    /**
-     * Test method for
-     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#evaluateCondition()}
-     * .
-     * 
-     * @exception JVoiceXMLEvent
-     *                test failed
-     */
-    @Test
-    public void testGetConditionFalseStrings() throws JVoiceXMLEvent {
+    public void testGetConditionFalse() throws JVoiceXMLEvent {
+        final DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(
+                model.evaluateExpression(item.getName() + " == 'hallo'",
+                        Boolean.class)).thenReturn(false);
+        Mockito.when(context.getDataModel()).thenReturn(model);
         field.setCond(item.getName() + " == 'hallo'");
         Assert.assertFalse(item.evaluateCondition());
     }
@@ -164,9 +129,12 @@ public class TestAbstractFormItem {
      *                test failed
      */
     @Test
-    public void testGetConditionTrueStrings() throws JVoiceXMLEvent {
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.setVariable(field.getName(), "hallo");
+    public void testGetConditionTrue() throws JVoiceXMLEvent {
+        final DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(
+                model.evaluateExpression(item.getName() + " == 'hallo'",
+                        Boolean.class)).thenReturn(true);
+        Mockito.when(context.getDataModel()).thenReturn(model);
         field.setCond(item.getName() + " == 'hallo'");
         Assert.assertTrue(item.evaluateCondition());
     }
@@ -181,6 +149,10 @@ public class TestAbstractFormItem {
      */
     @Test
     public void testIsSelectable() throws JVoiceXMLEvent {
+        final DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(model.readVariable(item.getName(), Object.class))
+                .thenReturn(null);
+        Mockito.when(context.getDataModel()).thenReturn(model);
         Assert.assertTrue(item.isSelectable());
     }
 
@@ -194,66 +166,12 @@ public class TestAbstractFormItem {
      */
     @Test
     public void testIsSelectableVariableSet() throws JVoiceXMLEvent {
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.setVariable(field.getName(), "hallo");
+        final DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(model.readVariable(item.getName(), Object.class))
+                .thenReturn("somevalue");
+        Mockito.when(model.toString("somevalue")).thenReturn("somevalue");
+        Mockito.when(context.getDataModel()).thenReturn(model);
         Assert.assertFalse(item.isSelectable());
     }
 
-    /**
-     * Test method for
-     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}
-     * .
-     * 
-     * @exception JVoiceXMLEvent
-     *                test failed
-     */
-    @Test
-    public void testIsSelectableFalseNumbers() throws JVoiceXMLEvent {
-        field.setCond("1 == 0");
-        Assert.assertFalse(item.isSelectable());
-    }
-
-    /**
-     * Test method for
-     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}
-     * .
-     * 
-     * @exception JVoiceXMLEvent
-     *                test failed
-     */
-    @Test
-    public void testIsSelectableTrueNumbers() throws JVoiceXMLEvent {
-        field.setCond("1 == 1");
-        Assert.assertTrue(item.isSelectable());
-    }
-
-    /**
-     * Test method for
-     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}
-     * .
-     * 
-     * @exception JVoiceXMLEvent
-     *                test failed
-     */
-    @Test
-    public void testIsSelectableFalseString() throws JVoiceXMLEvent {
-        field.setCond(item.getName() + " == 'hallo'");
-        Assert.assertFalse(item.isSelectable());
-    }
-
-    /**
-     * Test method for
-     * {@link org.jvoicexml.interpreter.formitem.AbstractFormItem#isSelectable()}
-     * .
-     * 
-     * @exception JVoiceXMLEvent
-     *                test failed
-     */
-    @Test
-    public void testIsSelectableTrueString() throws JVoiceXMLEvent {
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.setVariable(field.getName() + "test", "hallo");
-        field.setCond(item.getName() + "test" + " == 'hallo'");
-        Assert.assertTrue(item.isSelectable());
-    }
 }
