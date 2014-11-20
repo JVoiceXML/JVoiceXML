@@ -29,30 +29,21 @@ package org.jvoicexml.interpreter.event;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.Application;
-import org.jvoicexml.Configuration;
-import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.implementation.NomatchEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
-import org.jvoicexml.interpreter.JVoiceXmlApplication;
-import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
-import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
-import org.jvoicexml.mock.MockRecognitionResult;
-import org.jvoicexml.mock.config.MockConfiguration;
-import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.interpreter.scope.Scope;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * Test cases for {@link InputItemRecognitionEventStrategy}.
@@ -77,13 +68,9 @@ public final class TestInputItemRecognitionEventStrategy {
      */
     @Before
     public void setUp() throws Exception {
-        final ImplementationPlatform platform = new MockImplementationPlatform();
-        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Profile profile = new MockProfile();
-        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null, profile);
-        final Configuration configuration = new MockConfiguration();
-        context = new VoiceXmlInterpreterContext(session, configuration);
+        context = Mockito.mock(VoiceXmlInterpreterContext.class);
+        DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(context.getDataModel()).thenReturn(model);
         interpreter = new VoiceXmlInterpreter(context);
     }
 
@@ -106,26 +93,23 @@ public final class TestInputItemRecognitionEventStrategy {
         final Field field = form.appendChild(Field.class);
         field.setName("field");
 
-        context.setProperty("confidencelevel", "0.5");
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setUtterance("hello world");
-        result.setConfidence(0.55f);
-        result.setAccepted(true);
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final ApplicationShadowVarContainer container = scripting
-                .createHostObject(ApplicationShadowVarContainer.VARIABLE_NAME,
-                        ApplicationShadowVarContainer.class);
-        final Application application = new JVoiceXmlApplication();
-        container.setApplication(application);
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
+        Mockito.when(result.getUtterance()).thenReturn("hello world");
+        Mockito.when(result.isAccepted()).thenReturn(true);
+        Mockito.when(result.getConfidence()).thenReturn(0.55f);
+        Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
+
+        Mockito.when(context.getProperty("confidencelevel", "0.5")).thenReturn(
+                "0.5");
+
         final FieldFormItem formItem = new FieldFormItem(context, field);
-        formItem.init(scripting);
         final InputItemRecognitionEventStrategy strategy = new InputItemRecognitionEventStrategy(
                 context, interpreter, null, formItem);
         final JVoiceXMLEvent event = new RecognitionEvent(null, null, result);
         final boolean handled = strategy.handleEvent(formItem, event);
-        Assert.assertTrue("event should be handled", handled);
-        Assert.assertEquals(result.getUtterance(),
-                scripting.eval("application.lastresult$[0].utterance;"));
+        Assert.assertTrue("event should have been handled", handled);
+        Mockito.verify(context.getDataModel()).createVariable(
+                "lastresult$.utterance", "hello world", Scope.APPLICATION);
     }
 
     /**
@@ -147,25 +131,24 @@ public final class TestInputItemRecognitionEventStrategy {
 
         final Field field = form.appendChild(Field.class);
         field.setName("field");
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setUtterance("hello world");
-        result.setConfidence(0.55f);
-        result.setAccepted(false);
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final ApplicationShadowVarContainer container = scripting
-                .createHostObject(ApplicationShadowVarContainer.VARIABLE_NAME,
-                        ApplicationShadowVarContainer.class);
-        final Application application = new JVoiceXmlApplication();
-        container.setApplication(application);
+
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
+        Mockito.when(result.getUtterance()).thenReturn("hello world");
+        Mockito.when(result.isAccepted()).thenReturn(false);
+        Mockito.when(result.getConfidence()).thenReturn(0.55f);
+        Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
+
+        Mockito.when(context.getProperty("confidencelevel", "0.5")).thenReturn(
+                "0.5");
+
         final FieldFormItem formItem = new FieldFormItem(context, field);
-        formItem.init(scripting);
         final InputItemRecognitionEventStrategy strategy = new InputItemRecognitionEventStrategy(
                 context, interpreter, null, formItem);
         final JVoiceXMLEvent event = new RecognitionEvent(null, null, result);
-        boolean handled = strategy.handleEvent(formItem, event);
-        Assert.assertFalse("event should not be handled", handled);
-        Assert.assertEquals(result.getUtterance(),
-                scripting.eval("application.lastresult$[0].utterance;"));
+        final boolean handled = strategy.handleEvent(formItem, event);
+        Assert.assertFalse("event should not have been handled", handled);
+        Mockito.verify(context.getDataModel()).createVariable(
+                "lastresult$.utterance", "hello world", Scope.APPLICATION);
     }
 
     /**
@@ -178,7 +161,7 @@ public final class TestInputItemRecognitionEventStrategy {
      * @throws JVoiceXMLEvent
      *             test failed
      */
-    @Test
+    @Test(expected = NomatchEvent.class)
     public void testHandleEventNotHandledBelowConfidence() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument document = new VoiceXmlDocument();
@@ -188,31 +171,19 @@ public final class TestInputItemRecognitionEventStrategy {
         final Field field = form.appendChild(Field.class);
         field.setName("field");
 
-        context.setProperty("confidencelevel", "0.5");
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setUtterance("hello world");
-        result.setConfidence(0.55f);
-        result.setAccepted(true);
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final ApplicationShadowVarContainer container = scripting
-                .createHostObject(ApplicationShadowVarContainer.VARIABLE_NAME,
-                        ApplicationShadowVarContainer.class);
-        final Application application = new JVoiceXmlApplication();
-        container.setApplication(application);
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
+        Mockito.when(result.getUtterance()).thenReturn("hello world");
+        Mockito.when(result.isAccepted()).thenReturn(true);
+        Mockito.when(result.getConfidence()).thenReturn(0.55f);
+        Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
+
+        Mockito.when(context.getProperty("confidencelevel", "0.5")).thenReturn(
+                "0.6");
+
         final FieldFormItem formItem = new FieldFormItem(context, field);
-        formItem.init(scripting);
         final InputItemRecognitionEventStrategy strategy = new InputItemRecognitionEventStrategy(
                 context, interpreter, null, formItem);
         final JVoiceXMLEvent event = new RecognitionEvent(null, null, result);
-        context.setProperty("confidencelevel", "0.6");
-        JVoiceXMLEvent nomatch = null;
-        try {
-            strategy.handleEvent(formItem, event);
-        } catch (NomatchEvent e) {
-            nomatch = e;
-        }
-        Assert.assertNotNull("event should not be handled", nomatch);
-        Assert.assertEquals(result.getUtterance(),
-                scripting.eval("application.lastresult$[0].utterance;"));
+        strategy.handleEvent(formItem, event);
     }
 }
