@@ -123,7 +123,7 @@ public final class TestObjectExecutorThread {
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, dialog);
         final EventHandler handler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler(null);
+            JVoiceXmlEventHandler(null, null);
         final EventBus eventbus = context.getEventBus();
         eventbus.subscribe("", handler);
         handler.collect(context, null, fia, item);
@@ -161,7 +161,7 @@ public final class TestObjectExecutorThread {
             new FormInterpretationAlgorithm(context, null, dialog);
 
         final EventHandler handler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler(null);
+            JVoiceXmlEventHandler(null, null);
         final EventBus eventbus = context.getEventBus();
         eventbus.subscribe("", handler);
         handler.collect(context, null, fia, item);
@@ -205,7 +205,7 @@ public final class TestObjectExecutorThread {
             new FormInterpretationAlgorithm(context, null, dialog);
 
         final EventHandler handler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler(null);
+            JVoiceXmlEventHandler(null, null);
         final EventBus eventbus = context.getEventBus();
         eventbus.subscribe("", handler);
         handler.collect(context, null, fia, item);

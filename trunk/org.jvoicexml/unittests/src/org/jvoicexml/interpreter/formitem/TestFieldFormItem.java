@@ -39,7 +39,6 @@ import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Profile;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
 import org.jvoicexml.mock.MockProfile;

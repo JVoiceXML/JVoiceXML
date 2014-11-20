@@ -115,7 +115,7 @@ public class TestSubdialogExecutorThread {
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, null, dialog);
         final EventHandler handler = new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
-                null);
+                null, null);
         final EventBus eventbus = context.getEventBus();
         eventbus.subscribe("", handler);
         handler.collect(context, null, fia, item);
