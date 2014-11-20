@@ -46,11 +46,10 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @see org.jvoicexml.ImplementationPlatform
  * @see org.jvoicexml.xml.vxml.AbstractCatchElement
  */
-final class CatchEventStrategy
-        extends AbstractEventStrategy {
+final class CatchEventStrategy extends AbstractEventStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(CatchEventStrategy.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(CatchEventStrategy.class);
 
     /**
      * Constructs a new object.
@@ -62,23 +61,22 @@ final class CatchEventStrategy
      * Constructs a new object.
      *
      * @param ctx
-     *        the VoiceXML interpreter context.
+     *            the VoiceXML interpreter context.
      * @param ip
-     *        the VoiceXML interpreter.
+     *            the VoiceXML interpreter.
      * @param interpreter
-     *        the FIA.
+     *            the FIA.
      * @param formItem
-     *        the current form item.
+     *            the current form item.
      * @param node
-     *        the node to execute.
+     *            the node to execute.
      * @param type
-     *        the event type.
+     *            the event type.
      */
     public CatchEventStrategy(final VoiceXmlInterpreterContext ctx,
-                                  final VoiceXmlInterpreter ip,
-                                  final FormInterpretationAlgorithm interpreter,
-                                  final FormItem formItem,
-                                  final VoiceXmlNode node, final String type) {
+            final VoiceXmlInterpreter ip,
+            final FormInterpretationAlgorithm interpreter,
+            final FormItem formItem, final VoiceXmlNode node, final String type) {
         super(ctx, ip, interpreter, formItem, node, type);
     }
 
@@ -86,25 +84,21 @@ final class CatchEventStrategy
      * {@inheritDoc}
      */
     @Override
-    public void process(final JVoiceXMLEvent event)
-            throws JVoiceXMLEvent {
-        final FormInterpretationAlgorithm fia =
-                getFormInterpretationAlgorithm();
+    public void process(final JVoiceXMLEvent event) throws JVoiceXMLEvent {
+        final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
         if (fia == null) {
-            LOGGER.warn("Unable to process event '"
-                    + event.getEventType()
+            LOGGER.warn("Unable to process event '" + event.getEventType()
                     + "' No reference to a form FIA!");
             return;
         }
-        final VoiceXmlInterpreterContext context =
-            getVoiceXmlInterpreterContext();
+        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
         context.enterScope(Scope.ANONYMOUS);
 
         // Declare the special variable _event which contains the name of the
         // event that was thrown.
         final DataModel model = context.getDataModel();
         final String name = event.getEventType();
-        model.updateVariable("_event", name);
+        model.createVariable("_event", name);
 
         final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
         final TagStrategyExecutor executor = getTagStrategyExecutor();
