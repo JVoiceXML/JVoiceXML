@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,26 +33,20 @@ import java.util.Iterator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.Configuration;
-import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
+import org.jvoicexml.LastResult;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
-import org.jvoicexml.mock.MockRecognitionResult;
-import org.jvoicexml.mock.config.MockConfiguration;
-import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Option;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
-import org.mozilla.javascript.ScriptableObject;
+import org.mockito.Mockito;
 
 /**
  * Test cases for {@link FieldFormItem}.
@@ -88,16 +82,9 @@ public final class TestFieldFormItem {
         final Form form = vxml.appendChild(Form.class);
         field = form.appendChild(Field.class);
         field.setName("testfield");
-        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final ImplementationPlatform platform = new MockImplementationPlatform();
-        final Profile profile = new MockProfile();
-        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null, profile);
-        final Configuration configuration = new MockConfiguration();
-        context = new VoiceXmlInterpreterContext(session, configuration);
+
+        context = Mockito.mock(VoiceXmlInterpreterContext.class);
         item = new FieldFormItem(context, field);
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        item.init(scripting);
         final OptionConverter converter = new SrgsXmlOptionConverter();
         item.setOptionConverter(converter);
     }
@@ -111,15 +98,14 @@ public final class TestFieldFormItem {
      */
     @Test
     public void setFormItemVariable() throws JVoiceXMLEvent {
+        final DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(context.getDataModel()).thenReturn(model);
+
         final String value = "test";
         item.setFormItemVariable(value);
-        Assert.assertEquals(value, item.getFormItemVariable());
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final String name = item.getName();
-        Assert.assertEquals(value, scripting.getVariable(name));
-        Assert.assertEquals(value, scripting.eval(name + "$.utterance;"));
-        scripting.setVariable(name, "hurz");
-        Assert.assertEquals("hurz", item.getFormItemVariable());
+        Mockito.verify(model).updateVariable(item.getName(), value);
+        final LastResult result = new LastResult(value);
+        Mockito.verify(model).updateVariable(item.getName() + "$", result);
     }
 
     /**
@@ -131,16 +117,16 @@ public final class TestFieldFormItem {
      */
     @Test
     public void setFormItemVariableRecognitionResult() throws JVoiceXMLEvent {
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setAccepted(true);
-        result.setUtterance("hans");
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
+        Mockito.when(result.getUtterance()).thenReturn("hans");
+        Mockito.when(result.isAccepted()).thenReturn(true);
+        Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
+        final DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(model.readVariable(item.getName(), Object.class))
+                .thenReturn("hans");
+        Mockito.when(context.getDataModel()).thenReturn(model);
         item.setFormItemVariable(result);
         Assert.assertEquals(result.getUtterance(), item.getFormItemVariable());
-        final String name = item.getName();
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        Assert.assertEquals(result.getUtterance(),
-                scripting.eval(name + "$.utterance;"));
-        Assert.assertEquals(result.getUtterance(), scripting.getVariable(name));
     }
 
     /**
@@ -153,17 +139,15 @@ public final class TestFieldFormItem {
     @Test
     public void setFormItemVariableRecognitionResultSemanticInterpretation()
             throws JVoiceXMLEvent {
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setAccepted(true);
-        result.setUtterance("yeah");
-        result.setSemanticInterpretation("'yes'");
+        final DataModel model = Mockito.mock(DataModel.class);
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
+        Mockito.when(result.getUtterance()).thenReturn("yeah");
+        Mockito.when(result.getSemanticInterpretation(model)).thenReturn("yes");
+        Mockito.when(result.isAccepted()).thenReturn(true);
+        Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
+        Mockito.when(context.getDataModel()).thenReturn(model);
         item.setFormItemVariable(result);
-        Assert.assertEquals(result.getSemanticInterpretation(),
-                item.getFormItemVariable());
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final String name = item.getName();
-        Assert.assertEquals(result.getSemanticInterpretation(),
-                scripting.getVariable(name));
+        Mockito.verify(model).updateVariable(item.getName(), "yes");
     }
 
     /**
@@ -174,59 +158,20 @@ public final class TestFieldFormItem {
      * @since 0.7.6
      */
     @Test
-    public void setFormItemVariableRecognitionResultSemanticInterpretationCompoundObject()
+    public void setFormItemVariableRecognitionResultSemanticSlot()
             throws JVoiceXMLEvent {
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setAccepted(true);
-        result.setUtterance("yeah");
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("var out = new Object();");
-        scripting.eval("out.number = 3;");
-        scripting.eval("out.size = 'large';");
-        final ScriptableObject interpretation = (ScriptableObject) scripting
-                .getVariable("out");
-        result.setSemanticInterpretation(interpretation);
-        field.setName("size");
-        item.setFormItemVariable(result);
-        final String name = item.getName();
-        Assert.assertEquals("large", item.getFormItemVariable());
-        Assert.assertEquals("large", scripting.getVariable(name));
-
-        field.setSlot("pizza.topping");
-        item.setFormItemVariable(result);
-        Assert.assertNull(scripting.getVariable(name));
-    }
-
-    /**
-     * Test case for {@link FieldFormItem#getFormItemVariable()}.
-     * 
-     * @exception JVoiceXMLEvent
-     *                test failed
-     * @since 0.7.6
-     */
-    @Test
-    public void setFormItemVariableRecognitionResultSemanticInterpretationCompoundObjectSlot()
-            throws JVoiceXMLEvent {
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setAccepted(true);
-        result.setUtterance("yeah");
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("var out = new Object();");
-        scripting.eval("out.pizza = new Object();");
-        scripting.eval("out.pizza.number = 3;");
-        scripting.eval("out.pizza.size = 'large';");
-        final ScriptableObject interpretation = (ScriptableObject) scripting
-                .getVariable("out");
-        result.setSemanticInterpretation(interpretation);
+        final DataModel model = Mockito.mock(DataModel.class);
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
+        Mockito.when(result.getUtterance()).thenReturn("a large pizza");
+        Mockito.when(result.getSemanticInterpretation(model)).thenReturn("large pizza");
+        Mockito.when(result.isAccepted()).thenReturn(true);
+        Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
+        Mockito.when(context.getDataModel()).thenReturn(model);
+        Mockito.when(model.readVariable("pizza.size", Object.class))
+                .thenReturn("large");
         field.setSlot("pizza.size");
         item.setFormItemVariable(result);
-        final String name = item.getName();
-        Assert.assertEquals("large", item.getFormItemVariable());
-        Assert.assertEquals("large", scripting.getVariable(name));
-
-        field.setSlot("pizza.topping");
-        item.setFormItemVariable(result);
-        Assert.assertNull(scripting.getVariable(name));
+        Mockito.verify(model).updateVariable(item.getName(), "large");
     }
 
     /**
