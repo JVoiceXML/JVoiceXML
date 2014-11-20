@@ -42,6 +42,7 @@ import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
 import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
@@ -51,6 +52,7 @@ import org.jvoicexml.xml.vxml.Param;
 import org.jvoicexml.xml.vxml.ParamValueType;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link org.jvoicexml.interpreter.ParamParser}.
@@ -60,9 +62,6 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @since 0.6
  */
 public final class TestParamParser {
-    /** The scripting engine to use. */
-    private ScriptingEngine scripting;
-
     /** Mapped document repository. */
     private DocumentMap map;
 
@@ -77,26 +76,25 @@ public final class TestParamParser {
      */
     @Before
     public void setUp() throws Exception {
-        scripting = new ScriptingEngine(null);
-
         map = DocumentMap.getInstance();
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
 
-        final ImplementationPlatform platform =
-                new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final Profile profile = new MockProfile();
         session = new JVoiceXmlSession(platform, jvxml, null, profile);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.ParamParser#getParameters()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.ParamParser#getParameters()}.
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test
     public void testGetParameters() throws Exception, JVoiceXMLEvent {
@@ -104,7 +102,9 @@ public final class TestParamParser {
         final URI uri = map.getUri("/test");
         map.addDocument(uri, test);
 
-        scripting.setVariable("last", "Buchholz");
+        final DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(model.evaluateExpression("last", Object.class))
+                .thenReturn("Buchholz");
 
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -122,7 +122,7 @@ public final class TestParamParser {
         param3.setValuetype(ParamValueType.REF);
         param3.setType("text/plain");
 
-        final ParamParser parser = new ParamParser(object, scripting, server,
+        final ParamParser parser = new ParamParser(object, model, server,
                 session);
         final Map<String, Object> params = parser.getParameters();
         Assert.assertEquals("Horst", params.get("firstname"));
@@ -131,15 +131,17 @@ public final class TestParamParser {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.ParamParser#getParameters()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.ParamParser#getParameters()}.
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test
-    public void testGetParametersErrorBadFetch()
-        throws Exception, JVoiceXMLEvent {
+    public void testGetParametersErrorBadFetch() throws Exception,
+            JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
         final Form form = vxml.appendChild(Form.class);
@@ -149,7 +151,7 @@ public final class TestParamParser {
         param1.setValue("Horst");
         object.appendChild(Param.class);
 
-        final ParamParser parser = new ParamParser(object, scripting, server,
+        final ParamParser parser = new ParamParser(object, null, server,
                 session);
         BadFetchError error = null;
         try {
@@ -157,21 +159,24 @@ public final class TestParamParser {
         } catch (BadFetchError e) {
             error = e;
         }
-        Assert.assertNotNull("ParamParser should have thrown an error.badfetch",
-                error);
+        Assert.assertNotNull(
+                "ParamParser should have thrown an error.badfetch", error);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.ParamParser#getParameters()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.ParamParser#getParameters()}.
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test
-    public void testGetParametersInvalidUri()
-        throws Exception, JVoiceXMLEvent {
-        scripting.setVariable("last", "'Buchholz'");
+    public void testGetParametersInvalidUri() throws Exception, JVoiceXMLEvent {
+        final DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(model.evaluateExpression("last", Object.class))
+                .thenReturn("Buchholz");
 
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -189,7 +194,7 @@ public final class TestParamParser {
         param3.setValuetype(ParamValueType.REF);
         param3.setType("text/plain");
 
-        final ParamParser parser = new ParamParser(object, scripting, server,
+        final ParamParser parser = new ParamParser(object, model, server,
                 session);
         BadFetchError error = null;
         try {
@@ -197,16 +202,18 @@ public final class TestParamParser {
         } catch (BadFetchError e) {
             error = e;
         }
-        Assert.assertNotNull("ParamParser should have thrown an error.badfetch",
-                error);
+        Assert.assertNotNull(
+                "ParamParser should have thrown an error.badfetch", error);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.ParamParser#getParameterValues()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.ParamParser#getParameterValues()}.
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test
     public void testGetParameterValues() throws Exception, JVoiceXMLEvent {
@@ -214,7 +221,9 @@ public final class TestParamParser {
         final URI uri = map.getUri("/test");
         map.addDocument(uri, test);
 
-        scripting.setVariable("last", "Buchholz");
+        final DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(model.evaluateExpression("last", Object.class))
+                .thenReturn("Buchholz");
 
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -232,7 +241,7 @@ public final class TestParamParser {
         param3.setValuetype(ParamValueType.REF);
         param3.setType("text/plain");
 
-        final ParamParser parser = new ParamParser(object, scripting, server,
+        final ParamParser parser = new ParamParser(object, model, server,
                 session);
         final Collection<Object> params = parser.getParameterValues();
         Assert.assertEquals(3, params.size());
