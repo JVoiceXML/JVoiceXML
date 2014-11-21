@@ -141,9 +141,6 @@ public final class FieldFormItem extends AbstractGrammarContainer {
             final Object value = model.readVariable(
                     "application.lastresult$.interpretation." + slot,
                     Object.class);
-            // final String slotInInterpretation = shadowVariableName
-            // + ".interpretation." + slot;
-            // model.updateVariable(slotInInterpretation, interpretation);
             return super.setFormItemVariable(value);
         }
     }
