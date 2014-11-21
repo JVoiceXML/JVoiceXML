@@ -23,9 +23,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml.interpreter.event;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.RecognitionResult;
@@ -37,7 +37,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
-import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
@@ -45,7 +44,6 @@ import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
-import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Test cases for {@link FormLevelRecognitionEventStrategy}.
@@ -159,22 +157,23 @@ public final class TestFormLevelRecognitionEventStrategy {
                 context, interpreter, dialog);
         final FormLevelRecognitionEventStrategy strategy = new FormLevelRecognitionEventStrategy(
                 context, interpreter, fia, dialog);
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setAccepted(true);
-        final String food = "Pizza";
-        result.setUtterance("I want " + food);
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("var out = new Object(); out.order = new Object();"
-                + "out.order." + field2.getName() + "='" + food + "';");
-        final ScriptableObject interpretation = (ScriptableObject) scripting
-                .getVariable("out");
-        result.setSemanticInterpretation(interpretation);
+        final String drink = "Cola";
+        final String food = "Pizza";
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
+        Mockito.when(result.getUtterance()).thenReturn(drink + " and " + food);
+        Mockito.when(result.isAccepted()).thenReturn(true);
+        Mockito.when(result.getConfidence()).thenReturn(0.55f);
+        Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
+        Mockito.when(result.getSemanticInterpretation(context.getDataModel()))
+                .thenReturn(drink + " and " + food);
+        Mockito.when(
+                model.readVariable("application.lastresult$.interpretation."
+                        + field1.getSlot(), Object.class)).thenReturn(drink);
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         strategy.process(event);
-        Assert.assertNull(scripting.getVariable(field1.getName()));
-        Assert.assertEquals(food, scripting.getVariable(field2.getName()));
-        Assert.assertEquals(Boolean.TRUE,
-                scripting.getVariable(initial.getName()));
+        Mockito.verify(model).updateVariable(field1.getName(), drink);
+        Mockito.verify(model, Mockito.never()).updateVariable(field2.getName(),
+                food);
     }
 }
