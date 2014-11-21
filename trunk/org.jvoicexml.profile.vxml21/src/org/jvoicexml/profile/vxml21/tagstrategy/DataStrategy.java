@@ -170,14 +170,19 @@ final class DataStrategy extends AbstractTagStrategy {
         final FetchAttributes attributes = getFetchAttributes();
         descriptor.setAttributes(attributes);
         final String sessionId = session.getSessionID();
-        final Document document = (Document) server.getObject(sessionId,
-                descriptor, DocumentServer.TEXT_XML);
-        final String name = (String) getAttribute(Data.ATTRIBUTE_NAME);
-        if (name == null) {
-            return;
+        try {
+            final Document document = (Document) server.getObject(sessionId,
+                    descriptor, DocumentServer.TEXT_XML);
+            final String name = (String) getAttribute(Data.ATTRIBUTE_NAME);
+            if (name == null) {
+                return;
+            }
+            final DataModel model = context.getDataModel();
+            model.updateVariable(name, document);
+        } catch (BadFetchError e) {
+            throw new BadFetchError("error reading data from '" + uri + "': "
+                    + e.getMessage(), e);
         }
-        final DataModel model = context.getDataModel();
-        model.updateVariable(name, document);
     }
 
     /**
