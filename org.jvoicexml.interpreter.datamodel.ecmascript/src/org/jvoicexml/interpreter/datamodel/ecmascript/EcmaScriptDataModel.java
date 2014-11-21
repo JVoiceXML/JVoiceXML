@@ -207,6 +207,9 @@ public class EcmaScriptDataModel implements DataModel {
 
         // See if we are already there.
         final Scope topscope = scopes.remove(topmostScope);
+        if (topscope == null) {
+            return ERROR_SCOPE_NOT_FOUND;
+        }
         if (topscope == scope) {
             topmostScope = topmostScope.getParentScope();
             if (LOGGER.isDebugEnabled()) {
