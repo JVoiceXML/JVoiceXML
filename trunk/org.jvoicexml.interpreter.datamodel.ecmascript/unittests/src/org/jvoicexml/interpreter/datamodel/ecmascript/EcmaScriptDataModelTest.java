@@ -60,6 +60,18 @@ public class EcmaScriptDataModelTest {
     }
 
     @Test
+    public void testDeleteScopeScopeWithAnonymous() {
+        final DataModel data = new EcmaScriptDataModel();
+        Assert.assertEquals(0, data.createScope(Scope.SESSION));
+        Assert.assertEquals(0, data.createScope(Scope.APPLICATION));
+        Assert.assertEquals(0, data.createScope());
+        Assert.assertEquals(0, data.deleteScope());
+        Assert.assertEquals(0, data.deleteScope());
+        Assert.assertEquals(0, data.deleteScope());
+        Assert.assertEquals(DataModel.ERROR_SCOPE_NOT_FOUND, data.deleteScope());
+    }
+
+    @Test
     public void testCreateVariableString() {
         final DataModel data = new EcmaScriptDataModel();
         Assert.assertEquals(0, data.createScope(Scope.SESSION));
