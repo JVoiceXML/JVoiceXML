@@ -130,9 +130,9 @@ abstract class AbstractFormItem
      * {@inheritDoc}
      */
     @Override
-    public void setFormItemVariable(final Object value) throws SemanticError {
+    public int setFormItemVariable(final Object value) throws SemanticError {
         final DataModel model = context.getDataModel();
-        model.updateVariable(name, value);
+        return model.updateVariable(name, value);
     }
 
     /**

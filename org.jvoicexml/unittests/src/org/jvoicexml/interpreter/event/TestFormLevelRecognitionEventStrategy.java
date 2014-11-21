@@ -28,29 +28,23 @@ package org.jvoicexml.interpreter.event;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.Configuration;
-import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
-import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.MockRecognitionResult;
-import org.jvoicexml.mock.config.MockConfiguration;
-import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
@@ -64,6 +58,9 @@ public final class TestFormLevelRecognitionEventStrategy {
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
 
+    /** The employed data model. */
+    private DataModel model;
+
     /** The VoiceXML interpreter. */
     private VoiceXmlInterpreter interpreter;
 
@@ -75,13 +72,9 @@ public final class TestFormLevelRecognitionEventStrategy {
      */
     @Before
     public void setUp() throws Exception {
-        final ImplementationPlatform platform = new MockImplementationPlatform();
-        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Profile profile = new MockProfile();
-        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null, profile);
-        final Configuration configuration = new MockConfiguration();
-        context = new VoiceXmlInterpreterContext(session, configuration);
+        context = Mockito.mock(VoiceXmlInterpreterContext.class);
+        model = Mockito.mock(DataModel.class);
+        Mockito.when(context.getDataModel()).thenReturn(model);
         interpreter = new VoiceXmlInterpreter(context);
     }
 
@@ -114,25 +107,27 @@ public final class TestFormLevelRecognitionEventStrategy {
                 context, interpreter, dialog);
         final FormLevelRecognitionEventStrategy strategy = new FormLevelRecognitionEventStrategy(
                 context, interpreter, fia, dialog);
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setAccepted(true);
+
         final String drink = "Cola";
         final String food = "Pizza";
-        result.setUtterance(drink + " and " + food);
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
+        Mockito.when(result.getUtterance()).thenReturn(drink + " and " + food);
+        Mockito.when(result.isAccepted()).thenReturn(true);
+        Mockito.when(result.getConfidence()).thenReturn(0.55f);
+        Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
+        Mockito.when(result.getSemanticInterpretation(context.getDataModel()))
+                .thenReturn(drink + " and " + food);
+        Mockito.when(
+                model.readVariable("application.lastresult$.interpretation."
+                        + field1.getSlot(), Object.class)).thenReturn(drink);
+        Mockito.when(
+                model.readVariable("application.lastresult$.interpretation."
+                        + field2.getSlot(), Object.class)).thenReturn(food);
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("var out = new Object(); out.order = new Object();"
-                + "out.order." + field1.getName() + "='" + drink + "';"
-                + "out.order." + field2.getName() + "='" + food + "';");
-        final ScriptableObject interpretation = (ScriptableObject) scripting
-                .getVariable("out");
-        result.setSemanticInterpretation(interpretation);
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         strategy.process(event);
-        Assert.assertEquals(drink, scripting.getVariable(field1.getName()));
-        Assert.assertEquals(food, scripting.getVariable(field2.getName()));
-        Assert.assertEquals(Boolean.TRUE,
-                scripting.getVariable(initial.getName()));
+        Mockito.verify(model).updateVariable(field1.getName(), drink);
+        Mockito.verify(model).updateVariable(field2.getName(), food);
     }
 
     /**
