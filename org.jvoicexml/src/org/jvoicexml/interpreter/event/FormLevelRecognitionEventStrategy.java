@@ -394,7 +394,7 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
             }
             try {
                 final Object value = model.readVariable(
-                        "application.lastresult$.interpretation" + slot,
+                        "application.lastresult$.interpretation." + slot,
                         Object.class);
                 if (value != null) {
                     filtered.add(item);

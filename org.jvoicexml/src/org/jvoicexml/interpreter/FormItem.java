@@ -45,29 +45,29 @@ import org.jvoicexml.xml.VoiceXmlNode;
  *
  * @since 0.4
  */
-public interface FormItem
-        extends FormItemVisitable, DialogConstruct {
+public interface FormItem extends FormItemVisitable, DialogConstruct {
     /**
      * Initializes this form item.
-     * @param model the employed data model
+     * 
+     * @param model
+     *            the employed data model
      * @throws SemanticError
-     *         error initializing this form item
+     *             error initializing this form item
      * @throws BadFetchError
-     *         error initializing this form item
+     *             error initializing this form item
      * @since 0.7.3
      */
-    void init(final DataModel model)
-        throws SemanticError, BadFetchError;
+    void init(final DataModel model) throws SemanticError, BadFetchError;
 
     /**
      * Retrieves the form item variable.
      *
      * <p>
      * Each form has an associated form item variable. which by default is set
-     * to <code>ECMA_SCRIPT_UNDEFINED</code> when the form is entered. This
-     * form item variable will contain the result of interpreting the form item.
-     * An input item's form variable can be given a name using the name
-     * attribute or left nameless in which case an internal name is generated.
+     * to <code>ECMA_SCRIPT_UNDEFINED</code> when the form is entered. This form
+     * item variable will contain the result of interpreting the form item. An
+     * input item's form variable can be given a name using the name attribute
+     * or left nameless in which case an internal name is generated.
      * </p>
      *
      * @see org.mozilla.javascript.Context#getUndefinedValue()
@@ -80,11 +80,12 @@ public interface FormItem
      * Sets the value of the form item variable.
      *
      * @param value
-     *        New value for the form item variable.
+     *            new value for the form item variable.
+     * @return {@code 0} if setting the form item variaable was successful
      * @exception SemanticError
-     *        error setting the value
+     *                error setting the value
      */
-    void setFormItemVariable(final Object value) throws SemanticError;
+    int setFormItemVariable(final Object value) throws SemanticError;
 
     /**
      * Retrieves the name of this <code>FormItem</code>..
@@ -104,7 +105,7 @@ public interface FormItem
      *
      * @return <code>true</code> if the form item's variable has no value.
      * @exception SemanticError
-     *            error evaluating the cond condition.
+     *                error evaluating the cond condition.
      * @see #getFormItemVariable()
      * @see org.mozilla.javascript.Context#getUndefinedValue()
      */
@@ -119,6 +120,7 @@ public interface FormItem
 
     /**
      * Retrieves the tag name of the encapsulated node.
+     * 
      * @return tag name of the encapsulated node.
      * @since 0.7
      */
@@ -126,30 +128,33 @@ public interface FormItem
 
     /**
      * Retrieves the evaluated <code>expr</code> attribute.
-     * @param model the data model to use for evaluation
+     * 
+     * @param model
+     *            the data model to use for evaluation
      *
      * @return evaluated expression of the <code>expr</code> attribute.
      * @exception SemanticError
-     *            error evaluating the <code>expr</code> attribute.
+     *                error evaluating the <code>expr</code> attribute.
      */
-    Object evaluateExpression(final DataModel model)
-            throws SemanticError;
+    Object evaluateExpression(final DataModel model) throws SemanticError;
 
     /**
      * An expression to evaluate in conjunction with the test of the form item
      * variable. If absent, this defaults to <code>true</code>, or in the case
-     * of <code>&lt;initial&gt;</code>, a test to see if any input item
-     * variable has been filled in.
-     * @return <code>true</code> if the <code>cond</code> attribute of the
-     * form item evaluates to <code>true</code>.
+     * of <code>&lt;initial&gt;</code>, a test to see if any input item variable
+     * has been filled in.
+     * 
+     * @return <code>true</code> if the <code>cond</code> attribute of the form
+     *         item evaluates to <code>true</code>.
      * @exception SemanticError
-     *            error evaluating the cond attribute.
+     *                error evaluating the cond attribute.
      */
     boolean evaluateCondition() throws SemanticError;
 
     /**
      * Checks if this form item is modal. This causes all grammars to be
      * disabled except the ones defined in the current form item.
+     * 
      * @return <code>true</code> if the form item is modal.
      * @since 0.7.2
      */
