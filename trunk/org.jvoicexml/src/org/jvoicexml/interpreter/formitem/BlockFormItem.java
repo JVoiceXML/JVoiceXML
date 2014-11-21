@@ -86,17 +86,21 @@ public final class BlockFormItem extends AbstractControlItem {
 
     /**
      * Mark this form item visited by setting the form item variable to
-     * <code>true</code>.
+     * {@code true}.
      */
     public void setVisited() {
         try {
-            setFormItemVariable(Boolean.TRUE);
+            int rc = setFormItemVariable(Boolean.TRUE);
+            if (rc == 0) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("block '" + getName() + "' marked as visited.");
+                }
+            } else {
+                LOGGER.warn("unable to mark block '" + getName()
+                        + "' as visited (rc=" + rc + ")");
+            }
         } catch (SemanticError e) {
-            LOGGER.error("error marking '" + getName() + "' as visited");
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("block '" + getName() + "' marked as visited.");
+            LOGGER.error("error marking '" + getName() + "' as visited", e);
         }
     }
 

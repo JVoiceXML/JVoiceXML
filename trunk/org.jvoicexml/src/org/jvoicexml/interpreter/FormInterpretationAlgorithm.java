@@ -703,7 +703,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             for (InputItem input : justFilled) {
                 final String name = input.getName();
                 model.deleteVariable(name);
-           }
+            }
         }
     }
 
@@ -1353,8 +1353,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final DataModel model = context.getDataModel();
         final DocumentServer documentServer = context.getDocumentServer();
         // Retrieve the nested param elements
-        final ParamParser parser = new ParamParser(subdialog.getNode(),
-                model, documentServer, session);
+        final ParamParser parser = new ParamParser(subdialog.getNode(), model,
+                documentServer, session);
         final Map<String, Object> parameters = parser.getParameters();
         final ScopeObserver observer = new ScopeObserver();
         // TODO aquire the configuration object
