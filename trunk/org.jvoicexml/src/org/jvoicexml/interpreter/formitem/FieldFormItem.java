@@ -118,11 +118,12 @@ public final class FieldFormItem extends AbstractGrammarContainer {
      * 
      * @param result
      *            the observed recognition result
+     * @return {@code 0} if the variable was set successfully
      * @exception SemanticError
      *                error passing the values to the scripting engine
      * @since 0.7.6
      */
-    public void setFormItemVariable(final RecognitionResult result)
+    public int setFormItemVariable(final RecognitionResult result)
             throws SemanticError {
         // Propagate the result to the field's shadow variable container.
         final VoiceXmlInterpreterContext context = getContext();
@@ -134,7 +135,7 @@ public final class FieldFormItem extends AbstractGrammarContainer {
         final Object interpretation = result.getSemanticInterpretation(model);
         if (interpretation == null) {
             final String utterance = result.getUtterance();
-            super.setFormItemVariable(utterance);
+            return super.setFormItemVariable(utterance);
         } else {
             final String slot = getSlot();
             final Object value = model.readVariable(
@@ -143,7 +144,7 @@ public final class FieldFormItem extends AbstractGrammarContainer {
             // final String slotInInterpretation = shadowVariableName
             // + ".interpretation." + slot;
             // model.updateVariable(slotInInterpretation, interpretation);
-            super.setFormItemVariable(value);
+            return super.setFormItemVariable(value);
         }
     }
 
@@ -152,11 +153,12 @@ public final class FieldFormItem extends AbstractGrammarContainer {
      * 
      * @param utterance
      *            the observed utterance
+     * @return {@code 0} if the variable was set successfully
      * @exception SemanticError
      *                error passing the values to the scripting engine
      * @since 0.7.7
      */
-    public void setFormItemVariable(final String utterance)
+    public int setFormItemVariable(final String utterance)
             throws SemanticError {
         // Propagate the result to the field's shadow variable container.
         final VoiceXmlInterpreterContext context = getContext();
@@ -164,7 +166,7 @@ public final class FieldFormItem extends AbstractGrammarContainer {
         final String shadowVariableName = getShadowVarContainerName();
         final LastResult lastresult = new LastResult(utterance);
         model.updateVariable(shadowVariableName, lastresult);
-        super.setFormItemVariable(utterance);
+        return super.setFormItemVariable(utterance);
     }
 
     /**
@@ -196,13 +198,13 @@ public final class FieldFormItem extends AbstractGrammarContainer {
      * Sets also the shadow variables.
      */
     @Override
-    public void setFormItemVariable(final Object value) throws SemanticError {
+    public int setFormItemVariable(final Object value) throws SemanticError {
         if (value instanceof RecognitionResult) {
             final RecognitionResult result = (RecognitionResult) value;
-            setFormItemVariable(result);
+            return setFormItemVariable(result);
         } else {
             final String utterance = value.toString();
-            setFormItemVariable(utterance);
+            return setFormItemVariable(utterance);
         }
     }
 
