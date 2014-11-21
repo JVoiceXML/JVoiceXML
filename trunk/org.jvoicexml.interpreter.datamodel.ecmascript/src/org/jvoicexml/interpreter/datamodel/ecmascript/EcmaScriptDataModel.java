@@ -183,6 +183,9 @@ public class EcmaScriptDataModel implements DataModel {
             return ERROR_SCOPE_NOT_FOUND;
         }
         final Scope scope = scopes.get(topmostScope);
+        if (scope == null) {
+            return ERROR_SCOPE_NOT_FOUND;
+        }
         return deleteScope(scope);
     }
 
