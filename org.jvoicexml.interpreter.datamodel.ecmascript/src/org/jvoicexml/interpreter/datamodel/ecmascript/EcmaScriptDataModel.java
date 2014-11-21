@@ -65,7 +65,7 @@ public class EcmaScriptDataModel implements DataModel {
     private Scriptable topmostScope;
 
     /** Map of scopes to the corresponding contexts. */
-    private final Map<Scope, Scriptable> scopes;
+    private final Map<Scriptable, Scope> scopes;
 
     static {
         if (!ContextFactory.hasExplicitGlobal()) {
@@ -79,7 +79,7 @@ public class EcmaScriptDataModel implements DataModel {
      * Constructs a new object.
      */
     public EcmaScriptDataModel() {
-        scopes = new java.util.HashMap<Scope, Scriptable>();
+        scopes = new java.util.HashMap<Scriptable, Scope>();
         context = Context.enter();
         context.setLanguageVersion(Context.VERSION_DEFAULT);
 
@@ -114,7 +114,7 @@ public class EcmaScriptDataModel implements DataModel {
         topmostScope = newScope;
 
         // Remember the new scope
-        scopes.put(scope, topmostScope);
+        scopes.put(topmostScope, scope);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("created scope '" + scope.name() + "'");
         }
@@ -182,14 +182,8 @@ public class EcmaScriptDataModel implements DataModel {
         if (topmostScope == null) {
             return ERROR_SCOPE_NOT_FOUND;
         }
-        final Scriptable parentScope = topmostScope.getParentScope();
-        scopes.remove(topmostScope);
-        topmostScope = parentScope;
-        if (topmostScope == rootScope) {
-            topmostScope = null;
-            rootScope = null;
-        }
-        return 0;
+        final Scope scope = scopes.get(topmostScope);
+        return deleteScope(scope);
     }
 
     /**
@@ -201,24 +195,27 @@ public class EcmaScriptDataModel implements DataModel {
             return deleteScope();
         }
         // Is there such a scope?
-        if (!scopes.containsKey(scope)) {
+        if (!scopes.values().contains(scope)) {
             return ERROR_SCOPE_NOT_FOUND;
+        }
+        if (topmostScope == null) {
+            return 0;
         }
 
         // See if we are already there.
-        final Scriptable current = scopes.remove(scope);
-        if (current == topmostScope) {
+        final Scope topscope = scopes.remove(topmostScope);
+        if (topscope == scope) {
             topmostScope = topmostScope.getParentScope();
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("created scope '" + scope.name() + "'");
+                LOGGER.debug("deleted scope '" + scope.name() + "'");
+            }
+            if (topmostScope == rootScope) {
+                topmostScope = null;
+                rootScope = null;
             }
             return 0;
         }
         // Dig deeper...
-        topmostScope = current.getParentScope();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("deleted scope '" + scope.name() + "'");
-        }
         return deleteScope(scope);
     }
 
@@ -297,7 +294,7 @@ public class EcmaScriptDataModel implements DataModel {
     @Override
     public int createVariable(final String variableName, final Object value,
             final Scope scope) {
-        final Scriptable start = scopes.get(scope);
+        final Scriptable start = getScriptable(scope);
         return createVariable(variableName, value, scope, start);
     }
 
@@ -389,13 +386,22 @@ public class EcmaScriptDataModel implements DataModel {
         return createArray(arrayName, dimension, null, topmostScope);
     }
 
+    Scriptable getScriptable(final Scope scope) {
+        for (final Scriptable scriptable : scopes.keySet()) {
+            final Scope currentScope = scopes.get(scriptable);
+            if (currentScope.equals(scope)) {
+                return scriptable;
+            }
+        }
+        return null;
+    }
     /**
      * {@inheritDoc}
      */
     @Override
     public int createArray(final String arrayName, final int dimension,
             final Scope scope) {
-        final Scriptable start = scopes.get(scope);
+        final Scriptable start = getScriptable(scope);
         return createArray(arrayName, dimension, scope, start);
     }
 
@@ -448,7 +454,7 @@ public class EcmaScriptDataModel implements DataModel {
     @Override
     public int resizeArray(final String arrayName, final int dimension,
             final Scope scope) {
-        final Scriptable start = scopes.get(scope);
+        final Scriptable start = getScriptable(scope);
         return resizeArray(arrayName, dimension, null, start);
     }
 
@@ -565,7 +571,7 @@ public class EcmaScriptDataModel implements DataModel {
      */
     @Override
     public boolean existsVariable(final String variableName, final Scope scope) {
-        final Scriptable start = scopes.get(scope);
+        final Scriptable start = getScriptable(scope);
         return existsVariable(variableName, scope, start);
     }
 
@@ -589,17 +595,6 @@ public class EcmaScriptDataModel implements DataModel {
     }
 
     /**
-     * Retrieves the scriptable object for the given scope.
-     * 
-     * @param scope
-     *            the scope
-     * @return associated scripable, maybe {@code null}
-     */
-    Scriptable getScriptable(final Scope scope) {
-        return scopes.get(scope);
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -612,7 +607,7 @@ public class EcmaScriptDataModel implements DataModel {
      */
     @Override
     public int deleteVariable(final String variableName, final Scope scope) {
-        final Scriptable start = scopes.get(scope);
+        final Scriptable start = getScriptable(scope);
         return deleteVariable(variableName, scope, start);
     }
 
@@ -667,7 +662,7 @@ public class EcmaScriptDataModel implements DataModel {
     @Override
     public int updateVariable(final String variableName, final Object newValue,
             final Scope scope) {
-        final Scriptable start = scopes.get(scope);
+        final Scriptable start = getScriptable(scope);
         return updateVariable(variableName, newValue, scope, start);
     }
 
@@ -736,7 +731,7 @@ public class EcmaScriptDataModel implements DataModel {
     @Override
     public int updateArray(final String variableName, final int position,
             final Object newValue, final Scope scope) {
-        final Scriptable start = scopes.get(scope);
+        final Scriptable start = getScriptable(scope);;
         return updateArray(variableName, position, newValue, scope, start);
     }
 
@@ -798,7 +793,7 @@ public class EcmaScriptDataModel implements DataModel {
     @Override
     public <T extends Object> T readVariable(String variableName, Scope scope,
             final Class<T> type) throws SemanticError {
-        final Scriptable start = scopes.get(scope);
+        final Scriptable start = getScriptable(scope);
         return readVariable(variableName, scope, start, type);
     }
 
@@ -846,7 +841,7 @@ public class EcmaScriptDataModel implements DataModel {
     @Override
     public <T> T readArray(final String arrayName, final int position,
             final Scope scope, final Class<T> type) throws SemanticError {
-        final Scriptable start = scopes.get(scope);
+        final Scriptable start = getScriptable(scope);
         return readArray(arrayName, position, scope, start, type);
     }
 
@@ -904,7 +899,7 @@ public class EcmaScriptDataModel implements DataModel {
     @Override
     public <T extends Object> T evaluateExpression(final String expr,
             final Scope scope, final Class<T> type) throws SemanticError {
-        final Scriptable start = scopes.get(scope);
+        final Scriptable start = getScriptable(scope);
         return evaluateExpression(expr, scope, start, type);
     }
 
