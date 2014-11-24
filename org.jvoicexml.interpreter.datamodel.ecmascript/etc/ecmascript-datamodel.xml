@@ -11,5 +11,15 @@
 
     <!-- The ECMA Script data model -->
     <beans:bean id="org.jvoicexml.interpreter.datamodel.DataModel"
-        class="org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel" />
+        class="org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel">
+        <property name="serializer">
+            <!-- The VoiceXML spec does not define how to serialize compound 
+                javascript object when submitting a form. http://www.w3.org/TR/voicexml20#dml5.3.8 
+                You may define one of the following serializers or remove this property to 
+                get an exception when trying to submit a compound object. -->
+            <bean
+                class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer" />
+            <!-- bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.JSONSerializer"/ -->
+        </property>
+    </beans:bean>
 </datamodel>
