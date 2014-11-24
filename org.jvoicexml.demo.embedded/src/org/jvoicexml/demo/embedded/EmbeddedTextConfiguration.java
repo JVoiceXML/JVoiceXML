@@ -44,7 +44,6 @@ import org.jvoicexml.implementation.text.TextPlatformFactory;
 import org.jvoicexml.interpreter.DialogFactory;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
-import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyRepository;
 import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
@@ -53,6 +52,7 @@ import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
 import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository;
+import org.jvoicexml.profile.TagStrategyFactory;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
 
