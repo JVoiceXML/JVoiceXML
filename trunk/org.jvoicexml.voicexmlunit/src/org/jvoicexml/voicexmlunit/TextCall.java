@@ -410,7 +410,9 @@ public final class TextCall implements Call  {
 
     /**
      * Notifies all listeners about the given error.
-     * @param error the caught error
+     * 
+     * @param error
+     *            the caught error
      */
     private void notifyError(final AssertionError error) {
         for (CallListener listener : listeners) {
