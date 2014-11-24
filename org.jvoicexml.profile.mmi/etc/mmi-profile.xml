@@ -7,7 +7,7 @@
     <classpath>dist/org.jvoicexml.profile.mmi.jar</classpath>
 
     <!-- Tag strategies for the VoiceXML 21 profile -->
-    <beans:bean id="org.jvoicexml.Profile"
+    <beans:bean id="org.jvoicexml.profile.Profile"
         class="org.jvoicexml.profile.mmi.MmiProfile" scope="singleton">
         <!-- Initialization of form items -->
         <beans:property name="initializationTagStrategyFactory">

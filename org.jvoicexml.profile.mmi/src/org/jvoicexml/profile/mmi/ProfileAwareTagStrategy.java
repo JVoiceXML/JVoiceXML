@@ -26,8 +26,8 @@
 package org.jvoicexml.profile.mmi;
 
 /**
- * A {@link org.jvoicexml.interpreter.TagStrategy} that knows about the
- * {@link org.jvoicexml.Profile}.
+ * A {@link org.jvoicexml.profile.TagStrategy} that knows about the
+ * {@link org.jvoicexml.profile.Profile}.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.7
