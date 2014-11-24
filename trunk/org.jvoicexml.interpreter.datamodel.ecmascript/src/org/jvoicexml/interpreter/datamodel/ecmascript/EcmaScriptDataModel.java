@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.interpreter.datamodel.DataModelObjectSerializer;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
@@ -66,6 +67,9 @@ public class EcmaScriptDataModel implements DataModel {
 
     /** Map of scopes to the corresponding contexts. */
     private final Map<Scriptable, Scope> scopes;
+
+    /** The data object serializer. */
+    private DataModelObjectSerializer serializer;
 
     static {
         if (!ContextFactory.hasExplicitGlobal()) {
@@ -308,7 +312,8 @@ public class EcmaScriptDataModel implements DataModel {
      * {@inheritDoc}
      */
     @Override
-    public int createVariableFor(final Object variable, final String variableName) {
+    public int createVariableFor(final Object variable,
+            final String variableName) {
         if (!(variable instanceof Scriptable)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("'" + variable
@@ -401,6 +406,7 @@ public class EcmaScriptDataModel implements DataModel {
         }
         return null;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -676,8 +682,8 @@ public class EcmaScriptDataModel implements DataModel {
      * {@inheritDoc}
      */
     @Override
-    public int updateVariableFor(final Object variable, final String variableName,
-            final Object newValue) {
+    public int updateVariableFor(final Object variable,
+            final String variableName, final Object newValue) {
         if (!(variable instanceof Scriptable)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("'" + variable
@@ -737,7 +743,8 @@ public class EcmaScriptDataModel implements DataModel {
     @Override
     public int updateArray(final String variableName, final int position,
             final Object newValue, final Scope scope) {
-        final Scriptable start = getScriptable(scope);;
+        final Scriptable start = getScriptable(scope);
+        ;
         return updateArray(variableName, position, newValue, scope, start);
     }
 
@@ -1040,5 +1047,23 @@ public class EcmaScriptDataModel implements DataModel {
             }
         }
         return json;
+    }
+
+    /**
+     * Sets the serializer.
+     * 
+     * @param value
+     *            the serializer
+     */
+    public void setSerializer(final DataModelObjectSerializer value) {
+        serializer = value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DataModelObjectSerializer getSerializer() {
+        return serializer;
     }
 }
