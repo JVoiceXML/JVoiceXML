@@ -24,14 +24,18 @@
  *
  */
 
-package org.jvoicexml.interpreter;
+package org.jvoicexml.profile;
 
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.Profile;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.FormItem;
+import org.jvoicexml.interpreter.FormItemLocalExecutableTagContainer;
+import org.jvoicexml.interpreter.VoiceXmlInterpreter;
+import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.w3c.dom.NodeList;
@@ -101,7 +105,7 @@ public final class TagStrategyExecutor {
      * @exception JVoiceXMLEvent
      *                Error or event executing the child node.
      *
-     * @see org.jvoicexml.interpreter.TagStrategy
+     * @see org.jvoicexml.profile.TagStrategy
      */
     public void executeChildNodes(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
@@ -129,7 +133,7 @@ public final class TagStrategyExecutor {
      * @exception JVoiceXMLEvent
      *                Error or event executing the child node.
      *
-     * @see org.jvoicexml.interpreter.TagStrategy
+     * @see org.jvoicexml.profile.TagStrategy
      */
     public void executeChildNodesLocal(
             final VoiceXmlInterpreterContext context,
@@ -165,7 +169,7 @@ public final class TagStrategyExecutor {
      * @exception JVoiceXMLEvent
      *                Error or event executing the child node.
      *
-     * @see org.jvoicexml.interpreter.TagStrategy
+     * @see org.jvoicexml.profile.TagStrategy
      */
     public void executeChildNodes(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,

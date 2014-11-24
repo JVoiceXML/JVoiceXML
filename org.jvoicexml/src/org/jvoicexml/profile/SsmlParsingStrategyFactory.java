@@ -25,14 +25,14 @@
  *
  */
 
-package org.jvoicexml.interpreter;
+package org.jvoicexml.profile;
 
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
  * Factory for {@link SsmlParsingStrategy}s.
  *
- * @see org.jvoicexml.interpreter.SsmlParsingStrategy
+ * @see org.jvoicexml.profile.SsmlParsingStrategy
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$

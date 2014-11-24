@@ -33,9 +33,9 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
-import org.jvoicexml.Profile;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.profile.Profile;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 

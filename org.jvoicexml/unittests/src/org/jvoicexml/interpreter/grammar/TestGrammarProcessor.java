@@ -35,7 +35,6 @@ import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -44,8 +43,9 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
@@ -56,6 +56,7 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * The <code>TestGrammarProcessor</code> provides tests for the
@@ -78,19 +79,21 @@ public final class TestGrammarProcessor {
     /**
      * Checks if the given grammar type is supported by the implementation
      * platform.
-     * @param type the type to check.
+     * 
+     * @param type
+     *            the type to check.
      * @return <code>true</code> if the grammar type is supported by the
      *         implementation platform.
      * @throws JVoiceXMLEvent
-     *         Error accessing the user input.
+     *             Error accessing the user input.
      */
     private boolean isSupportedGrammarType(final GrammarType type)
-        throws JVoiceXMLEvent {
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
+            throws JVoiceXMLEvent {
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
         final UserInput input = platform.getUserInput();
-        final Collection<GrammarType> supportedTypes =
-            input.getSupportedGrammarTypes(ModeType.VOICE);
+        final Collection<GrammarType> supportedTypes = input
+                .getSupportedGrammarTypes(ModeType.VOICE);
         for (GrammarType currentType : supportedTypes) {
             if (currentType == type) {
                 return true;
@@ -102,10 +105,11 @@ public final class TestGrammarProcessor {
 
     /**
      * Try to process a SRGS XML grammar.
+     * 
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testSrgsXmlGrammarTest() throws JVoiceXMLEvent, Exception {
@@ -124,8 +128,8 @@ public final class TestGrammarProcessor {
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("Fargo");
 
-        final GrammarDocument processed =
-            processor.process(context, null, srgsxmlgrammar);
+        final GrammarDocument processed = processor.process(context, null,
+                srgsxmlgrammar);
 
         final GrammarType type = processed.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
@@ -134,10 +138,11 @@ public final class TestGrammarProcessor {
 
     /**
      * Try to process an external SRGS XML grammar.
+     * 
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testSrgsXmlExternal() throws Exception, JVoiceXMLEvent {
@@ -145,11 +150,11 @@ public final class TestGrammarProcessor {
         final Grammar grammar = document.getGrammar();
         grammar.setType(GrammarType.SRGS_XML);
         grammar.setRoot("city");
-        final File file =
-            new File("unittests/config/irp_srgs10/conformance-1.grxml");
+        final File file = new File(
+                "unittests/config/irp_srgs10/conformance-1.grxml");
         grammar.setSrc(file.toURI());
-        final GrammarDocument processed =
-            processor.process(context, null, grammar);
+        final GrammarDocument processed = processor.process(context, null,
+                grammar);
         final GrammarType type = processed.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
                 isSupportedGrammarType(type));
@@ -157,10 +162,11 @@ public final class TestGrammarProcessor {
 
     /**
      * Try to process an external SRGS XML grammar.
+     * 
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testSrgsXmlExternalFragment() throws Exception, JVoiceXMLEvent {
@@ -168,11 +174,11 @@ public final class TestGrammarProcessor {
         final Grammar grammar = document.getGrammar();
         grammar.setType(GrammarType.SRGS_XML);
         grammar.setRoot("city");
-        final File file =
-            new File("unittests/config/irp_srgs10/conformance-1.grxml");
+        final File file = new File(
+                "unittests/config/irp_srgs10/conformance-1.grxml");
         grammar.setSrc(file.toURI().toString() + "#main");
-        final GrammarDocument processed =
-            processor.process(context, null, grammar);
+        final GrammarDocument processed = processor.process(context, null,
+                grammar);
 
         final GrammarType type = processed.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
@@ -182,10 +188,11 @@ public final class TestGrammarProcessor {
 
     /**
      * Try to process a SRGS ABNF grammar.
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test(expected = UnsupportedFormatError.class)
     public void testSrgsAbnfGrammarTest() throws Exception, JVoiceXMLEvent {
@@ -197,8 +204,7 @@ public final class TestGrammarProcessor {
         jsgfgrammar.setType(GrammarType.JSGF);
         jsgfgrammar.addText("#JSGF V1.0;");
         jsgfgrammar.addText("grammar $city;");
-        jsgfgrammar
-                .addText("public $city = Boston | Philadelphia | Fargo;");
+        jsgfgrammar.addText("public $city = Boston | Philadelphia | Fargo;");
 
         processor.process(context, null, jsgfgrammar);
     }
@@ -210,18 +216,20 @@ public final class TestGrammarProcessor {
     public void setUp() throws Exception {
         processor = new JVoiceXmlGrammarProcessor();
 
-        final GrammarIdentifierCentral identifier =
-            new GrammarIdentifierCentral();
+        final GrammarIdentifierCentral identifier = new GrammarIdentifierCentral();
         identifier.addIdentifier(new SrgsXmlGrammarIdentifier());
         identifier.addIdentifier(new SrgsAbnfGrammarIdentifier());
 
         processor.setGrammaridentifier(identifier);
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Profile profile = new MockProfile();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null, profile);
+        final Profile profile = Mockito.mock(Profile.class);
+        final SsmlParsingStrategyFactory factory = Mockito
+                .mock(SsmlParsingStrategyFactory.class);
+        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
+                factory);
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null, profile);
         context = new VoiceXmlInterpreterContext(session, null);
     }
 }

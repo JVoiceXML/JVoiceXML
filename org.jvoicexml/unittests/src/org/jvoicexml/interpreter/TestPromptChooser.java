@@ -34,18 +34,19 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * Test cases for {@link PromptChooser}.
@@ -80,7 +81,11 @@ public final class TestPromptChooser {
         field.setName("testfield");
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final ImplementationPlatform platform = new MockImplementationPlatform();
-        final Profile profile = new MockProfile();
+        final Profile profile = Mockito.mock(Profile.class);
+        final SsmlParsingStrategyFactory factory = Mockito
+                .mock(SsmlParsingStrategyFactory.class);
+        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
+                factory);
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile);
         final Configuration configuration = new MockConfiguration();

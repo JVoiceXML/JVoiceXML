@@ -27,16 +27,16 @@
 package org.jvoicexml.interpreter.event;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.jvoicexml.Profile;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.jvoicexml.interpreter.TagStrategyExecutor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.TagStrategyExecutor;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Catch;

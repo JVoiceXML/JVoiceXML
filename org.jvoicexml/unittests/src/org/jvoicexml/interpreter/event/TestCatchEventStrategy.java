@@ -31,7 +31,6 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.Dialog;
@@ -42,18 +41,21 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Noinput;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * Test cases for {@link CatchEventStrategy}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.3
@@ -67,28 +69,35 @@ public final class TestCatchEventStrategy {
 
     /**
      * Sets up the test environment.
+     * 
      * @throws java.lang.Exception
-     *         setup failed.
+     *             setup failed.
      */
     @Before
     public void setUp() throws Exception {
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Profile profile = new MockProfile();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null, profile);
+        final Profile profile = Mockito.mock(Profile.class);
+        final SsmlParsingStrategyFactory factory = Mockito
+                .mock(SsmlParsingStrategyFactory.class);
+        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
+                factory);
+
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null, profile);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.AbstractEventStrategy#isActive()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.AbstractEventStrategy#isActive()}.
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testIsActive() throws JVoiceXMLEvent, Exception {
@@ -100,21 +109,22 @@ public final class TestCatchEventStrategy {
         final Filled filled = field.appendChild(Filled.class);
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, interpreter, dialog);
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, dialog);
         final FieldFormItem item = new FieldFormItem(context, field);
-        final CatchEventStrategy strategy =
-            new CatchEventStrategy(context, interpreter, fia, item, filled,
-                    RecognitionEvent.EVENT_TYPE);
+        final CatchEventStrategy strategy = new CatchEventStrategy(context,
+                interpreter, fia, item, filled, RecognitionEvent.EVENT_TYPE);
         Assert.assertTrue(strategy.isActive());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.AbstractEventStrategy#isActive()}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.AbstractEventStrategy#isActive()}.
+     * 
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testIsActiveCond() throws JVoiceXMLEvent, Exception {
@@ -127,12 +137,11 @@ public final class TestCatchEventStrategy {
         noinput.setCond("false");
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
-        final FormInterpretationAlgorithm fia =
-            new FormInterpretationAlgorithm(context, interpreter, dialog);
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, dialog);
         final FieldFormItem item = new FieldFormItem(context, field1);
-        final CatchEventStrategy strategy =
-            new CatchEventStrategy(context, interpreter, fia, item, noinput,
-                    RecognitionEvent.EVENT_TYPE);
+        final CatchEventStrategy strategy = new CatchEventStrategy(context,
+                interpreter, fia, item, noinput, RecognitionEvent.EVENT_TYPE);
         Assert.assertFalse(strategy.isActive());
     }
 }

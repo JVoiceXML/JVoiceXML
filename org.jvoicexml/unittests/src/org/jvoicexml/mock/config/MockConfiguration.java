@@ -29,20 +29,22 @@ import java.util.Collection;
 
 import org.jvoicexml.Configuration;
 import org.jvoicexml.DtmfRecognizerProperties;
-import org.jvoicexml.Profile;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.interpreter.DialogFactory;
-import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
-import org.jvoicexml.mock.MockProfile;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
+import org.jvoicexml.profile.TagStrategyFactory;
 import org.jvoicexml.test.interpreter.tagstrategy.MockTagStrategyFactory;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
+import org.mockito.Mockito;
 
 /**
  * Dummy implementation of a configuration object.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.4
@@ -84,7 +86,12 @@ public final class MockConfiguration implements Configuration {
     public <T> T loadObject(final Class<T> baseClass) {
         if (baseClass == Profile.class) {
             try {
-                return (T) new MockProfile();
+                final Profile profile = Mockito.mock(Profile.class);
+                final SsmlParsingStrategyFactory factory = Mockito
+                        .mock(SsmlParsingStrategyFactory.class);
+                Mockito.when(profile.getSsmlParsingStrategyFactory())
+                        .thenReturn(factory);
+                return (T) profile;
             } catch (Exception e) {
                 return null;
             }
@@ -95,7 +102,12 @@ public final class MockConfiguration implements Configuration {
                 return null;
             }
         } else if (baseClass == Profile.class) {
-            return (T) new MockProfile();
+            final Profile profile = Mockito.mock(Profile.class);
+            final SsmlParsingStrategyFactory factory = Mockito
+                    .mock(SsmlParsingStrategyFactory.class);
+            Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
+                    factory);
+            return (T) profile;
         } else if (baseClass == SpeechRecognizerProperties.class) {
             return (T) new SpeechRecognizerProperties();
         } else if (baseClass == DtmfRecognizerProperties.class) {

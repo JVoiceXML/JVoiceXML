@@ -36,11 +36,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.jvoicexml.Configuration;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
@@ -49,23 +46,22 @@ import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.grammar.InternalGrammarDocument;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
-import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.mock.TestAppender;
-import org.jvoicexml.mock.config.MockConfiguration;
-import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.vxml.Catch;
 import org.jvoicexml.xml.vxml.Field;
@@ -79,7 +75,7 @@ import org.jvoicexml.xml.vxml.Noinput;
 import org.jvoicexml.xml.vxml.Nomatch;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
-import org.mozilla.javascript.ScriptableObject;
+import org.mockito.Mockito;
 import org.xml.sax.SAXException;
 
 /**
@@ -93,10 +89,13 @@ public final class TestJVoiceXmlEventHandler {
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
 
+    /** The employed data model. */
+    private DataModel model;
+
     /** The VoiceXML interpreter. */
     private VoiceXmlInterpreter interpreter;
 
-    /** the test profile. */
+    /** The profile. */
     private Profile profile;
 
     /**
@@ -120,14 +119,15 @@ public final class TestJVoiceXmlEventHandler {
      */
     @Before
     public void setUp() throws Exception {
-        final ImplementationPlatform platform = new MockImplementationPlatform();
-        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        profile = new MockProfile();
-        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null, profile);
-        final Configuration configuration = new MockConfiguration();
-        context = new VoiceXmlInterpreterContext(session, configuration);
+        context = Mockito.mock(VoiceXmlInterpreterContext.class);
+        model = Mockito.mock(DataModel.class);
+        Mockito.when(context.getDataModel()).thenReturn(model);
         interpreter = new VoiceXmlInterpreter(context);
+        profile = Mockito.mock(Profile.class);
+        final SsmlParsingStrategyFactory factory = Mockito
+                .mock(SsmlParsingStrategyFactory.class);
+        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
+                factory);
     }
 
     /**
@@ -420,21 +420,25 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
-                null, context.getScopeObserver());
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
+                context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
-        final MockRecognitionResult result = new MockRecognitionResult();
+        Mockito.when(context.getProperty("confidencelevel", "0.5")).thenReturn(
+                "0.5");
+
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
         final String utterance = "this is a field level test";
-        result.setUtterance(utterance);
-        result.setAccepted(true);
-        result.setConfidence(1.0f);
+        Mockito.when(result.getUtterance()).thenReturn(utterance);
+        Mockito.when(result.isAccepted()).thenReturn(true);
+        Mockito.when(result.getConfidence()).thenReturn(1.0f);
+        Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
+
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
         handler.processEvent(item);
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        Assert.assertEquals(utterance, scripting.eval(name + ";"));
+        Mockito.verify(model).updateVariable(name, utterance);
         Assert.assertTrue(TestAppender.containsMessage("test: " + utterance));
     }
 
@@ -474,8 +478,8 @@ public final class TestJVoiceXmlEventHandler {
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
         fia.initialize(profile);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
-                null, context.getScopeObserver());
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
+                context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
         final MockRecognitionResult result = new MockRecognitionResult();
@@ -524,7 +528,7 @@ public final class TestJVoiceXmlEventHandler {
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, null, dialog);
         fia.initialize(profile);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         handler.collect(context, interpreter, document);
         handler.collect(context, interpreter, fia, item);
@@ -538,8 +542,7 @@ public final class TestJVoiceXmlEventHandler {
         handler.onEvent(event);
         handler.processEvent(item);
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        Assert.assertEquals(utterance, scripting.eval(name + ";"));
+        Mockito.verify(model).updateVariable(name, utterance);
         Assert.assertTrue(TestAppender.containsMessage("test: " + utterance));
     }
 
@@ -578,7 +581,7 @@ public final class TestJVoiceXmlEventHandler {
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
         fia.initialize(profile);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         handler.collect(context, interpreter, dialog);
         handler.collect(context, interpreter, fia, item);
@@ -592,8 +595,7 @@ public final class TestJVoiceXmlEventHandler {
         handler.onEvent(event);
         handler.processEvent(item);
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        Assert.assertEquals(null, scripting.eval(name + ";"));
+        Mockito.verifyZeroInteractions(model);
         // The nomatch will not be processed since there is no related FIA.
     }
 
@@ -646,31 +648,34 @@ public final class TestJVoiceXmlEventHandler {
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
         fia.initialize(profile);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         final InitialFormItem initialItem = new InitialFormItem(context,
                 initial);
         handler.collect(context, interpreter, fia, initialItem);
 
-        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance1 = "input1";
         final String utterance2 = "input2";
-        result.setUtterance(utterance1);
-        result.setAccepted(true);
-        result.setConfidence(1.0f);
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("var out = new Object(); " + "out." + field1.getName()
-                + "='" + utterance1 + "';" + "out." + field2.getName() + "='"
-                + utterance2 + "';");
-        final ScriptableObject interpretation = (ScriptableObject) scripting
-                .getVariable("out");
-        result.setSemanticInterpretation(interpretation);
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
+        Mockito.when(result.getUtterance()).thenReturn(utterance1);
+        Mockito.when(result.isAccepted()).thenReturn(true);
+        Mockito.when(result.getConfidence()).thenReturn(1.0f);
+        Mockito.when(result.getSemanticInterpretation(model)).thenReturn("out");
+
+        Mockito.when(
+                model.readVariable("application.lastresult$.interpretation."
+                        + field1.getName(), Object.class)).thenReturn(
+                utterance1);
+        Mockito.when(
+                model.readVariable("application.lastresult$.interpretation."
+                        + field2.getName(), Object.class)).thenReturn(
+                utterance2);
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
 
         handler.processEvent(item2);
-        Assert.assertEquals(utterance1, scripting.eval(name1 + ";"));
-        Assert.assertEquals(utterance2, scripting.eval(name2 + ";"));
+        Mockito.verify(model).updateVariable(name1, utterance1);
+        Mockito.verify(model).updateVariable(name2, utterance2);
         Assert.assertTrue(TestAppender.containsMessage("test: " + utterance1));
         Assert.assertTrue(TestAppender.containsMessage("test: " + utterance2));
     }
@@ -727,29 +732,30 @@ public final class TestJVoiceXmlEventHandler {
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
         fia.initialize(profile);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         final InitialFormItem initialItem = new InitialFormItem(context,
                 initial);
         handler.collect(context, null, fia, initialItem);
 
-        final MockRecognitionResult result = new MockRecognitionResult();
         final String utterance = "input2";
-        result.setUtterance(utterance);
-        result.setAccepted(true);
-        result.setConfidence(1.0f);
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("var out = new Object(); " + "out." + field1.getName()
-                + "='" + result.getUtterance() + "';");
-        final ScriptableObject interpretation = (ScriptableObject) scripting
-                .getVariable("out");
-        result.setSemanticInterpretation(interpretation);
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
+        Mockito.when(result.getUtterance()).thenReturn(utterance);
+        Mockito.when(result.isAccepted()).thenReturn(true);
+        Mockito.when(result.getConfidence()).thenReturn(1.0f);
+        Mockito.when(result.getSemanticInterpretation(model)).thenReturn("out");
+
+        Mockito.when(
+                model.readVariable("application.lastresult$.interpretation."
+                        + field1.getName(), Object.class)).thenReturn(
+                utterance);
+
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
 
         handler.processEvent(item2);
-        Assert.assertEquals(result.getUtterance(), scripting.eval(name1 + ";"));
-        Assert.assertEquals(null, scripting.eval(name2 + ";"));
+        Mockito.verify(model).updateVariable(name1, utterance);
+        Mockito.verifyNoMoreInteractions(model);
         Assert.assertTrue(TestAppender.containsMessage("test: " + name1));
         Assert.assertFalse(TestAppender.containsMessage("test: " + name2));
     }
@@ -818,7 +824,7 @@ public final class TestJVoiceXmlEventHandler {
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
         fia.initialize(profile);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
@@ -870,7 +876,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
 
@@ -901,7 +907,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         handler.onEvent(event);
         final JVoiceXMLEvent waitEvent = handler.waitEvent();
@@ -923,7 +929,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setConfidence(1.0f);
         result.setSemanticInterpretation("cancel");
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         handler.onEvent(event);
         final JVoiceXMLEvent waitEvent = handler.waitEvent();
@@ -945,7 +951,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setConfidence(1.0f);
         result.setSemanticInterpretation("help");
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
-        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         handler.onEvent(event);
         final JVoiceXMLEvent waitEvent = handler.waitEvent();
