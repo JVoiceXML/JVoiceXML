@@ -29,8 +29,8 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.interpreter.SsmlParsingStrategy;
-import org.jvoicexml.interpreter.SsmlParsingStrategyFactory;
+import org.jvoicexml.profile.SsmlParsingStrategy;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Audio;
@@ -42,7 +42,7 @@ import org.jvoicexml.xml.vxml.Value;
 /**
  * Factory for {@link SsmlParsingStrategy}s.
  *
- * @see org.jvoicexml.interpreter.SsmlParsingStrategy
+ * @see org.jvoicexml.profile.SsmlParsingStrategy
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision: 4080 $
@@ -56,7 +56,7 @@ public final class JvoiceXmlSsmlParsingStrategyFactory
 
     /**
      * Known strategies. The known strategies are templates for the strategy to
-     * be executed used by the {@link org.jvoicexml.interpreter.SsmlParser}.
+     * be executed used by the {@link org.jvoicexml.profile.vxml21.VoiceXml21SsmlParser}.
      */
     private static final Map<String, SsmlParsingStrategy> STRATEGIES;
 

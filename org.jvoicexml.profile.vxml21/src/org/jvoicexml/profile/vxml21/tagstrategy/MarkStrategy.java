@@ -29,9 +29,9 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 import java.util.Collection;
 
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.interpreter.SsmlParser;
-import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.profile.SsmlParser;
+import org.jvoicexml.profile.SsmlParsingStrategy;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Mark;
@@ -74,6 +74,7 @@ final class MarkStrategy extends AbstractSsmlParsingStrategy
     /**
      * {@inheritDoc}
      */
+    @Override
     public SsmlNode cloneNode(final SsmlParser parser, final DataModel model,
             final SsmlDocument document, final SsmlNode parent,
             final VoiceXmlNode node) throws SemanticError {

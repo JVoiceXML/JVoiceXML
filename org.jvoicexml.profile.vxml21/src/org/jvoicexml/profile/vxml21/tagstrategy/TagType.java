@@ -26,7 +26,7 @@
 package org.jvoicexml.profile.vxml21.tagstrategy;
 
 /**
- * Type of the {@link org.jvoicexml.interpreter.TagStrategyFactory}.
+ * Type of the {@link org.jvoicexml.profile.TagStrategyFactory}.
  * @author Dirk Schnelle-Walka
  * @version $Revision: 4080 $
  * @since 0.7.4
