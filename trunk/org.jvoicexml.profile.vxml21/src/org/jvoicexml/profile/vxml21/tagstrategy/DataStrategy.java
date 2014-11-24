@@ -27,6 +27,7 @@
 package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -46,6 +47,8 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.interpreter.datamodel.DataModelObjectSerializer;
+import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -166,11 +169,11 @@ final class DataStrategy extends AbstractTagStrategy {
         LOGGER.info("obtaining data from '" + uri + "'");
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
                 method);
-        appendVariables(context, descriptor);
-        final FetchAttributes attributes = getFetchAttributes();
-        descriptor.setAttributes(attributes);
-        final String sessionId = session.getSessionID();
         try {
+            appendVariables(context, descriptor);
+            final FetchAttributes attributes = getFetchAttributes();
+            descriptor.setAttributes(attributes);
+            final String sessionId = session.getSessionID();
             final Document document = (Document) server.getObject(sessionId,
                     descriptor, DocumentServer.TEXT_XML);
             final String name = (String) getAttribute(Data.ATTRIBUTE_NAME);
@@ -198,18 +201,24 @@ final class DataStrategy extends AbstractTagStrategy {
     private void appendVariables(final VoiceXmlInterpreterContext context,
             final DocumentDescriptor descriptor) throws SemanticError {
         final DataModel model = context.getDataModel();
+        final DataModelObjectSerializer serializer = model.getSerializer();
         for (String name : namelist) {
             final Object value = model.readVariable(name, Object.class);
             if (value instanceof String) {
                 String str = (String) value;
                 if (str.startsWith("file:/")) {
                     final File file = new File(str);
-                    descriptor.addParameter(name, file);
+                    final KeyValuePair pair = new KeyValuePair(name, file);
+                    descriptor.addParameter(pair);
                 } else {
-                    descriptor.addParameter(name, value);
+                    final Collection<KeyValuePair> pairs = serializer
+                            .serialize(model, name, value);
+                    descriptor.addParameter(pairs);
                 }
             } else {
-                descriptor.addParameter(name, value);
+                final Collection<KeyValuePair> pairs = serializer.serialize(
+                        model, name, value);
+                descriptor.addParameter(pairs);
             }
         }
     }

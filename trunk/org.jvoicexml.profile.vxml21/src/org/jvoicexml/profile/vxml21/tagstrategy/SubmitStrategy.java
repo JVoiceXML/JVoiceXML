@@ -27,6 +27,7 @@
 package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -35,6 +36,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -42,6 +44,8 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.interpreter.datamodel.DataModelObjectSerializer;
+import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.RequestMethod;
@@ -155,18 +159,24 @@ final class SubmitStrategy extends AbstractTagStrategy {
     private void appendVariables(final VoiceXmlInterpreterContext context,
             final DocumentDescriptor descriptor) throws SemanticError {
         final DataModel model = context.getDataModel();
+        final DataModelObjectSerializer serializer = model.getSerializer();
         for (String name : namelist) {
             final Object value = model.readVariable(name, Object.class);
-            if (value == null) {
-                descriptor.addParameter(name, "");
-                continue;
-            }
-            final String str = value.toString();
-            if (str.startsWith("file:/")) {
-                final File file = new File(str);
-                descriptor.addParameter(name, file);
+            if (value instanceof String) {
+                String str = (String) value;
+                if (str.startsWith("file:/")) {
+                    final File file = new File(str);
+                    final KeyValuePair pair = new KeyValuePair(name, file);
+                    descriptor.addParameter(pair);
+                } else {
+                    final Collection<KeyValuePair> pairs = serializer
+                            .serialize(model, name, value);
+                    descriptor.addParameter(pairs);
+                }
             } else {
-                descriptor.addParameter(name, value);
+                final Collection<KeyValuePair> pairs = serializer.serialize(
+                        model, name, value);
+                descriptor.addParameter(pairs);
             }
         }
     }
