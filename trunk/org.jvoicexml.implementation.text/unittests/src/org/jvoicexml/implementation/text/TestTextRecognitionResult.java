@@ -31,11 +31,14 @@ import java.io.InputStream;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.processor.srgs.GrammarChecker;
 import org.jvoicexml.processor.srgs.GrammarGraph;
 import org.jvoicexml.processor.srgs.SrgsXmlGrammarParser;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
+import org.mockito.Mockito;
 import org.xml.sax.InputSource;
 
 /**
@@ -51,8 +54,9 @@ public final class TestTextRecognitionResult {
 
     /**
      * Set up the test environment.
+     * 
      * @throws Exception
-     *         set up failed
+     *             set up failed
      * @since 0.7.7
      */
     @Before
@@ -98,12 +102,13 @@ public final class TestTextRecognitionResult {
     }
 
     @Test
-    public void testGetSemanticInterpretation() {
+    public void testGetSemanticInterpretation() throws SemanticError {
         final String utterance = "yes";
         final TextRecognitionResult result = new TextRecognitionResult(
                 utterance, grammarChecker);
         Assert.assertTrue(result.isAccepted());
-        Assert.assertEquals("yes", result.getSemanticInterpretation());
+        final DataModel model = Mockito.mock(DataModel.class);
+        Assert.assertEquals("yes", result.getSemanticInterpretation(model));
     }
 
     /**
