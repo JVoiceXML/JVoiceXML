@@ -33,12 +33,13 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.SsmlParser;
-import org.jvoicexml.interpreter.SsmlParsingStrategy;
-import org.jvoicexml.interpreter.TagStrategyExecutor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.profile.SsmlParser;
+import org.jvoicexml.profile.SsmlParsingStrategy;
+import org.jvoicexml.profile.TagStrategyExecutor;
+import org.jvoicexml.profile.vxml21.VoiceXml21SsmlParser;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -98,14 +99,16 @@ final class ForeachTagStrategy extends AbstractTagStrategy
     /**
      * {@inheritDoc}
      */
+    @Override
     public SsmlNode cloneNode(final SsmlParser parser, final DataModel model,
             final SsmlDocument document, final SsmlNode parent,
             final VoiceXmlNode node) throws SemanticError {
         final Foreach foreach = (Foreach) node;
+        final VoiceXml21SsmlParser vxml21parser = (VoiceXml21SsmlParser) parser;
         for (int i = 0; i < array.length; i++) {
             final Object value = array[i];
             model.updateVariable(item, value);
-            parser.cloneNode(document, parent, foreach);
+            vxml21parser.cloneNode(document, parent, foreach);
         }
 
         return null;

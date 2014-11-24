@@ -32,9 +32,9 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.profile.TagStrategy;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**

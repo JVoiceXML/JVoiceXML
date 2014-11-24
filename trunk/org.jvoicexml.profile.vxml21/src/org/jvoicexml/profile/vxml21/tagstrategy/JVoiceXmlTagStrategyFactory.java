@@ -31,15 +31,15 @@ import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.interpreter.TagStrategy;
-import org.jvoicexml.interpreter.TagStrategyFactory;
+import org.jvoicexml.profile.TagStrategy;
+import org.jvoicexml.profile.TagStrategyFactory;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.w3c.dom.Node;
 
 /**
  * Factory for tag strategies.
  *
- * @see org.jvoicexml.interpreter.TagStrategy
+ * @see org.jvoicexml.profile.TagStrategy
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision: 4080 $

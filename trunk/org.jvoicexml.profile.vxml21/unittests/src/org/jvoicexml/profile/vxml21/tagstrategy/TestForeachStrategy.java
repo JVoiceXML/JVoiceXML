@@ -39,7 +39,7 @@ import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.ScriptingEngine;
-import org.jvoicexml.interpreter.TagStrategy;
+import org.jvoicexml.profile.TagStrategy;
 import org.jvoicexml.xml.ccxml.Script;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;

@@ -34,9 +34,9 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.profile.SsmlParsingStrategy;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**

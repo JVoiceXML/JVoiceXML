@@ -26,10 +26,10 @@
 
 package org.jvoicexml.profile.vxml21;
 
-import org.jvoicexml.Profile;
-import org.jvoicexml.interpreter.SsmlParsingStrategyFactory;
-import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
+import org.jvoicexml.profile.TagStrategyFactory;
 import org.jvoicexml.profile.vxml21.tagstrategy.JvoiceXmlSsmlParsingStrategyFactory;
 
 /**
