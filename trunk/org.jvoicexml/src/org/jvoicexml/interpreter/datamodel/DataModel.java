@@ -453,4 +453,11 @@ public interface DataModel {
     <T extends Object> T evaluateExpression(final String expr,
             final Scope scope, final Class<T> type) throws SemanticError;
 
+
+    /**
+     *  * Serializer for objects when submitting. 
+     * @return serializer to use
+     * @since 0.7.7
+     */
+    DataModelObjectSerializer getSerializer();
 }

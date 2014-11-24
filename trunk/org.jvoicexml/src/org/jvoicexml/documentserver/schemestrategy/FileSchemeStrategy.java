@@ -31,11 +31,12 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
@@ -77,7 +78,7 @@ public final class FileSchemeStrategy
     @Override
     public InputStream getInputStream(final String sessionId, final URI uri,
             final RequestMethod method, final long timeout,
-            final Map<String, Object> parameters)
+            final Collection<KeyValuePair> parameters)
             throws BadFetchError {
 
         try {

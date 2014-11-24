@@ -27,8 +27,9 @@
 package org.jvoicexml;
 
 import java.net.URI;
-import java.util.Map;
+import java.util.Collection;
 
+import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
@@ -49,7 +50,7 @@ public final class DocumentDescriptor {
     private FetchAttributes attributes;
 
     /** Parameters for the request. */
-    private final Map<String, Object> parameters;
+    private final Collection<KeyValuePair> parameters;
 
     /**
      * <code>true</code> if the document must be loaded although the document
@@ -86,7 +87,7 @@ public final class DocumentDescriptor {
             final RequestMethod requestMethod, final boolean force) {
         uri = documentUri;
         method = requestMethod;
-        parameters = new java.util.HashMap<String, Object>();
+        parameters = new java.util.ArrayList<KeyValuePair>();
         forceLoad = force;
     }
 
@@ -142,18 +143,25 @@ public final class DocumentDescriptor {
 
     /**
      * Adds the given parameter to the list of known parameters.
-     * @param name name of the parameter
-     * @param value value of the parameter
+     * @param pair the parameter to add
      */
-    public void addParameter(final String name, final Object value) {
-        parameters.put(name, value);
+    public void addParameter(final KeyValuePair pair) {
+        parameters.add(pair);
     }
 
+    /**
+     * Adds the given parameter to the list of known parameters.
+     * @param pair the parameter to add
+     */
+    public void addParameter(final Collection<KeyValuePair> pairs) {
+        parameters.addAll(pairs);
+    }
+    
     /**
      * Retrieves the known parameter.
      * @return known parameters
      */
-    public Map<String, Object> getParameters() {
+    public Collection<KeyValuePair> getParameters() {
         return parameters;
     }
 }

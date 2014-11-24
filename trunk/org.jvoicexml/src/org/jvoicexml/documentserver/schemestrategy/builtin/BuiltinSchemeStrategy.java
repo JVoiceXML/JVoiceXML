@@ -38,6 +38,7 @@ import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedBuiltinError;
 import org.jvoicexml.event.error.UnsupportedElementError;
+import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
@@ -115,7 +116,7 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
     @Override
     public InputStream getInputStream(final String sessionId, final URI uri,
             final RequestMethod method, final long timeout,
-            final Map<String, Object> parameters)
+            final Collection<KeyValuePair> parameters)
             throws BadFetchError, UnsupportedElementError, IOException {
         final String type = extractBuiltinType(uri);
         final GrammarCreator creator = creators.get(type);
