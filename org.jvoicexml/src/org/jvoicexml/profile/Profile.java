@@ -23,11 +23,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml;
+package org.jvoicexml.profile;
 
-import org.jvoicexml.interpreter.SsmlParsingStrategyFactory;
-import org.jvoicexml.interpreter.TagStrategy;
-import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 
 /**

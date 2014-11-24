@@ -30,11 +30,11 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.TagStrategyExecutor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.scope.Scope;
+import org.jvoicexml.profile.TagStrategyExecutor;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**

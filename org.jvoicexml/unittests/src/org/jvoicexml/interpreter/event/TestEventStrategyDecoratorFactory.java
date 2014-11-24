@@ -31,7 +31,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -40,8 +39,9 @@ import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.interpreter.formitem.RecordFormItem;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Initial;
@@ -49,9 +49,11 @@ import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Record;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link EventStrategyDecoratorFactory}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
@@ -65,18 +67,26 @@ public final class TestEventStrategyDecoratorFactory {
      */
     @Before
     public void setUp() {
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Profile profile = new MockProfile();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null, profile);
+        final Profile profile = Mockito.mock(Profile.class);
+        final SsmlParsingStrategyFactory factory = Mockito
+                .mock(SsmlParsingStrategyFactory.class);
+        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
+                factory);
+
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null, profile);
         context = new VoiceXmlInterpreterContext(session, null);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.EventStrategyDecoratorFactory#getDecorator(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
-     * @exception Exception test failed.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.event.EventStrategyDecoratorFactory#getDecorator(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
      */
     @Test
     public void testGetDecorator() throws Exception {
@@ -89,38 +99,35 @@ public final class TestEventStrategyDecoratorFactory {
         final Initial initial = form.appendChild(Initial.class);
 
         final FieldFormItem fieldItem = new FieldFormItem(context, field);
-        final EventStrategyDecoratorFactory factory =
-            new EventStrategyDecoratorFactory();
-        final EventStrategy strategy1 =
-            factory.getDecorator(context, null, null, fieldItem);
+        final EventStrategyDecoratorFactory factory = new EventStrategyDecoratorFactory();
+        final EventStrategy strategy1 = factory.getDecorator(context, null,
+                null, fieldItem);
         Assert.assertNotNull(strategy1);
         Assert.assertEquals(InputItemRecognitionEventStrategy.class,
                 strategy1.getClass());
 
         final RecordFormItem recordItem = new RecordFormItem(context, record);
-        final EventStrategy strategy2 =
-            factory.getDecorator(context, null, null, recordItem);
+        final EventStrategy strategy2 = factory.getDecorator(context, null,
+                null, recordItem);
         Assert.assertNotNull(strategy2);
-        Assert.assertEquals(RecordingEventStrategy.class,
-                strategy2.getClass());
+        Assert.assertEquals(RecordingEventStrategy.class, strategy2.getClass());
 
         final ObjectFormItem objectItem = new ObjectFormItem(context, object);
-        final EventStrategy strategy3 =
-            factory.getDecorator(context, null, null, objectItem);
+        final EventStrategy strategy3 = factory.getDecorator(context, null,
+                null, objectItem);
         Assert.assertNotNull(strategy3);
-        Assert.assertEquals(ObjectTagEventStrategy.class,
-                strategy3.getClass());
+        Assert.assertEquals(ObjectTagEventStrategy.class, strategy3.getClass());
 
         final InitialFormItem initialItem = new InitialFormItem(context,
                 initial);
-        final EventStrategy strategy4 =
-            factory.getDecorator(context, null, null, initialItem);
+        final EventStrategy strategy4 = factory.getDecorator(context, null,
+                null, initialItem);
         Assert.assertNotNull(strategy4);
         Assert.assertEquals(FormLevelRecognitionEventStrategy.class,
                 strategy4.getClass());
-        
-        final EventStrategy strategy5 =
-            factory.getDecorator(context, null, null, null);
+
+        final EventStrategy strategy5 = factory.getDecorator(context, null,
+                null, null);
         Assert.assertNull("expected a null strategy for a null input item",
                 strategy5);
     }

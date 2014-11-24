@@ -32,14 +32,15 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * This class tests the {@link VoiceXmlInterpreter}.
@@ -62,7 +63,12 @@ public final class TestVoiceXmlInterpreter {
     public void setUp() {
         final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Profile profile = new MockProfile();
+        final Profile profile = Mockito.mock(Profile.class);
+        final SsmlParsingStrategyFactory factory = Mockito
+                .mock(SsmlParsingStrategyFactory.class);
+        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
+                factory);
+
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile);
         final VoiceXmlInterpreterContext context = new VoiceXmlInterpreterContext(

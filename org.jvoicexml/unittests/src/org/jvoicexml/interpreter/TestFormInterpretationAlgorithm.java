@@ -35,20 +35,21 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.NoinputEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.mock.implementation.MockUserInput;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
@@ -59,6 +60,7 @@ import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link FormInterpretationAlgorithm}.
@@ -91,7 +93,11 @@ public final class TestFormInterpretationAlgorithm {
     public void setUp() throws Exception {
         platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        profile = new MockProfile();
+        profile = Mockito.mock(Profile.class);
+        final SsmlParsingStrategyFactory factory = Mockito
+                .mock(SsmlParsingStrategyFactory.class);
+        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
+                factory);
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile);
         final Configuration configuration = new MockConfiguration();
@@ -704,16 +710,11 @@ public final class TestFormInterpretationAlgorithm {
         Assert.assertEquals(1, activeGrammars.size());
         // Fake an input to fill one of the fields using the form grammar
         final EventHandler handler = context.getEventHandler();
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setUtterance("visa");
-        final ScriptingEngine scripting = new ScriptingEngine(null);
-        scripting.enterScope(null, Scope.APPLICATION);
-        scripting.eval("var out = new Object();");
-        scripting.eval("out.card = 'visa';");
-        final Object out = scripting.getVariable("out");
-        result.setSemanticInterpretation(out);
-        result.setAccepted(true);
-        result.setConfidence(1.0f);
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
+        Mockito.when(result.getUtterance()).thenReturn("visa");
+        Mockito.when(result.getConfidence()).thenReturn(1.0f);
+        Mockito.when(result.getSemanticInterpretation(Mockito.any(DataModel.class))).thenReturn("visa");
+        Mockito.when(result.isAccepted()).thenReturn(true);
         final JVoiceXMLEvent recognitionEvent = new RecognitionEvent(null,
                 null, result);
         input.stopRecognition();

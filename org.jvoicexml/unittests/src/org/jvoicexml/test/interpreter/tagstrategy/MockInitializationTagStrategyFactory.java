@@ -31,8 +31,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-import org.jvoicexml.interpreter.TagStrategy;
-import org.jvoicexml.interpreter.TagStrategyFactory;
+import org.jvoicexml.profile.TagStrategy;
+import org.jvoicexml.profile.TagStrategyFactory;
 import org.w3c.dom.Node;
 
 /**

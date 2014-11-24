@@ -40,7 +40,6 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.DtmfInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.event.ErrorEvent;
@@ -58,6 +57,7 @@ import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
+import org.jvoicexml.profile.Profile;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
