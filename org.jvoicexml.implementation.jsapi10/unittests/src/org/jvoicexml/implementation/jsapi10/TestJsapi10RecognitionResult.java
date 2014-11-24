@@ -33,12 +33,12 @@ import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RecognizerModeDesc;
 import javax.speech.recognition.RuleGrammar;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
+import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.mockito.Mockito;
 
 import com.sun.speech.engine.recognition.BaseResult;
 
@@ -47,6 +47,7 @@ import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
 
 /**
  * Test cases for {@link Jsapi10RecognitionResult}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.2
@@ -57,21 +58,24 @@ public class TestJsapi10RecognitionResult {
 
     /**
      * Global initialization.
+     * 
      * @throws EngineException
-     *         error registering the engine.
+     *             error registering the engine.
      */
     @BeforeClass
     public static void init() throws EngineException {
         final String config = "/sphinx4.jsapi10.test.config.xml";
-        final SphinxRecognizerModeDesc desc =
-                new SphinxRecognizerModeDesc(config);
+        final SphinxRecognizerModeDesc desc = new SphinxRecognizerModeDesc(
+                config);
         SphinxEngineCentral.registerEngineModeDesc(desc);
         Central.registerEngineCentral(SphinxEngineCentral.class.getName());
     }
 
     /**
      * Set up the test environment.
-     * @throws Exception test failed
+     * 
+     * @throws Exception
+     *             test failed
      * @since 0.7.3
      */
     @Before
@@ -85,7 +89,9 @@ public class TestJsapi10RecognitionResult {
 
     /**
      * Tear down the test environment.
-     * @throws Exception test failed
+     * 
+     * @throws Exception
+     *             test failed
      * @since 0.7.3
      */
     public void tearDown() throws Exception {
@@ -95,77 +101,77 @@ public class TestJsapi10RecognitionResult {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.jsapi10.Jsapi10RecognitionResult#getSemanticInterpretation()}.
+     * Test method for
+     * {@link org.jvoicexml.implementation.jsapi10.Jsapi10RecognitionResult#getSemanticInterpretation()}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
-    public void testGetSemanticInterpretation() throws Exception {
+    public void testGetSemanticInterpretation() throws Exception, SemanticError {
         final String lf = System.getProperty("line.separator");
-        final String grammar = "#JSGF V1.0;" + lf
-            + "grammar test;" + lf
-            + "public <test> = a{student.name='horst'}|b|c;";
+        final String grammar = "#JSGF V1.0;" + lf + "grammar test;" + lf
+                + "public <test> = a{student.name='horst'}|b|c;";
         final StringReader reader = new StringReader(grammar);
         final RuleGrammar rule = recognizer.loadJSGF(reader);
         rule.setEnabled(true);
         final BaseResult result = new BaseResult(rule, "a");
         result.setResultState(BaseResult.ACCEPTED);
 
-        final Jsapi10RecognitionResult res =
-            new Jsapi10RecognitionResult(result);
-        final Object out = res.getSemanticInterpretation();
-        final Context context = Context.enter();
-        context.setLanguageVersion(Context.VERSION_1_6);
-        final Scriptable scope = context.initStandardObjects();
-        scope.put("out", scope, out);
-        Assert.assertEquals("horst", context.evaluateString(scope,
-                "out.student.name", "expr", 1, null));
+        final DataModel model = Mockito.mock(DataModel.class);
+        final Jsapi10RecognitionResult res = new Jsapi10RecognitionResult(
+                result);
+        res.getSemanticInterpretation(model);
+        Mockito.verify(model).updateVariable("out.student.name", "horst");
+        // Assert.assertEquals("horst", context.evaluateString(scope,
+        // "out.student.name", "expr", 1, null));
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.jsapi10.Jsapi10RecognitionResult#getSemanticInterpretation()}.
+     * Test method for
+     * {@link org.jvoicexml.implementation.jsapi10.Jsapi10RecognitionResult#getSemanticInterpretation()}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
-    public void testGetSemanticInterpretationSimple() throws Exception {
+    public void testGetSemanticInterpretationSimple() throws Exception,
+            SemanticError {
         final String lf = System.getProperty("line.separator");
-        final String grammar = "#JSGF V1.0;" + lf
-            + "grammar test;" + lf
-            + "public <test> = yes{true}|no{false}|one{1234}|two{'horst'};";
+        final String grammar = "#JSGF V1.0;" + lf + "grammar test;" + lf
+                + "public <test> = yes{true}|no{false}|one{1234}|two{'horst'};";
         final StringReader reader = new StringReader(grammar);
         final RuleGrammar rule = recognizer.loadJSGF(reader);
         rule.setEnabled(true);
 
-        final Context context = Context.enter();
-        context.setLanguageVersion(Context.VERSION_1_6);
-        final Scriptable scope = context.initStandardObjects();
-
         final BaseResult result1 = new BaseResult(rule, "yes");
         result1.setResultState(BaseResult.ACCEPTED);
-        final Jsapi10RecognitionResult res1 =
-            new Jsapi10RecognitionResult(result1);
-        final Object out1 = res1.getSemanticInterpretation();
-        scope.put("out", scope, out1);
-        Assert.assertEquals(Boolean.TRUE, context.evaluateString(scope,
-                "out", "expr", 1, null));
+        final DataModel model = Mockito.mock(DataModel.class);
+        final Jsapi10RecognitionResult res1 = new Jsapi10RecognitionResult(
+                result1);
+        res1.getSemanticInterpretation(model);
+        Mockito.verify(model).updateVariable("out", true);
+        // Assert.assertEquals(Boolean.TRUE,
+        // context.evaluateString(scope, "out", "expr", 1, null));
 
         final BaseResult result2 = new BaseResult(rule, "one");
         result2.setResultState(BaseResult.ACCEPTED);
-        final Jsapi10RecognitionResult res2 =
-            new Jsapi10RecognitionResult(result2);
-        final Object out2 = res2.getSemanticInterpretation();
-        scope.put("out", scope, out2);
-        Assert.assertEquals(new Integer(1234), context.evaluateString(scope,
-                "out", "expr", 1, null));
+        final Jsapi10RecognitionResult res2 = new Jsapi10RecognitionResult(
+                result2);
+        res2.getSemanticInterpretation(model);
+        Mockito.verify(model).updateVariable("out", 1234);
+        // Assert.assertEquals(new Integer(1234),
+        // context.evaluateString(scope, "out", "expr", 1, null));
 
         final BaseResult result3 = new BaseResult(rule, "two");
         result3.setResultState(BaseResult.ACCEPTED);
-        final Jsapi10RecognitionResult res3 =
-            new Jsapi10RecognitionResult(result3);
-        final Object out3 = res3.getSemanticInterpretation();
-        scope.put("out", scope, out3);
-        Assert.assertEquals("horst", context.evaluateString(scope,
-                "out", "expr", 1, null));
+        final Jsapi10RecognitionResult res3 = new Jsapi10RecognitionResult(
+                result3);
+        res3.getSemanticInterpretation(model);
+        Mockito.verify(model).updateVariable("out", "horst");
+        // Assert.assertEquals("horst",
+        // context.evaluateString(scope, "out", "expr", 1, null));
     }
 }
