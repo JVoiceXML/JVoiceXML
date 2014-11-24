@@ -28,9 +28,9 @@ package org.jvoicexml.implementation.kinect;
 
 import java.util.List;
 
+import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.ModeType;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
 
 /**
  * A recognition result as it comes from the Kinect.
@@ -56,32 +56,23 @@ public class KinectRecognitionResult
 
     /**
      * {@inheritDoc}
+     * 
+     * @throws SemanticError
      */
     @Override
-    public Object getSemanticInterpretation() {
+    public Object getSemanticInterpretation(final DataModel model) throws SemanticError {
         final List<SmlInterpretation> interpretations =
                 extractor.getInterpretations();
         if (interpretations.size() == 0) {
             return null;
         }
-        final Context context = Context.enter();
-        context.setLanguageVersion(Context.VERSION_1_6);
-        
-        final Scriptable scope = context.initStandardObjects();
-        context.evaluateString(scope, "var out = new Object();", "expr",
-                1, null);
+        model.createVariable("out");
         for (SmlInterpretation interpretation : interpretations) {
             final String tag = interpretation.getTag();
             final String value = interpretation.getValue();
-            if (value == null) {
-                context.evaluateString(scope, "out." + tag + " = new Object();",
-                        "expr", 1, null);
-            } else {
-                context.evaluateString(scope, "out." + tag + " = '" + value
-                        + "';", "expr", 1, null);
-            }
+            model.createVariable("out." + tag, value);
         }
-        return scope.get("out", scope);
+        return model.readVariable("out", Object.class);
     }
 
     /**
