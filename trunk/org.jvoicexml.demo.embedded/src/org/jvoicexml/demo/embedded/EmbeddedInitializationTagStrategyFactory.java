@@ -30,7 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
-import org.jvoicexml.interpreter.TagStrategy;
+import org.jvoicexml.profile.TagStrategy;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
