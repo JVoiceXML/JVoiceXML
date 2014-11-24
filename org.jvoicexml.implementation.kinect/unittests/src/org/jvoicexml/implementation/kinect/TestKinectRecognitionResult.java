@@ -38,9 +38,10 @@ import javax.xml.transform.stream.StreamSource;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.ModeType;
-import org.mozilla.javascript.ScriptableObject;
+import org.mockito.Mockito;
 
 /**
  * Test cases for {@link KinectRecognitionResult}.
@@ -220,24 +221,28 @@ public class TestKinectRecognitionResult {
 
     /**
      * Test method for {@link org.jvoicexml.implementation.kinect.KinectRecognitionResult#getMark()}.
+     * @throws SemanticError 
      */
     @Test
-    public void testGetSemanticInterpretation() throws Exception {
+    public void testGetSemanticInterpretation() throws Exception, SemanticError {
         final SmlInterpretationExtractor extractor = readSml("sml-simple.xml");
         final KinectRecognitionResult result =
                 new KinectRecognitionResult(extractor);
-        Assert.assertNull(result.getSemanticInterpretation());
+        final DataModel model = Mockito.mock(DataModel.class);
+        Assert.assertNull(result.getSemanticInterpretation(model));
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.kinect.KinectRecognitionResult#getMark()}.
+     * @throws SemanticError 
      */
     @Test
-    public void testGetSemanticInterpretationTag() throws Exception {
+    public void testGetSemanticInterpretationTag() throws Exception, SemanticError {
         final SmlInterpretationExtractor extractor = readSml("sml-tag.xml");
         final KinectRecognitionResult result =
                 new KinectRecognitionResult(extractor);
-        Assert.assertNull(result.getSemanticInterpretation());
+        final DataModel model = Mockito.mock(DataModel.class);
+        Assert.assertNull(result.getSemanticInterpretation(model));
     }
 
     /**
@@ -254,9 +259,10 @@ public class TestKinectRecognitionResult {
                 readSml("sml-multiple-tags.xml");
         final KinectRecognitionResult result =
                 new KinectRecognitionResult(extractor);
-        Assert.assertNotNull(result.getSemanticInterpretation());
-        final String json = ScriptingEngine.toJSON(
-                (ScriptableObject) result.getSemanticInterpretation());
+        final DataModel model = Mockito.mock(DataModel.class);
+        Assert.assertNotNull(result.getSemanticInterpretation(model));
+        final String json = "hello";//ScriptingEngine.toJSON(
+//                (ScriptableObject) result.getSemanticInterpretation());
         Assert.assertEquals(
                 "{\"greet\":\"general\",\"who\":\"Projectmanager\"}", json);
     }
@@ -275,9 +281,10 @@ public class TestKinectRecognitionResult {
                 readSml("sml-compound.xml");
         final KinectRecognitionResult result =
                 new KinectRecognitionResult(extractor);
-        Assert.assertNotNull(result.getSemanticInterpretation());
-        final String json = ScriptingEngine.toJSON(
-                (ScriptableObject) result.getSemanticInterpretation());
+        final DataModel model = Mockito.mock(DataModel.class);
+        Assert.assertNotNull(result.getSemanticInterpretation(model));
+        final String json = "hello";//ScriptingEngine.toJSON(
+//                (ScriptableObject) result.getSemanticInterpretation());
         Assert.assertEquals(
                 "{\"order\":{\"topping\":\"salami\",\"size\":\"small\"}}",
                 json);
