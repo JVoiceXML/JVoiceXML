@@ -32,7 +32,6 @@ import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.Profile;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -41,11 +40,13 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.SsmlParser;
-import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParser;
+import org.jvoicexml.profile.SsmlParsingStrategy;
+import org.jvoicexml.profile.vxml21.VoiceXml21SsmlParser;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Audio;
@@ -61,8 +62,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @version $Revision: 4080 $
  * @since 0.6
  */
-final class AudioTagStrategy
-        extends AbstractTagStrategy
+final class AudioTagStrategy extends AbstractTagStrategy
         implements SsmlParsingStrategy {
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -90,7 +90,8 @@ final class AudioTagStrategy
             final FormInterpretationAlgorithm fia, final FormItem item,
             final VoiceXmlNode node) throws JVoiceXMLEvent {
         final Profile profile = context.getProfile();
-        final SsmlParser parser = new SsmlParser(profile, node, context);
+        final SsmlParser parser = new VoiceXml21SsmlParser(profile, node,
+                context);
         final SsmlDocument document;
 
         try {
@@ -105,15 +106,15 @@ final class AudioTagStrategy
         if (speakable.isSpeakableTextEmpty()) {
             return;
         }
-        final ImplementationPlatform platform =
-                context.getImplementationPlatform();
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
         platform.setPromptTimeout(-1);
         platform.queuePrompt(speakable);
         final Session session = context.getSession();
         final String sessionId = session.getSessionID();
         try {
-            final CallControlProperties callProps =
-                    context.getCallControlProperties(fia);
+            final CallControlProperties callProps = context
+                    .getCallControlProperties(fia);
             platform.renderPrompts(sessionId, documentServer, callProps);
         } catch (ConfigurationException ex) {
             throw new NoresourceError(ex.getMessage(), ex);
@@ -123,10 +124,10 @@ final class AudioTagStrategy
     /**
      * {@inheritDoc}
      */
-    public SsmlNode cloneNode(final SsmlParser parser,
-            final DataModel model, final SsmlDocument document,
-            final SsmlNode parent, final VoiceXmlNode node)
-        throws SemanticError {
+    @Override
+    public SsmlNode cloneNode(final SsmlParser parser, final DataModel model,
+            final SsmlDocument document, final SsmlNode parent,
+            final VoiceXmlNode node) throws SemanticError {
         final Audio audio = (Audio) parent.addChild(Audio.TAG_NAME);
 
         // Copy all attributes into the new node and replace the src
@@ -140,7 +141,8 @@ final class AudioTagStrategy
             }
             if (value != null) {
                 if (name.equals(Audio.ATTRIBUTE_SRC)) {
-                    value = parser.resolve(value.toString());
+                    final VoiceXml21SsmlParser vxml21parser = (VoiceXml21SsmlParser) parser;
+                    value = vxml21parser.resolve(value.toString());
                 }
                 audio.setAttribute(name, value.toString());
             }

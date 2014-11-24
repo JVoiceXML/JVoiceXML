@@ -6,7 +6,7 @@
     <classpath>dist/org.jvoicexml.profile.vxml21.jar</classpath>
 
     <!-- Tag strategies for the VoiceXML 21 profile -->
-    <beans:bean id="org.jvoicexml.Profile"
+    <beans:bean id="org.jvoicexml.profile.Profile"
         class="org.jvoicexml.profile.vxml21.VoiceXml21Profile" scope="singleton">
         <!-- Initialization of form items -->
         <beans:property name="initializationTagStrategyFactory">

@@ -34,7 +34,6 @@ import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.Profile;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -43,11 +42,13 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.SsmlParser;
-import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParser;
+import org.jvoicexml.profile.SsmlParsingStrategy;
+import org.jvoicexml.profile.vxml21.VoiceXml21SsmlParser;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.TextContainer;
 import org.jvoicexml.xml.TimeParser;
@@ -110,7 +111,7 @@ final class ValueStrategy extends AbstractTagStrategy
         }
 
         final Profile profile = context.getProfile();
-        final SsmlParser parser = new SsmlParser(profile, node, context);
+        final VoiceXml21SsmlParser parser = new VoiceXml21SsmlParser(profile, node, context);
         final SsmlDocument document;
 
         try {

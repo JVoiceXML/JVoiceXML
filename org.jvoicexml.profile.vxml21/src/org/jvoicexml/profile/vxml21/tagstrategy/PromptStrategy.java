@@ -33,7 +33,6 @@ import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.Profile;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.ErrorEvent;
@@ -42,10 +41,12 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParser;
+import org.jvoicexml.profile.vxml21.VoiceXml21SsmlParser;
 import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Speak;
@@ -122,7 +123,8 @@ class PromptStrategy extends AbstractTagStrategy {
         // the VoiceXmlNode constructor does not keep namespaces
         final Prompt prompt = (Prompt) node;
         final Profile profile = context.getProfile();
-        final SsmlParser parser = new SsmlParser(profile, prompt, context);
+        final SsmlParser parser = new VoiceXml21SsmlParser(profile, prompt,
+                context);
         final SsmlDocument document;
         try {
             document = parser.getDocument();
