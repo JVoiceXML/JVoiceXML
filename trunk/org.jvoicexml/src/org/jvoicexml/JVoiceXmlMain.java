@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.interpreter.GrammarProcessor;
+import org.jvoicexml.profile.Profile;
 
 /**
  * Main class of the JVoiceXML VoiceXML interpreter.

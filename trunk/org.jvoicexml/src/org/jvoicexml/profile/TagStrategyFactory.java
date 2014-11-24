@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.interpreter;
+package org.jvoicexml.profile;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -37,7 +37,7 @@ import org.w3c.dom.Node;
  * {@link #getTagNamespace()} that can be executed while interpreting
  * the form items.
  *
- * @see org.jvoicexml.interpreter.TagStrategy
+ * @see org.jvoicexml.profile.TagStrategy
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$

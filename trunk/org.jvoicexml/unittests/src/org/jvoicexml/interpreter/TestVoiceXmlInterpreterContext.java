@@ -35,21 +35,23 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
 import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.mockito.Mockito;
 import org.w3c.dom.Document;
 
 /**
  * Test cases for {@link VoiceXmlInterpreterContext}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
@@ -67,8 +69,9 @@ public final class TestVoiceXmlInterpreterContext {
 
     /**
      * Test setup.
+     * 
      * @exception Exception
-     *            set up failed.
+     *                set up failed.
      */
     @Before
     public void setUp() throws Exception {
@@ -77,22 +80,29 @@ public final class TestVoiceXmlInterpreterContext {
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
 
-        final ImplementationPlatform platform =
-            new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Profile profile = new MockProfile();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null, profile);
+        final Profile profile = Mockito.mock(Profile.class);
+        final SsmlParsingStrategyFactory factory = Mockito
+                .mock(SsmlParsingStrategyFactory.class);
+        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
+                factory);
+
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                null, profile);
         final Configuration configuration = new MockConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.VoiceXmlInterpreterContext#loadDocument(org.jvoicexml.DocumentDescriptor)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.VoiceXmlInterpreterContext#loadDocument(org.jvoicexml.DocumentDescriptor)}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testLoadDocument() throws Exception, JVoiceXMLEvent {
@@ -105,24 +115,26 @@ public final class TestVoiceXmlInterpreterContext {
     }
 
     /**
-     * Test method for {@link VoiceXmlInterpreterContext#getSpeechRecognizerProperties()}.
+     * Test method for
+     * {@link VoiceXmlInterpreterContext#getSpeechRecognizerProperties()}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      * @since 0.7.5
      */
     @Test
-    public void testGetSpeechRecognizerProperties()
-        throws Exception, JVoiceXMLEvent {
-        final SpeechRecognizerProperties props =
-            context.getSpeechRecognizerProperties(null);
+    public void testGetSpeechRecognizerProperties() throws Exception,
+            JVoiceXMLEvent {
+        final SpeechRecognizerProperties props = context
+                .getSpeechRecognizerProperties(null);
         Assert.assertEquals(new Float(
                 SpeechRecognizerProperties.DEFAULT_CONFIDENCE_LEVEL),
                 new Float(props.getConfidencelevel()));
         Assert.assertEquals(new Float(
-                SpeechRecognizerProperties.DEFAULT_SENSITIVITY),
-                new Float(props.getSensitivity()));
+                SpeechRecognizerProperties.DEFAULT_SENSITIVITY), new Float(
+                props.getSensitivity()));
         Assert.assertEquals(new Float(
                 SpeechRecognizerProperties.DEFAULT_SPEED_VS_ACCURACY),
                 new Float(props.getSpeedvsaccuracy()));
@@ -132,20 +144,22 @@ public final class TestVoiceXmlInterpreterContext {
     }
 
     /**
-     * Test method for {@link VoiceXmlInterpreterContext#getSpeechRecognizerProperties()}.
+     * Test method for
+     * {@link VoiceXmlInterpreterContext#getSpeechRecognizerProperties()}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      * @since 0.7.5
      */
     @Test
-    public void testGetSpeechRecognizerPropertiesSetProps()
-        throws Exception, JVoiceXMLEvent {
+    public void testGetSpeechRecognizerPropertiesSetProps() throws Exception,
+            JVoiceXMLEvent {
         context.setProperty(
                 SpeechRecognizerProperties.PROPERTY_CONFIDENCE_LEVEL, "0.2");
-        context.setProperty(
-                SpeechRecognizerProperties.PROPERTY_SENSITIVITY, "0.3");
+        context.setProperty(SpeechRecognizerProperties.PROPERTY_SENSITIVITY,
+                "0.3");
         context.setProperty(
                 SpeechRecognizerProperties.PROPERTY_SPEED_VS_ACCURACY, "0.4");
         context.setProperty(
@@ -154,12 +168,11 @@ public final class TestVoiceXmlInterpreterContext {
                 SpeechRecognizerProperties.PROPERTY_INCOMPLETE_TIMEOUT, "45s");
         context.setProperty(
                 SpeechRecognizerProperties.PROPERTY_MAX_SPEECH_TIMEOUT, "10ms");
-        final SpeechRecognizerProperties props =
-            context.getSpeechRecognizerProperties(null);
+        final SpeechRecognizerProperties props = context
+                .getSpeechRecognizerProperties(null);
         Assert.assertEquals(new Float(0.2f),
                 new Float(props.getConfidencelevel()));
-        Assert.assertEquals(new Float(0.3f),
-                new Float(props.getSensitivity()));
+        Assert.assertEquals(new Float(0.3f), new Float(props.getSensitivity()));
         Assert.assertEquals(new Float(0.4f),
                 new Float(props.getSpeedvsaccuracy()));
         Assert.assertEquals(800, props.getCompletetimeoutAsMsec());

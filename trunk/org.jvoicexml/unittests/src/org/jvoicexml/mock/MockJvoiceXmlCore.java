@@ -30,7 +30,6 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Profile;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
@@ -43,6 +42,9 @@ import org.jvoicexml.interpreter.grammar.GrammarIdentifierCentral;
 import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
+import org.mockito.Mockito;
 
 /**
  * This class provides a dummy implementation for {@link JVoiceXmlCore}.
@@ -77,10 +79,8 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
      */
     public GrammarProcessor getGrammarProcessor() {
         if (grammarProcessor == null) {
-            final JVoiceXmlGrammarProcessor processor =
-                new JVoiceXmlGrammarProcessor();
-            final GrammarIdentifierCentral identifier =
-                new GrammarIdentifierCentral();
+            final JVoiceXmlGrammarProcessor processor = new JVoiceXmlGrammarProcessor();
+            final GrammarIdentifierCentral identifier = new GrammarIdentifierCentral();
             identifier.addIdentifier(new SrgsXmlGrammarIdentifier());
             processor.setGrammaridentifier(identifier);
             grammarProcessor = processor;
@@ -93,10 +93,14 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
      * {@inheritDoc}
      */
     public Session createSession(final ConnectionInformation info)
-        throws ErrorEvent {
-        final ImplementationPlatform platform =
-                new MockImplementationPlatform();
-        final Profile profile = new MockProfile();
+            throws ErrorEvent {
+        final ImplementationPlatform platform = new MockImplementationPlatform();
+        final Profile profile = Mockito.mock(Profile.class);
+        final SsmlParsingStrategyFactory factory = Mockito
+                .mock(SsmlParsingStrategyFactory.class);
+        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
+                factory);
+
         return new JVoiceXmlSession(platform, this, info, profile);
     }
 
