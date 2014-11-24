@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -49,6 +49,7 @@ import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedElementError;
+import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -194,7 +195,7 @@ public final class JVoiceXmlDocumentServer
         final URI uri = descriptor.getUri();
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final RequestMethod method = descriptor.getMethod();
-        final Map<String, Object> parameters = descriptor.getParameters();
+        final Collection<KeyValuePair> parameters = descriptor.getParameters();
         final FetchAttributes attrs = descriptor.getAttributes();
         final FetchAttributes mergedAttrs = mergeFetchAttributes(attrs);
         final long timeout = mergedAttrs.getFetchTimeout();
@@ -355,7 +356,7 @@ public final class JVoiceXmlDocumentServer
 
         // Determine the relevant strategy
         final RequestMethod method = descriptor.getMethod();
-        final Map<String, Object> parameters = descriptor.getParameters();
+        final Collection<KeyValuePair> parameters = descriptor.getParameters();
         final FetchAttributes attrs = descriptor.getAttributes();
         final FetchAttributes mergedAttrs = mergeFetchAttributes(attrs);
         final long timeout = mergedAttrs.getFetchTimeout();

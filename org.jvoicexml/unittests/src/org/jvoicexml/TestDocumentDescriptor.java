@@ -30,6 +30,7 @@ import java.net.URI;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
@@ -114,20 +115,18 @@ public final class TestDocumentDescriptor {
             new DocumentDescriptor(uri);
         final String name1 = "name1";
         final String value1 = "value1";
-        Assert.assertNull("exected to get no value",
-                descriptor.getParameters().get(name1));
-        descriptor.addParameter(name1, value1);
-        Assert.assertEquals(value1, descriptor.getParameters().get(name1));
+        final KeyValuePair pair1 = new KeyValuePair(name1, value1);
+        Assert.assertFalse("exected to get no value",
+                descriptor.getParameters().contains(pair1));
+        descriptor.addParameter(pair1);
+        Assert.assertTrue(descriptor.getParameters().contains(pair1));
         final String name2 = "name2";
         final String value2 = "value2";
-        Assert.assertNull("exected to get no value",
-                descriptor.getParameters().get(name2));
-        descriptor.addParameter(name2, value2);
-        Assert.assertEquals(value1, descriptor.getParameters().get(name1));
-        Assert.assertEquals(value2, descriptor.getParameters().get(name2));
-        final String value3 = "value3";
-        descriptor.addParameter(name1, value3);
-        Assert.assertEquals(value3, descriptor.getParameters().get(name1));
-        Assert.assertEquals(value2, descriptor.getParameters().get(name2));
+        final KeyValuePair pair2 = new KeyValuePair(name2, value2);
+        Assert.assertFalse("exected to get no value",
+                descriptor.getParameters().contains(pair1));
+        descriptor.addParameter(pair2);
+        Assert.assertTrue(descriptor.getParameters().contains(pair1));
+        Assert.assertTrue(descriptor.getParameters().contains(pair2));
     }
 }

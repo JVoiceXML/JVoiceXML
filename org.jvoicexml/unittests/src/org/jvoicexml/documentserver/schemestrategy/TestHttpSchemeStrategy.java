@@ -26,7 +26,7 @@
 package org.jvoicexml.documentserver.schemestrategy;
 
 import java.net.URI;
-import java.util.Map;
+import java.util.Collection;
 
 import org.junit.Test;
 import org.jvoicexml.ImplementationPlatform;
@@ -34,6 +34,7 @@ import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
+import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.RequestMethod;
@@ -64,9 +65,11 @@ public final class TestHttpSchemeStrategy {
                 null);
         final HttpSchemeStrategy strategy = new HttpSchemeStrategy();
         final URI uri = new URI("http://localhost:8080?session=id");
-        final Map<String, Object> parameters = new java.util.HashMap<String, Object>();
-        parameters.put("firstName", "Horst");
-        parameters.put("lastName", "Buchholz");
+        final Collection<KeyValuePair> parameters = new java.util.ArrayList<KeyValuePair>();
+        final KeyValuePair pair1 = new KeyValuePair("firstName", "Horst");
+        parameters.add(pair1);
+        final KeyValuePair pair2 = new KeyValuePair("lastName", "Buchholz");
+        parameters.add(pair2);
         final String sessionId = session.getSessionID();
         strategy.getInputStream(sessionId, uri, RequestMethod.GET, 0,
                 parameters);
