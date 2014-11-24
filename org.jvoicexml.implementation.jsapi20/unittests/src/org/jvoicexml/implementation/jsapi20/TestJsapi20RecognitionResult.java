@@ -15,15 +15,15 @@ import javax.speech.recognition.RuleToken;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.jsapi2.recognition.BaseResult;
 import org.jvoicexml.jsapi2.recognition.sphinx4.SphinxEngineListFactory;
-import org.mozilla.javascript.ScriptableObject;
+import org.mockito.Mockito;
 
 public class TestJsapi20RecognitionResult {
 
     @Test
-    public void testGetSemanticInterpretation() throws Exception {
+    public void testGetSemanticInterpretation() throws Exception, SemanticError {
         EngineManager.registerEngineListFactory(SphinxEngineListFactory.class
                 .getName());
         Recognizer recognizer = (Recognizer) EngineManager
@@ -41,7 +41,8 @@ public class TestJsapi20RecognitionResult {
         final BaseResult result = new BaseResult(grammar, "test");
         final Jsapi20RecognitionResult res = new Jsapi20RecognitionResult(
                 result);
-        Assert.assertEquals("T", res.getSemanticInterpretation());
+        final DataModel model = Mockito.mock(DataModel.class);
+        Assert.assertEquals("T", res.getSemanticInterpretation(model));
     }
 
     @Test
@@ -68,9 +69,11 @@ public class TestJsapi20RecognitionResult {
         final BaseResult result = new BaseResult(grammar, "test");
         final Jsapi20RecognitionResult res = new Jsapi20RecognitionResult(
                 result);
-        final Object interpretation = res.getSemanticInterpretation();
-        Assert.assertEquals("{\"order\":{\"topping\":\"salami\",\"size\":\"medium\"},\"date\":\"now\"}",
-                ScriptingEngine.toJSON((ScriptableObject) interpretation));
+        final DataModel model = Mockito.mock(DataModel.class);
+        res.getSemanticInterpretation(model);
+        Mockito.verify(model).updateVariable("test", 5);
+//        Assert.assertEquals("{\"order\":{\"topping\":\"salami\",\"size\":\"medium\"},\"date\":\"now\"}",
+//                ScriptingEngine.toJSON((ScriptableObject) interpretation));
     }
 
 }
