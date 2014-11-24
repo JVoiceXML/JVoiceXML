@@ -29,15 +29,15 @@ package org.jvoicexml.documentserver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Map;
+import java.util.Collection;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedElementError;
+import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
- * Strategy to get a VoiceXML document from a repository for a
- * given URI scheme.
+ * Strategy to get a VoiceXML document from a repository for a given URI scheme.
  *
  * <p>
  * A <code>SchemeStrategy</code> is responsible for only one scheme, e.g.
@@ -46,8 +46,8 @@ import org.jvoicexml.xml.vxml.RequestMethod;
  * </p>
  *
  * <p>
- * A <code>SchemeStrategy</code> may store session relevant data to identify
- * a concrete established session with a server.
+ * A <code>SchemeStrategy</code> may store session relevant data to identify a
+ * concrete established session with a server.
  * </p>
  *
  * @author Dirk Schnelle
@@ -57,6 +57,7 @@ import org.jvoicexml.xml.vxml.RequestMethod;
 public interface SchemeStrategy {
     /**
      * Get the scheme that is handled by this strategy.
+     * 
      * @return Scheme that is handled by this strategy.
      */
     String getScheme();
@@ -64,37 +65,40 @@ public interface SchemeStrategy {
     /**
      * Opens the external URI and returns an <code>InputStream</code> to the
      * referenced object.
+     * 
      * @param sessionId
-     *        the Id of the current JVoiceXML session.
+     *            the Id of the current JVoiceXML session.
      * @param uri
-     *        the URI of the object to open.
+     *            the URI of the object to open.
      * @param method
-     *        type of the request method
+     *            type of the request method
      * @param timeout
-     *        fetch timeout in msec to wait for the content to be returned
-     *        before throwing an <code>error.badfetch</code> event.
+     *            fetch timeout in msec to wait for the content to be returned
+     *            before throwing an <code>error.badfetch</code> event.
      * @param parameters
-     *        request parameters
+     *            request parameters
      * @return <code>InputStream</code> to the referenced object.
      * @exception BadFetchError
-     *         error opening the document or unsupported method type
+     *                error opening the document or unsupported method type
      * @exception UnsupportedElementError
-     *         the requested element is not supported
+     *                the requested element is not supported
      * @exception IOException
-     *         error creating the input stream
+     *                error creating the input stream
      *
      * @since 0.3
      */
     InputStream getInputStream(final String sessionId, final URI uri,
             final RequestMethod method, final long timeout,
-            final Map<String, Object> parameters)
-            throws BadFetchError, UnsupportedElementError, IOException;
+            final Collection<KeyValuePair> parameters) throws BadFetchError,
+            UnsupportedElementError, IOException;
 
     /**
-     * Notification that the given session is closed. Now the strategy
-     * may free any resources related to the given session, e.g. a session with
-     * a web server.
-     * @param sessionId the Id of the current JVoiceXML session.
+     * Notification that the given session is closed. Now the strategy may free
+     * any resources related to the given session, e.g. a session with a web
+     * server.
+     * 
+     * @param sessionId
+     *            the Id of the current JVoiceXML session.
      * @since 0.7
      */
     void sessionClosed(final String sessionId);

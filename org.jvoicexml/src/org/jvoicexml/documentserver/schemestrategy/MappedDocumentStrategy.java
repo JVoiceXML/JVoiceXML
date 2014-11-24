@@ -30,10 +30,11 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
+import java.util.Collection;
 
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
@@ -67,7 +68,7 @@ public final class MappedDocumentStrategy
     @Override
     public InputStream getInputStream(final String sessionId, final URI uri,
             final RequestMethod method, final long timeout,
-            final Map<String, Object> parameters)
+            final Collection<KeyValuePair> parameters)
             throws BadFetchError {
         if (uri == null) {
             throw new BadFetchError("Unable to retrieve a document for null!");

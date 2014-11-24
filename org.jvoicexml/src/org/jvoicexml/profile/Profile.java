@@ -52,7 +52,9 @@ public interface Profile {
      * Note, that profiles are shared among all sessions and that any properties
      * may be overwritten by sessions that are created in parallel.
      * </p>
-     * @param context the context for the created session.
+     * 
+     * @param context
+     *            the context for the created session.
      */
     void initialize(final VoiceXmlInterpreterContext context);
 
@@ -62,7 +64,9 @@ public interface Profile {
      * Note, that profiles are shared among all sessions and that any properties
      * may be overwritten by sessions that are created in parallel.
      * </p>
-     * @param context the context for the closed session.
+     * 
+     * @param context
+     *            the context for the closed session.
      */
     void terminate(final VoiceXmlInterpreterContext context);
 
@@ -80,9 +84,10 @@ public interface Profile {
      * @return the tag strategy factory.
      */
     TagStrategyFactory getTagStrategyFactory();
-    
+
     /**
      * Retrieves the parsing strategy to parse nodes into SSML document.
+     * 
      * @return
      */
     SsmlParsingStrategyFactory getSsmlParsingStrategyFactory();

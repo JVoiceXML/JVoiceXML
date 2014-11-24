@@ -33,7 +33,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -55,11 +54,11 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.vxml.RequestMethod;
-import org.mozilla.javascript.ScriptableObject;
 
 /**
- *{@link SchemeStrategy} to read VoiceXML document via the HTTP protocol.
+ * {@link SchemeStrategy} to read VoiceXML document via the HTTP protocol.
  *
  * <p>
  * This implementation uses the proxy settings that are delivered via the
@@ -70,11 +69,10 @@ import org.mozilla.javascript.ScriptableObject;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class HttpSchemeStrategy
-        implements SchemeStrategy {
+public final class HttpSchemeStrategy implements SchemeStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(HttpSchemeStrategy.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(HttpSchemeStrategy.class);
 
     /** Scheme for which this scheme strategy is responsible. */
     public static final String HTTP_SCHEME_NAME = "http";
@@ -83,8 +81,8 @@ public final class HttpSchemeStrategy
     private static final SessionStorage<HttpClient> SESSION_STORAGE;
 
     /** Encoding that should be used to encode/decode URLs. */
-    private static String encoding =
-        System.getProperty("jvoicexml.xml.encoding", "UTF-8");
+    private static String encoding = System.getProperty(
+            "jvoicexml.xml.encoding", "UTF-8");
 
     /** Scheme name for this strategy. */
     private String scheme;
@@ -96,8 +94,7 @@ public final class HttpSchemeStrategy
     private ScriptableObjectSerializer serializer;
 
     static {
-        final SessionIdentifierFactory<HttpClient> factory =
-            new HttpClientSessionIdentifierFactory();
+        final SessionIdentifierFactory<HttpClient> factory = new HttpClientSessionIdentifierFactory();
         SESSION_STORAGE = new SessionStorage<HttpClient>(factory);
     }
 
@@ -111,7 +108,9 @@ public final class HttpSchemeStrategy
 
     /**
      * Sets the scheme for this strategy.
-     * @param value the new scheme
+     * 
+     * @param value
+     *            the new scheme
      * @since 0.7.4
      */
     public void setScheme(final String value) {
@@ -128,7 +127,9 @@ public final class HttpSchemeStrategy
 
     /**
      * Sets the default fetch timeout.
-     * @param timeout the default fetch timeout.
+     * 
+     * @param timeout
+     *            the default fetch timeout.
      * @since 0.7
      */
     public void setFetchTimeout(final int timeout) {
@@ -140,7 +141,9 @@ public final class HttpSchemeStrategy
 
     /**
      * Sets the serializer.
-     * @param value the serializer to set
+     * 
+     * @param value
+     *            the serializer to set
      */
     public void setSerializer(final ScriptableObjectSerializer value) {
         if (LOGGER.isDebugEnabled() && (value != null)) {
@@ -155,19 +158,13 @@ public final class HttpSchemeStrategy
     @Override
     public InputStream getInputStream(final String sessionId, final URI uri,
             final RequestMethod method, final long timeout,
-            final Map<String, Object> parameters)
-            throws BadFetchError {
-        final HttpClient client =
-                SESSION_STORAGE.getSessionIdentifier(sessionId);
+            final Collection<KeyValuePair> parameters) throws BadFetchError {
+        final HttpClient client = SESSION_STORAGE
+                .getSessionIdentifier(sessionId);
         final URI fullUri;
         try {
-            final URI fragmentLessUri = new URI(
-                    uri.getScheme(),
-                    uri.getAuthority(),
-                    uri.getPath(),
-                    uri.getQuery(),
-                    null
-                    );
+            final URI fragmentLessUri = new URI(uri.getScheme(),
+                    uri.getAuthority(), uri.getPath(), uri.getQuery(), null);
             fullUri = addParameters(parameters, fragmentLessUri);
         } catch (URISyntaxException e) {
             throw new BadFetchError(e.getMessage(), e);
@@ -205,12 +202,14 @@ public final class HttpSchemeStrategy
 
     /**
      * Sets the timeout for the current connection.
-     * @param timeout timeout as it is declared in the document.
-     * @param params connection parameters.
+     * 
+     * @param timeout
+     *            timeout as it is declared in the document.
+     * @param params
+     *            connection parameters.
      * @since 0.7
      */
-    private void setTimeout(final long timeout,
-            final HttpParams params) {
+    private void setTimeout(final long timeout, final HttpParams params) {
         if (timeout != 0) {
             params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,
                     new Integer((int) timeout));
@@ -219,53 +218,45 @@ public final class HttpSchemeStrategy
             }
         } else if (defaultFetchTimeout != 0) {
             params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,
-                   defaultFetchTimeout);
+                    defaultFetchTimeout);
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("timeout set to default '"
-                        + defaultFetchTimeout + "'");
+                LOGGER.debug("timeout set to default '" + defaultFetchTimeout
+                        + "'");
             }
         }
     }
 
     /**
      * Adds the parameters to the HTTP method.
-     * @param parameters parameters to add
-     * @param uri the given URI
+     * 
+     * @param parameters
+     *            parameters to add
+     * @param uri
+     *            the given URI
      * @return URI with the given parameters
      * @throws URISyntaxException
-     *         error creating a URI 
+     *             error creating a URI
      * @throws SemanticError
-     *         error evaluating a parameter
+     *             error evaluating a parameter
      */
-    private URI addParameters(final Map<String, Object> parameters,
+    private URI addParameters(final Collection<KeyValuePair> parameters,
             final URI uri) throws URISyntaxException, SemanticError {
         if ((parameters == null) || parameters.isEmpty()) {
             return uri;
         }
-        final ArrayList<NameValuePair> queryParameters =
-            new ArrayList<NameValuePair>();
-        final Collection<String> parameterNames = parameters.keySet();
-        for (String name : parameterNames) {
-            final Object value = parameters.get(name);
-            if (value instanceof ScriptableObject) {
-                if (serializer == null) {
-                    throw new SemanticError(
-                            "Submission of compund objects is not supported!");
-                }
-                final ScriptableObject scriptable =
-                    (ScriptableObject) value;
-                final Collection<NameValuePair> pairs =
-                    serializer.serialize(name, scriptable);
-                queryParameters.addAll(pairs);
-            } else if (!(value instanceof File)) {
+        final ArrayList<NameValuePair> queryParameters = new ArrayList<NameValuePair>();
+        for (KeyValuePair current : parameters) {
+            final Object value = current.getValue();
+            if (!(value instanceof File)) {
+                final String name = current.getKey();
                 final NameValuePair pair = new BasicNameValuePair(name,
                         value.toString());
                 queryParameters.add(pair);
             }
         }
 
-        final Collection<NameValuePair> parameterList =
-            URLEncodedUtils.parse(uri, encoding);
+        final Collection<NameValuePair> parameterList = URLEncodedUtils.parse(
+                uri, encoding);
         queryParameters.addAll(parameterList);
 
         final String query = URLEncodedUtils.format(queryParameters, encoding);
@@ -276,19 +267,21 @@ public final class HttpSchemeStrategy
 
     /**
      * Attach the files given in the parameters.
-     * @param request the current request
-     * @param parameters the parameters
+     * 
+     * @param request
+     *            the current request
+     * @param parameters
+     *            the parameters
      * @since 0.7.3
      */
     private void attachFiles(final HttpUriRequest request,
-            final Map<String, Object> parameters) {
+            final Collection<KeyValuePair> parameters) {
         if (!(request instanceof HttpPost)) {
             return;
         }
         final HttpPost post = (HttpPost) request;
-        final Collection<String> parameterNames = parameters.keySet();
-        for (String name : parameterNames) {
-            final Object value = parameters.get(name);
+        for (KeyValuePair current : parameters) {
+            final Object value = current.getValue();
             if (value instanceof File) {
                 final File file = (File) value;
                 final FileEntity fileEntity = new FileEntity(file,
