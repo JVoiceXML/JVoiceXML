@@ -80,7 +80,6 @@ public interface DataModel {
      * @param object
      *            the value to convert
      * @return string representation of {@code object}
-     * @since 0.7.7
      */
     String toString(final Object object);
 
@@ -133,10 +132,14 @@ public interface DataModel {
     int createVariable(final String variableName);
 
     /**
-     * Creates a variable with the default value specified by the underlying
-     * datamodel retrieved via {@link #getUndefinedValue()} at the topmost scope
-     * on the scope stack.
+     * Creates a variable as a nested property in the specified variable
+     * container with the default value specified by the underlying datamodel
+     * retrieved via {@link #getUndefinedValue()} at the topmost scope on the
+     * scope stack.
      * 
+     * @param variable
+     *            the container (previously obtained from the datamodel) where
+     *            to create the variable
      * @param variableName
      *            name of the variable to create
      * @return {@code 0} upon success, failure status if a variable of the same
@@ -158,10 +161,13 @@ public interface DataModel {
     int createVariable(final String variableName, final Object value);
 
     /**
-     * Creates a variable with the given initial value on top most scope on the
-     * scope stack.
+     * Creates a variable as a nested property in the given container with the
+     * given initial value on top most scope on the scope stack.
      * 
      * @param variable
+     *            the container (previously obtained from the datamodel) where
+     *            to create the variable
+     * @param variableName
      *            name of the variable to create
      * @param value
      *            initial value of the variable
@@ -194,8 +200,8 @@ public interface DataModel {
      * 
      * @param arrayName
      *            name of the array to create
-     * @param value
-     *            initial value of the variable
+     * @param dimension
+     *            initial dimension of the array
      * @return {@code 0} upon success, failure status if a variable of the same
      *         name already exists
      */
@@ -207,10 +213,10 @@ public interface DataModel {
      * 
      * @param arrayName
      *            name of the array to create
-     * @param value
-     *            initial value of the variable, maybe {@code null}
+     * @param dimeones
+     *            initial dimension of the array
      * @param scope
-     *            scope, where to create the variable
+     *            scope, where to create the array
      * @return {@code 0} upon success, failure status if a variable of the same
      *         name already exists in the specified scope
      */
@@ -223,9 +229,9 @@ public interface DataModel {
      * 
      * @param arrayName
      *            name of the array to create
-     * @param value
-     *            initial value of the variable
-     * @return {@code 0} upon success, failure status if the arry could not be
+     * @param dimension
+     *            new dimension of the array after resizing
+     * @return {@code 0} upon success, failure status if the array could not be
      *         found
      */
     int resizeArray(final String arrayName, final int dimension);
@@ -236,8 +242,8 @@ public interface DataModel {
      * 
      * @param arrayName
      *            name of the array to create
-     * @param value
-     *            initial value of the variable, maybe {@code null}
+     * @param dimension
+     *            new dimension of the array after resizing
      * @param scope
      *            scope, where to create the variable
      * @return {@code 0} upon success, failure status if the array could not be
@@ -259,7 +265,7 @@ public interface DataModel {
      * Checks if the given variable exists at the given scope.
      * 
      * @param variableName
-     *            name of the variabl to check
+     *            name of the variable to check
      * @param scope
      *            the scope where to check for the variable
      * @return {@code true} if the variable exists
@@ -433,7 +439,8 @@ public interface DataModel {
      *            the expression to evaluate
      * @return evaluated value
      * @throws SemanticError
-     *             if the specified scope can not be found
+     *             if the specified scope can not be found or the expression
+     *             could not be evaluated
      */
     <T extends Object> T evaluateExpression(final String expr,
             final Class<T> type) throws SemanticError;
@@ -448,16 +455,16 @@ public interface DataModel {
      *            scope, where to evaluate the expression
      * @return evaluated value
      * @throws SemanticError
-     *             if the specified scope can not be found
+     *             if the specified scope can not be found or the expression
+     *             could not be evaluated
      */
     <T extends Object> T evaluateExpression(final String expr,
             final Scope scope, final Class<T> type) throws SemanticError;
 
-
     /**
-     *  * Serializer for objects when submitting. 
+     * Retrieves the Serializer for objects when submitting.
+     * 
      * @return serializer to use
-     * @since 0.7.7
      */
     DataModelObjectSerializer getSerializer();
 }
