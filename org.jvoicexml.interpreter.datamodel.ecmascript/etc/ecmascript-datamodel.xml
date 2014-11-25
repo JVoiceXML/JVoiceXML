@@ -18,8 +18,8 @@
                 You may define one of the following serializers or remove this property to 
                 get an exception when trying to submit a compound object. -->
             <bean
-                class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer" />
-            <!-- bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.JSONSerializer"/ -->
+                class="org.jvoicexml.interpreter.datamodel.ecmascript.serializer.KeyValueSerializer" />
+            <!-- bean class="org.jvoicexml.interpreter.datamodel.ecmascript.serializer.JSONSerializer"/ -->
         </property>
     </beans:bean>
 </datamodel>
