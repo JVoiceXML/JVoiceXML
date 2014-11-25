@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,12 +30,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.profile.TagStrategy;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Block;
-import org.jvoicexml.xml.vxml.Script;
-import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * This class provides a test case for the {@link AssignStrategy}.
@@ -47,153 +46,106 @@ import org.jvoicexml.xml.vxml.Vxml;
 public final class TestAssignStrategy extends TagStrategyTestBase {
     /**
      * Test method for {@link AssignStrategy#newInstance()}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testNewInstance() throws Exception {
         final AssignStrategy strategy = new AssignStrategy();
-        AssignStrategy clonedStrategy1 = (AssignStrategy)
-            strategy.newInstance();
+        final TagStrategy strategy2 = strategy.newInstance();
+        Assert.assertTrue(strategy2 instanceof AssignStrategy);
+    }
+
+    /**
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
+     * @exception Exception
+     *                Test failed.
+     * @throws SemanticError
+     *             test failed
+     */
+    @Test
+    public void testExecute() throws Exception, SemanticError {
+        final AssignStrategy strategy = new AssignStrategy();
+        AssignStrategy clonedStrategy1 = (AssignStrategy) strategy
+                .newInstance();
         final String var = "test";
         final Block block = createBlock();
         final Assign assign = block.appendChild(Assign.class);
         assign.setName(var);
         assign.setExpr("'assigned'");
 
-        getScriptingEngine().setVariable(var, "");
-
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression("'assigned'", Object.class))
+                .thenReturn("'assigned'");
+        Mockito.when(model.toString("'assigned'")).thenReturn("'assigned'");
         try {
             executeTagStrategy(assign, clonedStrategy1);
         } catch (JVoiceXMLEvent e) {
             Assert.fail(e.getMessage());
         }
 
-        Assert.assertEquals("assigned", getScriptingEngine().getVariable(var));
-
-        AssignStrategy clonedStrategy2 = (AssignStrategy)
-        strategy.newInstance();
-        Assert.assertEquals("assigned", clonedStrategy1.getAttribute(
-                Assign.ATTRIBUTE_EXPR));
-        Assert.assertNull(clonedStrategy2.getAttribute(Assign.ATTRIBUTE_EXPR));
+        Mockito.verify(model).evaluateExpression("'assigned'", Object.class);
+        Mockito.verify(model).updateVariable(var, "'assigned'");
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .<br/>
+     * Test assignment of null
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
+     * @throws SemanticError
+     *             test failed
      */
     @Test
-    public void testExecute() throws Exception {
-        final String var = "test";
-        final Block block = createBlock();
-        final Assign assign = block.appendChild(Assign.class);
-        assign.setName(var);
-        assign.setExpr("'assigned'");
-
-        getScriptingEngine().setVariable(var, "");
-
-        AssignStrategy strategy = new AssignStrategy();
-        try {
-            executeTagStrategy(assign, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
-
-        Assert.assertEquals("assigned", getScriptingEngine().getVariable(var));
-    }
-
-    /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
-     * @exception Exception
-     *            Test failed.
-     */
-    @Test
-    public void testExecuteNumber() throws Exception {
-        final String var = "test";
-        final Block block = createBlock();
-        final Assign assign = block.appendChild(Assign.class);
-        assign.setName(var);
-        assign.setExpr("7");
-
-        getScriptingEngine().setVariable(var, "");
-
-        AssignStrategy strategy = new AssignStrategy();
-        try {
-            executeTagStrategy(assign, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
-
-        Assert.assertEquals(7, getScriptingEngine().getVariable(var));
-    }
-    
-    /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.<br/>
-     * Test assignment of ECMAScript's "undefined"
-     * @exception Exception
-     *            Test failed.
-     */
-    @Test
-    public void testExecuteECMAScriptUndefined() throws Exception {
+    public void testExecuteNull() throws Exception, SemanticError {
         final String var = "test";
         final Block block = createBlock();
         final Assign assign = block.appendChild(Assign.class);
         assign.setName(var);
         assign.setExpr("null");
-        
-        getScriptingEngine().setVariable(var, "");
-        
+
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression("null", Object.class))
+                .thenReturn(null);
         AssignStrategy strategy = new AssignStrategy();
         try {
             executeTagStrategy(assign, strategy);
         } catch (JVoiceXMLEvent e) {
             Assert.fail(e.getMessage());
         }
-
-        
-        Assert.assertNull(getScriptingEngine().getVariable(var));
+        Mockito.verify(model).evaluateExpression("null", Object.class);
+        Mockito.verify(model).updateVariable(var, null);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
-     * @exception JVoiceXMLEvent
-     *            test failed
+     *                Test failed.
+     * @throws SemanticError
+     *             test failed
      */
     @Test
-    public void testExecuteCompoundObject() throws Exception, JVoiceXMLEvent {
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.eval("var A=new Object();");
-        final String var = "A.B";
-        final Block block = createBlock();
-        final Assign assign = block.appendChild(Assign.class);
-        assign.setName(var);
-        assign.setExpr("'assigned'");
-
-        AssignStrategy strategy = new AssignStrategy();
-        try {
-            executeTagStrategy(assign, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
-        Assert.assertEquals("assigned", scripting.eval(var + ";"));
-    }
-
-    /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
-     * @exception Exception
-     *            Test failed.
-     */
-    @Test
-    public void testExecuteNotCreated() throws Exception {
+    public void testExecuteUndefined() throws Exception, SemanticError {
         final String var = "test";
         final Block block = createBlock();
         final Assign assign = block.appendChild(Assign.class);
         assign.setName(var);
         assign.setExpr("'assigned'");
 
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression("'assigned'", Object.class))
+                .thenThrow(new SemanticError("mock not created"));
+        Mockito.when(model.toString("'assigned'")).thenReturn("'assigned'");
         AssignStrategy strategy = new AssignStrategy();
         SemanticError error = null;
         try {
@@ -205,120 +157,5 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
         }
 
         Assert.assertNotNull("A semantic error should have been thrown", error);
-    }
-
-    /**
-     * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.LogStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
-     * @exception Exception
-     *            test failed
-     * @exception JVoiceXMLEvent
-     *            test failed
-     */
-    @Test
-    public void testExecuteExprFunctionCall()
-            throws Exception, JVoiceXMLEvent {
-        final String scriptFactorial = "function factorial(n)"
-                + "{"
-                + "return (n <= 1)? 1 : n * factorial(n-1);"
-                + "}";
-        final VoiceXmlDocument doc = createDocument();
-        final Vxml vxml = doc.getVxml();
-        final Script script = vxml.appendChild(Script.class);
-        script.addCdata(scriptFactorial);
-
-        final Block block = createBlock();
-        final Assign assign = block.appendChild(Assign.class);
-        final String expr = "factorial(6)";
-        assign.setName("test");
-        assign.setExpr(expr);
-
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.eval("var test;");
-        AssignStrategy strategy = new AssignStrategy();
-        try {
-            executeTagStrategy(script, new ScriptStrategy());
-            executeTagStrategy(assign, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
-        Assert.assertEquals(720, scripting.getVariable("test"));
-    }
-
-    /**
-     * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.LogStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
-     * @exception Exception
-     *            test failed
-     * @exception JVoiceXMLEvent
-     *            test failed
-     */
-    @Test
-    public void testExecuteExprFunctionCallString()
-            throws Exception, JVoiceXMLEvent {
-        final String scriptFactorial = "function concat(arg)"
-                + "{"
-                + "return arg + arg;"
-                + "}";
-        final VoiceXmlDocument doc = createDocument();
-        final Vxml vxml = doc.getVxml();
-        final Script script = vxml.appendChild(Script.class);
-        script.addCdata(scriptFactorial);
-
-        final Block block = createBlock();
-        final Assign assign = block.appendChild(Assign.class);
-        final String expr = "concat('Hello')";
-        assign.setName("test");
-        assign.setExpr(expr);
-
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.eval("var test;");
-        AssignStrategy strategy = new AssignStrategy();
-        try {
-            executeTagStrategy(script, new ScriptStrategy());
-            executeTagStrategy(assign, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
-        Assert.assertEquals("HelloHello", scripting.getVariable("test"));
-    }
-
-    /**
-     * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.LogStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
-     * @exception Exception
-     *            test failed
-     * @exception JVoiceXMLEvent
-     *            test failed
-     */
-    @Test
-    public void testExecuteExprFunctionCallPreceedingLiteral()
-            throws Exception, JVoiceXMLEvent {
-        final String scriptFactorial = "function factorial(n)"
-                + "{"
-                + "return (n <= 1)? 1 : n * factorial(n-1);"
-                + "}";
-        final VoiceXmlDocument doc = createDocument();
-        final Vxml vxml = doc.getVxml();
-        final Script script = vxml.appendChild(Script.class);
-        script.addCdata(scriptFactorial);
-
-        final Block block = createBlock();
-        final Assign assign = block.appendChild(Assign.class);
-        final String expr = "'6 factorial is ' + factorial(6)";
-        assign.setName("test");
-        assign.setExpr(expr);
-
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.eval("var test;");
-        AssignStrategy strategy = new AssignStrategy();
-        try {
-            executeTagStrategy(script, new ScriptStrategy());
-            executeTagStrategy(assign, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
-        final String message = "6 factorial is 720";
-        Assert.assertEquals(message, scripting.getVariable("test"));
     }
 }
