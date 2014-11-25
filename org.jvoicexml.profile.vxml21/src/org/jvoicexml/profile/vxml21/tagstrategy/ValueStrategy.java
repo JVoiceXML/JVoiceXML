@@ -67,7 +67,7 @@ import org.jvoicexml.xml.vxml.Value;
  * @author Dirk Schnelle-Walka
  * @version $Revision: 4080 $
  */
-final class ValueStrategy extends AbstractTagStrategy
+public final class ValueStrategy extends AbstractTagStrategy
         implements SsmlParsingStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(ValueStrategy.class);
@@ -84,7 +84,7 @@ final class ValueStrategy extends AbstractTagStrategy
     /**
      * Constructs a new object.
      */
-    ValueStrategy() {
+    public ValueStrategy() {
     }
 
     /**

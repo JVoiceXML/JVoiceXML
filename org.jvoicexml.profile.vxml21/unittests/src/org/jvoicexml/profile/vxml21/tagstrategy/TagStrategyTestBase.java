@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,29 +30,25 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
-import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.MockProfile;
-import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.TagStrategy;
+import org.jvoicexml.profile.TagStrategyFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * Base class for tests of {@link org.jvoicexml.profile.TagStrategy}.
@@ -77,8 +73,8 @@ public abstract class TagStrategyTestBase {
     /** The profile. */
     private Profile profile;
 
-    /** The scripting engine. */
-    private ScriptingEngine scripting;
+    /** The employed data model */
+    private DataModel model;
 
     /**
      * Constructs a new object.
@@ -88,15 +84,17 @@ public abstract class TagStrategyTestBase {
     }
 
     /**
-     * Retrieves the scripting engine.
-     * @return the scripting engine.
+     * Retrieves the data model
+     * 
+     * @return the data mdoel
      */
-    protected final ScriptingEngine getScriptingEngine() {
-        return scripting;
+    protected final DataModel getDataModel() {
+        return model;
     }
 
     /**
      * Retrieves the interpreter.
+     * 
      * @return the interpreter.
      */
     protected final VoiceXmlInterpreter getInterpreter() {
@@ -105,6 +103,7 @@ public abstract class TagStrategyTestBase {
 
     /**
      * Retrieves the {@link VoiceXmlInterpreterContext}.
+     * 
      * @return the voice XML interpreter context.
      */
     protected final VoiceXmlInterpreterContext getContext() {
@@ -113,6 +112,7 @@ public abstract class TagStrategyTestBase {
 
     /**
      * Retrieves the {@link ImplementationPlatform}.
+     * 
      * @return the implementation platform
      */
     protected final ImplementationPlatform getImplementationPlatform() {
@@ -125,19 +125,22 @@ public abstract class TagStrategyTestBase {
     @Before
     public final void baseSetUp() throws Exception {
         platform = new MockImplementationPlatform();
-        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        profile = new MockProfile();
-        final JVoiceXmlSession session =
-            new JVoiceXmlSession(platform, jvxml, null, profile);
-        final Configuration configuration = new MockConfiguration();
-        context = new VoiceXmlInterpreterContext(session, configuration);
+        profile = Mockito.mock(Profile.class);
+        final TagStrategyFactory taginitfactory = Mockito
+                .mock(TagStrategyFactory.class);
+        Mockito.when(profile.getInitializationTagStrategyFactory()).thenReturn(
+                taginitfactory);
+        context = Mockito.mock(VoiceXmlInterpreterContext.class);
         interpreter = new VoiceXmlInterpreter(context);
-        scripting = context.getScriptingEngine();
+        model = Mockito.mock(DataModel.class);
+        Mockito.when(context.getDataModel()).thenReturn(model);
     }
 
     /**
      * Sets the output listener to add once the system output is obtained.
-     * @param listener the listener.
+     * 
+     * @param listener
+     *            the listener.
      */
     public final void setSystemOutputListener(
             final SynthesizedOutputListener listener) {
@@ -146,6 +149,7 @@ public abstract class TagStrategyTestBase {
 
     /**
      * Convenience method to creates an empty form.
+     * 
      * @return the created form.
      */
     protected final Form createForm() {
@@ -154,9 +158,9 @@ public abstract class TagStrategyTestBase {
         return vxml.appendChild(Form.class);
     }
 
-
     /**
      * Convenient method to create a new VoiceXML document.
+     * 
      * @return the newly created VoiceXML document.
      */
     protected final VoiceXmlDocument createDocument() {
@@ -186,11 +190,12 @@ public abstract class TagStrategyTestBase {
     /**
      * Creates a <code>&lt;block&gt;</code> inside the VoiceXML document.
      *
-     * @param doc Optional VoiceXML document.
+     * @param doc
+     *            Optional VoiceXML document.
      *
      * @return Created block.
      * @exception Exception
-     *            error creating the FIA
+     *                error creating the FIA
      */
     protected final Block createBlock(final VoiceXmlDocument doc) {
         final VoiceXmlDocument document;
@@ -210,10 +215,12 @@ public abstract class TagStrategyTestBase {
 
     /**
      * Creates a fia for the given form.
-     * @param form the form for which to create a fia.
+     * 
+     * @param form
+     *            the form for which to create a fia.
      */
     protected final void createFia(final Form form) {
-        final Dialog executableForm  = new ExecutablePlainForm();
+        final Dialog executableForm = new ExecutablePlainForm();
         executableForm.setNode(form);
         fia = new FormInterpretationAlgorithm(context, interpreter,
                 executableForm);
@@ -221,12 +228,15 @@ public abstract class TagStrategyTestBase {
 
     /**
      * Convenient method to execute the tag strategy.
-     * @param node the node.
-     * @param strategy the tag strategy.
+     * 
+     * @param node
+     *            the node.
+     * @param strategy
+     *            the tag strategy.
      * @exception JVoiceXMLEvent
-     *            error executing the strategy.
+     *                error executing the strategy.
      * @exception Exception
-     *            error executing the strategy.
+     *                error executing the strategy.
      */
     protected final void executeTagStrategy(final VoiceXmlNode node,
             final TagStrategy strategy) throws JVoiceXMLEvent, Exception {
@@ -235,7 +245,7 @@ public abstract class TagStrategyTestBase {
         }
         strategy.getAttributes(context, fia, node);
         strategy.evalAttributes(context);
-        strategy.validateAttributes();
+        strategy.validateAttributes(model);
         strategy.execute(context, interpreter, fia, null, node);
     }
 }

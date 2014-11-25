@@ -166,6 +166,10 @@ final class ClearStrategy extends AbstractTagStrategy {
             final FormInterpretationAlgorithm fia) throws SemanticError {
         final DataModel model = context.getDataModel();
         for (String name : namelist) {
+            if (!model.existsVariable(name)) {
+                throw new SemanticError("clear failed: variable '" + name
+                        + "' is not defined");
+            }
             resetCounter(model, name);
             model.updateVariable(name, null);
             if (LOGGER.isDebugEnabled()) {
