@@ -42,7 +42,10 @@ import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParser;
 import org.jvoicexml.profile.SsmlParsingStrategy;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
+import org.jvoicexml.profile.vxml21.tagstrategy.ValueStrategy;
+import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.P;
 import org.jvoicexml.xml.ssml.Speak;
@@ -80,6 +83,9 @@ public final class TestSsmlParser {
     /** The used profile. */
     private Profile profile;
 
+    /** The parsing strategy factory. */
+    private SsmlParsingStrategyFactory factory;
+
     /**
      * {@inheritDoc}
      */
@@ -89,8 +95,7 @@ public final class TestSsmlParser {
         model = Mockito.mock(DataModel.class);
         Mockito.when(context.getDataModel()).thenReturn(model);
         profile = Mockito.mock(Profile.class);
-        final SsmlParsingStrategyFactory factory = Mockito
-                .mock(SsmlParsingStrategyFactory.class);
+        factory = Mockito.mock(SsmlParsingStrategyFactory.class);
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
     }
@@ -327,6 +332,9 @@ public final class TestSsmlParser {
         final Value value = audio.appendChild(Value.class);
         value.setExpr(testVar);
 
+        final SsmlParsingStrategy valueStrategy = new ValueStrategy();
+        Mockito.when(factory.getParsingStrategy(value)).thenReturn(
+                valueStrategy);
         SsmlParser parser = new VoiceXml21SsmlParser(profile, prompt, context);
 
         SsmlDocument ssml = new SsmlDocument();

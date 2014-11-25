@@ -29,10 +29,10 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Var;
-import org.mozilla.javascript.ScriptableObject;
+import org.mockito.Mockito;
 
 /**
  * This class provides a test case for the {@link VarStrategy}.
@@ -61,8 +61,8 @@ public final class TestVarStrategy extends TagStrategyTestBase {
             Assert.fail(e.getMessage());
         }
 
-        Assert.assertEquals(org.mozilla.javascript.Undefined.instance,
-                getScriptingEngine().getVariable(name));
+        final DataModel model = getDataModel();
+        Mockito.verify(model.createVariable(name));
     }
 
     /**

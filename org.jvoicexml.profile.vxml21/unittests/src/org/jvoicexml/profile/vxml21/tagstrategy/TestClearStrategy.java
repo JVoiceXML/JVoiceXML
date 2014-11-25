@@ -31,7 +31,7 @@ import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.InputItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.xml.TokenList;
@@ -41,7 +41,7 @@ import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
-import org.mozilla.javascript.Context;
+import org.mockito.Mockito;
 
 /**
  * This class provides a test case for the {@link ClearStrategy}.
@@ -66,18 +66,15 @@ public final class TestClearStrategy extends TagStrategyTestBase {
         final Clear clear = block.appendChild(Clear.class);
         clear.setNamelist(var);
 
-        getScriptingEngine().setVariable(var, "assigned");
-        Assert.assertEquals("assigned", getScriptingEngine().getVariable(var));
-
+        final DataModel model = getDataModel();
+        Mockito.when(model.existsVariable(var)).thenReturn(true);
         ClearStrategy strategy = new ClearStrategy();
         try {
             executeTagStrategy(clear, strategy);
         } catch (JVoiceXMLEvent e) {
             Assert.fail(e.getMessage());
         }
-
-        Assert.assertEquals(ScriptingEngine.getUndefinedValue(),
-                getScriptingEngine().getVariable(var));
+        Mockito.verify(model).updateVariable(var, null);
     }
 
     /**
@@ -102,14 +99,10 @@ public final class TestClearStrategy extends TagStrategyTestBase {
         names.add(var3);
         clear.setNamelist(names);
 
-        getScriptingEngine().setVariable(var1, "assigned1");
-        getScriptingEngine().setVariable(var2, "assigned2");
-        getScriptingEngine().setVariable(var3, "assigned3");
-
-        Assert.assertEquals("assigned1", getScriptingEngine().getVariable(var1));
-        Assert.assertEquals("assigned2", getScriptingEngine().getVariable(var2));
-        Assert.assertEquals("assigned3", getScriptingEngine().getVariable(var3));
-
+        final DataModel model = getDataModel();
+        Mockito.when(model.existsVariable(var1)).thenReturn(true);
+        Mockito.when(model.existsVariable(var2)).thenReturn(true);
+        Mockito.when(model.existsVariable(var3)).thenReturn(true);
         ClearStrategy strategy = new ClearStrategy();
         try {
             executeTagStrategy(clear, strategy);
@@ -117,102 +110,10 @@ public final class TestClearStrategy extends TagStrategyTestBase {
             Assert.fail(e.getMessage());
         }
 
-        Assert.assertEquals(ScriptingEngine.getUndefinedValue(),
-                getScriptingEngine().getVariable(var1));
-        Assert.assertEquals(ScriptingEngine.getUndefinedValue(),
-                getScriptingEngine().getVariable(var2));
-        Assert.assertEquals(ScriptingEngine.getUndefinedValue(),
-                getScriptingEngine().getVariable(var3));
+        Mockito.verify(model).updateVariable(var1, null);
+        Mockito.verify(model).updateVariable(var2, null);
+        Mockito.verify(model).updateVariable(var3, null);
     }
-
-    /**
-     * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
-     * .
-     * 
-     * @exception JVoiceXMLEvent
-     *                test failed
-     * @exception Exception
-     *                test failed
-     */
-    @Test
-    public void testExecuteInputItem() throws JVoiceXMLEvent, Exception {
-        final String var = "testfield";
-        final VoiceXmlDocument document = createDocument();
-        final Vxml vxml = document.getVxml();
-        final Form form = vxml.appendChild(Form.class);
-        final Field field = form.appendChild(Field.class);
-        field.setName("testfield");
-        final InputItem inputItem = new FieldFormItem(getContext(), field);
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setUtterance("dummy");
-        inputItem.setFormItemVariable(result);
-        inputItem.incrementPromptCount();
-        /* @todo Check the event counter. */
-        final Block block = createBlock(document);
-        final Clear clear = block.appendChild(Clear.class);
-        clear.setNamelist(var);
-
-        Assert.assertEquals("dummy", getScriptingEngine().getVariable(var));
-        Assert.assertEquals(2, inputItem.getPromptCount());
-
-        ClearStrategy strategy = new ClearStrategy();
-        try {
-            executeTagStrategy(clear, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
-
-        Assert.assertEquals(ScriptingEngine.getUndefinedValue(),
-                getScriptingEngine().getVariable(var));
-        Assert.assertEquals(1, inputItem.getPromptCount());
-    }
-
-    /**
-     * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
-     * .
-     * 
-     * @exception JVoiceXMLEvent
-     *                test failed
-     * @exception Exception
-     *                test failed
-     */
-    @Test
-    public void testExecuteInputEmpty() throws JVoiceXMLEvent, Exception {
-        final String var = "testfield";
-        final VoiceXmlDocument document = createDocument();
-        final Vxml vxml = document.getVxml();
-        final Form form = vxml.appendChild(Form.class);
-        final Field field = form.appendChild(Field.class);
-        field.setName("testfield");
-        final InputItem inputItem = new FieldFormItem(getContext(), field);
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setUtterance("dummy2");
-        inputItem.setFormItemVariable(result);
-        inputItem.incrementPromptCount();
-        /* @todo Check the event counter. */
-        final Block block = form.appendChild(Block.class);
-        final Clear clear = block.appendChild(Clear.class);
-        clear.setNamelist("");
-
-        createFia(form);
-
-        Assert.assertEquals("dummy2", getScriptingEngine().getVariable(var));
-        Assert.assertEquals(2, inputItem.getPromptCount());
-
-        ClearStrategy strategy = new ClearStrategy();
-        try {
-            executeTagStrategy(clear, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
-
-        Assert.assertEquals(ScriptingEngine.getUndefinedValue(),
-                getScriptingEngine().getVariable(var));
-        Assert.assertEquals(1, inputItem.getPromptCount());
-    }
-
     /**
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
@@ -220,14 +121,16 @@ public final class TestClearStrategy extends TagStrategyTestBase {
      * 
      * @exception Exception
      *                test failed
+     * @throws SemanticError 
      */
     @Test
-    public void testExecuteNotDeclared() throws Exception {
+    public void testExecuteNotDeclared() throws Exception, SemanticError {
         final String var = "test";
         final Block block = createBlock();
         final Clear clear = block.appendChild(Clear.class);
         clear.setNamelist(var);
 
+        final DataModel model = getDataModel();
         JVoiceXMLEvent failure = null;
         ClearStrategy strategy = new ClearStrategy();
         try {
