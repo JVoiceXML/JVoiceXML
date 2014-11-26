@@ -27,20 +27,24 @@ package org.jvoicexml.demo.embedded;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
-import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.profile.TagStrategy;
-import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.profile.TagStrategyFactory;
+import org.jvoicexml.xml.vxml.Vxml;
+import org.w3c.dom.Node;
 
 /**
  * Dummy {@link InitializationTagStrategyFactory} for test purposes.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision: 3659 $
  * @since 0.7.4
  */
 public class EmbeddedInitializationTagStrategyFactory
-    implements InitializationTagStrategyFactory {
+        implements TagStrategyFactory {
     /**
      * Known strategies. The known strategies are templates for the strategy to
      * be executed by the <code>ForminterpreteationAlgorithm</code>.
@@ -49,50 +53,60 @@ public class EmbeddedInitializationTagStrategyFactory
 
     /**
      * Creates a new object.
-     * @throws NoSuchMethodException 
-     * @throws SecurityException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
+     * 
+     * @throws NoSuchMethodException
+     * @throws SecurityException
+     * @throws InvocationTargetException
+     * @throws IllegalArgumentException
      */
-    public EmbeddedInitializationTagStrategyFactory() 
-        throws InstantiationException, IllegalAccessException,
-        ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
+    public EmbeddedInitializationTagStrategyFactory()
+            throws InstantiationException, IllegalAccessException,
+            ClassNotFoundException, SecurityException, NoSuchMethodException,
+            IllegalArgumentException, InvocationTargetException {
         strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put("grammar",
-         loadStrategy("org.jvoicexml.interpreter.tagstrategy.GrammarStrategy"));
-        strategies.put("meta",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.MetaStrategy"));
-        strategies.put("property",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.PropertyStrategy"));
-        strategies.put("script",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ScriptStrategy"));
-        strategies.put("#text",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.TextStrategy"));
-        strategies.put("var",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.VarStrategy"));
+        strategies
+                .put("grammar",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.GrammarStrategy"));
+        strategies
+                .put("meta",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.MetaStrategy"));
+        strategies
+                .put("property",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.PropertyStrategy"));
+        strategies
+                .put("script",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.ScriptStrategy"));
+        strategies
+                .put("#text",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.TextStrategy"));
+        strategies
+                .put("var",
+                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.VarStrategy"));
     }
 
     /**
      * Loads the specified tag strategy.
-     * @param name name of the class to laod
+     * 
+     * @param name
+     *            name of the class to laod
      * @return loaded tag strategy
      * @throws InstantiationException
-     *         unable to create the tag strategy
+     *             unable to create the tag strategy
      * @throws IllegalAccessException
-     *         unable to create the tag strategy
+     *             unable to create the tag strategy
      * @throws ClassNotFoundException
-     *         unable to create the tag strategy
-     * @throws NoSuchMethodException 
-     *         unable to create the tag strategy
-     * @throws SecurityException 
-     *         unable to create the tag strategy
-     * @throws InvocationTargetException 
-     *         unable to create the tag strategy
-     * @throws IllegalArgumentException 
-     *         unable to create the tag strategy
+     *             unable to create the tag strategy
+     * @throws NoSuchMethodException
+     *             unable to create the tag strategy
+     * @throws SecurityException
+     *             unable to create the tag strategy
+     * @throws InvocationTargetException
+     *             unable to create the tag strategy
+     * @throws IllegalArgumentException
+     *             unable to create the tag strategy
      */
     private TagStrategy loadStrategy(final String name)
-        throws InstantiationException, IllegalAccessException,
+            throws InstantiationException, IllegalAccessException,
             ClassNotFoundException, SecurityException, NoSuchMethodException,
             IllegalArgumentException, InvocationTargetException {
         final Class<?> clazz = Class.forName(name);
@@ -106,12 +120,17 @@ public class EmbeddedInitializationTagStrategyFactory
      * {@inheritDoc}
      */
     @Override
-    public TagStrategy getTagStrategy(final VoiceXmlNode node) {
+    public TagStrategy getTagStrategy(final Node node) {
         if (node == null) {
             return null;
         }
 
-        final String tagName = node.getTagName();
+        final String tagName = node.getLocalName(); // namespace aware
+        if (tagName == null) {
+            // for #text etc.s
+            final String nodeName = node.getNodeName();
+            return getTagStrategy(nodeName);
+        }
         return getTagStrategy(tagName);
     }
 
@@ -129,6 +148,14 @@ public class EmbeddedInitializationTagStrategyFactory
         }
 
         return strategy.newInstance();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getTagNamespace() throws URISyntaxException {
+        return new URI(Vxml.DEFAULT_XMLNS);
     }
 
 }
