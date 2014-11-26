@@ -30,17 +30,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.datamodel.DataModel;
-import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Clear;
-import org.jvoicexml.xml.vxml.Field;
-import org.jvoicexml.xml.vxml.Form;
-import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
 
 /**
@@ -130,7 +123,6 @@ public final class TestClearStrategy extends TagStrategyTestBase {
         final Clear clear = block.appendChild(Clear.class);
         clear.setNamelist(var);
 
-        final DataModel model = getDataModel();
         JVoiceXMLEvent failure = null;
         ClearStrategy strategy = new ClearStrategy();
         try {

@@ -27,7 +27,6 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import java.net.URI;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
@@ -35,13 +34,16 @@ import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.ccxml.Var;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Data;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
+import org.w3c.dom.Document;
 
 /**
  * Test case for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy}.
@@ -50,23 +52,23 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @version $Revision: 4080 $
  * @since 0.7.1
  */
-public final class TestDataStrategy
-        extends TagStrategyTestBase {
+public final class TestDataStrategy extends TagStrategyTestBase {
     /** The demo script. */
     private static final String XML;
 
     static {
         XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-            + "<quote xmlns=\"http://www.example.org\">"
-            + "  <ticker>F</ticker>"
-            + "  <name>Ford Motor Company</name>"
-            + "  <change>1.00</change>"
-            + "  <last>30.00</last>"
-            + "</quote>";
+                + "<quote xmlns=\"http://www.example.org\">"
+                + "  <ticker>F</ticker>" + "  <name>Ford Motor Company</name>"
+                + "  <change>1.00</change>" + "  <last>30.00</last>"
+                + "</quote>";
     }
 
     /** The URI of the test script. */
     private URI uri;
+
+    /** The document server. */
+    private JVoiceXmlDocumentServer server;
 
     /**
      * {@inheritDoc}
@@ -74,20 +76,24 @@ public final class TestDataStrategy
     @Before
     public void setUp() throws Exception {
         final DocumentMap map = DocumentMap.getInstance();
-        final JVoiceXmlDocumentServer server = new JVoiceXmlDocumentServer();
+        server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
 
         uri = map.getUri("/xml");
         map.addDocument(uri, XML);
-
+        final VoiceXmlInterpreterContext context = getContext();
+        Mockito.when(context.getDocumentServer()).thenReturn(server);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         test failed
+     *             test failed
      * @exception Exception
-     *         test failed
+     *                test failed
      */
     @Test
     public void testExecute() throws JVoiceXMLEvent, Exception {
@@ -100,21 +106,24 @@ public final class TestDataStrategy
         final Data data = block.appendChild(Data.class);
         data.setSrc(uri);
         data.setName(name);
+
         final DataStrategy strategy = new DataStrategy();
         executeTagStrategy(data, strategy);
 
-        final ScriptingEngine scripting = getScriptingEngine();
-        Assert.assertTrue((Boolean) scripting.eval(
-           "\"30.00\" == quote.documentElement.getElementsByTagNameNS("
-           + "\"http://www.example.org\", \"last\").item(0).firstChild.data;"));
+        final DataModel model = getDataModel();
+        Mockito.verify(model).updateVariable(Mockito.eq(name),
+                Mockito.isA(Document.class));
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         test failed
+     *             test failed
      * @exception Exception
-     *         test failed
+     *                test failed
      */
     @Test
     public void testExecuteExpr() throws JVoiceXMLEvent, Exception {
@@ -124,29 +133,32 @@ public final class TestDataStrategy
         final String name = "quote";
         var.setName(name);
         final Var varSrcexpr = vxml.appendChild(Var.class);
-        final String srcexpr = "scexpr";
+        final String srcexpr = "myexpr";
         varSrcexpr.setName(name);
         final Block block = createBlock(doc);
         final Data data = block.appendChild(Data.class);
         data.setSrcexpr(srcexpr);
         data.setName(name);
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.setVariable(srcexpr, uri.toString());
 
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression(srcexpr, Object.class))
+                .thenReturn(uri.toString());
         final DataStrategy strategy = new DataStrategy();
         executeTagStrategy(data, strategy);
 
-        Assert.assertTrue((Boolean) scripting.eval(
-           "\"30.00\" == quote.documentElement.getElementsByTagNameNS("
-           + "\"http://www.example.org\", \"last\").item(0).firstChild.data;"));
+        Mockito.verify(model).updateVariable(Mockito.eq(name),
+                Mockito.isA(Document.class));
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         test failed
+     *             test failed
      * @exception Exception
-     *         test failed
+     *                test failed
      */
     @Test(expected = BadFetchError.class)
     public void testExecuteNoneSpecified() throws JVoiceXMLEvent, Exception {
@@ -162,11 +174,14 @@ public final class TestDataStrategy
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         test failed
+     *             test failed
      * @exception Exception
-     *         test failed
+     *                test failed
      */
     @Test(expected = BadFetchError.class)
     public void testExecuteBoth() throws JVoiceXMLEvent, Exception {
@@ -183,19 +198,24 @@ public final class TestDataStrategy
         data.setSrcexpr(srcexpr);
         data.setSrc(uri);
         data.setName(name);
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.setVariable(srcexpr, uri.toString());
+
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression(srcexpr, Object.class))
+                .thenReturn(uri.toString());
 
         final DataStrategy strategy = new DataStrategy();
         executeTagStrategy(data, strategy);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         test failed.
+     *             test failed.
      * @throws Exception
-     *         test failed
+     *             test failed
      */
     @Test
     public void testExecuteNamelist() throws JVoiceXMLEvent, Exception {
@@ -208,18 +228,19 @@ public final class TestDataStrategy
         final Data data = block.appendChild(Data.class);
         data.setSrc(uri);
         data.setName(name);
-        final ScriptingEngine scripting = getScriptingEngine();
         final String name1 = "actor";
-        scripting.setVariable(name1, "Horst Buchholz");
         final TokenList namelist = new TokenList();
         namelist.add(name1);
         data.setNameList(namelist);
 
+        final DataModel model = getDataModel();
+        Mockito.when(model.readVariable(name1, Object.class)).thenReturn(
+                "Horst Buchholz");
         final DataStrategy strategy = new DataStrategy();
         executeTagStrategy(data, strategy);
 
-        Assert.assertTrue((Boolean) scripting.eval(
-           "\"30.00\" == quote.documentElement.getElementsByTagNameNS("
-           + "\"http://www.example.org\", \"last\").item(0).firstChild.data;"));
+        Mockito.verify(model).updateVariable(Mockito.eq(name),
+                Mockito.isA(Document.class));
+        // TODO chekc that the namelist was submitted
     }
 }

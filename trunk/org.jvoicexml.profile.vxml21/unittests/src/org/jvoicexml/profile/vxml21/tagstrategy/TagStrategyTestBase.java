@@ -31,6 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.Dialog;
@@ -38,6 +39,7 @@ import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.interpreter.datamodel.DataModelObjectSerializer;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.profile.Profile;
@@ -131,8 +133,14 @@ public abstract class TagStrategyTestBase {
         Mockito.when(profile.getInitializationTagStrategyFactory()).thenReturn(
                 taginitfactory);
         context = Mockito.mock(VoiceXmlInterpreterContext.class);
+        Mockito.when(context.getProfile()).thenReturn(profile);
+        final Session session = Mockito.mock(Session.class);
+        Mockito.when(context.getSession()).thenReturn(session);
         interpreter = new VoiceXmlInterpreter(context);
         model = Mockito.mock(DataModel.class);
+        final DataModelObjectSerializer serializer = Mockito
+                .mock(DataModelObjectSerializer.class);
+        Mockito.when(model.getSerializer()).thenReturn(serializer);
         Mockito.when(context.getDataModel()).thenReturn(model);
     }
 
