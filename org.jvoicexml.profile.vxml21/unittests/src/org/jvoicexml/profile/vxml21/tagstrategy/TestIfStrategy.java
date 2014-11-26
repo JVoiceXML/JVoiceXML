@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,10 +29,16 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.TagStrategyFactory;
+import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Block;
+import org.jvoicexml.xml.vxml.Foreach;
 import org.jvoicexml.xml.vxml.If;
+import org.jvoicexml.xml.vxml.Value;
+import org.mockito.Mockito;
 
 /**
  * This class provides a test case for the {@link IfStrategy}.
@@ -43,16 +49,17 @@ import org.jvoicexml.xml.vxml.If;
  */
 public final class TestIfStrategy extends TagStrategyTestBase {
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.IfStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.IfStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            fest failed.
+     *                fest failed.
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testExecute() throws Exception, JVoiceXMLEvent {
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.eval("var test = 'horst';");
         final Block block = createBlock();
         final If ifNode = block.appendChild(If.class);
         ifNode.setCond("test == 'horst'");
@@ -60,14 +67,19 @@ public final class TestIfStrategy extends TagStrategyTestBase {
         assign.setName("test");
         assign.setExpr("'fritz'");
 
-        Assert.assertEquals("horst", scripting.getVariable("test"));
-        final IfStrategy strategy = new IfStrategy();
-        try {
-            executeTagStrategy(ifNode, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
+        final TagStrategyFactory tagfactory = Mockito
+                .mock(TagStrategyFactory.class);
+        final Profile profile = getContext().getProfile();
+        Mockito.when(profile.getTagStrategyFactory()).thenReturn(tagfactory);
 
-        Assert.assertEquals("fritz", scripting.getVariable("test"));
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression(ifNode.getCond(), Boolean.class))
+                .thenReturn(true);
+
+        final IfStrategy strategy = new IfStrategy();
+        executeTagStrategy(ifNode, strategy);
+
+        Mockito.verify(model).evaluateExpression(ifNode.getCond(),
+                Boolean.class);
     }
 }

@@ -43,9 +43,12 @@ import org.mockito.Mockito;
  */
 public final class TestVarStrategy extends TagStrategyTestBase {
     /**
-     * Test method for {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      */
     @Test
     public void testExecuteUndefined() throws Exception {
@@ -66,101 +69,30 @@ public final class TestVarStrategy extends TagStrategyTestBase {
     }
 
     /**
-     * Test method for {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
+     * @throws JVoiceXMLEvent
+     *             test failed
      */
     @Test
-    public void testExecuteExpr() throws Exception {
+    public void testExecuteExpr() throws Exception, JVoiceXMLEvent {
         final String name = "test";
         final Block block = createBlock();
         final Var var = block.appendChild(Var.class);
         var.setName(name);
         var.setExpr("'testvalue'");
 
-        final VarStrategy strategy = new VarStrategy();
-        try {
-            executeTagStrategy(var, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
-
-        Assert.assertEquals("testvalue",
-                getScriptingEngine().getVariable(name));
-    }
-
-    /**
-     * Test method for {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
-     * @exception Exception
-     *            Test failed.
-     */
-    @Test
-    public void testExecuteIntegerExpr() throws Exception {
-        final String name = "test";
-        final Block block = createBlock();
-        final Var var = block.appendChild(Var.class);
-        var.setName(name);
-        var.setExpr("42");
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression(var.getExpr(), Object.class))
+                .thenReturn(var.getExpr());
 
         final VarStrategy strategy = new VarStrategy();
-        try {
-            executeTagStrategy(var, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
+        executeTagStrategy(var, strategy);
 
-        Assert.assertEquals(new Integer(42),
-                getScriptingEngine().getVariable(name));
-    }
-
-    /**
-     * Test method for {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
-     * @exception Exception
-     *            Test failed.
-     */
-    @Test
-    public void testExecuteComplexExpr() throws Exception {
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.setVariable("a", 42);
-
-        final String name = "test";
-        final Block block = createBlock();
-        final Var var = block.appendChild(Var.class);
-        var.setName(name);
-        var.setExpr("a + 1");
-
-        final VarStrategy strategy = new VarStrategy();
-        try {
-            executeTagStrategy(var, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
-
-        Assert.assertEquals(new Double(43),
-                getScriptingEngine().getVariable(name));
-    }
-
-    /**
-     * Test method for {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
-     * @exception Exception
-     *            Test failed.
-     */
-    @Test
-    public void testExecuteJavascriptObject() throws Exception {
-        final String name = "test";
-        final Block block = createBlock();
-        final Var var = block.appendChild(Var.class);
-        var.setName(name);
-        var.setExpr("new Object()");
-
-        final VarStrategy strategy = new VarStrategy();
-        try {
-            executeTagStrategy(var, strategy);
-        } catch (JVoiceXMLEvent e) {
-            Assert.fail(e.getMessage());
-        }
-
-        Assert.assertTrue(getScriptingEngine().getVariable(name)
-                instanceof ScriptableObject);
+        Mockito.verify(model).createVariable(name, var.getExpr());
     }
 }
