@@ -25,7 +25,10 @@
  */
 package org.jvoicexml.profile.vxml21.tagstrategy;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 
@@ -33,15 +36,20 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.Application;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
+import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
+import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.JVoiceXmlApplication;
-import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.vxml.Script;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy}.
@@ -50,17 +58,13 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @version $Revision: 4175 $
  * @since 0.6
  */
-public final class TestScriptStrategy
-        extends TagStrategyTestBase {
+public final class TestScriptStrategy extends TagStrategyTestBase {
     /** The demo script. */
     private static final String SCRIPT;
 
     static {
-        SCRIPT = "var a = 42;"
-            + "function factorial(n)"
-            + "{"
-            + "return (n <= 1)? 1 : n * factorial(n-1);"
-            + "}";
+        SCRIPT = "var a = 42;" + "function factorial(n)" + "{"
+                + "return (n <= 1)? 1 : n * factorial(n-1);" + "}";
     }
 
     /** The URI of the test script. */
@@ -73,16 +77,22 @@ public final class TestScriptStrategy
     public void setUp() throws Exception {
         final JVoiceXmlDocumentServer server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
+        server.addSchemeStrategy(new FileSchemeStrategy());
         final URL url = TestScriptStrategy.class.getResource("factorial.js");
         uri = url.toURI();
+        final VoiceXmlInterpreterContext context = getContext();
+        Mockito.when(context.getDocumentServer()).thenReturn(server);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *             Test failed.
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testExecute() throws JVoiceXMLEvent, Exception {
@@ -94,17 +104,34 @@ public final class TestScriptStrategy
         final ScriptStrategy strategy = new ScriptStrategy();
         executeTagStrategy(script, strategy);
 
-        final ScriptingEngine scripting = getScriptingEngine();
-        Assert.assertEquals(42, scripting.getVariable("a"));
-        Assert.assertEquals(24.0, scripting.eval("factorial(4);"));
+        final DataModel model = getDataModel();
+        Mockito.verify(model).evaluateExpression(SCRIPT, Object.class);
+    }
+
+    private String readResource(final String name) throws IOException {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final InputStream input = TestScriptStrategy.class
+                .getResourceAsStream(name);
+        final byte[] buffer = new byte[1024];
+        int read;
+        do {
+            read = input.read(buffer);
+            if (read > 0) {
+                out.write(buffer, 0, read);
+            }
+        } while (read >= 0);
+        return out.toString();
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *             Test failed.
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testExecuteSrc() throws JVoiceXMLEvent, Exception {
@@ -116,17 +143,20 @@ public final class TestScriptStrategy
         final ScriptStrategy strategy = new ScriptStrategy();
         executeTagStrategy(script, strategy);
 
-        final ScriptingEngine scripting = getScriptingEngine();
-        Assert.assertEquals(42, scripting.getVariable("a"));
-        Assert.assertEquals(24.0, scripting.eval("factorial(4);"));
+        final DataModel model = getDataModel();
+        final String externalScript = readResource("factorial.js");
+        Mockito.verify(model).evaluateExpression(externalScript, Object.class);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *             Test failed.
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testExecuteRelativeSrc() throws JVoiceXMLEvent, Exception {
@@ -142,62 +172,75 @@ public final class TestScriptStrategy
         getContext().setApplication(application);
         executeTagStrategy(script, strategy);
 
-        final ScriptingEngine scripting = getScriptingEngine();
-        Assert.assertEquals(42, scripting.getVariable("a"));
-        Assert.assertEquals(24.0, scripting.eval("factorial(4);"));
+        final DataModel model = getDataModel();
+        final String externalScript = readResource("factorial.js");
+        Mockito.verify(model).evaluateExpression(externalScript, Object.class);
     }
-    
+
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *             Test failed.
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testExecuteSrcExpr() throws JVoiceXMLEvent, Exception {
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.setVariable("test", uri.toString());
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Script script = vxml.appendChild(Script.class);
         script.setSrcexpr("test");
 
+        final DataModel model = getDataModel();
+        Mockito.when(
+                model.evaluateExpression(script.getSrcexpr(), Object.class))
+                .thenReturn(uri.toString());
         final ScriptStrategy strategy = new ScriptStrategy();
         executeTagStrategy(script, strategy);
 
-        Assert.assertEquals(42, scripting.getVariable("a"));
-        Assert.assertEquals(24.0, scripting.eval("factorial(4);"));
+        final String externalScript = readResource("factorial.js");
+        Mockito.verify(model).evaluateExpression(externalScript, Object.class);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *             Test failed.
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test(expected = BadFetchError.class)
     public void testExecuteSrcAndSrcExpr() throws JVoiceXMLEvent, Exception {
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.setVariable("test", uri.toString());
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Script script = vxml.appendChild(Script.class);
         script.setSrcexpr("test");
         script.setSrc(uri);
 
+        final DataModel model = getDataModel();
+        Mockito.when(
+                model.evaluateExpression(script.getSrcexpr(), Object.class))
+                .thenReturn(uri.toString());
+
         final ScriptStrategy strategy = new ScriptStrategy();
         executeTagStrategy(script, strategy);
     }
 
-
     /**
-     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *             Test failed.
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test(expected = BadFetchError.class)
     public void testExecuteNone() throws JVoiceXMLEvent, Exception {
