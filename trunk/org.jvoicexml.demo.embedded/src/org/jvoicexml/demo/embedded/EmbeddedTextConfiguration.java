@@ -43,16 +43,14 @@ import org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatformFactory
 import org.jvoicexml.implementation.text.TextPlatformFactory;
 import org.jvoicexml.interpreter.DialogFactory;
 import org.jvoicexml.interpreter.GrammarProcessor;
-import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
-import org.jvoicexml.interpreter.TagStrategyRepository;
 import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
-import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository;
 import org.jvoicexml.profile.TagStrategyFactory;
+import org.jvoicexml.profile.vxml21.VoiceXml21TagStrategyFactory;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
 
@@ -107,20 +105,14 @@ public final class EmbeddedTextConfiguration implements Configuration {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T loadObject(final Class<T> baseClass) {
-        if (baseClass == InitializationTagStrategyFactory.class) {
-            try {
-                return (T) new EmbeddedInitializationTagStrategyFactory();
-            } catch (Exception e) {
-                return null;
-            }
-        } else if (baseClass == TagStrategyFactory.class) {
+        if (baseClass == TagStrategyFactory.class) {
             try {
                 return (T) new EmbeddedTagStrategyFactory();
             } catch (Exception e) {
                 return null;
             }
-        } else if (baseClass == TagStrategyRepository.class) {
-            return (T) new JVoiceXmlTagStrategyRepository();
+        } else if (baseClass == TagStrategyFactory.class) {
+            return (T) new VoiceXml21TagStrategyFactory();
         } else if (baseClass == DocumentServer.class) {
             final JVoiceXmlDocumentServer server =
                     new JVoiceXmlDocumentServer();
