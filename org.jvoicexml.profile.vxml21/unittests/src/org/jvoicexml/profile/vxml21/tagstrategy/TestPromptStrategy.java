@@ -37,14 +37,17 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.profile.Profile;
+import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.Value;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link PromptStrategy}.
@@ -54,24 +57,25 @@ import org.jvoicexml.xml.vxml.Value;
  * @since 0.6
  */
 public final class TestPromptStrategy extends TagStrategyTestBase
-    implements SynthesizedOutputListener {
+        implements SynthesizedOutputListener {
     /** The queued speakable. */
     private SpeakableText queuedSpeakable;
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.PromptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * {@link org.jvoicexml.interpreter.tagstrategy.PromptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            test failed.
+     *                test failed.
      * @exception JVoiceXMLEvent
-     *            test failed.
+     *                test failed.
      */
     @Test
     public void testExecute() throws Exception, JVoiceXMLEvent {
         final Block block = createBlock();
         final Prompt prompt = block.appendChild(Prompt.class);
-        prompt.addText(
-                "When you hear the name of the movie you want, just say it.");
+        prompt.addText("When you hear the name of the movie you want, just say it.");
         final Audio audio1 = prompt.appendChild(Audio.class);
         audio1.setSrc("godfather.wav");
         audio1.addText("the godfather");
@@ -92,8 +96,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
-        speak.addText(
-                "When you hear the name of the movie you want, just say it.");
+        speak.addText("When you hear the name of the movie you want, just say it.");
         final Audio ssmlAudio1 = speak.appendChild(Audio.class);
         ssmlAudio1.setSrc("godfather.wav");
         ssmlAudio1.addText("the godfather");
@@ -109,17 +112,16 @@ public final class TestPromptStrategy extends TagStrategyTestBase
     }
 
     /**
-     * Test method for occurrences of a {@code value}-tag within a prompt. 
+     * Test method for occurrences of a {@code value}-tag within a prompt.
+     * 
      * @since 0.7.7
      * @exception Exception
-     *            test failed.
+     *                test failed.
      * @exception JVoiceXMLEvent
-     *            test failed.
+     *                test failed.
      */
     @Test
     public void testExecuteValue() throws Exception, JVoiceXMLEvent {
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.eval("var foo = 42;");
         final Block block = createBlock();
         final Prompt prompt = block.appendChild(Prompt.class);
         prompt.addText("this is");
@@ -127,6 +129,20 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         value.setExpr("foo");
         prompt.addText("times");
         setSystemOutputListener(this);
+
+        final SsmlParsingStrategyFactory factory = Mockito
+                .mock(SsmlParsingStrategyFactory.class);
+        Mockito.when(factory.getParsingStrategy(Mockito.isA(Value.class)))
+                .thenReturn(new ValueStrategy());
+        final VoiceXmlInterpreterContext context = getContext();
+        final Profile profile = context.getProfile();
+        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
+                factory);
+
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression("foo", Object.class)).thenReturn(
+                42);
+
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.setPromptTimeout(30000);
@@ -144,11 +160,13 @@ public final class TestPromptStrategy extends TagStrategyTestBase
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.PromptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * {@link org.jvoicexml.interpreter.tagstrategy.PromptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            test failed.
+     *                test failed.
      * @exception JVoiceXMLEvent
-     *            test failed.
+     *                test failed.
      */
     @Test
     public void testExecuteCond() throws Exception, JVoiceXMLEvent {
@@ -165,17 +183,19 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final CallControlProperties props = new CallControlProperties();
         platform.renderPrompts(null, null, props);
 
-        Assert.assertNull(
-                "wrong evaluation of the cond attribute", queuedSpeakable);
+        Assert.assertNull("wrong evaluation of the cond attribute",
+                queuedSpeakable);
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.PromptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * {@link org.jvoicexml.interpreter.tagstrategy.PromptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            test failed.
+     *                test failed.
      * @exception JVoiceXMLEvent
-     *            test failed.
+     *                test failed.
      * @since 0.7
      */
     @Test
@@ -184,8 +204,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         context.setProperty("timeout", "20s");
         final Block block = createBlock();
         final Prompt prompt = block.appendChild(Prompt.class);
-        prompt.addText(
-                "test execute timeout");
+        prompt.addText("test execute timeout");
         prompt.setTimeout("10s");
         setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
@@ -197,8 +216,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
-        speak.addText(
-                "test execute timeout");
+        speak.addText("test execute timeout");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
         final int timeout = 10000;
@@ -208,11 +226,13 @@ public final class TestPromptStrategy extends TagStrategyTestBase
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.tagstrategy.PromptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * {@link org.jvoicexml.interpreter.tagstrategy.PromptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            test failed.
+     *                test failed.
      * @exception JVoiceXMLEvent
-     *            test failed.
+     *                test failed.
      * @since 0.7
      */
     @Test
@@ -221,8 +241,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         context.setProperty("timeout", "20s");
         final Block block = createBlock();
         final Prompt prompt = block.appendChild(Prompt.class);
-        prompt.addText(
-                "test execute timeout");
+        prompt.addText("test execute timeout");
         setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
@@ -233,8 +252,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
-        speak.addText(
-                "test execute timeout");
+        speak.addText("test execute timeout");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
         final int timeout = 20000;
