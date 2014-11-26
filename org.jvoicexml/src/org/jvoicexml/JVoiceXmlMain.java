@@ -36,6 +36,7 @@ import java.util.ServiceLoader;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.profile.Profile;
@@ -203,6 +204,10 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         // Create the session and link it with the implementation platform
         final String profileName = info.getProfile();
         final Profile profile = profiles.get(profileName);
+        if (profile == null) {
+            throw new BadFetchError("Unable to find a profile named '"
+                    + profileName + "'");
+        }
         final ImplementationPlatform platform = implementationPlatformFactory
                 .getImplementationPlatform(info);
         final Session session = new org.jvoicexml.interpreter.JVoiceXmlSession(
