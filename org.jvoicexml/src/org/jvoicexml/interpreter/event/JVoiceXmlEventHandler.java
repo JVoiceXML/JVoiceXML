@@ -544,7 +544,7 @@ public final class JVoiceXmlEventHandler implements EventHandler {
         }
         synchronized (semaphore) {
             try {
-                event = transformEvent(model, e);
+                event = transformEvent(e);
                 LOGGER.info("notified event '" + event.getEventType() + "'");
             } catch (SemanticError semanticError) {
                 event = semanticError;
@@ -560,8 +560,6 @@ public final class JVoiceXmlEventHandler implements EventHandler {
      * by the user must be transformed into {@link HelpEvent}s and
      * {@link CancelEvent}.
      * 
-     * @param model
-     *            the emplyoed data model
      * @param e
      *            the source event
      * @return the transformed event, <code>e</code> if there was no
@@ -570,8 +568,8 @@ public final class JVoiceXmlEventHandler implements EventHandler {
      *                error evaluating the semantic interpretation
      * @since 0.7.4
      */
-    private JVoiceXMLEvent transformEvent(final DataModel model,
-            final JVoiceXMLEvent e) throws SemanticError {
+    private JVoiceXMLEvent transformEvent(final JVoiceXMLEvent e)
+            throws SemanticError {
         if (!(e instanceof RecognitionEvent)) {
             return e;
         }
