@@ -62,7 +62,7 @@ public final class RecordingStoppedEvent extends JVoiceXMLEvent {
      * 
      * @see #getEventType()
      * 
-     * @param sessionId
+     * @param id
      *            the session id
      * @param audioUri
      *            the URI where the audio is stored

@@ -57,7 +57,7 @@ public final class RecordingStartedEvent extends JVoiceXMLEvent {
      * 
      * @see #getEventType()
      * 
-     * @param sessionId
+     * @param id
      *            the session id
      */
     public RecordingStartedEvent(final String id) {
