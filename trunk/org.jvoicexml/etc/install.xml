@@ -55,15 +55,10 @@
         <pack name="JVoiceXML Core" required="yes">
             <description>JVoiceXML binaries.
 
-                You will have to select
-                other components to actually use JVoiceXML.
-                Please make
-                sure that you select only those components
-                that you
-                really need.
+You will have to select other components to actually use JVoiceXML.
+Please make sure that you select only those components that you really need.
 
-                The JSAPI 1.0 implementation platform is a
-                good place to get started.
+The JSAPI 2.0 implementation platform is a good place to get started.
             </description>
             <fileset dir="." targetdir="$INSTALL_PATH">
                 <include name="bin/**" />
@@ -110,25 +105,6 @@
                 <include name="org.jvoicexml.processor.srgs.jar" />
             </fileset>
         </pack>
-        <pack name="JSAPI 1.0 implementation platform" required="no"
-            preselected="no">
-            <description>Base implementation platform based on JSAPI
-                1.0.
-
-                This package is required if you plan to use one of
-                the demo
-                implementation platforms for JSAPI 1.0 or if you
-                are
-                having your own JSAPI 1.0 compliant speech engine.
-            </description>
-            <fileset dir="config" targetdir="$INSTALL_PATH/config">
-                <include name="jsapi10-grammar.xml" />
-            </fileset>
-            <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
-                <include name="org.jvoicexml.implementation.jsapi10.jar" />
-                <include name="jsapi.jar" />
-            </fileset>
-        </pack>
         <pack name="VoiceXML 2.1 Profile" required="yes"
             preselected="yes">
             <description>Ability of JVoiceXML to process VoiceXML 2.1
@@ -153,33 +129,38 @@
                 <include name="org.jvoicexml.profile.mmi.jar" />
             </fileset>
         </pack>
+        <pack name="JSAPI 1.0 implementation platform" required="no"
+            preselected="no">
+            <description>Base implementation platform based on JSAPI 1.0.
+
+This package is required if you plan to use one of the demo implementation
+platforms for JSAPI 1.0 or if you are having your own JSAPI 1.0 compliant
+speech engine.
+            </description>
+            <fileset dir="config" targetdir="$INSTALL_PATH/config">
+                <include name="jsapi10-grammar.xml" />
+            </fileset>
+            <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
+                <include name="org.jvoicexml.implementation.jsapi10.jar" />
+                <include name="jsapi.jar" />
+            </fileset>
+        </pack>
         <pack
             name="Talking Java Support for the JSAPI 1.0 implementation platform"
             required="no" os="windows" preselected="no">
             <depends packname="JSAPI 1.0 implementation platform" />
             <description>Cloudgarden's implementation of JSAPI 1.0
-                allowing to make use of SAPI4 and SAPI5 compliant TTS
-                and ASR.
+allowing to make use of SAPI4 and SAPI5 compliant TTS and ASR.
 
-                * The TalkingJava SDK and runtime libraries are
-                FREE FOR PERSONAL USE
-                ONLY.
-                * Any COMMERCIAL CORPORATE or
-                INSTITUTIONAL use of the SDK or
-                runtimes requires
-                purchase of one or more
-                professional licenses. Please see
-                the website http://www.cloudgarden.com for
-                current
-                details.
-                * The SDK and implementation is the property of
-                Cloudgarden,
+* The TalkingJava SDK and runtime libraries are FREE FOR PERSONAL USE ONLY.
+* Any COMMERCIAL CORPORATE or INSTITUTIONAL use of the SDK or runtimes requires
+  purchase of one or more professional licenses. Please see the website 
+  http://www.cloudgarden.com for current details.
+* The SDK and implementation is the property of Cloudgarden,
 
-                Copyright (c) 2001-2009, all rights
-                reserved.
+Copyright (c) 2001-2009, all rights reserved.
 
-                Note: Do not select any other JSAPI platform if
-                you install this one.
+Note: Do not select any other JSAPI platform if you install this one.
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
                 <include name="jsapi10-talking-java-implementation.xml" />
@@ -192,23 +173,17 @@
             </fileset>
         </pack>
         <pack name="JSAPI 2.0 implementation platform" required="no"
-            preselected="no">
-            <description>Base implementation platform based on JSAPI
-                2.0.
+            preselected="yes">
+            <description>Base implementation platform based on JSAPI 2.0.
 
-                This package is required if you plan to use one of
-                the demo
-                implementation platforms for JSAPI 2.0 or if you
-                are
-                having your own JSAPI 2.0 compliant speech engine.
+This package is required if you plan to use one of the demo
+implementation platforms for JSAPI 2.0 or if you are
+having your own JSAPI 2.0 compliant speech engine.
 
-                This is an implementation of a draft specification
-                developed under the
-                Java Community Process (JCP) and is
-                made available for
-                testing and evaluation purposes only.
-                The code is not compatible with any specification of the
-                JCP.
+This is an implementation of a draft specification developed under the
+Java Community Process (JCP) and is made available for
+testing and evaluation purposes only.
+The code is not compatible with any specification of the JCP.
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
                 <include name="jsapi20-implementation.xml" />
@@ -221,13 +196,13 @@
             </fileset>
         </pack>
         <pack name="FreeTTS and Sphinx 4 support for JSAPI 2.0"
-            required="no" preselected="no">
+            required="no" preselected="yes">
             <depends packname="JSAPI 2.0 implementation platform" />
             <description>FreeTTS and Sphinx 4 support for JSAPI 1.0.
 
-                Adds basic support for the JSAPI 2.0 implementation
-                platform using FreeTTS for speech synthesis and sphinx 4
-                for speech recognition.
+Adds basic support for the JSAPI 2.0 implementation
+platform using FreeTTS for speech synthesis and sphinx 4
+for speech recognition.
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
                 <include name="jsapi20-implementation.xml" />
@@ -263,9 +238,7 @@
             <depends packname="JSAPI 2.0 implementation platform" />
             <description>Support for Mac OSX for JSAPI 2.0
 
-                Rudimentary
-                support since Mac OSX does not support a grammar based
-                recognition.
+Rudimentary support since Mac OSX does not support a grammar based recognition.
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
                 <include name="jsapi20-mac-implementation.xml" />
@@ -279,8 +252,7 @@
             preselected="no">
             <description>Demo implementation platform based on JTAPI.
 
-                JTAPI is required to enable telephony support for
-                JVoiceXML (Experimental).
+JTAPI is required to enable telephony support for JVoiceXML (Experimental).
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
                 <include name="jtapi-implementation.xml" />
@@ -301,10 +273,8 @@
             preselected="no">
             <description>Demo implementation platform for MARC.
 
-                You will
-                need to download MARC from http://marc.limsi.fr to use
-                this
-                implementation platform.
+You will need to download and install MARC from http://marc.limsi.fr to use
+this implementation platform.
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
                 <include name="marc-implementation.xml" />
@@ -315,12 +285,9 @@
         </pack>
         <pack name="Mary implementation platform" required="no"
             preselected="no">
-            <description>Demo implementation platform for the Open Mary
-                Speech Synthesizer.
+            <description>Demo implementation platform for the Open Mary Speech Synthesizer.
 
-                You will need a Mary Server installed
-                to use this implementation
-                platform.
+You will need a Mary Server installed to use this implementation platform.
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
                 <include name="mary-implementation.xml" />
@@ -332,12 +299,9 @@
         </pack>
         <pack name="MRCPv2 implementation platform" required="no"
             preselected="no">
-            <description>Demo implementation platform based for the
-                MRCPv2 protocol.
+            <description>Demo implementation platform based for the MRCPv2 protocol.
 
-                You will need a MRCPv2 server in
-                addition to use this implementation
-                platform.
+You will need a MRCPv2 server in addition to use this implementation platform.
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
                 <include name="mrcpv2-implementation.xml" />
@@ -360,8 +324,7 @@
         </pack>
         <pack name="Text implementation platform" required="no"
             preselected="no">
-            <description>Demo implementation platform with text based
-                input and output.
+            <description>Demo implementation platform with text based input and output.
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
                 <include name="text-implementation.xml" />
@@ -372,13 +335,11 @@
             </fileset>
         </pack>
         <pack name="MMI call manager" required="no" preselected="no">
-            <description>Demo call manager that allows the use of
-                JVoiceXML as a modality component in an MMI
-                architectural pattern compatible setting.
+            <description>Demo call manager that allows the use of JVoiceXML as
+a modality component in an MMI architectural pattern compatible setting.
 
-                The selection
-                of this module requires the selection of an Event and
-                Transport Layer (ETL).
+The selection of this module requires the selection of an Event and Transport
+Layer (ETL).
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
                 <include name="mmi-callmanager.xml" />
@@ -390,8 +351,7 @@
             </fileset>
         </pack>
         <pack name="HTTP ETL for MMI" required="no" preselected="no">
-            <description>Event and Transportlayer based on the HTTP
-                protocol and XML documents.
+            <description>Event and Transportlayer based on the HTTP protocol and XML documents.
             </description>
             <depends packname="MMI call manager" />
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
@@ -408,9 +368,9 @@
                 <include name="servlet-api-3.1.jar" />
             </fileset>
         </pack>
-        <pack name="Socket ETL for MMI" required="no" preselected="no">
-            <description>Event and Transportlayer based on sockets and
-                XML documents.
+        <pack name="Socket ETL for MMI" required="no" preselected="no"
+            requires="MMI call manager">
+            <description>Event and Transportlayer based on sockets and XML documents.
             </description>
             <depends packname="MMI call manager" />
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
@@ -420,9 +380,9 @@
                 <include name="org.jvoicexml.callmanager.mmi.socket.jar" />
             </fileset>
         </pack>
-        <pack name="umndo ETL for MMI" required="no" preselected="no">
-            <description>Event and Transportlayer based on sockets and
-                XML documents.
+        <pack name="umundo ETL for MMI" required="no" preselected="no"
+            requires="MMI call manager">
+            <description>Event and Transportlayer based on uMundo (https://github.com/tklab-tud/umundo) and XML documents.
             </description>
             <depends packname="MMI call manager" />
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
@@ -434,14 +394,17 @@
                 <include name="protobuf-java-2.5.0.jar" />
             </fileset>
         </pack>
-        <pack name="VoiceXML Unit" required="no" preselected="no">
-            <description>Unit testing framework for VoiceXML.
+        <pack name="VoiceXML Unit" required="no" preselected="no"
+            requires="Text implementation platform">
+            <depends packname="Text implementation platform" />
+            <description>Unit testing framework for VoiceXML. It builds upon 
+JUnit (http://junit.org) and the text implementation platform.
             </description>
             <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
                 <include name="org.jvoicexml.voicexmlunit.jar" />
             </fileset>
         </pack>
-        <pack name="Datamodel" required="yes" preselcted="yes">
+        <pack name="ECMAScript Datamodel" required="yes" preselected="yes">
             <description>ECMAScript Datamodel.
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
@@ -456,33 +419,27 @@
             <description>Javadoc API</description>
             <file src="doc/api" targetdir="$INSTALL_PATH/doc" />
         </pack>
-        <pack name="Userguide" required="no" preselected="no">
+        <pack name="Userguide" required="no" preselected="yes">
             <description>JVoiceXML User Guide</description>
             <fileset dir="doc" targetdir="$INSTALL_PATH/doc">
                 <include name="jvxml-userguide-@{jvxml.version}.pdf" />
             </fileset>
         </pack>
-        <pack name="Demo" required="no" preselected="no">
+        <pack name="Demo" required="no" preselected="yes">
             <description>Demo programs.
 
-                The demo programs are designed to
-                work with the JSAPI 1.0
-                implementation platform. It is
-                recommended to install
-                that platform but not required.
-                The demo programs will also work with other platforms
-                but may need a
-                bit tweaking.
+The demo programs are designed to work with the JSAPI 2.0 implementation
+platform. It is recommended to install that platform but not required.
+The demo programs will also work with other platforms but may need a
+bit tweaking.
             </description>
             <file src="demo" targetdir="$INSTALL_PATH" />
         </pack>
         <pack name="Source Code" required="no" preselected="no">
             <description>JVoiceXML Source Code
 
-                You will need ANT to build
-                the binaries.
-                ANT can be downloaded from
-                http://ant.apache.org
+You will need ANT to build the binaries.
+ANT can be downloaded from http://ant.apache.org
             </description>
             <fileset dir="src" targetdir="$INSTALL_PATH/src" />
         </pack>
