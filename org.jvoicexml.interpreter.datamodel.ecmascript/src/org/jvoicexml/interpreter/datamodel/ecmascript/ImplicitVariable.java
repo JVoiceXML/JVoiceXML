@@ -53,9 +53,6 @@ public final class ImplicitVariable extends ScriptableObject {
 
     /**
      * Constructs a new objects.
-     * 
-     * @param variableScope
-     *            the scope of this implicit variable
      */
     @JSConstructor
     public ImplicitVariable() {
