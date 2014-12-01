@@ -180,8 +180,9 @@ org.jvoicexml/personal-props/README.txt
 
 <target name="distribution" depends="jar">
     <property name="distFolder" value="${dist}/${jvxml.version}" />
-    <copy todir="${distFolder}/lib">
-        <fileset refid="spring.lib" />
-    </copy>
+    <copy tofile="${distFolder}/config/ecmascript-datamodel.xml"
+          file="${etc}/ecmascript-datamodel-dist.xml"
+          overwrite="true" />
+    <copy todir="${distFolder}/lib" file="${dist.jar}"/>
 </target>
 </project>
