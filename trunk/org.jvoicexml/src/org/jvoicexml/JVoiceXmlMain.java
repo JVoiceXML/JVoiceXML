@@ -449,14 +449,23 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
             throws NoresourceError, IOException, ConfigurationException {
         final Collection<Profile> loadedProfiles = config.loadObjects(
                 Profile.class, "profile");
-        if (loadedProfiles == null) {
-            LOGGER.warn("no profiles configure");
-            return;
+        if (loadedProfiles != null) {
+            for (Profile profile : loadedProfiles) {
+                final String name = profile.getName();
+                profiles.put(name, profile);
+                LOGGER.info("added profile '" + name + "'");
+            }
         }
-        for (Profile profile : loadedProfiles) {
-            final String name = profile.getName();
-            profiles.put(name, profile);
-            LOGGER.info("added profile '" + name + "'");
+
+        // Report available profiles
+        if (profiles.isEmpty()) {
+            LOGGER.warn("no profiles available");
+        } else {
+            LOGGER.info("available profiles:");
+            for (String name : profiles.keySet()) {
+                final Profile profile = profiles.get(name);
+                LOGGER.info("- '" + profile.getName() + "'");
+            }
         }
     }
 
