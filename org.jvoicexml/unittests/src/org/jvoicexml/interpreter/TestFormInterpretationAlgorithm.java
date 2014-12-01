@@ -43,10 +43,7 @@ import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.mock.MockJvoiceXmlCore;
 import org.jvoicexml.mock.MockRecognitionResult;
-import org.jvoicexml.mock.config.MockConfiguration;
-import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.mock.implementation.MockUserInput;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
@@ -91,17 +88,19 @@ public final class TestFormInterpretationAlgorithm {
      */
     @Before
     public void setUp() throws Exception {
-        platform = new MockImplementationPlatform();
-        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
+        platform = Mockito.mock(ImplementationPlatform.class);
         profile = Mockito.mock(Profile.class);
         final SsmlParsingStrategyFactory factory = Mockito
                 .mock(SsmlParsingStrategyFactory.class);
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
+        final JVoiceXmlCore jvxml = Mockito.mock(JVoiceXmlCore.class);
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile);
-        final Configuration configuration = new MockConfiguration();
+        final Configuration configuration = Mockito.mock(Configuration.class);
         context = new VoiceXmlInterpreterContext(session, configuration);
+        final DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(context.getDataModel()).thenReturn(model);
         interpreter = new VoiceXmlInterpreter(context);
     }
 
@@ -176,7 +175,7 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testActivateFieldGrammars() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -228,7 +227,7 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testReentrantActivateFieldGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -289,7 +288,7 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testTwoFieldsActivateFieldGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -414,7 +413,7 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testReentrantActivateFormGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -470,7 +469,7 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testActivateFormFieldGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();

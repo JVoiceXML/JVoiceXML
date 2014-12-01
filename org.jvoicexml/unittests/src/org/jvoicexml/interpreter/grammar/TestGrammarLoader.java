@@ -37,7 +37,6 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
@@ -80,7 +79,7 @@ public final class TestGrammarLoader {
                 factory);
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile);
-        final Configuration configuration = new MockConfiguration();
+        final Configuration configuration = Mockito.mock(Configuration.class);
         context = new VoiceXmlInterpreterContext(session, configuration);
     }
 
