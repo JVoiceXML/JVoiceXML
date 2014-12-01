@@ -72,7 +72,8 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         </fileset>
 
         <!-- JSON simple library -->
-        <property name="jsonsimple.dir" value="${3rdparty.dir}/jsonsimple1.1.1" />
+        <property name="jsonsimple.dir"
+                  value="${3rdparty.dir}/jsonsimple1.1.1" />
         <property name="jsonsimple.lib.dir" value="${jsonsimple.dir}/lib" />
         <fileset dir="${jsonsimple.lib.dir}" id="jsonsimple.lib">
             <include name="json-simple-1.1.1.jar" />
@@ -107,8 +108,9 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         <property name="sphinx.dir" value="${3rdparty.dir}/sphinx4" />
         <property name="sphinx.lib.dir" value="${sphinx.dir}/lib" />
         <fileset dir="${sphinx.lib.dir}" id="sphinx4.lib">
-            <include name="sphinx4.jar" />
+            <include name="sphinx4-core-1.0-SNAPSHOT.jar" />
             <include name="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar" />
+            <include name="speechdata2014.cd_cont_2000.jar" />
         </fileset>
 
         <!-- jchardet library -->
