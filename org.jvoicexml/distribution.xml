@@ -173,6 +173,10 @@ This file builds the distribution files for JVoiceXML.
         </ant>
         <echo message="distributing org.jvoicexml.config" />
         <ant dir="../org.jvoicexml.config" inheritall="false" inheritrefs="false" target="distribution" />
+        <echo message="distributing org.jvoicexml.interpreter.datamodel.ecmascript" />
+        <ant dir="../org.jvoicexml.interpreter.datamodel.ecmascript" inheritall="false" inheritrefs="false" target="distribution" />
+        <echo message="distributing org.jvoicexml.profile.vxml21" />
+        <ant dir="../org.jvoicexml.profile.vxml21" inheritall="false" inheritrefs="false" target="distribution" />
         <antcall target="-distributionPlatforms" />
     </target>
 
@@ -271,6 +275,9 @@ servlet.include=servlet-api.jar
             <param name="demoproject" value="org.jvoicexml.demo.scriptdemo" />
         </antcall>
         <antcall target="-copyDemoProject">
+            <param name="demoproject" value="org.jvoicexml.demo.simpleinputdemo" />
+        </antcall>
+        <antcall target="-copyDemoProject">
             <param name="demoproject" value="org.jvoicexml.demo.subdialogdemo" />
         </antcall>
         <antcall target="-copyDemoProject">
@@ -301,19 +308,25 @@ servlet.include=servlet-api.jar
             <param name="currentcomponent" value="org.jvoicexml" />
         </antcall>
         <antcall target="-copyComponentSourceCode">
-            <param name="currentcomponent" value="org.jvoicexml.config" />
-        </antcall>
-        <antcall target="-copyComponentSourceCode">
             <param name="currentcomponent" value="org.jvoicexml.client" />
         </antcall>
         <antcall target="-copyComponentSourceCode">
-            <param name="currentcomponent" value="org.jvoicexml.xml" />
+            <param name="currentcomponent" value="org.jvoicexml.config" />
+        </antcall>
+        <antcall target="-copyComponentSourceCode">
+            <param name="currentcomponent" value="org.jvoicexml.interpreter.datamodel.ecmascript" />
         </antcall>
         <antcall target="-copyComponentSourceCode">
             <param name="currentcomponent" value="org.jvoicexml.jndi" />
         </antcall>
         <antcall target="-copyComponentSourceCode">
             <param name="currentcomponent" value="org.jvoicexml.processor.srgs" />
+        </antcall>
+        <antcall target="-copyComponentSourceCode">
+            <param name="currentcomponent" value="org.jvoicexml.profile.vxml21" />
+        </antcall>
+        <antcall target="-copyComponentSourceCode">
+            <param name="currentcomponent" value="org.jvoicexml.xml" />
         </antcall>
         <echo append="true" file="${distFolder}/src/org.jvoicexml/config-props/ant.properties">
 
