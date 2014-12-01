@@ -32,13 +32,10 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.Application;
-import org.jvoicexml.DocumentServer;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
-import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -244,8 +241,6 @@ public final class TestScriptStrategy extends TagStrategyTestBase {
      */
     @Test(expected = BadFetchError.class)
     public void testExecuteNone() throws JVoiceXMLEvent, Exception {
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.setVariable("test", "'" + uri.toString() + "'");
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Script script = vxml.appendChild(Script.class);
