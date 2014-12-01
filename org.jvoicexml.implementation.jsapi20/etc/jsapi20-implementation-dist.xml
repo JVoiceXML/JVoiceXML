@@ -12,8 +12,10 @@
   <classpath>lib/cmu_us_kal.jar</classpath>
   <classpath>lib/cmulex.jar</classpath>
   <classpath>lib/en_us.jar</classpath>
-  <classpath>lib/sphinx4.jar</classpath>
+  <classpath>lib/sphinx4-core-1.0-SNAPSHOT.jar</classpath>
   <classpath>lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar</classpath>
+    <classpath>3rdparty/sphinx4/lib/speechdata2014.cd_cont_2000.jar
+    </classpath>
 
   <beans:bean
     class="org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutputFactory">
