@@ -33,7 +33,6 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
@@ -74,7 +73,7 @@ public final class TestVoiceXmlInterpreter {
         final VoiceXmlInterpreterContext context = new VoiceXmlInterpreterContext(
                 session, null);
         interpreter = new VoiceXmlInterpreter(context);
-        configuration = new MockConfiguration();
+        configuration = Mockito.mock(Configuration.class);
     }
 
     /**

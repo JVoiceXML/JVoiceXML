@@ -41,7 +41,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.config.MockConfiguration;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
@@ -85,7 +84,7 @@ public final class TestCatchEventStrategy {
 
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile);
-        final Configuration configuration = new MockConfiguration();
+        final Configuration configuration = Mockito.mock(Configuration.class);
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
     }

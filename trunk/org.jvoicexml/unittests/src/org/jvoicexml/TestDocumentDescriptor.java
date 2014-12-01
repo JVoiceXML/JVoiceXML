@@ -124,7 +124,7 @@ public final class TestDocumentDescriptor {
         final String value2 = "value2";
         final KeyValuePair pair2 = new KeyValuePair(name2, value2);
         Assert.assertFalse("exected to get no value",
-                descriptor.getParameters().contains(pair1));
+                descriptor.getParameters().contains(pair2));
         descriptor.addParameter(pair2);
         Assert.assertTrue(descriptor.getParameters().contains(pair1));
         Assert.assertTrue(descriptor.getParameters().contains(pair2));
