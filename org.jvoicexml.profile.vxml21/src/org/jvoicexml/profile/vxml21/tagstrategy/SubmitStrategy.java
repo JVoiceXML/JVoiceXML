@@ -27,7 +27,6 @@
 package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -36,7 +35,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;

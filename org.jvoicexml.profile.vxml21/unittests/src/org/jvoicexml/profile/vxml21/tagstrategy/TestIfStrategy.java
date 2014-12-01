@@ -26,18 +26,14 @@
 
 package org.jvoicexml.profile.vxml21.tagstrategy;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.TagStrategyFactory;
-import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Block;
-import org.jvoicexml.xml.vxml.Foreach;
 import org.jvoicexml.xml.vxml.If;
-import org.jvoicexml.xml.vxml.Value;
 import org.mockito.Mockito;
 
 /**

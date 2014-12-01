@@ -43,9 +43,7 @@ import org.jvoicexml.profile.SsmlParser;
 import org.jvoicexml.profile.SsmlParsingStrategy;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.profile.vxml21.tagstrategy.ValueStrategy;
-import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.Text;
-import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.P;
 import org.jvoicexml.xml.ssml.Speak;
@@ -257,18 +255,6 @@ public final class TestSsmlParser {
      */
     @Test
     public void testGetDocumentForEach() throws Exception, JVoiceXMLEvent {
-        scripting.eval("function GetMovieList()" + "{"
-                + "var movies = new Array(3);" + "movies[0] = new Object();"
-                + "movies[0].audio = \"godfather.wav\";"
-                + "movies[0].tts = \"the godfather\";"
-                + "movies[1] = new Object();"
-                + "movies[1].audio = \"high_fidelity.wav\";"
-                + "movies[1].tts = \"high fidelity\";"
-                + "movies[2] = new Object();"
-                + "movies[2].audio = \"raiders.wav\";"
-                + "movies[2].tts = \"raiders of the lost ark\";"
-                + "return movies;" + "}");
-        scripting.eval("var prompts=GetMovieList();");
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
 
@@ -287,6 +273,13 @@ public final class TestSsmlParser {
         final Value value = audio.appendChild(Value.class);
         value.setExpr("thePrompt.tts");
 
+        Mockito.when(model.readVariable(foreach.getArray(), Object[].class))
+                .thenReturn(new Object[3]);
+        Mockito.when(model.evaluateExpression("thePrompt.audio", Object.class))
+                .thenReturn("godfather.wav", "high_fidelity.wav", "raiders.wav");
+        Mockito.when(model.evaluateExpression("thePrompt.tts", Object.class))
+                .thenReturn("the godfather", "high fidelity",
+                        "raiders of the lost ark");
         final SsmlParser parser = new VoiceXml21SsmlParser(profile, prompt,
                 context);
 
