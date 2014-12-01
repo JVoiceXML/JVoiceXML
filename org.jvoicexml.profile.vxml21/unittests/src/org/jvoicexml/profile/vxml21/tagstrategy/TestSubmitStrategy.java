@@ -28,6 +28,8 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,7 +38,9 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.SubmitEvent;
-import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.interpreter.datamodel.DataModelObjectSerializer;
+import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.ccxml.Var;
 import org.jvoicexml.xml.vxml.Block;
@@ -44,6 +48,7 @@ import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.Submit;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * This class provides a test case for the {@link SubmitStrategy}.
@@ -54,11 +59,14 @@ import org.jvoicexml.xml.vxml.Vxml;
  */
 public final class TestSubmitStrategy extends TagStrategyTestBase {
     /**
-     * Test method for {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test
     public void testExecute() throws Exception, JVoiceXMLEvent {
@@ -80,11 +88,14 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
     }
 
     /**
-     * Test method for {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test
     public void testExecuteExpr() throws Exception, JVoiceXMLEvent {
@@ -97,8 +108,9 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
         final Submit submit = block.appendChild(Submit.class);
         submit.setExpr(expr);
         final URI next = new URI("http://www.jvoicexml.org");
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.setVariable(expr, next.toString());
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression(expr, Object.class)).thenReturn(
+                next.toString());
         final SubmitStrategy strategy = new SubmitStrategy();
         SubmitEvent event = null;
         try {
@@ -114,11 +126,14 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
     }
 
     /**
-     * Test method for {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test(expected = BadFetchError.class)
     public void testExecuteNone() throws Exception, JVoiceXMLEvent {
@@ -129,25 +144,24 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
     }
 
     /**
-     * Test method for {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test
     public void testExecuteParameters() throws Exception, JVoiceXMLEvent {
-        final ScriptingEngine scripting = getScriptingEngine();
         final String name1 = "test";
         final String value1 = "Horst Buchholz";
-        scripting.setVariable(name1, value1);
         final String name2 = "test2";
         final String value2 = "Walter Giller";
-        scripting.setVariable(name2, value2);
         final String name3 = "test3";
         final File file = new File("test/test.wav");
         final String value3 = file.toURI().toString();
-        scripting.setVariable(name3, value3);
 
         final Block block = createBlock();
         final Submit submit = block.appendChild(Submit.class);
@@ -158,6 +172,21 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
         tokens.add(name2);
         tokens.add(name3);
         submit.setNameList(tokens);
+
+        final DataModel model = getDataModel();
+        Mockito.when(model.readVariable(name1, Object.class))
+                .thenReturn(value1);
+        Mockito.when(model.readVariable(name2, Object.class))
+                .thenReturn(value2);
+        Mockito.when(model.readVariable(name3, Object.class))
+                .thenReturn(value3);
+        final DataModelObjectSerializer serializer = Mockito
+                .mock(DataModelObjectSerializer.class);
+        Mockito.when(model.getSerializer()).thenReturn(serializer);
+        Mockito.when(serializer.serialize(model, name1, value1)).thenReturn(
+                Arrays.asList(new KeyValuePair(name1, value1)));
+        Mockito.when(serializer.serialize(model, name2, value2)).thenReturn(
+                Arrays.asList(new KeyValuePair(name2, value2)));
         final SubmitStrategy strategy = new SubmitStrategy();
         SubmitEvent event = null;
         try {
@@ -170,34 +199,33 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
         Assert.assertTrue(descriptor.isForceLoad());
         Assert.assertEquals(next, descriptor.getUri());
         Assert.assertEquals(RequestMethod.GET, descriptor.getMethod());
-        Assert.assertEquals(value1, descriptor.getParameters().get(name1));
-        Assert.assertEquals(value2, descriptor.getParameters().get(name2));
-        final File expectedFile = new File(file.toURI().toString());
-        final File actualFile = (File) descriptor.getParameters().get(name3);
-        Assert.assertEquals(0, expectedFile.compareTo(actualFile));
+        final Collection<KeyValuePair> parameters = descriptor.getParameters();
+        Assert.assertTrue(parameters.contains(new KeyValuePair(name1, value1)));
+        Assert.assertTrue(parameters.contains(new KeyValuePair(name2, value2)));
+        Assert.assertTrue(parameters.contains(new KeyValuePair(name3, new File(
+                value3))));
     }
 
     /**
-     * Test method for {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for
+     * {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *                Test failed.
      */
     @Test(expected = SemanticError.class)
-    public void testExecuteParametersUndefined()
-            throws Exception, JVoiceXMLEvent {
-        final ScriptingEngine scripting = getScriptingEngine();
+    public void testExecuteParametersUndefined() throws Exception,
+            JVoiceXMLEvent {
         final String name1 = "test";
         final String value1 = "Horst Buchholz";
-        scripting.setVariable(name1, value1);
         final String name2 = "test2";
         final String value2 = "Walter Giller";
-        scripting.setVariable(name2, value2);
         final String name3 = "test3";
         final File file = new File("test/test.wav");
         final String value3 = file.toURI().toString();
-        scripting.setVariable(name3, value3);
 
         final Block block = createBlock();
         final Submit submit = block.appendChild(Submit.class);
@@ -209,43 +237,24 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
         tokens.add(name3);
         tokens.add("test4");
         submit.setNameList(tokens);
+
+        final DataModel model = getDataModel();
+        Mockito.when(model.readVariable(name1, Object.class))
+                .thenReturn(value1);
+        Mockito.when(model.readVariable(name2, Object.class))
+                .thenReturn(value2);
+        Mockito.when(model.readVariable(name3, Object.class))
+                .thenReturn(value3);
+        Mockito.when(model.readVariable("test4", Object.class)).thenThrow(
+                new SemanticError("no test 4"));
+        final DataModelObjectSerializer serializer = Mockito
+                .mock(DataModelObjectSerializer.class);
+        Mockito.when(model.getSerializer()).thenReturn(serializer);
+        Mockito.when(serializer.serialize(model, name1, value1)).thenReturn(
+                Arrays.asList(new KeyValuePair(name1, value1)));
+        Mockito.when(serializer.serialize(model, name2, value2)).thenReturn(
+                Arrays.asList(new KeyValuePair(name2, value2)));
         final SubmitStrategy strategy = new SubmitStrategy();
         executeTagStrategy(submit, strategy);
-    }
-
-    /**
-     * Test method for {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
-     * @exception Exception
-     *            Test failed.
-     * @exception JVoiceXMLEvent
-     *            Test failed.
-     */
-    @Test
-    public void testExecuteParametersCompoundObject()
-        throws Exception, JVoiceXMLEvent {
-        final ScriptingEngine scripting = getScriptingEngine();
-        scripting.eval("var A = new Object();");
-        scripting.eval("A.B = 'test';");
-        final Block block = createBlock();
-        final Submit submit = block.appendChild(Submit.class);
-        final URI next = new URI("http://www.jvoicexml.org");
-        submit.setNextUri(next);
-        final TokenList tokens = new TokenList();
-        tokens.add("A");
-        submit.setNameList(tokens);
-        final SubmitStrategy strategy = new SubmitStrategy();
-        SubmitEvent event = null;
-        try {
-            executeTagStrategy(submit, strategy);
-        } catch (SubmitEvent e) {
-            event = e;
-        }
-        Assert.assertNotNull(event);
-        final DocumentDescriptor descriptor = event.getDocumentDescriptor();
-        Assert.assertTrue(descriptor.isForceLoad());
-        Assert.assertEquals(next, descriptor.getUri());
-        Assert.assertEquals(RequestMethod.GET, descriptor.getMethod());
-        Assert.assertEquals(scripting.getVariable("A"),
-                descriptor.getParameters().get("A"));
     }
 }

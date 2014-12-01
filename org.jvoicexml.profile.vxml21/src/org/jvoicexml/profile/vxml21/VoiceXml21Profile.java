@@ -27,7 +27,6 @@
 package org.jvoicexml.profile.vxml21;
 
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.datamodel.DataModelObjectSerializer;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.profile.TagStrategyFactory;

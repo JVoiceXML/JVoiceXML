@@ -34,9 +34,6 @@ import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.mock.TestAppender;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Log;
-import org.jvoicexml.xml.vxml.Script;
-import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
 
 /**
