@@ -180,8 +180,8 @@ org.jvoicexml/personal-props/README.txt
 
 <target name="distribution" depends="jar">
     <property name="distFolder" value="${dist}/${jvxml.version}" />
-    <copy todir="${distFolder}/lib">
-        <fileset refid="spring.lib" />
-    </copy>
+    <copy tofile="${distFolder}/config/mmi-profile.xml"
+      file="${etc}/mmi-profile-dist.xml" overwrite="true" />
+    <copy todir="${distFolder}/lib" file="${dist.jar}" />
 </target>
 </project>
