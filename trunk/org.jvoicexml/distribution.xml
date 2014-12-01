@@ -109,6 +109,7 @@ This file builds the distribution files for JVoiceXML.
             <fileset refid="sphinx4.lib" />
             <fileset refid="loggings.lib" />
             <fileset refid="codec.lib" />
+            <fileset refid="lang.lib" />
             <fileset refid="rhino.lib" />
             <fileset refid="pool.lib" />
             <fileset refid="jlibrtp.lib" />
