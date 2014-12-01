@@ -105,7 +105,9 @@ public final class GrammarChecker {
     /**
      * Checks if the given tokens can be represented using the given graph.
      * 
-     * @param tokens
+     * @param grammar
+     *            the grammar to check
+     * @param input
      *            the tokens
      * @return <code>true</code> if the tokens are valid.
      * @throws GrammarException
