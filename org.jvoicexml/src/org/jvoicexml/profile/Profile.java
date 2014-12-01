@@ -88,7 +88,7 @@ public interface Profile {
     /**
      * Retrieves the parsing strategy to parse nodes into SSML document.
      * 
-     * @return
+     * @return the parsing strategy
      */
     SsmlParsingStrategyFactory getSsmlParsingStrategyFactory();
 }

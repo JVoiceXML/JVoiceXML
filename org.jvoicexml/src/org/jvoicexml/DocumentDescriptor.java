@@ -151,7 +151,7 @@ public final class DocumentDescriptor {
 
     /**
      * Adds the given parameter to the list of known parameters.
-     * @param pair the parameter to add
+     * @param pairs the parameters to add
      */
     public void addParameter(final Collection<KeyValuePair> pairs) {
         parameters.addAll(pairs);

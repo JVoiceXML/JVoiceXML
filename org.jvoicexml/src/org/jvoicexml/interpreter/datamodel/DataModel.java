@@ -86,7 +86,7 @@ public interface DataModel {
     /**
      * Creates a new scope object and pushes it on top of the scope stack.
      * 
-     * @param scooe
+     * @param scope
      *            the scope to create
      * @return {@code 0} upon success, failure status if a scope already exists
      *         with the specified name.
@@ -213,7 +213,7 @@ public interface DataModel {
      * 
      * @param arrayName
      *            name of the array to create
-     * @param dimeones
+     * @param dimension
      *            initial dimension of the array
      * @param scope
      *            scope, where to create the array

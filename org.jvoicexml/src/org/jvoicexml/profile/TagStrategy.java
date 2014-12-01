@@ -75,11 +75,10 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * getAttributes}<br>
  * Retrieve the current attributes from the node.</li>
  * <li>
- * {@link #evalAttributes(org.jvoicexml.interpreter.VoiceXmlInterpreterContext)
- * evalAttributes}<br>
+ * {@link #evalAttributes(VoiceXmlInterpreterContext)}<br>
  * Evaluate attributes, that need to be evaluated by the current script context</li>
  * <li>
- * {@link #validateAttributes() validateAttributes}<br>
+ * {@link #validateAttributes(DataModel)}<br>
  * Check, if all necessary information are present.</li>
  * <li>
  * {@link #execute(VoiceXmlInterpreterContext, VoiceXmlInterpreter, FormInterpretationAlgorithm, FormItem, VoiceXmlNode)
