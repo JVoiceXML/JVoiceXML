@@ -111,7 +111,7 @@ The JSAPI 2.0 implementation platform is a good place to get started.
                 tags.
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
-                <include name="vxml2.1-profile" />
+                <include name="vxml2.1-profile.xml" />
             </fileset>
             <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
                 <include name="org.jvoicexml.profile.vxml21.jar" />
@@ -123,7 +123,7 @@ The JSAPI 2.0 implementation platform is a good place to get started.
                 tags as an MMI modality component.
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">
-                <include name="mmi-profile" />
+                <include name="mmi-profile.xml" />
             </fileset>
             <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
                 <include name="org.jvoicexml.profile.mmi.jar" />
