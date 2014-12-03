@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,7 +41,6 @@ import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
-import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -124,6 +123,7 @@ public final class TestBufferedDtmfInput implements SpokenInputListener {
                 lock.wait();
             }
         }
+        Assert.assertNotNull("no result obtained", result);
         Assert.assertTrue("result should be accepted", result.isAccepted());
         Assert.assertEquals(Character.toString(dtmf), result.getUtterance());
         input.stopRecognition();
@@ -137,6 +137,7 @@ public final class TestBufferedDtmfInput implements SpokenInputListener {
                 lock.wait();
             }
         }
+        Assert.assertNotNull("no result obtained", result);
         Assert.assertFalse("result should be rejected", result.isAccepted());
         Assert.assertEquals(Character.toString(invalidDtmf),
                 result.getUtterance());
@@ -162,6 +163,7 @@ public final class TestBufferedDtmfInput implements SpokenInputListener {
             lock.wait();
         }
         input.stopRecognition();
+        Assert.assertNotNull("no result obtained", result);
         Assert.assertFalse("result should be rejected", result.isAccepted());
         Assert.assertEquals(Character.toString(dtmf), result.getUtterance());
     }
@@ -219,6 +221,7 @@ public final class TestBufferedDtmfInput implements SpokenInputListener {
             lock.wait();
         }
         input.stopRecognition();
+        Assert.assertNotNull("no result obtained", result);
         Assert.assertTrue("result should be accepted", result.isAccepted());
         Assert.assertEquals("1234", result.getUtterance());
     }
