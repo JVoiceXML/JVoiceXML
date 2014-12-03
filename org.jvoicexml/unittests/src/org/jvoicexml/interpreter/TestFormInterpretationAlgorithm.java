@@ -26,16 +26,22 @@
 
 package org.jvoicexml.interpreter;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.Configuration;
+import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DtmfRecognizerProperties;
+import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SpeechRecognizerProperties;
+import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.NoinputEvent;
@@ -47,6 +53,7 @@ import org.jvoicexml.mock.MockRecognitionResult;
 import org.jvoicexml.mock.implementation.MockUserInput;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
+import org.jvoicexml.profile.TagStrategyFactory;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
@@ -58,6 +65,8 @@ import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * Test case for {@link FormInterpretationAlgorithm}.
@@ -85,22 +94,50 @@ public final class TestFormInterpretationAlgorithm {
      * 
      * @exception Exception
      *                set up failed
+     * @exception JVoiceXMLEvent
+     *                set up failed
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws Exception, JVoiceXMLEvent {
         platform = Mockito.mock(ImplementationPlatform.class);
+        final UserInput input = Mockito.mock(UserInput.class);
+        Mockito.when(platform.getUserInput()).thenReturn(input);
         profile = Mockito.mock(Profile.class);
         final SsmlParsingStrategyFactory factory = Mockito
                 .mock(SsmlParsingStrategyFactory.class);
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
+        final TagStrategyFactory tagfactory = Mockito
+                .mock(TagStrategyFactory.class);
+        Mockito.when(profile.getInitializationTagStrategyFactory()).thenReturn(
+                tagfactory);
         final JVoiceXmlCore jvxml = Mockito.mock(JVoiceXmlCore.class);
-        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null, profile);
+        final GrammarProcessor processor = Mockito.mock(GrammarProcessor.class);
+        Mockito.when(jvxml.getGrammarProcessor()).thenReturn(processor);
         final Configuration configuration = Mockito.mock(Configuration.class);
-        context = new VoiceXmlInterpreterContext(session, configuration);
         final DataModel model = Mockito.mock(DataModel.class);
-        Mockito.when(context.getDataModel()).thenReturn(model);
+        Mockito.when(configuration.loadObjects(DataModel.class, "datamodel"))
+                .thenReturn(Arrays.asList(model));
+        final SpeechRecognizerProperties speechproperties = Mockito
+                .mock(SpeechRecognizerProperties.class);
+        Mockito.when(configuration.loadObject(SpeechRecognizerProperties.class))
+                .thenReturn(speechproperties);
+        final DtmfRecognizerProperties dtmfproperties = Mockito
+                .mock(DtmfRecognizerProperties.class);
+        Mockito.when(configuration.loadObject(DtmfRecognizerProperties.class))
+                .thenReturn(dtmfproperties);
+        Mockito.when(jvxml.getConfiguration()).thenReturn(configuration);
+        final ConnectionInformation info = Mockito
+                .mock(ConnectionInformation.class);
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
+                info, profile);
+        context = session.getVoiceXmlInterpreterContext();
+        final GrammarDocument document = Mockito.mock(GrammarDocument.class);
+        Mockito.when(
+                processor.process(
+                        Mockito.any(VoiceXmlInterpreterContext.class),
+                        Mockito.any(FetchAttributes.class),
+                        Mockito.any(Grammar.class))).thenReturn(document);
         interpreter = new VoiceXmlInterpreter(context);
     }
 
@@ -500,6 +537,7 @@ public final class TestFormInterpretationAlgorithm {
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, executableForm);
+        final Object lock = new Object();
         final Thread thread = new Thread() {
             @Override
             public void run() {
@@ -512,14 +550,27 @@ public final class TestFormInterpretationAlgorithm {
             };
         };
         thread.start();
-        final MockUserInput input = (MockUserInput) platform.getUserInput();
-        input.waitRecognitionStarted();
-        final Collection<GrammarDocument> activeGrammars = input
-                .getActiveGrammars();
-        Assert.assertEquals(2, activeGrammars.size());
-        final EventHandler handler = context.getEventHandler();
-        final JVoiceXMLEvent event = new CancelEvent();
-        handler.onEvent(event);
+        final UserInput input = platform.getUserInput();
+        final Answer<Integer> answer = new Answer<Integer>() {
+            @Override
+            public Integer answer(final InvocationOnMock invocation)
+                    throws Throwable {
+                final Collection grammars = invocation.getArgumentAt(0,
+                        Collection.class);
+                synchronized (lock) {
+                    lock.notifyAll();
+                }
+                return grammars.size();
+            }
+        };
+        Mockito.when(
+                input.activateGrammars(Mockito
+                        .anyCollectionOf(GrammarDocument.class))).then(answer);
+        synchronized (lock) {
+            lock.wait();
+        }
+        Mockito.verify(input).activateGrammars(
+                Mockito.anyCollectionOf(GrammarDocument.class));
     }
 
     /**
@@ -552,6 +603,7 @@ public final class TestFormInterpretationAlgorithm {
         executableForm.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, executableForm);
+        final Object lock = new Object();
         final Thread thread = new Thread() {
             @Override
             public void run() {
@@ -564,14 +616,27 @@ public final class TestFormInterpretationAlgorithm {
             };
         };
         thread.start();
-        final MockUserInput input = (MockUserInput) platform.getUserInput();
-        input.waitRecognitionStarted();
-        final Collection<GrammarDocument> activeGrammars = input
-                .getActiveGrammars();
-        Assert.assertEquals(1, activeGrammars.size());
-        final EventHandler handler = context.getEventHandler();
-        final JVoiceXMLEvent event = new CancelEvent();
-        handler.onEvent(event);
+        final UserInput input = platform.getUserInput();
+        final Answer<Integer> answer = new Answer<Integer>() {
+            @Override
+            public Integer answer(final InvocationOnMock invocation)
+                    throws Throwable {
+                final Collection grammars = invocation.getArgumentAt(0,
+                        Collection.class);
+                synchronized (lock) {
+                    lock.notifyAll();
+                }
+                return grammars.size();
+            }
+        };
+        Mockito.when(
+                input.activateGrammars(Mockito
+                        .anyCollectionOf(GrammarDocument.class))).then(answer);
+        synchronized (lock) {
+            lock.wait();
+        }
+        Mockito.verify(input).activateGrammars(
+                Mockito.anyCollectionOf(GrammarDocument.class));
     }
 
     /**
@@ -712,7 +777,9 @@ public final class TestFormInterpretationAlgorithm {
         final RecognitionResult result = Mockito.mock(RecognitionResult.class);
         Mockito.when(result.getUtterance()).thenReturn("visa");
         Mockito.when(result.getConfidence()).thenReturn(1.0f);
-        Mockito.when(result.getSemanticInterpretation(Mockito.any(DataModel.class))).thenReturn("visa");
+        Mockito.when(
+                result.getSemanticInterpretation(Mockito.any(DataModel.class)))
+                .thenReturn("visa");
         Mockito.when(result.isAccepted()).thenReturn(true);
         final JVoiceXMLEvent recognitionEvent = new RecognitionEvent(null,
                 null, result);

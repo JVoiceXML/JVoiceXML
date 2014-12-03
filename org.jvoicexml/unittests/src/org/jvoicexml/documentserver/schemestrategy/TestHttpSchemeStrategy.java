@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,16 +27,11 @@ package org.jvoicexml.documentserver.schemestrategy;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.UUID;
 
 import org.junit.Test;
-import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
-import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
@@ -59,10 +54,6 @@ public final class TestHttpSchemeStrategy {
      */
     @Test(expected = BadFetchError.class)
     public void testGetInputStream() throws Exception, BadFetchError {
-        final ImplementationPlatform platform = new MockImplementationPlatform();
-        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final Session session = new JVoiceXmlSession(platform, jvxml, null,
-                null);
         final HttpSchemeStrategy strategy = new HttpSchemeStrategy();
         final URI uri = new URI("http://localhost:8080?session=id");
         final Collection<KeyValuePair> parameters = new java.util.ArrayList<KeyValuePair>();
@@ -70,7 +61,7 @@ public final class TestHttpSchemeStrategy {
         parameters.add(pair1);
         final KeyValuePair pair2 = new KeyValuePair("lastName", "Buchholz");
         parameters.add(pair2);
-        final String sessionId = session.getSessionID();
+        final String sessionId = UUID.randomUUID().toString();
         strategy.getInputStream(sessionId, uri, RequestMethod.GET, 0,
                 parameters);
     }
