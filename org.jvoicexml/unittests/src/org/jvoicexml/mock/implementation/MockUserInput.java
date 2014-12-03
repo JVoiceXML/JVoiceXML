@@ -115,7 +115,7 @@ public class MockUserInput implements UserInput {
      * {@inheritDoc}
      */
     @Override
-    public void activateGrammars(final Collection<GrammarDocument> grammars)
+    public int activateGrammars(final Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
         if (activeGrammars.addAll(grammars)) {
             for (GrammarDocument document : grammars) {
@@ -126,13 +126,14 @@ public class MockUserInput implements UserInput {
         for (GrammarDocument document : activeGrammars) {
             LOGGER.info("active: " + document + ", " + document.hashCode());
         }
+        return grammars.size();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void deactivateGrammars(final Collection<GrammarDocument> grammars)
+    public int deactivateGrammars(final Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError {
         for (GrammarDocument document : activeGrammars) {
             LOGGER.info("deactivate: " + document + ", " + document.hashCode());
@@ -146,6 +147,7 @@ public class MockUserInput implements UserInput {
         for (GrammarDocument document : activeGrammars) {
             LOGGER.info("active: " + document + ", " + document.hashCode());
         }
+        return grammars.size();
     }
 
     /**
