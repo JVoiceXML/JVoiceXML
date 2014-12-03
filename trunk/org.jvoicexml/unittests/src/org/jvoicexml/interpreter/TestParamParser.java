@@ -33,6 +33,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
@@ -42,7 +43,6 @@ import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.datamodel.DataModel;
-import org.jvoicexml.mock.MockJvoiceXmlCore;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
@@ -82,7 +82,9 @@ public final class TestParamParser {
         server.addSchemeStrategy(new MappedDocumentStrategy());
 
         final ImplementationPlatform platform = new MockImplementationPlatform();
-        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
+        final JVoiceXmlCore jvxml = Mockito.mock(JVoiceXmlCore.class);
+        final Configuration configuration = Mockito.mock(Configuration.class);
+        Mockito.when(jvxml.getConfiguration()).thenReturn(configuration);
         final Profile profile = Mockito.mock(Profile.class);
         final SsmlParsingStrategyFactory factory = Mockito
                 .mock(SsmlParsingStrategyFactory.class);
