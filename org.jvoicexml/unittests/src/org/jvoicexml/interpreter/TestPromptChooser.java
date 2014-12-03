@@ -36,8 +36,6 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.mock.MockJvoiceXmlCore;
-import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.vxml.Field;
@@ -78,8 +76,11 @@ public final class TestPromptChooser {
         final Form form = vxml.appendChild(Form.class);
         field = form.appendChild(Field.class);
         field.setName("testfield");
-        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
-        final ImplementationPlatform platform = new MockImplementationPlatform();
+        final JVoiceXmlCore jvxml = Mockito.mock(JVoiceXmlCore.class);
+        final Configuration configuration = Mockito.mock(Configuration.class);
+        Mockito.when(jvxml.getConfiguration()).thenReturn(configuration);
+        final ImplementationPlatform platform = Mockito
+                .mock(ImplementationPlatform.class);
         final Profile profile = Mockito.mock(Profile.class);
         final SsmlParsingStrategyFactory factory = Mockito
                 .mock(SsmlParsingStrategyFactory.class);
@@ -87,8 +88,8 @@ public final class TestPromptChooser {
                 factory);
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile);
-        final Configuration configuration = Mockito.mock(Configuration.class);
-        context = new VoiceXmlInterpreterContext(session, configuration);
+        context = session.getVoiceXmlInterpreterContext();
+        
     }
 
     /**
