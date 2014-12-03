@@ -125,7 +125,7 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
      * {@inheritDoc}
      */
     @Override
-    public void activateGrammars(final Collection<GrammarDocument> grammars)
+    public int activateGrammars(final Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError,
             UnsupportedFormatError {
         final Collection<GrammarImplementation<?>> voiceGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
@@ -149,13 +149,14 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
         if ((dtmfInput != null) && !dtmfGrammars.isEmpty()) {
             dtmfInput.activateGrammars(dtmfGrammars);
         }
+        return voiceGrammars.size() + dtmfGrammars.size();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void deactivateGrammars(final Collection<GrammarDocument> grammars)
+    public int deactivateGrammars(final Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError {
         final Collection<GrammarImplementation<?>> voiceGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
         final Collection<GrammarImplementation<?>> dtmfGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
@@ -183,6 +184,7 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
         if ((dtmfInput != null) && !dtmfGrammars.isEmpty()) {
             dtmfInput.deactivateGrammars(dtmfGrammars);
         }
+        return voiceGrammars.size() + dtmfGrammars.size();
     }
 
     /**

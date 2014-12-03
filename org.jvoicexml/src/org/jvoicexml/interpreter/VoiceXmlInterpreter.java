@@ -126,9 +126,7 @@ public final class VoiceXmlInterpreter {
         if (state == newState) {
             return;
         }
-
         state = newState;
-
         LOGGER.info("entered state " + state);
     }
 
@@ -146,9 +144,9 @@ public final class VoiceXmlInterpreter {
      * @param startDialog
      *            the dialog where to start interpretation
      * @param configuration
-     *            the configuration to use to load firther components
+     *            the configuration to use to load further components
      * @throws ConfigurationException
-     *             if the needed configration parts could not be loaded
+     *             if the needed configuration parts could not be loaded
      */
     void setDocument(final VoiceXmlDocument doc, final String startDialog,
             final Configuration configuration) throws ConfigurationException {

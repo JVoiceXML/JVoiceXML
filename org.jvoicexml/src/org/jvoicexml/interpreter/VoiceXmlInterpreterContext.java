@@ -155,8 +155,9 @@ public class VoiceXmlInterpreterContext {
         // Subscribe the default event handler for all events to the event bus.
         eventbus = new EventBus();
         properties = new ScopedMap<String, String>(scopeObserver);
+        final DataModel dataModel = getDataModel();
         eventHandler = new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
-                model, scopeObserver);
+                dataModel, scopeObserver);
         eventbus.subscribe("", eventHandler);
     }
 
@@ -525,14 +526,14 @@ public class VoiceXmlInterpreterContext {
 
         enterScope(Scope.APPLICATION);
 
-        model.createVariableFor("lastresult$.confidence",
-                null, Scope.APPLICATION);
-        model.createVariableFor("lastresult$.utterance",
-                null, Scope.APPLICATION);
-        model.createVariableFor("lastresult$.inputmode",
-                null, Scope.APPLICATION);
-        model.createVariableFor("lastresult$.interpretation",
-                null, Scope.APPLICATION);
+        model.createVariableFor("lastresult$.confidence", null,
+                Scope.APPLICATION);
+        model.createVariableFor("lastresult$.utterance", null,
+                Scope.APPLICATION);
+        model.createVariableFor("lastresult$.inputmode", null,
+                Scope.APPLICATION);
+        model.createVariableFor("lastresult$.interpretation", null,
+                Scope.APPLICATION);
         model.createArray("lastresult$", 0);
 
         // The main loop to interpret single- and multi-document applications
