@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,7 +33,6 @@ import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedSet;
 import org.jvoicexml.interpreter.scope.ScopedSetObserver;
 
-
 /**
  * The set of grammars active during a VoiceXML interpreter context's input
  * collection operation. This grammar set is scope aware. {@link ScopeObserver}s
@@ -44,11 +43,10 @@ import org.jvoicexml.interpreter.scope.ScopedSetObserver;
  * @since 0.7.2
  * @see org.jvoicexml.interpreter.scope.Scope
  */
-public final class ActiveGrammarSet
-    implements ScopedSetObserver<GrammarDocument> {
+public class ActiveGrammarSet implements ScopedSetObserver<GrammarDocument> {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(ActiveGrammarSet.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(ActiveGrammarSet.class);
 
     /** Set of active grammars. */
     private final ScopedSet<GrammarDocument> grammars;
@@ -58,7 +56,9 @@ public final class ActiveGrammarSet
 
     /**
      * Constructs a new object.
-     * @param scopeObserver The current scope observer.
+     * 
+     * @param scopeObserver
+     *            The current scope observer.
      */
     public ActiveGrammarSet(final ScopeObserver scopeObserver) {
         observers = new java.util.ArrayList<ActiveGrammarSetObserver>();
@@ -68,11 +68,12 @@ public final class ActiveGrammarSet
 
     /**
      * Adds the given observer to the list of known observers.
-     * @param obs the observer to add
+     * 
+     * @param obs
+     *            the observer to add
      * @since 0.7.3
      */
-    public void addActiveGrammarSetObserver(
-            final ActiveGrammarSetObserver obs) {
+    public void addActiveGrammarSetObserver(final ActiveGrammarSetObserver obs) {
         synchronized (observers) {
             observers.add(obs);
         }
@@ -80,7 +81,9 @@ public final class ActiveGrammarSet
 
     /**
      * Removes the given scope observer from the list of known observers.
-     * @param obs the observer to remove
+     * 
+     * @param obs
+     *            the observer to remove
      * @since 0.7.3
      */
     public void removeActiveGrammarSetObserver(
@@ -92,6 +95,7 @@ public final class ActiveGrammarSet
 
     /**
      * Retrieves the number of active grammars.
+     * 
      * @return number of active grammars
      */
     public int size() {
@@ -100,7 +104,9 @@ public final class ActiveGrammarSet
 
     /**
      * Adds the given grammar to the active grammar set.
-     * @param grammar the grammar to add
+     * 
+     * @param grammar
+     *            the grammar to add
      */
     public void add(final GrammarDocument grammar) {
         grammars.add(grammar);
@@ -111,7 +117,9 @@ public final class ActiveGrammarSet
 
     /**
      * Adds the given grammars to the active grammar set.
-     * @param grams the grammars to add
+     * 
+     * @param grams
+     *            the grammars to add
      */
     public void addAll(final Collection<GrammarDocument> grams) {
         grammars.addAll(grams);
@@ -123,7 +131,9 @@ public final class ActiveGrammarSet
 
     /**
      * Removes the given grammars to the active grammar set.
-     * @param grams the grammars to remove
+     * 
+     * @param grams
+     *            the grammars to remove
      * @since 0.7.6
      */
     public void removeAll(final Collection<GrammarDocument> grams) {
@@ -135,11 +145,12 @@ public final class ActiveGrammarSet
     }
 
     /**
-     * Checks if the active grammar set contains the given grammar
-     * document.
-     * @param document the grammar document to look for.
-     * @return <code>true</code> if the active grammar set contains the
-     *          given grammar document
+     * Checks if the active grammar set contains the given grammar document.
+     * 
+     * @param document
+     *            the grammar document to look for.
+     * @return <code>true</code> if the active grammar set contains the given
+     *         grammar document
      */
     public boolean contains(final GrammarDocument document) {
         return grammars.contains(document);
@@ -147,6 +158,7 @@ public final class ActiveGrammarSet
 
     /**
      * Retrieves the grammars that are currently contained in the set.
+     * 
      * @return the grammars in the set
      * @since 0.7.5
      */
