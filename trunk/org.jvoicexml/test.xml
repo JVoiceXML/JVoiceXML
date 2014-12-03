@@ -22,6 +22,7 @@ This file runs unit tests on JVoiceXML.
             <pathelement location="../org.jvoicexml.xml/classes" />
             <pathelement location="../org.jvoicexml.processor.srgs/classes" />
             <fileset refid="junit.lib" />
+            <fileset refid="mockito.lib" />
             <fileset refid="loggings.lib" />
         </path>
     </target>

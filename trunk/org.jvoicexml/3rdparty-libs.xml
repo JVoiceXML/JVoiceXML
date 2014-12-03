@@ -120,6 +120,13 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
             <include name="chardet.jar" />
         </fileset>
 
+        <!-- mockito library -->
+        <property name="mockito.dir" value="${3rdparty.dir}/mockito1.10" />
+        <property name="mockito.lib.dir" value="${mockito.dir}/lib" />
+        <fileset dir="${mockito.lib.dir}" id="mockito.lib">
+            <include name="mockito-all-1.10.12.jar" />
+        </fileset>
+
         <!-- junit library -->
         <property name="junit.dir" value="${3rdparty.dir}/junit4.11" />
         <property name="junit.lib.dir" value="${junit.dir}/lib" />
