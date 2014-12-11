@@ -46,6 +46,7 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.EventSubscriber;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
@@ -70,7 +71,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class JVoiceXmlSession extends Thread
+public class JVoiceXmlSession extends Thread
         implements Session, EventSubscriber {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
@@ -80,7 +81,7 @@ public final class JVoiceXmlSession extends Thread
     private final ConnectionInformation info;
 
     /** The VoiceXML interpreter context related to this session. */
-    private final VoiceXmlInterpreterContext context;
+    private VoiceXmlInterpreterContext context;
 
     /** Reference to the implementation platform. */
     private final ImplementationPlatform implementationPlatform;
@@ -115,10 +116,14 @@ public final class JVoiceXmlSession extends Thread
     /** The profile to use. */
     private final Profile profile;
 
-    /**
-     * Semaphore to that is set while the session is running.
-     */
+    /** The configuration to use. */
+    private final Configuration configuration;
+
+    /** Semaphore to that is set while the session is running. */
     private final Object sem;
+
+    /** The URI of the application to call. */
+    private URI applicationUri;
 
     /**
      * Constructs a new object.
@@ -148,23 +153,11 @@ public final class JVoiceXmlSession extends Thread
         application = null;
         grammarProcessor = jvxml.getGrammarProcessor();
         scopeObserver = new ScopeObserver();
-
-        // Create a new context.
-        final Configuration configuration = jvxml.getConfiguration();
-        context = new VoiceXmlInterpreterContext(this, configuration);
+        configuration = jvxml.getConfiguration();
         sem = new Object();
         closed = false;
         sessionListeners = new ScopedCollection<SessionListener>(scopeObserver);
         detailedSessionListeners = new java.util.ArrayList<DetailedSessionListener>();
-
-        // Subscribe to the event bus.
-        final EventBus eventbus = context.getEventBus();
-        eventbus.subscribe(SynthesizedOutputEvent.EVENT_TYPE, this);
-        eventbus.subscribe(SpokenInputEvent.EVENT_TYPE, this);
-        eventbus.subscribe(NomatchEvent.EVENT_TYPE, this);
-
-        // initialize the profile
-        profile.initialize(context);
     }
 
     /**
@@ -245,22 +238,15 @@ public final class JVoiceXmlSession extends Thread
         // Store the session Id in the MDC
         MDC.put("sessionId", uuid.toString());
 
-        try {
-            application = new JVoiceXmlApplication(scopeObserver);
-            final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
-            final VoiceXmlDocument doc = context.loadDocument(descriptor);
-            final URI resolvedUri = descriptor.getUri();
-            application.addDocument(resolvedUri, doc);
+        // Some initialization stuff
+        application = new JVoiceXmlApplication(scopeObserver);
+        applicationUri = uri;
+        final String sessionId = getSessionID();
+        setName(sessionId);
 
-            final String sessionId = getSessionID();
-            setName(sessionId);
+        // Start processing of the given URI
+        start();
 
-            start();
-        } catch (ErrorEvent e) {
-            LOGGER.error("error while calling '" + uri + "'", e);
-            cleanup();
-            throw e;
-        }
         return application;
     }
 
@@ -342,14 +328,46 @@ public final class JVoiceXmlSession extends Thread
     }
 
     /**
+     * Creates a new VoiceXML interpreter context.
+     * 
+     * @since 0.7.7
+     */
+    private void createContext() {
+        // Create a new context.
+        context = new VoiceXmlInterpreterContext(this, configuration);
+
+        // Subscribe to the event bus.
+        final EventBus eventbus = context.getEventBus();
+        eventbus.subscribe(SynthesizedOutputEvent.EVENT_TYPE, this);
+        eventbus.subscribe(SpokenInputEvent.EVENT_TYPE, this);
+        eventbus.subscribe(NomatchEvent.EVENT_TYPE, this);
+
+        // initialize the profile
+        profile.initialize(context);
+    }
+
+    /**
      * {@inheritDoc}
      * 
      * Session working method.
      */
     @Override
     public void run() {
-        // Store the session Id in the MDC
-        MDC.put("sessionId", uuid.toString());
+        createContext();
+
+        try {
+            final DocumentDescriptor descriptor = new DocumentDescriptor(
+                    applicationUri);
+            final VoiceXmlDocument doc = context.loadDocument(descriptor);
+            final URI resolvedUri = descriptor.getUri();
+            application.addDocument(resolvedUri, doc);
+        } catch (BadFetchError e) {
+            LOGGER.error("error processing application '" + application + "'",
+                    e);
+            processingError = new ExceptionWrapper(e.getMessage(), e);
+            cleanup();
+            return;
+        }
 
         final URI calledDevice;
         final URI callingDevice;
@@ -384,7 +402,6 @@ public final class JVoiceXmlSession extends Thread
         } catch (ErrorEvent e) {
             LOGGER.error("error processing application '" + application + "'",
                     e);
-
             processingError = e;
         } catch (Exception e) {
             LOGGER.error("error processing application '" + application + "'",

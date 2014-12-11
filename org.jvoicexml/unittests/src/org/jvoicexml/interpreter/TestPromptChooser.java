@@ -35,6 +35,7 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
@@ -86,10 +87,15 @@ public final class TestPromptChooser {
                 .mock(SsmlParsingStrategyFactory.class);
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
-        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null, profile);
-        context = session.getVoiceXmlInterpreterContext();
-        
+        final JVoiceXmlSession session = Mockito.spy(new JVoiceXmlSession(
+                platform, jvxml, null, profile));
+        context = Mockito.spy(new VoiceXmlInterpreterContext(session,
+                configuration));
+        Mockito.when(session.getVoiceXmlInterpreterContext()).thenReturn(
+                context);
+        final DataModel model = Mockito.mock(DataModel.class);
+        Mockito.when(context.getDataModel()).
+
     }
 
     /**
