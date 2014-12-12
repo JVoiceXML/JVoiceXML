@@ -1086,9 +1086,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             LOGGER.debug("activating " + grammarsToActivate.size()
                     + " grammar(s)...");
         }
-        input.activateGrammars(grammarsToActivate);
+        final int num = input.activateGrammars(grammarsToActivate);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...grammar(s) activated");
+            LOGGER.debug("..." + num + " grammar(s) activated");
         }
     }
 
