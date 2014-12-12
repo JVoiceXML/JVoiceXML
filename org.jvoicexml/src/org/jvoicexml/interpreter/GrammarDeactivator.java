@@ -36,9 +36,9 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 /**
- * Deactivates grammars, once the grammars gets out of scope. This class
- * is intended to decouple the {@link ActiveGrammarSet} from the
- * used {@link ImplementationPlatform}.
+ * Deactivates grammars, once the grammars gets out of scope. This class is
+ * intended to decouple the {@link ActiveGrammarSet} from the used
+ * {@link ImplementationPlatform}.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -46,23 +46,25 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  */
 class GrammarDeactivator implements ActiveGrammarSetObserver {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(GrammarDeactivator.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(GrammarDeactivator.class);
 
     /** The current implementation platform. */
     private final ImplementationPlatform platform;
 
     /**
      * Constructs a new object.
-     * @param ip the current implementation platform
+     * 
+     * @param ip
+     *            the current implementation platform
      */
     public GrammarDeactivator(final ImplementationPlatform ip) {
         platform = ip;
     }
 
     /**
-     * {@inheritDoc}
-     * Deactivates the grammars in the current implementation platform.
+     * {@inheritDoc} Deactivates the grammars in the current implementation
+     * platform.
      */
     @Override
     public void removedGrammars(final ActiveGrammarSet set,
@@ -70,12 +72,11 @@ class GrammarDeactivator implements ActiveGrammarSetObserver {
         try {
             final UserInput input = platform.getUserInput();
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("deactivating " + removed.size()
-                        + " grammars...");
+                LOGGER.debug("deactivating " + removed.size() + " grammars...");
             }
-            input.deactivateGrammars(removed);
+            final int num = input.deactivateGrammars(removed);
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...grammars deactivated");
+                LOGGER.debug("..." + num + " grammars deactivated");
             }
         } catch (NoresourceError e) {
             LOGGER.error(e.getMessage(), e);
