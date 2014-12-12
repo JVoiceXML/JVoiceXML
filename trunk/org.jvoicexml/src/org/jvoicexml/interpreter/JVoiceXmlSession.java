@@ -311,9 +311,7 @@ public class JVoiceXmlSession extends Thread
                         "waiting for end of session interrupted", e);
             }
         }
-
         LOGGER.info("...session ended");
-
         if (processingError != null) {
             throw processingError;
         }
