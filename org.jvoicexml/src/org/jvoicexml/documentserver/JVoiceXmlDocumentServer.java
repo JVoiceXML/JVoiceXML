@@ -68,11 +68,10 @@ import org.xml.sax.SAXException;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class JVoiceXmlDocumentServer
-    implements DocumentServer {
+public final class JVoiceXmlDocumentServer implements DocumentServer {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlDocumentServer.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(JVoiceXmlDocumentServer.class);
 
     /** Known strategy handler. */
     private final Map<String, SchemeStrategy> strategies;
@@ -95,12 +94,13 @@ public final class JVoiceXmlDocumentServer
 
     /**
      * Adds the given list of strategies for schemes to the supported schemes.
-     * @param schemeStrategies List with strategies.
+     * 
+     * @param schemeStrategies
+     *            List with strategies.
      *
      * @since 0.5
      */
-    public void setSchemeStrategies(
-            final List<SchemeStrategy> schemeStrategies) {
+    public void setSchemeStrategies(final List<SchemeStrategy> schemeStrategies) {
         for (SchemeStrategy strategy : schemeStrategies) {
             addSchemeStrategy(strategy);
         }
@@ -108,7 +108,9 @@ public final class JVoiceXmlDocumentServer
 
     /**
      * Sets the default fetch attributes.
-     * @param attrs default fetch attributes.
+     * 
+     * @param attrs
+     *            default fetch attributes.
      * @since 0.7
      */
     public void setFetchAttributes(final FetchAttributes attrs) {
@@ -118,10 +120,11 @@ public final class JVoiceXmlDocumentServer
     }
 
     /**
-     * Merges the default fetch attributes with the given fetch attributes.
-     * Any setting in the given fetch attributes will overwrite the default
-     * setting.
-     * @param attrs fetch attributes to merge with.
+     * Merges the default fetch attributes with the given fetch attributes. Any
+     * setting in the given fetch attributes will overwrite the default setting.
+     * 
+     * @param attrs
+     *            fetch attributes to merge with.
      * @return merged fetch attributes
      * @since 0.7
      */
@@ -163,10 +166,10 @@ public final class JVoiceXmlDocumentServer
      * Reads the VoiceXML document from the given <code>InputStream</code>.
      *
      * @param input
-     *        <code>InputStream</code> for the VoiceXML document.
+     *            <code>InputStream</code> for the VoiceXML document.
      * @return Retrieved VoiceXML document.
      * @exception BadFetchError
-     *            Error reading from the input stream.
+     *                Error reading from the input stream.
      *
      * @since 0.3
      */
@@ -190,8 +193,7 @@ public final class JVoiceXmlDocumentServer
      */
     @Override
     public VoiceXmlDocument getDocument(final String sessionId,
-            final DocumentDescriptor descriptor)
-            throws BadFetchError {
+            final DocumentDescriptor descriptor) throws BadFetchError {
         final URI uri = descriptor.getUri();
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final RequestMethod method = descriptor.getMethod();
@@ -203,8 +205,8 @@ public final class JVoiceXmlDocumentServer
         InputStream input = null;
         final VoiceXmlDocument document;
         try {
-            input = strategy.getInputStream(sessionId, uri, method,
-                    timeout, parameters);
+            input = strategy.getInputStream(sessionId, uri, method, timeout,
+                    parameters);
             document = readDocument(input);
         } catch (UnsupportedElementError e) {
             throw new BadFetchError(e.getMessage(), e);
@@ -228,8 +230,8 @@ public final class JVoiceXmlDocumentServer
         final Vxml vxml = document.getVxml();
         final String version = vxml.getVersion();
         if (version == null) {
-            throw new BadFetchError("The document at '"
-                    + uri + "' does not provide a version attribute!");
+            throw new BadFetchError("The document at '" + uri
+                    + "' does not provide a version attribute!");
         }
         return document;
     }
@@ -239,11 +241,10 @@ public final class JVoiceXmlDocumentServer
      * URI.
      *
      * @param uri
-     *        The URI of a document to retrieve.
-     * @return Responsible <code>SchemeStrategy</code>, never
-     *         <code>null</code>.
+     *            The URI of a document to retrieve.
+     * @return Responsible <code>SchemeStrategy</code>, never <code>null</code>.
      * @throws BadFetchError
-     *         The URI does not reference a document or no valid strategy.
+     *             The URI does not reference a document or no valid strategy.
      *
      * @since 0.3
      */
@@ -270,7 +271,7 @@ public final class JVoiceXmlDocumentServer
      * Adds the given scheme strategy.
      *
      * @param strategy
-     *        Scheme strategy to be added.
+     *            Scheme strategy to be added.
      */
     public void addSchemeStrategy(final SchemeStrategy strategy) {
         if (strategy == null) {
@@ -291,16 +292,25 @@ public final class JVoiceXmlDocumentServer
      * {@inheritDoc}
      */
     @Override
+    public URI addGrammarDocument(final String sessionId,
+            final GrammarDocument document) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public GrammarDocument getGrammarDocument(final String sessionId,
-            final URI uri, final FetchAttributes attrs)
-            throws BadFetchError {
+            final URI uri, final FetchAttributes attrs) throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving grammar '" + uri + "'");
         }
 
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
-        final ReadBuffer buffer =
-            (ReadBuffer) getObject(sessionId, descriptor, null);
+        final ReadBuffer buffer = (ReadBuffer) getObject(sessionId, descriptor,
+                null);
 
         final byte[] bytes = buffer.getBytes();
         final String encoding = buffer.getCharset();
@@ -313,8 +323,7 @@ public final class JVoiceXmlDocumentServer
      */
     @Override
     public AudioInputStream getAudioInputStream(final String sessionId,
-            final URI uri)
-            throws BadFetchError {
+            final URI uri) throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving audio input stream '" + uri + "'");
         }
@@ -349,10 +358,10 @@ public final class JVoiceXmlDocumentServer
     @Override
     public Object getObject(final String sessionId,
             final DocumentDescriptor descriptor, final String type)
-        throws BadFetchError {
+            throws BadFetchError {
         final URI uri = descriptor.getUri();
-        LOGGER.info("retrieving object with type '" + type + "' from '"
-                + uri + "'");
+        LOGGER.info("retrieving object with type '" + type + "' from '" + uri
+                + "'");
 
         // Determine the relevant strategy
         final RequestMethod method = descriptor.getMethod();
@@ -399,15 +408,17 @@ public final class JVoiceXmlDocumentServer
 
     /**
      * Reads a {@link Document} from the given {@link InputStream}.
-     * @param in the input stream to use.
+     * 
+     * @param in
+     *            the input stream to use.
      * @return read document.
      * @throws BadFetchError
-     *         Error reading.
+     *             Error reading.
      * @since 0.7
      */
     private Document readXml(final InputStream in) throws BadFetchError {
-        final DocumentBuilderFactory factory =
-            DocumentBuilderFactory.newInstance();
+        final DocumentBuilderFactory factory = DocumentBuilderFactory
+                .newInstance();
         factory.setNamespaceAware(true);
         final DocumentBuilder builder;
         try {
@@ -441,6 +452,7 @@ public final class JVoiceXmlDocumentServer
 
     /**
      * Retrieves the recording directory. If it does not exist, create it.
+     * 
      * @return recording directory.
      */
     private File getRecordingsDirectory() {
