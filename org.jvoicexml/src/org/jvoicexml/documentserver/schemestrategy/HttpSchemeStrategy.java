@@ -90,9 +90,6 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
     /** The default fetch timeout. */
     private int defaultFetchTimeout;
 
-    /** The scriptable object serializer to use. */
-    private ScriptableObjectSerializer serializer;
-
     static {
         final SessionIdentifierFactory<HttpClient> factory = new HttpClientSessionIdentifierFactory();
         SESSION_STORAGE = new SessionStorage<HttpClient>(factory);
@@ -137,19 +134,6 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
             LOGGER.debug("default fetch timeout: " + timeout);
         }
         defaultFetchTimeout = timeout;
-    }
-
-    /**
-     * Sets the serializer.
-     * 
-     * @param value
-     *            the serializer to set
-     */
-    public void setSerializer(final ScriptableObjectSerializer value) {
-        if (LOGGER.isDebugEnabled() && (value != null)) {
-            LOGGER.debug("serializer: '" + value.getClass() + "'");
-        }
-        serializer = value;
     }
 
     /**
