@@ -94,7 +94,7 @@ public final class TestPromptChooser {
         Mockito.when(session.getVoiceXmlInterpreterContext()).thenReturn(
                 context);
         final DataModel model = Mockito.mock(DataModel.class);
-        Mockito.when(context.getDataModel()).
+        Mockito.when(context.getDataModel()).thenReturn(model);
 
     }
 
