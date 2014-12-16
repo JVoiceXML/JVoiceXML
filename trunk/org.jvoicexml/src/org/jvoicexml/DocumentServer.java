@@ -70,6 +70,16 @@ public interface DocumentServer {
         throws BadFetchError;
 
     /**
+     * Adds the given grammar document to the documents store and retrieves
+     * the URI to access it.
+     * @param sessionId the id of the initiating session
+     * @param document the document to add
+     * @return the URI to access the document
+     * @since 0.7.7
+     */
+    URI addGrammarDocument(final String sessionId, final GrammarDocument document);
+
+    /**
      * Returns the external Grammar referenced by <code>URI</code>.
      *
      * <p>
