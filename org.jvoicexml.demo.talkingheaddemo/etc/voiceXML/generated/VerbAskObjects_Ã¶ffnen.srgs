@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" root="VerbAskObjects" xml:lang="de"
+    xmlns="http://www.w3.org/2001/06/grammar" mode="voice"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+                        http://www.w3.org/TR/speech-grammar/grammar.xsd"
+    scope = "public"
+    tag-format="semantics/1.0">
+  <rule id="VerbAskObjects" scope="public">
+		<tag>out = new Object(); out.r = new Object(); out.r.match = new Object(); out.r.result = new Object();</tag>
+    <one-of>
+			<item>Fenster<tag>out.r.match=1; out.r.result="Fenster öffnen";</tag></item>
+			<item>Rollläden<tag>out.r.match=1; out.r.result="Rollläden öffnen";</tag></item>
+    </one-of>
+  </rule>
+</grammar>

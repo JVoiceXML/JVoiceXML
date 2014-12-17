@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" 
+         root="numbers"
+		 xml:lang="de"
+         xmlns="http://www.w3.org/2001/06/grammar" mode="voice"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+                        http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         scope = "public"
+         tag-format="semantics/1.0">
+	<rule id="numbers" scope="public">
+		<tag>out = new Object(); out.result = new Object();</tag>
+		<one-of>
+			<item>0<tag>out.result=0;</tag></item>
+			<item>1<tag>out.result=1;</tag></item>
+			<item>2<tag>out.result=2;</tag></item>
+			<item>3<tag>out.result=3;</tag></item>
+			<item>4<tag>out.result=4;</tag></item>
+			<item>5<tag>out.result=5;</tag></item>
+			<item>6<tag>out.result=6;</tag></item>
+			<item>7<tag>out.result=7;</tag></item>
+			<item>8<tag>out.result=8;</tag></item>
+			<item>9<tag>out.result=9;</tag></item>
+		</one-of>
+	</rule>
+</grammar>
