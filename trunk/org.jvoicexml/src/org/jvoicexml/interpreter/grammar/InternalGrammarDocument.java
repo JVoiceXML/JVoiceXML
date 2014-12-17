@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,18 +37,16 @@ import org.jvoicexml.xml.srgs.ModeType;
 import org.w3c.dom.Document;
 
 /**
- * A {@link GrammarDocument} referencing a grammar inside a
- * VoiceXML document.
+ * A {@link GrammarDocument} referencing a grammar inside a VoiceXML document.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
  */
-public final class InternalGrammarDocument
-        implements GrammarDocument {
+public final class InternalGrammarDocument implements GrammarDocument {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(InternalGrammarDocument.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(InternalGrammarDocument.class);
 
     /** Base hash code. */
     private static final int HASH_CODE_BASE = 13;
@@ -73,19 +71,22 @@ public final class InternalGrammarDocument
 
     /** A grammar node. */
     private final Grammar grammar;
-    
+
     /** URI of the grammar source. */
-    private final URI uri;
+    private URI uri;
 
     /**
-     * Constructs a new object from a grammar node. This constructor is
-     * intended to be used to capture inline grammars in a VoiceXML document.
-     * @param source URI of the grammar document
-     * @param node the grammar node
+     * Constructs a new object from a grammar node. This constructor is intended
+     * to be used to capture inline grammars in a VoiceXML document.
+     * 
+     * @param source
+     *            URI of the grammar document
+     * @param node
+     *            the grammar node
      */
     public InternalGrammarDocument(final URI source, final Grammar node) {
         uri = source;
-        // Try getting the encoding of the owner document 
+        // Try getting the encoding of the owner document
         final Document owner = node.getOwnerDocument();
         final String ownerEncoding = owner.getInputEncoding();
         if (ownerEncoding == null) {
@@ -104,6 +105,14 @@ public final class InternalGrammarDocument
     @Override
     public boolean isCacheable() {
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setURI(final URI value) {
+        uri = value;
     }
 
     /**
@@ -132,6 +141,7 @@ public final class InternalGrammarDocument
 
     /**
      * {@inheritDoc}
+     * 
      * @return <code>true</code> since internal documents are for sure ASCII.
      */
     @Override
@@ -160,7 +170,7 @@ public final class InternalGrammarDocument
                     document = new String(buffer, charset);
                 } catch (UnsupportedEncodingException ex) {
                     LOGGER.warn("unable to use charset '" + charset
-                            + "' to convert grammar '"  + uri
+                            + "' to convert grammar '" + uri
                             + "'' Using default.", ex);
                     document = new String(buffer);
                 }
@@ -191,8 +201,9 @@ public final class InternalGrammarDocument
 
     /**
      * {@inheritDoc}
-     * @return <code>true</code> if the {@link GrammarDocument}s share
-     * the same buffer
+     * 
+     * @return <code>true</code> if the {@link GrammarDocument}s share the same
+     *         buffer
      */
     @Override
     public boolean equals(final GrammarDocument other) {

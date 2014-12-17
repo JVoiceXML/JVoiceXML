@@ -501,6 +501,7 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
         for (SchemeStrategy strategy : knownStrategies) {
             strategy.sessionClosed(sessionId);
         }
+        storage.clear(sessionId);
     }
 
     @Override
