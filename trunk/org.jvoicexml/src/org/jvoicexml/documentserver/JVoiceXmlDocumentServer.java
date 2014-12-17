@@ -79,6 +79,12 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
     /** The default fetch attributes. */
     private FetchAttributes attributes;
 
+    /** The document storage. */
+    private DocumentStorage storage;
+
+    /** Port of the document storage. */
+    private int storagePort;
+
     /**
      * Creates a new object.
      *
@@ -90,6 +96,27 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      */
     public JVoiceXmlDocumentServer() {
         strategies = new java.util.HashMap<String, SchemeStrategy>();
+        storagePort = 9595;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void start() throws Exception {
+        if (storagePort < 0) {
+            LOGGER.info("not starting storage port");
+        }
+        storage = new DocumentStorage(storagePort);
+    }
+
+    /**
+     * Sets the storage port.
+     * @param port port number for the {@link DocumentStorage}
+     * @since 0.7.7
+     */
+    public void setStoragePort(final int port) {
+        storagePort = port;
     }
 
     /**
@@ -473,6 +500,15 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
         final Collection<SchemeStrategy> knownStrategies = strategies.values();
         for (SchemeStrategy strategy : knownStrategies) {
             strategy.sessionClosed(sessionId);
+        }
+    }
+
+    @Override
+    public void stop() {
+        try {
+            storage.close();
+        } catch (Exception e) {
+            LOGGER.warn("error closing the document storage", e);
         }
     }
 }

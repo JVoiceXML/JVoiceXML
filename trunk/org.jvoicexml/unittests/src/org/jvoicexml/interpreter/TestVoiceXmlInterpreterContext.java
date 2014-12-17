@@ -78,6 +78,7 @@ public final class TestVoiceXmlInterpreterContext {
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
+        server.start();
 
         final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();

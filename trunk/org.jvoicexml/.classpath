@@ -47,5 +47,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/org.jvoicexml.interpreter.datamodel.ecmascript/3rdparty/jsonsimple1.1.1/lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jetty9.2.2/lib/jetty-http-9.2.2.v20140723.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jetty9.2.2/lib/jetty-io-9.2.2.v20140723.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jetty9.2.2/lib/jetty-server-9.2.2.v20140723.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jetty9.2.2/lib/jetty-util-9.2.2.v20140723.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jetty9.2.2/lib/servlet-api-3.1.jar"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
