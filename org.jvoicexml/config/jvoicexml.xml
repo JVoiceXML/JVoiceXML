@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
   <!--
     - Configuration file for the JVoiceXML VoiceXML interpreter.
-    - Copyright (C) 2005-2010 JVoiceXML group
+    - Copyright (C) 2005-2014 JVoiceXML group
     - http://jvoicexml.sourceforge.net
     -
     - This library is free software; you can redistribute it and/or
@@ -44,17 +44,6 @@
           <!-- Strategy default fetch timeout in msec -->
           <property name="fetchTimeout" value="5000"/>
           <property name="scheme" value="https" />
-          <property name="serializer">
-            <!--
-              The VoiceXML spec does not define how to serialize compound
-              javascript object when submitting a form. 
-              http://www.w3.org/TR/voicexml20#dml5.3.8
-              You may define one of the following serializers or remove this
-              property to get an exception when trying to submit a compound
-              object. -->
-            <bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/>
-            <!-- bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/-->
-          </property>
         </bean>
         <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BuiltinSchemeStrategy">
           <property name="grammarCreators">
@@ -72,6 +61,10 @@
           <property name="fetchTimeout" value="5000"/>
         </bean>
     </property>
+    <!-- port number for the document storage -->
+    <!-- a value of 0 will start the storage at port 9595 -->
+    <!-- negative values cause that no storage will be started -->
+    <property name="storagePort" value="9595" />
   </bean>
 
   <!-- The dialog strategy factory -->

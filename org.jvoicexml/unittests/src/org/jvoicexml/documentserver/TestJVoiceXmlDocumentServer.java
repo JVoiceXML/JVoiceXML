@@ -68,14 +68,18 @@ public final class TestJVoiceXmlDocumentServer {
 
     /**
      * Test setup.
+     * 
+     * @throws Exception
+     *             setup failed
      */
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         map = DocumentMap.getInstance();
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
         server.addSchemeStrategy(new FileSchemeStrategy());
+        server.start();
     }
 
     /**

@@ -259,17 +259,6 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
     }
 
     /**
-     * Sets the document server.
-     * 
-     * @param server
-     *            the document server
-     * @since 0.7.4
-     */
-    public void setDocumentServer(final DocumentServer server) {
-        documentServer = server;
-    }
-
-    /**
      * Sets the implementation platform factory.
      * <p>
      * The factory may need further configuration. See
@@ -345,6 +334,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         try {
             // Load configuration
             documentServer = config.loadObject(DocumentServer.class);
+            documentServer.start();
             implementationPlatformFactory = configuration
                     .loadObject(ImplementationPlatformFactory.class);
             implementationPlatformFactory.init(config);
@@ -353,21 +343,14 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
             initCallManager(config);
             initProfiles(config);
             initJndi(config);
+        } catch (Exception e) {
+            LOGGER.fatal(e.getMessage(), e);
+            synchronized (shutdownSemaphore) {
+                shutdownSemaphore.notifyAll();
+            }
+            fireJVoiceXmlStartupError(e);
+            return;
         } catch (NoresourceError e) {
-            LOGGER.fatal(e.getMessage(), e);
-            synchronized (shutdownSemaphore) {
-                shutdownSemaphore.notifyAll();
-            }
-            fireJVoiceXmlStartupError(e);
-            return;
-        } catch (IOException e) {
-            LOGGER.fatal(e.getMessage(), e);
-            synchronized (shutdownSemaphore) {
-                shutdownSemaphore.notifyAll();
-            }
-            fireJVoiceXmlStartupError(e);
-            return;
-        } catch (ConfigurationException e) {
             LOGGER.fatal(e.getMessage(), e);
             synchronized (shutdownSemaphore) {
                 shutdownSemaphore.notifyAll();

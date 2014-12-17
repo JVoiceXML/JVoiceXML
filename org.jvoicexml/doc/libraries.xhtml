@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=URF-8" />
 <title>Libraries</title>
 </head>
 <body>
@@ -41,15 +41,12 @@
         <li>org.jvoicexml.config.jar<br /> spring based
             configuration of JVoiceXML
         </li>
+        <li>org.jvoicexml.interpreter.datamodel.ecmascript.jar<br />
+            This jar contains a datamodel based on ECMAScript
+        </li>
         <li>org.jvoicexml.implementation.jsapi10.jar<br /> This
             jar contains a basic implementation platform based on the
             JSAPI 1.0.
-        </li>
-        <li>org.jvoicexml.implementation.jsapi10-impl.jar<br />
-            This jar contains some demo implementations for the JSAPI
-            1.0 using some open source libraries. Currently we support
-            FreeTTS as the TTS engine and sphinx 4 as the voice
-            recognizer.
         </li>
         <li>org.jvoicexml.implementation.jsapi20.jar<br /> This
             jar contains an unfinished implementation platform based on
@@ -65,8 +62,9 @@
             contains a basic implementation platform for text based
             interaction.
         </li>
-        <li>org.jvoicexml.jndi.jar<br /> This jar contains the JNDI
-            support for JVoiceXML which is needed for remote access.
+        <li>org.jvoicexml.jndi.jar<br /> This jar contains the
+            JNDI support for JVoiceXML which is needed for remote
+            access.
         </li>
         <li>org.jvoicexml.mmi.events.jar<br /> Class library for
             authoring MMI events.
@@ -122,16 +120,22 @@
                 <li>codec 1.4</li>
             </ul>
         </li>
-        <li>rhino 1.7R3 (<a href="http://www.mozilla.org/rhino/">http://www.mozilla.org/rhino/</a>)
-        </li>
-        <li>json-simple 1.1 (<a
-            href="http://code.google.com/p/json-simple//">http://code.google.com/p/json-simple/</a>)
-        </li>
+        <li>Jetty 9.2.2 <a
+            href="http://download.eclipse.org/jetty/">http://download.eclipse.org/jetty/</a></li>
         <li>spring framework 3.2.1 (<a
             href="http://www.springsource.org/">http://www.springsource.org/</a>)
         </li>
         <li>jchardet 1.1 (<a
             href="http://jchardet.sourceforge.net/">http://jchardet.sourceforge.net/</a>)
+        </li>
+    </ul>
+
+    <h4>ECMAScript data model</h4>
+    <ul>
+        <li>rhino 1.7R4 (<a href="http://www.mozilla.org/rhino/">http://www.mozilla.org/rhino/</a>)
+        </li>
+        <li>json-simple 1.1 (<a
+            href="http://code.google.com/p/json-simple//">http://code.google.com/p/json-simple/</a>)
         </li>
     </ul>
 
@@ -201,7 +205,8 @@
     <h4>HTTP ETL for the MMI callmanager</h4>
     <ul>
         <li>org.jvoicexml.callmanager.mmi.http.jar</li>
-        <li>Jetty 9.2.2 <a href="http://download.eclipse.org/jetty/">http://download.eclipse.org/jetty/</a></li>
+        <li>Jetty 9.2.2 <a
+            href="http://download.eclipse.org/jetty/">http://download.eclipse.org/jetty/</a></li>
     </ul>
 
     <h4>Socket ETL for the MMI callmanager</h4>
@@ -225,8 +230,8 @@
         <li>org.jvoicexml.client.jar</li>
         <li>org.jvoicexml.xml.jar (optional if you want to author
             VoiceXML documents</li>
-        <li>org.jvoicexml.jndi.jar (optional if you want to access JVoiceXML
-            remotely</li>
+        <li>org.jvoicexml.jndi.jar (optional if you want to access
+            JVoiceXML remotely</li>
         <li>org.jvoicexml.client.text.jar (optional, to access the
             text based implementation platform)</li>
     </ul>
