@@ -97,5 +97,4 @@ public class MmiHandler extends AbstractHandler {
         }
         baseRequest.setHandled(true);
     }
-
 }
