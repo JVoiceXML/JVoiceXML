@@ -69,6 +69,12 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
             documentServer.addSchemeStrategy(new MappedDocumentStrategy());
             documentServer.addSchemeStrategy(new FileSchemeStrategy());
             documentServer.addSchemeStrategy(new HttpSchemeStrategy());
+            try {
+                documentServer.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
         }
 
         return documentServer;

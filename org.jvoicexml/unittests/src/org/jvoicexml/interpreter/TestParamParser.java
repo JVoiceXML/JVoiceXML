@@ -80,6 +80,7 @@ public final class TestParamParser {
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
+        server.start();
 
         final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = Mockito.mock(JVoiceXmlCore.class);

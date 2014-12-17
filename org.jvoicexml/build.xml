@@ -42,6 +42,7 @@ personal-props/README.txt
             <fileset refid="httpclient.lib" />
             <fileset refid="jlibrtp.lib" />
             <fileset refid="jchardet.lib" />
+            <fileset refid="jetty.lib" />
         </path>
     </target>
 
