@@ -56,13 +56,24 @@ public interface GrammarDocument {
     /**
      * Checks, if this grammar document can be cached or should be retrieved
      * anew.
+     * 
      * @return <code>true</code> if this grammar document can be cached.
      * @since 0.7.7
      */
     boolean isCacheable();
 
     /**
+     * Sets the URI of this grammar document.
+     * 
+     * @param uri
+     *            the new URI
+     * @since 0.7.7
+     */
+    void setURI(final URI uri);
+
+    /**
      * Retrieves the URI of the source grammar.
+     * 
      * @return URI of the grammar document.
      * @since 0.7.5
      */
@@ -70,7 +81,9 @@ public interface GrammarDocument {
 
     /**
      * Sets the media type of this document.
-     * @param type the new media type.
+     * 
+     * @param type
+     *            the new media type.
      */
     void setMediaType(final GrammarType type);
 
@@ -83,21 +96,24 @@ public interface GrammarDocument {
 
     /**
      * Sets the mode type.
-     * @param type the mode type
+     * 
+     * @param type
+     *            the mode type
      * @since 0.7.5
      */
     void setModeType(final ModeType type);
 
     /**
      * Returns the mode type of the grammar.
+     * 
      * @return mode type of the grammar.
      * @since 0.7
      */
     ModeType getModeType();
 
-
     /**
      * Checks if the underlying document is an ASCII document.
+     * 
      * @return <code>true</code> if the document is an ASCII document.
      * @since 0.7.5
      */
@@ -105,15 +121,17 @@ public interface GrammarDocument {
 
     /**
      * Retrieves the document as a string.
+     * 
      * @return the document object.
      */
     String getDocument();
 
     /**
      * Retrieves the document as a string. In contrast to {@link #getDocument()}
-     * this method returns the text content of a node if it was loaded from
-     * a {@link org.jvoicexml.xml.srgs.Grammar} node of a
+     * this method returns the text content of a node if it was loaded from a
+     * {@link org.jvoicexml.xml.srgs.Grammar} node of a
      * {@link org.jvoicexml.xml.VoiceXmlNode}.
+     * 
      * @return the document as a string
      * @since 0.7.5
      */
@@ -121,8 +139,9 @@ public interface GrammarDocument {
 
     /**
      * Retrieves the document's byte array. This is typically useful if
-     * {@link #isAscii()} return <code>false</code>, otherwise the contents
-     * of the string based buffer is returned via {@link String#getBytes()}.
+     * {@link #isAscii()} return <code>false</code>, otherwise the contents of
+     * the string based buffer is returned via {@link String#getBytes()}.
+     * 
      * @return the document's byte array
      * @since 0.7.5
      */
@@ -130,7 +149,9 @@ public interface GrammarDocument {
 
     /**
      * Checks if this grammar document is equal to the given grammar document.
-     * @param other the grammar document to compare with.
+     * 
+     * @param other
+     *            the grammar document to compare with.
      * @return <code>true</code> if the grammar documents are equal.
      * @since 0.7.2
      */
