@@ -1,0 +1,14 @@
+<bml>
+  <!--
+	Ablauf:
+	Der Avatar verschwindet von der Oberfläche und bleibt 5sec. lang verschwunden.
+	Danach taucht er wieder auf und wechselt wieder in den Idle-Zustand.
+  -->
+  <required>
+    <gesture id="key00" lexeme="idle" start="0" end="key00:start+1000" />
+    <gesture id="key01" lexeme="disappear" start="key00:end" end="key01:start+2000" />
+    <wait id="key02" start="key01:end" end="key02:start+5000" />
+    <gesture id="key03" lexeme="appear" start="key02:end" end="key03:start+2000" />
+    <gesture id="key04" lexeme="idle" start="key03:end" end="key04:start+5000" />
+  </required>
+</bml>

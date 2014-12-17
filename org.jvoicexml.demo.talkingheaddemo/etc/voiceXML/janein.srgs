@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" 
+         root="janein"
+		 xml:lang="de"
+         xmlns="http://www.w3.org/2001/06/grammar" mode="voice"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+                        http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         scope = "public"
+         tag-format="semantics/1.0">
+	<rule id="janein" scope="public">
+		<tag>out = new Object(); out.result = new Object();</tag>
+		<one-of>
+			<item>Ja<tag>out.result='ja';</tag></item>
+			<item>Nein<tag>out.result='nein';</tag></item>
+		</one-of>
+	</rule>
+</grammar>

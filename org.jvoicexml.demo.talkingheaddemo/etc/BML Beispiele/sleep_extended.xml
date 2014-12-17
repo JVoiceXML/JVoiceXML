@@ -1,0 +1,14 @@
+<bml>
+  <!--
+	Ablauf:
+	Der Avatar wechselt vom Idle-Zustand in den Sleep-Zustand und verweilt dort 5sec. lang.
+	Danach wacht er wieder auf und wechselt in den Idle-Zustand.
+  -->
+  <required>
+    <gesture id="key00" lexeme="idle" start="0" end="key00:start+1000" />
+    <gesture id="key01" lexeme="fallasleep" start="key00:end" end="key01:start+2000" />
+    <gesture id="key02" lexeme="sleep" start="key01:end" end="key02:start+5000" />
+    <gesture id="key03" lexeme="wakeup" start="key02:end" end="key03:start+2000" />
+    <gesture id="key04" lexeme="idle" start="key03:end" end="key04:start+5000" />
+  </required>
+</bml>
