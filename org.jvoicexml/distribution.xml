@@ -119,6 +119,7 @@ This file builds the distribution files for JVoiceXML.
             <fileset refid="jmf.lib" />
             <fileset refid="freetts.lib" />
             <fileset refid="jsonsimple.lib" />
+            <fileset refid="jetty.lib" />
         </copy>
         <copy todir="${distFolder}/lib" file="${dist.jvxml.jar}" />
         <copy todir="${distFolder}/lib" file="dist/org.jvoicexml.processor.srgs.jar" />
