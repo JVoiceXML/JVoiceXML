@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" 
+         root="object_verb"
+		 xml:lang="de"
+         xmlns="http://www.w3.org/2001/06/grammar" mode="voice"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+                        http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         scope = "public"
+         tag-format="semantics/1.0">
+    <rule id="object_verb" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#objects"/>
+            </item>
+            <item>
+                <ruleref uri="#verbs"/>
+            </item>
+            <item>
+                <ruleref uri="#actions"/>
+            </item>
+            <item>
+                <ruleref uri="#bad_actions"/>
+            </item>
+        </one-of>
+    </rule>
+  <rule id="objects" scope="public">
+		<tag>out = new Object(); out.r = new Object(); out.r.match = new Object(); out.r.result = new Object();</tag>
+    <one-of>
+			<item>Licht<tag>out.r.match=3; out.r.result="Licht";</tag></item>
+			<item>Radio<tag>out.r.match=3; out.r.result="Radio";</tag></item>
+			<item>Fenster<tag>out.r.match=3; out.r.result="Fenster";</tag></item>
+			<item>Rollläden<tag>out.r.match=3; out.r.result="Rollläden";</tag></item>
+    </one-of>
+  </rule>
+  <rule id="verbs" scope="public">
+		<tag>out = new Object(); out.r = new Object(); out.r.match = new Object(); out.r.result = new Object();</tag>
+    <one-of>
+			<item>anschalten<tag>out.r.match=2; out.r.result="anschalten";</tag></item>
+			<item>ausschalten<tag>out.r.match=2; out.r.result="ausschalten";</tag></item>
+			<item>öffnen<tag>out.r.match=2; out.r.result="öffnen";</tag></item>
+			<item>schliessen<tag>out.r.match=2; out.r.result="schliessen";</tag></item>
+    </one-of>
+  </rule>
+  <rule id="actions" scope="public">
+		<tag>out = new Object();out.r = new Object();out.r.match = new Object();out.r.result = new Object();</tag>
+    <one-of>
+			<item>Licht anschalten<tag>out.r.match=1; out.r.result="Licht anschalten";</tag></item>
+			<item>anschalten Licht<tag>out.r.match=1; out.r.result="Licht anschalten";</tag></item>
+			<item>Licht ausschalten<tag>out.r.match=1; out.r.result="Licht ausschalten";</tag></item>
+			<item>ausschalten Licht<tag>out.r.match=1; out.r.result="Licht ausschalten";</tag></item>
+			<item>Radio anschalten<tag>out.r.match=1; out.r.result="Radio anschalten";</tag></item>
+			<item>anschalten Radio<tag>out.r.match=1; out.r.result="Radio anschalten";</tag></item>
+			<item>Radio ausschalten<tag>out.r.match=1; out.r.result="Radio ausschalten";</tag></item>
+			<item>ausschalten Radio<tag>out.r.match=1; out.r.result="Radio ausschalten";</tag></item>
+			<item>Fenster öffnen<tag>out.r.match=1; out.r.result="Fenster öffnen";</tag></item>
+			<item>öffnen Fenster<tag>out.r.match=1; out.r.result="Fenster öffnen";</tag></item>
+			<item>Fenster schliessen<tag>out.r.match=1; out.r.result="Fenster schliessen";</tag></item>
+			<item>schliessen Fenster<tag>out.r.match=1; out.r.result="Fenster schliessen";</tag></item>
+			<item>Rollläden öffnen<tag>out.r.match=1; out.r.result="Rollläden öffnen";</tag></item>
+			<item>öffnen Rollläden<tag>out.r.match=1; out.r.result="Rollläden öffnen";</tag></item>
+			<item>Rollläden schliessen<tag>out.r.match=1; out.r.result="Rollläden schliessen";</tag></item>
+			<item>schliessen Rollläden<tag>out.r.match=1; out.r.result="Rollläden schliessen";</tag></item>
+    </one-of>
+  </rule>
+  <rule id="bad_actions" scope="public">
+		<tag>out = new Object(); out.r = new Object(); out.r.match = new Object(); out.r.result = new Object();</tag>
+    <one-of>
+			<item>Licht öffnen<tag>out.r.match=0; out.r.result="Licht öffnen";</tag></item>
+			<item>öffnen Licht<tag>out.r.match=0; out.r.result="Licht öffnen";</tag></item>
+			<item>Licht schliessen<tag>out.r.match=0; out.r.result="Licht schliessen";</tag></item>
+			<item>schliessen Licht<tag>out.r.match=0; out.r.result="Licht schliessen";</tag></item>
+			<item>Radio öffnen<tag>out.r.match=0; out.r.result="Radio öffnen";</tag></item>
+			<item>öffnen Radio<tag>out.r.match=0; out.r.result="Radio öffnen";</tag></item>
+			<item>Radio schliessen<tag>out.r.match=0; out.r.result="Radio schliessen";</tag></item>
+			<item>schliessen Radio<tag>out.r.match=0; out.r.result="Radio schliessen";</tag></item>
+			<item>Fenster anschalten<tag>out.r.match=0; out.r.result="Fenster anschalten";</tag></item>
+			<item>anschalten Fenster<tag>out.r.match=0; out.r.result="Fenster anschalten";</tag></item>
+			<item>Fenster ausschalten<tag>out.r.match=0; out.r.result="Fenster ausschalten";</tag></item>
+			<item>ausschalten Fenster<tag>out.r.match=0; out.r.result="Fenster ausschalten";</tag></item>
+			<item>Rollläden anschalten<tag>out.r.match=0; out.r.result="Rollläden anschalten";</tag></item>
+			<item>anschalten Rollläden<tag>out.r.match=0; out.r.result="Rollläden anschalten";</tag></item>
+			<item>Rollläden ausschalten<tag>out.r.match=0; out.r.result="Rollläden ausschalten";</tag></item>
+			<item>ausschalten Rollläden<tag>out.r.match=0; out.r.result="Rollläden ausschalten";</tag></item>
+    </one-of>
+  </rule>
+
+</grammar>

@@ -1,0 +1,26 @@
+<bml>
+  <!--
+	Ablauf:
+	Der Avatar begrüßt den Benutzer (hier Alex genannt), indem er ihm zuwinkt
+	und den User direkt anspricht.
+	
+	Hinweis: Diese BML-Datei kann von TalkingHead nicht ausgeführt werden, da er zwei Animationen
+			 (Winken + Reden) nicht gleichzeitg ausführen kann. Er wird eine Warnung ausgeben und
+			 keine Animation durchführen.
+  -->
+  <required>
+    <gesture id="key00" lexeme="idle" start="0" end="1000" />
+    <speech id="key01" start="key00:end">
+      <text>
+	    Hallo Alex!
+	  </text>
+    </speech>
+	<gesture id="key02" lexeme="greet" />
+    <constraint>
+	  <synchronize>
+	    <sync ref="key01" />
+	    <sync ref="key02" />
+	  </synchronize>
+    </constraint>
+  </required>  
+</bml>
