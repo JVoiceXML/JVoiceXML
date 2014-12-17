@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,11 +41,10 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @version $Revision$
  * @since 0.5.5
  */
-public final class ExternalGrammarDocument
-        implements GrammarDocument {
+public final class ExternalGrammarDocument implements GrammarDocument {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(ExternalGrammarDocument.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(ExternalGrammarDocument.class);
 
     /** Base hash code. */
     private static final int HASH_CODE_BASE = 13;
@@ -72,15 +71,20 @@ public final class ExternalGrammarDocument
     private final byte[] buffer;
 
     /** URI of the grammar source. */
-    private final URI uri;
+    private URI uri;
 
     /**
-     * Creates a new grammar document. This constructor is intended to be
-     * used to capture external grammars.
-     * @param source URI of the grammar document
-     * @param content the grammar itself
-     * @param encoding guessed encoding of the grammar
-     * @param ascii <code>true</code> if content is in ASCII format
+     * Creates a new grammar document. This constructor is intended to be used
+     * to capture external grammars.
+     * 
+     * @param source
+     *            URI of the grammar document
+     * @param content
+     *            the grammar itself
+     * @param encoding
+     *            guessed encoding of the grammar
+     * @param ascii
+     *            <code>true</code> if content is in ASCII format
      */
     public ExternalGrammarDocument(final URI source, final byte[] content,
             final String encoding, final boolean ascii) {
@@ -98,6 +102,14 @@ public final class ExternalGrammarDocument
     public boolean isCacheable() {
         // TODO set this dependent on the storage.
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setURI(final URI value) {
+        uri = value;
     }
 
     /**
@@ -153,7 +165,7 @@ public final class ExternalGrammarDocument
                     document = new String(buffer, charset);
                 } catch (UnsupportedEncodingException ex) {
                     LOGGER.warn("unable to use charset '" + charset
-                            + "' to convert grammar '"  + uri
+                            + "' to convert grammar '" + uri
                             + "'' Using default.", ex);
                     document = new String(buffer);
                 }
@@ -184,8 +196,9 @@ public final class ExternalGrammarDocument
 
     /**
      * {@inheritDoc}
-     * @return <code>true</code> if the {@link GrammarDocument}s share
-     * the same buffer
+     * 
+     * @return <code>true</code> if the {@link GrammarDocument}s share the same
+     *         buffer
      */
     @Override
     public boolean equals(final GrammarDocument other) {

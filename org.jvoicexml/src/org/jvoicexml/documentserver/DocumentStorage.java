@@ -27,8 +27,12 @@
 package org.jvoicexml.documentserver;
 
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collection;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.jvoicexml.GrammarDocument;
 
@@ -47,6 +51,12 @@ public class DocumentStorage {
     private static final Logger LOGGER = Logger
             .getLogger(DocumentStorage.class);
 
+    /** Generated documents per session. */
+    private final Map<String, Collection<GrammarDocument>> sessionDocuments;
+
+    /** Stored documents. */
+    private final Map<URI, GrammarDocument> documents;
+
     /**
      * Creates a new object.
      * 
@@ -56,24 +66,57 @@ public class DocumentStorage {
      *             error starting the web server.
      */
     public DocumentStorage(final int port) throws Exception {
+        sessionDocuments = new java.util.HashMap<String, Collection<GrammarDocument>>();
+        documents = new java.util.HashMap<URI, GrammarDocument>();
         server = new Server(port);
+        final Handler handler = new DocumentHandler(this);
+        server.setHandler(handler);
         server.start();
         LOGGER.info("document storage started on port " + port);
     }
 
     /**
      * Adds the given grammar document to the documents store and retrieves the
-     * URI to access it externally.
+     * URI to access it from external.
      * 
      * @param sessionId
      *            the id of the initiating session
      * @param document
      *            the document to add
      * @return the URI to access the document
+     * @throws URISyntaxException
+     *             if the URI could not be created
      */
     public URI addGrammarDocument(final String sessionId,
-            final GrammarDocument document) {
+            final GrammarDocument document) throws URISyntaxException {
+        Collection<GrammarDocument> currentDocuments = sessionDocuments
+                .get(sessionId);
+        if (currentDocuments == null) {
+            currentDocuments = new java.util.ArrayList<GrammarDocument>();
+            sessionDocuments.put(sessionId, currentDocuments);
+        }
+        currentDocuments.add(document);
+        final URI serverUri = server.getURI();
+        final URI uri = new URI(serverUri + "/" + sessionId + "/"
+                + document.hashCode());
+        documents.put(uri, document);
         return null;
+    }
+
+    /**
+     * Retrieves the content of the document.
+     * 
+     * @param uri
+     *            URI of the document to retrieve, {@code null} if there is no
+     *            such document
+     * @return the document
+     */
+    public byte[] getDocument(final URI uri) {
+        final GrammarDocument document = documents.get(uri);
+        if (document == null) {
+            return null;
+        }
+        return document.getBuffer();
     }
 
     /**
@@ -83,7 +126,15 @@ public class DocumentStorage {
      *            the id of the session
      */
     public void clear(final String sessionId) {
+        final Collection<GrammarDocument> currentDocuments = sessionDocuments
+                .get(sessionId);
+        for (GrammarDocument document : currentDocuments) {
+            final URI uri = document.getURI();
+            documents.remove(uri);
+        }
+        sessionDocuments.remove(sessionId);
     }
+
 
     /**
      * Closes the storage.
