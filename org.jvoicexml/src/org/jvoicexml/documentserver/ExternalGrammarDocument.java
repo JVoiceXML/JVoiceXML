@@ -157,7 +157,7 @@ public final class ExternalGrammarDocument implements GrammarDocument {
      */
     @Override
     public String getDocument() {
-        if (document == null) {
+        if ((document == null) && (buffer != null)) {
             if (charset == null) {
                 document = new String(buffer);
             } else {
