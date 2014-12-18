@@ -442,6 +442,11 @@ public final class JVoiceXmlEventHandler implements EventHandler {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("received event: " + event);
         }
+        try {
+            event = transformEvent(event);
+        } catch (SemanticError e) {
+            LOGGER.warn("unable to transform event", e);
+        }
 
         return event;
     }
@@ -544,10 +549,7 @@ public final class JVoiceXmlEventHandler implements EventHandler {
         }
         synchronized (semaphore) {
             try {
-                event = transformEvent(e);
                 LOGGER.info("notified event '" + event.getEventType() + "'");
-            } catch (SemanticError semanticError) {
-                event = semanticError;
             } finally {
                 semaphore.notify();
             }
