@@ -94,12 +94,18 @@ public class DocumentStorage {
         if (currentDocuments == null) {
             currentDocuments = new java.util.ArrayList<GrammarDocument>();
             sessionDocuments.put(sessionId, currentDocuments);
+            LOGGER.info("initialized document storage for session '"
+                    + sessionId + "'");
         }
         currentDocuments.add(document);
         final URI serverUri = server.getURI();
         final URI uri = new URI(serverUri + "/" + sessionId + "/"
                 + document.hashCode());
         documents.put(uri, document);
+        document.setURI(uri);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("added '" + document + "' at '" + uri + "'");
+        }
         return null;
     }
 
@@ -111,12 +117,8 @@ public class DocumentStorage {
      *            such document
      * @return the document
      */
-    public byte[] getDocument(final URI uri) {
-        final GrammarDocument document = documents.get(uri);
-        if (document == null) {
-            return null;
-        }
-        return document.getBuffer();
+    public GrammarDocument getDocument(final URI uri) {
+        return documents.get(uri);
     }
 
     /**
@@ -128,13 +130,17 @@ public class DocumentStorage {
     public void clear(final String sessionId) {
         final Collection<GrammarDocument> currentDocuments = sessionDocuments
                 .get(sessionId);
+        if (currentDocuments == null) {
+            LOGGER.warn("session '" + sessionId + "' unknown. cannot clear");
+            return;
+        }
         for (GrammarDocument document : currentDocuments) {
             final URI uri = document.getURI();
             documents.remove(uri);
         }
         sessionDocuments.remove(sessionId);
+        LOGGER.info("cleared document storage for session '" + sessionId + "'");
     }
-
 
     /**
      * Closes the storage.
@@ -145,5 +151,6 @@ public class DocumentStorage {
      */
     public void close() throws Exception {
         server.stop();
+        LOGGER.info("document storage stopped");
     }
 }
