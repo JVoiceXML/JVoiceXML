@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -317,12 +318,12 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
 
     /**
      * {@inheritDoc}
+     * @throws URISyntaxException 
      */
     @Override
     public URI addGrammarDocument(final String sessionId,
-            final GrammarDocument document) {
-        // TODO Auto-generated method stub
-        return null;
+            final GrammarDocument document) throws URISyntaxException {
+        return storage.addGrammarDocument(sessionId, document);
     }
 
     /**

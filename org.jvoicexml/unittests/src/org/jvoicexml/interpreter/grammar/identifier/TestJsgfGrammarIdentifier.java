@@ -105,7 +105,7 @@ public final class TestJsgfGrammarIdentifier {
         str.append("public <boolean> = yes{true}|no{false};");
         grammar.addCData(str.toString());
         final GrammarDocument grammarDocument =
-            new InternalGrammarDocument(null, grammar);
+            new InternalGrammarDocument(grammar);
         final GrammarType type = identifier.identify(grammarDocument);
         Assert.assertEquals(GrammarType.JSGF, type);
     }

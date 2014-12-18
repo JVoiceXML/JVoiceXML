@@ -30,8 +30,10 @@ import java.net.URISyntaxException;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -41,7 +43,7 @@ import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.srgs.Grammar;
 
 /**
- * Loads external and external grammars.
+ * Loads external and internal grammars.
  * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -76,9 +78,12 @@ final class GrammarLoader {
             if (grammar.isExternalGrammar()) {
                 return loadExternalGrammar(context, attributes, grammar);
             } else {
-                return loadInternalGrammar(grammar);
+                final Session session = context.getSession();
+                final String sessionId = session.getSessionID();
+                final DocumentServer server = context.getDocumentServer();
+                return loadInternalGrammar(sessionId, server, grammar);
             }
-        } catch (IllegalAttributeException e) {
+        } catch (IllegalAttributeException | URISyntaxException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
     }
@@ -90,23 +95,30 @@ final class GrammarLoader {
      * String representation as well as the corresponding media type, if one is
      * applicable.
      *
+     * @param sessionId
+     *            the session id
+     * @param server
+     *            the document server
      * @param grammar
-     *            Takes a VoiceXML Node and processes the contained grammar.
+     *            takes a VoiceXML Node and processes the contained grammar.
      *
      * @return The result of the processing. A grammar representation which can
      *         be used to transform into a RuleGrammar.
      * @throws UnsupportedFormatError
      *             If the grammar could not be identified. This means, the
      *             grammar is not valid or (even worse) not supported.
+     * @throws URISyntaxException
+     *             error generating the URI for the document
      */
-    private GrammarDocument loadInternalGrammar(final Grammar grammar)
-            throws UnsupportedFormatError {
+    private GrammarDocument loadInternalGrammar(final String sessionId,
+            final DocumentServer server, final Grammar grammar)
+            throws UnsupportedFormatError, URISyntaxException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading internal grammar");
         }
-
-        // TODO provide a means to tell about the URI
-        return new InternalGrammarDocument(null, grammar);
+        final GrammarDocument document = new InternalGrammarDocument(grammar);
+        server.addGrammarDocument(sessionId, document);
+        return document;
     }
 
     /**
@@ -128,32 +140,30 @@ final class GrammarLoader {
      *             If the document could not be fetched successfully.
      * @throws SemanticError
      *             if the srcexpr attribute could not be evaluated
+     * @exception URISyntaxException
+     *                if the URI of the external grammar could not be resolved
      */
     private GrammarDocument loadExternalGrammar(
             final VoiceXmlInterpreterContext context,
             final FetchAttributes attributes, final Grammar grammar)
-            throws BadFetchError, UnsupportedFormatError, SemanticError {
+            throws BadFetchError, UnsupportedFormatError, SemanticError,
+            URISyntaxException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading external grammar");
         }
 
         // First of all, we need to check, if user has provided any
         // grammar type.
-        URI src;
-        try {
-            src = getExternalUriSrc(grammar, context);
-            if (src.getFragment() != null) {
-                // TODO add support for URI fragments
-                LOGGER.warn("URI fragments are currently not supported: "
-                        + "ignoring fragment");
-                src = new URI(src.getScheme(), src.getUserInfo(),
-                        src.getHost(), src.getPort(), src.getPath(),
-                        src.getQuery(), null);
-            }
-        } catch (java.net.URISyntaxException e) {
-            throw new BadFetchError(e.getMessage(), e);
+        URI src = getExternalUriSrc(grammar, context);
+        if (src.getFragment() != null) {
+            // TODO add support for URI fragments
+            LOGGER.warn("URI fragments are currently not supported: "
+                    + "ignoring fragment");
+            src = new URI(src.getScheme(), src.getUserInfo(), src.getHost(),
+                    src.getPort(), src.getPath(), src.getQuery(), null);
         }
 
+        // Now load the grammar
         LOGGER.info("loading grammar from source: '" + src + "'");
         final FetchAttributes adaptedAttributes = adaptFetchAttributes(
                 attributes, grammar);
@@ -167,7 +177,7 @@ final class GrammarLoader {
 
     /**
      * Retrieves the URI from the grammar node by either returning the src
-     * attribute or by evaluating the srcexpr attribut.
+     * attribute or by evaluating the srcexpr attribute.
      * 
      * @param grammar
      *            the current grammar node

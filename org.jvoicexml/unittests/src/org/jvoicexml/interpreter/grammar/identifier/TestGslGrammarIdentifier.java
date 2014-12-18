@@ -101,7 +101,7 @@ public final class TestGslGrammarIdentifier {
         str.append("Digit:public [0 1 2 3 4 5 6 7 8 9]");
         grammar.addCData(str.toString());
         final GrammarDocument grammarDocument =
-            new InternalGrammarDocument(null, grammar);
+            new InternalGrammarDocument(grammar);
         final GrammarType type = identifier.identify(grammarDocument);
         Assert.assertEquals(GrammarType.GSL, type);
     }

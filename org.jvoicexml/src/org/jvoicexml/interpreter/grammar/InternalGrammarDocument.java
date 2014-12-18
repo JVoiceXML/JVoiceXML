@@ -79,13 +79,10 @@ public final class InternalGrammarDocument implements GrammarDocument {
      * Constructs a new object from a grammar node. This constructor is intended
      * to be used to capture inline grammars in a VoiceXML document.
      * 
-     * @param source
-     *            URI of the grammar document
      * @param node
      *            the grammar node
      */
-    public InternalGrammarDocument(final URI source, final Grammar node) {
-        uri = source;
+    public InternalGrammarDocument(final Grammar node) {
         // Try getting the encoding of the owner document
         final Document owner = node.getOwnerDocument();
         final String ownerEncoding = owner.getInputEncoding();

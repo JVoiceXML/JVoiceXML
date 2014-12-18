@@ -27,6 +27,7 @@
 package org.jvoicexml;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.sound.sampled.AudioInputStream;
 
@@ -87,10 +88,12 @@ public interface DocumentServer {
      * @param document
      *            the document to add
      * @return the URI to access the document
+     * @exception URISyntaxException
+     *                error generating the URI for the document
      * @since 0.7.7
      */
     URI addGrammarDocument(final String sessionId,
-            final GrammarDocument document);
+            final GrammarDocument document) throws URISyntaxException;
 
     /**
      * Returns the external Grammar referenced by <code>URI</code>.

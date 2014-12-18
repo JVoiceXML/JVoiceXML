@@ -835,7 +835,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
     }
 
     /**
-     * Process the given grammar tag and add it to the {@link ActiveGrammarSet}.
+     * Processes the given grammar tag and adds it to the
+     * {@link ActiveGrammarSet}.
      * 
      * @param grammar
      *            grammar to process.
