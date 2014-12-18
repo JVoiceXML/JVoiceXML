@@ -549,6 +549,7 @@ public final class JVoiceXmlEventHandler implements EventHandler {
         }
         synchronized (semaphore) {
             try {
+                event = e;
                 LOGGER.info("notified event '" + event.getEventType() + "'");
             } finally {
                 semaphore.notify();

@@ -747,8 +747,8 @@ public final class TestJVoiceXmlEventHandler {
 
         Mockito.when(
                 model.readVariable("application.lastresult$.interpretation."
-                        + field1.getName(), Object.class)).thenReturn(
-                utterance);
+                        + field1.getName(), Object.class))
+                .thenReturn(utterance);
 
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
@@ -786,8 +786,7 @@ public final class TestJVoiceXmlEventHandler {
         rule1.setId(grammar.getRoot());
         rule1.addText(input);
 
-        final GrammarDocument document = new InternalGrammarDocument(null,
-                grammar);
+        final GrammarDocument document = new InternalGrammarDocument(grammar);
         item.addGrammar(document);
         return grammar;
     }

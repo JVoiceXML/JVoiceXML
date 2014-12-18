@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -86,7 +86,7 @@ public final class TestActiveGrammarSet {
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("Fargo");
 
-        document1 = new InternalGrammarDocument(null, grammar1);
+        document1 = new InternalGrammarDocument(grammar1);
 
         final SrgsXmlDocument doc2 = new SrgsXmlDocument();
         final Grammar grammar2 = doc2.getGrammar();
@@ -96,7 +96,7 @@ public final class TestActiveGrammarSet {
         rule2.addText("test input");
         grammar2.setRoot(rule2);
 
-        document2 = new InternalGrammarDocument(null, grammar2);
+        document2 = new InternalGrammarDocument(grammar2);
     }
 
     /**
@@ -141,7 +141,7 @@ public final class TestActiveGrammarSet {
         rule3.addText("test input");
         grammar3.setRoot(rule3);
         final InternalGrammarDocument document3 =
-                new InternalGrammarDocument(null, grammar3);
+                new InternalGrammarDocument(grammar3);
         set.add(document3);
         final byte[] buffer = grammar3.toString().getBytes();
         final String encoding = System.getProperty("jvoicexml.xml.encoding",

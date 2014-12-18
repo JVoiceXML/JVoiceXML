@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,6 +39,7 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Test cases for {@link InternalGrammarDocument}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
@@ -46,9 +47,12 @@ import org.jvoicexml.xml.vxml.Vxml;
 public class TestInternalGrammarDocument {
 
     /**
-     * Test method for {@link org.jvoicexml.documentserver.InternalGrammarDocument#getDocument()}.
+     * Test method for
+     * {@link org.jvoicexml.documentserver.InternalGrammarDocument#getDocument()}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testGetDocument() throws Exception {
@@ -66,17 +70,20 @@ public class TestInternalGrammarDocument {
         item2.addText("mastercard");
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("american express");
-        final InternalGrammarDocument document =
-                new InternalGrammarDocument(null, grammar);
+        final InternalGrammarDocument document = new InternalGrammarDocument(
+                grammar);
         document.setModeType(ModeType.VOICE);
         document.setMediaType(GrammarType.SRGS_XML);
         Assert.assertEquals(grammar.toString(), document.getDocument());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.documentserver.InternalGrammarDocument#equals(java.lang.Object)}.
+     * Test method for
+     * {@link org.jvoicexml.documentserver.InternalGrammarDocument#equals(java.lang.Object)}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testEqualsInternalObject() throws Exception {
@@ -94,8 +101,8 @@ public class TestInternalGrammarDocument {
         item12.addText("mastercard");
         final Item item13 = oneof1.appendChild(Item.class);
         item13.addText("american express");
-        final InternalGrammarDocument document1 =
-                new InternalGrammarDocument(null,grammar1);
+        final InternalGrammarDocument document1 = new InternalGrammarDocument(
+                grammar1);
 
         final VoiceXmlDocument doc2 = new VoiceXmlDocument();
         final Vxml vxml2 = doc2.getVxml();
@@ -111,18 +118,19 @@ public class TestInternalGrammarDocument {
         item22.addText("mastercard");
         final Item item23 = oneof2.appendChild(Item.class);
         item23.addText("american express");
-        final InternalGrammarDocument document2 =
-                new InternalGrammarDocument(null, grammar2);
+        final InternalGrammarDocument document2 = new InternalGrammarDocument(
+                grammar2);
         System.out.println(document1);
         System.out.println(document2);
         Assert.assertEquals(document1, document2);
     }
 
-
     /**
-     * Test method for {@link org.jvoicexml.documentserver.InternalGrammarDocument#hashCode()}.
+     * Test method for
+     * {@link org.jvoicexml.documentserver.InternalGrammarDocument#hashCode()}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testHashCodeInternal() throws Exception {
@@ -140,8 +148,8 @@ public class TestInternalGrammarDocument {
         item12.addText("mastercard");
         final Item item13 = oneof1.appendChild(Item.class);
         item13.addText("american express");
-        final InternalGrammarDocument document1 =
-                new InternalGrammarDocument(null,grammar1);
+        final InternalGrammarDocument document1 = new InternalGrammarDocument(
+                grammar1);
 
         final VoiceXmlDocument doc2 = new VoiceXmlDocument();
         final Vxml vxml2 = doc2.getVxml();
@@ -157,8 +165,8 @@ public class TestInternalGrammarDocument {
         item22.addText("mastercard");
         final Item item23 = oneof2.appendChild(Item.class);
         item23.addText("american express");
-        final InternalGrammarDocument document2 =
-                new InternalGrammarDocument(null, grammar2);
+        final InternalGrammarDocument document2 = new InternalGrammarDocument(
+                grammar2);
         Assert.assertEquals(document1.hashCode(), document2.hashCode());
     }
 }
