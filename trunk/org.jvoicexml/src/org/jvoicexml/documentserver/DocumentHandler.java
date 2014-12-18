@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * Jetty handler to server generated documents from the {@link DocumentStorage}.
@@ -49,7 +51,13 @@ class DocumentHandler extends AbstractHandler {
         final String requestUri = request.getRequestURI();
         try {
             final URI uri = new URI(requestUri);
-            final byte[] buffer = storage.getDocument(uri);
+            final GrammarDocument document = storage.getDocument(uri);
+            final GrammarType type = document.getMediaType();
+            final String contentType = getContentType(type);
+            if (contentType != null) {
+                response.setContentType(contentType);
+            }
+            final byte[] buffer = document.getBuffer();
             if (buffer == null) {
                 LOGGER.warn("no document found at '" + uri + "'");
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -62,5 +70,16 @@ class DocumentHandler extends AbstractHandler {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
     }
-
+    
+    private String getContentType(final GrammarType type) {
+        if (type == GrammarType.SRGS_XML) {
+            return "text/xml";
+        } else if (type == GrammarType.SRGS_ABNF) {
+            return "text/plain";
+        } else if (type == GrammarType.GSL) {
+            return "text/plain";
+        } else {
+            return null;
+        }
+    }
 }
