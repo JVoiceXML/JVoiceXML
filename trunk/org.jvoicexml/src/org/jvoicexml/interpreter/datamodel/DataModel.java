@@ -66,6 +66,12 @@ public interface DataModel {
     int ERROR_VARIABLE_ALREADY_DEFINED = -3;
 
     /**
+     * Creates a new data model.
+     * @return new data model
+     */
+    DataModel newInstance();
+
+    /**
      * Retrieves the value for undefined. Either this value or {@code null} may
      * be returned to indicate a defined variable with no value.
      * 
