@@ -46,6 +46,7 @@ import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.mozilla.javascript.ScriptableObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -294,10 +295,14 @@ public class XmlExtensionNotificationDataConverter
             final RecognitionEvent event) throws ConversionException {
         final RecognitionResult result = event.getRecognitionResult();
         final String utterance = result.getUtterance();
-        final String mode = result.getMode().getMode();
+        final ModeType modetype = result.getMode();
+        final String mode = modetype.getMode();
         final float confidence = result.getConfidence();
         try {
-            final Object interpretation = result.getSemanticInterpretation(model);
+            final DataModel datamodel = model.newInstance();
+            datamodel.createScope();
+            final Object interpretation = result
+                    .getSemanticInterpretation(datamodel);
             return createEmma("recognition", utterance, mode, confidence,
                     interpretation);
         } catch (ParserConfigurationException | SemanticError e) {
