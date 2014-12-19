@@ -93,6 +93,13 @@ public class EcmaScriptDataModel implements DataModel {
      * {@inheritDoc}
      */
     @Override
+    public DataModel newInstance() {
+        return new EcmaScriptDataModel();
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Object getUndefinedValue() {
         return Context.getUndefinedValue();
     }
@@ -250,35 +257,6 @@ public class EcmaScriptDataModel implements DataModel {
             }
         } else {
             return scope;
-        }
-    }
-
-    private Scriptable getAndCreateFullScope(final Scriptable scope,
-            final String name) {
-        int dotPos = name.indexOf('.');
-        if (dotPos >= 0) {
-            final String prefix = name.substring(0, dotPos);
-            final String suffix = name.substring(dotPos + 1);
-            final Object value;
-            if (ScriptableObject.hasProperty(scope, prefix)) {
-                value = ScriptableObject.getProperty(scope, prefix);
-            } else {
-                value = new NativeObject();
-                ScriptableObject.putProperty(scope, prefix, value);
-            }
-            if (value instanceof Scriptable) {
-                final Scriptable subscope = (Scriptable) value;
-                return getAndCreateScope(subscope, suffix);
-            } else {
-                return null;
-            }
-        } else {
-            final Object value = ScriptableObject.getProperty(scope, name);
-            if (value instanceof Scriptable) {
-                return (Scriptable) value;
-            } else {
-                return null;
-            }
         }
     }
 
