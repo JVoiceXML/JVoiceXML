@@ -32,6 +32,7 @@ personal-props/README.txt
                 <include name="*-implementation.xml" />
                 <include name="*-callmanager*.xml" />
                 <include name="*-grammar.xml" />
+                <include name="*-profile.xml" />
                 <include name="jvxml-jndi.xml" />
                 <exclude name="jvxml-implementation.xml" />
                 <exclude name="jvxml-grammar.xml" />
