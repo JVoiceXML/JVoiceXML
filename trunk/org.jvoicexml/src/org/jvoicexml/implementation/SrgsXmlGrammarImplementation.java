@@ -26,6 +26,8 @@
 
 package org.jvoicexml.implementation;
 
+import java.net.URI;
+
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.processor.srgs.GrammarChecker;
 import org.jvoicexml.processor.srgs.GrammarGraph;
@@ -43,7 +45,7 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  * @since 0.5.5
  */
 public final class SrgsXmlGrammarImplementation
-    implements GrammarImplementation<SrgsXmlDocument> {
+        implements GrammarImplementation<SrgsXmlDocument> {
     /** The encapsulated grammar. */
     private final SrgsXmlDocument document;
 
@@ -53,12 +55,29 @@ public final class SrgsXmlGrammarImplementation
     /** The grammar checker for the {@link #graph}. */
     private GrammarChecker checker;
 
+    /** The URI of the grammar document. */
+    private final URI uri;
+
     /**
      * Constructs a new object.
-     * @param doc the grammar.
+     * 
+     * @param doc
+     *            the grammar
+     * @param documentUri
+     *            the URI of the grammar document
      */
-    public SrgsXmlGrammarImplementation(final SrgsXmlDocument doc) {
+    public SrgsXmlGrammarImplementation(final SrgsXmlDocument doc,
+            final URI documentUri) {
         document = doc;
+        uri = documentUri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getURI() {
+        return uri;
     }
 
     /**
@@ -118,6 +137,7 @@ public final class SrgsXmlGrammarImplementation
 
     /**
      * {@inheritDoc}
+     * 
      * @since 0.7.2
      */
     @Override
@@ -141,9 +161,8 @@ public final class SrgsXmlGrammarImplementation
         }
         return result;
     }
-    
+
     public GrammarChecker getLastChecker() {
         return checker;
     }
 }
-

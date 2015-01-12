@@ -31,7 +31,6 @@ import java.util.Set;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.implementation.GrammarImplementation;
 
-
 /**
  * The grammars that have been processed by the grammar processor.
  *
@@ -41,17 +40,18 @@ import org.jvoicexml.implementation.GrammarImplementation;
  */
 public final class GrammarCache {
     /** Set of active grammars. */
-    private final Set<ProcessedGrammar> grammars;
+    private final Set<LoadedGrammar> grammars;
 
     /**
      * Constructs a new object.
      */
     public GrammarCache() {
-        grammars = new java.util.HashSet<ProcessedGrammar>();
+        grammars = new java.util.HashSet<LoadedGrammar>();
     }
 
     /**
      * Retrieves the number of active grammars.
+     * 
      * @return number of active grammars
      */
     public int size() {
@@ -60,20 +60,22 @@ public final class GrammarCache {
 
     /**
      * Adds the given grammar to the active grammar set.
-     * @param grammar the grammar to add
+     * 
+     * @param grammar
+     *            the grammar to add
      */
-    public void add(final ProcessedGrammar grammar) {
+    public void add(final LoadedGrammar grammar) {
         grammars.add(grammar);
     }
 
     /**
      * Retrieves the set of active grammar implementations.
+     * 
      * @return set of active grammar implementations.
      */
     public Collection<GrammarImplementation<?>> getImplementations() {
-        final Collection<GrammarImplementation<?>> col =
-            new java.util.ArrayList<GrammarImplementation<?>>();
-        for (ProcessedGrammar grammar : grammars) {
+        final Collection<GrammarImplementation<?>> col = new java.util.ArrayList<GrammarImplementation<?>>();
+        for (LoadedGrammar grammar : grammars) {
             final GrammarImplementation<?> impl = grammar.getImplementation();
             col.add(impl);
         }
@@ -82,12 +84,14 @@ public final class GrammarCache {
 
     /**
      * Retrieves the processed grammar for the given document.
-     * @param document the grammar document to look for
-     * @return the processed grammar, <code>null</code> if there is no
-     *         processed grammar.
+     * 
+     * @param document
+     *            the grammar document to look for
+     * @return the processed grammar, <code>null</code> if there is no processed
+     *         grammar.
      */
-    public ProcessedGrammar get(final GrammarDocument document) {
-        for (ProcessedGrammar grammar : grammars) {
+    public LoadedGrammar get(final GrammarDocument document) {
+        for (LoadedGrammar grammar : grammars) {
             final GrammarDocument current = grammar.getDocument();
             if (current.equals(document)) {
                 return grammar;
@@ -97,14 +101,32 @@ public final class GrammarCache {
     }
 
     /**
-     * Checks if the active grammar set contains the given grammar
-     * document.
-     * @param document the grammar document to look for.
-     * @return <code>true</code> if the active grammar set contains the
-     *          given grammar document
+     * Retrieves the cached implementation of the give grammar document.
+     * 
+     * @param document
+     *            the document
+     * @return cached implementation, maybe {@code null}
+     * @since 0.7.7
+     */
+    public GrammarImplementation<?> getImplementation(
+            final GrammarDocument document) {
+        final LoadedGrammar grammar = get(document);
+        if (grammar == null) {
+            return null;
+        }
+        return grammar.getImplementation();
+    }
+
+    /**
+     * Checks if the active grammar set contains the given grammar document.
+     * 
+     * @param document
+     *            the grammar document to look for.
+     * @return <code>true</code> if the active grammar set contains the given
+     *         grammar document
      */
     public boolean contains(final GrammarDocument document) {
-        for (ProcessedGrammar grammar : grammars) {
+        for (LoadedGrammar grammar : grammars) {
             final GrammarDocument current = grammar.getDocument();
             if (current.equals(document)) {
                 return true;
@@ -116,14 +138,16 @@ public final class GrammarCache {
     /**
      * Checks if the active grammar set contains the given grammar
      * implementation.
-     * @param implementation the grammar implementation to look for.
-     * @return <code>true</code> if the active grammar set contains the
-     *          given grammar implementation
+     * 
+     * @param implementation
+     *            the grammar implementation to look for.
+     * @return <code>true</code> if the active grammar set contains the given
+     *         grammar implementation
      */
     public boolean contains(final GrammarImplementation<?> implementation) {
-        for (ProcessedGrammar grammar : grammars) {
-            final GrammarImplementation<?> current =
-                grammar.getImplementation();
+        for (LoadedGrammar grammar : grammars) {
+            final GrammarImplementation<?> current = grammar
+                    .getImplementation();
             if (current.equals(implementation)) {
                 return true;
             }

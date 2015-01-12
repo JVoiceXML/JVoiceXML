@@ -32,10 +32,13 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -43,17 +46,16 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
- * The <code>GrammarProcessor</code> is the main entry point for
- * grammar processing.<br>
- * This class provides a lean method interface to process a grammar
- * in a VoiceXML file.
+ * The <code>GrammarProcessor</code> is the main entry point for grammar
+ * processing.<br>
+ * This class provides a lean method interface to process a grammar in a
+ * VoiceXML file.
  *
  * @author Christoph Buente
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class JVoiceXmlGrammarProcessor
-        implements GrammarProcessor {
+public final class JVoiceXmlGrammarProcessor implements GrammarProcessor {
     /** grammar identifier central. */
     private GrammarIdentifierCentral identifier;
 
@@ -69,18 +71,16 @@ public final class JVoiceXmlGrammarProcessor
     }
 
     /**
-     * {@inheritDoc}
-     * This implementation loads the {@link GrammarIdentifier}s 
-     * from the configuration. They can also be
-     * added manually by
-     * {@link GrammarIdentifierCentral#addIdentifier(GrammarIdentifier)}
-     * TODO Rewrite the configuration to let the centrals be configured.
+     * {@inheritDoc} This implementation loads the {@link GrammarIdentifier}s
+     * from the configuration. They can also be added manually by
+     * {@link GrammarIdentifierCentral#addIdentifier(GrammarIdentifier)} TODO
+     * Rewrite the configuration to let the centrals be configured.
      */
     @Override
     public void init(final Configuration configuration)
-        throws ConfigurationException {
-        final Collection<GrammarIdentifier> identifiers =
-            configuration.loadObjects(GrammarIdentifier.class, "jvxmlgrammar");
+            throws ConfigurationException {
+        final Collection<GrammarIdentifier> identifiers = configuration
+                .loadObjects(GrammarIdentifier.class, "jvxmlgrammar");
         for (GrammarIdentifier current : identifiers) {
             identifier.addIdentifier(current);
         }
@@ -88,7 +88,9 @@ public final class JVoiceXmlGrammarProcessor
 
     /**
      * Sets the central to identify grammars.
-     * @param central GrammarIdentifierCentral
+     * 
+     * @param central
+     *            GrammarIdentifierCentral
      * @since 0.5
      */
     public void setGrammaridentifier(final GrammarIdentifierCentral central) {
@@ -99,44 +101,54 @@ public final class JVoiceXmlGrammarProcessor
      * {@inheritDoc}
      */
     @Override
-    public GrammarDocument process(
-            final VoiceXmlInterpreterContext context,
-            final FetchAttributes attributes,
-            final Grammar grammar)
+    public GrammarDocument process(final VoiceXmlInterpreterContext context,
+            final FetchAttributes attributes, final Grammar grammar)
             throws NoresourceError, BadFetchError, UnsupportedFormatError,
-                SemanticError {
+            SemanticError {
         /*
-         * check if grammar is external or not an process with
-         * appropriates methods
+         * check if grammar is external or not an process with appropriates
+         * methods
          */
-        final GrammarDocument document
-            = loader.loadGrammarDocument(context, attributes, grammar);
+        final GrammarDocument document = loader.loadGrammarDocument(context,
+                attributes, grammar);
 
         // Identify the grammar.
         identifyGrammar(grammar, document);
         adaptMode(grammar, document);
+
+        // Load it
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
+        try {
+            final UserInput input = platform.getUserInput();
+        } catch (ConnectionDisconnectHangupEvent e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
         return document;
     }
 
     /**
      * Identifies the given grammar.
-     * @param grammar the grammar to identify
-     * @param document current grammar document
+     * 
+     * @param grammar
+     *            the grammar to identify
+     * @param document
+     *            current grammar document
      * @return identified grammar document
      * @throws UnsupportedFormatError
-     *         if the grammar type is not supported.
+     *             if the grammar type is not supported.
      * @since 0.7.3
      */
     private GrammarDocument identifyGrammar(final Grammar grammar,
             final GrammarDocument document) throws UnsupportedFormatError {
         // now we need to know the actual type.
         final GrammarType expectedType = grammar.getType();
-        final GrammarType actualType =
-                identifier.identifyGrammar(document, expectedType);
+        final GrammarType actualType = identifier.identifyGrammar(document,
+                expectedType);
         // let's check, if the declared type is supported.
         if (actualType == null) {
-            throw new UnsupportedFormatError(
-                    grammar.getType() + " is not supported.");
+            throw new UnsupportedFormatError(grammar.getType()
+                    + " is not supported.");
         }
 
         document.setMediaType(actualType);
@@ -147,12 +159,14 @@ public final class JVoiceXmlGrammarProcessor
 
     /**
      * Adapts the mode of the grammar in the document.
-     * @param grammar the identified grammar
-     * @param document the resulting grammar document
+     * 
+     * @param grammar
+     *            the identified grammar
+     * @param document
+     *            the resulting grammar document
      * @since 0.7.5
      */
-    private void adaptMode(final Grammar grammar,
-            final GrammarDocument document) {
+    private void adaptMode(final Grammar grammar, final GrammarDocument document) {
         final ModeType mode = grammar.getMode();
         document.setModeType(mode);
     }

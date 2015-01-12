@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,7 +27,6 @@
 package org.jvoicexml.mock.implementation;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URI;
 import java.util.Collection;
 
@@ -111,8 +110,8 @@ public final class MockSpokenInput
      * {@inheritDoc}
      */
     public GrammarImplementation<?> loadGrammar(
-            final Reader reader, final GrammarType type)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+            final URI uri, final GrammarType type)
+            throws NoresourceError, IOException, UnsupportedFormatError {
         return null;
     }
 

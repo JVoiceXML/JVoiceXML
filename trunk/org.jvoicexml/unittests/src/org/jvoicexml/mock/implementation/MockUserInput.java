@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,12 +26,9 @@
 package org.jvoicexml.mock.implementation;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Set;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
@@ -41,17 +38,12 @@ import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * This class provides a dummy implementation of a {@link UserInput} for testing
@@ -196,50 +188,9 @@ public class MockUserInput implements UserInput {
      * @throws NoresourceError
      * @throws BadFetchError
      */
-    protected GrammarImplementation<?> handleLoadGrammar(final Reader reader,
-            final GrammarType type) throws NoresourceError, BadFetchError {
+    protected GrammarImplementation<?> handleLoadGrammar(
+            final GrammarDocument document) throws NoresourceError {
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public GrammarImplementation<?> loadGrammar(final Reader reader,
-            final GrammarType type) throws NoresourceError, BadFetchError,
-            UnsupportedFormatError {
-        final GrammarImplementation<?> impl = handleLoadGrammar(reader, type);
-        if (impl != null) {
-            return impl;
-        }
-
-        if (type == GrammarType.SRGS_XML) {
-            final InputSource inputSource = new InputSource(reader);
-            SrgsXmlDocument doc;
-            try {
-                doc = new SrgsXmlDocument(inputSource);
-            } catch (ParserConfigurationException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            } catch (SAXException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            } catch (IOException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            }
-            return new SrgsXmlGrammarImplementation(doc);
-        }
-
-        throw new UnsupportedFormatError(type + " is not supported");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public GrammarImplementation<?> newGrammar(final GrammarType type)
-            throws NoresourceError, UnsupportedFormatError {
-        if (type == GrammarType.SRGS_XML) {
-            return new SrgsXmlGrammarImplementation(null);
-        }
-
-        throw new UnsupportedFormatError(type + " is not supported");
     }
 
     /**

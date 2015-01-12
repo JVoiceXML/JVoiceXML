@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +24,8 @@
  *
  */
 package org.jvoicexml.implementation;
+
+import java.net.URI;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.RecognitionResult;
@@ -50,6 +52,14 @@ public final class DocumentGrammarImplementation
      */
     public DocumentGrammarImplementation(final GrammarDocument doc) {
         document = doc;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getURI() {
+        return document.getURI();
     }
 
     /**

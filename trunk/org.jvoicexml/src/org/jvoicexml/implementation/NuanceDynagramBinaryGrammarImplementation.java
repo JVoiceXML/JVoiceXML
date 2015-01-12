@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +25,8 @@
  */
 
 package org.jvoicexml.implementation;
+
+import java.net.URI;
 
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -50,6 +52,14 @@ public final class NuanceDynagramBinaryGrammarImplementation
     public NuanceDynagramBinaryGrammarImplementation(
             final BinaryGrammar binary) {
         grammar = binary;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getURI() {
+        return grammar.getUri();
     }
 
     /**

@@ -26,6 +26,7 @@
 
 package org.jvoicexml.implementation;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -136,7 +137,7 @@ public interface SpokenInput
      * </code>
      * </p>
      *
-     * @param reader The Reader from which the grammar text is loaded
+     * @param uri the URI to load the grammar
      * @param type type of the grammar to read. The type is one of the supported
      *             types of the implementation, that has been requested via
      *             {@link #getSupportedGrammarTypes()}.
@@ -146,15 +147,15 @@ public interface SpokenInput
      * @since 0.3
      *
      * @exception NoresourceError
-     *            The input resource is not available.
-     * @exception BadFetchError
-     *            Error reading the grammar.
+     *            the input resource is not available.
+     * @exception IOException
+     *            error reading the grammar.
      * @exception UnsupportedFormatError
-     *            Invalid grammar format.
+     *            invalid grammar format.
      */
-    GrammarImplementation<?> loadGrammar(final Reader reader,
+    GrammarImplementation<?> loadGrammar(final URI uri,
             final GrammarType type)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError;
+            throws NoresourceError, IOException, UnsupportedFormatError;
 
     /**
      * Retrieves the barge-in types supported by this <code>UserInput</code>.

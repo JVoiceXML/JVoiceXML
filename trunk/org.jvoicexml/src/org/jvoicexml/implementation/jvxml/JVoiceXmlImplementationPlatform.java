@@ -31,12 +31,12 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
-import org.jvoicexml.DtmfInput;
 import org.jvoicexml.Configurable;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.Session;
@@ -61,7 +61,6 @@ import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.event.plain.jvxml.TransferEvent;
 import org.jvoicexml.implementation.ExternalResource;
-import org.jvoicexml.implementation.ImplementationGrammarProcessor;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SynthesizedOutput;
@@ -70,7 +69,6 @@ import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
 import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;
-import org.jvoicexml.implementation.grammar.JVoiceXmlImplementationGrammarProcessor;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
 import org.jvoicexml.xml.srgs.ModeType;
 
@@ -120,9 +118,6 @@ public final class JVoiceXmlImplementationPlatform
 
     /** Support for audio input. */
     private JVoiceXmlUserInput input;
-
-    /** The grammar processor. */
-    private final ImplementationGrammarProcessor processor;
 
     /** Input not busy notification lock. */
     private final Object inputLock;
@@ -219,7 +214,6 @@ public final class JVoiceXmlImplementationPlatform
         recognizerPool = spokenInputPool;
         dtmfInput = bufferedCharacterInput;
         inputLock = new Object();
-        processor = new JVoiceXmlImplementationGrammarProcessor();
         promptAccumulator = new JVoiceXmlPromptAccumulator(this);
     }
 
@@ -229,7 +223,6 @@ public final class JVoiceXmlImplementationPlatform
     @Override
     public void init(final Configuration configuration)
             throws ConfigurationException {
-        processor.init(configuration);
     }
 
     /**
@@ -349,8 +342,7 @@ public final class JVoiceXmlImplementationPlatform
             if (input == null) {
                 final SpokenInput spokenInput = getExternalResourceFromPool(
                         recognizerPool, type);
-                input = new JVoiceXmlUserInput(spokenInput, dtmfInput,
-                        processor);
+                input = new JVoiceXmlUserInput(spokenInput, dtmfInput);
                 input.addListener(this);
                 LOGGER.info("borrowed user input of type '" + type + "'");
             }
@@ -743,7 +735,8 @@ public final class JVoiceXmlImplementationPlatform
             inputStarted(modeType);
         } else if (type.equals(RecognitionEvent.EVENT_TYPE)) {
             final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
-            final RecognitionResult result = recognitionEvent.getRecognitionResult();
+            final RecognitionResult result = recognitionEvent
+                    .getRecognitionResult();
             resultAccepted(result);
         } else if (type.equals(NomatchEvent.EVENT_TYPE)) {
             final NomatchEvent nomatch = (NomatchEvent) event;

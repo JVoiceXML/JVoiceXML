@@ -110,7 +110,7 @@ public final class TestBufferedDtmfInput implements SpokenInputListener {
         final Item item3 = oneOf.appendChild(Item.class);
         item3.addText("3");
         final SrgsXmlGrammarImplementation impl = new SrgsXmlGrammarImplementation(
-                document);
+                document, null);
         final Collection<GrammarImplementation<?>> grammars = new java.util.ArrayList<GrammarImplementation<?>>();
         grammars.add(impl);
         input.activateGrammars(grammars);
@@ -203,7 +203,7 @@ public final class TestBufferedDtmfInput implements SpokenInputListener {
         final Ruleref ref = item.appendChild(Ruleref.class);
         ref.setUri(digit);
         final SrgsXmlGrammarImplementation impl = new SrgsXmlGrammarImplementation(
-                document);
+                document, null);
         final Collection<GrammarImplementation<?>> grammars = new java.util.ArrayList<GrammarImplementation<?>>();
         grammars.add(impl);
         input.activateGrammars(grammars);

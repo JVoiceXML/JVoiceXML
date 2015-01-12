@@ -151,46 +151,6 @@ public interface UserInput {
             throws NoresourceError, BadFetchError;
 
     /**
-     * Creates a {@link GrammarImplementation} from the contents provided by the
-     * reader. If the grammar contained in the reader already exists, it is
-     * over-written.
-     *
-     * <p>
-     * This method is mainly needed for non SRGS grammars, e.g. JSGF. Loading an
-     * SRGS grammar is quite easy and can be implemented e.g. as
-     * </p>
-     * <p>
-     * <code>
-     * final InputSource inputSource = new InputSource(reader);<br>
-     * SrgsXmlDocument doc = new SrgsXmlDocument(inputSource);<br>
-     * &#47;&#47; Pass it to the recognizer<br>
-     * return doc;
-     * </code>
-     * </p>
-     *
-     * @param reader
-     *            the reader from which the grammar text is loaded
-     * @param type
-     *            type of the grammar to read. The type is one of the supported
-     *            types of the implementation, that has been requested via
-     *            {@link #getSupportedGrammarTypes(ModeType)}.
-     *
-     * @return Read grammar.
-     *
-     * @since 0.3
-     *
-     * @exception NoresourceError
-     *                The input resource is not available.
-     * @exception BadFetchError
-     *                Error reading the grammar.
-     * @exception UnsupportedFormatError
-     *                Invalid grammar format.
-     */
-    GrammarImplementation<?> loadGrammar(final Reader reader,
-            final GrammarType type) throws NoresourceError, BadFetchError,
-            UnsupportedFormatError;
-
-    /**
      * Retrieves the barge-in types supported by this <code>UserInput</code>.
      * 
      * @return Collection of supported barge-in types, an empty collection, if
