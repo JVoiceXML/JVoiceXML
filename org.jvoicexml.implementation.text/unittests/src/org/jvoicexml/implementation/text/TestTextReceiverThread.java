@@ -29,10 +29,14 @@
 
 package org.jvoicexml.implementation.text;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.URI;
 import java.util.Collection;
 
 import org.junit.After;
@@ -129,6 +133,23 @@ public final class TestTextReceiverThread
     }
 
     /**
+     * Writes the given grammar to a file.
+     * @param file the file to write to
+     * @param grammar the grammar to write
+     * @return URI of the file
+     * @throws IOException
+     *          error writing
+     * @since 0.7.7
+     */
+    private URI writeToFile(final File file, final String grammar)
+            throws IOException {
+        final FileWriter writer = new FileWriter(file);
+        writer.write(grammar);
+        writer.close();
+        return file.toURI();
+    }
+
+    /**
      * Test method for {@link org.jvoicexml.implementation.text.TextReceiverThread#run()}.
      * @exception Exception
      *            test failed.
@@ -144,8 +165,10 @@ public final class TestTextReceiverThread
         final Rule rule = grammar.appendChild(Rule.class);
         rule.setId("root");
         rule.addText(userInput);
+        final File file = File.createTempFile("jvxmltest", "srgs");
+        final URI uri = writeToFile(file, doc.toXml());
         final SrgsXmlGrammarImplementation impl =
-            new SrgsXmlGrammarImplementation(doc);
+            new SrgsXmlGrammarImplementation(doc, uri);
         final Collection<GrammarImplementation<?>> grammars
             = new java.util.ArrayList<GrammarImplementation<?>>();
         grammars.add(impl);

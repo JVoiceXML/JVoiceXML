@@ -29,15 +29,15 @@ import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.implementation.GrammarImplementation;
 
 /**
- * A <code>&lt;grammar&gt;</code> that has been processed by the
- * {@link org.jvoicexml.interpreter.GrammarProcessor}. In fact this is a pair of
+ * A <code>&lt;grammar&gt;</code> that has been loaded by the
+ * {@link org.jvoicexml.implementation.SpokenInput}. In fact this is a pair of
  * a {@link GrammarDocument} and a {@link GrammarImplementation}.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.2
  */
-public final class ProcessedGrammar {
+public final class LoadedGrammar {
     /** The grammar document. */
     private GrammarDocument document;
 
@@ -47,7 +47,7 @@ public final class ProcessedGrammar {
     /**
      * Constructs a new object.
      */
-    public ProcessedGrammar() {
+    public LoadedGrammar() {
     }
 
     /**
@@ -55,7 +55,7 @@ public final class ProcessedGrammar {
      * @param doc the grammar document
      * @param impl the grammar implementation
      */
-    public ProcessedGrammar(final GrammarDocument doc,
+    public LoadedGrammar(final GrammarDocument doc,
             final GrammarImplementation<?> impl) {
         document = doc;
         implementation = impl;
@@ -105,7 +105,7 @@ public final class ProcessedGrammar {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ProcessedGrammar other = (ProcessedGrammar) obj;
+        final LoadedGrammar other = (LoadedGrammar) obj;
         if (document == null) {
             if (other.document != null) {
                 return false;

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +26,8 @@
 
 package org.jvoicexml.implementation.jsapi20;
 
+import java.net.URI;
+
 import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.RuleGrammar;
 import javax.speech.recognition.RuleParse;
@@ -44,16 +46,25 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @since 0.5.5
  */
 public final class RuleGrammarImplementation
-    implements GrammarImplementation<RuleGrammar> {
+        implements GrammarImplementation<RuleGrammar> {
     /** The encapsulated grammar. */
     private final RuleGrammar grammar;
 
+    /** The URI. */
+    private final URI uri;
+
     /**
      * Constructs a new object.
-     * @param ruleGrammar the grammar.
+     * 
+     * @param ruleGrammar
+     *            the grammar.
+     * @param grammarUri
+     *            the URI of the grammar
      */
-    public RuleGrammarImplementation(final RuleGrammar ruleGrammar) {
+    public RuleGrammarImplementation(final RuleGrammar ruleGrammar,
+            final URI grammarUri) {
         grammar = ruleGrammar;
+        uri = grammarUri;
     }
 
     /**
@@ -61,6 +72,14 @@ public final class RuleGrammarImplementation
      */
     public RuleGrammar getGrammar() {
         return grammar;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getURI() {
+        return uri;
     }
 
     /**
@@ -79,6 +98,7 @@ public final class RuleGrammarImplementation
 
     /**
      * Retrieves the name of this grammar.
+     * 
      * @return name of the grammar
      */
     public String getName() {
@@ -91,7 +111,7 @@ public final class RuleGrammarImplementation
     public boolean accepts(final RecognitionResult result) {
         try {
             final RuleParse rp = grammar.parse(result.getWords(),
-                                               grammar.getRoot());
+                    grammar.getRoot());
             return rp != null;
         } catch (GrammarException ex) {
             return false;
@@ -100,6 +120,7 @@ public final class RuleGrammarImplementation
 
     /**
      * {@inheritDoc}
+     * 
      * @since 0.7.2
      */
     @Override
@@ -138,6 +159,7 @@ public final class RuleGrammarImplementation
 
     /**
      * {@inheritDoc}
+     * 
      * @since 0.7.2
      */
     @Override

@@ -27,11 +27,10 @@
 package org.jvoicexml.implementation.jvxml;
 
 import java.io.IOException;
-import java.io.Reader;
+import java.net.URI;
 import java.util.Collection;
 
-import javax.xml.parsers.ParserConfigurationException;
-
+import org.apache.log4j.Logger;
 import org.jvoicexml.DtmfInput;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarDocument;
@@ -42,28 +41,25 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.GrammarImplementation;
-import org.jvoicexml.implementation.ImplementationGrammarProcessor;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SpokenInputProvider;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;
+import org.jvoicexml.implementation.grammar.GrammarCache;
+import org.jvoicexml.implementation.grammar.LoadedGrammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * Basic wrapper for {@link UserInput}.
  * 
  * <p>
  * The {@link UserInput} encapsulates two external resources. A basic
- * implementation for the {@link DtmfInput} is provided by the interpreter.
- * The unknown resource is the spoken input, which must be obtained from a
- * resource pool. This class combines these two as the {@link UserInput} which
- * is been used by the rest of the interpreter.
+ * implementation for the {@link DtmfInput} is provided by the interpreter. The
+ * unknown resource is the spoken input, which must be obtained from a resource
+ * pool. This class combines these two as the {@link UserInput} which is been
+ * used by the rest of the interpreter.
  * </p>
  * 
  * @author Dirk Schnelle-Walka
@@ -71,14 +67,18 @@ import org.xml.sax.SAXException;
  * @since 0.5
  */
 final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(JVoiceXmlUserInput.class);
+
     /** The character input device. */
     private final BufferedDtmfInput dtmfInput;
 
     /** The spoken input device. */
     private final SpokenInput spokenInput;
 
-    /** The grammar processor. */
-    private final ImplementationGrammarProcessor processor;
+    /** The cache of already processed grammars. */
+    private final GrammarCache cache;
 
     /**
      * Constructs a new object.
@@ -91,11 +91,10 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
      *            the grammar processor
      */
     public JVoiceXmlUserInput(final SpokenInput input,
-            final BufferedDtmfInput dtmf,
-            final ImplementationGrammarProcessor proc) {
+            final BufferedDtmfInput dtmf) {
         spokenInput = input;
         dtmfInput = dtmf;
-        processor = proc;
+        cache = new GrammarCache();
     }
 
     /**
@@ -132,14 +131,13 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
         final Collection<GrammarImplementation<?>> dtmfGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
 
         for (GrammarDocument grammar : grammars) {
-            final ModeType type = grammar.getModeType();
-            final GrammarImplementation<?> impl = processor.process(this,
-                    grammar);
+            final GrammarImplementation<?> grammarImplementation = loadGrammar(grammar);
+            final ModeType type = grammarImplementation.getModeType();
             // A grammar is voice by default.
             if (type == ModeType.DTMF) {
-                dtmfGrammars.add(impl);
+                dtmfGrammars.add(grammarImplementation);
             } else {
-                voiceGrammars.add(impl);
+                voiceGrammars.add(grammarImplementation);
             }
         }
 
@@ -162,13 +160,7 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
         final Collection<GrammarImplementation<?>> dtmfGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
 
         for (GrammarDocument grammar : grammars) {
-            GrammarImplementation<?> impl;
-            try {
-                impl = processor.process(this, grammar);
-            } catch (UnsupportedFormatError e) {
-                // Should not happen since we've already through the activate
-                throw new BadFetchError(e.getMessage(), e);
-            }
+            GrammarImplementation<?> impl = cache.getImplementation(grammar);
             final ModeType type = grammar.getModeType();
             // A grammar is voice by default.
             if (type == ModeType.DTMF) {
@@ -196,27 +188,62 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
     }
 
     /**
-     * {@inheritDoc}
+     * Creates a {@link GrammarImplementation} from the contents provided by the
+     * reader. If the grammar contained in the reader already exists, it is
+     * over-written.
+     *
+     * <p>
+     * This method is mainly needed for non SRGS grammars, e.g. JSGF. Loading an
+     * SRGS grammar is quite easy and can be implemented e.g. as
+     * </p>
+     * <p>
+     * <code>
+     * final InputSource inputSource = new InputSource(reader);<br>
+     * SrgsXmlDocument doc = new SrgsXmlDocument(inputSource);<br>
+     * &#47;&#47; Pass it to the recognizer<br>
+     * return doc;
+     * </code>
+     * </p>
+     *
+     * @param document
+     *            the grammar to read. The type is one of the supported types of
+     *            the implementation, that has been requested via
+     *            {@link #getSupportedGrammarTypes(ModeType)}.
+     *
+     * @return Read grammar.
+     *
+     * @since 0.3
+     *
+     * @exception NoresourceError
+     *                The input resource is not available.
+     * @exception BadFetchError
+     *                Error reading the grammar.
+     * @exception UnsupportedFormatError
+     *                Invalid grammar format.
      */
-    @Override
-    public GrammarImplementation<?> loadGrammar(final Reader reader,
-            final GrammarType type) throws NoresourceError, BadFetchError,
-            UnsupportedFormatError {
-        if (type == GrammarType.SRGS_XML) {
-            final InputSource inputSource = new InputSource(reader);
-            final SrgsXmlDocument doc;
-            try {
-                doc = new SrgsXmlDocument(inputSource);
-            } catch (ParserConfigurationException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            } catch (SAXException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            } catch (IOException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            }
-            return new SrgsXmlGrammarImplementation(doc);
+    private GrammarImplementation<?> loadGrammar(final GrammarDocument document)
+            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+        final URI uri = document.getURI();
+
+        // Check if the grammar has already been loaded
+        if (cache.contains(document)) {
+            LOGGER.info("grammar from '" + uri + "' already loaded");
+            return cache.getImplementation(document);
         }
-        return spokenInput.loadGrammar(reader, type);
+
+        // Actually load and cache the grammar
+        final GrammarType type = document.getMediaType();
+        try {
+            LOGGER.info("loading '" + type + "' grammar from '" + uri + "'");
+            final GrammarImplementation<?> implementation = spokenInput
+                    .loadGrammar(uri, type);
+            final LoadedGrammar loaded = new LoadedGrammar(document,
+                    implementation);
+            cache.add(loaded);
+            return implementation;
+        } catch (IOException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        }
     }
 
     /**

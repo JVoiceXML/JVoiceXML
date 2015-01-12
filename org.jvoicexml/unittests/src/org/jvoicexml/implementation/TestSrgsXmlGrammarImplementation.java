@@ -61,7 +61,7 @@ public final class TestSrgsXmlGrammarImplementation {
         rule.setId("test");
         rule.addText("this is a test");
         final SrgsXmlGrammarImplementation impl =
-            new SrgsXmlGrammarImplementation(document);
+            new SrgsXmlGrammarImplementation(document, null);
         final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("this is a test");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
@@ -101,7 +101,7 @@ public final class TestSrgsXmlGrammarImplementation {
         final Item item3 = oneOf.appendChild(Item.class);
         item3.addText("3");
         final SrgsXmlGrammarImplementation impl =
-            new SrgsXmlGrammarImplementation(document);
+            new SrgsXmlGrammarImplementation(document, null);
         final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("press 1");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
@@ -151,7 +151,7 @@ public final class TestSrgsXmlGrammarImplementation {
         final Ruleref ref2 = rule.appendChild(Ruleref.class);
         ref2.setUri("#digit");
         final SrgsXmlGrammarImplementation impl =
-            new SrgsXmlGrammarImplementation(document);
+            new SrgsXmlGrammarImplementation(document, null);
         final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("2 or 3");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
@@ -189,7 +189,7 @@ public final class TestSrgsXmlGrammarImplementation {
         final InputSource source = new InputSource(reader);
         final SrgsXmlDocument document = new SrgsXmlDocument(source);
         final SrgsXmlGrammarImplementation impl =
-            new SrgsXmlGrammarImplementation(document);
+            new SrgsXmlGrammarImplementation(document, null);
         final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("a");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",

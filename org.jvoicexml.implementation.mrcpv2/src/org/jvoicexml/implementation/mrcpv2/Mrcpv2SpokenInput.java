@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,12 +26,14 @@
 
 package org.jvoicexml.implementation.mrcpv2;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Collection;
 
@@ -131,6 +133,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open() throws NoresourceError {
         LOGGER.info("Opening mrcpv2 spoken input.");
         // get the local host address (used for rtp audio stream)
@@ -147,6 +150,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
         LOGGER.info("Closing mrcpv2 spoken input.");
     }
@@ -154,6 +158,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addListener(final SpokenInputListener inputListener) {
         synchronized (listeners) {
             listeners.add(inputListener);
@@ -163,6 +168,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeListener(final SpokenInputListener inputListener) {
         synchronized (listeners) {
             listeners.remove(inputListener);
@@ -172,6 +178,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<BargeInType> getSupportedBargeInTypes() {
         final Collection<BargeInType> types = new java.util.ArrayList<BargeInType>();
 
@@ -184,29 +191,28 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<GrammarDocument> loadGrammar(
-            final Reader reader, final GrammarType type)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+    @Override
+    public GrammarImplementation<GrammarDocument> loadGrammar(final URI uri,
+            final GrammarType type) throws NoresourceError, IOException,
+            UnsupportedFormatError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading grammar from reader");
         }
 
-        final char[] buffer = new char[READ_BUFFER_SIZE];
-        final StringBuilder str = new StringBuilder();
+        final byte[] buffer = new byte[READ_BUFFER_SIZE];
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final URL url = uri.toURL();
+        final InputStream input = url.openStream();
         int num;
-        try {
-            do {
-                num = reader.read(buffer);
-                if (num >= 0) {
-                    str.append(buffer, 0, num);
-                }
-            } while (num >= 0);
-        } catch (java.io.IOException ioe) {
-            throw new BadFetchError(ioe);
-        }
+        do {
+            num = input.read(buffer);
+            if (num >= 0) {
+                out.write(buffer, 0, num);
+            }
+        } while (num >= 0);
         final String encoding = System.getProperty("file.encoding");
-        final GrammarDocument document = new ExternalGrammarDocument(null, str
-                .toString().getBytes(), encoding, true);
+        final GrammarDocument document = new ExternalGrammarDocument(uri,
+                out.toByteArray(), encoding, true);
         document.setMediaType(type);
         return new DocumentGrammarImplementation(document);
     }
@@ -214,6 +220,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
@@ -233,6 +240,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void deactivateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
             throws BadFetchError {
@@ -316,6 +324,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopRecognition() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("stoping recognition...");
@@ -341,6 +350,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activate() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("activating input...");
@@ -350,6 +360,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void passivate() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivating input...");
@@ -359,6 +370,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void connect(final ConnectionInformation client) throws IOException {
         final Mrcpv2ConnectionInformation mrcpv2Client = (Mrcpv2ConnectionInformation) client;
         LOGGER.info("connecting to '" + mrcpv2Client + "'");
@@ -375,6 +387,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void disconnect(final ConnectionInformation client) {
         // If the connection is already established, do not touch this
         // connection.
@@ -401,6 +414,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return "mrcpv2";
     }
@@ -408,6 +422,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
         final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
         types.add(GrammarType.JSGF);
@@ -418,6 +433,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public URI getUriForNextSpokenInput() throws NoresourceError {
         final String url = "rtp://" + remoteRtpHost + ":" + remoteRtpPort;
         try {
@@ -430,6 +446,7 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isBusy() {
         LOGGER.warn("isBusy check is not implemented.");
         // TODO Implement this. Is it checking if there is a recognition

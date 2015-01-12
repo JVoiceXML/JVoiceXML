@@ -27,15 +27,19 @@
 package org.jvoicexml.implementation.dtmf;
 
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.log4j.Logger;
-import org.jvoicexml.DtmfInput;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.SpeechRecognizerProperties;
@@ -47,8 +51,12 @@ import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Buffered DTMF input.
@@ -337,10 +345,19 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public GrammarImplementation<?> loadGrammar(final Reader reader,
-            final GrammarType type) throws NoresourceError, BadFetchError,
+    public GrammarImplementation<?> loadGrammar(final URI uri,
+            final GrammarType type) throws NoresourceError, IOException,
             UnsupportedFormatError {
-        return null;
+        try {
+            final URL url = uri.toURL();
+            final InputStream input = url.openStream();
+            final InputSource source = new InputSource(input);
+            final SrgsXmlDocument document = new SrgsXmlDocument(source);
+            return new SrgsXmlGrammarImplementation(document, uri);
+        } catch (MalformedURLException | ParserConfigurationException
+                | SAXException e) {
+            throw new IOException(e.getMessage(), e);
+        }
     }
 
     /**

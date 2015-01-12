@@ -37,8 +37,6 @@ import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy;
 import org.jvoicexml.implementation.PlatformFactory;
 import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;
-import org.jvoicexml.implementation.grammar.GrammarTransformer;
-import org.jvoicexml.implementation.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer;
 import org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatformFactory;
 import org.jvoicexml.implementation.text.TextPlatformFactory;
 import org.jvoicexml.interpreter.DialogFactory;
@@ -83,10 +81,6 @@ public final class EmbeddedTextConfiguration implements Configuration {
         } else if (baseClass == GrammarIdentifier.class) {
             final GrammarIdentifier identifier = new SrgsXmlGrammarIdentifier();
             col.add((T) identifier);
-        } else if (baseClass == GrammarTransformer.class) {
-            final GrammarTransformer transformer =
-                    new SrgsXml2SrgsXmlGrammarTransformer();
-            col.add((T) transformer);
         }
         return col;
     }

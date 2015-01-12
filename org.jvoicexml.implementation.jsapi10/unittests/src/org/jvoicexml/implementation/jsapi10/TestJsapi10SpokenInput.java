@@ -25,7 +25,11 @@
  */
 package org.jvoicexml.implementation.jsapi10;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringReader;
+import java.net.URI;
 import java.util.Collection;
 
 import javax.speech.Central;
@@ -50,6 +54,7 @@ import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
 
 /**
  * Test cases for {@link Jsapi10SpokenInput}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.2
@@ -64,25 +69,27 @@ public class TestJsapi10SpokenInput {
 
     /**
      * Global initialization.
+     * 
      * @throws EngineException
-     *         error registering the engine.
+     *             error registering the engine.
      */
     @BeforeClass
     public static void init() throws EngineException {
         final String config = "/sphinx4.jsapi10.test.config.xml";
-        final SphinxRecognizerModeDesc desc =
-                new SphinxRecognizerModeDesc(config);
+        final SphinxRecognizerModeDesc desc = new SphinxRecognizerModeDesc(
+                config);
         SphinxEngineCentral.registerEngineModeDesc(desc);
         Central.registerEngineCentral(SphinxEngineCentral.class.getName());
-//        Central.registerEngineCentral(CGEngineCentral.class.getName());
+        // Central.registerEngineCentral(CGEngineCentral.class.getName());
     }
 
     /**
      * Set up the test environment.
+     * 
      * @throws java.lang.Exception
-     *         setup failed
+     *             setup failed
      * @throws JVoiceXMLEvent
-     *         setup failed
+     *             setup failed
      */
     @Before
     public void setUp() throws Exception, JVoiceXMLEvent {
@@ -95,7 +102,9 @@ public class TestJsapi10SpokenInput {
 
     /**
      * Tears down the environment.
-     * @throws Exception tear down faild
+     * 
+     * @throws Exception
+     *             tear down faild
      * @since 0.7.3
      */
     @After
@@ -105,13 +114,15 @@ public class TestJsapi10SpokenInput {
 
     /**
      * Checks if the given name is in the list of grammars.
-     * @param name the name to look for.
-     * @param grammars the list of grammars
+     * 
+     * @param name
+     *            the name to look for.
+     * @param grammars
+     *            the list of grammars
      * @return <code>true</code> if the name is present
      * @since 0.7.3
      */
-    private boolean contains(final String name,
-            Collection<RuleGrammar> grammars) {
+    private boolean contains(final String name, Collection<RuleGrammar> grammars) {
         for (RuleGrammar grammar : grammars) {
             final String current = grammar.getName();
             if (name.equals(current)) {
@@ -122,26 +133,46 @@ public class TestJsapi10SpokenInput {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.jsapi10.Jsapi10SpokenInput#loadGrammar(java.io.Reader, org.jvoicexml.xml.srgs.GrammarType)}.
+     * Writes the given grammar to a file.
+     * @param file the file to write to
+     * @param grammar the grammar to write
+     * @return URI of the file
+     * @throws IOException
+     *          error writing
+     * @since 0.7.7
+     */
+    private URI writeToFile(final File file, final String grammar)
+            throws IOException {
+        final FileWriter writer = new FileWriter(file);
+        writer.write(grammar);
+        writer.close();
+        return file.toURI();
+    }
+
+    /**
+     * Test method for
+     * {@link org.jvoicexml.implementation.jsapi10.Jsapi10SpokenInput#loadGrammar(java.io.Reader, org.jvoicexml.xml.srgs.GrammarType)}
+     * .
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testLoadGrammar() throws Exception, JVoiceXMLEvent {
         final String lf = System.getProperty("line.separator");
-        final String grammar = "#JSGF V1.0;" + lf
-            + "grammar test;" + lf
-            + "public <test> = a|b|c;";
-        final StringReader reader = new StringReader(grammar);
-        final RuleGrammarImplementation impl = (RuleGrammarImplementation)
-            recognizer.loadGrammar(reader, GrammarType.JSGF);
+        final String grammar = "#JSGF V1.0;" + lf + "grammar test;" + lf
+                + "public <test> = a|b|c;";
+        final File file = File.createTempFile("jvxmltest", "jsgf");
+        final URI uri = writeToFile(file, grammar);
+        final RuleGrammarImplementation impl = (RuleGrammarImplementation) recognizer
+                .loadGrammar(uri, GrammarType.JSGF);
         Assert.assertNotNull(impl);
         final RuleGrammar ruleGrammar = impl.getGrammar();
         Assert.assertEquals("test", ruleGrammar.getName());
-        final RuleAlternatives alternatives = (RuleAlternatives)
-            ruleGrammar.getRule("test");
+        final RuleAlternatives alternatives = (RuleAlternatives) ruleGrammar
+                .getRule("test");
         Assert.assertNotNull(alternatives);
         final Rule[] rules = alternatives.getRules();
         Assert.assertEquals(3, rules.length);
@@ -152,22 +183,21 @@ public class TestJsapi10SpokenInput {
 
     /**
      * Test case for {@link Jsapi10SpokenInput#activateGrammars(Collection)}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testActivateGrammars() throws Exception, JVoiceXMLEvent {
         final String lf = System.getProperty("line.separator");
-        final String grammar = "#JSGF V1.0;" + lf
-            + "grammar test;" + lf
-            + "public <test> = a|b|c;";
+        final String grammar = "#JSGF V1.0;" + lf + "grammar test;" + lf
+                + "public <test> = a|b|c;";
         final StringReader reader = new StringReader(grammar);
-        final RuleGrammarImplementation impl = (RuleGrammarImplementation)
-            recognizer.loadGrammar(reader, GrammarType.JSGF);
-        final Collection<GrammarImplementation<?>> implementations =
-            new java.util.ArrayList<GrammarImplementation<?>>();
+        final RuleGrammarImplementation impl = (RuleGrammarImplementation) recognizer
+                .loadGrammar(reader, GrammarType.JSGF);
+        final Collection<GrammarImplementation<?>> implementations = new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl);
         recognizer.activateGrammars(implementations);
         final Collection<RuleGrammar> active = recognizer.getActiveGrammars();
@@ -177,29 +207,26 @@ public class TestJsapi10SpokenInput {
 
     /**
      * Test case for {@link Jsapi10SpokenInput#activateGrammars(Collection)}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
-    public void testActivateGrammarsMultiple()
-        throws Exception, JVoiceXMLEvent {
+    public void testActivateGrammarsMultiple() throws Exception, JVoiceXMLEvent {
         final String lf = System.getProperty("line.separator");
-        final String grammar1 = "#JSGF V1.0;" + lf
-            + "grammar test1;" + lf
-            + "public <test1> = a|b|c;";
+        final String grammar1 = "#JSGF V1.0;" + lf + "grammar test1;" + lf
+                + "public <test1> = a|b|c;";
         final StringReader reader1 = new StringReader(grammar1);
-        final RuleGrammarImplementation impl1 = (RuleGrammarImplementation)
-            recognizer.loadGrammar(reader1, GrammarType.JSGF);
-        final String grammar2 = "#JSGF V1.0;" + lf
-            + "grammar test2;" + lf
-            + "public <test2> = d|e|f;";
+        final RuleGrammarImplementation impl1 = (RuleGrammarImplementation) recognizer
+                .loadGrammar(reader1, GrammarType.JSGF);
+        final String grammar2 = "#JSGF V1.0;" + lf + "grammar test2;" + lf
+                + "public <test2> = d|e|f;";
         final StringReader reader2 = new StringReader(grammar2);
-        final RuleGrammarImplementation impl2 = (RuleGrammarImplementation)
-        recognizer.loadGrammar(reader2, GrammarType.JSGF);
-        final Collection<GrammarImplementation<?>> implementations =
-            new java.util.ArrayList<GrammarImplementation<?>>();
+        final RuleGrammarImplementation impl2 = (RuleGrammarImplementation) recognizer
+                .loadGrammar(reader2, GrammarType.JSGF);
+        final Collection<GrammarImplementation<?>> implementations = new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl1);
         implementations.add(impl2);
         recognizer.activateGrammars(implementations);
@@ -211,22 +238,21 @@ public class TestJsapi10SpokenInput {
 
     /**
      * Test case for {@link Jsapi10SpokenInput#deactivateGrammars(Collection)}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
     public void testDectivateGrammars() throws Exception, JVoiceXMLEvent {
         final String lf = System.getProperty("line.separator");
-        final String grammar = "#JSGF V1.0;" + lf
-            + "grammar test;" + lf
-            + "public <test> = a|b|c;";
+        final String grammar = "#JSGF V1.0;" + lf + "grammar test;" + lf
+                + "public <test> = a|b|c;";
         final StringReader reader = new StringReader(grammar);
-        final RuleGrammarImplementation impl = (RuleGrammarImplementation)
-            recognizer.loadGrammar(reader, GrammarType.JSGF);
-        final Collection<GrammarImplementation<?>> implementations =
-            new java.util.ArrayList<GrammarImplementation<?>>();
+        final RuleGrammarImplementation impl = (RuleGrammarImplementation) recognizer
+                .loadGrammar(reader, GrammarType.JSGF);
+        final Collection<GrammarImplementation<?>> implementations = new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl);
         recognizer.activateGrammars(implementations);
         final Collection<RuleGrammar> active1 = recognizer.getActiveGrammars();
@@ -239,29 +265,27 @@ public class TestJsapi10SpokenInput {
 
     /**
      * Test case for {@link Jsapi10SpokenInput#deactivateGrammars(Collection)}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
-    public void testDectivateGrammarsMultiple()
-        throws Exception, JVoiceXMLEvent {
+    public void testDectivateGrammarsMultiple() throws Exception,
+            JVoiceXMLEvent {
         final String lf = System.getProperty("line.separator");
-        final String grammar1 = "#JSGF V1.0;" + lf
-            + "grammar test1;" + lf
-            + "public <test1> = a|b|c;";
+        final String grammar1 = "#JSGF V1.0;" + lf + "grammar test1;" + lf
+                + "public <test1> = a|b|c;";
         final StringReader reader1 = new StringReader(grammar1);
-        final RuleGrammarImplementation impl1 = (RuleGrammarImplementation)
-            recognizer.loadGrammar(reader1, GrammarType.JSGF);
-        final String grammar2 = "#JSGF V1.0;" + lf
-            + "grammar test2;" + lf
-            + "public <test2> = d|e|f;";
+        final RuleGrammarImplementation impl1 = (RuleGrammarImplementation) recognizer
+                .loadGrammar(reader1, GrammarType.JSGF);
+        final String grammar2 = "#JSGF V1.0;" + lf + "grammar test2;" + lf
+                + "public <test2> = d|e|f;";
         final StringReader reader2 = new StringReader(grammar2);
-        final RuleGrammarImplementation impl2 = (RuleGrammarImplementation)
-        recognizer.loadGrammar(reader2, GrammarType.JSGF);
-        final Collection<GrammarImplementation<?>> implementations =
-            new java.util.ArrayList<GrammarImplementation<?>>();
+        final RuleGrammarImplementation impl2 = (RuleGrammarImplementation) recognizer
+                .loadGrammar(reader2, GrammarType.JSGF);
+        final Collection<GrammarImplementation<?>> implementations = new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl1);
         implementations.add(impl2);
         recognizer.activateGrammars(implementations);
@@ -278,42 +302,40 @@ public class TestJsapi10SpokenInput {
      * Test case for multiple calls to
      * {@link Jsapi10SpokenInput#activateGrammars(Collection)} and
      * {@link Jsapi10SpokenInput#deactivateGrammars(Collection)}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      * @exception JVoiceXMLEvent
-     *            test failed
+     *                test failed
      */
     @Test
-    public void testActivateDectivateGrammarsMultiple()
-        throws Exception, JVoiceXMLEvent {
+    public void testActivateDectivateGrammarsMultiple() throws Exception,
+            JVoiceXMLEvent {
         final String lf = System.getProperty("line.separator");
-        final String grammar1 = "#JSGF V1.0;" + lf
-            + "grammar test1;" + lf
-            + "public <test1> = a|b|c;";
+        final String grammar1 = "#JSGF V1.0;" + lf + "grammar test1;" + lf
+                + "public <test1> = a|b|c;";
         final StringReader reader1 = new StringReader(grammar1);
-        final RuleGrammarImplementation impl1 = (RuleGrammarImplementation)
-            recognizer.loadGrammar(reader1, GrammarType.JSGF);
-        final String grammar2 = "#JSGF V1.0;" + lf
-            + "grammar test2;" + lf
-            + "public <test2> = d|e|f;";
+        final RuleGrammarImplementation impl1 = (RuleGrammarImplementation) recognizer
+                .loadGrammar(reader1, GrammarType.JSGF);
+        final String grammar2 = "#JSGF V1.0;" + lf + "grammar test2;" + lf
+                + "public <test2> = d|e|f;";
         final StringReader reader2 = new StringReader(grammar2);
-        final RuleGrammarImplementation impl2 = (RuleGrammarImplementation)
-        recognizer.loadGrammar(reader2, GrammarType.JSGF);
-        final Collection<GrammarImplementation<?>> implementations =
-            new java.util.ArrayList<GrammarImplementation<?>>();
+        final RuleGrammarImplementation impl2 = (RuleGrammarImplementation) recognizer
+                .loadGrammar(reader2, GrammarType.JSGF);
+        final Collection<GrammarImplementation<?>> implementations = new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl1);
         implementations.add(impl2);
-        for (int i=0; i<100; i++) {
+        for (int i = 0; i < 100; i++) {
             LOGGER.info("run: " + i);
             recognizer.activateGrammars(implementations);
-            final Collection<RuleGrammar> active1 =
-                recognizer.getActiveGrammars();
+            final Collection<RuleGrammar> active1 = recognizer
+                    .getActiveGrammars();
             Assert.assertEquals(2, active1.size());
             Assert.assertTrue(contains("test1", active1));
             Assert.assertTrue(contains("test2", active1));
             recognizer.deactivateGrammars(implementations);
-            final Collection<RuleGrammar> active2 =
-                recognizer.getActiveGrammars();
+            final Collection<RuleGrammar> active2 = recognizer
+                    .getActiveGrammars();
             Assert.assertEquals(0, active2.size());
         }
     }

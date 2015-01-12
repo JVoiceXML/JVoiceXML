@@ -29,9 +29,10 @@
 
 package org.jvoicexml.implementation.jsapi20;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -109,6 +110,23 @@ public final class TestJsapi20SpokenInput implements SpokenInputListener {
     }
 
     /**
+     * Writes the given grammar to a file.
+     * @param file the file to write to
+     * @param grammar the grammar to write
+     * @return URI of the file
+     * @throws IOException
+     *          error writing
+     * @since 0.7.7
+     */
+    private URI writeToFile(final File file, final String grammar)
+            throws IOException {
+        final FileWriter writer = new FileWriter(file);
+        writer.write(grammar);
+        writer.close();
+        return file.toURI();
+    }
+
+    /**
      * Test case for {@link Jsapi10SpokenInput#activateGrammars(Collection)}.
      * @exception Exception
      *            test failed
@@ -126,9 +144,10 @@ public final class TestJsapi20SpokenInput implements SpokenInputListener {
         grammar.setRoot(rule);
         rule.addText("This is a test");
         final String xml = document.toString();
-        final Reader reader = new StringReader(xml);
+        final File file = File.createTempFile("jvxmltest", "srgs");
+        final URI uri = writeToFile(file, xml);
         final GrammarImplementation<?> impl =
-            input.loadGrammar(reader, GrammarType.SRGS_XML);
+            input.loadGrammar(uri, GrammarType.SRGS_XML);
         final Collection<GrammarImplementation<?>> implementations =
             new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl);
@@ -153,9 +172,10 @@ public final class TestJsapi20SpokenInput implements SpokenInputListener {
         grammar.setRoot(rule);
         rule.addText("test");
         final String xml = document.toString();
-        final Reader reader = new StringReader(xml);
+        final File file = File.createTempFile("jvxmltest", "srgs");
+        final URI uri = writeToFile(file, xml);
         final GrammarImplementation<?> impl =
-            input.loadGrammar(reader, GrammarType.SRGS_XML);
+            input.loadGrammar(uri, GrammarType.SRGS_XML);
         final Collection<GrammarImplementation<?>> implementations =
             new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl);

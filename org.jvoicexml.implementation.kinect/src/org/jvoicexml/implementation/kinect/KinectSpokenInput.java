@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,9 +27,10 @@
 package org.jvoicexml.implementation.kinect;
 
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -318,24 +319,29 @@ public final class KinectSpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public GrammarImplementation<?> loadGrammar(Reader reader, GrammarType type)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+    public GrammarImplementation<?> loadGrammar(URI uri, GrammarType type)
+            throws NoresourceError, UnsupportedFormatError, IOException {
         if (type != GrammarType.SRGS_XML) {
             throw new UnsupportedFormatError("Only SRGS XML is supported!");
         }
 
-        final InputSource inputSource = new InputSource(reader);
+        final URL url = uri.toURL();
+        InputStream input = null;
         final SrgsXmlDocument doc;
         try {
+            input = url.openStream();
+            final InputSource inputSource = new InputSource(input);
             doc = new SrgsXmlDocument(inputSource);
         } catch (ParserConfigurationException e) {
-            throw new BadFetchError(e.getMessage(), e);
+            throw new NoresourceError(e.getMessage(), e);
         } catch (SAXException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        } catch (IOException e) {
-            throw new BadFetchError(e.getMessage(), e);
+            throw new UnsupportedFormatError(e.getMessage(), e);
+        } finally {
+            if (input != null) {
+                input.close();
+            }
         }
-        return new SrgsXmlGrammarImplementation(doc);
+        return new SrgsXmlGrammarImplementation(doc, uri);
     }
 
     /**

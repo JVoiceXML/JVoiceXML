@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -30,7 +30,6 @@
 package org.jvoicexml.implementation.red5;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -220,8 +219,8 @@ public final class Red5SpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public GrammarImplementation<?> loadGrammar(Reader reader, GrammarType type)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+    public GrammarImplementation<?> loadGrammar(URI uri, GrammarType type)
+            throws NoresourceError, IOException, UnsupportedFormatError {
         // TODO Auto-generated method stub
         return null;
     }
