@@ -18,8 +18,10 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
 
     <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
-        <property name="component" value="org.jvoicexml.implementation.jsapi20" />
-        <property name="component.path" value="org/jvoicexml/implementation/jsapi20" />
+        <property name="component"
+                  value="org.jvoicexml.implementation.jsapi20" />
+        <property name="component.path"
+                  value="org/jvoicexml/implementation/jsapi20" />
 
         <!-- directory structure -->
         <property name="src" value="src" />
@@ -69,21 +71,30 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         <path id="jsapi2.path">
             <fileset refid="jsapi2.lib" />
         </path>
-        <available classpathref="jsapi2.path" classname="javax.speech.AudioManager" property="jsapi2.present" />
+        <available classpathref="jsapi2.path"
+                   classname="javax.speech.AudioManager"
+                   property="jsapi2.present" />
     </target>
 
-    <target name="-sapiConfiguration" depends="-setup" if="jvxml.jsapi20.sapi.use">
-        <xslt in="${jvxml.core.dir}/run.xml" out="${jvxml.core.dir}/run-tmp.xml" style="${etc}/patch-runscript-sapi.xsl">
+    <target name="-sapiConfiguration"
+            depends="-setup"
+            if="jvxml.jsapi20.sapi.use">
+        <xslt in="${jvxml.core.dir}/run.xml"
+              out="${jvxml.core.dir}/run-tmp.xml"
+              style="${etc}/patch-runscript-sapi.xsl">
             <outputproperty name="method" value="xml" />
             <outputproperty name="standalone" value="no" />
             <outputproperty name="encoding" value="UTF-8" />
             <outputproperty name="indent" value="yes" />
-            <param name="sapibridgepath" expression="${basedir}/3rdparty/jsapi2.0/lib" />
+            <param name="sapibridgepath"
+                   expression="${basedir}/3rdparty/jsapi2.0/lib" />
         </xslt>
-        <copy file="${jvxml.core.dir}/run-tmp.xml" tofile="${jvxml.core.dir}/run.xml" overwrite="true" />
+        <copy file="${jvxml.core.dir}/run-tmp.xml"
+              tofile="${jvxml.core.dir}/run.xml"
+              overwrite="true" />
         <copy todir="${dist}" overwrite="true">
             <fileset dir="${jsapi2.lib.dir}">
-                <include name="*.dll"/>
+                <include name="*.dll" />
             </fileset>
         </copy>
         <delete file="${jvxml.core.dir}/run-tmp.xml" />
@@ -94,15 +105,22 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         </copy>
     </target>
 
-    <target name="-macConfiguration" depends="-setup" if="jvxml.jsapi20.mac.use">
-        <xslt in="${jvxml.core.dir}/run.xml" out="${jvxml.core.dir}/run-tmp.xml" style="${etc}/patch-runscript-sapi.xsl">
+    <target name="-macConfiguration"
+            depends="-setup"
+            if="jvxml.jsapi20.mac.use">
+        <xslt in="${jvxml.core.dir}/run.xml"
+              out="${jvxml.core.dir}/run-tmp.xml"
+              style="${etc}/patch-runscript-sapi.xsl">
             <outputproperty name="method" value="xml" />
             <outputproperty name="standalone" value="no" />
             <outputproperty name="encoding" value="UTF-8" />
             <outputproperty name="indent" value="yes" />
-            <param name="sapibridgepath" expression="${basedir}/3rdparty/jsapi2.0/lib" />
+            <param name="sapibridgepath"
+                   expression="${basedir}/3rdparty/jsapi2.0/lib" />
         </xslt>
-        <copy file="${jvxml.core.dir}/run-tmp.xml" tofile="${jvxml.core.dir}/run.xml" overwrite="true" />
+        <copy file="${jvxml.core.dir}/run-tmp.xml"
+              tofile="${jvxml.core.dir}/run.xml"
+              overwrite="true" />
         <delete file="${jvxml.core.dir}/run-tmp.xml" />
         <copy todir="${config}" overwrite="true">
             <fileset dir="${etc}">
@@ -111,9 +129,13 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         </copy>
     </target>
 
-    <target name="-configuration" depends="-setup" if="jvxml.jsapi20.default.use">
+    <target name="-configuration"
+            depends="-setup"
+            if="jvxml.jsapi20.default.use">
         <copy todir="${config}" file="${etc}/jsapi20-implementation.xml" />
-        <xslt in="${jvxml.core.dir}/run.xml" out="${jvxml.core.dir}/run-tmp.xml" style="${etc}/patch-runscript.xsl">
+        <xslt in="${jvxml.core.dir}/run.xml"
+              out="${jvxml.core.dir}/run-tmp.xml"
+              style="${etc}/patch-runscript.xsl">
             <outputproperty name="method" value="xml" />
             <outputproperty name="standalone" value="no" />
             <outputproperty name="encoding" value="UTF-8" />
@@ -121,7 +143,9 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
             <param name="distpath" expression="${dist}" />
             <param name="thirdparty" expression="../${component}/3rdparty" />
         </xslt>
-        <copy file="${jvxml.core.dir}/run-tmp.xml" tofile="${jvxml.core.dir}/run.xml" overwrite="true" />
+        <copy file="${jvxml.core.dir}/run-tmp.xml"
+              tofile="${jvxml.core.dir}/run.xml"
+              overwrite="true" />
         <delete file="${jvxml.core.dir}/run-tmp.xml" />
         <copy todir="${config}" overwrite="true">
             <fileset dir="${etc}">
@@ -131,17 +155,27 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         </copy>
     </target>
 
-    <target name="configuration" depends="-setup,-sapiConfiguration,-macConfiguration,-configuration">
+    <target name="configuration"
+            depends="-setup,-sapiConfiguration,-macConfiguration,-configuration">
     </target>
 
-    <target name="clean" depends="-setup" description="Remove all compiled and distribution files">
+    <target name="clean"
+            depends="-setup"
+            description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
         <delete file="${dist.jar}" failonerror="false" />
     </target>
 
-    <target name="compile" depends="-init,-checkJavaVersion" if="jsapi2.present" description="Compile the JSAPI 2.0 sources">
+    <target name="compile"
+            depends="-init,-checkJavaVersion"
+            if="jsapi2.present"
+            description="Compile the JSAPI 2.0 sources">
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
-        <javac destdir="${build}" includeantruntime="false" optimize="${javac.optimize}" debug="${javac.debug}" deprecation="on">
+        <javac destdir="${build}"
+               includeantruntime="false"
+               optimize="${javac.optimize}"
+               debug="${javac.debug}"
+               deprecation="on">
             <src path="${src}" />
             <include name="${component.path}/**/*.java" />
             <classpath refid="project.classpath" />
@@ -149,7 +183,9 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         </javac>
     </target>
 
-    <target name="jar" depends="compile" description="Pack all compiled files into jar files">
+    <target name="jar"
+            depends="compile"
+            description="Pack all compiled files into jar files">
         <!-- jsapi 2.0 implementation jar file -->
         <jar jarfile="${dist.jar}" compress="false">
             <fileset dir="${build}">
@@ -160,22 +196,33 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
                 <section name="common">
-                    <attribute name="Implementation-Vendor" value="JVoiceXML group" />
-                    <attribute name="Implementation-Title" value="JVoiceXML jsapi 2.0 base layer" />
-                    <attribute name="Implementation-Version" value="${version}" />
+                    <attribute name="Implementation-Vendor"
+                               value="JVoiceXML group" />
+                    <attribute name="Implementation-Title"
+                               value="JVoiceXML jsapi 2.0 base layer" />
+                    <attribute name="Implementation-Version"
+                               value="${version}" />
                 </section>
             </manifest>
         </jar>
     </target>
 
-    <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,jar" />
+    <target name="rebuild"
+            description="Rebuild the jars from scratch"
+            depends="clean,jar" />
 
     <target name="apidoc" description="create javadoc" depends="-setup">
         <echo message="creating javadoc with access: ${javadoc.access}" />
 
         <delete dir="${apidoc}" failonerror="false" />
 
-        <javadoc destdir="${apidoc}" windowtitle="JVoiceXML" author="true" version="true" linksource="true" access="${javadoc.access}" use="true">
+        <javadoc destdir="${apidoc}"
+                 windowtitle="JVoiceXML"
+                 author="true"
+                 version="true"
+                 linksource="true"
+                 access="${javadoc.access}"
+                 use="true">
             <packageset dir="${src}" />
             <doctitle>
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
@@ -189,9 +236,16 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         </classpath>
 
         <!-- Resolve used libraries -->
-        <link offline="true" href="http://java.sun.com/javase/6/docs/api/" packagelistLoc="${3rdparty.dir}" />
-        <link offline="true" resolveLink="false" href="${jvxml.core.apidoc}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
-        <link offline="true" href="http://logging.apache.org/log4j/docs/api/" packagelistLoc="${log4j.dir}" />
+        <link offline="true"
+              href="http://java.sun.com/javase/6/docs/api/"
+              packagelistLoc="${3rdparty.dir}" />
+        <link offline="true"
+              resolveLink="false"
+              href="${jvxml.core.apidoc}"
+              packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+        <link offline="true"
+              href="http://logging.apache.org/log4j/docs/api/"
+              packagelistLoc="${log4j.dir}" />
 
         <group title="JSAPI 2.0 based implementation platform">
             <package name="org.jvoicexml.implementation.jsapi20*" />
@@ -202,11 +256,17 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
     </javadoc>
 </target>
 
-<target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -initcheckstyle" if="checkstyle.present">
-    <property name="checkstyle-target.dir" value="${dist}/checkstyle/${component}" />
+<target name="checkstyle"
+        description="Check for JVoiceXML coding standard"
+        depends="compile, -initcheckstyle"
+        if="checkstyle.present">
+    <property name="checkstyle-target.dir"
+              value="${dist}/checkstyle/${component}" />
     <mkdir dir="${checkstyle-target.dir}" />
-    <property name="checkstyle.data" value="${checkstyle-target.dir}/checkstyle-data.xml" />
-    <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml" failonviolation="false">
+    <property name="checkstyle.data"
+              value="${checkstyle-target.dir}/checkstyle-data.xml" />
+    <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml"
+                failonviolation="false">
         <classpath>
             <pathelement path="${project.classpath}" />
             <pathelement location="${build}" />
@@ -217,23 +277,31 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         </fileset>
         <formatter type="xml" tofile="${checkstyle.data}" />
     </checkstyle>
-    <xslt style="${jvxml.core.dir}/etc/checkstyle-frames.xsl" in="${checkstyle.data}" out="${checkstyle-target.dir}/report.html">
+    <xslt style="${jvxml.core.dir}/etc/checkstyle-frames.xsl"
+          in="${checkstyle.data}"
+          out="${checkstyle-target.dir}/report.html">
         <param name="output.dir" expression="${checkstyle-target.dir}" />
     </xslt>
 </target>
 
 <target name="distribution" depends="jar">
     <property name="distFolder" value="${dist}/${jvxml.version}" />
-    <copy tofile="${distFolder}/config/jsapi20-implementation.xml" file="${etc}/jsapi20-implementation-dist.xml" />
-    <copy tofile="${distFolder}/config/jsapi20-mac-implementation.xml" file="${etc}/jsapi20-mac-implementation-dist.xml" />
-    <copy tofile="${distFolder}/config/jsapi20-sapi-implementation.xml" file="${etc}/jsapi20-sapi-implementation-dist.xml" />
+    <copy tofile="${distFolder}/config/jsapi20-implementation.xml"
+          file="${etc}/jsapi20-implementation-dist.xml" />
+    <copy tofile="${distFolder}/config/jsapi20-mac-implementation.xml"
+          file="${etc}/jsapi20-mac-implementation-dist.xml" />
+    <copy tofile="${distFolder}/config/jsapi20-sapi-implementation.xml"
+          file="${etc}/jsapi20-sapi-implementation-dist.xml" />
     <copy todir="${distFolder}/config">
         <fileset dir="${etc}">
             <include name="hello.xml" />
         </fileset>
     </copy>
-    <copy todir="${distFolder}/lib" file="${dist}/org.jvoicexml.implementation.jsapi20.jar" />
+    <copy todir="${distFolder}/lib"
+          file="${dist}/org.jvoicexml.implementation.jsapi20.jar" />
     <copy todir="${distFolder}/lib">
+        <fileset refid="sphinx4.lib"/>
+        <fileset refid="freetts.lib"/>
         <fileset refid="jsapi2.lib" />
         <fileset dir="${local-3rdparty.dir}/jsapi2.0/lib">
             <include name="*.jar" />

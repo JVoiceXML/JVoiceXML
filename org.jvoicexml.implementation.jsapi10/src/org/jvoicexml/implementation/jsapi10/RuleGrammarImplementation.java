@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +25,8 @@
  */
 
 package org.jvoicexml.implementation.jsapi10;
+
+import java.net.URI;
 
 import javax.speech.recognition.Rule;
 import javax.speech.recognition.RuleAlternatives;
@@ -46,38 +48,41 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @since 0.5.5
  */
 public final class RuleGrammarImplementation
-    implements GrammarImplementation<RuleGrammar> {
+        implements GrammarImplementation<RuleGrammar> {
     /** The encapsulated grammar. */
     private final RuleGrammar grammar;
 
     /** The grammars source. */
-    private final String jsgf;
+    private final URI uri;
 
     /**
      * Constructs a new object.
-     * @param ruleGrammar the grammar.
-     * @param source the JSGF source code
+     * 
+     * @param ruleGrammar
+     *            the grammar.
+     * @param source
+     *            the JSGF source code
      */
     public RuleGrammarImplementation(final RuleGrammar ruleGrammar,
-            final String source) {
+            final URI source) {
         grammar = ruleGrammar;
-        jsgf = source;
+        uri = source;
     }
 
     /**
      * {@inheritDoc}
      */
-    public RuleGrammar getGrammar() {
-        return grammar;
+    @Override
+    public URI getURI() {
+        return uri;
     }
 
     /**
-     * Retrieves the JSGF source code.
-     * @return the JSGF source code
-     * @since 0.7.3
+     * {@inheritDoc}
      */
-    public String getJsgf() {
-        return jsgf;
+    @Override
+    public RuleGrammar getGrammar() {
+        return grammar;
     }
 
     /**
@@ -96,10 +101,78 @@ public final class RuleGrammarImplementation
 
     /**
      * Retrieves the name of the grammar.
+     * 
      * @return name of the grammar.
      */
     public String getName() {
         return grammar.getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((grammar == null) ? 0 : grammar.hashCode());
+        result = prime * result + ((uri == null) ? 0 : uri.hashCode());
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof RuleGrammarImplementation)) {
+            return false;
+        }
+        RuleGrammarImplementation other = (RuleGrammarImplementation) obj;
+        if (grammar == null) {
+            if (other.grammar != null) {
+                return false;
+            }
+        } else if (!grammar.equals(other.grammar)) {
+            return false;
+        }
+        if (uri == null) {
+            if (other.uri != null) {
+                return false;
+            }
+        } else if (!uri.equals(other.uri)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final GrammarImplementation<RuleGrammar> obj) {
+        RuleGrammarImplementation other = (RuleGrammarImplementation) obj;
+        if (grammar == null) {
+            if (other.grammar != null) {
+                return false;
+            }
+        } else if (!grammar.equals(other.grammar)) {
+            return false;
+        }
+        if (uri == null) {
+            if (other.uri != null) {
+                return false;
+            }
+        } else if (!uri.equals(other.uri)) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -124,13 +197,16 @@ public final class RuleGrammarImplementation
 
     /**
      * Checks if the given utterance is matched by the given rule.
-     * @param rule the current rule
-     * @param words the utterance to check.
-     * @param index current word
+     * 
+     * @param rule
+     *            the current rule
+     * @param words
+     *            the utterance to check.
+     * @param index
+     *            current word
      * @return the new index if the utterances match, <code>-1</code> otherwise.
      */
-    private int accepts(final Rule rule,
-            final String[] words, final int index) {
+    private int accepts(final Rule rule, final String[] words, final int index) {
         int newIndex = index;
         if (rule instanceof RuleSequence) {
             final RuleSequence sequence = (RuleSequence) rule;
@@ -150,13 +226,17 @@ public final class RuleGrammarImplementation
 
     /**
      * Checks if the given utterance is matched by the given sequence.
-     * @param sequence the current sequence
-     * @param words the utterance to check.
-     * @param index current word
+     * 
+     * @param sequence
+     *            the current sequence
+     * @param words
+     *            the utterance to check.
+     * @param index
+     *            current word
      * @return the new index if the utterances match, <code>-1</code> otherwise.
      */
-    private int accepts(final RuleSequence sequence,
-            final String[] words, final int index) {
+    private int accepts(final RuleSequence sequence, final String[] words,
+            final int index) {
         final Rule[] rules = sequence.getRules();
         int localIndex = index;
         for (Rule current : rules) {
@@ -172,9 +252,13 @@ public final class RuleGrammarImplementation
 
     /**
      * Checks if the given utterance is matched by the given token.
-     * @param token the current token
-     * @param words the utterance to check.
-     * @param index current word
+     * 
+     * @param token
+     *            the current token
+     * @param words
+     *            the utterance to check.
+     * @param index
+     *            current word
      * @return the new index if the utterances match, <code>-1</code> otherwise.
      */
     private int accepts(final RuleToken token, final String[] words,
@@ -197,9 +281,13 @@ public final class RuleGrammarImplementation
 
     /**
      * Checks if the given utterance is matched by the given alternatives.
-     * @param alternatives the current alternatives
-     * @param words the utterance to check.
-     * @param index current word
+     * 
+     * @param alternatives
+     *            the current alternatives
+     * @param words
+     *            the utterance to check.
+     * @param index
+     *            current word
      * @return the new index if the utterances match, <code>-1</code> otherwise.
      */
     private int accepts(final RuleAlternatives alternatives,
@@ -213,11 +301,16 @@ public final class RuleGrammarImplementation
         }
         return -1;
     }
+
     /**
      * Checks if the given utterance is matched by the given rule reference.
-     * @param ref the current reference
-     * @param words the utterance to check.
-     * @param index current word
+     * 
+     * @param ref
+     *            the current reference
+     * @param words
+     *            the utterance to check.
+     * @param index
+     *            current word
      * @return the new index if the utterances match, <code>-1</code> otherwise.
      */
     private int accepts(final RuleName ref, final String[] words,
@@ -229,51 +322,7 @@ public final class RuleGrammarImplementation
 
     /**
      * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(final GrammarImplementation<RuleGrammar> obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final RuleGrammarImplementation other = (RuleGrammarImplementation) obj;
-        if (jsgf == null) {
-            if (other.jsgf != null) {
-                return false;
-            }
-        } else if (!jsgf.equals(other.jsgf)) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        if (grammar == null) {
-            result = prime * result;
-        } else {
-            result = prime * result + grammar.hashCode();
-        }
-        if (jsgf == null) {
-            result = prime * result;
-        } else {
-            result = prime * result + jsgf.hashCode();
-        }
-        return result;
-    }
-
-    /**
-     * {@inheritDoc}
+     * 
      * @since 0.7.3
      */
     @Override
@@ -285,7 +334,7 @@ public final class RuleGrammarImplementation
         str.append(',');
         str.append(getModeType());
         str.append(',');
-        str.append(jsgf);
+        str.append(uri);
         str.append(']');
         return str.toString();
     }

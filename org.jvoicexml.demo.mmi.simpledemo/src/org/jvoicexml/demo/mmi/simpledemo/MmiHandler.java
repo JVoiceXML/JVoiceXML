@@ -24,7 +24,6 @@ import org.jvoicexml.mmi.events.DoneNotification;
 import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.Mmi;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -77,11 +76,11 @@ public class MmiHandler extends AbstractHandler {
                             final String contextId = ext.getContext();
                             final String source = ext.getSource();
                             final String target = ext.getTarget();
-                            try {
-                                sendYes(contextId, target, source);
-                            } catch (Exception e) {
-                                LOGGER.warn(e.getMessage(), e);
-                            }
+//                            try {
+//                                sendYes(contextId, target, source);
+//                            } catch (Exception e) {
+//                                LOGGER.warn(e.getMessage(), e);
+//                            }
                         } else if (sessionTerminated(mmi)) {
                             demo.notifySessionEnd();
                         }

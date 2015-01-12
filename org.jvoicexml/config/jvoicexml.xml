@@ -92,8 +92,8 @@
   </bean>
 
   <!--
-    - Grammar processor with all grammar identifiers and transformers from 
-    - a source type into a target type.
+    Grammar processor with all grammar identifiers. The concrete identifiers
+    to be loaded are configured in a separate configruation file.
     -->
   <bean id="org.jvoicexml.interpreter.GrammarProcessor"
     class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor" />

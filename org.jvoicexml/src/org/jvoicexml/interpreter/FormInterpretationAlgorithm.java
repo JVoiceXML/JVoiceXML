@@ -1080,6 +1080,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             }
             return;
         }
+
+        // Load and activate the grammars
         final ImplementationPlatform platform = context
                 .getImplementationPlatform();
         final UserInput input = platform.getUserInput();

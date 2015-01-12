@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -175,7 +175,7 @@ public final class TestTextTelephony
             SrgsXmlDocument doc = new SrgsXmlDocument();
             doc.setGrammarSimple("mock", utterance);
             final SrgsXmlGrammarImplementation impl = 
-                    new SrgsXmlGrammarImplementation(doc);
+                    new SrgsXmlGrammarImplementation(doc, null);
             final Collection<GrammarImplementation<?>> grammars;
             grammars = new java.util.ArrayList<>();
             grammars.add(impl);

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,8 +27,9 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 
@@ -202,25 +203,25 @@ final class TextSpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public GrammarImplementation<?> loadGrammar(final Reader reader,
-            final GrammarType type) throws NoresourceError, BadFetchError,
+    public GrammarImplementation<?> loadGrammar(final URI uri,
+            final GrammarType type) throws NoresourceError, IOException,
             UnsupportedFormatError {
         if (type != GrammarType.SRGS_XML) {
             throw new UnsupportedFormatError("Only SRGS XML is supported!");
         }
 
-        final InputSource inputSource = new InputSource(reader);
+        final URL url = uri.toURL();
+        final InputStream input = url.openStream();
+        final InputSource inputSource = new InputSource(input);
         final SrgsXmlDocument doc;
         try {
             doc = new SrgsXmlDocument(inputSource);
         } catch (ParserConfigurationException e) {
-            throw new BadFetchError(e.getMessage(), e);
+            throw new IOException(e.getMessage(), e);
         } catch (SAXException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        } catch (IOException e) {
-            throw new BadFetchError(e.getMessage(), e);
+            throw new UnsupportedFormatError(e.getMessage(), e);
         }
-        return new SrgsXmlGrammarImplementation(doc);
+        return new SrgsXmlGrammarImplementation(doc, uri);
     }
 
     /**

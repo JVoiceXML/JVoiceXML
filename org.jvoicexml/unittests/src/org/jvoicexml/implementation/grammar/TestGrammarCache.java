@@ -48,7 +48,7 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  */
 public final class TestGrammarCache {
     /** A processed grammar to test with. */
-    private ProcessedGrammar processed;
+    private LoadedGrammar processed;
 
     /**
      * Set up the test environment.
@@ -78,8 +78,8 @@ public final class TestGrammarCache {
         final GrammarDocument document =
             new InternalGrammarDocument(grammar);
         final GrammarImplementation<?> implementation =
-            new SrgsXmlGrammarImplementation(doc);
-        processed = new ProcessedGrammar(document, implementation);
+            new SrgsXmlGrammarImplementation(doc, null);
+        processed = new LoadedGrammar(document, implementation);
     }
 
     /**

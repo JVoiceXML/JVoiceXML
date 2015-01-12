@@ -27,10 +27,12 @@
 package org.jvoicexml.implementation.jsapi20;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -65,7 +67,6 @@ import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -76,8 +77,8 @@ import org.xml.sax.SAXException;
  * Audio input that uses the JSAPI 2.0 to address the recognition engine.
  *
  * <p>
- * Handle all JSAPI calls to the recognizer to make JSAPI transparent
- * to the interpreter.
+ * Handle all JSAPI calls to the recognizer to make JSAPI transparent to the
+ * interpreter.
  * </p>
  *
  * @author Dirk Schnelle-Walka
@@ -86,11 +87,11 @@ import org.xml.sax.SAXException;
  * @version $Revision$
  * @since 0.6
  */
-public final class Jsapi20SpokenInput implements SpokenInput,
-        RecognizerListener {
+public final class Jsapi20SpokenInput
+        implements SpokenInput, RecognizerListener {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(Jsapi20SpokenInput.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(Jsapi20SpokenInput.class);
 
     /** The speech recognizer. */
     private Recognizer recognizer;
@@ -115,9 +116,11 @@ public final class Jsapi20SpokenInput implements SpokenInput,
 
     /**
      * Constructs a new audio input.
+     * 
      * @param defaultDescriptor
-     *        the default recognizer mode descriptor.
-     * @param mediaLocatorFactory the media locator factory
+     *            the default recognizer mode descriptor.
+     * @param mediaLocatorFactory
+     *            the media locator factory
      */
     public Jsapi20SpokenInput(final RecognizerMode defaultDescriptor,
             final InputMediaLocatorFactory mediaLocatorFactory) {
@@ -129,7 +132,9 @@ public final class Jsapi20SpokenInput implements SpokenInput,
 
     /**
      * Sets the media locator.
-     * @param locator the media locator to use.
+     * 
+     * @param locator
+     *            the media locator to use.
      * @since 0.7
      */
     public void setMediaLocator(final URI locator) {
@@ -153,23 +158,19 @@ public final class Jsapi20SpokenInput implements SpokenInput,
 
             if (mediaLocator != null) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("using media locator '" + mediaLocator
-                            + "'");
+                    LOGGER.debug("using media locator '" + mediaLocator + "'");
                 }
-                final AudioManager manager =
-                    recognizer.getAudioManager();
+                final AudioManager manager = recognizer.getAudioManager();
                 manager.setMediaLocator(mediaLocator);
             }
-            final SpeechEventExecutor executor =
-                new SynchronousSpeechEventExecutor();
+            final SpeechEventExecutor executor = new SynchronousSpeechEventExecutor();
             recognizer.setSpeechEventExecutor(executor);
             recognizer.addRecognizerListener(this);
             recognizer.allocate();
             recognizer.waitEngineState(Recognizer.ALLOCATED);
             LOGGER.info("...JSAPI 2.0 recognizer allocated");
-        } catch (EngineException | AudioException
-                | IllegalArgumentException | IllegalStateException
-                | InterruptedException ex) {
+        } catch (EngineException | AudioException | IllegalArgumentException
+                | IllegalStateException | InterruptedException ex) {
             throw new NoresourceError(ex.getMessage(), ex);
         }
     }
@@ -222,14 +223,12 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
     @Override
     public Collection<BargeInType> getSupportedBargeInTypes() {
-        final Collection<BargeInType> types =
-                new java.util.ArrayList<BargeInType>();
+        final Collection<BargeInType> types = new java.util.ArrayList<BargeInType>();
 
         types.add(BargeInType.SPEECH);
         types.add(BargeInType.HOTWORD);
@@ -241,9 +240,9 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     @Override
-    public GrammarImplementation<RuleGrammar> loadGrammar(final Reader reader,
-            final GrammarType grammarType)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+    public GrammarImplementation<RuleGrammar> loadGrammar(final URI uri,
+            final GrammarType grammarType) throws NoresourceError,
+            UnsupportedFormatError, IOException {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
@@ -253,10 +252,12 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         }
         RuleGrammar grammar = null;
         try {
-            final InputSource source = new InputSource(reader);
+            final URL url = uri.toURL();
+            final InputStream input = url.openStream();
+            final InputSource source = new InputSource(input);
             final SrgsXmlDocument doc = new SrgsXmlDocument(source);
             final org.jvoicexml.xml.srgs.Grammar gram = doc.getGrammar();
-            reader.close();
+            input.close();
             final String reference;
             String root = gram.getRoot();
             if (root == null) {
@@ -280,8 +281,6 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             throw new NoresourceError(ex.getMessage(), ex);
         } catch (IllegalArgumentException ex) {
             throw new NoresourceError(ex.getMessage(), ex);
-        } catch (java.io.IOException ex) {
-            throw new NoresourceError(ex.getMessage(), ex);
         } catch (javax.speech.recognition.GrammarException ex) {
             throw new NoresourceError(ex.getMessage(), ex);
         } catch (ParserConfigurationException ex) {
@@ -290,22 +289,23 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             throw new NoresourceError(ex.getMessage(), ex);
         }
 
-        return new RuleGrammarImplementation(grammar);
+        return new RuleGrammarImplementation(grammar, uri);
     }
 
     /**
      * Activates the given grammar.
+     * 
      * @param name
-     *        Name of the grammar.
+     *            Name of the grammar.
      * @param activate
-     *        <code>true</code> if the grammar should be activated.
+     *            <code>true</code> if the grammar should be activated.
      *
      * @return <code>true</code> if the grammar is active.
      * @exception BadFetchError
-     *        Error creating the grammar.
+     *                Error creating the grammar.
      */
     private boolean activateGrammar(final String name, final boolean activate)
-        throws BadFetchError {
+            throws BadFetchError {
         RuleGrammar grammar = null;
         final GrammarManager manager = recognizer.getGrammarManager();
         try {
@@ -316,7 +316,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             grammar.setActivatable(activate);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("grammar '" + name + "' activated: "
-                             + grammar.isActive());
+                        + grammar.isActive());
             }
         } catch (EngineStateException ex) {
             throw new BadFetchError(ex.getMessage(), ex);
@@ -330,42 +330,18 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     @Override
     public void activateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
-        throws BadFetchError, UnsupportedLanguageError, NoresourceError {
+            throws BadFetchError, UnsupportedLanguageError, NoresourceError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
 
         for (GrammarImplementation<? extends Object> current : grammars) {
             if (current instanceof RuleGrammarImplementation) {
-                final RuleGrammarImplementation ruleGrammar =
-                        (RuleGrammarImplementation) current;
+                final RuleGrammarImplementation ruleGrammar = (RuleGrammarImplementation) current;
                 final String name = ruleGrammar.getName();
-
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("activating grammar '" + name + "'...");
                 }
-
-                activateGrammar(name, true);
-            } else if (current instanceof SrgsXmlGrammarImplementation) {
-                final SrgsXmlGrammarImplementation implementation =
-                    (SrgsXmlGrammarImplementation) current;
-                final SrgsXmlDocument document = implementation.getGrammar();
-                final String grammar = document.toString();                
-                
-                final StringReader reader = new StringReader(grammar);
-                final GrammarImplementation<RuleGrammar> rule;
-                try {
-                    rule = loadGrammar(reader, GrammarType.SRGS_XML);
-                } catch (UnsupportedFormatError e) {
-                    throw new BadFetchError(e.getMessage(), e);
-                }
-                final String name = rule.getGrammar().getRoot();
-
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("activating VOICE grammar '\n" + document
-                            + "'...");
-                }
-
                 activateGrammar(name, true);
             }
         }
@@ -377,41 +353,18 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     @Override
     public void deactivateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
-        throws BadFetchError {
+            throws BadFetchError {
         if (recognizer == null) {
             return;
         }
-        
 
         for (GrammarImplementation<? extends Object> current : grammars) {
-
-            if (current instanceof SrgsXmlGrammarImplementation) {
-                
-                final SrgsXmlDocument doc =
-                        (SrgsXmlDocument) current.getGrammar();
-                final org.jvoicexml.xml.srgs.Grammar srgsXmlGrammar
-                    = doc.getGrammar();
-                final String reference = srgsXmlGrammar.getRoot();
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("deactivating grammar '" + reference + "'...");
-                }   
-                
-                final GrammarManager manager = recognizer.getGrammarManager();
-                final Grammar grammar = manager.getGrammar(reference);
-                if (grammar != null) {
-                    manager.deleteGrammar(grammar);
-                }
-            }
-            
             if (current instanceof RuleGrammarImplementation) {
-                final RuleGrammarImplementation ruleGrammar =
-                        (RuleGrammarImplementation) current;
+                final RuleGrammarImplementation ruleGrammar = (RuleGrammarImplementation) current;
                 final String name = ruleGrammar.getName();
-
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("deactivating grammar '" + name + "'...");
                 }
-
                 activateGrammar(name, false);
             }
         }
@@ -421,17 +374,16 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     @Override
-    public void startRecognition(
-        final SpeechRecognizerProperties speech,
-        final DtmfRecognizerProperties dtmf)
-        throws NoresourceError, BadFetchError {
+    public void startRecognition(final SpeechRecognizerProperties speech,
+            final DtmfRecognizerProperties dtmf) throws NoresourceError,
+            BadFetchError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
-        
+
         if (speech != null) {
-            final RecognizerProperties recProbs
-                = recognizer.getRecognizerProperties();
+            final RecognizerProperties recProbs = recognizer
+                    .getRecognizerProperties();
 
             // confidence
             final float confidence = speech.getConfidencelevel();
@@ -439,33 +391,33 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                     RecognizerProperties.MIN_CONFIDENCE,
                     RecognizerProperties.MAX_CONFIDENCE);
             recProbs.setConfidenceThreshold(scaledConfidence);
-            
+
             // sensitivity
             final float sensitivity = speech.getSensitivity();
             final int scaledSensitivity = scale(sensitivity,
                     RecognizerProperties.MIN_SENSITIVITY,
                     RecognizerProperties.MAX_SENSITIVITY);
             recProbs.setSensitivity(scaledSensitivity);
-            
+
             // speedvsaccuracy
             final float speedVsAccuracs = speech.getSpeedvsaccuracy();
             final int scaledSpeedVsAccuracy = scale(speedVsAccuracs,
                     RecognizerProperties.MIN_ACCURACY,
                     RecognizerProperties.MAX_ACCURACY);
             recProbs.setSensitivity(scaledSpeedVsAccuracy);
-            
+
             // completeTimeout
             final long completeTimeout = speech.getCompletetimeoutAsMsec();
             recProbs.setCompleteTimeout((int) completeTimeout);
-            
+
             // incompleteTimeout
             final long incompleteTimeout = speech.getCompletetimeoutAsMsec();
             recProbs.setIncompleteTimeout((int) incompleteTimeout);
-            
+
             // maxTimeOut
             // TODO search a corresponding option in JSAPI2
         }
-        
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("starting recognition...");
         }
@@ -499,9 +451,13 @@ public final class Jsapi20SpokenInput implements SpokenInput,
 
     /**
      * Scales the given value into the range from min to max.
-     * @param value the value to scale
-     * @param min the minimum border of the range
-     * @param max the maximum border of the range
+     * 
+     * @param value
+     *            the value to scale
+     * @param min
+     *            the minimum border of the range
+     * @param max
+     *            the maximum border of the range
      * @return converted value
      * @since 0.7.5
      */
@@ -610,7 +566,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * Sets the type of this resource.
      *
      * @param resourceType
-     *                type of the resource
+     *            type of the resource
      */
     public void setType(final String resourceType) {
         type = resourceType;
@@ -621,8 +577,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      */
     @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        final Collection<GrammarType> types =
-                new java.util.ArrayList<GrammarType>();
+        final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
         types.add(GrammarType.SRGS_XML);
         return types;
     }
@@ -631,8 +586,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     @Override
-    public URI getUriForNextSpokenInput()
-        throws NoresourceError, URISyntaxException {
+    public URI getUriForNextSpokenInput() throws NoresourceError,
+            URISyntaxException {
         if (recognizer == null) {
             throw new NoresourceError("No recognizer");
         }
@@ -662,29 +617,29 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     @Override
     public void recognizerUpdate(final RecognizerEvent recognizerEvent) {
         final int id = recognizerEvent.getId();
-        switch(id) {
+        switch (id) {
         case EngineEvent.ENGINE_ERROR:
             /*
-             * quote JSAPI2-Specc: 
-             * "Event issued when an Engine error occurs. 
+             * quote JSAPI2-Specc: "Event issued when an Engine error occurs.
              * [...] The application should deallocate the Engine in this case."
              */
             close();
             break;
-         default:
+        default:
             break;
         }
     }
 
     /**
      * Notifies all registered listeners about the given event.
-     * @param event the event.
+     * 
+     * @param event
+     *            the event.
      * @since 0.6
      */
     void fireInputEvent(final SpokenInputEvent event) {
         synchronized (listeners) {
-            final Collection<SpokenInputListener> copy =
-                new java.util.ArrayList<SpokenInputListener>();
+            final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listeners);
             for (SpokenInputListener current : copy) {
                 current.inputStatusChanged(event);
