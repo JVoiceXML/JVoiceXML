@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -64,7 +64,7 @@ public final class TestRuleGrammarImplementation {
         RuleSequence sequence = new RuleSequence(words);
         grammar.setRule(grammar.getName(), sequence, true);
         final RuleGrammarImplementation impl =
-            new RuleGrammarImplementation(grammar, grammar.toString());
+            new RuleGrammarImplementation(grammar, null);
         final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("this is a test");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
@@ -97,7 +97,7 @@ public final class TestRuleGrammarImplementation {
         final RuleSequence sequence = new RuleSequence(rules);
         grammar.setRule(grammar.getName(), sequence, true);
         final RuleGrammarImplementation impl =
-            new RuleGrammarImplementation(grammar, grammar.toString());
+            new RuleGrammarImplementation(grammar, null);
         final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("press 1");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
@@ -137,7 +137,7 @@ public final class TestRuleGrammarImplementation {
         final RuleSequence sequence = new RuleSequence(rules);
         grammar.setRule(grammar.getName(), sequence, true);
         final RuleGrammarImplementation impl =
-            new RuleGrammarImplementation(grammar, grammar.toString());
+            new RuleGrammarImplementation(grammar, null);
         final MockRecognitionResult result1 = new MockRecognitionResult();
         result1.setUtterance("2 or 3");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
@@ -186,11 +186,11 @@ public final class TestRuleGrammarImplementation {
         final StringReader reader1 = new StringReader(grammar.toString());
         final RuleGrammar grammar1 = rec.loadJSGF(reader1);
         final RuleGrammarImplementation impl1 =
-            new RuleGrammarImplementation(grammar1, grammar1.toString());
+            new RuleGrammarImplementation(grammar1, null);
         final StringReader reader2 = new StringReader(grammar.toString());
         final RuleGrammar grammar2 = rec.loadJSGF(reader2);
         final RuleGrammarImplementation impl2 =
-            new RuleGrammarImplementation(grammar2, grammar2.toString());
+            new RuleGrammarImplementation(grammar2, null);
         Assert.assertTrue(impl1.equals(impl2));
         Assert.assertTrue(impl2.equals(impl1));
     }
