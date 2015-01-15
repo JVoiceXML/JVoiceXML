@@ -28,13 +28,11 @@ package org.jvoicexml.implementation.jsapi10;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringReader;
 import java.net.URI;
 import java.util.Collection;
 
 import javax.speech.Central;
 import javax.speech.EngineException;
-import javax.speech.recognition.RecognizerModeDesc;
 import javax.speech.recognition.Rule;
 import javax.speech.recognition.RuleAlternatives;
 import javax.speech.recognition.RuleGrammar;
@@ -49,8 +47,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 
-import edu.cmu.sphinx.jsapi.SphinxEngineCentral;
-import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
+import com.cloudgarden.speech.CGEngineCentral;
 
 /**
  * Test cases for {@link Jsapi10SpokenInput}.
@@ -75,12 +72,7 @@ public class TestJsapi10SpokenInput {
      */
     @BeforeClass
     public static void init() throws EngineException {
-        final String config = "/sphinx4.jsapi10.test.config.xml";
-        final SphinxRecognizerModeDesc desc = new SphinxRecognizerModeDesc(
-                config);
-        SphinxEngineCentral.registerEngineModeDesc(desc);
-        Central.registerEngineCentral(SphinxEngineCentral.class.getName());
-        // Central.registerEngineCentral(CGEngineCentral.class.getName());
+        Central.registerEngineCentral(CGEngineCentral.class.getName());
     }
 
     /**
@@ -93,9 +85,7 @@ public class TestJsapi10SpokenInput {
      */
     @Before
     public void setUp() throws Exception, JVoiceXMLEvent {
-        final String config = "/sphinx4.jsapi10.test.config.xml";
-        final RecognizerModeDesc desc = new SphinxRecognizerModeDesc(config);
-        recognizer = new Jsapi10SpokenInput(desc);
+        recognizer = new Jsapi10SpokenInput(null);
         recognizer.open();
         recognizer.activate();
     }
@@ -134,11 +124,14 @@ public class TestJsapi10SpokenInput {
 
     /**
      * Writes the given grammar to a file.
-     * @param file the file to write to
-     * @param grammar the grammar to write
+     * 
+     * @param file
+     *            the file to write to
+     * @param grammar
+     *            the grammar to write
      * @return URI of the file
      * @throws IOException
-     *          error writing
+     *             error writing
      * @since 0.7.7
      */
     private URI writeToFile(final File file, final String grammar)
@@ -164,7 +157,7 @@ public class TestJsapi10SpokenInput {
         final String lf = System.getProperty("line.separator");
         final String grammar = "#JSGF V1.0;" + lf + "grammar test;" + lf
                 + "public <test> = a|b|c;";
-        final File file = File.createTempFile("jvxmltest", "jsgf");
+        final File file = File.createTempFile("jvxmltest", ".gram");
         final URI uri = writeToFile(file, grammar);
         final RuleGrammarImplementation impl = (RuleGrammarImplementation) recognizer
                 .loadGrammar(uri, GrammarType.JSGF);
@@ -194,9 +187,10 @@ public class TestJsapi10SpokenInput {
         final String lf = System.getProperty("line.separator");
         final String grammar = "#JSGF V1.0;" + lf + "grammar test;" + lf
                 + "public <test> = a|b|c;";
-        final StringReader reader = new StringReader(grammar);
+        final File file = File.createTempFile("jvxmltest", ".gram");
+        final URI uri = writeToFile(file, grammar);
         final RuleGrammarImplementation impl = (RuleGrammarImplementation) recognizer
-                .loadGrammar(reader, GrammarType.JSGF);
+                .loadGrammar(uri, GrammarType.JSGF);
         final Collection<GrammarImplementation<?>> implementations = new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl);
         recognizer.activateGrammars(implementations);
@@ -218,14 +212,16 @@ public class TestJsapi10SpokenInput {
         final String lf = System.getProperty("line.separator");
         final String grammar1 = "#JSGF V1.0;" + lf + "grammar test1;" + lf
                 + "public <test1> = a|b|c;";
-        final StringReader reader1 = new StringReader(grammar1);
+        final File file = File.createTempFile("jvxmltest", ".gram");
+        final URI uri = writeToFile(file, grammar1);
         final RuleGrammarImplementation impl1 = (RuleGrammarImplementation) recognizer
-                .loadGrammar(reader1, GrammarType.JSGF);
+                .loadGrammar(uri, GrammarType.JSGF);
         final String grammar2 = "#JSGF V1.0;" + lf + "grammar test2;" + lf
                 + "public <test2> = d|e|f;";
-        final StringReader reader2 = new StringReader(grammar2);
+        final File file2 = File.createTempFile("jvxmltest", ".gram");
+        final URI uri2 = writeToFile(file2, grammar2);
         final RuleGrammarImplementation impl2 = (RuleGrammarImplementation) recognizer
-                .loadGrammar(reader2, GrammarType.JSGF);
+                .loadGrammar(uri2, GrammarType.JSGF);
         final Collection<GrammarImplementation<?>> implementations = new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl1);
         implementations.add(impl2);
@@ -249,9 +245,10 @@ public class TestJsapi10SpokenInput {
         final String lf = System.getProperty("line.separator");
         final String grammar = "#JSGF V1.0;" + lf + "grammar test;" + lf
                 + "public <test> = a|b|c;";
-        final StringReader reader = new StringReader(grammar);
+        final File file = File.createTempFile("jvxmltest", ".gram");
+        final URI uri = writeToFile(file, grammar);
         final RuleGrammarImplementation impl = (RuleGrammarImplementation) recognizer
-                .loadGrammar(reader, GrammarType.JSGF);
+                .loadGrammar(uri, GrammarType.JSGF);
         final Collection<GrammarImplementation<?>> implementations = new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl);
         recognizer.activateGrammars(implementations);
@@ -277,14 +274,16 @@ public class TestJsapi10SpokenInput {
         final String lf = System.getProperty("line.separator");
         final String grammar1 = "#JSGF V1.0;" + lf + "grammar test1;" + lf
                 + "public <test1> = a|b|c;";
-        final StringReader reader1 = new StringReader(grammar1);
+        final File file = File.createTempFile("jvxmltest", ".gram");
+        final URI uri = writeToFile(file, grammar1);
         final RuleGrammarImplementation impl1 = (RuleGrammarImplementation) recognizer
-                .loadGrammar(reader1, GrammarType.JSGF);
+                .loadGrammar(uri, GrammarType.JSGF);
         final String grammar2 = "#JSGF V1.0;" + lf + "grammar test2;" + lf
                 + "public <test2> = d|e|f;";
-        final StringReader reader2 = new StringReader(grammar2);
+        final File file2 = File.createTempFile("jvxmltest", ".gram");
+        final URI uri2 = writeToFile(file2, grammar2);
         final RuleGrammarImplementation impl2 = (RuleGrammarImplementation) recognizer
-                .loadGrammar(reader2, GrammarType.JSGF);
+                .loadGrammar(uri2, GrammarType.JSGF);
         final Collection<GrammarImplementation<?>> implementations = new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl1);
         implementations.add(impl2);
@@ -314,14 +313,16 @@ public class TestJsapi10SpokenInput {
         final String lf = System.getProperty("line.separator");
         final String grammar1 = "#JSGF V1.0;" + lf + "grammar test1;" + lf
                 + "public <test1> = a|b|c;";
-        final StringReader reader1 = new StringReader(grammar1);
+        final File file = File.createTempFile("jvxmltest", ".gram");
+        final URI uri = writeToFile(file, grammar1);
         final RuleGrammarImplementation impl1 = (RuleGrammarImplementation) recognizer
-                .loadGrammar(reader1, GrammarType.JSGF);
+                .loadGrammar(uri, GrammarType.JSGF);
         final String grammar2 = "#JSGF V1.0;" + lf + "grammar test2;" + lf
                 + "public <test2> = d|e|f;";
-        final StringReader reader2 = new StringReader(grammar2);
+        final File file2 = File.createTempFile("jvxmltest", ".gram");
+        final URI uri2 = writeToFile(file2, grammar2);
         final RuleGrammarImplementation impl2 = (RuleGrammarImplementation) recognizer
-                .loadGrammar(reader2, GrammarType.JSGF);
+                .loadGrammar(uri2, GrammarType.JSGF);
         final Collection<GrammarImplementation<?>> implementations = new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl1);
         implementations.add(impl2);
