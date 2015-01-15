@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -29,9 +29,11 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
@@ -225,21 +227,23 @@ public final class Jsapi10SpokenInput
         }
         final RuleGrammar grammar;
         try {
-            System.out.println("'" + uri + "'");
             final URL url = uri.toURL();
-            System.out.println("'" + url + "'");
             InputStream input = url.openStream();
+            final BufferedInputStream bufferedInput = new BufferedInputStream(
+                    input);
+            bufferedInput.mark(Integer.MAX_VALUE);
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
             final byte[] buffer = new byte[256];
             int read = 0;
             do {
-                read = input.read(buffer);
+                read = bufferedInput.read(buffer);
                 if (read > 0) {
                     out.write(buffer, 0, read);
                 }
             } while (read >= 0);
-            System.out.println(out);
-            grammar = recognizer.loadJSGF(url, url.toString());
+            bufferedInput.reset();
+            final InputStreamReader reader = new InputStreamReader(bufferedInput);
+            grammar = recognizer.loadJSGF(reader);
         } catch (javax.speech.recognition.GrammarException ge) {
             throw new UnsupportedFormatError(ge.getMessage(), ge);
         }
