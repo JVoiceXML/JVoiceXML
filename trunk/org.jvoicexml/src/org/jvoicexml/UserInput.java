@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,7 +26,6 @@
 
 package org.jvoicexml;
 
-import java.io.Reader;
 import java.util.Collection;
 
 import org.jvoicexml.event.error.BadFetchError;
@@ -83,11 +82,10 @@ public interface UserInput {
      * Retrieves the grammar types that are supported by this implementation for
      * the given mode.
      * <p>
-     * It is guaranteed that the implementation is only asked to load grammars
-     * via the {@link #loadGrammar(Reader, GrammarType)} method or activate (
+     * It is guaranteed that the implementation is only asked to activate (
      * {@link #activateGrammars(Collection)}) and deactivate (
-     * {@link UserInput#deactivateGrammars(Collection)}) grammars whos format is
-     * returned by this method.
+     * {@link UserInput#deactivateGrammars(Collection)}) grammars who's format
+     * is returned by this method.
      * </p>
      *
      * @return supported grammars.
