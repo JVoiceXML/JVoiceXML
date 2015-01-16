@@ -32,13 +32,10 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -116,14 +113,6 @@ public final class JVoiceXmlGrammarProcessor implements GrammarProcessor {
         identifyGrammar(grammar, document);
         adaptMode(grammar, document);
 
-        // Load it
-        final ImplementationPlatform platform = context
-                .getImplementationPlatform();
-        try {
-            final UserInput input = platform.getUserInput();
-        } catch (ConnectionDisconnectHangupEvent e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
         return document;
     }
 
