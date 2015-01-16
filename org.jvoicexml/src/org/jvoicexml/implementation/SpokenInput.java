@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,7 +27,6 @@
 package org.jvoicexml.implementation;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -77,10 +76,8 @@ public interface SpokenInput
      * Activates the given grammars. It is guaranteed that all grammars types
      * are supported by this implementation.
      * <p>
-     * It is not guaranteed that the {@link #loadGrammar(Reader, GrammarType)}
+     * It is guaranteed that the {@link #loadGrammar(URI, GrammarType)}
      * method is always called before a grammar becomes active via this method.
-     * However, each grammar that is requested to be activated has been
-     * loaded by {@link #loadGrammar(Reader, GrammarType)}. 
      * </p>
      * 
      * @param grammars

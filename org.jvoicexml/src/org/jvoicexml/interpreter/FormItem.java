@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -64,15 +64,13 @@ public interface FormItem extends FormItemVisitable, DialogConstruct {
      *
      * <p>
      * Each form has an associated form item variable. which by default is set
-     * to <code>ECMA_SCRIPT_UNDEFINED</code> when the form is entered. This form
-     * item variable will contain the result of interpreting the form item. An
-     * input item's form variable can be given a name using the name attribute
-     * or left nameless in which case an internal name is generated.
+     * to {@code null} when the form is entered. This form item variable will
+     * contain the result of interpreting the form item. An input item's form
+     * variable can be given a name using the name attribute or left nameless in
+     * which case an internal name is generated.
      * </p>
      *
-     * @see org.mozilla.javascript.Context#getUndefinedValue()
-     *
-     * @return Result of interpreting this form item.
+     * @return result of interpreting this form item.
      */
     Object getFormItemVariable();
 
@@ -103,11 +101,10 @@ public interface FormItem extends FormItemVisitable, DialogConstruct {
      * has a value. If it does, this form item will not be visited.
      * </p>
      *
-     * @return <code>true</code> if the form item's variable has no value.
+     * @return {@code true} if the form item's variable has no value.
      * @exception SemanticError
      *                error evaluating the cond condition.
      * @see #getFormItemVariable()
-     * @see org.mozilla.javascript.Context#getUndefinedValue()
      */
     boolean isSelectable() throws SemanticError;
 
