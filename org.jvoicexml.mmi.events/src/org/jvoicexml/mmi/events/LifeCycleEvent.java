@@ -130,7 +130,7 @@ public class LifeCycleEvent {
      * Retrieves the data attribute.
      * @return the data attribute
      */
-    @XmlElement(name = "Data", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "data", namespace = "http://www.w3.org/2008/04/mmi-arch")
     public final AnyComplexType getData() {
         return data;
     }
