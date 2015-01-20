@@ -128,40 +128,6 @@ This file builds the distribution files for JVoiceXML.
         <copy todir="${distFolder}/lib" file="${dist.xml.jar}" />
     </target>
 
-    <target name="-jsmooth" depends="-prepareDistributionFolder" description="Create windows exe wrappers for the main processes">
-        <!-- jsmooth library -->
-        <property name="jsmooth.dir" value="${3rdparty.dir}/jsmooth0.9.9" />
-        <property name="jsmooth.lib.dir" value="${jsmooth.dir}/lib" />
-        <!-- Register the JSmooth ANT task -->
-        <taskdef classname="net.charabia.jsmoothgen.ant.JSmoothGen" name="jsmoothgen">
-            <classpath>
-                <fileset dir="${jsmooth.lib.dir}">
-                    <include name="**/*.jar" />
-                </fileset>
-            </classpath>
-        </taskdef>
-
-        <!--
-      - Copy the jsmooth configuration file to the bin folder to have all
-      - library settings right
-      -->
-        <copy todir="${distFolder}/bin">
-            <fileset dir="${etc}">
-                <include name="*.jsmooth" />
-            </fileset>
-        </copy>
-
-        <jsmoothgen project="${distFolder}/bin/jvoicexml.jsmooth" skeletonroot="${jsmooth.dir}" />
-        <jsmoothgen project="${distFolder}/bin/shutdown.jsmooth" skeletonroot="${jsmooth.dir}" />
-
-        <!-- some cleanup after the work is done -->
-        <delete>
-            <fileset dir="${distFolder}/bin">
-                <include name="*.jsmooth" />
-            </fileset>
-        </delete>
-    </target>
-
     <!-- Distribution of the configured components -->
     <target name="-distComponents" depends="-distinit">
         <echo message="distributing org.jvoicexml.xml" />
@@ -363,7 +329,7 @@ sphinx.lib.dir=../../lib
     </echo>
     </target>
 
-    <target name="distributionFolder" depends="-prepareDistributionFolder, -jsmooth, -distComponents,-copyDemos,-copySourceCode" description="collect all files for the binary distribution">
+    <target name="distributionFolder" depends="-prepareDistributionFolder, -distComponents,-copyDemos,-copySourceCode" description="collect all files for the binary distribution">
     </target>
 
     <target name="-checkIzpack" depends="-setup">
