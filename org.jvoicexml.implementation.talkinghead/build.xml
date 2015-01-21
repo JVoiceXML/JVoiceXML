@@ -1,4 +1,4 @@
-<project name="TalkingHead" default="all" basedir=".">
+<project name="org.jvoicexml.talkinghead" default="all" basedir=".">
     <description>
 		This file builds and runs the TalkingHead Avatar implementation for JVoiceXML.
     </description>
@@ -14,9 +14,9 @@
     <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
         <property name="component"
-            value="org.jvoicexml.implementation.talkinghead"/>
+            value="org.jvoicexml.talkinghead"/>
         <property name="component.path"
-          value="org/jvoicexml/implementation/talkinghead"/>
+          value="org/jvoicexml/talkinghead"/>
 
         <property name="src" value="src" />
         <property name="build" value="classes" />
@@ -68,7 +68,7 @@ Build this jar from the main project first.
     </target>
 
     <target name="run" description="Run the TalkingHead avatar" depends="compile">
-        <java classname="org.jvoicexml.implementation.talkinghead.TalkingHead" fork="true">
+        <java classname="org.jvoicexml.talkinghead.TalkingHead" fork="true">
             <!--<jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />-->
             <classpath>
                 <path refid="run.classpath" />
