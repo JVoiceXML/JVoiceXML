@@ -69,7 +69,7 @@ public final class RecordingStartedEvent extends JVoiceXMLEvent {
      * 
      * @return the session id
      */
-    public final String getSessionId() {
+    public String getSessionId() {
         return sessionId;
     }
 

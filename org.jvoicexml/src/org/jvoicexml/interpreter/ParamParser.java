@@ -108,7 +108,8 @@ class ParamParser {
             BadFetchError {
         final Collection<Param> paramtags = node.getChildNodes(Param.class);
 
-        final Map<String, Object> parameters = new java.util.HashMap<String, Object>();
+        final Map<String, Object> parameters =
+                new java.util.HashMap<String, Object>();
 
         for (Param param : paramtags) {
             final String name = param.getName();
@@ -133,8 +134,8 @@ class ParamParser {
                                 + "' is not a valid URI");
                     }
                     final String type = param.getType();
-                    final DocumentDescriptor descriptor = new DocumentDescriptor(
-                            uri);
+                    final DocumentDescriptor descriptor =
+                            new DocumentDescriptor(uri);
                     value = server.getObject(sessionId, descriptor, type);
                 }
             }
@@ -183,8 +184,8 @@ class ParamParser {
                                 + "' is not a valid URI");
                     }
                     final String type = param.getType();
-                    final DocumentDescriptor descriptor = new DocumentDescriptor(
-                            uri);
+                    final DocumentDescriptor descriptor =
+                            new DocumentDescriptor(uri);
                     value = server.getObject(sessionId, descriptor, type);
                 }
             }

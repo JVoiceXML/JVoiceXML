@@ -113,7 +113,7 @@ public abstract class JVoiceXMLEvent
      * @return {@code true} if the type is the same
      * @since 0.7.7
      */
-    public boolean isType(final String otherType) {
+    public final boolean isType(final String otherType) {
         final String type = getEventType();
         return type.equals(otherType);
     }

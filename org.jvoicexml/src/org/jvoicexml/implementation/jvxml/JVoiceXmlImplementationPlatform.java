@@ -243,8 +243,8 @@ public final class JVoiceXmlImplementationPlatform
         final String type = info.getSystemOutput();
         synchronized (info) {
             if (output == null) {
-                final SynthesizedOutput synthesizer = getExternalResourceFromPool(
-                        synthesizerPool, type);
+                final SynthesizedOutput synthesizer =
+                        getExternalResourceFromPool(synthesizerPool, type);
                 output = new JVoiceXmlSystemOutput(synthesizer, session);
                 output.addListener(this);
                 LOGGER.info("borrowed system output of type '" + type + "'");
@@ -265,7 +265,8 @@ public final class JVoiceXmlImplementationPlatform
 
             if (!hungup && !closed && output.isBusy()) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("output still busy. returning when queue is empty");
+                    LOGGER.debug("output still busy. returning when queue is"
+                            + " empty");
                 }
             } else {
                 final JVoiceXmlSystemOutput systemOutput = output;
@@ -279,7 +280,8 @@ public final class JVoiceXmlImplementationPlatform
 
                 final SynthesizedOutput synthesizedOutput = systemOutput
                         .getSynthesizedOutput();
-                returnExternalResourceToPool(synthesizerPool, synthesizedOutput);
+                returnExternalResourceToPool(synthesizerPool,
+                        synthesizedOutput);
                 LOGGER.info("returned system output of type '" + type + "'");
             }
         }
@@ -372,7 +374,8 @@ public final class JVoiceXmlImplementationPlatform
 
             if (!hungup && !closed && input.isBusy()) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("input still busy. returning when recognition is stopped");
+                    LOGGER.debug("input still busy. returning when recognition"
+                            + " is stopped");
                 }
             } else {
                 final JVoiceXmlUserInput userInput = input;
@@ -455,7 +458,8 @@ public final class JVoiceXmlImplementationPlatform
             // possesses it.
             if (!hungup && !closed && call.isBusy()) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("call control still busy. returning when queue is empty");
+                    LOGGER.debug("call control still busy. returning when queue"
+                            + " is empty");
                 }
             } else {
                 final JVoiceXmlCallControl callControl = call;
@@ -839,7 +843,8 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
-            final OutputStartedEvent outputStartedEvent = (OutputStartedEvent) event;
+            final OutputStartedEvent outputStartedEvent =
+                    (OutputStartedEvent) event;
             final SpeakableText startedSpeakable = outputStartedEvent
                     .getSpeakable();
             if (LOGGER.isDebugEnabled()) {
@@ -855,7 +860,8 @@ public final class JVoiceXmlImplementationPlatform
                 LOGGER.debug("output queue is empty");
             }
         } else if (event.isType(MarkerReachedEvent.EVENT_TYPE)) {
-            final MarkerReachedEvent markReachedEvent = (MarkerReachedEvent) event;
+            final MarkerReachedEvent markReachedEvent =
+                    (MarkerReachedEvent) event;
             markname = markReachedEvent.getMark();
             LOGGER.info("reached mark '" + markname + "'");
         } else {

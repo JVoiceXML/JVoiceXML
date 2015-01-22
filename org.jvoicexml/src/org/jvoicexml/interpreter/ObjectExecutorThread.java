@@ -332,7 +332,8 @@ final class ObjectExecutorThread extends Thread {
      * @throws URISyntaxException
      *             classid does not denote a valid URI.
      */
-    private String getMethodName(final ObjectTag tag) throws URISyntaxException {
+    private String getMethodName(final ObjectTag tag)
+            throws URISyntaxException {
         final URI classid = tag.getClassidUri();
         final String fragment = classid.getFragment();
         if (fragment == null) {

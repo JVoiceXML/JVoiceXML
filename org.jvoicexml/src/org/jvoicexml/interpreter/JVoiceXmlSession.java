@@ -139,7 +139,8 @@ public class JVoiceXmlSession extends Thread
      */
     public JVoiceXmlSession(final ImplementationPlatform ip,
             final JVoiceXmlCore jvxml,
-            final ConnectionInformation connectionInformation, Profile prof) {
+            final ConnectionInformation connectionInformation,
+            final Profile prof) {
         // Create a unique session id
         uuid = UUID.randomUUID();
         // Store it in the MDC so that the session Id can be used by the loggers
@@ -157,7 +158,8 @@ public class JVoiceXmlSession extends Thread
         sem = new Object();
         closed = false;
         sessionListeners = new ScopedCollection<SessionListener>(scopeObserver);
-        detailedSessionListeners = new java.util.ArrayList<DetailedSessionListener>();
+        detailedSessionListeners =
+                new java.util.ArrayList<DetailedSessionListener>();
     }
 
     /**
@@ -385,7 +387,8 @@ public class JVoiceXmlSession extends Thread
             callingDevice = null;
             protocolName = null;
             protocolVersion = null;
-            LOGGER.info("start processing application '" + application + "'...");
+            LOGGER.info("start processing application '" + application
+                    + "'...");
         }
 
         processingError = null;

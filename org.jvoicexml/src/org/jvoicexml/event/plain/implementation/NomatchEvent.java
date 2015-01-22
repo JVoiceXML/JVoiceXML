@@ -37,7 +37,7 @@ import org.jvoicexml.implementation.SpokenInput;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public class NomatchEvent extends SpokenInputEvent implements InputEvent {
+public final class NomatchEvent extends SpokenInputEvent implements InputEvent {
     /** The serial version UID. */
     private static final long serialVersionUID = 776343576316001103L;
 
@@ -50,8 +50,12 @@ public class NomatchEvent extends SpokenInputEvent implements InputEvent {
     /**
      * Constructs a new event with the specified detail message and cause.
      * 
+     * @param input
+     *            the input initiating this event
+     * @param sessionId
+     *            the session id
      * @param recognitionResult
-     *            teh recognition result
+     *            the recognition result
      */
     public NomatchEvent(final SpokenInput input, final String sessionId,
             final RecognitionResult recognitionResult) {
@@ -63,7 +67,7 @@ public class NomatchEvent extends SpokenInputEvent implements InputEvent {
      * {@inheritDoc}
      */
     @Override
-    public final String getEventType() {
+    public String getEventType() {
         return EVENT_TYPE;
     }
 
@@ -81,7 +85,7 @@ public class NomatchEvent extends SpokenInputEvent implements InputEvent {
      * {@inheritDoc}
      */
     @Override
-    public Object getInputResult() {
+    public  Object getInputResult() {
         return result;
     }
 }
