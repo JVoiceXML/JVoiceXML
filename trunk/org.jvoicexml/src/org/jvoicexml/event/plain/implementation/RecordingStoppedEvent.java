@@ -77,7 +77,7 @@ public final class RecordingStoppedEvent extends JVoiceXMLEvent {
      * 
      * @return the session id
      */
-    public final String getSessionId() {
+    public String getSessionId() {
         return sessionId;
     }
 

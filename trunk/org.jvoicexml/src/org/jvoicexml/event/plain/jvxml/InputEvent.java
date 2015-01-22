@@ -40,5 +40,5 @@ public interface InputEvent {
      *
      * @return result.
      */
-    public abstract Object getInputResult();
+    Object getInputResult();
 }

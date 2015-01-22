@@ -62,6 +62,7 @@ public final class InputStartedEvent extends SpokenInputEvent {
      *            object that caused the event.
      * @param sessionId
      *            the session id
+     * @param modeType input mode
      */
     public InputStartedEvent(final SpokenInput input,
             final String sessionId, final ModeType modeType) {

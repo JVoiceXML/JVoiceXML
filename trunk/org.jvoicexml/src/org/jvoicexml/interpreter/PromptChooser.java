@@ -158,7 +158,8 @@ final class PromptChooser {
         for (Prompt prompt : prompts) {
             final String cond = prompt.getCond();
             final String unescapedCond = StringEscapeUtils.unescapeXml(cond);
-            final boolean result = model.evaluateExpression(unescapedCond, Boolean.class);
+            final boolean result = model.evaluateExpression(unescapedCond,
+                    Boolean.class);
             if (result) {
                 filteredPrompts.add(prompt);
             }

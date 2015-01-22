@@ -32,7 +32,6 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
-import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -102,7 +101,8 @@ public interface UserInput {
      * retrieved from {@link #getSupportedGrammarTypes(ModeType)}.
      *
      * <p>
-     * {@link GrammarImplementation}s may be cached. This means that a grammar
+     * {@link org.jvoicexml.implementation.GrammarImplementation}s may be
+     * cached. This means that a grammar
      * implementation object is loaded either by this or by another instance of
      * the {@link UserInput}. For some implementation platforms it may be
      * necessary that the instance activating the grammar also loaded the

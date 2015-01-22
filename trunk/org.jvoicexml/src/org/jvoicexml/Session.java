@@ -113,7 +113,7 @@ public interface Session {
      * to ensure that resources like ASR and TTS are released.
      * </p>
      * @param uri URI of the first document to load.
-     *
+     * @return called application
      * @exception ErrorEvent
      *            Error initiating the call.
      */
