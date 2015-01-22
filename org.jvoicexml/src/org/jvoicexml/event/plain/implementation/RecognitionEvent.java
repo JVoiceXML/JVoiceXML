@@ -50,6 +50,10 @@ public final class RecognitionEvent
      * Constructs a new event with the event type as its detail message. The
      * cause is not initialized.
      *
+     * @param input
+     *            the input initiating this event
+     * @param sessionId
+     *            the session id
      * @param recognitionResult
      *        Result of the recognition process.
      */

@@ -191,8 +191,9 @@ public class VoiceXmlInterpreterContext {
 
         // Subscribe the default event handler for all events to the event bus.
         eventbus = new EventBus();
-        eventHandler = new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
-                model, scopeObserver);
+        eventHandler =
+                new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
+                        model, scopeObserver);
         eventbus.subscribe("", eventHandler);
     }
 
@@ -279,8 +280,8 @@ public class VoiceXmlInterpreterContext {
                 LOGGER.error("error loading data model: " + e.getMessage(), e);
                 return null;
             }
-            final DataModelScopeSubscriber subscriber = new DataModelScopeSubscriber(
-                    model);
+            final DataModelScopeSubscriber subscriber =
+                    new DataModelScopeSubscriber(model);
             scopeObserver.addScopeSubscriber(subscriber);
         }
 
@@ -480,7 +481,8 @@ public class VoiceXmlInterpreterContext {
      */
     private Map<String, String> getProperties(
             final FormInterpretationAlgorithm fia) {
-        final Map<String, String> props = new java.util.HashMap<String, String>();
+        final Map<String, String> props =
+                new java.util.HashMap<String, String>();
         if (properties != null) {
             props.putAll(properties);
         }
@@ -869,8 +871,8 @@ public class VoiceXmlInterpreterContext {
 
         final Vxml vxml = document.getVxml();
         final NodeList list = vxml.getChildNodes();
-        final JVoiceXmlSession session = (JVoiceXmlSession) getSession();
-        final Profile profile = session.getProfile();
+        final JVoiceXmlSession jvxmlsession = (JVoiceXmlSession) getSession();
+        final Profile profile = jvxmlsession.getProfile();
         final TagStrategyFactory factory = profile
                 .getInitializationTagStrategyFactory();
         for (int i = 0; i < list.getLength(); i++) {

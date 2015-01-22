@@ -216,8 +216,8 @@ public final class VoiceXmlInterpreter {
             return null;
         }
         if (dialogs == null) {
-            LOGGER.warn("dialogs not initialized. can not determine dialog with "
-                    + "id '" + id + "'");
+            LOGGER.warn("dialogs not initialized. can not determine dialog"
+                    + " with id '" + id + "'");
             return null;
         }
 

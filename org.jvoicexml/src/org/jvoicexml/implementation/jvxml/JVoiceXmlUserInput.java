@@ -87,8 +87,6 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
      *            the spoken input implementation.
      * @param dtmf
      *            the buffered character input.
-     * @param proc
-     *            the grammar processor
      */
     public JVoiceXmlUserInput(final SpokenInput input,
             final BufferedDtmfInput dtmf) {
@@ -127,11 +125,14 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
     public int activateGrammars(final Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError,
             UnsupportedFormatError {
-        final Collection<GrammarImplementation<?>> voiceGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
-        final Collection<GrammarImplementation<?>> dtmfGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
+        final Collection<GrammarImplementation<?>> voiceGrammars =
+                new java.util.ArrayList<GrammarImplementation<?>>();
+        final Collection<GrammarImplementation<?>> dtmfGrammars =
+                new java.util.ArrayList<GrammarImplementation<?>>();
 
         for (GrammarDocument grammar : grammars) {
-            final GrammarImplementation<?> grammarImplementation = loadGrammar(grammar);
+            final GrammarImplementation<?> grammarImplementation =
+                    loadGrammar(grammar);
             final ModeType type = grammarImplementation.getModeType();
             // A grammar is voice by default.
             if (type == ModeType.DTMF) {
@@ -156,8 +157,10 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
     @Override
     public int deactivateGrammars(final Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError {
-        final Collection<GrammarImplementation<?>> voiceGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
-        final Collection<GrammarImplementation<?>> dtmfGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
+        final Collection<GrammarImplementation<?>> voiceGrammars =
+                new java.util.ArrayList<GrammarImplementation<?>>();
+        final Collection<GrammarImplementation<?>> dtmfGrammars =
+                new java.util.ArrayList<GrammarImplementation<?>>();
 
         for (GrammarDocument grammar : grammars) {
             GrammarImplementation<?> impl = cache.getImplementation(grammar);
@@ -294,9 +297,11 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
      * {@inheritDoc}
      */
     @Override
-    public Collection<GrammarType> getSupportedGrammarTypes(final ModeType mode) {
+    public Collection<GrammarType> getSupportedGrammarTypes(
+            final ModeType mode) {
         if (mode == ModeType.DTMF) {
-            final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
+            final Collection<GrammarType> types =
+                    new java.util.ArrayList<GrammarType>();
             types.add(GrammarType.SRGS_XML);
             return types;
         } else {

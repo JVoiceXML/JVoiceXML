@@ -725,7 +725,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             return;
         }
         localProperties.clear();
-        final FormItemLocalExecutableTagContainer container = (FormItemLocalExecutableTagContainer) formItem;
+        final FormItemLocalExecutableTagContainer container =
+                (FormItemLocalExecutableTagContainer) formItem;
         executor.executeChildNodesLocal(context, interpreter, this, formItem,
                 container);
     }
@@ -882,11 +883,13 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             final GrammarContainer grammarContainer,
             final Collection<Grammar> grammars) throws UnsupportedFormatError,
             NoresourceError, BadFetchError, SemanticError {
-        final Collection<GrammarDocument> grammarDocuments = new java.util.HashSet<GrammarDocument>();
+        final Collection<GrammarDocument> grammarDocuments =
+                new java.util.HashSet<GrammarDocument>();
         final Collection<GrammarDocument> documents = grammarContainer
                 .getGrammarDocuments();
         grammarDocuments.addAll(documents);
-        if (grammars.isEmpty() || (grammarDocuments.size() == grammars.size())) {
+        if (grammars.isEmpty()
+                || (grammarDocuments.size() == grammars.size())) {
             // All grammar documents are already processed or
             // no more grammars to process
             if (LOGGER.isDebugEnabled()) {
@@ -1030,7 +1033,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         }
         if (isGrammarContainer) {
             // Add the grammars of the current form item
-            final GrammarContainer grammarContainer = (GrammarContainer) formItem;
+            final GrammarContainer grammarContainer =
+                    (GrammarContainer) formItem;
             final Collection<Grammar> grammars = grammarContainer.getGrammars();
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("found " + grammars.size() + " grammar node(s)");
@@ -1169,7 +1173,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      * higher-level grammars, and waits for the item to be filled or for some
      * events to be generated.
      */
-    public void visitFieldFormItem(final InputItem field) throws JVoiceXMLEvent {
+    public void visitFieldFormItem(final InputItem field)
+            throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("visiting field '" + field.getName() + "'...");
         }
@@ -1307,8 +1312,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final RecordingReceiverThread recording = new RecordingReceiverThread(
                 eventbus, maxTime);
         final Session session = context.getSession();
-        final String id = session.getSessionID();
-        final RecordingStartedEvent started = new RecordingStartedEvent(id);
+        final String sessionId = session.getSessionID();
+        final RecordingStartedEvent started =
+                new RecordingStartedEvent(sessionId);
         eventbus.publish(started);
 
         // Actually start the recording
@@ -1365,8 +1371,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final ScopeObserver observer = new ScopeObserver();
         // TODO aquire the configuration object
         final Configuration configuration = context.getConfiguration();
-        final VoiceXmlInterpreterContext subdialogContext = new VoiceXmlInterpreterContext(
-                session, configuration, observer);
+        final VoiceXmlInterpreterContext subdialogContext =
+                new VoiceXmlInterpreterContext(session, configuration,
+                        observer);
         final EventBus bus = context.getEventBus();
         // Start the subdialog thread
         final Thread thread = new SubdialogExecutorThread(resolvedUri,

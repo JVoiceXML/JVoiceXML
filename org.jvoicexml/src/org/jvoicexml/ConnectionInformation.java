@@ -62,7 +62,7 @@ import java.net.URI;
  */
 public interface ConnectionInformation extends Serializable {
     /**
-     * Retrieves the profile to use
+     * Retrieves the profile to use.
      * 
      * @return the profile
      * @since 0.7.7
