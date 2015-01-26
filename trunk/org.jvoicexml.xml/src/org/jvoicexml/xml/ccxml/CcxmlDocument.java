@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -129,9 +129,12 @@ public final class CcxmlDocument
      * @return The Ccxml child, <code>null</code> if there is none.
      */
     public Ccxml getCcxml() {
-        final NodeList ccxml = getElementsByTagName(Ccxml.TAG_NAME);
+        NodeList ccxml = getElementsByTagName(Ccxml.TAG_NAME);
         if (ccxml.getLength() == 0) {
-            return null;
+            ccxml = getElementsByTagNameNS("*", Ccxml.TAG_NAME);
+            if (ccxml.getLength() == 0) {
+                return null;
+            }
         }
 
         return new Ccxml(ccxml.item(0));
