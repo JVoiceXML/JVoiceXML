@@ -26,7 +26,11 @@
 
 package org.jvoicexml.processor.srgs;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,6 +42,8 @@ import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.Ruleref;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.srgs.Tag;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Test cases for {@link SrgsXmlGrammarParser}.
@@ -208,6 +214,21 @@ public final class TestSrgsXmlGrammarParser {
         Assert.assertFalse("2 or 4 should be invalid", checker.isValid(words4));
     }
 
+    @Test
+    public void testNamespaces() throws Exception {
+        final InputStream input =
+                TestSrgsXmlGrammarParser.class.getResourceAsStream(
+                        "srgs-namespace-test.srgs");
+        final InputSource source = new InputSource(input);
+        final SrgsXmlDocument document = new SrgsXmlDocument(source);
+        final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
+        final GrammarGraph graph = parser.parse(document);
+        dump(graph, 2);
+        final GrammarChecker checker = new GrammarChecker(null, graph);
+        final String[] words = {"Kannst", "Du", "mir"};
+        Assert.assertTrue("'Kannst Du mir' should be valid",
+                checker.isValid(words));
+    }
     /**
      * Test method for {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#accepts(RecognitionResult)}.
      * @exception Exception
