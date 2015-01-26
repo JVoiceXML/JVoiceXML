@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:grammar xml:lang="de" mode="voice" tag-format="semantics/1.0"
+    version="1.0" root="cmdPrefix" xsi:schemaLocation="grammar.xsd"
+    xmlns:ns2="http://www.w3.org/2001/06/grammar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ns2:rule id="cmdPrefix">
+        <ns2:one-of>
+            <ns2:item>Bitte</ns2:item>
+            <ns2:item>Kannst Du</ns2:item>
+            <ns2:item>Kannst Du mir</ns2:item>
+            <ns2:item>Kannst Du mir bitte</ns2:item>
+        </ns2:one-of>
+    </ns2:rule>
+</ns2:grammar>
