@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -129,9 +129,12 @@ public final class SsmlDocument
      *         none.
      */
     public Speak getSpeak() {
-        final NodeList speak = getElementsByTagName(Speak.TAG_NAME);
+        NodeList speak = getElementsByTagName(Speak.TAG_NAME);
         if (speak.getLength() == 0) {
-            return null;
+            speak = getElementsByTagNameNS("*", Speak.TAG_NAME);
+            if (speak.getLength() == 0) {
+                return null;
+            }
         }
 
         return new Speak(speak.item(0));

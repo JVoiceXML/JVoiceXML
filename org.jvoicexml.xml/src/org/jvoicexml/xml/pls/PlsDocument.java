@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -127,9 +127,12 @@ public final class PlsDocument
      *         none.
      */
     public Lexicon getLexicon() {
-        final NodeList lexicon = getElementsByTagName(Lexicon.TAG_NAME);
+        NodeList lexicon = getElementsByTagName(Lexicon.TAG_NAME);
         if (lexicon.getLength() == 0) {
-            return null;
+            lexicon = getElementsByTagNameNS("*", Lexicon.TAG_NAME);
+            if (lexicon.getLength() == 0) {
+                return null;
+            }
         }
 
         return (Lexicon) lexicon.item(0);
