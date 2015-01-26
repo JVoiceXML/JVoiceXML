@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -212,9 +212,12 @@ public final class VoiceXmlDocument
      * @return The Vxml child, <code>null</code> if there is none.
      */
     public Vxml getVxml() {
-        final NodeList vxml = getElementsByTagName(Vxml.TAG_NAME);
+        NodeList vxml = getElementsByTagName(Vxml.TAG_NAME);
         if (vxml.getLength() == 0) {
-            return null;
+            vxml = getElementsByTagNameNS("*", Vxml.TAG_NAME);
+            if (vxml.getLength() == 0) {
+                return null;
+            }
         }
 
         return (Vxml) vxml.item(0);

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -818,8 +818,10 @@ public abstract class AbstractXmlNode
                 final Node n = list.item(i);
                 if (n instanceof XmlNode) {
                     final XmlNode xmlNode = (XmlNode) n;
-                    final String xmlNodeTagName = xmlNode.getTagName();
-                    if (xmlNodeTagName.compareTo(tagName) == 0) {
+                    final String xmlNodeTagName = xmlNode.getNodeName();
+                    final String localName = xmlNode.getLocalName();
+                    if (tagName.equals(xmlNodeTagName)
+                            || tagName.equals(localName)) {
                         nodes.add(tagClass.cast(xmlNode));
                     }
                 }

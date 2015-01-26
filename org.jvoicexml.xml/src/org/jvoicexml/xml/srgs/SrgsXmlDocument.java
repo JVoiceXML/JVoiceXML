@@ -126,12 +126,15 @@ public final class SrgsXmlDocument
      *         none.
      */
     public Grammar getGrammar() {
-        final NodeList grammar = getElementsByTagName(Grammar.TAG_NAME);
-        if (grammar.getLength() == 0) {
-            return null;
+        NodeList grammars = getElementsByTagName(Grammar.TAG_NAME);
+        if (grammars.getLength() == 0) {
+            grammars = getElementsByTagNameNS("*", Grammar.TAG_NAME);
+            if (grammars.getLength() == 0) {
+                return null;
+            }
         }
 
-        return (Grammar) grammar.item(0);
+        return (Grammar) grammars.item(0);
     }
 
     /**

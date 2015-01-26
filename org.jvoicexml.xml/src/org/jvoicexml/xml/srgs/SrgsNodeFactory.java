@@ -91,7 +91,10 @@ final class SrgsNodeFactory
             return (SrgsNode) node;
         }
 
-        final String name = node.getNodeName();
+        String name = node.getLocalName();
+        if (name == null) {
+            name = node.getNodeName();
+        }
         final SrgsNode srgsXmlNode = NODES.get(name);
         if (srgsXmlNode == null) {
             LOGGER.warning("cannot resolve node with name '" + name + "'");
