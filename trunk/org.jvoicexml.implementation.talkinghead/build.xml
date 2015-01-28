@@ -23,6 +23,8 @@
         <property name="config" value="config" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
 
+        <property name="dist.jar" value="${dist}/${component}.jar" />
+
         <property name="optimize" value="off" />
         <property name="debug" value="on" />
 
@@ -67,9 +69,24 @@ Build this jar from the main project first.
         </javac>
     </target>
 
-    <target name="run" description="Run the TalkingHead avatar" depends="compile">
+    <target name="jar" depends="compile" description="Pack all compiled files into jar files">
+        <jar jarfile="${dist.jar}" compress="false">
+            <fileset dir="${build}">
+                <include name="${component.path}/**/*.class" />
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <section name="common">
+                    <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+                    <attribute name="Implementation-Title" value="JVoiceXML Talking Head" />
+                    <attribute name="Implementation-Version" value="${version}" />
+                </section>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" description="Run the TalkingHead avatar" depends="jar">
         <java classname="org.jvoicexml.talkinghead.TalkingHead" fork="true">
-            <!--<jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />-->
             <classpath>
                 <path refid="run.classpath" />
                 <pathelement path="${build}" />
