@@ -98,6 +98,9 @@ personal-props/README.txt
                 </platform>
                 <platform name="org.jvoicexml.implementation.jtapi"/>
                 <platform name="org.jvoicexml.implementation.kinect"/>
+                <platform name="org.jvoicexml.implementation.lightweightbml">
+                    <subproject name="org.jvoicexml.talkinghead" order="post" />
+                </platform>
                 <platform name="org.jvoicexml.implementation.mary"/>
                 <platform name="org.jvoicexml.implementation.marc"/>
                 <platform name="org.jvoicexml.implementation.mrcpv2"/>
