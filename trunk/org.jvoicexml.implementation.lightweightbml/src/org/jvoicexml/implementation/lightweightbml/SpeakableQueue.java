@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,7 +33,7 @@ import org.jvoicexml.SpeakableText;
  * Queued speakables.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.7.5
+ * @since 0.7.7
  */
 class SpeakableQueue {
     /** Queued speakables. */
@@ -41,7 +41,6 @@ class SpeakableQueue {
 
     /** The sequence number of queued speakables. */
     private int seq;
-
 
     /** Lock to wait for an empty queue. */
     private final Object queueEmptyLock;
