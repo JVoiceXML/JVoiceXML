@@ -58,6 +58,9 @@ Build this jar from the main project first.
         <delete file="${jar.file}" />
     </target>
 
+    <target name="configuration" depends="-setup">
+    </target>
+
     <target name="compile" depends="-init,-checkJVoiceXML" description="Compile the JAVA sources">
         <echo message="compiling with debug=${debug}, optimize=${optimize}" />
         <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
