@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ package org.jvoicexml.implementation.lightweightbml.xmltags;
  * @author Alex Krause
  * 
  * @version $LastChangedRevision$
- * @since 0.7.3
+ * @since 0.7.7
  */
 public class Speech
     extends ITag {

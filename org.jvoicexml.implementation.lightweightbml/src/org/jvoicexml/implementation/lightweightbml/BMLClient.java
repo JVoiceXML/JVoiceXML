@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml.implementation.lightweightbml;
 
 import java.io.IOException;
@@ -35,18 +36,18 @@ import java.io.IOException;
  * @author Alex Krause
  * 
  * @version $LastChangedRevision$
- * @since 0.7.3
+ * @since 0.7.7
  */
 public interface BMLClient {
 
-  /**
-   * Method to send a bml string to an avatar.
-   * 
-   * @param bml
-   *          the bml string to send
-   * @throws IOException
-   *           io exception, which can occurs, when the
-   *           sending process has some errors
-   */
-  void sendToAvatar(final String bml) throws IOException;
+    /**
+     * Method to send a bml string to an avatar.
+     * 
+     * @param bml
+     *            the bml string to send
+     * @throws IOException
+     *             io exception, which can occurs, when the sending process has
+     *             some errors
+     */
+    void sendToAvatar(final String bml) throws IOException;
 }
