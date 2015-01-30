@@ -50,336 +50,334 @@ import org.jvoicexml.talkinghead.utilities.TimeData;
  * @version $LastChangedRevision$
  * @since 0.7.3
  */
-public class BMLExecutor
-    implements BMLTimer.Listener {
-  /**
-   * Internal class, to describe an Listener for Execution Events.
-   * 
-   * @author Matthias Mettel
-   * @author Markus Ermuth
-   * @author Alex Krause
-   * 
-   * @version $LastChangedRevision$
-   * @since 0.7.3
-   */
-  public interface Listener {
+public class BMLExecutor implements BMLTimer.Listener {
     /**
-     * Handler of the execution events.
+     * Internal class, to describe an Listener for Execution Events.
      * 
-     * @param event
-     *          Execution event, which will notified
+     * @author Matthias Mettel
+     * @author Markus Ermuth
+     * @author Alex Krause
+     * 
+     * @version $LastChangedRevision$
+     * @since 0.7.3
      */
-    void update(BMLEvent event);
-  }
-
-  /**
-   * Execution Listener, which executes the emitted events.
-   */
-  private Listener eventListener;
-
-  /**
-   * BML Data, which will executed.
-   */
-  private BML bmlTree;
-
-  /**
-   * Container to store the different events.
-   */
-  private BMLEventContainer containerOfEvents;
-
-  /**
-   * List of Warnings.
-   */
-  private LinkedList<String> listOfWarnings;
-
-  /**
-   * Timer to trigger timed BML events.
-   */
-  private BMLTimer executionTimer;
-
-  /**
-   * Constructor to set default values to the Attributes.
-   */
-  public BMLExecutor() {
-    // Set Attributes
-    eventListener = null;
-    bmlTree = null;
-
-    // Init CLasses
-    executionTimer = new BMLTimer();
-    containerOfEvents = new BMLEventContainer();
-    listOfWarnings = new LinkedList<String>();
-  }
-
-  /**
-   * Constructor to set an event listener.
-   * 
-   * @param listener
-   *          event listener to handle BML execution events
-   */
-  public BMLExecutor(final Listener listener) {
-    // Set Attributes
-    this();
-    eventListener = listener;
-  }
-
-  /**
-   * Stops a running execution and starts an new one with given parameter.
-   * 
-   * @param bml
-   *          new bml data to execute, is the value null, 
-   *          then the current bml execution will stop
-   */
-  public final void start(final BML bml) {
-    // Stop Current Execution
-    stop();
-
-    // Set Attributes & Check
-    bmlTree = bml;
-    if (bmlTree == null) {
-      return;
+    public interface Listener {
+        /**
+         * Handler of the execution events.
+         * 
+         * @param event
+         *            Execution event, which will notified
+         */
+        void update(BMLEvent event);
     }
 
-    // Can BML execute
-    if (!validateBML()) {
-      // Set Global Warning
-      listOfWarnings.add("BML cannot executed");
+    /**
+     * Execution Listener, which executes the emitted events.
+     */
+    private Listener eventListener;
 
-      // TODO: Notify Warnings
+    /**
+     * BML Data, which will executed.
+     */
+    private BML bmlTree;
+
+    /**
+     * Container to store the different events.
+     */
+    private BMLEventContainer containerOfEvents;
+
+    /**
+     * List of Warnings.
+     */
+    private LinkedList<String> listOfWarnings;
+
+    /**
+     * Timer to trigger timed BML events.
+     */
+    private BMLTimer executionTimer;
+
+    /**
+     * Constructor to set default values to the Attributes.
+     */
+    public BMLExecutor() {
+        // Set Attributes
+        eventListener = null;
+        bmlTree = null;
+
+        // Init CLasses
+        executionTimer = new BMLTimer();
+        containerOfEvents = new BMLEventContainer();
+        listOfWarnings = new LinkedList<String>();
     }
 
-    // Notify Warnings
-    if (!listOfWarnings.isEmpty()) {
-      // TODO: Notify Warnings
+    /**
+     * Constructor to set an event listener.
+     * 
+     * @param listener
+     *            event listener to handle BML execution events
+     */
+    public BMLExecutor(final Listener listener) {
+        // Set Attributes
+        this();
+        eventListener = listener;
     }
 
-    // Convert BML to Execution Data
-    convertBML2ExecutionData();
+    /**
+     * Stops a running execution and starts an new one with given parameter.
+     * 
+     * @param bml
+     *            new bml data to execute, is the value null, then the current
+     *            bml execution will stop
+     */
+    public final void start(final BML bml) {
+        // Stop Current Execution
+        stop();
 
-    // Start execution
-    executionTimer.start(this);
+        // Set Attributes & Check
+        bmlTree = bml;
+        if (bmlTree == null) {
+            return;
+        }
 
-    // Notify
-    if (eventListener != null) {
-      eventListener.update(new BMLEvent(BMLEvent.TYPE_START_BML, bmlTree));
-    }
-  }
+        // Can BML execute
+        if (!validateBML()) {
+            // Set Global Warning
+            listOfWarnings.add("BML cannot executed");
 
-  /**
-   * Stops the current executed bml-data.
-   */
-  public final void stop() {
-    // Stop Timer
-    executionTimer.stop();
+            // TODO: Notify Warnings
+        }
 
-    // Tidy Up
-    listOfWarnings.clear();
-    containerOfEvents.clear();
-  }
+        // Notify Warnings
+        if (!listOfWarnings.isEmpty()) {
+            // TODO: Notify Warnings
+        }
 
-  /**
-   * Runs the TimeThread.
-   */
-  @Override
-  public final void tick(final long currentGlobalTime) {
-    TimePoint first = containerOfEvents.getTimePoint(currentGlobalTime);
-    if (first != null) {
-      triggerEvent(first.getEvent());
-    }
-  }
+        // Convert BML to Execution Data
+        convertBML2ExecutionData();
 
-  /**
-   * Triggers a specific event from inside the class or from outside.
-   * 
-   * @param eventName
-   *          name of the event
-   */
-  public final void triggerEvent(final String eventName) {
-    // Get EventPoints of this event
-    LinkedList<EventPoint> events = containerOfEvents.getEventPoint(eventName);
-    if (events == null) {
-      return;
-    }
-
-    // Execute EventPoints
-    for (EventPoint e : events) {
-      switch (e.getType()) {
-      case EventPoint.TYPE_START:
-        // Cast
-        StartEventPoint startPoint = (StartEventPoint) e;
+        // Start execution
+        executionTimer.start(this);
 
         // Notify
         if (eventListener != null) {
-          //Generate Event
-          BMLEvent evt = new BMLEvent(BMLEvent.TYPE_START,
-              startPoint.getCommand().getDecoratedTag());
-          
-          //Notify event
-          eventListener.update(evt);
+            eventListener
+                    .update(new BMLEvent(BMLEvent.TYPE_START_BML, bmlTree));
         }
-        break;
-      case EventPoint.TYPE_STOP:
-        // Cast
-        StopEventPoint stopPoint = (StopEventPoint) e;
+    }
+
+    /**
+     * Stops the current executed bml-data.
+     */
+    public final void stop() {
+        // Stop Timer
+        executionTimer.stop();
+
+        // Tidy Up
+        listOfWarnings.clear();
+        containerOfEvents.clear();
+    }
+
+    /**
+     * Runs the TimeThread.
+     */
+    @Override
+    public final void tick(final long currentGlobalTime) {
+        TimePoint first = containerOfEvents.getTimePoint(currentGlobalTime);
+        if (first != null) {
+            triggerEvent(first.getEvent());
+        }
+    }
+
+    /**
+     * Triggers a specific event from inside the class or from outside.
+     * 
+     * @param eventName
+     *            name of the event
+     */
+    public final void triggerEvent(final String eventName) {
+        // Get EventPoints of this event
+        LinkedList<EventPoint> events = containerOfEvents
+                .getEventPoint(eventName);
+        if (events == null) {
+            return;
+        }
+
+        // Execute EventPoints
+        for (EventPoint e : events) {
+            switch (e.getType()) {
+            case EventPoint.TYPE_START:
+                // Cast
+                StartEventPoint startPoint = (StartEventPoint) e;
+
+                // Notify
+                if (eventListener != null) {
+                    // Generate Event
+                    BMLEvent evt = new BMLEvent(BMLEvent.TYPE_START, startPoint
+                            .getCommand().getDecoratedTag());
+
+                    // Notify event
+                    eventListener.update(evt);
+                }
+                break;
+            case EventPoint.TYPE_STOP:
+                // Cast
+                StopEventPoint stopPoint = (StopEventPoint) e;
+
+                // Notify
+                if (eventListener != null) {
+                    // Generate Event
+                    BMLEvent evt = new BMLEvent(BMLEvent.TYPE_STOP, stopPoint
+                            .getCommand().getDecoratedTag());
+
+                    // Post event
+                    eventListener.update(evt);
+                }
+                break;
+            case EventPoint.TYPE_WAIT:
+                // Cast
+                WaitEventPoint waitPoint = (WaitEventPoint) e;
+
+                // Calculate time point
+                long timePointValue = executionTimer.getGlobalTime()
+                        + waitPoint.getDuration();
+
+                // Generate Time Point
+                TimePoint timePoint = new TimePoint(timePointValue,
+                        waitPoint.getEventID());
+
+                // Add to container
+                containerOfEvents.addSortedTimePoint(timePoint);
+                break;
+            case EventPoint.TYPE_TRIGGER:
+                // Cast
+                TriggerEventPoint triggerPoint = (TriggerEventPoint) e;
+
+                // Trigger Event
+                triggerEvent(triggerPoint.getEventID());
+                break;
+            default:
+                break;
+            }
+        }
 
         // Notify
-        if (eventListener != null) {
-          //Generate Event
-          BMLEvent evt = 
-              new BMLEvent(BMLEvent.TYPE_STOP,
-                           stopPoint.getCommand().getDecoratedTag());
-          
-          //Post event
-          eventListener.update(evt);
+        if (containerOfEvents.isEmpty()) {
+            // Notify the stop
+            if (eventListener != null) {
+                eventListener.update(new BMLEvent(BMLEvent.TYPE_STOP_BML,
+                        bmlTree));
+            }
+
+            stop();
+
         }
-        break;
-      case EventPoint.TYPE_WAIT:
-        // Cast
-        WaitEventPoint waitPoint = (WaitEventPoint) e;
-        
-        //Calculate time point
-        long timePointValue = executionTimer.getGlobalTime()
-            + waitPoint.getDuration();
-
-        // Generate Time Point
-        TimePoint timePoint = new TimePoint(timePointValue,
-                                            waitPoint.getEventID());
-        
-        //Add to container
-        containerOfEvents
-            .addSortedTimePoint(timePoint);
-        break;
-      case EventPoint.TYPE_TRIGGER:
-        // Cast
-        TriggerEventPoint triggerPoint = (TriggerEventPoint) e;
-
-        // Trigger Event
-        triggerEvent(triggerPoint.getEventID());
-        break;
-        default:
-          break;
-      }
     }
 
-    // Notify
-    if (containerOfEvents.isEmpty()) {
-      // Notify the stop
-      if (eventListener != null) {
-        eventListener.update(new BMLEvent(BMLEvent.TYPE_STOP_BML, bmlTree));
-      }
-
-      stop();
-
-    }
-  }
-
-  /**
-   * Validates the given BML Informations.
-   * 
-   * @return true if the BML is valid, false if the BML isn't valid and cannot
-   *         executed
-   */
-  protected final boolean validateBML() {
-    // Check Constraints [Constraints aren't supported]
-    if (!bmlTree.getConstraints().isEmpty()) {
-      listOfWarnings.add("Constraints aren't supported");
-    }
-
-    // Check for required constraints
-    for (Constraint c : bmlTree.getConstraints()) {
-      // TODO: Required field
-    }
-
-    // Generate Warnings for unsupported required Commands
-    for (ITag cmd : bmlTree.getCommands()) {
-      // Gaze commands aren't supported
-      if (cmd.getType() == ITag.TYPE_GAZE) {
-        // Set Warning
-        listOfWarnings.add("Required command \"gaze\" is not supported");
-
-        // When required stop execution
-        if (cmd.isRequired()) {
-          return false;
+    /**
+     * Validates the given BML Informations.
+     * 
+     * @return true if the BML is valid, false if the BML isn't valid and cannot
+     *         executed
+     */
+    protected final boolean validateBML() {
+        // Check Constraints [Constraints aren't supported]
+        if (!bmlTree.getConstraints().isEmpty()) {
+            listOfWarnings.add("Constraints aren't supported");
         }
-      }
-    }
 
-    return true;
-  }
-
-  /**
-   * Converts the BML Data to execution data.
-   */
-  protected final void convertBML2ExecutionData() {
-    // Parse Command Information
-    LinkedList<ExtendedTag> extendedTags = new LinkedList<ExtendedTag>();
-    for (ITag command : bmlTree.getCommands()) {
-      extendedTags.add(new ExtendedTag(command));
-    }
-
-    // Generate Events
-    for (ExtendedTag cmd : extendedTags) {
-      // Generate & Set Start Event
-      String startEventName = cmd.getID()
-                                + ":start";
-      containerOfEvents.addEventPoint(startEventName,
-          new StartEventPoint(cmd));
-
-      // Generate & Set Stop Events
-      String stopEventName = cmd.getID()
-                               + ":end";
-      if (cmd.getEndData().getType() != TimeData.TYPE_TIME_NOT_SET) {
-        containerOfEvents.addEventPoint(stopEventName,
-            new StopEventPoint(cmd));
-      }
-
-      // Generate Start Time Event
-      if (cmd.getStartData().getType() == TimeData.TYPE_TIME_POINT) {
-        containerOfEvents.addTimePoint(
-            new TimePoint(cmd.getStartData().getPoint(), startEventName));
-      } else {
-        // Generate Event Name
-        String eventName = cmd.getStartData().getReferenceID()
-                            + ":"
-                            + cmd.getStartData().getReferencePoint();
-
-        // Generate Event Point
-        if (cmd.getStartData().getOffset() == 0) {
-          containerOfEvents.addEventPoint(eventName,
-              new TriggerEventPoint(startEventName));
-        } else {
-          containerOfEvents.addEventPoint(eventName,
-              new WaitEventPoint(startEventName,
-                                 cmd.getStartData().getOffset()));
+        // Check for required constraints
+        for (Constraint c : bmlTree.getConstraints()) {
+            // TODO: Required field
         }
-      }
 
-      // Generate End Time Event
-      if (cmd.getEndData().getType() == TimeData.TYPE_TIME_POINT) {
-        //Generate TimePoint
-        TimePoint timePoint = new TimePoint(cmd.getEndData().getPoint(),
-                                            stopEventName);
-        
-        //Add time point to container
-        containerOfEvents.addTimePoint(timePoint);
-      } else if (cmd.getEndData().getType() != TimeData.TYPE_TIME_NOT_SET) {
-        // Generate Event Name
-        String eventName = cmd.getEndData().getReferenceID()
-                            + ":"
-                            + cmd.getEndData().getReferencePoint();
+        // Generate Warnings for unsupported required Commands
+        for (ITag cmd : bmlTree.getCommands()) {
+            // Gaze commands aren't supported
+            if (cmd.getType() == ITag.TYPE_GAZE) {
+                // Set Warning
+                listOfWarnings
+                        .add("Required command \"gaze\" is not supported");
 
-        // Generate Event Point
-        if (cmd.getEndData().getOffset() == 0) {
-          containerOfEvents.addEventPoint(eventName,
-              new TriggerEventPoint(stopEventName));
-        } else {
-          containerOfEvents.addEventPoint(eventName,
-              new WaitEventPoint(stopEventName, cmd.getEndData().getOffset()));
+                // When required stop execution
+                if (cmd.isRequired()) {
+                    return false;
+                }
+            }
         }
-      }
+
+        return true;
     }
 
-    // Sort TimePoints
-    containerOfEvents.sortTimePoints();
-  }
+    /**
+     * Converts the BML Data to execution data.
+     */
+    protected final void convertBML2ExecutionData() {
+        // Parse Command Information
+        LinkedList<ExtendedTag> extendedTags = new LinkedList<ExtendedTag>();
+        for (ITag command : bmlTree.getCommands()) {
+            extendedTags.add(new ExtendedTag(command));
+        }
+
+        // Generate Events
+        for (ExtendedTag cmd : extendedTags) {
+            // Generate & Set Start Event
+            String startEventName = cmd.getID() + ":start";
+            containerOfEvents.addEventPoint(startEventName,
+                    new StartEventPoint(cmd));
+
+            // Generate & Set Stop Events
+            String stopEventName = cmd.getID() + ":end";
+            if (cmd.getEndData().getType() != TimeData.TYPE_TIME_NOT_SET) {
+                containerOfEvents.addEventPoint(stopEventName,
+                        new StopEventPoint(cmd));
+            }
+
+            // Generate Start Time Event
+            if (cmd.getStartData().getType() == TimeData.TYPE_TIME_POINT) {
+                containerOfEvents.addTimePoint(new TimePoint(cmd.getStartData()
+                        .getPoint(), startEventName));
+            } else {
+                // Generate Event Name
+                String eventName = cmd.getStartData().getReferenceID() + ":"
+                        + cmd.getStartData().getReferencePoint();
+
+                // Generate Event Point
+                if (cmd.getStartData().getOffset() == 0) {
+                    containerOfEvents.addEventPoint(eventName,
+                            new TriggerEventPoint(startEventName));
+                } else {
+                    containerOfEvents.addEventPoint(eventName,
+                            new WaitEventPoint(startEventName, cmd
+                                    .getStartData().getOffset()));
+                }
+            }
+
+            // Generate End Time Event
+            if (cmd.getEndData().getType() == TimeData.TYPE_TIME_POINT) {
+                // Generate TimePoint
+                TimePoint timePoint = new TimePoint(
+                        cmd.getEndData().getPoint(), stopEventName);
+
+                // Add time point to container
+                containerOfEvents.addTimePoint(timePoint);
+            } else if (cmd.getEndData().getType() != TimeData.TYPE_TIME_NOT_SET) {
+                // Generate Event Name
+                String eventName = cmd.getEndData().getReferenceID() + ":"
+                        + cmd.getEndData().getReferencePoint();
+
+                // Generate Event Point
+                if (cmd.getEndData().getOffset() == 0) {
+                    containerOfEvents.addEventPoint(eventName,
+                            new TriggerEventPoint(stopEventName));
+                } else {
+                    containerOfEvents.addEventPoint(eventName,
+                            new WaitEventPoint(stopEventName, cmd.getEndData()
+                                    .getOffset()));
+                }
+            }
+        }
+
+        // Sort TimePoints
+        containerOfEvents.sortTimePoints();
+    }
 }

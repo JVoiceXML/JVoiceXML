@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,28 +33,29 @@ package org.jvoicexml.demo.talkingheaddemo;
  * @author Alex Krause
  * 
  * @version $LastChangedRevision$
- * @since 0.7.3
+ * @since 0.7.7
  */
-class DummyEvent
-    extends AvatarEvent {
+class DummyEvent extends AvatarEvent {
 
-  /**
-   * The Constructor to define the event.
-   * 
-   * @param offerText the text to display
-   * @param acceptText the text to display after accepting
-   * @param rejectText the text to display after rejecting
-   */
-  public DummyEvent(final String offerText,
-                    final String acceptText,
-                    final String rejectText) {
-    super(offerText, acceptText, rejectText);
-  }
+    /**
+     * The Constructor to define the event.
+     * 
+     * @param offerText
+     *            the text to display
+     * @param acceptText
+     *            the text to display after accepting
+     * @param rejectText
+     *            the text to display after rejecting
+     */
+    public DummyEvent(final String offerText, final String acceptText,
+            final String rejectText) {
+        super(offerText, acceptText, rejectText);
+    }
 
-  @Override
-  public boolean doAccepted() {
-    // Do nothing
-    return true;
-  }
+    @Override
+    public boolean doAccepted() {
+        // Do nothing
+        return true;
+    }
 
 }
