@@ -22,6 +22,7 @@
 
         <property name="src" value="src" />
         <property name="build" value="classes" />
+        <property name="config" value="../org.jvoicexml/config" />
         <property name="etc" value="etc" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
 

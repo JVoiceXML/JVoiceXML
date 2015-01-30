@@ -189,7 +189,7 @@ public final class BMLSynthesizedOutputFactory
      * Sets the type of the created resource.
      * @param typeName name of the resource
      */
-    void setType(final String typeName) {
+    public void setType(final String typeName) {
         type = typeName;
     }
 

@@ -56,7 +56,7 @@
 							<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="idle" id="id_0" start="0" end="100"/>
 							<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="nod" id="id_1" start="id_0:end+1"/>
 							<ns1:speech xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" id="id_2" start="id_1:end+1"/>
-							Befehl Licht ausschalten wird ausgefÃ¼hrt.
+							Befehl Licht ausschalten wird ausgeführt.
 							<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="idle" id="id_3" start="id_2:end+1"/>
 						</prompt>
 					<elseif cond="action==2"/>
@@ -64,7 +64,7 @@
 							<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="idle" id="id_0" start="0" end="100"/>
 							<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="nod" id="id_1" start="id_0:end+1"/>
 							<ns1:speech xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" id="id_2" start="id_1:end+1"/>
-							Befehl Radio ausschalten wird ausgefÃ¼hrt.
+							Befehl Radio ausschalten wird ausgeführt.
 							<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="idle" id="id_3" start="id_2:end+1"/>
 						</prompt>
 
