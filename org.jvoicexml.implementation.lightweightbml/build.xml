@@ -7,8 +7,8 @@
 
     <!-- allow the user to override setting in an own propertiesfile. -->
     <!-- Use the same properties file as in the main project.         -->
-    <property file="../../personal-props/ant.properties" />
-    <property file="../../config-props/ant.properties" />
+    <property file="../org.jvoicexml/personal-props/ant.properties" />
+    <property file="../org.jvoicexml/config-props/ant.properties" />
 
     <!-- Load the settings for 3rdparty libraries -->
     <import file="3rdparty-libs.xml" />
@@ -25,6 +25,7 @@
         <property name="config" value="../org.jvoicexml/config" />
         <property name="etc" value="etc" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
+        <property name="apidoc" value="${apidoc.basedir}/${component}" />
 
         <condition property="windows">
             <os family="windows" />
@@ -100,6 +101,47 @@
     <target name="rebuild"
             description="Rebuild the jars from scratch"
             depends="clean,jar" />
+
+    <target name="apidoc" description="create javadoc"
+        depends="-setup">
+        <echo message="creating javadoc for ${component} with access: ${javadoc.access}" />
+
+        <delete dir="${apidoc}" failonerror="false"/>
+
+        <javadoc destdir="${apidoc}"
+                 windowtitle="JVoiceXML"
+                 author="true"
+                 version="true"
+                 access="${javadoc.access}"
+                 use="true">
+            <packageset dir="${src}" />
+            <doctitle>
+                <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
+            </doctitle>
+            <bottom>
+                <![CDATA[<i>Copyright &#169; 2012-2013<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+            </bottom>
+        <tag name="todo" description="Stuff to complete" />
+        <classpath>
+            <path refid="project.classpath" />
+        </classpath>
+
+        <!-- Resolve used libraries -->
+        <link offline="true"
+              href="http://java.sun.com/j2se/1.5.0/docs/api/"
+              packagelistLoc="${3rdparty.dir}" />
+        <link offline="true" resolveLink="false"
+              href="${jvxml.core.apidoc}"
+              packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+        <link offline="true" 
+              href="http://logging.apache.org/log4j/docs/api/"
+              packagelistLoc="${log4j.dir}" />
+
+        <group title="Lightweight BML Implementation Platform">
+            <package name="${component}*" />
+        </group>
+        </javadoc>
+    </target>
 
     <target name="checkstyle"
             description="Check for JVoiceXML coding standard"
