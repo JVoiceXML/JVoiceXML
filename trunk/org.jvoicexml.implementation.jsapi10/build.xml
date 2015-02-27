@@ -120,7 +120,6 @@ org.jvoicexml/personal-props/README.txt
         <tag name="todo" description="Stuff to complete" />
         <classpath>
             <path refid="project.classpath" />
-            <fileset refid="freetts.jsapi10.lib" />
         </classpath>
 
         <!-- Resolve used libraries -->
