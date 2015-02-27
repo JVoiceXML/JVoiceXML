@@ -69,6 +69,7 @@ public final class Jsapi10RecognitionResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUtterance() {
         if (result == null) {
             return null;
@@ -93,6 +94,7 @@ public final class Jsapi10RecognitionResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isAccepted() {
         if (result == null) {
             return false;
@@ -104,17 +106,7 @@ public final class Jsapi10RecognitionResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
-    public boolean isRejected() {
-        if (result == null) {
-            return false;
-        }
-
-        return result.getResultState() == Result.REJECTED;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setMark(final String mark) {
         markname = mark;
     }
@@ -122,6 +114,7 @@ public final class Jsapi10RecognitionResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMark() {
         return markname;
     }
@@ -129,6 +122,7 @@ public final class Jsapi10RecognitionResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public float getConfidence() {
         /** @todo Retrieve the confidence level. */
         return 1.0f;
@@ -137,6 +131,7 @@ public final class Jsapi10RecognitionResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public float[] getWordsConfidence() {
         /** @todo Retrieve the confidence level of each word. */
         final String[] words = getWords();
@@ -150,6 +145,7 @@ public final class Jsapi10RecognitionResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String[] getWords() {
         final ResultToken[] tokens = result.getBestTokens();
         final String[] words = new String[tokens.length];
@@ -162,6 +158,7 @@ public final class Jsapi10RecognitionResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ModeType getMode() {
         return ModeType.VOICE;
     }
