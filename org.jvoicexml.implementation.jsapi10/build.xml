@@ -155,12 +155,10 @@ org.jvoicexml/personal-props/README.txt
 
 <target name="distribution" depends="jar">
     <property name="distFolder" value="${dist}/${jvxml.version}" />
-    <copy tofile="${distFolder}/config/jsapi10-implementation.xml" file="${etc}/jsapi10-implementation-dist.xml" />
     <copy tofile="${distFolder}/config/jsapi10-talking-java-implementation.xml" file="${etc}/jsapi10-talking-java-implementation-dist.xml" />
     <copy todir="${distFolder}/config">
         <fileset dir="${etc}">
             <include name="jvoicexml.gram" />
-            <include name="sphinx4.jsapi10.config.xml" />
         </fileset>
     </copy>
     <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jar}" />
