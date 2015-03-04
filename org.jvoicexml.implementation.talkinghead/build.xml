@@ -101,6 +101,11 @@ Build this jar from the main project first.
         </jar>
     </target>
 
+    <target name="distribution" depends="jar">
+        <property name="distFolder" value="${dist}/${jvxml.version}" />
+        <copy todir="${distFolder}/lib" file="${dist.jar}" />
+    </target>
+
     <target name="run" description="Run the TalkingHead avatar" depends="jar">
         <java classname="org.jvoicexml.talkinghead.TalkingHead" fork="true">
             <classpath>
