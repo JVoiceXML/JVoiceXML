@@ -64,6 +64,7 @@ public final class Mrcpv2RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUtterance() {
         if (result == null) {
             return null;
@@ -75,6 +76,7 @@ public final class Mrcpv2RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isAccepted() {
         return true;
     }
@@ -82,13 +84,7 @@ public final class Mrcpv2RecognitionResult
     /**
      * {@inheritDoc}
      */
-    public boolean isRejected() {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setMark(final String mark) {
         markname = mark;
     }
@@ -96,6 +92,7 @@ public final class Mrcpv2RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMark() {
         return markname;
     }
@@ -103,6 +100,7 @@ public final class Mrcpv2RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public float getConfidence() {
         return confidenceResult;
     }
@@ -110,6 +108,7 @@ public final class Mrcpv2RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public float[] getWordsConfidence() {
         final String[] words =  getWords();
         float[] confidence = new float[words.length];
@@ -123,6 +122,7 @@ public final class Mrcpv2RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public String[] getWords() {
         if (result == null) {
             return new String[0];
@@ -133,6 +133,7 @@ public final class Mrcpv2RecognitionResult
     /**
      * {@inheritDoc}
      */
+    @Override
     public ModeType getMode() {
         return ModeType.valueOf("VOICE");
     }
