@@ -15,6 +15,8 @@ personal-props/README.txt
     <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
         <property name="component" value="org.jvoicexml.implementation.jtapi"/>
+        <property name="component.path"
+                  value="org/jvoicexml/implementation/jtapi" />
 
         <!-- directory structure -->
         <property name="src" value="src" />
@@ -28,9 +30,8 @@ personal-props/README.txt
             <os family="windows" />
         </condition>
 
-        <!-- main jar files -->
-        <property name="dist.implementation.jtapi.jar"
-                  value="${dist}/jvxml-jtapi.jar" />
+        <!-- main jar file -->
+        <property name="dist.jar" value="${dist}/${component}.jar" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
@@ -83,7 +84,7 @@ personal-props/README.txt
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
-      <delete file="${dist.implementation.jtapi.jar}" failonerror="false"/>
+      <delete file="${dist.jar}" failonerror="false"/>
     </target>
 
 
@@ -106,12 +107,11 @@ personal-props/README.txt
     <target name="jar"
             depends="compile"
             description="Pack all compiled files into jar files">
-        <jar jarfile="${dist.implementation.jtapi.jar}"
+        <jar jarfile="${dist.jar}"
              compress="false">
             <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/jtapi/**/*.class" />
+                <include name="${component.path}/**/*.class" />
                 <include name="org/jvoicexml/callmanager/jtapi/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
