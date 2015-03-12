@@ -394,7 +394,7 @@ Layer (ETL).
                 <include name="protobuf-java-2.5.0.jar" />
             </fileset>
         </pack>
-        <pack name="Lightweight implementation platform" required="no"
+        <pack name="Lightweight BML implementation platform" required="no"
             preselected="no">
             <description>Demo implementation platform for an Avatar that uses a lightweight version of BML.
 
