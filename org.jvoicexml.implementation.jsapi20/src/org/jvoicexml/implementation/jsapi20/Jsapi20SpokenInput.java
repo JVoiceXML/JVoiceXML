@@ -163,7 +163,8 @@ public final class Jsapi20SpokenInput
                 final AudioManager manager = recognizer.getAudioManager();
                 manager.setMediaLocator(mediaLocator);
             }
-            final SpeechEventExecutor executor = new SynchronousSpeechEventExecutor();
+            final SpeechEventExecutor executor =
+                    new SynchronousSpeechEventExecutor();
             recognizer.setSpeechEventExecutor(executor);
             recognizer.addRecognizerListener(this);
             recognizer.allocate();
@@ -228,7 +229,8 @@ public final class Jsapi20SpokenInput
      */
     @Override
     public Collection<BargeInType> getSupportedBargeInTypes() {
-        final Collection<BargeInType> types = new java.util.ArrayList<BargeInType>();
+        final Collection<BargeInType> types =
+                new java.util.ArrayList<BargeInType>();
 
         types.add(BargeInType.SPEECH);
         types.add(BargeInType.HOTWORD);
@@ -337,7 +339,8 @@ public final class Jsapi20SpokenInput
 
         for (GrammarImplementation<? extends Object> current : grammars) {
             if (current instanceof RuleGrammarImplementation) {
-                final RuleGrammarImplementation ruleGrammar = (RuleGrammarImplementation) current;
+                final RuleGrammarImplementation ruleGrammar =
+                        (RuleGrammarImplementation) current;
                 final String name = ruleGrammar.getName();
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("activating grammar '" + name + "'...");
@@ -360,7 +363,8 @@ public final class Jsapi20SpokenInput
 
         for (GrammarImplementation<? extends Object> current : grammars) {
             if (current instanceof RuleGrammarImplementation) {
-                final RuleGrammarImplementation ruleGrammar = (RuleGrammarImplementation) current;
+                final RuleGrammarImplementation ruleGrammar =
+                        (RuleGrammarImplementation) current;
                 final String name = ruleGrammar.getName();
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("deactivating grammar '" + name + "'...");
@@ -577,7 +581,8 @@ public final class Jsapi20SpokenInput
      */
     @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
+        final Collection<GrammarType> types =
+                new java.util.ArrayList<GrammarType>();
         types.add(GrammarType.SRGS_XML);
         return types;
     }
