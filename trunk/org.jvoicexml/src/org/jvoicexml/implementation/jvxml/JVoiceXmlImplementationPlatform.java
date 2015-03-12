@@ -905,9 +905,6 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         // The timer is only needed within the field.
-        // Here we have only prompts which produces SSML.
-        // If the platform is using JSAPI2,
-        // this code must be commented.
         final SpeakableText lastSpeakable = promptAccumulator
                 .getLastSpeakableText();
         if (speakable.equals(lastSpeakable)) {
