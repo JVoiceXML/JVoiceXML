@@ -225,7 +225,7 @@ personal-props/README.txt
       <replacefilter token="@sip.terminal@" value="${sip.terminal}" />
       <replacefilter token="@sip.outputType@" value="${sip.outputType}" />
     </replace>
-    <copy todir="${distFolder}/lib" file="${dist.implementation.jtapi.jar}"/>
+    <copy todir="${distFolder}/lib" file="${dist.jar}"/>
     <copy todir="${distFolder}/lib">
       <fileset refid="jtapi.lib" />
       <fileset refid="gjtapi.lib" />

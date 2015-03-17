@@ -794,12 +794,14 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
+    @Override
     public void telephonyCallAnswered(final TelephonyEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void telephonyCallHungup(final TelephonyEvent event) {
         synchronized (this) {
             if (hungup) {
@@ -829,6 +831,7 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
+    @Override
     public void telephonyMediaEvent(final TelephonyEvent event) {
     }
 

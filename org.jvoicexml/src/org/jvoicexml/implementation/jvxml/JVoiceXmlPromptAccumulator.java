@@ -120,8 +120,12 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
             final DocumentServer server, final CallControlProperties callProps)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent {
-        final SystemOutput output = platform.getSystemOutput();
         final CallControl call = platform.getCallControl();
+        if (!call.isCallActive()) {
+            throw new NoresourceError(
+                    "cannot render prompts. call is no longer acttive");
+        }
+        final SystemOutput output = platform.getSystemOutput();
         for (SpeakableText speakable : prompts) {
             if (speakable instanceof SpeakableSsmlText) {
                 final SpeakableSsmlText ssmlSpeakable =

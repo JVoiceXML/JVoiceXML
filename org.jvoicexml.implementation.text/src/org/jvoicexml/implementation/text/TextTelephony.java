@@ -374,6 +374,17 @@ public final class TextTelephony implements Telephony {
      * {@inheritDoc}
      */
     @Override
+    public boolean isActive() {
+        if (!socket.isConnected()) {
+            return false;
+        }
+        return !sentHungup;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void open() throws NoresourceError {
     }
 

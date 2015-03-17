@@ -125,6 +125,15 @@ public interface CallControl {
     void transfer(String dest) throws NoresourceError;
 
     /**
+     * Checks if the call is currently active and outputs can be sent and
+     * inputs can be retrieved. This is usally {@code true} after a call has
+     * started and {@link #hangup()} has not been called.
+     * @return {@code true} if the call is active
+     * @since 0.7.7
+     */
+    boolean isCallActive();
+
+    /**
      * Generate an application driven hangup.
      * @since 0.7.5
      */

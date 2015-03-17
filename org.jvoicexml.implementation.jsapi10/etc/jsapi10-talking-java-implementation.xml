@@ -27,9 +27,4 @@
     </beans:property>
   </beans:bean>
 
-  <beans:bean
-    class="org.jvoicexml.implementation.jsapi10.Jsapi10TelephonyFactory">
-    <beans:property name="instances" value="1" />
-  </beans:bean>
-
 </implementation>

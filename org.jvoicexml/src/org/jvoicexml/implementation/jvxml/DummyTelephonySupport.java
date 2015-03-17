@@ -46,8 +46,8 @@ import org.jvoicexml.implementation.TelephonyListener;
  * Dummy implementation of a {@link Telephony} resource.
  *
  * <p>
- * This implementation of a {@link Telephony} resource can be used, if there
- * is no telephony support or if the {@link SpokenInput} and
+ * This implementation of a {@link Telephony} resource can be used, if there is
+ * no telephony support or if the {@link SpokenInput} and
  * {@link SynthesizedOutput} implementations are able to produced communicate
  * directly with the user.
  * </p>
@@ -57,11 +57,10 @@ import org.jvoicexml.implementation.TelephonyListener;
  *
  * @since 0.5.5
  */
-public final class DummyTelephonySupport
-    implements Telephony {
+public final class DummyTelephonySupport implements Telephony {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(DummyTelephonySupport.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(DummyTelephonySupport.class);
 
     /** Audio format to use for recording. */
     private static final AudioFormat RECORDING_AUDIO_FORMAT;
@@ -72,15 +71,17 @@ public final class DummyTelephonySupport
     /** Flag if this device is busy. */
     private boolean busy;
 
+    /** Flag if this device is active. */
+    private boolean active;
+
     /** Asynchronous recording of audio. */
     private RecordingThread recording;
 
     static {
-        final AudioFormat.Encoding encoding =
-                new AudioFormat.Encoding("PCM_SIGNED");
-        RECORDING_AUDIO_FORMAT =
-                new AudioFormat(encoding, ((float) 8000.0), 16, 1, 2,
-                ((float) 8000.0), false);
+        final AudioFormat.Encoding encoding = new AudioFormat.Encoding(
+                "PCM_SIGNED");
+        RECORDING_AUDIO_FORMAT = new AudioFormat(encoding, ((float) 8000.0),
+                16, 1, 2, ((float) 8000.0), false);
     }
 
     /**
@@ -140,11 +141,10 @@ public final class DummyTelephonySupport
      * {@inheritDoc}
      */
     @Override
-    public void connect(final ConnectionInformation client)
-        throws IOException {
+    public void connect(final ConnectionInformation client) throws IOException {
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
-                new java.util.ArrayList<TelephonyListener>();
+                    new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
             final TelephonyEvent event = new TelephonyEvent(this,
                     TelephonyEvent.ANSWERED);
@@ -152,6 +152,7 @@ public final class DummyTelephonySupport
                 current.telephonyCallAnswered(event);
             }
         }
+        active = true;
     }
 
     /**
@@ -159,9 +160,10 @@ public final class DummyTelephonySupport
      */
     @Override
     public void disconnect(final ConnectionInformation client) {
+        active = false;
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
-                new java.util.ArrayList<TelephonyListener>();
+                    new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
             final TelephonyEvent event = new TelephonyEvent(this,
                     TelephonyEvent.HUNGUP);
@@ -176,12 +178,15 @@ public final class DummyTelephonySupport
      */
     @Override
     public void play(final SynthesizedOutput output,
-            final CallControlProperties props)
-        throws IOException, NoresourceError {
+            final CallControlProperties props) throws IOException,
+            NoresourceError {
+        if (!active) {
+            throw new NoresourceError("dummy telephony is no longer active");
+        }
         busy = true;
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
-                new java.util.ArrayList<TelephonyListener>();
+                    new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
             final TelephonyEvent event = new TelephonyEvent(this,
                     TelephonyEvent.PLAY_STARTED);
@@ -202,7 +207,7 @@ public final class DummyTelephonySupport
         busy = false;
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
-                new java.util.ArrayList<TelephonyListener>();
+                    new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
             final TelephonyEvent event = new TelephonyEvent(this,
                     TelephonyEvent.PLAY_STOPPED);
@@ -212,17 +217,20 @@ public final class DummyTelephonySupport
         }
     }
 
-    /**
+    /**w
      * {@inheritDoc}
      */
     @Override
     public void record(final SpokenInput input,
-            final CallControlProperties props)
-        throws IOException, NoresourceError {
+            final CallControlProperties props) throws IOException,
+            NoresourceError {
+        if (!active) {
+            throw new NoresourceError("dummy telephony is no longer active");
+        }
         busy = true;
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
-                new java.util.ArrayList<TelephonyListener>();
+                    new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
             final TelephonyEvent event = new TelephonyEvent(this,
                     TelephonyEvent.RECORD_STARTED);
@@ -244,15 +252,16 @@ public final class DummyTelephonySupport
      */
     @Override
     public void startRecording(final SpokenInput input,
-            final OutputStream stream,
-            final CallControlProperties props)
-        throws IOException, NoresourceError {
+            final OutputStream stream, final CallControlProperties props)
+            throws IOException, NoresourceError {
+        if (!active) {
+            throw new NoresourceError("dummy telephony is no longer active");
+        }
         busy = true;
         recording = new RecordingThread(stream, RECORDING_AUDIO_FORMAT);
         recording.start();
         synchronized (listener) {
-            final Collection<TelephonyListener> copy =
-                new java.util.ArrayList<TelephonyListener>();
+            final Collection<TelephonyListener> copy = new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
             final TelephonyEvent event = new TelephonyEvent(this,
                     TelephonyEvent.RECORD_STARTED);
@@ -277,7 +286,7 @@ public final class DummyTelephonySupport
         }
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
-                new java.util.ArrayList<TelephonyListener>();
+                    new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
             final TelephonyEvent event = new TelephonyEvent(this,
                     TelephonyEvent.RECORD_STOPPED);
@@ -299,9 +308,10 @@ public final class DummyTelephonySupport
      */
     @Override
     public void hangup() {
+        active = false;
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
-                new java.util.ArrayList<TelephonyListener>();
+                    new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
             final TelephonyEvent event = new TelephonyEvent(this,
                     TelephonyEvent.HUNGUP);
@@ -325,8 +335,7 @@ public final class DummyTelephonySupport
      * {@inheritDoc}
      */
     @Override
-    public void removeListener(
-            final TelephonyListener callListener) {
+    public void removeListener(final TelephonyListener callListener) {
         synchronized (listener) {
             listener.add(callListener);
         }
@@ -339,5 +348,12 @@ public final class DummyTelephonySupport
     public boolean isBusy() {
         return busy;
     }
-}
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isActive() {
+        return active;
+    }
+}
