@@ -92,6 +92,8 @@
         <li>refactoring: Loaded Grammars are referenced by a URI
             rather than a loaded document to be more MRCP compliant</li>
         <li>refactoring: removed the need for grammar transformers</li>
+        <li>bugfix: introduced an active flag to prevent hanging of
+            platforms</li>
     </ul>
 
     <h4>jsapi10 implementation platform</h4>
@@ -99,6 +101,8 @@
     <ul>
         <li>removed sphinx and freetts as implementations because
             of sphinx refactoring</li>
+        <li>removed own telephony implementation in favour of the
+            dummy telephony</li>
     </ul>
 
     <h4>jsapi20 implementation platform</h4>

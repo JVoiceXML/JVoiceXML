@@ -142,6 +142,14 @@ public interface Telephony extends ExternalResource {
     void transfer(String dest) throws NoresourceError;
 
     /**
+     * Checks if this instance can actively be used to play back output or
+     * record input.
+     * @return {@code true} if this instance is active
+     * @since 0.7.7
+     */
+    boolean isActive();
+    
+    /**
      * Hangs up the current call.
      *         Error hanging up the call.
      */

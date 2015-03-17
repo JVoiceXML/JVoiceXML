@@ -208,4 +208,12 @@ final class JVoiceXmlCallControl implements CallControl {
 
         telephony.hangup();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCallActive() {
+        return telephony.isActive();
+    }
 }

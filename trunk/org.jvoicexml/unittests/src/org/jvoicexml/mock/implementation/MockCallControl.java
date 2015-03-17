@@ -111,4 +111,12 @@ public final class MockCallControl implements CallControl {
     @Override
     public void hangup() {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCallActive() {
+        return false;
+    }
 }
