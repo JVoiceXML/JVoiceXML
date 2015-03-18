@@ -154,6 +154,12 @@ public final class JVoiceXmlImplementationPlatform
     private final JVoiceXmlPromptAccumulator promptAccumulator;
 
     /**
+     * A reaper to monitor that the platform is returned within a predefined
+     * timespan.
+     */
+    private ImplementationPlatformReaper reaper;
+    
+    /**
      * Constructs a new Implementation platform.
      * 
      * <p>
@@ -268,7 +274,9 @@ public final class JVoiceXmlImplementationPlatform
                     LOGGER.debug("output still busy. returning when queue is"
                             + " empty");
                 }
+                maybeStartReaper();
             } else {
+                maybeStopReaper();
                 final JVoiceXmlSystemOutput systemOutput = output;
                 output = null;
                 final String type = info.getSystemOutput();
@@ -287,6 +295,31 @@ public final class JVoiceXmlImplementationPlatform
         }
     }
 
+    /**
+     * Starts a reaper if not already started.
+     * 
+     * @since 0.7.7
+     */
+    private void maybeStartReaper() {
+        if (reaper != null) {
+            return;
+        }
+        reaper = new ImplementationPlatformReaper(this);
+        reaper.start();
+    }
+    
+    /**
+     * Stops a reaper if not already stopped.
+     * 
+     * @since 0.7.7
+     */
+    private void maybeStopReaper() {
+        if (reaper == null) {
+            return;
+        }
+        reaper.stopReaping();
+        reaper = null;
+    }
     /**
      * {@inheritDoc}
      */
@@ -481,16 +514,17 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
         synchronized (this) {
             if (closed) {
                 return;
             }
-
             closed = true;
         }
 
         LOGGER.info("closing implementation platform");
+        maybeStopReaper();
         if (output != null) {
             if (!hungup) {
                 // If the user did not hang up, wait until all output has been
@@ -810,9 +844,11 @@ public final class JVoiceXmlImplementationPlatform
             hungup = true;
         }
         LOGGER.info("telephony connection closed");
-        returnCallControl();
+        LOGGER.info("returning aqcuired resources");
         returnSystemOutput();
         returnUserInput();
+        returnCallControl();
+        LOGGER.info("implementation platform closed");
     }
 
     /**
@@ -899,7 +935,6 @@ public final class JVoiceXmlImplementationPlatform
 
         if (hungup) {
             returnSystemOutput();
-            // No need to start any timers in this case.
             return;
         }
 
