@@ -217,7 +217,7 @@ public final class DummyTelephonySupport implements Telephony {
         }
     }
 
-    /**w
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -261,7 +261,8 @@ public final class DummyTelephonySupport implements Telephony {
         recording = new RecordingThread(stream, RECORDING_AUDIO_FORMAT);
         recording.start();
         synchronized (listener) {
-            final Collection<TelephonyListener> copy = new java.util.ArrayList<TelephonyListener>();
+            final Collection<TelephonyListener> copy =
+                    new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
             final TelephonyEvent event = new TelephonyEvent(this,
                     TelephonyEvent.RECORD_STARTED);
