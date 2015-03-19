@@ -486,6 +486,24 @@ public final class Jsapi20SpokenInput
             LOGGER.debug("stopping recognition...");
         }
 
+        // If a result listener exists: Remove it.
+        if (currentResultListener != null) {
+            recognizer.removeResultListener(currentResultListener);
+            currentResultListener = null;
+        }
+
+        // Pause the recognizer
+        try {
+            recognizer.releaseFocus();
+            recognizer.waitEngineState(Recognizer.DEFOCUSED);
+            recognizer.pause();
+            recognizer.waitEngineState(Recognizer.PAUSED);
+        } catch (IllegalArgumentException | IllegalStateException
+                | InterruptedException e) {
+            LOGGER.warn(e.getMessage(), e);
+        }
+
+        // Unload all grammars
         final GrammarManager manager = recognizer.getGrammarManager();
         final Grammar[] list = manager.listGrammars();
         for (Grammar gram : list) {
@@ -496,22 +514,6 @@ public final class Jsapi20SpokenInput
         }
         recognizer.processGrammars();
 
-        // If a result listener exists: Remove it.
-        if (currentResultListener != null) {
-            recognizer.removeResultListener(currentResultListener);
-            currentResultListener = null;
-        }
-
-        recognizer.releaseFocus();
-        try {
-            recognizer.pause();
-        } catch (EngineStateException e) {
-            LOGGER.warn(e.getMessage(), e);
-        } catch (IllegalArgumentException e) {
-            LOGGER.warn(e.getMessage(), e);
-        } catch (IllegalStateException e) {
-            LOGGER.warn(e.getMessage(), e);
-        }
         final SpokenInputEvent event = new RecognitionStoppedEvent(this, null);
         fireInputEvent(event);
         if (LOGGER.isDebugEnabled()) {
