@@ -1,0 +1,7 @@
+<bml>
+  <speech id="key01" start="0">
+    <text>
+	  Hello World!
+	</text>
+  </speech>
+</bml>

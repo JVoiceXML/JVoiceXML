@@ -1,0 +1,36 @@
+seqdiag {
+  Test -> Call [label = "new"];
+  Test -> Supervisor [label = "new"];
+          Supervisor -> Call [label = "setListener" ];
+                        Call -> TextServer [label = "addListener" ];
+  
+  Test -> Supervisor [label = "init"];
+          Supervisor -> Conversation [label = "new"];
+  Test -> Conversation [label = "addOutput" ];
+  Test -> Conversation [label = "addinput" ];
+          
+  Test -> Supervisor [label = "process"];
+          Supervisor -> Sequence [label = "new"];
+          Supervisor -> Call [label = "run"];
+          Call -> TextServer [label = "start"];
+
+  TextServer -> Supervisor [label = "outputSsml"];
+                Supervisor -> Supervisor [label = "assertOutput"];
+                              Supervisor -> Sequence [label = "validate"];
+                                            Sequence -> Conversation [label = "next"];
+  TextServer <-- Conversation;
+
+  TextServer -> Supervisor [label = "inputExpected"];
+                Supervisor -> Supervisor [label = "assertInput"];
+                              Supervisor -> Sequence [label = "validate"];
+                                            Sequence -> Conversation [label = "next"];
+  TextServer <-- Conversation;
+  
+          Call -> TextServer [label = "stopServer"];
+
+  TextServer -> Supervisor [label = "disconnected"];
+                Supervisor -> Supervisor [label = "assertHangup"];
+                              Supervisor -> Sequence [label = "validate"];
+                                            Sequence -> Conversation [label = "next"];
+  TextServer <-- Conversation;
+}

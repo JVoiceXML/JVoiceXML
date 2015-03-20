@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:mmi="http://www.w3.org/2008/04/mmi-arch" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" targetNamespace="http://www.w3.org/2008/04/mmi-arch">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+             general Type definition schema for MMI Life cycle events version 1.0
+        </xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="mmi-attribs.xsd"/>
+    <xs:simpleType name="targetType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="requestIDType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="contextType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="statusType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="success"/>
+            <xs:enumeration value="failure"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="statusResponseType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="alive"/>
+            <xs:enumeration value="dead"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="contentURLType">
+        <xs:attribute name="href" type="xs:anyURI" use="required"/>
+        <xs:attribute name="max-age" type="xs:string" use="optional"/>
+        <xs:attribute name="fetchtimeout" type="xs:string" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="contentType">
+        <xs:sequence>
+            <xs:any maxOccurs="unbounded" namespace="http://www.w3.org/2001/vxml" processContents="skip"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="emmaType">
+        <xs:sequence>
+            <xs:any maxOccurs="unbounded" namespace="http://www.w3.org/2003/04/emma" processContents="skip"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType mixed="true" name="anyComplexType">
+        <xs:complexContent mixed="true">
+            <xs:restriction base="xs:anyType">
+                <xs:sequence>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" processContents="skip"/>
+                </xs:sequence>
+            </xs:restriction>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

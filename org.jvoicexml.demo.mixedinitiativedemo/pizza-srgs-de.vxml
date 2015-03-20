@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.0" xmlns="http://www.w3.org/2001/vxml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xml:lang="de"
+    xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+
+    <meta name="description" content="script demo" />
+    <meta name="author" content="Dirk Schnelle-Walka" />
+    <meta name="copyright" content="2014 JVoiceXML group" />
+
+    <form id="order">
+        <grammar src="pizza-de.srgs" type="application/srgs+xml" />
+
+        <block>
+            <prompt bargein="false">
+                Willkommen beim JVoiceXML Pizza Service!
+            </prompt>
+        </block>
+
+        <initial name="start">
+            <prompt>
+                Welche Pizza möchten Sie?
+            </prompt>
+            <!-- If user is silent, reprompt once, then try directed prompts. -->
+            <noinput count="1">
+                Bitte sagen Sie etwas.
+                <reprompt />
+            </noinput>
+            <noinput count="2">
+                <reprompt />
+                <assign name="start" expr="true" />
+            </noinput>
+            <nomatch>
+                Entschuldigung, das habe ich nicht verstanden.
+                <assign name="start" expr="true" />
+            </nomatch>
+        </initial>
+
+        <field name="topping" slot="order.topping">
+            <prompt>Welchen Belag möchten Sie?</prompt>
+            <nomatch>
+                Tut mir leid. Das haben wir nicht.
+                Sie können zwischen folgenden Belägen wählen: Salami, Schinken oder Pilze.
+            </nomatch>
+        </field>
+
+        <field name="size" slot="order.size">
+            <prompt cond="topping==null">Möchten Sie eine kleine, eine mittlere oder eine große Pizza?</prompt>
+            <prompt cond="topping!=null">Möchten Sie eine kleine, mittlere oder eine große Pizza mit <value expr="topping"/>?</prompt>
+        </field>
+
+        <field name="go_ahead" modal="true">
+            <grammar src="yesno.srgs" type="application/srgs+xml" />
+            <prompt>
+                Möchten Sie eine <value expr="size" />
+                Pizza mit
+                <value expr="topping" />?
+            </prompt>
+            <filled>
+                <if cond="go_ahead=='yes'">
+                    <prompt>
+                        Die Pizza wird in 15 Minuten geliefert.
+                        Vielen Dank für Ihre Bestelleung.
+                    </prompt>
+                <else/>
+                    <clear namelist="start topping size go_ahead" />
+                </if>
+            </filled>
+        </field>
+    </form>
+</vxml>

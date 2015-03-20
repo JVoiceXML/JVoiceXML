@@ -1,0 +1,213 @@
+@charset "utf-8";
+/* CSS Document */
+html,body{
+	height:100%;
+}
+body{
+	height:100%;
+	margin:0px;
+	background:#e7e7e0;
+}
+a,a img,a:active{
+	outline:none;
+	border:none;
+}
+h1,h2,h3,h4,h5,h6,p,pre,ul,li,ol,li,dl,dd,dt{
+	margin:0px; padding:0px;
+}
+#headerBg{
+	background:url("../images/headerBg.gif") left top repeat-x;
+	height:139px;
+}
+#jvoiceLogo a{
+	background:url("../images/jvoiceLogo.jpg") left top no-repeat;
+	width:197px;
+	height:91px;
+	display:block; 
+}
+#navigations{
+	background:#e9e9e4; margin:0px; padding:0px;
+}
+#navigations ul{
+	list-style-type:none;
+	margin:0px; padding:0px;
+	}
+#navigations ul li{
+	margin:0px; padding:0px; float:left;
+	list-style-type:none;
+	width:143px;
+}
+#navigations ul li a{
+	background:url("../images/divider.gif") right 1px no-repeat #e9e9e4;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;color:#898986;font-weight:bold;
+	text-transform:uppercase;text-decoration:none;
+	width:143px;height:38px;
+	display:block;text-align:center;
+	list-style-type:none;
+	line-height:37px;
+	padding:0px;
+}
+#navigations ul li a:hover,#navigations #active{
+	background:url("../images/dividerHover.gif") right 1px no-repeat #ffd389;
+	color:#c50015;
+}
+#navigations .last{
+	background:#e9e9e4;
+	width:144px;
+}
+#navigations .last:hover{
+	background:#ffd389;
+}
+.red{
+	color:#c30018;
+}
+.leftShadow{
+	background:url("../images/leftShadow.gif") top right repeat-y;
+}
+.rightShadow{
+	background:url("../images/rightShadow.gif") top left repeat-y;
+}
+#mainContent{
+	background:url("../images/maincontent.gif") top left repeat-x #fff;
+	min-height:630px !important;
+	height:auto;
+	height:630px;
+}
+#contents{
+	padding:15px 20px;
+}
+#articleWrapper{
+	background:url("../images/maincontent.gif") top left repeat-x #fbfbfb;
+	border-left:solid 1px #e9e9e9;
+	padding:15px 10px 10px 10px;  
+	margin:1px 0 0 0;
+}
+
+#articleWrapper h2{
+	font-family:"Trajan Pro", sans-serif,calibri;
+	font-size:16px;
+	color:#c50015;
+	font-weight:normal;
+	line-height:25px;
+	padding:25px 0 5px 5px;
+	background:url("../images/headingBrder_2.gif") left bottom repeat-x;
+	margin:0; 
+}
+#articleWrapper h3{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color:#c50015;
+	font-weight:normal;
+	padding:25px 0 10px 8px;
+}
+#articleWrapper p{
+	font-family:Tahoma, sans-serif;
+	font-size:11px;
+	color:#404040;
+	line-height:18px;
+	padding:0 8px 5px 8px;
+}
+#articleWrapper p a{
+	font-family:Tahoma, sans-serif;
+	font-size:11px;
+	color:#c50015;
+	text-decoration:none;
+}
+#articleWrapper p a:hover{
+	text-decoration:underline;
+}
+.readMore{
+	float:right;
+}
+#articleWrapper ul {
+	list-style-type:none; padding:15px 10px 15px 25px; margin:0px;
+}
+#articleWrapper ul li {
+	margin:0px; padding:0px;
+}
+#articleWrapper ul li a{
+	list-style-type:circle;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	text-decoration:none;
+	color:#404040;
+	line-height:15px;
+}
+#articleWrapper ul li a:hover{
+	color:#c50015;
+}
+#footerArea{
+	background:#ffd389;
+	height:77px;
+}
+.footerLogo{
+	background:url("../images/footerLogo.gif") left center no-repeat;
+	height:77px;
+	width:257px;
+}
+.footerDivider{
+	background:url("../images/footerDivider.gif") left center no-repeat;
+	height:57px;
+}
+
+.licensedProduct{
+	width:280px;
+	padding:0 0 0 30px;
+	font-family:Tahoma, sans-serif;
+	font-size:11px;
+	color:#726b5f;
+} 
+.licensedProduct a{
+	text-decoration:none;
+	color:#726b5f;
+}
+.licensedProduct a:hover{
+	text-decoration:underline;
+	color:#c50015;
+}
+#imageWrapper{
+	width:293px;
+	margin:0 auto;
+}
+
+#documentation{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#404040;
+	border:solid 1px #FEE6C5;
+}
+#documentation th{
+	background:#ffe9c5;
+	padding:0 0 0 10px;
+	font-size:11px;
+	font-weight:normal;
+	color:#21384B;
+}
+#documentation td{
+	padding:0 0 0 10px;
+}
+#documentation td a{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#c50015;
+	text-decoration:none;
+}
+#documentation td a:hover{
+	text-decoration:underline;
+}
+#documentation .alternateRow{
+	background:#FFF8F4;
+}
+#documentation .fullSupport{
+	color:#165025;
+}
+#documentation .started{
+	color:#FF702B;
+}
+#documentation .notImplemented{
+	color:#FF0000;
+}
+#documentation .divider{
+	border-top:solid 1px #FEE6C5;
+}

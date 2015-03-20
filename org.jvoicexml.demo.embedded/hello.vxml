@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    version="2.1" xml:lang="de-DE"
+    xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+    <form id="say_hello">
+        <block>
+            Hello World!
+            <goto next="#say_goodbye" />
+        </block>
+    </form>
+    <form id="say_goodbye">
+        <block>
+            <prompt>Goodbye!</prompt>
+        </block>
+    </form>
+</vxml>
