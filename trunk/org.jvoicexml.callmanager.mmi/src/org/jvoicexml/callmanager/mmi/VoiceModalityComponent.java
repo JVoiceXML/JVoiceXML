@@ -123,7 +123,8 @@ public final class VoiceModalityComponent
      */
     public VoiceModalityComponent(final MMICallManager cm,
             final ExtensionNotificationDataConverter conv,
-            final ExtensionNotificationDataExtractor ext, final String baseUri) {
+            final ExtensionNotificationDataExtractor ext,
+            final String baseUri) {
         callManager = cm;
         servletBaseUri = baseUri;
         converter = conv;
@@ -143,7 +144,8 @@ public final class VoiceModalityComponent
             final ETLProtocolAdapter protocolAdapter) throws IOException {
         adapter = protocolAdapter;
         adapter.addMMIEventListener(this);
-        LOGGER.info("starting ETL protocol adapter " + adapter.getClass() + "'");
+        LOGGER.info("starting ETL protocol adapter " + adapter.getClass()
+                + "'");
         adapter.start();
     }
 
@@ -652,6 +654,12 @@ public final class VoiceModalityComponent
             final Session session = context.getSession();
             context.setSession(null);
             session.hangup();
+            try {
+                session.waitSessionEnd();
+            } catch (ErrorEvent e) {
+                LOGGER.error(e.getMessage(), e);
+                statusInfo = e.getMessage();
+            }
             callManager.cleanupSession(session);
         } else if (state == ModalityComponentState.IDLE) {
             statusInfo = "session is idle: ignoring cancel request";
