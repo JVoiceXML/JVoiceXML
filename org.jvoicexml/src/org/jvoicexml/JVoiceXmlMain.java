@@ -324,6 +324,10 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
 
         // Initialize the configuration object.
         final Configuration config = getConfiguration();
+        if (config == null) {
+            LOGGER.fatal("no configuration found. exiting...");
+            return;
+        }
         LOGGER.info("using configuration '"
                 + config.getClass().getCanonicalName() + "'");
 
