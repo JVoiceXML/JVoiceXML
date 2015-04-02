@@ -60,7 +60,7 @@ public final class TestSessionStorage {
         final Answer<String> answer = new Answer<String>() {
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
-                return invocation.getArgumentAt(0, String.class) + "-G";
+                return invocation.getArguments()[0].toString() + "-G";
             }
         };
         Mockito.when(factory.createSessionIdentifier(Mockito.anyString()))
