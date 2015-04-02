@@ -1,66 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project name="JVoiceXML Run Script" default="run" basedir=".">
     <description>
 This file provides targets to run and stop the voice browser.
   </description>
 
-    <import file="build.xml" />
+    <import file="build.xml"/>
 
     <target name="-run-setup" depends="-setup">
         <path id="run.classpath">
-            <path refid="project.classpath" />
-            <fileset refid="loggings.lib" />
+            <path refid="project.classpath"/>
+            <fileset refid="loggings.lib"/>
             <fileset refid="codec.lib"/>
-            <pathelement path="${build}" />
-            <pathelement location="../org.jvoicexml.client/classes" />
-            <pathelement location="../org.jvoicexml.jndi/classes" />
-            <pathelement location="../org.jvoicexml.xml/classes" />
-            <pathelement location="../org.jvoicexml.processor.srgs/classes" />
-            <pathelement location="${config}" />
+            <pathelement path="${build}"/>
+            <pathelement location="../org.jvoicexml.client/classes"/>
+            <pathelement location="../org.jvoicexml.jndi/classes"/>
+            <pathelement location="../org.jvoicexml.xml/classes"/>
+            <pathelement location="../org.jvoicexml.processor.srgs/classes"/>
+            <pathelement location="${config}"/>
         </path>
 
         <path id="shutdown.classpath">
-            <path refid="project.classpath" />
-            <fileset refid="loggings.lib" />
-            <pathelement location="../org.jvoicexml.client/classes" />
+            <path refid="project.classpath"/>
+            <fileset refid="loggings.lib"/>
+            <pathelement location="../org.jvoicexml.client/classes"/>
             <pathelement location="../org.jvoicexml.jndi/classes"/>
-            <pathelement location="../org.jvoicexml.xml/classes" />
-            <pathelement location="${build}" />
-            <pathelement location="${config}" />
+            <pathelement location="../org.jvoicexml.xml/classes"/>
+            <pathelement location="${build}"/>
+            <pathelement location="${config}"/>
         </path>
     </target>
 
-    <target name="run"
-            description="Run the VoiceXML interpreter"
-            depends="jar,-run-setup">
-        <java classname="org.jvoicexml.startup.Startup"
-              fork="true"
-              maxmemory="256m">
-            <jvmarg value="-Djava.library.path=${dist}" />
-            <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties" />
-            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
-            <classpath refid="run.classpath" />
+    <target name="run" description="Run the VoiceXML interpreter" depends="jar,-run-setup">
+        <java classname="org.jvoicexml.startup.Startup" fork="true" maxmemory="256m">
+<!--Added org.jvoicexml.config configuration settings-->
+<classpath>
+<pathelement location="dist/org.jvoicexml.config.jar"/>
+<fileset dir="/home/vxml/NetBeansProjects/jvoicexml/org.jvoicexml.config/3rdparty/springframework3.2.1/lib">
+<include name="spring-core-3.2.1.RELEASE.jar"/>
+<include name="spring-beans-3.2.1.RELEASE.jar"/>
+<include name="spring-context-3.2.1.RELEASE.jar"/>
+<include name="spring-expression-3.2.1.RELEASE.jar"/>
+</fileset>
+</classpath>
+            <jvmarg value="-Djava.library.path=${dist}"/>
+            <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties"/>
+            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy"/>
+            <classpath refid="run.classpath"/>
         </java>
     </target>
 
-    <target name="debug"
-            description="Run the VoiceXML interpreter in debug mode"
-            depends="jar,-run-setup">
-        <java classname="org.jvoicexml.startup.Startup"
-              fork="true"
-              maxmemory="256m">
-            <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties" />
-            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
-            <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367" />
-            <classpath refid="run.classpath" />
+    <target name="debug" description="Run the VoiceXML interpreter in debug mode" depends="jar,-run-setup">
+        <java classname="org.jvoicexml.startup.Startup" fork="true" maxmemory="256m">
+<!--Added org.jvoicexml.config configuration settings-->
+<classpath>
+<pathelement location="dist/org.jvoicexml.config.jar"/>
+<fileset dir="/home/vxml/NetBeansProjects/jvoicexml/org.jvoicexml.config/3rdparty/springframework3.2.1/lib">
+<include name="spring-core-3.2.1.RELEASE.jar"/>
+<include name="spring-beans-3.2.1.RELEASE.jar"/>
+<include name="spring-context-3.2.1.RELEASE.jar"/>
+<include name="spring-expression-3.2.1.RELEASE.jar"/>
+</fileset>
+</classpath>
+            <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties"/>
+            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy"/>
+            <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367"/>
+            <classpath refid="run.classpath"/>
         </java>
     </target>
 
-    <target name="shutdown"
-            description="Terminates the VoiceXML interpreter"
-            depends="jar,-run-setup">
+    <target name="shutdown" description="Terminates the VoiceXML interpreter" depends="jar,-run-setup">
         <java classname="org.jvoicexml.startup.Shutdown" fork="true">
-            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
-            <classpath refid="shutdown.classpath" />
+<!--Added org.jvoicexml.config configuration settings-->
+<classpath>
+<pathelement location="dist/org.jvoicexml.config.jar"/>
+<fileset dir="../org.jvoicexml.config/3rdparty/springframework3.2.1/lib">
+<include name="spring-core-3.2.1.RELEASE.jar"/>
+<include name="spring-beans-3.2.1.RELEASE.jar"/>
+<include name="spring-context-3.2.1.RELEASE.jar"/>
+<include name="spring-expression-3.2.1.RELEASE.jar"/>
+</fileset>
+</classpath>
+            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy"/>
+            <classpath refid="shutdown.classpath"/>
         </java>
     </target>
 </project>
