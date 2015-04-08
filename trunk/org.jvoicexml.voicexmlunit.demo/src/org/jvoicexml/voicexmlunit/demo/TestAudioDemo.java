@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.voicexmlunit.demo/src/org/jvoicexml/voicexmlunit/demo/TestHelloDemo.java $
+ * Version: $LastChangedRevision: 4259 $
+ * Date:    $Date: 2014-09-09 09:09:00 +0200 (Tue, 09 Sep 2014) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -35,9 +35,13 @@ import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.voicexmlunit.Call;
 import org.jvoicexml.voicexmlunit.TextCall;
+import org.jvoicexml.voicexmlunit.VoiceXmlUnitNamespaceContect;
+import org.jvoicexml.voicexmlunit.XPathAssert;
+import org.jvoicexml.xml.ssml.Speak;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
- * A demo that tests the venerable hello world.
+ * A demo that tests proper delivery of audio tags
  * <p>
  * Must be run with the system property
  * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
@@ -52,7 +56,7 @@ import org.jvoicexml.voicexmlunit.TextCall;
  * @since 0.7.6
  *
  */
-public final class TestHelloDemo {
+public final class TestAudioDemo {
     /** The call to JVoiceXML. */
     private Call call;
     /** URI of the application to call. */
@@ -65,7 +69,7 @@ public final class TestHelloDemo {
      */
     @Before
     public void setUp() throws Exception {
-        uri = new File("etc/helloworld.vxml").toURI();
+        uri = new File("etc/audio.vxml").toURI();
         call = new TextCall();
     }
 
@@ -85,9 +89,19 @@ public final class TestHelloDemo {
      *            test failed
      */
     @Test(timeout = 20000)
-    public void testHelloWorld() throws Exception {
+    public void testAudioTags() throws Exception {
         call.call(uri);
-        call.hears("Hello World!");
-        call.hears("Goodbye!");
+        final SsmlDocument document1 = call.getNextOutput();
+        final URI audio1 = uri.resolve("audio-in-block.wav");
+        final VoiceXmlUnitNamespaceContect context =
+                new VoiceXmlUnitNamespaceContect();
+        context.addPrefix("ssml", Speak.DEFAULT_XMLNS);
+        XPathAssert.assertEquals(context, document1,
+                "/ssml:speak/ssml:audio/@src", audio1.toString());
+        final SsmlDocument document2 = call.getNextOutput();
+        final URI audio2 = uri.resolve("audio-in-prompt.wav");
+        context.addPrefix("ssml", Speak.DEFAULT_XMLNS);
+        XPathAssert.assertEquals(context, document2,
+                "/ssml:speak/ssml:audio/@src", audio2.toString());
     }
 }
