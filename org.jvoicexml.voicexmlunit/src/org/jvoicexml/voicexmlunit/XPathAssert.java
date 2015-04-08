@@ -26,6 +26,7 @@
 
 package org.jvoicexml.voicexmlunit;
 
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -76,4 +77,35 @@ public final class XPathAssert {
                 doc, XPathConstants.STRING);
         Assert.assertEquals(expected, actual);
     }
+
+    /**
+     * Checks if the evaluation of <code>expression</code> on
+     * <code>document</code> node's node value
+     * is equal to <code>expected</code>. 
+     * @param context namespace context to use
+     * @param document the current XML document
+     * @param expression the XPath expression to evaluate
+     * @param expected the expected result
+     * @exception XPathExpressionException
+     *            error evaluating the XPath expression
+     */
+    public static void assertEquals(final NamespaceContext context,
+            final Document document, final String expression,
+            final String expected)
+                    throws XPathExpressionException {
+        final XPathFactory xpathFactory = XPathFactory.newInstance();
+        final XPath xpath = xpathFactory.newXPath();
+        xpath.setNamespaceContext(context);
+        final Document doc;
+        if (document instanceof XmlDocument) {
+            final XmlDocument xmldocument = (XmlDocument) document;
+            doc = xmldocument.getDocument();
+        } else {
+            doc = document;
+        }
+        final String actual = (String) xpath.evaluate(expression,
+                doc, XPathConstants.STRING);
+        Assert.assertEquals(expected, actual);
+    }
+
 }
