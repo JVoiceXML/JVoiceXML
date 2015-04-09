@@ -266,7 +266,8 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
         }
         item.setFormItemVariable(result);
 
-        final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia =
+                getFormInterpretationAlgorithm();
         if (fia != null) {
             fia.setJustFilled(item);
         }
