@@ -6,7 +6,7 @@
             <prompt>Do you like this example?</prompt>
             <filled>
                 <log expr="application.lastresult$.utterance"/>
-                <if cond="answer=='yes'">
+                <if cond="answer=='Y'">
                     You like this example.
                     <else />
                     You do not like this example.
