@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -858,7 +859,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("preprocessing grammar " + grammar + "...");
         }
-        return processor.process(context, null, grammar);
+        final Locale language = interpreter.getLanguage();
+        return processor.process(context, null, grammar, language);
     }
 
     /**

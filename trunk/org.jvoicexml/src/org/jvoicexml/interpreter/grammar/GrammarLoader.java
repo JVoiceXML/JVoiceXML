@@ -27,6 +27,7 @@ package org.jvoicexml.interpreter.grammar;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
@@ -61,7 +62,9 @@ final class GrammarLoader {
      * @param attributes
      *            attributes governing the fetch.
      * @param grammar
-     *            The grammar to process
+     *            the grammar to process
+     * @param language
+     *            the default language
      * @return the transformed grammar
      * @exception BadFetchError
      *                If the document could not be fetched successfully.
@@ -72,7 +75,8 @@ final class GrammarLoader {
      */
     public GrammarDocument loadGrammarDocument(
             final VoiceXmlInterpreterContext context,
-            final FetchAttributes attributes, final Grammar grammar)
+            final FetchAttributes attributes, final Grammar grammar,
+            final Locale language)
             throws UnsupportedFormatError, BadFetchError, SemanticError {
         try {
             if (grammar.isExternalGrammar()) {
@@ -81,7 +85,8 @@ final class GrammarLoader {
                 final Session session = context.getSession();
                 final String sessionId = session.getSessionID();
                 final DocumentServer server = context.getDocumentServer();
-                return loadInternalGrammar(sessionId, server, grammar);
+                return loadInternalGrammar(sessionId, server, grammar,
+                        language);
             }
         } catch (IllegalAttributeException | URISyntaxException e) {
             throw new BadFetchError(e.getMessage(), e);
@@ -100,7 +105,9 @@ final class GrammarLoader {
      * @param server
      *            the document server
      * @param grammar
-     *            takes a VoiceXML Node and processes the contained grammar.
+     *            takes a VoiceXML Node and processes the contained grammar
+     * @param language
+     *          the default language
      *
      * @return The result of the processing. A grammar representation which can
      *         be used to transform into a RuleGrammar.
@@ -111,11 +118,19 @@ final class GrammarLoader {
      *             error generating the URI for the document
      */
     private GrammarDocument loadInternalGrammar(final String sessionId,
-            final DocumentServer server, final Grammar grammar)
+            final DocumentServer server, final Grammar grammar,
+            final Locale language)
             throws UnsupportedFormatError, URISyntaxException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading internal grammar");
         }
+        // Set the language if omitted
+        final Locale grammarLanguage = grammar.getXmlLangObject();
+        if (grammarLanguage == null) {
+            grammar.setXmlLang(language);
+        }
+        // Create an internal gramamr document thereof and publicize it to the
+        // server
         final GrammarDocument document = new InternalGrammarDocument(grammar);
         server.addGrammarDocument(sessionId, document);
         return document;
