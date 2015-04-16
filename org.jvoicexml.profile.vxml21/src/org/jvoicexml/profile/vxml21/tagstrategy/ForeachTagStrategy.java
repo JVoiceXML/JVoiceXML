@@ -82,7 +82,7 @@ final class ForeachTagStrategy extends AbstractTagStrategy
             throw new SemanticError("Both item and array must be specified");
         }
         final DataModel model = context.getDataModel();
-        array = model.readVariable(arrayName, Object[].class);
+        array = model.evaluateExpression(arrayName, Object[].class);
     }
 
     /**
