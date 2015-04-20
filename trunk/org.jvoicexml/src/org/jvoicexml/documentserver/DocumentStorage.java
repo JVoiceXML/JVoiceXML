@@ -103,8 +103,9 @@ public class DocumentStorage {
                 + document.hashCode());
         documents.put(uri, document);
         document.setURI(uri);
+        LOGGER.info("added grammar document at '" + uri + "'");
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("added '" + document + "' at '" + uri + "'");
+            LOGGER.debug("added document " + document);
         }
         return null;
     }
