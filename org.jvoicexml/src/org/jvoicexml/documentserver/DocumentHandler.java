@@ -69,6 +69,7 @@ class DocumentHandler extends AbstractHandler {
             }
             final OutputStream out = response.getOutputStream();
             out.write(buffer);
+            baseRequest.setHandled(true);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (URISyntaxException e) {
             LOGGER.warn("unabale to create request uri '" + requestUri + "'", e);
