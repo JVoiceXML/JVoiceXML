@@ -98,8 +98,8 @@ public class DocumentStorage {
                     + sessionId + "'");
         }
         currentDocuments.add(document);
-        final URI serverUri = server.getURI();
-        final URI uri = new URI(serverUri + "/" + sessionId + "/"
+        URI serverUri = server.getURI();
+        final URI uri = new URI(serverUri +sessionId + "/"
                 + document.hashCode());
         documents.put(uri, document);
         document.setURI(uri);
