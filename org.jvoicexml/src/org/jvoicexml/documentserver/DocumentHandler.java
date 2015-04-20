@@ -52,6 +52,11 @@ class DocumentHandler extends AbstractHandler {
         try {
             final URI uri = new URI(requestUri);
             final GrammarDocument document = storage.getDocument(uri);
+            if (document == null) {
+                LOGGER.warn("no document with URI '" + uri + "'");
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
             final GrammarType type = document.getMediaType();
             final String contentType = getContentType(type);
             if (contentType != null) {
