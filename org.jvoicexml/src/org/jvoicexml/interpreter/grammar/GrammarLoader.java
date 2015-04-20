@@ -129,7 +129,7 @@ final class GrammarLoader {
         if (grammarLanguage == null) {
             grammar.setXmlLang(language);
         }
-        // Create an internal gramamr document thereof and publicize it to the
+        // Create an internal grammar document thereof and publicize it to the
         // server
         final GrammarDocument document = new InternalGrammarDocument(grammar);
         server.addGrammarDocument(sessionId, document);
