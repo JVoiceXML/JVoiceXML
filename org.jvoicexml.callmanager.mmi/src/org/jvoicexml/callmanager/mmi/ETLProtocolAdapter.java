@@ -1,0 +1,88 @@
+/*
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
+package org.jvoicexml.callmanager.mmi;
+
+
+import java.io.IOException;
+
+import org.jvoicexml.mmi.events.Mmi;
+
+/**
+ * Adapter to the actual used protocol used in the event and transport layer
+ * to receive and respond to MMI events.
+ * Events can be received between calls to {@link #start()} and {@link #stop()}.
+ * Once the adapter receives an event, it is propagated to all
+ * registered {@link MMIEventListener}s.
+ * @author Dirk Schnelle-Walka
+ * @since 0.7.6
+ */
+public interface ETLProtocolAdapter {
+    /**
+     * Starts the protocol adapter.
+     * @throws IOException
+     *         error starting the protocol adapter
+     */
+    void start() throws IOException;
+
+    /**
+     * Checks if the protocol adapter is started.
+     * @return <code>true</code> if the adapter is started.
+     */
+    boolean isStarted();
+
+    /**
+     * Registers the given listener for MMI events.
+     * @param listener the listener to add
+     */
+    void addMMIEventListener(final MMIEventListener listener);
+
+    /**
+     * Deregisters the given listener for MMI events.
+     * @param listener the listener to remove
+     */
+    void removeMMIEventListener(final MMIEventListener listener);
+
+    /**
+     * Sends the given MMI event to the event and transport layer.
+     * <p>
+     * Implementations will also have to set the source attribute for
+     * response message. The target attributes are copied from the received
+     * request messages.
+     * </p>
+     * @param channel a communication channel or an identifier thereof
+     * @param event the event to send
+     * @exception IOException
+     *            error sending the event
+     */
+    void sendMMIEvent(final Object channel, final Mmi event)
+            throws IOException;
+
+    /**
+     * Stops the protocol adapter.
+     */
+    void stop();
+}

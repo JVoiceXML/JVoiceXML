@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension-point id="voiceXMLBrowser" name="%VoiceXMLBrowser" schema="schema/voiceXMLBrowser.exsd"/>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="org.jvoicexml.eclipse.debug.ui.launching.VoiceXMLLaunchConfigurationDelegate"
+            id="org.jvoicexml.eclipse.debug.ui.launching.voicexml"
+            modes="run"
+            name="%VoiceXMLLaunchConfiguration.name"/>
+   </extension>
+</plugin>

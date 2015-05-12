@@ -1,0 +1,46 @@
+<project name="LightweightBML - 3rd party libraries" basedir=".">
+    <description>
+		This file contains the 3rd party libary definitions, used by the lightweight bml implementation.
+    </description>
+    <property name="jvxml.core.dir" value="../org.jvoicexml"/>
+	<property name="jvxml.xml.dir" value="../org.jvoicexml.xml"/>
+    <import file="${jvxml.core.dir}/3rdparty-libs.xml" />
+
+    <target name="-local-3rdparty-setup" depends="-3rdparty-setup">
+        <!-- local third party libraries -->
+        <property name="local-3rdparty.dir" value="3rdparty" />
+		
+		<!-- jvxml library -->
+        <path id="jvxml.core.lib">
+          <path location="${jvxml.core.dir}/classes"/>
+          <path location="../org.jvoicexml.xml/classes"/>
+        </path>
+		
+		<!-- jvxml library -->
+        <!--path id="jvxml.xml.lib">
+          <path location="${jvxml.xml.dir}/classes"/>
+          <path location="../org.jvoicexml.xml/classes"/>
+        </path>-->
+		
+		<!-- jdom library -->
+		<property name="jdom.dir" value="${local-3rdparty.dir}/jdom-2.0.5" />
+		<property name="jdom.lib.dir" value="${jdom.dir}/lib" />
+		<fileset dir="${jdom.lib.dir}" id="jdom.lib">
+			<include name="jdom-2.0.5.jar" />
+		</fileset>
+		
+		<!-- log4j library -->
+		<property name="log4j.dir" value="${local-3rdparty.dir}/log4j1.2.17" />
+		<property name="log4j.lib.dir" value="${log4j.dir}/lib" />
+		<fileset dir="${log4j.lib.dir}" id="log4j.lib">
+			<include name="log4j-1.2.17.jar" />
+		</fileset>
+		
+		<!--JVXML implementation-->
+		<!--path id="jvxml.core.lib">
+			<path location="${jvxml.core.dir}/dist/org.jvoicexml.jar" />
+			<path location="${jvxml.core.dir}/dist/org.jvoicexml.xml.jar" />
+		</path-->
+    </target>
+</project>
+

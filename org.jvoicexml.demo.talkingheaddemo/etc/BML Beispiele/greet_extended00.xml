@@ -1,0 +1,16 @@
+<bml>
+  <!--
+	Ablauf:
+	Der Avatar begrüßt den Benutzer (hier Alex genannt), indem er ihm zuwinkt
+	und den User danach direkt anspricht.
+  -->
+  <required>
+    <gesture id="key00" lexeme="idle" start="0" end="1000" />
+    <gesture id="key01" lexeme="greet" start="key00:end" end="key01:start+1000" />
+    <speech id="key02" start="key01:end">
+      <text>
+	    Hallo Alex!
+	  </text>
+    </speech>
+  </required>  
+</bml>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" 
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      version="2.1" xml:lang="de" 
+      xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+    <form id="askverbs">
+		<grammar src="ObjectAskVerbs_%s.srgs" type="application/srgs+xml"/>
+		<field name="action" slot="r">
+			<prompt timeout="10s">
+                <ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="idle" id="id_0" start="0" end="100"/>
+                <ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="confused" id="id_1" start="id_0:end+1" end="id_1:start+1000"/>
+				<ns1:speech xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" id="id_2" start="id_1:end+1"/>
+				Was soll ich mit %s machen?
+				<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="listening" id="id_3" start="id_2:end+1"/>
+			</prompt>
+			
+			<prompt count="2" timeout="10s">
+				<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="idle" id="id_0" start="0" end="100"/>
+                <ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="confused" id="id_1" start="id_0:end+1" end="id_1:start+1000"/>
+				<ns1:speech xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" id="id_2" start="id_1:end+1"/>
+				Ich habe es nicht verstanden.
+				Bitte nennen Sie eine Aktion.
+				<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="listening" id="id_3" start="id_2:end+1"/>
+			</prompt>
+			
+			<nomatch count="1">
+				<reprompt/>
+            </nomatch>
+			
+			<nomatch count="2">
+                <goto next="SelectActionMenu_%s.vxml"/>
+            </nomatch>
+			
+			<noinput count="1">
+				<reprompt/>
+			</noinput>
+			
+			<noinput count="2">
+				<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="idle" id="id_0" start="0" end="100"/>
+				<ns1:speech xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" id="id_1" start="id_0:end+1"/>
+				Ich kann sie nicht hören.
+				<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="idle" id="id_2" start="id_1:end+1"/>
+				<exit/>
+			</noinput>
+			
+			<filled>
+				<prompt>
+					<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="idle" id="id_0" start="0" end="100"/>
+					<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="nod" id="id_1" start="id_0:end+1"/>
+					<ns1:speech xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" id="id_2" start="id_1:end+1"/>
+					Befehl <value expr="action.result"/> wird ausgeführt.
+					<ns1:gesture xmlns:ns1="http://www.mindmakers.org/projects/bml-1-0/wiki" lexeme="idle" id="id_3" start="id_2:end+1"/>
+				</prompt>
+			</filled>
+		</field>
+    </form>
+</vxml>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" 
+         root="object_verb"
+		 xml:lang="de"
+         xmlns="http://www.w3.org/2001/06/grammar" mode="voice"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+                        http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         scope = "public"
+         tag-format="semantics/1.0">
+    <rule id="object_verb" scope="public">
+        <one-of>
+            <item>
+                <ruleref uri="#objects"/>
+            </item>
+            <item>
+                <ruleref uri="#verbs"/>
+            </item>
+            <item>
+                <ruleref uri="#actions"/>
+            </item>
+            <item>
+                <ruleref uri="#bad_actions"/>
+            </item>
+        </one-of>
+    </rule>
+%s
+</grammar>

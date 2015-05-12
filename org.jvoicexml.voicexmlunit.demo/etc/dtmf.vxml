@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.1">
+    <property name="interdigittimeout" value="1s"/>
+    <menu id="mainmenu">
+        <prompt>Do you like this example? Please enter 1 for yes or 2 for no</prompt>
+        <choice dtmf="1" next="#yes" />
+        <choice dtmf="2" next="#no" />
+    </menu>
+    <form id="yes">
+        <block>You like this example.</block>
+    </form>
+    <form id="no">
+        <block>You do not like this example.</block>
+    </form>
+</vxml>

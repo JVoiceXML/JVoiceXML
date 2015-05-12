@@ -1,0 +1,12 @@
+;GSL2.0;
+ColoredObject:public (Color Object)
+Color [
+[red pink] { <color red> }
+[yellow canary] { <color yellow> }
+[green khaki] { <color green> }
+]
+Object [
+[truck car] { <object vehicle> }
+[ball block] { <object toy> }
+[shirt blouse] { <object clothing> }
+]

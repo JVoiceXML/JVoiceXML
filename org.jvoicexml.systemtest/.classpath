@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="unittests/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.config"/>
+	<classpathentry kind="lib" path="/org.jvoicexml.config/3rdparty/springframework3.2.1/lib/spring-beans-3.2.1.RELEASE.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.config/3rdparty/springframework3.2.1/spring-beans-3.2.1.RELEASE-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/org.jvoicexml.config/3rdparty/springframework3.2.1/lib/spring-context-3.2.1.RELEASE.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.config/3rdparty/springframework3.2.1/spring-context-3.2.1.RELEASE-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/org.jvoicexml.config/3rdparty/springframework3.2.1/lib/spring-core-3.2.1.RELEASE.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.config/3rdparty/springframework3.2.1/spring-core-3.2.1.RELEASE-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/org.jvoicexml.config/3rdparty/springframework3.2.1/lib/spring-expression-3.2.1.RELEASE.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client.text"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.voicexmlunit"/>
+	<classpathentry kind="output" path="eclipse-compiled"/>
+</classpath>

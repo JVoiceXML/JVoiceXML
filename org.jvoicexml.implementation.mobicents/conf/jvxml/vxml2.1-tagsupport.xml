@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tagsupport xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-tagsupport-0-7.xsd">
+  <type name="executable"/>
+  <beans:bean id="org.jvoicexml.interpreter.TagStrategyFactory"
+    class="org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyFactory"
+    scope="singleton">
+    <beans:property name="tagStrategies">
+      <beans:map>
+        <beans:entry key="assign">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.AssignStrategy"/>
+        </beans:entry>
+        <beans:entry key="audio">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.AudioTagStrategy"/>
+        </beans:entry>
+        <beans:entry key="clear">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.ClearStrategy"/>
+        </beans:entry>
+        <beans:entry key="data">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.DataStrategy"/>
+        </beans:entry>
+        <beans:entry key="disconnect">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.DisconnectStrategy"/>
+        </beans:entry>
+        <beans:entry key="exit">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.ExitStrategy"/>
+        </beans:entry>
+        <beans:entry key="goto">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.GotoStrategy"/>
+        </beans:entry>
+        <beans:entry key="if">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.IfStrategy"/>
+        </beans:entry>
+        <beans:entry key="log">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.LogStrategy"/>
+        </beans:entry>
+        <beans:entry key="link">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.UnsupportedElementTagStrategy">
+            <beans:constructor-arg><beans:value>link</beans:value></beans:constructor-arg>
+          </beans:bean>
+        </beans:entry>
+        <beans:entry key="prompt">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.PromptStrategy"/>
+        </beans:entry>
+        <beans:entry key="reprompt">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.RepromptStrategy"/>
+        </beans:entry>
+        <beans:entry key="return">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.ReturnStrategy"/>
+        </beans:entry>
+        <beans:entry key="script">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.ScriptStrategy"/>
+        </beans:entry>
+        <beans:entry key="submit">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.SubmitStrategy"/>
+        </beans:entry>
+        <beans:entry key="#text">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.TextStrategy"/>
+        </beans:entry>
+        <beans:entry key="throw">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.ThrowStrategy"/>
+        </beans:entry>
+        <beans:entry key="value">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.ValueStrategy"/>
+        </beans:entry>
+        <beans:entry key="var">
+          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.VarStrategy"/>
+        </beans:entry>
+      </beans:map>
+    </beans:property>
+  </beans:bean>
+</tagsupport>

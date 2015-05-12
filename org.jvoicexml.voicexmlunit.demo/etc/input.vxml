@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.1">
+    <form>
+        <field name="answer">
+            <grammar src="yesno.srgs" type="application/srgs+xml" />
+            <prompt>Do you like this example?</prompt>
+            <filled>
+                <log expr="application.lastresult$.utterance"/>
+                <if cond="answer=='Y'">
+                    You like this example.
+                    <else />
+                    You do not like this example.
+                </if>
+            </filled>
+        </field>
+    </form>
+</vxml>

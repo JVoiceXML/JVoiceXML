@@ -1,0 +1,22 @@
+\newcommand{\version}[1] {\def\@version{#1}}
+\newcommand{\email}[1] {\def\@email{#1}}
+
+\renewcommand{\maketitle} {
+%\hspace{-5mm}\includegraphics{logo.eps}\\[1cm]
+
+\begin{flushleft}
+{\Huge{ {\bf{\@title}}  }}\\
+\vspace{5mm}
+
+Version \@version \\
+Date \@date
+\end{flushleft}
+\vspace{16cm} \noindent
+
+\hrule
+\begin{flushright}
+\textbf{\@author} \\
+\texttt{\@email}
+\end{flushright}
+\newpage
+}
