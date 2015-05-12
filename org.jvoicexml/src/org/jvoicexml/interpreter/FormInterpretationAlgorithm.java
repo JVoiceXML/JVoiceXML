@@ -564,6 +564,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 throw new BadFetchError("unable to find form item '" + name
                         + "'");
             }
+            return formItem;
         }
 
         // Find the next selectable form item
