@@ -1,0 +1,13 @@
+/irtests
+/*.xml
+/*.txt
+/*.jsp
+/*.jar
+/*.5
+/*.1d
+/*.properties
+/*.7
+/images
+/prompts
+/chkit
+/makewar
