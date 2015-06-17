@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -137,7 +138,8 @@ public final class TestFormInterpretationAlgorithm {
                 processor.process(
                         Mockito.any(VoiceXmlInterpreterContext.class),
                         Mockito.any(FetchAttributes.class),
-                        Mockito.any(Grammar.class))).thenReturn(document);
+                        Mockito.any(Grammar.class),
+                        Mockito.any(Locale.class))).thenReturn(document);
         interpreter = new VoiceXmlInterpreter(context);
     }
 

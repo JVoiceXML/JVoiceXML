@@ -339,6 +339,12 @@ public class EcmaScriptDataModel implements DataModel {
             return ERROR_SCOPE_NOT_FOUND;
         }
         final Scriptable subscope = getAndCreateScope(start, variableName);
+        if (subscope == null) {
+            LOGGER.warn("unable to create scope for '" + variableName + "'."
+                    + " Please check object creation in var tag or in your"
+                    + "grammmar file.");
+            return ERROR_SCOPE_NOT_FOUND;
+        }
         final String name;
         int dotPos = variableName.lastIndexOf('.');
         if (dotPos >= 0) {

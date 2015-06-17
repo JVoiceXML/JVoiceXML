@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter.grammar;
 
 import java.util.Collection;
+import java.util.Locale;
 
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
@@ -99,7 +100,8 @@ public final class JVoiceXmlGrammarProcessor implements GrammarProcessor {
      */
     @Override
     public GrammarDocument process(final VoiceXmlInterpreterContext context,
-            final FetchAttributes attributes, final Grammar grammar)
+            final FetchAttributes attributes, final Grammar grammar,
+            final Locale language)
             throws NoresourceError, BadFetchError, UnsupportedFormatError,
             SemanticError {
         /*
@@ -107,7 +109,7 @@ public final class JVoiceXmlGrammarProcessor implements GrammarProcessor {
          * methods
          */
         final GrammarDocument document = loader.loadGrammarDocument(context,
-                attributes, grammar);
+                attributes, grammar, language);
 
         // Identify the grammar.
         identifyGrammar(grammar, document);
@@ -155,7 +157,8 @@ public final class JVoiceXmlGrammarProcessor implements GrammarProcessor {
      *            the resulting grammar document
      * @since 0.7.5
      */
-    private void adaptMode(final Grammar grammar, final GrammarDocument document) {
+    private void adaptMode(final Grammar grammar,
+            final GrammarDocument document) {
         final ModeType mode = grammar.getMode();
         document.setModeType(mode);
     }

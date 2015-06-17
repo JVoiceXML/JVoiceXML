@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter.grammar;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -129,7 +130,7 @@ public final class TestGrammarProcessor {
         item3.addText("Fargo");
 
         final GrammarDocument processed = processor.process(context, null,
-                srgsxmlgrammar);
+                srgsxmlgrammar, Locale.US);
 
         final GrammarType type = processed.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
@@ -154,7 +155,7 @@ public final class TestGrammarProcessor {
                 "unittests/config/irp_srgs10/conformance-1.grxml");
         grammar.setSrc(file.toURI());
         final GrammarDocument processed = processor.process(context, null,
-                grammar);
+                grammar, Locale.US);
         final GrammarType type = processed.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
                 isSupportedGrammarType(type));
@@ -178,7 +179,7 @@ public final class TestGrammarProcessor {
                 "unittests/config/irp_srgs10/conformance-1.grxml");
         grammar.setSrc(file.toURI().toString() + "#main");
         final GrammarDocument processed = processor.process(context, null,
-                grammar);
+                grammar, Locale.US);
 
         final GrammarType type = processed.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
@@ -206,7 +207,7 @@ public final class TestGrammarProcessor {
         jsgfgrammar.addText("grammar $city;");
         jsgfgrammar.addText("public $city = Boston | Philadelphia | Fargo;");
 
-        processor.process(context, null, jsgfgrammar);
+        processor.process(context, null, jsgfgrammar, Locale.US);
     }
 
     /**

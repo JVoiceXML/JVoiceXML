@@ -26,6 +26,8 @@
 
 package org.jvoicexml.interpreter;
 
+import java.util.Locale;
+
 import org.jvoicexml.Configurable;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
@@ -79,11 +81,13 @@ public interface GrammarProcessor extends Configurable {
      * </p>
      *
      * @param context
-     *        The current context.
+     *        the current context.
      * @param attributes
      *        attributes governing the fetch.
      * @param grammar
-     *        The grammar to process
+     *        the grammar to process
+     * @param language
+     *        the default xml:lang attribute
      * @return the transformed grammar
      * @exception NoresourceError
      *         Error accessing the input device.
@@ -97,7 +101,7 @@ public interface GrammarProcessor extends Configurable {
     GrammarDocument process(
             final VoiceXmlInterpreterContext context,
                 final FetchAttributes attributes,
-                final Grammar grammar)
+                final Grammar grammar, final Locale language)
             throws NoresourceError, BadFetchError, UnsupportedFormatError,
                 SemanticError;
 
