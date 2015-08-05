@@ -11,5 +11,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
