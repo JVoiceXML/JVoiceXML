@@ -1,0 +1,16 @@
+idle:		07, 08
+greet:		01, 02
+speak:		07, 09
+wave:		01, 02
+blink:		13
+shakehead:	14, 07, 15
+nod:		04, 05, 06, 05, 04
+show:		16
+touched:	11
+fallasleep:	schnell oft hintereinander (07, 08), dann 17
+sleep:		17
+wakeup:		fallasleep rückwärts
+disappear:	07, 19-27, nichts 
+appear:		disappear rückwärts
+confused:	12
+listening:	18
