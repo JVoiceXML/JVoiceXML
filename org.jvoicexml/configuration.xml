@@ -108,6 +108,7 @@ personal-props/README.txt
                 <platform name="org.jvoicexml.callmanager.sip"/>
                 <platform name="org.jvoicexml.callmanager.mmi">
                     <subproject name="org.jvoicexml.mmi.events" order="pre" />
+                    <subproject name="org.jvoicexml.profile.mmi" order="pre" />
                     <subproject name="org.jvoicexml.callmanager.mmi.servlet" order="pre" />
                     <subproject name="org.jvoicexml.callmanager.mmi.http" order="post" />
                     <subproject name="org.jvoicexml.callmanager.mmi.umundo" order="post" />

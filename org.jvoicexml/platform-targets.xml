@@ -38,6 +38,8 @@
 <echo>handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
 <echo>building org.jvoicexml.mmi.events</echo>
 <ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.mmi.events"/>
+<echo>building org.jvoicexml.profile.mmi</echo>
+<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.profile.mmi"/>
 <echo>building org.jvoicexml.callmanager.mmi.servlet</echo>
 <ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.servlet"/>
 <echo>done handling handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
@@ -99,6 +101,8 @@
 <echo>handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
 <echo>cleaning org.jvoicexml.mmi.events</echo>
 <ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.mmi.events"/>
+<echo>cleaning org.jvoicexml.profile.mmi</echo>
+<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.profile.mmi"/>
 <echo>cleaning org.jvoicexml.callmanager.mmi.servlet</echo>
 <ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.servlet"/>
 <echo>done handling handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
@@ -160,6 +164,8 @@
 <echo>handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
 <echo>creating apidoc for org.jvoicexml.mmi.events</echo>
 <ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.mmi.events"/>
+<echo>creating apidoc for org.jvoicexml.profile.mmi</echo>
+<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.profile.mmi"/>
 <echo>creating apidoc for org.jvoicexml.callmanager.mmi.servlet</echo>
 <ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.servlet"/>
 <echo>done handling handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
@@ -221,6 +227,8 @@
 <echo>handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
 <echo>creating distribution for org.jvoicexml.mmi.events</echo>
 <ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.mmi.events"/>
+<echo>creating distribution for org.jvoicexml.profile.mmi</echo>
+<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.profile.mmi"/>
 <echo>creating distribution for org.jvoicexml.callmanager.mmi.servlet</echo>
 <ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.servlet"/>
 <echo>done handling handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
@@ -282,6 +290,8 @@
 <echo>handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
 <echo>configuring org.jvoicexml.mmi.events</echo>
 <ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.mmi.events"/>
+<echo>configuring org.jvoicexml.profile.mmi</echo>
+<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.profile.mmi"/>
 <echo>configuring org.jvoicexml.callmanager.mmi.servlet</echo>
 <ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.servlet"/>
 <echo>done handling handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
