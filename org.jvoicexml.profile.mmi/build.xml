@@ -51,7 +51,7 @@ org.jvoicexml/personal-props/README.txt
     <target name="configuration" depends="-setup">
         <copy todir="${config}">
             <fileset dir="${etc}">
-                <include name="*.xml" />
+                <include name="mmi-profile.xml" />
             </fileset>
         </copy>
     </target>
