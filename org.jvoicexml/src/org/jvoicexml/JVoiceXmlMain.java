@@ -326,6 +326,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         final Configuration config = getConfiguration();
         if (config == null) {
             LOGGER.fatal("no configuration found. exiting...");
+            shutdownSequence();
             return;
         }
         LOGGER.info("using configuration '"
@@ -462,9 +463,13 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
      * @since 0.7.5
      */
     private void shutdownCallManager() {
-        for (CallManager manager : callManagers) {
-            manager.stop();
-            LOGGER.info("stopped call manager '" + manager + "'");
+        if (callManagers == null) {
+            LOGGER.warn("no call manager, skip shutdown");
+        } else {
+            for (CallManager manager : callManagers) {
+                manager.stop();
+                LOGGER.info("stopped call manager '" + manager + "'");
+            }
         }
     }
 
