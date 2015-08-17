@@ -54,6 +54,7 @@ personal-props/README.txt
 
     <!-- Clean targets of the configured components. -->
     <target name="-cleancomponents" depends="-cleanPlatforms">
+    	<echo message="cleaning components" />
         <ant dir="../org.jvoicexml.xml"
              inheritall="false"
              inheritrefs="false"
