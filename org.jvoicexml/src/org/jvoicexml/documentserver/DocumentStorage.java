@@ -98,15 +98,13 @@ public class DocumentStorage {
                     + sessionId + "'");
         }
         currentDocuments.add(document);
-        final URI localUri = new URI("/" + sessionId + "/" + document.hashCode());
-        documents.put(localUri, document);
-        URI serverUri = server.getURI();
-        final URI uri = new URI(serverUri +sessionId + "/"
+        final URI serverUri = server.getURI();
+        final URI uri = new URI(serverUri + "/" + sessionId + "/"
                 + document.hashCode());
+        documents.put(uri, document);
         document.setURI(uri);
-        LOGGER.info("added grammar document at '" + uri + "'");
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("added document " + document);
+            LOGGER.debug("added '" + document + "' at '" + uri + "'");
         }
         return null;
     }

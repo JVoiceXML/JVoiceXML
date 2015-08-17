@@ -193,14 +193,4 @@ public class LastResult {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return LastResult.class.getCanonicalName() + "[utterance=" + utterance
-                + ", confidence=" + confidence + ", inputmode=" + inputmode
-                + ", interpretation=" + interpretation + "]";
-    }
-
 }

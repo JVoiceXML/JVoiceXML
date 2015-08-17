@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -123,7 +123,7 @@ public class VoiceXmlInterpreterContext {
     private final Configuration configuration;
 
     /**
-     * Creates a new object.
+     * Create a new object.
      *
      * @param currentSession
      *            the current session
@@ -134,19 +134,25 @@ public class VoiceXmlInterpreterContext {
             final Configuration config) {
         session = currentSession;
         configuration = config;
-        scopeObserver = session.getScopeObserver();
+        if (session != null) {
+            scopeObserver = session.getScopeObserver();
+        } else {
+            LOGGER.warn("no session given: Cannot create scope observer!");
+            scopeObserver = null;
+        }
 
         grammars = new ActiveGrammarSet(scopeObserver);
+        if (session != null) {
+            // Add a grammar deactivator as observer to the active grammar set
+            // who will deactivate grammars once a scope is left.
+            final ImplementationPlatform platform = session
+                    .getImplementationPlatform();
+            final GrammarDeactivator deactivator = new GrammarDeactivator(
+                    platform);
+            grammars.addActiveGrammarSetObserver(deactivator);
+        }
 
-        // Add a grammar deactivator as observer to the active grammar set
-        // that will deactivate grammars once a scope is left.
-        final ImplementationPlatform platform = session
-                .getImplementationPlatform();
-        final GrammarDeactivator deactivator = new GrammarDeactivator(
-                platform);
-        grammars.addActiveGrammarSetObserver(deactivator);
-
-        // Subscribe the default event handler to all events of the event bus.
+        // Subscribe the default event handler for all events to the event bus.
         eventbus = new EventBus();
         properties = new ScopedMap<String, String>(scopeObserver);
         final DataModel dataModel = getDataModel();
@@ -156,15 +162,14 @@ public class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Creates a new object in the context of the observing entity specified
-     * by the observer. Usually, this is needed to model subdialogs.
+     * Create a new object.
      *
      * @param currentSession
-     *            the current session
+     *            The current session
      * @param config
-     *            the configuration to use
+     *            the configuration to use.
      * @param observer
-     *            the scope observer
+     *            the scope observer (not taken from the session).
      */
     public VoiceXmlInterpreterContext(final JVoiceXmlSession currentSession,
             final Configuration config, final ScopeObserver observer) {
@@ -173,17 +178,18 @@ public class VoiceXmlInterpreterContext {
         configuration = config;
 
         grammars = new ActiveGrammarSet(scopeObserver);
-
-        // Add a grammar deactivator as observer to the active grammar set
-        // that will deactivate grammars once a scope is left.
-        final ImplementationPlatform platform = session
-                .getImplementationPlatform();
-        final GrammarDeactivator deactivator = new GrammarDeactivator(
-                platform);
-        grammars.addActiveGrammarSetObserver(deactivator);
+        if (session != null) {
+            // Add a grammar deactivator as observer to the active grammar set
+            // who will deactivate grammars once a scope is left.
+            final ImplementationPlatform platform = session
+                    .getImplementationPlatform();
+            final GrammarDeactivator deactivator = new GrammarDeactivator(
+                    platform);
+            grammars.addActiveGrammarSetObserver(deactivator);
+        }
         properties = new ScopedMap<String, String>(scopeObserver);
 
-        // Subscribe the default event handler to all events of the event bus.
+        // Subscribe the default event handler for all events to the event bus.
         eventbus = new EventBus();
         eventHandler =
                 new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(

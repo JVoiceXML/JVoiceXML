@@ -144,14 +144,12 @@ public final class JVoiceXmlEventHandler implements EventHandler {
             final VoiceXmlInterpreter interpreter,
             final VoiceXmlDocument document) {
         final Vxml vxml = document.getVxml();
-        final Collection<AbstractCatchElement> catches =
-                new java.util.ArrayList<AbstractCatchElement>();
+        final Collection<AbstractCatchElement> catches = new java.util.ArrayList<AbstractCatchElement>();
         final NodeList children = vxml.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
             if (child instanceof AbstractCatchElement) {
-                final AbstractCatchElement catchElement =
-                        (AbstractCatchElement) child;
+                final AbstractCatchElement catchElement = (AbstractCatchElement) child;
                 catches.add(catchElement);
             }
         }
@@ -210,8 +208,7 @@ public final class JVoiceXmlEventHandler implements EventHandler {
             final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final CatchContainer item) {
-        final Collection<EventStrategy> added =
-                new java.util.ArrayList<EventStrategy>();
+        final Collection<EventStrategy> added = new java.util.ArrayList<EventStrategy>();
         // Retrieve the specified catch elements.
         final Collection<AbstractCatchElement> catches = item
                 .getCatchElements();
@@ -304,8 +301,7 @@ public final class JVoiceXmlEventHandler implements EventHandler {
             final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final CatchContainer item) {
-        final Collection<EventStrategy> added =
-                new java.util.ArrayList<EventStrategy>();
+        final Collection<EventStrategy> added = new java.util.ArrayList<EventStrategy>();
         if (!containsStrategy(Noinput.TAG_NAME)) {
             final EventStrategy strategy = new DefaultRepromptEventStrategy(
                     context, interpreter, fia, item, Noinput.TAG_NAME);
@@ -373,12 +369,10 @@ public final class JVoiceXmlEventHandler implements EventHandler {
      */
     @Override
     public void clean(final FormItem item) {
-        final Collection<EventStrategy> toremove =
-                new java.util.ArrayList<EventStrategy>();
+        final Collection<EventStrategy> toremove = new java.util.ArrayList<EventStrategy>();
         for (EventStrategy strategy : strategies) {
             if (strategy instanceof AbstractEventStrategy) {
-                final AbstractEventStrategy eventStrategy =
-                        (AbstractEventStrategy) strategy;
+                final AbstractEventStrategy eventStrategy = (AbstractEventStrategy) strategy;
                 final FormItem strategyItem = eventStrategy.getFormItem();
                 if (item == strategyItem) {
                     toremove.add(eventStrategy);
@@ -481,8 +475,7 @@ public final class JVoiceXmlEventHandler implements EventHandler {
         }
 
         final Collection<EventFilter> eventFilters;
-        final Collection<EventStrategy> matchingStrategies =
-                new java.util.ArrayList<EventStrategy>(
+        final Collection<EventStrategy> matchingStrategies = new java.util.ArrayList<EventStrategy>(
                 strategies);
         if (item == null) {
             eventFilters = filtersNoinput;

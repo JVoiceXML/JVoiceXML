@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="3rdparty/jdom-2.0.5/lib/jdom-2.0.5.jar"/>
-	<classpathentry kind="lib" path="3rdparty/marytts-5.0/lib/marytts-client-5.0-jar-with-dependencies.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.implementation.lightweightbml"/>
-	<classpathentry kind="output" path="eclipse-compiled"/>
-</classpath>

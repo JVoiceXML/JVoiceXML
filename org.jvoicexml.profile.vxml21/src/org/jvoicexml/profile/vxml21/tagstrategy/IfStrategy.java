@@ -114,13 +114,11 @@ public final class IfStrategy extends AbstractTagStrategy {
      */
     private NodeList getListToExecute(final VoiceXmlInterpreterContext context,
             final VoiceXmlNode node) throws SemanticError {
-        // First, check the current if-node
         final NodeList children = node.getChildNodes();
         if (checkCondition(context, node)) {
             return collect(children, 0);
         }
 
-        // If the condition didi not hold, try the nested else-tags
         for (int i = 0; i < children.getLength(); i++) {
             final VoiceXmlNode child = (VoiceXmlNode) children.item(i);
             final String name = child.getTagName();

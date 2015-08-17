@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -85,8 +85,7 @@ final class InputItemRecognitionEventStrategy
     public InputItemRecognitionEventStrategy(
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm algorithm,
-            final FormItem formItem) {
+            final FormInterpretationAlgorithm algorithm, final FormItem formItem) {
         super(ctx, interpreter, algorithm, formItem,
                 RecognitionEvent.EVENT_TYPE);
     }
@@ -102,8 +101,7 @@ final class InputItemRecognitionEventStrategy
      */
     private void setApplicationLastResult(final RecognitionResult result)
             throws SemanticError {
-        final VoiceXmlInterpreterContext context =
-                getVoiceXmlInterpreterContext();
+        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
         final DataModel model = context.getDataModel();
         model.resizeArray("lastresult$", 1, Scope.APPLICATION);
         final Object value = model.readArray("lastresult$", 0,

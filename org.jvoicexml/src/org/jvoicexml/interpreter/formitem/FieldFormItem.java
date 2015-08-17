@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group
+ * Copyright (C) 2005-2012 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -132,25 +132,16 @@ public final class FieldFormItem extends AbstractGrammarContainer {
         final LastResult lastresult = toLastResult(model, result);
         model.updateVariable(shadowVariableName, lastresult);
 
-        // Check for semantic interpretation
         final Object interpretation = result.getSemanticInterpretation(model);
         if (interpretation == null) {
             final String utterance = result.getUtterance();
             return super.setFormItemVariable(utterance);
         } else {
-            // Check if the we need to pick a property of the semantic
-            // interpretation
             final String slot = getSlot();
-            final String slotPath = "application.lastresult$.interpretation."
-                    + slot;
-            if (model.existsVariable(slotPath)) {
-                final Object value = model.readVariable(
-                        "application.lastresult$.interpretation." + slot,
-                        Object.class);
-                return super.setFormItemVariable(value);
-            } else {
-                return super.setFormItemVariable(interpretation);
-            }
+            final Object value = model.readVariable(
+                    "application.lastresult$.interpretation." + slot,
+                    Object.class);
+            return super.setFormItemVariable(value);
         }
     }
 

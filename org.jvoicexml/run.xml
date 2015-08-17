@@ -35,21 +35,13 @@ This file provides targets to run and stop the voice browser.
 <!--Added org.jvoicexml.config configuration settings-->
 <classpath>
 <pathelement location="dist/org.jvoicexml.config.jar"/>
-<fileset dir="C:\Users\dwalka\Documents\Entwicklung\JVoiceXML.git\JVoiceXML\org.jvoicexml.config/3rdparty/springframework4.2.0/lib">
-<include name="spring-core-4.2.0.RELEASE.jar"/>
-<include name="spring-beans-4.2.0.RELEASE.jar"/>
-<include name="spring-context-4.2.0.RELEASE.jar"/>
-<include name="spring-expression-4.2.0.RELEASE.jar"/>
+<fileset dir="/home/vxml/NetBeansProjects/jvoicexml/org.jvoicexml.config/3rdparty/springframework3.2.1/lib">
+<include name="spring-core-3.2.1.RELEASE.jar"/>
+<include name="spring-beans-3.2.1.RELEASE.jar"/>
+<include name="spring-context-3.2.1.RELEASE.jar"/>
+<include name="spring-expression-3.2.1.RELEASE.jar"/>
 </fileset>
 </classpath>
-<!--Set the library path for the Kinect Recognizer-->
-<jvmarg value="-Djava.library.path=C:\Users\dwalka\Documents\Entwicklung\JVoiceXML.git\JVoiceXML\org.jvoicexml.implementation.kinect/../org.jvoicexml.implementation.kinect.recognizer/x64/Debug"/>
-<jvmarg value="-Dgjtapi.sip.properties=/gjtapi-provider.properties"/>
-<jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols"/>
-<jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols"/>
-<jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols"/>
-<!--set the library path for Cloudgarden-->
-<jvmarg value="-Djava.library.path=../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib"/>
             <jvmarg value="-Djava.library.path=${dist}"/>
             <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties"/>
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy"/>
@@ -62,21 +54,13 @@ This file provides targets to run and stop the voice browser.
 <!--Added org.jvoicexml.config configuration settings-->
 <classpath>
 <pathelement location="dist/org.jvoicexml.config.jar"/>
-<fileset dir="C:\Users\dwalka\Documents\Entwicklung\JVoiceXML.git\JVoiceXML\org.jvoicexml.config/3rdparty/springframework4.2.0/lib">
-<include name="spring-core-4.2.0.RELEASE.jar"/>
-<include name="spring-beans-4.2.0.RELEASE.jar"/>
-<include name="spring-context-4.2.0.RELEASE.jar"/>
-<include name="spring-expression-4.2.0.RELEASE.jar"/>
+<fileset dir="/home/vxml/NetBeansProjects/jvoicexml/org.jvoicexml.config/3rdparty/springframework3.2.1/lib">
+<include name="spring-core-3.2.1.RELEASE.jar"/>
+<include name="spring-beans-3.2.1.RELEASE.jar"/>
+<include name="spring-context-3.2.1.RELEASE.jar"/>
+<include name="spring-expression-3.2.1.RELEASE.jar"/>
 </fileset>
 </classpath>
-<!--Set the library path for the Kinect Recognizer-->
-<jvmarg value="-Djava.library.path=C:\Users\dwalka\Documents\Entwicklung\JVoiceXML.git\JVoiceXML\org.jvoicexml.implementation.kinect/../org.jvoicexml.implementation.kinect.recognizer/x64/Debug"/>
-<jvmarg value="-Dgjtapi.sip.properties=/gjtapi-provider.properties"/>
-<jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols"/>
-<jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols"/>
-<jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols"/>
-<!--set the library path for Cloudgarden-->
-<jvmarg value="-Djava.library.path=../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib"/>
             <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties"/>
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy"/>
             <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367"/>
@@ -89,11 +73,11 @@ This file provides targets to run and stop the voice browser.
 <!--Added org.jvoicexml.config configuration settings-->
 <classpath>
 <pathelement location="dist/org.jvoicexml.config.jar"/>
-<fileset dir="../org.jvoicexml.config/3rdparty/springframework4.2.0/lib">
-<include name="spring-core-4.2.0.RELEASE.jar"/>
-<include name="spring-beans-4.2.0.RELEASE.jar"/>
-<include name="spring-context-4.2.0.RELEASE.jar"/>
-<include name="spring-expression-4.2.0.RELEASE.jar"/>
+<fileset dir="../org.jvoicexml.config/3rdparty/springframework3.2.1/lib">
+<include name="spring-core-3.2.1.RELEASE.jar"/>
+<include name="spring-beans-3.2.1.RELEASE.jar"/>
+<include name="spring-context-3.2.1.RELEASE.jar"/>
+<include name="spring-expression-3.2.1.RELEASE.jar"/>
 </fileset>
 </classpath>
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy"/>

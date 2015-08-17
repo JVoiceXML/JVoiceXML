@@ -6,55 +6,6 @@
         Do not edit!
       </description>
 <target name="-buildPlatforms">
-<echo>building org.jvoicexml.implementation.jsapi10</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jsapi10">
-<property name="jvxml.jsapi10.talkingJava.path" value="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib"/>
-</ant>
-<echo>building org.jvoicexml.implementation.jsapi20</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jsapi20">
-<property name="jvxml.jsapi20.sapi" value="true"/>
-<property name="jvxml.jsapi20.mac" value="true"/>
-</ant>
-<echo>building org.jvoicexml.implementation.jtapi</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jtapi"/>
-<echo>building org.jvoicexml.implementation.kinect</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.kinect"/>
-<echo>building org.jvoicexml.implementation.lightweightbml</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.lightweightbml"/>
-<echo>handling dependent subprojects of org.jvoicexml.implementation.lightweightbml</echo>
-<echo>building org.jvoicexml.talkinghead</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.talkinghead"/>
-<echo>done handling dependent subprojects of org.jvoicexml.implementation.lightweightbml</echo>
-<echo>building org.jvoicexml.implementation.mary</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.mary"/>
-<echo>building org.jvoicexml.implementation.marc</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.marc"/>
-<echo>building org.jvoicexml.implementation.mrcpv2</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.mrcpv2"/>
-<echo>building org.jvoicexml.implementation.red5</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.red5"/>
-<echo>building org.jvoicexml.callmanager.sip</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.sip"/>
-<echo>handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
-<echo>building org.jvoicexml.mmi.events</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.mmi.events"/>
-<echo>building org.jvoicexml.profile.mmi</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.profile.mmi"/>
-<echo>building org.jvoicexml.callmanager.mmi.servlet</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.servlet"/>
-<echo>done handling handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
-<echo>building org.jvoicexml.callmanager.mmi</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi"/>
-<echo>handling dependent subprojects of org.jvoicexml.callmanager.mmi</echo>
-<echo>building org.jvoicexml.callmanager.mmi.http</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.http"/>
-<echo>building org.jvoicexml.callmanager.mmi.umundo</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.umundo"/>
-<echo>building org.jvoicexml.callmanager.mmi.socket</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.socket"/>
-<echo>done handling dependent subprojects of org.jvoicexml.callmanager.mmi</echo>
-<echo>building org.jvoicexml.callmanager.text</echo>
-<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.text"/>
 <echo>handling subprojects that org.jvoicexml.implementation.text depends on</echo>
 <echo>building org.jvoicexml.client.text</echo>
 <ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
@@ -67,57 +18,14 @@
 <echo>building org.jvoicexml.voicexmlunit.demo</echo>
 <ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.voicexmlunit.demo"/>
 <echo>done handling dependent subprojects of org.jvoicexml.voicexmlunit</echo>
+<echo>handling subprojects that org.jvoicexml.implementation.amqp depends on</echo>
+<echo>building org.jvoicexml.client.text</echo>
+<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
+<echo>done handling handling subprojects that org.jvoicexml.implementation.amqp depends on</echo>
+<echo>building org.jvoicexml.implementation.amqp</echo>
+<ant target="jar" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.amqp"/>
 </target>
 <target name="-cleanPlatforms">
-<echo>cleaning org.jvoicexml.implementation.jsapi10</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jsapi10">
-<property name="jvxml.jsapi10.talkingJava.path" value="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib"/>
-</ant>
-<echo>cleaning org.jvoicexml.implementation.jsapi20</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jsapi20">
-<property name="jvxml.jsapi20.sapi" value="true"/>
-<property name="jvxml.jsapi20.mac" value="true"/>
-</ant>
-<echo>cleaning org.jvoicexml.implementation.jtapi</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jtapi"/>
-<echo>cleaning org.jvoicexml.implementation.kinect</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.kinect"/>
-<echo>cleaning org.jvoicexml.implementation.lightweightbml</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.lightweightbml"/>
-<echo>handling dependent subprojects of org.jvoicexml.implementation.lightweightbml</echo>
-<echo>cleaning org.jvoicexml.talkinghead</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.talkinghead"/>
-<echo>done handling dependent subprojects of org.jvoicexml.implementation.lightweightbml</echo>
-<echo>cleaning org.jvoicexml.implementation.mary</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.mary"/>
-<echo>cleaning org.jvoicexml.implementation.marc</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.marc"/>
-<echo>cleaning org.jvoicexml.implementation.mrcpv2</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.mrcpv2"/>
-<echo>cleaning org.jvoicexml.implementation.red5</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.red5"/>
-<echo>cleaning org.jvoicexml.callmanager.sip</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.sip"/>
-<echo>handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
-<echo>cleaning org.jvoicexml.mmi.events</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.mmi.events"/>
-<echo>cleaning org.jvoicexml.profile.mmi</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.profile.mmi"/>
-<echo>cleaning org.jvoicexml.callmanager.mmi.servlet</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.servlet"/>
-<echo>done handling handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
-<echo>cleaning org.jvoicexml.callmanager.mmi</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi"/>
-<echo>handling dependent subprojects of org.jvoicexml.callmanager.mmi</echo>
-<echo>cleaning org.jvoicexml.callmanager.mmi.http</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.http"/>
-<echo>cleaning org.jvoicexml.callmanager.mmi.umundo</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.umundo"/>
-<echo>cleaning org.jvoicexml.callmanager.mmi.socket</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.socket"/>
-<echo>done handling dependent subprojects of org.jvoicexml.callmanager.mmi</echo>
-<echo>cleaning org.jvoicexml.callmanager.text</echo>
-<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.text"/>
 <echo>handling subprojects that org.jvoicexml.implementation.text depends on</echo>
 <echo>cleaning org.jvoicexml.client.text</echo>
 <ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
@@ -130,57 +38,14 @@
 <echo>cleaning org.jvoicexml.voicexmlunit.demo</echo>
 <ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.voicexmlunit.demo"/>
 <echo>done handling dependent subprojects of org.jvoicexml.voicexmlunit</echo>
+<echo>handling subprojects that org.jvoicexml.implementation.amqp depends on</echo>
+<echo>cleaning org.jvoicexml.client.text</echo>
+<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
+<echo>done handling handling subprojects that org.jvoicexml.implementation.amqp depends on</echo>
+<echo>cleaning org.jvoicexml.implementation.amqp</echo>
+<ant target="clean" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.amqp"/>
 </target>
 <target name="-apidocPlatforms">
-<echo>creating apidoc for org.jvoicexml.implementation.jsapi10</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jsapi10">
-<property name="jvxml.jsapi10.talkingJava.path" value="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib"/>
-</ant>
-<echo>creating apidoc for org.jvoicexml.implementation.jsapi20</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jsapi20">
-<property name="jvxml.jsapi20.sapi" value="true"/>
-<property name="jvxml.jsapi20.mac" value="true"/>
-</ant>
-<echo>creating apidoc for org.jvoicexml.implementation.jtapi</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jtapi"/>
-<echo>creating apidoc for org.jvoicexml.implementation.kinect</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.kinect"/>
-<echo>creating apidoc for org.jvoicexml.implementation.lightweightbml</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.lightweightbml"/>
-<echo>handling dependent subprojects of org.jvoicexml.implementation.lightweightbml</echo>
-<echo>creating apidoc for org.jvoicexml.talkinghead</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.talkinghead"/>
-<echo>done handling dependent subprojects of org.jvoicexml.implementation.lightweightbml</echo>
-<echo>creating apidoc for org.jvoicexml.implementation.mary</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.mary"/>
-<echo>creating apidoc for org.jvoicexml.implementation.marc</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.marc"/>
-<echo>creating apidoc for org.jvoicexml.implementation.mrcpv2</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.mrcpv2"/>
-<echo>creating apidoc for org.jvoicexml.implementation.red5</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.red5"/>
-<echo>creating apidoc for org.jvoicexml.callmanager.sip</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.sip"/>
-<echo>handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
-<echo>creating apidoc for org.jvoicexml.mmi.events</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.mmi.events"/>
-<echo>creating apidoc for org.jvoicexml.profile.mmi</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.profile.mmi"/>
-<echo>creating apidoc for org.jvoicexml.callmanager.mmi.servlet</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.servlet"/>
-<echo>done handling handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
-<echo>creating apidoc for org.jvoicexml.callmanager.mmi</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi"/>
-<echo>handling dependent subprojects of org.jvoicexml.callmanager.mmi</echo>
-<echo>creating apidoc for org.jvoicexml.callmanager.mmi.http</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.http"/>
-<echo>creating apidoc for org.jvoicexml.callmanager.mmi.umundo</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.umundo"/>
-<echo>creating apidoc for org.jvoicexml.callmanager.mmi.socket</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.socket"/>
-<echo>done handling dependent subprojects of org.jvoicexml.callmanager.mmi</echo>
-<echo>creating apidoc for org.jvoicexml.callmanager.text</echo>
-<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.text"/>
 <echo>handling subprojects that org.jvoicexml.implementation.text depends on</echo>
 <echo>creating apidoc for org.jvoicexml.client.text</echo>
 <ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
@@ -193,57 +58,14 @@
 <echo>creating apidoc for org.jvoicexml.voicexmlunit.demo</echo>
 <ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.voicexmlunit.demo"/>
 <echo>done handling dependent subprojects of org.jvoicexml.voicexmlunit</echo>
+<echo>handling subprojects that org.jvoicexml.implementation.amqp depends on</echo>
+<echo>creating apidoc for org.jvoicexml.client.text</echo>
+<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
+<echo>done handling handling subprojects that org.jvoicexml.implementation.amqp depends on</echo>
+<echo>creating apidoc for org.jvoicexml.implementation.amqp</echo>
+<ant target="apidoc" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.amqp"/>
 </target>
 <target name="-distributionPlatforms">
-<echo>creating distribution for org.jvoicexml.implementation.jsapi10</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jsapi10">
-<property name="jvxml.jsapi10.talkingJava.path" value="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib"/>
-</ant>
-<echo>creating distribution for org.jvoicexml.implementation.jsapi20</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jsapi20">
-<property name="jvxml.jsapi20.sapi" value="true"/>
-<property name="jvxml.jsapi20.mac" value="true"/>
-</ant>
-<echo>creating distribution for org.jvoicexml.implementation.jtapi</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jtapi"/>
-<echo>creating distribution for org.jvoicexml.implementation.kinect</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.kinect"/>
-<echo>creating distribution for org.jvoicexml.implementation.lightweightbml</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.lightweightbml"/>
-<echo>handling dependent subprojects of org.jvoicexml.implementation.lightweightbml</echo>
-<echo>creating distribution for org.jvoicexml.talkinghead</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.talkinghead"/>
-<echo>done handling dependent subprojects of org.jvoicexml.implementation.lightweightbml</echo>
-<echo>creating distribution for org.jvoicexml.implementation.mary</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.mary"/>
-<echo>creating distribution for org.jvoicexml.implementation.marc</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.marc"/>
-<echo>creating distribution for org.jvoicexml.implementation.mrcpv2</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.mrcpv2"/>
-<echo>creating distribution for org.jvoicexml.implementation.red5</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.red5"/>
-<echo>creating distribution for org.jvoicexml.callmanager.sip</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.sip"/>
-<echo>handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
-<echo>creating distribution for org.jvoicexml.mmi.events</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.mmi.events"/>
-<echo>creating distribution for org.jvoicexml.profile.mmi</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.profile.mmi"/>
-<echo>creating distribution for org.jvoicexml.callmanager.mmi.servlet</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.servlet"/>
-<echo>done handling handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
-<echo>creating distribution for org.jvoicexml.callmanager.mmi</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi"/>
-<echo>handling dependent subprojects of org.jvoicexml.callmanager.mmi</echo>
-<echo>creating distribution for org.jvoicexml.callmanager.mmi.http</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.http"/>
-<echo>creating distribution for org.jvoicexml.callmanager.mmi.umundo</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.umundo"/>
-<echo>creating distribution for org.jvoicexml.callmanager.mmi.socket</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.socket"/>
-<echo>done handling dependent subprojects of org.jvoicexml.callmanager.mmi</echo>
-<echo>creating distribution for org.jvoicexml.callmanager.text</echo>
-<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.text"/>
 <echo>handling subprojects that org.jvoicexml.implementation.text depends on</echo>
 <echo>creating distribution for org.jvoicexml.client.text</echo>
 <ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
@@ -256,57 +78,14 @@
 <echo>creating distribution for org.jvoicexml.voicexmlunit.demo</echo>
 <ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.voicexmlunit.demo"/>
 <echo>done handling dependent subprojects of org.jvoicexml.voicexmlunit</echo>
+<echo>handling subprojects that org.jvoicexml.implementation.amqp depends on</echo>
+<echo>creating distribution for org.jvoicexml.client.text</echo>
+<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
+<echo>done handling handling subprojects that org.jvoicexml.implementation.amqp depends on</echo>
+<echo>creating distribution for org.jvoicexml.implementation.amqp</echo>
+<ant target="distribution" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.amqp"/>
 </target>
 <target name="configurePlatforms">
-<echo>configuring org.jvoicexml.implementation.jsapi10</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jsapi10">
-<property name="jvxml.jsapi10.talkingJava.path" value="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib"/>
-</ant>
-<echo>configuring org.jvoicexml.implementation.jsapi20</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jsapi20">
-<property name="jvxml.jsapi20.sapi" value="true"/>
-<property name="jvxml.jsapi20.mac" value="true"/>
-</ant>
-<echo>configuring org.jvoicexml.implementation.jtapi</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.jtapi"/>
-<echo>configuring org.jvoicexml.implementation.kinect</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.kinect"/>
-<echo>configuring org.jvoicexml.implementation.lightweightbml</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.lightweightbml"/>
-<echo>handling dependent subprojects of org.jvoicexml.implementation.lightweightbml</echo>
-<echo>configuring org.jvoicexml.talkinghead</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.talkinghead"/>
-<echo>done handling dependent subprojects of org.jvoicexml.implementation.lightweightbml</echo>
-<echo>configuring org.jvoicexml.implementation.mary</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.mary"/>
-<echo>configuring org.jvoicexml.implementation.marc</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.marc"/>
-<echo>configuring org.jvoicexml.implementation.mrcpv2</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.mrcpv2"/>
-<echo>configuring org.jvoicexml.implementation.red5</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.red5"/>
-<echo>configuring org.jvoicexml.callmanager.sip</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.sip"/>
-<echo>handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
-<echo>configuring org.jvoicexml.mmi.events</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.mmi.events"/>
-<echo>configuring org.jvoicexml.profile.mmi</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.profile.mmi"/>
-<echo>configuring org.jvoicexml.callmanager.mmi.servlet</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.servlet"/>
-<echo>done handling handling subprojects that org.jvoicexml.callmanager.mmi depends on</echo>
-<echo>configuring org.jvoicexml.callmanager.mmi</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi"/>
-<echo>handling dependent subprojects of org.jvoicexml.callmanager.mmi</echo>
-<echo>configuring org.jvoicexml.callmanager.mmi.http</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.http"/>
-<echo>configuring org.jvoicexml.callmanager.mmi.umundo</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.umundo"/>
-<echo>configuring org.jvoicexml.callmanager.mmi.socket</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.mmi.socket"/>
-<echo>done handling dependent subprojects of org.jvoicexml.callmanager.mmi</echo>
-<echo>configuring org.jvoicexml.callmanager.text</echo>
-<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.callmanager.text"/>
 <echo>handling subprojects that org.jvoicexml.implementation.text depends on</echo>
 <echo>configuring org.jvoicexml.client.text</echo>
 <ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
@@ -319,5 +98,11 @@
 <echo>configuring org.jvoicexml.voicexmlunit.demo</echo>
 <ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.voicexmlunit.demo"/>
 <echo>done handling dependent subprojects of org.jvoicexml.voicexmlunit</echo>
+<echo>handling subprojects that org.jvoicexml.implementation.amqp depends on</echo>
+<echo>configuring org.jvoicexml.client.text</echo>
+<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.client.text"/>
+<echo>done handling handling subprojects that org.jvoicexml.implementation.amqp depends on</echo>
+<echo>configuring org.jvoicexml.implementation.amqp</echo>
+<ant target="configuration" inheritall="false" inheritrefs="false" dir="../org.jvoicexml.implementation.amqp"/>
 </target>
 </project>

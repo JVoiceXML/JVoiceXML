@@ -84,7 +84,7 @@ public final class TestHelloDemo {
      * @exception Exception
      *            test failed
      */
-    @Test(timeout = 20000)
+    @Test(timeout = 10000)
     public void testHelloWorld() throws Exception {
         call.call(uri);
         call.hears("Hello World!");

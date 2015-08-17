@@ -33,16 +33,16 @@ message LifeCycleEvent {
 
 message LifeCycleRequest {
   extend LifeCycleEvent {
-        optional LifeCycleRequest Request = 5;
+        required LifeCycleRequest Request = 5;
   }
 
-  optional string Context = 1;
+  required string Context = 1;
   extensions 2 to max;
 }
 
 message LifeCycleResponse {
   extend LifeCycleEvent {
-        optional LifeCycleResponse Response = 6;
+        required LifeCycleResponse Response = 6;
   }
 
   enum StatusType {
@@ -50,8 +50,8 @@ message LifeCycleResponse {
     FAILURE = 1;
   }
 
-  optional string Context = 1;
-  optional StatusType Status = 2;
+  required string Context = 1;
+  required StatusType Status = 2;
   optional string StatusInfo = 3;
   extensions 4 to max;
 }
@@ -59,7 +59,7 @@ message LifeCycleResponse {
 
 message NewContextRequest {
   extend LifeCycleEvent {
-        optional NewContextRequest Request = 7;
+        required NewContextRequest Request = 7;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -67,7 +67,7 @@ message NewContextRequest {
 
 message NewContextResponse {
   extend LifeCycleResponse {
-        optional NewContextResponse Response = 4;
+        required NewContextResponse Response = 4;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -75,7 +75,7 @@ message NewContextResponse {
 
 message PrepareRequest {
   extend LifeCycleRequest {
-        optional PrepareRequest Request = 2;
+        required PrepareRequest Request = 2;
   }
 
   optional string ContentURL = 1;
@@ -86,7 +86,7 @@ message PrepareRequest {
 
 message PrepareResponse {
   extend LifeCycleResponse {
-        optional PrepareResponse Response = 5;
+        required PrepareResponse Response = 5;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -94,7 +94,7 @@ message PrepareResponse {
 
 message StartRequest {
   extend LifeCycleRequest {
-        optional StartRequest Request = 3;
+        required StartRequest Request = 3;
   }
   optional string ContentURL = 1;
   optional string Content = 2;
@@ -104,7 +104,7 @@ message StartRequest {
 
 message StartResponse {
   extend LifeCycleResponse {
-        optional StartResponse Response = 6;
+        required StartResponse Response = 6;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -112,7 +112,7 @@ message StartResponse {
 
 message DoneNotification {
   extend LifeCycleResponse {
-        optional DoneNotification Notification = 9;
+        required DoneNotification Notification = 9;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -120,7 +120,7 @@ message DoneNotification {
 
 message CancelRequest {
   extend LifeCycleRequest {
-        optional CancelRequest Request = 4;
+        required CancelRequest Request = 4;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -128,7 +128,7 @@ message CancelRequest {
 
 message CancelResponse {
   extend LifeCycleResponse {
-        optional CancelResponse Response = 7;
+        required CancelResponse Response = 7;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -136,7 +136,7 @@ message CancelResponse {
 
 message PauseRequest {
   extend LifeCycleRequest {
-        optional PauseRequest Request = 5;
+        required PauseRequest Request = 5;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -144,7 +144,7 @@ message PauseRequest {
 
 message PauseResponse {
   extend LifeCycleResponse {
-        optional PauseResponse Response = 8;
+        required PauseResponse Response = 8;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -152,7 +152,7 @@ message PauseResponse {
 
 message ResumeRequest {
   extend LifeCycleRequest {
-        optional ResumeRequest Request = 6;
+        required ResumeRequest Request = 6;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -160,7 +160,7 @@ message ResumeRequest {
 
 message ResumeResponse {
   extend LifeCycleResponse {
-        optional ResumeResponse Response = 10;
+        required ResumeResponse Response = 10;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -168,17 +168,17 @@ message ResumeResponse {
 
 message ExtensionNotification {
   extend LifeCycleEvent {
-        optional ExtensionNotification Notification = 8;
+        required ExtensionNotification Notification = 8;
   }
-  optional string Name = 1;
-  optional string Context = 2;
+  required string Name = 1;
+  required string Context = 2;
   // Extend for custom data
   extensions 3 to max;
 }
 
 message ClearContextRequest {
   extend LifeCycleRequest {
-        optional ClearContextRequest Request = 7;
+        required ClearContextRequest Request = 7;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -186,7 +186,7 @@ message ClearContextRequest {
 
 message ClearContextResponse {
   extend LifeCycleResponse {
-        optional ClearContextResponse Response = 11;
+        required ClearContextResponse Response = 11;
   }
   // Extend for custom data
   extensions 1 to max;
@@ -194,7 +194,7 @@ message ClearContextResponse {
 
 message StatusRequest {
   extend LifeCycleEvent {
-        optional StatusRequest Request = 9;
+        required StatusRequest Request = 9;
   }
   optional string Context = 2;
   // Extend for custom data
@@ -203,7 +203,7 @@ message StatusRequest {
 
 message StatusResponse {
   extend LifeCycleEvent {
-        optional StatusResponse Response = 10;
+        required StatusResponse Response = 10;
   }
   enum StatusType {
     ALIVE = 0;
@@ -211,7 +211,7 @@ message StatusResponse {
   }
 
   optional string Context = 1;
-  optional StatusType Status = 2;
+  required StatusType Status = 2;
   // Extend for custom data
   extensions 3 to max;
 }

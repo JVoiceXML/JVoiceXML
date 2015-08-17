@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -116,8 +116,7 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
      */
     private Collection<InputItem> getInputItems() throws BadFetchError {
         if (inputItems == null) {
-            final VoiceXmlInterpreterContext ctx =
-                    getVoiceXmlInterpreterContext();
+            final VoiceXmlInterpreterContext ctx = getVoiceXmlInterpreterContext();
             final Collection<FormItem> formItems = dialog.getFormItems(ctx);
             inputItems = new java.util.ArrayList<InputItem>();
             for (FormItem formItem : formItems) {
@@ -139,8 +138,7 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
      */
     private Collection<InitialFormItem> getInitialItems() throws BadFetchError {
         if (initalItems == null) {
-            final VoiceXmlInterpreterContext ctx =
-                    getVoiceXmlInterpreterContext();
+            final VoiceXmlInterpreterContext ctx = getVoiceXmlInterpreterContext();
             final Collection<FormItem> formItems = dialog.getFormItems(ctx);
             initalItems = new java.util.ArrayList<InitialFormItem>();
             for (FormItem formItem : formItems) {
@@ -164,8 +162,7 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
      */
     private void setApplicationLastResult(final RecognitionResult result)
             throws SemanticError {
-        final VoiceXmlInterpreterContext context =
-                getVoiceXmlInterpreterContext();
+        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
         final DataModel model = context.getDataModel();
         model.resizeArray("lastresult$", 1, Scope.APPLICATION);
         final Object value = model.readArray("lastresult$", 0,
@@ -194,8 +191,7 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
         final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
         final RecognitionResult result = recognitionEvent
                 .getRecognitionResult();
-        final VoiceXmlInterpreterContext context =
-                getVoiceXmlInterpreterContext();
+        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
         final DataModel model = context.getDataModel();
         setApplicationLastResult(result);
         final Collection<InputItem> filtered = filterEvent(model, result);
@@ -212,8 +208,7 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
             LOGGER.debug("executing filled elements...");
         }
         final Collection<Filled> filledElements = dialog.getFilledElements();
-        final FormInterpretationAlgorithm fia =
-                getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
         final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
         final TagStrategyExecutor executor = getTagStrategyExecutor();
         for (Filled filled : filledElements) {
@@ -338,8 +333,7 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("setting the filled form items...");
         }
-        final FormInterpretationAlgorithm fia =
-                getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
         for (InputItem item : filtered) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("setting form item variable to '" + result + "'");
@@ -368,8 +362,7 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
      *                error evaluating the semantic interpretation
      */
     private Collection<InputItem> filterEvent(final DataModel model,
-            final RecognitionResult result)
-                    throws BadFetchError, SemanticError {
+            final RecognitionResult result) throws BadFetchError, SemanticError {
         if (!result.isAccepted()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("result not accepted");
@@ -385,8 +378,7 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
         }
         final String str = model.toString(interpretation);
         LOGGER.info("semantic interpretation: '" + str + "'");
-        final Collection<InputItem> filtered =
-                new java.util.ArrayList<InputItem>();
+        final Collection<InputItem> filtered = new java.util.ArrayList<InputItem>();
         final Collection<InputItem> items = getInputItems();
         for (InputItem item : items) {
             final String slot;

@@ -419,7 +419,10 @@ public class JVoiceXmlSession extends Thread
      * @since 0.7.5
      */
     private void cleanup() {
-        LOGGER.info("finished processing application '" + application + "'");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("finished processing application '" + application
+                    + "'");
+        }
         if (closed) {
             return;
         }

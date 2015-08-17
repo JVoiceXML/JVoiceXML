@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,8 +24,6 @@
  *
  */
 package org.jvoicexml.interpreter.grammar;
-
-import java.util.Locale;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -72,8 +70,7 @@ public final class TestGrammarLoader {
     @Before
     public void setUp() throws Exception {
         loader = new GrammarLoader();
-        final ImplementationPlatform platform =
-                new MockImplementationPlatform();
+        final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final Profile profile = Mockito.mock(Profile.class);
         final SsmlParsingStrategyFactory factory = Mockito
@@ -112,7 +109,6 @@ public final class TestGrammarLoader {
         final String cr = System.getProperty("line.separator");
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
-        vxml.setXmlLang(Locale.US);
         final Form form = vxml.appendChild(Form.class);
         final Grammar grammar = form.appendChild(Grammar.class);
         grammar.setType(GrammarType.JSGF);
@@ -122,7 +118,7 @@ public final class TestGrammarLoader {
         str.append("public <boolean> = yes{true}|no{false};");
         grammar.addCData(str.toString());
         final GrammarDocument grammarDocument = loader.loadGrammarDocument(
-                context, null, grammar, Locale.US);
+                context, null, grammar);
         Assert.assertEquals(grammar.toString(), grammarDocument.getDocument());
     }
 

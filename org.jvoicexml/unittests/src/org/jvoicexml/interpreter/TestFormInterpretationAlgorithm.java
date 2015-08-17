@@ -28,7 +28,6 @@ package org.jvoicexml.interpreter;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Locale;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -138,8 +137,7 @@ public final class TestFormInterpretationAlgorithm {
                 processor.process(
                         Mockito.any(VoiceXmlInterpreterContext.class),
                         Mockito.any(FetchAttributes.class),
-                        Mockito.any(Grammar.class),
-                        Mockito.any(Locale.class))).thenReturn(document);
+                        Mockito.any(Grammar.class))).thenReturn(document);
         interpreter = new VoiceXmlInterpreter(context);
     }
 
@@ -553,16 +551,20 @@ public final class TestFormInterpretationAlgorithm {
         };
         thread.start();
         final UserInput input = platform.getUserInput();
-        final Answer<Integer> answer = new Answer<Integer>() {
+        final Answer<Integer> answer;
+        answer = new Answer<Integer>() {
             @Override
             public Integer answer(final InvocationOnMock invocation)
                     throws Throwable {
-                final Collection grammars = invocation.getArgumentAt(0,
-                        Collection.class);
-                synchronized (lock) {
-                    lock.notifyAll();
+                final Object obj = invocation.getArguments()[0];
+                if (obj != null) {
+                    final Collection grammars = (Collection) obj;
+                    synchronized (lock) {
+                        lock.notifyAll();
+                    }
+                    return grammars.size();
                 }
-                return grammars.size();
+                return 0;
             }
         };
         Mockito.when(
@@ -623,12 +625,15 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public Integer answer(final InvocationOnMock invocation)
                     throws Throwable {
-                final Collection grammars = invocation.getArgumentAt(0,
-                        Collection.class);
-                synchronized (lock) {
-                    lock.notifyAll();
+                final Object obj = invocation.getArguments()[0];
+                if (obj != null) {
+                    final Collection grammars = (Collection) obj;
+                    synchronized (lock) {
+                        lock.notifyAll();
+                    }
+                    return grammars.size();
                 }
-                return grammars.size();
+                return 0;
             }
         };
         Mockito.when(

@@ -24,7 +24,6 @@
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
-      <xsl:comment>set the library path for Cloudgarden</xsl:comment>
       <jvmarg
         value="-Djava.library.path={$tjpath}" />
       <xsl:apply-templates select="@*|*|text()|comment()" />

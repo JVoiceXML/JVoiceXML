@@ -83,10 +83,10 @@ The JSAPI 2.0 implementation platform is a good place to get started.
                 <include name="commons-*" />
                 <include name="log4j-1.2.17.jar" />
                 <include name="js.jar" />
-                <include name="spring-core-4.2.0.RELEASE.jar" />
-                <include name="spring-beans-4.2.0.RELEASE.jar" />
-                <include name="spring-context-4.2.0.RELEASE.jar" />
-                <include name="spring-expression-4.2.0.RELEASE.jar" />
+                <include name="spring-core-3.2.1.RELEASE.jar" />
+                <include name="spring-beans-3.2.1.RELEASE.jar" />
+                <include name="spring-context-3.2.1.RELEASE.jar" />
+                <include name="spring-expression-3.2.1.RELEASE.jar" />
                 <include name="jmf.jar" />
                 <include name="jlibrtp.jar" />
                 <include name="fluent-hc-4.2.3.jar" />

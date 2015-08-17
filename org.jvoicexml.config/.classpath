@@ -6,9 +6,20 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
-	<classpathentry kind="lib" path="3rdparty/springframework4.2.0/lib/spring-beans-4.2.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="3rdparty/springframework4.2.0/lib/spring-context-4.2.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="3rdparty/springframework4.2.0/lib/spring-core-4.2.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="3rdparty/springframework4.2.0/lib/spring-expression-4.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="3rdparty/springframework3.2.1/lib/spring-beans-3.2.1.RELEASE.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.config/3rdparty/springframework3.2.1/spring-beans-3.2.1.RELEASE-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="3rdparty/springframework3.2.1/lib/spring-core-3.2.1.RELEASE.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.config/3rdparty/springframework3.2.1/spring-core-3.2.1.RELEASE-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="3rdparty/springframework3.2.1/lib/spring-context-3.2.1.RELEASE.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.config/3rdparty/springframework3.2.1/spring-context-3.2.1.RELEASE-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>

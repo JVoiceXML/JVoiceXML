@@ -35,14 +35,9 @@ import org.apache.log4j.Logger;
  * A simple {@link java.util.Collection} which is scope aware.
  *
  * <p>
- * This enables the user to store a collection and retrieve these values
+ * This enables the user to store in a collection and retrieve these values
  * without taking care about scope changes. The values are always scope
  * aware.
- * </p>
- * <p>
- * Views onto this collection, like iterating over its elements, will always
- * return those elements from the topmost scope prior to elements from lower
- * scopes.
  * </p>
  *
  *
@@ -63,9 +58,6 @@ public final class ScopedCollection<E>
     /** A view onto all items of all elements. */
     private final Collection<E> view;
 
-    /** {@code true} if the view must be recreated. */
-    private boolean needRecreatedView;
-    
     /** The scope observer. */
     private final ScopeObserver observer;
 
@@ -128,7 +120,7 @@ public final class ScopedCollection<E>
      *
      * @return current collection.
      */
-    private ScopedCollectionItem<E> getTopmostCollection() {
+    private ScopedCollectionItem<E> getCurrentCollection() {
         ScopedCollectionItem<E> item = null;
         if (!stack.empty()) {
             item = stack.peek();
@@ -148,27 +140,11 @@ public final class ScopedCollection<E>
     }
 
     /**
-     * Retrieves the current view onto all elements.
-     * @return current view
-     * @since 0.7.7
-     */
-    private Collection<E> getView() {
-        if (needRecreatedView) {
-            view.clear();
-            for (int i = stack.size() - 1; i >= 0; i--) {
-                final ScopedCollectionItem<E> item = stack.get(i);
-                view.addAll(item);
-            }
-            needRecreatedView = false;
-        }
-        return view;
-    }
-    /**
      * {@inheritDoc}
      */
     public boolean add(final E e) {
-        needRecreatedView = true;
-        final ScopedCollectionItem<E> collection = getTopmostCollection();
+        final ScopedCollectionItem<E> collection = getCurrentCollection();
+        view.add(e);
         return collection.add(e);
     }
 
@@ -176,8 +152,8 @@ public final class ScopedCollection<E>
      * {@inheritDoc}
      */
     public boolean addAll(final Collection<? extends E> c) {
-        needRecreatedView = true;
-        final ScopedCollectionItem<E> collection = getTopmostCollection();
+        final ScopedCollectionItem<E> collection = getCurrentCollection();
+        view.addAll(c);
         return collection.addAll(c);
     }
 
@@ -185,7 +161,7 @@ public final class ScopedCollection<E>
      * {@inheritDoc}
      */
     public void clear() {
-        needRecreatedView = true;
+        view.clear();
         stack.clear();
     }
 
@@ -193,24 +169,21 @@ public final class ScopedCollection<E>
      * {@inheritDoc}
      */
     public boolean contains(final Object o) {
-        final Collection<E> currentView = getView();
-        return currentView.contains(o);
+        return view.contains(o);
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean containsAll(final Collection<?> c) {
-        final Collection<E> currentView = getView();
-        return currentView.containsAll(c);
+        return view.containsAll(c);
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean isEmpty() {
-        final Collection<E> currentView = getView();
-        return currentView.isEmpty();
+        return view.isEmpty();
     }
 
     /**
@@ -224,15 +197,20 @@ public final class ScopedCollection<E>
      * {@inheritDoc}
      */
     public boolean remove(final Object o) {
+        if (!view.remove(o)) {
+            return false;
+        }
+
         // Iterate over the stack and try to find the collection where
         // the item has been added
         for (ScopedCollectionItem<E> item : stack) {
             if (item.remove(o)) {
-                needRecreatedView = true;
                 return true;
             }
         }
 
+        // This should not happen since it means that the object has been
+        // added to the view but not to the scoped collections.
         return false;
     }
 
@@ -243,10 +221,10 @@ public final class ScopedCollection<E>
         boolean changed = false;
         for (Object o : c) {
             if (remove(o) && !changed) {
-                needRecreatedView = true;
                 changed = true;
             }
         }
+
         return changed;
     }
 
@@ -261,24 +239,21 @@ public final class ScopedCollection<E>
      * {@inheritDoc}
      */
     public int size() {
-        final Collection<E> currentView = getView();
-        return currentView.size();
+        return view.size();
     }
 
     /**
      * {@inheritDoc}
      */
     public Object[] toArray() {
-        final Collection<E> currentView = getView();
-        return currentView.toArray();
+        return view.toArray();
     }
 
     /**
      * {@inheritDoc}
      */
     public <T> T[] toArray(final T[] a) {
-        final Collection<E> currentView = getView();
-        return currentView.toArray(a);
+        return view.toArray(a);
     }
 }
 

@@ -5,11 +5,15 @@
     xsi:schemaLocation="http://www.w3.org/2001/06/grammar
                         http://www.w3.org/TR/speech-grammar/grammar.xsd"
     tag-format="semantics/1.0">
-  <rule id="yesno" scope="public">
-    <one-of>
-      <item>yes<tag>Y</tag></item>
-      <item>sure<tag>Y</tag></item>
-      <item>no<tag>N</tag></item>
-    </one-of>
-  </rule>
+	<rule id="yesno" scope="public">
+		<one-of>
+			<item>
+				yes
+			</item>
+
+			<item>
+				no
+			</item>
+		</one-of>
+	</rule>
 </grammar>

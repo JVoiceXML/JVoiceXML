@@ -28,8 +28,6 @@
         <li>removed generation of buggy exe files for windows</li>
         <li>new talking head implementation that is controlled via
             a new BML implementation platform</li>
-        <li>bugfix: events were not processed in inverse scope order</li>
-        <li>bugfix: proper shutdown if no configuration is available</li>
     </ul>
 
     <h3>interpreter</h3>
@@ -50,8 +48,6 @@
                     <ul>
                         <li>bugfix: srcexpr is evaluated each time
                             the grammar element is executed</li>
-                        <li>bugfix: setting the default locale if
-                            no locale is given</li>
                     </ul>
                 </li>
                 <li>script
@@ -72,12 +68,6 @@
         </li>
     </ul>
 
-    <h3>configuration</h3>
-    
-    <ul>
-    	<li>update to spring framework 4.2.0 to be compatible with Java 8</li>
-    </ul>
-    
     <h3>implementation</h3>
 
     <ul>
@@ -152,7 +142,6 @@
             deserializing ArrayList as content</li>
         <li>added support for access to the used protocol in
             VoiceXML documents</li>
-        <li>adaptation to protobuf 2.6.1: Message extensions cannot have required fields</li>
     </ul>
 
     <h4>text implementation platform</h4>

@@ -4,6 +4,6 @@
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <beans:bean
     class="org.jvoicexml.implementation.jvxml.DummyTelephonySupportFactory">
-    <beans:property name="instances" value="1" />
+    <beans:property name="instances" value="100" />
   </beans:bean>
 </implementation>
