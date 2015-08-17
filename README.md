@@ -1,5 +1,5 @@
 # JVoiceXML
-Open Source VoiceXML interpter
+Open Source VoiceXML interpreter
 
 A free VoiceXML interpreter for JAVA with an open architecture for custom extensions. Demo implementation platforms are supporting JAVA APIs such as JSAPI and JTAPI.
 
