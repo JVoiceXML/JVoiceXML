@@ -321,20 +321,27 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
     public void run() {
         state = InterpreterState.ALLOCATING_RESOURCES;
         LOGGER.info("interpreter state " + state);
-        
-        try {            
-            // Initialize the configuration object.
-            final Configuration config = getConfiguration();
-            if (null == config) {
-                throw new NoresourceError();
+
+        // Initialize the configuration object.
+        final Configuration config = getConfiguration();
+        if (config == null) {
+            LOGGER.fatal("no configuration found. exiting...");
+            final Exception exception =
+                    new IllegalArgumentException("no configuration available");
+            fireJVoiceXmlStartupError(exception);
+            synchronized (shutdownSemaphore) {
+                shutdownSemaphore.notifyAll();
             }
-            LOGGER.info("using configuration '"
-                    + config.getClass().getCanonicalName() + "'");
+            return;
+        }
+        LOGGER.info("using configuration '"
+                + config.getClass().getCanonicalName() + "'");
 
-            // Add the shutdown hook
-            shutdownWaiter = new ShutdownWaiter(this);
-            addShutdownHook();
+        // Add the shutdown hook
+        shutdownWaiter = new ShutdownWaiter(this);
+        addShutdownHook();
 
+        try {
             // Load configuration
             documentServer = config.loadObject(DocumentServer.class);
             documentServer.start();
@@ -346,7 +353,14 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
             initCallManager(config);
             initProfiles(config);
             initJndi(config);
-        } catch (Exception | NoresourceError e) {
+        } catch (Exception e) {
+            LOGGER.fatal(e.getMessage(), e);
+            synchronized (shutdownSemaphore) {
+                shutdownSemaphore.notifyAll();
+            }
+            fireJVoiceXmlStartupError(e);
+            return;
+        } catch (NoresourceError e) {
             LOGGER.fatal(e.getMessage(), e);
             synchronized (shutdownSemaphore) {
                 shutdownSemaphore.notifyAll();
