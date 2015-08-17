@@ -33,6 +33,7 @@ import javax.xml.xpath.XPathFactory;
 
 import org.junit.Assert;
 import org.jvoicexml.xml.XmlDocument;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.w3c.dom.Document;
 
 
@@ -44,6 +45,7 @@ import org.w3c.dom.Document;
  * @since 0.7.7
  */
 public final class XPathAssert {
+
     /**
      * Do not make instances.
      */
@@ -75,5 +77,11 @@ public final class XPathAssert {
         final String actual = (String) xpath.evaluate(expression,
                 doc, XPathConstants.STRING);
         Assert.assertEquals(expected, actual);
+    }
+
+    public static void assertEquals(VoiceXmlUnitNamespaceContect context, 
+            SsmlDocument document1, String ssmlspeakssmlaudiosrc, 
+            String toString) {
+        throw new UnsupportedOperationException("Not supported yet."); //TODO
     }
 }
