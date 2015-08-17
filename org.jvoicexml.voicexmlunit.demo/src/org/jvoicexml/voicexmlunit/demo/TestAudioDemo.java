@@ -35,7 +35,7 @@ import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.voicexmlunit.Call;
 import org.jvoicexml.voicexmlunit.TextCall;
-import org.jvoicexml.voicexmlunit.VoiceXmlUnitNamespaceContect;
+import org.jvoicexml.voicexmlunit.VoiceXmlUnitNamespaceContext;
 import org.jvoicexml.voicexmlunit.XPathAssert;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -93,8 +93,8 @@ public final class TestAudioDemo {
         call.call(uri);
         final SsmlDocument document1 = call.getNextOutput();
         final URI audio1 = uri.resolve("audio-in-block.wav");
-        final VoiceXmlUnitNamespaceContect context =
-                new VoiceXmlUnitNamespaceContect();
+        final VoiceXmlUnitNamespaceContext context =
+                new VoiceXmlUnitNamespaceContext();
         context.addPrefix("ssml", Speak.DEFAULT_XMLNS);
         XPathAssert.assertEquals(context, document1,
                 "/ssml:speak/ssml:audio/@src", audio1.toString());
