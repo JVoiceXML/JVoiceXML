@@ -63,9 +63,6 @@ public final class ScopedCollection<E>
     /** A view onto all items of all elements. */
     private final Collection<E> view;
 
-    /** {@code true} if the view must be recreated. */
-    private boolean needRecreatedView;
-    
     /** The scope observer. */
     private final ScopeObserver observer;
 
