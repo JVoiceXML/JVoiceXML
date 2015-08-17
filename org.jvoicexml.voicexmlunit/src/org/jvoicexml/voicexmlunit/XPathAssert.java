@@ -79,7 +79,7 @@ public final class XPathAssert {
         Assert.assertEquals(expected, actual);
     }
 
-    public static void assertEquals(VoiceXmlUnitNamespaceContect context, 
+    public static void assertEquals(VoiceXmlUnitNamespaceContext context, 
             SsmlDocument document1, String ssmlspeakssmlaudiosrc, 
             String toString) {
         throw new UnsupportedOperationException("Not supported yet."); //TODO
