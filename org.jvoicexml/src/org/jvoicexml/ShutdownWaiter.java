@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,7 +29,10 @@ package org.jvoicexml;
 import org.apache.log4j.Logger;
 
 /**
- * Waiter for a JVoiceXML shutdown request.
+ * Waiter for a JVoiceXML shutdown request. This is necessary to decouple a
+ * remote shutdown request via {@link JVoiceXml#shutdown()} from the actual
+ * shutdown. While the JNDI call returns immediately, the shutdown is executed
+ * asynchronously.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
