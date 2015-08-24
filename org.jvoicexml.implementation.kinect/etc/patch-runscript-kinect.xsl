@@ -3,12 +3,12 @@
   version="1.0">
   <xsl:param name="kinectrecognizerpath"/>
   <!-- Adapt the jvmarg values -->
-  <xsl:template match="java[@classname='org.jvoicexml.startup.Startup']">
+  <xsl:template match="path[@id='run.librarypath']">
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
-      <xsl:comment>Set the library path for the Kinect Recognizer</xsl:comment>
-      <jvmarg value="-Djava.library.path={$kinectrecognizerpath}" />
+      <xsl:comment>library path for the Kinect Recognizer</xsl:comment>
+      <pathelement location="{$kinectrecognizerpath}" />
       <xsl:apply-templates select="@*|*|text()|comment()" />
     </xsl:copy>
   </xsl:template>

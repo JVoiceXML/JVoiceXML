@@ -208,20 +208,21 @@ public final class Jsapi10SynthesizedOutput
                 throw new NoresourceError("Error creating the synthesizer!");
             }
 
+            // Allocate the synthesizer
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("allocating synthesizer...");
             }
-
             synthesizer.allocate();
             synthesizer.resume();
-
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...synthesizer allocated");
             }
-        } catch (EngineException ee) {
-            throw new NoresourceError(ee);
-        } catch (AudioException ae) {
-            throw new NoresourceError(ae);
+        } catch (EngineException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (AudioException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (UnsatisfiedLinkError e) {
+            throw new NoresourceError(e.getMessage(), e);
         }
     }
 

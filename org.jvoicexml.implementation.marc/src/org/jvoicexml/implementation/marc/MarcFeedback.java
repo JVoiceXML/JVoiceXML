@@ -63,19 +63,25 @@ class MarcFeedback extends Thread {
     /** The feedback port from MARC. */
     private final int port;
 
+    /** The socket to receive feedback from MARC. */
+    private final DatagramSocket socket;
+    
     /** Output to MARC. */
     private final MarcSynthesizedOutput output;
 
     /**
      * Constructs a new object.
      * @param marcOutput output to MARC
-     * @param portNumber the feedback port number from MARC.
+     * @param portNumber the feedback port number from MARC
+     * @throws IOException error creating the feedback socket
      */
     public MarcFeedback(final MarcSynthesizedOutput marcOutput,
-            final int portNumber) {
+            final int portNumber) throws IOException {
         setDaemon(true);
         output = marcOutput;
         port = portNumber;
+        socket = new DatagramSocket(port);
+        LOGGER.info("receiving feedback from MARC at port " + port);
     }
 
     /**
@@ -83,10 +89,7 @@ class MarcFeedback extends Thread {
      */
     @Override
     public void run() {
-        DatagramSocket socket = null;
         try {
-            socket = new DatagramSocket(port);
-            LOGGER.info("receiving feedback from MARC at port " + port);
             final byte[] buffer = new byte[BUFFER_SIZE];
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
             while (true) {

@@ -514,18 +514,20 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         // Release all references to the allocated resources.
         grammarProcessor = null;
         documentServer = null;
-
         if (implementationPlatformFactory != null) {
             implementationPlatformFactory.close();
             implementationPlatformFactory = null;
         }
 
+        // Adapt the interpreter state
         state = InterpreterState.STOPPED;
         LOGGER.info("interpreter state " + state);
         LOGGER.info("shutdown of JVoiceXML complete!");
         synchronized (shutdownSemaphore) {
             shutdownSemaphore.notifyAll();
         }
+
+        // Notify that we are done
         fireJVoiceXmlTerminated();
     }
 
@@ -538,10 +540,8 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         final JVoiceXmlShutdownHook hook = new JVoiceXmlShutdownHook(this);
         shutdownHook = new Thread(hook);
         shutdownHook.setName("ShutdownHook");
-
         final Runtime runtime = Runtime.getRuntime();
         runtime.addShutdownHook(shutdownHook);
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("added shutdown hook");
         }
@@ -563,9 +563,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         } catch (IllegalStateException e) {
             LOGGER.debug("shutdown already in process");
         }
-
         shutdownHook = null;
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("removed shutdown hook");
         }
@@ -582,7 +580,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
                 shutdownSemaphore.wait();
             }
         } catch (InterruptedException ie) {
-            LOGGER.error("wait event was interrupted", ie);
+            LOGGER.error("wait shutdown event was interrupted", ie);
         }
     }
 

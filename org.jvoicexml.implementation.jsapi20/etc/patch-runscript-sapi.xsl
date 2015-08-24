@@ -19,12 +19,23 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
   <xsl:param name="sapibridgepath"/>
+
   <!-- Adapt the jvmarg values -->
   <xsl:template match="java[@classname='org.jvoicexml.startup.Startup']">
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
-      <jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols" />
+      <jvmarg value="-Djava.protocol.handler.pkgs=org.jsapi2.protocols" />
+      <xsl:apply-templates select="@*|*|text()|comment()" />
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="path[@id='run.librarypath']">
+    <xsl:copy>
+      <!-- Keep current path -->
+      <xsl:apply-templates select="@*" />
+      <xsl:comment>library path for JSAPI 2.0 SAPI</xsl:comment>
+      <pathelement location="-Djava.library.path={$sapibridgepath}" />
       <xsl:apply-templates select="@*|*|text()|comment()" />
     </xsl:copy>
   </xsl:template>

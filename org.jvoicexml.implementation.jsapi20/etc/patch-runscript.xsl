@@ -23,7 +23,7 @@
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
-      <jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols" />
+      <jvmarg value="-Djava.protocol.handler.pkgs=org.jsapi2.protocols" />
       <xsl:comment>Disallow FreeTTS to add jars to the classpath</xsl:comment>
       <jvmarg value="-Dfreetts.nocpexpansion" />
       <xsl:apply-templates select="@*|*|text()|comment()" />

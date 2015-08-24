@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -298,7 +298,7 @@ public final class MarcSynthesizedOutput
      *         if the connection to MARC could not be established
      */
     private void connect() throws IOException {
-        // Do nothing if we are already connectd.
+        // Do nothing if we are already connected.
         if (socket != null) {
             return;
         }

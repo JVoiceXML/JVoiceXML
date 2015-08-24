@@ -19,6 +19,18 @@ This file provides targets to run and stop the voice browser.
             <pathelement location="${config}"/>
         </path>
 
+        <path id="run.librarypath">
+<!--library path for the Kinect Recognizer-->
+<pathelement location="C:\Users\dwalka\Documents\Entwicklung\JVoiceXML.git\JVoiceXML\org.jvoicexml.implementation.kinect/../org.jvoicexml.implementation.kinect.recognizer/x64/Debug"/>
+<!--library path for JSAPI 2.0 SAPI-->
+<pathelement location="-Djava.library.path=C:\Users\dwalka\Documents\Entwicklung\JVoiceXML.git\JVoiceXML\org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib"/>
+<!--library path for Cloudgarden-->
+<pathelement location="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib"/>
+            <pathelement location="${dist}"/>
+        </path>
+        
+        <pathconvert property="run.librarypath.converted" refid="run.librarypath"/>
+        
         <path id="shutdown.classpath">
             <path refid="project.classpath"/>
             <fileset refid="loggings.lib"/>
@@ -32,7 +44,7 @@ This file provides targets to run and stop the voice browser.
 
     <target name="run" description="Run the VoiceXML interpreter" depends="jar,-run-setup">
         <java classname="org.jvoicexml.startup.Startup" fork="true" maxmemory="256m">
-<!--Added org.jvoicexml.config configuration settings-->
+<!--Added path for org.jvoicexml.config configuration settings-->
 <classpath>
 <pathelement location="dist/org.jvoicexml.config.jar"/>
 <fileset dir="C:\Users\dwalka\Documents\Entwicklung\JVoiceXML.git\JVoiceXML\org.jvoicexml.config/3rdparty/springframework4.2.0/lib">
@@ -42,15 +54,10 @@ This file provides targets to run and stop the voice browser.
 <include name="spring-expression-4.2.0.RELEASE.jar"/>
 </fileset>
 </classpath>
-<!--Set the library path for the Kinect Recognizer-->
-<jvmarg value="-Djava.library.path=C:\Users\dwalka\Documents\Entwicklung\JVoiceXML.git\JVoiceXML\org.jvoicexml.implementation.kinect/../org.jvoicexml.implementation.kinect.recognizer/x64/Debug"/>
 <jvmarg value="-Dgjtapi.sip.properties=/gjtapi-provider.properties"/>
 <jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols"/>
-<jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols"/>
-<jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols"/>
-<!--set the library path for Cloudgarden-->
-<jvmarg value="-Djava.library.path=../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib"/>
-            <jvmarg value="-Djava.library.path=${dist}"/>
+<jvmarg value="-Djava.protocol.handler.pkgs=org.jsapi2.protocols"/>
+            <jvmarg value="-Djava.library.path=${run.librarypath.converted}"/>
             <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties"/>
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy"/>
             <classpath refid="run.classpath"/>
@@ -59,7 +66,7 @@ This file provides targets to run and stop the voice browser.
 
     <target name="debug" description="Run the VoiceXML interpreter in debug mode" depends="jar,-run-setup">
         <java classname="org.jvoicexml.startup.Startup" fork="true" maxmemory="256m">
-<!--Added org.jvoicexml.config configuration settings-->
+<!--Added path for org.jvoicexml.config configuration settings-->
 <classpath>
 <pathelement location="dist/org.jvoicexml.config.jar"/>
 <fileset dir="C:\Users\dwalka\Documents\Entwicklung\JVoiceXML.git\JVoiceXML\org.jvoicexml.config/3rdparty/springframework4.2.0/lib">
@@ -69,14 +76,9 @@ This file provides targets to run and stop the voice browser.
 <include name="spring-expression-4.2.0.RELEASE.jar"/>
 </fileset>
 </classpath>
-<!--Set the library path for the Kinect Recognizer-->
-<jvmarg value="-Djava.library.path=C:\Users\dwalka\Documents\Entwicklung\JVoiceXML.git\JVoiceXML\org.jvoicexml.implementation.kinect/../org.jvoicexml.implementation.kinect.recognizer/x64/Debug"/>
 <jvmarg value="-Dgjtapi.sip.properties=/gjtapi-provider.properties"/>
 <jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols"/>
-<jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols"/>
-<jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols"/>
-<!--set the library path for Cloudgarden-->
-<jvmarg value="-Djava.library.path=../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib"/>
+<jvmarg value="-Djava.protocol.handler.pkgs=org.jsapi2.protocols"/>
             <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties"/>
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy"/>
             <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367"/>
@@ -86,7 +88,7 @@ This file provides targets to run and stop the voice browser.
 
     <target name="shutdown" description="Terminates the VoiceXML interpreter" depends="jar,-run-setup">
         <java classname="org.jvoicexml.startup.Shutdown" fork="true">
-<!--Added org.jvoicexml.config configuration settings-->
+<!--Added path org.jvoicexml.config configuration settings-->
 <classpath>
 <pathelement location="dist/org.jvoicexml.config.jar"/>
 <fileset dir="../org.jvoicexml.config/3rdparty/springframework4.2.0/lib">

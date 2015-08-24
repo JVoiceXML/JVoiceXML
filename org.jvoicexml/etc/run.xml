@@ -18,6 +18,12 @@ This file provides targets to run and stop the voice browser.
             <pathelement location="${config}" />
         </path>
 
+        <path id="run.librarypath">
+            <pathelement location="${dist}" />
+        </path>
+        
+        <pathconvert property="run.librarypath.converted" refid="run.librarypath"/>
+        
         <path id="shutdown.classpath">
             <path refid="project.classpath" />
             <fileset refid="loggings.lib" />
@@ -35,7 +41,7 @@ This file provides targets to run and stop the voice browser.
         <java classname="org.jvoicexml.startup.Startup"
               fork="true"
               maxmemory="256m">
-            <jvmarg value="-Djava.library.path=${dist}" />
+            <jvmarg value="-Djava.library.path=${run.librarypath.converted}" />
             <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties" />
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
             <classpath refid="run.classpath" />

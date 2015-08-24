@@ -20,13 +20,12 @@
   version="1.0">
   <xsl:param name="tjpath"/>
   <!-- Adapt the jvmarg values -->
-  <xsl:template match="java[@classname='org.jvoicexml.startup.Startup']">
+  <xsl:template match="path[@id='run.librarypath']">
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
-      <xsl:comment>set the library path for Cloudgarden</xsl:comment>
-      <jvmarg
-        value="-Djava.library.path={$tjpath}" />
+      <xsl:comment>library path for Cloudgarden</xsl:comment>
+      <pathelement location="{$tjpath}" />
       <xsl:apply-templates select="@*|*|text()|comment()" />
     </xsl:copy>
   </xsl:template>

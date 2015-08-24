@@ -27,7 +27,7 @@
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
-        <xsl:comment>Added org.jvoicexml.config configuration settings</xsl:comment>
+        <xsl:comment>Added path for org.jvoicexml.config configuration settings</xsl:comment>
         <classpath>
         <pathelement location="dist/org.jvoicexml.config.jar"/>
           <fileset dir="{$spring.lib.dir}">
@@ -46,7 +46,7 @@
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
-        <xsl:comment>Added org.jvoicexml.config configuration settings</xsl:comment>
+        <xsl:comment>Added path org.jvoicexml.config configuration settings</xsl:comment>
         <classpath>
         <pathelement location="dist/org.jvoicexml.config.jar"/>
           <fileset dir="../org.jvoicexml.config/3rdparty/springframework4.2.0/lib">

@@ -139,17 +139,19 @@ public final class Jsapi10SpokenInput
             if (recognizer == null) {
                 throw new NoresourceError("Error creating the recognizer!");
             }
+
+            // Allocate the recognizer
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("allocating JSAPI 1.0 recognizer...");
             }
-
             recognizer.allocate();
-
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...JSAPI 1.0  recognizer allocated");
             }
         } catch (EngineException ee) {
             throw new NoresourceError(ee.getMessage(), ee);
+        } catch (UnsatisfiedLinkError e) {
+            throw new NoresourceError(e.getMessage(), e);
         }
     }
 
