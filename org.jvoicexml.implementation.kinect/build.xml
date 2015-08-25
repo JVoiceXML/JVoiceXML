@@ -67,6 +67,33 @@ org.jvoicexml/personal-props/README.txt
     <target name="clean" depends="-setup" description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
         <delete file="${dist.jar}" failonerror="false" />
+        <exec dir="../org.jvoicexml.implementation.kinect.recognizer" executable="${msvc.devenv}"
+          osfamily="windows">
+          <arg value="JVoiceXmlKinectRecognizer.sln"/>
+          <arg value="/Clean"/>
+          <arg value="&quot;Debug|Win32&quot;"/>
+        </exec>
+        <exec dir="../org.jvoicexml.implementation.kinect.recognizer" executable="${msvc.devenv}"
+          osfamily="windows">
+          <arg value="JVoiceXmlKinectRecognizer.sln"/>
+          <arg value="/Clean"/>
+          <arg value="&quot;Release|Win32&quot;"/>
+        </exec>
+        <exec dir="../org.jvoicexml.implementation.kinect.recognizer" executable="${msvc.devenv}"
+          osfamily="windows">
+          <arg value="JVoiceXmlKinectRecognizer.sln"/>
+          <arg value="/Clean"/>
+          <arg value="&quot;Debug|x64&quot;"/>
+        </exec>
+        <exec dir="../org.jvoicexml.implementation.kinect.recognizer" executable="${msvc.devenv}"
+          osfamily="windows">
+          <arg value="JVoiceXmlKinectRecognizer.sln"/>
+          <arg value="/Clean"/>
+          <arg value="&quot;Release|x64&quot;"/>
+        </exec>
+        <delete dir="../org.jvoicexml.implementation.kinect.recognizer/src">
+          <include name="org_jvoicexml_implementation_kinect*.h"/>
+        </delete>
     </target>
 
     <target name="compile" depends="-init,-checkJavaVersion" description="Compile the sources">
@@ -82,9 +109,47 @@ org.jvoicexml/personal-props/README.txt
             <classpath refid="project.classpath" />
             <classpath location="${build}" />
         </javah>
+        <echo>Building Win32 Debug</echo>
+        <exec dir="../org.jvoicexml.implementation.kinect.recognizer" executable="${msvc.devenv}"
+          osfamily="windows">
+          <arg value="JVoiceXmlKinectRecognizer.sln"/>
+          <arg value="/Build"/>
+          <arg value="&quot;Debug|Win32&quot;"/>
+        </exec>
+        <echo>Building Win32 Release</echo>
+        <exec dir="../org.jvoicexml.implementation.kinect.recognizer" executable="${msvc.devenv}"
+          osfamily="windows">
+          <arg value="JVoiceXmlKinectRecognizer.sln"/>
+          <arg value="/Build"/>
+          <arg value="&quot;Release|Win32&quot;"/>
+        </exec>
+        <echo>Building Win64 Debug</echo>
+        <exec dir="../org.jvoicexml.implementation.kinect.recognizer" executable="${msvc.devenv}"
+          osfamily="windows">
+          <arg value="JVoiceXmlKinectRecognizer.sln"/>
+          <arg value="/Build"/>
+          <arg value="&quot;Debug|x64&quot;"/>
+        </exec>
+        <echo>Building Win64 Release</echo>
+        <exec dir="../org.jvoicexml.implementation.kinect.recognizer" executable="${msvc.devenv}"
+          osfamily="windows">
+          <arg value="JVoiceXmlKinectRecognizer.sln"/>
+          <arg value="/Build"/>
+          <arg value="&quot;Release|x64&quot;"/>
+        </exec>
     </target>
 
-    <target name="jar" depends="compile" description="Pack all compiled files into jar files">
+    <target name="-copyReleaseDll">
+      <copy file="../org.jvoicexml.implementation.kinect.recognizer/Release/JVoiceXmlKinectRecognizer.dll"
+        tofile="${dist}/JVoiceXmlKinectRecognizer.dll" overwrite="true" failonerror="false"/>
+      <copy file="../org.jvoicexml.implementation.kinect.recognizer/Release_x64/JVoiceXmlKinectRecognizer_x64.dll"
+        tofile="${dist}/JVoiceXmlKinectRecognizer_x64.dll" overwrite="true" failonerror="false"/>
+    </target>
+
+    <target name="-copydll" if="isWindows" depends="-copyReleaseDll">
+    </target>
+    
+    <target name="jar" depends="compile,-copydll" description="Pack all compiled files into jar files">
         <jar jarfile="${dist.jar}" compress="false">
             <fileset dir="${build}">
                 <include name="${component.path}/**/*.class" />
@@ -115,7 +180,7 @@ org.jvoicexml/personal-props/README.txt
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2015<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <tag name="todo" description="Stuff to complete" />
         <classpath>

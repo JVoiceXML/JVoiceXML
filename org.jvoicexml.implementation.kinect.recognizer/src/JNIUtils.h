@@ -1,10 +1,4 @@
-#pragma once
-
-#include <jni.h>
-
-extern JavaVM *jvm; //Handle to the Java Virtual Machine
-
-void ThrowJavaException(JNI﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // JVoiceXML - A free VoiceXML implementation.
 //
 // Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -24,7 +18,13 @@ void ThrowJavaException(JNI﻿//------------------------------------------------
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //------------------------------------------------------------------------------
 
-Env* env, char* exceptionClassName, char* message);
+#pragma once
+
+#include <jni.h>
+
+extern JavaVM *jvm; //Handle to the Java Virtual Machine
+
+void ThrowJavaException(JNIEnv* env, char* exceptionClassName, char* message);
 
 BOOL GetMethodId(JNIEnv* env, const char* className, const char* methodName,
                  const char* sig, jclass& clazz, jmethodID& methodId);
