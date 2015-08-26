@@ -93,6 +93,7 @@ personal-props/README.txt
 	                value ="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib" />
                 </platform>
                 <platform name="org.jvoicexml.implementation.jsapi20">
+                    <property name="jvxml.jsapi20.default" value ="true" />
                     <property name="jvxml.jsapi20.sapi" value ="true" />
                     <property name="jvxml.jsapi20.mac" value ="true" />
                 </platform>

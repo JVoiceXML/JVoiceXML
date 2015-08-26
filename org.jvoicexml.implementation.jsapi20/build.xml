@@ -35,19 +35,16 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
             <os family="windows" />
         </condition>
 
+        <condition property="jvxml.jsapi20.default.use">
+            <istrue value="${jvxml.jsapi20.default}" />
+        </condition>
+
         <condition property="jvxml.jsapi20.sapi.use">
             <istrue value="${jvxml.jsapi20.sapi}" />
         </condition>
 
         <condition property="jvxml.jsapi20.mac.use">
             <istrue value="${jvxml.jsapi20.mac}" />
-        </condition>
-
-        <condition property="jvxml.jsapi20.default.use">
-            <and>
-                <isfalse value="${jvxml.jsapi20.sapi}" />
-                <isfalse value="${jvxml.jsapi20.mac}" />
-            </and>
         </condition>
 
         <!-- main jar files -->
@@ -115,7 +112,7 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         </copy>
     </target>
 
-    <target name="-configuration"
+    <target name="-defaultConfiguration"
             depends="-setup"
             if="jvxml.jsapi20.default.use">
         <copy todir="${config}" file="${etc}/jsapi20-implementation.xml" />
@@ -142,7 +139,7 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
     </target>
 
     <target name="configuration"
-            depends="-setup,-sapiConfiguration,-macConfiguration,-configuration">
+            depends="-setup,-sapiConfiguration,-macConfiguration,-defaultConfiguration">
     </target>
 
     <target name="clean"
