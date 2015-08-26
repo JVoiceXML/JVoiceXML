@@ -159,7 +159,7 @@ public class JVoiceXmlUserAgent {
             headerFactory = factory.createHeaderFactory();
             addressFactory = factory.createAddressFactory();
             messageFactory = factory.createMessageFactory();
-            udp = stack.createListeningPoint(host, 4242, "udp");
+            udp = stack.createListeningPoint(host, 4246, "udp");
             provider = stack.createSipProvider(udp);
         } catch (InvalidArgumentException e) {
             throw new SipException(e.getMessage(), e);

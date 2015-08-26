@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -60,8 +60,7 @@ public final class KinectRecognizer {
         if (System.getProperty("os.arch").equalsIgnoreCase("x86")) {
             System.loadLibrary("JVoiceXmlKinectRecognizer");
         } else {
-            System.loadLibrary("JVoiceXmlKinectRecognizer");
-            // System.loadLibrary("JVoiceXmlKinectRecognizer_x64");
+             System.loadLibrary("JVoiceXmlKinectRecognizer_x64");
         }
     }
 
