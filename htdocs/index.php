@@ -47,6 +47,7 @@
                         <p>JVoiceXML is an implementation of VoiceXML 2.1, the Voice Extensible Markup Language, specified at <a href="http://www.w3.org/TR/voicexml21/">http://www.w3.org/TR/voicexml21/</a>. This is an extension to VoiceXML 2.0, specified at <a href="http://www.w3.org/TR/voicexml20/">http://www.w3.org/TR/voicexml20/</a></p>
                         <p>VoiceXML is designed for creating audio dialogs that feature synthesized speech, digitized audio, recognition of spoken and DTMF key input, recording of spoken input, telephony, and mixed initiative conversations. Major goal is to have a platform independent implementation that can be used for free.</p>
                         <p>See also our project site at <a href="http://sourceforge.net/projects/jvoicexml">http://sourceforge.net/projects/jvoicexml</a></p>
+						<p>We moved to GitHub: <a href="https://github.com/JVoiceXML/JVoiceXML">https://github.com/JVoiceXML/JVoiceXML</a></p>
                         <br />
                         <a href="http://sourceforge.net/donate/index.php?group_id=128141"><img src="images/supportProject.gif" align="bottom"/></a> &nbsp; &nbsp;&nbsp;<a href="#"><script type="text/javascript" src="http://www.ohloh.net/p/4208/widgets/project_thin_badge.js"></script></a>&nbsp; &nbsp; &nbsp;<script type="text/javascript" src="http://www.ohloh.net/p/4208/widgets/project_users_logo.js"></script> </td>
                       <td width="269" id="articleWrapper" valign="top"><h2>Latest News</h2>
