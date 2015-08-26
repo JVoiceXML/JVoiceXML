@@ -26,13 +26,17 @@
 
 package org.jvoicexml.callmanager.jtapi;
 
-import net.sourceforge.gjtapi.media.GenericMediaService;
+import java.net.URI;
+import java.util.Dictionary;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.telephony.media.MediaResourceException;
 import javax.telephony.media.RTC;
-import java.util.Map;
-import java.util.Dictionary;
-import java.util.LinkedHashMap;
-import java.net.URI;
+
+import net.sourceforge.gjtapi.media.GenericMediaService;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -222,7 +226,19 @@ public abstract class TerminalMedia implements Runnable {
            busy = true;
 
            //Get next URI and parameters
-           uri = uris.keySet().iterator().next();
+           final Iterator<URI> iterator = uris.keySet().iterator();
+           if (!iterator.hasNext()) {
+               if (LOGGER.isDebugEnabled()) {
+                   LOGGER.debug("media server shutdown");
+               }
+               busy = false;
+
+               stopProcessing();
+               stop();
+
+               return;
+           }
+           uri = iterator.next();
            parameters = uris.get(uri);
            uris.remove(uri);
 
