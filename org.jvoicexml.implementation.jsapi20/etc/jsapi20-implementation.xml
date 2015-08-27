@@ -30,11 +30,6 @@
             value="org.jvoicexml.jsapi2.synthesis.freetts.FreeTTSEngineListFactory" />
         <beans:property name="instances" value="1" />
         <beans:property name="type" value="jsapi20" />
-        <!-- Description of the synthesizer to use -->
-        <!-- beans:property name="engineModeFactory"> <beans:bean class="org.jvoicexml.implementation.jsapi20.JVoiceXmlSynthesizerModeFactory"> 
-            <beans:property name="engineName" value="anna"/> <beans:property name="locale" 
-            value="en"/> <beans:property name="voiceName" value="anna"/> </beans:bean> 
-            </beans:property -->
         <!-- Description of the media locator -->
         <!-- beans:property name="mediaLocatorFactory"> <beans:bean class="org.jvoicexml.implementation.jsapi20.JlibRtpMediaLocatorFactory"> 
             <beans:property name="participant" value="localhost:16384"/> <beans:property 
@@ -53,11 +48,22 @@
         <beans:property name="engineModeFactory">
             <beans:bean
                 class="org.jvoicexml.implementation.jsapi20.JVoiceXmlRecognizerModeFactory">
-                <!-- beans:property name="engineName" value="anna" / -->
                 <!-- beans:property name="locale" value="de" / -->
             </beans:bean>
         </beans:property>
         <!-- Description of the media locator -->
+        <!-- beans:property name="mediaLocatorFactory">
+            <beans:bean
+                class="org.jvoicexml.implementation.jsapi20.FormatMediaLocatorFactory">
+                <beans:property name="protocol" value="capture" />
+                <beans:property name="rate" value="8000" />
+                <beans:property name="bits" value="16" />
+                <beans:property name="channels" value="2" />
+                <beans:property name="endian" value="big" />
+                <beans:property name="encoding" value="pcm" />
+                <beans:property name="signed" value="true" />
+             </beans:bean>
+        </beans:property-->
         <!-- beans:property name="mediaLocatorFactory"> <beans:bean class="org.jvoicexml.implementation.jsapi20.JlibRtpMediaLocatorFactory"> 
             <beans:property name="participant" value="localhost:16384"/> <beans:property 
             name="port" value="30001"/> <beans:property name="rate" value="8000" /> <beans:property 

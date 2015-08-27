@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -323,7 +323,8 @@ public final class Jsapi20SynthesizedOutput
 
         if (!supportsMarkup) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("synthesizer does not support markup. reducing to plain text");
+                LOGGER.debug("synthesizer does not support markup."
+                        + " reducing to plain text");
             }
             speakPlaintext(ssmlText);
             return;
@@ -402,7 +403,8 @@ public final class Jsapi20SynthesizedOutput
                 sessionId, speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -421,7 +423,8 @@ public final class Jsapi20SynthesizedOutput
                 sessionId, mark);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -440,7 +443,8 @@ public final class Jsapi20SynthesizedOutput
                 sessionId, speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -456,7 +460,8 @@ public final class Jsapi20SynthesizedOutput
                 sessionId);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -517,7 +522,8 @@ public final class Jsapi20SynthesizedOutput
             return;
         }
 
-        final Collection<SpeakableText> skipped = new java.util.ArrayList<SpeakableText>();
+        final Collection<SpeakableText> skipped =
+                new java.util.ArrayList<SpeakableText>();
         for (SpeakableText speakable : queuedSpeakables) {
             if (speakable.isBargeInEnabled()) {
                 skipped.add(speakable);
@@ -752,7 +758,8 @@ public final class Jsapi20SynthesizedOutput
      */
     private void notifyError(final ErrorEvent error) {
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>();
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputError(error);

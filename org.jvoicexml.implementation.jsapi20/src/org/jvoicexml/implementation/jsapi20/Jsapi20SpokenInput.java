@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -157,9 +157,7 @@ public final class Jsapi20SpokenInput
             LOGGER.info("allocating JSAPI 2.0 recognizer...");
 
             if (mediaLocator != null) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("using media locator '" + mediaLocator + "'");
-                }
+                LOGGER.info("using media locator '" + mediaLocator + "'");
                 final AudioManager manager = recognizer.getAudioManager();
                 manager.setMediaLocator(mediaLocator);
             }
@@ -646,7 +644,8 @@ public final class Jsapi20SpokenInput
      */
     void fireInputEvent(final SpokenInputEvent event) {
         synchronized (listeners) {
-            final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
+            final Collection<SpokenInputListener> copy =
+                    new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listeners);
             for (SpokenInputListener current : copy) {
                 current.inputStatusChanged(event);

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -169,8 +169,8 @@ public final class JVoiceXMLResultListener implements ResultListener {
          * RecognitionResult recognitionResult = new
          * Jsapi20RecognitionResult(result, checker); \
          **********************************************************************/
-        final RecognitionResult recognitionResult = new Jsapi20RecognitionResult(
-                result);
+        final RecognitionResult recognitionResult =
+                new Jsapi20RecognitionResult(result);
         final SpokenInputEvent event = new RecognitionEvent(input, null,
                 recognitionResult);
         input.fireInputEvent(event);
@@ -191,12 +191,9 @@ public final class JVoiceXMLResultListener implements ResultListener {
     }
 
     /**
-     * An <code>RESULT_REJECTED</code> event has occurred indicating that a
-     * <code>Result</code> has transitioned from the <code>UNFINALIZED</code>
-     * state to the
-     * <code            new SpokenInputEvent(input, SpokenInputEvent.RESULT_ACCEPTED,
-                    recognitionResult);
->REJECTED</code> state.
+     * A {@code RESULT_REJECTED} event has occurred indicating that a
+     * {@code Result} has transitioned from the {@code UNFINALIZED}
+     * state to the {@code REJECTED} state.
      * 
      * @param resultEvent
      *            ResultEvent
@@ -207,8 +204,8 @@ public final class JVoiceXMLResultListener implements ResultListener {
         }
 
         final Result result = (Result) resultEvent.getSource();
-        final RecognitionResult recognitionResult = new Jsapi20RecognitionResult(
-                result);
+        final RecognitionResult recognitionResult =
+                new Jsapi20RecognitionResult(result);
         final SpokenInputEvent event = new NomatchEvent(input, null,
                 recognitionResult);
         input.fireInputEvent(event);
