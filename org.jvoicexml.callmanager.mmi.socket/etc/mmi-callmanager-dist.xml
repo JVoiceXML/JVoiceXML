@@ -6,6 +6,10 @@
     <classpath>lib/org.jvoicexml.mmi.events.jar</classpath>
     <classpath>lib/org.jvoicexml.callmanager.mmi.jar</classpath>
     <classpath>lib/org.jvoicexml.callmanager.mmi.socket.jar</classpath>
+    <classpath>lib/org.jvoicexml.profile.mmi.jar</classpath>
+    <classpath>lib/org.jvoicexml.profile.vxml21.jar</classpath>
+    <classpath>lib/js.jar</classpath>
+    <classpath>lib/json-simple-1.1.1.jar</classpath>
 
     <beans:bean id="callmanager"
         class="org.jvoicexml.callmanager.mmi.MMICallManager">

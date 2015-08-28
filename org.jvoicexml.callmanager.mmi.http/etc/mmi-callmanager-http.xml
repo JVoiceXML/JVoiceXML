@@ -8,16 +8,13 @@
     <classpath>dist/org.jvoicexml.callmanager.mmi.http.jar</classpath>
     <classpath>dist/org.jvoicexml.profile.mmi.jar</classpath>
     <classpath>dist/org.jvoicexml.profile.vxml21.jar</classpath>
-    <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/jetty-server-9.2.2.v20140723.jar
-    </classpath>
-    <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/jetty-util-9.2.2.v20140723.jar
-    </classpath>
-    <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/jetty-http-9.2.2.v20140723.jar
-    </classpath>
-    <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/jetty-io-9.2.2.v20140723.jar
-    </classpath>
-    <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/servlet-api-3.1.jar
-    </classpath>
+    <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/jetty-server-9.2.2.v20140723.jar</classpath>
+    <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/jetty-util-9.2.2.v20140723.jar</classpath>
+    <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/jetty-http-9.2.2.v20140723.jar</classpath>
+    <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/jetty-io-9.2.2.v20140723.jar</classpath>
+    <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/servlet-api-3.1.jar</classpath>
+    <classpath>3rdparty/rhino1.7R4/lib/js.jar</classpath>
+    <classpath>3rdparty/jsonsimple1.1.1/lib/json-simple-1.1.1.jar</classpath>
 
     <beans:bean id="callmanager"
         class="org.jvoicexml.callmanager.mmi.MMICallManager">

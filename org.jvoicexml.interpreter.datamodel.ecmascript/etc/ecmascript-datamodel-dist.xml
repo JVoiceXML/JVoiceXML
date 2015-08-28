@@ -2,12 +2,9 @@
 <datamodel xmlns:beans="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="jvxml-datamodel-0-7.xsd">
-    <classpath>lib/org.jvoicexml.interpreter.datamodel.ecmascript.jar
-    </classpath>
-    <classpath>lib/js.jar
-    </classpath>
-    <classpath>lib/json-simple-1.1.1.jar
-    </classpath>
+    <classpath>lib/org.jvoicexml.interpreter.datamodel.ecmascript.jar</classpath>
+    <classpath>lib/js.jar</classpath>
+    <classpath>lib/json-simple-1.1.1.jar</classpath>
 
     <!-- The ECMA Script data model -->
     <beans:bean id="org.jvoicexml.interpreter.datamodel.DataModel"

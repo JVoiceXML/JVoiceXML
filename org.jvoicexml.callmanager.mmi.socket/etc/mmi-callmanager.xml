@@ -6,6 +6,10 @@
     <classpath>dist/org.jvoicexml.mmi.events.jar</classpath>
     <classpath>dist/org.jvoicexml.callmanager.mmi.jar</classpath>
     <classpath>dist/org.jvoicexml.callmanager.mmi.socket.jar</classpath>
+    <classpath>dist/org.jvoicexml.profile.mmi.jar</classpath>
+    <classpath>dist/org.jvoicexml.profile.vxml21.jar</classpath>
+    <classpath>3rdparty/rhino1.7R4/lib/js.jar</classpath>
+    <classpath>3rdparty/jsonsimple1.1.1/lib/json-simple-1.1.1.jar</classpath>
 
     <beans:bean id="callmanager"
         class="org.jvoicexml.callmanager.mmi.MMICallManager">
