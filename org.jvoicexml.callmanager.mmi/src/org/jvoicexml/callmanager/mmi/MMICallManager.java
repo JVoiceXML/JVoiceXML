@@ -89,7 +89,9 @@ public final class MMICallManager implements CallManager {
      * Constructs a new object.
      */
     public MMICallManager() {
-        sessions = new java.util.HashMap<Session, ConnectionInformationController>();
+        sessions =
+            new java.util.HashMap<Session,
+                ConnectionInformationController>();
     }
 
     /**
@@ -143,7 +145,7 @@ public final class MMICallManager implements CallManager {
     }
 
     /**
-     * Sets the extension notification data converter
+     * Sets the extension notification data converter.
      * 
      * @param conv
      *            the converter
@@ -155,7 +157,7 @@ public final class MMICallManager implements CallManager {
     }
 
     /**
-     * Sets the extension notification data extractor
+     * Sets the extension notification data extractor.
      * 
      * @param ext
      *            the data extractor
@@ -167,12 +169,13 @@ public final class MMICallManager implements CallManager {
     }
 
     /**
-     * Retrieves the extension notification converter
+     * Retrieves the extension notification converter.
      * 
      * @return the converter
      * @since 0.7.7
      */
-    public ExtensionNotificationDataConverter getExtensionNotificationDataConverter() {
+    public ExtensionNotificationDataConverter
+        getExtensionNotificationDataConverter() {
         return converter;
     }
 
@@ -224,6 +227,7 @@ public final class MMICallManager implements CallManager {
      * Creates a session. Created sessions must be cleaned up after the session
      * has ended using {@link #cleanupSession(Session)}.
      * 
+     * @param data call meta data
      * @return created session
      * @throws ErrorEvent
      *             error creating the session
@@ -237,7 +241,8 @@ public final class MMICallManager implements CallManager {
         final ConnectionInformation info = controller
                 .getConnectionInformation();
         if (info instanceof ConnectionInformationCallMetadataModifiable) {
-            final ConnectionInformationCallMetadataModifiable modifiable = (ConnectionInformationCallMetadataModifiable) info;
+            final ConnectionInformationCallMetadataModifiable modifiable =
+                    (ConnectionInformationCallMetadataModifiable) info;
             modifiable.setProfile(MmiProfile.NAME);
             modifiable.setCalledDevice(data.getCalledDevice());
             modifiable.setCallingDevice(data.getCallingDevice());

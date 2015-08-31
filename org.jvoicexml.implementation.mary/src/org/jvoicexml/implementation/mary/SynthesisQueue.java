@@ -73,8 +73,9 @@ final class SynthesisQueue extends Thread {
 
     /**
      * Constructs a new SynthesisQueue object. .
+     * @param synthesizedOutput reference to the parent
      */
-    public SynthesisQueue(MarySynthesizedOutput synthesizedOutput) {
+    public SynthesisQueue(final MarySynthesizedOutput synthesizedOutput) {
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
         output = synthesizedOutput;
         setDaemon(true);
@@ -163,12 +164,13 @@ final class SynthesisQueue extends Thread {
      * 
      * @param ssml
      *            the SSML document to be synthesized by Mary
-     * @param out
+     * @param responseStream
      *            the output buffer to store Mary's response
      * @exception IOException
      *                error communicating with Mary
      */
-    private void speakSsml(final SpeakableSsmlText ssml, final OutputStream out)
+    private void speakSsml(final SpeakableSsmlText ssml,
+            final OutputStream responseStream)
             throws IOException {
         final SsmlDocument document = ssml.getDocument();
         final Speak speak = document.getSpeak();
@@ -180,7 +182,8 @@ final class SynthesisQueue extends Thread {
         processor.process(text, "SSML", "AUDIO",
                 lang,
                 maryRequestParameters.get("audioType"),
-                maryRequestParameters.get("voiceName"), out, SERVER_TIMEOUT);
+                maryRequestParameters.get("voiceName"), responseStream,
+                SERVER_TIMEOUT);
     }
 
     /**
@@ -296,7 +299,8 @@ final class SynthesisQueue extends Thread {
         }
 
         synchronized (queuedSpeakables) {
-            final Collection<SpeakableText> skipped = new java.util.ArrayList<SpeakableText>();
+            final Collection<SpeakableText> skipped =
+                    new java.util.ArrayList<SpeakableText>();
             for (SpeakableText speakable : queuedSpeakables) {
                 if (speakable.isBargeInEnabled()) {
                     skipped.add(speakable);

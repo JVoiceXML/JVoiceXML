@@ -29,17 +29,15 @@ package org.jvoicexml.callmanager.mmi;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.jvoicexml.ConnectionInformation;
-
 /**
  * Container that holds call meta data that can be used in
- * {@link ConnectionInformation}.
+ * {@link org.jvoicexml.ConnectionInformatio}.
  * 
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.7
  */
-public class CallMetadata {
+public final class CallMetadata {
     /** URI of the local interpreter context device. */
     private URI calledDevice;
 

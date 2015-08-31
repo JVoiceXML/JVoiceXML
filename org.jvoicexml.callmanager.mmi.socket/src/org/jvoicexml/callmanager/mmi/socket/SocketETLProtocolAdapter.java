@@ -176,7 +176,8 @@ public final class SocketETLProtocolAdapter implements ETLProtocolAdapter {
      * @param data
      *            call meta data
      */
-    void notifyMMIEvent(final DecoratedMMIEvent event, final CallMetadata data) {
+    void notifyMMIEvent(final DecoratedMMIEvent event,
+            final CallMetadata data) {
         synchronized (listeners) {
             for (MMIEventListener listener : listeners) {
                 listener.receivedEvent(event, data);

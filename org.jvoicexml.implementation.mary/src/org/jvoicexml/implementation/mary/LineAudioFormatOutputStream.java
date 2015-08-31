@@ -49,7 +49,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  * @since 0.7.7
  */
-public class LineAudioFormatOutputStream extends AudioFormatOutputStream {
+public final class LineAudioFormatOutputStream extends AudioFormatOutputStream {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(LineAudioFormatOutputStream.class);
@@ -58,7 +58,7 @@ public class LineAudioFormatOutputStream extends AudioFormatOutputStream {
     private SourceDataLine line;
 
     /**
-     * Constructs a new object
+     * Constructs a new object.
      */
     public LineAudioFormatOutputStream() {
     }

@@ -32,7 +32,6 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketOption;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -44,7 +43,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.mmi.CallMetadata;
 import org.jvoicexml.callmanager.mmi.DecoratedMMIEvent;
 import org.jvoicexml.client.TcpUriFactory;
-import org.jvoicexml.mmi.events.LifeCycleEvent;
 import org.jvoicexml.mmi.events.Mmi;
 
 /**
@@ -92,7 +90,7 @@ final class SocketETLClient extends Thread {
             }
             final Object o = unmarshaller.unmarshal(in);
             if (o instanceof Mmi) {
-            	final Mmi mmi = (Mmi) o;
+                final Mmi mmi = (Mmi) o;
                 LOGGER.info("received MMI event: " + mmi);
                 final DecoratedMMIEvent event =
                         new DecoratedMMIEvent(this, mmi);

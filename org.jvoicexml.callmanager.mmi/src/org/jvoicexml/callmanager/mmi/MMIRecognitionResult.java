@@ -38,7 +38,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @version $Revision$
  * @since 0.7.7
  */
-public class MMIRecognitionResult implements RecognitionResult {
+public final class MMIRecognitionResult implements RecognitionResult {
     /** The semantic interpretation of the utterance. */
     private final Object interpretation;
 
@@ -51,7 +51,8 @@ public class MMIRecognitionResult implements RecognitionResult {
     /**
      * Constructs a new object.
      * @param utt the received utterance
-     * @param semanticInterpretation the semantic interpretation of the utterance
+     * @param semanticInterpretation the semantic interpretation of the
+     *           utterance
      * @param conf the confidence of the interpretation
      */
     public MMIRecognitionResult(final String utt,

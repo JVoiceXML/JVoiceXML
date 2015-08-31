@@ -92,7 +92,8 @@ import org.jvoicexml.profile.mmi.OutgoingExtensionNotificationJVoiceXmlEvent;
  * @version $Revision$
  * @since 0.7.7
  */
-public class MmiDetailedSessionListener implements DetailedSessionListener {
+public final class MmiDetailedSessionListener
+    implements DetailedSessionListener {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(MmiDetailedSessionListener.class);
@@ -100,7 +101,7 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
     /** The ETL protocol adapter to send MMI events. */
     private final ETLProtocolAdapter adapter;
 
-    /** The MMI context */
+    /** The MMI context. */
     private final MMIContext context;
 
     /** The extension notification converter. */
@@ -109,11 +110,14 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
     /**
      * Constructs a new object.
      * 
+     * @param ctc the MMI context
+     * @param conv the converter for MMI events
      * @param protocolAdapter
      *            the adapter to send events
      */
     public MmiDetailedSessionListener(final ETLProtocolAdapter protocolAdapter,
-            final MMIContext ctx, final ExtensionNotificationDataConverter conv) {
+            final MMIContext ctx,
+            final ExtensionNotificationDataConverter conv) {
         adapter = protocolAdapter;
         context = ctx;
         converter = conv;
@@ -130,7 +134,8 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
      * {@inheritDoc}
      */
     @Override
-    public void sessionEvent(final Session session, final JVoiceXMLEvent event) {
+    public void sessionEvent(final Session session,
+            final JVoiceXMLEvent event) {
         final DataModel model = ((JVoiceXmlSession) session).getDataModel();
         final Mmi mmi = convertJVoiceXMLEvent(model, event);
         try {
@@ -144,6 +149,7 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
     /**
      * Converts the given event into an extension notification.
      * 
+     * @param model the employed data model
      * @param event
      *            the received event.
      * @return extension notification
@@ -153,7 +159,8 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
             final JVoiceXMLEvent event) {
         // Simply retrieve an encapsulated event to handle a send tag.
         if (event instanceof OutgoingExtensionNotificationJVoiceXmlEvent) {
-            final OutgoingExtensionNotificationJVoiceXmlEvent ext = (OutgoingExtensionNotificationJVoiceXmlEvent) event;
+            final OutgoingExtensionNotificationJVoiceXmlEvent ext =
+                    (OutgoingExtensionNotificationJVoiceXmlEvent) event;
             return ext.getExtensionNotification();
         }
 
@@ -172,7 +179,8 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
         notification.setName(name);
         Object data = null;
         if (event instanceof SynthesizedOutputEvent) {
-            final SynthesizedOutputEvent output = (SynthesizedOutputEvent) event;
+            final SynthesizedOutputEvent output =
+                    (SynthesizedOutputEvent) event;
             try {
                 data = converter.convertSynthesizedOutputEvent(output);
             } catch (ConversionException e) {
@@ -220,7 +228,8 @@ public class MmiDetailedSessionListener implements DetailedSessionListener {
         final Thread thread = new Thread() {
             @Override
             public void run() {
-                final JVoiceXmlSession jvxmlSession = (JVoiceXmlSession) session;
+                final JVoiceXmlSession jvxmlSession =
+                        (JVoiceXmlSession) session;
                 jvxmlSession.removeSessionListener(listener);
             }
         };

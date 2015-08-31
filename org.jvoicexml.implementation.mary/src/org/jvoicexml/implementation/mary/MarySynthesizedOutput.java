@@ -317,7 +317,8 @@ public final class MarySynthesizedOutput
      */
     private void fireOutputEvent(final SynthesizedOutputEvent event) {
         synchronized (listener) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>();
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listener);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -344,7 +345,8 @@ public final class MarySynthesizedOutput
      */
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
         if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
-            final OutputStartedEvent outputStartedEvent = (OutputStartedEvent) event;
+            final OutputStartedEvent outputStartedEvent =
+                    (OutputStartedEvent) event;
             final SpeakableText startedSpeakable = outputStartedEvent
                     .getSpeakable();
             if (LOGGER.isDebugEnabled()) {
@@ -445,7 +447,8 @@ public final class MarySynthesizedOutput
     @Override
     public void outputError(final ErrorEvent error) {
         synchronized (listener) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>();
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listener);
             for (SynthesizedOutputListener current : copy) {
                 current.outputError(error);
