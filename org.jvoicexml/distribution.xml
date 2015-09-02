@@ -359,7 +359,7 @@ sphinx.lib.dir=../../lib
         <izpack input="${etc}/install.xml" output="${dist.install.jar}" installerType="standard" basedir="${distFolder}" inheritall="true" />
     </target>
 
-    <target name="dist-maven-snapshot" depends="distributionFolder,-version" description="Create a snapshot for maven installations">
+    <target name="dist-maven-snapshot" depends="distributionFolder" description="Create a snapshot for maven installations">
         <ant dir="../org.jvoicexml.client" target="dist-maven-snapshot" inheritall="false" inheritrefs="false" />
         <ant dir="../org.jvoicexml.client.text" target="dist-maven-snapshot" inheritall="false" inheritrefs="false" />
         <ant dir="../org.jvoicexml.jndi" target="dist-maven-snapshot" inheritall="false" inheritrefs="false" />
