@@ -181,6 +181,9 @@ public final class Jsapi20SynthesizedOutput
                 manager.setMediaLocator(mediaLocator);
             }
             synthesizer.allocate();
+            synthesizer.setSpeakableMask(SpeakableEvent.DEFAULT_MASK
+                    | SpeakableEvent.SPEAKABLE_FAILED);
+            synthesizer.addSpeakableListener(this);
             synthesizer.addSynthesizerListener(this);
             synthesizer.waitEngineState(Synthesizer.ALLOCATED);
         } catch (EngineStateException ex) {
@@ -331,7 +334,6 @@ public final class Jsapi20SynthesizedOutput
         }
         final SsmlDocument document = ssmlText.getDocument();
         final String doc = document.toString();
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("speaking SSML");
             LOGGER.debug(doc);
@@ -339,7 +341,7 @@ public final class Jsapi20SynthesizedOutput
         enableBargeIn = ssmlText.isBargeInEnabled();
         try {
             synthesizer.resume();
-            int id = synthesizer.speakMarkup(doc, this);
+            int id = synthesizer.speakMarkup(doc, null);
             queueIds.put(ssmlText, id);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("queued id '" + id + "'");
@@ -383,7 +385,7 @@ public final class Jsapi20SynthesizedOutput
             LOGGER.debug("processing next speakable: " + speakable);
         }
 
-        // Really process the next speakable
+        // Actually process the next speakable
         if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             speakSSML(ssml);
@@ -492,7 +494,7 @@ public final class Jsapi20SynthesizedOutput
         }
         try {
             synthesizer.resume();
-            int id = synthesizer.speak(text, this);
+            int id = synthesizer.speak(text, null);
             queueIds.put(speakable, id);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("queued id '" + id + "'");
@@ -733,6 +735,12 @@ public final class Jsapi20SynthesizedOutput
             } catch (BadFetchError e) {
                 notifyError(e);
             }
+        } else if (id == SpeakableEvent.SPEAKABLE_FAILED) {
+            LOGGER.warn("speakable failed: " + event);
+            final SpeakableException exception = event.getSpeakableException();
+            final BadFetchError error =
+                    new BadFetchError(exception.getMessage(), exception);
+            notifyError(error);
         }
     }
 
