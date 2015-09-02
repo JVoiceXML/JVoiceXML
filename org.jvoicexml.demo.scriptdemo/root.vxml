@@ -7,5 +7,5 @@
   <meta name="author" content="JVoiceXML group" />
   <meta name="copyright" content="JVoiceXML group" />
 
-  <var name="testvar" expr="'hello'" />
+  <var name="testvar" expr="'Hello'" />
 </vxml>

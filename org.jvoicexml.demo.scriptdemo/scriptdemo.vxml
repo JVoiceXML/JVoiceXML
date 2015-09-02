@@ -2,6 +2,7 @@
 <vxml version="2.0" xmlns="http://www.w3.org/2001/vxml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd"
+  xml:lang="en"
   application="root.vxml">
 
   <meta name="description" content="script demo" />
@@ -32,7 +33,7 @@
     <block name="third">
       Third scripting demo:
       hello + world =
-      <value expr="'hello ' + 'world'" />
+      <value expr="'Hello ' + 'world'" />
     </block>
 
     <block name="second">
