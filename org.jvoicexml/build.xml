@@ -98,7 +98,7 @@ personal-props/README.txt
 
 
     <target name="-compile"
-            depends="-init,-checkJavaVersion,-version"
+            depends="-init,-checkJavaVersion"
             description="Compile the core JAVA sources">
         <!-- Build components that are used by the core -->
         <ant dir="../org.jvoicexml.xml"
@@ -114,7 +114,6 @@ personal-props/README.txt
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
         <echo file="${build}/jvoicexml.version">
 jvxml.version=${jvxml.version}
-jvxml.revision=${revision.max}
         </echo>
         <javac destdir="${build}"
                includeantruntime="false"

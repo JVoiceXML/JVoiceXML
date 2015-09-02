@@ -79,10 +79,10 @@ public final class ScriptDemo {
     }
 
     /**
-     * Call the voicexml interpreter context to process the given xml document.
+     * Call the VoiceXML interpreter context to process the given XML document.
      *
      * @param uri
-     *            uri of the first document to load
+     *            URI of the first document to load
      * @exception JVoiceXMLEvent
      *                Error processing the call.
      */
@@ -97,7 +97,7 @@ public final class ScriptDemo {
         }
 
         final ConnectionInformation client =
-            new BasicConnectionInformation("dummy", "jsapi20", "jsapi20");
+            new BasicConnectionInformation("dummy", "jsapi20sapi", "jsapi20sapi");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
@@ -121,7 +121,7 @@ public final class ScriptDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting sripting demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2014 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2015 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final ScriptDemo demo = new ScriptDemo();

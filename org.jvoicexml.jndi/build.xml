@@ -160,9 +160,9 @@
     <copy todir="${distFolder}/lib" file="${dist.jndi.jar}" />
 </target>
 
-<target name="dist-maven-snapshot" depends="-version,distribution">
+<target name="dist-maven-snapshot" depends="distribution">
     <copy todir="${dist}" file="etc/${component}.pom" overwrite="true" />
-    <replace file="${dist}/${component}.pom" token="@version@" value="${jvxml.version}.${revision.max}-SNAPSHOT" />
+    <replace file="${dist}/${component}.pom" token="@version@" value="${jvxml.version}-SNAPSHOT" />
     <path id="maven.path">
         <fileset dir="${3rdparty.dir}/maven/lib">
             <include name="maven-ant-tasks-2.1.3.jar" />

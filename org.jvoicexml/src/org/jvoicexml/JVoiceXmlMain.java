@@ -133,8 +133,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
      * {@inheritDoc}
      *
      * The version information is created by <code>
-     * &lt;VERSION_MAJOR&gt>.&lt;VERSION_MINOR&gt;.&lt;VERSION_BUGFIX_LEVEL&gt;
-     * .&lt;EA|GA&gt;[.&lt;BUILD_NUMBER&gt;]
+     * &lt;VERSION_MAJOR&gt;.&lt;VERSION_MINOR&gt;.&lt;VERSION_BUGFIX_LEVEL&gt;.&lt;EA|GA&gt;
      * </code>.
      */
     public String getVersion() {
@@ -150,16 +149,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
             return "unmanaged version";
         }
 
-        final StringBuilder str = new StringBuilder();
-        final String version = props.getProperty("jvxml.version");
-        str.append(version);
-        final String buildNumber = props.getProperty("jvxml.revision");
-        if (!buildNumber.startsWith("${")) {
-            str.append(" (Revision ");
-            str.append(buildNumber);
-            str.append(')');
-        }
-        return str.toString();
+        return props.getProperty("jvxml.version");
     }
 
     /**
