@@ -875,7 +875,7 @@ public class EcmaScriptDataModel implements DataModel {
         if (trimmedExpr.isEmpty()) {
             return null;
         }
-        if (trimmedExpr.endsWith(";")) {
+        if (trimmedExpr.endsWith(";") || trimmedExpr.endsWith("}")) {
             return trimmedExpr;
         }
         return trimmedExpr + ";";

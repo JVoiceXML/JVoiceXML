@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -122,7 +122,7 @@ final class ClearStrategy extends AbstractTagStrategy {
         final Collection<FormItem> items = fia.getFormItems();
         for (FormItem item : items) {
             final String name = item.getName();
-            model.deleteVariable(name);
+            model.updateVariable(name, null);
             resetCounter(model, name);
         }
     }
@@ -140,6 +140,9 @@ final class ClearStrategy extends AbstractTagStrategy {
      */
     private void resetCounter(final DataModel model, final String name)
             throws SemanticError {
+        if (!model.existsVariable(name + "$")) {
+            return;
+        }
         final Object value = model.readVariable(name + "$", Object.class);
         if (value instanceof EventCountable) {
             final EventCountable countable = (EventCountable) value;
@@ -152,7 +155,7 @@ final class ClearStrategy extends AbstractTagStrategy {
     }
 
     /**
-     * Clear all specified variables.
+     * Clears all specified variables.
      * 
      * @param context
      *            The current VoiceXML interpreter context.
@@ -166,10 +169,6 @@ final class ClearStrategy extends AbstractTagStrategy {
             final FormInterpretationAlgorithm fia) throws SemanticError {
         final DataModel model = context.getDataModel();
         for (String name : namelist) {
-            if (!model.existsVariable(name)) {
-                throw new SemanticError("clear failed: variable '" + name
-                        + "' is not defined");
-            }
             resetCounter(model, name);
             model.updateVariable(name, null);
             if (LOGGER.isDebugEnabled()) {

@@ -26,13 +26,9 @@
 
 package org.jvoicexml.interpreter.datamodel.ecmascript;
 
-import org.apache.log4j.Logger;
-import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
-import org.mozilla.javascript.WrappedException;
 import org.mozilla.javascript.annotations.JSConstructor;
 
 /**
