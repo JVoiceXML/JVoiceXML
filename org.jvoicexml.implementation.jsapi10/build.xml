@@ -104,70 +104,62 @@ org.jvoicexml/personal-props/README.txt
     <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,jar" />
 
     <target name="apidoc" description="create javadoc" depends="-setup,-initdocs">
-        <echo message="creating javadoc with access: ${javadoc.access}" />
-
+        <echo message="creating javadoc for ${component} with access: ${javadoc.access}" />
         <delete dir="${apidoc}" failonerror="false" />
-
         <javadoc destdir="${apidoc}" windowtitle="JVoiceXML JSAPI 1.0 Implementation Platform" author="true" version="true" linksource="true" access="${javadoc.access}" use="true">
             <packageset dir="${src}" />
-            <doctitle>
-                <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
-            </doctitle>
-            <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2014<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
-            </bottom>
-        <!-- Custom tags -->
-        <tag name="todo" description="Stuff to complete" />
-        <classpath>
-            <path refid="project.classpath" />
-        </classpath>
+            <classpath refid="project.classpath" />
+            
+            <doctitle>JVoiceXML - a free VoiceXML interpreter</doctitle>
+            <bottom>Copyright &#169; 2005-${year} JVoiceXML group</bottom>
+            <tag name="todo" description="Stuff to complete" />
 
-        <!-- Resolve used libraries -->
-        <link offline="true" href="http://java.sun.com/javase/6/docs/api/" packagelistLoc="${3rdparty.dir}" />
-        <link offline="true" resolveLink="false" href="${jvxml.core.apidoc}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
-        <link offline="true" href="http://logging.apache.org/log4j/docs/api/" packagelistLoc="${log4j.dir}" />
-        <link offline="true" href="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc" packagelistLoc="${jsapi1.dir}" />
+            <!-- Resolve used libraries -->
+            <link offline="true" href="${apidoc.java.href}" packagelistLoc="${3rdparty.dir}" />
+            <link offline="true" resolveLink="false" href="${jvxml.core.apidoc}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+            <link offline="true" href="http://logging.apache.org/log4j/docs/api/" packagelistLoc="${log4j.dir}" />
+            <link offline="true" href="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc" packagelistLoc="${jsapi1.dir}" />
 
-        <!-- Group definitions -->
-        <group title="JSAPI 1.0 based implementation platform">
-            <package name="org.jvoicexml.implementation.jsapi10*" />
-        </group>
-    </javadoc>
-</target>
+            <!-- Group definitions -->
+            <group title="JSAPI 1.0 Implementation Platform">
+                <package name="${component}*" />
+            </group>
+        </javadoc>
+    </target>
 
-<target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -initcheckstyle" if="checkstyle.present">
-    <property name="checkstyle-target.dir" value="${dist}/checkstyle/${component}" />
-    <mkdir dir="${checkstyle-target.dir}" />
-    <property name="checkstyle.data" value="${checkstyle-target.dir}/checkstyle-data.xml" />
-    <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml" failonviolation="false">
-        <classpath path="${project.classpath}" />
-        <classpath refid="jvxml.core.lib" />
-        <classpath location="${build}" />
-        <fileset dir="${src}">
-            <include name="org/jvoicexml/**/*.java" />
-        </fileset>
-        <formatter type="xml" tofile="${checkstyle.data}" />
-    </checkstyle>
-    <xslt style="${jvxml.core.dir}/etc/checkstyle-frames.xsl" in="${checkstyle.data}" out="${checkstyle-target.dir}/report.html">
-        <param name="output.dir" expression="${checkstyle-target.dir}" />
-    </xslt>
-</target>
+    <target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -initcheckstyle" if="checkstyle.present">
+        <property name="checkstyle-target.dir" value="${dist}/checkstyle/${component}" />
+        <mkdir dir="${checkstyle-target.dir}" />
+        <property name="checkstyle.data" value="${checkstyle-target.dir}/checkstyle-data.xml" />
+        <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml" failonviolation="false">
+            <classpath path="${project.classpath}" />
+            <classpath refid="jvxml.core.lib" />
+            <classpath location="${build}" />
+            <fileset dir="${src}">
+                <include name="org/jvoicexml/**/*.java" />
+            </fileset>
+            <formatter type="xml" tofile="${checkstyle.data}" />
+        </checkstyle>
+        <xslt style="${jvxml.core.dir}/etc/checkstyle-frames.xsl" in="${checkstyle.data}" out="${checkstyle-target.dir}/report.html">
+            <param name="output.dir" expression="${checkstyle-target.dir}" />
+        </xslt>
+    </target>
 
-<target name="distribution" depends="jar">
-    <property name="distFolder" value="${dist}/${jvxml.version}" />
-    <copy tofile="${distFolder}/config/jsapi10-talking-java-implementation.xml" file="${etc}/jsapi10-talking-java-implementation-dist.xml" />
-    <copy todir="${distFolder}/config">
-        <fileset dir="${etc}">
-            <include name="jvoicexml.gram" />
-        </fileset>
-    </copy>
-    <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jar}" />
-    <copy todir="${distFolder}/lib">
-        <fileset refid="jsapi1.lib" />
-        <fileset dir="${local-3rdparty.dir}/talkingjava/lib">
-            <include name="*.jar" />
-            <include name="*.dll" />
-        </fileset>
-    </copy>
-</target>
+    <target name="distribution" depends="jar">
+        <property name="distFolder" value="${dist}/${jvxml.version}" />
+        <copy tofile="${distFolder}/config/jsapi10-talking-java-implementation.xml" file="${etc}/jsapi10-talking-java-implementation-dist.xml" />
+        <copy todir="${distFolder}/config">
+            <fileset dir="${etc}">
+                <include name="jvoicexml.gram" />
+            </fileset>
+        </copy>
+        <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jar}" />
+        <copy todir="${distFolder}/lib">
+            <fileset refid="jsapi1.lib" />
+            <fileset dir="${local-3rdparty.dir}/talkingjava/lib">
+                <include name="*.jar" />
+                <include name="*.dll" />
+            </fileset>
+        </copy>
+    </target>
 </project>

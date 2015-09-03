@@ -47,8 +47,8 @@ personal-props/README.txt
             <fileset refid="httpclient.lib" />
             <fileset refid="jlibrtp.lib" />
             <fileset refid="jchardet.lib" />
-            <fileset refid="spring.lib"/>
-            <fileset refid="junit.lib"/>
+            <fileset refid="spring.lib" />
+            <fileset refid="junit.lib" />
             <pathelement location="${dist}/org.jvoicexml.client.text.jar" />
             <pathelement location="${build}" />
         </path>
@@ -74,23 +74,21 @@ personal-props/README.txt
     </target>
 
     <target name="createSystemTestConfiguration" depends="-setup">
-        <echo file="${jvxml.core.dir}/personal-props/platforms.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<platforms>
-    <platform name="org.jvoicexml.implementation.text">
-        <subproject name="org.jvoicexml.client.text" order="pre" />
-    </platform>
-</platforms>
+        <echo file="${jvxml.core.dir}/personal-props/platforms.xml">
+            <![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+            <platforms>
+                <platform name="org.jvoicexml.implementation.text">
+                    <subproject name="org.jvoicexml.client.text" order="pre" />
+                </platform>
+            </platforms>
 ]]>
         </echo>
-        <ant antfile="${jvxml.core.dir}/configuration.xml"
-            inheritall="false" inheritrefs="false" dir="${jvxml.core.dir}">
-          <property name="enableJndi" value="true"/>
+        <ant antfile="${jvxml.core.dir}/configuration.xml" inheritall="false" inheritrefs="false" dir="${jvxml.core.dir}">
+            <property name="enableJndi" value="true" />
         </ant>
         <!-- Further adaptations to the run.xml that are not handled by
              the configuration file -->
-        <xslt in="${jvxml.core.dir}/run.xml"
-            out="${jvxml.core.dir}/run-tmp.xml"
-        	style="${etc}/patch-runscript.xsl">
+        <xslt in="${jvxml.core.dir}/run.xml" out="${jvxml.core.dir}/run-tmp.xml" style="${etc}/patch-runscript.xsl">
             <outputproperty name="method" value="xml" />
             <outputproperty name="standalone" value="no" />
             <outputproperty name="encoding" value="UTF-8" />
@@ -98,37 +96,26 @@ personal-props/README.txt
             <param name="log4j.configuration" expression="${basedir}/config/log4j.xml" />
         </xslt>
         <copy file="${jvxml.core.dir}/run-tmp.xml" tofile="${jvxml.core.dir}/run.xml" overwrite="true" />
-      <!-- Remove classloader issues in the config file -->
-      <xslt in="${config}/text-implementation.xml"
-        out="${config}/text-test-implementation.xml"
-        style="etc/patch-text-config.xsl">
-          <outputproperty name="method" value="xml" />
-          <outputproperty name="standalone" value="no" />
-          <outputproperty name="encoding" value="UTF-8" />
-          <outputproperty name="indent" value="yes" />
-      </xslt>
-      <delete file="${config}/text-implementation.xml"/>
+        <!-- Remove classloader issues in the config file -->
+        <xslt in="${config}/text-implementation.xml" out="${config}/text-test-implementation.xml" style="etc/patch-text-config.xsl">
+            <outputproperty name="method" value="xml" />
+            <outputproperty name="standalone" value="no" />
+            <outputproperty name="encoding" value="UTF-8" />
+            <outputproperty name="indent" value="yes" />
+        </xslt>
+        <delete file="${config}/text-implementation.xml" />
     </target>
 
-    <target name="compile-jvxml" depends="createSystemTestConfiguration"
-      description="Create JVoiceXML core jar files">
+    <target name="compile-jvxml" depends="createSystemTestConfiguration" description="Create JVoiceXML core jar files">
         <echo message="Create JVoiceXML core jare files" />
-        <ant antfile="${jvxml.core.dir}/build.xml" 
-            dir="${jvxml.core.dir}"
-            target="jar" 
-            inheritAll="false" inheritrefs="false" />
+        <ant antfile="${jvxml.core.dir}/build.xml" dir="${jvxml.core.dir}" target="jar" inheritAll="false" inheritrefs="false" />
         <echo message="Create JVoiceXML voicexml unit" />
-        <ant antfile="../org.jvoicexml.voicexmlunit/build.xml" 
-            dir="../org.jvoicexml.voicexmlunit"
-            target="jar" 
-            inheritAll="false" inheritrefs="false" />
+        <ant antfile="../org.jvoicexml.voicexmlunit/build.xml" dir="../org.jvoicexml.voicexmlunit" target="jar" inheritAll="false" inheritrefs="false" />
     </target>
 
-    <target name="compile" depends="-init,-initcompile,compile-jvxml,-checkJavaVersion" 
-        	description="Compile the sources">
+    <target name="compile" depends="-init,-initcompile,compile-jvxml,-checkJavaVersion" description="Compile the sources">
         <echo message="compiling system test layer with debug=${debug}, optimize=${optimize}" />
-        <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
-        	deprecation="on" includeantruntime="false">
+        <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" includeantruntime="false">
             <src path="${src}" />
             <include name="org/jvoicexml/systemtest/**/*.java" />
             <classpath refid="project.classpath" />
@@ -136,8 +123,7 @@ personal-props/README.txt
         </javac>
     </target>
 
-    <target name="jar" depends="compile"
-        description="Pack all compiled files into jar files">
+    <target name="jar" depends="compile" description="Pack all compiled files into jar files">
         <!-- system test jar file -->
         <jar jarfile="${dist.systemtest.jar}" compress="false">
             <fileset dir="${build}">
@@ -158,83 +144,78 @@ personal-props/README.txt
     <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,jar" />
 
     <target name="apidoc" description="create javadoc" depends="-setup,-initdocs">
-        <echo message="creating javadoc with access: ${access}" />
-
+        <echo message="creating javadoc for ${component} with access: ${javadoc.access}" />
         <delete dir="${apidoc}" />
         <makeurl property="jvxml.core.apidoc" file="${apidoc.basedir}/org.jvoicexml" />
-
-        <javadoc destdir="${apidoc}" windowtitle="JVoiceXML" author="true" version="true" access="${access}" use="true">
+        <javadoc destdir="${apidoc}" windowtitle="JVoiceXML System Test" author="true" version="true" access="${access}" use="true">
             <packageset dir="${src}" />
-            <doctitle>
-                <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
-            </doctitle>
-            <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
-            </bottom>
-	        <tag name="todo" description="Stuff to complete" />
-	        <classpath>
-	            <path refid="project.classpath" />
-	        </classpath>
-	        <link offline="true" href="http://java.sun.com/javase/6/docs/api/" packagelistLoc="${3rdparty.dir}" />
-	        <link offline="true" href="${jvxml.core.apidoc}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
-	
-	        <group title="JVoiceXML system test">
-	            <package name="org.jvoicexml.systemtest*" />
-	        </group>
-	    </javadoc>
-	</target>
+            <classpath refid="project.classpath" />
 
-	<target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -initcheckstyle" if="checkstyle.present">
-	    <!-- checkstyle library -->
-	    <checkstyle config="${etc}/jvoicexml-checks.xml">
-	        <classpath>
-	            <pathelement path="${project.classpath}" />
-	            <pathelement location="${build}" />
-	        </classpath>
-	        <fileset dir="${src}">
-	            <include name="org/jvoicexml/**/*.java" />
-	        </fileset>
-	    </checkstyle>
-	</target>
-	
-	<!--
+            <doctitle>JVoiceXML - a free VoiceXML interpreter</doctitle>
+            <bottom>Copyright &#169; 2009-${year} JVoiceXML group</bottom>
+            <tag name="todo" description="Stuff to complete" />
+
+            <link offline="true" href="${apidoc.java.href}" packagelistLoc="${3rdparty.dir}" />
+            <link offline="true" href="${jvxml.core.apidoc}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+
+            <!-- Group definitions -->
+            <group title="JVoiceXML System Test">
+                <package name="${component}*" />
+            </group>
+        </javadoc>
+    </target>
+
+    <target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -initcheckstyle" if="checkstyle.present">
+        <!-- checkstyle library -->
+        <checkstyle config="${etc}/jvoicexml-checks.xml">
+            <classpath>
+                <pathelement path="${project.classpath}" />
+                <pathelement location="${build}" />
+            </classpath>
+            <fileset dir="${src}">
+                <include name="org/jvoicexml/**/*.java" />
+            </fileset>
+        </checkstyle>
+    </target>
+
+    <!--
 	      ===================================================================
 	      Do JUnit test target
 	      ===================================================================
 	    -->
-	<target name="test.junit" depends="compile">
-	    <echo message="junit test run..." />
-	    <mkdir dir="${junit.report}" />
-	    <junit printsummary="yes" fork="yes" timeout="180000" haltonfailure="no" tempdir="${junit.report}" showoutput="true">
-	        <classpath>
-	            <path refid="project.classpath" />
-	            <fileset refid="junit.lib" />
-	        </classpath>
-	        <formatter type="xml" />
-	        <batchtest fork="yes" todir="${junit.report}">
-	            <fileset dir="${unitTests}">
-	                <include name="**/*Test.java" />
-	                <exclude name="**/All*Tests.java" />
-	                <exclude name="**/All*Test.java" />
-	                <exclude name="**/All*.java" />
-	            </fileset>
-	        </batchtest>
-	    </junit>
-	</target>
-	
-	<!--
+    <target name="test.junit" depends="compile">
+        <echo message="junit test run..." />
+        <mkdir dir="${junit.report}" />
+        <junit printsummary="yes" fork="yes" timeout="180000" haltonfailure="no" tempdir="${junit.report}" showoutput="true">
+            <classpath>
+                <path refid="project.classpath" />
+                <fileset refid="junit.lib" />
+            </classpath>
+            <formatter type="xml" />
+            <batchtest fork="yes" todir="${junit.report}">
+                <fileset dir="${unitTests}">
+                    <include name="**/*Test.java" />
+                    <exclude name="**/All*Tests.java" />
+                    <exclude name="**/All*Test.java" />
+                    <exclude name="**/All*.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <!--
 	      ===================================================================
 	      test report target
 	      ===================================================================
 	    -->
-	<target name="report">
-	    <echo message="create html report for tests" />
-	    <mkdir dir="${junit.report}" />
-	    <junitreport todir="${junit.report}">
-	        <fileset dir="${junit.report}">
-	            <include name="TEST-*.xml" />
-	        </fileset>
-	        <report format="frames" todir="${junit.report}" />
-	    </junitreport>
-	</target>
-	</project>
+    <target name="report">
+        <echo message="create html report for tests" />
+        <mkdir dir="${junit.report}" />
+        <junitreport todir="${junit.report}">
+            <fileset dir="${junit.report}">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report format="frames" todir="${junit.report}" />
+        </junitreport>
+    </target>
+</project>

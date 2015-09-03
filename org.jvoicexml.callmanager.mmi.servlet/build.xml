@@ -13,10 +13,8 @@ This file builds the servlet to create MMI responses.
 
     <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
-        <property name="component"
-            value="org.jvoicexml.callmanager.mmi.servlet"/>
-        <property name="component.path"
-          value="org/jvoicexml/callmanager/mmi/servlet"/>
+        <property name="component" value="org.jvoicexml.callmanager.mmi.servlet" />
+        <property name="component.path" value="org/jvoicexml/callmanager/mmi/servlet" />
 
         <property name="src" value="src" />
         <property name="build" value="classes" />
@@ -30,7 +28,7 @@ This file builds the servlet to create MMI responses.
         <property name="debug" value="on" />
 
         <!-- the used class path -->
-        <path id="build.classpath">
+        <path id="project.classpath">
             <fileset refid="jvxml.xml.lib" />
             <fileset refid="servlet.lib" />
         </path>
@@ -41,7 +39,7 @@ This file builds the servlet to create MMI responses.
     </target>
 
     <target name="-checkJVoiceXML">
-        <available classname="org.jvoicexml.xml.vxml.VoiceXmlDocument" property="jvoicexml.present" classpathref="build.classpath" />
+        <available classname="org.jvoicexml.xml.vxml.VoiceXmlDocument" property="jvoicexml.present" classpathref="project.classpath" />
         <fail unless="jvoicexml.present">
 Cannot find jvoicexml libraries needed to build this demo.
 Build this jar from the main project first.
@@ -61,7 +59,7 @@ Adapt the settings for your servlet container in the file
       </fail>
         <echo message="servlet.lib.dir = '${servlet.lib.dir}' usable:${servlet.available}" />
     </target>
-    
+
     <target name="configuration">
     </target>
 
@@ -70,13 +68,12 @@ Adapt the settings for your servlet container in the file
         <delete file="${war.file}" />
     </target>
 
-    <target name="compile" depends="-init,-checkJVoiceXML,-checkJEE"
-        description="Compile the JAVA sources">
+    <target name="compile" depends="-init,-checkJVoiceXML,-checkJEE" description="Compile the JAVA sources">
         <echo message="compiling with debug=${debug}, optimize=${optimize}" />
         <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" includeantruntime="false">
-              <src path="${src}" />
+            <src path="${src}" />
             <include name="**/*.java" />
-            <classpath refid="build.classpath" />
+            <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
     </target>
@@ -102,48 +99,29 @@ Adapt the settings for your servlet container in the file
 
     <target name="distribution" depends="jar">
         <property name="distFolder" value="${dist}/${jvxml.version}" />
-        <copy todir="${distFolder}/lib" file="${dist.war}"/>
+        <copy todir="${distFolder}/lib" file="${dist.war}" />
     </target>
-    
-    <target name="apidoc" description="create javadoc"
-        depends="-setup">
+
+    <target name="apidoc" description="create javadoc" depends="-setup">
         <echo message="creating javadoc for ${component} with access: ${javadoc.access}" />
-
-        <delete dir="${apidoc}" failonerror="false"/>
-
-        <javadoc destdir="${apidoc}"
-                 windowtitle="JVoiceXML"
-                 author="true"
-                 version="true"
-                 access="${javadoc.access}"
-                 use="true">
+        <delete dir="${apidoc}" failonerror="false" />
+        <javadoc destdir="${apidoc}" windowtitle="JVoiceXML MMI Callmanager Servlet" author="true" version="true" access="${javadoc.access}" use="true">
             <packageset dir="${src}" />
-            <doctitle>
-                <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
-            </doctitle>
-            <bottom>
-                <![CDATA[<i>Copyright &#169; 2013<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
-            </bottom>
-        <tag name="todo" description="Stuff to complete" />
-        <classpath>
-            <path location="${build}" />
-            <path refid="build.classpath" />
-        </classpath>
+            <classpath refid="project.classpath" />
+            
+            <doctitle>JVoiceXML - a free VoiceXML interpreter</doctitle>
+            <bottom>Copyright &#169; 2013-${year} JVoiceXML group</bottom>
+            <tag name="todo" description="Stuff to complete" />
 
-        <!-- Resolve used libraries -->
-        <link offline="true"
-              href="http://java.sun.com/j2se/1.5.0/docs/api/"
-              packagelistLoc="${3rdparty.dir}" />
-        <link offline="true" resolveLink="false"
-              href="${jvxml.core.apidoc}"
-              packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
-        <link offline="true" 
-              href="http://logging.apache.org/log4j/docs/api/"
-              packagelistLoc="${log4j.dir}" />
+            <!-- Resolve used libraries -->
+            <link offline="true" href="${apidoc.java.href}" packagelistLoc="${3rdparty.dir}" />
+            <link offline="true" resolveLink="false" href="${jvxml.core.apidoc}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+            <link offline="true" href="http://logging.apache.org/log4j/docs/api/" packagelistLoc="${log4j.dir}" />
 
-        <group title="MMI Callmanager Servlet">
-            <package name="${component}*" />
-        </group>
+            <!-- Group definitions -->
+            <group title="MMI Callmanager Servlet">
+                <package name="${component}*" />
+            </group>
         </javadoc>
     </target>
 

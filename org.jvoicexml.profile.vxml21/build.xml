@@ -56,22 +56,14 @@ org.jvoicexml/personal-props/README.txt
         </copy>
     </target>
 
-    <target name="clean"
-            depends="-setup"
-            description="Remove all compiled and distribution files">
+    <target name="clean" depends="-setup" description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
         <delete file="${dist.jar}" failonerror="false" />
     </target>
 
-    <target name="compile"
-            depends="-init,-checkJavaVersion"
-            description="Compile the sources">
+    <target name="compile" depends="-init,-checkJavaVersion" description="Compile the sources">
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
-        <javac destdir="${build}"
-               includeantruntime="false"
-               optimize="${javac.optimize}"
-               debug="${javac.debug}"
-               deprecation="on">
+        <javac destdir="${build}" includeantruntime="false" optimize="${javac.optimize}" debug="${javac.debug}" deprecation="on">
             <src path="${src}" />
             <include name="${component.path}/**/*.java" />
             <classpath refid="project.classpath" />
@@ -79,9 +71,7 @@ org.jvoicexml/personal-props/README.txt
         </javac>
     </target>
 
-    <target name="jar"
-            depends="compile"
-            description="Pack all compiled files into jar files">
+    <target name="jar" depends="compile" description="Pack all compiled files into jar files">
         <jar jarfile="${dist.jar}" compress="false">
             <fileset dir="${build}">
                 <include name="${component.path}/**/*.class" />
@@ -91,12 +81,9 @@ org.jvoicexml/personal-props/README.txt
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
                 <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML jsapi 2.0 base layer" />
-                    <attribute name="Implementation-Version"
-                               value="${version}" />
+                    <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+                    <attribute name="Implementation-Title" value="JVoiceXML jsapi 2.0 base layer" />
+                    <attribute name="Implementation-Version" value="${version}" />
                 </section>
             </manifest>
             <metainf dir="etc">
@@ -105,84 +92,55 @@ org.jvoicexml/personal-props/README.txt
         </jar>
     </target>
 
-    <target name="rebuild"
-            description="Rebuild the jars from scratch"
-            depends="clean,jar" />
+    <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,jar" />
 
     <target name="apidoc" description="create javadoc" depends="-setup">
-        <echo message="creating javadoc with access: ${javadoc.access}" />
-
+        <echo message="creating javadoc for ${component} with access: ${javadoc.access}" />
         <delete dir="${apidoc}" failonerror="false" />
-
-        <javadoc destdir="${apidoc}"
-                 windowtitle="JVoiceXML"
-                 author="true"
-                 version="true"
-                 linksource="true"
-                 access="${javadoc.access}"
-                 use="true">
+        <javadoc destdir="${apidoc}" windowtitle="JVoiceXML VoiceXML 2.1. Profile" author="true" version="true" linksource="true" access="${javadoc.access}" use="true">
             <packageset dir="${src}" />
-            <doctitle>
-                <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
-            </doctitle>
-            <bottom>
-                <![CDATA[<i>Copyright &#169; 2011<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
-            </bottom>
-        <tag name="todo" description="Stuff to complete" />
-        <classpath>
-            <path refid="project.classpath" />
-        </classpath>
+            <classpath refid="project.classpath" />
 
-        <!-- Resolve used libraries -->
-        <link offline="true"
-              href="http://java.sun.com/javase/6/docs/api/"
-              packagelistLoc="${3rdparty.dir}" />
-        <link offline="true"
-              resolveLink="false"
-              href="${jvxml.core.apidoc}"
-              packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
-        <link offline="true"
-              href="http://logging.apache.org/log4j/docs/api/"
-              packagelistLoc="${log4j.dir}" />
-        <link offline="true"
-              href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api"
-              packagelistLoc="${spring.dir}" />
-    </javadoc>
-</target>
+            <doctitle>JVoiceXML - a free VoiceXML interpreter</doctitle>
+            <bottom>Copyright &#169; 2011-${year} JVoiceXML group</bottom>
+            <tag name="todo" description="Stuff to complete" />
 
-<target name="checkstyle"
-        description="Check for JVoiceXML coding standard"
-        depends="compile, -initcheckstyle"
-        if="checkstyle.present">
-    <property name="checkstyle-target.dir"
-              value="${dist}/checkstyle/${component}" />
-    <mkdir dir="${checkstyle-target.dir}" />
-    <property name="checkstyle.data"
-              value="${checkstyle-target.dir}/checkstyle-data.xml" />
-    <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml"
-                failonviolation="false">
-        <classpath>
-            <pathelement path="${project.classpath}" />
-            <pathelement location="${build}" />
-        </classpath>
-        <classpath refid="jvxml.core.lib" />
-        <fileset dir="${src}">
-            <include name="${component.path}/**/*.java" />
-        </fileset>
-        <formatter type="xml" tofile="${checkstyle.data}" />
-    </checkstyle>
-    <xslt style="${jvxml.core.dir}/etc/checkstyle-frames.xsl"
-          in="${checkstyle.data}"
-          out="${checkstyle-target.dir}/report.html">
-        <param name="output.dir" expression="${checkstyle-target.dir}" />
-    </xslt>
-</target>
+            <!-- Resolve used libraries -->
+            <link offline="true" href="${apidoc.java.href}" packagelistLoc="${3rdparty.dir}" />
+            <link offline="true" resolveLink="false" href="${jvxml.core.apidoc}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+            <link offline="true" href="http://logging.apache.org/log4j/docs/api/" packagelistLoc="${log4j.dir}" />
+            <link offline="true" href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api" packagelistLoc="${spring.dir}" />
 
-<target name="distribution" depends="jar">
-    <property name="distFolder" value="${dist}/${jvxml.version}" />
-    <copy tofile="${distFolder}/config/vxml2.1-profile.xml"
-          file="${etc}/vxml2.1-profile-dist.xml"
-          overwrite="true" />
-    <copy todir="${distFolder}/lib" file="${dist.jar}"/>
-</target>
+            <!-- Group definitions -->
+            <group title="VoiceXML 2.1 Profile">
+                <package name="${component}*" />
+            </group>
+        </javadoc>
+    </target>
+
+    <target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -initcheckstyle" if="checkstyle.present">
+        <property name="checkstyle-target.dir" value="${dist}/checkstyle/${component}" />
+        <mkdir dir="${checkstyle-target.dir}" />
+        <property name="checkstyle.data" value="${checkstyle-target.dir}/checkstyle-data.xml" />
+        <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml" failonviolation="false">
+            <classpath>
+                <pathelement path="${project.classpath}" />
+                <pathelement location="${build}" />
+            </classpath>
+            <classpath refid="jvxml.core.lib" />
+            <fileset dir="${src}">
+                <include name="${component.path}/**/*.java" />
+            </fileset>
+            <formatter type="xml" tofile="${checkstyle.data}" />
+        </checkstyle>
+        <xslt style="${jvxml.core.dir}/etc/checkstyle-frames.xsl" in="${checkstyle.data}" out="${checkstyle-target.dir}/report.html">
+            <param name="output.dir" expression="${checkstyle-target.dir}" />
+        </xslt>
+    </target>
+
+    <target name="distribution" depends="jar">
+        <property name="distFolder" value="${dist}/${jvxml.version}" />
+        <copy tofile="${distFolder}/config/vxml2.1-profile.xml" file="${etc}/vxml2.1-profile-dist.xml" overwrite="true" />
+        <copy todir="${distFolder}/lib" file="${dist.jar}" />
+    </target>
 </project>

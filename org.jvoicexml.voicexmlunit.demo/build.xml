@@ -13,10 +13,8 @@ This file builds and runs the 'ViceXMLUnit' demo for JVoiceXML.
 
     <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
-        <property name="component"
-            value="org.jvoicexml.voicexmlunit.demo"/>
-        <property name="component.path"
-          value="org/jvoicexml/voicexmlunit/demo"/>
+        <property name="component" value="org.jvoicexml.voicexmlunit.demo" />
+        <property name="component.path" value="org/jvoicexml/voicexmlunit/demo" />
 
         <property name="src" value="${basedir}/src" />
         <property name="build" value="${basedir}/classes" />
@@ -28,14 +26,14 @@ This file builds and runs the 'ViceXMLUnit' demo for JVoiceXML.
         <property name="debug" value="on" />
 
         <!-- the used class path -->
-        <path id="build.classpath">
+        <path id="project.classpath">
             <path refid="jvxml.core.lib" />
             <fileset refid="log4j.lib" />
-            <fileset refid="junit.lib"/>
+            <fileset refid="junit.lib" />
         </path>
 
         <path id="run.classpath">
-            <path refid="build.classpath" />
+            <path refid="project.classpath" />
             <pathelement path="${config}" />
             <fileset refid="rhino.lib" />
             <fileset refid="harmcrest.lib" />
@@ -47,7 +45,7 @@ This file builds and runs the 'ViceXMLUnit' demo for JVoiceXML.
     </target>
 
     <target name="-checkJVoiceXML">
-        <available classname="org.jvoicexml.JVoiceXml" property="jvoicexml.present" classpathref="build.classpath" />
+        <available classname="org.jvoicexml.JVoiceXml" property="jvoicexml.present" classpathref="project.classpath" />
         <fail unless="jvoicexml.present">
 Cannot find jvoicexml libraries needed to build this demo.
 Build this jar from the main project first.
@@ -71,7 +69,7 @@ Build this jar from the main project first.
         <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" includeantruntime="false">
             <src path="${src}" />
             <include name="**/*.java" />
-            <classpath refid="build.classpath" />
+            <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
     </target>
@@ -79,61 +77,38 @@ Build this jar from the main project first.
     <target name="jar">
     </target>
 
-    <target name="apidoc" description="create javadoc"
-        depends="-setup">
+    <target name="apidoc" description="create javadoc" depends="-setup">
         <echo message="creating javadoc for ${component} with access: ${javadoc.access}" />
-
-        <delete dir="${apidoc}" failonerror="false"/>
-
-        <javadoc destdir="${apidoc}"
-                 windowtitle="JVoiceXML"
-                 author="true"
-                 version="true"
-                 access="${javadoc.access}"
-                 use="true">
+        <delete dir="${apidoc}" failonerror="false" />
+        <javadoc destdir="${apidoc}" windowtitle="JVoiceXML VoiceXML Unit Test Demos" author="true" version="true" access="${javadoc.access}" use="true">
             <packageset dir="${src}" />
-            <doctitle>
-                <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
-            </doctitle>
-            <bottom>
-                <![CDATA[<i>Copyright &#169; 2013-2014<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
-            </bottom>
-        <tag name="todo" description="Stuff to complete" />
-        <classpath>
-            <path refid="build.classpath" />
-        </classpath>
+            <classpath refid="project.classpath" />
 
-        <!-- Resolve used libraries -->
-        <link offline="true"
-              href="http://java.sun.com/j2se/1.5.0/docs/api/"
-              packagelistLoc="${3rdparty.dir}" />
-        <link offline="true" resolveLink="false"
-              href="${jvxml.core.apidoc}"
-              packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
-        <link offline="true" 
-              href="http://logging.apache.org/log4j/docs/api/"
-              packagelistLoc="${log4j.dir}" />
+            <doctitle>JVoiceXML - a free VoiceXML interpreter</doctitle>
+            <bottom>Copyright &#169; 2013-${year} JVoiceXML group</bottom>
+            <tag name="todo" description="Stuff to complete" />
 
-        <group title="JVoiceXML Unit Demo">
-            <package name="${component}*" />
-        </group>
+            <!-- Resolve used libraries -->
+            <link offline="true" href="${apidoc.java.href}" packagelistLoc="${3rdparty.dir}" />
+            <link offline="true" resolveLink="false" href="${jvxml.core.apidoc}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+            <link offline="true" href="http://logging.apache.org/log4j/docs/api/" packagelistLoc="${log4j.dir}" />
+
+            <!-- Group definitions -->
+            <group title="JVoiceXML Unit Demo">
+                <package name="${component}*" />
+            </group>
         </javadoc>
     </target>
 
-    <target name="runHelloWorldDemo"
-        description="Run the 'hello world' demo" depends="compile">
-        <junit printsummary="yes"
-                   maxmemory="256M"
-                   fork="true"
-                   haltonfailure="false"
-                   showoutput="true">
-          <jvmarg value="-Djava.security.manager" />
-          <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
-          <classpath refid="run.classpath" />
-          <classpath location="${build}" />
+    <target name="runHelloWorldDemo" description="Run the 'hello world' demo" depends="compile">
+        <junit printsummary="yes" maxmemory="256M" fork="true" haltonfailure="false" showoutput="true">
+            <jvmarg value="-Djava.security.manager" />
+            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
+            <classpath refid="run.classpath" />
+            <classpath location="${build}" />
 
-          <formatter type="brief" usefile="false" />
-          <test name="org.jvoicexml.voicexmlunit.demo.TestHelloDemo" />
+            <formatter type="brief" usefile="false" />
+            <test name="org.jvoicexml.voicexmlunit.demo.TestHelloDemo" />
         </junit>
     </target>
 

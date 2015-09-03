@@ -6,6 +6,9 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
     <target name="-3rdparty-setup">
         <!-- third party libraries -->
         <property name="3rdparty.dir" value="../org.jvoicexml/3rdparty" />
+
+        <property name="apidoc.java.href" value="http://docs.oracle.com/javase/7/docs/api" />
+
         <!-- log4j library -->
         <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.17" />
         <property name="log4j.lib.dir" value="${log4j.dir}/lib" />
@@ -38,8 +41,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         </fileset>
 
         <!-- commons-httpclient library -->
-        <property name="httpclient.dir"
-                  value="${commons.dir}/httpclient4.2.3" />
+        <property name="httpclient.dir" value="${commons.dir}/httpclient4.2.3" />
         <property name="httpclient.lib.dir" value="${httpclient.dir}/lib" />
         <fileset dir="${httpclient.lib.dir}" id="httpclient.lib">
             <include name="httpclient-4.2.3.jar" />
@@ -72,8 +74,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         </fileset>
 
         <!-- JSON simple library -->
-        <property name="jsonsimple.dir"
-                  value="${3rdparty.dir}/jsonsimple1.1.1" />
+        <property name="jsonsimple.dir" value="${3rdparty.dir}/jsonsimple1.1.1" />
         <property name="jsonsimple.lib.dir" value="${jsonsimple.dir}/lib" />
         <fileset dir="${jsonsimple.lib.dir}" id="jsonsimple.lib">
             <include name="json-simple-1.1.1.jar" />
@@ -168,27 +169,20 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         <condition property="checkstyle.present">
             <and>
                 <available file="${checkstyle.lib.dir}" type="dir" />
-                <available classpathref="checkstyle.path"
-                           classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" />
+                <available classpathref="checkstyle.path" classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" />
             </and>
         </condition>
     </target>
 
-    <target name="-initcheckstyle"
-            description="Setup the checkstyle task"
-            depends="-checkCheckstyle"
-            if="checkstyle.present">
-        <taskdef classname="com.puppycrawl.tools.checkstyle.CheckStyleTask"
-                 name="checkstyle">
+    <target name="-initcheckstyle" description="Setup the checkstyle task" depends="-checkCheckstyle" if="checkstyle.present">
+        <taskdef classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" name="checkstyle">
             <classpath refid="checkstyle.path" />
         </taskdef>
     </target>
 
     <target name="-checkJunit">
         <!-- Check if junit ist accessible for ant. -->
-        <available classname="junit.framework.TestCase"
-                   property="junit.present"
-                   classpathref="test.classpath" />
+        <available classname="junit.framework.TestCase" property="junit.present" classpathref="test.classpath" />
         <fail unless="junit.present">
 junit is not installed in your ANT distribution.
 Download junit.jar from http://www.junit.org and copy junit.jar into

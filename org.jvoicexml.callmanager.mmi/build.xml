@@ -15,9 +15,8 @@ org.jvoicexml/personal-props/README.txt
 
     <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
-        <property name="component" value="org.jvoicexml.callmanager.mmi"/>
-        <property name="component.path"
-          value="org/jvoicexml/callmanager/mmi"/>
+        <property name="component" value="org.jvoicexml.callmanager.mmi" />
+        <property name="component.path" value="org/jvoicexml/callmanager/mmi" />
 
         <!-- directory structure -->
         <property name="src" value="src" />
@@ -32,8 +31,7 @@ org.jvoicexml/personal-props/README.txt
         </condition>
 
         <!-- main jar files -->
-        <property name="dist.jar"
-                  value="${dist}/${component}.jar" />
+        <property name="dist.jar" value="${dist}/${component}.jar" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
@@ -50,25 +48,18 @@ org.jvoicexml/personal-props/README.txt
         <mkdir dir="${dist}" />
     </target>
 
-    <target name="clean" depends="-setup"
-            description="Remove all compiled and distribution files">
-        <ant dir="../org.jvoicexml.mmi.events" target="clean"
-          inheritrefs="false"  inheritall="false"/>
+    <target name="clean" depends="-setup" description="Remove all compiled and distribution files">
+        <ant dir="../org.jvoicexml.mmi.events" target="clean" inheritrefs="false" inheritall="false" />
         <delete dir="${build}" failonerror="false" />
-        <delete file="${dist.jar}" failonerror="false"/>
+        <delete file="${dist.jar}" failonerror="false" />
     </target>
 
     <target name="configuration" depends="-setup">
     </target>
 
-    <target name="compile"
-            depends="-init,-checkJavaVersion"
-            description="Compile the sources">
+    <target name="compile" depends="-init,-checkJavaVersion" description="Compile the sources">
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
-        <javac destdir="${build}" includeantruntime="false"
-               optimize="${javac.optimize}"
-               debug="${javac.debug}"
-               deprecation="on">
+        <javac destdir="${build}" includeantruntime="false" optimize="${javac.optimize}" debug="${javac.debug}" deprecation="on">
             <src path="${src}" />
             <include name="${component.path}/**/*.java" />
             <classpath refid="project.classpath" />
@@ -76,109 +67,73 @@ org.jvoicexml/personal-props/README.txt
         </javac>
     </target>
 
-    <target name="jar"
-            depends="compile"
-            description="Pack all compiled files into jar files">
+    <target name="jar" depends="compile" description="Pack all compiled files into jar files">
         <jar jarfile="${dist.jar}" compress="false">
             <fileset dir="${build}">
-              <include name="${component.path}/**/*.class" />
-              <exclude name="org/jvoicexml/**/Test*.class" />
+                <include name="${component.path}/**/*.class" />
+                <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
                 <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML MMI call manager" />
-                    <attribute name="Implementation-Version"
-                        value="${version}" />
+                    <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+                    <attribute name="Implementation-Title" value="JVoiceXML MMI call manager" />
+                    <attribute name="Implementation-Version" value="${version}" />
                 </section>
             </manifest>
         </jar>
     </target>
 
-    <target name="rebuild"
-            description="Rebuild the jars from scratch"
-            depends="clean,jar" />
+    <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,jar" />
 
-    <target name="apidoc" description="create javadoc"
-        depends="-setup">
+    <target name="apidoc" description="create javadoc" depends="-setup">
         <echo message="creating javadoc for ${component} with access: ${javadoc.access}" />
-
-        <delete dir="${apidoc}" failonerror="false"/>
-
-        <javadoc destdir="${apidoc}"
-                 windowtitle="JVoiceXML"
-                 author="true"
-                 version="true"
-                 access="${javadoc.access}"
-                 use="true">
+        <delete dir="${apidoc}" failonerror="false" />
+        <javadoc destdir="${apidoc}" windowtitle="JVoiceXML MMI CallManager" author="true" version="true" access="${javadoc.access}" use="true">
             <packageset dir="${src}" />
-            <doctitle>
-                <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
-            </doctitle>
-            <bottom>
-                <![CDATA[<i>Copyright &#169; 2012-2013<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
-            </bottom>
-        <tag name="todo" description="Stuff to complete" />
-        <classpath>
-            <path refid="project.classpath" />
-        </classpath>
+            <classpath refid="project.classpath" />
 
-        <!-- Resolve used libraries -->
-        <link offline="true"
-              href="http://java.sun.com/j2se/1.5.0/docs/api/"
-              packagelistLoc="${3rdparty.dir}" />
-        <link offline="true" resolveLink="false"
-              href="${jvxml.core.apidoc}"
-              packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
-        <link offline="true" 
-              href="http://logging.apache.org/log4j/docs/api/"
-              packagelistLoc="${log4j.dir}" />
+            <doctitle>JVoiceXML - a free VoiceXML interpreter</doctitle>
+            <bottom>Copyright &#169; 2012-${year} JVoiceXML group</bottom>
+            <tag name="todo" description="Stuff to complete" />
 
-        <group title="MMI call manager">
-            <package name="${component}*" />
-        </group>
+            <!-- Resolve used libraries -->
+            <link offline="true" href="${apidoc.java.href}" packagelistLoc="${3rdparty.dir}" />
+            <link offline="true" resolveLink="false" href="${jvxml.core.apidoc}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+            <link offline="true" href="http://logging.apache.org/log4j/docs/api/" packagelistLoc="${log4j.dir}" />
+
+            <!-- Group definitions -->
+            <group title="MMI Callmanager">
+                <package name="${component}*" />
+            </group>
         </javadoc>
     </target>
 
-  <target name="checkstyle"
-    description="Check for JVoiceXML coding standard"
-    depends="compile, -initcheckstyle"
-    if="checkstyle.present">
-    <property name="checkstyle-target.dir"
-      value="${dist}/checkstyle/${component}" />
-    <mkdir dir="${checkstyle-target.dir}"/>
-    <property name="checkstyle.data"
-      value="${checkstyle-target.dir}/checkstyle-data.xml" />
-    <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml"
-       failonviolation="false">
-        <classpath>
-          <pathelement path="${project.classpath}" />
-          <pathelement location="${build}" />
-        </classpath>
-        <classpath refid="jvxml.core.lib"/>
-        <fileset dir="${src}">
-            <include name="${component.path}/**/*.java" />
-        </fileset>
-        <formatter type="xml" tofile="${checkstyle.data}"/>
-    </checkstyle>
-    <xslt style="${jvxml.core.dir}/etc/checkstyle-frames.xsl"
-          in="${checkstyle.data}"
-          out="${checkstyle-target.dir}/report.html">
-      <param name="output.dir" expression="${checkstyle-target.dir}"/>
-    </xslt>
-  </target>
+    <target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -initcheckstyle" if="checkstyle.present">
+        <property name="checkstyle-target.dir" value="${dist}/checkstyle/${component}" />
+        <mkdir dir="${checkstyle-target.dir}" />
+        <property name="checkstyle.data" value="${checkstyle-target.dir}/checkstyle-data.xml" />
+        <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml" failonviolation="false">
+            <classpath>
+                <pathelement path="${project.classpath}" />
+                <pathelement location="${build}" />
+            </classpath>
+            <classpath refid="jvxml.core.lib" />
+            <fileset dir="${src}">
+                <include name="${component.path}/**/*.java" />
+            </fileset>
+            <formatter type="xml" tofile="${checkstyle.data}" />
+        </checkstyle>
+        <xslt style="${jvxml.core.dir}/etc/checkstyle-frames.xsl" in="${checkstyle.data}" out="${checkstyle-target.dir}/report.html">
+            <param name="output.dir" expression="${checkstyle-target.dir}" />
+        </xslt>
+    </target>
 
     <target name="distribution" depends="jar">
         <property name="distFolder" value="${dist}/${jvxml.version}" />
-  	    <copy todir="${distFolder}/lib" file="${dist.jar}"/>
-        <ant dir="../org.jvoicexml.mmi.events" target="distribution"
-          inheritrefs="false" inheritall="false"/>
-        <ant dir="../org.jvoicexml.callmanager.mmi.socket" target="distribution"
-             inheritrefs="false" inheritall="false"/>
-        <ant dir="../org.jvoicexml.callmanager.mmi.umundo" target="distribution"
-             inheritrefs="false" inheritall="false"/>
+        <copy todir="${distFolder}/lib" file="${dist.jar}" />
+        <ant dir="../org.jvoicexml.mmi.events" target="distribution" inheritrefs="false" inheritall="false" />
+        <ant dir="../org.jvoicexml.callmanager.mmi.socket" target="distribution" inheritrefs="false" inheritall="false" />
+        <ant dir="../org.jvoicexml.callmanager.mmi.umundo" target="distribution" inheritrefs="false" inheritall="false" />
     </target>
 </project>
