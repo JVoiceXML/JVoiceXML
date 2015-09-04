@@ -1,0 +1,31 @@
+<grammar version="1.0" xmlns="http://www.w3.org/2001/06/grammar"
+         xml:lang="en-US" tag-format="semantics/1.0-literals" root="answer">
+   <rule id="answer" scope="public">
+
+      <one-of>
+         <item><ruleref uri="#yes"/></item>
+         <item><ruleref uri="#no"/></item>
+      </one-of>
+   </rule>
+
+   <rule id="yes">
+      <one-of>
+         <item>yes</item>
+         <item>yeah</item>
+
+         <item><token>you bet</token></item>
+         <item xml:lang="fr-CA">oui</item>
+		 <tag>yes&apos;s</tag>
+      </one-of>
+   </rule>
+   <rule id="no">
+      <one-of>
+         <item>no</item>
+
+         <item>nope</item>
+         <item>no way</item>
+      </one-of>
+      <tag>no&apos;s</tag>
+
+   </rule>
+</grammar>

@@ -1,0 +1,43 @@
+<grammar mode="voice" tag-format="semantics/1.0" root="myroot" version="1.0" xml:lang="en-US">
+  <rule id='myroot'>
+	<ruleref uri='#Digits'/>
+  </rule>
+  
+  <rule id='Digits' scope='public'>
+    <one-of>
+      <item>
+        <one-of>
+          <item>oh</item>
+          <item>zero</item>
+        </one-of>
+      </item>
+      <item>
+        one
+      </item>
+      <item>
+        two
+      </item>
+      <item>
+        three
+      </item>
+      <item>
+        four
+      </item>
+      <item>
+        five
+      </item>
+      <item>
+        six
+      </item>
+      <item>
+        seven
+      </item>
+      <item>
+        eight
+      </item>
+      <item>
+        nine
+      </item>
+    </one-of>
+  </rule>
+</grammar>
