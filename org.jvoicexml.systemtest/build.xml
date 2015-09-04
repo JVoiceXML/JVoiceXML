@@ -146,7 +146,7 @@ personal-props/README.txt
     <target name="apidoc" description="create javadoc" depends="-setup,-initdocs">
         <echo message="creating javadoc for ${component} with access: ${javadoc.access}" />
         <delete dir="${apidoc}" />
-        <makeurl property="jvxml.core.apidoc" file="${apidoc.basedir}/org.jvoicexml" />
+        <makeurl property="apidoc.jvxml.href" file="${apidoc.basedir}/org.jvoicexml" />
         <javadoc destdir="${apidoc}" windowtitle="JVoiceXML System Test" author="true" version="true" access="${access}" use="true">
             <packageset dir="${src}" />
             <classpath refid="project.classpath" />
@@ -156,7 +156,8 @@ personal-props/README.txt
             <tag name="todo" description="Stuff to complete" />
 
             <link offline="true" href="${apidoc.java.href}" packagelistLoc="${3rdparty.dir}" />
-            <link offline="true" href="${jvxml.core.apidoc}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+            <link offline="true" href="${apidoc.jvxml.href}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+            <link offline="true" href="${log4j.apidoc.href}" packagelistLoc="${log4j.dir}" />
 
             <!-- Group definitions -->
             <group title="JVoiceXML System Test">

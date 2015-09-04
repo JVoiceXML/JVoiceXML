@@ -107,8 +107,9 @@ org.jvoicexml/personal-props/README.txt
 
             <!-- Resolve used libraries -->
             <link offline="true" href="${apidoc.java.href}" packagelistLoc="${3rdparty.dir}" />
-            <link offline="true" resolveLink="false" href="${jvxml.core.apidoc}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
-            <link offline="true" href="http://logging.apache.org/log4j/docs/api/" packagelistLoc="${log4j.dir}" />
+            <link offline="true" resolveLink="false" href="${apidoc.jvxml.href}" packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+            <link offline="true" resolveLink="false" href="${apidoc.jvxml.href}/org.jvoicexml.xml" packagelistLoc="${apidoc.basedir}/org.jvoicexml.xml" />
+            <link offline="true" href="${log4j.apidoc.href}" packagelistLoc="${log4j.dir}" />
 
             <!-- Group definitions -->
             <group title="uMundo ETL for MMI">

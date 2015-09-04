@@ -22,7 +22,8 @@ personal-props/README.txt
         <property name="src" value="${basedir}/src" />
         <property name="build" value="${basedir}/classes" />
         <property name="dist" value="${basedir}/dist" />
-        <property name="apidoc" value="${basedir}/doc/api/${component}" />
+        <property name="apidoc.basedir" value="${basedir}/doc/api/" />
+        <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${basedir}/config" />
         <property name="etc" value="${basedir}/etc" />
 
@@ -174,10 +175,10 @@ jvxml.version=${jvxml.version}
 
             <!-- Resolve used libraries -->
             <link offline="true" href="${apidoc.java.href}" packagelistLoc="${3rdparty.dir}" />
-            <link offline="true" resolveLink="false" href="${jvxml.core.apidoc}.xml" packagelistLoc="${apidoc.basedir}/org.jvoicexml.xml" />
-            <link offline="true" resolveLink="false" href="${jvxml.core.apidoc}.processor.srgs" packagelistLoc="${apidoc.basedir}/org.jvoicexml.processor.srgs" />
+            <link offline="true" resolveLink="false" href="${apidoc.jvxml.href}/org.jvoicexml.xml" packagelistLoc="${apidoc.basedir}/org.jvoicexml.xml" />
+            <link offline="true" resolveLink="false" href="${apidoc.jvxml.href}/org.jvoicexml.processor.srgs" packagelistLoc="${apidoc.basedir}/org.jvoicexml.processor.srgs" />
             <link offline="true" href="http://www.mozilla.org/rhino/apidocs/" packagelistLoc="${rhino.dir}" />
-            <link offline="true" href="http://logging.apache.org/log4j/docs/api/" packagelistLoc="${log4j.dir}" />
+            <link offline="true" href="${log4j.apidoc.href}" packagelistLoc="${log4j.dir}" />
             <link offline="true" href="http://www.springframework.org/api" packagelistLoc="${spring.dir}" />
 
             <!-- Group definitions -->
