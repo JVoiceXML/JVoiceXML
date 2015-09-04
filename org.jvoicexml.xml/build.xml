@@ -17,11 +17,13 @@ personal-props/README.txt
         <property name="component" value="org.jvoicexml.xml" />
 
         <!-- directory structure -->
-        <property name="src" value="src" />
-        <property name="build" value="classes" />
-        <property name="dist" value="../org.jvoicexml/dist" />
-        <property name="etc" value="etc" />
+        <property name="src" value="${basedir}/src" />
+        <property name="build" value="${basedir}/classes" />
+        <property name="dist" value="${jvxml.core.dir}/dist" />
+        <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
+        <property name="config" value="${jvxml.core.dir}/config" />
+        <property name="etc" value="${basedir}/etc" />
 
         <!-- main jar files -->
         <property name="dist.jar" value="${dist}/${component}.jar" />
@@ -98,10 +100,10 @@ personal-props/README.txt
         <javadoc destdir="${apidoc}" windowtitle="JVoiceXML XML Library" author="true" version="true" linksource="true" access="${javadoc.access}" use="true">
             <packageset dir="${src}" />
             <classpath refid="project.classpath" />
-            
+
             <doctitle>JVoiceXML - a free VoiceXML interpreter</doctitle>
             <bottom>Copyright &#169; 2005-${year} JVoiceXML group</bottom>
-            
+
             <!-- Custom tags -->
             <tag name="todo" description="Stuff to complete" />
             <tag name="created" description="Creation date" />

@@ -15,15 +15,17 @@ pizza.gram and yesno.gram to ${JVOICEXML_HOME}/config/jvoicexml.gram.
 
     <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
-        <property name="component"
-            value="org.jvoicexml.demo.mixedinitiativedemo"/>
-        <property name="component.path"
-          value="org/jvoicexml/demo/mixedinitiativedemo"/>
+        <property name="component" value="org.jvoicexml.demo.mixedinitiativedemo" />
+        <property name="component.path" value="org/jvoicexml/demo/mixedinitiativedemo" />
 
-        <property name="src" value="src" />
-        <property name="build" value="classes" />
+        <!-- directory structure -->
+        <property name="src" value="${basedir}/src" />
+        <property name="build" value="${basedir}/classes" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
-        <property name="config" value="config" />
+        <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
+        <property name="apidoc" value="${apidoc.basedir}/${component}" />
+        <property name="config" value="${jvxml.core.dir}/config" />
+        <property name="etc" value="${basedir}/etc" />
 
         <property name="optimize" value="off" />
         <property name="debug" value="on" />
@@ -60,8 +62,7 @@ Build this jar from the main project first.
         <delete file="${jar.file}" />
     </target>
 
-    <target name="compile" depends="-init,-checkJVoiceXML"
-        description="Compile the JAVA sources">
+    <target name="compile" depends="-init,-checkJVoiceXML" description="Compile the JAVA sources">
         <copy todir="${build}">
             <fileset dir="${config}">
                 <include name="**/*.xml" />
@@ -71,8 +72,7 @@ Build this jar from the main project first.
         </copy>
 
         <echo message="compiling with debug=${debug}, optimize=${optimize}" />
-        <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
-            deprecation="on" includeantruntime="false">
+        <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" includeantruntime="false">
             <src path="${src}" />
             <include name="**/*.java" />
             <classpath refid="build.classpath" />

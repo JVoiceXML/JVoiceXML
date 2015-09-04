@@ -16,11 +16,14 @@ This file builds and runs the 'ViceXMLUnit' demo for JVoiceXML.
         <property name="component" value="org.jvoicexml.voicexmlunit.demo" />
         <property name="component.path" value="org/jvoicexml/voicexmlunit/demo" />
 
+        <!-- directory structure -->
         <property name="src" value="${basedir}/src" />
         <property name="build" value="${basedir}/classes" />
-        <property name="config" value="${basedir}/config" />
-        <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
+        <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
+        <property name="apidoc" value="${apidoc.basedir}/${component}" />
+        <property name="config" value="${jvxml.core.dir}/config" />
+        <property name="etc" value="${basedir}/etc" />
 
         <property name="optimize" value="off" />
         <property name="debug" value="on" />

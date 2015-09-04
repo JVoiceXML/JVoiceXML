@@ -19,12 +19,13 @@ org.jvoicexml/personal-props/README.txt
         <property name="component.path" value="org/jvoicexml/callmanager/mmi" />
 
         <!-- directory structure -->
-        <property name="src" value="src" />
-        <property name="build" value="classes" />
-        <property name="etc" value="etc" />
+        <property name="src" value="${basedir}/src" />
+        <property name="build" value="${basedir}/classes" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
+        <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
+        <property name="etc" value="${basedir}/etc" />
 
         <condition property="windows">
             <os family="windows" />

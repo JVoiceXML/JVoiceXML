@@ -43,8 +43,12 @@
         <property name="testsuite.subdirectory" value="${testsuite}_Rel_1.01" />
 
         <!-- directory structure -->
-        <property name="src" value="src" />
-        <property name="build" value="WebContent/WEB-INF/classes" />
+        <property name="src" value="${basedir}/src" />
+        <property name="build" value="${basedir}/WebContent/WEB-INF/classes" />
+        <property name="apidoc.basedir" value="${basedir}/doc/api/" />
+        <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
+        <property name="config" value="${jvxml.core.dir}/config" />
+        <property name="etc" value="${basedir}/etc" />
         <property name="lib" value="WebContent/WEB-INF/lib" />
         <property name="webxml" value="WebContent/WEB-INF/web.xml" />
         
