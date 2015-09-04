@@ -26,6 +26,7 @@ org.jvoicexml/personal-props/README.txt
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
         <property name="etc" value="${basedir}/etc" />
+        <property name="gen" value="gen" />
 
         <condition property="windows">
             <os family="windows" />
