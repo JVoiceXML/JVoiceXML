@@ -28,7 +28,7 @@ public class Utils {
         }
     }
 
-    public static SrgsSisrGrammar LoadDocument(String filename)
+    public static SrgsSisrGrammar loadDocument(String filename)
             throws Exception {
         Assert.assertNotNull("filename to load was null", filename);
 

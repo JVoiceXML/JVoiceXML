@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.srgs.sisr.SIBlock;
+import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
 import org.jvoicexml.xml.srgs.Grammar;
 
 public class SrgsSisrGrammar {
@@ -17,7 +17,7 @@ public class SrgsSisrGrammar {
     private URI uri;
     private boolean isLiteral = false;
 
-    private SIBlock globalTags = new SIBlock();
+    private SemanticInterpretationBlock globalTags = new SemanticInterpretationBlock();
     private HashMap<String, SrgsRule> rules = new HashMap<String, SrgsRule>();
 
     // A pool of grammars shared by all that were parsed together
@@ -63,7 +63,7 @@ public class SrgsSisrGrammar {
         globalTags.append(tagContents);
     }
 
-    public SIBlock getGlobalTags() {
+    public SemanticInterpretationBlock getGlobalTags() {
         return globalTags;
     }
 
@@ -124,12 +124,14 @@ public class SrgsSisrGrammar {
 
     public Object recognize(String[] words) {
         ArrayList<String> list = new ArrayList<String>();
-        for (String word : words)
+        for (String word : words) {
             list.add(word);
+        }
 
         MatchConsumption mc = match(list);
-        if (mc == null)
+        if (mc == null) {
             return null;
+        }
 
         return mc.executeSisr();
     }
@@ -139,8 +141,9 @@ public class SrgsSisrGrammar {
         if (rule == null)
             return null;
         MatchConsumption mc = rule.match(tokens, 0);
-        if (mc != null)
+        if (mc != null) {
             mc.setGlobalExecutableSI(globalTags);
+        }
         return mc;
     }
 
@@ -148,8 +151,9 @@ public class SrgsSisrGrammar {
         ArrayList<String> tokens = new ArrayList<String>();
         String[] parts = text.split(" ");
         for (String part : parts) {
-            if (part.trim().length() > 0)
+            if (part.trim().length() > 0) {
                 tokens.add(part.trim());
+            }
         }
 
         return match(tokens);

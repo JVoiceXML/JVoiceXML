@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.srgs.sisr.AddToMatchedText;
-import org.jvoicexml.srgs.sisr.ExecutableSI;
+import org.jvoicexml.srgs.sisr.ExecutableSemanticInterpretation;
 
 public class TokenRuleExpansion implements RuleExpansion {
     private static final Logger LOGGER = Logger
             .getLogger(TokenRuleExpansion.class);
 
     private ArrayList<String> tokens = new ArrayList<String>();
-    private ExecutableSI executableSI = null;
+    private ExecutableSemanticInterpretation executableSI = null;
 
     public TokenRuleExpansion() {
     }
@@ -43,7 +43,7 @@ public class TokenRuleExpansion implements RuleExpansion {
      * 
      * @param si
      */
-    public void setExecutionSI(ExecutableSI si) {
+    public void setExecutionSI(ExecutableSemanticInterpretation si) {
         executableSI = si;
     }
 

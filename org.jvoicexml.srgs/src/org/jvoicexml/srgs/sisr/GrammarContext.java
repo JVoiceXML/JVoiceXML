@@ -5,15 +5,15 @@ import org.jvoicexml.srgs.SrgsSisrGrammar;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
-public class GrammarContext implements ExecutableSI {
+public class GrammarContext implements ExecutableSemanticInterpretation {
     private static final Logger LOGGER = Logger.getLogger(GrammarContext.class);
 
     private SrgsSisrGrammar grammar;
-    private ExecutableSI executableSI;
+    private ExecutableSemanticInterpretation executableSI;
     private String ruleName;
 
     public GrammarContext(SrgsSisrGrammar grammar, String ruleName,
-            ExecutableSI executableSI) {
+            ExecutableSemanticInterpretation executableSI) {
         this.grammar = grammar;
         this.ruleName = ruleName;
         this.executableSI = executableSI;

@@ -3,15 +3,15 @@ package org.jvoicexml.srgs;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.srgs.sisr.ExecutableSI;
-import org.jvoicexml.srgs.sisr.SIBlock;
+import org.jvoicexml.srgs.sisr.ExecutableSemanticInterpretation;
+import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
 
 public class OneOfRuleExpansion implements RuleExpansion {
     private static final Logger LOGGER = Logger
             .getLogger(OneOfRuleExpansion.class);
     private ArrayList<RuleExpansion> subRules = new ArrayList<RuleExpansion>();
-    private ExecutableSI executableSI = null;
-    private SIBlock initialSI = null;
+    private ExecutableSemanticInterpretation executableSI = null;
+    private SemanticInterpretationBlock initialSI = null;
 
     /**
      * Add executable SI (tag) to item to return if matched. Note, per spec only
@@ -19,7 +19,7 @@ public class OneOfRuleExpansion implements RuleExpansion {
      * 
      * @param si
      */
-    public void setExecutionSI(ExecutableSI si) {
+    public void setExecutionSI(ExecutableSemanticInterpretation si) {
         executableSI = si;
     }
 
@@ -29,7 +29,7 @@ public class OneOfRuleExpansion implements RuleExpansion {
 
     public void addInitialSI(String si) {
         if (initialSI == null)
-            initialSI = new SIBlock();
+            initialSI = new SemanticInterpretationBlock();
         initialSI.append(si);
     }
 

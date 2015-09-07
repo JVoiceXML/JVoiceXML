@@ -3,8 +3,8 @@ package org.jvoicexml.srgs;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.srgs.sisr.ExecutableSI;
-import org.jvoicexml.srgs.sisr.SIBlock;
+import org.jvoicexml.srgs.sisr.ExecutableSemanticInterpretation;
+import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
 
 public class ItemRuleExpansion implements RuleExpansion {
     private static final Logger LOGGER = Logger
@@ -12,11 +12,11 @@ public class ItemRuleExpansion implements RuleExpansion {
 
     private int minRepeat = 1, maxRepeat = 1;
     private ArrayList<RuleExpansion> subRules = new ArrayList<RuleExpansion>();
-    private SIBlock initialSI = null;
-    private ExecutableSI executableSI = null;
+    private SemanticInterpretationBlock initialSI = null;
+    private ExecutableSemanticInterpretation executableSI = null;
 
     /**
-     * Define minimum and maximum repeats
+     * Define minimum and maximum repeats.
      * 
      * @param min
      *            Minimum number of times token set must match
@@ -34,13 +34,13 @@ public class ItemRuleExpansion implements RuleExpansion {
      * 
      * @param si
      */
-    public void setExecutionSI(ExecutableSI si) {
+    public void setExecutionSI(ExecutableSemanticInterpretation si) {
         executableSI = si;
     }
 
     public void appendInitialSI(String si) {
         if (initialSI == null)
-            initialSI = new SIBlock();
+            initialSI = new SemanticInterpretationBlock();
         initialSI.append(si);
     }
 
@@ -52,7 +52,7 @@ public class ItemRuleExpansion implements RuleExpansion {
         return subRules;
     }
 
-    SIBlock getInitialSI() {
+    SemanticInterpretationBlock getInitialSI() {
         return initialSI;
     }
 

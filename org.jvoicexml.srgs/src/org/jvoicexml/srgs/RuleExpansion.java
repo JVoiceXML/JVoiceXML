@@ -2,12 +2,12 @@ package org.jvoicexml.srgs;
 
 import java.util.ArrayList;
 
-import org.jvoicexml.srgs.sisr.ExecutableSI;
+import org.jvoicexml.srgs.sisr.ExecutableSemanticInterpretation;
 
 public interface RuleExpansion {
     MatchConsumption match(ArrayList<String> tokens, int offset);
 
-    public void dump(String pad);
+    void setExecutionSI(ExecutableSemanticInterpretation si);
 
-    public void setExecutionSI(ExecutableSI si);
+    void dump(String pad);
 }

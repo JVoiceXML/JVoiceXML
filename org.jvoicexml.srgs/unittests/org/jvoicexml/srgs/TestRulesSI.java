@@ -16,7 +16,7 @@ public class TestRulesSI {
     @Test
     public void testLatest() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .LoadDocument("staticTestFiles/rulesLatest.srgs");
+                .loadDocument("staticTestFiles/rulesLatest.srgs");
 
         MatchConsumption mc = parsedGrammar.match("one");
         Assert.assertNotNull(mc);
@@ -28,7 +28,7 @@ public class TestRulesSI {
     @Test
     public void testRuleByName() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .LoadDocument("staticTestFiles/rulesLatest.srgs");
+                .loadDocument("staticTestFiles/rulesLatest.srgs");
 
         MatchConsumption mc = parsedGrammar.match("one");
         Assert.assertNotNull(mc);

@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-public class AddToMatchedText implements ExecutableSI {
+public class AddToMatchedText implements ExecutableSemanticInterpretation {
     private static final Logger LOGGER = Logger
             .getLogger(AddToMatchedText.class);
     private String matchedText;

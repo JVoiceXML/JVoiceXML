@@ -15,7 +15,7 @@ public class TestExternalRuleref {
     @Test
     public void testExternalWithNamedRule() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .LoadDocument("staticTestFiles/ExternalParent.srgs");
+                .loadDocument("staticTestFiles/ExternalParent.srgs");
         MatchConsumption mc = parsedGrammar.match("two three dogs");
         Assert.assertNotNull(mc);
 
@@ -28,7 +28,7 @@ public class TestExternalRuleref {
     @Test
     public void testExternalWithDefaultRule() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .LoadDocument("staticTestFiles/ExternalParentDefault.srgs");
+                .loadDocument("staticTestFiles/ExternalParentDefault.srgs");
         MatchConsumption mc = parsedGrammar.match("two three dogs");
         Assert.assertNotNull(mc);
 

@@ -7,34 +7,34 @@ import org.apache.log4j.Logger;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
 
-public class Context implements ExecutableSI {
+public class Context implements ExecutableSemanticInterpretation {
     private static final Logger LOGGER = Logger.getLogger(Context.class);
-    private ArrayList<ExecutableSI> executationCollection = new ArrayList<ExecutableSI>();
+    private ArrayList<ExecutableSemanticInterpretation> executationCollection = new ArrayList<ExecutableSemanticInterpretation>();
     private String ruleName;
 
     public Context(String contextName) {
         this.ruleName = contextName;
     }
 
-    public ArrayList<ExecutableSI> getExecutationCollection() {
+    public ArrayList<ExecutableSemanticInterpretation> getExecutationCollection() {
         return executationCollection;
     }
 
-    public void addExecutableContent(ArrayList<ExecutableSI> si) {
+    public void addExecutableContent(ArrayList<ExecutableSemanticInterpretation> si) {
         executationCollection.addAll(si);
     }
 
-    public void addExecutableContent(ExecutableSI si) {
+    public void addExecutableContent(ExecutableSemanticInterpretation si) {
         executationCollection.add(si);
     }
 
-    public void setExecutableContent(ArrayList<ExecutableSI> si) {
+    public void setExecutableContent(ArrayList<ExecutableSemanticInterpretation> si) {
         executationCollection = si;
     }
 
     public void dump(String pad) {
         LOGGER.debug(pad + "Context(" + ruleName + ")");
-        for (ExecutableSI si : executationCollection)
+        for (ExecutableSemanticInterpretation si : executationCollection)
             si.dump(pad + " ");
     }
 
@@ -53,7 +53,7 @@ public class Context implements ExecutableSI {
 
         // Perform SI execution
         boolean ruleRefProcessed = false;
-        for (ExecutableSI si : executationCollection) {
+        for (ExecutableSemanticInterpretation si : executationCollection) {
             si.execute(context, ruleScope);
             if (si instanceof Context)
                 ruleRefProcessed = true;

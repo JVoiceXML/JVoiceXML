@@ -73,7 +73,8 @@ public class ActiveGrammarSet implements ScopedSetObserver<GrammarDocument> {
      *            the observer to add
      * @since 0.7.3
      */
-    public void addActiveGrammarSetObserver(final ActiveGrammarSetObserver obs) {
+    public void addActiveGrammarSetObserver(
+            final ActiveGrammarSetObserver obs) {
         synchronized (observers) {
             observers.add(obs);
         }

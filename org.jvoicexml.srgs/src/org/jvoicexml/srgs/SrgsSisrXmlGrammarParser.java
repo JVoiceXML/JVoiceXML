@@ -10,7 +10,7 @@ import java.util.HashMap;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.srgs.sisr.SIBlock;
+import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
@@ -83,13 +83,13 @@ public class SrgsSisrXmlGrammarParser {
         for (int i = 0; i < children.getLength(); i++) {
             Node childNode = children.item(i);
             if (childNode instanceof Item) {
-                lastExpansion = ParseItem((Item) childNode);
+                lastExpansion = parseItem((Item) childNode);
                 grammarRule.setRule(lastExpansion);
             } else if (childNode instanceof OneOf) {
-                lastExpansion = ParseOneOf((OneOf) childNode);
+                lastExpansion = parseOneOf((OneOf) childNode);
                 grammarRule.setRule(lastExpansion);
             } else if (childNode instanceof Ruleref) {
-                lastExpansion = ParseRuleref((Ruleref) childNode);
+                lastExpansion = parseRuleref((Ruleref) childNode);
                 grammarRule.setRule(lastExpansion);
             } else if (childNode instanceof Tag) {
                 String textContent = childNode.getTextContent();
@@ -100,7 +100,7 @@ public class SrgsSisrXmlGrammarParser {
                 if (lastExpansion == null)
                     grammarRule.addInitialSI(textContent);
                 else
-                    lastExpansion.setExecutionSI(new SIBlock(textContent));
+                    lastExpansion.setExecutionSI(new SemanticInterpretationBlock(textContent));
             } else if (childNode instanceof org.jvoicexml.xml.Text) {
                 // ignore
             } else {
@@ -116,7 +116,7 @@ public class SrgsSisrXmlGrammarParser {
         return textContent.replace("'", "\\'");
     }
 
-    private ItemRuleExpansion ParseItem(Item itemNode)
+    private ItemRuleExpansion parseItem(Item itemNode)
             throws SrgsSisrParsingException {
         ItemRuleExpansion item = new ItemRuleExpansion();
 
@@ -143,13 +143,13 @@ public class SrgsSisrXmlGrammarParser {
         for (int i = 0; i < children.getLength(); i++) {
             Node childNode = children.item(i);
             if (childNode instanceof Item) {
-                lastExpansion = ParseItem((Item) childNode);
+                lastExpansion = parseItem((Item) childNode);
                 item.addSubRule(lastExpansion);
             } else if (childNode instanceof OneOf) {
-                lastExpansion = ParseOneOf((OneOf) childNode);
+                lastExpansion = parseOneOf((OneOf) childNode);
                 item.addSubRule(lastExpansion);
             } else if (childNode instanceof Ruleref) {
-                lastExpansion = ParseRuleref((Ruleref) childNode);
+                lastExpansion = parseRuleref((Ruleref) childNode);
                 item.addSubRule(lastExpansion);
             } else if (childNode instanceof Tag) {
                 String textContent = childNode.getTextContent();
@@ -160,13 +160,13 @@ public class SrgsSisrXmlGrammarParser {
                 if (lastExpansion == null)
                     item.appendInitialSI(textContent);
                 else
-                    lastExpansion.setExecutionSI(new SIBlock(textContent));
+                    lastExpansion.setExecutionSI(new SemanticInterpretationBlock(textContent));
             } else if (childNode instanceof Token
                     || childNode instanceof org.jvoicexml.xml.Text) {
                 String text = childNode.getTextContent().trim();
                 if (text.length() == 0)
                     continue;
-                lastExpansion = GenerateTextItem(text);
+                lastExpansion = generateTextItem(text);
                 item.addSubRule(lastExpansion);
             } else {
                 LOGGER.warn("Unknown node type "
@@ -177,7 +177,7 @@ public class SrgsSisrXmlGrammarParser {
         return item;
     }
 
-    private RuleExpansion GenerateTextItem(String textContent) {
+    private RuleExpansion generateTextItem(String textContent) {
         TokenRuleExpansion token = new TokenRuleExpansion(
                 textContent.split(" "));
 
@@ -195,7 +195,7 @@ public class SrgsSisrXmlGrammarParser {
     }
 
     // Parse a one-of rule; recursing as needed
-    private OneOfRuleExpansion ParseOneOf(OneOf oneOfNode)
+    private OneOfRuleExpansion parseOneOf(OneOf oneOfNode)
             throws SrgsSisrParsingException {
         OneOfRuleExpansion rule = new OneOfRuleExpansion();
 
@@ -205,13 +205,13 @@ public class SrgsSisrXmlGrammarParser {
         for (int i = 0; i < children.getLength(); i++) {
             Node childNode = children.item(i);
             if (childNode instanceof Item) {
-                lastExpansion = ParseItem((Item) childNode);
+                lastExpansion = parseItem((Item) childNode);
                 rule.addSubRule(lastExpansion);
             } else if (childNode instanceof OneOf) {
-                lastExpansion = ParseOneOf((OneOf) childNode);
+                lastExpansion = parseOneOf((OneOf) childNode);
                 rule.addSubRule(lastExpansion);
             } else if (childNode instanceof Ruleref) {
-                lastExpansion = ParseRuleref((Ruleref) childNode);
+                lastExpansion = parseRuleref((Ruleref) childNode);
                 rule.addSubRule(lastExpansion);
             } else if (childNode instanceof Tag) {
                 String textContent = childNode.getTextContent();
@@ -222,12 +222,12 @@ public class SrgsSisrXmlGrammarParser {
                 if (lastExpansion == null)
                     rule.addInitialSI(textContent);
                 else
-                    lastExpansion.setExecutionSI(new SIBlock(textContent));
+                    lastExpansion.setExecutionSI(new SemanticInterpretationBlock(textContent));
             } else if (childNode instanceof Token) {
                 String text = childNode.getTextContent().trim();
                 if (text.length() == 0)
                     continue;
-                lastExpansion = GenerateTextItem(text);
+                lastExpansion = generateTextItem(text);
                 rule.addSubRule(lastExpansion);
             } else if (childNode instanceof org.jvoicexml.xml.Text) {
                 // ignore text children as I don't believe they are valid in
@@ -241,7 +241,7 @@ public class SrgsSisrXmlGrammarParser {
         return rule;
     }
 
-    private RuleRefExpansion ParseRuleref(Ruleref ruleNode)
+    private RuleRefExpansion parseRuleref(Ruleref ruleNode)
             throws SrgsSisrParsingException {
         String uri = ruleNode.getUri();
         if (uri == null || uri.length() == 0)

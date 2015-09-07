@@ -3,7 +3,7 @@ package org.jvoicexml.srgs;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.srgs.sisr.ExecutableSI;
+import org.jvoicexml.srgs.sisr.ExecutableSemanticInterpretation;
 import org.jvoicexml.srgs.sisr.GrammarContext;
 
 public class RuleRefExpansion implements RuleExpansion {
@@ -11,7 +11,7 @@ public class RuleRefExpansion implements RuleExpansion {
             .getLogger(RuleRefExpansion.class);
 
     private SrgsRule referencedRule = null;
-    private ExecutableSI executableSI = null;
+    private ExecutableSemanticInterpretation executableSI = null;
     private SrgsSisrGrammar externalGrammar = null;
 
     public RuleRefExpansion(SrgsRule rule) {
@@ -29,7 +29,7 @@ public class RuleRefExpansion implements RuleExpansion {
      * 
      * @param si
      */
-    public void setExecutionSI(ExecutableSI si) {
+    public void setExecutionSI(ExecutableSemanticInterpretation si) {
         executableSI = si;
     }
 

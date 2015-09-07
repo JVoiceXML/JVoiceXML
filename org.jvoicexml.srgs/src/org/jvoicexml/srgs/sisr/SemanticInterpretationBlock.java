@@ -7,15 +7,15 @@ import org.apache.log4j.Logger;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-public class SIBlock implements ExecutableSI {
-    private static final Logger LOGGER = Logger.getLogger(SIBlock.class);
+public class SemanticInterpretationBlock implements ExecutableSemanticInterpretation {
+    private static final Logger LOGGER = Logger.getLogger(SemanticInterpretationBlock.class);
     private StringBuffer tagContent = new StringBuffer();
     private String lastRulename = null;
 
-    public SIBlock() {
+    public SemanticInterpretationBlock() {
     }
 
-    public SIBlock(String text) {
+    public SemanticInterpretationBlock(String text) {
         append(text);
     }
 
@@ -49,8 +49,8 @@ public class SIBlock implements ExecutableSI {
         return tagContent.toString();
     }
 
-    public ExecutableSI createMatchingInstance() {
-        SIBlock newCopy = new SIBlock();
+    public ExecutableSemanticInterpretation createMatchingInstance() {
+        SemanticInterpretationBlock newCopy = new SemanticInterpretationBlock();
         newCopy.append(tagContent.toString());
         newCopy.lastRulename = lastRulename;
         return newCopy;

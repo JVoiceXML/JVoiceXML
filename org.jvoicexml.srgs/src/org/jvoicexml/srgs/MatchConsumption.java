@@ -3,17 +3,17 @@ package org.jvoicexml.srgs;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.srgs.sisr.ExecutableSI;
+import org.jvoicexml.srgs.sisr.ExecutableSemanticInterpretation;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
- * Returned when a successful match of a rule expansion is successful. It
- * informs the caller how many tokens were actually consumed and the resulting
- * SI that needs to be executed to generate a result.
+ * Returned when a match of a rule expansion is successful. It informs the
+ * caller how many tokens were actually consumed and the resulting SI that needs
+ * to be executed to generate a result.
  * 
- * @author jrush
+ * @author Jim Rush
  *
  */
 public class MatchConsumption {
@@ -21,8 +21,8 @@ public class MatchConsumption {
             .getLogger(MatchConsumption.class);
     private int tokensConsumed = 0;
     private ArrayList<String> tokens = new ArrayList<String>();
-    private ExecutableSI globalExecutation = null;
-    private ArrayList<ExecutableSI> executationCollection = new ArrayList<ExecutableSI>();
+    private ExecutableSemanticInterpretation globalExecutation = null;
+    private ArrayList<ExecutableSemanticInterpretation> executationCollection = new ArrayList<ExecutableSemanticInterpretation>();
 
     public MatchConsumption() {
     }
@@ -32,17 +32,17 @@ public class MatchConsumption {
     }
 
     public MatchConsumption(int tokensConsumed,
-            ArrayList<ExecutableSI> executationCollection) {
+            ArrayList<ExecutableSemanticInterpretation> executationCollection) {
         this.tokensConsumed = tokensConsumed;
         this.executationCollection = executationCollection;
     }
 
-    public MatchConsumption(int tokensConsumed, ExecutableSI si) {
+    public MatchConsumption(int tokensConsumed, ExecutableSemanticInterpretation si) {
         this.tokensConsumed = tokensConsumed;
         this.executationCollection.add(si);
     }
 
-    public MatchConsumption(ExecutableSI executableSI) {
+    public MatchConsumption(ExecutableSemanticInterpretation executableSI) {
         executationCollection.add(executableSI);
     }
 
@@ -54,20 +54,21 @@ public class MatchConsumption {
         this.tokensConsumed = tokensConsumed;
     }
 
-    public ArrayList<ExecutableSI> getExecutationCollection() {
+    public ArrayList<ExecutableSemanticInterpretation> getExecutationCollection() {
         return executationCollection;
     }
 
-    public void setExecutationCollection(ArrayList<ExecutableSI> newValue) {
+    public void setExecutationCollection(ArrayList<ExecutableSemanticInterpretation> newValue) {
         executationCollection = newValue;
     }
 
-    public void addExecutableSI(ExecutableSI si) {
-        if (si != null)
+    public void addExecutableSI(ExecutableSemanticInterpretation si) {
+        if (si != null) {
             executationCollection.add(si);
+        }
     }
 
-    public void setGlobalExecutableSI(ExecutableSI si) {
+    public void setGlobalExecutableSI(ExecutableSemanticInterpretation si) {
         globalExecutation = si;
     }
 
@@ -91,7 +92,7 @@ public class MatchConsumption {
                 .getExecutationCollection());
     }
 
-    public void addExecutableSI(ArrayList<ExecutableSI> si) {
+    public void addExecutableSI(ArrayList<ExecutableSemanticInterpretation> si) {
         executationCollection.addAll(si);
     }
 
@@ -113,7 +114,7 @@ public class MatchConsumption {
         LOGGER.debug("MatchConsumption(tokensConsumed=" + tokensConsumed
                 + ", tokens=" + sb + ")");
         if (dumpSI) {
-            for (ExecutableSI si : executationCollection) {
+            for (ExecutableSemanticInterpretation si : executationCollection) {
                 si.dump("");
             }
         }
@@ -143,7 +144,7 @@ public class MatchConsumption {
 
         // At the top level, there should only be one item, a context for the
         // rule being fired.
-        for (ExecutableSI si : executationCollection) {
+        for (ExecutableSemanticInterpretation si : executationCollection) {
             si.execute(context, workingScope);
         }
 

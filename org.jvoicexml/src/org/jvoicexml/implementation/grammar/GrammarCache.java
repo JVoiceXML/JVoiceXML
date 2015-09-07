@@ -74,7 +74,8 @@ public final class GrammarCache {
      * @return set of active grammar implementations.
      */
     public Collection<GrammarImplementation<?>> getImplementations() {
-        final Collection<GrammarImplementation<?>> col = new java.util.ArrayList<GrammarImplementation<?>>();
+        final Collection<GrammarImplementation<?>> col =
+                new java.util.ArrayList<GrammarImplementation<?>>();
         for (LoadedGrammar grammar : grammars) {
             final GrammarImplementation<?> impl = grammar.getImplementation();
             col.add(impl);

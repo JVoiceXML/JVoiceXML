@@ -18,7 +18,7 @@ public class TestMatching {
     @Before
     public void loadGrammar() throws Exception {
         parsedGrammar = Utils
-                .LoadDocument("staticTestFiles/MediumGrammar.srgs");
+                .loadDocument("staticTestFiles/MediumGrammar.srgs");
         parsedGrammar.dump();
     }
 

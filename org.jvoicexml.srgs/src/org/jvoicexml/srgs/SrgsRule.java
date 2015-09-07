@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.srgs.sisr.Context;
-import org.jvoicexml.srgs.sisr.ExecutableSI;
-import org.jvoicexml.srgs.sisr.SIBlock;
+import org.jvoicexml.srgs.sisr.ExecutableSemanticInterpretation;
+import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
 import org.jvoicexml.xml.srgs.Rule;
 
 public class SrgsRule implements RuleExpansion {
@@ -14,7 +14,7 @@ public class SrgsRule implements RuleExpansion {
     private String id;
     private boolean isPublic = true;
 
-    private SIBlock initialSI = null;
+    private SemanticInterpretationBlock initialSI = null;
     private RuleExpansion innerRule;
 
     public SrgsRule(Rule rule) {
@@ -39,7 +39,7 @@ public class SrgsRule implements RuleExpansion {
 
     public void addInitialSI(String si) {
         if (initialSI == null)
-            initialSI = new SIBlock();
+            initialSI = new SemanticInterpretationBlock();
         initialSI.append(si);
     }
 
@@ -66,11 +66,11 @@ public class SrgsRule implements RuleExpansion {
     }
 
     @Override
-    public void setExecutionSI(ExecutableSI si) {
+    public void setExecutionSI(ExecutableSemanticInterpretation si) {
         LOGGER.error("setExecutionSI should never be called on a rule");
     }
 
-    SIBlock getInitialSI() {
+    SemanticInterpretationBlock getInitialSI() {
         return initialSI;
     }
 

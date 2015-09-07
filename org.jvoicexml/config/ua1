@@ -64,7 +64,7 @@ log_path= ./logging
 
 # Local SIP port 
 # Default value: host_port=5060
-host_port=4242  
+host_port=4245  
 
 # Network interface (IP address) used by SIP.
 # Use 'all-interfaces' for binding SIP to all interfaces (or let it undefined).
@@ -104,11 +104,11 @@ host_port=4242
 # The AOR is the SIP address used to register with the user's registrar server (if requested).
 # The address of the registrar is taken from the hostport field of the AOR, i.e. the value(s) host[:port] after the '@' character.
 # If not defined (default), it equals the 'contact_url' parameter
-from_url=sip:jvoicexml@127.0.0.1:4242
+from_url=sip:jvoicexml@127.0.0.1:4244
 
 # Contact URL.
 # If not defined (default), it is formed by sip:username@host_address:host_port
-contact_url=sip:jvoicexml@127.0.0.1:4242
+contact_url=sip:jvoicexml@127.0.0.1:4244
 
 # User's name (used to build the contact_url if not explitely defined).
 #username=jvoicexml

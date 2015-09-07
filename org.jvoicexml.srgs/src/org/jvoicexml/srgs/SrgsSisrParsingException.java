@@ -1,7 +1,7 @@
 package org.jvoicexml.srgs;
 
+@SuppressWarnings("serial")
 public class SrgsSisrParsingException extends Exception {
-    private static final long serialVersionUID = 7623516472103382901L;
 
     /**
      * Constructs a new event with the object type as its detail message. The
