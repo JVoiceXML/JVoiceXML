@@ -1,6 +1,27 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.srgs;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.srgs.sisr.ExecutableSemanticInterpretation;
@@ -14,15 +35,16 @@ import org.mozilla.javascript.ScriptableObject;
  * to be executed to generate a result.
  * 
  * @author Jim Rush
- *
+ * @author Dirk Schnelle-Walka
+ * @since 0.7.8
  */
 public class MatchConsumption {
     private static final Logger LOGGER = Logger
             .getLogger(MatchConsumption.class);
-    private int tokensConsumed = 0;
-    private ArrayList<String> tokens = new ArrayList<String>();
-    private ExecutableSemanticInterpretation globalExecutation = null;
-    private ArrayList<ExecutableSemanticInterpretation> executationCollection = new ArrayList<ExecutableSemanticInterpretation>();
+    private int tokensConsumed;
+    private List<String> tokens = new java.util.ArrayList<String>();
+    private ExecutableSemanticInterpretation globalExecutation;
+    private List<ExecutableSemanticInterpretation> executationCollection = new java.util.ArrayList<ExecutableSemanticInterpretation>();
 
     public MatchConsumption() {
     }
@@ -32,7 +54,7 @@ public class MatchConsumption {
     }
 
     public MatchConsumption(int tokensConsumed,
-            ArrayList<ExecutableSemanticInterpretation> executationCollection) {
+            List<ExecutableSemanticInterpretation> executationCollection) {
         this.tokensConsumed = tokensConsumed;
         this.executationCollection = executationCollection;
     }
@@ -54,11 +76,11 @@ public class MatchConsumption {
         this.tokensConsumed = tokensConsumed;
     }
 
-    public ArrayList<ExecutableSemanticInterpretation> getExecutationCollection() {
+    public List<ExecutableSemanticInterpretation> getExecutationCollection() {
         return executationCollection;
     }
 
-    public void setExecutationCollection(ArrayList<ExecutableSemanticInterpretation> newValue) {
+    public void setExecutationCollection(List<ExecutableSemanticInterpretation> newValue) {
         executationCollection = newValue;
     }
 
@@ -72,11 +94,11 @@ public class MatchConsumption {
         globalExecutation = si;
     }
 
-    public ArrayList<String> getTokens() {
+    public List<String> getTokens() {
         return tokens;
     }
 
-    public void addTokens(ArrayList<String> tokens) {
+    public void addTokens(List<String> tokens) {
         this.tokens.addAll(tokens);
     }
 
@@ -92,7 +114,7 @@ public class MatchConsumption {
                 .getExecutationCollection());
     }
 
-    public void addExecutableSI(ArrayList<ExecutableSemanticInterpretation> si) {
+    public void addExecutableSI(List<ExecutableSemanticInterpretation> si) {
         executationCollection.addAll(si);
     }
 

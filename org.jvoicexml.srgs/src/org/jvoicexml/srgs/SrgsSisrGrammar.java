@@ -1,34 +1,69 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.srgs;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 
-public class SrgsSisrGrammar {
+/**
+ * Preprocessed SRGS grammar container with semantic interpretation. 
+ * @author Jim Rush
+ * @author Dirk Schnelle-Walka
+ * @since 0.7.8
+ */
+public class SrgsSisrGrammar implements GrammarImplementation<Grammar> {
+    /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(SrgsSisrGrammar.class);
     private Grammar grammarNode;
     private String rootRule;
     private URI uri;
-    private boolean isLiteral = false;
+    private boolean isLiteral;
 
-    private SemanticInterpretationBlock globalTags = new SemanticInterpretationBlock();
-    private HashMap<String, SrgsRule> rules = new HashMap<String, SrgsRule>();
+    private SemanticInterpretationBlock globalTags =
+            new SemanticInterpretationBlock();
+    private Map<String, SrgsRule> rules =
+            new java.util.HashMap<String, SrgsRule>();
 
-    // A pool of grammars shared by all that were parsed together
-    private HashMap<URI, SrgsSisrGrammar> grammarPool = null;
+    /** A pool of grammars shared by all that were parsed together. */
+    private HashMap<URI, SrgsSisrGrammar> grammarPool;
 
-    public SrgsSisrGrammar(Grammar grammarNode, URI uri,
+    public SrgsSisrGrammar(Grammar grammar, URI uri,
             HashMap<URI, SrgsSisrGrammar> grammarPool) {
-        this.grammarNode = grammarNode;
+        grammarNode = grammar;
         this.uri = uri;
-        rootRule = grammarNode.getRoot();
-        String tagFormat = grammarNode.getTagFormat();
+        rootRule = grammar.getRoot();
+        String tagFormat = grammar.getTagFormat();
         isLiteral = tagFormat != null
                 && tagFormat.equals("semantics/1.0-literals");
         this.grammarPool = grammarPool;
@@ -74,12 +109,14 @@ public class SrgsSisrGrammar {
     public SrgsRule getRule(String id, boolean needsToBePublic) {
         String desiredRuleId = id == null ? rootRule : id;
 
-        SrgsRule rule = rules.get(desiredRuleId);
-        if (rule == null)
+        final SrgsRule rule = rules.get(desiredRuleId);
+        if (rule == null) {
             return null;
+        }
 
-        if (needsToBePublic && !rule.isPublic())
+        if (needsToBePublic && !rule.isPublic()) {
             return null;
+        }
 
         return rule;
     }
@@ -97,17 +134,18 @@ public class SrgsSisrGrammar {
     }
 
     /**
-     * Recognize a parsed grammar
+     * Recognizes a parsed grammar.
      * 
      * @param text
      *            Caller's spoken text
      * @return The recognition
      */
-    public Object recognize(String text) {
+    public Object recognize(final String text) {
         LOGGER.debug("recognize(" + text + ")");
 
-        if (text == null || text.length() == 0)
+        if (text == null || text.length() == 0) {
             return null;
+        }
 
         MatchConsumption mc = match(text);
         if (mc == null) {
@@ -116,8 +154,9 @@ public class SrgsSisrGrammar {
         }
         LOGGER.debug("Recognized: " + text);
 
-        if (LOGGER.isTraceEnabled())
+        if (LOGGER.isTraceEnabled()) {
             mc.dump(true);
+        }
 
         return mc.executeSisr();
     }
@@ -138,8 +177,10 @@ public class SrgsSisrGrammar {
 
     MatchConsumption match(ArrayList<String> tokens) {
         SrgsRule rule = rules.get(rootRule);
-        if (rule == null)
+        if (rule == null) {
             return null;
+            
+        }
         MatchConsumption mc = rule.match(tokens, 0);
         if (mc != null) {
             mc.setGlobalExecutableSI(globalTags);
@@ -165,6 +206,36 @@ public class SrgsSisrGrammar {
 
     public void setLiteral(boolean isLiteral) {
         this.isLiteral = isLiteral;
+    }
+
+    @Override
+    public GrammarType getMediaType() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ModeType getModeType() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public URI getURI() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean accepts(RecognitionResult result) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean equals(GrammarImplementation<Grammar> other) {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }

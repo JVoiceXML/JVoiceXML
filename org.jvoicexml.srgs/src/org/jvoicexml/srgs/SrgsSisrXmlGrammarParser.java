@@ -1,11 +1,32 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.srgs;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -24,9 +45,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class SrgsSisrXmlGrammarParser {
+    /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(SrgsSisrXmlGrammarParser.class);
-    SrgsSisrGrammar currentGrammar = null;
+    SrgsSisrGrammar currentGrammar;
 
     public SrgsSisrGrammar parse(SrgsXmlDocument document, URI uri)
             throws SrgsSisrParsingException {
@@ -100,7 +122,7 @@ public class SrgsSisrXmlGrammarParser {
                 if (lastExpansion == null)
                     grammarRule.addInitialSI(textContent);
                 else
-                    lastExpansion.setExecutionSI(new SemanticInterpretationBlock(textContent));
+                    lastExpansion.setExecutionSemanticInterpretation(new SemanticInterpretationBlock(textContent));
             } else if (childNode instanceof org.jvoicexml.xml.Text) {
                 // ignore
             } else {
@@ -160,7 +182,7 @@ public class SrgsSisrXmlGrammarParser {
                 if (lastExpansion == null)
                     item.appendInitialSI(textContent);
                 else
-                    lastExpansion.setExecutionSI(new SemanticInterpretationBlock(textContent));
+                    lastExpansion.setExecutionSemanticInterpretation(new SemanticInterpretationBlock(textContent));
             } else if (childNode instanceof Token
                     || childNode instanceof org.jvoicexml.xml.Text) {
                 String text = childNode.getTextContent().trim();
@@ -222,7 +244,7 @@ public class SrgsSisrXmlGrammarParser {
                 if (lastExpansion == null)
                     rule.addInitialSI(textContent);
                 else
-                    lastExpansion.setExecutionSI(new SemanticInterpretationBlock(textContent));
+                    lastExpansion.setExecutionSemanticInterpretation(new SemanticInterpretationBlock(textContent));
             } else if (childNode instanceof Token) {
                 String text = childNode.getTextContent().trim();
                 if (text.length() == 0)
@@ -325,17 +347,18 @@ public class SrgsSisrXmlGrammarParser {
                 currentGrammar.getGrammarPool());
     }
 
-    public static String joinTokens(ArrayList<String> list, int start, int count) {
+    public static String joinTokens(List<String> list, int start, int count) {
         if (count == 0)
             return "";
 
         StringBuffer sb = new StringBuffer();
         boolean first = true;
         for (int i = start; i < start + count; i++) {
-            if (first)
+            if (first) {
                 first = false;
-            else
+            } else {
                 sb.append(' ');
+            }
 
             sb.append(list.get(i));
         }
@@ -352,11 +375,9 @@ public class SrgsSisrXmlGrammarParser {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("cannot resolve null");
             }
-
             return null;
         }
         final URI resolvedUri = base.resolve(uri);
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("resolved to '" + resolvedUri + "'");
         }

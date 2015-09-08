@@ -1,6 +1,27 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.srgs.sisr;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -9,18 +30,18 @@ import org.mozilla.javascript.Scriptable;
 
 public class Context implements ExecutableSemanticInterpretation {
     private static final Logger LOGGER = Logger.getLogger(Context.class);
-    private ArrayList<ExecutableSemanticInterpretation> executationCollection = new ArrayList<ExecutableSemanticInterpretation>();
+    private List<ExecutableSemanticInterpretation> executationCollection = new java.util.ArrayList<ExecutableSemanticInterpretation>();
     private String ruleName;
 
     public Context(String contextName) {
         this.ruleName = contextName;
     }
 
-    public ArrayList<ExecutableSemanticInterpretation> getExecutationCollection() {
+    public List<ExecutableSemanticInterpretation> getExecutationCollection() {
         return executationCollection;
     }
 
-    public void addExecutableContent(ArrayList<ExecutableSemanticInterpretation> si) {
+    public void addExecutableContent(List<ExecutableSemanticInterpretation> si) {
         executationCollection.addAll(si);
     }
 
@@ -28,7 +49,7 @@ public class Context implements ExecutableSemanticInterpretation {
         executationCollection.add(si);
     }
 
-    public void setExecutableContent(ArrayList<ExecutableSemanticInterpretation> si) {
+    public void setExecutableContent(List<ExecutableSemanticInterpretation> si) {
         executationCollection = si;
     }
 
@@ -55,8 +76,9 @@ public class Context implements ExecutableSemanticInterpretation {
         boolean ruleRefProcessed = false;
         for (ExecutableSemanticInterpretation si : executationCollection) {
             si.execute(context, ruleScope);
-            if (si instanceof Context)
+            if (si instanceof Context) {
                 ruleRefProcessed = true;
+            }
         }
 
         // get result from ruleScope

@@ -1,19 +1,42 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.srgs;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.srgs.sisr.ExecutableSemanticInterpretation;
 import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
 
 public class ItemRuleExpansion implements RuleExpansion {
+    /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(ItemRuleExpansion.class);
 
-    private int minRepeat = 1, maxRepeat = 1;
-    private ArrayList<RuleExpansion> subRules = new ArrayList<RuleExpansion>();
-    private SemanticInterpretationBlock initialSI = null;
-    private ExecutableSemanticInterpretation executableSI = null;
+    private int minRepeat = 1;
+    private int maxRepeat = 1;
+    private List<RuleExpansion> subRules = new java.util.ArrayList<RuleExpansion>();
+    private SemanticInterpretationBlock initialSemanticInterpretation;
+    private ExecutableSemanticInterpretation executableSemanticInterpretation;
 
     /**
      * Define minimum and maximum repeats.
@@ -23,7 +46,7 @@ public class ItemRuleExpansion implements RuleExpansion {
      * @param max
      *            Set to -1 for an unlimited match potential
      */
-    public void setRepeat(int min, int max) {
+    public void setRepeat(final int min, final int max) {
         minRepeat = min;
         maxRepeat = max;
     }
@@ -34,26 +57,27 @@ public class ItemRuleExpansion implements RuleExpansion {
      * 
      * @param si
      */
-    public void setExecutionSI(ExecutableSemanticInterpretation si) {
-        executableSI = si;
+    public void setExecutionSemanticInterpretation(final ExecutableSemanticInterpretation si) {
+        executableSemanticInterpretation = si;
     }
 
     public void appendInitialSI(String si) {
-        if (initialSI == null)
-            initialSI = new SemanticInterpretationBlock();
-        initialSI.append(si);
+        if (initialSemanticInterpretation == null) {
+            initialSemanticInterpretation = new SemanticInterpretationBlock();
+        }
+        initialSemanticInterpretation.append(si);
     }
 
     public void addSubRule(RuleExpansion rule) {
         subRules.add(rule);
     }
 
-    ArrayList<RuleExpansion> getSubItems() {
+    List<RuleExpansion> getSubItems() {
         return subRules;
     }
 
-    SemanticInterpretationBlock getInitialSI() {
-        return initialSI;
+    SemanticInterpretationBlock getInitialSemanticInterpretation() {
+        return initialSemanticInterpretation;
     }
 
     int getMinRepeat() {
@@ -64,15 +88,19 @@ public class ItemRuleExpansion implements RuleExpansion {
         return maxRepeat;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public MatchConsumption match(ArrayList<String> tokens, int offset) {
+    public MatchConsumption match(final List<String> tokens, final int offset) {
         if (subRules.isEmpty()) {
-            return new MatchConsumption(executableSI);
+            return new MatchConsumption(executableSemanticInterpretation);
         }
 
         MatchConsumption summationResult = new MatchConsumption();
-        if (initialSI != null)
-            summationResult.addExecutableSI(initialSI);
+        if (initialSemanticInterpretation != null) {
+            summationResult.addExecutableSI(initialSemanticInterpretation);
+        }
         int matchCount = 0;
         int tokensConsumed = 0;
         while (maxRepeat == -1 || matchCount < maxRepeat) {
@@ -104,21 +132,22 @@ public class ItemRuleExpansion implements RuleExpansion {
         }
 
         if (matchCount >= minRepeat) {
-            summationResult.addExecutableSI(executableSI);
+            summationResult.addExecutableSI(executableSemanticInterpretation);
             return summationResult;
         }
         return null;
     }
 
     @Override
-    public void dump(String pad) {
+    public void dump(final String pad) {
         LOGGER.debug(pad + "item(minRepeat=" + minRepeat + ", maxRepeat="
                 + maxRepeat + ") ");
         for (RuleExpansion rule : subRules) {
             rule.dump(pad + " ");
         }
-        if (executableSI != null)
-            executableSI.dump(pad);
+        if (executableSemanticInterpretation != null) {
+            executableSemanticInterpretation.dump(pad);
+        }
     }
 
 }

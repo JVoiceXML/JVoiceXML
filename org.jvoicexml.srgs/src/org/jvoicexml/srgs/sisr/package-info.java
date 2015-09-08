@@ -19,21 +19,10 @@
  *
  */
 
-package org.jvoicexml.srgs;
-
-import java.util.List;
-
-import org.jvoicexml.srgs.sisr.ExecutableSemanticInterpretation;
-
-public interface RuleExpansion {
-    MatchConsumption match(List<String> tokens, int offset);
-
-    void setExecutionSemanticInterpretation(
-            final ExecutableSemanticInterpretation si);
-
-    /**
-     * Dumps the current contents on the console.
-     * @param pad space padding
-     */
-    void dump(String pad);
-}
+/**
+ * Semantic interpretation of an SRGS grammar processor.
+ * @author Jim Rush
+ * @author Dirk Schnelle-Walka
+ *
+ */
+package org.jvoicexml.srgs.sisr;
