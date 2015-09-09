@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -25,21 +20,21 @@
  */
 package org.jvoicexml.implementation.grammar;
 
-import org.jvoicexml.RecognitionResult;
-
+import org.jvoicexml.GrammarDocument;
 
 /**
- * A grammar processor to process a given utterance into a recognition result.
+ * A grammar processor is able to process any {@link GrammarDocument} into
+ * something that can be evaluated later to retrieve semantic interpretation
+ * from a given utterance .
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
  * @since 0.7.8
  */
 public interface GrammarProcessor {
     /**
-     * Processes the given utterance and retrieves the corresponding recognition
-     * result.
-     * @param utterance the current utterance
-     * @return the determined recognition result
+     * Processes a given {@link GrammarDocument} into a
+     * {@link GrammarEvaluator}.
+     * @param document the document to process.
+     * @return grammar evaluator
      */
-    RecognitionResult process(final String utterance);
+    GrammarEvaluator process(final GrammarDocument document);
 }

@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -25,34 +20,20 @@
  */
 package org.jvoicexml.implementation.grammar;
 
-import java.io.IOException;
 
-import org.jvoicexml.GrammarDocument;
 
 /**
- * A grammar manager retrieves {@link org.jvoicexml.GrammarDocument}s to
- * load or remove and takes care that these are accessible via the
- * {@link org.jvoicexml.ImplementationPlatform}.
- * 
- * Usually, it will be used by the {@link GrammarEvaluator} to process
- * a actual utterance into a {@link org.jvoicexml.RecognitionResult}.
- * 
+ * A grammar evaluator processes a given utterance into a recognition result.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.8
  */
-public interface GrammarManager {
+public interface GrammarEvaluator {
     /**
-     * Loads the given grammar.
-     * @param document the grammar to load
-     * @throws IOException
-     *         error loading the grammar
+     * Processes the given utterance and retrieves the corresponding semantic
+     * interpretation.
+     * @param utterance the current utterance
+     * @return the determined semantic interpretation, maybe {@code null}
      */
-    void loadGrammar(final GrammarDocument document) throws IOException;
-
-    /**
-     * Unloads the given grammar.
-     * @param document the grammar to unload
-     */
-    void unloadGrammar(final GrammarDocument document);
+    Object process(final String utterance);
 }

@@ -90,7 +90,7 @@ public class MatchConsumption {
         }
     }
 
-    public void setGlobalExecutableSI(ExecutableSemanticInterpretation si) {
+    public void setGlobalExecutableSemanticInterpretation(ExecutableSemanticInterpretation si) {
         globalExecutation = si;
     }
 
