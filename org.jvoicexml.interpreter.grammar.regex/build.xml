@@ -1,6 +1,6 @@
-<project name="org.jvoicexml.interpreter.datamodel.ecmascript" default="jar" basedir=".">
+<project name="org.jvoicexml.interpreter.grammar.regex" default="jar" basedir=".">
     <description>
-This file builds the ECMAScript datamodel for JVoiceXml.
+This file builds the regex grammar support for JVoiceXml.
 To override the current settings follow the instructions given in
 org.jvoicexml/personal-props/README.txt
   </description>
@@ -14,8 +14,8 @@ org.jvoicexml/personal-props/README.txt
 
     <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
-        <property name="component" value="org.jvoicexml.interpreter.datamodel.ecmascript" />
-        <property name="component.path" value="org/jvoicexml/interpreter/datamodel/ecmascript" />
+        <property name="component" value="org.jvoicexml.interpreter.grammar.regex" />
+        <property name="component.path" value="org/jvoicexml/interpreter/grammar/regex" />
 
         <!-- directory structure -->
         <property name="src" value="${basedir}/src" />
@@ -83,7 +83,7 @@ org.jvoicexml/personal-props/README.txt
                 <attribute name="Built-By" value="${user.name}" />
                 <section name="common">
                     <attribute name="Implementation-Vendor" value="JVoiceXML group" />
-                    <attribute name="Implementation-Title" value="JVoiceXML ECMAScript datamodel" />
+                    <attribute name="Implementation-Title" value="JVoiceXML Regex Grammar support" />
                     <attribute name="Implementation-Version" value="${version}" />
                 </section>
             </manifest>

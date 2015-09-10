@@ -129,6 +129,7 @@ public class GrammarType {
      * @since 0.6
      */
     public static final GrammarType valueOfAttribute(final String attribute) {
+        // First, check if there is an externally defined grammar
         final ServiceLoader<GrammarTypeFactory> factories =
             ServiceLoader.load(GrammarTypeFactory.class);
         for (GrammarTypeFactory factory : factories) {
@@ -137,6 +138,8 @@ public class GrammarType {
                 return type;
             }
         }
+        
+        // If there is none, try it with internal grammars
         final JVoiceXmlGrammarTypeFactory factory =
             new JVoiceXmlGrammarTypeFactory();
         final GrammarType type = factory.getGrammarType(attribute);

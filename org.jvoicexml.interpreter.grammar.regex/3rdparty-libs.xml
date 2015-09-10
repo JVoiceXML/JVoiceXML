@@ -1,7 +1,7 @@
-<project name="org.jvoicexml.interpreter.datamodel.ecmascript - 3rd party libraries" basedir=".">
+<project name="org.jvoicexml.interpreter.grammar.regex - 3rd party libraries" basedir=".">
     <description>
 This file contains the 3rd party libary definitions, used by
-org.jvoicexml.interpreter.datamodel.ecmascript.
+org.jvoicexml.profile.mmi.
     </description>
     <property name="jvxml.core.dir" value="../org.jvoicexml" />
     <import file="${jvxml.core.dir}/3rdparty-libs.xml" />
@@ -12,6 +12,7 @@ org.jvoicexml.interpreter.datamodel.ecmascript.
         <!-- jvxml library -->
         <path id="jvxml.core.lib">
             <path location="${jvxml.core.dir}/classes" />
+            <path location="../org.jvoicexml.xml/classes" />
         </path>
 
         <!-- JSON simple library -->
