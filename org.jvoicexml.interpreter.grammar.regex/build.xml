@@ -50,9 +50,17 @@ org.jvoicexml/personal-props/README.txt
 
 
     <target name="configuration" depends="-setup">
+        <xslt in="${jvxml.core.dir}/run.xml" out="${jvxml.core.dir}/run-tmp.xml" style="${etc}/patch-runscript.xsl">
+            <outputproperty name="method" value="xml" />
+            <outputproperty name="standalone" value="no" />
+            <outputproperty name="encoding" value="UTF-8" />
+            <outputproperty name="indent" value="yes" />
+        </xslt>
+        <copy file="${jvxml.core.dir}/run-tmp.xml" tofile="${jvxml.core.dir}/run.xml" overwrite="true" />
+        <delete file="${jvxml.core.dir}/run-tmp.xml" />
         <copy todir="${config}">
             <fileset dir="${etc}">
-                <include name="ecmascript-datamodel.xml" />
+                <include name="*.xsd" />
             </fileset>
         </copy>
     </target>
