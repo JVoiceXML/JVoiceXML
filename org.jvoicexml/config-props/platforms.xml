@@ -3,6 +3,7 @@
   <!--
      Uncomment the platforms that you want to use or add your own platform.
   -->
+  <!-- platform name="org.jvoicexml.interpreter.grammar.regex"/-->
   <!-- platform name="org.jvoicexml.implementation.jsapi10">
     <property name="jvxml.jsapi10.talkingJava.path"
         value ="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib" />
