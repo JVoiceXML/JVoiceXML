@@ -18,6 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml.interpreter.grammar.regex;
 
 import java.net.URI;
@@ -29,7 +30,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
- * A grammar implementation for regex grammars.
+ * A {@link GrammarImplementation} for regex grammars.
  *
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
