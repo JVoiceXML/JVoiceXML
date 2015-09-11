@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,11 +21,14 @@
 
 package org.jvoicexml.implementation.text;
 
+import java.util.Collection;
+
 import org.jvoicexml.implementation.PlatformFactory;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * Platform factory for the text based implementation platform.
@@ -43,13 +41,16 @@ public final class TextPlatformFactory implements PlatformFactory {
     /** Number of instances that the factories will create. */
     private int instances;
 
+    /** Supported grammar types. */
+    private Collection<GrammarType> grammarTypes;
+
     /**
      * {@inheritDoc}
      */
     public ResourceFactory<SpokenInput> getSpokeninput() {
-        final TextSpokenInputFactory factory =
-            new TextSpokenInputFactory();
+        final TextSpokenInputFactory factory = new TextSpokenInputFactory();
         factory.setInstances(instances);
+        factory.setGrammarTypes(grammarTypes);
         return factory;
     }
 
@@ -58,7 +59,7 @@ public final class TextPlatformFactory implements PlatformFactory {
      */
     public ResourceFactory<SynthesizedOutput> getSynthesizedoutput() {
         final TextSynthesizedOutputFactory factory =
-            new TextSynthesizedOutputFactory();
+                new TextSynthesizedOutputFactory();
         factory.setInstances(instances);
         return factory;
     }
@@ -74,9 +75,22 @@ public final class TextPlatformFactory implements PlatformFactory {
 
     /**
      * Sets the number of instances that the factories will create.
-     * @param number Number of instances to create.
+     * 
+     * @param number
+     *            number of instances to create.
      */
     public void setInstances(final int number) {
         instances = number;
+    }
+
+    /**
+     * Sets the grammar types to support by the text platform.
+     * 
+     * @param types
+     *            the types to support
+     * @since 0.7.8
+     */
+    public void setGrammarTypes(final Collection<GrammarType> types) {
+        grammarTypes = types;
     }
 }

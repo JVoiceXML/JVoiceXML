@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -86,21 +81,19 @@ final class TextSpokenInput implements SpokenInput {
     private static final Collection<BargeInType> BARGE_IN_TYPES;
 
     /** Supported grammar types. */
-    private static final Collection<GrammarType> GRAMMAR_TYPES;
+    private final Collection<GrammarType> grammarTypes;
 
     /** Reference to the SrgsXmlGrammarParser. */
     private final SrgsXmlGrammarParser parser;
 
     /** Active grammar checkers. */
-    private final Map<SrgsXmlGrammarImplementation, GrammarChecker> grammarCheckers;
+    private final Map<SrgsXmlGrammarImplementation,
+        GrammarChecker> grammarCheckers;
 
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
         BARGE_IN_TYPES.add(BargeInType.SPEECH);
         BARGE_IN_TYPES.add(BargeInType.HOTWORD);
-
-        GRAMMAR_TYPES = new java.util.ArrayList<GrammarType>();
-        GRAMMAR_TYPES.add(GrammarType.SRGS_XML);
     }
 
     /** Registered listener for input events. */
@@ -113,8 +106,11 @@ final class TextSpokenInput implements SpokenInput {
      * Constructs a new object.
      */
     public TextSpokenInput() {
+        grammarTypes = new java.util.ArrayList<GrammarType>();
+        grammarTypes.add(GrammarType.SRGS_XML);
         listener = new java.util.ArrayList<SpokenInputListener>();
-        grammarCheckers = new java.util.HashMap<SrgsXmlGrammarImplementation, GrammarChecker>();
+        grammarCheckers =
+          new java.util.HashMap<SrgsXmlGrammarImplementation, GrammarChecker>();
         parser = new SrgsXmlGrammarParser();
     }
 
@@ -152,7 +148,8 @@ final class TextSpokenInput implements SpokenInput {
      */
     public void activateGrammar(final GrammarImplementation<?> grammar)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
-        final SrgsXmlGrammarImplementation impl = (SrgsXmlGrammarImplementation) grammar;
+        final SrgsXmlGrammarImplementation impl =
+                (SrgsXmlGrammarImplementation) grammar;
         if (!grammarCheckers.containsKey(impl)) {
             final SrgsXmlDocument doc = impl.getGrammar();
             final GrammarGraph graph = parser.parse(doc);
@@ -176,7 +173,8 @@ final class TextSpokenInput implements SpokenInput {
             final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
         for (GrammarImplementation<?> grammar : grammars) {
-            final SrgsXmlGrammarImplementation impl = (SrgsXmlGrammarImplementation) grammar;
+            final SrgsXmlGrammarImplementation impl =
+                    (SrgsXmlGrammarImplementation) grammar;
             if (grammarCheckers.containsKey(impl)) {
                 grammarCheckers.remove(impl);
             }
@@ -192,11 +190,20 @@ final class TextSpokenInput implements SpokenInput {
     }
 
     /**
+     * Adds the given grammar types.
+     * @param types grammar types to add.
+     * @since 0.7.8
+     */
+    void addSupportedGrammarTypes(final Collection<GrammarType> types) {
+        grammarTypes.addAll(types);
+    }
+    
+    /**
      * {@inheritDoc}
      */
     @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        return GRAMMAR_TYPES;
+        return grammarTypes;
     }
 
     /**
@@ -380,7 +387,8 @@ final class TextSpokenInput implements SpokenInput {
      */
     private void fireInputEvent(final SpokenInputEvent event) {
         synchronized (listener) {
-            final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
+            final Collection<SpokenInputListener> copy =
+                    new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listener);
             for (SpokenInputListener current : copy) {
                 current.inputStatusChanged(event);

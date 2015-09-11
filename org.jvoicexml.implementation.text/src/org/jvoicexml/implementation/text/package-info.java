@@ -1,6 +1,7 @@
 /**
  * User relevant interfaces and classes for a text based implementation
- * platform.
+ * platform. In this case, spoken input and synthesized output is considered
+ * to be pure strings.
  * 
  * <p>
  * Main classes are {@link org.jvoicexml.implementation.text.TextTelephony}
