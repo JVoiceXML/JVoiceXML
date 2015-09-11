@@ -16,7 +16,7 @@ public class TestLiteralSISR {
     @Test
     public void testLiteralExample() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .loadDocument("staticTestFiles/Literal1.srgs");
+                .loadDocument("unittests/staticTestFiles/Literal1.srgs");
         MatchConsumption mc = parsedGrammar.match("nope");
         Assert.assertNotNull(mc);
 
@@ -28,7 +28,7 @@ public class TestLiteralSISR {
     @Test
     public void testSingleQuotesInTag() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .loadDocument("staticTestFiles/Literal2.srgs");
+                .loadDocument("unittests/staticTestFiles/Literal2.srgs");
         MatchConsumption mc = parsedGrammar.match("nope");
         Assert.assertNotNull(mc);
 

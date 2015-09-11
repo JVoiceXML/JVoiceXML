@@ -20,7 +20,7 @@ public class TestSrgsSisrXmlGrammarParser {
     @Before
     public void loadGrammar() throws Exception {
         parsedGrammar = Utils
-                .loadDocument("staticTestFiles/MediumGrammar.srgs");
+                .loadDocument("unittests/staticTestFiles/MediumGrammar.srgs");
         parsedGrammar.dump();
     }
 

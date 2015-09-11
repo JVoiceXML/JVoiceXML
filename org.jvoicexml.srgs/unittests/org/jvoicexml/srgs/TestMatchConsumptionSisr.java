@@ -18,7 +18,7 @@ public class TestMatchConsumptionSisr {
     @Test
     public void testMediumGrammar() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .loadDocument("staticTestFiles/MediumGrammar.srgs");
+                .loadDocument("unittests/staticTestFiles/MediumGrammar.srgs");
         MatchConsumption mc = parsedGrammar.match("two three dogs");
         Assert.assertNotNull(mc);
 
@@ -31,7 +31,7 @@ public class TestMatchConsumptionSisr {
     @Test
     public void testDefaultAssignment1() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .loadDocument("staticTestFiles/defaultAssignment1.srgs");
+                .loadDocument("unittests/staticTestFiles/defaultAssignment1.srgs");
         MatchConsumption mc = parsedGrammar.match("two");
         Assert.assertNotNull(mc);
 
@@ -47,7 +47,7 @@ public class TestMatchConsumptionSisr {
     @Test
     public void testDefaultAssignment2() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .loadDocument("staticTestFiles/defaultAssignment2.srgs");
+                .loadDocument("unittests/staticTestFiles/defaultAssignment2.srgs");
         MatchConsumption mc = parsedGrammar.match("two");
         Assert.assertNotNull(mc);
 
@@ -58,7 +58,7 @@ public class TestMatchConsumptionSisr {
     @Test
     public void testDefaultAssignment3() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .loadDocument("staticTestFiles/defaultAssignment3.srgs");
+                .loadDocument("unittests/staticTestFiles/defaultAssignment3.srgs");
         MatchConsumption mc = parsedGrammar.match("nope");
         Assert.assertNotNull(mc);
 
