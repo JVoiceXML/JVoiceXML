@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,7 +36,6 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  * Implementation of a SRGS XML grammar.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5.5
  */
 public final class SrgsXmlGrammarImplementation
@@ -160,9 +154,5 @@ public final class SrgsXmlGrammarImplementation
             result = prime * result + graph.hashCode();
         }
         return result;
-    }
-
-    public GrammarChecker getLastChecker() {
-        return checker;
     }
 }

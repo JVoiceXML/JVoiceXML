@@ -379,6 +379,7 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void telephonyCallAnswered(final TelephonyEvent event) {
         final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
                 callControlListeners);
@@ -390,6 +391,16 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
     /**
      * {@inheritDoc}
      */
+    @Override
+    public void dtmfInput(char dtmf) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void telephonyCallHungup(final TelephonyEvent event) {
         final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
                 callControlListeners);

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,45 +29,65 @@ import org.jvoicexml.event.ErrorEvent;
  *
  * @author Hugo Monteiro
  * @author Dirk Schnelle-Walka
- * @author Renato
- * @version $Revision$
+ * @author Renato Cassaca
  * @since 0.6
  */
 public interface TelephonyListener {
     /**
-     * Invoked when the {@link Telephony} implementation triggered a
-     * call answered event.
-     * @param event the event.
+     * Invoked when the {@link Telephony} implementation triggered a call
+     * answered event.
+     * 
+     * @param event
+     *            the event.
      */
     void telephonyCallAnswered(final TelephonyEvent event);
 
     /**
-     * Invoked when the {@link Telephony} implementation triggered an event.
-     * @param event the event.
+     * Invoked when the {@link Telephony} implementation triggered an event that
+     * was associated with media. Examples include start and end of a playback.
+     * 
+     * @param event
+     *            the event.
      */
     void telephonyMediaEvent(final TelephonyEvent event);
 
     /**
-     * Invoked when the {@link Telephony} implementation triggered a
-     * call hangup event.
-     * @param event the event.
+     * Invoked when the {@link Telephony} implementation recognized a DTMF
+     * input.
+     * 
+     * @param dtmf
+     *            the DTMF character
+     * @since 0.7.8
+     */
+    void dtmfInput(final char dtmf);
+
+    /**
+     * Invoked when the {@link Telephony} implementation triggered a call hangup
+     * event.
+     * 
+     * @param event
+     *            the event.
      */
     void telephonyCallHungup(final TelephonyEvent event);
 
     /**
-     * Invoked when the {@link Telephony} implementation triggered a
-     * transfer event.
-     * @param event the event.
+     * Invoked when the {@link Telephony} implementation triggered a transfer
+     * event.
+     * 
+     * @param event
+     *            the event.
      */
     void telephonyCallTransferred(final TelephonyEvent event);
 
     /**
-     * An error occured while communicating over the telephony.
+     * An error occurred while communicating over the telephony.
      * <p>
      * This method is intended to feed back errors that happen while the
      * {@link org.jvoicexml.CallControl} processes an output asynchronously.
      * </p>
-     * @param error the error
+     * 
+     * @param error
+     *            the error
      * @since 0.7.4
      */
     void telephonyError(final ErrorEvent error);
