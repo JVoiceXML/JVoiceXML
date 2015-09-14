@@ -31,9 +31,9 @@ public class RuleRefExpansion implements RuleExpansion {
     private static final Logger LOGGER = Logger
             .getLogger(RuleRefExpansion.class);
 
-    private SrgsRule referencedRule = null;
-    private ExecutableSemanticInterpretation executableSI = null;
-    private SrgsSisrGrammar externalGrammar = null;
+    private SrgsRule referencedRule;
+    private ExecutableSemanticInterpretation executableSematicInterpretation;
+    private SrgsSisrGrammar externalGrammar;
 
     public RuleRefExpansion(SrgsRule rule) {
         referencedRule = rule;
@@ -51,7 +51,7 @@ public class RuleRefExpansion implements RuleExpansion {
      * @param si
      */
     public void setExecutionSemanticInterpretation(ExecutableSemanticInterpretation si) {
-        executableSI = si;
+        executableSematicInterpretation = si;
     }
 
     /**
@@ -75,7 +75,7 @@ public class RuleRefExpansion implements RuleExpansion {
                 individualResult.getExecutationCollection().clear();
                 individualResult.addExecutableSI(grammarContext);
             } else {
-                individualResult.addExecutableSI(executableSI);
+                individualResult.addExecutableSI(executableSematicInterpretation);
             }
             return individualResult;
         }
@@ -85,7 +85,7 @@ public class RuleRefExpansion implements RuleExpansion {
 
     public void dump(String pad) {
         LOGGER.debug(pad + "RuleRefExpansion(" + referencedRule.getId() + ") ");
-        if (executableSI != null)
-            executableSI.dump(pad);
+        if (executableSematicInterpretation != null)
+            executableSematicInterpretation.dump(pad);
     }
 }

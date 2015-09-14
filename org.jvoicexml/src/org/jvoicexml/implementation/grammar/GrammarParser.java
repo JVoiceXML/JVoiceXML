@@ -20,21 +20,39 @@
  */
 package org.jvoicexml.implementation.grammar;
 
+import java.io.IOException;
+
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.event.error.UnsupportedFormatError;
+import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
- * A grammar processor is able to process any {@link GrammarDocument} into
+ * A grammar processor is able to parse any {@link GrammarDocument} into
  * something that can be evaluated later to retrieve semantic interpretation
  * from a given utterance .
+ * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
  */
-public interface GrammarProcessor {
+public interface GrammarParser {
     /**
-     * Processes a given {@link GrammarDocument} into a
-     * {@link GrammarEvaluator}.
-     * @param document the document to process.
-     * @return grammar evaluator
+     * Retrieves the grammar type that this parser will process.
+     * 
+     * @return the grammar type
      */
-    GrammarEvaluator process(final GrammarDocument document);
+    GrammarType getType();
+
+    /**
+     * Parses a given {@link GrammarDocument} into a {@link GrammarEvaluator} .
+     * 
+     * @param document
+     *            the document to process.
+     * @return grammar evaluator
+     * @throws IOException
+     *             error reading the grammar
+     * @throws UnsupportedFormatError
+     *             the grammar format is not supported
+     */
+    GrammarEvaluator parse(final GrammarDocument document) throws IOException,
+            UnsupportedFormatError;
 }

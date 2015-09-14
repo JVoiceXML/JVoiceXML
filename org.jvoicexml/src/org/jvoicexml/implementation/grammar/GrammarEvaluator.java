@@ -20,6 +20,8 @@
  */
 package org.jvoicexml.implementation.grammar;
 
+import java.net.URI;
+
 
 
 /**
@@ -29,6 +31,12 @@ package org.jvoicexml.implementation.grammar;
  * @since 0.7.8
  */
 public interface GrammarEvaluator {
+    /**
+     * Retrieves the base URI of this grammar.
+     * @return the URI
+     */
+    URI getUri();
+    
     /**
      * Processes the given utterance and retrieves the corresponding semantic
      * interpretation.

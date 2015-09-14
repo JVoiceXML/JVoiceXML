@@ -71,6 +71,10 @@ public class SrgsSisrGrammar implements GrammarEvaluator {
         return grammarNode;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public URI getUri() {
         return uri;
     }

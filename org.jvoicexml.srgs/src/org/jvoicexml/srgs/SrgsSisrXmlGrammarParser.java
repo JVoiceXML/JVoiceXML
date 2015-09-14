@@ -21,6 +21,7 @@
 
 package org.jvoicexml.srgs;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -31,7 +32,12 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.event.error.UnsupportedFormatError;
+import org.jvoicexml.implementation.grammar.GrammarEvaluator;
+import org.jvoicexml.implementation.grammar.GrammarParser;
 import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
@@ -44,11 +50,48 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class SrgsSisrXmlGrammarParser {
+/**
+ * A parser of SRGS XML formatted grammars. This parser is not thread-safe and
+ * will parse only one grammar at a time.
+ * 
+ * @author Jim Rush
+ * @author Dirk Schnelle-Walka
+ * @since 0.7.8
+ */
+public class SrgsSisrXmlGrammarParser implements GrammarParser {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(SrgsSisrXmlGrammarParser.class);
-    SrgsSisrGrammar currentGrammar;
+
+    /** The currently parsed grammar. */
+    private SrgsSisrGrammar currentGrammar;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GrammarType getType() {
+        return GrammarType.SRGS_XML;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GrammarEvaluator parse(final GrammarDocument document)
+            throws IOException, UnsupportedFormatError {
+        final byte[] buffer = document.getBuffer();
+        final InputStream stream = new ByteArrayInputStream(buffer);
+        final InputSource source = new InputSource(stream);
+        try {
+            final SrgsXmlDocument grammar = new SrgsXmlDocument(source);
+            final URI uri = document.getURI();
+            return parse(grammar, uri);
+        } catch (ParserConfigurationException | SAXException
+                | SrgsSisrParsingException e) {
+            throw new IOException(e.getMessage(), e);
+        }
+    }
 
     public SrgsSisrGrammar parse(SrgsXmlDocument document, URI uri)
             throws SrgsSisrParsingException {
@@ -122,7 +165,9 @@ public class SrgsSisrXmlGrammarParser {
                 if (lastExpansion == null)
                     grammarRule.addInitialSI(textContent);
                 else
-                    lastExpansion.setExecutionSemanticInterpretation(new SemanticInterpretationBlock(textContent));
+                    lastExpansion
+                            .setExecutionSemanticInterpretation(new SemanticInterpretationBlock(
+                                    textContent));
             } else if (childNode instanceof org.jvoicexml.xml.Text) {
                 // ignore
             } else {
@@ -182,7 +227,9 @@ public class SrgsSisrXmlGrammarParser {
                 if (lastExpansion == null)
                     item.appendInitialSI(textContent);
                 else
-                    lastExpansion.setExecutionSemanticInterpretation(new SemanticInterpretationBlock(textContent));
+                    lastExpansion
+                            .setExecutionSemanticInterpretation(new SemanticInterpretationBlock(
+                                    textContent));
             } else if (childNode instanceof Token
                     || childNode instanceof org.jvoicexml.xml.Text) {
                 String text = childNode.getTextContent().trim();
@@ -244,7 +291,9 @@ public class SrgsSisrXmlGrammarParser {
                 if (lastExpansion == null)
                     rule.addInitialSI(textContent);
                 else
-                    lastExpansion.setExecutionSemanticInterpretation(new SemanticInterpretationBlock(textContent));
+                    lastExpansion
+                            .setExecutionSemanticInterpretation(new SemanticInterpretationBlock(
+                                    textContent));
             } else if (childNode instanceof Token) {
                 String text = childNode.getTextContent().trim();
                 if (text.length() == 0)
@@ -384,5 +433,4 @@ public class SrgsSisrXmlGrammarParser {
 
         return resolvedUri;
     }
-
 }
