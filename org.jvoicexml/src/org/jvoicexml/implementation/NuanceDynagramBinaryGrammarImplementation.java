@@ -82,7 +82,7 @@ public final class NuanceDynagramBinaryGrammarImplementation
      * {@inheritDoc}
      */
     @Override
-    public BinaryGrammar getGrammar() {
+    public BinaryGrammar getGrammarDocument() {
         return grammar;
     }
 

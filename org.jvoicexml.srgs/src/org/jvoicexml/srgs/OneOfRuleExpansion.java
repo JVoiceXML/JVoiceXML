@@ -66,9 +66,9 @@ public class OneOfRuleExpansion implements RuleExpansion {
             MatchConsumption individualResult = rule.match(tokens, offset);
             if (individualResult != null) {
                 if (initialSI != null)
-                    individualResult.addExecutableSI(initialSI);
+                    individualResult.addExecutableSemanticInterpretation(initialSI);
 
-                individualResult.addExecutableSI(executableSI);
+                individualResult.addExecutableSemanticInterpretation(executableSI);
                 return individualResult;
             }
         }

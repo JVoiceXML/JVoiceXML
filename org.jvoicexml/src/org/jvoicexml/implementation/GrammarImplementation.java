@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,9 +28,9 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
- * Implementation of a grammar that is accessed by the VoiceXML interpreter
- * and passed to the {@link org.jvoicexml.ImplementationPlatform} if the grammar
- * is activated or deactivated.
+ * Implementation of a grammar that is accessed by the VoiceXML interpreter and
+ * passed to the {@link org.jvoicexml.ImplementationPlatform} if the grammar is
+ * activated or deactivated.
  *
  * <p>
  * VoiceXML is designed to support at least
@@ -53,7 +48,8 @@ import org.jvoicexml.xml.srgs.ModeType;
  *
  * @since 0.5.5
  *
- * @param <T> the grammar implementation.
+ * @param <T>
+ *            the grammar implementation.
  */
 public interface GrammarImplementation<T> {
     /**
@@ -65,16 +61,18 @@ public interface GrammarImplementation<T> {
 
     /**
      * Returns the mode type of the grammar.
+     * 
      * @return mode type of the grammar.
      * @since 0.7
      */
     ModeType getModeType();
 
     /**
-     * Retrieves the grammar object.
+     * Retrieves the grammar document.
+     * 
      * @return the grammar.
      */
-    T getGrammar();
+    T getGrammarDocument();
 
     /**
      * Retrieves the URI of the grammar.
@@ -88,8 +86,8 @@ public interface GrammarImplementation<T> {
      * Checks, if this grammar covers the given recognition result.
      * <p>
      * It is not legal to check if the result is accepted using
-     * {@link RecognitionResult#isAccepted()}. Implementations
-     * should assume that it is a valid input result.
+     * {@link RecognitionResult#isAccepted()}. Implementations should assume
+     * that it is a valid input result.
      * </p>
      *
      * <p>
@@ -97,7 +95,8 @@ public interface GrammarImplementation<T> {
      * {@link org.jvoicexml.processor.srgs.GrammarChecker}.
      * </p>
      *
-     * @param result the result to check.
+     * @param result
+     *            the result to check.
      * @return <code>true</code> if the utterance is valid for this grammar
      * @since 0.7
      */
@@ -106,7 +105,9 @@ public interface GrammarImplementation<T> {
     /**
      * Checks if this grammar implementation is equal to the given grammar
      * implementation.
-     * @param other the grammar implementation to compare with.
+     * 
+     * @param other
+     *            the grammar implementation to compare with.
      * @return <code>true</code> if the grammar implementations are equal.
      * @since 0.7.2
      */

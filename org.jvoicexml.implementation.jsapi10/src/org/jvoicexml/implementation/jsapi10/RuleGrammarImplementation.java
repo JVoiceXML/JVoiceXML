@@ -81,7 +81,7 @@ public final class RuleGrammarImplementation
      * {@inheritDoc}
      */
     @Override
-    public RuleGrammar getGrammar() {
+    public RuleGrammar getGrammarDocument() {
         return grammar;
     }
 

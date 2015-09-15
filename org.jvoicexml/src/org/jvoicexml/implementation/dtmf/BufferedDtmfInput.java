@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,15 +22,12 @@
 package org.jvoicexml.implementation.dtmf;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
@@ -51,18 +43,15 @@ import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
+import org.jvoicexml.implementation.grammar.GrammarEvaluator;
+import org.jvoicexml.implementation.grammar.GrammarParser;
 import org.jvoicexml.xml.srgs.GrammarType;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * Buffered DTMF input.
  * 
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision$
  * @since 0.5
  */
 public class BufferedDtmfInput implements DtmfInput, SpokenInput {
@@ -88,6 +77,9 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
     /** Reference to the current DTMF recognition properties. */
     private DtmfRecognizerProperties props;
 
+    /** The grammar parser to use. */
+    private final Map<GrammarType, GrammarParser<?>> parsers;
+    
     /**
      * Constructs a new object.
      */
@@ -95,8 +87,25 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
         buffer = new java.util.concurrent.LinkedBlockingQueue<Character>();
         listener = new java.util.ArrayList<SpokenInputListener>();
         activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
+        parsers = new java.util.HashMap<GrammarType, GrammarParser<?>>();
     }
 
+    /**
+     * Sets the grammar parsers to use.
+     * @param grammarParsers the grammar parsers to use
+     * @since 0.7.8
+     */
+    public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
+        for (GrammarParser<?> parser : grammarParsers) {
+            final GrammarType type = parser.getType();
+            parsers.put(type, parser);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added parser '" + parser + "' for grammar type '"
+                        + type + "'");
+            }
+        }
+    }
+    
     /**
      * Activates the given grammars. It is guaranteed that all grammars types
      * are supported by this implementation.
@@ -117,7 +126,8 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
         activeGrammars.addAll(grammars);
         if (LOGGER.isDebugEnabled()) {
             for (GrammarImplementation<?> grammar : grammars) {
-                LOGGER.debug("activated DTMF grammar " + grammar.getGrammar());
+                LOGGER.debug("activated DTMF grammar "
+                        + grammar.getGrammarDocument());
             }
         }
     }
@@ -142,7 +152,8 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
         activeGrammars.removeAll(grammars);
         if (LOGGER.isDebugEnabled()) {
             for (GrammarImplementation<?> grammar : grammars) {
-                LOGGER.debug("deactivated DTMF grammar " + grammar.getGrammar());
+                LOGGER.debug("deactivated DTMF grammar "
+                        + grammar.getGrammarDocument());
             }
         }
     }
@@ -215,6 +226,18 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
     public boolean isAccepted(final RecognitionResult result) {
         for (GrammarImplementation<?> grammar : activeGrammars) {
             if (grammar.accepts(result)) {
+                if (result instanceof DtmfInputResult) {
+                    if (grammar instanceof GrammarEvaluator) {
+                        final GrammarEvaluator evaluator =
+                                (GrammarEvaluator) grammar;
+                        final String utterance = result.getUtterance();
+                        final Object interpretation =
+                                evaluator.getSemanticInterpretation(utterance);
+                        final DtmfInputResult dtmfResult =
+                                (DtmfInputResult) result;
+                        dtmfResult.setSemanticInterpretation(interpretation);
+                    }
+                }
                 return true;
             }
         }
@@ -266,7 +289,8 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      * @since 0.6
      */
     public void fireInputEvent(final SpokenInputEvent event) {
-        final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
+        final Collection<SpokenInputListener> copy =
+                new java.util.ArrayList<SpokenInputListener>();
         synchronized (listener) {
             copy.addAll(listener);
         }
@@ -338,7 +362,7 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      */
     @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        return null;
+        return parsers.keySet();
     }
 
     /**
@@ -348,16 +372,11 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
     public GrammarImplementation<?> loadGrammar(final URI uri,
             final GrammarType type) throws NoresourceError, IOException,
             UnsupportedFormatError {
-        try {
-            final URL url = uri.toURL();
-            final InputStream input = url.openStream();
-            final InputSource source = new InputSource(input);
-            final SrgsXmlDocument document = new SrgsXmlDocument(source);
-            return new SrgsXmlGrammarImplementation(document, uri);
-        } catch (MalformedURLException | ParserConfigurationException
-                | SAXException e) {
-            throw new IOException(e.getMessage(), e);
+        final GrammarParser<?> parser = parsers.get(type);
+        if (parser == null) {
+            throw new UnsupportedFormatError("'" + type + "' is not supported");
         }
+        return parser.load(uri);
     }
 
     /**

@@ -136,6 +136,11 @@
  <!-- uncomment to generally disable DTMF recognition -->
  <bean id="org.jvoicexml.implementation.dtmf.BufferedDtmfInput"
    class="org.jvoicexml.implementation.dtmf.BufferedDtmfInput">
+   <property name="grammarParsers">
+    <list>
+        <bean class="org.jvoicexml.srgs.SrgsSisrXmlGrammarParser" />
+    </list>    
+   </property>
  </bean>
  
 </beans>

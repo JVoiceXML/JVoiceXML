@@ -109,7 +109,7 @@ public interface UserInput {
      * grammar. In these cases, the grammar implementation must be loaded in
      * this call. The grammar source may be accessed by the grammar
      * implementation itself, e.g. SRGS grammar sources can be accessed via
-     * {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#getGrammar()}
+     * {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#getGrammarDocument()}
      * .
      * </p>
      *

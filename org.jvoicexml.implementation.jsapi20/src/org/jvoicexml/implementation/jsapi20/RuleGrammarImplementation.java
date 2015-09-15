@@ -70,7 +70,7 @@ public final class RuleGrammarImplementation
     /**
      * {@inheritDoc}
      */
-    public RuleGrammar getGrammar() {
+    public RuleGrammar getGrammarDocument() {
         return grammar;
     }
 
@@ -146,7 +146,7 @@ public final class RuleGrammarImplementation
         if (other == null) {
             return false;
         }
-        final RuleGrammar otherGrammar = other.getGrammar();
+        final RuleGrammar otherGrammar = other.getGrammarDocument();
         if (grammar == null) {
             if (otherGrammar != null) {
                 return false;

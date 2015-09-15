@@ -231,7 +231,7 @@ public final class Mrcpv2SpokenInput
             }
             if (current instanceof DocumentGrammarImplementation) {
                 final DocumentGrammarImplementation grammar = (DocumentGrammarImplementation) current;
-                activatedGrammar = grammar.getGrammar();
+                activatedGrammar = grammar.getGrammarDocument();
                 numActiveGrammars = 1;
             }
         }
@@ -250,7 +250,7 @@ public final class Mrcpv2SpokenInput
             }
             if (current instanceof DocumentGrammarImplementation) {
                 final DocumentGrammarImplementation grammar = (DocumentGrammarImplementation) current;
-                if (grammar.getGrammar().equals(activatedGrammar)) {
+                if (grammar.getGrammarDocument().equals(activatedGrammar)) {
                     numActiveGrammars = 0;
                 }
 

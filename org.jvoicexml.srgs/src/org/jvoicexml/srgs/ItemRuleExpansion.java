@@ -99,7 +99,7 @@ public class ItemRuleExpansion implements RuleExpansion {
 
         MatchConsumption summationResult = new MatchConsumption();
         if (initialSemanticInterpretation != null) {
-            summationResult.addExecutableSI(initialSemanticInterpretation);
+            summationResult.addExecutableSemanticInterpretation(initialSemanticInterpretation);
         }
         int matchCount = 0;
         int tokensConsumed = 0;
@@ -132,7 +132,7 @@ public class ItemRuleExpansion implements RuleExpansion {
         }
 
         if (matchCount >= minRepeat) {
-            summationResult.addExecutableSI(executableSemanticInterpretation);
+            summationResult.addExecutableSemanticInterpretation(executableSemanticInterpretation);
             return summationResult;
         }
         return null;

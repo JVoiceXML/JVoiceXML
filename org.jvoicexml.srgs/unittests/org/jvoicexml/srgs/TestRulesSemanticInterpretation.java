@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.jvoicexml.srgs.MatchConsumption;
 import org.jvoicexml.srgs.SrgsSisrGrammar;
 
-public class TestRulesSI {
+public class TestRulesSemanticInterpretation {
 
     @BeforeClass
     public static void loggerSetup() {

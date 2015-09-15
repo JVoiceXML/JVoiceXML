@@ -88,6 +88,8 @@ personal-props/README.txt
     <target name="createDistributionConfiguration">
         <echo file="personal-props/platforms.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
             <platforms>
+                <platform name="org.jvoicexml.interpreter.grammar.regex"/>
+                <platform name="org.jvoicexml.srgs"/>
                 <platform name="org.jvoicexml.implementation.jsapi10">
                     <property name="jvxml.jsapi10.talkingJava.path"
 	                value ="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib" />

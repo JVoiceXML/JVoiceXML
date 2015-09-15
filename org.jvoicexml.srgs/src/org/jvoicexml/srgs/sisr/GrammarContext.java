@@ -42,7 +42,7 @@ public class GrammarContext implements ExecutableSemanticInterpretation {
 
     @Override
     public void dump(String pad) {
-        LOGGER.debug(pad + "GrammarContext(" + grammar.getUri() + ")");
+        LOGGER.debug(pad + "GrammarContext(" + grammar.getURI() + ")");
         executableSI.dump(pad + " ");
     }
 
@@ -54,8 +54,9 @@ public class GrammarContext implements ExecutableSemanticInterpretation {
         context.setLanguageVersion(org.mozilla.javascript.Context.VERSION_DEFAULT);
         Scriptable globalScope = context.initStandardObjects();
 
-        if (grammar.getGlobalTags() != null)
+        if (grammar.getGlobalTags() != null) {
             grammar.getGlobalTags().execute(context, globalScope);
+        }
         ((ScriptableObject) globalScope).sealObject();
 
         // Set up working scope - note out initialized at this level, but

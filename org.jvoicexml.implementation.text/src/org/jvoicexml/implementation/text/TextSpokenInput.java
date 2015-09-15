@@ -69,7 +69,6 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 final class TextSpokenInput implements SpokenInput {
@@ -151,7 +150,7 @@ final class TextSpokenInput implements SpokenInput {
         final SrgsXmlGrammarImplementation impl =
                 (SrgsXmlGrammarImplementation) grammar;
         if (!grammarCheckers.containsKey(impl)) {
-            final SrgsXmlDocument doc = impl.getGrammar();
+            final SrgsXmlDocument doc = impl.getGrammarDocument();
             final GrammarGraph graph = parser.parse(doc);
             if (graph != null) {
                 final GrammarChecker checker = new GrammarChecker(null, graph);
@@ -195,6 +194,9 @@ final class TextSpokenInput implements SpokenInput {
      * @since 0.7.8
      */
     void addSupportedGrammarTypes(final Collection<GrammarType> types) {
+        if (types == null) {
+            return;
+        }
         grammarTypes.addAll(types);
     }
     

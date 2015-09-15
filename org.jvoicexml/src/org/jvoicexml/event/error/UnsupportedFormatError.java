@@ -1,13 +1,7 @@
 /*
- * File:    $RCSfile: UnsupportedFormatError.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,13 +26,10 @@ package org.jvoicexml.event.error;
  * e.g. an unsupported grammar format, or media type.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
+@SuppressWarnings("serial")
 public class UnsupportedFormatError
         extends UnsupportedElementError {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -2845633772481704400L;
-
     /** The unsupported element. */
     public static final String ELEMENT = "format";
 

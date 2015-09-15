@@ -18,11 +18,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml.implementation.grammar;
 
 import java.net.URI;
-
-
 
 /**
  * A grammar evaluator processes a given utterance into a recognition result.
@@ -35,7 +34,7 @@ public interface GrammarEvaluator {
      * Retrieves the base URI of this grammar.
      * @return the URI
      */
-    URI getUri();
+    URI getURI();
     
     /**
      * Processes the given utterance and retrieves the corresponding semantic
@@ -43,5 +42,5 @@ public interface GrammarEvaluator {
      * @param utterance the current utterance
      * @return the determined semantic interpretation, maybe {@code null}
      */
-    Object process(final String utterance);
+    Object getSemanticInterpretation(final String utterance);
 }

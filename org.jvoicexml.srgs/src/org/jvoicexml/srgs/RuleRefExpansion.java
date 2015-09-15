@@ -73,9 +73,9 @@ public class RuleRefExpansion implements RuleExpansion {
                         externalGrammar, referencedRule.getId(),
                         individualResult.getExecutationCollection().get(0));
                 individualResult.getExecutationCollection().clear();
-                individualResult.addExecutableSI(grammarContext);
+                individualResult.addExecutableSemanticInterpretation(grammarContext);
             } else {
-                individualResult.addExecutableSI(executableSematicInterpretation);
+                individualResult.addExecutableSemanticInterpretation(executableSematicInterpretation);
             }
             return individualResult;
         }

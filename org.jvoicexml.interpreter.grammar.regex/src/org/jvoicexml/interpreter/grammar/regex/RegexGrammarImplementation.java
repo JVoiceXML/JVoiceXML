@@ -92,14 +92,14 @@ public final class RegexGrammarImplementation
         if (other == null) {
             return false;
         }
-        return document.equals(other.getGrammar());
+        return document.equals(other.getGrammarDocument());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public GrammarDocument getGrammar() {
+    public GrammarDocument getGrammarDocument() {
         return document;
     }
 

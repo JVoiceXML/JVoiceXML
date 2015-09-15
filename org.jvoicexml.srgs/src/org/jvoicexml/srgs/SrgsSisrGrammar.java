@@ -24,14 +24,18 @@ package org.jvoicexml.srgs;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.grammar.GrammarEvaluator;
 import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
  * Preprocessed SRGS grammar container with semantic interpretation. 
@@ -39,7 +43,8 @@ import org.jvoicexml.xml.srgs.Grammar;
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
  */
-public class SrgsSisrGrammar implements GrammarEvaluator {
+public class SrgsSisrGrammar
+    implements GrammarEvaluator, GrammarImplementation<SrgsXmlDocument> {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(SrgsSisrGrammar.class);
@@ -54,10 +59,10 @@ public class SrgsSisrGrammar implements GrammarEvaluator {
             new java.util.HashMap<String, SrgsRule>();
 
     /** A pool of grammars shared by all that were parsed together. */
-    private HashMap<URI, SrgsSisrGrammar> grammarPool;
+    private Map<URI, SrgsSisrGrammar> grammarPool;
 
     public SrgsSisrGrammar(Grammar grammar, URI uri,
-            HashMap<URI, SrgsSisrGrammar> grammarPool) {
+            Map<URI, SrgsSisrGrammar> grammarPool) {
         grammarNode = grammar;
         this.uri = uri;
         rootRule = grammar.getRoot();
@@ -71,23 +76,15 @@ public class SrgsSisrGrammar implements GrammarEvaluator {
         return grammarNode;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getUri() {
-        return uri;
-    }
-
     public SrgsSisrGrammar getGrammarFromPool(URI uri) {
         return grammarPool.get(uri);
     }
 
     public void putGrammarInPool(SrgsSisrGrammar grammar) {
-        grammarPool.put(grammar.getUri(), grammar);
+        grammarPool.put(grammar.getURI(), grammar);
     }
 
-    public HashMap<URI, SrgsSisrGrammar> getGrammarPool() {
+    public Map<URI, SrgsSisrGrammar> getGrammarPool() {
         return grammarPool;
     }
 
@@ -139,7 +136,7 @@ public class SrgsSisrGrammar implements GrammarEvaluator {
      * {@inheritDoc}
      */
     @Override
-    public Object process(final String utterance) {
+    public Object getSemanticInterpretation(final String utterance) {
         LOGGER.info("processing '" + utterance + "'");
         if (utterance == null || utterance.length() == 0) {
             return null;
@@ -156,12 +153,11 @@ public class SrgsSisrGrammar implements GrammarEvaluator {
     }
 
     MatchConsumption match(final List<String> tokens) {
-        SrgsRule rule = rules.get(rootRule);
+        final SrgsRule rule = rules.get(rootRule);
         if (rule == null) {
             return null;
-            
         }
-        MatchConsumption mc = rule.match(tokens, 0);
+        final MatchConsumption mc = rule.match(tokens, 0);
         if (mc != null) {
             mc.setGlobalExecutableSemanticInterpretation(globalTags);
         }
@@ -180,6 +176,141 @@ public class SrgsSisrGrammar implements GrammarEvaluator {
 
     public void setLiteral(boolean isLiteral) {
         this.isLiteral = isLiteral;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GrammarType getMediaType() {
+        return GrammarType.SRGS_XML;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ModeType getModeType() {
+        return grammarNode.getMode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SrgsXmlDocument getGrammarDocument() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getURI() {
+        return uri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean accepts(final RecognitionResult result) {
+        final String utterance = result.getUtterance();
+        final MatchConsumption consumption = match(utterance);
+        return consumption != null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((globalTags == null) ? 0 : globalTags.hashCode());
+        result = prime * result
+                + ((grammarNode == null) ? 0 : grammarNode.hashCode());
+        result = prime * result
+                + ((grammarPool == null) ? 0 : grammarPool.hashCode());
+        result = prime * result + (isLiteral ? 1231 : 1237);
+        result = prime * result
+                + ((rootRule == null) ? 0 : rootRule.hashCode());
+        result = prime * result + ((rules == null) ? 0 : rules.hashCode());
+        result = prime * result + ((uri == null) ? 0 : uri.hashCode());
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        SrgsSisrGrammar other = (SrgsSisrGrammar) obj;
+        if (globalTags == null) {
+            if (other.globalTags != null) {
+                return false;
+            }
+        } else if (!globalTags.equals(other.globalTags)) {
+            return false;
+        }
+        if (grammarNode == null) {
+            if (other.grammarNode != null) {
+                return false;
+            }
+        } else if (!grammarNode.equals(other.grammarNode)) {
+            return false;
+        }
+        if (grammarPool == null) {
+            if (other.grammarPool != null) {
+                return false;
+            }
+        } else if (!grammarPool.equals(other.grammarPool)) {
+            return false;
+        }
+        if (isLiteral != other.isLiteral) {
+            return false;
+        }
+        if (rootRule == null) {
+            if (other.rootRule != null) {
+                return false;
+            }
+        } else if (!rootRule.equals(other.rootRule)) {
+            return false;
+        }
+        if (rules == null) {
+            if (other.rules != null) {
+                return false;
+            }
+        } else if (!rules.equals(other.rules)) {
+            return false;
+        }
+        if (uri == null) {
+            if (other.uri != null) {
+                return false;
+            }
+        } else if (!uri.equals(other.uri)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final GrammarImplementation<SrgsXmlDocument> other) {
+        return equals((Object) other);
     }
 
 }

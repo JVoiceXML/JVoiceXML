@@ -26,17 +26,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.event.error.UnsupportedFormatError;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.grammar.GrammarEvaluator;
 import org.jvoicexml.implementation.grammar.GrammarParser;
 import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
+import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
@@ -58,7 +60,8 @@ import org.xml.sax.SAXException;
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
  */
-public class SrgsSisrXmlGrammarParser implements GrammarParser {
+public class SrgsSisrXmlGrammarParser
+    implements GrammarParser<SrgsXmlDocument> {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(SrgsSisrXmlGrammarParser.class);
@@ -95,14 +98,15 @@ public class SrgsSisrXmlGrammarParser implements GrammarParser {
 
     public SrgsSisrGrammar parse(SrgsXmlDocument document, URI uri)
             throws SrgsSisrParsingException {
-        return parse(document, uri, new HashMap<URI, SrgsSisrGrammar>());
+        return parse(document, uri,
+                new java.util.HashMap<URI, SrgsSisrGrammar>());
     }
 
     private SrgsSisrGrammar parse(SrgsXmlDocument document, URI uri,
-            HashMap<URI, SrgsSisrGrammar> grammarPool)
+            Map<URI, SrgsSisrGrammar> grammarPool)
             throws SrgsSisrParsingException {
-        currentGrammar = new SrgsSisrGrammar(document.getGrammar(), uri,
-                grammarPool);
+        final Grammar grammar = document.getGrammar();
+        currentGrammar = new SrgsSisrGrammar(grammar, uri, grammarPool);
         grammarPool.put(uri, currentGrammar); // Added early to minimize grammar
                                               // recursion problems
 
@@ -344,7 +348,7 @@ public class SrgsSisrXmlGrammarParser implements GrammarParser {
         // Resolve to an absolute path
         URI uri = null;
         try {
-            uri = currentGrammar.getUri().resolve(uriText);
+            uri = currentGrammar.getURI().resolve(uriText);
         } catch (IllegalArgumentException e) {
             throw new SrgsSisrParsingException(
                     "Unable to parse external rule ref: " + uriText, e);
@@ -358,11 +362,11 @@ public class SrgsSisrXmlGrammarParser implements GrammarParser {
         }
 
         SrgsRule rule = externalGrammar.getRule(ruleName, true);
-        if (rule == null)
+        if (rule == null) {
             throw new SrgsSisrParsingException(
                     "Unable to find a public rule with the name '" + ruleName
                             + "' in grammar " + uri);
-
+        }
         return new RuleRefExpansion(externalGrammar, rule);
     }
 
@@ -392,15 +396,16 @@ public class SrgsSisrXmlGrammarParser implements GrammarParser {
                             + e.getMessage(), e);
         }
 
-        return new SrgsSisrXmlGrammarParser().parse(doc, uri,
-                currentGrammar.getGrammarPool());
+        final SrgsSisrXmlGrammarParser parser = new SrgsSisrXmlGrammarParser();
+        return parser.parse(doc, uri, currentGrammar.getGrammarPool());
     }
 
     public static String joinTokens(List<String> list, int start, int count) {
-        if (count == 0)
+        if (count == 0) {
             return "";
+        }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         boolean first = true;
         for (int i = start; i < start + count; i++) {
             if (first) {
@@ -432,5 +437,18 @@ public class SrgsSisrXmlGrammarParser implements GrammarParser {
         }
 
         return resolvedUri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GrammarImplementation<SrgsXmlDocument> load(final URI uri)
+            throws IOException {
+        try {
+            return fetchAndParseExternalGrammar(uri);
+        } catch (SrgsSisrParsingException e) {
+            throw new IOException(e.getMessage(), e);
+        }
     }
 }

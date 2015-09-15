@@ -21,9 +21,11 @@
 package org.jvoicexml.implementation.grammar;
 
 import java.io.IOException;
+import java.net.URI;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.event.error.UnsupportedFormatError;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
@@ -34,7 +36,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
  */
-public interface GrammarParser {
+public interface GrammarParser<T> {
     /**
      * Retrieves the grammar type that this parser will process.
      * 
@@ -42,6 +44,15 @@ public interface GrammarParser {
      */
     GrammarType getType();
 
+    /**
+     * Loads a grammar by its URI.
+     * @param uri the URI to load the grammar from
+     * @return grammar implementation
+     * @throws IOException
+     *         error loading the grammar
+     */
+    GrammarImplementation<T> load(final URI uri) throws IOException;
+    
     /**
      * Parses a given {@link GrammarDocument} into a {@link GrammarEvaluator} .
      * 

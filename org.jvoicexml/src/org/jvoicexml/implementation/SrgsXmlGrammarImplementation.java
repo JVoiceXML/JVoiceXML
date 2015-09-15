@@ -78,7 +78,7 @@ public final class SrgsXmlGrammarImplementation
      * {@inheritDoc}
      */
     @Override
-    public SrgsXmlDocument getGrammar() {
+    public SrgsXmlDocument getGrammarDocument() {
         return document;
     }
 
@@ -126,7 +126,7 @@ public final class SrgsXmlGrammarImplementation
      */
     @Override
     public boolean equals(final GrammarImplementation<SrgsXmlDocument> other) {
-        return document.equals(other.getGrammar());
+        return document.equals(other.getGrammarDocument());
     }
 
     /**

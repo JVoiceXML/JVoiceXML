@@ -98,11 +98,11 @@ public class TokenRuleExpansion implements RuleExpansion {
         String matchedText = SrgsSisrXmlGrammarParser.joinTokens(tokensToMatch,
                 offset, result.getTokensConsumed());
         if (matchedText.length() > 0) {
-            result.addExecutableSI(new AddToMatchedText(matchedText));
+            result.addExecutableSemanticInterpretation(new AddToMatchedText(matchedText));
         }
 
         // Maintain null if present
-        result.addExecutableSI(executableSI);
+        result.addExecutableSemanticInterpretation(executableSI);
         return result;
     }
 

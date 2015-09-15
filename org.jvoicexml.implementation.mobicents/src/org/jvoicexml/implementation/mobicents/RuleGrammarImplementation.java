@@ -67,7 +67,7 @@ public final class RuleGrammarImplementation
     /**
      * {@inheritDoc}
      */
-    public RuleGrammar getGrammar() {
+    public RuleGrammar getGrammarDocument() {
         return grammar;
     }
 

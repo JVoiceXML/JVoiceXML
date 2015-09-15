@@ -44,7 +44,8 @@ public class MatchConsumption {
     private int tokensConsumed;
     private List<String> tokens = new java.util.ArrayList<String>();
     private ExecutableSemanticInterpretation globalExecutation;
-    private List<ExecutableSemanticInterpretation> executationCollection = new java.util.ArrayList<ExecutableSemanticInterpretation>();
+    private List<ExecutableSemanticInterpretation> executationCollection =
+            new java.util.ArrayList<ExecutableSemanticInterpretation>();
 
     public MatchConsumption() {
     }
@@ -84,7 +85,7 @@ public class MatchConsumption {
         executationCollection = newValue;
     }
 
-    public void addExecutableSI(ExecutableSemanticInterpretation si) {
+    public void addExecutableSemanticInterpretation(ExecutableSemanticInterpretation si) {
         if (si != null) {
             executationCollection.add(si);
         }
@@ -147,8 +148,9 @@ public class MatchConsumption {
         context.setLanguageVersion(Context.VERSION_DEFAULT);
         Scriptable globalScope = context.initStandardObjects();
 
-        if (globalExecutation != null)
+        if (globalExecutation != null) {
             globalExecutation.execute(context, globalScope);
+        }
         ((ScriptableObject) globalScope).sealObject();
 
         // Set up working scope - note out initialized at this level, but
@@ -160,9 +162,10 @@ public class MatchConsumption {
                         + "var meta={current: function() {return {text:'', score:1.0}}};\n",
                 "SISR init from MatchConsumer", 0, null);
 
-        if (executationCollection.size() != 1)
+        if (executationCollection.size() != 1) {
             LOGGER.error("Execution collection was not 1: "
                     + executationCollection.size());
+        }
 
         // At the top level, there should only be one item, a context for the
         // rule being fired.

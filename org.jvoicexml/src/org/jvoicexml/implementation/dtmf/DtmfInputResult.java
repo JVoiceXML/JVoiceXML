@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,7 +29,6 @@ import org.jvoicexml.xml.srgs.ModeType;
  * Result of a DTMF recognition process.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5
  */
 class DtmfInputResult implements RecognitionResult {
@@ -44,8 +38,11 @@ class DtmfInputResult implements RecognitionResult {
     /** The last reached marker. */
     private String marker;
 
-    /** <code>true</code> if the result is accepted. */
+    /** {@code true} if the result is accepted. */
     private boolean accepted;
+
+    /** The semantic interpretation. */
+    private Object interpretation;
 
     /**
      * Constructs a new accepted result..
@@ -74,6 +71,7 @@ class DtmfInputResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMark() {
         return marker;
     }
@@ -81,6 +79,7 @@ class DtmfInputResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUtterance() {
         return utterance;
     }
@@ -99,6 +98,7 @@ class DtmfInputResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isAccepted() {
         return accepted;
     }
@@ -106,13 +106,7 @@ class DtmfInputResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
-    public boolean isRejected() {
-        return !accepted;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setMark(final String mark) {
         marker = mark;
     }
@@ -120,6 +114,7 @@ class DtmfInputResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public float getConfidence() {
         return 1.0f;
     }
@@ -127,6 +122,7 @@ class DtmfInputResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public float[] getWordsConfidence() {
         final float[] wordsConfidence = new float[utterance.length()];
         for (int i = 0; i < utterance.length(); i++) {
@@ -138,6 +134,7 @@ class DtmfInputResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String[] getWords() {
         final String[] words = new String[utterance.length()];
         for (int i = 0; i < utterance.length(); i++) {
@@ -150,8 +147,18 @@ class DtmfInputResult implements RecognitionResult {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ModeType getMode() {
         return ModeType.DTMF;
+    }
+
+    /**
+     * Sets the semantic interpretation.
+     * @param object the semantic interpretation
+     * @since 0.7.8
+     */
+    public void setSemanticInterpretation(final Object object) {
+        interpretation = object;
     }
 
     /**
@@ -159,6 +166,6 @@ class DtmfInputResult implements RecognitionResult {
      */
     @Override
     public Object getSemanticInterpretation(final DataModel model) {
-        return null;
+        return interpretation;
     }
 }

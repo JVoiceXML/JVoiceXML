@@ -162,7 +162,7 @@ public class TestJsapi10SpokenInput {
         final RuleGrammarImplementation impl = (RuleGrammarImplementation) recognizer
                 .loadGrammar(uri, GrammarType.JSGF);
         Assert.assertNotNull(impl);
-        final RuleGrammar ruleGrammar = impl.getGrammar();
+        final RuleGrammar ruleGrammar = impl.getGrammarDocument();
         Assert.assertEquals("test", ruleGrammar.getName());
         final RuleAlternatives alternatives = (RuleAlternatives) ruleGrammar
                 .getRule("test");

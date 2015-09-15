@@ -1,6 +1,6 @@
-<project name="org.jvoicexml.processor.srgssisr" default="jar" basedir=".">
+<project name="org.jvoicexml.srgs" default="jar" basedir=".">
     <description>
-This file builds the srgssisr grammar implementation for JVoiceXml.
+This file builds the SRGS grammar processor for JVoiceXml.
       
 To override the current settings follow the instructions given in
 org.jvoicexml/personal-props/README.txt
@@ -83,7 +83,7 @@ org.jvoicexml/personal-props/README.txt
                 <attribute name="Built-By" value="${user.name}" />
                 <section name="common">
                     <attribute name="Implementation-Vendor" value="JVoiceXML group" />
-                    <attribute name="Implementation-Title" value="SRGS Processor" />
+                    <attribute name="Implementation-Title" value="SRGS  grammar processor" />
                     <attribute name="Implementation-Version" value="${version}" />
                 </section>
             </manifest>
