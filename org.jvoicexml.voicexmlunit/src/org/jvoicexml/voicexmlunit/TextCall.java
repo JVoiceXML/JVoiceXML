@@ -355,7 +355,6 @@ public final class TextCall implements Call  {
         try {
             inputMonitor.waitUntilExpectingInput();
         } catch (InterruptedException | JVoiceXMLEvent e) {
-            JVoiceXMLEvent lastError;
             try {
                 lastError = session.getLastError();
             } catch (ErrorEvent ex) {
@@ -388,7 +387,6 @@ public final class TextCall implements Call  {
             }
         } catch (InterruptedException | TimeoutException
                 | JVoiceXMLEvent e) {
-            JVoiceXMLEvent lastError;
             try {
                 lastError = session.getLastError();
             } catch (ErrorEvent ex) {

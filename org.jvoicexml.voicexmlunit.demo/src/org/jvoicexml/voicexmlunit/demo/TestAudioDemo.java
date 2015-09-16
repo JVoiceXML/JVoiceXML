@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.voicexmlunit.demo/src/org/jvoicexml/voicexmlunit/demo/TestHelloDemo.java $
- * Version: $LastChangedRevision: 4259 $
- * Date:    $Date: 2014-09-09 09:09:00 +0200 (Tue, 09 Sep 2014) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

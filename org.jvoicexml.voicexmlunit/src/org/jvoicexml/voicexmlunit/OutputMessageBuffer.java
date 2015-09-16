@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,14 +36,14 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * Buffer of messages received so far from JVoiceXml. The buffer gets filled
  * by calls to the implemented {@link TextListener}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 class OutputMessageBuffer implements TextListener {
     /** The last received output message. */
     private SsmlDocument output;
-    /** Synchronization. */
+    /** Synchronization for reading. */
     private final Semaphore receiveSem;
+    /** Synchronization for writing. */
     private final Semaphore readSem;
     /** Caught event while waiting for an input. */
     private JVoiceXMLEvent event;
