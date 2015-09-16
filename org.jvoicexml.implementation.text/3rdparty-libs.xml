@@ -20,7 +20,7 @@ implementation platform.
 
         <!-- jvxml srgs processor library -->
         <path id="jvxml.processor.srgs.lib">
-          <path location="../org.jvoicexml.processor.srgs/classes"/>
+          <path location="../org.jvoicexml.srgs/classes"/>
         </path>
     </target>
 </project>

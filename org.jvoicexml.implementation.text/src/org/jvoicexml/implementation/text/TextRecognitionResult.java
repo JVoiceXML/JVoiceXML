@@ -24,11 +24,9 @@
 
 package org.jvoicexml.implementation.text;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.datamodel.DataModel;
-import org.jvoicexml.processor.srgs.GrammarChecker;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
@@ -37,12 +35,11 @@ import org.jvoicexml.xml.srgs.ModeType;
  * confidence.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 final class TextRecognitionResult implements RecognitionResult {
     /** The semantic interpretation of the utterance. */
-    private Object interpretation;
+    private final Object interpretation;
 
     /** The received utterance. */
     private final String utterance;
@@ -50,25 +47,18 @@ final class TextRecognitionResult implements RecognitionResult {
     /** The last reached mark. */
     private String mark;
 
-    /** Reference to the grammarChecker Object. */
-    private final GrammarChecker grammarChecker;
-
-    /** The Logger for this class. */
-    private static final Logger LOGGER = Logger
-            .getLogger(TextRecognitionResult.class);
-
     /**
      * Constructs a new object.
      * 
      * @param text
      *            the received text.
-     * @param checker
-     *            the checker for the grammar.
+     * @param semanticInterpretation
+     *            the semantic interpretation of the input
      */
     public TextRecognitionResult(final String text,
-            final GrammarChecker checker) {
+            final Object semanticInterpretation) {
         utterance = text;
-        grammarChecker = checker;
+        interpretation = semanticInterpretation;
     }
 
     /**
@@ -96,12 +86,7 @@ final class TextRecognitionResult implements RecognitionResult {
      * {@inheritDoc}
      */
     public boolean isAccepted() {
-        if (grammarChecker == null) {
-            return false;
-        }
-
-        final String[] utterances = utterance.split(" ");
-        return grammarChecker.isValid(utterances);
+        return interpretation != null;
     }
 
     /**
@@ -146,37 +131,6 @@ final class TextRecognitionResult implements RecognitionResult {
     @Override
     public Object getSemanticInterpretation(final DataModel model)
             throws SemanticError {
-        if (interpretation == null) {
-            if (grammarChecker == null) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("there is no grammar graph"
-                            + " cannot get semantic interpretation");
-                }
-                return null;
-            }
-
-            final String[] tags = grammarChecker.getInterpretation();
-            if ((tags == null) || (tags.length == 0)) {
-                return null;
-            }
-            for (int i = 0; i < tags.length; i++) {
-                if (tags[i].startsWith("out.")) {
-                    tags[i] = tags[i].substring(tags[i].indexOf('.') + 1);
-                }
-            }
-
-            model.createVariable("out");
-            for (String tag : tags) {
-                if (tag.trim().endsWith(";")) {
-                    model.evaluateExpression(tag, Object.class);
-                } else {
-                    model.updateVariable("out", tag);
-                }
-            }
-            interpretation = model.readVariable("out", Object.class);
-            final String log = model.toString(interpretation);
-            LOGGER.info("created semantic interpretation '" + log + "'");
-        }
         return interpretation;
     }
 }

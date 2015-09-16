@@ -21,14 +21,14 @@
 
 package org.jvoicexml.implementation.text;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.jvoicexml.implementation.PlatformFactory;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
-import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.implementation.grammar.GrammarParser;
 
 /**
  * Platform factory for the text based implementation platform.
@@ -41,8 +41,8 @@ public final class TextPlatformFactory implements PlatformFactory {
     /** Number of instances that the factories will create. */
     private int instances;
 
-    /** Supported grammar types. */
-    private Collection<GrammarType> grammarTypes;
+    /** The configured grammar parser. */
+    private List<GrammarParser<?>> parsers;
 
     /**
      * {@inheritDoc}
@@ -50,7 +50,7 @@ public final class TextPlatformFactory implements PlatformFactory {
     public ResourceFactory<SpokenInput> getSpokeninput() {
         final TextSpokenInputFactory factory = new TextSpokenInputFactory();
         factory.setInstances(instances);
-        factory.setGrammarTypes(grammarTypes);
+        factory.setGrammarParsers(parsers);
         return factory;
     }
 
@@ -84,13 +84,13 @@ public final class TextPlatformFactory implements PlatformFactory {
     }
 
     /**
-     * Sets the grammar types to support by the text platform.
+     * Sets the grammar parsers to use.
      * 
-     * @param types
-     *            the types to support
+     * @param grammarParsers
+     *            the grammar parsers to use
      * @since 0.7.8
      */
-    public void setGrammarTypes(final Collection<GrammarType> types) {
-        grammarTypes = types;
+    public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
+        parsers = grammarParsers;
     }
 }

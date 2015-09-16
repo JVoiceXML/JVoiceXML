@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2013-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -53,6 +48,8 @@ import org.jvoicexml.voicexmlunit.TextCall;
  *
  */
 public final class TestDtmfDemo {
+    /** Timeout in msec for each test method. */
+    private static final int TIMEOUT = 10000;
     /** The call to JVoiceXML. */
     private Call call;
     /** URI of the application to call. */
@@ -82,7 +79,7 @@ public final class TestDtmfDemo {
     /**
      * Runs a test with the option '1'.
      */
-    @Test(timeout = 10000)
+    @Test(timeout = TIMEOUT)
     public void testInputYes() {
         call.call(uri);
         call.hears(
@@ -94,7 +91,7 @@ public final class TestDtmfDemo {
     /**
      * Runs a test with the option '2'.
      */
-    @Test(timeout = 10000)
+    @Test(timeout = TIMEOUT)
     public void testInputNo() {
         call.call(uri);
         call.hears(

@@ -21,6 +21,19 @@
 
 /**
  * This package contains demos for the VoiceXMLunit testing platform.
+ *
+ * <p>
+ * Tests must be run with the system property
+ * {@code -Djava.security.policy=${config}/jvoicexml.policy} and
+ * the {@code config} folder added to the classpath. JNDI within
+ * JVoiceXML must be configured to share the classloader repository with the
+ * text implementation platform. This is usually achieved by adapting the
+ * corresponding property in {@code config/jvxml-jndi.xml}:
+ * <pre>
+ * &lt;repositor&gt;jndi&lt;/repository&gt;
+ * </pre>
+ * </p>
+
  */
 
 package org.jvoicexml.voicexmlunit.demo;

@@ -22,13 +22,10 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
-import java.net.URL;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
@@ -49,16 +46,11 @@ import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
-import org.jvoicexml.processor.srgs.GrammarChecker;
-import org.jvoicexml.processor.srgs.GrammarGraph;
-import org.jvoicexml.processor.srgs.SrgsXmlGrammarParser;
+import org.jvoicexml.implementation.grammar.GrammarEvaluator;
+import org.jvoicexml.implementation.grammar.GrammarParser;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * Text based implementation for a {@link SpokenInput}.
@@ -79,15 +71,11 @@ final class TextSpokenInput implements SpokenInput {
     /** Supported barge-in types. */
     private static final Collection<BargeInType> BARGE_IN_TYPES;
 
-    /** Supported grammar types. */
-    private final Collection<GrammarType> grammarTypes;
+    /** The grammar parser to use. */
+    private final Map<GrammarType, GrammarParser<?>> parsers;
 
-    /** Reference to the SrgsXmlGrammarParser. */
-    private final SrgsXmlGrammarParser parser;
-
-    /** Active grammar checkers. */
-    private final Map<SrgsXmlGrammarImplementation,
-        GrammarChecker> grammarCheckers;
+    /** Active grammars. */
+    private final Collection<GrammarImplementation<?>> activeGrammars;
 
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
@@ -105,12 +93,25 @@ final class TextSpokenInput implements SpokenInput {
      * Constructs a new object.
      */
     public TextSpokenInput() {
-        grammarTypes = new java.util.ArrayList<GrammarType>();
-        grammarTypes.add(GrammarType.SRGS_XML);
+        activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
+        parsers = new java.util.HashMap<GrammarType, GrammarParser<?>>();
         listener = new java.util.ArrayList<SpokenInputListener>();
-        grammarCheckers =
-          new java.util.HashMap<SrgsXmlGrammarImplementation, GrammarChecker>();
-        parser = new SrgsXmlGrammarParser();
+    }
+
+    /**
+     * Sets the grammar parsers to use.
+     * @param grammarParsers the grammar parsers to use
+     * @since 0.7.8
+     */
+    public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
+        for (GrammarParser<?> parser : grammarParsers) {
+            final GrammarType type = parser.getType();
+            parsers.put(type, parser);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added parser '" + parser + "' for grammar type '"
+                        + type + "'");
+            }
+        }
     }
 
     /**
@@ -127,39 +128,11 @@ final class TextSpokenInput implements SpokenInput {
     public void activateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
-        for (GrammarImplementation<?> grammar : grammars) {
-            activateGrammar(grammar);
-        }
-    }
-
-    /**
-     * Activates a given grammar. It's the implementation for
-     * activateGrammars().
-     * 
-     * @param grammar
-     *            the grammar to activate
-     * @exception BadFetchError
-     *                Grammar is not known by the recognizer.
-     * @exception UnsupportedLanguageError
-     *                The specified language is not supported.
-     * @exception NoresourceError
-     *                The input resource is not available.
-     */
-    public void activateGrammar(final GrammarImplementation<?> grammar)
-            throws BadFetchError, UnsupportedLanguageError, NoresourceError {
-        final SrgsXmlGrammarImplementation impl =
-                (SrgsXmlGrammarImplementation) grammar;
-        if (!grammarCheckers.containsKey(impl)) {
-            final SrgsXmlDocument doc = impl.getGrammarDocument();
-            final GrammarGraph graph = parser.parse(doc);
-            if (graph != null) {
-                final GrammarChecker checker = new GrammarChecker(null, graph);
-                grammarCheckers.put(impl, checker);
-            } else {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.warn("Cannot create a grammar graph "
-                            + "from the grammar file");
-                }
+        activeGrammars.addAll(grammars);
+        if (LOGGER.isDebugEnabled()) {
+            for (GrammarImplementation<?> grammar : grammars) {
+                LOGGER.debug("activated grammar "
+                        + grammar.getGrammarDocument());
             }
         }
     }
@@ -171,11 +144,11 @@ final class TextSpokenInput implements SpokenInput {
     public void deactivateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
-        for (GrammarImplementation<?> grammar : grammars) {
-            final SrgsXmlGrammarImplementation impl =
-                    (SrgsXmlGrammarImplementation) grammar;
-            if (grammarCheckers.containsKey(impl)) {
-                grammarCheckers.remove(impl);
+        activeGrammars.removeAll(grammars);
+        if (LOGGER.isDebugEnabled()) {
+            for (GrammarImplementation<?> grammar : grammars) {
+                LOGGER.debug("deactivated grammar "
+                        + grammar.getGrammarDocument());
             }
         }
     }
@@ -189,23 +162,11 @@ final class TextSpokenInput implements SpokenInput {
     }
 
     /**
-     * Adds the given grammar types.
-     * @param types grammar types to add.
-     * @since 0.7.8
-     */
-    void addSupportedGrammarTypes(final Collection<GrammarType> types) {
-        if (types == null) {
-            return;
-        }
-        grammarTypes.addAll(types);
-    }
-    
-    /**
      * {@inheritDoc}
      */
     @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        return grammarTypes;
+        return parsers.keySet();
     }
 
     /**
@@ -215,22 +176,11 @@ final class TextSpokenInput implements SpokenInput {
     public GrammarImplementation<?> loadGrammar(final URI uri,
             final GrammarType type) throws NoresourceError, IOException,
             UnsupportedFormatError {
-        if (type != GrammarType.SRGS_XML) {
-            throw new UnsupportedFormatError("Only SRGS XML is supported!");
+        final GrammarParser<?> parser = parsers.get(type);
+        if (parser == null) {
+            throw new UnsupportedFormatError("'" + type + "' is not supported");
         }
-
-        final URL url = uri.toURL();
-        final InputStream input = url.openStream();
-        final InputSource inputSource = new InputSource(input);
-        final SrgsXmlDocument doc;
-        try {
-            doc = new SrgsXmlDocument(inputSource);
-        } catch (ParserConfigurationException e) {
-            throw new IOException(e.getMessage(), e);
-        } catch (SAXException e) {
-            throw new UnsupportedFormatError(e.getMessage(), e);
-        }
-        return new SrgsXmlGrammarImplementation(doc, uri);
+        return parser.load(uri);
     }
 
     /**
@@ -239,7 +189,7 @@ final class TextSpokenInput implements SpokenInput {
     @Override
     public void passivate() {
         listener.clear();
-        grammarCheckers.clear();
+        activeGrammars.clear();
         recognizing = false;
     }
 
@@ -340,26 +290,25 @@ final class TextSpokenInput implements SpokenInput {
                 null, ModeType.VOICE);
         fireInputEvent(inputStartedEvent);
 
-        final String[] tokens = text.split(" ");
-        GrammarChecker grammarChecker = null;
-        for (GrammarChecker checker : grammarCheckers.values()) {
-            if (checker.isValid(tokens)) {
-                grammarChecker = checker;
-                break;
+        Object interpretation = null;
+        for (GrammarImplementation<?> grammar : activeGrammars) {
+            if (grammar instanceof GrammarEvaluator) {
+                final GrammarEvaluator evaluator = (GrammarEvaluator) grammar;
+                interpretation = evaluator.getSemanticInterpretation(text);
+                if (interpretation != null) {
+                    break;
+                }
             }
         }
         final RecognitionResult result = new TextRecognitionResult(text,
-                grammarChecker);
-
+                interpretation);
         if (result.isAccepted()) {
             final SpokenInputEvent acceptedEvent = new RecognitionEvent(this,
                     null, result);
-
             fireInputEvent(acceptedEvent);
         } else {
             final SpokenInputEvent rejectedEvent = new NomatchEvent(this, null,
                     result);
-
             fireInputEvent(rejectedEvent);
         }
     }

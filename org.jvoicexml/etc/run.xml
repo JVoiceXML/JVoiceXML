@@ -15,6 +15,7 @@ This file provides targets to run and stop the voice browser.
             <pathelement location="../org.jvoicexml.jndi/classes" />
             <pathelement location="../org.jvoicexml.xml/classes" />
             <pathelement location="../org.jvoicexml.processor.srgs/classes" />
+            <pathelement location="../org.jvoicexml.srgs/classes" />
             <pathelement location="${config}" />
         </path>
 

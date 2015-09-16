@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2013-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -54,7 +49,6 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 public final class TextCall implements Call  {
@@ -149,7 +143,7 @@ public final class TextCall implements Call  {
                 listener.called(uri);
             }
         } catch (Exception | ErrorEvent e) {
-            final AssertionError error = new AssertionError(e);
+            final AssertionError error = new AssertionError(e.getMessage(), e);
             notifyError(error);
             throw error;
         }

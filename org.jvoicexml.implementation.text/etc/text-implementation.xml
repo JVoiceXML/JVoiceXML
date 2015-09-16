@@ -5,8 +5,13 @@
   <repository>text</repository>
   <classpath>../org.jvoicexml/dist/org.jvoicexml.implementation.text.jar</classpath>
   <classpath>../org.jvoicexml/dist/org.jvoicexml.client.text.jar</classpath>
-  <classpath>../org.jvoicexml/dist/org.jvoicexml.processor.srgs.jar</classpath>
+  <classpath>../org.jvoicexml/dist/org.jvoicexml.srgs.jar</classpath>
   <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">
     <beans:property name="instances" value="1" />
+   <property name="grammarParsers">
+    <list>
+        <bean class="org.jvoicexml.srgs.SrgsSisrXmlGrammarParser" />
+    </list>    
+   </property>
   </beans:bean>
 </implementation>

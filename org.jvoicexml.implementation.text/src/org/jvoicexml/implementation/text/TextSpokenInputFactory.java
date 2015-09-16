@@ -21,13 +21,13 @@
 
 package org.jvoicexml.implementation.text;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.implementation.grammar.GrammarParser;
 
 /**
  * Demo implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
@@ -42,8 +42,8 @@ public final class TextSpokenInputFactory
     /** Number of instances that this factory will create. */
     private int instances;
 
-    /** Supported grammar types. */
-    private Collection<GrammarType> grammarTypes;
+    /** The configured grammar parser. */
+    private List<GrammarParser<?>> parsers;
 
     /**
      * Constructs a new object.
@@ -52,12 +52,23 @@ public final class TextSpokenInputFactory
     }
 
     /**
+     * Sets the grammar parsers to use.
+     * 
+     * @param grammarParsers
+     *            the grammar parsers to use
+     * @since 0.7.8
+     */
+    public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
+        parsers = grammarParsers;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public SpokenInput createResource() throws NoresourceError {
         final TextSpokenInput input = new TextSpokenInput();
-        input.addSupportedGrammarTypes(grammarTypes);
+        input.setGrammarParsers(parsers);
         return input;
     }
 
@@ -77,17 +88,6 @@ public final class TextSpokenInputFactory
     @Override
     public int getInstances() {
         return instances;
-    }
-
-    /**
-     * Sets the grammar types to support by the text platform.
-     * 
-     * @param types
-     *            the types to support
-     * @since 0.7.8
-     */
-    public void setGrammarTypes(final Collection<GrammarType> types) {
-        grammarTypes = types;
     }
 
     /**

@@ -105,7 +105,7 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
             }
         }
     }
-    
+
     /**
      * Activates the given grammars. It is guaranteed that all grammars types
      * are supported by this implementation.

@@ -1,0 +1,339 @@
+2015-09-16 06:57:23,999 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   133) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 06:57:24,293 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 06:57:24,296 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   435) - server stopped
+2015-09-16 06:59:22,582 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   133) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 06:59:22,971 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 06:59:23,077 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 06:59:23,078 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 06:59:23,078 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   435) - server stopped
+2015-09-16 06:59:23,080 [VoiceXML text server] DEBUG      org.jvoicexml.client.text.TextServer (   336) - error reading from the socket
+java.net.SocketException: socket closed
+	at java.net.DualStackPlainSocketImpl.accept0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketAccept(DualStackPlainSocketImpl.java:131)
+	at java.net.AbstractPlainSocketImpl.accept(AbstractPlainSocketImpl.java:398)
+	at java.net.PlainSocketImpl.accept(PlainSocketImpl.java:199)
+	at java.net.ServerSocket.implAccept(ServerSocket.java:530)
+	at java.net.ServerSocket.accept(ServerSocket.java:498)
+	at org.jvoicexml.client.text.TextServer.run(TextServer.java:317)
+2015-09-16 06:59:23,114 [Thread-4            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   133) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 06:59:23,118 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 06:59:23,129 [VoiceXML text server] DEBUG      org.jvoicexml.client.text.TextServer (   336) - error reading from the socket
+java.net.SocketException: socket closed
+	at java.net.DualStackPlainSocketImpl.accept0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketAccept(DualStackPlainSocketImpl.java:131)
+	at java.net.AbstractPlainSocketImpl.accept(AbstractPlainSocketImpl.java:398)
+	at java.net.PlainSocketImpl.accept(PlainSocketImpl.java:199)
+	at java.net.ServerSocket.implAccept(ServerSocket.java:530)
+	at java.net.ServerSocket.accept(ServerSocket.java:498)
+	at org.jvoicexml.client.text.TextServer.run(TextServer.java:317)
+2015-09-16 06:59:23,130 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 06:59:23,130 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 06:59:23,130 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   435) - server stopped
+2015-09-16 07:02:05,326 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   133) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:02:05,612 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:02:05,684 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:02:05,685 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:02:05,685 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   435) - server stopped
+2015-09-16 07:02:05,688 [VoiceXML text server] DEBUG      org.jvoicexml.client.text.TextServer (   336) - error reading from the socket
+java.net.SocketException: socket closed
+	at java.net.DualStackPlainSocketImpl.accept0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketAccept(DualStackPlainSocketImpl.java:131)
+	at java.net.AbstractPlainSocketImpl.accept(AbstractPlainSocketImpl.java:398)
+	at java.net.PlainSocketImpl.accept(PlainSocketImpl.java:199)
+	at java.net.ServerSocket.implAccept(ServerSocket.java:530)
+	at java.net.ServerSocket.accept(ServerSocket.java:498)
+	at org.jvoicexml.client.text.TextServer.run(TextServer.java:317)
+2015-09-16 07:02:05,724 [Thread-4            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   133) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:02:05,729 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:02:05,761 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:02:05,761 [VoiceXML text server] DEBUG      org.jvoicexml.client.text.TextServer (   336) - error reading from the socket
+java.net.SocketException: socket closed
+	at java.net.DualStackPlainSocketImpl.accept0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketAccept(DualStackPlainSocketImpl.java:131)
+	at java.net.AbstractPlainSocketImpl.accept(AbstractPlainSocketImpl.java:398)
+	at java.net.PlainSocketImpl.accept(PlainSocketImpl.java:199)
+	at java.net.ServerSocket.implAccept(ServerSocket.java:530)
+	at java.net.ServerSocket.accept(ServerSocket.java:498)
+	at org.jvoicexml.client.text.TextServer.run(TextServer.java:317)
+2015-09-16 07:02:05,762 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:02:05,764 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   435) - server stopped
+2015-09-16 07:03:33,522 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:03:33,832 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:03:33,897 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:03:33,898 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:03:33,898 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   429) - server stopped
+2015-09-16 07:03:33,900 [VoiceXML text server] DEBUG      org.jvoicexml.client.text.TextServer (   336) - error reading from the socket
+java.net.SocketException: socket closed
+	at java.net.DualStackPlainSocketImpl.accept0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketAccept(DualStackPlainSocketImpl.java:131)
+	at java.net.AbstractPlainSocketImpl.accept(AbstractPlainSocketImpl.java:398)
+	at java.net.PlainSocketImpl.accept(PlainSocketImpl.java:199)
+	at java.net.ServerSocket.implAccept(ServerSocket.java:530)
+	at java.net.ServerSocket.accept(ServerSocket.java:498)
+	at org.jvoicexml.client.text.TextServer.run(TextServer.java:317)
+2015-09-16 07:03:33,922 [Thread-4            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:03:33,925 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:03:33,935 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:03:33,935 [VoiceXML text server] DEBUG      org.jvoicexml.client.text.TextServer (   336) - error reading from the socket
+java.net.SocketException: socket closed
+	at java.net.DualStackPlainSocketImpl.accept0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketAccept(DualStackPlainSocketImpl.java:131)
+	at java.net.AbstractPlainSocketImpl.accept(AbstractPlainSocketImpl.java:398)
+	at java.net.PlainSocketImpl.accept(PlainSocketImpl.java:199)
+	at java.net.ServerSocket.implAccept(ServerSocket.java:530)
+	at java.net.ServerSocket.accept(ServerSocket.java:498)
+	at org.jvoicexml.client.text.TextServer.run(TextServer.java:317)
+2015-09-16 07:03:33,935 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:03:33,936 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   429) - server stopped
+2015-09-16 07:06:44,549 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:06:44,892 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:06:44,974 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:06:44,975 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:06:44,975 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   429) - server stopped
+2015-09-16 07:06:44,977 [VoiceXML text server] DEBUG      org.jvoicexml.client.text.TextServer (   336) - error reading from the socket
+java.net.SocketException: socket closed
+	at java.net.DualStackPlainSocketImpl.accept0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketAccept(DualStackPlainSocketImpl.java:131)
+	at java.net.AbstractPlainSocketImpl.accept(AbstractPlainSocketImpl.java:398)
+	at java.net.PlainSocketImpl.accept(PlainSocketImpl.java:199)
+	at java.net.ServerSocket.implAccept(ServerSocket.java:530)
+	at java.net.ServerSocket.accept(ServerSocket.java:498)
+	at org.jvoicexml.client.text.TextServer.run(TextServer.java:317)
+2015-09-16 07:06:44,997 [Thread-4            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:06:45,001 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:06:45,012 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:06:45,012 [VoiceXML text server] DEBUG      org.jvoicexml.client.text.TextServer (   336) - error reading from the socket
+java.net.SocketException: socket closed
+	at java.net.DualStackPlainSocketImpl.accept0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketAccept(DualStackPlainSocketImpl.java:131)
+	at java.net.AbstractPlainSocketImpl.accept(AbstractPlainSocketImpl.java:398)
+	at java.net.PlainSocketImpl.accept(PlainSocketImpl.java:199)
+	at java.net.ServerSocket.implAccept(ServerSocket.java:530)
+	at java.net.ServerSocket.accept(ServerSocket.java:498)
+	at org.jvoicexml.client.text.TextServer.run(TextServer.java:317)
+2015-09-16 07:06:45,012 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:06:45,013 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   429) - server stopped
+2015-09-16 07:13:00,636 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:13:00,939 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:13:01,740 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   327) - connected to tcp://NB-LEN-Walka.s1nn.int:49696
+2015-09-16 07:13:01,847 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 163
+2015-09-16 07:13:02,129 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[DATA, 1, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>]
+2015-09-16 07:13:02,130 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 1, null]
+2015-09-16 07:13:02,130 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:13:02,130 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[EXPECTING_INPUT, 2, null]
+2015-09-16 07:13:02,130 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 2, null]
+2015-09-16 07:13:02,136 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   163) - heard '<?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>'
+2015-09-16 07:13:02,274 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   313) - entered '1'
+2015-09-16 07:13:03,317 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:13:03,317 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 3, null]
+2015-09-16 07:13:03,318 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 3, null]
+2015-09-16 07:13:03,318 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:13:03,318 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 4, null]
+2015-09-16 07:13:03,319 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 4, null]
+2015-09-16 07:13:03,461 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:13:03,461 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 5, null]
+2015-09-16 07:13:03,462 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 5, null]
+2015-09-16 07:13:03,661 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 163
+2015-09-16 07:13:03,692 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[DATA, 6, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">You like this example.</speak>]
+2015-09-16 07:13:03,692 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 6, null]
+2015-09-16 07:13:03,692 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:13:03,692 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 7, null]
+2015-09-16 07:13:03,693 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 7, null]
+2015-09-16 07:13:03,696 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   163) - heard '<?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">You like this example.</speak>'
+2015-09-16 07:13:03,698 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   424) - hungup
+2015-09-16 07:13:03,698 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:13:03,698 [main                ] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[BYE, 0, null]
+2015-09-16 07:13:03,699 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:13:03,699 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[BYE, 8, null]
+2015-09-16 07:13:05,698 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:13:05,698 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   429) - server stopped
+2015-09-16 07:13:05,701 [Thread-4            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:13:05,704 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:13:06,006 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   327) - connected to tcp://NB-LEN-Walka.s1nn.int:49698
+2015-09-16 07:13:06,182 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 209
+2015-09-16 07:13:06,190 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[DATA, 1, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>]
+2015-09-16 07:13:06,191 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 1, null]
+2015-09-16 07:13:06,194 [Thread-4            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   163) - heard '<?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>'
+2015-09-16 07:13:06,221 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:13:06,221 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[EXPECTING_INPUT, 2, null]
+2015-09-16 07:13:06,221 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 2, null]
+2015-09-16 07:13:06,242 [Thread-4            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   313) - entered '2'
+2015-09-16 07:13:07,246 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:13:07,247 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 3, null]
+2015-09-16 07:13:07,247 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 3, null]
+2015-09-16 07:13:07,248 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:13:07,248 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 4, null]
+2015-09-16 07:13:07,248 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 4, null]
+2015-09-16 07:13:07,434 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:13:07,434 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 5, null]
+2015-09-16 07:13:07,434 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 5, null]
+2015-09-16 07:13:07,550 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:13:07,550 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 6, null]
+2015-09-16 07:13:07,550 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 6, null]
+2015-09-16 07:13:07,638 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 163
+2015-09-16 07:13:07,647 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[DATA, 7, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">You do not like this example.</speak>]
+2015-09-16 07:13:07,647 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 7, null]
+2015-09-16 07:13:07,674 [Thread-4            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   163) - heard '<?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">You do not like this example.</speak>'
+2015-09-16 07:13:07,676 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:13:07,676 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[BYE, 8, null]
+2015-09-16 07:13:07,676 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 8, null]
+2015-09-16 07:13:07,676 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   424) - hungup
+2015-09-16 07:13:07,676 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:13:07,677 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:13:07,677 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   429) - server stopped
+2015-09-16 07:20:01,320 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:20:01,634 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:20:02,284 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   327) - connected to tcp://NB-LEN-Walka.s1nn.int:49832
+2015-09-16 07:20:02,477 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 163
+2015-09-16 07:20:02,737 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[DATA, 1, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>]
+2015-09-16 07:20:02,737 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 1, null]
+2015-09-16 07:20:02,738 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:20:02,738 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[EXPECTING_INPUT, 2, null]
+2015-09-16 07:20:02,738 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 2, null]
+2015-09-16 07:20:02,743 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   163) - heard '<?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>'
+2015-09-16 07:20:02,892 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   313) - entered '2'
+2015-09-16 07:20:11,325 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   424) - hungup
+2015-09-16 07:20:11,325 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:20:11,325 [main                ] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[BYE, 0, null]
+2015-09-16 07:20:11,387 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 342
+2015-09-16 07:20:11,387 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 3, null]
+2015-09-16 07:20:13,325 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:20:13,325 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   429) - server stopped
+2015-09-16 07:21:07,313 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:21:07,613 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:21:07,991 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   327) - connected to tcp://NB-LEN-Walka.s1nn.int:49857
+2015-09-16 07:21:08,079 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 590
+2015-09-16 07:21:08,272 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[DATA, 1, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>]
+2015-09-16 07:21:08,273 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 1, null]
+2015-09-16 07:21:08,273 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:21:08,273 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[EXPECTING_INPUT, 2, null]
+2015-09-16 07:21:08,274 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 2, null]
+2015-09-16 07:21:08,278 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   163) - heard '<?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>'
+2015-09-16 07:21:08,640 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   313) - entered '2'
+2015-09-16 07:21:17,316 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   424) - hungup
+2015-09-16 07:21:17,316 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:21:17,316 [main                ] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[BYE, 0, null]
+2015-09-16 07:21:17,319 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:21:17,319 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[ACK, 0, null]
+2015-09-16 07:21:17,321 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:21:17,321 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   429) - server stopped
+2015-09-16 07:21:52,821 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:21:53,178 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:21:53,594 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   327) - connected to tcp://NB-LEN-Walka.s1nn.int:49880
+2015-09-16 07:21:53,797 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 163
+2015-09-16 07:21:53,996 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[DATA, 1, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>]
+2015-09-16 07:21:53,997 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 1, null]
+2015-09-16 07:21:53,997 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:21:53,997 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[EXPECTING_INPUT, 2, null]
+2015-09-16 07:21:53,997 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 2, null]
+2015-09-16 07:21:54,002 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   163) - heard '<?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>'
+2015-09-16 07:21:54,078 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   313) - entered '2'
+2015-09-16 07:22:02,822 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   424) - hungup
+2015-09-16 07:22:02,822 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:22:02,822 [main                ] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[BYE, 0, null]
+2015-09-16 07:22:02,853 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:22:02,854 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 3, null]
+2015-09-16 07:22:04,822 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:22:04,822 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   429) - server stopped
+2015-09-16 07:22:12,107 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:22:12,455 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:22:12,863 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   327) - connected to tcp://NB-LEN-Walka.s1nn.int:49895
+2015-09-16 07:22:12,968 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 163
+2015-09-16 07:22:13,154 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[DATA, 1, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>]
+2015-09-16 07:22:13,154 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 1, null]
+2015-09-16 07:22:13,155 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:22:13,155 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[EXPECTING_INPUT, 2, null]
+2015-09-16 07:22:13,155 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 2, null]
+2015-09-16 07:22:13,159 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   163) - heard '<?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>'
+2015-09-16 07:22:13,229 [Thread-1            ] INFO        org.jvoicexml.voicexmlunit.TextCall (   313) - entered '2'
+2015-09-16 07:22:22,108 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   424) - hungup
+2015-09-16 07:22:22,108 [main                ] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:22:22,109 [main                ] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[BYE, 0, null]
+2015-09-16 07:22:22,110 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:22:22,111 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 3, null]
+2015-09-16 07:22:24,111 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:22:24,111 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   429) - server stopped
+2015-09-16 07:24:13,571 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:24:13,871 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:24:14,565 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   327) - connected to tcp://NB-LEN-Walka.s1nn.int:49958
+2015-09-16 07:24:14,665 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 209
+2015-09-16 07:24:14,909 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[DATA, 1, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>]
+2015-09-16 07:24:14,910 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 1, null]
+2015-09-16 07:24:14,911 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:24:14,911 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[EXPECTING_INPUT, 2, null]
+2015-09-16 07:24:14,912 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 2, null]
+2015-09-16 07:24:14,936 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   163) - heard '<?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>'
+2015-09-16 07:24:19,055 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   313) - entered '1'
+2015-09-16 07:24:45,005 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:24:45,006 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 3, null]
+2015-09-16 07:24:45,006 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 3, null]
+2015-09-16 07:24:45,006 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:24:45,006 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 4, null]
+2015-09-16 07:24:45,007 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 4, null]
+2015-09-16 07:24:45,191 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 163
+2015-09-16 07:24:45,219 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[DATA, 5, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>]
+2015-09-16 07:24:45,219 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 5, null]
+2015-09-16 07:24:45,219 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:24:45,219 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[EXPECTING_INPUT, 6, null]
+2015-09-16 07:24:45,219 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 6, null]
+2015-09-16 07:25:15,228 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:25:15,229 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 7, null]
+2015-09-16 07:25:15,229 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 7, null]
+2015-09-16 07:25:15,229 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:25:15,229 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[INPUT_CLOSED, 8, null]
+2015-09-16 07:25:15,230 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 8, null]
+2015-09-16 07:25:15,366 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:25:15,367 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[BYE, 9, null]
+2015-09-16 07:25:15,374 [VoiceXML text server] DEBUG      org.jvoicexml.client.text.TextServer (   336) - error reading from the socket
+java.net.SocketException: Software caused connection abort: socket write error
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:113)
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:159)
+	at java.io.ObjectOutputStream$BlockDataOutputStream.drain(ObjectOutputStream.java:1876)
+	at java.io.ObjectOutputStream$BlockDataOutputStream.setBlockDataMode(ObjectOutputStream.java:1785)
+	at java.io.ObjectOutputStream.writeNonProxyDesc(ObjectOutputStream.java:1285)
+	at java.io.ObjectOutputStream.writeClassDesc(ObjectOutputStream.java:1230)
+	at java.io.ObjectOutputStream.writeOrdinaryObject(ObjectOutputStream.java:1426)
+	at java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1177)
+	at java.io.ObjectOutputStream.writeFatalException(ObjectOutputStream.java:1576)
+	at java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:350)
+	at org.jvoicexml.client.text.TextServer.send(TextServer.java:508)
+	at org.jvoicexml.client.text.TextServer.acknowledge(TextServer.java:434)
+	at org.jvoicexml.client.text.TextServer.readOutput(TextServer.java:382)
+	at org.jvoicexml.client.text.TextServer.run(TextServer.java:330)
+2015-09-16 07:25:15,382 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   532) - server closed
+2015-09-16 07:25:52,240 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   424) - hungup
+2015-09-16 07:25:52,240 [main                ] INFO       org.jvoicexml.client.text.TextServer (   521) - text server stopped
+2015-09-16 07:25:52,240 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   429) - server stopped
+2015-09-16 07:25:52,253 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:25:52,274 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:25:52,554 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   327) - connected to tcp://NB-LEN-Walka.s1nn.int:49989
+2015-09-16 07:25:52,677 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 209
+2015-09-16 07:25:52,715 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[DATA, 1, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>]
+2015-09-16 07:25:52,715 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 1, null]
+2015-09-16 07:25:52,719 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   163) - heard '<?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>'
+2015-09-16 07:25:52,791 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:25:52,792 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[EXPECTING_INPUT, 2, null]
+2015-09-16 07:25:52,792 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 2, null]
+2015-09-16 07:25:55,102 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   313) - entered '2'
+2015-09-16 07:26:17,504 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:26:17,976 [VoiceXML text server] DEBUG      org.jvoicexml.client.text.TextServer (   307) - error connecting
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(DualStackPlainSocketImpl.java:106)
+	at java.net.AbstractPlainSocketImpl.bind(AbstractPlainSocketImpl.java:376)
+	at java.net.PlainSocketImpl.bind(PlainSocketImpl.java:190)
+	at java.net.ServerSocket.bind(ServerSocket.java:376)
+	at java.net.ServerSocket.bind(ServerSocket.java:330)
+	at org.jvoicexml.client.text.TextServer.run(TextServer.java:303)
+2015-09-16 07:27:38,133 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   127) - calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
+2015-09-16 07:27:38,449 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   312) - text server started at port '6000'
+2015-09-16 07:27:39,082 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   327) - connected to tcp://NB-LEN-Walka.s1nn.int:50048
+2015-09-16 07:27:39,297 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 209
+2015-09-16 07:27:39,493 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[DATA, 1, <?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>]
+2015-09-16 07:27:39,494 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 1, null]
+2015-09-16 07:27:39,494 [VoiceXML text server] DEBUG  .jvoicexml.client.text.TextMessageReader (    77) - stream available: 114
+2015-09-16 07:27:39,494 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   376) - read TextMessage[EXPECTING_INPUT, 2, null]
+2015-09-16 07:27:39,495 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   509) - sent TextMessage[ACK, 2, null]
+2015-09-16 07:27:39,499 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   163) - heard '<?xml version="1.0" encoding="UTF-8" standalone="no"?><speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xml:lang="de-DE" xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">Do you like this example? Please enter 1 for yes or 2 for no</speak>'
+2015-09-16 07:27:43,996 [main                ] INFO        org.jvoicexml.voicexmlunit.TextCall (   313) - entered '1'

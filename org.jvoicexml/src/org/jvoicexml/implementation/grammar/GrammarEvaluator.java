@@ -38,9 +38,12 @@ public interface GrammarEvaluator {
     
     /**
      * Processes the given utterance and retrieves the corresponding semantic
-     * interpretation.
+     * interpretation. If there is no semantic interpretation but the utterances
+     * is considered a valid input, the utterance is returned as semantic
+     * interpretation. 
      * @param utterance the current utterance
-     * @return the determined semantic interpretation, maybe {@code null}
+     * @return the determined semantic interpretation, or {@code null} if
+     *         the utterance is not valid
      */
     Object getSemanticInterpretation(final String utterance);
 }
