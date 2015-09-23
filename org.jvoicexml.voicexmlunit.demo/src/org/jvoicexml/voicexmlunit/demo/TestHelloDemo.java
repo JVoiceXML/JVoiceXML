@@ -48,6 +48,8 @@ import org.jvoicexml.voicexmlunit.TextCall;
  *
  */
 public final class TestHelloDemo {
+    /** Timeout in msec for each test method. */
+    private static final int TIMEOUT = 10000;
     /** The call to JVoiceXML. */
     private Call call;
     /** URI of the application to call. */
@@ -79,7 +81,7 @@ public final class TestHelloDemo {
      * @exception Exception
      *            test failed
      */
-    @Test(timeout = 20000)
+    @Test(timeout = TIMEOUT)
     public void testHelloWorld() throws Exception {
         call.call(uri);
         call.hears("Hello World!");

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -79,7 +74,6 @@ import org.w3c.dom.NodeList;
  * @see org.jvoicexml.xml.vxml.Menu
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.4
  */
 public final class ExecutableMenuForm
@@ -316,7 +310,7 @@ public final class ExecutableMenuForm
             return;
         }
         final Grammar grammar = field.appendChild(Grammar.class);
-        grammar.setRoot(field.getName() + "-" + mode);
+        grammar.setRoot(field.getName() + mode);
         grammar.setVersion("1.0");
         grammar.setType(GrammarType.SRGS_XML);
         // Copy the lang attribute from the parent document.

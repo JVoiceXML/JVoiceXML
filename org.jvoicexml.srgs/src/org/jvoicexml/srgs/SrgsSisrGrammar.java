@@ -232,8 +232,6 @@ public class SrgsSisrGrammar
                 + ((globalTags == null) ? 0 : globalTags.hashCode());
         result = prime * result
                 + ((grammarNode == null) ? 0 : grammarNode.hashCode());
-        result = prime * result
-                + ((grammarPool == null) ? 0 : grammarPool.hashCode());
         result = prime * result + (isLiteral ? 1231 : 1237);
         result = prime * result
                 + ((rootRule == null) ? 0 : rootRule.hashCode());

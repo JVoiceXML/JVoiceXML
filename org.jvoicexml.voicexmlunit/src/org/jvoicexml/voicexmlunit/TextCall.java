@@ -22,6 +22,7 @@
 package org.jvoicexml.voicexmlunit;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
@@ -119,6 +120,15 @@ public final class TextCall implements Call  {
         server.addTextListener(listener);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void call(final File file) {
+        final URI uri = file.toURI();
+        call(uri);
+    }
+    
     /**
      * {@inheritDoc}
      */

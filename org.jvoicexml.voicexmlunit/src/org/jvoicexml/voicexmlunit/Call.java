@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +21,7 @@
 
 package org.jvoicexml.voicexmlunit;
 
+import java.io.File;
 import java.net.URI;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -36,13 +32,19 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public interface Call {
 
     /**
-     * Calls the application identified by the given uri.
+     * Calls the application identified by the given file.
+     * @param file file of the application to call
+     * @since 0.7.8
+     */
+    void call(File file);
+
+    /**
+     * Calls the application identified by the given URI.
      * @param uri URI of the application to call
      */
     void call(URI uri);

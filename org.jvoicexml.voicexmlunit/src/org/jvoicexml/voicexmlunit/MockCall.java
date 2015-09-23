@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +21,7 @@
 
 package org.jvoicexml.voicexmlunit;
 
+import java.io.File;
 import java.net.URI;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -35,10 +31,16 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * Mocks a real telephone call.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 public final class MockCall implements Call {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void call(final File file) {
+    }
 
     /**
      * {@inheritDoc}

@@ -32,7 +32,7 @@ import org.jvoicexml.voicexmlunit.Call;
 import org.jvoicexml.voicexmlunit.TextCall;
 
 /**
- * A demo that tests the venerable hello world.
+ * A demo that tests a small VoiceXML script to enter a either 'yes' or 'no'.
  * <p>
  * Must be run with the system property
  * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
@@ -48,6 +48,8 @@ import org.jvoicexml.voicexmlunit.TextCall;
  *
  */
 public final class TestInputDemo {
+    /** Timeout in msec for each test method. */
+    private static final int TIMEOUT = 10000;
     /** The call to JVoiceXML. */
     private Call call;
     /** URI of the application to call. */
@@ -76,9 +78,9 @@ public final class TestInputDemo {
     }
 
     /**
-     * Runs a test with the option '1'.
+     * Runs a test with the option 'yes'.
      */
-    @Test//(timeout = 10000)
+    @Test(timeout = TIMEOUT)
     public void testInputYes() {
         call.call(uri);
         call.hears("Do you like this example?");
@@ -87,14 +89,14 @@ public final class TestInputDemo {
     }
 
     /**
-     * Runs a test with the option '2'.
+     * Runs a test with the option 'no'.
      */
-    @Test(timeout = 10000)
+    @Test(timeout = TIMEOUT)
     public void testInputNo() {
         call.call(uri);
         call.hears("Do you like this example?");
         call.say("no");
         call.hears("You do not like this example.");
     }
-
 }
+

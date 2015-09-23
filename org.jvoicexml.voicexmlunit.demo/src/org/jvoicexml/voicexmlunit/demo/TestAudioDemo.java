@@ -52,6 +52,8 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  */
 public final class TestAudioDemo {
+    /** Timeout in msec for each test method. */
+    private static final int TIMEOUT = 10000;
     /** The call to JVoiceXML. */
     private Call call;
     /** URI of the application to call. */
@@ -83,7 +85,7 @@ public final class TestAudioDemo {
      * @exception Exception
      *            test failed
      */
-    @Test(timeout = 20000)
+    @Test(timeout = TIMEOUT)
     public void testAudioTags() throws Exception {
         call.call(uri);
         final SsmlDocument document1 = call.getNextOutput();

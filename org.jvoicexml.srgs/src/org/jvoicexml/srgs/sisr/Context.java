@@ -69,7 +69,7 @@ public class Context implements ExecutableSemanticInterpretation {
         Scriptable ruleScope = context.newObject(parentScope);
 
         // Initialize out, rules and meta
-        context.evaluateString(ruleScope, contextInitSI(ruleName),
+        context.evaluateString(ruleScope, contextInitSemanticInterpretation(ruleName),
                 "Context:init", 0, null);
 
         // Perform SI execution
@@ -153,8 +153,8 @@ public class Context implements ExecutableSemanticInterpretation {
         String ruleMetaCurrent = (String) context.evaluateString(ruleScope,
                 "meta.current().text;", "Context:rule get meta", 0, null);
 
-        // LOGGER.debug("ruleMetaCurrent="+ruleMetaCurrent);
-        // LOGGER.debug("about to execute: "+"meta."+ruleName+"=function() {return {text:'"+ruleMetaCurrent+"', score:1.0}};");
+//        LOGGER.debug("ruleMetaCurrent="+ruleMetaCurrent);
+//        LOGGER.debug("about to execute: "+"meta."+ruleName+"=function() {return {text:'"+ruleMetaCurrent+"', score:1.0}};");
         context.evaluateString(parentScope, "meta." + ruleName
                 + "=function() {return {text:'" + ruleMetaCurrent
                 + "', score:1.0}};", "Context:rule set meta." + ruleName, 0,
@@ -181,22 +181,11 @@ public class Context implements ExecutableSemanticInterpretation {
     }
 
     private String getRulesLastestScript(String contextName) {
-        return "rules.latest = function() {return this." + contextName + ";}"; // We
-                                                                               // are
-                                                                               // within
-                                                                               // the
-                                                                               // rules
-                                                                               // context,
-                                                                               // so
-                                                                               // the
-                                                                               // rule
-                                                                               // id
-                                                                               // should
-                                                                               // be
-                                                                               // valid
+        return "rules.latest = function() {return this." + contextName + ";}"; 
+        // We are within the rules context, so the rule id should be valid
     }
 
-    private String contextInitSI(String contextName) {
+    private String contextInitSemanticInterpretation(String contextName) {
         return "var out=new Object();\n"
                 + "var rules=new Object();\n"
                 + "var meta={current: function() {return {text:'', score:1.0}}};\n";

@@ -98,8 +98,9 @@ public class SrgsSisrXmlGrammarParser
 
     public SrgsSisrGrammar parse(SrgsXmlDocument document, URI uri)
             throws SrgsSisrParsingException {
-        return parse(document, uri,
-                new java.util.HashMap<URI, SrgsSisrGrammar>());
+        final Map<URI, SrgsSisrGrammar> pool =
+                new java.util.HashMap<URI, SrgsSisrGrammar>();
+        return parse(document, uri, pool);
     }
 
     private SrgsSisrGrammar parse(SrgsXmlDocument document, URI uri,
@@ -397,7 +398,9 @@ public class SrgsSisrXmlGrammarParser
         }
 
         final SrgsSisrXmlGrammarParser parser = new SrgsSisrXmlGrammarParser();
-        return parser.parse(doc, uri, currentGrammar.getGrammarPool());
+        final Map<URI, SrgsSisrGrammar> pool =
+                new java.util.HashMap<URI, SrgsSisrGrammar>();
+        return parser.parse(doc, uri, pool);
     }
 
     public static String joinTokens(List<String> list, int start, int count) {

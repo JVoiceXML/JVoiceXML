@@ -51,8 +51,9 @@ public class SemanticInterpretationBlock implements ExecutableSemanticInterpreta
         }
 
         String cleanedText = text.trim();
-        if (cleanedText.charAt(cleanedText.length() - 1) != ';')
+        if (cleanedText.charAt(cleanedText.length() - 1) != ';') {
             cleanedText = cleanedText + ";";
+        }
 
         tagContent.append(cleanedText);
         tagContent.append('\n');
