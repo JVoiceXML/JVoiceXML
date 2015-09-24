@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.documentserver;
+package org.jvoicexml.documentserver.jetty;
 
 import java.net.URI;
 
@@ -33,6 +33,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.documentserver.ExternalGrammarDocument;
+import org.jvoicexml.documentserver.jetty.DocumentStorage;
 
 /**
  * Test methods for {@link DocumentStorage}.
@@ -69,7 +71,7 @@ public class DocumentStorageTest {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.documentserver.DocumentStorage#addGrammarDocument(java.lang.String, org.jvoicexml.GrammarDocument)}
+     * {@link org.jvoicexml.documentserver.jetty.DocumentStorage#addGrammarDocument(java.lang.String, org.jvoicexml.GrammarDocument)}
      * .
      * 
      * @throws Exception
@@ -87,7 +89,7 @@ public class DocumentStorageTest {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.documentserver.DocumentStorage#clear(java.lang.String)}
+     * {@link org.jvoicexml.documentserver.jetty.DocumentStorage#clear(java.lang.String)}
      * .
      * 
      * @throws Exception
@@ -107,7 +109,7 @@ public class DocumentStorageTest {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.documentserver.DocumentStorage#clear(java.lang.String)}
+     * {@link org.jvoicexml.documentserver.jetty.DocumentStorage#clear(java.lang.String)}
      * .
      * 
      * @throws Exception

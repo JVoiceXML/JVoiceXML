@@ -32,6 +32,7 @@ import java.net.URISyntaxException;
 import javax.sound.sampled.AudioInputStream;
 
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
@@ -95,6 +96,25 @@ public interface DocumentServer {
     URI addGrammarDocument(final String sessionId,
             final GrammarDocument document) throws URISyntaxException;
 
+    /**
+     * Adds the given grammar document to the documents store and retrieves the
+     * URI to access it.
+     * 
+     * @param sessionId
+     *            the id of the initiating session
+     * @param builtin
+     *            the src attribute describing the builtin grammar
+     * @param type
+     *            type of grammar to create
+     * @return the URI to access the document
+     * @exception URISyntaxException
+     *                error generating the URI for the document
+     * @since 0.7.8
+     */
+    URI addGrammarDocument(final String sessionId,
+            final String builtin,
+            final GrammarType type) throws URISyntaxException;
+    
     /**
      * Returns the external Grammar referenced by <code>URI</code>.
      *

@@ -20,9 +20,8 @@
  */
 
 /**
- * The schemestrategy package provides some implementations of
- * the {@link org.jvoicexml.documentserver.SchemeStrategy} interface.
+ * Jetty document storage.
  */
 
-package org.jvoicexml.documentserver.schemestrategy;
+package org.jvoicexml.documentserver.jetty;
 

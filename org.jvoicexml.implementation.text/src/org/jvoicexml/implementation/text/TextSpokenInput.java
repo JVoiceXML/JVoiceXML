@@ -144,11 +144,16 @@ final class TextSpokenInput implements SpokenInput {
     public void deactivateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
+        if (grammars == null) {
+            return;
+        }
         activeGrammars.removeAll(grammars);
         if (LOGGER.isDebugEnabled()) {
             for (GrammarImplementation<?> grammar : grammars) {
-                LOGGER.debug("deactivated grammar "
-                        + grammar.getGrammarDocument());
+                if (grammar != null) {
+                    LOGGER.debug("deactivated grammar "
+                            + grammar.getGrammarDocument());
+                }
             }
         }
     }

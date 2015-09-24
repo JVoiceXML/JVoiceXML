@@ -35,6 +35,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
+ * @param <T> grammar implementation
  */
 public interface GrammarParser<T> {
     /**

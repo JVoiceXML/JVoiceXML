@@ -1,4 +1,4 @@
-package org.jvoicexml.documentserver;
+package org.jvoicexml.documentserver.jetty;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -77,6 +77,11 @@ class DocumentHandler extends AbstractHandler {
         }
     }
     
+    /**
+     * Determines the content type for the given grammar type.
+     * @param type the current grammar type
+     * @return content type for the grammar
+     */
     private String getContentType(final GrammarType type) {
         if (type == GrammarType.SRGS_XML) {
             return "text/xml";

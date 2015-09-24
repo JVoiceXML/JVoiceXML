@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 200-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 200-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,13 +25,10 @@ package org.jvoicexml.event.error;
  * The platform does not support a requested builtin type/grammar.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
+@SuppressWarnings("serial")
 public class UnsupportedBuiltinError
         extends UnsupportedElementError {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -4527038478843916684L;
-
     /** The element. */
     public static final String ELEMENT = "builtin";
 

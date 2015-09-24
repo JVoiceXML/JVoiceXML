@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -48,9 +43,11 @@ import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -67,8 +64,7 @@ import org.xml.sax.SAXException;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
- */
+*/
 public final class JVoiceXmlDocumentServer implements DocumentServer {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
@@ -318,7 +314,6 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
 
     /**
      * {@inheritDoc}
-     * @throws URISyntaxException 
      */
     @Override
     public URI addGrammarDocument(final String sessionId,
@@ -326,6 +321,16 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
         return storage.addGrammarDocument(sessionId, document);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI addGrammarDocument(final String sessionId, final String builtin,
+            final GrammarType type) throws URISyntaxException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
     /**
      * {@inheritDoc}
      */

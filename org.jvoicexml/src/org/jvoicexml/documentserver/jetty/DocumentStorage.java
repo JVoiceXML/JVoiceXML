@@ -1,12 +1,5 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/documentserver/ExternalGrammarDocument.java $
- * Version: $LastChangedRevision: 4080 $
- * Date:    $Date $
- * Author:  $LastChangedBy: schnelle $
- *
- * JVoiceXML - A free VoiceXML implementation.
- *
- * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,7 +17,7 @@
  *
  */
 
-package org.jvoicexml.documentserver;
+package org.jvoicexml.documentserver.jetty;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -42,7 +35,6 @@ import org.jvoicexml.GrammarDocument;
  * associated with these documents.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
  * @since 0.7.7
  */
 public class DocumentStorage {
@@ -66,7 +58,8 @@ public class DocumentStorage {
      *             error starting the web server.
      */
     public DocumentStorage(final int port) throws Exception {
-        sessionDocuments = new java.util.HashMap<String, Collection<GrammarDocument>>();
+        sessionDocuments =
+                new java.util.HashMap<String, Collection<GrammarDocument>>();
         documents = new java.util.HashMap<URI, GrammarDocument>();
         server = new Server(port);
         final Handler handler = new DocumentHandler(this);
@@ -89,14 +82,8 @@ public class DocumentStorage {
      */
     public URI addGrammarDocument(final String sessionId,
             final GrammarDocument document) throws URISyntaxException {
-        Collection<GrammarDocument> currentDocuments = sessionDocuments
-                .get(sessionId);
-        if (currentDocuments == null) {
-            currentDocuments = new java.util.ArrayList<GrammarDocument>();
-            sessionDocuments.put(sessionId, currentDocuments);
-            LOGGER.info("initialized document storage for session '"
-                    + sessionId + "'");
-        }
+        Collection<GrammarDocument> currentDocuments =
+                getCurrentSessionDocuments(sessionId);
         currentDocuments.add(document);
         final URI localUri = new URI("/" + sessionId + "/" + document.hashCode());
         documents.put(localUri, document);
@@ -111,6 +98,27 @@ public class DocumentStorage {
         return null;
     }
 
+    /**
+     * Retrieves the documents for the given session. If no documents exist so
+     * far a new document storage for the session is created.
+     * @param sessionId the identifier for the session
+     * @return documents for the session
+     * @since 0.7.8
+     */
+    private Collection<GrammarDocument> getCurrentSessionDocuments(
+            final String sessionId) {
+        Collection<GrammarDocument> currentDocuments = sessionDocuments
+                .get(sessionId);
+        if (currentDocuments != null) {
+            return currentDocuments;
+        }
+        currentDocuments = new java.util.ArrayList<GrammarDocument>();
+        sessionDocuments.put(sessionId, currentDocuments);
+        LOGGER.info("initialized document storage for session '"
+                + sessionId + "'");
+        return currentDocuments;
+    }
+    
     /**
      * Retrieves the content of the document.
      * 
