@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.documentserver.schemestrategy.builtin.GrammarCreator;
 
 /**
  * A storage for documents for ASR and TTS that are generated while executing a
@@ -38,7 +39,6 @@ import org.jvoicexml.GrammarDocument;
  * @since 0.7.7
  */
 public class DocumentStorage {
-    private final Server server;
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(DocumentStorage.class);
@@ -49,25 +49,78 @@ public class DocumentStorage {
     /** Stored documents. */
     private final Map<URI, GrammarDocument> documents;
 
+    /** The integrated web server. */
+    private Server server;
+
+    /** Port of the document storage. */
+    private int storagePort;
+
+    /** Known grammar creators. */
+    private final Map<String, GrammarCreator> creators;
+
     /**
      * Creates a new object.
      * 
-     * @param port
-     *            port number of the integrated web server.
-     * @throws Exception
-     *             error starting the web server.
      */
-    public DocumentStorage(final int port) throws Exception {
+    public DocumentStorage() {
         sessionDocuments =
                 new java.util.HashMap<String, Collection<GrammarDocument>>();
         documents = new java.util.HashMap<URI, GrammarDocument>();
-        server = new Server(port);
+        storagePort = 9595;
+        creators = new java.util.HashMap<String, GrammarCreator>();
+    }
+
+    /**
+     * Sets the storage port.
+     * @param port port number for the integrated web server
+     * @since 0.7.8
+     */
+    public void setStoragePort(final int port) {
+        storagePort = port;
+    }
+
+    /**
+     * Adds the specified grammar creators to the list of known grammar
+     * creators.
+     * @param col the creators to add
+     * @since 0.7.5
+     */
+    public void setGrammarCreators(final Collection<GrammarCreator> col) {
+        for (GrammarCreator creator : col) {
+            addGrammarCreator(creator);
+        }
+    }
+
+    /**
+     * Adds the specified grammar creator to the list of known grammar creators.
+     * @param creator the creator to add
+     * @since 0.7.5
+     */
+    public void addGrammarCreator(final GrammarCreator creator) {
+        final String type = creator.getTypeName();
+        creators.put(type, creator);
+        LOGGER.info("added builtin grammar creator '" + creator.getClass()
+                + "' for type '" + type + "'");
+    }
+
+    /**
+     * Starts the document storage. Afterwards it will be ready to serve
+     * documents.
+     * @throws Exception error starting the web server
+     * 
+     * @since 0.7.8
+     */
+    public void start() throws Exception {
+        if (storagePort < 0) {
+            return;
+        }
+        server = new Server(storagePort);
         final Handler handler = new DocumentHandler(this);
         server.setHandler(handler);
         server.start();
-        LOGGER.info("document storage started on port " + port);
+        LOGGER.info("document storage started on port " + storagePort);
     }
-
+    
     /**
      * Adds the given grammar document to the documents store and retrieves the
      * URI to access it from external.
@@ -85,7 +138,8 @@ public class DocumentStorage {
         Collection<GrammarDocument> currentDocuments =
                 getCurrentSessionDocuments(sessionId);
         currentDocuments.add(document);
-        final URI localUri = new URI("/" + sessionId + "/" + document.hashCode());
+        final URI localUri = new URI("/" + sessionId + "/"
+                + document.hashCode());
         documents.put(localUri, document);
         URI serverUri = server.getURI();
         final URI uri = new URI(serverUri +sessionId + "/"
@@ -153,13 +207,16 @@ public class DocumentStorage {
     }
 
     /**
-     * Closes the storage.
+     * Stops the storage.
      * 
      * @throws Exception
      *             error closing the storage
      * @since 0.7.7
      */
-    public void close() throws Exception {
+    public void stop() throws Exception {
+        if (storagePort < 0) {
+            return;
+        }
         server.stop();
         LOGGER.info("document storage stopped");
     }

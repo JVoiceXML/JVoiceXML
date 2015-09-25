@@ -72,7 +72,8 @@ class DocumentHandler extends AbstractHandler {
             baseRequest.setHandled(true);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (URISyntaxException e) {
-            LOGGER.warn("unabale to create request uri '" + requestUri + "'", e);
+            LOGGER.warn("unabale to create request uri '" + requestUri + "'",
+                    e);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
     }

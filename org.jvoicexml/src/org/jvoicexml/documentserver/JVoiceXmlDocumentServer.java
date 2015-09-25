@@ -47,7 +47,6 @@ import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
-import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -79,9 +78,6 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
     /** The document storage. */
     private DocumentStorage storage;
 
-    /** Port of the document storage. */
-    private int storagePort;
-
     /**
      * Creates a new object.
      *
@@ -93,7 +89,15 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      */
     public JVoiceXmlDocumentServer() {
         strategies = new java.util.HashMap<String, SchemeStrategy>();
-        storagePort = 9595;
+    }
+
+    /**
+     * Sets the document storage
+     * @param documentStorage the document storage
+     * @since 0.7.8
+     */
+    public void setDocumentStorage(final DocumentStorage documentStorage) {
+        storage = documentStorage;
     }
 
     /**
@@ -101,19 +105,7 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      */
     @Override
     public void start() throws Exception {
-        if (storagePort < 0) {
-            LOGGER.info("not starting storage port");
-        }
-        storage = new DocumentStorage(storagePort);
-    }
-
-    /**
-     * Sets the storage port.
-     * @param port port number for the {@link DocumentStorage}
-     * @since 0.7.7
-     */
-    public void setStoragePort(final int port) {
-        storagePort = port;
+        storage.start();
     }
 
     /**
@@ -325,16 +317,6 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      * {@inheritDoc}
      */
     @Override
-    public URI addGrammarDocument(final String sessionId, final String builtin,
-            final GrammarType type) throws URISyntaxException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public GrammarDocument getGrammarDocument(final String sessionId,
             final URI uri, final FetchAttributes attrs) throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
@@ -513,7 +495,7 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
     @Override
     public void stop() {
         try {
-            storage.close();
+            storage.stop();
         } catch (Exception e) {
             LOGGER.warn("error closing the document storage", e);
         }

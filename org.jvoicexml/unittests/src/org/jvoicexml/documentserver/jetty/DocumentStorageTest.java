@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,17 +29,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.documentserver.ExternalGrammarDocument;
-import org.jvoicexml.documentserver.jetty.DocumentStorage;
 
 /**
  * Test methods for {@link DocumentStorage}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
  * @since 0.7.7
  */
 public class DocumentStorageTest {
-
+    /** The document storage to test. */
     private DocumentStorage storage;
 
     /**
@@ -55,7 +48,9 @@ public class DocumentStorageTest {
      */
     @Before
     public void setUp() throws Exception {
-        storage = new DocumentStorage(9494);
+        storage = new DocumentStorage();
+        storage.setStoragePort(9494);
+        storage.start();
     }
 
     /**
@@ -66,7 +61,7 @@ public class DocumentStorageTest {
      */
     @After
     public void tearDown() throws Exception {
-        storage.close();
+        storage.stop();
     }
 
     /**

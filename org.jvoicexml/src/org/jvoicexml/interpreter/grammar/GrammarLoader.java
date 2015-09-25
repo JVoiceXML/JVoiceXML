@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,7 +42,6 @@ import org.jvoicexml.xml.srgs.Grammar;
  * Loads external and internal grammars.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  */
 final class GrammarLoader {
@@ -216,17 +210,16 @@ final class GrammarLoader {
         }
         final String srcexpr = grammar.getSrcexpr();
         if (srcexpr == null) {
-            LOGGER.warn("unable to resolve the external URI: "
+            throw new BadFetchError("unable to resolve the external URI: "
                     + "neither a src nor a srcexpr found");
-            return null;
         }
         final String unescapedSrcexpr = StringEscapeUtils.unescapeXml(srcexpr);
         final DataModel model = context.getDataModel();
         final String value = model.evaluateExpression(unescapedSrcexpr,
                 String.class);
         if ((value == null) || (value == model.getUndefinedValue())) {
-            LOGGER.warn("srcexpr does not describe a valid uri");
-            return null;
+            throw new URISyntaxException(unescapedSrcexpr, 
+                    "srcexpr does not describe a valid uri");
         }
         return new URI(value);
     }

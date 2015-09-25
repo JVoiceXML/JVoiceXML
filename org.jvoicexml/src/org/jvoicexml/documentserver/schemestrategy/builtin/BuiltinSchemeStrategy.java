@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -66,7 +61,6 @@ import org.jvoicexml.xml.vxml.RequestMethod;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.1
  */
 public final class BuiltinSchemeStrategy implements SchemeStrategy {
@@ -110,6 +104,7 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
         LOGGER.info("added builtin grammar creator '" + creator.getClass()
                 + "' for type '" + type + "'");
     }
+
     /**
      * {@inheritDoc}
      */

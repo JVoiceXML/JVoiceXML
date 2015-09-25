@@ -37,7 +37,7 @@ import org.jvoicexml.event.error.BadFetchError;
  * @version $Revision$
  * @since 0.7.1
  */
-interface GrammarCreator {
+public interface GrammarCreator {
     /**
      * Creates the built-in grammar.
      * @param uri the URI for the built-in grammar to create.
