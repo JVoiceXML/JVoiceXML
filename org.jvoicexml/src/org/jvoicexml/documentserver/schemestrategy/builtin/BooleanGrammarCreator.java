@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,10 +40,9 @@ import org.jvoicexml.xml.srgs.Tag;
 /**
  * Creator for a boolean builtin grammar.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.1
  */
-class BooleanGrammarCreator extends AbstractGrammarCreator
+public class BooleanGrammarCreator extends AbstractGrammarCreator
     implements GrammarCreator {
     /** Name of the parameter for <em>no</em>. */
     private static final String NO_PARAMETER_NAME = "n";
@@ -112,6 +106,7 @@ class BooleanGrammarCreator extends AbstractGrammarCreator
         grammar.setType(GrammarType.SRGS_XML);
         grammar.setVersion(Grammar.DEFAULT_VERSION);
         grammar.setAttribute("xmlns", "http://www.w3.org/2001/06/grammar");
+        grammar.setAttribute("tag-format", "semantics/1.0-literals");
         final Rule rule = grammar.appendChild(Rule.class);
         rule.makePublic();
         rule.setId("boolean");

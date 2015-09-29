@@ -27,6 +27,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.documentserver.schemestrategy.builtin.GrammarCreator;
 
@@ -55,24 +57,29 @@ public class DocumentStorage {
     /** Port of the document storage. */
     private int storagePort;
 
-    /** Known grammar creators. */
-    private final Map<String, GrammarCreator> creators;
+    /** Handler for internale gramamrs. */
+    private final Handler internalGrammarHandler;
+
+    /** Handler for builtin grammars. */
+    private final BuiltinGrammarHandler builtinGrammarHandler;
 
     /**
      * Creates a new object.
      * 
      */
     public DocumentStorage() {
-        sessionDocuments =
-                new java.util.HashMap<String, Collection<GrammarDocument>>();
+        sessionDocuments = new java.util.HashMap<String, Collection<GrammarDocument>>();
         documents = new java.util.HashMap<URI, GrammarDocument>();
         storagePort = 9595;
-        creators = new java.util.HashMap<String, GrammarCreator>();
+        internalGrammarHandler = new InternalGrammarDocumentHandler(this);
+        builtinGrammarHandler = new BuiltinGrammarHandler();
     }
 
     /**
      * Sets the storage port.
-     * @param port port number for the integrated web server
+     * 
+     * @param port
+     *            port number for the integrated web server
      * @since 0.7.8
      */
     public void setStoragePort(final int port) {
@@ -82,31 +89,21 @@ public class DocumentStorage {
     /**
      * Adds the specified grammar creators to the list of known grammar
      * creators.
-     * @param col the creators to add
-     * @since 0.7.5
+     * 
+     * @param col
+     *            the creators to add
+     * @since 0.7.8
      */
     public void setGrammarCreators(final Collection<GrammarCreator> col) {
-        for (GrammarCreator creator : col) {
-            addGrammarCreator(creator);
-        }
-    }
-
-    /**
-     * Adds the specified grammar creator to the list of known grammar creators.
-     * @param creator the creator to add
-     * @since 0.7.5
-     */
-    public void addGrammarCreator(final GrammarCreator creator) {
-        final String type = creator.getTypeName();
-        creators.put(type, creator);
-        LOGGER.info("added builtin grammar creator '" + creator.getClass()
-                + "' for type '" + type + "'");
+        builtinGrammarHandler.setGrammarCreators(col);
     }
 
     /**
      * Starts the document storage. Afterwards it will be ready to serve
      * documents.
-     * @throws Exception error starting the web server
+     * 
+     * @throws Exception
+     *             error starting the web server
      * 
      * @since 0.7.8
      */
@@ -115,12 +112,44 @@ public class DocumentStorage {
             return;
         }
         server = new Server(storagePort);
-        final Handler handler = new DocumentHandler(this);
-        server.setHandler(handler);
+        ContextHandler rootContext = new ContextHandler();
+        rootContext.setHandler(internalGrammarHandler);
+        ContextHandler internalGrammarContext = new ContextHandler(
+                InternalGrammarDocumentHandler.CONTEXT_PATH);
+        internalGrammarContext.setHandler(internalGrammarHandler);
+        ContextHandler builtinGrammarContext = new ContextHandler(
+                BuiltinGrammarHandler.CONTEXT_PATH);
+        ContextHandlerCollection contexts = new ContextHandlerCollection();
+        builtinGrammarContext.setHandler(builtinGrammarHandler);
+        ContextHandler[] handlers = new ContextHandler[] { rootContext,
+                internalGrammarContext, builtinGrammarContext };
+        contexts.setHandlers(handlers);
+        server.setHandler(contexts);
         server.start();
         LOGGER.info("document storage started on port " + storagePort);
     }
-    
+
+    /**
+     * Resolves the given URI of a builtin grammar to an URI that can be handled
+     * by this document server.
+     * 
+     * @param uri
+     *            the builtin URI
+     * @return the resolved URI
+     * @since 0.7.8
+     */
+    public URI resolveBuiltinUri(final URI uri) {
+        final URI serverUri = server.getURI();
+        try {
+            return new URI(serverUri
+                    + BuiltinGrammarHandler.CONTEXT_PATH.substring(1) + "/"
+                    + uri.getSchemeSpecificPart());
+        } catch (URISyntaxException e) {
+            LOGGER.warn("unable to resolve '" + uri + "'");
+            return uri;
+        }
+    }
+
     /**
      * Adds the given grammar document to the documents store and retrieves the
      * URI to access it from external.
@@ -135,15 +164,16 @@ public class DocumentStorage {
      */
     public URI addGrammarDocument(final String sessionId,
             final GrammarDocument document) throws URISyntaxException {
-        Collection<GrammarDocument> currentDocuments =
-                getCurrentSessionDocuments(sessionId);
+        Collection<GrammarDocument> currentDocuments = getCurrentSessionDocuments(sessionId);
         currentDocuments.add(document);
-        final URI localUri = new URI("/" + sessionId + "/"
-                + document.hashCode());
+        final URI localUri = new URI(
+                InternalGrammarDocumentHandler.CONTEXT_PATH + "/" + sessionId
+                        + "/" + document.hashCode());
         documents.put(localUri, document);
-        URI serverUri = server.getURI();
-        final URI uri = new URI(serverUri +sessionId + "/"
-                + document.hashCode());
+        final URI serverUri = server.getURI();
+        final URI uri = new URI(serverUri
+                + InternalGrammarDocumentHandler.CONTEXT_PATH.substring(1)
+                + "/" + sessionId + "/" + document.hashCode());
         document.setURI(uri);
         LOGGER.info("added grammar document at '" + uri + "'");
         if (LOGGER.isDebugEnabled()) {
@@ -155,7 +185,9 @@ public class DocumentStorage {
     /**
      * Retrieves the documents for the given session. If no documents exist so
      * far a new document storage for the session is created.
-     * @param sessionId the identifier for the session
+     * 
+     * @param sessionId
+     *            the identifier for the session
      * @return documents for the session
      * @since 0.7.8
      */
@@ -168,11 +200,11 @@ public class DocumentStorage {
         }
         currentDocuments = new java.util.ArrayList<GrammarDocument>();
         sessionDocuments.put(sessionId, currentDocuments);
-        LOGGER.info("initialized document storage for session '"
-                + sessionId + "'");
+        LOGGER.info("initialized document storage for session '" + sessionId
+                + "'");
         return currentDocuments;
     }
-    
+
     /**
      * Retrieves the content of the document.
      * 

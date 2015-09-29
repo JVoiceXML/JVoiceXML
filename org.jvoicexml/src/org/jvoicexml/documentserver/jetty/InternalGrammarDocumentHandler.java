@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.documentserver.jetty;
 
 import java.io.IOException;
@@ -19,14 +38,16 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * Jetty handler to server generated documents from the {@link DocumentStorage}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
  * @since 0.7.7
  */
-class DocumentHandler extends AbstractHandler {
+class InternalGrammarDocumentHandler extends AbstractHandler  {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
-            .getLogger(DocumentHandler.class);
+            .getLogger(InternalGrammarDocumentHandler.class);
 
+    /** The context path of this handler. */
+    public static String CONTEXT_PATH = "/grammars";
+    
     /** Reference to the document storage. */
     private final DocumentStorage storage;
 
@@ -36,7 +57,7 @@ class DocumentHandler extends AbstractHandler {
      * @param documentStorage
      *            the document storage
      */
-    public DocumentHandler(final DocumentStorage documentStorage) {
+    public InternalGrammarDocumentHandler(final DocumentStorage documentStorage) {
         storage = documentStorage;
     }
 
@@ -47,7 +68,8 @@ class DocumentHandler extends AbstractHandler {
     public void handle(final String target, final Request baseRequest,
             final HttpServletRequest request, final HttpServletResponse response)
             throws IOException, ServletException {
-        LOGGER.info("request from " + request.getRemoteAddr());
+        LOGGER.info("request from " + request.getRemoteAddr()
+                + " to internal grammar handler");
         final String requestUri = request.getRequestURI();
         try {
             final URI uri = new URI(requestUri);

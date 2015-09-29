@@ -292,16 +292,22 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
     public void addSchemeStrategy(final SchemeStrategy strategy) {
         if (strategy == null) {
             LOGGER.warn("cannot add null scheme strategy");
-
             return;
         }
 
+        // Actually add the strategy
         final String scheme = strategy.getScheme();
-
         LOGGER.info("adding scheme strategy for scheme '" + scheme + "': "
                 + strategy.getClass().getName());
-
         strategies.put(strategy.getScheme(), strategy);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI resolveBuiltinUri(final URI uri) {
+        return storage.resolveBuiltinUri(uri);
     }
 
     /**

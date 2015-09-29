@@ -172,6 +172,13 @@ final class GrammarLoader {
                     src.getPort(), src.getPath(), src.getQuery(), null);
         }
 
+        // Maybe adapt a builtin grammar URI
+        final String scheme = src.getScheme();
+        if ((scheme != null) && scheme.equalsIgnoreCase("builtin")) {
+            final DocumentServer server = context.getDocumentServer();
+            src = server.resolveBuiltinUri(src);
+        }
+        
         // Now load the grammar
         LOGGER.info("loading grammar from source: '" + src + "'");
         final FetchAttributes adaptedAttributes = adaptFetchAttributes(

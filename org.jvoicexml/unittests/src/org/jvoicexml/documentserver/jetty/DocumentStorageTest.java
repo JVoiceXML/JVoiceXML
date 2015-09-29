@@ -22,6 +22,7 @@
 package org.jvoicexml.documentserver.jetty;
 
 import java.net.URI;
+import java.util.Collection;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -29,6 +30,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.documentserver.ExternalGrammarDocument;
+import org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator;
+import org.jvoicexml.documentserver.schemestrategy.builtin.DigitsGrammarCreator;
+import org.jvoicexml.documentserver.schemestrategy.builtin.GrammarCreator;
+import org.jvoicexml.interpreter.grammar.InternalGrammarDocument;
+import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
  * Test methods for {@link DocumentStorage}.
@@ -41,7 +48,7 @@ public class DocumentStorageTest {
     private DocumentStorage storage;
 
     /**
-     * Set up the test environement
+     * Set up the test environment
      * 
      * @exception set
      *                up failed
@@ -50,6 +57,10 @@ public class DocumentStorageTest {
     public void setUp() throws Exception {
         storage = new DocumentStorage();
         storage.setStoragePort(9494);
+        final Collection<GrammarCreator> creators = new java.util.ArrayList<GrammarCreator>();
+        creators.add(new BooleanGrammarCreator());
+        creators.add(new DigitsGrammarCreator());
+        storage.setGrammarCreators(creators);
         storage.start();
     }
 
@@ -74,8 +85,9 @@ public class DocumentStorageTest {
      */
     @Test
     public void testAddGrammarDocument() throws Exception {
-        final GrammarDocument document = new ExternalGrammarDocument(null,
-                null, null, true);
+        final SrgsXmlDocument srgsdocument = new SrgsXmlDocument();
+        final Grammar grammar = srgsdocument.getGrammar();
+        final GrammarDocument document = new InternalGrammarDocument(grammar);
         storage.addGrammarDocument("12345", document);
         final URI uri = document.getURI();
         Assert.assertNotNull(uri);

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,10 +40,9 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 /**
  * Creator for a digit builtin grammar.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.1
  */
-class DigitsGrammarCreator extends AbstractGrammarCreator 
+public class DigitsGrammarCreator extends AbstractGrammarCreator 
     implements GrammarCreator {
     /** The maximal digit. */
     private static final int MAX_DIGIT = 10;

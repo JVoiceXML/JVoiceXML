@@ -80,6 +80,15 @@ public interface DocumentServer {
             final DocumentDescriptor descriptor) throws BadFetchError;
 
     /**
+     * Resolves the given URI ofg a builtin grammar to an URI that can be
+     * handled by this document server.
+     * @param uri the builtin URI
+     * @return the resolved URI
+     * @since 0.7.8
+     */
+    URI resolveBuiltinUri(final URI uri);
+
+    /**
      * Adds the given grammar document to the documents store and retrieves the
      * URI to access it.
      * 
