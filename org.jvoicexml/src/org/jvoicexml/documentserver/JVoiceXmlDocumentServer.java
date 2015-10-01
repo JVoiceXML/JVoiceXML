@@ -495,7 +495,11 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
         for (SchemeStrategy strategy : knownStrategies) {
             strategy.sessionClosed(sessionId);
         }
-        storage.clear(sessionId);
+        try {
+            storage.clear(sessionId);
+        } catch (URISyntaxException e) {
+            LOGGER.warn("error clearing session", e);
+        }
     }
 
     @Override

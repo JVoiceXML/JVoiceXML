@@ -91,7 +91,8 @@ public class DocumentStorageTest {
         storage.addGrammarDocument("12345", document);
         final URI uri = document.getURI();
         Assert.assertNotNull(uri);
-        Assert.assertEquals(document, storage.getDocument(uri));
+        final URI path = new URI(uri.getPath());
+        Assert.assertEquals(document, storage.getDocument(path));
     }
 
     /**
@@ -111,7 +112,7 @@ public class DocumentStorageTest {
         Assert.assertNotNull(uri);
         Assert.assertEquals(document, storage.getDocument(uri));
         storage.clear("12345");
-        Assert.assertNull(storage.getDocument(uri));
+        Assert.assertNull("document not cleared", storage.getDocument(uri));
     }
 
     /**

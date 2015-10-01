@@ -212,9 +212,12 @@ public class DocumentStorage {
      *            URI of the document to retrieve, {@code null} if there is no
      *            such document
      * @return the document
+     * @throws URISyntaxException if the URI does not feature a valid path
      */
-    public GrammarDocument getDocument(final URI uri) {
-        return documents.get(uri);
+    public GrammarDocument getDocument(final URI uri) throws URISyntaxException {
+        final String path = uri.getPath();
+        final URI pathUri = new URI(path);
+        return documents.get(pathUri);
     }
 
     /**
@@ -222,8 +225,9 @@ public class DocumentStorage {
      * 
      * @param sessionId
      *            the id of the session
+     * @throws URISyntaxException if the URI does not feature a valid path
      */
-    public void clear(final String sessionId) {
+    public void clear(final String sessionId) throws URISyntaxException {
         final Collection<GrammarDocument> currentDocuments = sessionDocuments
                 .get(sessionId);
         if (currentDocuments == null) {
@@ -232,7 +236,9 @@ public class DocumentStorage {
         }
         for (GrammarDocument document : currentDocuments) {
             final URI uri = document.getURI();
-            documents.remove(uri);
+            final String path = uri.getPath();
+            final URI pathUri = new URI(path);
+            documents.remove(pathUri);
         }
         sessionDocuments.remove(sessionId);
         LOGGER.info("cleared document storage for session '" + sessionId + "'");
