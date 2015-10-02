@@ -27,7 +27,8 @@
 package org.jvoicexml.implementation.text;
 
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.client.text.TextMessage;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage.TextMessageType;
 
 /**
  * A message that has not been acknowledged by the client.
@@ -73,8 +74,8 @@ class PendingMessage {
      * @return the message code.
      * @since 0.7.7
      */
-    public int getMessageCode() {
-        return message.getCode();
+    public TextMessageType getMessageCode() {
+        return message.getType();
     }
 
     /**

@@ -26,11 +26,10 @@
 
 package org.jvoicexml.client.text;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -39,9 +38,15 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Collection;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.client.TcpUriFactory;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage.TextMessageType;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * A client for the {@link org.jvoicexml.callmanager.text.TextCallManager}.
@@ -52,8 +57,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class TextClient extends Thread {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(TextClient.class);;
+    private static final Logger LOGGER = Logger.getLogger(TextClient.class);;
 
     /**
      * Address of the {@link org.jvoicexml.callmanager.text.TextCallManager}.
@@ -78,11 +82,16 @@ public final class TextClient extends Thread {
     /** <code>true</code> if a disconnect notification has been sent. */
     private boolean notifiedDisconnected;
 
+    /** The last used sequence number. */
+    private int lastSequenceNumber;
+
     /**
      * Constructs a new object.
-     * @param callmanagerPort of the text based call manager
+     * 
+     * @param callmanagerPort
+     *            of the text based call manager
      * @throws UnknownHostException
-     *         Unable to determine the local host
+     *             Unable to determine the local host
      */
     public TextClient(final int callmanagerPort) throws UnknownHostException {
         this(InetAddress.getLocalHost(), callmanagerPort);
@@ -90,20 +99,26 @@ public final class TextClient extends Thread {
 
     /**
      * Constructs a new object.
-     * @param callmanagerAddress address of the text based call manager
-     * @param callmanagerPort of the text based call manager
+     * 
+     * @param callmanagerAddress
+     *            address of the text based call manager
+     * @param callmanagerPort
+     *            of the text based call manager
      * @throws UnknownHostException
-     *         Unable to determine the local host
+     *             Unable to determine the local host
      */
-    public TextClient(final String callmanagerAddress,
-            final int callmanagerPort) throws UnknownHostException {
+    public TextClient(final String callmanagerAddress, final int callmanagerPort)
+            throws UnknownHostException {
         this(InetAddress.getByName(callmanagerAddress), callmanagerPort);
     }
 
     /**
      * Constructs a new object.
-     * @param callmanagerAddress address of the text based call manager
-     * @param callmanagerPort of the text based call manager
+     * 
+     * @param callmanagerAddress
+     *            address of the text based call manager
+     * @param callmanagerPort
+     *            of the text based call manager
      */
     public TextClient(final InetAddress callmanagerAddress,
             final int callmanagerPort) {
@@ -117,7 +132,9 @@ public final class TextClient extends Thread {
 
     /**
      * Adds the given text listener to the list of known listeners.
-     * @param textListener the listener to add.
+     * 
+     * @param textListener
+     *            the listener to add.
      */
     public void addTextListener(final TextListener textListener) {
         synchronized (listener) {
@@ -127,9 +144,11 @@ public final class TextClient extends Thread {
 
     /**
      * Calls the application with the given URI.
-     * @param uri the URI of the application to call
+     * 
+     * @param uri
+     *            the URI of the application to call
      * @throws IOException
-     *         error connecting to the call manager
+     *             error connecting to the call manager
      */
     public void call(final URI uri) throws IOException {
         socket = new Socket(address, port);
@@ -140,11 +159,14 @@ public final class TextClient extends Thread {
 
     /**
      * Hangup.
+     * 
      * @throws IOException
-     *         error disconnecting
+     *             error disconnecting
      */
     public void hangup() throws IOException {
-        final TextMessage bye = new TextMessage(TextMessage.BYE);
+        final TextMessage bye = TextMessage.newBuilder()
+                .setType(TextMessageType.BYE)
+                .setSequenceNumber(lastSequenceNumber++).build();
         send(bye);
         disconnect();
     }
@@ -184,8 +206,8 @@ public final class TextClient extends Thread {
     public void run() {
         try {
             try {
-                final InetSocketAddress remote =
-                        (InetSocketAddress) socket.getRemoteSocketAddress();
+                final InetSocketAddress remote = (InetSocketAddress) socket
+                        .getRemoteSocketAddress();
                 fireConnected(remote);
                 final URI remoteUri = TcpUriFactory.createUri(remote);
                 LOGGER.info("connected to " + remoteUri);
@@ -214,78 +236,74 @@ public final class TextClient extends Thread {
             throw new IOException("no connection");
         }
         final InputStream in = socket.getInputStream();
-        final NonBlockingObjectInputStream oin =
-            new NonBlockingObjectInputStream(in);
-        try {
-            while ((socket != null) && socket.isConnected() && !interrupted()) {
-                try {
-                    final TextMessage message = (TextMessage) oin.readObject();
-                    LOGGER.info("read " + message);
-                    final int code = message.getCode();
-                    if (code == TextMessage.BYE) {
-                        synchronized (lock) {
-                            disconnect();
-                        }
-                        fireDisconnected();
-                        return;
+        while ((socket != null) && socket.isConnected() && !interrupted()) {
+            try {
+                final TextMessage message = TextMessage.parseDelimitedFrom(in);
+                LOGGER.info("read " + message);
+                final TextMessageType type = message.getType();
+                if (type == TextMessageType.BYE) {
+                    synchronized (lock) {
+                        disconnect();
                     }
-                    if (code == TextMessage.DATA) {
-                        final Object data = message.getData();
-                        if (data instanceof SsmlDocument) {
-                            final SsmlDocument document = (SsmlDocument) data;
-                            fireOutputArrived(document);
-                        }
-                    }
-                    final int seq = message.getSequenceNumber();
-                    final TextMessage ack =
-                            new TextMessage(TextMessage.ACK, seq);
-                    send(ack);
-                } catch (ClassNotFoundException e) {
-                    throw new IOException(
-                            "unable to instantiate the read object", e);
+                    fireDisconnected();
+                    return;
                 }
+                if (type == TextMessageType.SSML) {
+                    final String data = message.getData();
+                    final StringReader reader = new StringReader(data);
+                    final InputSource source = new InputSource(reader);
+                    final SsmlDocument document = new SsmlDocument(source);
+                    fireOutputArrived(document);
+                }
+                final int seq = message.getSequenceNumber();
+                final TextMessage ack = TextMessage.newBuilder()
+                        .setType(TextMessageType.BYE).setSequenceNumber(seq)
+                        .build();
+                send(ack);
+            } catch (ParserConfigurationException | SAXException e) {
+                throw new IOException("unable to create an SSML documet", e);
             }
-        } finally {
-            oin.close();
         }
     }
 
     /**
      * Send the given input as a recognition result to JVoiceXml.
-     * @param input the input to send.
+     * 
+     * @param input
+     *            the input to send.
      * @throws IOException
-     *         Error sending the input.
+     *             Error sending the input.
      */
     public void sendInput(final String input) throws IOException {
-        final TextMessage message =
-            new TextMessage(TextMessage.USER, 0, input);
+        final TextMessage message = TextMessage.newBuilder()
+                .setType(TextMessageType.USER).setData(input)
+                .setSequenceNumber(lastSequenceNumber++).build();
         send(message);
     }
 
     /**
      * Sends the given text message to the server.
-     * @param message the message to send.
+     * 
+     * @param message
+     *            the message to send.
      * @throws IOException
-     *         error sending the message.
+     *             error sending the message.
      */
-    private void send(final TextMessage message)
-        throws IOException {
+    private void send(final TextMessage message) throws IOException {
         synchronized (lock) {
             if (out == null) {
                 throw new IOException("No stream to send " + message.getData());
             }
-            final ByteArrayOutputStream bout = new ByteArrayOutputStream();
-            final ObjectOutputStream oout = new ObjectOutputStream(bout);
-            oout.writeObject(message);
-            final byte[] bytes = bout.toByteArray();
-            out.write(bytes);
+            message.writeDelimitedTo(out);
             LOGGER.info("sent " + message);
         }
     }
 
     /**
      * Notifies all registered listeners that a connection has been established.
-     * @param remote the address of the server.
+     * 
+     * @param remote
+     *            the address of the server.
      * @since 0.7
      */
     private void fireConnected(final InetSocketAddress remote) {
@@ -300,7 +318,9 @@ public final class TextClient extends Thread {
     /**
      * Notifies all registered listeners that the given SSML document has
      * arrived.
-     * @param document the received document.
+     * 
+     * @param document
+     *            the received document.
      */
     private void fireOutputArrived(final SsmlDocument document) {
         synchronized (listener) {
@@ -312,6 +332,7 @@ public final class TextClient extends Thread {
 
     /**
      * Notifies all registered listeners that a connection has been closed.
+     * 
      * @since 0.7
      */
     private void fireDisconnected() {

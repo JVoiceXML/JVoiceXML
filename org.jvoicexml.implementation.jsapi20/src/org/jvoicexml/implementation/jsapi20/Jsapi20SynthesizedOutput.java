@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -78,7 +73,6 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * 
  * @author Dirk Schnelle-Walka
  * @author Renato Cassaca
- * @version $Revision$
  * @since 0.6
  */
 public final class Jsapi20SynthesizedOutput
@@ -165,6 +159,7 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open() throws NoresourceError {
         try {
             synthesizer = (Synthesizer) EngineManager.createEngine(desc);
@@ -210,6 +205,7 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
         if (synthesizer == null) {
             LOGGER.warn("no synthesizer: cannot deallocate");
@@ -248,6 +244,7 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addListener(final SynthesizedOutputListener outputListener) {
         synchronized (listeners) {
             listeners.add(outputListener);
@@ -257,6 +254,7 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeListener(final SynthesizedOutputListener outputListener) {
         synchronized (listeners) {
             listeners.remove(outputListener);
@@ -515,6 +513,7 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void cancelOutput() throws NoresourceError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot queue audio");
@@ -624,12 +623,14 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activate() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void passivate() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivating output " + queuedSpeakables.size()
@@ -646,12 +647,14 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void connect(final ConnectionInformation info) throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void disconnect(final ConnectionInformation info) {
         sessionId = null;
     }
@@ -659,6 +662,7 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return type;
     }
@@ -697,6 +701,7 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isBusy() {
         synchronized (queuedSpeakables) {
             return !queuedSpeakables.isEmpty();
@@ -706,6 +711,7 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void speakableUpdate(final SpeakableEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("speakable updated: " + event);
@@ -747,6 +753,7 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void synthesizerUpdate(final SynthesizerEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("synthesizer updated: " + event);

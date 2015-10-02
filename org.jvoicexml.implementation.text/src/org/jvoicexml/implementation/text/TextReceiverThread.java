@@ -31,8 +31,8 @@ import java.io.InputStream;
 import java.net.Socket;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.client.text.TextMessage;
-import org.jvoicexml.client.text.TextMessageReader;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage.TextMessageType;
 
 /**
  * Reads asynchronously some text input from the client.
@@ -99,28 +99,28 @@ final class TextReceiverThread extends Thread {
         }
         try {
             final InputStream stream = socket.getInputStream();
-            final TextMessageReader reader = new TextMessageReader(stream);
             while (socket.isConnected() && !isInterrupted()) {
-                final TextMessage message = reader.getNextMessage();
+                final TextMessage message =
+                        TextMessage.parseDelimitedFrom(stream);
                 if (message == null) {
                     continue;
                 }
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("read: " + message);
                 }
-                final int code = message.getCode();
-                if ((code == TextMessage.USER) && (input != null)) {
-                    final String str = (String) message.getData();
+                final TextMessageType type = message.getType();
+                if ((type == TextMessageType.USER) && (input != null)) {
+                    final String str = message.getData();
                     input.notifyRecognitionResult(str);
                     input = null;
-                } else if (code == TextMessage.BYE) {
+                } else if (type == TextMessageType.BYE) {
                     telephony.addAcknowledgeMessage(message);
                 } else {
                     final int sequenceNumber = message.getSequenceNumber();
                     telephony.removePendingMessage(sequenceNumber);
                 }
                 // Terminate this thread if a BYE has been received.
-                if (code == TextMessage.BYE) {
+                if (type == TextMessageType.BYE) {
                     break;
                 }
             }

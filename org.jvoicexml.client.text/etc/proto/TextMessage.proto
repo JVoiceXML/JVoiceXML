@@ -1,0 +1,28 @@
+option java_package = "org.jvoicexml.client.text.protobuf";
+
+message TextMessage {
+  enum TextMessageType {
+     // Code indicating that this message contains data. Usually this is used
+     // to send prompts as SSML 
+    SSML = 1;
+
+    // Code indicating an acknowledge.
+    ACK = 2;
+
+    // Code indicating an acknowledge.
+    BYE = 3;
+
+    // Code indicating user input as text string.
+    USER = 4;
+
+    // Code indicating that clients may send input.
+    EXPECTING_INPUT = 5;
+
+    // Code indicating that clients may no longer send input.
+    INPUT_CLOSED = 6;
+  }
+  
+  required TextMessageType Type = 1;
+  required int32 SequenceNumber = 2;
+  optional string Data = 3;
+}

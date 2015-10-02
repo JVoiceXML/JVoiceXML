@@ -3,9 +3,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>text</repository>
-  <classpath>../org.jvoicexml/dist/org.jvoicexml.implementation.text.jar</classpath>
-  <classpath>../org.jvoicexml/dist/org.jvoicexml.client.text.jar</classpath>
-  <classpath>../org.jvoicexml/dist/org.jvoicexml.srgs.jar</classpath>
+  <classpath>dist/org.jvoicexml.implementation.text.jar</classpath>
+  <classpath>dist/org.jvoicexml.client.text.jar</classpath>
+  <classpath>dist/org.jvoicexml.srgs.jar</classpath>
+  <classpath>3rdparty/protobuf2.5.0/lib/protobuf-java-2.5.0.jar</classpath>
+
   <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">
     <beans:property name="instances" value="1" />
    <property name="grammarParsers">

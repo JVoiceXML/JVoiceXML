@@ -36,6 +36,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage.TextMessageType;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -56,12 +58,13 @@ public class TestTextServer implements TextListener {
 
     private final Object lock = new Object();
 
-    private Object rcvd;
+    private TextMessage rcvd;
 
     /**
      * Set up the test environment
+     * 
      * @throws java.lang.Exception
-     *          test failed
+     *             test failed
      */
     @Before
     public void setUp() throws Exception {
@@ -81,8 +84,9 @@ public class TestTextServer implements TextListener {
 
     /**
      * Tear down the test environment
+     * 
      * @throws java.lang.Exception
-     *          tear down failed
+     *             tear down failed
      */
     @After
     public void tearDown() throws Exception {
@@ -121,27 +125,19 @@ public class TestTextServer implements TextListener {
         final Thread thread = new Thread() {
             @Override
             public void run() {
-                NonBlockingObjectInputStream oin = null;
                 try {
                     synchronized (lock) {
                         lock.notifyAll();
                     }
                     final InputStream in = socket.getInputStream();
-                    oin = new NonBlockingObjectInputStream(in);
-                    rcvd = oin.readObject();
+                    System.out.println("1");
+                    rcvd = TextMessage.parseDelimitedFrom(in);
+                    System.out.println(2);
                     synchronized (lock) {
                         lock.notifyAll();
                     }
                 } catch (Exception e) {
                     Assert.fail(e.getMessage());
-                } finally {
-                    if (oin != null) {
-                        try {
-                            oin.close();
-                        } catch (IOException e) {
-                            Assert.fail(e.getMessage());
-                        }
-                    }
                 }
             }
         };
@@ -155,8 +151,10 @@ public class TestTextServer implements TextListener {
                 lock.wait();
             }
         }
-        final TextMessage msg = new TextMessage(TextMessage.USER, 0, input);
-        Assert.assertEquals(msg, rcvd);
+        final TextMessage message = TextMessage.newBuilder()
+                .setType(TextMessageType.USER).setData(input)
+                .setSequenceNumber(0).build();
+        Assert.assertEquals(message, rcvd);
     }
 
     /**

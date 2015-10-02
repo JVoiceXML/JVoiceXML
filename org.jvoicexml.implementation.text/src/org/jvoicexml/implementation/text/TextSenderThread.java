@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,22 +22,19 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.client.text.TextMessage;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage.TextMessageType;
 
 /**
  * Writes asynchronously some text input to the client.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 final class TextSenderThread extends Thread {
@@ -110,9 +102,9 @@ final class TextSenderThread extends Thread {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("... done sending output");
                 }
-                final int messageCode = pending.getMessageCode();
-                sending = (messageCode != TextMessage.BYE)
-                            || (messageCode == TextMessage.ACK
+                final TextMessageType type = pending.getMessageCode();
+                sending = (type != TextMessageType.BYE)
+                            || (type == TextMessageType.ACK
                                 && acknowledgeBye);
             }
         } catch (InterruptedException | IOException e) {
@@ -145,11 +137,9 @@ final class TextSenderThread extends Thread {
      */
     private void sendMessage(final PendingMessage pending)
             throws IOException {
-        final OutputStream stream = socket.getOutputStream();
-        final ObjectOutputStream out =  new ObjectOutputStream(stream);
+        final OutputStream out = socket.getOutputStream();
         final TextMessage message = pending.getMessage();
-        out.writeObject(message);
-        out.flush();
+        message.writeDelimitedTo(out);
     }
 
     /**
@@ -172,15 +162,10 @@ final class TextSenderThread extends Thread {
      * @param speakable the speakable to send.
      */
     public void sendData(final SpeakableText speakable) {
-        final Serializable data;
-        if (speakable instanceof SpeakableSsmlText) {
-            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
-            data = ssml.getDocument();
-        } else {
-            data = speakable.getSpeakableText();
-        }
-        final TextMessage message =
-            new TextMessage(TextMessage.DATA, ++sequenceNumber, data);
+        final String ssml = speakable.getSpeakableText();
+        final TextMessage message = TextMessage.newBuilder()
+                .setType(TextMessageType.SSML).setData(ssml)
+                .setSequenceNumber(sequenceNumber++).build();
         final PendingMessage pending = new PendingMessage(message, speakable);
         messages.add(pending);
     }
@@ -191,8 +176,9 @@ final class TextSenderThread extends Thread {
      * @since 0.7.6
      */
     public void sendExpectingInput() {
-        final TextMessage message =
-                new TextMessage(TextMessage.EXPECTING_INPUT, ++sequenceNumber);
+        final TextMessage message = TextMessage.newBuilder()
+                .setType(TextMessageType.EXPECTING_INPUT)
+                .setSequenceNumber(sequenceNumber++).build();
         final PendingMessage pending = new PendingMessage(message);
         messages.add(pending);
     }
@@ -203,8 +189,9 @@ final class TextSenderThread extends Thread {
      * @since 0.7.6
      */
     public void sendClosedInput() {
-        final TextMessage message =
-                new TextMessage(TextMessage.INPUT_CLOSED, ++sequenceNumber);
+        final TextMessage message = TextMessage.newBuilder()
+                .setType(TextMessageType.INPUT_CLOSED)
+                .setSequenceNumber(sequenceNumber++).build();
         final PendingMessage pending = new PendingMessage(message);
         messages.add(pending);
     }
@@ -213,8 +200,9 @@ final class TextSenderThread extends Thread {
      * Sends a bye message and terminates the sender thread.
      */
     public void sendBye() {
-        final TextMessage message =
-                new TextMessage(TextMessage.BYE, ++sequenceNumber);
+        final TextMessage message = TextMessage.newBuilder()
+                .setType(TextMessageType.BYE)
+                .setSequenceNumber(sequenceNumber++).build();
         final PendingMessage pending = new PendingMessage(message, null);
         messages.add(pending);
     }
@@ -224,10 +212,11 @@ final class TextSenderThread extends Thread {
      * @param message the message to acknowledge
      */
     public void sendAck(final TextMessage message) {
-        acknowledgeBye = message.getCode() == TextMessage.BYE;
+        acknowledgeBye = message.getType() == TextMessageType.BYE;
         final int num = message.getSequenceNumber();
-        final TextMessage ack =
-                new TextMessage(TextMessage.ACK, num);
+        final TextMessage ack = TextMessage.newBuilder()
+                .setType(TextMessageType.ACK)
+                .setSequenceNumber(num).build();
         final PendingMessage pending = new PendingMessage(ack);
         messages.add(pending);
     }

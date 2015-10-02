@@ -3,8 +3,9 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
   <repository>text</repository>
-  <classpath>dist/jvxml-client-text.jar</classpath>
+  <classpath>dist/org.jvoicexml.client.text.jar</classpath>
   <classpath>dist/org.jvoicexml.callmanager.text.jar</classpath>
+  <classpath>3rdparty/protobuf2.5.0/lib/protobuf-java-2.5.0.jar</classpath>
 
   <beans:bean id="callmanager"
     class="org.jvoicexml.callmanager.text.TextCallManager">

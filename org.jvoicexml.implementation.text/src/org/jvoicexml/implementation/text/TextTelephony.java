@@ -42,7 +42,7 @@ import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextConnectionInformation;
-import org.jvoicexml.client.text.TextMessage;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
