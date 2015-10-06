@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -62,7 +57,6 @@ import org.jvoicexml.implementation.TelephonyListener;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public final class TextTelephony implements Telephony {
@@ -74,7 +68,7 @@ public final class TextTelephony implements Telephony {
     private static final int MAX_TIMEOUT_CONNECT = 1000;
 
     /** Maximal number of milliseconds to wait for acknowledgment. */
-    private static final int MAX_TIMEOUT_ACK = 100;
+    private static final int MAX_TIMEOUT_ACK = 1000;
     
     /** The connection to the client. */
     private Socket socket;
@@ -492,16 +486,13 @@ public final class TextTelephony implements Telephony {
         }
 
         // delay to acknowledge pending messages
-        if (!pendingMessages.isEmpty()) {
-            try {
-                synchronized (pendingMessages) {
+        while (sender != null && !pendingMessages.isEmpty()) {
+            synchronized (pendingMessages) {
+                try {
                     pendingMessages.wait(MAX_TIMEOUT_ACK);
+                } catch (InterruptedException e) {
+                    LOGGER.warn("waiting for pending messages interrupted", e);
                 }
-            } catch (InterruptedException e) {
-                LOGGER.warn("waiting for acknowledgement interrupted", e);
-            }
-            if (!pendingMessages.isEmpty()) {
-                LOGGER.warn("pending messages: " + pendingMessages.values());
             }
         }
 

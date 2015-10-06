@@ -94,7 +94,10 @@ final class TextSenderThread extends Thread {
                     LOGGER.debug("trying to take next message");
                 }
                 pending = messages.take();
-                telephony.addPendingMessage(pending);
+                final TextMessageType type = pending.getMessageCode();
+                if (type != TextMessageType.ACK) {
+                    telephony.addPendingMessage(pending);
+                }
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("sending " + pending);
                 }
@@ -102,7 +105,6 @@ final class TextSenderThread extends Thread {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("... done sending output");
                 }
-                final TextMessageType type = pending.getMessageCode();
                 sending = (type != TextMessageType.BYE)
                             || (type == TextMessageType.ACK
                                 && acknowledgeBye);

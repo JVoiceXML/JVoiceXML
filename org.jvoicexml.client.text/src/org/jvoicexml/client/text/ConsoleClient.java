@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,14 +40,13 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Console client for JVoiceXML.
+ * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  */
 public final class ConsoleClient implements TextListener {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(ConsoleClient.class);;
+    private static final Logger LOGGER = Logger.getLogger(ConsoleClient.class);;
 
     /** Server start lock. */
     private final Object lock;
@@ -69,11 +63,13 @@ public final class ConsoleClient implements TextListener {
 
     /**
      * Running thread.
-     * @param uri the URI to call
+     * 
+     * @param uri
+     *            the URI to call
      * @exception Exception
-     *            error communicating with JVoiceXML
+     *                error communicating with JVoiceXML
      * @exception JVoiceXMLEvent
-     *            error running the application
+     *                error running the application
      */
     private void run(final URI uri) throws Exception, JVoiceXMLEvent {
         final Context context = new InitialContext();
@@ -85,8 +81,7 @@ public final class ConsoleClient implements TextListener {
             lock.wait();
         }
         LOGGER.info("server started");
-        final ConnectionInformation info =
-                server.getConnectionInformation();
+        final ConnectionInformation info = server.getConnectionInformation();
         final Session session = jvxml.createSession(info);
         LOGGER.info("calling application at '" + uri + "'...");
         session.call(uri);
@@ -113,7 +108,7 @@ public final class ConsoleClient implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(final SsmlDocument document) {
+    public void outputSsml(final int messageNumber, final SsmlDocument document) {
         final Speak speak = document.getSpeak();
         System.out.println("System: " + speak.getTextContent());
     }
@@ -134,7 +129,7 @@ public final class ConsoleClient implements TextListener {
     @Override
     public void inputClosed() {
         // TODO Auto-generated method stub
-        
+
     }
 
     /**
@@ -148,9 +143,10 @@ public final class ConsoleClient implements TextListener {
 
     /**
      * Read an input from the command line.
+     * 
      * @return DTMF from the command line.
      * @exception IOException
-     *            error reading the next line
+     *                error reading the next line
      */
     public String readLine() throws IOException {
         System.out.print("User: ");
@@ -163,7 +159,9 @@ public final class ConsoleClient implements TextListener {
 
     /**
      * Start routine.
-     * @param args URI of the application to call
+     * 
+     * @param args
+     *            URI of the application to call
      */
     public static void main(final String[] args) {
         if (args.length != 1) {

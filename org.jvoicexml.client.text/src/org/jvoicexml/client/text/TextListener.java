@@ -55,7 +55,7 @@ public interface TextListener {
      * Notification that an SSML document has arrived.
      * @param document the received SSML document.
      */
-    void outputSsml(final SsmlDocument document);
+    void outputSsml(int messageNumber, final SsmlDocument document);
 
     /**
      * Notification that the voice browser is ready to receive input.

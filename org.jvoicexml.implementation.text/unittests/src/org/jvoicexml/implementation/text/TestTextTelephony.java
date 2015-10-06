@@ -52,12 +52,13 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Test cases for {@link TextTelephony}.
+ * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
 public final class TestTextTelephony
-    implements TextListener, SpokenInputListener {
+        implements TextListener, SpokenInputListener {
     /** Maximal number of milliseconds to wait for a receipt. */
     private static final int MAX_WAIT = 1000;
 
@@ -118,13 +119,16 @@ public final class TestTextTelephony
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.text.TextTelephony#play(org.jvoicexml.SystemOutput, java.util.Map)}.
+     * Test method for
+     * {@link org.jvoicexml.implementation.text.TextTelephony#play(org.jvoicexml.SystemOutput, java.util.Map)}
+     * .
+     * 
      * @exception Exception
-     *            test failed.
+     *                test failed.
      * @exception JVoiceXMLEvent
-     *            test failed.
+     *                test failed.
      */
-    @Test(timeout=5000)
+    @Test(timeout = 5000)
     public void testPlay() throws Exception, JVoiceXMLEvent {
         final TextSynthesizedOutput textOutput = new TextSynthesizedOutput();
         final String prompt = "testPlay";
@@ -138,18 +142,21 @@ public final class TestTextTelephony
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.text.TextTelephony#record(org.jvoicexml.UserInput, java.util.Map)}.
+     * Test method for
+     * {@link org.jvoicexml.implementation.text.TextTelephony#record(org.jvoicexml.UserInput, java.util.Map)}
+     * .
+     * 
      * @exception Exception
-     *            test failed.
+     *                test failed.
      * @exception JVoiceXMLEvent
-     *            test failed.
+     *                test failed.
      */
-    @Test(timeout=5000)
+    @Test(timeout = 5000)
     public void testRecord() throws Exception, JVoiceXMLEvent {
         final TextSpokenInput textInput = new TextSpokenInput();
         textInput.startRecognition(null, null);
         textInput.addListener(this);
-        final String utterance = "testRecord";    
+        final String utterance = "testRecord";
         mockGrammarChecker(textInput, utterance);
         telephony.record(textInput, null);
         Assert.assertTrue(telephony.isBusy());
@@ -159,37 +166,42 @@ public final class TestTextTelephony
         }
         Assert.assertNotNull(receivedResult);
         // equals should be already done in mocked grammar
-        //Assert.assertEquals(utterance, receivedResult.getUtterance()); 
+        // Assert.assertEquals(utterance, receivedResult.getUtterance());
     }
 
     /**
-     * Mocks a grammar checker to accept the utterance 
-     * and pass it to the textInput.
-     * @param textInput the input to use the mocked grammar
-     * @param utterance the valid text to be allowed in grammar
+     * Mocks a grammar checker to accept the utterance and pass it to the
+     * textInput.
+     * 
+     * @param textInput
+     *            the input to use the mocked grammar
+     * @param utterance
+     *            the valid text to be allowed in grammar
      * @since 0.7.6
      */
-    private void mockGrammarChecker(final TextSpokenInput textInput, 
-            final String utterance)
-            throws JVoiceXMLEvent, ParserConfigurationException {
-            SrgsXmlDocument doc = new SrgsXmlDocument();
-            doc.setGrammarSimple("mock", utterance);
-            final SrgsXmlGrammarImplementation impl = 
-                    new SrgsXmlGrammarImplementation(doc, null);
-            final Collection<GrammarImplementation<?>> grammars;
-            grammars = new java.util.ArrayList<>();
-            grammars.add(impl);
-            textInput.activateGrammars(grammars);
+    private void mockGrammarChecker(final TextSpokenInput textInput,
+            final String utterance) throws JVoiceXMLEvent,
+            ParserConfigurationException {
+        SrgsXmlDocument doc = new SrgsXmlDocument();
+        doc.setGrammarSimple("mock", utterance);
+        final SrgsXmlGrammarImplementation impl = new SrgsXmlGrammarImplementation(
+                doc, null);
+        final Collection<GrammarImplementation<?>> grammars;
+        grammars = new java.util.ArrayList<>();
+        grammars.add(impl);
+        textInput.activateGrammars(grammars);
     }
 
     /**
      * Checks if the given SSML documents are equal based on their content.
-     * @param doc1 the expected document
-     * @param doc2 the document to check
+     * 
+     * @param doc1
+     *            the expected document
+     * @param doc2
+     *            the document to check
      * @since 0.7.6
      */
-    private void assertEquals(final SsmlDocument doc1,
-            final SsmlDocument doc2) {
+    private void assertEquals(final SsmlDocument doc1, final SsmlDocument doc2) {
         Assert.assertNotNull(doc1);
         Assert.assertNotNull(doc2);
         Assert.assertEquals(doc1.getTextContent(), doc2.getTextContent());
@@ -198,7 +210,7 @@ public final class TestTextTelephony
     /**
      * {@inheritDoc}
      */
-    public void outputSsml(final SsmlDocument document) {
+    public void outputSsml(final int messageNumber, final SsmlDocument document) {
         receivedDocument = document;
         synchronized (lock) {
             lock.notifyAll();
@@ -212,7 +224,8 @@ public final class TestTextTelephony
         final String type = event.getEventType();
         if (type.equals(RecognitionEvent.EVENT_TYPE)) {
             final RecognitionEvent recEvent = (RecognitionEvent) event;
-            receivedResult = (TextRecognitionResult) recEvent.getRecognitionResult();
+            receivedResult = (TextRecognitionResult) recEvent
+                    .getRecognitionResult();
             synchronized (lock) {
                 lock.notifyAll();
             }

@@ -65,6 +65,12 @@ import org.xml.sax.SAXException;
  * Not, that one instance of a {@link TextServer} can handle only one session.
  * </p>
  *
+ * <p>
+ * Usually, incoming SSML messages are acknowledge upon arrival. This behavior
+ * can chaged via {@link #setAutoAcknowledge(boolean)}. Messages must be
+ * acknowledged manuylly by {@link #acknowledge(int)}.
+ * </p>
+ * 
  * @author Dirk Schnelle-Walka
  * @since 0.6
  */
@@ -130,6 +136,12 @@ public final class TextServer extends Thread {
     private int lastSequenceNumber;
 
     /**
+     * Flag to indicate if incoming messages should be automatically
+     * acknowledged.
+     */
+    private boolean autoAck;
+
+    /**
      * Constructs a new object.
      * 
      * @param hostname
@@ -148,6 +160,7 @@ public final class TextServer extends Thread {
         connectionLock = new Object();
         startedLock = new Object();
         acknowledgeMonitor = new Object();
+        autoAck = true;
     }
 
     /**
@@ -158,6 +171,17 @@ public final class TextServer extends Thread {
      */
     public TextServer(final int serverPort) {
         this(null, serverPort);
+    }
+
+    /**
+     * Modify the auto acknowledge mode.
+     * 
+     * @param value
+     *            new value for the auto acknowledge mode
+     * @since 0.7.8
+     */
+    public void setAutoAcknowledge(final boolean value) {
+        autoAck = value;
     }
 
     /**
@@ -214,13 +238,16 @@ public final class TextServer extends Thread {
      * Notifies all registered listeners that the given SSML document has
      * arrived.
      * 
+     * @param messageNumber
+     *            the received message number
      * @param document
      *            the received document.
      */
-    private void fireOutputArrived(final SsmlDocument document) {
+    private void fireOutputArrived(int messageNumber,
+            final SsmlDocument document) {
         synchronized (listener) {
             for (TextListener current : listener) {
-                current.outputSsml(document);
+                current.outputSsml(messageNumber, document);
             }
         }
     }
@@ -400,13 +427,16 @@ public final class TextServer extends Thread {
                     fireDisconnected();
                     return true;
                 }
+                boolean acknwowldege = true;
                 if (type == TextMessageType.SSML) {
+                    int messageNumber = message.getSequenceNumber();
                     final String data = message.getData();
                     final StringReader reader = new StringReader(data);
                     final InputSource source = new InputSource(reader);
                     try {
                         final SsmlDocument document = new SsmlDocument(source);
-                        fireOutputArrived(document);
+                        fireOutputArrived(messageNumber, document);
+                        acknwowldege = autoAck;
                     } catch (ParserConfigurationException | SAXException e) {
                         LOGGER.error("error parsing SSML", e);
                     }
@@ -420,7 +450,7 @@ public final class TextServer extends Thread {
                     }
                     return true;
                 }
-                if (!acknowledge(message)) {
+                if (acknwowldege && !acknowledge(message)) {
                     LOGGER.warn("can not acknowledge due to disconnect");
                     return true;
                 }
@@ -444,15 +474,33 @@ public final class TextServer extends Thread {
      *             sending error
      */
     private boolean acknowledge(final TextMessage message) throws IOException {
-        if (isConnected()) {
-            final int seq = message.getSequenceNumber();
-            final TextMessage ack = TextMessage.newBuilder()
-                    .setType(TextMessageType.ACK).setSequenceNumber(seq)
-                    .build();
-            send(ack);
-            return true;
+        if (!isConnected()) {
+            return false;
         }
-        return false;
+        final int seq = message.getSequenceNumber();
+        final TextMessage ack = TextMessage.newBuilder()
+                .setType(TextMessageType.ACK).setSequenceNumber(seq)
+                .build();
+        send(ack);
+        return true;
+    }
+
+    /**
+     * Acknowledges receipt of a message.
+     * 
+     * @param seq
+     *            sequence number of the message to acknowledger
+     * @throws IOException
+     *             sending error
+     */
+    public void acknowledge(final int seq) throws IOException {
+        if (!isConnected()) {
+            return;
+        }
+        final TextMessage ack = TextMessage.newBuilder()
+                .setType(TextMessageType.ACK).setSequenceNumber(seq)
+                .build();
+        send(ack);
     }
 
     /**

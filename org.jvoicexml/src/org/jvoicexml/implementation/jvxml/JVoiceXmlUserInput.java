@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -63,7 +58,6 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5
  */
 final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
@@ -125,11 +119,11 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
     public int activateGrammars(final Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError,
             UnsupportedFormatError {
+        // Separate grammars for the DTMF and voice recognizer
         final Collection<GrammarImplementation<?>> voiceGrammars =
                 new java.util.ArrayList<GrammarImplementation<?>>();
         final Collection<GrammarImplementation<?>> dtmfGrammars =
                 new java.util.ArrayList<GrammarImplementation<?>>();
-
         for (GrammarDocument grammar : grammars) {
             final GrammarImplementation<?> grammarImplementation =
                     loadGrammar(grammar);
@@ -141,7 +135,8 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
                 voiceGrammars.add(grammarImplementation);
             }
         }
-
+        
+        // Activate the specific grammars per mode type
         if (!voiceGrammars.isEmpty()) {
             spokenInput.activateGrammars(voiceGrammars);
         }

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -50,24 +45,25 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * implementation platform.
  * <p>
  * Must be run with the system property
- * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
- * the <code>config</code> folder added to the classpath.
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and the
+ * <code>config</code> folder added to the classpath.
  * </p>
  * <p>
- * This demo requires that JVoiceXML is configured with the text
- * implementation platform.
+ * This demo requires that JVoiceXML is configured with the text implementation
+ * platform.
  * </p>
+ * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class TextDemo implements TextListener {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(TextDemo.class);
+    private static final Logger LOGGER = Logger.getLogger(TextDemo.class);
 
     /**
      * The main method.
-     * @param args Command line arguments. None expected.
+     * 
+     * @param args
+     *            Command line arguments. None expected.
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' parallel text demo for "
@@ -77,7 +73,7 @@ public final class TextDemo implements TextListener {
 
         final int MAX = 20;
         final TextServer[] servers = new TextServer[MAX];
-        for (int i=0; i<MAX; i++) {
+        for (int i = 0; i < MAX; i++) {
             final TextServer server = new TextServer(4242 + i);
             server.addTextListener(new TextDemo());
             server.start();
@@ -91,17 +87,17 @@ public final class TextDemo implements TextListener {
             final URI dialog = file.toURI();
             LOGGER.info("initiating " + MAX + " calls...");
             final Session[] sessions = new Session[MAX];
-            for (int i=0; i<MAX; i++) {
-                final ConnectionInformation info =
-                        servers[i].getConnectionInformation();
+            for (int i = 0; i < MAX; i++) {
+                final ConnectionInformation info = servers[i]
+                        .getConnectionInformation();
                 final Session session = jvxml.createSession(info);
                 sessions[i] = session;
             }
-            for (int i=0; i<MAX; i++) {
+            for (int i = 0; i < MAX; i++) {
                 sessions[i].call(dialog);
             }
             LOGGER.info("waiting for the end of all sessions...");
-            for (int i=0; i<MAX; i++) {
+            for (int i = 0; i < MAX; i++) {
                 sessions[i].waitSessionEnd();
                 sessions[i].hangup();
             }
@@ -136,7 +132,7 @@ public final class TextDemo implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(final SsmlDocument document) {
+    public void outputSsml(final int messageNumber, final SsmlDocument document) {
         final Speak speak = document.getSpeak();
         LOGGER.info("System said: '" + speak.getTextContent() + "'");
     }

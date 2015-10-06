@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,7 +40,6 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * 
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public class TestTextServer implements TextListener {
@@ -189,7 +183,7 @@ public class TestTextServer implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(SsmlDocument document) {
+    public void outputSsml(final int messageNumber, final SsmlDocument document) {
 
     }
 

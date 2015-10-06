@@ -31,8 +31,8 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Monitor that enables delaying until JVoiceXML expects an input.
+ * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public final class InputMonitor implements TextListener {
@@ -52,13 +52,14 @@ public final class InputMonitor implements TextListener {
 
     /**
      * Waits until JVoiceXml is expecting input.
+     * 
      * @throws InterruptedException
-     *         waiting interrupted
+     *             waiting interrupted
      * @throws JVoiceXMLEvent
-     *         error while waiting
+     *             error while waiting
      */
-    public void waitUntilExpectingInput()
-            throws InterruptedException, JVoiceXMLEvent {
+    public void waitUntilExpectingInput() throws InterruptedException,
+            JVoiceXMLEvent {
         synchronized (monitor) {
             try {
                 if (expectingInput) {
@@ -76,14 +77,16 @@ public final class InputMonitor implements TextListener {
 
     /**
      * Waits until JVoiceXml is expecting input.
-     * @param timeout the timeout to wait at max in msec, waits forever, if
-     *          timeout is zero
+     * 
+     * @param timeout
+     *            the timeout to wait at max in msec, waits forever, if timeout
+     *            is zero
      * @throws InterruptedException
-     *         waiting interrupted
+     *             waiting interrupted
      * @throws TimeoutException
-     *         waiting time exceeded
+     *             waiting time exceeded
      * @throws JVoiceXMLEvent
-     *         error while waiting
+     *             error while waiting
      */
     public void waitUntilExpectingInput(final long timeout)
             throws InterruptedException, TimeoutException, JVoiceXMLEvent {
@@ -97,8 +100,10 @@ public final class InputMonitor implements TextListener {
                     throw event;
                 }
                 if (!expectingInput) {
-                    throw new TimeoutException("timeout of '" + timeout
-                          + "' msec exceeded while waiting for expected input");
+                    throw new TimeoutException(
+                            "timeout of '"
+                                    + timeout
+                                    + "' msec exceeded while waiting for expected input");
                 }
             } finally {
                 expectingInput = false;
@@ -124,7 +129,7 @@ public final class InputMonitor implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(final SsmlDocument document) {
+    public void outputSsml(final int messageNumber, final SsmlDocument document) {
     }
 
     /**

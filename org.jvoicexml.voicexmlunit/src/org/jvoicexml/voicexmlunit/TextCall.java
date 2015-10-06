@@ -21,7 +21,6 @@
 
 package org.jvoicexml.voicexmlunit;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -52,7 +51,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @author Dirk Schnelle-Walka
  * @since 0.7.7
  */
-public final class TextCall implements Call  {
+public final class TextCall implements Call {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(TextCall.class);
     /** Known call listeners. */
@@ -79,7 +78,9 @@ public final class TextCall implements Call  {
 
     /**
      * Constructs a new object with the default server port.
-     * @throws InterruptedException error initializing the output buffer
+     * 
+     * @throws InterruptedException
+     *             error initializing the output buffer
      */
     public TextCall() throws InterruptedException {
         this(DEFAULT_SERVER_PORT);
@@ -87,15 +88,20 @@ public final class TextCall implements Call  {
 
     /**
      * Constructs a new call.
-     * @param hostname the hostname to use for the {@link TextServer}
-     * @param port number to use for the {@link TextServer}.
-     * @throws InterruptedException error initializing the output buffer
+     * 
+     * @param hostname
+     *            the host name to use for the {@link TextServer}
+     * @param port
+     *            number to use for the {@link TextServer}.
+     * @throws InterruptedException
+     *             error initializing the output buffer
      */
     public TextCall(final String hostname, final int port)
             throws InterruptedException {
         portNumber = port;
         server = new TextServer(hostname, portNumber);
-        outputBuffer = new OutputMessageBuffer();
+        server.setAutoAcknowledge(false);
+        outputBuffer = new OutputMessageBuffer(server);
         server.addTextListener(outputBuffer);
         inputMonitor = new InputMonitor();
         server.addTextListener(inputMonitor);
@@ -104,17 +110,22 @@ public final class TextCall implements Call  {
 
     /**
      * Constructs a new call.
-     * @param port number to use for the {@link TextServer}.
-     * @throws InterruptedException error initializing the output buffer
+     * 
+     * @param port
+     *            number to use for the {@link TextServer}.
+     * @throws InterruptedException
+     *             error initializing the output buffer
      */
     public TextCall(final int port) throws InterruptedException {
         this(null, port);
     }
 
     /**
-     * Adds the given listener of messages received from the JVoiceXML.
-     * This allows for further investigation of the behavior.
-     * @param listener the listener to add
+     * Adds the given listener of messages received from the JVoiceXML. This
+     * allows for further investigation of the behavior.
+     * 
+     * @param listener
+     *            the listener to add
      */
     public void addTextListener(final TextListener listener) {
         server.addTextListener(listener);
@@ -128,7 +139,7 @@ public final class TextCall implements Call  {
         final URI uri = file.toURI();
         call(uri);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -145,8 +156,8 @@ public final class TextCall implements Call  {
             server.waitStarted();
 
             // run the dialog
-            final ConnectionInformation info =
-                   server.getConnectionInformation();
+            final ConnectionInformation info = server
+                    .getConnectionInformation();
             session = jvxml.createSession(info);
             session.call(uri);
             for (CallListener listener : listeners) {
@@ -172,7 +183,7 @@ public final class TextCall implements Call  {
             }
             LOGGER.info("heard '" + lastOutput + "'");
             return lastOutput;
-        } catch (InterruptedException | JVoiceXMLEvent e) {
+        } catch (InterruptedException | JVoiceXMLEvent | IOException e) {
             try {
                 lastError = session.getLastError();
             } catch (ErrorEvent ex) {
@@ -204,7 +215,8 @@ public final class TextCall implements Call  {
             }
             LOGGER.info("heard '" + lastOutput + "'");
             return lastOutput;
-        } catch (InterruptedException | TimeoutException | JVoiceXMLEvent e) {
+        } catch (InterruptedException | TimeoutException | JVoiceXMLEvent
+                | IOException e) {
             try {
                 lastError = session.getLastError();
             } catch (ErrorEvent ex) {
@@ -389,8 +401,7 @@ public final class TextCall implements Call  {
             } else {
                 inputMonitor.waitUntilExpectingInput(timeout);
             }
-        } catch (InterruptedException | TimeoutException
-                | JVoiceXMLEvent e) {
+        } catch (InterruptedException | TimeoutException | JVoiceXMLEvent e) {
             try {
                 lastError = session.getLastError();
             } catch (ErrorEvent ex) {

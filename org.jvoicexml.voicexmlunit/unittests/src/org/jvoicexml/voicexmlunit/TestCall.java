@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,6 +33,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Test cases for {@link TextCall}.
+ * 
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
  *
@@ -52,8 +48,9 @@ public final class TestCall implements TextListener {
 
     /**
      * Set up the test environment.
+     * 
      * @throws Exception
-     *         setup failed
+     *             setup failed
      */
     @Before
     public void setUp() throws Exception {
@@ -74,7 +71,6 @@ public final class TestCall implements TextListener {
         Assert.assertFalse("connected", connected);
     }
 
-
     @Override
     public void started() {
         started = true;
@@ -86,7 +82,7 @@ public final class TestCall implements TextListener {
     }
 
     @Override
-    public void outputSsml(final SsmlDocument document) {
+    public void outputSsml(final int messageNumber, final SsmlDocument document) {
         lastOutput = document;
     }
 

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2105 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -52,7 +47,6 @@ import org.xml.sax.SAXException;
  * A client for the {@link org.jvoicexml.callmanager.text.TextCallManager}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  */
 public final class TextClient extends Thread {
@@ -249,11 +243,12 @@ public final class TextClient extends Thread {
                     return;
                 }
                 if (type == TextMessageType.SSML) {
+                    final int messageNumber = message.getSequenceNumber();
                     final String data = message.getData();
                     final StringReader reader = new StringReader(data);
                     final InputSource source = new InputSource(reader);
                     final SsmlDocument document = new SsmlDocument(source);
-                    fireOutputArrived(document);
+                    fireOutputArrived(messageNumber, document);
                 }
                 final int seq = message.getSequenceNumber();
                 final TextMessage ack = TextMessage.newBuilder()
@@ -319,13 +314,16 @@ public final class TextClient extends Thread {
      * Notifies all registered listeners that the given SSML document has
      * arrived.
      * 
+     * @param messageNumner
+     *            the message number to acknowledge
      * @param document
      *            the received document.
      */
-    private void fireOutputArrived(final SsmlDocument document) {
+    private void fireOutputArrived(final int messageNumner,
+            final SsmlDocument document) {
         synchronized (listener) {
             for (TextListener current : listener) {
-                current.outputSsml(document);
+                current.outputSsml(messageNumner, document);
             }
         }
     }

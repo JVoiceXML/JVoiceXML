@@ -30,6 +30,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -48,14 +49,15 @@ public class TestOutputMessageBuffer {
      */
     @Test
     public void testNextMessage() throws Exception, JVoiceXMLEvent {
-        final OutputMessageBuffer buffer = new OutputMessageBuffer();
+        final TextServer server = new TextServer(9494);
+        final OutputMessageBuffer buffer = new OutputMessageBuffer(server);
         final SsmlDocument document = new SsmlDocument();
         final Speak speak = document.getSpeak();
         speak.addText("hello world");
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                buffer.outputSsml(document);
+                buffer.outputSsml(0, document);
             }
         };
         final Thread thread = new Thread(runnable);
@@ -72,11 +74,12 @@ public class TestOutputMessageBuffer {
     @Test
     public void testNextMessageMultiple() throws Exception, JVoiceXMLEvent {
         final int max = 1000;
-        final OutputMessageBuffer buffer = new OutputMessageBuffer();
+        final TextServer server = new TextServer(9292);
+        final OutputMessageBuffer buffer = new OutputMessageBuffer(server);
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                for (int i=0; i<max; i++) {
+                for (int i = 0; i < max; i++) {
                     SsmlDocument document = null;
                     try {
                         document = new SsmlDocument();
@@ -85,13 +88,13 @@ public class TestOutputMessageBuffer {
                     }
                     final Speak speak = document.getSpeak();
                     speak.addText("test " + i);
-                    buffer.outputSsml(document);
+                    buffer.outputSsml(i, document);
                 }
             }
         };
         final Thread thread = new Thread(runnable);
         thread.start();
-        for (int i=0; i<max; i++) {
+        for (int i = 0; i < max; i++) {
             final SsmlDocument document = buffer.nextMessage();
             final Speak speak = document.getSpeak();
             Assert.assertEquals("test " + i, speak.getTextContent());
