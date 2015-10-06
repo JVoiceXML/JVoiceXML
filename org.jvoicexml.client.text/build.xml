@@ -181,6 +181,7 @@ Currently it is set to '${mmi.protoc}'
     <target name="distribution" depends="jar">
         <property name="distFolder" value="${dist}/${jvxml.version}" />
         <copy todir="${distFolder}/lib" file="${dist.jar}" />
+        <copy todir="${jvxml.core.dir}/doc" file="etc/proto/TextMessage.proto"/>
     </target>
 
     <target name="dist-maven-snapshot" depends="distribution">

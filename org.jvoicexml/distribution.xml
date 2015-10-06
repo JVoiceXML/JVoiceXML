@@ -90,6 +90,7 @@ This file builds the distribution files for JVoiceXML.
                 <include name="*.xhtml" />
                 <include name="*api/**" />
                 <include name="**.pdf" />
+                <include name="**.proto" />
             </fileset>
         </copy>
         <replace file="${distFolder}/doc/index.xhtml">
