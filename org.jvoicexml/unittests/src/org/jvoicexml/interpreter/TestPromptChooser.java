@@ -39,6 +39,7 @@ import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
+import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Prompt;
@@ -113,9 +114,9 @@ public final class TestPromptChooser {
         prompt2.addText("prompt 2");
         final PromptCountable countable = new FieldFormItem(context, field);
         final PromptChooser chooser = new PromptChooser(countable, context);
-        final Collection<Prompt> prompts = chooser.collect();
+        final Collection<VoiceXmlNode> prompts = chooser.collect();
         Assert.assertEquals(2, prompts.size());
-        final Iterator<Prompt> iterator = prompts.iterator();
+        final Iterator<VoiceXmlNode> iterator = prompts.iterator();
         Assert.assertEquals(prompt1, iterator.next());
         Assert.assertEquals(prompt2, iterator.next());
     }
@@ -137,9 +138,9 @@ public final class TestPromptChooser {
         prompt2.setCond("2 == 2");
         final PromptCountable countable = new FieldFormItem(context, field);
         final PromptChooser chooser = new PromptChooser(countable, context);
-        final Collection<Prompt> prompts = chooser.collect();
+        final Collection<VoiceXmlNode> prompts = chooser.collect();
         Assert.assertEquals(1, prompts.size());
-        final Iterator<Prompt> iterator = prompts.iterator();
+        final Iterator<VoiceXmlNode> iterator = prompts.iterator();
         Assert.assertEquals(prompt2, iterator.next());
     }
 }

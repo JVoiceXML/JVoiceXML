@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -55,7 +50,6 @@ import org.w3c.dom.UserDataHandler;
  *
  * @author Steve Doyle
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public abstract class AbstractXmlNode
         implements XmlNode {
@@ -759,9 +753,7 @@ public abstract class AbstractXmlNode
      */
     public final <T extends XmlNode> T appendChild(final Class<T> tagClass) {
         final T newTag = addChild(tagClass);
-
         appendChild(newTag);
-
         return newTag;
     }
 

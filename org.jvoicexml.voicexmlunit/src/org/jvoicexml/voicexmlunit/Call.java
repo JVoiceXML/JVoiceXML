@@ -38,20 +38,25 @@ public interface Call {
 
     /**
      * Calls the application identified by the given file.
-     * @param file file of the application to call
+     * 
+     * @param file
+     *            file of the application to call
      * @since 0.7.8
      */
     void call(File file);
 
     /**
      * Calls the application identified by the given URI.
-     * @param uri URI of the application to call
+     * 
+     * @param uri
+     *            URI of the application to call
      */
     void call(URI uri);
 
     /**
      * Retrieves the next output. This method is useful if the output should be
      * examined in more detail
+     * 
      * @return the next output that has been captured
      */
     SsmlDocument getNextOutput();
@@ -59,14 +64,17 @@ public interface Call {
     /**
      * Retrieves the next output. This method is useful if the output should be
      * examined in more detail
-     * @param timeout the timeout to wait at max in msec, waits forever, if
-     *          timeout is zero
+     * 
+     * @param timeout
+     *            the timeout to wait at max in msec, waits forever, if timeout
+     *            is zero
      * @return the next output that has been captured
      */
-    SsmlDocument getNextOutput(long timeout);
+    SsmlDocument getNextOutput(final long timeout);
 
     /**
      * Retrieves the last obtained output.
+     * 
      * @return last captured output
      */
     SsmlDocument getLastOutput();
@@ -74,48 +82,85 @@ public interface Call {
     /**
      * Waits for the next output and checks if this output matches the given
      * utterance.
-     * @param utterance the expected utterance
+     * 
+     * @param utterance
+     *            the expected utterance
      */
-    void hears(String utterance);
+    void hears(final String utterance);
 
     /**
      * Waits for the next output and checks if this output matches the given
      * utterance. The output is expected to arrive in max timeout msec.
-     * @param utterance the expected utterance
-     * @param timeout the timeout to wait at max in msec, waits forever, if
-     *          timeout is zero
+     * 
+     * @param utterance
+     *            the expected utterance
+     * @param timeout
+     *            the timeout to wait at max in msec, waits forever, if timeout
+     *            is zero
      */
-    void hears(String utterance, long timeout);
+    void hears(final String utterance, final long timeout);
+
+    /**
+     * Waits for the next audio output and checks if this output matches the
+     * given utterance.
+     * 
+     * @param uri
+     *            the URI of the expected audio file
+     * @since 0.7.8
+     */
+    void hearsAudio(final URI uri);
+
+    /**
+     * Waits for the next audio output and checks if this output matches the
+     * given utterance. The output is expected to arrive in max timeout msec.
+     * 
+     * @param uri
+     *            the URI of the expected audio file
+     * @param timeout
+     *            the timeout to wait at max in msec, waits forever, if timeout
+     *            is zero
+     * @since 0.7.8
+     */
+    void hearsAudio(final URI uri, final long timeout);
 
     /**
      * Waits until an input is expected and then sends the given utterance to
      * JVoiceXML.
-     * @param utterance the utterance to send
+     * 
+     * @param utterance
+     *            the utterance to send
      */
-    void say(String utterance);
+    void say(final String utterance);
 
     /**
      * Waits until an input is expected and then sends the given utterance to
      * JVoiceXML.
-     * @param utterance the utterance to send
-     * @param timeout max timeout to wait in msec, waits forever, if timeout is
-     *                  zero
+     * 
+     * @param utterance
+     *            the utterance to send
+     * @param timeout
+     *            max timeout to wait in msec, waits forever, if timeout is zero
      */
-    void say(String utterance, long timeout);
+    void say(final String utterance, final long timeout);
 
     /**
      * Sends the given utterance to JVoiceXML.
-     * @param digits the digits to enter
+     * 
+     * @param digits
+     *            the digits to enter
      */
-    void enter(String digits);
+    void enter(final String digits);
 
     /**
      * Sends the given utterance to JVoiceXML.
-     * @param digits the digits to enter
-     * @param timeout the timeout to wait at max in msec, waits forever, if
-     *          timeout is zero
+     * 
+     * @param digits
+     *            the digits to enter
+     * @param timeout
+     *            the timeout to wait at max in msec, waits forever, if timeout
+     *            is zero
      */
-    void enter(String digits, long timeout);
+    void enter(final String digits, final long timeout);
 
     /**
      * Delays until an input is expected, i.e. the voice browser is expecting
@@ -124,9 +169,11 @@ public interface Call {
     void waitUnitExpectingInput();
 
     /**
-     * Delays until an input is expected. 
-     * @param timeout the timeout to wait at max in msec, waits forever, if
-     *          timeout is zero
+     * Delays until an input is expected.
+     * 
+     * @param timeout
+     *            the timeout to wait at max in msec, waits forever, if timeout
+     *            is zero
      */
     void waitUnitExpectingInput(long timeout);
 
@@ -134,9 +181,10 @@ public interface Call {
      * Issues a hangup event.
      */
     void hangup();
-    
+
     /**
      * Retrieves the last observed error.
+     * 
      * @return the last observed error, {@code null} if there was no error
      */
     JVoiceXMLEvent getLastError();

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -115,7 +110,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @see org.jvoicexml.interpreter.VoiceXmlInterpreter
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class FormInterpretationAlgorithm implements FormItemVisitor {
     /** Logger for this class. */
@@ -784,7 +778,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         // Collect all prompts to be queued
         final PromptChooser promptChooser = new PromptChooser(countable,
                 context);
-        final Collection<Prompt> prompts = promptChooser.collect();
+        final Collection<VoiceXmlNode> prompts = promptChooser.collect();
 
         // Set the timeout to use for the prompts
         final ImplementationPlatform platform = context
@@ -793,9 +787,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         platform.setPromptTimeout(timeout);
 
         // Actually queue the prompts
-        for (Prompt prompt : prompts) {
+        for (VoiceXmlNode node : prompts) {
             executor.executeTagStrategy(context, interpreter, this, formItem,
-                    prompt);
+                    node);
         }
         final DocumentServer server = context.getDocumentServer();
         final Session session = context.getSession();

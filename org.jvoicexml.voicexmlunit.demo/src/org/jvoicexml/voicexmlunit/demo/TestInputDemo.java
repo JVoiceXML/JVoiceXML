@@ -35,13 +35,14 @@ import org.jvoicexml.voicexmlunit.TextCall;
  * A demo that tests a small VoiceXML script to enter a either 'yes' or 'no'.
  * <p>
  * Must be run with the system property
- * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
- * the <code>config</code> folder added to the classpath.
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and the
+ * <code>config</code> folder added to the classpath.
  * </p>
  * <p>
- * This demo requires that JVoiceXML is configured with the text
- * implementation platform.
+ * This demo requires that JVoiceXML is configured with the text implementation
+ * platform.
  * </p>
+ *
  * @author Raphael Groner
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
@@ -55,11 +56,11 @@ public final class TestInputDemo {
     /** URI of the application to call. */
     private URI uri;
 
-
     /**
      * Set up the test environment.
+     *
      * @throws Exception
-     *        error setting up the test environment
+     *             error setting up the test environment
      */
     @Before
     public void setUp() throws Exception {
@@ -69,8 +70,9 @@ public final class TestInputDemo {
 
     /**
      * Tear down the test environment.
+     *
      * @exception JVoiceXMLEvent
-     *            error tearing down
+     *                error tearing down
      */
     @After
     public void tearDown() throws JVoiceXMLEvent {
@@ -79,11 +81,16 @@ public final class TestInputDemo {
 
     /**
      * Runs a test with the option 'yes'.
+     *
+     * @throws Exception
+     *             test failed
      */
     @Test(timeout = TIMEOUT)
-    public void testInputYes() {
+    public void testInputYes() throws Exception {
         call.call(uri);
         call.hears("Do you like this example?");
+        final URI chime = uri.resolve("chime.wav");
+        call.hearsAudio(chime);
         call.say("yes");
         call.hears("You like this example.");
     }
@@ -95,8 +102,9 @@ public final class TestInputDemo {
     public void testInputNo() {
         call.call(uri);
         call.hears("Do you like this example?");
+        final URI chime = uri.resolve("chime.wav");
+        call.hearsAudio(chime);
         call.say("no");
         call.hears("You do not like this example.");
     }
 }
-

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/TextStrategy.java $
- * Version: $LastChangedRevision: 4080 $
- * Date:    $Date: 2013-12-17 09:46:17 +0100 (Tue, 17 Dec 2013) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -61,7 +56,6 @@ import org.jvoicexml.xml.vxml.Prompt;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4080 $
  */
 final class TextStrategy extends AbstractTagStrategy
         implements SsmlParsingStrategy {
@@ -92,10 +86,6 @@ final class TextStrategy extends AbstractTagStrategy
             final VoiceXmlNode node) throws JVoiceXMLEvent {
         final String text = getOutput(node);
         if (text == null) {
-            if (LOGGER.isTraceEnabled()) {
-                LOGGER.trace("ignoring null text node");
-            }
-
             return;
         }
 
@@ -120,15 +110,17 @@ final class TextStrategy extends AbstractTagStrategy
                 platform.setPromptTimeout(-1);
             }
             platform.queuePrompt(speakable);
-            final Session session = context.getSession();
-            final String sessionId = session.getSessionID();
-            try {
-                final CallControlProperties callProps = context
-                        .getCallControlProperties(fia);
-                final DocumentServer server = context.getDocumentServer();
-                platform.renderPrompts(sessionId, server, callProps);
-            } catch (ConfigurationException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
+            if (!fia.isQueuingPrompts()) {
+                final Session session = context.getSession();
+                final String sessionId = session.getSessionID();
+                try {
+                    final CallControlProperties callProps = context
+                            .getCallControlProperties(fia);
+                    final DocumentServer server = context.getDocumentServer();
+                    platform.renderPrompts(sessionId, server, callProps);
+                } catch (ConfigurationException ex) {
+                    throw new NoresourceError(ex.getMessage(), ex);
+                }
             }
         }
     }

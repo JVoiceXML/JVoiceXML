@@ -29,6 +29,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -210,6 +211,7 @@ public final class TextCall implements Call {
         Assert.assertNotNull("no active session", session);
         try {
             lastOutput = outputBuffer.nextMessage(timeout);
+            Assert.assertNotNull("Received SSML must not be null", lastOutput);
             for (CallListener listener : listeners) {
                 listener.heard(lastOutput);
             }
@@ -250,6 +252,7 @@ public final class TextCall implements Call {
     public void hears(final String utterance) {
         Assert.assertNotNull("no active session", session);
         final SsmlDocument document = getNextOutput();
+        Assert.assertNotNull("Received SSML must not be null", document);
         final Speak speak = document.getSpeak();
         final String output = speak.getTextContent();
         Assert.assertEquals(utterance, output);
@@ -262,9 +265,51 @@ public final class TextCall implements Call {
     public void hears(final String utterance, final long timeout) {
         Assert.assertNotNull("no active session", session);
         final SsmlDocument document = getNextOutput(timeout);
+        Assert.assertNotNull("Received SSML must not be null", document);
         final Speak speak = document.getSpeak();
         final String output = speak.getTextContent();
         Assert.assertEquals(utterance, output);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hearsAudio(final URI uri) {
+        Assert.assertNotNull("no active session", session);
+        final SsmlDocument document = getNextOutput();
+        Assert.assertNotNull("Received SSML must not be null", document);
+        assertAudioSource(document, uri);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hearsAudio(final URI uri, final long timeout) {
+        Assert.assertNotNull("no active session", session);
+        final SsmlDocument document = getNextOutput(timeout);
+        Assert.assertNotNull("Received SSML must not be null", document);
+        assertAudioSource(document, uri);
+    }
+
+    /**
+     * Checks if the given URI is in the source attribute of the received audio.
+     * 
+     * @param document
+     *            the document to check
+     * @param uri
+     *            the expected audio source URI
+     */
+    private void assertAudioSource(final SsmlDocument document, final URI uri) {
+        final VoiceXmlUnitNamespaceContect context = new VoiceXmlUnitNamespaceContect();
+        context.addPrefix("ssml", Speak.DEFAULT_XMLNS);
+        try {
+            XPathAssert.assertEquals(context, document,
+                    "/ssml:speak/ssml:audio/@src", uri.toString());
+        } catch (XPathExpressionException e) {
+            Assert.fail(e.getMessage());
+        }
     }
 
     /**

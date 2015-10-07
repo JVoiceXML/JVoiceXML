@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/PromptStrategy.java $
- * Version: $LastChangedRevision: 4269 $
- * Date:    $LastChangedDate: 2014-09-25 09:11:35 +0200 (Thu, 25 Sep 2014) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -61,7 +56,6 @@ import org.jvoicexml.xml.vxml.Prompt;
  * @see org.jvoicexml.xml.vxml.Prompt
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4269 $
  */
 class PromptStrategy extends AbstractTagStrategy {
     /** Logger for this class. */

@@ -4,8 +4,9 @@
         <field name="answer">
             <grammar src="yesno.srgs" type="application/srgs+xml" />
             <prompt>Do you like this example?</prompt>
+            <audio src="chime.wav" />
             <filled>
-                <log expr="application.lastresult$.utterance"/>
+                <log expr="application.lastresult$.utterance" />
                 <if cond="answer=='Y'">
                     You like this example.
                     <else />

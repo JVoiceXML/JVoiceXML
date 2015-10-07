@@ -91,6 +91,20 @@ public final class MockCall implements Call {
      * {@inheritDoc}
      */
     @Override
+    public void hearsAudio(final URI uri) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hearsAudio(final URI uri, final long timeout) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void say(final String utterance) {
     }
 
