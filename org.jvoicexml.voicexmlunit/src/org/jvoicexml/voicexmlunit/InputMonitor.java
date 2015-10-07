@@ -101,9 +101,8 @@ public final class InputMonitor implements TextListener {
                 }
                 if (!expectingInput) {
                     throw new TimeoutException(
-                            "timeout of '"
-                                    + timeout
-                                    + "' msec exceeded while waiting for expected input");
+                          "timeout of '" + timeout
+                          + "' msec exceeded while waiting for expected input");
                 }
             } finally {
                 expectingInput = false;
@@ -129,7 +128,8 @@ public final class InputMonitor implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(final int messageNumber, final SsmlDocument document) {
+    public void outputSsml(final int messageNumber,
+            final SsmlDocument document) {
     }
 
     /**

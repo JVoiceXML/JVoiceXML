@@ -302,7 +302,8 @@ public final class TextCall implements Call {
      *            the expected audio source URI
      */
     private void assertAudioSource(final SsmlDocument document, final URI uri) {
-        final VoiceXmlUnitNamespaceContect context = new VoiceXmlUnitNamespaceContect();
+        final VoiceXmlUnitNamespaceContect context =
+                new VoiceXmlUnitNamespaceContect();
         context.addPrefix("ssml", Speak.DEFAULT_XMLNS);
         try {
             XPathAssert.assertEquals(context, document,

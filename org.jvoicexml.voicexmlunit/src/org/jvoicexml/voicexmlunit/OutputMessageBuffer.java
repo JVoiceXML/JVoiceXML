@@ -23,13 +23,12 @@ package org.jvoicexml.voicexmlunit;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
-import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -42,14 +41,8 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @since 0.7.6
  */
 class OutputMessageBuffer implements TextListener {
-    /** The last received output message. */
-    private SsmlDocument output;
-    /** The sequence number of the message with the last output. */
-    private int outputSequenceNumber;
-    /** Synchronization for reading. */
-    private final Semaphore receiveSem;
-    /** Synchronization for writing. */
-    private final Semaphore readSem;
+    /** Buffered documents. */
+    private final BlockingQueue<BufferedSsmlDocument> documents;
     /** Caught event while waiting for an input. */
     private JVoiceXMLEvent event;
     /** Reference to the text server. */
@@ -66,11 +59,8 @@ class OutputMessageBuffer implements TextListener {
     public OutputMessageBuffer(final TextServer textServer)
             throws InterruptedException {
         server = textServer;
-        receiveSem = new Semaphore(1);
-        receiveSem.acquire();
-        readSem = new Semaphore(1);
-        readSem.release();
-        outputSequenceNumber = -1;
+        documents =
+           new java.util.concurrent.LinkedBlockingQueue<BufferedSsmlDocument>();
     }
 
     /**
@@ -86,21 +76,13 @@ class OutputMessageBuffer implements TextListener {
      */
     public SsmlDocument nextMessage() throws InterruptedException,
             JVoiceXMLEvent, IOException {
-        try {
-            receiveSem.acquire();
-            if (event != null) {
-                throw event;
-            }
-            if (output != null) {
-                server.acknowledge(outputSequenceNumber);
-            }
-            return output;
-        } finally {
-            output = null;
-            outputSequenceNumber = -1;
-            event = null;
-            readSem.release();
+        BufferedSsmlDocument buffer = documents.take();
+        if (event != null) {
+            throw event;
         }
+        final int num = buffer.getSequenceNumber();
+        server.acknowledge(num);
+        return buffer.getDocument();
     }
 
     /**
@@ -122,26 +104,18 @@ class OutputMessageBuffer implements TextListener {
     public SsmlDocument nextMessage(final long timeout)
             throws InterruptedException, TimeoutException, JVoiceXMLEvent,
             IOException {
-        try {
-            final boolean success = receiveSem.tryAcquire(timeout,
-                    TimeUnit.MILLISECONDS);
-            if (event != null) {
-                throw event;
-            }
-            if (!success || (output == null)) {
-                throw new TimeoutException("timeout of '" + timeout
-                        + "' msec exceeded while waiting for next message");
-            }
-            if (output != null) {
-                server.acknowledge(outputSequenceNumber);
-            }
-            return output;
-        } finally {
-            output = null;
-            outputSequenceNumber = -1;
-            event = null;
-            readSem.release();
+        BufferedSsmlDocument buffer = documents.poll(timeout,
+                TimeUnit.MILLISECONDS);
+        if (event != null) {
+            throw event;
         }
+        if (buffer == null) {
+            throw new TimeoutException("timeout of '" + timeout
+                    + "' msec exceeded while waiting for next message");
+        }
+        final int num = buffer.getSequenceNumber();
+        server.acknowledge(num);
+        return buffer.getDocument();
     }
 
     /**
@@ -161,15 +135,9 @@ class OutputMessageBuffer implements TextListener {
     @Override
     public void outputSsml(final int messageNumber,
             final SsmlDocument document) {
-        try {
-            readSem.acquire();
-            output = document;
-            outputSequenceNumber = messageNumber;
-        } catch (InterruptedException e) {
-            event = new GenericVoiceXmlEvent("interrupted", e.getMessage());
-        } finally {
-            receiveSem.release();
-        }
+        BufferedSsmlDocument buffer = new BufferedSsmlDocument(document,
+                messageNumber);
+        documents.offer(buffer);
     }
 
     /**
@@ -192,6 +160,7 @@ class OutputMessageBuffer implements TextListener {
     @Override
     public void disconnected() {
         event = new ConnectionDisconnectHangupEvent();
-        receiveSem.release();
+        BufferedSsmlDocument document = new BufferedSsmlDocument();
+        documents.offer(document);
     }
 }
