@@ -159,6 +159,10 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
 
         for (GrammarDocument grammar : grammars) {
             GrammarImplementation<?> impl = cache.getImplementation(grammar);
+            if (impl == null) {
+                LOGGER.warn("no implementation for grammar " + grammar);
+                continue;
+            }
             final ModeType type = grammar.getModeType();
             // A grammar is voice by default.
             if (type == ModeType.DTMF) {

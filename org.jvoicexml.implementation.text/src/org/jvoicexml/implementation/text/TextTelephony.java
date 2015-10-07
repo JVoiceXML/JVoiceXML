@@ -174,7 +174,7 @@ public final class TextTelephony implements Telephony {
                     LOGGER.debug("removed pending message " + sequenceNumber
                             + " remaining " + pengingSequenveNumbers);
                 }
-                if (textOutput != null) {
+                if (textOutput != null && pendingMessages.isEmpty()) {
                     textOutput.checkEmptyQueue(speakable);
                 }
                 if (pendingMessages.isEmpty()) {

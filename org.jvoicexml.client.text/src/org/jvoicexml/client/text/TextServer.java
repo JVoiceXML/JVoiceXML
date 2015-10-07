@@ -626,7 +626,7 @@ public final class TextServer extends Thread {
                                 .build();
                         send(bye);
                         synchronized (acknowledgeMonitor) {
-                            acknowledgeMonitor.wait(2000);
+                            acknowledgeMonitor.wait(4000);
                         }
                     }
                     out.close();

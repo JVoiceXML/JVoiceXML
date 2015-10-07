@@ -21,11 +21,15 @@
 
 package org.jvoicexml.srgs;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
@@ -36,6 +40,8 @@ import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Preprocessed SRGS grammar container with semantic interpretation. 
@@ -199,8 +205,16 @@ public class SrgsSisrGrammar
      */
     @Override
     public SrgsXmlDocument getGrammarDocument() {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            final String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                + grammarNode;
+            final StringReader reader = new StringReader(xml);
+            final InputSource source = new InputSource(reader);
+            return new SrgsXmlDocument(source);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            LOGGER.error("unable to create grammar document", e);
+            return null;
+        }
     }
 
     /**

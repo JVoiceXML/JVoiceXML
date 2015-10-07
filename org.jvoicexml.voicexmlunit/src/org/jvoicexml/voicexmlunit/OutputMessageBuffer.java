@@ -45,7 +45,7 @@ class OutputMessageBuffer implements TextListener {
     /** The last received output message. */
     private SsmlDocument output;
     /** The sequence number of the message with the last output. */
-    int outputSequenceNumber;
+    private int outputSequenceNumber;
     /** Synchronization for reading. */
     private final Semaphore receiveSem;
     /** Synchronization for writing. */
@@ -70,6 +70,7 @@ class OutputMessageBuffer implements TextListener {
         receiveSem.acquire();
         readSem = new Semaphore(1);
         readSem.release();
+        outputSequenceNumber = -1;
     }
 
     /**
@@ -96,6 +97,7 @@ class OutputMessageBuffer implements TextListener {
             return output;
         } finally {
             output = null;
+            outputSequenceNumber = -1;
             event = null;
             readSem.release();
         }
@@ -136,6 +138,7 @@ class OutputMessageBuffer implements TextListener {
             return output;
         } finally {
             output = null;
+            outputSequenceNumber = -1;
             event = null;
             readSem.release();
         }
@@ -156,7 +159,8 @@ class OutputMessageBuffer implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(final int messageNumber, final SsmlDocument document) {
+    public void outputSsml(final int messageNumber,
+            final SsmlDocument document) {
         try {
             readSem.acquire();
             output = document;
