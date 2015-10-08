@@ -71,7 +71,7 @@ public final class SpeakableSsmlText
         speak.addText(text);
         timeout = -1;
         bargeInType = null;
-        bargein = false;
+        bargein = true;
     }
 
     /**
@@ -83,7 +83,7 @@ public final class SpeakableSsmlText
         document = doc;
         timeout = -1;
         bargeInType = null;
-        bargein = false;
+        bargein = true;
     }
 
     /**
@@ -155,8 +155,8 @@ public final class SpeakableSsmlText
      * {@inheritDoc}
      */
     @Override
-    public boolean isBargeInEnabled() {
-        return bargein;
+    public boolean isBargeInEnabled(final BargeInType type) {
+        return bargein && ((bargeInType == null) || (type == bargeInType));
     }
 
     /**

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -53,6 +48,7 @@ import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.BargeInType;
 import org.mrcp4j.client.MrcpInvocationException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SessionManager;
@@ -71,7 +67,6 @@ import org.xml.sax.SAXException;
  * 
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public final class Mrcpv2SynthesizedOutput
@@ -320,7 +315,9 @@ public final class Mrcpv2SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void cancelOutput() throws NoresourceError {
+    @Override
+    public void cancelOutput(final BargeInType bargeInType)
+            throws NoresourceError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("cancelOutput not implemented");
         }

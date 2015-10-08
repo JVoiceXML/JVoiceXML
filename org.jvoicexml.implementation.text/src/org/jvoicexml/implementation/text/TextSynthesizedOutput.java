@@ -45,6 +45,7 @@ import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Text based implementation for a {@link SynthesizedOutput}.
@@ -177,14 +178,15 @@ final class TextSynthesizedOutput
      * {@inheritDoc}
      */
     @Override
-    public void cancelOutput() throws NoresourceError {
+    public void cancelOutput(final BargeInType bargeInType)
+            throws NoresourceError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("clearing all pending messages");
         }
         final Collection<SpeakableText> skipped =
             new java.util.ArrayList<SpeakableText>();
         for (SpeakableText speakable : texts) {
-            if (speakable.isBargeInEnabled()) {
+            if (speakable.isBargeInEnabled(bargeInType)) {
                 skipped.add(speakable);
             } else {
                 break;
@@ -273,7 +275,8 @@ final class TextSynthesizedOutput
         }
         do {
             final SpeakableText speakable = texts.peek();
-            if (speakable.isBargeInEnabled()) {
+            if (speakable.isBargeInEnabled(BargeInType.SPEECH)
+                    || speakable.isBargeInEnabled(BargeInType.HOTWORD)) {
                 return;
             }
             synchronized (texts) {

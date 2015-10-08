@@ -1,10 +1,5 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
- * Copyright (C) 2010-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-5 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,13 +39,13 @@ import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * An implementation of the {@link SynthesizedOutput} for the Mary TTS System.
  * 
  * @author Dirk Schnelle-Walka
  * @author Giannis Assiouras
- * @version $Revision$
  * @since 0.7.3
  */
 public final class MarySynthesizedOutput
@@ -239,8 +234,8 @@ public final class MarySynthesizedOutput
      * {@inheritDoc}
      */
     @Override
-    public void cancelOutput() {
-        synthesisQueue.cancelOutput();
+    public void cancelOutput(final BargeInType bargeInType) {
+        synthesisQueue.cancelOutput(bargeInType);
     }
 
     /**

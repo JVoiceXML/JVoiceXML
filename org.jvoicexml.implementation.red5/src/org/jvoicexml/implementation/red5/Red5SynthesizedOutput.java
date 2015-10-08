@@ -40,6 +40,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Demo implementation for a synthesized output using the Red5 server.
@@ -144,7 +145,7 @@ public class Red5SynthesizedOutput implements SynthesizedOutput {
      * {@inheritDoc}
      */
     @Override
-    public void cancelOutput() throws NoresourceError {
+    public void cancelOutput(final BargeInType bargeInType) throws NoresourceError {
         // TODO Auto-generated method stub
 
     }

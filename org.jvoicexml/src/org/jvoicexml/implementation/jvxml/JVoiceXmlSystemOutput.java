@@ -36,6 +36,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.implementation.SynthesizedOutputProvider;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Basic wrapper for {@link SystemOutput}.
@@ -89,24 +90,27 @@ final class JVoiceXmlSystemOutput
     /**
      * {@inheritDoc}
      */
-    public void cancelOutput() throws NoresourceError {
+    @Override
+    public void cancelOutput(final BargeInType type) throws NoresourceError {
         final boolean supportsBargeIn = synthesizedOutput.supportsBargeIn();
         if (!supportsBargeIn) {
             LOGGER.warn("implementation platform does not support barge-in");
             return;
         }
-        synthesizedOutput.cancelOutput();
+        synthesizedOutput.cancelOutput(type);
     }
 
     /**
-     * {@inheritDoc}
+     * Adds the given listener for output events
+     * @param listener the listener to add
      */
     public void addListener(final SynthesizedOutputListener listener) {
         synthesizedOutput.addListener(listener);
     }
 
     /**
-     * {@inheritDoc}
+     * Removes the given listener for output events.
+     * @param listener the listener to remove
      */
     public void removeListener(
             final SynthesizedOutputListener listener) {

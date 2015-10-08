@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,13 +36,13 @@ import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * This class provides a dummy {@link SynthesizedOutput} for testing
  * purposes.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public final class MockSynthesizedOutput implements SynthesizedOutput {
@@ -82,16 +77,9 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void queuePlaintext(final String text) throws NoresourceError,
-            BadFetchError {
-
     }
 
     /**
@@ -109,17 +97,10 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
-    public boolean requiresAudioFileOutput() {
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void activate() {
         LOGGER.info("activated");
     }
@@ -127,6 +108,7 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
         LOGGER.info("closed");
     }
@@ -134,6 +116,7 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return "dummy";
     }
@@ -141,6 +124,7 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open() throws NoresourceError {
         LOGGER.info("opened");
     }
@@ -148,6 +132,7 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void passivate() {
         LOGGER.info("passivated");
     }
@@ -155,19 +140,22 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void connect(final ConnectionInformation client) throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void disconnect(final ConnectionInformation client) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void cancelOutput() throws NoresourceError {
+    @Override
+    public void cancelOutput(final BargeInType type) throws NoresourceError {
     }
 
     /**
@@ -243,7 +231,7 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
         do {
             speakable = speakables.peek();
             if (speakable != null) {
-                if (!speakable.isBargeInEnabled()) {
+                if (!speakable.isBargeInEnabled(BargeInType.SPEECH)) {
                     return;
                 }
                 try {

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -77,8 +72,8 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * <p>
  * The queued {@link SpeakableText}s are maintained in a list. Once a speakable
  * has ended (this is detected via the {@link #speakableEnded(SpeakableEvent)}
- * method) this implementation processes the next {@link SpeakableText} from
- * the queue.
+ * method) this implementation processes the next {@link SpeakableText} from the
+ * queue.
  * </p>
  *
  * <p>
@@ -86,8 +81,8 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  *
  * <p>
- * This implementation offers 2 ways to overcome the lack in JSAPI 1.0 not
- * to be able to stream audio data.
+ * This implementation offers 2 ways to overcome the lack in JSAPI 1.0 not to be
+ * able to stream audio data.
  * <ol>
  * <li>use custom streaming via {@link SpokenInputConnectionHandler} and</li>
  * <li>direct streaming via {@link StreamableSynthesizedOutput}.
@@ -95,19 +90,18 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  *
  * <p>
- * Note that these ways are not fully tested and might be changed towards
- * the JSAPI 2 way.
+ * Note that these ways are not fully tested and might be changed towards the
+ * JSAPI 2 way.
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class Jsapi10SynthesizedOutput
         implements SynthesizedOutput, SpeakableListener,
-            StreamableSynthesizedOutput {
+        StreamableSynthesizedOutput {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(Jsapi10SynthesizedOutput.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(Jsapi10SynthesizedOutput.class);
 
     /** Factory for SSML speak strategies. */
     private static final SSMLSpeakStrategyFactory SPEAK_FACTORY;
@@ -148,7 +142,7 @@ public final class Jsapi10SynthesizedOutput
     /** Current synthesizer stream of the streamable output. */
     private InputStream currentSynthesizerStream;
 
-    /** Stream  buffer that is used for streamable outputs. */
+    /** Stream buffer that is used for streamable outputs. */
     private ByteArrayOutputStream streamBuffer;
 
     /** Reference to the document server. */
@@ -176,8 +170,7 @@ public final class Jsapi10SynthesizedOutput
     private String sessionId;
 
     static {
-        SPEAK_FACTORY = new org.jvoicexml.implementation.jsapi10.speakstrategy.
-            JVoiceXmlSpeakStratgeyFactory();
+        SPEAK_FACTORY = new org.jvoicexml.implementation.jsapi10.speakstrategy.JVoiceXmlSpeakStratgeyFactory();
     }
 
     /**
@@ -186,22 +179,19 @@ public final class Jsapi10SynthesizedOutput
      * @param defaultDescriptor
      *            the default synthesizer mode descriptor.
      */
-    public Jsapi10SynthesizedOutput(
-            final SynthesizerModeDesc defaultDescriptor) {
+    public Jsapi10SynthesizedOutput(final SynthesizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
         emptyLock = new Object();
         endplayLock = new Object();
-        synthesizerStreams =
-            new java.util.concurrent.LinkedBlockingQueue<InputStream>();
+        synthesizerStreams = new java.util.concurrent.LinkedBlockingQueue<InputStream>();
     }
 
     /**
      * {@inheritDoc}
      */
-    public void open()
-            throws NoresourceError {
+    public void open() throws NoresourceError {
         try {
             synthesizer = Central.createSynthesizer(desc);
             if (synthesizer == null) {
@@ -263,6 +253,7 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Retrieves the encapsulated synthesizer.
+     * 
      * @return the encapsulated synthesizer.
      * @since 0.6
      */
@@ -272,6 +263,7 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Retrieves the document server.
+     * 
      * @return the document server
      * @since 0.7.5
      */
@@ -281,6 +273,7 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Retrieves the Id of the current session.
+     * 
      * @return the Id of the current session
      * @since 0.7.5
      */
@@ -291,8 +284,7 @@ public final class Jsapi10SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void addListener(
-            final SynthesizedOutputListener outputListener) {
+    public void addListener(final SynthesizedOutputListener outputListener) {
         synchronized (listener) {
             listener.add(outputListener);
         }
@@ -301,8 +293,7 @@ public final class Jsapi10SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void removeListener(
-            final SynthesizedOutputListener outputListener) {
+    public void removeListener(final SynthesizedOutputListener outputListener) {
         synchronized (listener) {
             listener.remove(outputListener);
         }
@@ -315,10 +306,8 @@ public final class Jsapi10SynthesizedOutput
      * output or for plain text output.
      */
     @Override
-    public void queueSpeakable(final SpeakableText speakable,
-                               final String id,
-                               final DocumentServer server)
-            throws NoresourceError, BadFetchError {
+    public void queueSpeakable(final SpeakableText speakable, final String id,
+            final DocumentServer server) throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
@@ -355,14 +344,15 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Processes the next speakable in the queue.
+     * 
      * @throws NoresourceError
-     *         error processing the speakable.
+     *             error processing the speakable.
      * @throws BadFetchError
-     *         error processing the speakable.
+     *             error processing the speakable.
      * @since 0.7.1
      */
-    private synchronized void processNextSpeakable()
-        throws NoresourceError, BadFetchError {
+    private synchronized void processNextSpeakable() throws NoresourceError,
+            BadFetchError {
         // Check if there are more speakables to process
         final SpeakableText speakable;
         synchronized (queuedSpeakables) {
@@ -393,7 +383,8 @@ public final class Jsapi10SynthesizedOutput
         if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             synchronized (queuedSpeakables) {
-                bargein = ssml.isBargeInEnabled();
+                bargein = ssml.isBargeInEnabled(BargeInType.SPEECH)
+                        || ssml.isBargeInEnabled(BargeInType.HOTWORD);
                 bargeInType = ssml.getBargeInType();
             }
             speakSSML(ssml, documentServer);
@@ -431,8 +422,7 @@ public final class Jsapi10SynthesizedOutput
      *                Error reading from the <code>AudioStream</code>.
      */
     private void speakSSML(final SpeakableSsmlText text,
-            final DocumentServer server)
-        throws NoresourceError, BadFetchError {
+            final DocumentServer server) throws NoresourceError, BadFetchError {
         // Retrieve the document
         final SsmlDocument document = text.getDocument();
         if (LOGGER.isDebugEnabled()) {
@@ -446,8 +436,8 @@ public final class Jsapi10SynthesizedOutput
             return;
         }
 
-        final SSMLSpeakStrategy strategy =
-            SPEAK_FACTORY.getSpeakStrategy(speak);
+        final SSMLSpeakStrategy strategy = SPEAK_FACTORY
+                .getSpeakStrategy(speak);
         if (strategy != null) {
             strategy.speak(this, speak);
             if (LOGGER.isDebugEnabled()) {
@@ -470,31 +460,37 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Notifies all listeners that output has started.
-     * @param speakable the current speakable.
+     * 
+     * @param speakable
+     *            the current speakable.
      */
     private void fireOutputStarted(final SpeakableText speakable) {
-        final SynthesizedOutputEvent event =
-            new OutputStartedEvent(this, null, speakable);
+        final SynthesizedOutputEvent event = new OutputStartedEvent(this, null,
+                speakable);
         fireOutputEvent(event);
     }
 
     /**
      * Notifies all listeners that the given marker has been reached.
-     * @param mark the reached marker.
+     * 
+     * @param mark
+     *            the reached marker.
      */
     private void fireMarkerReached(final String mark) {
-        final SynthesizedOutputEvent event =
-            new MarkerReachedEvent(this, null, mark);
+        final SynthesizedOutputEvent event = new MarkerReachedEvent(this, null,
+                mark);
         fireOutputEvent(event);
     }
 
     /**
      * Notifies all listeners that output has ended.
-     * @param speakable the current speakable.
+     * 
+     * @param speakable
+     *            the current speakable.
      */
     private void fireOutputEnded(final SpeakableText speakable) {
-        final SynthesizedOutputEvent event =
-            new OutputEndedEvent(this, null, speakable);
+        final SynthesizedOutputEvent event = new OutputEndedEvent(this, null,
+                speakable);
         fireOutputEvent(event);
         synchronized (endplayLock) {
             endplayLock.notifyAll();
@@ -519,8 +515,8 @@ public final class Jsapi10SynthesizedOutput
      * @exception BadFetchError
      *                Recognizer in wrong state.
      */
-    public void speakPlaintext(final String text)
-            throws NoresourceError, BadFetchError {
+    public void speakPlaintext(final String text) throws NoresourceError,
+            BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
@@ -547,13 +543,13 @@ public final class Jsapi10SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void cancelOutput()
-            throws NoresourceError {
+    @Override
+    public void cancelOutput(final BargeInType type) throws NoresourceError {
         if (synthesizer == null) {
             throw new NoresourceError("No synthesizer: Cannot cancel output");
         }
 
-        if (!bargein) {
+        if (!bargein || (type != bargeInType)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("bargein not active for current output");
             }
@@ -571,10 +567,9 @@ public final class Jsapi10SynthesizedOutput
                 throw new NoresourceError(ee);
             }
 
-            final Collection<SpeakableText> skipped =
-                new java.util.ArrayList<SpeakableText>();
+            final Collection<SpeakableText> skipped = new java.util.ArrayList<SpeakableText>();
             for (SpeakableText speakable : queuedSpeakables) {
-                if (speakable.isBargeInEnabled()) {
+                if (speakable.isBargeInEnabled(type)) {
                     skipped.add(speakable);
                 } else {
                     // Stop iterating after the first non-bargein speakable
@@ -616,8 +611,9 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Checks if there was a request to cancel the current output.
+     * 
      * @return <code>true</code> if there was a request to cancel the current
-     * output.
+     *         output.
      * @since 0.7.3
      */
     public boolean isOutputCanceled() {
@@ -692,8 +688,7 @@ public final class Jsapi10SynthesizedOutput
                 } else {
                     final SpeakableText speakable = queuedSpeakables.peek();
                     if (speakable instanceof SpeakableSsmlText) {
-                        final SpeakableSsmlText ssml =
-                            (SpeakableSsmlText) speakable;
+                        final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
                         stopWaiting = ssml.getBargeInType() == null;
                     }
                 }
@@ -722,6 +717,7 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * A mark in an SSML output has been reached.
+     * 
      * @param mark
      *            Name of the mark.
      */
@@ -763,7 +759,7 @@ public final class Jsapi10SynthesizedOutput
      * {@inheritDoc}
      */
     public void connect(final ConnectionInformation connectionInformation)
-        throws IOException {
+            throws IOException {
         if (handler != null) {
             handler.connect(connectionInformation, this, synthesizer);
         }
@@ -791,7 +787,9 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Sets the type of this resource.
-     * @param resourceType type of the resource
+     * 
+     * @param resourceType
+     *            type of the resource
      */
     public void setType(final String resourceType) {
         type = resourceType;
@@ -799,7 +797,9 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Sets a custom connection handler.
-     * @param connectionHandler the connection handler.
+     * 
+     * @param connectionHandler
+     *            the connection handler.
      */
     public void setSynthesizedOutputConnectionHandler(
             final SynthesizedOutputConnectionHandler connectionHandler) {
@@ -872,7 +872,7 @@ public final class Jsapi10SynthesizedOutput
      */
     public boolean isBusy() {
         synchronized (queuedSpeakables) {
-           return !queuedSpeakables.isEmpty();
+            return !queuedSpeakables.isEmpty();
         }
     }
 
@@ -895,12 +895,14 @@ public final class Jsapi10SynthesizedOutput
     /**
      * Reads from the given output stream and adds the result to the list of
      * streams.
-     * @param input stream to read from.
+     * 
+     * @param input
+     *            stream to read from.
      * @exception IOException
-     *            Error reading from the given stream.
+     *                Error reading from the given stream.
      */
     public void addSynthesizerStream(final InputStream input)
-        throws IOException {
+            throws IOException {
         if (streamBuffer == null) {
             streamBuffer = new ByteArrayOutputStream();
         }
@@ -912,18 +914,19 @@ public final class Jsapi10SynthesizedOutput
             if (num >= 0) {
                 streamBuffer.write(buffer, 0, num);
             }
-        } while(num >= 0);
+        } while (num >= 0);
     }
 
     /**
      * Notifies all registered listeners about the given event.
-     * @param event the event.
+     * 
+     * @param event
+     *            the event.
      * @since 0.6
      */
     private void fireOutputEvent(final SynthesizedOutputEvent event) {
         synchronized (listener) {
-            final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>();
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listener);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -933,13 +936,14 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Notifies all registered listeners about the given error.
-     * @param error the error.
+     * 
+     * @param error
+     *            the error.
      * @since 0.7.4
      */
     private void notifyError(final ErrorEvent error) {
         synchronized (listener) {
-            final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>();
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listener);
             for (SynthesizedOutputListener current : copy) {
                 current.outputError(error);
@@ -947,4 +951,3 @@ public final class Jsapi10SynthesizedOutput
         }
     }
 }
-

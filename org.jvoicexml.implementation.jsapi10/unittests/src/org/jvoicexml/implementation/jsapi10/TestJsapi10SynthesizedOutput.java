@@ -347,7 +347,7 @@ public final class TestJsapi10SynthesizedOutput {
         synthesizer.queueSpeakable(text3, sessionId, documentServer);
         // delay a bit to let the first speakable start
         Thread.sleep(TIMEOUT);
-        synthesizer.cancelOutput();
+        synthesizer.cancelOutput(BargeInType.SPEECH);
         synthesizer.waitQueueEmpty();
     }
 }

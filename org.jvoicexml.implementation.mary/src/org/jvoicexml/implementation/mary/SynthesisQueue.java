@@ -19,6 +19,7 @@ import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * SynthesisQueue extends Thead and is responsible for getting the speakables.
@@ -61,12 +62,6 @@ final class SynthesisQueue extends Thread {
      * audioType,voiceName,voiceEffects and their value
      */
     private Map<String, String> maryRequestParameters;
-
-    /**
-     * Flag to indicate that TTS output and audio of the current speakable. can
-     * be canceled.
-     */
-    private boolean enableBargeIn;
 
     /** The line output stream. */
     private LineAudioFormatOutputStream out;
@@ -142,7 +137,6 @@ final class SynthesisQueue extends Thread {
     private void passSpeakableToMary(final SpeakableText speakable)
             throws BadFetchError, IOException {
         fireOutputStarted(speakable);
-        enableBargeIn = speakable.isBargeInEnabled();
         out = new LineAudioFormatOutputStream();
         try {
             if (speakable instanceof SpeakableSsmlText) {
@@ -288,21 +282,21 @@ final class SynthesisQueue extends Thread {
     /**
      * Stops the currently playing output if barge-in is enabled and. Removes
      * from the queue the speakables for which barge-in is enabled
+     * @param bargeInType the type of bargein to cancel
      */
-    public void cancelOutput() {
-        if (!enableBargeIn) {
+    public void cancelOutput(final BargeInType bargeInType) {
+        if ((queuedSpeakable == null)
+                || !queuedSpeakable.isBargeInEnabled(bargeInType)) {
             return;
         }
-
         if (out != null) {
             out.cancel();
         }
-
         synchronized (queuedSpeakables) {
             final Collection<SpeakableText> skipped =
                     new java.util.ArrayList<SpeakableText>();
             for (SpeakableText speakable : queuedSpeakables) {
-                if (speakable.isBargeInEnabled()) {
+                if (speakable.isBargeInEnabled(bargeInType)) {
                     skipped.add(speakable);
                 } else {
                     break;
@@ -316,7 +310,10 @@ final class SynthesisQueue extends Thread {
      * Stops the currently playing output if barge-in is enabled.
      */
     public void cancelAudioOutput() {
-        if (!enableBargeIn) {
+        if ((queuedSpeakable != null)
+                && (queuedSpeakable.isBargeInEnabled(BargeInType.SPEECH)
+                        || queuedSpeakable.isBargeInEnabled(
+                                BargeInType.HOTWORD))) {
             return;
         }
         if (out != null) {

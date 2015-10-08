@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation;
 
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * An output device for synthesized or audio file output.
@@ -51,8 +52,8 @@ public interface OutputDevice {
 
     /**
      * Cancels the current output from the TTS engine and queued audio
-     * for all entries in the queue that allow barge-in. Does nothing if the
-     * current output can not be interrupted using barge-in.
+     * for all entries in the queue that allow barge-in of the given type.
+     * Does nothing if the current output can not be interrupted using barge-in.
      *
      * <p>
      * This method is only called if {@link #supportsBargeIn()} returns
@@ -64,11 +65,11 @@ public interface OutputDevice {
      * depending on the <code>barge-in</code> flag of
      * {@link org.jvoicexml.xml.Prompt}.
      * </p>
-     *
+     * @param type the barge in type to cancel
      * @exception NoresourceError
      *            The output resource is not available.
      *
      * @since 0.5
      */
-    void cancelOutput() throws NoresourceError;
+    void cancelOutput(final BargeInType type) throws NoresourceError;
 }

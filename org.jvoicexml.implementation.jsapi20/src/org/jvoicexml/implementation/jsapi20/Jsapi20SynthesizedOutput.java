@@ -62,6 +62,7 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Audio output that uses the JSAPI 2.0 to address the TTS engine.
@@ -104,14 +105,6 @@ public final class Jsapi20SynthesizedOutput
 
     /** Object lock for an empty queue. */
     private final Object emptyLock;
-
-    /**
-     * Flag to indicate that TTS output and audio can be canceled.
-     * 
-     * @todo Replace this by a solution that does not cancel output without
-     *       bargein, if there is mixed output.
-     */
-    private boolean enableBargeIn;
 
     /** Queued speakables. */
     private final Queue<SpeakableText> queuedSpeakables;
@@ -336,7 +329,6 @@ public final class Jsapi20SynthesizedOutput
             LOGGER.debug("speaking SSML");
             LOGGER.debug(doc);
         }
-        enableBargeIn = ssmlText.isBargeInEnabled();
         try {
             synthesizer.resume();
             int id = synthesizer.speakMarkup(doc, null);
@@ -514,27 +506,32 @@ public final class Jsapi20SynthesizedOutput
      * {@inheritDoc}
      */
     @Override
-    public void cancelOutput() throws NoresourceError {
+    public void cancelOutput(final BargeInType bargeInType)
+            throws NoresourceError {
         if (synthesizer == null) {
-            throw new NoresourceError("no synthesizer: cannot queue audio");
-        }
-
-        if (!enableBargeIn) {
-            return;
-        }
-
-        final Collection<SpeakableText> skipped =
-                new java.util.ArrayList<SpeakableText>();
-        for (SpeakableText speakable : queuedSpeakables) {
-            if (speakable.isBargeInEnabled()) {
-                skipped.add(speakable);
-            } else {
-                // Stop iterating after the first non-bargein speakable
-                // has been detected
-                break;
-            }
+            throw new NoresourceError("no synthesizer: cannot cancel output");
         }
         synchronized (queuedSpeakables) {
+            final SpeakableText curent = queuedSpeakables.peek();
+            if (curent == null) {
+                return;
+            }
+            if (!curent.isBargeInEnabled(bargeInType)) {
+                return;
+            }
+
+            final Collection<SpeakableText> skipped =
+                    new java.util.ArrayList<SpeakableText>();
+            for (SpeakableText speakable : queuedSpeakables) {
+                if (speakable.isBargeInEnabled(bargeInType)) {
+                    skipped.add(speakable);
+                } else {
+                    // Stop iterating after the first non-bargein speakable
+                    // has been detected
+                    break;
+                }
+            }
+
             queuedSpeakables.removeAll(skipped);
             for (SpeakableText speakable : skipped) {
                 final Integer id = queueIds.get(speakable);
@@ -579,9 +576,17 @@ public final class Jsapi20SynthesizedOutput
      */
     @Override
     public void waitNonBargeInPlayed() {
-        if (!enableBargeIn) {
-            waitQueueEmpty();
+        synchronized (queuedSpeakables) {
+            final SpeakableText speakable = queuedSpeakables.peek();
+            if (speakable == null) {
+                return;
+            }
+            if (!speakable.isBargeInEnabled(BargeInType.SPEECH)
+                    && !speakable.isBargeInEnabled(BargeInType.HOTWORD)) { 
+                return;
+            }
         }
+        waitQueueEmpty();
     }
 
     /**
@@ -636,9 +641,7 @@ public final class Jsapi20SynthesizedOutput
             LOGGER.debug("passivating output " + queuedSpeakables.size()
                     + "...");
         }
-
         listeners.clear();
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
         }

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,7 +49,6 @@ import org.jvoicexml.xml.vxml.BargeInType;
 /**
  * Test cases for {@link MarySynthesizedOutput}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  */
 public final class TestMarySynthesizedOutput
@@ -285,7 +279,7 @@ public final class TestMarySynthesizedOutput
             }
         }
         Thread.sleep(DELAY);
-        output.cancelOutput();
+        output.cancelOutput(BargeInType.SPEECH);
         synchronized (outputEndedLock) {
             while (!outputEnded) {
                 outputEndedLock.wait();
@@ -306,7 +300,7 @@ public final class TestMarySynthesizedOutput
             }
         }
         Thread.sleep(DELAY);
-        output.cancelOutput();
+        output.cancelOutput(BargeInType.SPEECH);
         synchronized (outputEndedLock) {
             while (!outputEnded) {
                 outputEndedLock.wait();
@@ -323,7 +317,7 @@ public final class TestMarySynthesizedOutput
             }
         }
         Thread.sleep(DELAY);
-        output.cancelOutput();
+        output.cancelOutput(BargeInType.SPEECH);
 
         synchronized (outputEndedLock) {
             while (!outputEnded) { 
@@ -342,7 +336,7 @@ public final class TestMarySynthesizedOutput
 
         }     
         Thread.sleep(DELAY);
-        output.cancelOutput();
+        output.cancelOutput(BargeInType.SPEECH);
         synchronized (outputEndedLock) {
             while (!outputEnded) {
                 outputEndedLock.wait();
@@ -363,7 +357,7 @@ public final class TestMarySynthesizedOutput
             }
         }
         Thread.sleep(DELAY);
-        output.cancelOutput();
+        output.cancelOutput(BargeInType.SPEECH);
               
         synchronized (outputEndedLock) {
             while (!outputEnded) {
@@ -381,7 +375,7 @@ public final class TestMarySynthesizedOutput
             }
         }     
         Thread.sleep(DELAY);
-        output.cancelOutput();
+        output.cancelOutput(BargeInType.SPEECH);
         synchronized (outputEndedLock) {
             while (!outputEnded) { 
                 outputEndedLock.wait();

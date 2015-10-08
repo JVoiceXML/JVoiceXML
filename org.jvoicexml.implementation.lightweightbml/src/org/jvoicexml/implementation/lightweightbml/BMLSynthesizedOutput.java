@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -57,6 +52,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.BargeInType;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -69,7 +65,6 @@ import org.w3c.dom.NodeList;
  * @author Markus Ermuth
  * @author Alex Krause
  * 
- * @version $LastChangedRevision$
  * @since 0.7.7
  */
 public final class BMLSynthesizedOutput
@@ -377,7 +372,7 @@ public final class BMLSynthesizedOutput
      * {@inheritDoc}
      */
     @Override
-    public void cancelOutput() throws NoresourceError {
+    public void cancelOutput(final BargeInType bargeInType) throws NoresourceError {
     }
 
     /**

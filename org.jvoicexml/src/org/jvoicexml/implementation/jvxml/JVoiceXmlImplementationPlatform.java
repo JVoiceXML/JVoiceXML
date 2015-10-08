@@ -22,6 +22,7 @@
 package org.jvoicexml.implementation.jvxml;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
@@ -66,6 +67,7 @@ import org.jvoicexml.implementation.TelephonyListener;
 import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Basic implementation of an {@link ImplementationPlatform}.
@@ -590,16 +592,20 @@ public final class JVoiceXmlImplementationPlatform
      *            the barge-in type
      */
     private void inputStarted(final ModeType type) {
+        // No need to wait for input
         if (timer != null) {
             timer.stopTimer();
             timer = null;
         }
-
         if (output == null) {
             return;
         }
 
-        /** @todo Check the bargein type. */
+        // Try cancel the output only, if the platform supports SPEECH bargeins.
+        final Collection<BargeInType> types = input.getSupportedBargeInTypes();
+        if (types.contains(BargeInType.SPEECH)) {
+            return;
+        }
         if (LOGGER.isDebugEnabled()) {
             if (type == null) {
                 LOGGER.debug("input started 'unknown mode':"
@@ -609,15 +615,12 @@ public final class JVoiceXmlImplementationPlatform
                         + "' stopping system output...");
             }
         }
-
         try {
-            output.cancelOutput();
+            output.cancelOutput(BargeInType.SPEECH);
         } catch (NoresourceError nre) {
             LOGGER.warn("unable to stop speech output", nre);
-
             return;
         }
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...system output stopped");
         }

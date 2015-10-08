@@ -28,6 +28,7 @@ package org.jvoicexml;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Facade for easy access to the system output.
@@ -77,11 +78,11 @@ public interface SystemOutput {
      * The implementation has to maintain a list of cancelable outputs
      * depending on the <code>barge-in</code> flag.
      * </p>
-     *
+     * @param type the bargein type to cancel
      * @exception NoresourceError
      *            The output resource is not available.
      *
      * @since 0.5
      */
-    void cancelOutput() throws NoresourceError;
+    void cancelOutput(final BargeInType type) throws NoresourceError;
 }

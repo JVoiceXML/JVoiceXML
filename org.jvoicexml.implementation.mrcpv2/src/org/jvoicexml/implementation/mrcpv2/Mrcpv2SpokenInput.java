@@ -56,7 +56,6 @@ import org.jvoicexml.implementation.DocumentGrammarImplementation;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -226,9 +225,6 @@ public final class Mrcpv2SpokenInput
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
 
         for (GrammarImplementation<? extends Object> current : grammars) {
-            if (current instanceof SrgsXmlGrammarImplementation) {
-                LOGGER.warn("SRGS not yet supported in mrcpv2 implementation");
-            }
             if (current instanceof DocumentGrammarImplementation) {
                 final DocumentGrammarImplementation grammar = (DocumentGrammarImplementation) current;
                 activatedGrammar = grammar.getGrammarDocument();
@@ -245,9 +241,6 @@ public final class Mrcpv2SpokenInput
             final Collection<GrammarImplementation<? extends Object>> grammars)
             throws BadFetchError {
         for (GrammarImplementation<? extends Object> current : grammars) {
-            if (current instanceof SrgsXmlGrammarImplementation) {
-                LOGGER.warn("SRGS not yet supported in mrcpv2 implementation");
-            }
             if (current instanceof DocumentGrammarImplementation) {
                 final DocumentGrammarImplementation grammar = (DocumentGrammarImplementation) current;
                 if (grammar.getGrammarDocument().equals(activatedGrammar)) {

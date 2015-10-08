@@ -256,7 +256,7 @@ public final class TestJsapi20SynthesizedOutput {
 
         output.queueSpeakable(speakable1, sessionId, documentServer);
         Thread.sleep(1500);
-        output.cancelOutput();
+        output.cancelOutput(BargeInType.SPEECH);
         final int size = 2;
         listener.waitSize(size, TIMEOUT);
         Assert.assertEquals(size, listener.size());
@@ -295,7 +295,7 @@ public final class TestJsapi20SynthesizedOutput {
                 new SpeakableSsmlText(ssml2, false, null);
         output.queueSpeakable(speakable2, sessionId, documentServer);
         Thread.sleep(1500);
-        output.cancelOutput();
+        output.cancelOutput(BargeInType.SPEECH);
         final int size = 4;
         listener.waitSize(size, TIMEOUT);
         Assert.assertEquals(size, listener.size());

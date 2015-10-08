@@ -1,13 +1,7 @@
 /*
- * File:    $RCSfile: SpeakableText.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,12 +21,13 @@
 
 package org.jvoicexml;
 
+import org.jvoicexml.xml.vxml.BargeInType;
+
 /**
  * Objects that implement this interface contain some text, that is
  * passed to the TTS engine.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.4
  */
 public interface SpeakableText {
@@ -57,9 +52,11 @@ public interface SpeakableText {
     boolean isSpeakableTextEmpty();
 
     /**
-     * Checks is barge-in is enabled for this speakable.
-     * @return <code>true</code> if barge-in is enabled.
+     * Checks is barge-in is enabled for this speakable and the given bargein
+     * type.
+     * @param type the bargein type to look for
+     * @return {@code true} if barge-in is enabled.
      * @since 0.7.1
      */
-    boolean isBargeInEnabled();
+    boolean isBargeInEnabled(final BargeInType type);
 }
