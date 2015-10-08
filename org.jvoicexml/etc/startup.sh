@@ -94,7 +94,6 @@ LOCAL_CLASSPATH="${LOCAL_CLASSPATH}:${JVOICEXML_LIB}/org.jvoicexml.xml.jar"
 LOCAL_CLASSPATH="${LOCAL_CLASSPATH}:${JVOICEXML_LIB}/org.jvoicexml.config.jar"
 LOCAL_CLASSPATH="${LOCAL_CLASSPATH}:${JVOICEXML_LIB}/org.jvoicexml.jndi.jar"
 LOCAL_CLASSPATH="${LOCAL_CLASSPATH}:${JVOICEXML_LIB}/org.jvoicexml.srgs.jar"
-LOCAL_CLASSPATH="${LOCAL_CLASSPATH}:${JVOICEXML_LIB}/org.jvoicexml.processor.srgs.jar"
 LOCAL_CLASSPATH="${LOCAL_CLASSPATH}:${JVOICEXML_LIB}/org.jvoicexml.client.jar"
 
 cd ${JVOICEXML_HOME}

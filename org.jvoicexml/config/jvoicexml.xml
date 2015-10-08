@@ -103,22 +103,22 @@
 
   <!--
     Grammar processor with all grammar identifiers. The concrete identifiers
-    to be loaded are configured in a separate configruation file.
+    to be loaded are configured in a separate configuration file.
     -->
   <bean id="org.jvoicexml.interpreter.GrammarProcessor"
     class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor" />
 
   <!--
    General properties for the speech recognizer.
-   Add your own implementation of here, if special properties are needed. 
+   Add your own implementation here, if special properties are needed. 
   -->
   <bean id="org.jvoicexml.SpeechRecognizerProperties"
     class="org.jvoicexml.SpeechRecognizerProperties">
   </bean>
 
   <!--
-   General properties for the dtmf recognizer.
-   Add your own implementation of here, if special properties are needed. 
+   General properties for the DTMF recognizer.
+   Add your own implementation here, if special properties are needed. 
   -->
   <bean id="org.jvoicexml.DtmfRecognizerProperties"
     class="org.jvoicexml.DtmfRecognizerProperties">
