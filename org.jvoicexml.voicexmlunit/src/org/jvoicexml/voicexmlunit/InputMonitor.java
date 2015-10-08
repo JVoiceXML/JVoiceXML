@@ -25,6 +25,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.TimeoutException;
 
 import org.jvoicexml.client.text.TextListener;
+import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -128,7 +129,7 @@ public final class InputMonitor implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(final int messageNumber,
+    public void outputSsml(final TextMessageEvent evt,
             final SsmlDocument document) {
     }
 
@@ -136,7 +137,7 @@ public final class InputMonitor implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void expectingInput() {
+    public void expectingInput(final TextMessageEvent evt) {
         synchronized (monitor) {
             expectingInput = true;
             monitor.notifyAll();
@@ -147,14 +148,14 @@ public final class InputMonitor implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void inputClosed() {
+    public void inputClosed(final TextMessageEvent evt) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void disconnected() {
+    public void disconnected(final TextMessageEvent evt) {
         synchronized (monitor) {
             event = new ConnectionDisconnectHangupEvent();
             monitor.notifyAll();

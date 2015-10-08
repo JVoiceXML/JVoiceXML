@@ -33,16 +33,17 @@ import org.junit.Test;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextListener;
+import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Test cases for {@link TextSenderThread}.
+ * 
  * @author Dirk Schnelle-Walka
  * @since 0.6
  */
-public final class TestTextSenderThread
-    implements TextListener {
+public final class TestTextSenderThread implements TextListener {
     /** Maximal number of milliseconds to wait for a receipt. */
     private static final int MAX_WAIT = 1000;
 
@@ -63,8 +64,9 @@ public final class TestTextSenderThread
 
     /**
      * Set up the test environment.
+     * 
      * @exception Exception
-     *            error setting up the test environment
+     *                error setting up the test environment
      */
     @Before
     public void setUp() throws Exception {
@@ -73,8 +75,7 @@ public final class TestTextSenderThread
         server.addTextListener(this);
         server.waitStarted();
         final InetAddress address = InetAddress.getLocalHost();
-        final SocketAddress socketAddress =
-            new InetSocketAddress(address, PORT);
+        final SocketAddress socketAddress = new InetSocketAddress(address, PORT);
         final Socket socket = new Socket();
         socket.connect(socketAddress);
         server.waitConnected();
@@ -85,8 +86,9 @@ public final class TestTextSenderThread
 
     /**
      * Tear down the test environment.
+     * 
      * @exception Exception
-     *            error tearing down the test environment
+     *                error tearing down the test environment
      */
     @After
     public void tearDown() throws Exception {
@@ -100,8 +102,12 @@ public final class TestTextSenderThread
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.text.TextSenderThread#sendData(org.jvoicexml.SpeakableText)}.
-     * @exception Exception test failed.
+     * Test method for
+     * {@link org.jvoicexml.implementation.text.TextSenderThread#sendData(org.jvoicexml.SpeakableText)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
      */
     @Test
     public void testSendData() throws Exception {
@@ -115,13 +121,17 @@ public final class TestTextSenderThread
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.text.TextSenderThread#sendData(org.jvoicexml.SpeakableText)}.
-     * @exception Exception test failed.
+     * Test method for
+     * {@link org.jvoicexml.implementation.text.TextSenderThread#sendData(org.jvoicexml.SpeakableText)}
+     * .
+     * 
+     * @exception Exception
+     *                test failed.
      */
     @Test
     public void testSendDataMultiple() throws Exception {
         final int max = 100;
-        for (int  i = 0; i < max; i++) {
+        for (int i = 0; i < max; i++) {
             final String test = "test " + i;
             final SpeakableText speakable = new SpeakableSsmlText(test);
             sender.sendData(speakable);
@@ -136,15 +146,16 @@ public final class TestTextSenderThread
         Assert.assertEquals(max, i);
     }
 
-    
     /**
      * Checks if the given SSML documents are equal based on their content.
-     * @param doc1 the expected document
-     * @param doc2 the document to check
+     * 
+     * @param doc1
+     *            the expected document
+     * @param doc2
+     *            the document to check
      * @since 0.7.6
      */
-    private void assertEquals(final SsmlDocument doc1,
-            final SsmlDocument doc2) {
+    private void assertEquals(final SsmlDocument doc1, final SsmlDocument doc2) {
         Assert.assertNotNull(doc1);
         Assert.assertNotNull(doc2);
         Assert.assertEquals(doc1.getTextContent(), doc2.getTextContent());
@@ -153,7 +164,9 @@ public final class TestTextSenderThread
     /**
      * {@inheritDoc}
      */
-    public void outputSsml(final int messageNumber, final SsmlDocument document) {
+    @Override
+    public void outputSsml(final TextMessageEvent event,
+            final SsmlDocument document) {
         receivedObject = document;
         System.out.println(document);
         synchronized (lock) {
@@ -164,18 +177,21 @@ public final class TestTextSenderThread
     /**
      * {@inheritDoc}
      */
+    @Override
     public void connected(final InetSocketAddress remote) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnected() {
+    @Override
+    public void disconnected(final TextMessageEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void started() {
     }
 
@@ -183,13 +199,13 @@ public final class TestTextSenderThread
      * {@inheritDoc}
      */
     @Override
-    public void expectingInput() {
+    public void expectingInput(final TextMessageEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void inputClosed() {
+    public void inputClosed(final TextMessageEvent event) {
     }
 }

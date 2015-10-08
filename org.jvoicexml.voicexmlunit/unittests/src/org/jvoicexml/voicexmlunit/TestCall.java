@@ -29,6 +29,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.client.text.TextListener;
+import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -82,21 +83,22 @@ public final class TestCall implements TextListener {
     }
 
     @Override
-    public void outputSsml(final int messageNumber, final SsmlDocument document) {
+    public void outputSsml(final TextMessageEvent event,
+            final SsmlDocument document) {
         lastOutput = document;
     }
 
     @Override
-    public void expectingInput() {
+    public void expectingInput(final TextMessageEvent event) {
     }
 
     @Override
-    public void inputClosed() {
+    public void inputClosed(final TextMessageEvent event) {
 
     }
 
     @Override
-    public void disconnected() {
+    public void disconnected(final TextMessageEvent event) {
         connected = false;
     }
 }

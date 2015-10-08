@@ -53,27 +53,31 @@ public interface TextListener {
 
     /**
      * Notification that an SSML document has arrived.
+     * @param event additional event data
      * @param document the received SSML document.
      */
-    void outputSsml(int messageNumber, final SsmlDocument document);
+    void outputSsml(final TextMessageEvent event, final SsmlDocument document);
 
     /**
      * Notification that the voice browser is ready to receive input.
+     * @param event additional event data
      * 
      * @since 0.7.6
      */
-    void expectingInput();
+    void expectingInput(final TextMessageEvent event);
 
     /**
      * Notification that the voice browser stopped listening for input.
+     * @param event additional event data
      * 
      * @since 0.7.6
      */
-    void inputClosed();
+    void inputClosed(final TextMessageEvent event);
 
     /**
      * Notification about a disconnect from the server.
+     * @param event additional event data
      * @since 0.7
      */
-    void disconnected();
+    void disconnected(final TextMessageEvent event);
 }

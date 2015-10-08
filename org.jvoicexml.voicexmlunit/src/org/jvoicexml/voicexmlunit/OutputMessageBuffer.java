@@ -27,8 +27,12 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.client.text.TextListener;
+import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage;
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage.TextMessageType;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -41,13 +45,18 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @since 0.7.6
  */
 class OutputMessageBuffer implements TextListener {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(OutputMessageBuffer.class);
     /** Buffered documents. */
     private final BlockingQueue<BufferedSsmlDocument> documents;
     /** Caught event while waiting for an input. */
     private JVoiceXMLEvent event;
     /** Reference to the text server. */
     private final TextServer server;
-
+    /** {@code true} if a BYE was received. */
+    private boolean receivedDisconnect;
+    
     /**
      * Constructs a new object.
      * 
@@ -80,8 +89,11 @@ class OutputMessageBuffer implements TextListener {
         if (event != null) {
             throw event;
         }
-        final int num = buffer.getSequenceNumber();
-        server.acknowledge(num);
+        final TextMessage message = buffer.getTextMessage();
+        acknowledge(message);
+        if (message.getType() == TextMessageType.BYE) {
+            throw new ConnectionDisconnectHangupEvent();
+        }
         return buffer.getDocument();
     }
 
@@ -113,8 +125,11 @@ class OutputMessageBuffer implements TextListener {
             throw new TimeoutException("timeout of '" + timeout
                     + "' msec exceeded while waiting for next message");
         }
-        final int num = buffer.getSequenceNumber();
-        server.acknowledge(num);
+        final TextMessage message = buffer.getTextMessage();
+        acknowledge(message);
+        if (message.getType() == TextMessageType.BYE) {
+            throw new ConnectionDisconnectHangupEvent();
+        }
         return buffer.getDocument();
     }
 
@@ -125,6 +140,9 @@ class OutputMessageBuffer implements TextListener {
     public void started() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void connected(final InetSocketAddress remote) {
     }
@@ -133,10 +151,11 @@ class OutputMessageBuffer implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(final int messageNumber,
+    public void outputSsml(final TextMessageEvent evt,
             final SsmlDocument document) {
+        final TextMessage message = evt.getMessage();
         BufferedSsmlDocument buffer = new BufferedSsmlDocument(document,
-                messageNumber);
+                message);
         documents.offer(buffer);
     }
 
@@ -144,23 +163,58 @@ class OutputMessageBuffer implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void expectingInput() {
+    public void expectingInput(final TextMessageEvent evt) {
+        final TextMessage message = evt.getMessage();
+        try {
+            acknowledge(message);
+        } catch (IOException e) {
+            LOGGER.error("error acknowledging message '" + message + "'", e);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void inputClosed() {
+    public void inputClosed(final TextMessageEvent evt) {
+        final TextMessage message = evt.getMessage();
+        try {
+            acknowledge(message);
+        } catch (IOException e) {
+            LOGGER.error("error acknowledging message '" + message + "'", e);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void disconnected() {
-        event = new ConnectionDisconnectHangupEvent();
-        BufferedSsmlDocument document = new BufferedSsmlDocument();
+    public void disconnected(final TextMessageEvent evt) {
+        receivedDisconnect = true;
+        // Push an empty document
+        final TextMessage message = evt.getMessage();
+        BufferedSsmlDocument document = new BufferedSsmlDocument(message);
         documents.offer(document);
+    }
+
+    /**
+     * Checks, if a disconnect was received from JVoiceXML.
+     * @return {@code true} if a disconnect was received
+     */
+    public boolean hasReceivedDisconnect() {
+        return receivedDisconnect;
+    }
+
+    /**
+     * Acknowledges the given message.
+     * 
+     * @param message
+     *            the message to acknowledge
+     * @throws IOException
+     *             sending error
+     */
+    private void acknowledge(final TextMessage message) throws IOException {
+        final int sequenceNumber = message.getSequenceNumber();
+        server.acknowledge(sequenceNumber);
     }
 }

@@ -190,7 +190,8 @@ public final class TextClient extends Thread {
             }
         }
         interrupt();
-        fireDisconnected();
+        // TODO pass an actual event
+        fireDisconnected(null);
     }
 
     /**
@@ -239,16 +240,11 @@ public final class TextClient extends Thread {
                     synchronized (lock) {
                         disconnect();
                     }
-                    fireDisconnected();
+                    fireDisconnected(message);
                     return;
                 }
                 if (type == TextMessageType.SSML) {
-                    final int messageNumber = message.getSequenceNumber();
-                    final String data = message.getData();
-                    final StringReader reader = new StringReader(data);
-                    final InputSource source = new InputSource(reader);
-                    final SsmlDocument document = new SsmlDocument(source);
-                    fireOutputArrived(messageNumber, document);
+                    fireOutputArrived(message);
                 }
                 final int seq = message.getSequenceNumber();
                 final TextMessage ack = TextMessage.newBuilder()
@@ -314,16 +310,25 @@ public final class TextClient extends Thread {
      * Notifies all registered listeners that the given SSML document has
      * arrived.
      * 
-     * @param messageNumner
-     *            the message number to acknowledge
-     * @param document
-     *            the received document.
+     * @param message
+     *            the received message
+     * @throws IOException
+     *             error creating the SSML document
+     * @throws SAXException
+     *             error creating the SSML document
+     * @throws ParserConfigurationException
+     *             error creating the SSML document
      */
-    private void fireOutputArrived(final int messageNumner,
-            final SsmlDocument document) {
+    private void fireOutputArrived(final TextMessage message)
+            throws ParserConfigurationException, SAXException, IOException {
+        final String data = message.getData();
+        final StringReader reader = new StringReader(data);
+        final InputSource source = new InputSource(reader);
+        final SsmlDocument document = new SsmlDocument(source);
+        final TextMessageEvent event = new TextMessageEvent(this, message);
         synchronized (listener) {
             for (TextListener current : listener) {
-                current.outputSsml(messageNumner, document);
+                current.outputSsml(event, document);
             }
         }
     }
@@ -331,16 +336,19 @@ public final class TextClient extends Thread {
     /**
      * Notifies all registered listeners that a connection has been closed.
      * 
+     * @param message
+     *            the received message
      * @since 0.7
      */
-    private void fireDisconnected() {
+    private void fireDisconnected(final TextMessage message) {
         if (notifiedDisconnected) {
             return;
         }
         notifiedDisconnected = true;
+        final TextMessageEvent event = new TextMessageEvent(this, message);
         synchronized (listener) {
             for (TextListener current : listener) {
-                current.disconnected();
+                current.disconnected(event);
             }
         }
     }

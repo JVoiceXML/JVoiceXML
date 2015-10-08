@@ -32,6 +32,7 @@ This file builds and runs the 'Hello world' text demo for JVoiceXML.
         <path id="build.classpath">
             <path refid="jvxml.core.lib" />
             <fileset refid="log4j.lib" />
+            <fileset refid="protobuf.lib" />
         </path>
 
         <path id="run.classpath">

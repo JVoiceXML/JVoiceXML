@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -39,6 +34,7 @@ import org.junit.Test;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.client.text.TextListener;
+import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -54,7 +50,6 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * Test cases for {@link TextTelephony}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public final class TestTextTelephony
@@ -210,7 +205,8 @@ public final class TestTextTelephony
     /**
      * {@inheritDoc}
      */
-    public void outputSsml(final int messageNumber, final SsmlDocument document) {
+    @Override
+    public void outputSsml(final TextMessageEvent event, final SsmlDocument document) {
         receivedDocument = document;
         synchronized (lock) {
             lock.notifyAll();
@@ -220,6 +216,7 @@ public final class TestTextTelephony
     /**
      * {@inheritDoc}
      */
+    @Override
     public void inputStatusChanged(final SpokenInputEvent event) {
         final String type = event.getEventType();
         if (type.equals(RecognitionEvent.EVENT_TYPE)) {
@@ -244,13 +241,15 @@ public final class TestTextTelephony
     /**
      * {@inheritDoc}
      */
+    @Override
     public void connected(final InetSocketAddress remote) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnected() {
+    @Override
+    public void disconnected(final TextMessageEvent event) {
     }
 
     /**
@@ -267,13 +266,13 @@ public final class TestTextTelephony
      * {@inheritDoc}
      */
     @Override
-    public void expectingInput() {
+    public void expectingInput(final TextMessageEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void inputClosed() {
+    public void inputClosed(final TextMessageEvent event) {
     }
 }

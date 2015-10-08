@@ -20,6 +20,7 @@
  */
 package org.jvoicexml.voicexmlunit;
 
+import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -31,28 +32,26 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 class BufferedSsmlDocument {
     /** The received SSML document. */
     private final SsmlDocument document;
-    /**
-     * The sequence number of the message that was used when sending the
-     * document.
-     */
-    private final int sequenceNumber;
+    /** The associated message. */
+    private final TextMessage message;
 
     /**
-     * Creates a new empty object.
+     * Creates a new object without a document.
+     * @param msg the received message
      */
-    public BufferedSsmlDocument() {
+    public BufferedSsmlDocument(final TextMessage msg) {
         document = null;
-        sequenceNumber = -1;
+        message = msg;
     }
 
     /**
      * Creates a new object with the given document and sequence number.
      * @param doc the received document
-     * @param num the used sequence number
+     * @param msg the received message
      */
-    public BufferedSsmlDocument(final SsmlDocument doc, final int num) {
+    public BufferedSsmlDocument(final SsmlDocument doc, final TextMessage msg) {
         document = doc;
-        sequenceNumber = num;
+        message = msg;
     }
 
     /**
@@ -64,10 +63,10 @@ class BufferedSsmlDocument {
     }
 
     /**
-     * Receives the sequence number.
-     * @return the sequence number
+     * Receives the associated text message.
+     * @return the text message
      */
-    public int getSequenceNumber() {
-        return sequenceNumber;
+    public TextMessage getTextMessage() {
+        return message;
     }
 }

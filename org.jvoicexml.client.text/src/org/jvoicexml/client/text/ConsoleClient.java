@@ -108,7 +108,8 @@ public final class ConsoleClient implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(final int messageNumber, final SsmlDocument document) {
+    public void outputSsml(final TextMessageEvent event,
+            final SsmlDocument document) {
         final Speak speak = document.getSpeak();
         System.out.println("System: " + speak.getTextContent());
     }
@@ -117,7 +118,7 @@ public final class ConsoleClient implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void expectingInput() {
+    public void expectingInput(final TextMessageEvent event) {
         try {
             final String line = readLine();
             server.sendInput(line);
@@ -127,16 +128,14 @@ public final class ConsoleClient implements TextListener {
     }
 
     @Override
-    public void inputClosed() {
-        // TODO Auto-generated method stub
-
+    public void inputClosed(final TextMessageEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void disconnected() {
+    public void disconnected(final TextMessageEvent event) {
         LOGGER.info("system hung up");
         System.exit(0);
     }

@@ -238,55 +238,73 @@ public final class TextServer extends Thread {
      * Notifies all registered listeners that the given SSML document has
      * arrived.
      * 
-     * @param messageNumber
-     *            the received message number
-     * @param document
-     *            the received document.
+     * @param message
+     *            the received message
+     * @throws IOException
+     *             error creating an SSML document
+     * @throws SAXException
+     *             error creating an SSML document
+     * @throws ParserConfigurationException
+     *             error creating an SSML document
      */
-    private void fireOutputArrived(int messageNumber,
-            final SsmlDocument document) {
+    private void fireOutputArrived(final TextMessage message)
+            throws ParserConfigurationException, SAXException, IOException {
+        final String data = message.getData();
+        final StringReader reader = new StringReader(data);
+        final InputSource source = new InputSource(reader);
+        final SsmlDocument document = new SsmlDocument(source);
+        final TextMessageEvent event = new TextMessageEvent(this, message);
         synchronized (listener) {
             for (TextListener current : listener) {
-                current.outputSsml(messageNumber, document);
+                current.outputSsml(event, document);
             }
         }
     }
 
     /**
      * Notifies all registered listeners that it is OK to send input.
+     * @param message
+     *            the received message
      */
-    private void fireExpectingInput() {
+    private void fireExpectingInput(final TextMessage message) {
+        final TextMessageEvent event = new TextMessageEvent(this, message);
         synchronized (listener) {
             for (TextListener current : listener) {
-                current.expectingInput();
+                current.expectingInput(event);
             }
         }
     }
 
     /**
      * Notifies all registered listeners that it is no longer OK to send input.
+     * @param message
+     *            the received message
      */
-    private void fireInputClosed() {
+    private void fireInputClosed(final TextMessage message) {
+        final TextMessageEvent event = new TextMessageEvent(this, message);
         synchronized (listener) {
             for (TextListener current : listener) {
-                current.inputClosed();
+                current.inputClosed(event);
             }
         }
     }
 
     /**
      * Notifies all registered listeners that a connection has been closed.
+     * @param message
+     *            the received message
      * 
      * @since 0.7
      */
-    private void fireDisconnected() {
+    private void fireDisconnected(final TextMessage message) {
         if (notifiedDisconnected) {
             return;
         }
         notifiedDisconnected = true;
+        final TextMessageEvent event = new TextMessageEvent(this, message);
         synchronized (listener) {
             for (TextListener current : listener) {
-                current.disconnected();
+                current.disconnected(event);
             }
         }
     }
@@ -418,39 +436,33 @@ public final class TextServer extends Thread {
                 if (type == TextMessageType.BYE) {
                     synchronized (lock) {
                         receivedBye = true;
-                        if (client != null) {
+                        if (autoAck && (client != null)) {
                             acknowledge(message);
                             client.close();
                             client = null;
                         }
                     }
-                    fireDisconnected();
+                    fireDisconnected(message);
                     return true;
                 }
-                boolean acknwowldege = true;
                 if (type == TextMessageType.SSML) {
-                    int messageNumber = message.getSequenceNumber();
-                    final String data = message.getData();
-                    final StringReader reader = new StringReader(data);
-                    final InputSource source = new InputSource(reader);
                     try {
-                        final SsmlDocument document = new SsmlDocument(source);
-                        fireOutputArrived(messageNumber, document);
-                        acknwowldege = autoAck;
+                        fireOutputArrived(message);
                     } catch (ParserConfigurationException | SAXException e) {
                         LOGGER.error("error parsing SSML", e);
                     }
                 } else if (type == TextMessageType.EXPECTING_INPUT) {
-                    fireExpectingInput();
+                    fireExpectingInput(message);
                 } else if (type == TextMessageType.INPUT_CLOSED) {
-                    fireInputClosed();
+                    fireInputClosed(message);
                 } else if (type == TextMessageType.ACK && closingClient) {
                     synchronized (acknowledgeMonitor) {
                         acknowledgeMonitor.notifyAll();
                     }
+                    fireDisconnected(message);
                     return true;
                 }
-                if (acknwowldege && !acknowledge(message)) {
+                if (autoAck && !acknowledge(message)) {
                     LOGGER.warn("can not acknowledge due to disconnect");
                     return true;
                 }
@@ -464,7 +476,7 @@ public final class TextServer extends Thread {
     }
 
     /**
-     * Acknowledges a message.
+     * Acknowledges the given message.
      * 
      * @param message
      *            the message to acknowledge
@@ -479,8 +491,7 @@ public final class TextServer extends Thread {
         }
         final int seq = message.getSequenceNumber();
         final TextMessage ack = TextMessage.newBuilder()
-                .setType(TextMessageType.ACK).setSequenceNumber(seq)
-                .build();
+                .setType(TextMessageType.ACK).setSequenceNumber(seq).build();
         send(ack);
         return true;
     }
@@ -498,8 +509,7 @@ public final class TextServer extends Thread {
             return;
         }
         final TextMessage ack = TextMessage.newBuilder()
-                .setType(TextMessageType.ACK).setSequenceNumber(seq)
-                .build();
+                .setType(TextMessageType.ACK).setSequenceNumber(seq).build();
         send(ack);
     }
 
@@ -646,7 +656,6 @@ public final class TextServer extends Thread {
                 }
             }
         }
-        fireDisconnected();
     }
 
     /**

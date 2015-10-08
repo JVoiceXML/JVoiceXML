@@ -57,7 +57,7 @@ public class TestOutputMessageBuffer {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                buffer.outputSsml(0, document);
+                buffer.outputSsml(null, document);
             }
         };
         final Thread thread = new Thread(runnable);
@@ -88,7 +88,7 @@ public class TestOutputMessageBuffer {
                     }
                     final Speak speak = document.getSpeak();
                     speak.addText("test " + i);
-                    buffer.outputSsml(i, document);
+                    buffer.outputSsml(null, document);
                 }
             }
         };

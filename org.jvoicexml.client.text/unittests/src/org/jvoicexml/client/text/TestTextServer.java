@@ -183,7 +183,8 @@ public class TestTextServer implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(final int messageNumber, final SsmlDocument document) {
+    public void outputSsml(final TextMessageEvent event,
+            final SsmlDocument document) {
 
     }
 
@@ -191,7 +192,7 @@ public class TestTextServer implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void expectingInput() {
+    public void expectingInput(final TextMessageEvent event) {
 
     }
 
@@ -199,7 +200,7 @@ public class TestTextServer implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void inputClosed() {
+    public void inputClosed(final TextMessageEvent event) {
 
     }
 
@@ -207,7 +208,7 @@ public class TestTextServer implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void disconnected() {
+    public void disconnected(final TextMessageEvent event) {
     }
 
 }

@@ -483,6 +483,17 @@ public final class TextCall implements Call {
      */
     @Override
     public void hangup() {
+        if (outputBuffer.hasReceivedDisconnect()) {
+            try {
+                // This will implicitly acknowledge the BYE
+                outputBuffer.nextMessage(100);
+            } catch (InterruptedException | TimeoutException | IOException
+                    | JVoiceXMLEvent e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.warn("error acknowledging a BYE", e);
+                }
+            }
+        }
         if (session != null) {
             session.hangup();
             for (CallListener listener : listeners) {

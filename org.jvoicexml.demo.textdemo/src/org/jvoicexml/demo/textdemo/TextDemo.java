@@ -35,6 +35,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
+import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.xml.ssml.Speak;
@@ -132,7 +133,8 @@ public final class TextDemo implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(final int messageNumber, final SsmlDocument document) {
+    public void outputSsml(final TextMessageEvent event,
+            final SsmlDocument document) {
         final Speak speak = document.getSpeak();
         LOGGER.info("System said: '" + speak.getTextContent() + "'");
     }
@@ -141,20 +143,20 @@ public final class TextDemo implements TextListener {
      * {@inheritDoc}
      */
     @Override
-    public void expectingInput() {
+    public void expectingInput(final TextMessageEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void inputClosed() {
+    public void inputClosed(final TextMessageEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void disconnected() {
+    public void disconnected(final TextMessageEvent event) {
     }
 }
