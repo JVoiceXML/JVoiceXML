@@ -68,7 +68,7 @@ public final class TextTelephony implements Telephony {
     private static final int MAX_TIMEOUT_CONNECT = 1000;
 
     /** Maximal number of milliseconds to wait for acknowledgment. */
-    private static final int MAX_TIMEOUT_ACK = 1000;
+    private static final int MAX_TIMEOUT_ACK = 100;
     
     /** The connection to the client. */
     private Socket socket;
@@ -486,7 +486,8 @@ public final class TextTelephony implements Telephony {
         }
 
         // delay to acknowledge pending messages
-        while (sender != null && !pendingMessages.isEmpty()) {
+        while (((receiver != null) && receiver.isRecording())
+                && !pendingMessages.isEmpty()) {
             synchronized (pendingMessages) {
                 try {
                     pendingMessages.wait(MAX_TIMEOUT_ACK);

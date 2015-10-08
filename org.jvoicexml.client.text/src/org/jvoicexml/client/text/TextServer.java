@@ -123,9 +123,12 @@ public final class TextServer extends Thread {
     /** <code>true</code> if the server is shutting down. */
     private boolean stopping;
 
-    /** <code>true</code> if we received a bye from JVoiceXML. */
+    /** {@code true} if we received a bye from JVoiceXML. */
     private boolean receivedBye;
 
+    /** {@code true}  if we sent a BYE */
+    private boolean sentBye;
+        
     /** <code>true</code> if we the client is about to close. */
     private boolean closingClient;
 
@@ -578,6 +581,9 @@ public final class TextServer extends Thread {
     private void send(final TextMessage message) throws IOException {
         // check generally if we can send
         synchronized (lock) {
+            if (sentBye) {
+                return;
+            }
             if (out == null) {
                 if (isConnected()) {
                     out = client.getOutputStream();
@@ -588,6 +594,9 @@ public final class TextServer extends Thread {
             }
             message.writeDelimitedTo(out);
             LOGGER.info("sent " + message);
+            if (message.getType() == TextMessageType.BYE) {
+                sentBye = true;
+            }
         }
     }
 

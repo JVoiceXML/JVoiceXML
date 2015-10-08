@@ -485,12 +485,10 @@ public final class TextCall implements Call {
     public void hangup() {
         if (outputBuffer.hasReceivedDisconnect()) {
             try {
-                // This will implicitly acknowledge the BYE
-                outputBuffer.nextMessage(100);
-            } catch (InterruptedException | TimeoutException | IOException
-                    | JVoiceXMLEvent e) {
+                outputBuffer.acknowledgeBye();
+            } catch (InterruptedException | IOException e) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.warn("error acknowledging a BYE", e);
+                    LOGGER.debug("error acknowledging a BYE", e);
                 }
             }
         }

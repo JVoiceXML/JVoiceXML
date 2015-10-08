@@ -85,7 +85,7 @@ class OutputMessageBuffer implements TextListener {
      */
     public SsmlDocument nextMessage() throws InterruptedException,
             JVoiceXMLEvent, IOException {
-        BufferedSsmlDocument buffer = documents.take();
+        final BufferedSsmlDocument buffer = documents.take();
         if (event != null) {
             throw event;
         }
@@ -116,7 +116,7 @@ class OutputMessageBuffer implements TextListener {
     public SsmlDocument nextMessage(final long timeout)
             throws InterruptedException, TimeoutException, JVoiceXMLEvent,
             IOException {
-        BufferedSsmlDocument buffer = documents.poll(timeout,
+        final BufferedSsmlDocument buffer = documents.poll(timeout,
                 TimeUnit.MILLISECONDS);
         if (event != null) {
             throw event;
@@ -203,6 +203,24 @@ class OutputMessageBuffer implements TextListener {
      */
     public boolean hasReceivedDisconnect() {
         return receivedDisconnect;
+    }
+
+    /**
+     * Acknowledges a received BYE.
+     * @throws InterruptedException
+     *          error retrieving the BYE message
+     * @throws IOException
+     *          error sending the ACK message
+     */
+    public void acknowledgeBye() throws InterruptedException, IOException {
+        final long timeout = 100;
+        final BufferedSsmlDocument buffer = documents.poll(timeout,
+                TimeUnit.MILLISECONDS);
+        if (buffer == null) {
+            return;
+        }
+        final TextMessage message = buffer.getTextMessage();
+        acknowledge(message);
     }
 
     /**

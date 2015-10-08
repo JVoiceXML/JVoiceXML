@@ -139,6 +139,9 @@ final class TextSenderThread extends Thread {
      */
     private void sendMessage(final PendingMessage pending)
             throws IOException {
+        if (socket.isClosed()) {
+            return;
+        }
         final OutputStream out = socket.getOutputStream();
         final TextMessage message = pending.getMessage();
         message.writeDelimitedTo(out);
