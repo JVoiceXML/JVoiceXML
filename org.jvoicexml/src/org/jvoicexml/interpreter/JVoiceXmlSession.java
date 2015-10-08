@@ -397,6 +397,7 @@ public class JVoiceXmlSession extends Thread
         final Connection connection = new Connection(info);
         model.createVariable("session.connection", connection, Scope.SESSION);
         model.createVariable("session.sessionid", uuid, Scope.SESSION);
+        context.setProperty("bargein", "true");
         notifySessionStarted();
         try {
             context.process(application);

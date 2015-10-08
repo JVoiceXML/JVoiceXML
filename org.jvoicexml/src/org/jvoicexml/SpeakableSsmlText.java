@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,7 +35,6 @@ import org.jvoicexml.xml.vxml.BargeInType;
  *
  *
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision$
  * @since 0.4
  */
 public final class SpeakableSsmlText

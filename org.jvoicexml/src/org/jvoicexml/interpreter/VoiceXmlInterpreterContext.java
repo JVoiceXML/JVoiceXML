@@ -521,16 +521,12 @@ public class VoiceXmlInterpreterContext {
         VoiceXmlDocument document = application.getCurrentDocument();
 
         enterScope(Scope.APPLICATION);
-
-        model.createVariableFor("lastresult$.confidence", null,
-                Scope.APPLICATION);
-        model.createVariableFor("lastresult$.utterance", null,
-                Scope.APPLICATION);
-        model.createVariableFor("lastresult$.inputmode", null,
-                Scope.APPLICATION);
-        model.createVariableFor("lastresult$.interpretation", null,
-                Scope.APPLICATION);
         model.createArray("lastresult$", 0);
+        model.createVariable("lastresult$.confidence", null, Scope.APPLICATION);
+        model.createVariable("lastresult$.utterance", null, Scope.APPLICATION);
+        model.createVariable("lastresult$.inputmode", null, Scope.APPLICATION);
+        model.createVariable("lastresult$.interpretation", null,
+                Scope.APPLICATION);
 
         // The main loop to interpret single- and multi-document applications
         DocumentDescriptor descriptor = null;

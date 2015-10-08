@@ -22,7 +22,6 @@
 package org.jvoicexml.implementation.text;
 
 import java.net.InetSocketAddress;
-import java.util.Collection;
 import java.util.UUID;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -40,9 +39,7 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
-import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInputListener;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -179,12 +176,12 @@ public final class TestTextTelephony
             ParserConfigurationException {
         SrgsXmlDocument doc = new SrgsXmlDocument();
         doc.setGrammarSimple("mock", utterance);
-        final SrgsXmlGrammarImplementation impl = new SrgsXmlGrammarImplementation(
-                doc, null);
-        final Collection<GrammarImplementation<?>> grammars;
-        grammars = new java.util.ArrayList<>();
-        grammars.add(impl);
-        textInput.activateGrammars(grammars);
+//        final SrgsXmlGrammarImplementation impl = new SrgsXmlGrammarImplementation(
+//                doc, null);
+//        final Collection<GrammarImplementation<?>> grammars;
+//        grammars = new java.util.ArrayList<>();
+//        grammars.add(impl);
+//        textInput.activateGrammars(grammars);
     }
 
     /**
