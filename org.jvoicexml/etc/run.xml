@@ -47,7 +47,6 @@ This file provides targets to run and stop the voice browser.
             <jvmarg value="-Djava.library.path=${run.librarypath.converted}" />
             <jvmarg value="-Djava.protocol.handler.pkgs=${run.protocolhandlerpath.converted}" />
             <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties" />
-            <jvmarg value="-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" />
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
             <classpath refid="run.classpath" />
         </java>

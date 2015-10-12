@@ -10,13 +10,6 @@
     <classpath>lib/org.jvoicexml.profile.vxml21.jar</classpath>
     <classpath>lib/js.jar</classpath>
     <classpath>lib/json-simple-1.1.1.jar</classpath>
-    <classpath>lib/jetty-server-9.2.2.v20140723.jar</classpath>
-    <classpath>lib/jetty-util-9.2.2.v20140723.jar</classpath>
-    <classpath>lib/jetty-http-9.2.2.v20140723.jar</classpath>
-    <classpath>lib/jetty-io-9.2.2.v20140723.jar</classpath>
-    <classpath>lib/servlet-api-3.1.jar</classpath>
-    <classpath>lib/slf4j-api-1.7.12.jar</classpath>
-    <classpath>lib/slf4j-log4j12-1.7.12.jar</classpath>
 
     <beans:bean id="callmanager"
         class="org.jvoicexml.callmanager.mmi.MMICallManager">
