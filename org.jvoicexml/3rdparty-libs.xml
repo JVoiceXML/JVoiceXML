@@ -154,6 +154,8 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
             <include name="jetty-http-9.2.2.v20140723.jar" />
             <include name="jetty-io-9.2.2.v20140723.jar" />
             <include name="servlet-api-3.1.jar" />
+            <include name="slf4j-api-1.7.12.jar" />
+            <include name="slf4j-log4j12-1.7.12.jar" />
         </fileset>
 
         <!-- protobuf library -->

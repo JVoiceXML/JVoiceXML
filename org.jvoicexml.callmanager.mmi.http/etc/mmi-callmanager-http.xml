@@ -13,6 +13,9 @@
     <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/jetty-http-9.2.2.v20140723.jar</classpath>
     <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/jetty-io-9.2.2.v20140723.jar</classpath>
     <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/servlet-api-3.1.jar</classpath>
+    <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/slf4j-api-1.7.12.jar</classpath>
+    <classpath>../org.jvoicexml/3rdparty/jetty9.2.2/lib/slf4j-log4j12-1.7.12.jar</classpath>
+
     <classpath>3rdparty/rhino1.7R4/lib/js.jar</classpath>
     <classpath>3rdparty/jsonsimple1.1.1/lib/json-simple-1.1.1.jar</classpath>
 

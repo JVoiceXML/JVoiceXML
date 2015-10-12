@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -60,7 +55,6 @@ import org.jvoicexml.xml.vxml.FilledMode;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  * @see org.jvoicexml.ImplementationPlatform
  */
@@ -241,7 +235,8 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
     private boolean shouldExecute(final Filled filled, final DataModel model)
             throws SemanticError {
         final FilledMode mode = filled.getModeObject();
-        final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia =
+                getFormInterpretationAlgorithm();
         final TokenList tokens = filled.getNameListObject();
         final Collection<FormItem> formItems = fia.getFormItems();
         if (tokens.isEmpty()) {
@@ -411,7 +406,10 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
                                 + "'");
                     }
                 }
-            } catch (SemanticError ignore) {
+            } catch (SemanticError e) {
+                if (LOGGER.isTraceEnabled()) {
+                    LOGGER.warn(e.getMessage(), e);
+                }
             }
         }
         return filtered;
@@ -438,7 +436,8 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
     @Override
     public EventStrategy newInstance(final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm algorithm, final FormItem formItem) {
+            final FormInterpretationAlgorithm algorithm,
+            final FormItem formItem) {
         final Dialog currentDialog;
         if (algorithm == null) {
             currentDialog = null;

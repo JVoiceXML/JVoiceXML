@@ -55,7 +55,9 @@ public interface GrammarParser<T> {
     GrammarImplementation<T> load(final URI uri) throws IOException;
     
     /**
-     * Parses a given {@link GrammarDocument} into a {@link GrammarEvaluator} .
+     * Parses a given {@link GrammarDocument} into a {@link GrammarEvaluator}.
+     * This also means that there is a 1:1 relationship between grammars and
+     * their evaluators.
      * 
      * @param document
      *            the document to process.

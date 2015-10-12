@@ -25,6 +25,8 @@ import java.net.URI;
 
 /**
  * A grammar evaluator processes a given utterance into a recognition result.
+ * Usually, one {@link GrammarEvaluator} is responsible to evaluate input for
+ * the associated active grammar.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.8
@@ -41,6 +43,10 @@ public interface GrammarEvaluator {
      * interpretation. If there is no semantic interpretation but the utterances
      * is considered a valid input, the utterance is returned as semantic
      * interpretation. 
+     * <p>
+     * This method is also called to check if the associated grammar accepts the
+     * given utterance.
+     * </p>
      * @param utterance the current utterance
      * @return the determined semantic interpretation, or {@code null} if
      *         the utterance is not valid

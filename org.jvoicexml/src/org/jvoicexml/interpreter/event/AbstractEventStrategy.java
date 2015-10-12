@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -51,7 +46,6 @@ import org.jvoicexml.xml.vxml.Catch;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 abstract class AbstractEventStrategy implements EventStrategy {
     /** Base hash code. */
@@ -161,7 +155,8 @@ abstract class AbstractEventStrategy implements EventStrategy {
      *
      * @return The current FIA.
      */
-    protected final FormInterpretationAlgorithm getFormInterpretationAlgorithm() {
+    protected final FormInterpretationAlgorithm
+        getFormInterpretationAlgorithm() {
         // If there was no FIA, try to obtain one from the interpreter.
         if (fia == null) {
             if (interpreter == null) {
@@ -197,7 +192,8 @@ abstract class AbstractEventStrategy implements EventStrategy {
      */
     protected FormItem getCurrentFormItem() {
         if (item == null) {
-            FormInterpretationAlgorithm algorithm = getFormInterpretationAlgorithm();
+            final FormInterpretationAlgorithm algorithm =
+                    getFormInterpretationAlgorithm();
             if (algorithm == null) {
                 return null;
             }

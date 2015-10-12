@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -59,7 +54,6 @@ import org.w3c.dom.Node;
  *
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  * @param <T>
  *            Type of the {@link InputItem}.
@@ -123,14 +117,16 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
             LOGGER.debug("executing filled elements...");
         }
         final Collection<Filled> filledElements = item.getFilledElements();
-        final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia =
+                getFormInterpretationAlgorithm();
         final Dialog dialog = fia.getDialog();
         final Collection<Filled> dialogFilledElements = dialog
                 .getFilledElements();
         if (dialogFilledElements != null) {
             filledElements.addAll(dialogFilledElements);
         }
-        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
+        final VoiceXmlInterpreterContext context =
+                getVoiceXmlInterpreterContext();
         final DataModel model = context.getDataModel();
         final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
         final TagStrategyExecutor executor = getTagStrategyExecutor();
@@ -152,8 +148,8 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
      * 
      * @param filled
      *            the filled node to check
-     * @param scripting
-     *            the scripting engine
+     * @param model
+     *            the employed data model
      * @return <code>true</code> if the filled node should be executed.
      * @throws SemanticError
      *             if one of the defined variables could not be evaluated
@@ -165,7 +161,8 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
             return true;
         }
         final FilledMode mode = filled.getModeObject();
-        final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia =
+                getFormInterpretationAlgorithm();
         final TokenList tokens = filled.getNameListObject();
         final Collection<FormItem> formItems = fia.getFormItems();
         if (tokens.isEmpty()) {

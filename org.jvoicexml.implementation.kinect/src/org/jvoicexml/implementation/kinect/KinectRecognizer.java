@@ -170,8 +170,8 @@ public final class KinectRecognizer {
             final String sml = result.getSml();
             LOGGER.info("recognized '" + sml + "'");
             final SmlInterpretationExtractor extractor = parseSml(sml);
-            final KinectRecognitionResult kinectResult = new KinectRecognitionResult(
-                    extractor);
+            final KinectRecognitionResult kinectResult =
+                    new KinectRecognitionResult(extractor);
             final SpokenInputEvent event;
             if (kinectResult.isAccepted()) {
                 event = new RecognitionEvent(input, null, kinectResult);

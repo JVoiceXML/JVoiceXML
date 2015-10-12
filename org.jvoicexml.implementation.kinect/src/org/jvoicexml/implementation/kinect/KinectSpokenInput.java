@@ -325,6 +325,7 @@ public final class KinectSpokenInput implements SpokenInput {
             throw new UnsupportedFormatError("Only SRGS XML is supported!");
         }
 
+        
         final URL url = uri.toURL();
         InputStream input = null;
         final SrgsXmlDocument doc;
@@ -341,6 +342,7 @@ public final class KinectSpokenInput implements SpokenInput {
                 input.close();
             }
         }
+        
         return new SrgsXmlGrammarImplementation(doc, uri);
     }
 
@@ -349,11 +351,10 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public Collection<BargeInType> getSupportedBargeInTypes() {
-        final Collection<BargeInType> types = new java.util.ArrayList<BargeInType>();
-
+        final Collection<BargeInType> types =
+                new java.util.ArrayList<BargeInType>();
         types.add(BargeInType.SPEECH);
         types.add(BargeInType.HOTWORD);
-
         return types;
     }
 
@@ -366,7 +367,8 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     void fireInputEvent(final SpokenInputEvent event) {
         synchronized (listeners) {
-            final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
+            final Collection<SpokenInputListener> copy =
+                    new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listeners);
             for (SpokenInputListener current : copy) {
                 current.inputStatusChanged(event);
@@ -383,7 +385,8 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     void notifyError(final ErrorEvent error) {
         synchronized (listeners) {
-            final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
+            final Collection<SpokenInputListener> copy =
+                    new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listeners);
             for (SpokenInputListener current : copy) {
                 current.inputError(error);

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -54,7 +49,6 @@ import org.jvoicexml.interpreter.formitem.RecordFormItem;
  * Event strategy to handle the end of a recording.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 final class RecordingEventStrategy
@@ -105,7 +99,8 @@ final class RecordingEventStrategy
         final RecordingEvent recordingEvent = (RecordingEvent) event;
         final byte[] buffer = recordingEvent.getRecordingBuffer();
         final ByteArrayInputStream in = new ByteArrayInputStream(buffer);
-        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
+        final VoiceXmlInterpreterContext context =
+                getVoiceXmlInterpreterContext();
         final DocumentServer server = context.getDocumentServer();
 
         // Store the recording.

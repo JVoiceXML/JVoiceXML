@@ -225,21 +225,21 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      */
     public boolean isAccepted(final RecognitionResult result) {
         for (GrammarImplementation<?> grammar : activeGrammars) {
-            if (grammar.accepts(result)) {
-                if (result instanceof DtmfInputResult) {
-                    if (grammar instanceof GrammarEvaluator) {
-                        final GrammarEvaluator evaluator =
-                                (GrammarEvaluator) grammar;
-                        final String utterance = result.getUtterance();
-                        final Object interpretation =
-                                evaluator.getSemanticInterpretation(utterance);
+            if (result instanceof DtmfInputResult) {
+                if (grammar instanceof GrammarEvaluator) {
+                    final GrammarEvaluator evaluator =
+                            (GrammarEvaluator) grammar;
+                    final String utterance = result.getUtterance();
+                    final Object interpretation =
+                            evaluator.getSemanticInterpretation(utterance);
+                    if (interpretation != null) {
                         final DtmfInputResult dtmfResult =
                                 (DtmfInputResult) result;
                         dtmfResult.setSemanticInterpretation(interpretation);
                     }
                 }
-                return true;
             }
+            return true;
         }
         return false;
     }

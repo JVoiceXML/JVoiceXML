@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,7 +36,6 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * Strategy to execute a user defined catch node.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  * @see org.jvoicexml.ImplementationPlatform
  * @see org.jvoicexml.xml.vxml.AbstractCatchElement
@@ -76,7 +70,8 @@ final class CatchEventStrategy extends AbstractEventStrategy {
     public CatchEventStrategy(final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter ip,
             final FormInterpretationAlgorithm interpreter,
-            final FormItem formItem, final VoiceXmlNode node, final String type) {
+            final FormItem formItem, final VoiceXmlNode node,
+            final String type) {
         super(ctx, ip, interpreter, formItem, node, type);
     }
 
@@ -85,13 +80,15 @@ final class CatchEventStrategy extends AbstractEventStrategy {
      */
     @Override
     public void process(final JVoiceXMLEvent event) throws JVoiceXMLEvent {
-        final FormInterpretationAlgorithm fia = getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia =
+                getFormInterpretationAlgorithm();
         if (fia == null) {
             LOGGER.warn("Unable to process event '" + event.getEventType()
                     + "' No reference to a form FIA!");
             return;
         }
-        final VoiceXmlInterpreterContext context = getVoiceXmlInterpreterContext();
+        final VoiceXmlInterpreterContext context =
+                getVoiceXmlInterpreterContext();
         context.enterScope(Scope.ANONYMOUS);
 
         // Declare the special variable _event which contains the name of the
