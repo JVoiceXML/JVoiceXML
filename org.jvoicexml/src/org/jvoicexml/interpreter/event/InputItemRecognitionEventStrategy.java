@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2009-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -53,7 +48,6 @@ import org.jvoicexml.interpreter.scope.Scope;
  * </p>
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.2
  * @see org.jvoicexml.ImplementationPlatform
  */
@@ -130,6 +124,7 @@ final class InputItemRecognitionEventStrategy
     @Override
     protected boolean handleEvent(final FieldFormItem field,
             final JVoiceXMLEvent event) throws JVoiceXMLEvent {
+        // First, set the application last result values
         final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
         final RecognitionResult result = recognitionEvent
                 .getRecognitionResult();
@@ -158,11 +153,11 @@ final class InputItemRecognitionEventStrategy
                     recognitionEvent.getSessionId(), result);
         }
 
+        // Simply reject, if the result was not accepted
         if (!result.isAccepted()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("result not accepted");
             }
-
             return false;
         }
         return true;

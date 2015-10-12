@@ -107,4 +107,18 @@ public final class TestInputDemo {
         call.say("no");
         call.hears("You do not like this example.");
     }
+
+    /**
+     * Runs a test with the option that does not match the input.
+     */
+    @Test(timeout = TIMEOUT)
+    public void testInputNomatch() {
+        call.call(uri);
+        call.hears("Do you like this example?");
+        final URI chime = uri.resolve("chime.wav");
+        call.hearsAudio(chime);
+        final String notmatchingUtterance = "blabla";
+        call.say(notmatchingUtterance);
+        call.hears(notmatchingUtterance + " is not a valid input.");
+    }
 }

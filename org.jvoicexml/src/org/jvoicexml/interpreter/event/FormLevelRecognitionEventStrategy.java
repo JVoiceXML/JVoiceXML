@@ -356,7 +356,7 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
      *            the employed data model
      * @param result
      *            the recognition result
-     * @return filtered input items
+     * @return filtered input items, {@code null} if no input items match
      * @exception BadFetchError
      *                error obtaining the form items
      * @exception SemanticError

@@ -22,7 +22,10 @@
 package org.jvoicexml.interpreter.event;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.event.plain.implementation.NomatchEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
@@ -87,6 +90,13 @@ final class CatchEventStrategy extends AbstractEventStrategy {
                     + "' No reference to a form FIA!");
             return;
         }
+        
+        // First, maybe set the application last result values
+        if (event instanceof NomatchEvent) {
+            final NomatchEvent nomatch = (NomatchEvent) event;
+            final RecognitionResult result = nomatch.getRecognitionResult();
+            setApplicationLastResult(result);
+        }        
         final VoiceXmlInterpreterContext context =
                 getVoiceXmlInterpreterContext();
         context.enterScope(Scope.ANONYMOUS);
@@ -108,4 +118,38 @@ final class CatchEventStrategy extends AbstractEventStrategy {
             context.exitScope(Scope.ANONYMOUS);
         }
     }
+    
+    /**
+     * Sets the result in the application shadow variable.
+     * 
+     * @param result
+     *            the current recognition result.
+     * @throws SemanticError
+     *             Error creating the shadow variable.
+     * @since 0.7.8
+     */
+    private void setApplicationLastResult(final RecognitionResult result)
+            throws SemanticError {
+        final VoiceXmlInterpreterContext context =
+                getVoiceXmlInterpreterContext();
+        final DataModel model = context.getDataModel();
+        model.resizeArray("lastresult$", 1, Scope.APPLICATION);
+        final Object value = model.readArray("lastresult$", 0,
+                Scope.APPLICATION, Object.class);
+        model.createVariableFor(value, "confidence", result.getConfidence());
+        model.createVariableFor(value, "utterance", result.getUtterance());
+        model.createVariableFor(value, "inputmode", result.getMode().name());
+        model.createVariableFor(value, "interpretation",
+                result.getSemanticInterpretation(model));
+        model.updateArray("lastresult$", 0, value, Scope.APPLICATION);
+        model.createVariable("lastresult$.interpretation",
+                result.getSemanticInterpretation(model), Scope.APPLICATION);
+        model.createVariable("lastresult$.confidence", result.getConfidence(),
+                Scope.APPLICATION);
+        model.createVariable("lastresult$.utterance", result.getUtterance(),
+                Scope.APPLICATION);
+        model.createVariable("lastresult$.inputmode", result.getMode().name(),
+                Scope.APPLICATION);
+    }
+    
 }
