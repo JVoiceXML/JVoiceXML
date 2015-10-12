@@ -229,16 +229,6 @@ public class SrgsSisrGrammar
      * {@inheritDoc}
      */
     @Override
-    public boolean accepts(final RecognitionResult result) {
-        final String utterance = result.getUtterance();
-        final MatchConsumption consumption = match(utterance);
-        return consumption != null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;

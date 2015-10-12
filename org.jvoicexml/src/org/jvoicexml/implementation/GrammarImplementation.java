@@ -23,7 +23,6 @@ package org.jvoicexml.implementation;
 
 import java.net.URI;
 
-import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
@@ -81,26 +80,6 @@ public interface GrammarImplementation<T> {
      * @since 0.7.5
      */
     URI getURI();
-
-    /**
-     * Checks, if this grammar covers the given recognition result.
-     * <p>
-     * It is not legal to check if the result is accepted using
-     * {@link RecognitionResult#isAccepted()}. Implementations should assume
-     * that it is a valid input result.
-     * </p>
-     *
-     * <p>
-     * Implementations can use the
-     * {@link org.jvoicexml.processor.srgs.GrammarChecker}.
-     * </p>
-     *
-     * @param result
-     *            the result to check.
-     * @return <code>true</code> if the utterance is valid for this grammar
-     * @since 0.7
-     */
-    boolean accepts(final RecognitionResult result);
 
     /**
      * Checks if this grammar implementation is equal to the given grammar

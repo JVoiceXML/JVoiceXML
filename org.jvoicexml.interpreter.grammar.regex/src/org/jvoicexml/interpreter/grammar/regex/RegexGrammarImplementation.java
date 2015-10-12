@@ -24,7 +24,6 @@ package org.jvoicexml.interpreter.grammar.regex;
 import java.net.URI;
 
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -49,7 +48,7 @@ public final class RegexGrammarImplementation
      */
     public RegexGrammarImplementation(final GrammarDocument doc) {
         document = doc;
-        document.getTextContent();
+        regex = document.getTextContent();
     }
 
     /**
@@ -73,15 +72,6 @@ public final class RegexGrammarImplementation
             result = prime * result + document.hashCode();
         }
         return result;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean accepts(final RecognitionResult result) {
-        final String utterance = result.getUtterance();
-        return utterance.matches(regex);
     }
 
     /**

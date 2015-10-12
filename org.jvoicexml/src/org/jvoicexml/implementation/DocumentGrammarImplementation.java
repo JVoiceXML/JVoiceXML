@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +23,6 @@ package org.jvoicexml.implementation;
 import java.net.URI;
 
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
@@ -38,7 +32,6 @@ import org.jvoicexml.xml.srgs.ModeType;
  * implementation but an implementation that is simply based on documents.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  */
 public final class DocumentGrammarImplementation
@@ -75,14 +68,6 @@ public final class DocumentGrammarImplementation
             result = prime * result + document.hashCode();
         }
         return result;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean accepts(final RecognitionResult result) {
-        return false;
     }
 
     /**

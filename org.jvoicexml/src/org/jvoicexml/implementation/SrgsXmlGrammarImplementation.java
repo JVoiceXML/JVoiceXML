@@ -28,7 +28,6 @@ package org.jvoicexml.implementation;
 
 import java.net.URI;
 
-import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -45,10 +44,6 @@ public final class SrgsXmlGrammarImplementation
         implements GrammarImplementation<SrgsXmlDocument> {
     /** The encapsulated grammar. */
     private final SrgsXmlDocument document;
-
-    /** {@code true} if the result is accepted. */
-    private boolean accepted;
-
 
     /** The URI of the grammar document. */
     private final URI uri;
@@ -104,25 +99,6 @@ public final class SrgsXmlGrammarImplementation
     }
 
     /**
-     * Marks the result as accepted.
-     * 
-     * @param isAccepted
-     *            <code>true</code> if the result is accepted.
-     * @since 0.7
-     */
-    public void setAccepted(final boolean isAccepted) {
-        accepted = isAccepted;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean accepts(final RecognitionResult result) {
-        return accepted;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -134,7 +110,6 @@ public final class SrgsXmlGrammarImplementation
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (accepted ? 1231 : 1237);
         result = prime * result
                 + ((document == null) ? 0 : document.hashCode());
         result = prime * result + ((uri == null) ? 0 : uri.hashCode());

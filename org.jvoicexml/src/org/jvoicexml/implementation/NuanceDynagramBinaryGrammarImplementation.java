@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2011-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -28,7 +23,6 @@ package org.jvoicexml.implementation;
 
 import java.net.URI;
 
-import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
@@ -37,7 +31,6 @@ import org.jvoicexml.xml.srgs.ModeType;
  * 
  * @author Shuo Yang
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  */
 public final class NuanceDynagramBinaryGrammarImplementation
@@ -84,14 +77,6 @@ public final class NuanceDynagramBinaryGrammarImplementation
     @Override
     public BinaryGrammar getGrammarDocument() {
         return grammar;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean accepts(final RecognitionResult result) {
-        return true;
     }
 
     /**
