@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <implementation xmlns:beans="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
-  <repository>text</repository>
-  <classpath>dist/org.jvoicexml.implementation.text.jar</classpath>
-  <classpath>dist/org.jvoicexml.client.text.jar</classpath>
-  <classpath>dist/org.jvoicexml.srgs.jar</classpath>
-  <classpath>3rdparty/protobuf2.5.0/lib/protobuf-java-2.5.0.jar</classpath>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+    <repository>text</repository>
+    <classpath>dist/org.jvoicexml.implementation.text.jar</classpath>
+    <classpath>dist/org.jvoicexml.client.text.jar</classpath>
+    <classpath>dist/org.jvoicexml.srgs.jar</classpath>
+    <classpath>3rdparty/protobuf2.5.0/lib/protobuf-java-2.5.0.jar</classpath>
 
-  <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">
-    <beans:property name="instances" value="1" />
-   <property name="grammarParsers">
-    <list>
-        <bean class="org.jvoicexml.srgs.SrgsSisrXmlGrammarParser" />
-    </list>    
-   </property>
-  </beans:bean>
+    <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">
+        <beans:property name="instances" value="1" />
+        <property name="grammarParsers">
+            <list>
+                <bean class="org.jvoicexml.srgs.SrgsSisrXmlGrammarParser" />
+            </list>
+        </property>
+    </beans:bean>
 </implementation>

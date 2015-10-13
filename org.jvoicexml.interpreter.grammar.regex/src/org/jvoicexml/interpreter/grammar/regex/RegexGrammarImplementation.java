@@ -39,16 +39,12 @@ public final class RegexGrammarImplementation
     /** The document. */
     private final GrammarDocument document;
 
-    /** The regular expression. */
-    private String regex;
-    
     /**
      * Constructs a new object.
      * @param doc the grammar document.
      */
     public RegexGrammarImplementation(final GrammarDocument doc) {
         document = doc;
-        regex = document.getTextContent();
     }
 
     /**
