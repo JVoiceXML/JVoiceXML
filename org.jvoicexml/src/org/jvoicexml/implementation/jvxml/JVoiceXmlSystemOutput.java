@@ -101,7 +101,7 @@ final class JVoiceXmlSystemOutput
     }
 
     /**
-     * Adds the given listener for output events
+     * Adds the given listener for output events.
      * @param listener the listener to add
      */
     public void addListener(final SynthesizedOutputListener listener) {

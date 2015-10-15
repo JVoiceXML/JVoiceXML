@@ -49,7 +49,7 @@ class ImplementationPlatformReaper extends Thread {
     private Object wait;
     
     /** Flag if the platform closed normally. */
-    boolean stopReaping;
+    private boolean stopReaping;
 
     /**
      * Creates a new object.

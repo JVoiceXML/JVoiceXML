@@ -52,6 +52,7 @@ import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
+import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionStoppedEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
@@ -753,8 +754,7 @@ public final class JVoiceXmlImplementationPlatform
      */
     @Override
     public void inputStatusChanged(final SpokenInputEvent event) {
-        final String type = event.getEventType();
-        if (type.equals(InputStartedEvent.EVENT_TYPE)) {
+        if (event.isType(InputStartedEvent.EVENT_TYPE)) {
             // Start the timer with a default timeout if there were no
             // prompts to queue.
             final SpeakableText lastSpeakable = promptAccumulator
@@ -762,21 +762,21 @@ public final class JVoiceXmlImplementationPlatform
             if (lastSpeakable == null) {
                 startTimer();
             }
-        } else if (type.equals(RecognitionStoppedEvent.EVENT_TYPE)) {
-            recognitionStopped();
-        } else if (type.equals(InputStartedEvent.EVENT_TYPE)) {
+        } else if (event.isType(RecognitionStartedEvent.EVENT_TYPE)) {
             final InputStartedEvent started = (InputStartedEvent) event;
             final ModeType modeType = started.getMode();
             inputStarted(modeType);
-        } else if (type.equals(RecognitionEvent.EVENT_TYPE)) {
+        } else if (event.isType(RecognitionEvent.EVENT_TYPE)) {
             final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
             final RecognitionResult result = recognitionEvent
                     .getRecognitionResult();
             resultAccepted(result);
-        } else if (type.equals(NomatchEvent.EVENT_TYPE)) {
+        } else if (event.isType(NomatchEvent.EVENT_TYPE)) {
             final NomatchEvent nomatch = (NomatchEvent) event;
             final RecognitionResult result = nomatch.getRecognitionResult();
             resultRejected(result);
+        } else if (event.isType(RecognitionStoppedEvent.EVENT_TYPE)) {
+            recognitionStopped();
         } else {
             LOGGER.warn("unknown spoken input event " + event);
         }
