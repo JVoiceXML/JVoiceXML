@@ -17,7 +17,6 @@ linkcolor=black, colorlinks=black, colorlinks=true,
 \include{version}
 
 \title{How to build JVoiceXML \jvxmlversion}
-\version{1.9.9}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -64,7 +63,7 @@ You find everything that is related to this project under
 \url{http://sourceforge.net/projects/jvoicexml/}.
 
 This document refers to UNIX and Windows systems. JVoiceXML will work 
-any other operating systems that support Java 6, too.
+any other operating systems that support Java 7, too.
 
 Nobody is perfect, so you may find some errors or small things to correct.
 Please let me know if you think you found something that should be written
@@ -98,48 +97,37 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 \section{Download the Source Code}
 
-\subsection{Download the source archive}
+\subsection{Download the Source Archive}
 
 You can download a the source code for the available releases from 
-\url{http://jvoicexml.sourceforge.net/downloads.html}. The source code is part of
-the binary distribution and can be obtained by running the installer. This is
-not the recommended way. Please use the SVN repository as described in
-the following sections. \\
+\url{https://github.com/JVoiceXML/JVoiceXML/releases}. Parts of the source code
+is part of the binary distribution and can be obtained by running the installer.
+Although this works, it is not the recommended way. Please use the Git
+repository as described in the following sections. 
 
-\subsection{SVN repository}
-\label{sec:svn-repository}
+\subsection{Git Repository}
+\label{sec:git-repository}
 
 If you want to stay at the current state of development you have to use
-the SVN repository from Source Forge~\cite{sourceforge}.
-This is also the preferred way.
+the Git repository from GitHub\footnote{\url{http://github.com}}. This is also
+the preferred way. Some older stuff is still at Source Forge~\cite{sourceforge}.
 
-This section describe the parameters to access the SVN repository 
+This section describe the parameters to access the Git repository 
 using the command line. Feel free to grab the required parameters from
 this description and feed your favorite tool with them.
 
 \begin{lstlisting}
-svn checkout --username=<your name> \
-  https://svn.code.sf.net/p/jvoicexml/code/trunk jvoicexml
+git clone  https://github.com/JVoiceXML/JVoiceXML.git
 \end{lstlisting}
 
-This will check out all projects of \texttt{trunk} of
-into the folder \texttt{jvoicexml}. Please refer to
+This will check out all projects of JVoiceXML
+into the folder \texttt{JVoiceXML}. Please refer to
 section~\ref{sec:jvoicexml-core} if you want to checkout
 only a minimal set of projects. Here, the required projects
 to build the core project are marked as \emph{required}.
 
 Since all the third party libraries are checked a checkout may
 take a while.
-
-An alternative way is given by using svn+ssh. In this case code is checked out
-by
-\begin{lstlisting}
-svn checkout --username=<your name>
-  svn+ssh://<your name>@svn.code.sf.net/p/jvoicexml/code/trunk jvoicexml
-\end{lstlisting}
-
-For the eclipse users on Windows the following article might be of some interest
-\url{http://www.woodwardweb.com/java/howto_configure.html}. 
 
 A screenshot from a checkout in eclipse is shown in
 figure~\ref{fig:eclipse-projects}.
@@ -155,21 +143,6 @@ All projects follow the convention that they have the same name as the jar
 that will be produced when bundling them. For instance, the jar \lstinline{org.jvoicexml.xml.jar}
 is built by the project \lstinline{org.jvoicexm.xml}.
 
-An alternative way to download the contents of the repository is to use the 
-nightly build system for that purpose. Download all jars from
-\url{http://jvoicexml.svn.sourceforge.net/viewvc/jvoicexml/core/trunk/org.jvoicexml/3rdparty/svnant/lib/}
-as well as the ANT file for the nightly build at
-\url{http://jvoicexml.svn.sourceforge.net/viewvc/jvoicexml/core/trunk/org.jvoicexml/nightly.xml}
-into the directory where you want to have all those project files. This may be
-your eclipse workspace.
-
-Then change in to that directory and run
-\begin{lstlisting}
-svn co \
-ant -f nightly.xml checkout
-\end{lstlisting}
-
-
 \section{Required Software}
 \label{sec:required-software}
 
@@ -184,7 +157,7 @@ comparable repository or from their home pages. The file
 \subsection{IDE}
 \label{sec:ide}
 
-JVoiceXML is being developed using eclipse 4.2, but you can use the IDE of your
+JVoiceXML is being developed using eclipse 4.4, but you can use the IDE of your
 choice to edit the sources and compile the binaries. You can even use a simple
 text editor to perform this job. Nevertheless there are some restriction that
 you cannot work around.
@@ -208,8 +181,8 @@ for free from \url{http://oracle.com/technetwork/java/javase/downloads/index.htm
 \label{sec:eclipse}
 
 If you are not using eclipse as your favorite IDE, you may ignore this section.
-We are using the \emph{Eclipse IDE for Java EE Developers} version 4.2 for
-the development of JVoiceXML. The subversion repository contains the eclipse
+We are using the \emph{Eclipse IDE for Java EE Developers} version 4.4 (Luna))
+for the development of JVoiceXML. The subversion repository contains the eclipse
 project settings. This way, you there is no need to import the
 project into eclipse. The project settings will be detected 
 automatically when you checkout the projects. However you are requested to configure the execution
@@ -226,7 +199,7 @@ figure~\ref{fig:eclipse-execution-environments}.
 \end{figure}
 
 Eclipse is configured to use the folder \texttt{eclipse-compiled} as output
-since this may caus some interfernece with the ANT build
+since this may cause some interference with the ANT build
 scripts\footnote{\url{https://bugs.eclipse.org/bugs/show_bug.cgi?id=210746}}.
 
 \paragraph{Eclipse Plug-ins}
@@ -298,7 +271,7 @@ classpath.
 \label{sec:tomcat}
 
 For the system test and for some demos you will need to have a servlet
-container installed. We use Tomcat 5.5 for that purpose. You can download this
+container installed. We use Tomcat 7 for that purpose. You can download this
 release from \url{http://tomcat.apache.org}.
 
 This is not needed if you do not use the servlet based demos or want to run the
@@ -378,14 +351,12 @@ configurations settings.
 The core of JVoiceXML comprises the following sub-projects:
 
 \begin{description}
-\item[org.jvoicexml] The core of the interpreter (Required)
-\item[org.jvoicexml.config] JVoiceXML configuration based on spring (Required)
-\item[org.jvoicexml.client] Client libraries to interacti with JVoiceXML remotely. (Required)
+\item[org.jvoicexml] The core of the interpreter (required)
+\item[org.jvoicexml.config] JVoiceXML configuration based on spring (required)
+\item[org.jvoicexml.client] Client libraries to interacti with JVoiceXML
+remotely. (required)
 \item[org.jvoicexml.client.text] Text client for the text based
 implementation platform.
-\item[org.jvoicexml.xml] The JVoiceXML XML library (Required)
-\item[org.jvoicexml.jndi] JNDI support for JVoiceXML (Required)
-\item[org.jvoicexml.processor.srgs] SRGS processor (Required)
 \item[org.jvoicexml.callmanager.mmi] Demo implementation for the W3C MMI
 architecture.
 \item[org.jvoicexml.callmanager.mmi.http] Event and transport layer
@@ -412,8 +383,15 @@ the MARC.
 MRCPv2.
 \item[org.jvoicexml.implementation.text] Demo implementation platform for
 text based access.
+\item[org.jvoicexml.interpreter.datamodel.ecmascript] ECMAscript data model
+(required)
+\item[org.jvoicexml.interpreter.grammar.regex] Demo implementation for custom
+grammar type extensions
+\item[org.jvoicexml.jndi] JNDI support for JVoiceXML (required)
 \item[org.jvoicexml.mmi.events] A library to author MMI events.
 \item[org.jvoicexml.profile.vxml21] VoiceXML 2.1 profile for JVoiceXML.
+\item[org.jvoicexml.srgs] SRGS processor (required)
+\item[org.jvoicexml.xml] The JVoiceXML XML library (required)
 \end{description}
 
 The most convenient configuration setting is the one for \emph{JSAPI 2.0}. Here,
@@ -433,7 +411,7 @@ A simple demo to test that implementation platform to start with is
 \lstinline{org.jvoicexml.demo.helloworld}.
 
 
- For a \emph{text} based configuration
+For a \emph{text} based configuration
 you will need
 \begin{itemize}
   \item org.jvoicexml
@@ -442,7 +420,7 @@ you will need
   \item org.jvoicexml.config
   \item org.jvoicexml.implementation.text
   \item org.jvoicexml.jndi
-  \item org.jvoicexml.processor.srgs
+  \item org.jvoicexml.srgs
   \item org.jvoicexml.profile.vxml21
   \item org.jvoicexml.xml
 \end{itemize}
@@ -630,7 +608,7 @@ one single implementation platform are located in the implementation platform's
 \label{sec:create-configuration}
 
 Currently there are eleven implementations for the implementation platform
-that reside in co-projects, refer to section~\ref{sec:svn-repository}.
+that reside in co-projects, refer to section~\ref{sec:git-repository}.
 
 Section~\ref{sec:adapt-ant} describes how to prepare your personal settings.
 If you want to use one of them, you have to adapt the corresponding setting in
@@ -1336,13 +1314,12 @@ We follow the JAVA code conventions~\cite{sun:codeconv} for our code. All
 methods and member variables must be commented using 
 JAVADOC~\cite{sun:javadoc_guidelines}.
 
-In addition we use a custom \texttt[language=Java]{@todo} JAVADOC tag or a
-\texttt{TODO} tag to mark sections that need further work.
+In addition we use a \texttt{TODO} tag to mark sections that need further work.
 
 Example:
 
 \begin{lstlisting}[language=Java]
-/** @todo Implement the untreated case XYZ */
+// TODO Implement the untreated case XYZ
 \end{lstlisting}
 
 We use checkstyle~\cite{checkstyle} to check our coding conventions.
@@ -1379,14 +1356,9 @@ copyright, see section~\ref{sec:copyright}, that we use for JVoiceXML.
 
 \begin{lstlisting}[language=Java]
 /*
- * File:    $HeadURL: $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014 JVoiceXML group - 
+ * Copyright (C) 2015 JVoiceXML group - 
  *      http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it 
@@ -1409,35 +1381,6 @@ copyright, see section~\ref{sec:copyright}, that we use for JVoiceXML.
  */
 \end{lstlisting}
 
-The keywords embarrassed by \texttt{\$} are to be expanded by 
-subversion. 
-This means that for any \texttt{svn commit} the subversion
-option \texttt{svn:keywords} has to be set by
-
-\begin{lstlisting}
-svn propset svn:keywords "HeadURL LastChangedRevision \
-LastChangedDate LastChangedBy" <filename>
-\end{lstlisting}.
-
-Since this has to be done for each file, you might want to have a look
-at the SVN's automatic property setting capability.
-
-In order to activate it, locate the \texttt{config} file in you subversion home
-folder and open it for editing. Under Linux you will usually find this
-configuration folder \texttt{.subversion} in your home directory.
-
-In the section \texttt{[miscellany]} set
-\begin{lstlisting}
-enable-auto-props = yes
-\end{lstlisting}
-
-In the section \texttt{[auto-props]} set
-\begin{lstlisting}
-*.java = svn:mime-type=text/plain;svn:eol-style=native;svn:\
-keywords=Rev Date HeadURL LastChangedRevision LastChangedBy \
-LastChangedDate
-\end{lstlisting}
-
 The class comment has to contain the following information:
 
 \begin{lstlisting}[language=Java]
@@ -1448,14 +1391,12 @@ The class comment has to contain the following information:
  * @author <Name of the author>
  * @author <Other authors>
  *
- * @version $LastChangedRevision$
  * @since <current version number>
  */
 \end{lstlisting}
 
-Again the keyword expansion from subversion is used to expand the keyword,
-\texttt{\$LastChangedRevision \$} in this case. The name of the author and the 
-purpose have to be replaced by their proper values.
+The name of the author and the purpose have to be replaced by their proper
+values.
 
 \section{Releases}
 

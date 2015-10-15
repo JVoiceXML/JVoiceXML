@@ -5,7 +5,6 @@
 Create the document 'How to build JVoiceXML'..
     </description>
 
-
     <!--  allow the user to override setting in an own properties file.  -->
     <property file="../org.jvoicexml/personal-props/ant.properties" />
     <property file="../org.jvoicexml/config-props/ant.properties" />
