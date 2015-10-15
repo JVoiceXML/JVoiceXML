@@ -12,7 +12,7 @@ package org.jvoicexml.eclipse.debug.ui.launcher;
  *******************************************************************************/
 import java.net.URI;
 import java.net.URL;
-import java.util.Vector;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -43,6 +43,7 @@ import org.jvoicexml.eclipse.debug.ui.launching.IVoiceXMLBrowserConstants;
  * Tab group for VoiceXML browser settings. May not be subclassed.
  * 
  * @author Brent D. Metz
+ * @author Dirk Schnelle-Walka
  */
 public class CommonVoiceXMLBrowserTab extends AbstractLaunchConfigurationTab {
 
@@ -84,9 +85,9 @@ public class CommonVoiceXMLBrowserTab extends AbstractLaunchConfigurationTab {
         l.setText(Messages.BrowserWithColon);
         l.setLayoutData(new GridData());
 
-        Vector names = new Vector();
-        Vector ids = new Vector();
-        Vector browserExtensions = new Vector();
+        List<String> names = new java.util.ArrayList<String>();
+        List<String> ids = new java.util.ArrayList<String>();
+        List<IConfigurationElement> browserExtensions = new java.util.ArrayList<IConfigurationElement>();
 
         IExtensionPoint iep = Platform
                 .getExtensionRegistry()
@@ -116,13 +117,12 @@ public class CommonVoiceXMLBrowserTab extends AbstractLaunchConfigurationTab {
                 }
             }
         }
-        String browsers[] = (String[]) names.toArray(new String[0]);
-        browserIds = (String[]) ids.toArray(new String[0]);
+        String browsers[] = names.toArray(new String[0]);
+        browserIds = ids.toArray(new String[0]);
 
         // Keep extension points objects around so the UI class can be
         // instantiated if necessary
-        browserElements = (IConfigurationElement[]) browserExtensions
-                .toArray(new IConfigurationElement[0]);
+        browserElements = browserExtensions.toArray(new IConfigurationElement[0]);
 
         browserCombo = new Combo(c, SWT.READ_ONLY);
         browserCombo.setItems(browsers);

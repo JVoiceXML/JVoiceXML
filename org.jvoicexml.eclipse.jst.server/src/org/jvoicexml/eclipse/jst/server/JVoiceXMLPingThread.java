@@ -1,7 +1,7 @@
 /*
  * JVoiceXML JST server plugin
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,7 @@ import javax.naming.NamingException;
  * Ping the JVoiceXML server.
  *
  * @author Aurelian Maga
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version 0.1
  *
  */
@@ -29,7 +29,7 @@ final class JVoiceXMLPingThread extends Thread {
     /** Delay in msec between the checks. */
     private static final int SLEEP = 5000;
     /** Reference to the server behavior to update the status. */
-    private JVoiceXMLServerBehaviour behaviour;
+    private final JVoiceXMLServerBehaviour behaviour;
     /** <code>true</code> if checking should be performed. */
     private boolean check;
     /** JNDI context to lookup the server. */
@@ -53,7 +53,6 @@ final class JVoiceXMLPingThread extends Thread {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -67,6 +66,7 @@ final class JVoiceXMLPingThread extends Thread {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
         check = true;
         while (check) {

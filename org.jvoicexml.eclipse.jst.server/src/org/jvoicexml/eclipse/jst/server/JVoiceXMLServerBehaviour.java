@@ -1,7 +1,7 @@
 /*
  * JVoiceXML JST server plugin
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ import org.eclipse.wst.server.core.IServer;
  * </p>
  *
  * @author Aurelian Maga
+ * @author Dirk Schnelle-Walka
  * @version 0.1
  *
  */
