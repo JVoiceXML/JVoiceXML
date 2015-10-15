@@ -590,7 +590,7 @@ public final class JVoiceXmlImplementationPlatform
      * The user has started to speak.
      * 
      * @param type
-     *            the barge-in type
+     *            the mode type of te recognizer that started
      */
     private void inputStarted(final ModeType type) {
         // No need to wait for input
@@ -754,7 +754,7 @@ public final class JVoiceXmlImplementationPlatform
      */
     @Override
     public void inputStatusChanged(final SpokenInputEvent event) {
-        if (event.isType(InputStartedEvent.EVENT_TYPE)) {
+        if (event.isType(RecognitionStartedEvent.EVENT_TYPE)) {
             // Start the timer with a default timeout if there were no
             // prompts to queue.
             final SpeakableText lastSpeakable = promptAccumulator
@@ -762,8 +762,9 @@ public final class JVoiceXmlImplementationPlatform
             if (lastSpeakable == null) {
                 startTimer();
             }
-        } else if (event.isType(RecognitionStartedEvent.EVENT_TYPE)) {
-            final InputStartedEvent started = (InputStartedEvent) event;
+        } else if (event.isType(InputStartedEvent.EVENT_TYPE)) {
+            final InputStartedEvent started =
+                    (InputStartedEvent) event;
             final ModeType modeType = started.getMode();
             inputStarted(modeType);
         } else if (event.isType(RecognitionEvent.EVENT_TYPE)) {
