@@ -94,7 +94,7 @@ The JSAPI 2.0 implementation platform is a good place to get started.
                 <include name="httpclient-cache-4.2.3.jar" />
                 <include name="httpmime-4.2.3.jar" />
                 <include name="httpcore-4.2.3.jar" />
-                <include name="httpcore-nab-4.2.3.jar" />
+                <include name="httpcore-ab-4.2.3.jar" />
                 <include name="httpcore-nio-4.2.3.jar" />
                 <include name="chardet.jar" />
                 <include name="jetty-server-9.2.2.v20140723.jar" />
@@ -102,6 +102,8 @@ The JSAPI 2.0 implementation platform is a good place to get started.
                 <include name="jetty-http-9.2.2.v20140723.jar" />
                 <include name="jetty-io-9.2.2.v20140723.jar" />
                 <include name="servlet-api-3.1.jar" />
+                <include name="slf4j-api-1.7.12.jar" />
+                <include name="slf4j-log4j12-1.7.12.jar" />
                 <include name="org.jvoicexml.jar" />
                 <include name="org.jvoicexml.config.jar" />
                 <include name="org.jvoicexml.xml.jar" />
@@ -328,7 +330,7 @@ You will need a MRCPv2 server in addition to use this implementation platform.
             </fileset>
         </pack>
         <pack name="Text implementation platform" required="no"
-            preselected="no">
+            preselected="yes">
             <description>Demo implementation platform with text based input and output.
             </description>
             <fileset dir="config" targetdir="$INSTALL_PATH/config">

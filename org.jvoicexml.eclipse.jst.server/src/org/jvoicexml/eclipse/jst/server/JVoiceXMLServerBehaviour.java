@@ -30,7 +30,6 @@ import org.eclipse.wst.server.core.IServer;
  * @version 0.1
  *
  */
-
 public final class JVoiceXMLServerBehaviour extends GenericServerBehaviour {
     /** Reference to the ping thread. */
     private JVoiceXMLPingThread ping;
