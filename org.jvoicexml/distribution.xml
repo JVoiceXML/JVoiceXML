@@ -36,6 +36,7 @@ This file builds the distribution files for JVoiceXML.
 
     <target name="-userdoc">
         <ant dir="../userguide" target="distribution" inheritall="false" inheritrefs="false" />
+        <ant dir="../howtobuild" target="distribution" inheritall="false" inheritrefs="false" />
     </target>
 
     <target name="-prepareDistributionFolder" depends="jar,-prepareAdditionalFiles,-userdoc" description="copy all files for the binary distribution">

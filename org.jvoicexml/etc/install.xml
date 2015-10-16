@@ -441,7 +441,13 @@ JUnit (http://junit.org) and the text implementation platform.
         <pack name="Userguide" required="no" preselected="yes">
             <description>JVoiceXML User Guide</description>
             <fileset dir="doc" targetdir="$INSTALL_PATH/doc">
-                <include name="jvxml-userguide-@{jvxml.version}.pdf" />
+                <include name="jvxml-userguide.pdf" />
+            </fileset>
+        </pack>
+        <pack name="How to build" required="no" preselected="yes">
+            <description>How to build JVoiceXML Guide</description>
+            <fileset dir="doc" targetdir="$INSTALL_PATH/doc">
+                <include name="jvxml-howtobuild.pdf" />
             </fileset>
         </pack>
         <pack name="Demo" required="no" preselected="yes">
