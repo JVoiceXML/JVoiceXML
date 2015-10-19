@@ -91,8 +91,6 @@ public class JsonExtensionNotificationDataConverter
     /**
      * Packs the given SSML document into a JSON structure.
      * 
-     * @param name
-     *            the name of the event
      * @param speakable
      *            the speakable with the SSML document
      * @return JSON formatted string

@@ -41,6 +41,9 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * @since 0.7.8
  */
 public class RegexGrammarParser implements GrammarParser<GrammarDocument> {
+    /** Buffer size when reading the gramamr. */
+    private static final int BUFFER_SIZE = 1024;
+
     /**
      * {@inheritDoc}
      */
@@ -58,7 +61,7 @@ public class RegexGrammarParser implements GrammarParser<GrammarDocument> {
         final URL url = uri.toURL();
         final InputStream input = url.openStream();
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[BUFFER_SIZE];
         int read = 0;
         do {
             read = input.read(buffer);

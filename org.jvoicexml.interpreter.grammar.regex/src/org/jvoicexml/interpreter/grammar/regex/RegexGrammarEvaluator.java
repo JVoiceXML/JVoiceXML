@@ -18,6 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml.interpreter.grammar.regex;
 
 import java.net.URI;
@@ -33,13 +34,13 @@ import org.jvoicexml.implementation.grammar.GrammarEvaluator;
  */
 public class RegexGrammarEvaluator implements GrammarEvaluator {
     /** The regular expression to evaluate in this grammar. */
-    final Pattern pattern;
+    private final Pattern pattern;
     /** The URI of the associated grammar. */
-    final URI uri;
+    private final URI uri;
     
     /**
      * Constructs a new object.
-     * @param text the regular expression to evaluate in this grammar
+     * @param regex the regular expression to evaluate in this grammar
      * @param documentURI the URI of the associated grammar
      */
     public RegexGrammarEvaluator(final String regex, final URI documentURI) {

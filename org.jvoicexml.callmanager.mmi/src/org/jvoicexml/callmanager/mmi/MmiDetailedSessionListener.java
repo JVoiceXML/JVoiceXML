@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -110,7 +105,7 @@ public final class MmiDetailedSessionListener
     /**
      * Constructs a new object.
      * 
-     * @param ctc the MMI context
+     * @param ctx the MMI context
      * @param conv the converter for MMI events
      * @param protocolAdapter
      *            the adapter to send events

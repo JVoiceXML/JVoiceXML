@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -88,6 +83,7 @@ public final class RuleGrammarImplementation
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarType getMediaType() {
         return GrammarType.JSGF;
     }
@@ -95,6 +91,7 @@ public final class RuleGrammarImplementation
     /**
      * {@inheritDoc}
      */
+    @Override
     public ModeType getModeType() {
         return ModeType.VOICE;
     }
@@ -176,7 +173,7 @@ public final class RuleGrammarImplementation
     }
 
     /**
-     * {@inheritDoc}
+     * Checks, if the result is accepted by this grammar.
      */
     public boolean accepts(final RecognitionResult result) {
         if (grammar == null) {

@@ -34,7 +34,7 @@ public class RegexGrammarTypeFactory implements GrammarTypeFactory {
      * {@inheritDoc}
      */
     @Override
-    public GrammarType getGrammarType(String attribute) {
+    public GrammarType getGrammarType(final String attribute) {
         if (attribute == null) {
             return null;
         }

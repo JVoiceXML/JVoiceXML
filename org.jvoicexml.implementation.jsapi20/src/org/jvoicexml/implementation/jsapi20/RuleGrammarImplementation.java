@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -28,21 +23,16 @@ package org.jvoicexml.implementation.jsapi20;
 
 import java.net.URI;
 
-import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.RuleGrammar;
-import javax.speech.recognition.RuleParse;
 
-import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
- * Implementation of a SRGS grammar.
+ * Implementation of a SRGS grammar within the JSAPI 2.0 world.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
- *
  * @since 0.5.5
  */
 public final class RuleGrammarImplementation
@@ -85,6 +75,7 @@ public final class RuleGrammarImplementation
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarType getMediaType() {
         return GrammarType.SRGS_XML;
     }
@@ -92,6 +83,7 @@ public final class RuleGrammarImplementation
     /**
      * {@inheritDoc}
      */
+    @Override
     public ModeType getModeType() {
         return ModeType.VOICE;
     }
@@ -103,19 +95,6 @@ public final class RuleGrammarImplementation
      */
     public String getName() {
         return grammar.getReference();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean accepts(final RecognitionResult result) {
-        try {
-            final RuleParse rp = grammar.parse(result.getWords(),
-                    grammar.getRoot());
-            return rp != null;
-        } catch (GrammarException ex) {
-            return false;
-        }
     }
 
     /**

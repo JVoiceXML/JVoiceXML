@@ -28,7 +28,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * @author Dirk Schnelle-Walka
  *
  */
-class RegexGrammarType extends GrammarType {
+final class RegexGrammarType extends GrammarType {
     /** The grammar type {@code application/grammar+regex}. */
     public static final String GRAMMAR_TYPE = "application/grammar+regex";
 

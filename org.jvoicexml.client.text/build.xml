@@ -140,6 +140,7 @@ Currently it is set to '${mmi.protoc}'
         <delete dir="${apidoc}" failonerror="false" />
         <javadoc destdir="${apidoc}" windowtitle="JVoiceXML Text Client Library" author="true" version="true" access="${javadoc.access}" use="true">
             <packageset dir="${src}" />
+            <packageset dir="${gen}" />
             <classpath refid="project.classpath" />
 
             <doctitle>JVoiceXML - a free VoiceXML interpreter</doctitle>

@@ -306,6 +306,7 @@ public final class VoiceModalityComponent
      * @param data
      *            the container to copy the call meta data
      * @throws URISyntaxException
+     *            error converting the call metatdata into a URL
      * @since 0.7.7
      */
     private void copyCallMetadata(final LifeCycleEvent event,
@@ -477,11 +478,13 @@ public final class VoiceModalityComponent
                     session = callManager.createSession(data);
                     context.setSession(session);
                 }
-                final ExtensionNotificationDataConverter converter = callManager
-                        .getExtensionNotificationDataConverter();
-                final DetailedSessionListener listener = new MmiDetailedSessionListener(
-                        adapter, context, converter);
-                final JVoiceXmlSession jvxmlSession = (JVoiceXmlSession) session;
+                final ExtensionNotificationDataConverter converter =
+                        callManager.getExtensionNotificationDataConverter();
+                final DetailedSessionListener listener =
+                        new MmiDetailedSessionListener(adapter, context,
+                                converter);
+                final JVoiceXmlSession jvxmlSession =
+                        (JVoiceXmlSession) session;
                 jvxmlSession.addSessionListener(listener);
                 session.call(uri);
                 session.addSessionListener(this);
