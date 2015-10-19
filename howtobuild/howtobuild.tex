@@ -176,6 +176,10 @@ Parts of the code of JVoiceXML are using features from the JAVA 7 API, so that
 you will need at least J2SE 7 to compile the code. You can download it
 for free from \url{http://oracle.com/technetwork/java/javase/downloads/index.html}.
 
+In case you are useing another IDE, you will have to manually adapt
+the required library settings, e.g. gor code completion. The dependencies to all
+libraries are listed in \lstinline{JVOICEXML_HOME/doc/libraries.xhtml}.
+
 
 \subsubsection{Eclipse settings}
 \label{sec:eclipse}
@@ -202,7 +206,7 @@ Eclipse is configured to use the folder \texttt{eclipse-compiled} as output
 since this may cause some interference with the ANT build
 scripts\footnote{\url{https://bugs.eclipse.org/bugs/show_bug.cgi?id=210746}}.
 
-\paragraph{Eclipse Plug-ins}
+\paragraph{Required Eclipse Plug-ins for Development}
 
 The development of JVoiceXML relies on some plug-ins that are not part of the
 IDE. You will need to install the following eclipse plug-ins via the eclipse
@@ -213,12 +217,11 @@ Below is a list of the required update URLs.
 \begin{description}
 \item[Checkstyle] \url{http://eclipse-cs.sourceforge.net/update} (Note that you
 only need the 5.x version)
-\item[Subversion] \url{http://subclipse.tigris.org/update_1.6.x}
-(Alternatively, you can also use subversive or a similar SVN client)
 \item[TeXlipse] \url{http://texlipse.sourceforge.net} (optional if you want to
 edit the documentation)
 \item[Protocol Buffers Development Tools] \url{http://code.google.com/p/protobuf-dt/}
-(optional if you want to edit the protobuf files in the sub project \texttt{org.jvoicexml.mmi.events})
+(optional if you want to edit the protobuf files in the sub project
+\texttt{org.jvoicexml.mmi.events} or \texttt{org.jvoicexml.client.text})
 \end{description}
 
 \subsection{ANT}
@@ -234,7 +237,7 @@ The build file allows you to override the settings by using a custom
 properties file jvoicexml.properties in the \$\{JVOICEXML\_HOME\}
 directory.
 
-Nearly all IDE's feature an ANT integration. This allows to use
+Since almost all IDE's feature an ANT integration, it will be possible to use
 your favorite IDE.
 
 \subsubsection{ANT Support for Eclipse}
@@ -271,7 +274,7 @@ classpath.
 \label{sec:tomcat}
 
 For the system test and for some demos you will need to have a servlet
-container installed. We use Tomcat 7 for that purpose. You can download this
+container installed. We use Tomcat 8 for that purpose. You can download this
 release from \url{http://tomcat.apache.org}.
 
 This is not needed if you do not use the servlet based demos or want to run the
@@ -401,6 +404,7 @@ you will need to checkout the folloging projects:
   \item org.jvoicexml.client
   \item org.jvoicexml.config
   \item org.jvoicexml.implementation.jsapi20
+  \item org.jvoicexml.interpreter.datamodel.ecmascript
   \item org.jvoicexml.jndi
   \item org.jvoicexml.processor.srgs
   \item org.jvoicexml.profile.vxml21
@@ -419,13 +423,14 @@ you will need
   \item org.jvoicexml.client.text
   \item org.jvoicexml.config
   \item org.jvoicexml.implementation.text
+  \item org.jvoicexml.interpreter.datamodel.ecmascript
   \item org.jvoicexml.jndi
   \item org.jvoicexml.srgs
   \item org.jvoicexml.profile.vxml21
   \item org.jvoicexml.xml
 \end{itemize}
 
-A simple demo to test that implementation platform to start with is
+A simple demo to test that implementation platform is
 \lstinline{org.jvoicexml.demo.text}.
 
 \subsection{Project \texttt{org.jvoicexml}}
@@ -697,11 +702,8 @@ ant -f run.xml shutdown
 
 Please do not stop the voice browser by \texttt{CTRL-C} or similar. It may occur
 that some resources are not closed properly and may cause conflicts with the next
-start of JVoiceXML.
-
-This target will try to determine the current SVN version number using JavaHL. On
-windows systems this may cause some trouble. In case you encounter any problems,
-please read the instructions at \url{http://subclipse.tigris.org/wiki/JavaHL}.
+start of JVoiceXML. This is because it is not possible to properly shutdown the
+RMI registry.
 
 The created \texttt{run.xml} also contains a target to enable remote
 debugging. It can be called by
@@ -748,14 +750,14 @@ and the jars that are created by the \emph{jar} target in the directory
 files of your distribution in the directory \emph{dist}.
 If successful, you will find at minimum the following jar archives:
 \begin{itemize}
-\item jvxml.jar This jar file contains the core of JVoiceXML.
-\item jvxml-xml.jar This jar contains all files that are required
+\item org.jvoicexml.jar This jar file contains the core of JVoiceXML.
+\item org.jvoicexml.xml.jar This jar contains all files that are required
 to create and parse VoiceXML documents. This file is being build from the
 project \texttt{org.jvoicexml.xml} which is described in
 section~\ref{sec:org.jvoicexml.xml}.
 \item jvxml-client.jar This jar contains the files needed to build
 a client.
-\item jvxml-jndi.jar JNDI support for JVoiceXML
+\item org.jvoicexml.jndi.jar JNDI support for JVoiceXML
 \item some other jars, depending on your configuration settings
 \end{itemize}
 
@@ -781,14 +783,6 @@ run. A screenshot is shown in figure~\ref{fig:eclipse-launch}.
 \caption{Eclipse External Tools Configuration for JVoiceXML}
 \label{fig:eclipse-launch}
 \end{figure}
-
-In some cases you will see some warnings when executing the
-\lstinline{-version} target. Usually, these warnings can be ignored. In order
-to get rid of it, you will have to ensure that \lstinline{svn} (or
-\lstinline{svn.exe} for Windows systems) can be found on the OS's path. Usually
-this is not the case if you are using Tortoise on Windows. Therefore, you will
-have to donwload and install it separately from
-\url{http://subversion.apache.org/packages.html}.
 
 \subsection{Project \texttt{org.jvoicexml.config}}
 \label{sec:org.jvoicexml.config}
@@ -1228,8 +1222,6 @@ doese not require JNDI.
 
 No special libraries.
 
-
-
 \section{Demo Programs}
 
 The demo programs give a short impression how the JVoiceXML voice browser can
@@ -1261,11 +1253,16 @@ weird dialog flow
 \section{Eclipse Plug in}
 
 The eclipse plug-in allows to run JVoiceXML as a server from within the eclipse
-IDE.
+IDE and to start VoiceXML sessions from eclipse.
 
 \begin{description}
+\item[org.jvoicexml.eclipse.debug.ui] Basic UI Widgets for VoiceXML debugging
+\item[org.jvoicexml.eclipse.debug.ui.launching] Eclipse plug-in as a basic
+framework for VoiceXML debugging
+\item[org.jvoicexml.eclipse.debug.ui.launching.jvoicexml] Implementation of the
+basic framework for JVoiceXML
 \item[org.jvoicexml.eclipse.jst.server] Eclipse plug-in to start the JVoiceXML
-from the eclipse server view.
+server from the eclipse server view
 \item[org.jvoicexml.eclipse.features] Eclipse features for the JVoiceXML
 plug-in.
 \item[org.jvoicexml.eclipse.updatesite] Eclipse update site for the
@@ -1291,6 +1288,8 @@ In addition you will need the following sub-projects:
 \begin{itemize}
 \item org.jvoicexml
 \item org.jvoicexml.xml
+\item org.jvoicexml.client
+\item org.jvoicexml.client.text
 \item org.jvoicexml.implementation.text
 \end{itemize} 
 
@@ -1301,10 +1300,9 @@ JVoiceXML documentation as \LaTeX files.
 The documentation comprise the following sub-projects:
 
 \begin{description}
-\item[extensionguide] The extension guide for JVoiceXML
 \item[howtobuild] The how to build JVoiceXML documentation (this document)
-\item[htdocs] The HTML web pages
 \item[userguide] A tutorial to start working with JVoiceXML
+\item[htdocs] The HTML web pages
 \end{description}
 
 \section{Code Conventions}
@@ -1390,7 +1388,6 @@ The class comment has to contain the following information:
  *
  * @author <Name of the author>
  * @author <Other authors>
- *
  * @since <current version number>
  */
 \end{lstlisting}
