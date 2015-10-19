@@ -246,16 +246,18 @@ public class CommonVoiceXMLBrowserTab extends AbstractLaunchConfigurationTab {
         try {
             String url = launchConfig.getAttribute(
                     IVoiceXMLBrowserConstants.LAUNCH_URL, ""); //$NON-NLS-1$
-            if (url.trim().length() == 0) {
+            url = url.trim();
+            if (url.length() == 0) {
                 return false;
             }
 
-            new URI(url.trim());
+            // Check if this is a valid URL
+            new URI(url);
 
             String browser = launchConfig.getAttribute(
                     IVoiceXMLBrowserConstants.LAUNCH_BROWSER_ID, ""); //$NON-NLS-1$
-
-            if (browser.trim().length() == 0) {
+            browser = browser.trim();
+            if (browser.length() == 0) {
                 return false;
             }
             if (currentBrowserUI != null) {

@@ -1,9 +1,7 @@
 /*
  * JVoiceXML VTP Plugin
  *
- * Copyright (C) 2006 Dirk Schnelle
- *
- * Copyright (c) 2006 Dirk Schnelle
+ * Copyright (C) 2006-2015 Dirk Schnelle-Walka
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -23,9 +21,9 @@ import javax.naming.InitialContext;
 
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
-import org.jvoicexml.CharacterInput;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DtmfInput;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.eclipse.debug.ui.launching.IVoiceXMLBrowser;
@@ -40,7 +38,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 /**
  * Interface to the JVoiceXml VoiceXML browser.
  * 
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @author Aurelian Maga
  */
 public final class JVoiceXmlBrowser implements IVoiceXMLBrowser {
@@ -306,13 +304,11 @@ public final class JVoiceXmlBrowser implements IVoiceXMLBrowser {
      *            The DTMF to send.
      */
     private void sendDtmf(final String dtmf) {
-        final CharacterInput input;
-
+        final DtmfInput input;
         try {
-            input = session.getCharacterInput();
+            input = session.getDtmfInput();
         } catch (NoresourceError nre) {
             logMessage(nre.getMessage());
-
             return;
         } catch (ConnectionDisconnectHangupEvent e) {
             logMessage(e.getMessage());
@@ -320,7 +316,7 @@ public final class JVoiceXmlBrowser implements IVoiceXMLBrowser {
             return;
         }
         final char dtmfChar = dtmf.charAt(0);
-        input.addCharacter(dtmfChar);
+        input.addDtmf(dtmfChar);
     }
 
     /**

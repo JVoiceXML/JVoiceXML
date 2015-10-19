@@ -1,7 +1,7 @@
 /*
  * JVoiceXML VTP Plugin
  *
- * Copyright (C) 2006 Dirk Schnelle-Walka
+ * Copyright (C) 2006-2015 Dirk Schnelle-Walka
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -185,7 +185,7 @@ public final class JVoiceXmlBrowserUI implements IBrowserConfigurationUI {
      * @param attribute
      *            Name of the attribute,
      * @param text
-     *            The text containg the current value..
+     *            The text containing the current value..
      */
     private void setIntAttribute(
             final ILaunchConfigurationWorkingCopy configuration,
@@ -511,7 +511,6 @@ public final class JVoiceXmlBrowserUI implements IBrowserConfigurationUI {
      */
     private boolean existsFile(final String name) {
         final File file = new File(name);
-
         return file.exists();
 
     }

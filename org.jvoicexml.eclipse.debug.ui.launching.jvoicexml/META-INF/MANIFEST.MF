@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JVoiceXml Eclipse Plugin
 Bundle-SymbolicName: org.jvoicexml.eclipse.debug.ui.launching.jvoicexml;singleton:=true
-Bundle-Version: 0.4.0
+Bundle-Version: 0.5.0
 Bundle-Activator: org.jvoicexml.eclipse.debug.ui.launching.jvoicexml.JVoiceXmlPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -12,30 +12,38 @@ Require-Bundle: org.eclipse.ui,
  org.apache.log4j,
  org.jvoicexml.eclipse.debug.ui.launching;bundle-version="1.0.0"
 Eclipse-AutoStart: true
-Export-Package: org.jvoicexml;uses:="javax.sound.sampled,org.jvoicexml.event",
- org.jvoicexml.client.jndi;
-  uses:="javax.naming,
-   org.jvoicexml.xml.vxml,
-   org.jvoicexml.documentserver.schemestrategy,
-   org.jvoicexml,
-   javax.naming.spi,
+Export-Package: org.jvoicexml;
+  uses:="org.jvoicexml.xml.vxml,
+   javax.sound.sampled,
+   org.jvoicexml.xml.srgs,
    org.jvoicexml.event",
- org.jvoicexml.client.text;uses:="org.jvoicexml.client,org.jvoicexml.xml.ssml,org.jvoicexml",
- org.jvoicexml.eclipse.debug.ui.launching.jvoicexml;
-  uses:="org.eclipse.debug.core,
-   org.jvoicexml.eclipse.debug.ui,
-   org.eclipse.jface.resource,
-   org.jvoicexml.client.text,
-   org.eclipse.ui.plugin,
-   org.jvoicexml,
+ org.jvoicexml.client.jndi;
+  uses:="org.jvoicexml,
+   javax.naming.spi,
+   org.jvoicexml.documentserver.schemestrategy,
+   javax.naming,
+   org.jvoicexml.xml.vxml,
+   org.jvoicexml.event",
+ org.jvoicexml.client.text;
+  uses:="org.jvoicexml,
+   org.jvoicexml.client,
    org.jvoicexml.xml.ssml,
+   org.jvoicexml.client.text.protobuf",
+ org.jvoicexml.eclipse.debug.ui.launching.jvoicexml;
+  uses:="org.jvoicexml,
+   org.jvoicexml.client.text,
+   org.eclipse.swt.widgets,
+   org.eclipse.ui.plugin,
    org.jvoicexml.eclipse.debug.ui.launching,
+   org.eclipse.debug.core,
    org.osgi.framework,
-   org.eclipse.swt.widgets"
-Bundle-ClassPath: lib/jsr173_1.0_api.jar,
- lib/jsr173_1.0_ri.jar,
- lib/org.jvoicexml.client.jar,
+   org.eclipse.jface.resource,
+   org.jvoicexml.xml.ssml,
+   org.jvoicexml.eclipse.debug.ui"
+Bundle-ClassPath: lib/org.jvoicexml.client.jar,
  lib/org.jvoicexml.client.text.jar,
  lib/org.jvoicexml.jndi.jar,
- lib/org.jvoicexml.xml.jar
+ lib/org.jvoicexml.xml.jar,
+ lib/protobuf-java-2.5.0.jar
 Bundle-Vendor: Dirk Schnelle-Walka
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

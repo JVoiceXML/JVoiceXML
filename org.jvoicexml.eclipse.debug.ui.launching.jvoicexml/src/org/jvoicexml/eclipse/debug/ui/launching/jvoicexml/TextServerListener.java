@@ -1,9 +1,7 @@
 /*
  * JVoiceXML VTP Plugin
  *
- * Copyright (C) 2006 Dirk Schnelle
- *
- * Copyright (c) 2006 Dirk Schnelle
+ * Copyright (C) 2006-2015 Dirk Schnelle-Walka
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,6 +15,7 @@ import java.net.InetSocketAddress;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.jvoicexml.client.text.TextListener;
+import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.eclipse.debug.ui.launching.IVoiceXMLBrowserConstants;
 import org.jvoicexml.eclipse.debug.ui.launching.VoiceXMLDialogMessage;
 import org.jvoicexml.xml.ssml.Speak;
@@ -38,7 +37,15 @@ public class TextServerListener implements TextListener {
     }
 
     @Override
-    public void outputSsml(final SsmlDocument document) {
+    public void expectingInput(TextMessageEvent message) {
+    }
+
+    @Override
+    public void inputClosed(TextMessageEvent message) {
+    }
+
+    @Override
+    public void outputSsml(TextMessageEvent message, final SsmlDocument document) {
         browser.logMessage(document.toString());
 
         final DebugEvent event[] = new DebugEvent[1];
@@ -59,20 +66,12 @@ public class TextServerListener implements TextListener {
     }
 
     @Override
-    public void disconnected() {
+    public void disconnected(TextMessageEvent message) {
         browser.logMessage("disconnected");
         browser.stop();
     }
 
     @Override
     public void started() {
-    }
-
-    @Override
-    public void expectingInput() {
-    }
-
-    @Override
-    public void inputClosed() {
     }
 }
