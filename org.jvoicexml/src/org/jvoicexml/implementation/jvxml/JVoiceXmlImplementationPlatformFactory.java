@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -58,7 +53,6 @@ import org.jvoicexml.implementation.pool.KeyedResourcePool;
  * </p>
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class JVoiceXmlImplementationPlatformFactory
         implements ImplementationPlatformFactory {
@@ -127,7 +121,7 @@ public final class JVoiceXmlImplementationPlatformFactory
                     addTelephonyFactory(resourceFactory);
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception | UnsatisfiedLinkError e) {
             throw new ConfigurationException(e.getMessage(), e);
         }
 
