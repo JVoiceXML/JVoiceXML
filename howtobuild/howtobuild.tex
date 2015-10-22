@@ -176,7 +176,7 @@ Parts of the code of JVoiceXML are using features from the JAVA 7 API, so that
 you will need at least J2SE 7 to compile the code. You can download it
 for free from \url{http://oracle.com/technetwork/java/javase/downloads/index.html}.
 
-In case you are useing another IDE, you will have to manually adapt
+In case you are using another IDE, you will have to manually adapt
 the required library settings, e.g. gor code completion. The dependencies to all
 libraries are listed in \lstinline{JVOICEXML_HOME/doc/libraries.xhtml}.
 
@@ -237,8 +237,8 @@ The build file allows you to override the settings by using a custom
 properties file jvoicexml.properties in the \$\{JVOICEXML\_HOME\}
 directory.
 
-Since almost all IDE's feature an ANT integration, it will be possible to use
-your favorite IDE.
+Since almost all IDEs feature an ANT integration, it will be possible to use
+your favorite IDE. However, it might take you some manual effort to add all the needed libraries.
 
 \subsubsection{ANT Support for Eclipse}
 \label{sec:ant-eclipse}
@@ -267,7 +267,7 @@ Some more information for executing ANT targets from within eclipse are given at
 the end of section~\ref{sec:ant-build-file}. 
 
 Note: Please use the ANT build system. An attempt to run JVoiceXML from eclipse
-directly may result in strange errors and a huge amount of adaptions to the
+directly may result in strange errors and a huge amount of adaptations to the
 classpath.
 
 \subsection{Tomcat}
@@ -517,7 +517,7 @@ This directory is assigned to the property \\
 \texttt{3rdparty.dir}
 
 Each library is located in a specific subfolder of the \$\{3rdparty.dir\}
-folder. These subfolder follow this convention:
+folder. These subfolder follow the following convention:
 
 \begin{itemize}
 \item The name of the subfolder is a combination of the library name and
@@ -543,8 +543,9 @@ from their repository. The presence of a snapshot is marked in the file
 \subsubsection{Libraries Needed to Compile JVoiceXML}
 \label{sec:libr-need-comp}
 
-\paragraph{log4j 1.2.17}
-
+\begin{description}
+\item[log4j] Version 1.2.17 \\
+URL \url{http://logging.apache.org/log4j} \\
 JVoiceXML uses log4j~\cite{apache:log4j} for logging. We think that log4j has 
 some advantages
 over \texttt{java.util.logging} and appears to be more mature and reliable.
@@ -558,47 +559,36 @@ system property
 This file contains the description of a logging handler that forwards all
 request to log4j. Hence, both the log4j logging framework and SUN's logging
 framework can be configured through the log4.xml configuration file.
-
-\paragraph{Rhino 1.7R3}
-
-JVoiceXML uses rhino~\cite{rhino} from Mozilla to enable scripting.
-Java 6 already comes with a rhino implementation, but since we need to
-build custom components we can not rely on this.
-
-\paragraph{jsonsimple1.1}
-
-Helps to parse JSON formatted JavaScript.
-
-\paragraph{Commons pool 1.5.5}
-
+\item[Jetty] Version 9.2.2 \\
+URL\url{http://download.eclipse.org/jetty/} \\
+Embedded web server to serve, e.g., generated grammar files.
+\item[Commons Pool] Vesion 1.5.5 \\
+URL \url{http://jakarta.apache.org/commons/} \\
 The pooling of implementation platform resources is based on commons
 pool.
-
-\paragraph{Commons HTTP client 4.2.3}
-
+\item[Commons HTTP Client] Version 4.2.3 \\
+URL \url{http://jakarta.apache.org/commons/} \\
 The HTTP client library is used to retrieve VoiceXML documents from a web
 server.
-
-\paragraph{Commons HTTP core 4.2.3}
-
-Core HTTP functionalities needed by the HTTP client.
+\item[Commons HTTP Core] Version 4.2.3 \\
+URL \url{http://jakarta.apache.org/commons/} \\
+Basic HTTP functionality for Commons HTTP Client.
+\item[Commons Codec] Version 1.4 \\
+URL \url{http://jakarta.apache.org/commons/} \\
+This library is required by the Commons HTTP Client to add attachments to the
+POST and GET requests.
+\item[Commons Lang] Version 3.3.2 \\
+URL \url{http://jakarta.apache.org/commons/} \\
+Used by HTTP Core and Commons Pool.
+\item[Commons Logging] Version 1.1.1 \\
+URL \url{http://jakarta.apache.org/commons/} \\
+Used by HTTP Core and Commons Pool.
+\end{description}
 
 \subsubsection{Libraries Needed at Run-time}
 
 Besides the libraries named in section~\ref{sec:libr-need-comp} the following
 libraries are needed to run JVoiceXML.
-
-\paragraph{Commons Logging 1.1.1}
-\label{sec:commons-logging}
-
-This library is required by the other commons libraries.
-
-\paragraph{Commons Codec 1.4}
-\label{sec:commons-codec}
-
-This library is required by the HTTP client to add attachments to the POST and
-GET requests.
-
 
 \subsubsection{Other Libraries}
 
@@ -719,7 +709,7 @@ debug JVoiceXML.
 \label{sec:ant-build-file}
 
 This section explains the most important targets of the main build file
-\texttt{build.xml}. All others buildfiles from the implementation platforms
+\texttt{build.xml}. All others build files from the implementation platforms
 are called from this central point. Just start ant without any target specified
 if you want to build everything. Call
 \begin{lstlisting}
@@ -812,10 +802,27 @@ XML languages like SRGSXML, PLS and SSML.
 
 This project has to be build before the main project.
 
-\subsection{Project \texttt{org.jvoicexml.processor.srgs}}
-\label{sec:org.jvoicexml.processor.srgs}
+\subsection{Project \texttt{org.jvoicexml.srgs}}
+\label{sec:org.jvoicexml.srgs}
 
 This project provides an SRGS processor.
+
+\subsection{Project \texttt{org.jvoicexml.interpreter.ecmascript}}
+\label{sec:org.jvoicexml.srgs}
+
+This project provides a datamodel based on ECMAscript.
+
+\subsubsection{Third party libraries}
+\label{sec:config-third-party-libr}
+
+\begin{description}
+\item[Rhino] Version 1.7Rv \\
+URL \url{http://www.mozilla.org/rhino/} \\
+JVoiceXML uses Rhino from Mozilla to enable scripting.
+\item[JSONsimple] Version 1.1 \\
+URL \url{http://code.google.com/p/json-simple} \\
+Helps to serialize and deserialize JSON formatted strings into ECMAscript.
+\end{description}
 
 \section{Remote Java Applications}
 \subsection{Project \texttt{org.jvoicexml.client}}
@@ -904,11 +911,6 @@ Please refer to \url{http://www.cloudgarden.com}.
 
 This project contains a first draft of an implementation platform to enable
 JSAPI 2.0 support for JVoiceXML.
-
-Note that this is not the final release
-but the release candidate. It will not run on embedded devices since it makes
-use of Conversay's speech engine that is only compatible with the Windows
-operating system.
 
 \subsubsection{Project Specific Configuration}
 
@@ -1208,9 +1210,9 @@ JainSIP provides a SIP stack for Java.
 
 \subsection{Project \texttt{org.jvoicexml.callmanger.text}}
 
-This callmanager aims at accesssing JVoiceXML as a server for text based
+This callmanager aims at accessing JVoiceXML as a server for text based
 access. In contrast to the text based implementation platform this callmanager
-doese not require JNDI.
+does not require JNDI.
 
 \subsubsection{Third party libraries}
 
@@ -1588,13 +1590,13 @@ home directory with the following contents:
 \end{lstlisting}
 
 Insert your user name and your password at the marked entries.
-Aftwerwards call 
+Afterwards call 
 \begin{lstlisting}
 ant -f distribution.xml dist-maven-snapshot
 \end{lstlisting}
 in the core project \lstinline{org.jvoicexml}.
 
-The snapshots will use the SVN version number to differntiate between different
+The snapshots will use the SVN version number to differentiate between different
 snapshots of the same jar. Consequently, you will have to have at least
 a commit between two snapshots.
 \bibliography{howtobuild}
