@@ -140,7 +140,7 @@ public final class JVoiceXmlImplementationPlatform
     private boolean closed;
 
     /**
-     * Flag set to <code>true</code> if the caller hung up the phone.
+     * Flag set to {@code true} if the caller hung up the phone.
      */
     private boolean hungup;
 
@@ -844,12 +844,22 @@ public final class JVoiceXmlImplementationPlatform
     @Override
     public void telephonyCallHungup(final TelephonyEvent event) {
         synchronized (this) {
+            // Ignore the event if we are already closing the connection
             if (hungup) {
                 return;
             }
             hungup = true;
         }
         LOGGER.info("telephony connection closed");
+        
+        // Publish a corresponding event
+        if (eventbus != null) {
+            final JVoiceXMLEvent hangupEvent =
+                    new ConnectionDisconnectHangupEvent("caller hung up");
+            eventbus.publish(hangupEvent);
+        }
+
+        // Immediately return the resources
         LOGGER.info("returning aqcuired resources");
         returnSystemOutput();
         returnUserInput();
@@ -862,7 +872,6 @@ public final class JVoiceXmlImplementationPlatform
      */
     public void telephonyCallTransferred(final TelephonyEvent event) {
         LOGGER.info("call transfered to '" + event.getParam() + "'");
-
         if (eventbus != null) {
             final String uri = (String) event.getParam();
             final JVoiceXMLEvent transferEvent = new TransferEvent(uri, null);
@@ -886,7 +895,6 @@ public final class JVoiceXmlImplementationPlatform
         if (eventbus != null) {
             eventbus.publish(event);
         }
-
         if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
             final OutputStartedEvent outputStartedEvent =
                     (OutputStartedEvent) event;
