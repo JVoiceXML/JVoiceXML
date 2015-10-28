@@ -465,6 +465,7 @@ public final class JVoiceXmlImplementationPlatform
             if (call == null) {
                 final Telephony telephony = getExternalResourceFromPool(
                         telephonyPool, type);
+                telephony.addListener(this);
                 call = new JVoiceXmlCallControl(telephony);
                 LOGGER.info("borrowed call control of type '" + type + "'");
             }
