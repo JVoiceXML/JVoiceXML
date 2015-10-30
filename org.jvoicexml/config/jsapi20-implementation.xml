@@ -62,12 +62,17 @@
                 <beans:property name="endian" value="big" />
                 <beans:property name="encoding" value="pcm" />
                 <beans:property name="signed" value="true" />
-             </beans:bean>
+            </beans:bean>
         </beans:property>
-        <!-- beans:property name="mediaLocatorFactory"> <beans:bean class="org.jvoicexml.implementation.jsapi20.JlibRtpMediaLocatorFactory"> 
-            <beans:property name="participant" value="localhost:16384"/> <beans:property 
-            name="port" value="30001"/> <beans:property name="rate" value="8000" /> <beans:property 
-            name="keepAlive" value="true" /> </beans:bean> </beans:property -->
+        <!-- beans:property name="mediaLocatorFactory">
+            <beans:bean
+                class="org.jvoicexml.implementation.jsapi20.JlibRtpMediaLocatorFactory">
+                <beans:property name="participant" value="localhost:16384" />
+                <beans:property name="port" value="30001" />
+                <beans:property name="rate" value="8000" />
+                <beans:property name="keepAlive" value="true" />
+            </beans:bean>
+        </beans:property-->
     </beans:bean>
 
 </implementation>

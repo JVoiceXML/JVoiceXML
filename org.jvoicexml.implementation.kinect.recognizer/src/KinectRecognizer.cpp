@@ -91,8 +91,8 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD ul_reason_for_call, LPVOID lpRese
     }
 
     hInstance = hModule;
-	TCHAR *szWindowClass=_T("JVcoiceXmlKinectRecognizerClass");
-	TCHAR *szTitle=_T("JVcoiceXmlKinectRecognizer");
+	TCHAR *szWindowClass=_T("JVoiceXmlKinectRecognizerClass");
+	TCHAR *szTitle=_T("JVoiceXmlKinectRecognizer");
 
 	WNDCLASS wndclass;
     wndclass.style         = CS_HREDRAW | CS_VREDRAW;

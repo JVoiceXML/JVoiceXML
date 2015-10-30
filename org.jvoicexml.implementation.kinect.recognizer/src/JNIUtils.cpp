@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // JVoiceXML - A free VoiceXML implementation.
 //
-// Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+// Copyright (C) 2012-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -19,6 +19,7 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
+#include <iostream>
 #include <sapi.h>
 #include "JNIUtils.h"
 
@@ -37,6 +38,7 @@ DEFINE_GUID(CLSID_ExpectedRecognizer, 0x495648e7, 0xf7ab, 0x4267, 0x8e, 0x0f, 0x
 //    log4cplus::Logger::getInstance(L"org.jvoicexml.kinect.recognizer.JNIUtils");
 
 
+
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved)
 {
 	//log4cplus::BasicConfigurator config;
@@ -44,9 +46,10 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved)
 
     if (CLSID_ExpectedRecognizer != CLSID_SpInprocRecognizer)
     {
-        //char buffer[1024];
-        //GetErrorMessage(buffer, sizeof(buffer), "Incompatible SAPI versions! Please ensure that Microsoft Speech SDK and other requirements are installed!",
-        //    hr);
+        char buffer[1024];
+        GetErrorMessage(buffer, sizeof(buffer), "Incompatible SAPI versions! Please ensure that Microsoft Speech SDK and other requirements are installed!",
+            -1);
+		std::cerr << "Error loading Kinect Library: " << buffer << std::endl;
         return JNI_ERR;
     }
 
@@ -54,10 +57,11 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved)
 	HRESULT hr = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (FAILED(hr))
     {
-        //char buffer[1024];
-        //GetErrorMessage(buffer, sizeof(buffer), "Initializing COM failed!",
-        //    hr);
-        return JNI_ERR;
+        char buffer[1024];
+        GetErrorMessage(buffer, sizeof(buffer), "Initializing COM failed!",
+            hr);
+		std::cerr << "Error loading Kinect Library: " << buffer << std::endl;
+		return JNI_ERR;
     }
 
 	return JNI_VERSION_1_6;
