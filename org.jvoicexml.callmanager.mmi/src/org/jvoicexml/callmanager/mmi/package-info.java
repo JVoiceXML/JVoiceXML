@@ -5,8 +5,13 @@
  *
  * <p>
  * The event and transport layer can be customized by implementing the
- * {@link org.jvoicexml.callmanager.mmi.ETLProtocolAdapter}.
+ * {@link org.jvoicexml.callmanager.mmi.ETLProtocolAdapter}. The 
+ * {@link org.jvoicexml.callmanager.mmi.VoiceModalityComponent} registers
+ * itself as a listener to consume MMI events. It also employs the adapter
+ * to send MMI messages.
  * </p>
+ * 
+ * <img src="doc-files/Voice-Modality-Component.png" />
  * 
  * <p>
  * For now it is possible to start a new JVoiceXML session using the
