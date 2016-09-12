@@ -6,7 +6,7 @@
   <classpath>lib/org.jvoicexml.implementation.text.jar</classpath>
   <classpath>lib/org.jvoicexml.client.text.jar</classpath>
   <classpath>lib/org.jvoicexml.srgs.jar</classpath>
-  <classpath>lib/protobuf-java-2.5.0.jar</classpath>
+  <classpath>lib/protobuf-java-3.0.0.jar</classpath>
 
   <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">
     <beans:property name="instances" value="1" />
