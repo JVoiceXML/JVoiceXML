@@ -13,5 +13,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/log4j1.2.17/log4j1.2.17-api.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/protobuf3.0.0/lib/protobuf-java-3.0.0.jar"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>

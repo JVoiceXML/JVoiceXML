@@ -159,10 +159,10 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         </fileset>
 
         <!-- protobuf library -->
-        <property name="protobuf.dir" value="${3rdparty.dir}/protobuf2.5.0" />
+        <property name="protobuf.dir" value="${3rdparty.dir}/protobuf3.0.0" />
         <property name="protobuf.lib.dir" value="${protobuf.dir}/lib" />
         <fileset dir="${protobuf.lib.dir}" id="protobuf.lib">
-            <include name="protobuf-java-2.5.0.jar" />
+            <include name="protobuf-java-3.0.0.jar" />
         </fileset>
 
     </target>

@@ -1,3 +1,4 @@
+syntax = "proto2";
 option java_package = "@mmi.protoc.package@";
 
 message LifeCycleEvent {

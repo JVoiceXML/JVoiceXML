@@ -1,3 +1,4 @@
+syntax = "proto2";
 option java_package = "org.jvoicexml.client.text.protobuf";
 
 message TextMessage {

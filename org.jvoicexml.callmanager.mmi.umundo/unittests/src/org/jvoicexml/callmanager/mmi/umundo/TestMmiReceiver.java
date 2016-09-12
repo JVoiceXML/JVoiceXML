@@ -73,9 +73,11 @@ public final class TestMmiReceiver implements MMIEventListener {
         publishingNode = new Node();
         final MmiReceiver receiver = new MmiReceiver("target1");
         receiver.addMMIEventListener(this);
-        TypedSubscriber subscriber = new TypedSubscriber("test", receiver);
+        TypedSubscriber subscriber = new TypedSubscriber("test");
+        subscriber.setReceiver(receiver);
         receivingNode.addSubscriber(subscriber);
-        subscriber.registerType(LifeCycleEvents.LifeCycleEvent.class);
+        // TODO fix this in umundo
+//        subscriber.registerType(LifeCycleEvents.LifeCycleEvent.class);
 
         ExtensionRegistry registry = ExtensionRegistry.newInstance();
         LifeCycleEvents.registerAllExtensions(registry);

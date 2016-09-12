@@ -86,7 +86,7 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
     private final Collection<MMIEventListener> cachedListeners;
 
     /**
-     * Constructs a new object.
+     * Constructs a new object. 
      */
     public UmundoETLProtocolAdapter() {
         channel = "mmi:jvoicexml";
@@ -118,10 +118,12 @@ public final class UmundoETLProtocolAdapter implements ETLProtocolAdapter {
         receiver = new MmiReceiver(sourceUrl);
 
         node = new Node();
-        subscriber = new TypedSubscriber(channel, receiver);
+        subscriber = new TypedSubscriber(channel);
+        subscriber.setReceiver(receiver);
         node.addSubscriber(subscriber);
 
-        subscriber.registerType(LifeCycleEvents.LifeCycleEvent.class);
+        // TODO fix this in umundo
+//        subscriber.registerType(LifeCycleEvents.LifeCycleEvent.class);
         registry = ExtensionRegistry.newInstance();
         LifeCycleEvents.registerAllExtensions(registry);
         subscriber.setExtensionRegistry(registry);
