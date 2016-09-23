@@ -200,9 +200,9 @@ public final class Mrcpv2SynthesizedOutput
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document document = builder.parse(new InputSource(new StringReader(xml)));
 		NodeList list = document.getElementsByTagName("audio");
-		if (list != null and list.getLength > 0) {
+		if (list != null && list.getLength() > 0) {
 			Element audioTag = (Element) list.item(0); 
-			url = audioTag.getAttribute("src");
+			String url = audioTag.getAttribute("src");
 			try {
 			    new URI(url);
 			    speakText = url;
