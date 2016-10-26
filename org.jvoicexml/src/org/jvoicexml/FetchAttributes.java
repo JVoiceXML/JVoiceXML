@@ -156,6 +156,30 @@ public final class FetchAttributes implements Cloneable {
     }
 
     /**
+     * Checks if the fetchint has a value of {@link #HINT_PREFETCH}
+     * @return true if the it is OK to prefetch the document.
+     * @since 0.7.8
+     */
+    public boolean isFetchintPrefetch() {
+        if (fetchHint == null) {
+            return false;
+        }
+        return fetchHint.equalsIgnoreCase(HINT_PREFETCH);
+    }
+
+    /**
+     * Checks if the fetchint has a value of {@link #HINT_SAFE}
+     * @return true if the document should be downloaded when actually needed.
+     * @since 0.7.8
+     */
+    public boolean isFetchintSafe() {
+        if (fetchHint == null) {
+            return false;
+        }
+        return fetchHint.equalsIgnoreCase(HINT_SAFE);
+    }
+    
+    /**
      * Retrieve the <code>maxage</code> attribute.
      * @param seconds Maximum age of documents in seconds.
      * @see #maxage
