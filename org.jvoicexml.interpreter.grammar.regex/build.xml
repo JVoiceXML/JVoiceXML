@@ -63,6 +63,7 @@ org.jvoicexml/personal-props/README.txt
                 <include name="*.xsd" />
             </fileset>
         </copy>
+        <copy todir="${config}" file="${etc}/regex-grammar.xml" overwrite="true"/>
     </target>
 
     <target name="clean" depends="-setup" description="Remove all compiled and distribution files">
