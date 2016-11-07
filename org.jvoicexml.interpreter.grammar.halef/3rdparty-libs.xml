@@ -1,0 +1,26 @@
+<project name="org.jvoicexml.interpreter.grammar.halef - 3rd party libraries" basedir=".">
+    <description>
+This file contains the 3rd party libary definitions, used by
+org.jvoicexml.profile.mmi.
+    </description>
+    <property name="jvxml.core.dir" value="../org.jvoicexml" />
+    <import file="${jvxml.core.dir}/3rdparty-libs.xml" />
+
+    <target name="-local-3rdparty-setup" depends="-3rdparty-setup">
+        <!-- local third party libraries -->
+        <property name="local-3rdparty.dir" value="3rdparty" />
+        <!-- jvxml library -->
+        <path id="jvxml.core.lib">
+            <path location="${jvxml.core.dir}/classes" />
+            <path location="../org.jvoicexml.xml/classes" />
+        </path>
+
+        <!-- JSON simple library -->
+        <property name="jsonsimple.dir" value="${3rdparty.dir}/jsonsimple1.1" />
+        <property name="jsonsimple.lib.dir" value="${jsonsimple.dir}/lib" />
+        <fileset dir="${jsonsimple.lib.dir}" id="jsonsimple.lib">
+            <include name="json-simple-1.1.1.jar" />
+        </fileset>
+
+    </target>
+</project>
