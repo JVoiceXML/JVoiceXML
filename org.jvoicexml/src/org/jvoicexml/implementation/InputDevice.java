@@ -30,6 +30,7 @@ import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 
 /**
  * An input device for spoken or character input.
@@ -42,6 +43,8 @@ public interface InputDevice {
     /**
      * Detects and reports character and/or spoken input simultaneously.
      *
+     * @param model the data model to use for generating a semantic
+     *          interpretation
      * @param speech the speech recognizer properties to use
      * @param dtmf the DTMF recognizer properties to use
      * @exception NoresourceError
@@ -49,7 +52,8 @@ public interface InputDevice {
      * @exception BadFetchError
      * The active grammar contains some errors.
      */
-    void startRecognition(final SpeechRecognizerProperties speech,
+    void startRecognition(final DataModel model,
+            final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf)
             throws NoresourceError, BadFetchError;
 

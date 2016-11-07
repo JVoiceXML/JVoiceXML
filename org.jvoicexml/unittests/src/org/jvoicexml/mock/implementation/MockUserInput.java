@@ -41,6 +41,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -234,7 +235,8 @@ public class MockUserInput implements UserInput {
      * {@inheritDoc}
      */
     @Override
-    public void startRecognition(final SpeechRecognizerProperties speech,
+    public void startRecognition(final DataModel model,
+            final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf) throws NoresourceError,
             BadFetchError {
         recognitionStarted = true;

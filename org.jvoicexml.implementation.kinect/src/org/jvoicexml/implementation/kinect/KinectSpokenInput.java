@@ -51,6 +51,7 @@ import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -221,7 +222,8 @@ public final class KinectSpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public void startRecognition(SpeechRecognizerProperties speech,
+    public void startRecognition(final DataModel model,
+            SpeechRecognizerProperties speech,
             DtmfRecognizerProperties dtmf) throws NoresourceError,
             BadFetchError {
         try {

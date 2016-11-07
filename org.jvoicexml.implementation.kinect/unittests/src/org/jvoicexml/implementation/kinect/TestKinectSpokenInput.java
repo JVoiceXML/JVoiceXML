@@ -106,7 +106,7 @@ public class TestKinectSpokenInput {
         input.addListener(listener);
         input.open();
         input.activate();
-        input.startRecognition(null, null);
+        input.startRecognition(null, null, null);
         Assert.assertTrue(input.isBusy());
         listener.waitSize(1, 10000);
         final SpokenInputEvent event1 = listener.get(0);
@@ -136,7 +136,7 @@ public class TestKinectSpokenInput {
         input.addListener(listener);
         input.open();
         input.activate();
-        input.startRecognition(null, null);
+        input.startRecognition(null, null, null);
         listener.waitSize(1, 10000);
         final SpokenInputEvent event1 = listener.get(0);
         Assert.assertEquals(RecognitionEvent.EVENT_TYPE, event1.getEventType());

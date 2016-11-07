@@ -1194,11 +1194,12 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                         .getCallControlProperties(this);
                 call.record(input, callProps);
             }
+            final DataModel model = context.getDataModel();
             final SpeechRecognizerProperties speech = context
                     .getSpeechRecognizerProperties(this);
             final DtmfRecognizerProperties dtmf = context
                     .getDtmfRecognizerProperties(this);
-            input.startRecognition(speech, dtmf);
+            input.startRecognition(model, speech, dtmf);
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
         } catch (IOException e) {
@@ -1238,11 +1239,12 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         }
 
         try {
+            final DataModel model = context.getDataModel();
             final SpeechRecognizerProperties speech = context
                     .getSpeechRecognizerProperties(this);
             final DtmfRecognizerProperties dtmf = context
                     .getDtmfRecognizerProperties(this);
-            input.startRecognition(speech, dtmf);
+            input.startRecognition(model, speech, dtmf);
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
         }

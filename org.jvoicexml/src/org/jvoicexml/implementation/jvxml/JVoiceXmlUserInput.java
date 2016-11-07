@@ -42,6 +42,7 @@ import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;
 import org.jvoicexml.implementation.grammar.GrammarCache;
 import org.jvoicexml.implementation.grammar.LoadedGrammar;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -272,12 +273,13 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
      * {@inheritDoc}
      */
     @Override
-    public void startRecognition(final SpeechRecognizerProperties speech,
+    public void startRecognition(final DataModel model,
+            final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf) throws NoresourceError,
             BadFetchError {
-        spokenInput.startRecognition(speech, dtmf);
+        spokenInput.startRecognition(model, speech, dtmf);
         if (dtmfInput != null) {
-            dtmfInput.startRecognition(speech, dtmf);
+            dtmfInput.startRecognition(model, speech, dtmf);
         }
     }
 

@@ -32,9 +32,9 @@ import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.grammar.GrammarEvaluator;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -142,7 +142,8 @@ public class SrgsSisrGrammar
      * {@inheritDoc}
      */
     @Override
-    public Object getSemanticInterpretation(final String utterance) {
+    public Object getSemanticInterpretation(final DataModel model,
+            String utterance) {
         LOGGER.info("processing '" + utterance + "'");
         if (utterance == null || utterance.length() == 0) {
             return null;

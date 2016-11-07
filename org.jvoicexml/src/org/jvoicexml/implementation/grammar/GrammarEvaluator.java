@@ -23,6 +23,8 @@ package org.jvoicexml.implementation.grammar;
 
 import java.net.URI;
 
+import org.jvoicexml.interpreter.datamodel.DataModel;
+
 /**
  * A grammar evaluator processes a given utterance into a recognition result.
  * Usually, one {@link GrammarEvaluator} is responsible to evaluate input for
@@ -47,9 +49,10 @@ public interface GrammarEvaluator {
      * This method is also called to check if the associated grammar accepts the
      * given utterance.
      * </p>
+     * @param model the data model in use
      * @param utterance the current utterance
      * @return the determined semantic interpretation, or {@code null} if
      *         the utterance is not valid
      */
-    Object getSemanticInterpretation(final String utterance);
+    Object getSemanticInterpretation(final DataModel model, final String utterance);
 }

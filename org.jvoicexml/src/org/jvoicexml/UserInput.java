@@ -32,6 +32,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -57,6 +58,7 @@ public interface UserInput {
     /**
      * Detects and reports character and/or spoken input simultaneously.
      *
+     * @param model the data model for generating a semantic interpretation
      * @param speech
      *            the speech recognizer properties to use
      * @param dtmf
@@ -66,7 +68,8 @@ public interface UserInput {
      * @exception BadFetchError
      *                The active grammar contains some errors.
      */
-    void startRecognition(final SpeechRecognizerProperties speech,
+    void startRecognition(final DataModel model,
+            final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf) throws NoresourceError,
             BadFetchError;
 

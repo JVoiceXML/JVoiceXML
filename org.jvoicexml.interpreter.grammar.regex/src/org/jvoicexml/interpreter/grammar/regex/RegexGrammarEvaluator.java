@@ -26,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jvoicexml.implementation.grammar.GrammarEvaluator;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 
 /**
  * An evaluator for regex grammars.
@@ -60,7 +61,8 @@ public class RegexGrammarEvaluator implements GrammarEvaluator {
      * {@inheritDoc}
      */
     @Override
-    public Object getSemanticInterpretation(final String utterance) {
+    public Object getSemanticInterpretation(final DataModel model,
+            final String utterance) {
         final Matcher matcher = pattern.matcher(utterance);
         if (!matcher.matches()) {
             return null;

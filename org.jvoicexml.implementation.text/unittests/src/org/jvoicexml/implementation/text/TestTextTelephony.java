@@ -146,7 +146,7 @@ public final class TestTextTelephony
     @Test(timeout = 5000)
     public void testRecord() throws Exception, JVoiceXMLEvent {
         final TextSpokenInput textInput = new TextSpokenInput();
-        textInput.startRecognition(null, null);
+        textInput.startRecognition(null, null, null);
         textInput.addListener(this);
         final String utterance = "testRecord";
         mockGrammarChecker(textInput, utterance);

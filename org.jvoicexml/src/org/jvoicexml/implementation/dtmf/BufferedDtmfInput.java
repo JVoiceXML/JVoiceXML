@@ -45,6 +45,7 @@ import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.grammar.GrammarEvaluator;
 import org.jvoicexml.implementation.grammar.GrammarParser;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
@@ -79,6 +80,9 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
 
     /** The grammar parser to use. */
     private final Map<GrammarType, GrammarParser<?>> parsers;
+
+    /** The data model in use. */
+    private DataModel model;
     
     /**
      * Constructs a new object.
@@ -204,10 +208,11 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public synchronized void startRecognition(
+    public synchronized void startRecognition(final DataModel dataModel,
             final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf) throws NoresourceError,
             BadFetchError {
+        model = dataModel;
         props = dtmf;
         inputThread = new DtmfInputThread(this, props);
         inputThread.start();
@@ -231,7 +236,8 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
                             (GrammarEvaluator) grammar;
                     final String utterance = result.getUtterance();
                     final Object interpretation =
-                            evaluator.getSemanticInterpretation(utterance);
+                            evaluator.getSemanticInterpretation(model,
+                                    utterance);
                     if (interpretation != null) {
                         final DtmfInputResult dtmfResult =
                                 (DtmfInputResult) result;

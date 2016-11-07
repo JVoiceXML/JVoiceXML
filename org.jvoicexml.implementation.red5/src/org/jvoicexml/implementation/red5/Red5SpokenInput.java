@@ -44,6 +44,7 @@ import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
@@ -141,7 +142,7 @@ public final class Red5SpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public void startRecognition(
+    public void startRecognition(final DataModel mode,
             final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf)
         throws NoresourceError, BadFetchError {

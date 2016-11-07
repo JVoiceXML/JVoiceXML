@@ -48,6 +48,7 @@ import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.grammar.GrammarEvaluator;
 import org.jvoicexml.implementation.grammar.GrammarParser;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -77,6 +78,9 @@ final class TextSpokenInput implements SpokenInput {
     /** Active grammars. */
     private final Collection<GrammarImplementation<?>> activeGrammars;
 
+    /** The data model in use. */
+    private DataModel model;
+    
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
         BARGE_IN_TYPES.add(BargeInType.SPEECH);
@@ -238,9 +242,11 @@ final class TextSpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public void startRecognition(final SpeechRecognizerProperties speech,
+    public void startRecognition(final DataModel dataModel,
+            final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf) throws NoresourceError,
             BadFetchError {
+        model = dataModel;
         recognizing = true;
         final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
         fireInputEvent(event);
@@ -299,7 +305,8 @@ final class TextSpokenInput implements SpokenInput {
         for (GrammarImplementation<?> grammar : activeGrammars) {
             if (grammar instanceof GrammarEvaluator) {
                 final GrammarEvaluator evaluator = (GrammarEvaluator) grammar;
-                interpretation = evaluator.getSemanticInterpretation(text);
+                interpretation =
+                        evaluator.getSemanticInterpretation(model, text);
                 if (interpretation != null) {
                     break;
                 }

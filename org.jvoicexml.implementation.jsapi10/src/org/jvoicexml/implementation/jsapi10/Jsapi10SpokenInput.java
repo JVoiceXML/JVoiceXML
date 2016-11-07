@@ -63,6 +63,7 @@ import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
@@ -381,7 +382,9 @@ public final class Jsapi10SpokenInput
      * {@inheritDoc}
      */
     @Override
-    public void startRecognition(final SpeechRecognizerProperties speech,
+    public void startRecognition(
+            final DataModel model,
+            final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf) throws NoresourceError,
             BadFetchError {
         if (recognizer == null) {
