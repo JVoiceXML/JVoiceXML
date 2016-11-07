@@ -24,6 +24,7 @@ package org.jvoicexml.interpreter.grammar.halef;
 import java.net.URI;
 
 import org.jvoicexml.implementation.grammar.GrammarEvaluator;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 
 /**
  * An evaluator for halef grammars.
@@ -66,7 +67,8 @@ public class HalefGrammarEvaluator implements GrammarEvaluator {
      * {@inheritDoc}
      */
     @Override
-    public Object getSemanticInterpretation(final String utterance) {
+    public Object getSemanticInterpretation(final DataModel model,
+            final String utterance) {
         return utterance;
     }
 }
