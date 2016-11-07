@@ -193,25 +193,6 @@ public final class Mrcpv2SynthesizedOutput
                 SsmlDocument ssml = new SsmlDocument(src);
                 speakText = ssml.getSpeak().getTextContent();
             } else {
-		        // TODO: Implement a better way of extracting the audio src and
-		        // switching to audio playback.
-	            String xml = speakable.getSpeakableText();
-              DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-              DocumentBuilder builder = factory.newDocumentBuilder();
-              Document document = builder.parse(new InputSource(new StringReader(xml)));
-              NodeList list = document.getElementsByTagName("audio");
-              if (list != null && list.getLength() > 0) {
-                Element audioTag = (Element) list.item(0); 
-                String url = audioTag.getAttribute("src");
-                try {
-                    new URI(url);
-                    speakText = url;
-                    urlPrompt = true;
-                } catch (URISyntaxException e) {
-                    // src not a valid url
-                }
-              }
-            }
             speechClient.queuePrompt(urlPrompt, speakText);
         } catch (ParserConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
