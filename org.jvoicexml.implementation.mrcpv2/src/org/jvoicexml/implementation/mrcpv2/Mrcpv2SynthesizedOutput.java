@@ -192,8 +192,10 @@ public final class Mrcpv2SynthesizedOutput
                 InputSource src = new InputSource(is);
                 SsmlDocument ssml = new SsmlDocument(src);
                 speakText = ssml.getSpeak().getTextContent();
-            } else {
+            }
+            
             speechClient.queuePrompt(urlPrompt, speakText);
+
         } catch (ParserConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
         } catch (SAXException e) {
