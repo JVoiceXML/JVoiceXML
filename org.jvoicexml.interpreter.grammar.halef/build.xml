@@ -50,6 +50,7 @@ org.jvoicexml/personal-props/README.txt
 
 
     <target name="configuration" depends="-setup">
+	<copy todir="${config}" file="${etc}/halef-grammar.xml" overwrite="true" />
         <xslt in="${jvxml.core.dir}/run.xml" out="${jvxml.core.dir}/run-tmp.xml" style="${etc}/patch-runscript.xsl">
             <outputproperty name="method" value="xml" />
             <outputproperty name="standalone" value="no" />
