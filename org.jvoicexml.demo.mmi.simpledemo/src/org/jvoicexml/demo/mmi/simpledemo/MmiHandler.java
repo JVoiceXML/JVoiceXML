@@ -106,7 +106,7 @@ public class MmiHandler extends AbstractHandler {
      * @param mmi
      *            received MMI event
      * @return {@code true} if the MMI event is the
-     *         {@link org.jvoicexml.mmi.events.protobuf.LifeCycleEvents.DoneNotification}
+     *         {@link org.jvoicexml.mmi.events.DoneNotification}
      */
     private boolean sessionTerminated(final Mmi mmi) {
         final LifeCycleEvent evt = mmi.getLifeCycleEvent();

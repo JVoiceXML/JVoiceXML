@@ -80,6 +80,13 @@ public interface DataModel {
     Object getUndefinedValue();
 
     /**
+     * Retrieves a new empty object for this data model.
+     * 
+     * @return new object
+     */
+    Object createNewObject();
+    
+    /**
      * Retrieves a human readable representation of the given object retrieved
      * from this data model.
      * 

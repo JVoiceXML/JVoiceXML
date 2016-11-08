@@ -92,6 +92,7 @@ public class EcmaScriptDataModel implements DataModel {
     public DataModel newInstance() {
         return new EcmaScriptDataModel();
     }
+    
     /**
      * {@inheritDoc}
      */
@@ -100,6 +101,14 @@ public class EcmaScriptDataModel implements DataModel {
         return Context.getUndefinedValue();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object createNewObject() {
+        return context.newObject(topmostScope);
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -338,7 +347,7 @@ public class EcmaScriptDataModel implements DataModel {
         if (subscope == null) {
             LOGGER.warn("unable to create scope for '" + variableName + "'."
                     + " Please check object creation in var tag or in your"
-                    + "grammmar file.");
+                    + " grammar file.");
             return ERROR_SCOPE_NOT_FOUND;
         }
         final String name;
