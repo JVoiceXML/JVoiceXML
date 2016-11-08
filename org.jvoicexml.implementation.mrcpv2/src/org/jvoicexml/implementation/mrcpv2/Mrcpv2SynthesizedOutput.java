@@ -73,6 +73,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
+ * @author Patrick L. Lange
  * @since 0.7
  */
 public final class Mrcpv2SynthesizedOutput
@@ -192,8 +193,27 @@ public final class Mrcpv2SynthesizedOutput
                 InputSource src = new InputSource(is);
                 SsmlDocument ssml = new SsmlDocument(src);
                 speakText = ssml.getSpeak().getTextContent();
-            }
-            
+
+		LOGGER.info("Text content is " + speakText);
+		// TODO Implement a better way of detecting and extracting
+		// audio URLs
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document document = builder.parse(new InputSource(new StringReader(temp)));
+		NodeList list = document.getElementsByTagName("audio");
+		if (list != null && list.getLength() > 0) {
+		    Element audioTag = (Element) list.item(0);
+		    String url = audioTag.getAttribute("src");
+		    try {
+			new URI(url);
+			speakText = url;
+			urlPrompt = true;
+		    } catch (URISyntaxException e) {
+			// 'src' attribute is not a valid URI
+		    }	
+		}
+	    }
+
             speechClient.queuePrompt(urlPrompt, speakText);
 
         } catch (ParserConfigurationException e) {

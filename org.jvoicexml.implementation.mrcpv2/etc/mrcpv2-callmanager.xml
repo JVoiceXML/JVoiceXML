@@ -47,12 +47,6 @@
         </beans:property>
         <beans:property name="applications">
             <beans:map>
-                <beans:entry key="1000"
-                    value="http://127.0.0.1:8080/helloworldservletdemo/HelloWorld" />
-                <beans:entry key="2000"
-                    value="file:///work/zanzibar/src/main/voicexml/hello.vxml" />
-                <beans:entry key="3000"
-                    value="file:///work/zanzibar/src/main/voicexml/test.vxml" />
             </beans:map>
         </beans:property>
         <beans:property name="cloudUrl">

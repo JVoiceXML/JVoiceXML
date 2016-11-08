@@ -27,7 +27,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * A {@link GrammarIdentifier} for the new grammar. Halef grammars
- * are considered to be valid if they are note empty.
+ * are always considered valid at the moment.
  * @author Patrick L. Lange
  * @since 0.7.8
  */
@@ -37,13 +37,7 @@ public class HalefGrammarIdentifier implements GrammarIdentifier {
      */
     @Override
     public GrammarType identify(final GrammarDocument grammar) {
-        // Check if grammar content is empty
-        final String content = grammar.getTextContent();
-	if (content.trim().isEmpty()) {
-		return null;
-	}
-        
-        // It is not empty so it is a valid halef grammar.
+	// Currently, we accept everything as Halef grammar.
         return HalefGrammarType.HALEF;
     }
 

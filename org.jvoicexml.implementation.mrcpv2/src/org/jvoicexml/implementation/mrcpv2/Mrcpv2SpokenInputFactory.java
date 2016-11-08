@@ -26,9 +26,12 @@
 
 package org.jvoicexml.implementation.mrcpv2;
 
+import java.util.List;
+
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.grammar.GrammarParser;
 import org.speechforge.cairo.client.SessionManager;
 
 /**
@@ -37,6 +40,7 @@ import org.speechforge.cairo.client.SessionManager;
  * 
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
+ * @author Patrick L. Lange
  * @version $Revision$
  * @since 0.7
  */
@@ -44,6 +48,9 @@ public final class Mrcpv2SpokenInputFactory
         implements ResourceFactory<SpokenInput> {
     /** Number of instances that this factory will create. */
     private int instances;
+
+    /** The configured grammar parser. */
+    private List<GrammarParser<?>> parsers;
 
     /** Number of instances created. */
     private int currentInstance;
@@ -71,6 +78,7 @@ public final class Mrcpv2SpokenInputFactory
         final Mrcpv2SpokenInput input = new Mrcpv2SpokenInput();
         input.setRtpReceiverPort(basePort + (currentInstance++) * 2);
         input.setSessionManager(sessionManager);
+	input.setGrammarParsers(parsers);
 
         return input;
     }
@@ -150,5 +158,9 @@ public final class Mrcpv2SpokenInputFactory
      */
     public void setSessionManager(final SessionManager manager) {
         sessionManager = manager;
+    }
+
+    public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
+	parsers = grammarParsers;
     }
 }

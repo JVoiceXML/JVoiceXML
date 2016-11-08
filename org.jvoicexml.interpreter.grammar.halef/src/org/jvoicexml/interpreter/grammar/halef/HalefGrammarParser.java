@@ -58,10 +58,10 @@ public class HalefGrammarParser implements GrammarParser<GrammarDocument> {
     @Override
     public GrammarImplementation<GrammarDocument> load(final URI uri)
             throws IOException {
+	/** TODO Come up with an actual format and not just put the URI as content */
         final URL url = uri.toURL();
-	String resourceName = url.getPath();
-	resourceName = resourceName.substring(resourceName.lastIndexOf('/') + 1, resourceName.lastIndexOf('.'));
-        byte[] documentBuffer = resourceName.getBytes();
+	String urlString = url.toString();
+        byte[] documentBuffer = urlString.getBytes();
         final String charset = Charset.defaultCharset().toString();
         final ExternalGrammarDocument document =
                 new ExternalGrammarDocument(uri, documentBuffer, charset, true);
