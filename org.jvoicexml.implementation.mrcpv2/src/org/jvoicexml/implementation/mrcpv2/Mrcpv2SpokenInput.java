@@ -220,10 +220,6 @@ public final class Mrcpv2SpokenInput
     public GrammarImplementation<?> loadGrammar(final URI uri,
             final GrammarType type) throws NoresourceError, IOException,
             UnsupportedFormatError {
-	for (GrammarParser<?> parser : parsers.values()) {
-		LOGGER.info(parser.getType().getType() == type.getType());
-	}
-	LOGGER.info(parsers.get(type));
         final GrammarParser<?> parser = parsers.get(type.getType());
 	if (parser == null) {
 	    throw new UnsupportedFormatError("'" + type + "' is not supported");
@@ -293,7 +289,8 @@ public final class Mrcpv2SpokenInput
 	    GrammarDocument firstGrammarDocument = (GrammarDocument) firstGrammar.getGrammarDocument();
 	    // TODO use the URI here instead of putting the URI inside the document in 
 	    // org.jvoicexml.interpreter.grammar.halef.HalefGrammarParser.java
-	    speechClient.setContentType(firstGrammar.getMediaType().getType());
+	    // TODO load the application type from the grammar
+	    speechClient.setContentType("application/wfst");
             speechClient.recognize(
                     firstGrammarDocument.getDocument(), hotword,
                     attachGrammar, noInputTimeout);
