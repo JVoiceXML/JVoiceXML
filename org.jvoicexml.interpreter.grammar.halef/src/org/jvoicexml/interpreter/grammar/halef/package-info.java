@@ -65,5 +65,5 @@
  * @since 0.7.8
  */
 
-package org.jvoicexml.interpreter.grammar.regex;
+package org.jvoicexml.interpreter.grammar.halef;
 
