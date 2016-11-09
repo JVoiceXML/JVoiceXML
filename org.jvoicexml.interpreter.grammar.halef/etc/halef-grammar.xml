@@ -2,7 +2,7 @@
 <jvxmlgrammar xmlns:beans="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-grammar-0-7.xsd">
-  <classpath>dist/org.jvoicexml.interpreter.grammar.regex.jar</classpath>
+  <classpath>dist/org.jvoicexml.interpreter.grammar.halef.jar</classpath>
   <beans:bean
-    class="org.jvoicexml.interpreter.grammar.regex.RegexGrammarIdentifier" />
+    class="org.jvoicexml.interpreter.grammar.halef.HalefGrammarIdentifier" />
 </jvxmlgrammar>

@@ -36,6 +36,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
@@ -56,6 +58,7 @@ import org.jvoicexml.implementation.DocumentGrammarImplementation;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.implementation.grammar.GrammarParser;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -78,6 +81,7 @@ import org.speechforge.cairo.client.recog.RecognitionResult;
  * 
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
+ * @author Patrick L. Lange
  * @version $Revision$
  * @since 0.7
  */
@@ -106,6 +110,8 @@ public final class Mrcpv2SpokenInput
     /** Listener for user input events. */
     private final Collection<SpokenInputListener> listeners;
 
+    /** The grammar parser to use. */
+    private final Map<String, GrammarParser<?>> parsers;
     // private JSGFGrammar _grammar = new JSGFGrammar();
 
     // TODO Handle load and activate grammars properly on the server. At
@@ -113,9 +119,8 @@ public final class Mrcpv2SpokenInput
     // to be passed to the server with the recognize request. Should work OK for
     // now for recognize request with a single grammar.
 
-    // TODO Handle multiple grammars, now just the last one activated is active.
-    private GrammarDocument activatedGrammar;
-    private int numActiveGrammars;
+    // TODO Handle multiple grammars, now just the first one activated is active.
+    private Collection<GrammarImplementation<?>> activeGrammars;
 
     /** The session manager. */
     private SessionManager sessionManager;
@@ -127,8 +132,28 @@ public final class Mrcpv2SpokenInput
      * Constructs a new object.
      */
     public Mrcpv2SpokenInput() {
+	activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
         listeners = new java.util.ArrayList<SpokenInputListener>();
+	parsers = new java.util.HashMap<String, GrammarParser<?>>();
     }
+
+    /**
+     * Set the grammar parsers to use.
+     * @param grammarParsers the grammar parsers to use
+     * @since 0.7.8
+    */
+    public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
+        for (GrammarParser<?> parser : grammarParsers) {
+	    final GrammarType type = parser.getType();
+	    parsers.put(type.getType(), parser);
+  	    if (LOGGER.isDebugEnabled()) {
+		LOGGER.debug("added parser '" + parser + "' for grammar type '"
+			+ type + "'");
+	    }
+	}
+    }
+
+
 
     /**
      * {@inheritDoc}
@@ -192,29 +217,14 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     @Override
-    public GrammarImplementation<GrammarDocument> loadGrammar(final URI uri,
+    public GrammarImplementation<?> loadGrammar(final URI uri,
             final GrammarType type) throws NoresourceError, IOException,
             UnsupportedFormatError {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("loading grammar from reader");
-        }
-
-        final byte[] buffer = new byte[READ_BUFFER_SIZE];
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final URL url = uri.toURL();
-        final InputStream input = url.openStream();
-        int num;
-        do {
-            num = input.read(buffer);
-            if (num >= 0) {
-                out.write(buffer, 0, num);
-            }
-        } while (num >= 0);
-        final String encoding = System.getProperty("file.encoding");
-        final GrammarDocument document = new ExternalGrammarDocument(uri,
-                out.toByteArray(), encoding, true);
-        document.setMediaType(type);
-        return new DocumentGrammarImplementation(document);
+        final GrammarParser<?> parser = parsers.get(type.getType());
+	if (parser == null) {
+	    throw new UnsupportedFormatError("'" + type + "' is not supported");
+	}
+	return parser.load(uri);
     }
 
     /**
@@ -222,16 +232,15 @@ public final class Mrcpv2SpokenInput
      */
     @Override
     public void activateGrammars(
-            final Collection<GrammarImplementation<? extends Object>> grammars)
+            final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
-
-        for (GrammarImplementation<? extends Object> current : grammars) {
-            if (current instanceof DocumentGrammarImplementation) {
-                final DocumentGrammarImplementation grammar = (DocumentGrammarImplementation) current;
-                activatedGrammar = grammar.getGrammarDocument();
-                numActiveGrammars = 1;
-            }
-        }
+	activeGrammars.addAll(grammars);
+	if (LOGGER.isDebugEnabled()) {
+		for (GrammarImplementation<?> grammar : grammars) {
+		     LOGGER.debug("activated grammar "
+			+ grammar.getGrammarDocument());
+		}
+	}
     }
 
     /**
@@ -241,15 +250,16 @@ public final class Mrcpv2SpokenInput
     public void deactivateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
             throws BadFetchError {
-        for (GrammarImplementation<? extends Object> current : grammars) {
-            if (current instanceof DocumentGrammarImplementation) {
-                final DocumentGrammarImplementation grammar = (DocumentGrammarImplementation) current;
-                if (grammar.getGrammarDocument().equals(activatedGrammar)) {
-                    numActiveGrammars = 0;
-                }
-
-            }
-        }
+	if (grammars == null) {
+	    return;
+	}
+	activeGrammars.removeAll(grammars);
+	if (LOGGER.isDebugEnabled()) {
+	    for (GrammarImplementation<?> grammar : grammars) {
+	         LOGGER.debug("deactivated grammar "
+		    + grammar.getGrammarDocument());
+	    }
+	}
     }
 
     /**
@@ -263,7 +273,7 @@ public final class Mrcpv2SpokenInput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("starting recognition...");
         }
-        if ((activatedGrammar == null) || (numActiveGrammars == 0)) {
+        if (activeGrammars.size() == 0) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.warn("No active grammars");
             }
@@ -274,10 +284,15 @@ public final class Mrcpv2SpokenInput
             long noInputTimeout = 0;
             boolean hotword = false;
             boolean attachGrammar = true;
-            // todo: add a method in speechclient to take a string (rather than
-            // constructing readers on the fly to match the API).
+	   
+	    GrammarImplementation<?> firstGrammar = activeGrammars.iterator().next(); 
+	    GrammarDocument firstGrammarDocument = (GrammarDocument) firstGrammar.getGrammarDocument();
+	    // TODO use the URI here instead of putting the URI inside the document in 
+	    // org.jvoicexml.interpreter.grammar.halef.HalefGrammarParser.java
+	    // TODO load the application type from the grammar
+	    speechClient.setContentType("application/wfst");
             speechClient.recognize(
-                    new StringReader(activatedGrammar.getDocument()), hotword,
+                    firstGrammarDocument.getDocument(), hotword,
                     attachGrammar, noInputTimeout);
         } catch (MrcpInvocationException e) {
             if (LOGGER.isDebugEnabled()) {
@@ -419,10 +434,11 @@ public final class Mrcpv2SpokenInput
      */
     @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
-        types.add(GrammarType.JSGF);
-
-        return types;
+	Collection<GrammarType> supportedTypes = new java.util.HashSet<GrammarType>();
+	for (GrammarParser<?> parser: parsers.values()) {
+	    supportedTypes.add(parser.getType());
+	}
+	return supportedTypes;
     }
 
     /**

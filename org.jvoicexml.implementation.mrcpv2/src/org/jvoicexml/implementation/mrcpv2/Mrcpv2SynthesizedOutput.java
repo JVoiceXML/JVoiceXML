@@ -24,6 +24,7 @@ package org.jvoicexml.implementation.mrcpv2;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -31,6 +32,8 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
@@ -55,6 +58,9 @@ import org.speechforge.cairo.client.SessionManager;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechEventListener;
 import org.speechforge.cairo.client.recog.RecognitionResult;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -67,6 +73,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
+ * @author Patrick L. Lange
  * @since 0.7
  */
 public final class Mrcpv2SynthesizedOutput
@@ -169,6 +176,7 @@ public final class Mrcpv2SynthesizedOutput
             final String sessionId, final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
         String speakText = null;
+      	boolean urlPrompt = false;
         queueCount++;
         LOGGER.info("Queue count incremented,, now " + queueCount);
         try {
@@ -185,9 +193,29 @@ public final class Mrcpv2SynthesizedOutput
                 InputSource src = new InputSource(is);
                 SsmlDocument ssml = new SsmlDocument(src);
                 speakText = ssml.getSpeak().getTextContent();
-            }
-            // play the text
-            speechClient.queuePrompt(false, speakText);
+
+		LOGGER.info("Text content is " + speakText);
+		// TODO Implement a better way of detecting and extracting
+		// audio URLs
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document document = builder.parse(new InputSource(new StringReader(temp)));
+		NodeList list = document.getElementsByTagName("audio");
+		if (list != null && list.getLength() > 0) {
+		    Element audioTag = (Element) list.item(0);
+		    String url = audioTag.getAttribute("src");
+		    try {
+			new URI(url);
+			speakText = url;
+			urlPrompt = true;
+		    } catch (URISyntaxException e) {
+			// 'src' attribute is not a valid URI
+		    }	
+		}
+	    }
+
+            speechClient.queuePrompt(urlPrompt, speakText);
+
         } catch (ParserConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
         } catch (SAXException e) {
