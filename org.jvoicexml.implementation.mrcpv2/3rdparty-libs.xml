@@ -22,7 +22,7 @@ implementation platform.
 	<target name="-local-3rdparty-download-cairo-notwindows" depends="isWindows" if="isAntNotRunningOnWindows">
 		
         <exec dir="." executable="sh">
-            <arg line="-c mvn -d clean initialize" />
+            <arg line="-c mvn clean initialize" />
         </exec>
 	</target>
 
