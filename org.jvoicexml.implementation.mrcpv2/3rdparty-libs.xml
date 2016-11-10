@@ -5,8 +5,48 @@ implementation platform.
     </description>
     <property name="jvxml.core.dir" value="../org.jvoicexml"/>
     <import file="${jvxml.core.dir}/3rdparty-libs.xml" />
-    
-    <target name="-local-3rdparty-setup" depends="-3rdparty-setup">
+
+	<!-- property name="cairo.release.version" value="0.1-SNAPSHOT"/ -->
+
+	<target name="isWindows">
+		<condition property="isAntRunningOnWindows">
+		    <os family="windows" />
+		</condition>
+
+		<condition property="isAntNotRunningOnWindows">
+			<equals arg1="${isAntRunningOnWindows}" arg2="false" />
+		</condition>
+	</target>
+	
+	
+	<target name="-local-3rdparty-download-cairo-notwindows" depends="isWindows" if="isAntNotRunningOnWindows">
+		
+        <exec dir="." executable="sh">
+            <arg line="-c mvn -d clean initialize" />
+        </exec>
+	</target>
+
+	<target name="-local-3rdparty-download-cairo-windows" depends="isWindows" if="isAntRunningOnWindows">
+		<!-- property name="commandsLine" value="/c mvn -D cairo-version=${cairo.release.version} clean initialize "/-->
+		<property name="commandsLine" value="/c mvn clean initialize "/>
+
+		<!-- http://stackoverflow.com/questions/1375133/how-to-detect-a-build-error-from-ant-maven-via-a-bash-script -->
+	    <exec executable="cmd" dir="${basedir}" outputproperty="output"
+	          failonerror="false" osfamily="windows" logError="true" resultproperty="mvn.return.code">
+	        <arg line="${commandsLine}"/>
+	    </exec>
+		
+		<echo message="${output}" />
+
+		<fail><condition><isfailure code="${mvn.return.code}"/></condition></fail>
+		
+		
+		<!-- exec dir="." executable="cmd">
+            <arg line="/c mvn clean initialize -D cairo-version= ${cairo.release.version}" />
+        </exec -->
+	</target>
+
+    <target name="-local-3rdparty-setup" depends="-3rdparty-setup,-local-3rdparty-download-cairo-notwindows,-local-3rdparty-download-cairo-windows">
         <!-- local third party libraries -->
         <property name="local-3rdparty.dir" value="3rdparty" />
 
