@@ -61,7 +61,6 @@ personal-props/README.txt
     <target name="-cleancomponents" depends="-cleanPlatforms">
         <echo message="cleaning components" />
         <ant dir="../org.jvoicexml.xml" inheritall="false" inheritrefs="false" target="clean" />
-        <ant dir="../org.jvoicexml.processor.srgs" inheritall="false" inheritrefs="false" target="clean" />
         <ant dir="../org.jvoicexml.config" inheritall="false" inheritrefs="false" target="clean" />
         <ant dir="../org.jvoicexml.client" inheritall="false" inheritrefs="false" target="clean" />
         <ant dir="../org.jvoicexml.jndi" inheritall="false" inheritrefs="false" target="clean" />
@@ -82,7 +81,6 @@ personal-props/README.txt
     <target name="-compile" depends="-init,-checkJavaVersion" description="Compile the core JAVA sources">
         <!-- Build components that are used by the core -->
         <ant dir="../org.jvoicexml.xml" target="jar" inheritall="false" inheritrefs="false" />
-        <ant dir="../org.jvoicexml.processor.srgs" target="jar" inheritall="false" inheritrefs="false" />
 
         <!-- Build the core -->
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
@@ -93,7 +91,6 @@ jvxml.version=${jvxml.version}
             <src path="${src}" />
             <classpath refid="project.classpath" />
             <classpath location="../org.jvoicexml.xml/classes" />
-            <classpath location="../org.jvoicexml.processor.srgs/classes" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
         <copy todir="${build}">
@@ -153,7 +150,6 @@ jvxml.version=${jvxml.version}
 
     <target name="coreapidoc" depends="-setup">
         <ant dir="../org.jvoicexml.xml" target="apidoc" inheritall="false" inheritrefs="false" />
-        <ant dir="../org.jvoicexml.processor.srgs" target="apidoc" inheritall="false" inheritrefs="false" />
         <echo message="creating javadoc for ${component} with access: ${javadoc.access}" />
         <delete dir="${apidoc}" />
         <javadoc destdir="${apidoc}" windowtitle="JVoiceXML Core" author="true" version="true" linksource="true" access="${javadoc.access}" use="true">
@@ -163,7 +159,6 @@ jvxml.version=${jvxml.version}
             <!-- used classpath -->
             <classpath refid="project.classpath" />
             <classpath location="../org.jvoicexml.xml/classes" />
-            <classpath location="../org.jvoicexml.processor.srgs/classes" />
 
             <doctitle>JVoiceXML - a free VoiceXML interpreter</doctitle>
             <bottom>Copyright &#169; 2005-${year} JVoiceXML group</bottom>
@@ -176,7 +171,6 @@ jvxml.version=${jvxml.version}
             <!-- Resolve used libraries -->
             <link offline="true" href="${apidoc.java.href}" packagelistLoc="${3rdparty.dir}" />
             <link offline="true" resolveLink="false" href="${apidoc.jvxml.href}/org.jvoicexml.xml" packagelistLoc="${apidoc.basedir}/org.jvoicexml.xml" />
-            <link offline="true" resolveLink="false" href="${apidoc.jvxml.href}/org.jvoicexml.processor.srgs" packagelistLoc="${apidoc.basedir}/org.jvoicexml.processor.srgs" />
             <link offline="true" href="http://www.mozilla.org/rhino/apidocs/" packagelistLoc="${rhino.dir}" />
             <link offline="true" href="${log4j.apidoc.href}" packagelistLoc="${log4j.dir}" />
             <link offline="true" href="http://www.springframework.org/api" packagelistLoc="${spring.dir}" />
@@ -220,7 +214,6 @@ jvxml.version=${jvxml.version}
             <classpath>
                 <pathelement path="${project.classpath}" />
                 <pathelement location="../org.jvoicexml.xml/classes" />
-                <pathelement location="../org.jvoicexml.processor.srgs/classes" />
                 <pathelement location="${build}" />
             </classpath>
             <fileset dir="${src}">
