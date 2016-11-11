@@ -14,15 +14,16 @@ implementation platform.
 		</condition>
 
 		<condition property="isAntNotRunningOnWindows">
-			<equals arg1="${isAntRunningOnWindows}" arg2="false" />
+		    <not>
+			<isset property="isAntRunningOnWindows"/>
+		    </not>
 		</condition>
 	</target>
 	
 	
 	<target name="-local-3rdparty-download-cairo-notwindows" depends="isWindows" if="isAntNotRunningOnWindows">
-		
         <exec dir="." executable="sh">
-            <arg line="-c mvn clean initialize" />
+            <arg line='-c "mvn clean initialize"' />
         </exec>
 	</target>
 
