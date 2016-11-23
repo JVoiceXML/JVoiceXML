@@ -69,7 +69,7 @@ public final class TextDemo implements TextListener {
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' parallel text demo for "
                 + "JVoiceXML...");
-        LOGGER.info("(c) 2014 by JVoiceXML group - "
+        LOGGER.info("(c) 2014-2016 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final int MAX = 20;

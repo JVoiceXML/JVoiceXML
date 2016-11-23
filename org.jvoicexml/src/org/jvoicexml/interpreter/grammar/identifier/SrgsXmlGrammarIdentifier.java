@@ -158,6 +158,13 @@ public final class SrgsXmlGrammarIdentifier
         }
 
         final byte[] buffer = grammar.getBuffer();
+        if (buffer == null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("grammar buffer is null or empty");
+            }
+            return null;
+            
+        }
         try {
             final ByteArrayInputStream stream =
                 new ByteArrayInputStream(buffer);

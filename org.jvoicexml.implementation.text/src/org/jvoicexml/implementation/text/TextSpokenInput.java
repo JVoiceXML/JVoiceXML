@@ -73,7 +73,7 @@ final class TextSpokenInput implements SpokenInput {
     private static final Collection<BargeInType> BARGE_IN_TYPES;
 
     /** The grammar parser to use. */
-    private final Map<GrammarType, GrammarParser<?>> parsers;
+    private final Map<String, GrammarParser<?>> parsers;
 
     /** Active grammars. */
     private final Collection<GrammarImplementation<?>> activeGrammars;
@@ -98,7 +98,7 @@ final class TextSpokenInput implements SpokenInput {
      */
     public TextSpokenInput() {
         activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
-        parsers = new java.util.HashMap<GrammarType, GrammarParser<?>>();
+        parsers = new java.util.HashMap<String, GrammarParser<?>>();
         listener = new java.util.ArrayList<SpokenInputListener>();
     }
 
@@ -110,7 +110,7 @@ final class TextSpokenInput implements SpokenInput {
     public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
         for (GrammarParser<?> parser : grammarParsers) {
             final GrammarType type = parser.getType();
-            parsers.put(type, parser);
+            parsers.put(type.getType(), parser);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("added parser '" + parser + "' for grammar type '"
                         + type + "'");
@@ -175,7 +175,11 @@ final class TextSpokenInput implements SpokenInput {
      */
     @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        return parsers.keySet();
+        final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
+        for (GrammarParser<?> parser : parsers.values()) {
+            types.add(parser.getType());
+        }
+        return types;
     }
 
     /**
@@ -185,7 +189,7 @@ final class TextSpokenInput implements SpokenInput {
     public GrammarImplementation<?> loadGrammar(final URI uri,
             final GrammarType type) throws NoresourceError, IOException,
             UnsupportedFormatError {
-        final GrammarParser<?> parser = parsers.get(type);
+        final GrammarParser<?> parser = parsers.get(type.getType());
         if (parser == null) {
             throw new UnsupportedFormatError("'" + type + "' is not supported");
         }

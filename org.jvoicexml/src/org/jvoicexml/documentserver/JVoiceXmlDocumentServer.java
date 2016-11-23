@@ -327,6 +327,7 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
             final URI uri, final FetchAttributes attrs) throws BadFetchError {
         // Only prefetch the document if not explicitly asked to load on demand.
         if (attrs.isFetchintSafe()) {
+            LOGGER.debug("not loading a fetchhint safe grammar");
             return new ExternalReferenceGrammarDocument(uri);
         }
 
