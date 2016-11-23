@@ -38,14 +38,14 @@ import javax.xml.namespace.NamespaceContext;
  * @version $Revision: 4120 $
  * @since 0.7.6
  */
-public final class VoiceXmlUnitNamespaceContect implements NamespaceContext {
+public final class VoiceXmlUnitNamespaceContext implements NamespaceContext {
     /** Known mappings of namespace prefixes to namespace URIs. */
     private final Map<String, String> prefixes;
     
     /**
      * Constructs a new object.
      */
-    public VoiceXmlUnitNamespaceContect() {
+    public VoiceXmlUnitNamespaceContext() {
         prefixes = new java.util.HashMap<String, String>();
     }
 
