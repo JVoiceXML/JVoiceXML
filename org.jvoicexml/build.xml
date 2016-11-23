@@ -220,7 +220,6 @@ jvxml.version=${jvxml.version}
             <classpath>
                 <pathelement path="${project.classpath}" />
                 <pathelement location="../org.jvoicexml.xml/classes" />
-                <pathelement location="../org.jvoicexml.processor.srgs/classes" />
                 <pathelement location="${build}" />
             </classpath>
             <fileset dir="${src}">
