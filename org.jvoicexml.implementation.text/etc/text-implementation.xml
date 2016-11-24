@@ -6,6 +6,7 @@
     <classpath>dist/org.jvoicexml.implementation.text.jar</classpath>
     <classpath>dist/org.jvoicexml.client.text.jar</classpath>
     <classpath>dist/org.jvoicexml.srgs.jar</classpath>
+    <!-- classpath>dist/org.jvoicexml.grammar.interpreter.luis.jar</classpath-->
     <classpath>3rdparty/protobuf3.0.0/lib/protobuf-java-3.0.0.jar</classpath>
 
     <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">
@@ -13,6 +14,9 @@
         <property name="grammarParsers">
             <list>
                 <bean class="org.jvoicexml.srgs.SrgsSisrXmlGrammarParser" />
+                <!-- bean class="org.jvoicexml.interpreter.grammar.luis.LUISGrammarParser">
+                    <property name="subscription" value="MUST-BE-SUPPLIED-VALUE" />
+                </bean-->>
             </list>
         </property>
     </beans:bean>
