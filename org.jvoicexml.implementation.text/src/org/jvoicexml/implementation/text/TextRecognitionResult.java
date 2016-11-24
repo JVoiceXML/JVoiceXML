@@ -133,4 +133,5 @@ final class TextRecognitionResult implements RecognitionResult {
             throws SemanticError {
         return interpretation;
     }
+    
 }

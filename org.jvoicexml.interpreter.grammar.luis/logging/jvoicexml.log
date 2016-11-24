@@ -1,0 +1,109 @@
+2016-11-24 02:14:40,609 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   135) - created scope 'ANONYMOUS'
+2016-11-24 02:14:41,963 [main                ] ERROR  preter.grammar.luis.LUISGrammarEvaluator (   174) - error.semantic: no scope 'null' present to read 'out'
+org.jvoicexml.event.error.SemanticError: error.semantic: no scope 'null' present to read 'out'
+	at org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel.readVariable(EcmaScriptDataModel.java:805)
+	at org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel.readVariable(EcmaScriptDataModel.java:789)
+	at org.jvoicexml.interpreter.grammar.luis.LUISGrammarEvaluator.getSemanticInterpretation(LUISGrammarEvaluator.java:146)
+	at org.jvoicexml.interpreter.grammar.luis.LUISGrammarEvaluatorTest.testGetSemanticInterpretation(LUISGrammarEvaluatorTest.java:20)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)
+2016-11-24 02:16:32,571 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   135) - created scope 'ANONYMOUS'
+2016-11-24 02:16:34,186 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   135) - created scope 'ANONYMOUS'
+2016-11-24 02:16:34,191 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'out' with '{}'
+2016-11-24 02:16:34,210 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   154) - detected intent 'pizza' (0.9999566)
+2016-11-24 02:16:34,211 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'nlu-intent' with 'pizza'
+2016-11-24 02:16:34,211 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'pizza' with '{}'
+2016-11-24 02:16:34,212 [main                ] ERROR  preter.grammar.luis.LUISGrammarEvaluator (   175) - error.semantic: 'out.pizza' not found
+org.jvoicexml.event.error.SemanticError: error.semantic: 'out.pizza' not found
+	at org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel.readVariable(EcmaScriptDataModel.java:810)
+	at org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel.readVariable(EcmaScriptDataModel.java:789)
+	at org.jvoicexml.interpreter.grammar.luis.LUISGrammarEvaluator.getSemanticInterpretation(LUISGrammarEvaluator.java:157)
+	at org.jvoicexml.interpreter.grammar.luis.LUISGrammarEvaluatorTest.testGetSemanticInterpretation(LUISGrammarEvaluatorTest.java:20)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)
+2016-11-24 02:16:54,816 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   135) - created scope 'ANONYMOUS'
+2016-11-24 02:16:56,277 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   135) - created scope 'ANONYMOUS'
+2016-11-24 02:16:56,282 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'out' with '{}'
+2016-11-24 02:16:56,296 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   154) - detected intent 'pizza' (0.9999566)
+2016-11-24 02:16:56,297 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'nlu-intent' with 'pizza'
+2016-11-24 02:16:56,297 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'pizza' with '{}'
+2016-11-24 02:16:56,297 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   164) - detected entity 'size'='large' (0.9086043)
+2016-11-24 02:16:56,297 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'size' with 'large'
+2016-11-24 02:16:56,297 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   164) - detected entity 'topping'='salami' (0.7959856)
+2016-11-24 02:16:56,298 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'topping' with 'salami'
+2016-11-24 02:16:56,299 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   172) - created semantic interpretation '{"pizza":{"topping":"salami","size":"large"},"nlu-intent":"pizza"}'
+2016-11-24 06:04:47,400 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   135) - created scope 'ANONYMOUS'
+2016-11-24 06:04:49,009 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   135) - created scope 'ANONYMOUS'
+2016-11-24 06:04:49,011 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'out' with '{}'
+2016-11-24 06:04:49,019 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   158) - detected intent 'pizza' (0.9999566)
+2016-11-24 06:04:49,019 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'nlu-intent' with 'pizza'
+2016-11-24 06:04:49,019 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'pizza' with '{}'
+2016-11-24 06:04:49,019 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   167) - detected entity 'size'='large' (0.9086043)
+2016-11-24 06:04:49,020 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'size' with 'large'
+2016-11-24 06:04:49,020 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   167) - detected entity 'topping'='salami' (0.7959856)
+2016-11-24 06:04:49,020 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'topping' with 'salami'
+2016-11-24 06:04:49,021 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   175) - created semantic interpretation '{"pizza":{"topping":"salami","size":"large"},"nlu-intent":"pizza"}'
+2016-11-24 06:05:54,672 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   135) - created scope 'ANONYMOUS'
+2016-11-24 06:05:56,233 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   135) - created scope 'ANONYMOUS'
+2016-11-24 06:05:56,237 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'out' with '{}'
+2016-11-24 06:05:56,246 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   158) - detected intent 'pizza' (0.999955654)
+2016-11-24 06:05:56,247 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'nlu-intent' with 'pizza'
+2016-11-24 06:05:56,247 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'pizza' with '{}'
+2016-11-24 06:05:56,247 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   167) - detected entity 'size'='large' (0.908471048)
+2016-11-24 06:05:56,248 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'size' with 'large'
+2016-11-24 06:05:56,248 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   167) - detected entity 'topping'='salami' (0.671763062)
+2016-11-24 06:05:56,248 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'topping' with 'salami'
+2016-11-24 06:05:56,250 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   175) - created semantic interpretation '{"pizza":{"topping":"salami","size":"large"},"nlu-intent":"pizza"}'
+2016-11-24 06:08:51,342 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   135) - created scope 'ANONYMOUS'
+2016-11-24 06:08:52,950 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   135) - created scope 'ANONYMOUS'
+2016-11-24 06:08:52,952 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'out' with '{}'
+2016-11-24 06:08:52,957 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   158) - detected intent 'pizza' (0.999955654)
+2016-11-24 06:08:52,957 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'nlu-intent' with 'pizza'
+2016-11-24 06:08:52,958 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'pizza' with '{}'
+2016-11-24 06:08:52,958 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   167) - detected entity 'size'='large' (0.908471048)
+2016-11-24 06:08:52,958 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'size' with 'large'
+2016-11-24 06:08:52,958 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   167) - detected entity 'topping'='salami' (0.671763062)
+2016-11-24 06:08:52,958 [main                ] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   371) - created 'topping' with 'salami'
+2016-11-24 06:08:52,960 [main                ] INFO   preter.grammar.luis.LUISGrammarEvaluator (   175) - created semantic interpretation '{"pizza":{"topping":"salami","size":"large"},"nlu-intent":"pizza"}'
