@@ -1,4 +1,5 @@
-<project name="org.jvoicexml.xml" default="jar" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="org.jvoicexml.xml" default="jar" basedir="."
+    xmlns:artifact="antlib:org.apache.maven.artifact.ant">
     <description>
 This file builds the XML library of JVoiceXML.
 To override the current settings follow the instructions given in
@@ -17,13 +18,13 @@ personal-props/README.txt
         <property name="component" value="org.jvoicexml.xml" />
 
         <!-- directory structure -->
-        <property name="src" value="${basedir}/src" />
+        <property name="src" value="${basedir}/src/main/java" />
         <property name="build" value="${basedir}/classes" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
-        <property name="etc" value="${basedir}/etc" />
+        <property name="resources" value="${basedir}/src/main/resources" />
 
         <!-- main jar files -->
         <property name="dist.jar" value="${dist}/${component}.jar" />
@@ -70,14 +71,14 @@ personal-props/README.txt
                     <attribute name="Implementation-Version" value="${version}" />
                 </section>
             </manifest>
-            <metainf prefix="META-INF/services" file="${etc}/services/org.jvoicexml.xml.srgs.GrammarTypeFactory" />
+            <metainf prefix="META-INF/services" file="${resources}/services/org.jvoicexml.xml.srgs.GrammarTypeFactory" />
         </jar>
     </target>
 
     <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,jar" />
 
     <target name="dist-maven-snapshot" depends="jar">
-        <copy todir="${dist}" file="etc/${component}.pom" overwrite="true" />
+        <copy todir="${dist}" file="${resources}/${component}.pom" overwrite="true" />
         <replace file="${dist}/${component}.pom" token="@version@" value="${jvxml.version}-SNAPSHOT" />
         <path id="maven.path">
             <fileset dir="${3rdparty.dir}/maven/lib">
