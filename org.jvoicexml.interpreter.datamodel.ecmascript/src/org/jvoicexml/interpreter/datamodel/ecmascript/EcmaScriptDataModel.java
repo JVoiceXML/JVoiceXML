@@ -582,7 +582,7 @@ public class EcmaScriptDataModel implements DataModel {
             return false;
         }
         final Scriptable targetScope = getScope(start, variableName);
-        if (scope == null) {
+        if (targetScope == null) {
             return false;
         }
         final String property;

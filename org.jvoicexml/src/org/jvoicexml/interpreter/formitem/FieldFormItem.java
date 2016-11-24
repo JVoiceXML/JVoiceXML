@@ -138,15 +138,13 @@ public final class FieldFormItem extends AbstractGrammarContainer {
             final String utterance = result.getUtterance();
             return super.setFormItemVariable(utterance);
         } else {
-            // Check if the we need to pick a property of the semantic
+            // Check if the we need to pick a subproperty of the semantic
             // interpretation
             final String slot = getSlot();
             final String slotPath = "application.lastresult$.interpretation."
                     + slot;
             if (model.existsVariable(slotPath)) {
-                final Object value = model.readVariable(
-                        "application.lastresult$.interpretation." + slot,
-                        Object.class);
+                final Object value = model.readVariable(slotPath, Object.class);
                 return super.setFormItemVariable(value);
             } else {
                 return super.setFormItemVariable(interpretation);
