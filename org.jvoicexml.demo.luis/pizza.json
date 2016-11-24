@@ -1,0 +1,71 @@
+{
+  "luis_schema_version": "1.3.0",
+  "name": "pizza",
+  "desc": "Pizza demo application",
+  "culture": "en-us",
+  "intents": [
+    {
+      "name": "no"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "pizza"
+    },
+    {
+      "name": "yes"
+    }
+  ],
+  "entities": [
+    {
+      "name": "size"
+    },
+    {
+      "name": "topping"
+    }
+  ],
+  "composites": [],
+  "bing_entities": [],
+  "actions": [],
+  "model_features": [],
+  "regex_features": [],
+  "utterances": [
+    {
+      "text": "i want a large pizza with salami and mushrooms",
+      "intent": "pizza",
+      "entities": [
+        {
+          "entity": "size",
+          "startPos": 3,
+          "endPos": 3
+        },
+        {
+          "entity": "topping",
+          "startPos": 6,
+          "endPos": 6
+        },
+        {
+          "entity": "topping",
+          "startPos": 8,
+          "endPos": 8
+        }
+      ]
+    },
+    {
+      "text": "nope",
+      "intent": "no",
+      "entities": []
+    },
+    {
+      "text": "yeah",
+      "intent": "yes",
+      "entities": []
+    },
+    {
+      "text": "ok",
+      "intent": "yes",
+      "entities": []
+    }
+  ]
+}
