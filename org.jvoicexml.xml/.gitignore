@@ -2,3 +2,5 @@
 /classes/
 /bin/
 /eclipse-compile/
+/.gradle/
+/build/
