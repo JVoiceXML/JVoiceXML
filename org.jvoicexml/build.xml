@@ -19,13 +19,13 @@ personal-props/README.txt
         <property name="component.path" value="org/jvoicexml" />
 
         <!-- directory structure -->
-        <property name="src" value="${basedir}/src" />
+        <property name="src" value="${basedir}/src/main/java" />
         <property name="build" value="${basedir}/classes" />
         <property name="dist" value="${basedir}/dist" />
         <property name="apidoc.basedir" value="${basedir}/doc/api/" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${basedir}/config" />
-        <property name="etc" value="${basedir}/etc" />
+        <property name="etc" value="${basedir}/src/main/resources" />
 
         <!-- main jar files -->
         <property name="dist.jvxml.jar" value="${dist}/${component}.jar" />

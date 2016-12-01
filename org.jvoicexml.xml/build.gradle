@@ -1,19 +1,16 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
-
 repositories {
     mavenCentral()
 }
 
-// In this section you declare the dependencies for your production and test code
+// dependencies for production and test code
 dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-
+// jar configuration
 jar {
     manifest {
         attributes("Implementation-Title": "JVoiceXML XML library",

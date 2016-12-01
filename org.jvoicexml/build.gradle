@@ -1,0 +1,34 @@
+// Apply the java plugin to add support for Java
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+// dependencies for production and test code
+dependencies {
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    compile group: 'org.mozilla', name: 'rhino', version: '1.7R4'
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.3.14.v20161028'
+    compile group: 'net.sourceforge.jchardet', name: 'jchardet', version: '1.0'
+    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.5'
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
+    compile group: 'commons-pool', name: 'commons-pool', version: '1.6'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+    
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+    compile project(':org.jvoicexml.xml')
+}
+
+// jar configuration
+jar {
+    manifest {
+        attributes("Implementation-Title": "JVoiceXML core library",
+                   "Implementation-Vendor": "JVoiceXML group",
+                   "Implementation-Version": "0.7.8")
+    }
+    baseName 'org.jvoicexml'
+}

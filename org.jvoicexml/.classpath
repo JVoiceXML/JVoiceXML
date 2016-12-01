@@ -1,55 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="unittests/src"/>
-	<classpathentry exported="true" kind="lib" path="3rdparty/jlibrtp/lib/jlibrtp.jar">
+	<classpathentry kind="src" path="src/main/java">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/jlibrtp/jlibrtp-api.zip!/"/>
+			<attribute name="FROM_GRADLE_MODEL" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="3rdparty/jchardet1.1/lib/chardet.jar" sourcepath="C:/Users/dirk.TK/Downloads/jchardet-1.1/src"/>
-	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.2.3/lib/fluent-hc-4.2.3.jar"/>
-	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.2.3/lib/httpclient-4.2.3.jar"/>
-	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.2.3/lib/httpclient-cache-4.2.3.jar"/>
-	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.2.3/lib/httpmime-4.2.3.jar"/>
-	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.2.3/lib/httpcore-4.2.3.jar"/>
-	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.2.3/lib/httpcore-ab-4.2.3.jar"/>
-	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.2.3/lib/httpcore-nio-4.2.3.jar"/>
-	<classpathentry kind="lib" path="3rdparty/commons/lang3.3.2/lib/commons-lang3-3.3.2.jar">
+	<classpathentry kind="src" path="src/main/resources">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/commons/lang3.3.2/commons-lang3-3.3.2-javadoc.jar!/"/>
+			<attribute name="FROM_GRADLE_MODEL" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="3rdparty/mockito1.10/lib/mockito-all-1.10.12.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/mockito1.10/mockito-core-1.10.12-javadoc.zip!/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="src" path="test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="config"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
-	<classpathentry kind="lib" path="3rdparty/commons/logging1.1.1/lib/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="3rdparty/commons/pool1.5.5/lib/commons-pool-1.5.5.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/commons/pool1.5.5/commons-pool-1.5.5-api.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="3rdparty/log4j1.2.17/lib/log4j-1.2.17.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/log4j1.2.17/log4j1.2.17-api.zip!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="3rdparty/rhino1.7R4/lib/js.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/rhino1.7R4/rhino1.7R4-apidoc.zip!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/org.jvoicexml.interpreter.datamodel.ecmascript/3rdparty/jsonsimple1.1.1/lib/json-simple-1.1.1.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jetty9.2.2/lib/jetty-http-9.2.2.v20140723.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jetty9.2.2/lib/jetty-io-9.2.2.v20140723.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jetty9.2.2/lib/jetty-server-9.2.2.v20140723.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jetty9.2.2/lib/jetty-util-9.2.2.v20140723.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jetty9.2.2/lib/servlet-api-3.1.jar"/>
-	<classpathentry kind="output" path="eclipse-compiled"/>
+	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
