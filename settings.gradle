@@ -1,1 +1,1 @@
-include ':org.jvoicexml', ':org.jvoicexml.xml'
+include ':org.jvoicexml', ':org.jvoicexml.xml', ':org.jvoicexml.config' 
