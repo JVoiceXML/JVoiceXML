@@ -21,9 +21,6 @@
 
 package org.jvoicexml.startup;
 
-import java.net.URL;
-import java.net.URLClassLoader;
-
 import org.jvoicexml.JVoiceXmlMain;
 
 /**
@@ -48,13 +45,7 @@ public final class Startup {
      * @since 0.4
      */
     public static void main(final String[] args) {
-        ClassLoader cl = ClassLoader.getSystemClassLoader();
-
-        URL[] urls = ((URLClassLoader) cl).getURLs();
-
-        for (URL url : urls) {
-            System.out.println(url.getFile());
-        } // Start the interpreter asynchronously
+        // Start the interpreter asynchronously
         final JVoiceXmlMain jvxml = new JVoiceXmlMain();
         jvxml.start();
 
