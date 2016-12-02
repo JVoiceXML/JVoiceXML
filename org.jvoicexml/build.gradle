@@ -1,6 +1,6 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
-apply plugin: 'application'
+
 
 repositories {
     mavenCentral()
@@ -29,13 +29,7 @@ jar {
     manifest {
         attributes("Implementation-Title": "JVoiceXML core library",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": "0.7.8")
+                   "Implementation-Version": version)
     }
     baseName 'org.jvoicexml'
-}
-
-mainClassName = "org.jvoicexml.startup.Startup"
-
-run {
-    classpath += files('config')
 }

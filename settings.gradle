@@ -1,2 +1,2 @@
 include ':org.jvoicexml', ':org.jvoicexml.xml', ':org.jvoicexml.config', \
-    ':org.jvoicexml.client', ':org.jvoicexml.client.text' 
+    ':org.jvoicexml.client', ':org.jvoicexml.client.text', 'main'

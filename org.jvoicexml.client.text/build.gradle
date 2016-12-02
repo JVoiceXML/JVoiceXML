@@ -64,7 +64,7 @@ jar {
     manifest {
         attributes("Implementation-Title": "JVoiceXML configuration library",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": "0.7.8")
+                   "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.client'
 }

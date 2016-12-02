@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2016 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -61,7 +56,6 @@ import org.jvoicexml.profile.Profile;
  * 
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
     /** Logger for this class. */
@@ -222,9 +216,6 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
             for (Configuration config : services) {
                 configuration = config;
                 break;
-            }
-            if (configuration == null) {
-                LOGGER.warn("no configuration found");
             }
         }
         return configuration;

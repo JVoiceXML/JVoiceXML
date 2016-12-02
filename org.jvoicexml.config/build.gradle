@@ -19,10 +19,14 @@ dependencies {
 
 // jar configuration
 jar {
+    from ('./src/main/resources') {
+        include 'services/*'
+        into 'META-INF'
+    }
     manifest {
         attributes("Implementation-Title": "JVoiceXML configuration library",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": "0.7.8")
+                   "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.config'
 }
