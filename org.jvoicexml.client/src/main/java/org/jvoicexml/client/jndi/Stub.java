@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,33 +24,22 @@
  *
  */
 
-package org.jvoicexml.client.rtp;
+package org.jvoicexml.client.jndi;
 
-import java.net.InetAddress;
+import javax.naming.Referenceable;
 
 /**
- * RTP configuration information.
+ * Stub at the client side that remotely calls the skeleton.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.6
+ * @since 0.4
  */
-public interface RtpConfiguration {
+public interface Stub
+        extends Referenceable {
     /**
-     * Retrieves the IP address.
-     * @return the address
+     * Retrieves the name to which the stub is bound.
+     * @return Name of the stub.
      */
-    InetAddress getAddress();
-
-    /**
-     * Retrieves the IP port number for RTP communication.
-     * @return the port number.
-     */
-    int getPort();
-
-    /**
-     * Retrieves the IP port number for RTPC communication.
-     * @return the port number, <code>-1</code> if RTPC is not supported.
-     */
-    int getControlPort();
+    String getStubName();
 }

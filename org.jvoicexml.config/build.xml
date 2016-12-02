@@ -18,13 +18,13 @@ org.jvoicexml/personal-props/README.txt
         <property name="component.path" value="org/jvoicexml/config" />
 
         <!-- directory structure -->
-        <property name="src" value="${basedir}/src" />
+        <property name="src" value="${basedir}/src/main/java" />
         <property name="build" value="${basedir}/classes" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
-        <property name="etc" value="${basedir}/etc" />
+        <property name="resources" value="${basedir}/src/main/resources" />
 
         <condition property="windows">
             <os family="windows" />
@@ -49,7 +49,7 @@ org.jvoicexml/personal-props/README.txt
 
 
     <target name="configuration" depends="-setup">
-        <xslt in="${jvxml.core.dir}/run.xml" out="${jvxml.core.dir}/run-tmp.xml" style="${etc}/patch-runscript.xsl">
+        <xslt in="${jvxml.core.dir}/run.xml" out="${jvxml.core.dir}/run-tmp.xml" style="${resources}/patch-runscript.xsl">
             <outputproperty name="method" value="xml" />
             <outputproperty name="standalone" value="no" />
             <outputproperty name="encoding" value="UTF-8" />
@@ -59,7 +59,7 @@ org.jvoicexml/personal-props/README.txt
         <copy file="${jvxml.core.dir}/run-tmp.xml" tofile="${jvxml.core.dir}/run.xml" overwrite="true" />
         <delete file="${jvxml.core.dir}/run-tmp.xml" />
         <copy todir="${config}">
-            <fileset dir="${etc}">
+            <fileset dir="${resources}">
                 <include name="*.xsd" />
             </fileset>
         </copy>
@@ -95,7 +95,7 @@ org.jvoicexml/personal-props/README.txt
                     <attribute name="Implementation-Version" value="${version}" />
                 </section>
             </manifest>
-            <metainf dir="etc">
+            <metainf dir="${resources}">
                 <include name="services/*" />
             </metainf>
         </jar>

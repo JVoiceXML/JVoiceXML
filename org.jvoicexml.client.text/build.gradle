@@ -1,0 +1,70 @@
+// Apply the java plugin to add support for Java
+apply plugin: 'java'
+apply plugin: "com.google.protobuf"
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir 'src/main/protobuf'
+        }
+        java {
+            srcDir 'src/main/java'
+        }
+    }
+}
+
+// dependencies for production and test code
+dependencies {
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.1.0'
+    
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+    compile project(':org.jvoicexml')
+    compile project(':org.jvoicexml.client')
+}
+
+protobuf {
+    // Configure the protoc executable
+    protoc {
+        // Download from repositories
+        artifact = 'com.google.protobuf:protoc:3.0.0'
+    }
+    
+    generateProtoTasks {
+        // all() returns the collection of all protoc tasks
+        all().each { task ->
+            // Here you can configure the task
+        }
+
+        // In addition to all(), you may get the task collection by various
+        // criteria:
+
+        // (Java only) returns tasks for a sourceSet
+        ofSourceSet('main')
+    }    
+}
+
+// jar configuration
+jar {
+    manifest {
+        attributes("Implementation-Title": "JVoiceXML configuration library",
+                   "Implementation-Vendor": "JVoiceXML group",
+                   "Implementation-Version": "0.7.8")
+    }
+    baseName 'org.jvoicexml.client'
+}

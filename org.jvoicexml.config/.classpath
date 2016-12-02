@@ -14,10 +14,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
-	<classpathentry kind="lib" path="3rdparty/springframework4.2.0/lib/spring-beans-4.2.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="3rdparty/springframework4.2.0/lib/spring-context-4.2.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="3rdparty/springframework4.2.0/lib/spring-core-4.2.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="3rdparty/springframework4.2.0/lib/spring-expression-4.2.0.RELEASE.jar"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
 	<classpathentry kind="output" path="bin"/>

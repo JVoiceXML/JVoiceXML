@@ -18,13 +18,13 @@ org.jvoicexml/personal-props/README.txt
         <property name="component.path" value="org/jvoicexml/client" />
 
         <!-- directory structure -->
-        <property name="src" value="${basedir}/src" />
+        <property name="src" value="${basedir}/src/main/java" />
         <property name="build" value="${basedir}/classes" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
-        <property name="etc" value="${basedir}/etc" />
+        <property name="resources" value="${basedir}/src/main/resources" />
 
         <condition property="windows">
             <os family="windows" />
@@ -101,7 +101,7 @@ org.jvoicexml/personal-props/README.txt
                     <attribute name="Implementation-Version" value="${version}" />
                 </section>
             </manifest>
-            <metainf dir="etc">
+            <metainf dir="${resources}">
                 <include name="services/*" />
             </metainf>
         </jar>
@@ -154,7 +154,7 @@ org.jvoicexml/personal-props/README.txt
 
     <target name="distribution" depends="jar">
         <property name="distFolder" value="${dist}/${jvxml.version}" />
-        <copy tofile="${distFolder}/config/marc-implementation.xml" file="${etc}/marc-implementation-dist.xml" />
+        <copy tofile="${distFolder}/config/marc-implementation.xml" file="${resources}/marc-implementation-dist.xml" />
     </target>
 
     <target name="dist-maven-snapshot" depends="distribution">

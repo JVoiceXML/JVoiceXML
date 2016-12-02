@@ -19,14 +19,15 @@ org.jvoicexml/personal-props/README.txt
         <property name="component.path" value="org/jvoicexml/client/text" />
 
         <!-- directory structure -->
-        <property name="src" value="${basedir}/src" />
+        <property name="src" value="${basedir}/src/main/java" />
+        <property name="src.protobuf" value="${basedir}/src/main/protobuf" />
         <property name="build" value="${basedir}/classes" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
-        <property name="etc" value="${basedir}/etc" />
-        <property name="gen" value="${basedir}/gen" />
+        <property name="resources" value="${basedir}/src/main/resources" />
+        <property name="gen" value="${basedir}/build/generated/source/proto/main/java" />
 
         <condition property="windows">
             <os family="windows" />
@@ -76,7 +77,7 @@ Currently it is set to '${mmi.protoc}'
         <uptodate property="schemasChanged">
             <srcfiles dir="${basedir}">
                 <include name="build.xml" />
-                <include name="${etc}/proto/*.proto" />
+                <include name="${src.protobuf}/*.proto" />
             </srcfiles>
             <mapper type="merge" to="${gen}/__gen__" />
         </uptodate>
@@ -84,19 +85,14 @@ Currently it is set to '${mmi.protoc}'
 
     <target name="preprocess" depends="-init,-up2date,-checkProtoc" unless="schemasChanged">
         <copy todir="${gen}">
-            <fileset dir="etc/proto/">
+            <fileset dir="${src.protobuf}">
                 <include name="*.proto" />
             </fileset>
         </copy>
-        <replace token="@.protoc.package@" value="org.jvoicexml.mmi.events.protobuf">
-            <fileset dir="${gen}">
-                <include name="*.proto" />
-            </fileset>
-        </replace>
         <exec executable="${mmi.protoc}" failonerror="true">
             <arg value="--java_out=${gen}" />
-            <arg value="--proto_path=${etc}/proto" />
-            <arg value="${etc}/proto/TextMessage.proto" />
+            <arg value="--proto_path=${src.protobuf}" />
+            <arg value="${src.protobuf}/TextMessage.proto" />
         </exec>
         <touch file="${gen}/__gen__" />
     </target>
@@ -127,7 +123,7 @@ Currently it is set to '${mmi.protoc}'
                     <attribute name="Implementation-Version" value="${version}" />
                 </section>
             </manifest>
-            <metainf dir="etc">
+            <metainf dir="${resources}">
                 <include name="services/*" />
             </metainf>
         </jar>
@@ -182,7 +178,7 @@ Currently it is set to '${mmi.protoc}'
     <target name="distribution" depends="jar">
         <property name="distFolder" value="${dist}/${jvxml.version}" />
         <copy todir="${distFolder}/lib" file="${dist.jar}" />
-        <copy todir="${jvxml.core.dir}/doc" file="etc/proto/TextMessage.proto"/>
+        <copy todir="${jvxml.core.dir}/doc" file="${src.protobuf}/TextMessage.proto"/>
     </target>
 
     <target name="dist-maven-snapshot" depends="distribution">
