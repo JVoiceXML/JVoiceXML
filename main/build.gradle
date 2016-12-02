@@ -14,11 +14,13 @@ repositories {
 
 // dependencies for production and test code
 dependencies {
+    compile project(':org.jvoicexml.client')
+    compile project(':org.jvoicexml.client.text')
+    compile project(':org.jvoicexml.profile.vxml21')
+
     runtime project(':org.jvoicexml.xml')
     runtime project(':org.jvoicexml')
     runtime project(':org.jvoicexml.config')
-    runtime project(':org.jvoicexml.client')
-    runtime project(':org.jvoicexml.client.text')
     runtime project(':org.jvoicexml.srgs')
 }
 

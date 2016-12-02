@@ -18,13 +18,13 @@ org.jvoicexml/personal-props/README.txt
         <property name="component.path" value="org/jvoicexml/profile/vxml21" />
 
         <!-- directory structure -->
-        <property name="src" value="${basedir}/src" />
+        <property name="src" value="${basedir}/src/main/java" />
         <property name="build" value="${basedir}/classes" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
-        <property name="etc" value="${basedir}/etc" />
+        <property name="resources" value="${basedir}/src/main/resources" />
 
         <condition property="windows">
             <os family="windows" />
@@ -51,7 +51,7 @@ org.jvoicexml/personal-props/README.txt
 
     <target name="configuration" depends="-setup">
         <copy todir="${config}">
-            <fileset dir="${etc}">
+            <fileset dir="${resources}">
                 <include name="vxml2.1-profile.xml" />
             </fileset>
         </copy>
@@ -83,13 +83,10 @@ org.jvoicexml/personal-props/README.txt
                 <attribute name="Built-By" value="${user.name}" />
                 <section name="common">
                     <attribute name="Implementation-Vendor" value="JVoiceXML group" />
-                    <attribute name="Implementation-Title" value="JVoiceXML jsapi 2.0 base layer" />
+                    <attribute name="Implementation-Title" value="JVoiceXML VoiceXML 2.1 Profile" />
                     <attribute name="Implementation-Version" value="${version}" />
                 </section>
             </manifest>
-            <metainf dir="etc">
-                <include name="services/*" />
-            </metainf>
         </jar>
     </target>
 

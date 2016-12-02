@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="jvxml-profile-0-7.xsd">
+    <repository>vxml21</repository>
+    <classpath>dist/org.jvoicexml.profile.vxml21.jar</classpath>
+
+    <!-- Tag strategies for the VoiceXML 21 profile -->
+    <beans:bean id="org.jvoicexml.profile.Profile"
+        class="org.jvoicexml.profile.vxml21.VoiceXml21Profile" scope="singleton">
+        <!-- Initialization of form items -->
+        <beans:property name="initializationTagStrategyFactory">
+            <beans:bean
+                class="org.jvoicexml.profile.vxml21.VoiceXml21TagStrategyFactory">
+                <beans:property name="tagStrategies">
+                    <beans:map>
+                        <beans:entry key="data">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.DataStrategy" />
+                        </beans:entry>
+                        <beans:entry key="grammar">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.GrammarStrategy" />
+                        </beans:entry>
+                        <beans:entry key="meta">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.MetaStrategy" />
+                        </beans:entry>
+                        <beans:entry key="property">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.PropertyStrategy" />
+                        </beans:entry>
+                        <beans:entry key="script">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.ScriptStrategy" />
+                        </beans:entry>
+                        <beans:entry key="#text">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.TextStrategy" />
+                        </beans:entry>
+                        <beans:entry key="var">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.VarStrategy" />
+                        </beans:entry>
+                    </beans:map>
+                </beans:property>
+            </beans:bean>
+        </beans:property>
+
+        <!-- pure tag execution -->
+        <beans:property name="tagStrategyFactory">
+            <beans:bean
+                class="org.jvoicexml.profile.vxml21.VoiceXml21TagStrategyFactory">
+                <beans:property name="tagStrategies">
+                    <beans:map>
+                        <beans:entry key="assign">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.AssignStrategy" />
+                        </beans:entry>
+                        <beans:entry key="audio">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.AudioTagStrategy" />
+                        </beans:entry>
+                        <beans:entry key="clear">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.ClearStrategy" />
+                        </beans:entry>
+                        <beans:entry key="data">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.DataStrategy" />
+                        </beans:entry>
+                        <beans:entry key="disconnect">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.DisconnectStrategy" />
+                        </beans:entry>
+                        <beans:entry key="exit">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.ExitStrategy" />
+                        </beans:entry>
+                        <beans:entry key="goto">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.GotoStrategy" />
+                        </beans:entry>
+                        <beans:entry key="if">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.IfStrategy" />
+                        </beans:entry>
+                        <beans:entry key="log">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.LogStrategy" />
+                        </beans:entry>
+                        <beans:entry key="link">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.UnsupportedElementTagStrategy">
+                                <beans:constructor-arg>
+                                    <beans:value>link</beans:value>
+                                </beans:constructor-arg>
+                            </beans:bean>
+                        </beans:entry>
+                        <beans:entry key="prompt">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.PromptStrategy" />
+                        </beans:entry>
+                        <beans:entry key="reprompt">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.RepromptStrategy" />
+                        </beans:entry>
+                        <beans:entry key="return">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.ReturnStrategy" />
+                        </beans:entry>
+                        <beans:entry key="script">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.ScriptStrategy" />
+                        </beans:entry>
+                        <beans:entry key="submit">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.SubmitStrategy" />
+                        </beans:entry>
+                        <beans:entry key="#text">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.TextStrategy" />
+                        </beans:entry>
+                        <beans:entry key="throw">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.ThrowStrategy" />
+                        </beans:entry>
+                        <beans:entry key="value">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.ValueStrategy" />
+                        </beans:entry>
+                        <beans:entry key="var">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.VarStrategy" />
+                        </beans:entry>
+                    </beans:map>
+                </beans:property>
+            </beans:bean>
+        </beans:property>
+    </beans:bean>
+</profile>
