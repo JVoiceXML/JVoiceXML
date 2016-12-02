@@ -25,6 +25,17 @@ dependencies {
     runtime project(':org.jvoicexml.srgs')
 }
 
+jar {
+    onlyIf { 
+        false
+    }
+}
+
+distZip {
+    doLast {
+        file("$destinationDir/$archiveName").renameTo("$destinationDir/jvoicexml" + '-' + version + '.zip')
+    }
+}
 
 mainClassName = "org.jvoicexml.startup.Startup"
 applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').projectDir}/config"]

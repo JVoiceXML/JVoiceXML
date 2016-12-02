@@ -66,5 +66,5 @@ jar {
                    "Implementation-Vendor": "JVoiceXML group",
                    "Implementation-Version": version)
     }
-    baseName 'org.jvoicexml.client'
+    baseName 'org.jvoicexml.client.text'
 }
