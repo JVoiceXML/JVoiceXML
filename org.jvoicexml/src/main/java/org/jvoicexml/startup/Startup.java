@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2016 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,8 +25,8 @@ import org.jvoicexml.JVoiceXmlMain;
 
 /**
  * Startup the JVoiceXML voice browser.
+ * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public final class Startup {
@@ -44,14 +39,14 @@ public final class Startup {
     /**
      * The main method, which starts the interpreter.
      *
-     * @param args Command line arguments. None expected.
+     * @param args
+     *            Command line arguments. None expected.
      *
      * @since 0.4
      */
     public static void main(final String[] args) {
+        // Start the interpreter asynchronously
         final JVoiceXmlMain jvxml = new JVoiceXmlMain();
-
-        // Start the interpreter as a thread.
         jvxml.start();
 
         // Wait until the interpreter thread terminates.

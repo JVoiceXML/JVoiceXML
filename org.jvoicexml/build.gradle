@@ -1,5 +1,6 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
+apply plugin: 'application'
 
 repositories {
     mavenCentral()
@@ -31,4 +32,10 @@ jar {
                    "Implementation-Version": "0.7.8")
     }
     baseName 'org.jvoicexml'
+}
+
+mainClassName = "org.jvoicexml.startup.Startup"
+
+run {
+    classpath += files('config')
 }
