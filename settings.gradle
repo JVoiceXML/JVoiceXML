@@ -9,6 +9,7 @@ include ':org.jvoicexml', \
     ':org.jvoicexml.client.text', \
     ':org.jvoicexml.srgs', \
     ':org.jvoicexml.mmi.events', \
+    ':org.jvoicexml.profile.mmi', \
     ':org.jvoicexml.profile.vxml21', \
     ':org.jvoicexml.implementation.mary', \
     ':org.jvoicexml.implementation.text', \
