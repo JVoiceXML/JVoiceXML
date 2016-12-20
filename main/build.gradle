@@ -33,6 +33,7 @@ dependencies {
     runtime project(':org.jvoicexml.callmanager.mmi')
     runtime project(':org.jvoicexml.callmanager.mmi.http')
     runtime project(':org.jvoicexml.callmanager.mmi.servlet')
+    runtime project(':org.jvoicexml.callmanager.mmi.socket')
 }
 
 jar {
