@@ -15,9 +15,6 @@ repositories {
 // dependencies for production and test code
 dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
-    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.5'
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
     
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
@@ -34,9 +31,9 @@ jar {
     }
 
     manifest {
-        attributes("Implementation-Title": "JVoiceXML LUIS Grammar support",
+        attributes("Implementation-Title": "JVoiceXML Regex Grammar support",
                    "Implementation-Vendor": "JVoiceXML group",
                    "Implementation-Version": "version")
     }
-    baseName 'org.jvoicexml.interpreter.grammar.luis'
+    baseName 'org.jvoicexml.interpreter.grammar.regex'
 }

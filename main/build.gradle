@@ -25,6 +25,7 @@ dependencies {
     runtime project(':org.jvoicexml.jndi')
     runtime project(':org.jvoicexml.interpreter.datamodel.ecmascript')
     runtime project(':org.jvoicexml.interpreter.grammar.luis')
+    runtime project(':org.jvoicexml.interpreter.grammar.regex')
     runtime project(':org.jvoicexml.implementation.text')
     
 }
