@@ -1,3 +1,4 @@
 include ':org.jvoicexml', ':org.jvoicexml.xml', ':org.jvoicexml.config', \
+    ':org.jvoicexml.jndi', ':org.jvoicexml.interpreter.datamodel.ecmascript',
     ':org.jvoicexml.client', ':org.jvoicexml.client.text', 'org.jvoicexml.srgs', \
     'org.jvoicexml.profile.vxml21', 'org.jvoicexml.implementation.text', 'main'

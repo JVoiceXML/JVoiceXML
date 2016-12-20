@@ -23,6 +23,9 @@ dependencies {
     runtime project(':org.jvoicexml')
     runtime project(':org.jvoicexml.config')
     runtime project(':org.jvoicexml.srgs')
+    runtime project(':org.jvoicexml.jndi')
+    runtime project(':org.jvoicexml.interpreter.datamodel.ecmascript')
+    
 }
 
 jar {
