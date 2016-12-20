@@ -50,7 +50,8 @@ distZip {
 }
 
 mainClassName = "org.jvoicexml.startup.Startup"
-applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').projectDir}/config"]
+applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').projectDir}/config",
+                             "-Djava.security.policy=${project(':org.jvoicexml').projectDir}/config/jvoicexml.policy" ]
 
 run {
     classpath += files("${project(':org.jvoicexml').projectDir}/config")
