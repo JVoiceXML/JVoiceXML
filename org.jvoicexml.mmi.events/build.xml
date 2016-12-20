@@ -19,13 +19,13 @@ org.jvoicexml/personal-props/README.txt
         <property name="component.path" value="org/jvoicexml/mmi/events" />
 
         <!-- directory structure -->
-        <property name="src" value="${basedir}/src" />
+        <property name="src" value="${basedir}/src/main/java" />
         <property name="build" value="${basedir}/classes" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
-        <property name="etc" value="${basedir}/etc" />
+        <property name="resources" value="${basedir}/src/main/resources" />
         <property name="gen" value="gen" />
 
         <condition property="windows">
@@ -73,7 +73,7 @@ Currently it is set to '${mmi.protoc}'
         <uptodate property="schemasChanged">
             <srcfiles dir="${basedir}">
                 <include name="build.xml" />
-                <include name="etc/proto/*.proto" />
+                <include name="src/main/protobuf/*.proto" />
             </srcfiles>
             <mapper type="merge" to="${gen}/__gen__" />
         </uptodate>
@@ -81,7 +81,7 @@ Currently it is set to '${mmi.protoc}'
 
     <target name="preprocess" depends="-init,-up2date,-checkProtoc" unless="schemasChanged">
         <copy todir="${gen}">
-            <fileset dir="etc/proto/">
+            <fileset dir="src/main/protobuf/proto/">
                 <include name="*.proto" />
             </fileset>
         </copy>
@@ -179,7 +179,7 @@ Currently it is set to '${mmi.protoc}'
     </target>
 
     <target name="dist-maven-snapshot" depends="distribution">
-        <copy todir="${dist}" file="etc/${component}.pom" overwrite="true" />
+        <copy todir="${dist}" file="${resources}/${component}.pom" overwrite="true" />
         <replace file="${dist}/${component}.pom" token="@version@" value="${jvxml.version}-SNAPSHOT" />
         <path id="maven.path">
             <fileset dir="${3rdparty.dir}/maven/lib">

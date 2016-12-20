@@ -1,5 +1,5 @@
 syntax = "proto2";
-option java_package = "@mmi.protoc.package@";
+option java_package = "org.jvoicexml.mmi.events.protobuf";
 
 message LifeCycleEvent {
   required string RequestID = 1;

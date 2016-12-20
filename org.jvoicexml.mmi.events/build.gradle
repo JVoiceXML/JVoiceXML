@@ -35,7 +35,6 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
     compile project(':org.jvoicexml')
-    compile project(':org.jvoicexml.client')
 }
 
 protobuf {
@@ -62,9 +61,9 @@ protobuf {
 // jar configuration
 jar {
     manifest {
-        attributes("Implementation-Title": "JVoiceXML text client",
+        attributes("Implementation-Title": "JVoiceXML MMI Event library",
                    "Implementation-Vendor": "JVoiceXML group",
                    "Implementation-Version": version)
     }
-    baseName 'org.jvoicexml.client.text'
+    baseName 'org.jvoicexml.mmi.events'
 }

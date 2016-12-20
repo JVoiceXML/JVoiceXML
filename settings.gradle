@@ -7,8 +7,9 @@ include ':org.jvoicexml', \
     'org.jvoicexml.interpreter.grammar.regex', \
     ':org.jvoicexml.client', \
     ':org.jvoicexml.client.text', \
-    'org.jvoicexml.srgs', \
-    'org.jvoicexml.profile.vxml21', \
-    'org.jvoicexml.implementation.mary', \
-    'org.jvoicexml.implementation.text', \
-    'main'
+    ':org.jvoicexml.srgs', \
+    ':org.jvoicexml.mmi.events', \
+    ':org.jvoicexml.profile.vxml21', \
+    ':org.jvoicexml.implementation.mary', \
+    ':org.jvoicexml.implementation.text', \
+    ':main'

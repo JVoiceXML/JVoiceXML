@@ -9,6 +9,7 @@ buildscript {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 
@@ -16,6 +17,7 @@ repositories {
 dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
     compile fileTree(dir: './3rdparty/mary5.1/lib', include: ['*.jar'])
+    //compile group: 'de.dfki.mary', name: 'voice-cmu-slt-hsmm', version: '5.2'
     
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'

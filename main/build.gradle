@@ -16,13 +16,14 @@ repositories {
 dependencies {
     compile project(':org.jvoicexml.client')
     compile project(':org.jvoicexml.client.text')
-    compile project(':org.jvoicexml.profile.vxml21')
 
     runtime project(':org.jvoicexml.xml')
     runtime project(':org.jvoicexml')
     runtime project(':org.jvoicexml.config')
-    runtime project(':org.jvoicexml.srgs')
     runtime project(':org.jvoicexml.jndi')
+    runtime project(':org.jvoicexml.srgs')
+    runtime project(':org.jvoicexml.mmi.events')
+    compile project(':org.jvoicexml.profile.vxml21')
     runtime project(':org.jvoicexml.interpreter.datamodel.ecmascript')
     runtime project(':org.jvoicexml.interpreter.grammar.luis')
     runtime project(':org.jvoicexml.interpreter.grammar.regex')
