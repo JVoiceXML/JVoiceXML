@@ -8,12 +8,15 @@
   <classpath>lib/org.jvoicexml.srgs.jar</classpath>
   <classpath>lib/protobuf-java-3.0.0.jar</classpath>
 
-  <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">
-    <beans:property name="instances" value="1" />
-   <property name="grammarParsers">
-    <list>
-        <bean class="org.jvoicexml.srgs.SrgsSisrXmlGrammarParser" />
-    </list>    
-   </property>
-  </beans:bean>
+    <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">
+        <beans:property name="instances" value="1" />
+        <beans:property name="grammarParsers">
+            <beans:list value-type="org.jvoicexml.implementation.grammar.GrammarParser">
+                <beans:bean class="org.jvoicexml.srgs.SrgsSisrXmlGrammarParser" />
+                <!-- bean class="org.jvoicexml.interpreter.grammar.luis.LUISGrammarParser">
+                    <property name="subscription" value="MUST-BE-SUPPLIED-VALUE" />
+                </bean-->
+            </beans:list>
+        </beans:property>
+    </beans:bean>
 </implementation>

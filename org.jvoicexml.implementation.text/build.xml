@@ -137,7 +137,7 @@ org.jvoicexml/personal-props/README.txt
 
     <target name="distribution" depends="jar">
         <property name="distFolder" value="${dist}/${jvxml.version}" />
-        <copy tofile="${distFolder}/config/text-implementation.xml" file="${etc}/text-implementation-dist.xml" />
+        <copy tofile="${distFolder}/config/text-implementation.xml" file="${resources}/text-implementation-dist.xml" />
         <copy todir="${distFolder}/lib" file="${dist.jar}" />
     </target>
 </project>
