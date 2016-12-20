@@ -19,14 +19,14 @@ personal-props/README.txt
         <!-- directory structure -->
         <property name="dist" value="dist" />
         <property name="config" value="config" />
-        <property name="etc" value="etc" />
+        <property name="resources" value="src/main/resources" />
 
         <property name="enableJndi" value="true" />
 
         <!-- 
         - Prepare the files that can be changed by the implementation platforms 
         -->
-        <copy file="${etc}/run.xml" todir="." overwrite="true" />
+        <copy file="${resources}/run.xml" todir="." overwrite="true" />
         <delete>
             <fileset dir="${config}">
                 <include name="*-implementation.xml" />
@@ -61,7 +61,7 @@ personal-props/README.txt
             depends="-setup,-useGlobalConfig,-usePersonalConfig,-configureJndi">
         <xslt in="${configfile}"
               out="platform-targets.xml"
-              style="${etc}/patch-runscript.xsl">
+              style="${resources}/patch-runscript.xsl">
             <outputproperty name="method" value="xml" />
             <outputproperty name="standalone" value="no" />
             <outputproperty name="encoding" value="UTF-8" />
