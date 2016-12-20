@@ -19,13 +19,13 @@ org.jvoicexml/personal-props/README.txt
         <property name="component.path" value="org/jvoicexml/callmanager/mmi/http" />
 
         <!-- directory structure -->
-        <property name="src" value="${basedir}/src" />
+        <property name="src" value="${basedir}/src/main/kava" />
         <property name="build" value="${basedir}/classes" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
-        <property name="etc" value="${basedir}/etc" />
+        <property name="resources" value="${basedir}/src/main/resources" />
 
         <condition property="windows">
             <os family="windows" />
@@ -58,7 +58,7 @@ org.jvoicexml/personal-props/README.txt
 
 
     <target name="configuration" depends="-setup">
-        <copy todir="${config}" file="${etc}/mmi-callmanager-http.xml" />
+        <copy todir="${config}" file="${resources}/mmi-callmanager-http.xml" />
     </target>
 
     <target name="compile" depends="-init,-checkJavaVersion" description="Compile the sources">
@@ -146,6 +146,6 @@ org.jvoicexml/personal-props/README.txt
         <copy todir="${distFolder}/lib">
             <fileset refid="jetty.lib" />
         </copy>
-        <copy tofile="${distFolder}/config/mmi-callmanager-http.xml" file="${etc}/mmi-callmanager-http-dist.xml" />
+        <copy tofile="${distFolder}/config/mmi-callmanager-http.xml" file="${resources}/mmi-callmanager-http-dist.xml" />
     </target>
 </project>

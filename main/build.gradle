@@ -31,6 +31,7 @@ dependencies {
     runtime project(':org.jvoicexml.implementation.mary')
     runtime project(':org.jvoicexml.implementation.text')
     runtime project(':org.jvoicexml.callmanager.mmi')
+    runtime project(':org.jvoicexml.callmanager.mmi.http')
 }
 
 jar {

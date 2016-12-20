@@ -14,4 +14,5 @@ include ':org.jvoicexml', \
     ':org.jvoicexml.implementation.mary', \
     ':org.jvoicexml.implementation.text', \
     ':org.jvoicexml.callmanager.mmi', \
+    ':org.jvoicexml.callmanager.mmi.http', \
     ':main'
