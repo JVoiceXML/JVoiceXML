@@ -18,4 +18,5 @@ include 'org.jvoicexml', \
     'org.jvoicexml.callmanager.mmi.servlet', \
     'org.jvoicexml.callmanager.mmi.socket', \
     'org.jvoicexml.callmanager.text', \
+    'org.jvoicexml.voicexmlunit', \
     'main'
