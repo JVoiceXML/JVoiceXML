@@ -26,8 +26,8 @@ dependencies {
     runtime project(':org.jvoicexml.interpreter.datamodel.ecmascript')
     runtime project(':org.jvoicexml.interpreter.grammar.luis')
     runtime project(':org.jvoicexml.interpreter.grammar.regex')
+    runtime project(':org.jvoicexml.implementation.mary')
     runtime project(':org.jvoicexml.implementation.text')
-    
 }
 
 jar {

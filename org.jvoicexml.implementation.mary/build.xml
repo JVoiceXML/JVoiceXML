@@ -19,13 +19,13 @@ org.jvoicexml/personal-props/README.txt
         <property name="component.path" value="org/jvoicexml/implementation/mary" />
 
         <!-- directory structure -->
-        <property name="src" value="${basedir}/src" />
+        <property name="src" value="${basedir}/src/main/java" />
         <property name="build" value="${basedir}/classes" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api/" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
-        <property name="etc" value="${basedir}/etc" />
+        <property name="resources" value="${basedir}/src/main/resources" />
 
         <condition property="windows">
             <os family="windows" />
@@ -53,7 +53,7 @@ org.jvoicexml/personal-props/README.txt
     </target>
 
     <target name="configuration" depends="-setup">
-        <copy todir="${config}" file="${etc}/mary-implementation.xml" overwrite="true" />
+        <copy todir="${config}" file="${resources}/mary-implementation.xml" overwrite="true" />
     </target>
 
     <target name="clean" depends="-setup" description="Remove all compiled and distribution files">
@@ -137,7 +137,7 @@ org.jvoicexml/personal-props/README.txt
 
     <target name="distribution" depends="jar">
         <property name="distFolder" value="${dist}/${jvxml.version}" />
-        <copy tofile="${distFolder}/config/mary-implementation.xml" file="${etc}/mary-implementation-dist.xml" />
+        <copy tofile="${distFolder}/config/mary-implementation.xml" file="${resources}/mary-implementation-dist.xml" />
         <copy todir="${distFolder}/lib" file="${dist.jar}" />
         <copy todir="${distFolder}/lib">
             <fileset refid="mary.lib" />

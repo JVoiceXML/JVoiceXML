@@ -1,0 +1,35 @@
+// Apply the java plugin to add support for Java
+apply plugin: 'java'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+// dependencies for production and test code
+dependencies {
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    compile fileTree(dir: './3rdparty/mary5.1/lib', include: ['*.jar'])
+    
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+    compile project(':org.jvoicexml')
+}
+
+
+// jar configuration
+jar {
+    manifest {
+        attributes("Implementation-Title": "JVoiceXML mary implementation platform",
+                   "Implementation-Vendor": "JVoiceXML group",
+                   "Implementation-Version": "version")
+    }
+    baseName 'org.jvoicexml.implementation.mary'
+}
