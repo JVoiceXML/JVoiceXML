@@ -45,9 +45,7 @@ jar {
 }
 
 distZip {
-    doLast {
-        file("$destinationDir/$archiveName").renameTo("$destinationDir/jvoicexml" + '-' + version + '.zip')
-    }
+    baseName 'jvoicexml'
 }
 
 mainClassName = "org.jvoicexml.startup.Startup"
