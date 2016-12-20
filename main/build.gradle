@@ -30,6 +30,7 @@ dependencies {
     runtime project(':org.jvoicexml.interpreter.grammar.regex')
     runtime project(':org.jvoicexml.implementation.mary')
     runtime project(':org.jvoicexml.implementation.text')
+    runtime project(':org.jvoicexml.callmanager.mmi')
 }
 
 jar {
