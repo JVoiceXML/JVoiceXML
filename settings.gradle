@@ -1,18 +1,19 @@
-include ':org.jvoicexml', \
-    ':org.jvoicexml.xml', \
-    ':org.jvoicexml.config', \
-    ':org.jvoicexml.jndi', \
-    ':org.jvoicexml.interpreter.datamodel.ecmascript',
+include 'org.jvoicexml', \
+    'org.jvoicexml.xml', \
+    'org.jvoicexml.config', \
+    'org.jvoicexml.jndi', \
+    'org.jvoicexml.interpreter.datamodel.ecmascript',
     'org.jvoicexml.interpreter.grammar.luis', \
     'org.jvoicexml.interpreter.grammar.regex', \
-    ':org.jvoicexml.client', \
-    ':org.jvoicexml.client.text', \
-    ':org.jvoicexml.srgs', \
-    ':org.jvoicexml.mmi.events', \
-    ':org.jvoicexml.profile.mmi', \
-    ':org.jvoicexml.profile.vxml21', \
-    ':org.jvoicexml.implementation.mary', \
-    ':org.jvoicexml.implementation.text', \
-    ':org.jvoicexml.callmanager.mmi', \
-    ':org.jvoicexml.callmanager.mmi.http', \
-    ':main'
+    'org.jvoicexml.client', \
+    'org.jvoicexml.client.text', \
+    'org.jvoicexml.srgs', \
+    'org.jvoicexml.mmi.events', \
+    'org.jvoicexml.profile.mmi', \
+    'org.jvoicexml.profile.vxml21', \
+    'org.jvoicexml.implementation.mary', \
+    'org.jvoicexml.implementation.text', \
+    'org.jvoicexml.callmanager.mmi', \
+    'org.jvoicexml.callmanager.mmi.http', \
+    'org.jvoicexml.callmanager.mmi.servlet', \
+    'main'
