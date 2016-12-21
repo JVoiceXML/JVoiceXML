@@ -1,8 +1,0 @@
-[Unit]
-Description=JVoiceXML service
-
-[Service]
-Type=dbus
-BusName=edu.duke.linux.yum
-ExecStart=/usr/share/jvoicexml/bin/startup.sh
-ExecStop=/usr/share/jvoicexml/bin/shutdown.sh

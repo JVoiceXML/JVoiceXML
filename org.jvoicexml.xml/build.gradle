@@ -5,6 +5,14 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    main {
+        resources {
+            exclude '**'
+        }
+    }
+}
+
 // dependencies for production and test code
 dependencies {
     testCompile 'junit:junit:4.12'

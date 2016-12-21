@@ -7,6 +7,14 @@ buildscript {
     }
 }
 
+sourceSets {
+    main {
+        resources {
+            exclude '**'
+        }
+    }
+}
+
 repositories {
     mavenCentral()
 }

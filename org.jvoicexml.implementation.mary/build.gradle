@@ -1,17 +1,18 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
-
 repositories {
     mavenCentral()
     jcenter()
 }
 
+sourceSets {
+    main {
+        resources {
+            exclude '**'
+        }
+    }
+}
 
 // dependencies for production and test code
 dependencies {

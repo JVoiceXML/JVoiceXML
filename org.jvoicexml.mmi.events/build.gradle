@@ -23,6 +23,9 @@ sourceSets {
         java {
             srcDir 'src/main/java'
         }
+        resources {
+            exclude '**'
+        }
     }
 }
 

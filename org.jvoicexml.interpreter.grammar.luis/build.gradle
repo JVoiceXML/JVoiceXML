@@ -1,12 +1,6 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
-
 repositories {
     mavenCentral()
 }
