@@ -13,24 +13,36 @@
     MA 02111-1307 USA -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    version="2.0">
-    <xsl:param name="sapibridgepath" />
+    version="2.0"
+    xmlns:beans="http://www.springframework.org/schema/beans">
+    <xsl:param name="repositoryname" />
+    <xsl:param name="buildpath" />
+    <xsl:param name="port" />
 
-    <xsl:template match="path[@id='run.librarypath']">
+    <xsl:template match="repository">
         <xsl:copy>
             <xsl:apply-templates select="@*" />
-            <xsl:comment>library path for JSAPI 2.0 SAPI</xsl:comment>
-            <pathelement location="{$sapibridgepath}" />
-            <xsl:apply-templates select="@*|*|text()|comment()" />
+            <xsl:value-of select="$repositoryname" />
+            <!-- Keep current settings -->
+            <xsl:apply-templates select="@*|*|comment()" />
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="resources[@id='run.protocolhandlerpath']">
+    <xsl:template match="classpath">
         <xsl:copy>
             <xsl:apply-templates select="@*" />
-            <xsl:comment>protocol handler for JSAPI20 SAPI</xsl:comment>
-            <string value="org.jvoicexml.jsapi2.protocols" />
-            <xsl:apply-templates select="@*|*|text()|comment()" />
+            <xsl:value-of select="$buildpath" />/<xsl:value-of select="text()" />
+            <!-- Keep current settings -->
+            <xsl:apply-templates select="@*|*|comment()" />
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="beans:property[@name='port']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*" />
+            <xsl:attribute name="value"><xsl:value-of select="$port" /></xsl:attribute>
+            <!-- Keep current settings -->
+            <xsl:apply-templates select="@*|*|comment()" />
         </xsl:copy>
     </xsl:template>
 

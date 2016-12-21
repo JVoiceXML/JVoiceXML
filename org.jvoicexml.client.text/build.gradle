@@ -23,11 +23,6 @@ sourceSets {
         java {
             srcDir 'src/main/java'
         }
-    }
-}
-
-sourceSets {
-    main {
         resources {
             exclude '**'
         }

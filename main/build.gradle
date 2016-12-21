@@ -43,17 +43,28 @@ jar {
     }
 }
 
-task mmiServletWar(dependsOn: ':org.jvoicexml.callmanager.mmi.servlet:war') {
-  doLast {
-    applicationDistribution.into("servlets") {
-      from( project(':org.jvoicexml.callmanager.mmi.servlet').war.outputs.files )
+task jvxmlservlet(dependsOn: ':org.jvoicexml.callmanager.mmi.servlet:war') {
+    doLast {
+        applicationDistribution.into("servlets") {
+            from( project(':org.jvoicexml.callmanager.mmi.servlet').war.outputs.files )
+        }
     }
-  }
 }
 
 distZip {
-    dependsOn mmiServletWar
+    dependsOn jvxmlservlet
     baseName 'jvoicexml'
+}
+
+task jvxmlplugins {
+    dependsOn ':org.jvoicexml.jndi:jar'
+
+    doLast {
+        copy {
+            into("${project(':org.jvoicexml').projectDir}/config")
+            from( project(':org.jvoicexml.jndi').xslt.getOutputFiles() )
+        }
+    }
 }
 
 mainClassName = "org.jvoicexml.startup.Startup"
@@ -61,5 +72,6 @@ applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').pro
                              "-Djava.security.policy=${project(':org.jvoicexml').projectDir}/config/jvoicexml.policy" ]
 
 run {
+    dependsOn jvxmlplugins
     classpath += files("${project(':org.jvoicexml').projectDir}/config")
 }

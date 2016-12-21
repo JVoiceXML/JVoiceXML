@@ -1,0 +1,5 @@
+<configuration xmlns="http://saxon.sf.net/ns/configuration"
+    edition="HE">
+    <xslt version="3.0">
+    </xslt>
+</configuration>
