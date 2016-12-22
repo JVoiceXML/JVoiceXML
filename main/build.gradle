@@ -29,7 +29,6 @@ dependencies {
     runtime project(':org.jvoicexml.interpreter.grammar.luis')
     runtime project(':org.jvoicexml.interpreter.grammar.regex')
     runtime project(':org.jvoicexml.implementation.mary')
-    runtime project(':org.jvoicexml.implementation.text')
     runtime project(':org.jvoicexml.callmanager.mmi')
     runtime project(':org.jvoicexml.callmanager.mmi.http')
     runtime project(':org.jvoicexml.callmanager.mmi.socket')
@@ -58,11 +57,13 @@ distZip {
 
 task jvxmlplugins {
     dependsOn ':org.jvoicexml.jndi:jar'
-
+    dependsOn ':org.jvoicexml.implementation.text:jar'
+    
     doLast {
         copy {
             into("${project(':org.jvoicexml').projectDir}/config")
             from( project(':org.jvoicexml.jndi').xslt.getOutputFiles() )
+            from( project(':org.jvoicexml.implementation.text').xslt.getOutputFiles() )
         }
     }
 }
