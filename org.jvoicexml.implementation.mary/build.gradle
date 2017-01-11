@@ -1,5 +1,18 @@
-// Apply the java plugin to add support for Java
 apply plugin: 'java'
+apply plugin: "com.github.eerohele.saxon-gradle"
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
 
 repositories {
     mavenCentral()
@@ -14,7 +27,6 @@ sourceSets {
     }
 }
 
-// dependencies for production and test code
 dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
     compile fileTree(dir: './3rdparty/mary5.1/lib', include: ['*.jar'])
@@ -26,9 +38,27 @@ dependencies {
     compile project(':org.jvoicexml')
 }
 
+xslt {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/mary-implementation.xml"
+    output "${buildDir}/config/mary-implementation.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        libs: configurations.compile
+    )
+}
 
-// jar configuration
+task copyReferencedLibraries(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile) {
+        include 'log4j-*.jar', 'marytts-client*.jar'
+    }
+}
+
 jar {
+    dependsOn xslt
+    dependsOn copyReferencedLibraries
+
     manifest {
         attributes("Implementation-Title": "JVoiceXML mary implementation platform",
                    "Implementation-Vendor": "JVoiceXML group",
