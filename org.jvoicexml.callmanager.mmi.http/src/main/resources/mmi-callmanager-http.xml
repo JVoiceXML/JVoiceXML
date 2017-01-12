@@ -3,14 +3,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
     <repository>mmi-http</repository>
-    <classpath>dist/org.jvoicexml.mmi.events.jar</classpath>
-    <classpath>dist/org.jvoicexml.callmanager.mmi.jar</classpath>
-    <classpath>dist/org.jvoicexml.callmanager.mmi.http.jar</classpath>
-    <classpath>dist/org.jvoicexml.profile.mmi.jar</classpath>
-    <classpath>dist/org.jvoicexml.profile.vxml21.jar</classpath>
-
-    <classpath>3rdparty/rhino1.7R4/lib/js.jar</classpath>
-    <classpath>3rdparty/jsonsimple1.1.1/lib/json-simple-1.1.1.jar</classpath>
+    <classpath>org.jvoicexml.mmi.events.jar</classpath>
+    <classpath>org.jvoicexml.callmanager.mmi.jar</classpath>
+    <classpath>org.jvoicexml.callmanager.mmi.http.jar</classpath>
+    <classpath>org.jvoicexml.profile.mmi.jar</classpath>
+    <classpath>org.jvoicexml.profile.vxml21.jar</classpath>
+    <classpath>rhino-1.7R4.jar</classpath>
+    <classpath>json-simple-1.1.1.jar</classpath>
 
     <beans:bean id="callmanager"
         class="org.jvoicexml.callmanager.mmi.MMICallManager">
