@@ -3,15 +3,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
     <repository>mmi-umundo</repository>
-    <classpath>lib/org.jvoicexml.mmi.events.jar</classpath>
-    <classpath>lib/org.jvoicexml.callmanager.mmi.jar</classpath>
-    <classpath>lib/org.jvoicexml.callmanager.mmi.umundo.jar</classpath>
-    <classpath>lib/org.jvoicexml.profile.mmi.jar</classpath>
-    <classpath>lib/org.jvoicexml.profile.vxml21.jar</classpath>
-    <classpath>lib/js.jar</classpath>
-    <classpath>lib/json-simple-1.1.1.jar</classpath>
-    <classpath>lib/umundo.jar</classpath>
-    <classpath>lib/protobuf-java-2.5.0.jar</classpath>
+    <classpath>org.jvoicexml.mmi.events.jar</classpath>
+    <classpath>org.jvoicexml.callmanager.mmi.jar</classpath>
+    <classpath>org.jvoicexml.callmanager.mmi.umundo.jar</classpath>
+    <classpath>org.jvoicexml.profile.mmi.jar</classpath>
+    <classpath>org.jvoicexml.profile.vxml21.jar</classpath>
+    <classpath>rhino1.7R4/lib/js.jar</classpath>
+    <classpath>json-simple-1.1.1.jar</classpath>
+    <classpath>protobuf-java-2.5.0.jar</classpath>
+    <classpath>umundo.jar</classpath>
 
     <beans:bean id="callmanager"
         class="org.jvoicexml.callmanager.mmi.MMICallManager">

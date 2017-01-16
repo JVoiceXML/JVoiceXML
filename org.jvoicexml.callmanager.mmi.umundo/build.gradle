@@ -1,0 +1,80 @@
+apply plugin: 'java'
+apply plugin: "com.github.eerohele.saxon-gradle"
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        resources {
+            exclude '**'
+        }
+    }
+}
+
+dependencies {
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    compile group: 'org.mozilla', name: 'rhino', version: '1.7R4'
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.1.0'
+    compile fileTree(dir: './3rdparty/umundo/lib', include: ['*.jar'])
+    
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+    compile project(':org.jvoicexml')
+    compile project(':org.jvoicexml.client')
+    compile project(':org.jvoicexml.mmi.events')
+    compile project(':org.jvoicexml.profile.mmi')
+    compile project(':org.jvoicexml.callmanager.mmi')
+}
+
+xslt {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/mmi-callmanager-umundo.xml"
+    output "${buildDir}/config/mmi-callmanager-umundo.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        libs: configurations.compile
+    )
+}
+
+task copyReferencedLibraries(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile) {
+        include 'log4j-*.jar',
+        'rhino*.jar',
+        'json-simple*.jar',
+        'protobuf-java*.jar',
+        'umundo*.jar',
+        'org.jvoicexml.mmi.events*.jar',
+        'org.jvoicexml.mmi.profile.mmi*.jar',
+        'org.jvoicexml.callmanager.mmi*.jar'
+    }
+}
+
+jar {
+    dependsOn xslt
+    dependsOn copyReferencedLibraries
+
+    manifest {
+        attributes("Implementation-Title": "JVoiceXML uMundo ETL of the MMI call manager",
+                   "Implementation-Vendor": "JVoiceXML group",
+                   "Implementation-Version": version)
+    }
+    baseName 'org.jvoicexml.callmanager.mmi.umundo'
+}
