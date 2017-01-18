@@ -81,12 +81,15 @@ final class VoiceSpeakStrategy extends SpeakStrategyBase {
             properties.addPropertyChangeListener(listener);
             try {
                 listener.addProperty(MultiPropertyChangeListener.VOICE);
-                properties.setVoice(newVoice);
+                try {
+                    properties.setVoice(newVoice);
+                } catch (PropertyVetoException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
                 listener.waitChanged();
             } catch (InterruptedException e) {
                 return;
-            } catch (PropertyVetoException e) {
-                throw new NoresourceError(e.getMessage(), e);
             } finally {
                 properties.removePropertyChangeListener(listener);
             }
@@ -107,7 +110,8 @@ final class VoiceSpeakStrategy extends SpeakStrategyBase {
             } catch (InterruptedException e) {
                 return;
             } catch (PropertyVetoException e) {
-                throw new NoresourceError(e.getMessage(), e);
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             } finally {
                 properties.removePropertyChangeListener(listener);
             }

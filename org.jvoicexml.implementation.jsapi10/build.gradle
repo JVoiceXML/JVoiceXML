@@ -1,0 +1,80 @@
+apply plugin: 'java'
+apply plugin: "com.github.eerohele.saxon-gradle"
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+sourceSets {
+    main {
+        resources {
+            exclude '**'
+        }
+    }
+}
+
+dependencies {
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    //compile fileTree(dir: "${project(':org.jvoicexml').projectDir}/3rdparty/freetts1.2/lib", include: ['*.jar'])
+    //compile fileTree(dir: './3rdparty/freetts1.2/lib', include: ['*.jar'])
+    //compile fileTree(dir: './3rdparty/jsapi1.0/lib', include: ['*.jar'])
+    //compile fileTree(dir: './3rdparty/sphinx4/lib', include: ['*.jar'])
+    compile fileTree(dir: "./3rdparty/talkingjava/lib", include: ['*.jar'])
+    
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+    testCompile fileTree(dir: "${project(':org.jvoicexml').projectDir}/3rdparty/freetts1.2/lib", include: ['*.jar'])
+    testCompile fileTree(dir: './3rdparty/freetts1.2/lib', include: ['*.jar'])
+    testCompile fileTree(dir: './3rdparty/jsapi1.0/lib', include: ['*.jar'])
+    testCompile fileTree(dir: "${project(':org.jvoicexml').projectDir}/3rdparty/sphinx4/lib", include: ['*.jar'])
+    testCompile fileTree(dir: './3rdparty/sphinx4/lib', include: ['*.jar'])
+
+    compile project(':org.jvoicexml')
+    compile project(':org.jvoicexml.client')
+}
+
+xslt {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/jsapi10-talking-java-implementation.xml"
+    output "${buildDir}/config/jsapi10-talking-java-implementation.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        libs: configurations.compile
+    )
+}
+
+task copyReferencedLibraries(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile) {
+        include 'log4j-*.jar',
+         'freetts-jsapi1.0*.jar',
+         'jsapi*.jar',
+         'cgjsapi.jar'
+    }
+}
+
+jar {
+    dependsOn xslt
+    dependsOn copyReferencedLibraries
+
+    manifest {
+        attributes("Implementation-Title": "JVoiceXML JSAPI 1.0 implementation platform",
+                   "Implementation-Vendor": "JVoiceXML group",
+                   "Implementation-Version": version)
+    }
+    baseName 'org.jvoicexml.implementation.jsapi10'
+}

@@ -3,8 +3,8 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>jsapi10sapi</repository>
-  <classpath>dist/org.jvoicexml.implementation.jsapi10.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib/cgjsapi.jar</classpath>
+  <classpath>org.jvoicexml.implementation.jsapi10.jar</classpath>
+  <classpath>cgjsapi.jar</classpath>
   <beans:bean
     class="org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutputFactory">
     <beans:property name="instances" value="1" />
