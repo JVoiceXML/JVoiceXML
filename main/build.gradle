@@ -30,8 +30,9 @@ dependencies {
     runtime project(':org.jvoicexml.implementation.mary')
     runtime project(':org.jvoicexml.callmanager.mmi')
     runtime project(':org.jvoicexml.callmanager.mmi.http')
-    runtime project(':org.jvoicexml.callmanager.mmi.umundo')
     runtime project(':org.jvoicexml.callmanager.mmi.socket')
+    runtime project(':org.jvoicexml.callmanager.mmi.umundo')
+    runtime project(':org.jvoicexml.callmanager.sip')
     runtime project(':org.jvoicexml.callmanager.text')
     runtime project(':org.jvoicexml.voicexmlunit')
 }
