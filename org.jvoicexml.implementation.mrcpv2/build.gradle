@@ -17,6 +17,9 @@ buildscript {
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
 }
 
 sourceSets {
@@ -29,19 +32,23 @@ sourceSets {
 
 dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
-    compile fileTree(dir: './3rdparty/mary5.1/lib', include: ['*.jar'])
-    //compile group: 'de.dfki.mary', name: 'voice-cmu-slt-hsmm', version: '5.2'
+    compile group: 'net.sourceforge.halef', name: 'cairo-client', version: '0.1-SNAPSHOT'
+    compile group: 'net.sourceforge.halef', name: 'cairo-sip', version: '1.0-SNAPSHOT'
+    compile group: 'net.sourceforge.halef', name: 'cairo-rtp', version: '0.1-SNAPSHOT'
+    compile fileTree(dir: './3rdparty/mrcp4j/lib', include: ['*.jar'])
+    compile fileTree(dir: './3rdparty/speechcloud/lib', include: ['*.jar'])
+    compile fileTree(dir: './3rdparty/zanzibar/lib', include: ['*.jar'])
     
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
-    compile project(':org.jvoicexml')
+    //compile project(':org.jvoicexml')
 }
 
 xslt {
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/mary-implementation.xml"
-    output "${buildDir}/config/mary-implementation.xml"
+    input "${projectDir}/src/main/resources/mrcpv2-implementation.xml"
+    output "${buildDir}/config/mrcpv2-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
         libs: configurations.compile
@@ -51,7 +58,13 @@ xslt {
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
-        include 'log4j-*.jar', 'marytts-client*.jar'
+        include 'log4j-*.jar',
+         'cairo-client*.jar',
+         'cairo-sipt*.jar',
+         'cairo-rtp*.jar',
+         'mrcp4j*.jar',
+         'zanzibar*.jar',
+         'speechcloud*.jar'
     }
 }
 
@@ -60,9 +73,9 @@ jar {
     dependsOn copyReferencedLibraries
 
     manifest {
-        attributes("Implementation-Title": "JVoiceXML mary implementation platform",
+        attributes("Implementation-Title": "JVoiceXML MRCPv2 implementation platform",
                    "Implementation-Vendor": "JVoiceXML group",
                    "Implementation-Version": version)
     }
-    baseName 'org.jvoicexml.implementation.mary'
+    baseName 'org.jvoicexml.implementation.mrcpv2'
 }

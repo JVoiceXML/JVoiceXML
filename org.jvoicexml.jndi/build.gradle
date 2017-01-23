@@ -49,14 +49,13 @@ dependencies {
 }
 
 
-// jar configuration
 jar {
     dependsOn xslt
     
     manifest {
         attributes("Implementation-Title": "JVoiceXML JNDI library",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": "version")
+                   "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.jndi'
 }
