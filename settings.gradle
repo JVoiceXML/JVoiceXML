@@ -3,6 +3,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.config', \
     'org.jvoicexml.jndi', \
     'org.jvoicexml.interpreter.datamodel.ecmascript',
+    'org.jvoicexml.interpreter.grammar.halef', \
     'org.jvoicexml.interpreter.grammar.luis', \
     'org.jvoicexml.interpreter.grammar.regex', \
     'org.jvoicexml.client', \
