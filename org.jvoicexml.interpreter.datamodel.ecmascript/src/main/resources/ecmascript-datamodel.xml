@@ -3,12 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="jvxml-datamodel-0-7.xsd">
     <repository>mmi-http</repository>
-    <classpath>dist/org.jvoicexml.interpreter.datamodel.ecmascript.jar
-    </classpath>
-    <classpath>3rdparty/rhino1.7R4/lib/js.jar
-    </classpath>
-    <classpath>3rdparty/jsonsimple1.1.1/lib/json-simple-1.1.1.jar
-    </classpath>
+    <classpath>org.jvoicexml.interpreter.datamodel.ecmascript.jar</classpath>
+    <classpath>rhino-1.7R4.jar</classpath>
+    <classpath>json-simple-1.1.1.jar</classpath>
 
     <!-- The ECMA Script data model -->
     <beans:bean id="org.jvoicexml.interpreter.datamodel.DataModel"

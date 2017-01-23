@@ -1,5 +1,18 @@
-// Apply the java plugin to add support for Java
 apply plugin: 'java'
+apply plugin: "com.github.eerohele.saxon-gradle"
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
 
 repositories {
     mavenCentral()
@@ -13,7 +26,6 @@ sourceSets {
     }
 }
 
-// dependencies for production and test code
 dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
     
@@ -24,8 +36,27 @@ dependencies {
 }
 
 
-// jar configuration
+xslt {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/regex-grammar.xml"
+    output "${buildDir}/config/regex-grammar.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        libs: configurations.compile
+    )
+}
+
+task copyReferencedLibraries(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile) {
+        include 'log4j-*.jar'
+    }
+}
+
 jar {
+    dependsOn xslt
+    dependsOn copyReferencedLibraries
+
     from ('./src/main/resources') {
         include 'services/*'
         into 'META-INF'

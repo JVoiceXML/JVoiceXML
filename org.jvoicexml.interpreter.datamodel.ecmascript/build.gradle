@@ -1,5 +1,18 @@
-// Apply the java plugin to add support for Java
 apply plugin: 'java'
+apply plugin: "com.github.eerohele.saxon-gradle"
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
 
 repositories {
     mavenCentral()
@@ -14,7 +27,6 @@ sourceSets {
     }
 }
 
-// dependencies for production and test code
 dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
     compile group: 'org.mozilla', name: 'rhino', version: '1.7R4'
@@ -27,13 +39,33 @@ dependencies {
     compile project(':org.jvoicexml.client')
 }
 
+xslt {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/ecmascript-datamodel.xml"
+    output "${buildDir}/config/ecmascript-datamodel.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        libs: configurations.compile
+    )
+}
 
-// jar configuration
+task copyReferencedLibraries(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile) {
+        include 'log4j-*.jar',
+         'rhino*.jar',
+         'json-simple*.jar'
+    }
+}
+
 jar {
+    dependsOn xslt
+    dependsOn copyReferencedLibraries
+
     manifest {
         attributes("Implementation-Title": "JVoiceXML ECMAScript data model",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": "version")
+                   "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.interpreter.datamodel.ecmascript'
 }

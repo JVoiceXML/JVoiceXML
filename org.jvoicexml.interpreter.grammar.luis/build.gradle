@@ -1,4 +1,18 @@
 apply plugin: 'java'
+apply plugin: "com.github.eerohele.saxon-gradle"
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
 
 repositories {
     mavenCentral()
@@ -17,8 +31,30 @@ dependencies {
     compile project(':org.jvoicexml')
 }
 
+xslt {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/luis-grammar.xml"
+    output "${buildDir}/config/luis-grammar.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        libs: configurations.compile
+    )
+}
+
+task copyReferencedLibraries(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile) {
+        include 'log4j-*.jar', 
+        'json-simple*.jar',
+        'httpcore*.jar',
+        'http-client*.jar'
+    }
+}
 
 jar {
+    dependsOn xslt
+    dependsOn copyReferencedLibraries
+
     from ('./src/main/resources') {
         include 'services/*'
         into 'META-INF'
