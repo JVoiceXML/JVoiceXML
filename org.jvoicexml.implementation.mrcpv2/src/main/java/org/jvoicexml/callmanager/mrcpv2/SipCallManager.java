@@ -338,7 +338,6 @@ public final class SipCallManager
             synchronized (ids) {
                ids.put(session.getId(), id);
             }
-
         }  catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw e;

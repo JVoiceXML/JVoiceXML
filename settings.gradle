@@ -14,6 +14,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.profile.vxml21', \
     'org.jvoicexml.implementation.jsapi10', \
     'org.jvoicexml.implementation.jsapi20', \
+    'org.jvoicexml.implementation.marc', \
     'org.jvoicexml.implementation.mary', \
     'org.jvoicexml.implementation.mrcpv2', \
     'org.jvoicexml.implementation.text', \

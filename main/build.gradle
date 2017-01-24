@@ -30,6 +30,7 @@ dependencies {
     runtime project(':org.jvoicexml.interpreter.grammar.regex')
     runtime project(':org.jvoicexml.implementation.jsapi10')
     runtime project(':org.jvoicexml.implementation.jsapi20')
+    runtime project(':org.jvoicexml.implementation.marc')
     runtime project(':org.jvoicexml.implementation.mary')
     runtime project(':org.jvoicexml.implementation.mrcpv2')
     runtime project(':org.jvoicexml.implementation.text')
