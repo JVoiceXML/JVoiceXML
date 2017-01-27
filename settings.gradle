@@ -27,4 +27,5 @@ include 'org.jvoicexml', \
     'org.jvoicexml.callmanager.sip', \
     'org.jvoicexml.callmanager.text', \
     'org.jvoicexml.voicexmlunit', \
+    'org.jvoicexml.voicexmlunit.demo', \
     'main'

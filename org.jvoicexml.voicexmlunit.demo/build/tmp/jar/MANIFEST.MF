@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Implementation-Title: JVoiceXML Unit Test Demo
+Implementation-Version: version
+Implementation-Vendor: JVoiceXML group
+
