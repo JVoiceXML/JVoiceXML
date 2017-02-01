@@ -4,14 +4,6 @@ repositories {
     mavenCentral()
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
-}
-
 dependencies {
     testCompile group: 'log4j', name: 'log4j', version: '1.2.17'
     testCompile group: 'junit', name: 'junit', version: '4.12'
@@ -32,6 +24,7 @@ jar {
 }
 
 test {
+    classpath = project.sourceSets.test.runtimeClasspath + project(':org.jvoicexml.voicexmlunit').sourceSets.test.resources
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').projectDir}/config",
                              "-Djava.security.policy=${project(':org.jvoicexml').projectDir}/config/jvoicexml.policy" ]
 }
