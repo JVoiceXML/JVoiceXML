@@ -3,13 +3,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>jtapi</repository>
-  <classpath>lib/org.jvoicexml.implementation.jtapi.jar</classpath>
-  <classpath>lib/jtapi-1.3.1.jar</classpath>
-  <classpath>lib/jtapi-1.3.1-mediaImpl.jar</classpath>
-  <classpath>lib/gjtapi-1.9-rc2.jar</classpath>
-  <classpath>lib/gjtapi-mjsip-1.9-rc2.jar</classpath>
-  <classpath>lib/sip.jar</classpath>
-  <classpath>lib/ua.jar</classpath>
+  <classpath>org.jvoicexml.implementation.jtapi.jar</classpath>
+  <classpath>jtapi-1.3.1.jar</classpath>
+  <classpath>jtapi-1.3.1-mediaImpl.jar</classpath>
+  <classpath>gjtapi-1.9-rc2.jar</classpath>
+  <classpath>gjtapi-mjsip-1.9-rc2.jar</classpath>
+  <classpath>sip.jar</classpath>
+  <classpath>ua.jar</classpath>
 
   <beans:bean class="org.jvoicexml.implementation.jtapi.JtapiTelephonyFactory">
     <beans:property name="instances" value="1" />
