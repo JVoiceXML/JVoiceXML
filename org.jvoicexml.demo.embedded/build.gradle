@@ -1,0 +1,35 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+
+    compile project(':org.jvoicexml')
+    compile project(':org.jvoicexml.client')
+
+    runtime project(':org.jvoicexml.implementation.jsapi20')
+}
+
+jar {
+    manifest {
+        attributes("Implementation-Title": "JVoiceXML Embbeded Demo",
+                   "Implementation-Vendor": "JVoiceXML group",
+                   "Implementation-Version": version)
+    }
+    baseName 'org.jvoicexml.demo.embedded'
+}
+
+mainClassName = "org.jvoicexml.demo.helloworlddemo.HelloWorldDemo"
+applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').projectDir}/config",
+                             "-Djava.security.policy=${project(':org.jvoicexml').projectDir}/jvoicexml.policy" ]
+
+run {
+    classpath = project.sourceSets.test.runtimeClasspath + project(':org.jvoicexml').sourceSets.main.resources
+    jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').projectDir}/config",
+                             "-Djava.security.policy=${project(':org.jvoicexml').projectDir}/config/jvoicexml.policy" ]
+}
+

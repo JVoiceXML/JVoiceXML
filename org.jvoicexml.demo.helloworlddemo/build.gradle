@@ -16,7 +16,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes("Implementation-Title": "JVoiceXML Hello World Test Demo",
+        attributes("Implementation-Title": "JVoiceXML Hello World Demo",
                    "Implementation-Vendor": "JVoiceXML group",
                    "Implementation-Version": version)
     }
