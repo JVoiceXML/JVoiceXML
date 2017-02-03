@@ -23,9 +23,7 @@ jar {
     baseName 'org.jvoicexml.demo.embedded'
 }
 
-mainClassName = "org.jvoicexml.demo.helloworlddemo.HelloWorldDemo"
-applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').projectDir}/config",
-                             "-Djava.security.policy=${project(':org.jvoicexml').projectDir}/jvoicexml.policy" ]
+mainClassName = "org.jvoicexml.demo.embedded.EmbeddedJVoiceXML"
 
 run {
     classpath = project.sourceSets.test.runtimeClasspath + project(':org.jvoicexml').sourceSets.main.resources

@@ -1,0 +1,41 @@
+#JSGF V1.0;
+
+/**
+ * JSGF Grammar for the input demo of JVoiceXML.
+ * $Id: movies.gram,v 1.3 2006/03/14 08:22:34 schnelle Exp $
+ */
+
+grammar movies;
+
+/**
+ * A "watch a movie" gramamr
+ */
+public <movies> =     lord of the rings  |
+                      the magnificent seven  |
+                      two thousand one a space odyssey  |
+                      the matrix      |
+                      finding nemo    |
+                      spider man      |
+                      mystic river |
+                      the italian job |
+                      chicago |
+                      a beautiful mind |
+                      gladiator   |
+                      american beauty     |
+                      shakespeare in love |
+                      titanic     |
+                      the english patient |
+                      brave heart         |
+                      unforgiven  |
+                      the silence of the lambs    |
+                      dances with wolves  |
+                      driving miss daisy  |
+                      rain man    |
+                      the last emperor    |
+                      platoon     |
+                      out of africa       |
+                      terms of endearment |
+                      chariots of fire    |
+                      the empire strikes back |
+                      star wars   |
+                      ordinary people;

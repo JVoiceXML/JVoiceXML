@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2014 JVoiceXML group
+ * Copyright (C) 2005-2017 JVoiceXML group
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -76,7 +71,6 @@ import org.jvoicexml.xml.vxml.Vxml;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class InputDemo {
     /** Logger for this class. */
@@ -318,7 +312,7 @@ public final class InputDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'input' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2014 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2017 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final InputDemo demo = new InputDemo();

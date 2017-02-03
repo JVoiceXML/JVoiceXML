@@ -3,6 +3,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.config', \
     'org.jvoicexml.demo.embedded', \
     'org.jvoicexml.demo.helloworlddemo', \
+    'org.jvoicexml.demo.inputdemo', \
     'org.jvoicexml.jndi', \
     'org.jvoicexml.interpreter.datamodel.ecmascript',
     'org.jvoicexml.interpreter.grammar.halef', \
