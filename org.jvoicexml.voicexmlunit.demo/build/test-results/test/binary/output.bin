@@ -1,27 +1,0 @@
-Ë     0 [Time-limited test   ] INFO  voicexml.voicexmlunit.TextCall (   149)  calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/audio.vxml'
-b  1685 [Test worker         ] INFO  oicexml.client.text.TextServer (   611)  text server stopped
-]  1685 [Test worker         ] INFO  voicexml.voicexmlunit.TextCall (   505)  server stopped
-Í  1727 [Time-limited test   ] INFO  voicexml.voicexmlunit.TextCall (   149)  calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/builtin.vxml'
-b  2730 [Test worker         ] INFO  oicexml.client.text.TextServer (   611)  text server stopped
-]  2733 [Test worker         ] INFO  voicexml.voicexmlunit.TextCall (   505)  server stopped
-Ê  2752 [Time-limited test   ] INFO  voicexml.voicexmlunit.TextCall (   149)  calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
-b  3754 [Test worker         ] INFO  oicexml.client.text.TextServer (   611)  text server stopped
-]  3755 [Test worker         ] INFO  voicexml.voicexmlunit.TextCall (   505)  server stopped
-Ê  3756 [Time-limited test   ] INFO  voicexml.voicexmlunit.TextCall (   149)  calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/dtmf.vxml'
-b  4766 [Test worker         ] INFO  oicexml.client.text.TextServer (   611)  text server stopped
-]  4766 [Test worker         ] INFO  voicexml.voicexmlunit.TextCall (   505)  server stopped
-	Ð  4772 [Time-limited test   ] INFO  voicexml.voicexmlunit.TextCall (   149)  calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/helloworld.vxml'
-	b  5777 [Test worker         ] INFO  oicexml.client.text.TextServer (   611)  text server stopped
-	]  5777 [Test worker         ] INFO  voicexml.voicexmlunit.TextCall (   505)  server stopped
-
-Ë  5794 [Time-limited test   ] INFO  voicexml.voicexmlunit.TextCall (   149)  calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/input.vxml'
-
-b  6807 [Test worker         ] INFO  oicexml.client.text.TextServer (   611)  text server stopped
-
-]  6807 [Test worker         ] INFO  voicexml.voicexmlunit.TextCall (   505)  server stopped
-Ë  6809 [Time-limited test   ] INFO  voicexml.voicexmlunit.TextCall (   149)  calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/input.vxml'
-b  7811 [Test worker         ] INFO  oicexml.client.text.TextServer (   611)  text server stopped
-]  7811 [Test worker         ] INFO  voicexml.voicexmlunit.TextCall (   505)  server stopped
-Ë  7815 [Time-limited test   ] INFO  voicexml.voicexmlunit.TextCall (   149)  calling 'file:/C:/Users/dwalka/Documents/Entwicklung/JVoiceXML.git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/etc/input.vxml'
-b  8811 [Test worker         ] INFO  oicexml.client.text.TextServer (   611)  text server stopped
-]  8811 [Test worker         ] INFO  voicexml.voicexmlunit.TextCall (   505)  server stopped
