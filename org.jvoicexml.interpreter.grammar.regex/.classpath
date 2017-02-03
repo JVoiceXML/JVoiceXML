@@ -14,5 +14,5 @@
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
-	<classpathentry kind="output" path="build/eclipse-compiled"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
