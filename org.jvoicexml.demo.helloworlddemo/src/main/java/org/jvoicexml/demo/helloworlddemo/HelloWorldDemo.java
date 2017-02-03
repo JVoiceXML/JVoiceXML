@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -51,7 +46,6 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class HelloWorldDemo {
     /** Logger for this class. */
@@ -64,7 +58,7 @@ public final class HelloWorldDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2014 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2017 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final GenericClient client = new GenericClient();
