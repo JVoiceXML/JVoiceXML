@@ -32,5 +32,5 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/mockito1.10/mockito-core-1.10.12-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="build/eclipse-compiled"/>
 </classpath>

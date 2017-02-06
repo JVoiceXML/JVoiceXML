@@ -10,17 +10,21 @@ dependencies {
 
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
+
+    runtime project(':org.jvoicexml.mmi.events')
+    runtime project(':org.jvoicexml.callmanager.mmi')
+    runtime project(':org.jvoicexml.callmanager.mmi.http')
 }
 
 jar {
     manifest {
-        attributes("Implementation-Title": "JVoiceXML Mixed Initiative Demo",
+        attributes("Implementation-Title": "JVoiceXML Simple MMI Demo",
                    "Implementation-Vendor": "JVoiceXML group",
                    "Implementation-Version": version)
     }
-    baseName 'org.jvoicexml.demo.mixedinitiativedemo'
+    baseName 'org.jvoicexml.demo.mmi.simpledemo'
 }
 
-mainClassName = "org.jvoicexml.demo.mixedinitiativedemo.MixedInitiativeDemo"
+mainClassName = "org.jvoicexml.demo.mmi.simpledemo.SimpleMmiDemo"
 applicationDefaultJvmArgs = ["-Djava.security.policy=${projectDir}/src/main/resources/jvoicexml.policy" ]
 

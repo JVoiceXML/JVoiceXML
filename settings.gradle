@@ -8,6 +8,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.demo.luis', \
     'org.jvoicexml.demo.marcdemo', \
     'org.jvoicexml.demo.mixedinitiativedemo', \
+    'org.jvoicexml.demo.mmi.simpledemo', \
     'org.jvoicexml.jndi', \
     'org.jvoicexml.interpreter.datamodel.ecmascript',
     'org.jvoicexml.interpreter.grammar.halef', \
