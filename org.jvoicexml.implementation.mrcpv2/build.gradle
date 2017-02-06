@@ -32,12 +32,12 @@ sourceSets {
 
 dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
-    compile fileTree(dir: './3rdparty/mrcp4j/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/speechcloud/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/zanzibar/lib', include: ['*.jar'])
     compile group: 'net.sourceforge.halef', name: 'cairo-client', version: '0.1-SNAPSHOT'
     compile group: 'net.sourceforge.halef', name: 'cairo-sip', version: '1.0-SNAPSHOT'
     compile group: 'net.sourceforge.halef', name: 'cairo-rtp', version: '0.1-SNAPSHOT'
+    compile group: 'net.sourceforge.halef', name: 'halef-mrcp4j', version: '0.1-SNAPSHOT'
     
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
@@ -62,7 +62,7 @@ task copyReferencedLibraries(type: Copy) {
          'cairo-client*.jar',
          'cairo-sipt*.jar',
          'cairo-rtp*.jar',
-         'mrcp4j*.jar',
+         'halef-mrcp4j*.jar',
          'zanzibar*.jar',
          'speechcloud*.jar'
     }
