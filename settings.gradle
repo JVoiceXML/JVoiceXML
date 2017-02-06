@@ -6,6 +6,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.demo.inputdemo', \
     'org.jvoicexml.demo.jtapidemo', \
     'org.jvoicexml.demo.luis', \
+    'org.jvoicexml.demo.marcdemo', \
     'org.jvoicexml.jndi', \
     'org.jvoicexml.interpreter.datamodel.ecmascript',
     'org.jvoicexml.interpreter.grammar.halef', \
