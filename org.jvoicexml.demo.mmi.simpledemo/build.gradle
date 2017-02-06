@@ -10,8 +10,8 @@ dependencies {
 
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
+    compile project(':org.jvoicexml.mmi.events')
 
-    runtime project(':org.jvoicexml.mmi.events')
     runtime project(':org.jvoicexml.callmanager.mmi')
     runtime project(':org.jvoicexml.callmanager.mmi.http')
 }
