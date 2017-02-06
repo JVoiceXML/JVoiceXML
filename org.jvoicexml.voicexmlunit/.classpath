@@ -24,5 +24,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.jndi"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.client.text"/>
-	<classpathentry kind="output" path="build/eclipse-compiled"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

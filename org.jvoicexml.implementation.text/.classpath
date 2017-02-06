@@ -28,5 +28,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.srgs"/>
-	<classpathentry kind="output" path="build/eclipse-compiled"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
