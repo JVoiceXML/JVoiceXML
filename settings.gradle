@@ -10,6 +10,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.demo.mixedinitiativedemo', \
     'org.jvoicexml.demo.mmi.simpledemo', \
     'org.jvoicexml.demo.objecttagdemo', \
+    'org.jvoicexml.demo.recorddemo', \
     'org.jvoicexml.jndi', \
     'org.jvoicexml.interpreter.datamodel.ecmascript',
     'org.jvoicexml.interpreter.grammar.halef', \
