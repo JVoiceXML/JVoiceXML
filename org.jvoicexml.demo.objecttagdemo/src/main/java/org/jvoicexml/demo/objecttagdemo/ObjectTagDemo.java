@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -56,7 +51,6 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class ObjectTagDemo {
     /** Logger for this class. */
@@ -105,7 +99,7 @@ public final class ObjectTagDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2014 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2017 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         try {
