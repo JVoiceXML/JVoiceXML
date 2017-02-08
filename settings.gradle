@@ -14,6 +14,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.demo.scriptdemo', \
     'org.jvoicexml.demo.simpleinputdemo', \
     'org.jvoicexml.demo.subdialogdemo', \
+    'org.jvoicexml.demo.talkingheaddemo', \
     'org.jvoicexml.jndi', \
     'org.jvoicexml.interpreter.datamodel.ecmascript',
     'org.jvoicexml.interpreter.grammar.halef', \
