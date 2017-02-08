@@ -1,7 +1,0 @@
-<SML text="a small pizza with salami" utteranceConfidence="0.8081474"
-	confidence="0.8081474">
-	<order confidence="0.8131593">
-		<size confidence="0.8131593">small</size>
-		<topping confidence="0.8131593">salami</topping>
-	</order>
-</SML>

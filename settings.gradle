@@ -31,6 +31,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.implementation.jsapi10', \
     'org.jvoicexml.implementation.jsapi20', \
     'org.jvoicexml.implementation.jtapi', \
+    'org.jvoicexml.implementation.kinect', \
     'org.jvoicexml.implementation.lightweightbml', \
     'org.jvoicexml.implementation.marc', \
     'org.jvoicexml.implementation.mary', \
