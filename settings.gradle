@@ -12,6 +12,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.demo.objecttagdemo', \
     'org.jvoicexml.demo.recorddemo', \
     'org.jvoicexml.demo.scriptdemo', \
+    'org.jvoicexml.demo.simpleinputdemo', \
     'org.jvoicexml.demo.subdialogdemo', \
     'org.jvoicexml.jndi', \
     'org.jvoicexml.interpreter.datamodel.ecmascript',
