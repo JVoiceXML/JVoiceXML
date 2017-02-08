@@ -19,7 +19,7 @@ jar {
                    "Implementation-Vendor": "JVoiceXML group",
                    "Implementation-Version": version)
     }
-    baseName 'org.jvoicexml.demo.textdemp'
+    baseName 'org.jvoicexml.demo.textdemo'
 }
 
 mainClassName = "org.jvoicexml.demo.textdemo.TextDemo"

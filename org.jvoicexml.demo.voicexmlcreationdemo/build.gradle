@@ -1,0 +1,24 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+
+    compile project(':org.jvoicexml.xml')
+}
+
+jar {
+    manifest {
+        attributes("Implementation-Title": "JVoiceXML CoiceXML Creation Demo",
+                   "Implementation-Vendor": "JVoiceXML group",
+                   "Implementation-Version": version)
+    }
+    baseName 'org.jvoicexml.demo.voicexmlcreationdemo'
+}
+
+mainClassName = "org.jvoicexml.demo.voicexmlcreationdemo.VoiceXMLCreationDemo"
+
