@@ -1,5 +1,4 @@
 include 'org.jvoicexml', \
-    'org.jvoicexml.xml', \
     'org.jvoicexml.config', \
     'org.jvoicexml.demo.embedded', \
     'org.jvoicexml.demo.helloworlddemo', \
@@ -44,6 +43,8 @@ include 'org.jvoicexml', \
     'org.jvoicexml.callmanager.mmi.umundo', \
     'org.jvoicexml.callmanager.sip', \
     'org.jvoicexml.callmanager.text', \
+    'org.jvoicexml.systemtest', \
     'org.jvoicexml.voicexmlunit', \
     'org.jvoicexml.voicexmlunit.demo', \
+    'org.jvoicexml.xml', \
     'main'
