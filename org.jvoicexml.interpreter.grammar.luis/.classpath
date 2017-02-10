@@ -17,17 +17,5 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
-	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/fluent-hc-4.2.3.jar"/>
-	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/httpclient-4.2.3.jar"/>
-	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/httpclient-cache-4.2.3.jar"/>
-	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpclient4.2.3/lib/httpmime-4.2.3.jar"/>
-	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib/httpcore-4.2.3.jar"/>
-	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib/httpcore-ab-4.2.3.jar"/>
-	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/commons/httpcore4.2.3/lib/httpcore-nio-4.2.3.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/jsonsimple1.1.1/lib/json-simple-1.1.1.jar"/>
-	<classpathentry kind="src" path="/org.jvoicexml.interpreter.datamodel.ecmascript"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -25,10 +25,12 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.5'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
     
+    compile project(':org.jvoicexml')
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
-    compile project(':org.jvoicexml')
+    testCompile project(':org.jvoicexml.interpreter.datamodel.ecmascript')
 }
 
 xslt {
