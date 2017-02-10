@@ -46,6 +46,8 @@ import org.speechforge.cairo.client.cloudimpl.SpeechCloudClient;
 import org.speechforge.cairo.rtp.server.RTPStreamReplicator;
 import org.speechforge.cairo.sip.SipSession;
 import org.speechforge.zanzibar.sip.SipServer;
+import org.speechforge.zanzibar.speechlet.SessionProcessor;
+import org.speechforge.zanzibar.speechlet.SpeechletContext;
 import org.speechforge.zanzibar.speechlet.SpeechletService;
 import org.speechforge.zanzibar.telephony.TelephonyClient;
 
@@ -190,7 +192,7 @@ public final class SipCallManager
     /**
      * {@inheritDoc}
      */
-    @Override
+   // @Override
     public void startNewMrcpDialog(final SipSession pbxSession,
             final SipSession mrcpSession) throws Exception {
             final MrcpChannel ttsChannel = mrcpSession.getTtsChannel();
@@ -272,7 +274,7 @@ public final class SipCallManager
     /**
      * {@inheritDoc}
      */
-    @Override
+    //@Override
     public void startNewCloudDialog(final SipSession pbxSession,
             final RTPStreamReplicator rtpReplicator,
             final RtpTransmitter rtpTransmitter) throws Exception {
@@ -440,5 +442,13 @@ public final class SipCallManager
         
         //clean up the session
         cleanupSession(sipId);
+    }
+
+
+    @Override
+    public SessionProcessor startNewDialog(SpeechletContext arg0)
+            throws Exception {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
