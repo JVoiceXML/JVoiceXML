@@ -78,5 +78,5 @@ applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').bui
 
 run {
     dependsOn jvxmlplugins
-    classpath += files("${project(':org.jvoicexml').projectDir}/config")
+    classpath += files("${project(':org.jvoicexml').buildDir}/config")
 }
