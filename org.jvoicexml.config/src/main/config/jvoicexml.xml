@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!--
+    - Configuration file for the JVoiceXML VoiceXML interpreter.
+    - Copyright (C) 2005-2015 JVoiceXML group
+    - http://jvoicexml.sourceforge.net
+    -
+    - This library is free software; you can redistribute it and/or
+    - modify it under the terms of the GNU Library General Public
+    - License as published by the Free Software Foundation; either
+    - version 2 of the License, or (at your option) any later version.
+    -
+    - This library is distributed in the hope that it will be useful,
+    - but WITHOUT ANY WARRANTY; without even the implied warranty of
+    - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    - Library General Public License for more details.
+    -
+    - You should have received a copy of the GNU Library General Public
+    - License along with this library; if not, write to the Free Software
+    - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+  <!--
+    Document server with the configuration of all known strategies
+    to handle URIs.
+  -->
+  <bean id="org.jvoicexml.DocumentServer" class="org.jvoicexml.documentserver.JVoiceXmlDocumentServer">
+    <property name="schemeStrategies">
+      <list>
+        <bean
+          class="org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy" />
+        <bean
+          class="org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy" />
+        <bean
+          class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy">
+          <!-- Strategy default fetch timeout in msec -->
+          <property name="fetchTimeout" value="5000"/>
+        </bean>
+        <bean
+          class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy">
+          <!-- Strategy default fetch timeout in msec -->
+          <property name="fetchTimeout" value="5000"/>
+          <property name="scheme" value="https" />
+        </bean>
+        <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BuiltinSchemeStrategy">
+          <property name="grammarCreators">
+            <list>
+              <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator"/>
+              <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.DigitsGrammarCreator"/>
+            </list>
+          </property>
+        </bean>
+      </list>
+    </property>
+    <property name="fetchAttributes">
+        <bean class="org.jvoicexml.FetchAttributes">
+          <!-- Default fetch timeout in msec -->
+          <property name="fetchTimeout" value="5000"/>
+        </bean>
+    </property>
+    <property name="documentStorage">
+        <bean class="org.jvoicexml.documentserver.jetty.DocumentStorage">
+            <!-- port number for the document storage -->
+            <!-- a value of 0 will start the storage at port 9595 -->
+            <!-- negative values cause that no storage will be started -->
+            <property name="storagePort" value="9595" />
+            <property name="grammarCreators">
+                <list>
+                    <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator"/>
+                    <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.DigitsGrammarCreator"/>
+                </list>
+            </property>
+        </bean>
+    </property>
+  </bean>
+
+  <!-- The dialog strategy factory -->
+  <bean id="org.jvoicexml.interpreter.DialogFactory"
+    class="org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory">
+    <property name="dialogs">
+      <map>
+        <entry key="form">
+          <bean class="org.jvoicexml.interpreter.dialog.ExecutablePlainForm"/>
+        </entry>
+        <entry key="menu">
+          <bean class="org.jvoicexml.interpreter.dialog.ExecutableMenuForm">
+            <property name="choiceConverter">
+              <bean class="org.jvoicexml.interpreter.dialog.SrgsXmlChoiceConverter"/>
+            </property>
+          </bean>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <!-- The converter for options in fields -->
+  <bean id="org.jvoicexml.interpreter.formitem.OptionConverter"
+      class="org.jvoicexml.interpreter.formitem.SrgsXmlOptionConverter">
+  </bean>
+
+  <!--
+    Grammar processor with all grammar identifiers. The concrete identifiers
+    to be loaded are configured in a separate configuration file.
+    -->
+  <bean id="org.jvoicexml.interpreter.GrammarProcessor"
+    class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor" />
+
+  <!--
+   General properties for the speech recognizer.
+   Add your own implementation here, if special properties are needed. 
+  -->
+  <bean id="org.jvoicexml.SpeechRecognizerProperties"
+    class="org.jvoicexml.SpeechRecognizerProperties">
+  </bean>
+
+  <!--
+   General properties for the DTMF recognizer.
+   Add your own implementation here, if special properties are needed. 
+  -->
+  <bean id="org.jvoicexml.DtmfRecognizerProperties"
+    class="org.jvoicexml.DtmfRecognizerProperties">
+    <property name="interdigittimeout" value="5s"/>
+  </bean>
+
+  <!--
+   General properties for the telephony.
+   Add your own implementation of here, if special properties are needed. 
+  -->
+  <bean id="org.jvoicexml.CallControlProperties"
+    class="org.jvoicexml.CallControlProperties">
+  </bean>
+
+  <!--
+    Implementation platform to handle recognition and speech synthesis.
+  -->
+ <bean id="org.jvoicexml.ImplementationPlatformFactory"
+  class="org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatformFactory">
+ </bean>
+ 
+ <!--
+   Implementation of DtmfInput to use
+ --> 
+ <!-- uncomment to generally disable DTMF recognition -->
+ <bean id="org.jvoicexml.implementation.dtmf.BufferedDtmfInput"
+   class="org.jvoicexml.implementation.dtmf.BufferedDtmfInput">
+   <property name="grammarParsers">
+    <list>
+        <bean class="org.jvoicexml.srgs.SrgsSisrXmlGrammarParser" />
+    </list>    
+   </property>
+ </bean>
+ 
+</beans>
