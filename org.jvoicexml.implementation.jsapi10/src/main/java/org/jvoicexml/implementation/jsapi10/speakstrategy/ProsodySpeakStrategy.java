@@ -26,8 +26,6 @@
 
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
-import java.beans.PropertyVetoException;
-
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerProperties;
 
@@ -60,22 +58,12 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
         final SynthesizerProperties newProperties =
             new JVoiceXmlSynthesizerProperties(properties);
         if (prosody.getRate() != null) {
-            try {
-                newProperties.setSpeakingRate(
-                        (properties.getSpeakingRate() / 100.0f)
-                        * prosody.getRateFloat());
-            } catch (PropertyVetoException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            newProperties.setSpeakingRate(
+                    (properties.getSpeakingRate() / 100.0f)
+                    * prosody.getRateFloat());
         }
         if (prosody.getPitch() != null) {
-            try {
-                newProperties.setPitch(prosody.getPitchFloat());
-            } catch (PropertyVetoException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            newProperties.setPitch(prosody.getPitchFloat());
         }
         changeProperties(output, properties, newProperties);
 
@@ -107,21 +95,11 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
             if (properties.getSpeakingRate()
                     != newProperties.getSpeakingRate()) {
                 listener.addProperty(MultiPropertyChangeListener.SPEAKING_RATE);
-                try {
-                    properties.setSpeakingRate(newProperties.getSpeakingRate());
-                } catch (PropertyVetoException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                properties.setSpeakingRate(newProperties.getSpeakingRate());
             }
             if (properties.getPitch() != newProperties.getPitch()) {
                 listener.addProperty(MultiPropertyChangeListener.PITCH);
-                try {
-                    properties.setPitch(newProperties.getPitch());
-                } catch (PropertyVetoException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                properties.setPitch(newProperties.getPitch());
             }
             listener.waitChanged();
         } catch (InterruptedException e) {

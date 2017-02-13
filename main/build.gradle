@@ -67,19 +67,11 @@ distZip {
 task jvxmlplugins {
     dependsOn ':org.jvoicexml.jndi:jar'
     dependsOn ':org.jvoicexml.implementation.text:jar'
-    
-    doLast {
-        copy {
-            into("${project(':org.jvoicexml').projectDir}/config")
-            from( project(':org.jvoicexml.jndi').xslt.getOutputFiles() )
-            from( project(':org.jvoicexml.implementation.text').xslt.getOutputFiles() )
-        }
-    }
 }
 
 mainClassName = "org.jvoicexml.startup.Startup"
-applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').projectDir}/config",
-                             "-Djava.security.policy=${project(':org.jvoicexml').projectDir}/config/jvoicexml.policy" ]
+applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
+                             "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy" ]
 
 run {
     dependsOn jvxmlplugins

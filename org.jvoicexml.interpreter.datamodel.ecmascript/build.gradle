@@ -42,7 +42,7 @@ dependencies {
 xslt {
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/ecmascript-datamodel.xml"
-    output "${buildDir}/config/ecmascript-datamodel.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/ecmascript-datamodel.xml"
     parameters(
         buildpath: "${buildDir}/libs",
         libs: configurations.compile

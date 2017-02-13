@@ -60,10 +60,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.ssml.Voice;
 import org.jvoicexml.xml.vxml.BargeInType;
 
-import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
-
-import edu.cmu.sphinx.jsapi.SphinxEngineCentral;
-import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
+import com.cloudgarden.speech.CGEngineCentral;
 
 /**
  * Test cases for {@link JVoiceXmlSynthesizerModeDescFactory}.
@@ -96,12 +93,7 @@ public final class TestJsapi10SynthesizedOutput {
      */
     @BeforeClass
     public static void init() throws EngineException {
-        final String config = "/sphinx4.jsapi10.config";
-        final SphinxRecognizerModeDesc desc = new SphinxRecognizerModeDesc(
-                config);
-        SphinxEngineCentral.registerEngineModeDesc(desc);
-        Central.registerEngineCentral(FreeTTSEngineCentral.class.getName());
-        // Central.registerEngineCentral("com.cloudgarden.speech.CGEngineCentral");
+        Central.registerEngineCentral(CGEngineCentral.class.getName());
     }
 
     /**

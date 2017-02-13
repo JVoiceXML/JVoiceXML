@@ -1,20 +1,16 @@
-// Apply the java plugin to add support for Java
 apply plugin: 'java'
 
 repositories {
     mavenCentral()
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
+configurations {
+    jvxmlConfiguration
 }
 
-// dependencies for production and test code
 dependencies {
+    jvxmlConfiguration fileTree(dir: "src/main/config")
+
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
     compile group: 'org.mozilla', name: 'rhino', version: '1.7R4'
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
@@ -31,8 +27,20 @@ dependencies {
     compile project(':org.jvoicexml.xml')
 }
 
-// jar configuration
+task copyConfiguration(type: Copy) {
+    from configurations.jvxmlConfiguration.files
+    into "$buildDir/config"
+}
+
+artifacts {
+    archives copyConfiguration.destinationDir
+}
+
 jar {
+    dependsOn copyConfiguration
+
+    exclude ('$buildDir/resources')
+    
     manifest {
         attributes("Implementation-Title": "JVoiceXML core library",
                    "Implementation-Vendor": "JVoiceXML group",

@@ -1,4 +1,3 @@
-// Apply the java plugin to add support for Java
 apply plugin: 'java'
 
 repositories {
@@ -12,9 +11,13 @@ sourceSets {
         }
     }
 }
+configurations {
+    jvxmlConfiguration
+}
 
-// dependencies for production and test code
 dependencies {
+    jvxmlConfiguration fileTree(dir: "src/main/config")
+
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
     compile group: 'org.springframework', name: 'spring-context', version: '4.3.4.RELEASE'
     compile group: 'org.springframework', name: 'spring-beans', version: '4.3.4.RELEASE'
@@ -25,8 +28,14 @@ dependencies {
     compile project(':org.jvoicexml')
 }
 
-// jar configuration
+task copyConfiguration(type: Copy) {
+    from configurations.jvxmlConfiguration.files
+    into "${project(':org.jvoicexml').copyConfiguration.destinationDir}"
+}
+
 jar {
+    dependsOn copyConfiguration
+    
     from ('./src/main/resources') {
         include 'services/*'
         into 'META-INF'

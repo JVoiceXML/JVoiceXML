@@ -12,8 +12,7 @@ dependencies {
     compile project(':org.jvoicexml.client')
     compile project(':org.jvoicexml.client.text')
     compile project(':org.jvoicexml.profile.vxml21')
-
-    runtime project(':org.jvoicexml.implementation.text')
+    compile project(':org.jvoicexml.implementation.text')
 }
 
 jar {

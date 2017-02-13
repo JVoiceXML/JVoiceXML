@@ -26,8 +26,6 @@
 
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
-import java.beans.PropertyVetoException;
-
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.SynthesizerProperties;
@@ -81,12 +79,7 @@ final class VoiceSpeakStrategy extends SpeakStrategyBase {
             properties.addPropertyChangeListener(listener);
             try {
                 listener.addProperty(MultiPropertyChangeListener.VOICE);
-                try {
-                    properties.setVoice(newVoice);
-                } catch (PropertyVetoException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                properties.setVoice(newVoice);
                 listener.waitChanged();
             } catch (InterruptedException e) {
                 return;
@@ -109,9 +102,6 @@ final class VoiceSpeakStrategy extends SpeakStrategyBase {
                 listener.waitChanged();
             } catch (InterruptedException e) {
                 return;
-            } catch (PropertyVetoException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             } finally {
                 properties.removePropertyChangeListener(listener);
             }

@@ -53,7 +53,7 @@ dependencies {
 xslt {
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/mrcpv2-implementation.xml"
-    output "${buildDir}/config/mrcpv2-implementation.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
         libs: configurations.compile

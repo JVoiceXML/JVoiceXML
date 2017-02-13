@@ -29,7 +29,7 @@ sourceSets {
 xslt {
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/jvxml-jndi.xml"
-    output "${buildDir}/config/jvxml-jndi.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jvxml-jndi.xml"
     parameters(
         repositoryname: "text",
         buildpath: "${buildDir}/libs",

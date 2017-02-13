@@ -42,7 +42,7 @@ dependencies {
 xslt {
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/text-implementation.xml"
-    output "${buildDir}/config/text-implementation.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/text-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
         libs: configurations.compile

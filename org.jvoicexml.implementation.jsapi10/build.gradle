@@ -37,11 +37,11 @@ dependencies {
     
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
-    testCompile fileTree(dir: "${project(':org.jvoicexml').projectDir}/3rdparty/freetts1.2/lib", include: ['*.jar'])
-    testCompile fileTree(dir: './3rdparty/freetts1.2/lib', include: ['*.jar'])
-    testCompile fileTree(dir: './3rdparty/jsapi1.0/lib', include: ['*.jar'])
-    testCompile fileTree(dir: "${project(':org.jvoicexml').projectDir}/3rdparty/sphinx4/lib", include: ['*.jar'])
-    testCompile fileTree(dir: './3rdparty/sphinx4/lib', include: ['*.jar'])
+    //testCompile fileTree(dir: "${project(':org.jvoicexml').projectDir}/3rdparty/freetts1.2/lib", include: ['*.jar'])
+    //testCompile fileTree(dir: './3rdparty/freetts1.2/lib', include: ['*.jar'])
+    //testCompile fileTree(dir: './3rdparty/jsapi1.0/lib', include: ['*.jar'])
+    //testCompile fileTree(dir: "${project(':org.jvoicexml').projectDir}/3rdparty/sphinx4/lib", include: ['*.jar'])
+    //testCompile fileTree(dir: './3rdparty/sphinx4/lib', include: ['*.jar'])
 
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
@@ -50,7 +50,7 @@ dependencies {
 xslt {
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/jsapi10-talking-java-implementation.xml"
-    output "${buildDir}/config/jsapi10-talking-java-implementation.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi10-talking-java-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
         libs: configurations.compile

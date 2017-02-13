@@ -36,7 +36,7 @@ dependencies {
 xslt {
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/luis-grammar.xml"
-    output "${buildDir}/config/luis-grammar.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/luis-grammar.xml"
     parameters(
         buildpath: "${buildDir}/libs",
         libs: configurations.compile
