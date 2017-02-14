@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 
 import org.apache.log4j.Logger;
@@ -178,7 +179,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
             throws ErrorEvent {
         if (state != InterpreterState.RUNNING) {
             throw new NoresourceError(
-                    "VoiceXML not running. Can't create a session!");
+                    "JVoiceXML not running. Can't create a session!");
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -213,9 +214,13 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         if (configuration == null) {
             final ServiceLoader<Configuration> services = ServiceLoader
                     .load(Configuration.class);
-            for (Configuration config : services) {
-                configuration = config;
-                break;
+            try {
+                for (Configuration config : services) {
+                    configuration = config;
+                    break;
+                }
+            } catch (ServiceConfigurationError e) {
+                LOGGER.error("unable to load configuration", e);
             }
         }
         return configuration;
