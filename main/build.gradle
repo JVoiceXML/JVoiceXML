@@ -25,6 +25,10 @@ configurations {
         extendsFrom compile
     }
 
+    jvxmlVoiceXMLUnit {
+        description = "VoiceXML Unit Testing"
+        extendsFrom compile
+    }
 }
 
 dependencies {
@@ -36,6 +40,7 @@ dependencies {
 
     jvxmlImplementationMrcpv2 project(':org.jvoicexml.interpreter.grammar.halef')
     //jvxmlImplementationMrcpv2 project(':org.jvoicexml.implementation.mrcpv2')
+    jvxmlVoiceXMLUnit project(':org.jvoicexml.voicexmlunit')
     
     runtime project(':org.jvoicexml.xml')
     runtime project(':org.jvoicexml')
@@ -65,7 +70,6 @@ dependencies {
     //runtime project(':org.jvoicexml.callmanager.mmi.socket')
     //runtime project(':org.jvoicexml.callmanager.mmi.umundo')
     //runtime project(':org.jvoicexml.callmanager.sip')
-    //runtime project(':org.jvoicexml.voicexmlunit')
 }
 
 clean {
@@ -81,14 +85,21 @@ jar {
 task jvxmlservlet(dependsOn: ':org.jvoicexml.callmanager.mmi.servlet:war') {
     doLast {
         applicationDistribution.into("servlets") {
-            from( project(':org.jvoicexml.callmanager.mmi.servlet').war.outputs.files )
+            from(project(':org.jvoicexml.callmanager.mmi.servlet').war.outputs.files)
         }
     }
 }
 
-distZip {
-    dependsOn jvxmlservlet
-    baseName 'jvoicexml'
+distributions {
+    main {
+        baseName 'jvoicexml'
+        
+        contents {
+            into('config') { 
+                from("${project(':org.jvoicexml').buildDir}/config") 
+            }
+        }
+    }
 }
 
 task jvxmlplugins {
