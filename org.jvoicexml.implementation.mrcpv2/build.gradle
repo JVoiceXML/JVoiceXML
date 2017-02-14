@@ -65,10 +65,10 @@ task copyReferencedLibraries(type: Copy) {
     from(configurations.compile) {
         include 'log4j-*.jar',
          'cairo-client*.jar',
-         'cairo-sipt*.jar',
+         'cairo-sip*.jar',
          'cairo-rtp*.jar',
          'halef-mrcp4j*.jar',
-         'zanzibar*.jar',
+         'halef-zanzibar*.jar',
          'speechcloud*.jar'
     }
 }

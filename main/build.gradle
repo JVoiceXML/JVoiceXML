@@ -14,38 +14,62 @@ repositories {
     }
 }
 
+configurations {
+    jvxmlImplementationText {
+        description = "support for the text implementation platform"
+        extendsFrom compile
+    }
+    
+    jvxmlImplementationMrcpv2 {
+        description = "support for the MRCPv2 implementation platform"
+        extendsFrom compile
+    }
+
+}
+
 dependencies {
     compile project(':org.jvoicexml.client')
-    compile project(':org.jvoicexml.client.text')
 
+    jvxmlImplementationText project(':org.jvoicexml.client.text')
+    jvxmlImplementationText project(':org.jvoicexml.implementation.text')
+    jvxmlImplementationText project(':org.jvoicexml.callmanager.text')
+
+    jvxmlImplementationMrcpv2 project(':org.jvoicexml.interpreter.grammar.halef')
+    //jvxmlImplementationMrcpv2 project(':org.jvoicexml.implementation.mrcpv2')
+    
     runtime project(':org.jvoicexml.xml')
     runtime project(':org.jvoicexml')
     runtime project(':org.jvoicexml.config')
     runtime project(':org.jvoicexml.jndi')
     runtime project(':org.jvoicexml.srgs')
-    runtime project(':org.jvoicexml.mmi.events')
-    runtime project(':org.jvoicexml.profile.mmi')
     runtime project(':org.jvoicexml.profile.vxml21')
     runtime project(':org.jvoicexml.interpreter.datamodel.ecmascript')
-    runtime project(':org.jvoicexml.interpreter.grammar.halef')
-    runtime project(':org.jvoicexml.interpreter.grammar.luis')
-    runtime project(':org.jvoicexml.interpreter.grammar.regex')
-    runtime project(':org.jvoicexml.implementation.jsapi10')
-    runtime project(':org.jvoicexml.implementation.jsapi20')
-    runtime project(':org.jvoicexml.implementation.jtapi')
-    runtime project(':org.jvoicexml.implementation.kinect')
-    runtime project(':org.jvoicexml.implementation.lightweightbml')
-    runtime project(':org.jvoicexml.implementation.marc')
-    runtime project(':org.jvoicexml.implementation.mary')
-    runtime project(':org.jvoicexml.implementation.mrcpv2')
-    runtime project(':org.jvoicexml.implementation.text')
-    runtime project(':org.jvoicexml.callmanager.mmi')
-    runtime project(':org.jvoicexml.callmanager.mmi.http')
-    runtime project(':org.jvoicexml.callmanager.mmi.socket')
-    runtime project(':org.jvoicexml.callmanager.mmi.umundo')
-    runtime project(':org.jvoicexml.callmanager.sip')
-    runtime project(':org.jvoicexml.callmanager.text')
-    runtime project(':org.jvoicexml.voicexmlunit')
+
+    //runtime project(':org.jvoicexml.mmi.events')
+    
+    runtime configurations.jvxmlImplementationText
+    runtime configurations.jvxmlImplementationMrcpv2
+    
+    //runtime project(':org.jvoicexml.profile.mmi')
+    //runtime project(':org.jvoicexml.interpreter.grammar.luis')
+    //runtime project(':org.jvoicexml.interpreter.grammar.regex')
+    //runtime project(':org.jvoicexml.implementation.jsapi10')
+    //runtime project(':org.jvoicexml.implementation.jsapi20')
+    //runtime project(':org.jvoicexml.implementation.jtapi')
+    //runtime project(':org.jvoicexml.implementation.kinect')
+    //runtime project(':org.jvoicexml.implementation.lightweightbml')
+    //runtime project(':org.jvoicexml.implementation.marc')
+    //runtime project(':org.jvoicexml.implementation.mary')
+    //runtime project(':org.jvoicexml.callmanager.mmi')
+    //runtime project(':org.jvoicexml.callmanager.mmi.http')
+    //runtime project(':org.jvoicexml.callmanager.mmi.socket')
+    //runtime project(':org.jvoicexml.callmanager.mmi.umundo')
+    //runtime project(':org.jvoicexml.callmanager.sip')
+    //runtime project(':org.jvoicexml.voicexmlunit')
+}
+
+clean {
+    dependsOn ':org.jvoicexml:clean'
 }
 
 jar {
