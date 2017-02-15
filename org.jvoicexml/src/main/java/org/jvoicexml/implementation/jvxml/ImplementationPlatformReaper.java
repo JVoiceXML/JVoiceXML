@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2015-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -55,7 +50,7 @@ class ImplementationPlatformReaper extends Thread {
      * Creates a new object.
      * @param impl the implementation platform
      */
-    public ImplementationPlatformReaper(
+    ImplementationPlatformReaper(
             final JVoiceXmlImplementationPlatform impl) {
         platform = impl;
         setDaemon(true);
@@ -83,6 +78,7 @@ class ImplementationPlatformReaper extends Thread {
      */
     public void stopReaping() {
         synchronized (wait) {
+            LOGGER.info("stopping reaper");
             stopReaping = true;
             wait.notifyAll();
         }

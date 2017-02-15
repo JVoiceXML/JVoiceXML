@@ -177,8 +177,20 @@ distributions {
 
 mainClassName = "org.jvoicexml.startup.Startup"
 applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
-                             "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy" ]
+                             "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
+                             "-Djava.util.logging.config.file=${project(':org.jvoicexml').buildDir}/config/logging.properties",
+                             "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
 
 run {
     classpath += files("${project(':org.jvoicexml').buildDir}/config")
+}
+
+task(runDebug, dependsOn: 'jar', type: JavaExec) {
+    main = "org.jvoicexml.startup.Startup"
+    classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")
+    jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
+               "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
+               "-Djava.util.logging.config.file=${project(':org.jvoicexml').buildDir}/config/logging.properties",
+               "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog",
+               "-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=12367" ]
 }
