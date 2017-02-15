@@ -15,6 +15,11 @@ repositories {
 }
 
 configurations {
+    jvxmlInterpreterDatamodelEcmaScript {
+        description = "ECMAScript data model"
+        extendsFrom compile
+    }
+
     jvxmlImplementationText {
         description = "support for the text implementation platform"
         extendsFrom compile
@@ -34,6 +39,8 @@ configurations {
 dependencies {
     compile project(':org.jvoicexml.client')
 
+    jvxmlInterpreterDatamodelEcmaScript project(':org.jvoicexml.interpreter.datamodel.ecmascript')
+
     jvxmlImplementationText project(':org.jvoicexml.client.text')
     jvxmlImplementationText project(':org.jvoicexml.implementation.text')
     jvxmlImplementationText project(':org.jvoicexml.callmanager.text')
@@ -48,10 +55,11 @@ dependencies {
     runtime project(':org.jvoicexml.jndi')
     runtime project(':org.jvoicexml.srgs')
     runtime project(':org.jvoicexml.profile.vxml21')
-    runtime project(':org.jvoicexml.interpreter.datamodel.ecmascript')
 
     //runtime project(':org.jvoicexml.mmi.events')
     
+    runtime configurations.jvxmlInterpreterDatamodelEcmaScript
+
     runtime configurations.jvxmlImplementationText
     runtime configurations.jvxmlImplementationMrcpv2
     
@@ -76,7 +84,11 @@ clean {
     dependsOn ':org.jvoicexml:clean'
 }
 
+
 jar {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    println properties.getProperty('sdk.dir')
     onlyIf { 
         false
     }
@@ -102,16 +114,10 @@ distributions {
     }
 }
 
-task jvxmlplugins {
-    dependsOn ':org.jvoicexml.jndi:jar'
-    dependsOn ':org.jvoicexml.implementation.text:jar'
-}
-
 mainClassName = "org.jvoicexml.startup.Startup"
 applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                              "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy" ]
 
 run {
-    dependsOn jvxmlplugins
     classpath += files("${project(':org.jvoicexml').buildDir}/config")
 }

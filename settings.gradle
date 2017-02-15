@@ -44,6 +44,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.callmanager.sip', \
     'org.jvoicexml.callmanager.text', \
     'org.jvoicexml.systemtest', \
+    'org.jvoicexml.systemtest.servlet', \
     'org.jvoicexml.voicexmlunit', \
     'org.jvoicexml.voicexmlunit.demo', \
     'org.jvoicexml.xml', \
