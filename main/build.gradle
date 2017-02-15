@@ -15,8 +15,63 @@ repositories {
 }
 
 configurations {
-    jvxmlInterpreterDatamodelEcmaScript {
+    jvxmlInterpreterDatamodelECMAScript {
         description = "ECMAScript data model"
+        extendsFrom compile
+    }
+
+    jvxmlInterpreterGrammarLUIS {
+        description = "LUIS grammar support"
+        extendsFrom compile
+    }
+
+    jvxmlInterpreterGrammarRegex {
+        description = "Regex grammar support"
+        extendsFrom compile
+    }
+
+    jvxmlImplementationJSAPI10 {
+        description = "support for the JSAPI 1.0 implementation platform"
+        extendsFrom compile
+    }
+
+    jvxmlImplementationJSAPI20 {
+        description = "support for the JSAPI 2.0 implementation platform"
+        extendsFrom compile
+    }
+
+    jvxmlImplementationJTAPI {
+        description = "support for the JTAPI implementation platform"
+        extendsFrom compile
+    }
+
+    jvxmlImplementationKinect {
+        description = "support for the Kinect implementation platform"
+        extendsFrom compile
+    }
+
+    jvxmlImplementationLightweightBML {
+        description = "support for the lightweight BML implementation platform"
+        extendsFrom compile
+    }
+
+    jvxmlImplementationMarc {
+        description = "support for the MARC implementation platform"
+        extendsFrom compile
+    }
+
+    jvxmlImplementationMary {
+        description = "support for the Open Mary implementation platform"
+        extendsFrom compile
+    }
+
+    jvxmlImplementationMMI {
+        description = "support for the W3C MMI architecture"
+        extendsFrom compile
+    }
+
+    jvxmlImplementationMrcpv2 {
+        description = "support for the MRCPv2 implementation platform"
         extendsFrom compile
     }
 
@@ -25,11 +80,6 @@ configurations {
         extendsFrom compile
     }
     
-    jvxmlImplementationMrcpv2 {
-        description = "support for the MRCPv2 implementation platform"
-        extendsFrom compile
-    }
-
     jvxmlVoiceXMLUnit {
         description = "VoiceXML Unit Testing"
         extendsFrom compile
@@ -39,14 +89,41 @@ configurations {
 dependencies {
     compile project(':org.jvoicexml.client')
 
-    jvxmlInterpreterDatamodelEcmaScript project(':org.jvoicexml.interpreter.datamodel.ecmascript')
+    jvxmlImplementationJSAPI10 project(':org.jvoicexml.implementation.jsapi10')
+
+    jvxmlImplementationJSAPI20 project(':org.jvoicexml.implementation.jsapi20')
+
+    jvxmlImplementationJTAPI project(':org.jvoicexml.implementation.jtapi')
+
+    jvxmlImplementationKinect project(':org.jvoicexml.implementation.kinect')
+
+    jvxmlImplementationLightweightBML project(':org.jvoicexml.implementation.lightweightbml')
+
+    jvxmlImplementationMarc project(':org.jvoicexml.implementation.marc')
+
+    jvxmlImplementationMary project(':org.jvoicexml.implementation.mary')
+
+    jvxmlImplementationMrcpv2 project(':org.jvoicexml.interpreter.grammar.halef')
+    //jvxmlImplementationMrcpv2 project(':org.jvoicexml.implementation.mrcpv2')
+    jvxmlImplementationMrcpv2 project(':org.jvoicexml.callmanager.sip')
+
+    jvxmlImplementationMMI project(':org.jvoicexml.mmi.events')
+    jvxmlImplementationMMI project(':org.jvoicexml.profile.mmi')
+    jvxmlImplementationMMI project(':org.jvoicexml.callmanager.mmi')
+    jvxmlImplementationMMI project(':org.jvoicexml.callmanager.mmi.http')
+    jvxmlImplementationMMI project(':org.jvoicexml.callmanager.mmi.socket')
+    jvxmlImplementationMMI project(':org.jvoicexml.callmanager.mmi.umundo')
 
     jvxmlImplementationText project(':org.jvoicexml.client.text')
     jvxmlImplementationText project(':org.jvoicexml.implementation.text')
     jvxmlImplementationText project(':org.jvoicexml.callmanager.text')
 
-    jvxmlImplementationMrcpv2 project(':org.jvoicexml.interpreter.grammar.halef')
-    //jvxmlImplementationMrcpv2 project(':org.jvoicexml.implementation.mrcpv2')
+    jvxmlInterpreterDatamodelECMAScript project(':org.jvoicexml.interpreter.datamodel.ecmascript')
+
+    jvxmlInterpreterGrammarLUIS project(':org.jvoicexml.interpreter.grammar.luis')
+
+    jvxmlInterpreterGrammarRegex project(':org.jvoicexml.interpreter.grammar.regex')
+
     jvxmlVoiceXMLUnit project(':org.jvoicexml.voicexmlunit')
     
     runtime project(':org.jvoicexml.xml')
@@ -56,28 +133,11 @@ dependencies {
     runtime project(':org.jvoicexml.srgs')
     runtime project(':org.jvoicexml.profile.vxml21')
 
-    //runtime project(':org.jvoicexml.mmi.events')
     
-    runtime configurations.jvxmlInterpreterDatamodelEcmaScript
+    runtime configurations.jvxmlInterpreterDatamodelECMAScript
 
     runtime configurations.jvxmlImplementationText
-    runtime configurations.jvxmlImplementationMrcpv2
-    
-    //runtime project(':org.jvoicexml.profile.mmi')
-    //runtime project(':org.jvoicexml.interpreter.grammar.luis')
-    //runtime project(':org.jvoicexml.interpreter.grammar.regex')
-    //runtime project(':org.jvoicexml.implementation.jsapi10')
-    //runtime project(':org.jvoicexml.implementation.jsapi20')
-    //runtime project(':org.jvoicexml.implementation.jtapi')
-    //runtime project(':org.jvoicexml.implementation.kinect')
-    //runtime project(':org.jvoicexml.implementation.lightweightbml')
-    //runtime project(':org.jvoicexml.implementation.marc')
-    //runtime project(':org.jvoicexml.implementation.mary')
-    //runtime project(':org.jvoicexml.callmanager.mmi')
-    //runtime project(':org.jvoicexml.callmanager.mmi.http')
-    //runtime project(':org.jvoicexml.callmanager.mmi.socket')
-    //runtime project(':org.jvoicexml.callmanager.mmi.umundo')
-    //runtime project(':org.jvoicexml.callmanager.sip')
+    runtime configurations.jvxmlImplementationMrcpv2   
 }
 
 clean {
