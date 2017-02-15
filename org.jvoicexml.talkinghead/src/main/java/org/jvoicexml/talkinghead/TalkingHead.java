@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,8 +27,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Observable;
 import java.util.Observer;
 
-import marytts.exceptions.MaryConfigurationException;
-
 import org.jdom2.JDOMException;
 import org.jvoicexml.implementation.lightweightbml.connection.UDPConnection;
 import org.jvoicexml.implementation.lightweightbml.parser.LightweightBMLParser;
@@ -52,6 +45,8 @@ import org.jvoicexml.talkinghead.tts.MaryTTSClient;
 import org.jvoicexml.talkinghead.view.AvatarViewer;
 import org.xml.sax.SAXException;
 
+import marytts.exceptions.MaryConfigurationException;
+
 /**
  * Controller and App of TalkingHead.
  * 
@@ -59,7 +54,6 @@ import org.xml.sax.SAXException;
  * @author Markus Ermuth
  * @author Alex Krause
  * 
- * @version $LastChangedRevision$
  * @since 0.7.3
  */
 public class TalkingHead
@@ -145,7 +139,8 @@ public class TalkingHead
             InvocationTargetException, InterruptedException, SAXException,
             MaryConfigurationException {
         // Load Config
-        appConfig = new Configuration("etc\\TalkingHeadConfig.xml");
+        appConfig = new Configuration(
+                "src/main/resources/TalkingHeadConfig.xml");
 
         // Load the Avatar
         talkingHeadAvatarModel = new Avatar(appConfig.getAvatar());

@@ -6,34 +6,34 @@
 	<tts host="localhost" port="59125" locale="de" voice="bits3-hsmm" />
 	<avatar>
 		<images>
-			<image src="etc\v2\Smiley_01.png" />
-			<image src="etc\v2\Smiley_02.png" />
-			<image src="etc\v2\Smiley_03.png" />
-			<image src="etc\v2\Smiley_04.png" />
-			<image src="etc\v2\Smiley_05.png" />
-			<image src="etc\v2\Smiley_06.png" />
-			<image src="etc\v2\Smiley_07.png" />
-			<image src="etc\v2\Smiley_08.png" />
-			<image src="etc\v2\Smiley_09.png" />
-			<image src="etc\v2\Smiley_10.png" />
-			<image src="etc\v2\Smiley_11.png" />
-			<image src="etc\v2\Smiley_12.png" />
-			<image src="etc\v2\Smiley_13.png" />
-			<image src="etc\v2\Smiley_14.png" />
-			<image src="etc\v2\Smiley_15.png" />
-			<image src="etc\v2\Smiley_16.png" />
-			<image src="etc\v2\Smiley_17.png" />
-			<image src="etc\v2\Smiley_18.png" />
-			<image src="etc\v2\Smiley_19.png" />
-			<image src="etc\v2\Smiley_20.png" />
-			<image src="etc\v2\Smiley_21.png" />
-			<image src="etc\v2\Smiley_22.png" />
-			<image src="etc\v2\Smiley_23.png" />
-			<image src="etc\v2\Smiley_24.png" />
-			<image src="etc\v2\Smiley_25.png" />
-			<image src="etc\v2\Smiley_26.png" />
-			<image src="etc\v2\Smiley_27.png" />
-			<image src="etc\v2\nothing.png" />
+			<image src="src/main/resources/v2\Smiley_01.png" />
+			<image src="src/main/resources/v2\Smiley_02.png" />
+			<image src="src/main/resources/v2\Smiley_03.png" />
+			<image src="src/main/resources/v2\Smiley_04.png" />
+			<image src="src/main/resources/v2\Smiley_05.png" />
+			<image src="src/main/resources/v2\Smiley_06.png" />
+			<image src="src/main/resources/v2\Smiley_07.png" />
+			<image src="src/main/resources/v2\Smiley_08.png" />
+			<image src="src/main/resources/v2\Smiley_09.png" />
+			<image src="src/main/resources/v2\Smiley_10.png" />
+			<image src="src/main/resources/v2\Smiley_11.png" />
+			<image src="src/main/resources/v2\Smiley_12.png" />
+			<image src="src/main/resources/v2\Smiley_13.png" />
+			<image src="src/main/resources/v2\Smiley_14.png" />
+			<image src="src/main/resources/v2\Smiley_15.png" />
+			<image src="src/main/resources/v2\Smiley_16.png" />
+			<image src="src/main/resources/v2\Smiley_17.png" />
+			<image src="src/main/resources/v2\Smiley_18.png" />
+			<image src="src/main/resources/v2\Smiley_19.png" />
+			<image src="src/main/resources/v2\Smiley_20.png" />
+			<image src="src/main/resources/v2\Smiley_21.png" />
+			<image src="src/main/resources/v2\Smiley_22.png" />
+			<image src="src/main/resources/v2\Smiley_23.png" />
+			<image src="src/main/resources/v2\Smiley_24.png" />
+			<image src="src/main/resources/v2\Smiley_25.png" />
+			<image src="src/main/resources/v2\Smiley_26.png" />
+			<image src="src/main/resources/v2\Smiley_27.png" />
+			<image src="src/main/resources/v2\nothing.png" />
 		</images>
 		<animations>
 			<!--Basic & return Animation of the avatar-->

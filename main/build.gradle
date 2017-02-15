@@ -98,6 +98,7 @@ dependencies {
     jvxmlImplementationKinect project(':org.jvoicexml.implementation.kinect')
 
     jvxmlImplementationLightweightBML project(':org.jvoicexml.implementation.lightweightbml')
+    jvxmlImplementationLightweightBML project(':org.jvoicexml.talkinghead')
 
     jvxmlImplementationMarc project(':org.jvoicexml.implementation.marc')
 

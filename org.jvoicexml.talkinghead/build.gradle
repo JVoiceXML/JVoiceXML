@@ -1,0 +1,41 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+
+dependencies {
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    compile group: 'org.jdom', name: 'jdom2', version: '2.0.5'
+    compile group: 'de.dfki.mary', name: 'marytts-client', version: '5.2'
+    
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+    compile project(':org.jvoicexml')
+    compile project(':org.jvoicexml.implementation.lightweightbml')
+}
+
+task copyReferencedLibraries(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile) {
+        include 'log4j-*.jar',
+            'jdom2*.jar'
+    }
+}
+
+jar {
+    dependsOn copyReferencedLibraries
+
+    manifest {
+        attributes("Implementation-Title": "JVoiceXML Talking Head",
+                   "Implementation-Vendor": "JVoiceXML group",
+                   "Implementation-Version": "version")
+    }
+    baseName 'org.jvoicexml.talkinghead'
+}
+
+mainClassName = "org.jvoicexml.talkinghead.TalkingHead"
