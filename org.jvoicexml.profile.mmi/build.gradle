@@ -1,4 +1,18 @@
 apply plugin: 'java'
+apply plugin: "com.github.eerohele.saxon-gradle"
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
 
 repositories {
     mavenCentral()
@@ -22,8 +36,19 @@ dependencies {
    compile project(':org.jvoicexml.profile.vxml21')
    compile project(':org.jvoicexml.mmi.events')
 }
+xslt {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/mmi-profile.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-profile.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        libs: configurations.compile
+    )
+}
 
 jar {
+    dependsOn xslt
+
     manifest {
         attributes("Implementation-Title": "JVoiceXML MMI Profile",
                    "Implementation-Vendor": "JVoiceXML group",
