@@ -4,7 +4,13 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    jvxmlConfiguration
+}
+
 dependencies {
+    jvxmlConfiguration fileTree(dir: "src/test/config")
+
     testCompile group: 'log4j', name: 'log4j', version: '1.2.17'
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
@@ -12,6 +18,7 @@ dependencies {
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
     compile project(':org.jvoicexml.client.text')
+    compile project(':org.jvoicexml.jndi')
     compile project(':org.jvoicexml.voicexmlunit')}
 
 jar {
@@ -24,7 +31,5 @@ jar {
 }
 
 test {
-    classpath = project.sourceSets.test.runtimeClasspath + project(':org.jvoicexml.voicexmlunit').sourceSets.test.resources
-    jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').projectDir}/config",
-                             "-Djava.security.policy=${project(':org.jvoicexml').projectDir}/config/jvoicexml.policy" ]
+    jvmArgs = ["-Djava.security.policy=src/test/config/jvoicexml.policy" ]
 }

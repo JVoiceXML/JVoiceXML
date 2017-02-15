@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,7 +21,6 @@
 
 package org.jvoicexml.voicexmlunit.demo;
 
-import java.io.File;
 import java.net.URI;
 
 import org.junit.After;
@@ -64,7 +63,7 @@ public final class TestInputDemo {
      */
     @Before
     public void setUp() throws Exception {
-        uri = new File("etc/input.vxml").toURI();
+        uri = TestInputDemo.class.getResource("/input.vxml").toURI();
         call = new TextCall();
     }
 

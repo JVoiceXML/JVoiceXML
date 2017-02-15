@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
     <repository>lightweightbml</repository>
-    <classpath>dist/org.jvoicexml.implementation.lightweightbml.jar
+    <classpath>org.jvoicexml.implementation.lightweightbml-0.7.8.jar
     </classpath>
 
     <beans:bean
