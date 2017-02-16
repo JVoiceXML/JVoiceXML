@@ -479,10 +479,8 @@ public final class TextTelephony implements Telephony {
     @Override
     public void disconnect(final ConnectionInformation client) {
         if (LOGGER.isDebugEnabled()) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("disconnecting from '" + client.getCallingDevice()
-                        + "'...");
-            }
+            LOGGER.debug("disconnecting from '" + client.getCallingDevice()
+                    + "'...");
         }
 
         // delay to acknowledge pending messages

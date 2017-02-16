@@ -101,12 +101,18 @@ public final class JVoiceXmlImplementationPlatform
     /** Pool of synthesizer output resource factories. */
     private final KeyedResourcePool<SynthesizedOutput> synthesizerPool;
 
+    private final Object synthesizerPoolLock;
+    
     /** Pool of user input resource factories. */
     private final KeyedResourcePool<SpokenInput> recognizerPool;
 
+    private final Object recognizerPoolLock;
+    
     /** Pool of user calling resource factories. */
     private final KeyedResourcePool<Telephony> telephonyPool;
 
+    private final Object telephonyPoolLock;
+    
     /** Connection information to use. */
     private final ConnectionInformation info;
 
@@ -213,8 +219,11 @@ public final class JVoiceXmlImplementationPlatform
             final ConnectionInformation connectionInformation) {
         info = connectionInformation;
         telephonyPool = telePool;
+        telephonyPoolLock = new Object();
         synthesizerPool = synthesizedOutputPool;
+        synthesizerPoolLock = new Object();
         recognizerPool = spokenInputPool;
+        recognizerPoolLock = new Object();
         dtmfInput = bufferedCharacterInput;
         inputLock = new Object();
         promptAccumulator = new JVoiceXmlPromptAccumulator(this);
@@ -244,7 +253,7 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         final String type = info.getSystemOutput();
-        synchronized (info) {
+        synchronized (synthesizerPoolLock) {
             if (output == null) {
                 final SynthesizedOutput synthesizer =
                         getExternalResourceFromPool(synthesizerPool, type);
@@ -261,7 +270,7 @@ public final class JVoiceXmlImplementationPlatform
      * Returns a previously borrowed system output to the pool.
      */
     private void returnSystemOutput() {
-        synchronized (info) {
+        synchronized (synthesizerPoolLock) {
             if (output == null) {
                 return;
             }
@@ -370,7 +379,7 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         final String type = info.getUserInput();
-        synchronized (info) {
+        synchronized (recognizerPoolLock) {
             if (input == null) {
                 final SpokenInput spokenInput = getExternalResourceFromPool(
                         recognizerPool, type);
@@ -397,7 +406,7 @@ public final class JVoiceXmlImplementationPlatform
      * Returns a previously obtained user input to the pool.
      */
     private void returnUserInput() {
-        synchronized (info) {
+        synchronized (recognizerPoolLock) {
             if (input == null) {
                 return;
             }
@@ -461,7 +470,7 @@ public final class JVoiceXmlImplementationPlatform
         // resource may be used concurrently.
         // So we must not have a semaphore to avoid shared use.
         final String type = info.getCallControl();
-        synchronized (info) {
+        synchronized (telephonyPoolLock) {
             if (call == null) {
                 final Telephony telephony = getExternalResourceFromPool(
                         telephonyPool, type);
@@ -478,7 +487,7 @@ public final class JVoiceXmlImplementationPlatform
      * Returns a previously obtained call control to the pool.
      */
     private void returnCallControl() {
-        synchronized (info) {
+        synchronized (telephonyPoolLock) {
             if (call == null) {
                 return;
             }

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -59,13 +59,16 @@ final class TextSenderThread extends Thread {
 
     /** {@code true} if a bye message is acknowledged in the next send. */
     private boolean acknowledgeBye;
+    
+    /** {@code true} if the sender thread is running. */
+    boolean sending;
 
     /**
      * Constructs a new object.
      * @param asyncSocket the socket to read from.
      * @param textTelephony telephony device.
      */
-    public TextSenderThread(final Socket asyncSocket,
+    TextSenderThread(final Socket asyncSocket,
             final TextTelephony textTelephony) {
         socket = asyncSocket;
         telephony = textTelephony;
@@ -86,9 +89,9 @@ final class TextSenderThread extends Thread {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text sender thread started");
         }
+        sending = true;
         PendingMessage pending = null;
         try {
-            boolean sending = true;
             while (sending && socket.isConnected() && !interrupted()) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("trying to take next message");
@@ -123,11 +126,12 @@ final class TextSenderThread extends Thread {
             }
             telephony.fireHungup();
         }
-        synchronized (lock) {
-            lock.notifyAll();
-        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text sender thread stopped");
+        }
+        synchronized (lock) {
+            sending = false;
+            lock.notifyAll();
         }
     }
 
@@ -154,10 +158,10 @@ final class TextSenderThread extends Thread {
      * @since 0.7.6
      */
     void waitSenderTerminated() throws InterruptedException {
-        if (!isAlive()) {
-            return;
-        }
         synchronized (lock) {
+            if (!isAlive() || !sending) {
+                return;
+            }
             lock.wait();
         }
     }
@@ -231,6 +235,6 @@ final class TextSenderThread extends Thread {
      * @return {@code true} if there are messages to send.
      */
     public boolean isSending() {
-        return !messages.isEmpty();
+        return sending;
     }
 }

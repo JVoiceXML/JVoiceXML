@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,7 +33,6 @@ import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage.Text
  * Reads asynchronously some text input from the client.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 final class TextReceiverThread extends Thread {
@@ -66,7 +60,7 @@ final class TextReceiverThread extends Thread {
      * @param asyncSocket the socket to read from.
      * @param textTelephony telephony device.
      */
-    public TextReceiverThread(final Socket asyncSocket,
+    TextReceiverThread(final Socket asyncSocket,
             final TextTelephony textTelephony) {
         socket = asyncSocket;
         telephony = textTelephony;
@@ -131,14 +125,15 @@ final class TextReceiverThread extends Thread {
                 }
             }
         } finally {
+            synchronized (lock) {
+                started = false;
+                lock.notifyAll();
+            }
             telephony.fireHungup();
         }
         telephony.recordStopped();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text receiver thread stopped");
-        }
-        synchronized (lock) {
-            lock.notifyAll();
         }
     }
 
@@ -150,6 +145,9 @@ final class TextReceiverThread extends Thread {
      */
     void waitReceiverTerminated() throws InterruptedException {
         synchronized (lock) {
+            if (!started) {
+                return;
+            }
             lock.wait();
         }
     }
