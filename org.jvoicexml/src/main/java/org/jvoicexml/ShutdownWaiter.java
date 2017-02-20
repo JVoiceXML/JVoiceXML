@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,7 +21,8 @@
 
 package org.jvoicexml;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Waiter for a JVoiceXML shutdown request. This is necessary to decouple a
@@ -39,7 +35,8 @@ import org.apache.log4j.Logger;
  */
 class ShutdownWaiter extends Thread {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(ShutdownWaiter.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(ShutdownWaiter.class);
 
     /** Reference to JVoiceXML. */
     private final JVoiceXmlMain jvxml;
@@ -51,7 +48,7 @@ class ShutdownWaiter extends Thread {
      * Constructs a new object.
      * @param main reference to JVoiceXML.
      */
-    public ShutdownWaiter(final JVoiceXmlMain main) {
+    ShutdownWaiter(final JVoiceXmlMain main) {
         jvxml = main;
         shutdownRequestSemaphore = new Object();
         setName(ShutdownWaiter.class.getSimpleName());

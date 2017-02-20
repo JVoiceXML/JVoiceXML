@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -50,7 +45,6 @@ import org.apache.log4j.spi.LoggingEvent;
  * Messages that are kept in this appender <b>must</b> begin with
  * {@link #TEST_PREFIX}. All other messages are filtered.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public final class TestAppender implements Appender {
@@ -99,7 +93,7 @@ public final class TestAppender implements Appender {
      * {@inheritDoc}
      */
     public void doAppend(final LoggingEvent event) {
-        final String message = event.getMessage().toString();
+        final String message = event.toString();
         if (!message.startsWith(TEST_PREFIX)) {
             return;
         }

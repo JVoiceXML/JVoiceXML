@@ -11,7 +11,11 @@ configurations {
 dependencies {
     jvxmlConfiguration fileTree(dir: "src/main/config")
 
-    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.8'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.8'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.8'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.8'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.8'
     compile group: 'org.mozilla', name: 'rhino', version: '1.7R4'
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.3.14.v20161028'

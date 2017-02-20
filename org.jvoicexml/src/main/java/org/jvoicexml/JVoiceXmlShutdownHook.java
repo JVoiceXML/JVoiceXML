@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,7 +21,8 @@
 
 package org.jvoicexml;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A shutdown hook, to safely terminate the main process.
@@ -39,7 +35,7 @@ final class JVoiceXmlShutdownHook
         implements Runnable {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlShutdownHook.class);
+            LogManager.getLogger(JVoiceXmlShutdownHook.class);
 
     /** Reference to the main process. */
     private final JVoiceXml jvxml;
@@ -48,7 +44,7 @@ final class JVoiceXmlShutdownHook
      * Constructs a new object.
      * @param jvoicexml Reference to the main process.
      */
-    public JVoiceXmlShutdownHook(final JVoiceXml jvoicexml) {
+    JVoiceXmlShutdownHook(final JVoiceXml jvoicexml) {
         jvxml = jvoicexml;
     }
 

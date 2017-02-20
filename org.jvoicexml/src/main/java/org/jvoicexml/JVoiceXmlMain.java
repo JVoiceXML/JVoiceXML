@@ -30,7 +30,8 @@ import java.util.Properties;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -60,7 +61,8 @@ import org.jvoicexml.profile.Profile;
  */
 public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(JVoiceXmlMain.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(JVoiceXmlMain.class);
 
     /** Semaphore to handle the shutdown notification. */
     private final Object shutdownSemaphore;
