@@ -192,7 +192,7 @@ public final class SipCallManager
     /**
      * {@inheritDoc}
      */
-   // @Override
+    @Override
     public void startNewMrcpDialog(final SipSession pbxSession,
             final SipSession mrcpSession) throws Exception {
             final MrcpChannel ttsChannel = mrcpSession.getTtsChannel();
@@ -274,7 +274,7 @@ public final class SipCallManager
     /**
      * {@inheritDoc}
      */
-    //@Override
+    @Override
     public void startNewCloudDialog(final SipSession pbxSession,
             final RTPStreamReplicator rtpReplicator,
             final RtpTransmitter rtpTransmitter) throws Exception {
@@ -445,7 +445,7 @@ public final class SipCallManager
     }
 
 
-    @Override
+    //@Override
     public SessionProcessor startNewDialog(SpeechletContext arg0)
             throws Exception {
         // TODO Auto-generated method stub

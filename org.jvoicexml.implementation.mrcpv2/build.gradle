@@ -41,8 +41,14 @@ dependencies {
     compile group: 'net.sourceforge.halef', name: 'cairo-sip', version: '0.1-SNAPSHOT'
     compile group: 'net.sourceforge.halef', name: 'cairo-rtp', version: '0.1-SNAPSHOT'
     compile group: 'net.sourceforge.halef', name: 'halef-mrcp4j', version: '0.1-SNAPSHOT'
-    compile group: 'net.sourceforge.halef', name: 'halef-zanzibar', version: '0.1-SNAPSHOT'
+    //compile group: 'net.sourceforge.halef', name: 'halef-zanzibar', version: '0.1-SNAPSHOT'
+    compile fileTree(dir: './3rdparty/zanzibar/lib', include: ['*.jar'])
     compile project(':org.jvoicexml.interpreter.grammar.halef')
+    compile group: 'javax.sip', name: 'jain-sip-api', version: '1.2.1.4'
+    compile group: 'javax.sip', name: 'jain-sip-ri', version: '1.2.1'
+    compile group: 'javax.sdp', name: 'nist-sdp', version: '1.0'
+    compile group: 'concurrent', name: 'concurrent', version: '1.3.4'
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
     
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
@@ -51,13 +57,28 @@ dependencies {
     compile project(':org.jvoicexml.client')
 }
 
-xslt {
+task xsltImplementation(type: com.github.eerohele.SaxonXsltTask) {
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/mrcpv2-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
         libs: configurations.compile
+    )
+}
+
+task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
+    stylesheet "${projectDir}/src/main/resources/patch-callmanager-configuration.xsl"
+    input "${projectDir}/src/main/resources/mrcpv2-callmanager.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-callmanager.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        libs: configurations.compile,
+        address: "sip:127.0.0.1:4245",
+        port: 4245,
+        cairoAddress: "sip:cairo@speechforge.org",
+        cairoHost: "127.0.0.1",
+        cairoPort: 5050
     )
 }
 
@@ -69,13 +90,20 @@ task copyReferencedLibraries(type: Copy) {
          'cairo-sip*.jar',
          'cairo-rtp*.jar',
          'halef-mrcp4j*.jar',
-         'halef-zanzibar*.jar',
-         'speechcloud*.jar'
+         'zanzibar*.jar',
+         'speechcloud*.jar',
+         'org.jvoicexml.interpreter.grammar.halef*.jar',
+         'jain-sip-api*.jar',
+         'jain-sip-ri*.jar',
+         'nist-sdp*.jar',
+         'concurrent*.jar',
+         'commons-lang*.jar'
     }
 }
 
 jar {
-    dependsOn xslt
+    dependsOn xsltImplementation
+    dependsOn xsltCallmanager
     dependsOn copyReferencedLibraries
 
     manifest {

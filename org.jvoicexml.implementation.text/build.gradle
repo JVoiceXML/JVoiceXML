@@ -37,6 +37,7 @@ dependencies {
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
     compile project(':org.jvoicexml.client.text')
+    compile project(':org.jvoicexml.srgs')
 }
 
 xslt {
@@ -52,7 +53,10 @@ xslt {
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
-        include 'log4j-*.jar', 'protobuf-java*.jar'
+        include 'log4j-*.jar',
+        'protobuf-java*.jar',
+        'org.jvoicexml.client.text*.jar',
+        'org.jvoicexml.srgs*.jar'
     }
 }
 
