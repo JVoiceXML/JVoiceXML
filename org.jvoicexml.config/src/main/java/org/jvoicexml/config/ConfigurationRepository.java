@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,7 +39,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.xml.IgnoringEntityResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -55,14 +51,13 @@ import org.xml.sax.SAXException;
 /**
  * Cached configuration file repository.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 final class ConfigurationRepository
     implements ConfigurationFileChangedListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(ConfigurationRepository.class);
+        LogManager.getLogger(ConfigurationRepository.class);
 
     /** Size of the read buffer when reading objects. */
     private static final int READ_BUFFER_SIZE = 1024;

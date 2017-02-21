@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,7 +28,8 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -42,13 +38,12 @@ import org.xml.sax.SAXException;
 /**
  * Content handler to extract the classpath entries from a configuration file.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 final class ClasspathExtractor implements ContentHandler {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(ClasspathExtractor.class);;
+        LogManager.getLogger(ClasspathExtractor.class);;
 
         /** Intermediately read string between two tags. */
     private StringBuilder str;

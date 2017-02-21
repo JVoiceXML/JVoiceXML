@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,7 +36,8 @@ import java.nio.file.WatchService;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Monitoring thread for the configuration folder.
@@ -52,7 +48,7 @@ import org.apache.log4j.Logger;
 public final class ConfigurationFolderMonitor extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(ConfigurationFolderMonitor.class);
+        LogManager.getLogger(ConfigurationFolderMonitor.class);
 
     /** Stop request. */
     private boolean stop;

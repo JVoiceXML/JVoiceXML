@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2016 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -45,7 +45,8 @@ import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.xml.IgnoringEntityResolver;
@@ -99,12 +100,11 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *
  * @author Arindam Das
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision$
  */
 public final class JVoiceXmlConfiguration implements Configuration {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(JVoiceXmlConfiguration.class);;
+        LogManager.getLogger(JVoiceXmlConfiguration.class);;
 
     /** The factory to retrieve configured objects. */
     private ApplicationContext context;

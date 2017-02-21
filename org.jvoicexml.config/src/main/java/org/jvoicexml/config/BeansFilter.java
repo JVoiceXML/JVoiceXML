@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,7 +39,6 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 final class BeansFilter extends XMLFilterImpl {
@@ -70,7 +64,7 @@ final class BeansFilter extends XMLFilterImpl {
      * Constructs a new object.
      * @param parent the parent reader.
      */
-    public BeansFilter(final XMLReader parent) {
+    BeansFilter(final XMLReader parent) {
         super(parent);
     }
 
