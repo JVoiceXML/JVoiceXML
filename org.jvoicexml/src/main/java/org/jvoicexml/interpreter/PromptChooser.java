@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,7 +23,8 @@ package org.jvoicexml.interpreter;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.Text;
@@ -61,11 +57,11 @@ import org.jvoicexml.xml.vxml.Value;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 final class PromptChooser {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(PromptChooser.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(PromptChooser.class);
 
     /** The prompt countable item for which prompts should be chosen. */
     private final PromptCountable countable;
@@ -82,7 +78,7 @@ final class PromptChooser {
      * @param ctx
      *            The current VoiceXML interpreter context.
      */
-    public PromptChooser(final PromptCountable cnt,
+    PromptChooser(final PromptCountable cnt,
             final VoiceXmlInterpreterContext ctx) {
         countable = cnt;
         context = ctx;

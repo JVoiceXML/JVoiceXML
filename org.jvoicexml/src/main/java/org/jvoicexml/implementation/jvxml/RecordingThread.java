@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,7 +29,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Demo implementation of a
@@ -42,12 +38,11 @@ import org.apache.log4j.Logger;
  * {@link org.jvoicexml.implementation.Telephony} based on JSAPI 1.0.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 final class RecordingThread extends Thread {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(RecordingThread.class);
 
     /** Read buffer size when reading from the microphone. */
@@ -67,7 +62,7 @@ final class RecordingThread extends Thread {
      * @param stream the stream where to write the recording.
      * @param recordingFormat the audio format of the recording 
      */
-    public RecordingThread(final OutputStream stream,
+    RecordingThread(final OutputStream stream,
             final AudioFormat recordingFormat) {
         out = stream;
         format = recordingFormat;

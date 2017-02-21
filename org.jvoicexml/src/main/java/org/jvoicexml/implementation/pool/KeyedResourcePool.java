@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,7 +28,8 @@ import java.util.NoSuchElementException;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.PoolableObjectFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ExternalResource;
 import org.jvoicexml.implementation.ResourceFactory;
@@ -50,14 +46,13 @@ import org.jvoicexml.implementation.ResourceFactory;
  * @param <T> Type of {@link ExternalResource} to produce in this factory.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  * @since 0.5.1
  */
 public final class KeyedResourcePool<T extends ExternalResource> {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(KeyedResourcePool.class);
+        LogManager.getLogger(KeyedResourcePool.class);
 
     /** Known pools. */
     private final Map<String, ObjectPool> pools;

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +28,8 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedBuiltinError;
@@ -66,7 +67,7 @@ import org.jvoicexml.xml.vxml.RequestMethod;
 public final class BuiltinSchemeStrategy implements SchemeStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(BuiltinSchemeStrategy.class);
+            LogManager.getLogger(BuiltinSchemeStrategy.class);
 
     /** Scheme for which this scheme strategy is responsible. */
     public static final String SCHEME_NAME = "builtin";

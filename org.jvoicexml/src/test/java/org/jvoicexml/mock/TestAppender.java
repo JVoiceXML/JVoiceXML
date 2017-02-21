@@ -23,11 +23,12 @@ package org.jvoicexml.mock;
 
 import java.util.Collection;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.Layout;
-import org.apache.log4j.spi.ErrorHandler;
-import org.apache.log4j.spi.Filter;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.ErrorHandler;
+import org.apache.logging.log4j.core.Filter;
+import org.apache.logging.log4j.core.Layout;
+import org.apache.logging.log4j.core.LogEvent;
+import org.slf4j.event.LoggingEvent;
 
 /**
  * Test appender to monitor behavior.
@@ -163,5 +164,65 @@ public final class TestAppender implements Appender {
      */
     public static void clear() {
         messages.clear();
+    }
+
+    @Override
+    public State getState() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void initialize() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void start() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void stop() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean isStarted() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isStopped() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void append(LogEvent event) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean ignoreExceptions() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public ErrorHandler getHandler() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setHandler(ErrorHandler handler) {
+        // TODO Auto-generated method stub
+        
     }
 }

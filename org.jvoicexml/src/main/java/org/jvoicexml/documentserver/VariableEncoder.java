@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,7 +30,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Convenient class to access variables from a given {@link URI} or add
@@ -48,7 +44,6 @@ import org.apache.log4j.Logger;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  * @see org.jvoicexml.DocumentServer
  * @see java.net.URL#getQuery()
@@ -56,7 +51,7 @@ import org.apache.log4j.Logger;
 public final class VariableEncoder {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(VariableEncoder.class);
+        LogManager.getLogger(VariableEncoder.class);
 
     /** The base URI. */
     private final URI base;

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,7 +24,8 @@ import java.net.URI;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.EventBus;
@@ -43,12 +39,11 @@ import org.jvoicexml.interpreter.datamodel.DataModel;
  * Asynchronous execution of a subdialog.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.4
  */
 final class SubdialogExecutorThread extends Thread {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(SubdialogExecutorThread.class);
 
     /** The URI of the subdialog. */
@@ -81,7 +76,7 @@ final class SubdialogExecutorThread extends Thread {
      *            the event bus of the calling context to correctly propagate
      *            messages
      */
-    public SubdialogExecutorThread(final URI subdialogUri,
+    SubdialogExecutorThread(final URI subdialogUri,
             final VoiceXmlInterpreterContext subdialogContext,
             final Application appl, final Map<String, Object> params,
             final EventBus bus) {

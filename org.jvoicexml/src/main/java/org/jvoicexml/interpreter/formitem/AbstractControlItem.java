@@ -43,7 +43,7 @@ abstract class AbstractControlItem
     /**
      * Constructs a object item as a template.
      */
-    public AbstractControlItem() {
+    AbstractControlItem() {
     }
 
     /**
@@ -54,7 +54,7 @@ abstract class AbstractControlItem
      * @param voiceNode
      *        the corresponding XML node in the VoiceXML document.
      */
-    public AbstractControlItem(final VoiceXmlInterpreterContext context,
+    AbstractControlItem(final VoiceXmlInterpreterContext context,
             final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
     }

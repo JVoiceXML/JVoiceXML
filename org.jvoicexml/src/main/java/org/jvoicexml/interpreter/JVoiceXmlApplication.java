@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,7 +27,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.LastResult;
 import org.jvoicexml.event.error.BadFetchError;
@@ -47,14 +43,13 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @see org.jvoicexml.Application
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5.5
  */
 public final class JVoiceXmlApplication
         implements Application {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlApplication.class);
+            LogManager.getLogger(JVoiceXmlApplication.class);
 
     /** The root document of this application. */
     private VoiceXmlDocument root;

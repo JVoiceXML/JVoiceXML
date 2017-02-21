@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +25,8 @@ import java.net.URISyntaxException;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
@@ -46,7 +47,8 @@ import org.jvoicexml.xml.srgs.Grammar;
  */
 final class GrammarLoader {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(GrammarLoader.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(GrammarLoader.class);
 
     /**
      * Loads the document that is specified by the given grammar.

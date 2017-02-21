@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,7 +24,8 @@ package org.jvoicexml.interpreter.scope;
 import java.util.Collection;
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Central that gets notified about scope changes. A <code>ScopeObserver</code>
@@ -45,7 +46,7 @@ public final class ScopeObserver
         implements ScopePublisher {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(ScopeObserver.class);
+            LogManager.getLogger(ScopeObserver.class);
 
     /** All registered scope subscribers. */
     private final Collection<ScopeSubscriber> scopeSubscriber;

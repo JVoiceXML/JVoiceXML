@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,22 +20,23 @@
  */
 package org.jvoicexml.implementation.jvxml;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A thread that sleeps for a while before exiting the JVM.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.2
  */
 final class TerminationThread extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(TerminationThread.class);
+        LogManager.getLogger(TerminationThread.class);
+
     /**
      * Constructs a new object.
      */
-    public TerminationThread() {
+    TerminationThread() {
         setName("TerminationThread");
         setDaemon(true);
     }

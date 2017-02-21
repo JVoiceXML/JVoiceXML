@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,7 +20,8 @@
  */
 package org.jvoicexml.interpreter.grammar.identifier;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -34,14 +30,13 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * Grammar identifier for Nuance GSL grammars.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  */
 public final class GslGrammarIdentifier
         implements GrammarIdentifier {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(GslGrammarIdentifier.class);
+            LogManager.getLogger(GslGrammarIdentifier.class);
 
     /** Common JSGGF header. **/
     private static final String GSL_HEDAER = ";GSL2.0";

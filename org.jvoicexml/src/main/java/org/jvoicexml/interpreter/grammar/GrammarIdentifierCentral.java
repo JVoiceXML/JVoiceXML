@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,7 +25,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -42,7 +38,6 @@ import org.jvoicexml.xml.srgs.GrammarType;
  *
  * @author Christoph Buente
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class GrammarIdentifierCentral {
     /**
@@ -54,7 +49,7 @@ public final class GrammarIdentifierCentral {
      * Logger for this class.
      */
     private static final Logger LOGGER =
-            Logger.getLogger(GrammarIdentifierCentral.class);
+            LogManager.getLogger(GrammarIdentifierCentral.class);
 
 
     /**

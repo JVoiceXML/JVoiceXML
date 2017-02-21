@@ -1,14 +1,9 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006 UCM Technologies, Inc.
  *              - Released under the terms of LGPL License
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,7 +34,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
@@ -63,11 +59,10 @@ import org.jvoicexml.xml.vxml.ObjectTag;
  *
  * @author Andrew Nick (ucmtech@sourceforge.net)
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 final class ObjectExecutorThread extends Thread {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(ObjectExecutorThread.class);
 
     /** The current VoiceXML interpreter context. */

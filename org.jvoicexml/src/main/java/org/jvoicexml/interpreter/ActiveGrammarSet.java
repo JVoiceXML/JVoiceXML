@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,7 +22,8 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedSet;
@@ -39,13 +35,12 @@ import org.jvoicexml.interpreter.scope.ScopedSetObserver;
  * can be added to monitor scope related changes in this grammar set.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.2
  * @see org.jvoicexml.interpreter.scope.Scope
  */
 public class ActiveGrammarSet implements ScopedSetObserver<GrammarDocument> {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(ActiveGrammarSet.class);
 
     /** Set of active grammars. */

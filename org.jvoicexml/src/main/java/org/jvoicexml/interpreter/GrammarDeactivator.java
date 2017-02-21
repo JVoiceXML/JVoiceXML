@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,7 +22,8 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.UserInput;
@@ -41,12 +37,11 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * {@link ImplementationPlatform}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  */
 class GrammarDeactivator implements ActiveGrammarSetObserver {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(GrammarDeactivator.class);
 
     /** The current implementation platform. */

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $Revision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group
+ * Copyright (C) 2005-2017 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,7 +24,8 @@ package org.jvoicexml.interpreter.formitem;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.LastResult;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -50,12 +46,12 @@ import org.jvoicexml.xml.vxml.Vxml;
  * An input item whose value is obtained via ASR or DTMF grammars.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  */
 public final class FieldFormItem extends AbstractGrammarContainer {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(FieldFormItem.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(FieldFormItem.class);
 
     /** The converter for <code>&lt;option&gt;</code> tags. */
     private OptionConverter converter;

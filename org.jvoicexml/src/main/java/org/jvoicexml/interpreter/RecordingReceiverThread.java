@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,7 +24,8 @@ package org.jvoicexml.interpreter;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -44,13 +40,12 @@ import org.jvoicexml.event.plain.jvxml.RecordingEvent;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 final class RecordingReceiverThread extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(RecordingReceiverThread.class);
+        LogManager.getLogger(RecordingReceiverThread.class);
 
     /** The event bus to propagate the end of the recording. */
     private final EventBus eventbus;
@@ -66,7 +61,7 @@ final class RecordingReceiverThread extends Thread {
      * @param bus the event bus to propagate the end of the recording.
      * @param recordingTime maximal recording time.
      */
-    public RecordingReceiverThread(final EventBus bus,
+    RecordingReceiverThread(final EventBus bus,
             final long recordingTime) {
         eventbus = bus;
         maxTime = recordingTime;

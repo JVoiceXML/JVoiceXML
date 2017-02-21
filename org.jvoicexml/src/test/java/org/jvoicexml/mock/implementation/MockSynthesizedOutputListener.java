@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +23,8 @@ package org.jvoicexml.mock.implementation;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
@@ -37,14 +33,13 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 /**
  * {@link SynthesizedOutputListener} for test purposes.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public final class MockSynthesizedOutputListener
         implements SynthesizedOutputListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(MockSynthesizedOutputListener.class);
+            LogManager.getLogger(MockSynthesizedOutputListener.class);
 
     /** Collected events. */
     private final List<SynthesizedOutputEvent> occur;

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,7 +28,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
@@ -45,14 +41,13 @@ import org.jvoicexml.xml.vxml.RequestMethod;
  * <em>hierarchical</em>.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.3
  */
 public final class FileSchemeStrategy
         implements SchemeStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(FileSchemeStrategy.class);
+            LogManager.getLogger(FileSchemeStrategy.class);
 
     /** Scheme for which this scheme strategy is responsible. */
     public static final String SCHEME_NAME = "file";

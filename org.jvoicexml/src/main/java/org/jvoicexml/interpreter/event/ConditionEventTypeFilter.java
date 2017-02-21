@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,7 +22,8 @@ package org.jvoicexml.interpreter.event;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.CatchContainer;
@@ -36,13 +32,12 @@ import org.jvoicexml.interpreter.EventStrategy;
 /**
  * Filters all events whose condition does not evaluate to <code>true</code>.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.1
  */
 final class ConditionEventTypeFilter implements EventFilter {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(ConditionEventTypeFilter.class);
+        LogManager.getLogger(ConditionEventTypeFilter.class);
 
     /**
      * {@inheritDoc}

@@ -50,7 +50,7 @@ class DtmfInputResult implements RecognitionResult {
      * @param dtmf
      *            the recognized DTMF string.
      */
-    public DtmfInputResult(final String dtmf) {
+    DtmfInputResult(final String dtmf) {
         utterance = dtmf;
     }
 

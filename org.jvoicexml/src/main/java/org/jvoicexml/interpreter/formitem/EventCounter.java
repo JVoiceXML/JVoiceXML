@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,7 +24,8 @@ package org.jvoicexml.interpreter.formitem;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.EventCountable;
 
@@ -37,14 +33,13 @@ import org.jvoicexml.interpreter.EventCountable;
  * Basic implementation of an {@link EventCountable}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  * @see org.jvoicexml.interpreter.formitem.AbstractInputItem
  */
 final class EventCounter implements EventCountable {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(EventCounter.class);
+            LogManager.getLogger(EventCounter.class);
 
     /** Event counter. */
     private final Map<String, Integer> counter;
@@ -52,7 +47,7 @@ final class EventCounter implements EventCountable {
     /**
      * Constructs a new object.
      */
-    public EventCounter() {
+    EventCounter() {
         counter = new java.util.HashMap<String, Integer>();
     }
 

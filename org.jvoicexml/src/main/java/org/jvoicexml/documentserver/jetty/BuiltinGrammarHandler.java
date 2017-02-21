@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2015-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,7 +30,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.jvoicexml.documentserver.schemestrategy.builtin.GrammarCreator;
@@ -44,7 +45,7 @@ import org.jvoicexml.event.error.BadFetchError;
  */
 public class BuiltinGrammarHandler extends AbstractHandler {
     /** Logger instance. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(BuiltinGrammarHandler.class);
 
     /** The context path of this handler. */

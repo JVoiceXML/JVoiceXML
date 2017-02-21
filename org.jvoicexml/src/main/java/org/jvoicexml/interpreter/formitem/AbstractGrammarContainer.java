@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +23,8 @@ package org.jvoicexml.interpreter.formitem;
 import java.util.Collection;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.GrammarContainer;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -38,7 +34,6 @@ import org.jvoicexml.xml.srgs.Grammar;
 /**
  * Basic implementation of a {@link GrammarContainer}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.1
  */
 abstract class AbstractGrammarContainer
@@ -46,7 +41,7 @@ abstract class AbstractGrammarContainer
     implements GrammarContainer {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(AbstractGrammarContainer.class);
+            LogManager.getLogger(AbstractGrammarContainer.class);
 
     /** List of grammar documents for this grammar container. */
     private final Set<GrammarDocument> documents;
@@ -57,7 +52,7 @@ abstract class AbstractGrammarContainer
     /**
      * Constructs a new object as a template.
      */
-    public AbstractGrammarContainer() {
+    AbstractGrammarContainer() {
         documents = null;
     }
 
@@ -69,7 +64,7 @@ abstract class AbstractGrammarContainer
      * @param voiceNode
      *        The corresponding XML node in the VoiceXML document.
      */
-    public AbstractGrammarContainer(final VoiceXmlInterpreterContext context,
+    AbstractGrammarContainer(final VoiceXmlInterpreterContext context,
             final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
         documents = new java.util.HashSet<GrammarDocument>();

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,7 +21,8 @@
 
 package org.jvoicexml.implementation.dtmf;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.event.plain.implementation.InputStartedEvent;
 import org.jvoicexml.event.plain.implementation.NomatchEvent;
@@ -38,12 +34,11 @@ import org.jvoicexml.xml.srgs.ModeType;
  * Thread waiting for DTMF input.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 class DtmfInputThread extends Thread {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(DtmfInputThread.class);
 
     /** The related character input. */

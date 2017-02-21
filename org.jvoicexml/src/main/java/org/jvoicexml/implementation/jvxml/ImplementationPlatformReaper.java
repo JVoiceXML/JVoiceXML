@@ -20,18 +20,18 @@
  */
 package org.jvoicexml.implementation.jvxml;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Reaper for external resources to return them after a timeout when the
  * session has closed.
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
  * @since 0.7.7
  */
 class ImplementationPlatformReaper extends Thread {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(ImplementationPlatformReaper.class);
 
     /** Delay to wait before returning the platform. */

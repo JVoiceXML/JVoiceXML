@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,7 +25,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
@@ -38,13 +34,12 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * Implementation of the <code>MappedDocumentRepository</code>.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class DocumentMap
         implements MappedDocumentRepository {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(DocumentMap.class);
+            LogManager.getLogger(DocumentMap.class);
 
     /** The singleton. */
     private static final DocumentMap REPOSITORY;

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +25,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.DtmfInput;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarDocument;
@@ -63,7 +64,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  */
 final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(JVoiceXmlUserInput.class);
 
     /** The character input device. */
@@ -83,7 +84,7 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
      * @param dtmf
      *            the buffered character input.
      */
-    public JVoiceXmlUserInput(final SpokenInput input,
+    JVoiceXmlUserInput(final SpokenInput input,
             final BufferedDtmfInput dtmf) {
         spokenInput = input;
         dtmfInput = dtmf;

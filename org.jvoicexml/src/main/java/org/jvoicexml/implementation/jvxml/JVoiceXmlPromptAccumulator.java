@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,7 +24,8 @@ package org.jvoicexml.implementation.jvxml;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.DocumentServer;
@@ -50,7 +46,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 class JVoiceXmlPromptAccumulator implements PromptAccumulator {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlPromptAccumulator.class);
+            LogManager.getLogger(JVoiceXmlPromptAccumulator.class);
 
     /** The implementation platform to use. */
     private final ImplementationPlatform platform;
@@ -65,7 +61,7 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
      * Constructs a new object.
      * @param implementationPlatform the implementation platform to use
      */
-    public JVoiceXmlPromptAccumulator(
+    JVoiceXmlPromptAccumulator(
             final ImplementationPlatform implementationPlatform) {
         platform = implementationPlatform;
         prompts = new java.util.ArrayList<SpeakableText>();

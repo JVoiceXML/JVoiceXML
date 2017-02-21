@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,7 +24,8 @@ package org.jvoicexml.interpreter.formitem;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.FormItemLocalExecutableTagContainer;
@@ -49,12 +45,11 @@ import org.w3c.dom.NodeList;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 abstract class AbstractFormItem
         implements FormItem, FormItemLocalExecutableTagContainer {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(AbstractFormItem.class);
 
     /** The current <code>VoiceXmlInterpreterContext</code>. */
@@ -72,7 +67,7 @@ abstract class AbstractFormItem
     /**
      * Constructs a new form item as a template.
      */
-    public AbstractFormItem() {
+    AbstractFormItem() {
         node = null;
         context = null;
         name = null;
@@ -86,7 +81,7 @@ abstract class AbstractFormItem
      * @param voiceNode
      *            The corresponding XML node in the VoiceXML document.
      */
-    public AbstractFormItem(final VoiceXmlInterpreterContext ctx,
+    AbstractFormItem(final VoiceXmlInterpreterContext ctx,
             final VoiceXmlNode voiceNode) {
         node = voiceNode;
         context = ctx;

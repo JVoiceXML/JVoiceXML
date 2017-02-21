@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,7 +21,8 @@
 
 package org.jvoicexml.implementation.jvxml;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableText;
@@ -48,14 +44,13 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 final class JVoiceXmlSystemOutput
     implements SystemOutput, SynthesizedOutputProvider {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(JVoiceXmlSystemOutput.class);
+        LogManager.getLogger(JVoiceXmlSystemOutput.class);
 
     /** The synthesizer output device. */
     private final SynthesizedOutput synthesizedOutput;
@@ -65,7 +60,7 @@ final class JVoiceXmlSystemOutput
      * @param synthesizer the synthesizer output device.
      * @param currentSession the current session.
      */
-    public JVoiceXmlSystemOutput(final SynthesizedOutput synthesizer,
+    JVoiceXmlSystemOutput(final SynthesizedOutput synthesizer,
             final Session currentSession) {
         synthesizedOutput = synthesizer;
     }

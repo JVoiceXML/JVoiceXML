@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,7 +24,8 @@ package org.jvoicexml.implementation.jvxml;
 import java.io.IOException;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.Configurable;
@@ -92,7 +93,7 @@ public final class JVoiceXmlImplementationPlatform
         TelephonyListener, ImplementationPlatform, Configurable {
 
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(JVoiceXmlImplementationPlatform.class);
 
     /** Timeout in msec to wait until the resource is not busy. */
@@ -101,16 +102,19 @@ public final class JVoiceXmlImplementationPlatform
     /** Pool of synthesizer output resource factories. */
     private final KeyedResourcePool<SynthesizedOutput> synthesizerPool;
 
+    /** Lock for the synthesizer pool. */
     private final Object synthesizerPoolLock;
     
     /** Pool of user input resource factories. */
     private final KeyedResourcePool<SpokenInput> recognizerPool;
 
+    /** Lock for the recognizer pool. */
     private final Object recognizerPoolLock;
     
     /** Pool of user calling resource factories. */
     private final KeyedResourcePool<Telephony> telephonyPool;
 
+    /** Lock for the telephony pool. */
     private final Object telephonyPoolLock;
     
     /** Connection information to use. */

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,7 +25,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A simple {@link java.util.Set} which is scope aware.
@@ -43,14 +39,13 @@ import org.apache.log4j.Logger;
  *
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.2
  * @param <E> Type of the elements in this set.
  */
 public final class ScopedSet<E>
     implements ScopeSubscriber, Set<E> {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(ScopedSet.class);
+    private static final Logger LOGGER = LogManager.getLogger(ScopedSet.class);
 
     /** Scope stack. */
     private final Stack<ScopedCollectionItem<E>> stack;

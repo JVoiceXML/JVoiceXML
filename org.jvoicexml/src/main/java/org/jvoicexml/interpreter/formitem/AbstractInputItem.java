@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +23,8 @@ package org.jvoicexml.interpreter.formitem;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
@@ -42,12 +38,11 @@ import org.jvoicexml.xml.vxml.Filled;
 /**
  * Base methods of an {@link InputItem}.
  *
- * @version $Revision$
  * @author Dirk Schnelle-Walka
  */
 abstract class AbstractInputItem extends AbstractFormItem implements InputItem {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(AbstractInputItem.class);
 
     /** The maintained event counter. */
@@ -59,7 +54,7 @@ abstract class AbstractInputItem extends AbstractFormItem implements InputItem {
     /**
      * Constructs a new object as a template.
      */
-    public AbstractInputItem() {
+    AbstractInputItem() {
         super();
         eventCounter = null;
         promptCounter = 0;
@@ -73,7 +68,7 @@ abstract class AbstractInputItem extends AbstractFormItem implements InputItem {
      * @param voiceNode
      *            The corresponding XML node in the VoiceXML document.
      */
-    public AbstractInputItem(final VoiceXmlInterpreterContext context,
+    AbstractInputItem(final VoiceXmlInterpreterContext context,
             final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
 
@@ -181,7 +176,8 @@ abstract class AbstractInputItem extends AbstractFormItem implements InputItem {
      * {@inheritDoc}
      */
     @Override
-    public void init(final DataModel model) throws SemanticError, BadFetchError {
+    public void init(final DataModel model)
+            throws SemanticError, BadFetchError {
         // Create the variable
         final String name = getName();
         final Object expression = evaluateExpression(model);

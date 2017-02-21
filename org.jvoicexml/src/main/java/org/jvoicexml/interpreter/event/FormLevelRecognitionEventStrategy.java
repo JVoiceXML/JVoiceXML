@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,7 +23,8 @@ package org.jvoicexml.interpreter.event;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -61,7 +62,7 @@ import org.jvoicexml.xml.vxml.FilledMode;
 final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
         implements EventStrategyPrototype {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(FormLevelRecognitionEventStrategy.class);
 
     /** The current dialog. */
@@ -92,7 +93,7 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
      * @param dlg
      *            The current dialog.
      */
-    public FormLevelRecognitionEventStrategy(
+    FormLevelRecognitionEventStrategy(
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm algorithm, final Dialog dlg) {

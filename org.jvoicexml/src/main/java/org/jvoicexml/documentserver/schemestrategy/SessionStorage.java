@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,20 +23,20 @@ package org.jvoicexml.documentserver.schemestrategy;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Container that associates a JVoiceXML session to a custom strategy object,
  * Identifying the session with the repository.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  * @param <T> type of the session identifier
  */
 public final class SessionStorage<T> {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(SessionStorage.class);
+            LogManager.getLogger(SessionStorage.class);
 
     /** Association storage. */
     private final Map<String, T> sessions;

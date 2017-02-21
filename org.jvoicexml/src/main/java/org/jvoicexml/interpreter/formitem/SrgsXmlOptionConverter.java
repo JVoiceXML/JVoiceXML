@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,7 +25,8 @@ import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -42,12 +38,11 @@ import org.jvoicexml.xml.vxml.Option;
 /**
  * An option converter for SRGS XML grammars.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class SrgsXmlOptionConverter implements OptionConverter {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(SrgsXmlOptionConverter.class);
+            LogManager.getLogger(SrgsXmlOptionConverter.class);
 
     /**
      * A sequence number to distinguish multiple grammars that are created

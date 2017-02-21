@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,7 +21,8 @@
 
 package org.jvoicexml.implementation.jvxml;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.plain.NoinputEvent;
 
@@ -34,13 +30,12 @@ import org.jvoicexml.event.plain.NoinputEvent;
  * Timer to send timeout events if the user did not say anything.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 final class TimerThread
         extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(TimerThread.class);
+        LogManager.getLogger(TimerThread.class);
 
     /** Default timeout for the timer thread. */
     private static final long DEFAULT_TIMEOUT = 30000;
@@ -63,7 +58,7 @@ final class TimerThread
      * @param delay milliseconds to wait, a value <code>&lt;0</code> indicates
      *              that the default timeout should be taken.
      */
-    public TimerThread(final EventBus bus, final long delay) {
+    TimerThread(final EventBus bus, final long delay) {
         setDaemon(true);
         setName("noinput-TimerThread");
 

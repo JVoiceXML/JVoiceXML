@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,7 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mozilla.intl.chardet.nsDetector;
 
 /**
@@ -39,7 +40,7 @@ import org.mozilla.intl.chardet.nsDetector;
 class ReadBuffer {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(ReadBuffer.class);
+            LogManager.getLogger(ReadBuffer.class);
 
     /** Size of the read buffer when reading objects. */
     private static final int READ_BUFFER_SIZE = 1024;

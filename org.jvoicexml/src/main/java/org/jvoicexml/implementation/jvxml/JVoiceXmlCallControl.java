@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,7 +26,8 @@ import java.io.OutputStream;
 
 import javax.sound.sampled.AudioFormat;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.SystemOutput;
@@ -48,13 +44,12 @@ import org.jvoicexml.implementation.Telephony;
  * the {@link Telephony} implementation.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 final class JVoiceXmlCallControl implements CallControl {
     /** Logger instance. */
     private static final Logger LOGGER =
-        Logger.getLogger(JVoiceXmlCallControl.class);
+        LogManager.getLogger(JVoiceXmlCallControl.class);
 
     /** The encapsulated telephony object. */
     private final Telephony telephony;
@@ -63,7 +58,7 @@ final class JVoiceXmlCallControl implements CallControl {
      * Constructs a new object.
      * @param tel encapsulated telephony object.
      */
-    public JVoiceXmlCallControl(final Telephony tel) {
+    JVoiceXmlCallControl(final Telephony tel) {
         telephony = tel;
     }
 

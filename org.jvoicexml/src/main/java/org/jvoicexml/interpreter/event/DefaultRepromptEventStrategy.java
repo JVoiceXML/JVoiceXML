@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,7 +21,8 @@
 
 package org.jvoicexml.interpreter.event;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -46,14 +42,13 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 final class DefaultRepromptEventStrategy
         extends AbstractEventStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(DefaultRepromptEventStrategy.class);
+            LogManager.getLogger(DefaultRepromptEventStrategy.class);
 
     /**
      * Constructs a new object.

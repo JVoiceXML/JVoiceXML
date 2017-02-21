@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,7 +26,12 @@ import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Filter;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -82,7 +82,6 @@ import org.xml.sax.SAXException;
  * Test cases for {@link JVoiceXmlEventHandler}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public final class TestJVoiceXmlEventHandler {
@@ -107,8 +106,17 @@ public final class TestJVoiceXmlEventHandler {
      */
     @BeforeClass
     public static void init() throws Exception {
-        final Logger logger = Logger.getRootLogger();
-        logger.addAppender(new TestAppender());
+        final LoggerContext context = LoggerContext.getContext(false);
+        final Configuration config = context.getConfiguration();
+        final Appender appender = new TestAppender();
+        appender.start();
+        config.addAppender(appender);
+        final Level level = null;
+        final Filter filter = null;
+        for (final LoggerConfig loggerConfig : config.getLoggers().values()) {
+            loggerConfig.addAppender(appender, level, filter);
+        }
+        config.getRootLogger().addAppender(appender, level, filter);
     }
 
     /**

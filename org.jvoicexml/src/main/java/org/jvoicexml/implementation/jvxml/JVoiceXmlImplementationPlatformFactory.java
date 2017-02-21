@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -23,7 +23,8 @@ package org.jvoicexml.implementation.jvxml;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.ConnectionInformation;
@@ -57,7 +58,7 @@ import org.jvoicexml.implementation.pool.KeyedResourcePool;
 public final class JVoiceXmlImplementationPlatformFactory
         implements ImplementationPlatformFactory {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(JVoiceXmlImplementationPlatformFactory.class);
 
     /** Pool of synthesizer output resource factories. */
