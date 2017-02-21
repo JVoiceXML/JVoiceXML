@@ -28,7 +28,6 @@ sourceSets {
 }
 
 dependencies {
-    compile group: 'log4j', name: 'log4j', version: '1.2.17'
     compile group: 'org.mozilla', name: 'rhino', version: '1.7R4'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     
@@ -52,8 +51,7 @@ xslt {
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
-        include 'log4j-*.jar',
-         'rhino*.jar',
+        include 'rhino*.jar',
          'json-simple*.jar'
     }
 }

@@ -27,7 +27,6 @@ sourceSets {
 }
 
 dependencies {
-    compile group: 'log4j', name: 'log4j', version: '1.2.17'
     compile group: 'javax.sip', name: 'jain-sip-api', version: '1.2.1.4'
     compile group: 'javax.sdp', name: 'nist-sdp', version: '1.0'
         
@@ -51,8 +50,7 @@ xslt {
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
-        include 'log4j-*.jar',
-        'jain-sip-api*.jar',
+        include 'jain-sip-api*.jar',
         'nist-sdp*.jar'
     }
 }

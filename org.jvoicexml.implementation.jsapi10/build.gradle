@@ -28,7 +28,6 @@ sourceSets {
 }
 
 dependencies {
-    compile group: 'log4j', name: 'log4j', version: '1.2.17'
     //compile fileTree(dir: "${project(':org.jvoicexml').projectDir}/3rdparty/freetts1.2/lib", include: ['*.jar'])
     //compile fileTree(dir: './3rdparty/freetts1.2/lib', include: ['*.jar'])
     //compile fileTree(dir: './3rdparty/jsapi1.0/lib', include: ['*.jar'])
@@ -60,8 +59,7 @@ xslt {
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
-        include 'log4j-*.jar',
-         'freetts-jsapi1.0*.jar',
+         include 'freetts-jsapi1.0*.jar',
          'jsapi*.jar',
          'cgjsapi.jar'
     }

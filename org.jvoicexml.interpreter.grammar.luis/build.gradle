@@ -20,7 +20,6 @@ repositories {
 
 
 dependencies {
-    compile group: 'log4j', name: 'log4j', version: '1.2.17'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.5'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
@@ -46,8 +45,7 @@ xslt {
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
-        include 'log4j-*.jar', 
-        'json-simple*.jar',
+        include 'json-simple*.jar',
         'httpcore*.jar',
         'http-client*.jar'
     }

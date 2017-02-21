@@ -28,7 +28,6 @@ sourceSets {
 }
 
 dependencies {
-    compile group: 'log4j', name: 'log4j', version: '1.2.17'
     compile fileTree(dir: './3rdparty/gjtapi1.9/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/jainsip1.19/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/jtapi1.3/lib', include: ['*.jar'])
@@ -55,8 +54,7 @@ xslt {
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
-        include 'log4j-*.jar',
-         'gjtapi*.jar',
+         include 'gjtapi*.jar',
          'jainsip.jar',
          'jtapi-1.3.1*.jar'
          'mjsip*.jar'

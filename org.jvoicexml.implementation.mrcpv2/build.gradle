@@ -35,7 +35,6 @@ configurations.all {
 }
 
 dependencies {
-    compile group: 'log4j', name: 'log4j', version: '1.2.17'
     compile group: 'net.sourceforge.halef', name: 'cairo-client', version: '0.1-SNAPSHOT'
     compile fileTree(dir: './3rdparty/speechcloud/lib', include: ['*.jar'])
     compile group: 'net.sourceforge.halef', name: 'cairo-sip', version: '0.1-SNAPSHOT'
@@ -85,8 +84,7 @@ task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
-        include 'log4j-*.jar',
-         'cairo-client*.jar',
+        include 'cairo-client*.jar',
          'cairo-sip*.jar',
          'cairo-rtp*.jar',
          'halef-mrcp4j*.jar',
