@@ -36,15 +36,20 @@ task copyConfiguration(type: Copy) {
     into "$buildDir/config"
 }
 
+task createVersionFile() << {
+    def file = new File("${sourceSets.main.output.resourcesDir}/jvoicexml.version")
+    file.createNewFile()
+    file.text = "jvxml.version=$version"
+}
+
 artifacts {
     archives copyConfiguration.destinationDir
 }
 
 jar {
+    dependsOn createVersionFile
     dependsOn copyConfiguration
 
-    exclude ('$buildDir/resources')
-    
     manifest {
         attributes("Implementation-Title": "JVoiceXML core library",
                    "Implementation-Vendor": "JVoiceXML group",
