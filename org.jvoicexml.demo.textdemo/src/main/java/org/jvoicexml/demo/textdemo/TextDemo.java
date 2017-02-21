@@ -1,7 +1,7 @@
 /*
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -30,7 +30,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
@@ -58,7 +59,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class TextDemo implements TextListener {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(TextDemo.class);
+    private static final Logger LOGGER = LogManager.getLogger(TextDemo.class);
 
     /**
      * The main method.

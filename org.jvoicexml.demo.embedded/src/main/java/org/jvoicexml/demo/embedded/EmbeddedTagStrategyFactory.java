@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/unittests/src/org/jvoicexml/test/interpreter/tagstrategy/MockTagStrategyFactory.java $
- * Version: $LastChangedRevision: 3659 $
- * Date:    $Date: 2013-03-01 15:33:27 +0100 (Fri, 01 Mar 2013) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,7 +34,6 @@ import org.w3c.dom.Node;
 /**
  * Dummy {@link TagStrategyFactory} for test purposes.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 3659 $
  * @since 0.7.4
  */
 public class EmbeddedTagStrategyFactory

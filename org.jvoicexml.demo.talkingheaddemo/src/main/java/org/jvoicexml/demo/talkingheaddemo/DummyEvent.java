@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -47,7 +42,7 @@ class DummyEvent extends AvatarEvent {
      * @param rejectText
      *            the text to display after rejecting
      */
-    public DummyEvent(final String offerText, final String acceptText,
+    DummyEvent(final String offerText, final String acceptText,
             final String rejectText) {
         super(offerText, acceptText, rejectText);
     }

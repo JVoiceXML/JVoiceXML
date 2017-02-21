@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -35,7 +30,8 @@ import javax.telephony.ConnectionEvent;
 import javax.telephony.ConnectionListener;
 import javax.telephony.MetaEvent;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Connection listener for the demo call.
@@ -46,13 +42,12 @@ import org.apache.log4j.Logger;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 final class DemoConnectionListener implements ConnectionListener {
     /** Logger instance. */
     private static final Logger LOGGER =
-        Logger.getLogger(DemoConnectionListener.class);
+        LogManager.getLogger(DemoConnectionListener.class);
 
     /**
      * {@inheritDoc}

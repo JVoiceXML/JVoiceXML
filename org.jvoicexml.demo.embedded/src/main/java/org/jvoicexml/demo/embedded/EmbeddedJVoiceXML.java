@@ -26,7 +26,8 @@ import java.net.URI;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXmlMain;
 import org.jvoicexml.JVoiceXmlMainListener;
@@ -45,7 +46,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 public final class EmbeddedJVoiceXML implements JVoiceXmlMainListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(EmbeddedJVoiceXML.class);
+        LogManager.getLogger(EmbeddedJVoiceXML.class);
 
     /** Reference to JVoiceXML. */
     private JVoiceXmlMain jvxml;

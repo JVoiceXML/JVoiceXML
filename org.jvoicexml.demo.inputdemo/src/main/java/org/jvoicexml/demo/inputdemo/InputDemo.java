@@ -34,10 +34,11 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfInput;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
@@ -74,7 +75,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  */
 public final class InputDemo {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(InputDemo.class);
+    private static final Logger LOGGER = LogManager.getLogger(InputDemo.class);
 
     /** The JNDI context. */
     private Context context;

@@ -28,7 +28,8 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.xml.XmlDocument;
 import org.jvoicexml.xml.ccxml.Ccxml;
 import org.jvoicexml.xml.ccxml.CcxmlDocument;
@@ -64,7 +65,7 @@ import org.jvoicexml.xml.vxml.Vxml;
 public final class VoiceXMLCreationDemo {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(VoiceXMLCreationDemo.class);
+        LogManager.getLogger(VoiceXMLCreationDemo.class);
 
     /**
      * Do not create from outside.

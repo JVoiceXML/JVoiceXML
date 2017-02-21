@@ -29,7 +29,8 @@ import java.net.URI;
 
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.GenericClient;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
@@ -53,7 +54,7 @@ import org.jvoicexml.event.ErrorEvent;
 public final class SubdialogDemo {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(SubdialogDemo.class);
+            LogManager.getLogger(SubdialogDemo.class);
 
     /**
      * The main method.

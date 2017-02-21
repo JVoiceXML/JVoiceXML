@@ -16,7 +16,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.jvoicexml.mmi.events.AnyComplexType;
@@ -41,7 +42,7 @@ public class MmiHandler extends AbstractHandler {
     public static final String JVXML_MMI_NAMESPACE = "http://www.nowhere.org/jvxmlmmi";
 
     /** Logger instance. */
-    private static final Logger LOGGER = Logger.getLogger(MmiHandler.class);
+    private static final Logger LOGGER = LogManager.getLogger(MmiHandler.class);
 
     /** The demo. */
     private final SimpleMmiDemo demo;

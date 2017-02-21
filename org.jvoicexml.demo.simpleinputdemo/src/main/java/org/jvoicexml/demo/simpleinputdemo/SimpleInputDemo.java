@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.demo.helloworlddemo/src/org/jvoicexml/demo/helloworlddemo/HelloWorldDemo.java $
- * Version: $LastChangedRevision: 4230 $
- * Date:    $Date: 2014-09-02 09:02:50 +0200 (Tue, 02 Sep 2014) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -31,7 +26,8 @@ import java.net.URI;
 
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.GenericClient;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
@@ -51,12 +47,11 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4230 $
  */
 public final class SimpleInputDemo {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(SimpleInputDemo.class);
+            LogManager.getLogger(SimpleInputDemo.class);
 
     /**
      * The main method.

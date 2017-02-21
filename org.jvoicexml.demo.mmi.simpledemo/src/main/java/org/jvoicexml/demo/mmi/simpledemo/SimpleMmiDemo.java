@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -44,7 +39,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.jvoicexml.mmi.events.Mmi;
@@ -59,11 +55,10 @@ import org.jvoicexml.mmi.events.StartRequest;
  * </p>
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class SimpleMmiDemo {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(SimpleMmiDemo.class);
+    private static final Logger LOGGER = LogManager.getLogger(SimpleMmiDemo.class);
 
     /** Synchronization lock. */
     private final Object lock;

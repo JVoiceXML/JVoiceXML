@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2011-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -33,7 +28,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
@@ -55,12 +51,11 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * MARC must be up and running to run this demo
  * </p>
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class MarcDemo {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(MarcDemo.class);
+            LogManager.getLogger(MarcDemo.class);
 
     /** The JNDI context. */
     private Context context;

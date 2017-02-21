@@ -31,7 +31,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
@@ -55,7 +56,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 public final class ObjectTagDemo {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(ObjectTagDemo.class);
+            LogManager.getLogger(ObjectTagDemo.class);
 
     /** The JNDI context. */
     private Context context;
