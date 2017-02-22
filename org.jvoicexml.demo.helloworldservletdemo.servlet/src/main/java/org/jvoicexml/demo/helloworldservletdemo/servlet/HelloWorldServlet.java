@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -24,7 +19,7 @@
  *
  */
 
-package org.jvoicexml.demo.helloworldservletdemo.web;
+package org.jvoicexml.demo.helloworldservletdemo.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,7 +31,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Submit;
@@ -49,9 +45,8 @@ import org.jvoicexml.xml.vxml.Vxml;
  * <em>Goodbye</em> servlet.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
- * @see org.jvoicexml.demo.helloworldservletdemo.web.GoodbyeServlet
+ * @see org.jvoicexml.demo.helloworldservletdemo.servlet.GoodbyeServlet
  */
 @WebServlet(displayName="HelloWorld", description="VoiceXML Hello World Demo",
         urlPatterns="/HelloWorld")
@@ -62,7 +57,7 @@ public final class HelloWorldServlet
 
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(HelloWorldServlet.class);
+            LogManager.getLogger(HelloWorldServlet.class);
 
     /**
      * Construct a new object.

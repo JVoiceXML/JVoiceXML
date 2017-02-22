@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -24,7 +19,7 @@
  *
  */
 
-package org.jvoicexml.demo.helloworldservletdemo.web;
+package org.jvoicexml.demo.helloworldservletdemo.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,7 +31,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -46,7 +42,6 @@ import org.jvoicexml.xml.vxml.Vxml;
  * Servlet that generates a 'goodbye' VoiceXML document.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 @WebServlet(displayName="Goodbye", description="VoiceXML Goodbye Demo",
     urlPatterns="/Goodbye")
@@ -56,7 +51,8 @@ public final class GoodbyeServlet
     private static final long serialVersionUID = 657492536387249327L;
 
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(GoodbyeServlet.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(GoodbyeServlet.class);
 
     /**
      * Construct a new object.
