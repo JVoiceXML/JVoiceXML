@@ -3,6 +3,7 @@
     version="2.0"
     xmlns:beans="http://www.springframework.org/schema/beans">
     <xsl:param name="buildpath" />
+    <xsl:param name="version" />
     <xsl:param name="address" />
     <xsl:param name="port" />
     <xsl:param name="cairoAddress" />
@@ -12,7 +13,7 @@
     <xsl:template match="classpath">
         <xsl:copy>
             <xsl:apply-templates select="@*" />
-            <xsl:value-of select="$buildpath" />/<xsl:value-of select="text()" />
+            <xsl:value-of select="$buildpath" />/<xsl:value-of select="replace(text(), '@VERSION@', $version)" />
             <!-- Keep current settings -->
             <xsl:apply-templates select="@*|*|comment()" />
         </xsl:copy>

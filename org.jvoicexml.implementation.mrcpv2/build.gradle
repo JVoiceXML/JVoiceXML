@@ -62,6 +62,7 @@ task xsltImplementation(type: com.github.eerohele.SaxonXsltTask) {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
@@ -72,6 +73,7 @@ task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-callmanager.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile,
         address: "sip:127.0.0.1:4245",
         port: 4245,

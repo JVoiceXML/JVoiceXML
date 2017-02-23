@@ -39,6 +39,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/vxml2.1-profile.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
