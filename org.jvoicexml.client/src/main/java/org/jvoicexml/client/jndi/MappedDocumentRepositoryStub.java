@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,7 +33,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * Stub for the <code>MappedDocumentRepository</code>.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.4
  * @see org.jvoicexml.documentserver.schemestrategy.DocumentMap
  */

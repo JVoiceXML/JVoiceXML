@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision: 4211 $
- * Date:    $Date: 2014-08-15 15:43:25 +0200 (Fri, 15 Aug 2014) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,7 +35,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * {@link org.jvoicexml.Application}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision: 4211 $
  * @since 0.7.7
  */
 public interface RemoteApplication extends Remote {

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml.client;
 
 import org.jvoicexml.CallControl;
@@ -32,7 +28,6 @@ import org.jvoicexml.UserInput;
  * {@link ConnectionInformationFactory} for the default identifiers
  * deployed with JVoiceXML.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public final class JVoiceXmlConnectionInformationFactory
