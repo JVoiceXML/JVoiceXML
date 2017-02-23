@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,21 +22,21 @@ package org.jvoicexml.client.text;
 
 import java.net.UnknownHostException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.client.ConnectionInformationController;
 
 /**
  * A {@link ConnectionInformationController} for the text platform.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 class TextConnectionInformationController
         implements ConnectionInformationController {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(TextConnectionInformationController.class);
+        LogManager.getLogger(TextConnectionInformationController.class);
 
         /** Default port for the text server. */ 
     private static final int DEFAULT_SERVER_PORT = 4242;

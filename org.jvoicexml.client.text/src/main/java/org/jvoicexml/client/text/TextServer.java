@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,7 +36,8 @@ import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.client.text.protobuf.TextMessageOuterClass.TextMessage;
@@ -76,7 +77,7 @@ import org.xml.sax.SAXException;
  */
 public final class TextServer extends Thread {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(TextServer.class);
+    private static final Logger LOGGER = LogManager.getLogger(TextServer.class);
 
     /** The port number to use. */
     private final int port;
