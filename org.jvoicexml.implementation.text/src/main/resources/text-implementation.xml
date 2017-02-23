@@ -3,9 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
     <repository>text</repository>
-    <classpath>org.jvoicexml.implementation.text-0.7.8.jar</classpath>
-    <classpath>org.jvoicexml.client.text-0.7.8.jar</classpath>
-    <classpath>org.jvoicexml.srgs-0.7.8.jar</classpath>
+    <classpath>org.jvoicexml.implementation.text-@VERSION@.jar</classpath>
+    <classpath>org.jvoicexml.client.text-@VERSION@.jar</classpath>
+    <classpath>org.jvoicexml.srgs-@VERSION@.jar</classpath>
     <!-- classpath>dist/org.jvoicexml.grammar.interpreter.luis-0.7.8.jar</classpath-->
     <classpath>protobuf-java-3.1.0.jar</classpath>
 

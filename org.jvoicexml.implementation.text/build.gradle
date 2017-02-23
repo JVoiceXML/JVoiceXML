@@ -45,6 +45,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/text-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }

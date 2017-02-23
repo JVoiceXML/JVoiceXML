@@ -38,6 +38,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/luis-grammar.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
