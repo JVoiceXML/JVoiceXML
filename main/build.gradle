@@ -139,6 +139,7 @@ dependencies {
 
     runtime configurations.jvxmlImplementationText
     runtime configurations.jvxmlImplementationMrcpv2   
+    runtime configurations.jvxmlInterpreterGrammarLUIS
 }
 
 clean {
