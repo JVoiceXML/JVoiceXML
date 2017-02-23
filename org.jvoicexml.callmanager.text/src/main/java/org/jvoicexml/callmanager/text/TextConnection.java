@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,7 +25,8 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
@@ -39,13 +35,12 @@ import org.jvoicexml.event.ErrorEvent;
 /**
  * A connection to a text client.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  */
 final class TextConnection extends Thread {
     /** Logger instance. */
     private static final Logger LOGGER =
-        Logger.getLogger(TextServerThread.class);
+        LogManager.getLogger(TextServerThread.class);
 
     /** The socket connection. */
     private Socket socket;

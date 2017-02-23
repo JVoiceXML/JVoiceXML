@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,7 +25,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.CallManager;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.event.error.NoresourceError;
@@ -38,13 +34,12 @@ import org.jvoicexml.event.error.NoresourceError;
 /**
  * A {@link org.jvoicexml.CallManager} for text based clients.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public final class TextCallManager implements CallManager {
     /** Logger instance. */
     private static final Logger LOGGER =
-        Logger.getLogger(TextCallManager.class);
+        LogManager.getLogger(TextCallManager.class);
 
     /** Know applications. */
     private final Collection<TextApplication> applications;
