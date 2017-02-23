@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>jsapi20mac</repository>
-  <classpath>org.jvoicexml.implementation.jsapi20.jar</classpath>
+  <classpath>org.jvoicexml.implementation.jsapi20-0.7.8.jar</classpath>
   <classpath>jsr113.jar</classpath>
   <classpath>org.jvoicexml.jsapi2.jar</classpath>
   <classpath>org.jvoicexml.jsapi2.mac.jar</classpath>
