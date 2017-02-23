@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2016 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,7 +29,8 @@ import javax.sip.ObjectInUseException;
 import javax.sip.SipException;
 import javax.sip.address.Address;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.CallManager;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
@@ -57,14 +58,13 @@ import com.spokentech.speechdown.client.rtp.RtpTransmitter;
  * A SIP call manager.
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  */
 public final class SipCallManager
     implements CallManager, SpeechletService, SessionListener {
     /** Logger instance. */
     private static final Logger LOGGER =
-        Logger.getLogger(SipCallManager.class);
+        LogManager.getLogger(SipCallManager.class);
 
     //TODO Better management (clean out orphaned sessions, or leases/timeouts)
     /** Map of sessions. */

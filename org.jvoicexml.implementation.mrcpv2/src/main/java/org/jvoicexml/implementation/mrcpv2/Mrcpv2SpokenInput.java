@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,26 +21,22 @@
 
 package org.jvoicexml.implementation.mrcpv2;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
-import org.jvoicexml.documentserver.ExternalGrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -54,7 +45,6 @@ import org.jvoicexml.event.plain.implementation.InputStartedEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
-import org.jvoicexml.implementation.DocumentGrammarImplementation;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
@@ -82,13 +72,12 @@ import org.speechforge.cairo.client.recog.RecognitionResult;
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
  * @author Patrick L. Lange
- * @version $Revision$
  * @since 0.7
  */
 public final class Mrcpv2SpokenInput
         implements SpokenInput, SpeechEventListener {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(Mrcpv2SpokenInput.class);
 
     /** Size of the read buffer when reading objects. */
@@ -120,7 +109,7 @@ public final class Mrcpv2SpokenInput
     // now for recognize request with a single grammar.
 
     // TODO Handle multiple grammars, now just the first one activated is active.
-    private Collection<GrammarImplementation<?>> activeGrammars;
+    private final Collection<GrammarImplementation<?>> activeGrammars;
 
     /** The session manager. */
     private SessionManager sessionManager;

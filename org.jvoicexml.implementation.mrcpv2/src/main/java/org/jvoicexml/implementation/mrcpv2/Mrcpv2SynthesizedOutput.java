@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,11 +31,12 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Collection;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableSsmlText;
@@ -80,7 +81,7 @@ public final class Mrcpv2SynthesizedOutput
         implements SynthesizedOutput, SpeechEventListener {
     // SpeakableListener, SynthesizerListener {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(Mrcpv2SynthesizedOutput.class);
 
     /** The system output listener. */
