@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/JvoiceXmlSsmlParsingStrategyFactory.java $
- * Version: $LastChangedRevision: 4080 $
- * Date:    $Date: 2013-12-17 09:46:17 +0100 (Tue, 17 Dec 2013) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,7 +23,8 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.profile.SsmlParsingStrategy;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.Text;
@@ -45,14 +41,13 @@ import org.jvoicexml.xml.vxml.Value;
  * @see org.jvoicexml.profile.SsmlParsingStrategy
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4080 $
  * @since 0.6
  */
 public final class JvoiceXmlSsmlParsingStrategyFactory
         implements SsmlParsingStrategyFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(JvoiceXmlSsmlParsingStrategyFactory.class);
+            LogManager.getLogger(JvoiceXmlSsmlParsingStrategyFactory.class);
 
     /**
      * Known strategies. The known strategies are templates for the strategy to

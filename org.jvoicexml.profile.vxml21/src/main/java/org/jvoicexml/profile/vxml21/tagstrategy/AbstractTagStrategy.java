@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/AbstractTagStrategy.java $
- * Version: $LastChangedRevision: 4080 $
- * Date:    $Date: 2013-12-17 09:46:17 +0100 (Tue, 17 Dec 2013) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,7 +25,8 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -47,12 +43,11 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * Skeleton for a {@link TagStrategy}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4080 $
  * @since 0.3.1
  */
 abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(AbstractTagStrategy.class);
 
     /** Map with evaluated attributes. */

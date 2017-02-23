@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml.processor.srgs/src/org/jvoicexml/processor/srgs/GrammarChecker.java $
- * Version: $LastChangedRevision: 4184 $
- * Date:    $Date: 2014-08-11 09:20:42 +0200 (Mon, 11 Aug 2014) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,7 +32,6 @@ import org.jvoicexml.profile.vxml21.tagstrategy.JvoiceXmlSsmlParsingStrategyFact
  * href="http://www.w3.org/TR/voicexml21/">http://www.w3.org/TR/voicexml21/</a>.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4184 $
  * @since 0.7.7
  */
 public class VoiceXml21Profile implements Profile {

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/GrammarStrategy.java $
- * Version: $LastChangedRevision: 4080 $
- * Date:    $Date: 2013-12-17 09:46:17 +0100 (Tue, 17 Dec 2013) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,7 +36,6 @@ import org.jvoicexml.xml.srgs.Grammar;
 /**
  * Strategy of the FIA to execute a <code>&lt;grammar&gt;</code> node.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4080 $
  * @since 0.6
  * @see org.jvoicexml.xml.srgs.Grammar
  */

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/AssignStrategy.java $
- * Version: $LastChangedRevision: 4080 $
- * Date:    $LastChangedDate: 2013-12-17 09:46:17 +0100 (Tue, 17 Dec 2013) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,7 +23,8 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
@@ -47,11 +43,10 @@ import org.jvoicexml.xml.vxml.Assign;
  * @see org.jvoicexml.xml.vxml.Assign
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4080 $
  */
 final class AssignStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(AssignStrategy.class);
+    private static final Logger LOGGER = LogManager.getLogger(AssignStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
