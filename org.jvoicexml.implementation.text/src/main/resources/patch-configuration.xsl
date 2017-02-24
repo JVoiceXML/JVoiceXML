@@ -4,6 +4,7 @@
     xmlns:beans="http://www.springframework.org/schema/beans">
     <xsl:param name="buildpath" />
     <xsl:param name="version" />
+    <xsl:param name="subscriptionId" />
 
     <xsl:template match="classpath">
         <xsl:copy>
@@ -12,6 +13,13 @@
             <!-- Keep current settings -->
             <xsl:apply-templates select="@*|*|comment()" />
         </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="beans:property[@name='subscription']">
+       <xsl:copy>
+           <xsl:attribute name="value"><xsl:value-of select="$subscriptionId" /></xsl:attribute>
+           <xsl:apply-templates select="@*[name() != 'value']" />
+       </xsl:copy>
     </xsl:template>
 
     <!-- This template passes anything unmatched -->

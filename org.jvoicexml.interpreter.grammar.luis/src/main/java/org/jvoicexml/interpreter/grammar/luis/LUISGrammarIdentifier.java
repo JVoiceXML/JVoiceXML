@@ -29,7 +29,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * A {@link GrammarIdentifier} for the new grammar. LUIS grammars
- * are considered to be valid if they point to a LUIS deploymnet.
+ * are considered to be valid if they point to a LUIS deployment.
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
  */

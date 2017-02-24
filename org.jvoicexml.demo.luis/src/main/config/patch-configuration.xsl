@@ -6,9 +6,7 @@
     <xsl:param name="applicationId" />
 
     <xsl:template match="vxml:grammar/@src">
-            <xsl:attribute name="src"><xsl:value-of select="replace(., '@@MUST-BE-SUPPLIED-VALUE@@', $applicationId)" /></xsl:attribute>
-            <!-- Keep current settings -->
-            <!-- xsl:apply-templates select="@*|*|comment()" /-->
+        <xsl:attribute name="src"><xsl:value-of select="replace(., '@@MUST-BE-SUPPLIED-VALUE@@', $applicationId)" /></xsl:attribute>
     </xsl:template>
 
     <!-- This template passes anything unmatched -->

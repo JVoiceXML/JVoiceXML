@@ -22,6 +22,7 @@ configurations {
 dependencies {
     jvxmlConfiguration fileTree(dir: "src/test/config")
     
+    compile fileTree(dir: rootDir, include: ['*.properties'])
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.8'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.8'
 
@@ -40,7 +41,7 @@ xslt {
     input "${projectDir}/src/main/config/pizza.vxml"
     output "${sourceSets.main.output.resourcesDir}/pizza.vxml"
     parameters(
-        applicationId: properties.getProperty('luis.applicationId')
+        applicationId: properties.getProperty('org.jvoicexml.demo.luis.applicationId')
     )
 }
 

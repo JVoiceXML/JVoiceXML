@@ -31,5 +31,4 @@ public class LUISGrammarEvaluatorTest {
                 "I want a large pizza with salami");
         Assert.assertNotNull("interpretation must no be null", result);
     }
-
 }

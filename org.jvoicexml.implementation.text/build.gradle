@@ -36,16 +36,21 @@ dependencies {
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
     compile project(':org.jvoicexml.client.text')
+    compile project(':org.jvoicexml.interpreter.grammar.luis')
     compile project(':org.jvoicexml.srgs')
 }
 
 xslt {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/text-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/text-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
         version: version,
+        subscriptionId: properties.getProperty('org.jvoicexml.interpreter.grammar.luis.subscriptionId'),
         libs: configurations.compile
     )
 }
