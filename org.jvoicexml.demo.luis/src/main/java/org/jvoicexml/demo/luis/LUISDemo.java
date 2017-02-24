@@ -21,7 +21,6 @@
 
 package org.jvoicexml.demo.luis;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
@@ -139,8 +138,7 @@ public final class LUISDemo implements TextListener {
 
     @Override
     public void connected(InetSocketAddress remote) {
-        // TODO Auto-generated method stub
-        
+        LOGGER.info("disconnected");
     }
 
     @Override
@@ -159,14 +157,11 @@ public final class LUISDemo implements TextListener {
 
     @Override
     public void inputClosed(TextMessageEvent event) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void disconnected(TextMessageEvent event) {
-        // TODO Auto-generated method stub
-        
+        LOGGER.info("disconnected");
     }
 
     /**
@@ -177,13 +172,12 @@ public final class LUISDemo implements TextListener {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting LUIS demo for JVoiceXML...");
-        LOGGER.info("(c) 2016 by JVoiceXML group - "
+        LOGGER.info("(c) 2017 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final LUISDemo demo = new LUISDemo();
             demo.startTextServer();
-            final File file = new File("pizza.vxml");
-            final URI uri = file.toURI();
+            final URI uri = LUISDemo.class.getResource("/pizza.vxml").toURI();
             LOGGER.info("interpreting document '" + uri + "'...");
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
