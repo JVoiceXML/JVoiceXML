@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,12 +42,11 @@ public class LUISGrammarIdentifier implements GrammarIdentifier {
         // Check if we are able to find a link to LUIS
         final URI uri = grammar.getURI();
         final String host = uri.getHost();
-        if (host.equalsIgnoreCase("api.projectoxford.ai")) {
+        if (host != null && host.equalsIgnoreCase("api.projectoxford.ai")) {
         	return LUISGrammarType.LUIS;
         }
 
-        // It could compile, so it is a valid regular expression.
-        return LUISGrammarType.LUIS;
+        return null;
     }
 
     /**

@@ -38,6 +38,8 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Loads external and internal grammars.
@@ -120,15 +122,24 @@ final class GrammarLoader {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading internal grammar");
         }
+
         // Set the language if omitted
         final Locale grammarLanguage = grammar.getXmlLangObject();
         if (grammarLanguage == null) {
             grammar.setXmlLang(language);
         }
+
         // Create an internal grammar document thereof and publicize it to the
         // server
         final GrammarDocument document = new InternalGrammarDocument(grammar);
         server.addGrammarDocument(sessionId, document);
+
+        // Pre-set grammar and mode type
+        final GrammarType type = grammar.getType();
+        document.setMediaType(type);
+        final ModeType mode = grammar.getMode();
+        document.setModeType(mode);
+
         return document;
     }
 
@@ -190,6 +201,13 @@ final class GrammarLoader {
         if (document == null) {
             throw new BadFetchError("Unable to load grammar '" + src + "'!");
         }
+
+        // Pre-set grammar and mode type
+        final GrammarType type = grammar.getType();
+        document.setMediaType(type);
+        final ModeType mode = grammar.getMode();
+        document.setModeType(mode);
+
         return document;
     }
 

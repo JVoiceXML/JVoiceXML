@@ -21,6 +21,8 @@
 
 package org.jvoicexml.interpreter.grammar.halef;
 
+import java.net.URI;
+
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -37,8 +39,11 @@ public class HalefGrammarIdentifier implements GrammarIdentifier {
      */
     @Override
     public GrammarType identify(final GrammarDocument grammar) {
-	// Currently, we accept everything as Halef grammar.
-        return HalefGrammarType.HALEF;
+        final GrammarType requestedType = grammar.getMediaType();
+        if (requestedType.equals(HalefGrammarType.HALEF)) {
+            return HalefGrammarType.HALEF;
+        }
+        return null;
     }
 
     /**

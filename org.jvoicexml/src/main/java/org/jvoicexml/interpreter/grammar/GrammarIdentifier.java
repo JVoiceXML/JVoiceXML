@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,7 +34,6 @@ import org.jvoicexml.xml.srgs.GrammarType;
  *
  * @author Christoph Buente
  * @author Dirk Schnelle
- * @version $Revision$
  */
 public interface GrammarIdentifier {
     /**
@@ -50,10 +44,10 @@ public interface GrammarIdentifier {
      * @param grammar
      *        The grammar to be identified.
      *
-     * @return String the type of the grammar. If grammar could not be
+     * @return the type of the grammar. If grammar could not be
      *         identified, null is returned.
      */
-    GrammarType identify(final GrammarDocument grammar);
+    GrammarType identify(GrammarDocument grammar);
 
     /**
      * Returns the supported media type.
