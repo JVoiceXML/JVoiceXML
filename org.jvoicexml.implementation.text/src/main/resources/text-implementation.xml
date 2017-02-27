@@ -6,7 +6,7 @@
     <classpath>org.jvoicexml.implementation.text-@VERSION@.jar</classpath>
     <classpath>org.jvoicexml.client.text-@VERSION@.jar</classpath>
     <classpath>org.jvoicexml.srgs-@VERSION@.jar</classpath>
-    <classpath>dist/org.jvoicexml.grammar.interpreter.luis-@VERSION@.jar</classpath>
+    <classpath>org.jvoicexml.interpreter.grammar.luis-@VERSION@.jar</classpath>
     <classpath>protobuf-java-3.1.0.jar</classpath>
 
     <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">

@@ -84,6 +84,11 @@ configurations {
         description = "VoiceXML Unit Testing"
         extendsFrom compile
     }
+    
+    jvxmlJNDI {
+        description = "JVoiceXML JNDI support"
+        extendsFrom compile
+    }
 }
 
 dependencies {
@@ -125,21 +130,17 @@ dependencies {
 
     jvxmlInterpreterGrammarRegex project(':org.jvoicexml.interpreter.grammar.regex')
 
+    jvxmlJNDI project(':org.jvoicexml.jndi')
+
     jvxmlVoiceXMLUnit project(':org.jvoicexml.voicexmlunit')
     
     runtime project(':org.jvoicexml.xml')
     runtime project(':org.jvoicexml')
     runtime project(':org.jvoicexml.config')
-    runtime project(':org.jvoicexml.jndi')
     runtime project(':org.jvoicexml.srgs')
     runtime project(':org.jvoicexml.profile.vxml21')
 
     
-    runtime configurations.jvxmlInterpreterDatamodelECMAScript
-
-    runtime configurations.jvxmlImplementationText
-    runtime configurations.jvxmlImplementationMrcpv2   
-    runtime configurations.jvxmlInterpreterGrammarLUIS
 }
 
 clean {
@@ -148,9 +149,6 @@ clean {
 
 
 jar {
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    println properties.getProperty('sdk.dir')
     onlyIf { 
         false
     }
@@ -183,6 +181,12 @@ applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').bui
                              "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
 
 run {
+    dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
+
+    dependsOn configurations.jvxmlImplementationText
+    dependsOn configurations.jvxmlImplementationMrcpv2   
+    dependsOn configurations.jvxmlInterpreterGrammarLUIS
+    
     classpath += files("${project(':org.jvoicexml').buildDir}/config")
 }
 
