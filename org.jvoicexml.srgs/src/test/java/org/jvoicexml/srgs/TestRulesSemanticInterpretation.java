@@ -10,7 +10,7 @@ public class TestRulesSemanticInterpretation {
 
     @BeforeClass
     public static void loggerSetup() {
-        Utils.InitLogger();
+        Utils.initLogger();
     }
 
     @Test

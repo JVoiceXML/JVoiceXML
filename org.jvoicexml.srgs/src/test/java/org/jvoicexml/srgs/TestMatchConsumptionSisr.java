@@ -12,7 +12,7 @@ import org.mozilla.javascript.Scriptable;
 public class TestMatchConsumptionSisr {
     @BeforeClass
     public static void loggerSetup() {
-        Utils.InitLogger();
+        Utils.initLogger();
     }
 
     @Test

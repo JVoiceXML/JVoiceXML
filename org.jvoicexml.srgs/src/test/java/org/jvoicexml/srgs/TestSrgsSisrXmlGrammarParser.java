@@ -14,7 +14,7 @@ public class TestSrgsSisrXmlGrammarParser {
 
     @BeforeClass
     public static void loggerSetup() {
-        Utils.InitLogger();
+        Utils.initLogger();
     }
 
     @Before

@@ -12,7 +12,7 @@ public class TestMatching {
 
     @BeforeClass
     public static void loggerSetup() {
-        Utils.InitLogger();
+        Utils.initLogger();
     }
 
     @Before

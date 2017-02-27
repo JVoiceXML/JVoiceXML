@@ -9,7 +9,7 @@ import org.jvoicexml.srgs.SrgsSisrGrammar;
 public class TestExternalRuleref {
     @BeforeClass
     public static void loggerSetup() {
-        Utils.InitLogger();
+        Utils.initLogger();
     }
 
     @Test

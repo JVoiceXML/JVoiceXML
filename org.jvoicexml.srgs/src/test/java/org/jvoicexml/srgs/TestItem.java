@@ -12,7 +12,7 @@ import org.jvoicexml.srgs.TokenRuleExpansion;
 public class TestItem {
     @BeforeClass
     public static void loggerSetup() {
-        Utils.InitLogger();
+        Utils.initLogger();
     }
 
     @Test

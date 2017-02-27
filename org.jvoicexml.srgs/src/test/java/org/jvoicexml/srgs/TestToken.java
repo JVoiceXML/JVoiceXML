@@ -11,7 +11,7 @@ import org.jvoicexml.srgs.TokenRuleExpansion;
 public class TestToken {
     @BeforeClass
     public static void loggerSetup() {
-        Utils.InitLogger();
+        Utils.initLogger();
     }
 
     @Test

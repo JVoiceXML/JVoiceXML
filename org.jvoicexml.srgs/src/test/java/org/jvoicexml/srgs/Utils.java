@@ -6,26 +6,21 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.Map;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 import org.junit.Assert;
-import org.jvoicexml.srgs.SrgsSisrGrammar;
-import org.jvoicexml.srgs.SrgsSisrXmlGrammarParser;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
 import org.xml.sax.InputSource;
 
 public class Utils {
-    public static void InitLogger() {
-        Logger rootLogger = Logger.getRootLogger();
-        if (!rootLogger.getAllAppenders().hasMoreElements()) {
-            rootLogger.setLevel(Level.DEBUG);
-            rootLogger.addAppender(new ConsoleAppender(new PatternLayout(
-                    "%-5p [%t] (%4L): %m%n")));
-        }
+    public static void initLogger() {
+//        Logger rootLogger = Logger.getRootLogger();
+//        if (!rootLogger.getAllAppenders().hasMoreElements()) {
+//            rootLogger.setLevel(Level.DEBUG);
+//            rootLogger.addAppender(new ConsoleAppender(new PatternLayout(
+//                    "%-5p [%t] (%4L): %m%n")));
+//        }
     }
 
     public static SrgsSisrGrammar loadDocument(String filename)
