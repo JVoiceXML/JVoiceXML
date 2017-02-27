@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'maven'
 
 repositories {
     mavenCentral()
@@ -40,10 +41,6 @@ task createVersionFile() << {
     def file = new File("${sourceSets.main.output.resourcesDir}/jvoicexml.version")
     file.createNewFile()
     file.text = "jvxml.version=$version"
-}
-
-artifacts {
-    archives copyConfiguration.destinationDir
 }
 
 jar {
