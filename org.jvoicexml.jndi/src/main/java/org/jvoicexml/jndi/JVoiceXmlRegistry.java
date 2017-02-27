@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,19 +26,19 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Starter for the RMI registry.
  *
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision$
  * @since 0.5.1
  */
 public final class JVoiceXmlRegistry {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlRegistry.class);
+            LogManager.getLogger(JVoiceXmlRegistry.class);
 
     /** Configuration key. */
     public static final String CONFIG_KEY = "registry";

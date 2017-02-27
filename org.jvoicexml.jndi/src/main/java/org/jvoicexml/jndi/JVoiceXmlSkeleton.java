@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,7 +26,8 @@ import java.rmi.server.UnicastRemoteObject;
 
 import javax.naming.Context;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
@@ -44,7 +40,6 @@ import org.jvoicexml.event.ErrorEvent;
  * Skeleton for <code>JVoiceXml</code>.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.4
  * @see org.jvoicexml.JVoiceXml
  */
@@ -55,7 +50,7 @@ class JVoiceXmlSkeleton
 
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlSkeleton.class);
+            LogManager.getLogger(JVoiceXmlSkeleton.class);
 
     /** The encapsulated <code>JVoiceXml</code> object. */
     private JVoiceXml jvxml;
@@ -68,7 +63,7 @@ class JVoiceXmlSkeleton
      * @throws RemoteException
      *         Error creating the remote object.
      */
-    public JVoiceXmlSkeleton()
+    JVoiceXmlSkeleton()
             throws RemoteException {
         context = null;
     }
@@ -80,7 +75,7 @@ class JVoiceXmlSkeleton
      * @throws RemoteException
      *         Error creating the remote object.
      */
-    public JVoiceXmlSkeleton(final Context ctx, final JVoiceXml jvoicexml)
+    JVoiceXmlSkeleton(final Context ctx, final JVoiceXml jvoicexml)
             throws RemoteException {
         context = ctx;
         jvxml = jvoicexml;

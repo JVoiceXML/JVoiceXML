@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-jndi-0-7.xsd">
   <repository></repository>
-  <classpath>org.jvoicexml.jndi-0.7.8.jar</classpath>
+  <classpath>org.jvoicexml.jndi-@VERSION@.jar</classpath>
   <beans:bean id="org.jvoicexml.JndiSupport"
     class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
     <beans:property name="registry">

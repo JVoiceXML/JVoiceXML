@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,7 +27,8 @@ import java.rmi.server.UnicastRemoteObject;
 
 import javax.naming.Context;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DtmfInput;
 import org.jvoicexml.Session;
@@ -48,7 +44,6 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * Skeleton for the {@link Session}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.4
  * @see org.jvoicexml.Session
  */
@@ -58,8 +53,9 @@ final class SessionSkeleton extends UnicastRemoteObject
     private static final long serialVersionUID = 7903915853416003896L;
 
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(SessionSkeleton.class);
+    
     /** The encapsulated <code>ApplicationRegistry</code>. */
     private Session session;
 
@@ -72,7 +68,7 @@ final class SessionSkeleton extends UnicastRemoteObject
      * @throws RemoteException
      *             Error creating the remote object.
      */
-    public SessionSkeleton() throws RemoteException {
+    SessionSkeleton() throws RemoteException {
         context = null;
     }
 
@@ -86,7 +82,7 @@ final class SessionSkeleton extends UnicastRemoteObject
      * @throws RemoteException
      *             Error creating the remote object.
      */
-    public SessionSkeleton(final Context ctx, final Session sess)
+    SessionSkeleton(final Context ctx, final Session sess)
             throws RemoteException {
         context = ctx;
         session = sess;

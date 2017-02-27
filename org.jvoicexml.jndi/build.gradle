@@ -18,26 +18,25 @@ repositories {
     mavenCentral()
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
+configurations {
+    jvxmlConfiguration
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/jvxml-jndi.xml"
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/jvxml-jndi.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jvxml-jndi.xml"
     parameters(
         repositoryname: "text",
+        version: version,
         buildpath: "${buildDir}/libs",
         port: "1099"
     )
 }
 
 dependencies {
+    jvxmlConfiguration fileTree(dir: "src/main/config")
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
@@ -56,4 +55,8 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.jndi'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jvxml-jndi.xml")
 }

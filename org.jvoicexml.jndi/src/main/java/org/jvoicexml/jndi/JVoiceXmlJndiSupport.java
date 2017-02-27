@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,7 +29,8 @@ import java.util.Hashtable;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.JndiSupport;
 import org.jvoicexml.client.jndi.JVoiceXmlStub;
@@ -65,17 +61,14 @@ import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision$
- *
  * @see Skeleton
  * @see Stub
- *
  * @since 0.4
  */
 public final class JVoiceXmlJndiSupport implements JndiSupport {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlJndiSupport.class);
+            LogManager.getLogger(JVoiceXmlJndiSupport.class);
 
     /** Reference to the interpreter. */
     private JVoiceXml jvxml;
@@ -110,30 +103,39 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
      * {@inheritDoc}
      */
     public void startup() throws IOException {
-        LOGGER.info("starting JNDI support...");
-        if (registry != null) {
-            registry.start();
+        ClassLoader originalClassLoader =
+                Thread.currentThread().getContextClassLoader();
+        try {
+            Thread.currentThread().setContextClassLoader(
+                    getClass().getClassLoader());
+            LOGGER.info("starting JNDI support...");
+            if (registry != null) {
+                registry.start();
+            }
+    
+            // Set the security manager
+            SecurityManager securityManager = System.getSecurityManager();
+            if (securityManager == null) {
+                securityManager = new RMISecurityManager();
+                System.setSecurityManager(securityManager);
+                LOGGER.info("security manager set to '" + securityManager
+                        + "'");
+            }
+            final Context context = getInitialContext();
+            if (context == null) {
+                LOGGER.warn("unable to create initial context");
+                return;
+            }
+    
+            // Bind all JVoiceXML objects to the context
+            final boolean success = bindObjects(context);
+            if (!success) {
+                LOGGER.warn("not all object are bound");
+            }
+            LOGGER.info("...JNDI support started");
+        } finally {
+            Thread.currentThread().setContextClassLoader(originalClassLoader);
         }
-
-        // Set the security manager
-        SecurityManager securityManager = System.getSecurityManager();
-        if (securityManager == null) {
-            securityManager = new RMISecurityManager();
-            System.setSecurityManager(securityManager);
-            LOGGER.info("security manager set to '" + securityManager + "'");
-        }
-        final Context context = getInitialContext();
-        if (context == null) {
-            LOGGER.warn("unable to create initial context");
-            return;
-        }
-
-        // Bind all JVoiceXML objects to the context
-        final boolean success = bindObjects(context);
-        if (!success) {
-            LOGGER.warn("not all object are bound");
-        }
-        LOGGER.info("...JNDI support started");
     }
 
     /**

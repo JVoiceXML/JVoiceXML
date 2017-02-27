@@ -17,6 +17,7 @@
     xmlns:beans="http://www.springframework.org/schema/beans">
     <xsl:param name="repositoryname" />
     <xsl:param name="buildpath" />
+    <xsl:param name="version" />
     <xsl:param name="port" />
 
     <xsl:template match="repository">
@@ -31,7 +32,7 @@
     <xsl:template match="classpath">
         <xsl:copy>
             <xsl:apply-templates select="@*" />
-            <xsl:value-of select="$buildpath" />/<xsl:value-of select="text()" />
+            <xsl:value-of select="$buildpath" />/<xsl:value-of select="replace(text(), '@VERSION@', $version)" />
             <!-- Keep current settings -->
             <xsl:apply-templates select="@*|*|comment()" />
         </xsl:copy>
