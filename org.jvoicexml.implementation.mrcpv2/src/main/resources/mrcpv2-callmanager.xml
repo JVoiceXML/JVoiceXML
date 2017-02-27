@@ -17,6 +17,7 @@
     <classpath>nist-sdp-1.0.jar</classpath>
     <classpath>concurrent-1.3.4.jar</classpath>
     <classpath>commons-lang-2.6.jar</classpath>
+    <classpath>jmf-2.1.1e.jar</classpath>
 
     <beans:bean id="callmanager"
         class="org.jvoicexml.callmanager.mrcpv2.SipCallManager"
