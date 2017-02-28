@@ -42,6 +42,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-profile.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
@@ -55,4 +56,8 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.profile.mmi'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-profile.xml")
 }

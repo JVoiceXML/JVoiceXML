@@ -32,7 +32,7 @@
     <xsl:template match="classpath">
         <xsl:copy>
             <xsl:apply-templates select="@*" />
-            <xsl:value-of select="$buildpath" />/<xsl:value-of select="replace(text(), '@VERSION@', $version)" />
+            <xsl:value-of select="$buildpath" />/<xsl:value-of select="replace(text(), '@@VERSION@@', $version)" />
             <!-- Keep current settings -->
             <xsl:apply-templates select="@*|*|comment()" />
         </xsl:copy>

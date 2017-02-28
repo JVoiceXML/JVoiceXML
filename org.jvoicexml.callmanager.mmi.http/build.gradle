@@ -46,9 +46,10 @@ dependencies {
 xslt {
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/mmi-callmanager-http.xml"
-    output "${buildDir}/config/mmi-callmanager-http.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-callmanager-http.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
@@ -76,4 +77,8 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.callmanager.mmi.http'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-callmanager.xml")
 }

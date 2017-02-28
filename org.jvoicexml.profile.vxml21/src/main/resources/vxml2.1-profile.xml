@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="jvxml-profile-0-7.xsd">
     <repository>vxml21</repository>
-    <classpath>org.jvoicexml.profile.vxml21-@VERSION@.jar</classpath>
+    <classpath>org.jvoicexml.profile.vxml21-@@VERSION@@.jar</classpath>
 
     <!-- Tag strategies for the VoiceXML 21 profile -->
     <beans:bean id="org.jvoicexml.profile.Profile"
