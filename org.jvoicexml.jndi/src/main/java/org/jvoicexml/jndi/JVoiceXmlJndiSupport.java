@@ -103,7 +103,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
      * {@inheritDoc}
      */
     public void startup() throws IOException {
-        ClassLoader originalClassLoader =
+        final ClassLoader originalClassLoader =
                 Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(
