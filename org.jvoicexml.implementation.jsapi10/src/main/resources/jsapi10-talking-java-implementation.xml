@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>jsapi10sapi</repository>
-  <classpath>org.jvoicexml.implementation.jsapi10.jar</classpath>
+  <classpath>org.jvoicexml.implementation.jsapi10-@@VERSION@@.jar</classpath>
   <classpath>cgjsapi.jar</classpath>
   <beans:bean
     class="org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutputFactory">

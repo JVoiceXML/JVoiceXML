@@ -53,6 +53,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi10-talking-java-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
@@ -76,4 +77,8 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.implementation.jsapi10'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi10-talking-java-implementation.xml")
 }
