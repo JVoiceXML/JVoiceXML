@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="jvxml-datamodel-0-7.xsd">
     <repository>mmi-http</repository>
-    <classpath>org.jvoicexml.interpreter.datamodel.ecmascript-0.7.8.jar</classpath>
+    <classpath>org.jvoicexml.interpreter.datamodel.ecmascript-@@VERSION@@.jar</classpath>
     <classpath>rhino-1.7R4.jar</classpath>
     <classpath>json-simple-1.1.1.jar</classpath>
 

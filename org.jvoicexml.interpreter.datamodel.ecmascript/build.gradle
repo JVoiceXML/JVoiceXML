@@ -44,6 +44,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/ecmascript-datamodel.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
@@ -66,4 +67,8 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.interpreter.datamodel.ecmascript'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/ecmascript-datamodel.xml")
 }
