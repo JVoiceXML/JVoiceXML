@@ -3,13 +3,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
     <repository>mmi</repository>
-    <classpath>lib/org.jvoicexml.mmi.events.jar</classpath>
-    <classpath>lib/org.jvoicexml.callmanager.mmi.jar</classpath>
-    <classpath>lib/org.jvoicexml.callmanager.mmi.socket.jar</classpath>
-    <classpath>lib/org.jvoicexml.profile.mmi.jar</classpath>
-    <classpath>lib/org.jvoicexml.profile.vxml21.jar</classpath>
-    <classpath>lib/js.jar</classpath>
-    <classpath>lib/json-simple-1.1.1.jar</classpath>
+    <classpath>org.jvoicexml.mmi.events-@@VERSION@@.jar</classpath>
+    <classpath>org.jvoicexml.callmanager.mmi-@@VERSION@@.jar</classpath>
+    <classpath>org.jvoicexml.callmanager.mmi.socket-@@VERSION@@.jar</classpath>
+    <classpath>org.jvoicexml.profile.mmi-@@VERSION@@.jar</classpath>
+    <classpath>org.jvoicexml.profile.vxml21-@@VERSION@@.jar</classpath>
+    <classpath>rhino-1.7R4.jar</classpath>
+    <classpath>json-simple-1.1.1.jar</classpath>
 
     <beans:bean id="callmanager"
         class="org.jvoicexml.callmanager.mmi.MMICallManager">
@@ -31,7 +31,7 @@
         <beans:property name="protocolAdapter">
             <beans:bean
                 class="org.jvoicexml.callmanager.mmi.socket.SocketETLProtocolAdapter">
-                <beans:property name="port" value="4242" />
+                <beans:property name="port" value="4343" />
             </beans:bean>
         </beans:property>
 

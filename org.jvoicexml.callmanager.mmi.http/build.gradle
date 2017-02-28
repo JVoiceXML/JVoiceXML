@@ -80,5 +80,5 @@ jar {
 }
 
 clean {
-    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-callmanager.xml")
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-callmanager-http.xml")
 }

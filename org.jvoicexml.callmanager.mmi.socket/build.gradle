@@ -1,5 +1,19 @@
 apply plugin: 'java'
+apply plugin: "com.github.eerohele.saxon-gradle"
 apply plugin: 'maven'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
 
 repositories {
     mavenCentral()
@@ -27,11 +41,40 @@ dependencies {
     compile project(':org.jvoicexml.callmanager.mmi')
 }
 
+xslt {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/mmi-callmanager-socket.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-callmanager-socket.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        version: version,
+        libs: configurations.compile
+    )
+}
+
+task copyReferencedLibraries(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile) {
+        include 'rhino*.jar',
+        'json-simple*.jar',
+        'org.jvoicexml.mmi.events*.jar',
+        'org.jvoicexml.mmi.profile.mmi*.jar',
+        'org.jvoicexml.callmanager.mmi*.jar'
+    }
+}
+
 jar {
+    dependsOn xslt
+    dependsOn copyReferencedLibraries
+
     manifest {
         attributes("Implementation-Title": "JVoiceXML Socket ETL of the MMI call manager",
                    "Implementation-Vendor": "JVoiceXML group",
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.callmanager.mmi.socket'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-callmanager-socket.xml")
 }
