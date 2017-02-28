@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
   <repository>sip</repository>
-  <classpath>org.jvoicexml.callmanager.sip.jar</classpath>
+  <classpath>org.jvoicexml.callmanager.sip-@@VERSION@@.jar</classpath>
   <classpath>jain-sip-api-1.2.1.4.jar</classpath>
   <classpath>nist-sdp-1.0.jar</classpath>
 

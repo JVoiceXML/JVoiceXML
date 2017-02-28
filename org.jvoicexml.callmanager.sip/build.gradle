@@ -41,9 +41,10 @@ dependencies {
 xslt {
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/sip-callmanager.xml"
-    output "${buildDir}/config/sip-callmanager.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/sip-callmanager.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
@@ -66,4 +67,8 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.callmanager.sip'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/sip-callmanager.xml")
 }
