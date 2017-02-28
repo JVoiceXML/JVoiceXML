@@ -1,8 +1,22 @@
 apply plugin: 'java'
+apply plugin: "com.github.eerohele.saxon-gradle"
 apply plugin: 'maven'
 
 repositories {
     mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
 }
 
 sourceSets {
@@ -23,11 +37,38 @@ dependencies {
     compile project(':org.jvoicexml.implementation.text')
 }
 
+xslt {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/text-callmanager.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/text-callmanager.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        version: version,
+        libs: configurations.compile
+    )
+}
+
+task copyReferencedLibraries(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile) {
+        include 'protobuf*.jar',
+        'org.jvoicexml.client*.jar',
+        'org.jvoicexml.client.text*.jar'
+    }
+}
+
 jar {
+    dependsOn xslt
+    dependsOn copyReferencedLibraries
+
     manifest {
         attributes("Implementation-Title": "JVoiceXML MMI call manager",
                    "Implementation-Vendor": "JVoiceXML group",
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.callmanager.text'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/text-callmanager.xml")
 }
