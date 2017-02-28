@@ -46,6 +46,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi20-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
@@ -69,4 +70,8 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.implementation.jsapi20'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi20-implementation.xml")
 }
