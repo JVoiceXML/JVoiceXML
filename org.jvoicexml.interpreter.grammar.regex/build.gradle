@@ -41,6 +41,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/regex-grammar.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
@@ -59,4 +60,8 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.interpreter.grammar.regex'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/regex-grammar.xml")
 }

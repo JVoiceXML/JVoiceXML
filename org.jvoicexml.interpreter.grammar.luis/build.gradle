@@ -69,3 +69,7 @@ jar {
     }
     baseName 'org.jvoicexml.interpreter.grammar.luis'
 }
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/luis-grammar.xml")
+}
