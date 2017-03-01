@@ -29,8 +29,8 @@ sourceSets {
 }
 
 dependencies {
-    compile fileTree(dir: './3rdparty/mary5.1/lib', include: ['*.jar'])
-    //compile group: 'de.dfki.mary', name: 'voice-cmu-slt-hsmm', version: '5.2'
+//    compile fileTree(dir: './3rdparty/mary5.1/lib', include: ['*.jar'])
+    compile group: 'de.dfki.mary', name: 'marytts-client', version: '5.2'
     
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
@@ -44,6 +44,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mary-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
@@ -65,4 +66,8 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.implementation.mary'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mary-implementation.xml")
 }

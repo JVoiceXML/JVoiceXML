@@ -25,9 +25,8 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 
-import marytts.client.MaryClient;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableText;
@@ -41,6 +40,8 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.vxml.BargeInType;
 
+import marytts.client.MaryClient;
+
 /**
  * An implementation of the {@link SynthesizedOutput} for the Mary TTS System.
  * 
@@ -51,7 +52,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
 public final class MarySynthesizedOutput
         implements SynthesizedOutput, SynthesizedOutputListener {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(MarySynthesizedOutput.class);
 
     /** The system output listener. */

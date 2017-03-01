@@ -1,3 +1,27 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2010-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.implementation.mary;
 
 import java.io.IOException;
@@ -5,8 +29,6 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Queue;
-
-import marytts.client.MaryClient;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.SpeakableSsmlText;
@@ -20,6 +42,8 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
+
+import marytts.client.MaryClient;
 
 /**
  * SynthesisQueue extends Thead and is responsible for getting the speakables.
@@ -70,7 +94,7 @@ final class SynthesisQueue extends Thread {
      * Constructs a new SynthesisQueue object. .
      * @param synthesizedOutput reference to the parent
      */
-    public SynthesisQueue(final MarySynthesizedOutput synthesizedOutput) {
+    SynthesisQueue(final MarySynthesizedOutput synthesizedOutput) {
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
         output = synthesizedOutput;
         setDaemon(true);
