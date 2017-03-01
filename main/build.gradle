@@ -208,3 +208,4 @@ task(shutdown, dependsOn: 'jar', type: JavaExec) {
                              "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
                              "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
 }
+
