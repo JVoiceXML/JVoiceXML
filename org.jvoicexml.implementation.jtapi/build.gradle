@@ -19,16 +19,13 @@ repositories {
     mavenCentral()
 }
 
-
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
+configurations {
+    jvxmlConfiguration
 }
 
 dependencies {
+    jvxmlConfiguration fileTree(dir: "src/main/config")
+
     compile fileTree(dir: './3rdparty/gjtapi1.9/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/jainsip1.19/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/jtapi1.3/lib', include: ['*.jar'])
@@ -42,16 +39,31 @@ dependencies {
     compile project(':org.jvoicexml.client')
 }
 
-xslt {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/jtapi-implementation.xml"
+task xsltImplementation(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/jtapi-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
 
+task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
+    stylesheet "${projectDir}/src/main/config/patch-callmanager-configuration.xsl"
+    input "${projectDir}/src/main/config/jtapi-callmanager.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-callmanager.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        version: version,
+        libs: configurations.compile,
+        providername: project.property('org.jvoicexml.callmanager.jtapi.sip.providername'),
+        terminal: project.property('org.jvoicexml.callmanager.jtapi.sip.terminal'),
+        inputType: project.property('org.jvoicexml.callmanager.jtapi.sip.inputType'),
+        outputType: project.property('org.jvoicexml.callmanager.jtapi.sip.outputType')
+    )
+}
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
@@ -63,9 +75,19 @@ task copyReferencedLibraries(type: Copy) {
     }
 }
 
+task copyConfiguration(type: Copy) {
+    from configurations.jvxmlConfiguration.files {
+        include 'ua'
+    }
+
+    into "${project(':org.jvoicexml').copyConfiguration.destinationDir}"
+}
+
 jar {
-    dependsOn xslt
+    dependsOn xsltImplementation
+    dependsOn xsltCallmanager
     dependsOn copyReferencedLibraries
+    dependsOn copyConfiguration
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML JTAPI implementation platform",
@@ -73,4 +95,10 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.implementation.jtapi'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-callmanager.xml")
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-implementation.xml")
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/ua")
 }

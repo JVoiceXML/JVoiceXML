@@ -34,14 +34,11 @@ dependencies {
 }
 
 xslt {
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
     stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
     input "${projectDir}/src/main/config/pizza.vxml"
     output "${sourceSets.main.output.resourcesDir}/pizza.vxml"
     parameters(
-        applicationId: properties.getProperty('org.jvoicexml.demo.luis.applicationId')
+        applicationId: project.property('org.jvoicexml.demo.luis.applicationId')
     )
 }
 
