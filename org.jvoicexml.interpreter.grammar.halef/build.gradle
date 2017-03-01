@@ -40,6 +40,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/halef-grammar.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
@@ -58,4 +59,8 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.interpreter.grammar.halef'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/halef-grammar.xml")
 }
