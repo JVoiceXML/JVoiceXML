@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,7 +22,8 @@ package org.jvoicexml.callmanager.sip;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.CallManager;
 import org.jvoicexml.callmanager.BaseCallManager;
 import org.jvoicexml.callmanager.Terminal;
@@ -37,12 +33,12 @@ import org.jvoicexml.event.error.NoresourceError;
  * A {@link CallManager} for the SIP protocol, based on JainSip.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public final class SipCallManager extends BaseCallManager {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(SipCallManager.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(SipCallManager.class);
 
     /** Configured terminals. */
     private Collection<Terminal> terminals;
