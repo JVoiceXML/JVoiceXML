@@ -43,6 +43,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/lightweightbml-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
@@ -64,4 +65,8 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.implementation.lightweightbml'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/lightweightbml-implementation.xml")
 }
