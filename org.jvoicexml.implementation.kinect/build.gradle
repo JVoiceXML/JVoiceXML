@@ -42,6 +42,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/kinect-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
         libs: configurations.compile
     )
 }
@@ -56,4 +57,8 @@ jar {
                    "Implementation-Version": version)
     }
     baseName 'org.jvoicexml.implementation.kinect'
+}
+
+clean {
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/kinect-implementation.xml")
 }
