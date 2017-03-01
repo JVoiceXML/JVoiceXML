@@ -10,8 +10,8 @@
 <booleanAttribute key="show_console_view" value="true"/>
 <booleanAttribute key="show_execution_view" value="true"/>
 <listAttribute key="tasks">
-<listEntry value="clean"/>
+<listEntry value="install"/>
 </listAttribute>
 <booleanAttribute key="use_gradle_distribution_from_import" value="false"/>
-<stringAttribute key="working_dir" value="${workspace_loc:/main}"/>
+<stringAttribute key="working_dir" value="${workspace_loc:/JVoiceXML}"/>
 </launchConfiguration>
