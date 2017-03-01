@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>marc</repository>
-  <classpath>org.jvoicexml.implementation.marc.jar</classpath>
+  <classpath>org.jvoicexml.implementation.marc-@@VERSION@@.jar</classpath>
 
   <beans:bean
     class="org.jvoicexml.implementation.marc.MarcSynthesizedOutputFactory">
