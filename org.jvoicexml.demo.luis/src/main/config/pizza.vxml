@@ -6,10 +6,10 @@
 
     <meta name="description" content="LUIS pizza demo" />
     <meta name="author" content="Dirk Schnelle-Walka" />
-    <meta name="copyright" content="2016 JVoiceXML group" />
+    <meta name="copyright" content="2017 JVoiceXML group" />
 
     <form id="order">
-        <grammar src="https://api.projectoxford.ai/luis/v1/application?id=@@MUST-BE-SUPPLIED-VALUE@@"
+        <grammar src="https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/@@MUST-BE-SUPPLIED-VALUE@@"
              type="application/grammar+luis" fetchhint="safe"/>
 
         <block>

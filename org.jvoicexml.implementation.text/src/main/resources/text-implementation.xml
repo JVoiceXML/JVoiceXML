@@ -8,6 +8,7 @@
     <classpath>org.jvoicexml.srgs-@@VERSION@@.jar</classpath>
     <classpath>org.jvoicexml.interpreter.grammar.luis-@@VERSION@@.jar</classpath>
     <classpath>protobuf-java-3.1.0.jar</classpath>
+    <classpath>json-simple-1.1.1.jar</classpath>
 
     <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">
         <beans:property name="instances" value="1" />

@@ -42,10 +42,12 @@ public class LUISGrammarIdentifier implements GrammarIdentifier {
         // Check if we are able to find a link to LUIS
         final URI uri = grammar.getURI();
         final String host = uri.getHost();
-        if (host != null && host.equalsIgnoreCase("api.projectoxford.ai")) {
+        if (host == null) {
+            return null;
+        }
+        if (host.toLowerCase().contains("api.cognitive.microsoft.com")) {
         	return LUISGrammarType.LUIS;
         }
-
         return null;
     }
 

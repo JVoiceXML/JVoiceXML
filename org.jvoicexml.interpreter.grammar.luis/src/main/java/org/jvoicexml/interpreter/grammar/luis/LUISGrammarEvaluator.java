@@ -32,12 +32,10 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.conn.params.ConnRoutePNames;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpParams;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -67,12 +65,12 @@ public class LUISGrammarEvaluator implements GrammarEvaluator {
     /** The port of the proxy server. */
     private static final int PROXY_PORT;
 
-    /** The URI of the associated grammar. */
-    private final String applicationId;
-
     /** The LUIS subscription key. */
     private final String subscriptionKey;
 
+    /** URI of the grammar. */
+    private final URI grammarUri;
+    
     static {
         PROXY_HOST = System.getProperty("http.proxyHost");
         final String port = System.getProperty("http.proxyPort");
@@ -93,9 +91,7 @@ public class LUISGrammarEvaluator implements GrammarEvaluator {
      */
     public LUISGrammarEvaluator(final String subscription,
             final URI documentURI) {
-        final String query = documentURI.getQuery();
-        final String[] queryParameters = query.split("=");
-        applicationId = queryParameters[1];
+        grammarUri = documentURI;
         subscriptionKey = subscription;
     }
 
@@ -104,11 +100,7 @@ public class LUISGrammarEvaluator implements GrammarEvaluator {
      */
     @Override
     public URI getURI() {
-        try {
-            return new URI("https://api.projectoxford.ai/luis/v1/application");
-        } catch (URISyntaxException e) {
-            return null;
-        }
+        return grammarUri;
     }
 
     /**
@@ -117,66 +109,84 @@ public class LUISGrammarEvaluator implements GrammarEvaluator {
     @Override
     public Object getSemanticInterpretation(final DataModel model,
             String utterance) {
-        final HttpClient client = new DefaultHttpClient();
+        final HttpClientBuilder builder = HttpClientBuilder.create();
         if (PROXY_HOST != null) {
             HttpHost proxy = new HttpHost(PROXY_HOST, PROXY_PORT);
-            HttpParams params = client.getParams();
-            params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+            builder.setProxy(proxy);
         }
-        try {
-            final URIBuilder builder = new URIBuilder(
-                    "https://api.projectoxford.ai/luis/v1/application");
-            builder.addParameter("id", applicationId);
-            builder.addParameter("subscription-key", subscriptionKey);
-            builder.addParameter("q", utterance);
-            final HttpGet request = new HttpGet(builder.build());
+        try (CloseableHttpClient client = builder.build()){
+            final URIBuilder uribuilder = new URIBuilder(grammarUri);
+            uribuilder.addParameter("subscription-key", subscriptionKey);
+            uribuilder.addParameter("q", utterance);
+            final URI uri = uribuilder.build();
+            final HttpGet request = new HttpGet(uri);
             final HttpResponse response = client.execute(request);
             final StatusLine statusLine = response.getStatusLine();
             final int status = statusLine.getStatusCode();
             if (status != HttpStatus.SC_OK) {
-                LOGGER.error(statusLine.getReasonPhrase() + " (HTTP error code "
+                final String reasonPhrase = statusLine.getReasonPhrase();
+                LOGGER.error("error accessing '" + uri +"': " +
+                        reasonPhrase + " (HTTP error code "
                         + status + ")");
                 return null;
             }
             final HttpEntity entity = response.getEntity();
             final InputStream input = entity.getContent();
-            final InputStreamReader reader = new InputStreamReader(input);
-            JSONParser parser = new JSONParser();
-            final JSONObject object = (JSONObject) parser.parse(reader);
-            JSONArray intents = (JSONArray) object.get("intents");
-            JSONObject firstIntent = (JSONObject) intents.get(0);
-            final String intent = (String) firstIntent.get("intent");
-            JSONArray entities = (JSONArray) object.get("entities");
-            if (entities.isEmpty()) {
-                return intent;
-            }
-            final DataModel interpretationModel = model.newInstance();
-            interpretationModel.createScope();
-            interpretationModel.createVariable("out", model.createNewObject());
-            Object out =  interpretationModel.readVariable("out", Object.class);
-            final Double score = (Double) firstIntent.get("score");
-            LOGGER.info("detected intent '" + intent + "' (" + score + ")");
-            interpretationModel.createVariableFor(out, "nlu-intent", intent);
-            interpretationModel.createVariableFor(out, intent, model.createNewObject());
-            final Object intentObject = interpretationModel.readVariable("out." + intent, Object.class);
-            for (int i = 0; i < entities.size(); i++) {
-                final JSONObject currentEntity = (JSONObject) entities.get(i);
-                final String type = (String) currentEntity.get("type");
-                final String value = (String) currentEntity.get("entity");
-                final Double entityScore = (Double) currentEntity.get("score");
-                LOGGER.info("detected entity '" + type + "'='" + value + "' ("
-                        + entityScore + ")");
-                interpretationModel.createVariableFor(intentObject, type, value);
-            }
-
-            final Object interpretation =
-                    interpretationModel.readVariable("out", Object.class);
-            final String log = interpretationModel.toString(interpretation);
-            LOGGER.info("created semantic interpretation '" + log + "'");
+            final Object interpretation = parseLUISResponse(model, input);
             return interpretation;
         } catch (IOException | URISyntaxException | ParseException | SemanticError e) {
             LOGGER.error(e.getMessage(), e);
             return null;
         }
+    }
+
+    /**
+     * Parse the response from LUIS.
+     * @param model the current datamodel
+     * @param input the input stream to the response entity
+     * @return parsed semantic interpretation
+     * @throws IOException parsing error
+     * @throws ParseException parsing error
+     * @throws SemanticError error evaluating the result in the datamodel
+     */
+    private Object parseLUISResponse(final DataModel model,
+            final InputStream input)
+            throws IOException, ParseException, SemanticError {
+        final InputStreamReader reader = new InputStreamReader(input);
+        final JSONParser parser = new JSONParser();
+        final JSONObject object = (JSONObject) parser.parse(reader);
+        final JSONObject topScoringIntent = 
+                (JSONObject) object.get("topScoringIntent");
+        final DataModel interpretationModel = model.newInstance();
+        interpretationModel.createScope();
+        interpretationModel.createVariable("out", model.createNewObject());
+        Object out =  interpretationModel.readVariable("out", Object.class);
+        final String intent = (String) topScoringIntent.get("intent");
+        final Double score = (Double) topScoringIntent.get("score");
+        LOGGER.info("detected intent '" + intent + "' (" + score + ")");
+        interpretationModel.createVariableFor(out, "nlu-intent", intent);
+        interpretationModel.createVariableFor(out, intent,
+                model.createNewObject());
+        final Object intentObject = interpretationModel.readVariable(
+                "out." + intent, Object.class);
+        final JSONArray entities = (JSONArray) object.get("entities");
+        if (entities.isEmpty()) {
+            return intent;
+        }
+        for (int i = 0; i < entities.size(); i++) {
+            final JSONObject currentEntity = (JSONObject) entities.get(i);
+            final String type = (String) currentEntity.get("type");
+            final String value = (String) currentEntity.get("entity");
+            final Double entityScore = (Double) currentEntity.get("score");
+            LOGGER.info("detected entity '" + type + "'='" + value + "' ("
+                    + entityScore + ")");
+            interpretationModel.createVariableFor(intentObject, type, value);
+        }
+
+        final Object interpretation =
+                interpretationModel.readVariable("out", Object.class);
+        final String log = interpretationModel.toString(interpretation);
+        LOGGER.info("created semantic interpretation '" + log + "'");
+        return interpretation;
     }
 }

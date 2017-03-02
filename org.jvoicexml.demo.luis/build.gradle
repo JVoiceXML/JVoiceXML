@@ -44,6 +44,7 @@ xslt {
 
 jar {
     dependsOn xslt
+
     manifest {
         attributes("Implementation-Title": "JVoiceXML LUIS Demo",
                    "Implementation-Vendor": "JVoiceXML group",
@@ -54,4 +55,8 @@ jar {
 
 mainClassName = "org.jvoicexml.demo.luis.LUISDemo"
 applicationDefaultJvmArgs = ["-Djava.security.policy=${projectDir}/src/main/resources/jvoicexml.policy" ]
+
+run {
+    dependsOn xslt
+}
 

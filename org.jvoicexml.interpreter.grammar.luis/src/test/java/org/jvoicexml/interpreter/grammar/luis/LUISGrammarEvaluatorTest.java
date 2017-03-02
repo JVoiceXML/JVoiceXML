@@ -21,7 +21,7 @@ public class LUISGrammarEvaluatorTest {
                 .get("luis.pizza-application-id");
 
         final URI uri = new URI(
-                "https://api.projectoxford.ai/luis/v1/application?id="
+                "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/"
                         + applicationId);
         LUISGrammarEvaluator evaluator = new LUISGrammarEvaluator(subscription,
                 uri);

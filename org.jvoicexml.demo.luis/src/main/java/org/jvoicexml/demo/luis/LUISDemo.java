@@ -65,7 +65,7 @@ public final class LUISDemo implements TextListener {
     /** The text server. */
     private TextServer server;
 
-    private Object lock;
+    private final Object lock;
     
     /**
      * Do not create from outside.
@@ -76,7 +76,6 @@ public final class LUISDemo implements TextListener {
             context = new InitialContext();
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error creating initial context", ne);
-
             context = null;
         }
     }
@@ -106,10 +105,13 @@ public final class LUISDemo implements TextListener {
     private void interpretDocument(final URI uri) throws JVoiceXMLEvent, InterruptedException, IOException {
         final JVoiceXml jvxml;
         try {
-            jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+            jvxml = (JVoiceXml) context.lookup(JVoiceXml.class.getSimpleName());
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining JVoiceXml", ne);
-
+            return;
+        }
+        if (jvxml == null) {
+            LOGGER.error("unable to obtain a referece to JVoiceXML");
             return;
         }
 
@@ -130,10 +132,11 @@ public final class LUISDemo implements TextListener {
         session.hangup();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void started() {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
