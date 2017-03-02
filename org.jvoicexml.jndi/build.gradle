@@ -43,7 +43,6 @@ dependencies {
 
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
-    compile project(':org.jvoicexml.client.text')
 }
 
 
