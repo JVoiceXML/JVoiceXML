@@ -387,9 +387,6 @@ public final class TextTelephony implements Telephony {
      */
     @Override
     public void passivate() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("passivating...");
-        }
         listener.clear();
         if (receiver != null) {
             receiver.interrupt();
@@ -412,9 +409,6 @@ public final class TextTelephony implements Telephony {
         pendingMessages.clear();
         sentHungup = false;
         textOutput = null;
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...passivated");
-        }
     }
 
     /**

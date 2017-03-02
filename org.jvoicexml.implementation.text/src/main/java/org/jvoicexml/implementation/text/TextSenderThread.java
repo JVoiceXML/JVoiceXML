@@ -61,7 +61,7 @@ final class TextSenderThread extends Thread {
     private boolean acknowledgeBye;
     
     /** {@code true} if the sender thread is running. */
-    boolean sending;
+    private boolean sending;
 
     /**
      * Constructs a new object.

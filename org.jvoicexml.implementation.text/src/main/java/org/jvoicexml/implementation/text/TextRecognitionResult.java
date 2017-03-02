@@ -55,7 +55,7 @@ final class TextRecognitionResult implements RecognitionResult {
      * @param semanticInterpretation
      *            the semantic interpretation of the input
      */
-    public TextRecognitionResult(final String text,
+    TextRecognitionResult(final String text,
             final Object semanticInterpretation) {
         utterance = text;
         interpretation = semanticInterpretation;

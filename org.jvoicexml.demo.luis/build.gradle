@@ -25,7 +25,7 @@ configurations {
 }
 
 dependencies {
-    jvxmlConfiguration fileTree(dir: "src/test/config")
+    jvxmlConfiguration fileTree(dir: "src/main/config")
     
     compile fileTree(dir: rootDir, include: ['*.properties'])
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.8'
@@ -58,7 +58,7 @@ jar {
 }
 
 mainClassName = "org.jvoicexml.demo.luis.LUISDemo"
-applicationDefaultJvmArgs = ["-Djava.security.policy=${projectDir}/src/main/resources/jvoicexml.policy" ]
+applicationDefaultJvmArgs = ["-Djava.security.policy=${projectDir}/src/main/config/jvoicexml.policy" ]
 
 run {
     dependsOn xslt

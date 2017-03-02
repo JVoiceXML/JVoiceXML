@@ -78,7 +78,7 @@ final class TextSynthesizedOutput
     /**
      * Constructs a new object.
      */
-    public TextSynthesizedOutput() {
+    TextSynthesizedOutput() {
         texts = new java.util.concurrent.LinkedBlockingQueue<SpeakableText>();
         outputListener = new java.util.ArrayList<SynthesizedOutputListener>();
     }

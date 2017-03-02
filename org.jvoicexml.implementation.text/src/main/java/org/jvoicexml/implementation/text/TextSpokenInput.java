@@ -96,7 +96,7 @@ final class TextSpokenInput implements SpokenInput {
     /**
      * Constructs a new object.
      */
-    public TextSpokenInput() {
+    TextSpokenInput() {
         activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
         parsers = new java.util.HashMap<String, GrammarParser<?>>();
         listener = new java.util.ArrayList<SpokenInputListener>();
@@ -111,10 +111,6 @@ final class TextSpokenInput implements SpokenInput {
         for (GrammarParser<?> parser : grammarParsers) {
             final GrammarType type = parser.getType();
             parsers.put(type.getType(), parser);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("added parser '" + parser + "' for grammar type '"
-                        + type + "'");
-            }
         }
     }
 
@@ -175,7 +171,8 @@ final class TextSpokenInput implements SpokenInput {
      */
     @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
+        final Collection<GrammarType> types =
+                new java.util.ArrayList<GrammarType>();
         for (GrammarParser<?> parser : parsers.values()) {
             types.add(parser.getType());
         }

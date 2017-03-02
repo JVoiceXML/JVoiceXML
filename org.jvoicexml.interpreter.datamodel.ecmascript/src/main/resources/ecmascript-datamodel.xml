@@ -9,7 +9,8 @@
 
     <!-- The ECMA Script data model -->
     <beans:bean id="org.jvoicexml.interpreter.datamodel.DataModel"
-        class="org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel">
+        class="org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel"
+        scope="singleton">
         <property name="serializer">
             <!-- The VoiceXML spec does not define how to serialize compound 
                 javascript object when submitting a form. http://www.w3.org/TR/voicexml20#dml5.3.8 
