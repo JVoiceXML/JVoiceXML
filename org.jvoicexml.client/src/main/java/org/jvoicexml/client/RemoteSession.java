@@ -54,7 +54,7 @@ public interface RemoteSession
      * @exception ErrorEvent
      *            Error initiating the call.
      */
-    void call(final URI uri)
+    void call(URI uri)
             throws RemoteException, ErrorEvent;
 
     /**

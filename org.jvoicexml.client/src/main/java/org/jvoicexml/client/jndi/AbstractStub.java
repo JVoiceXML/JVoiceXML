@@ -56,7 +56,7 @@ abstract class AbstractStub<T extends Remote>
      * Creates a new object.
      * @since 0.6
      */
-    public AbstractStub() {
+    AbstractStub() {
         try {
             context = new InitialContext();
         } catch (javax.naming.NamingException ne) {
@@ -71,7 +71,7 @@ abstract class AbstractStub<T extends Remote>
      * @param ctx The context to use.
      * @since 0.6
      */
-    public AbstractStub(final Context ctx) {
+    AbstractStub(final Context ctx) {
         context = ctx;
     }
 

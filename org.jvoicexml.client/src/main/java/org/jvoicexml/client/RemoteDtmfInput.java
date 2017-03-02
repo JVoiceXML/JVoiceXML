@@ -52,6 +52,6 @@ public interface RemoteDtmfInput
      * @exception RemoteException
      *            Error in remote procedure call.
      */
-    void addCharacter(final char dtmf)
+    void addCharacter(char dtmf)
             throws RemoteException;
 }

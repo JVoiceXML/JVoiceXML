@@ -62,6 +62,6 @@ public interface ConnectionInformationFactory {
      *           this factory
      */
     ConnectionInformationController createConnectionInformation(
-            final String call, final String output, final String input)
+            String call, String output, String input)
                     throws UnsupportedResourceIdentifierException;
 }

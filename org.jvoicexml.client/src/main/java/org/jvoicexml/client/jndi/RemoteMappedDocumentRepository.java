@@ -47,7 +47,17 @@ public interface RemoteMappedDocumentRepository
      * @exception RemoteException
      *            Error in remote method call.
      */
-    URI getUri(final String path)
+    URI getUri(String path) throws RemoteException;
+
+    /**
+     * Adds the given document to this repository.
+     * @param uri URI as a key for later retrieval.
+     * @param document Document to be added.
+     *
+     * @exception RemoteException
+     *            Error in remote method call.
+     */
+    void addDocument(URI uri, String document)
             throws RemoteException;
 
     /**
@@ -58,17 +68,6 @@ public interface RemoteMappedDocumentRepository
      * @exception RemoteException
      *            Error in remote method call.
      */
-    void addDocument(final URI uri, final String document)
-            throws RemoteException;
-
-    /**
-     * Adds the given document to this repository.
-     * @param uri URI as a key for later retrieval.
-     * @param document Document to be added.
-     *
-     * @exception RemoteException
-     *            Error in remote method call.
-     */
-    void addDocument(final URI uri, final VoiceXmlDocument document)
+    void addDocument(URI uri, VoiceXmlDocument document)
             throws RemoteException;
 }

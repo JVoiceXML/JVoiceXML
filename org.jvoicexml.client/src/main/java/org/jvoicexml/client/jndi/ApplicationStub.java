@@ -83,7 +83,8 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      * {@inheritDoc}
      */
     @Override
-    public void addDocument(URI uri, VoiceXmlDocument doc) throws BadFetchError {
+    public void addDocument(final URI uri, final VoiceXmlDocument doc)
+            throws BadFetchError {
         final RemoteApplication application = getSkeleton();
         try {
             application.addDocument(uri, doc);
@@ -127,7 +128,8 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      * {@inheritDoc}
      */
     @Override
-    public void setRootDocument(VoiceXmlDocument document) throws BadFetchError {
+    public void setRootDocument(final VoiceXmlDocument document)
+            throws BadFetchError {
         final RemoteApplication application = getSkeleton();
         try {
             application.setRootDocument(document);
@@ -141,7 +143,7 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      * {@inheritDoc}
      */
     @Override
-    public boolean isLoaded(URI uri) {
+    public boolean isLoaded(final URI uri) {
         final RemoteApplication application = getSkeleton();
         try {
             return application.isLoaded(uri);
@@ -171,7 +173,7 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      * {@inheritDoc}
      */
     @Override
-    public URI resolve(URI uri) {
+    public URI resolve(final URI uri) {
         final RemoteApplication application = getSkeleton();
         try {
             return application.resolve(uri);
@@ -186,7 +188,7 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      * {@inheritDoc}
      */
     @Override
-    public URI resolve(URI baseUri, URI uri) {
+    public URI resolve(final URI baseUri, final URI uri) {
         final RemoteApplication application = getSkeleton();
         try {
             return application.resolve(baseUri, uri);
@@ -201,7 +203,7 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      * {@inheritDoc}
      */
     @Override
-    public void setLastResult(List<LastResult> lastresult) {
+    public void setLastResult(final List<LastResult> lastresult) {
         final RemoteApplication application = getSkeleton();
         try {
             application.setLastResult(lastresult);

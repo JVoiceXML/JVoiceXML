@@ -50,7 +50,7 @@ public interface RemoteApplication extends Remote {
      * @exception RemoteException
      *            Error in remote method call.
      */
-    void addDocument(final URI uri, final VoiceXmlDocument doc)
+    void addDocument(URI uri, VoiceXmlDocument doc)
             throws RemoteException, BadFetchError;
 
     /**
@@ -83,7 +83,7 @@ public interface RemoteApplication extends Remote {
      * @exception RemoteException
      *            Error in remote method call.
      */
-    void setRootDocument(final VoiceXmlDocument document)
+    void setRootDocument(VoiceXmlDocument document)
             throws RemoteException, BadFetchError;
 
     /**
@@ -95,7 +95,7 @@ public interface RemoteApplication extends Remote {
      * @exception RemoteException
      *            Error in remote method call.
      */
-    boolean isLoaded(final URI uri) throws RemoteException;
+    boolean isLoaded(URI uri) throws RemoteException;
 
     /**
      * Retrieves the base URI.
@@ -116,7 +116,7 @@ public interface RemoteApplication extends Remote {
      * @exception RemoteException
      *            Error in remote method call.
      */
-    URI resolve(final URI uri) throws RemoteException;
+    URI resolve(URI uri) throws RemoteException;
 
     /**
      * Converts the given {@link URI} into a hierarchical URI. If the given
@@ -131,7 +131,7 @@ public interface RemoteApplication extends Remote {
      * @exception RemoteException
      *            Error in remote method call.
      */
-    URI resolve(final URI baseUri, final URI uri) throws RemoteException;
+    URI resolve(URI baseUri, URI uri) throws RemoteException;
 
     /**
      * Sets the last result.
@@ -139,7 +139,7 @@ public interface RemoteApplication extends Remote {
      * @exception RemoteException
      *            Error in remote method call.
      */
-    void setLastResult(final List<LastResult> lastresult)
+    void setLastResult(List<LastResult> lastresult)
             throws RemoteException;
 
     /**

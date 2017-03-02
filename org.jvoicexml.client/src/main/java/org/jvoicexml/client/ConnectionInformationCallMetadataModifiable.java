@@ -38,7 +38,7 @@ public interface ConnectionInformationCallMetadataModifiable {
      * Sets the profile.
      * @param profile the profile
      */
-    void setProfile(final String profile);
+    void setProfile(String profile);
 
     /**
      * Sets the called device.
@@ -46,7 +46,7 @@ public interface ConnectionInformationCallMetadataModifiable {
      * @param device
      *            the called device to set
      */
-    void setCalledDevice(final URI device);
+    void setCalledDevice(URI device);
 
     /**
      * Sets the calling device.
@@ -54,7 +54,7 @@ public interface ConnectionInformationCallMetadataModifiable {
      * @param device
      *            the calling device to set
      */
-    void setCallingDevice(final URI device);
+    void setCallingDevice(URI device);
 
     /**
      * Sets the protocol name.
@@ -62,7 +62,7 @@ public interface ConnectionInformationCallMetadataModifiable {
      * @param name
      *            the protocol name to set
      */
-    void setProtocolName(final String name);
+    void setProtocolName(String name);
 
     /**
      * Sets the protocol version.
@@ -70,6 +70,5 @@ public interface ConnectionInformationCallMetadataModifiable {
      * @param version
      *            the protocol version to set
      */
-    void setProtocolVersion(final String version);
-
+    void setProtocolVersion(String version);
 }

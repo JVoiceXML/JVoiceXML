@@ -68,7 +68,7 @@ public interface RemoteJVoiceXml
      * @exception RemoteException
      *            Error creating the session.
      */
-    Session createSession(final ConnectionInformation connectionInformation)
+    Session createSession(ConnectionInformation connectionInformation)
             throws RemoteException;
 
     /**

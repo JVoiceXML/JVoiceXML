@@ -62,7 +62,7 @@ protobuf {
 
 jar {
     manifest {
-        attributes("Implementation-Title": "JVoiceXML text client",
+        attributes("Implementation-Title": "JVoiceXML Text Client",
                    "Implementation-Vendor": "JVoiceXML group",
                    "Implementation-Version": version)
     }

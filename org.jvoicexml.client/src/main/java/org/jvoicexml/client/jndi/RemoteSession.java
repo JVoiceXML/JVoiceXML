@@ -50,11 +50,12 @@ public interface RemoteSession extends Remote {
      * 
      * @param uri
      *            URI of the first document to load.
+     * @return called application
      * 
      * @exception RemoteException
      *                Error in remote method call.
      */
-    Application call(final URI uri) throws RemoteException;
+    Application call(URI uri) throws RemoteException;
 
     /**
      * Retrieves the application.
