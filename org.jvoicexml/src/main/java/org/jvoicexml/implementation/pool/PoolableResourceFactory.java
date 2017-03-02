@@ -22,8 +22,6 @@
 package org.jvoicexml.implementation.pool;
 
 import org.apache.commons.pool.PoolableObjectFactory;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ExternalResource;
 import org.jvoicexml.implementation.ResourceFactory;
@@ -40,11 +38,7 @@ import org.jvoicexml.implementation.ResourceFactory;
  * factory.
  */
 final class PoolableResourceFactory<T extends ExternalResource>
-        implements PoolableObjectFactory {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            LogManager.getLogger(PoolableResourceFactory.class);
-
+        implements PoolableObjectFactory<T> {
     /** Known platform factories. */
     private final ResourceFactory<T> factory;
 
@@ -52,7 +46,7 @@ final class PoolableResourceFactory<T extends ExternalResource>
      * Constructs a new object.
      * @param resourceFactory the factory to create new resource
      */
-    public PoolableResourceFactory(final ResourceFactory<T> resourceFactory) {
+     PoolableResourceFactory(final ResourceFactory<T> resourceFactory) {
         factory = resourceFactory;
     }
 
@@ -60,17 +54,16 @@ final class PoolableResourceFactory<T extends ExternalResource>
      * {@inheritDoc}
      */
     @Override
-    public Object makeObject()
+    public T makeObject()
             throws Exception {
-
-        final ExternalResource resource;
+        final T resource;
         try {
             resource = factory.createResource();
-            LOGGER.info("created a new resource of type ("
-                    + resource.getClass().getCanonicalName() + ")");
             resource.open();
         } catch (NoresourceError e) {
-            throw new Exception(e.getMessage(), e);
+            throw new Exception("error creating resource of type "
+                        + factory.getType() + ": "
+                        + e.getMessage(), e);
         }
 
         return resource;
@@ -80,9 +73,8 @@ final class PoolableResourceFactory<T extends ExternalResource>
      * {@inheritDoc}
      */
     @Override
-    public void destroyObject(final Object object)
+    public void destroyObject(final T resource)
             throws Exception {
-        final ExternalResource resource = (ExternalResource) object;
         resource.close();
     }
 
@@ -90,7 +82,7 @@ final class PoolableResourceFactory<T extends ExternalResource>
      * {@inheritDoc}
      */
     @Override
-    public boolean validateObject(final Object object) {
+    public boolean validateObject(final T object) {
         return false;
     }
 
@@ -98,9 +90,8 @@ final class PoolableResourceFactory<T extends ExternalResource>
      * {@inheritDoc}
      */
     @Override
-    public void activateObject(final Object object)
+    public void activateObject(final T resource)
             throws Exception {
-        final ExternalResource resource = (ExternalResource) object;
         try {
             resource.activate();
         } catch (NoresourceError e) {
@@ -112,9 +103,8 @@ final class PoolableResourceFactory<T extends ExternalResource>
      * {@inheritDoc}
      */
     @Override
-    public void passivateObject(final Object object)
+    public void passivateObject(final T resource)
             throws Exception {
-        final ExternalResource resource = (ExternalResource) object;
         try {
             resource.passivate();
         } catch (NoresourceError e) {

@@ -55,14 +55,14 @@ public final class KeyedResourcePool<T extends ExternalResource> {
         LogManager.getLogger(KeyedResourcePool.class);
 
     /** Known pools. */
-    private final Map<String, ObjectPool> pools;
+    private final Map<String, ObjectPool<T>> pools;
 
     /**
      * Constructs a new object.
      */
     public KeyedResourcePool() {
         super();
-        pools = new java.util.HashMap<String, ObjectPool>();
+        pools = new java.util.HashMap<String, ObjectPool<T>>();
     }
 
     /**
@@ -72,9 +72,9 @@ public final class KeyedResourcePool<T extends ExternalResource> {
      */
     public void addResourceFactory(
             final ResourceFactory<T> resourceFactory) throws Exception {
-        final PoolableObjectFactory factory =
+        final PoolableObjectFactory<T> factory =
             new PoolableResourceFactory<T>(resourceFactory);
-        final GenericObjectPool pool = new GenericObjectPool(factory);
+        final GenericObjectPool<T> pool = new GenericObjectPool<T>(factory);
         final int instances = resourceFactory.getInstances();
         pool.setMinIdle(instances);
         pool.setMaxActive(instances);
@@ -82,9 +82,8 @@ public final class KeyedResourcePool<T extends ExternalResource> {
         pool.setWhenExhaustedAction(GenericObjectPool.WHEN_EXHAUSTED_FAIL);
         final String type = resourceFactory.getType();
         pools.put(type, pool);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("loading resources of type '" + type + "'...");
-        }
+        LOGGER.info("loading " + instances + " instance(s) of type '" + type
+                + "'");
         for (int i = 0; i < instances; i++) {
             pool.addObject();
         }
@@ -100,16 +99,15 @@ public final class KeyedResourcePool<T extends ExternalResource> {
      * @exception NoresourceError
      *            the object could not be borrowed
      */
-    @SuppressWarnings("unchecked")
     public synchronized T borrowObject(final Object key)
         throws NoresourceError {
-        final ObjectPool pool = pools.get(key);
+        final ObjectPool<T> pool = pools.get(key);
         if (pool == null) {
             throw new NoresourceError("Pool of type '" + key + "' is unknown!");
         }
         T resource;
         try {
-            resource = (T) pool.borrowObject();
+            resource = pool.borrowObject();
         } catch (NoSuchElementException e) {
             throw new NoresourceError(e.getMessage(), e);
         } catch (IllegalStateException e) {
@@ -141,7 +139,7 @@ public final class KeyedResourcePool<T extends ExternalResource> {
      */
     public synchronized void returnObject(final String key,
             final T resource) throws NoresourceError {
-        final ObjectPool pool = pools.get(key);
+        final ObjectPool<T> pool = pools.get(key);
         if (pool == null) {
             throw new NoresourceError("Pool of type '" + key + "' is unknown!");
         }
@@ -170,8 +168,8 @@ public final class KeyedResourcePool<T extends ExternalResource> {
      */
     public synchronized int getNumActive() {
         int active = 0;
-        final Collection<ObjectPool> col = pools.values();
-        for (ObjectPool pool : col) {
+        final Collection<ObjectPool<T>> col = pools.values();
+        for (ObjectPool<T> pool : col) {
             active += pool.getNumActive();
         }
         return active;
@@ -184,7 +182,7 @@ public final class KeyedResourcePool<T extends ExternalResource> {
      * @since 0.7.3
      */
     public synchronized int getNumActive(final String key) {
-        final ObjectPool pool = pools.get(key);
+        final ObjectPool<T> pool = pools.get(key);
         return pool.getNumActive();
     }
 
@@ -195,8 +193,8 @@ public final class KeyedResourcePool<T extends ExternalResource> {
      */
     public synchronized int getNumIdle() {
         int idle = 0;
-        final Collection<ObjectPool> col = pools.values();
-        for (ObjectPool pool : col) {
+        final Collection<ObjectPool<T>> col = pools.values();
+        for (ObjectPool<T> pool : col) {
             idle += pool.getNumIdle();
         }
         return idle;
@@ -210,7 +208,7 @@ public final class KeyedResourcePool<T extends ExternalResource> {
      * @since 0.7.3
      */
     public synchronized int getNumIdle(final String key) {
-        final ObjectPool pool = pools.get(key);
+        final ObjectPool<T> pool = pools.get(key);
         if (pool == null) {
             return -1;
         }
@@ -233,8 +231,8 @@ public final class KeyedResourcePool<T extends ExternalResource> {
      * @since 0.7.3
      */
     public synchronized void close() throws Exception {
-        final Collection<ObjectPool> col = pools.values();
-        for (ObjectPool pool : col) {
+        final Collection<ObjectPool<T>> col = pools.values();
+        for (ObjectPool<T> pool : col) {
             pool.close();
         }
     }
