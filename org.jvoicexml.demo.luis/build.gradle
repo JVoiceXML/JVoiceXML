@@ -15,6 +15,11 @@ buildscript {
     }
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
 configurations {
     jvxmlConfiguration
 }
@@ -25,12 +30,11 @@ dependencies {
     compile fileTree(dir: rootDir, include: ['*.properties'])
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.8'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.8'
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: version
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.client.text', version: version
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: version
 
-    compile project(':org.jvoicexml')
-    compile project(':org.jvoicexml.client')
-    compile project(':org.jvoicexml.client.text')
-
-    runtime project(':org.jvoicexml.jndi')
+    runtime group: 'org.jvoicexml', name: 'org.jvoicexml.jndi', version: version
 }
 
 xslt {
