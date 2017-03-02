@@ -20,14 +20,3 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-task install {
-}
-
-subprojects {
-    project ->
-        if (project.hasProperty('install')) { 
-            install.dependsOn("${pr.path}:install")
-        } 
-}
-
-
