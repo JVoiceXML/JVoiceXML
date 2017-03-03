@@ -178,6 +178,9 @@ public final class TextTelephony implements Telephony {
                     textOutput.checkEmptyQueue(speakable);
                 }
                 if (pendingMessages.isEmpty()) {
+                    if (sentHungup) {
+                        receiver.terminateReceiver();
+                    }
                     pendingMessages.notifyAll();
                 }
             }

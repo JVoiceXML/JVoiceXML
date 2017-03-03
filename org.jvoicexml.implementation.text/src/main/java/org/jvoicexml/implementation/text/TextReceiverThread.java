@@ -55,6 +55,9 @@ final class TextReceiverThread extends Thread {
     /** Wait for termination semaphore. */
     private final Object lock;
     
+    /** {@code true} if the receiver should terminate. */
+    private boolean terminateReceiver;
+    
     /**
      * Constructs a new object.
      * @param asyncSocket the socket to read from.
@@ -65,6 +68,7 @@ final class TextReceiverThread extends Thread {
         socket = asyncSocket;
         telephony = textTelephony;
         lock = new Object();
+        terminateReceiver = false;
 
         setDaemon(true);
         setName("TextReceiverThread");
@@ -93,7 +97,8 @@ final class TextReceiverThread extends Thread {
         }
         try {
             final InputStream stream = socket.getInputStream();
-            while (socket.isConnected() && !isInterrupted()) {
+            while (!terminateReceiver && socket.isConnected() 
+                    && !isInterrupted()) {
                 final TextMessage message =
                         TextMessage.parseDelimitedFrom(stream);
                 if (message == null) {
@@ -109,6 +114,7 @@ final class TextReceiverThread extends Thread {
                     input = null;
                 } else if (type == TextMessageType.BYE) {
                     telephony.addAcknowledgeMessage(message);
+                    terminateReceiver = true;
                 } else {
                     final int sequenceNumber = message.getSequenceNumber();
                     telephony.removePendingMessage(sequenceNumber);
@@ -185,5 +191,15 @@ final class TextReceiverThread extends Thread {
                 wait();
             }
         }
+    }
+    
+    
+    /**
+     * Notify the receiver that it should terminate.
+     * 
+     * @since 0.7.8
+     */
+    public void terminateReceiver() {
+        terminateReceiver = true;
     }
 }

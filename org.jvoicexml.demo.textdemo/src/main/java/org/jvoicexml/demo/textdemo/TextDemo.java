@@ -70,13 +70,13 @@ public final class TextDemo implements TextListener {
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' parallel text demo for "
                 + "JVoiceXML...");
-        LOGGER.info("(c) 2014-2016 by JVoiceXML group - "
+        LOGGER.info("(c) 2014-2017 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final int MAX = 20;
         final TextServer[] servers = new TextServer[MAX];
         for (int i = 0; i < MAX; i++) {
-            final TextServer server = new TextServer(4242 + i);
+            final TextServer server = new TextServer(14242 + i);
             server.addTextListener(new TextDemo());
             server.start();
             servers[i] = server;
@@ -84,7 +84,8 @@ public final class TextDemo implements TextListener {
 
         try {
             final Context context = new InitialContext();
-            final JVoiceXml jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+            final JVoiceXml jvxml = (JVoiceXml) context.lookup(
+                    JVoiceXml.class.getSimpleName());
             final File file = new File("helloworld.vxml");
             final URI dialog = file.toURI();
             LOGGER.info("initiating " + MAX + " calls...");

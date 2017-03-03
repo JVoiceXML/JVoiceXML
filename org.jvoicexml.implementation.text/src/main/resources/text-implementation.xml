@@ -11,7 +11,7 @@
     <classpath>json-simple-1.1.1.jar</classpath>
 
     <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">
-        <beans:property name="instances" value="1" />
+        <beans:property name="instances" value="100" />
         <beans:property name="grammarParsers">
             <beans:list value-type="org.jvoicexml.implementation.grammar.GrammarParser">
                 <beans:bean class="org.jvoicexml.srgs.SrgsSisrXmlGrammarParser" />
