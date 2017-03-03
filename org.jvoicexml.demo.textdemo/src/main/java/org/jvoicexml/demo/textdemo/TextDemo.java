@@ -21,9 +21,9 @@
 
 package org.jvoicexml.demo.textdemo;
 
-import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import javax.naming.Context;
@@ -86,8 +86,8 @@ public final class TextDemo implements TextListener {
             final Context context = new InitialContext();
             final JVoiceXml jvxml = (JVoiceXml) context.lookup(
                     JVoiceXml.class.getSimpleName());
-            final File file = new File("helloworld.vxml");
-            final URI dialog = file.toURI();
+            final URI dialog =
+                    TextDemo.class.getResource("/helloworld.vxml").toURI();
             LOGGER.info("initiating " + MAX + " calls...");
             final Session[] sessions = new Session[MAX];
             for (int i = 0; i < MAX; i++) {
@@ -105,13 +105,8 @@ public final class TextDemo implements TextListener {
                 sessions[i].hangup();
             }
             LOGGER.info("...done");
-        } catch (NamingException e) {
-            LOGGER.fatal(e.getMessage(), e);
-            return;
-        } catch (ErrorEvent e) {
-            LOGGER.fatal(e.getMessage(), e);
-            return;
-        } catch (UnknownHostException e) {
+        } catch (NamingException | ErrorEvent | UnknownHostException
+                | URISyntaxException e) {
             LOGGER.fatal(e.getMessage(), e);
             return;
         }
