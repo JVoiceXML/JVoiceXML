@@ -34,5 +34,5 @@ public interface ExtendedConfiguration {
      * Sets the configuration file.
      * @param config the configuration file
      */
-    void setConfigurationFile(final File config);
+    void setConfigurationFile(File config);
 }

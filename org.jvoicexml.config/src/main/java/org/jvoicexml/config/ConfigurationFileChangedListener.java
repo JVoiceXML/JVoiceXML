@@ -32,17 +32,17 @@ public interface ConfigurationFileChangedListener {
      * The given file has been added.
      * @param file the added file
      */
-    void fileAdded(final File file);
+    void fileAdded(File file);
 
     /**
      * The given file has been updated.
      * @param file the updated file
      */
-    void fileUpdated(final File file);
+    void fileUpdated(File file);
 
     /**
      * The given file has been removed.
      * @param file the removed file
      */
-    void fileRemoved(final File file);
+    void fileRemoved(File file);
 }

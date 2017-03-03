@@ -308,7 +308,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
      * {@inheritDoc}
      */
     @Override
-    public <T extends Object> Collection<T> loadObjects(
+    public synchronized <T extends Object> Collection<T> loadObjects(
             final Class<T> baseClass, final String root)
             throws ConfigurationException {
         final Collection<T> beans = new java.util.ArrayList<T>();
@@ -379,8 +379,8 @@ public final class JVoiceXmlConfiguration implements Configuration {
      * {@inheritDoc}
      */
     @Override
-    public <T extends Object> T loadObject(final Class<T> baseClass,
-                                           final String key)
+    public synchronized <T extends Object> T loadObject(
+            final Class<T> baseClass, final String key)
         throws ConfigurationException {
         if (context == null) {
             LOGGER.warn("configuration error. unable to load object: key '"
@@ -408,7 +408,8 @@ public final class JVoiceXmlConfiguration implements Configuration {
      * {@inheritDoc}
      */
     @Override
-    public <T extends Object> T loadObject(final Class<T> baseClass)
+    public synchronized <T extends Object> T loadObject(
+            final Class<T> baseClass)
         throws ConfigurationException {
         final String key = baseClass.getCanonicalName();
         return loadObject(baseClass, key);

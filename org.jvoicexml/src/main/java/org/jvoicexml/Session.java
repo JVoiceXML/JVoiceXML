@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -67,8 +62,6 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
- *
  * @see org.jvoicexml.JVoiceXml#createSession(ConnectionInformation)
  *
  */
@@ -78,14 +71,14 @@ public interface Session {
      * @param listener the session listener to add.
      * @since 0.7.3
      */
-    void addSessionListener(final SessionListener listener);
+    void addSessionListener(SessionListener listener);
 
     /**
      * Removes the session listener.
      * @param listener the session listener to remove.
      * @since 0.7.3
      */
-    void removeSessionListener(final SessionListener listener);
+    void removeSessionListener(SessionListener listener);
 
     /**
      * Retrieves the universal unique identifier for this session.
@@ -117,7 +110,7 @@ public interface Session {
      * @exception ErrorEvent
      *            Error initiating the call.
      */
-    Application call(final URI uri)
+    Application call(URI uri)
             throws ErrorEvent;
 
 

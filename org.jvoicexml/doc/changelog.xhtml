@@ -16,8 +16,8 @@
         <li>improved javadoc comments</li>
         <li>added support of regex grammars to show how to enhance
             JVoiceXML by custom grammars</li>
-        <li>added support of LUIS grammars to show how to combine
-            JVoiceXML by NLU grammars</li>
+        <li>added support of LUIS grammars to show how to combine JVoiceXML
+            by NLU grammars</li>
         <li>added more compliant SRGS processor with SISR support</li>
         <li>added Halef support</li>
         <li>Telephony implementations are able to forward recognized DTMF
@@ -27,11 +27,14 @@
             triggering cancel requests to the system output</li>
         <li>redirecting jetty output to log4j</li>
         <li>bugfix: added listeners to the telephony interface</li>
+        <li>changed build system to gradle</li>
     </ul>
 
     <h3>interpreter</h3>
 
     <ul>
+        <li>return immediately if waiting for a session ending and it is
+            already closed</li>
         <li>more support for
             <ul>
                 <li>grammar
@@ -64,6 +67,7 @@
         <li>proper delay for pending messages in disconnect</li>
         <li>corrected notification of empty output queue</li>
         <li>upgrade to protobuf 3.0.0</li>
+        <li>safer shutdown of the receiver thread</li>
     </ul>
 
     <h4>JSAPI 2 implementation platform</h4>

@@ -74,7 +74,7 @@ final class ConfigurationRepository
      * @exception IOException
      *            error reading from the configuration folder
      */
-    public ConfigurationRepository(final File config) throws IOException {
+    ConfigurationRepository(final File config) throws IOException {
         configFolder = config;
         configurationFiles = new java.util.HashMap<File, byte[]>();
         final ConfigurationFolderMonitor monitor =

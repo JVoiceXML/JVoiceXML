@@ -298,11 +298,9 @@ public class JVoiceXmlSession extends Thread
         // Wait until the session ends.
         synchronized (sem) {
             try {
-                if (closed) {
-                    throw new NoresourceError("Session is already closed");
+                if (!closed) {
+                    sem.wait();
                 }
-
-                sem.wait();
             } catch (InterruptedException e) {
                 throw new NoresourceError(
                         "waiting for end of session interrupted", e);
