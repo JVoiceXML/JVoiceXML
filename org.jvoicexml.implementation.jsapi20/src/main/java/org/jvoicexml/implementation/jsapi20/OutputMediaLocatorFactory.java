@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -42,7 +37,6 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * determine the sink of the data stream.
  * </p>
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public interface OutputMediaLocatorFactory {
@@ -59,7 +53,7 @@ public interface OutputMediaLocatorFactory {
      * @exception URISyntaxException
      *            error creating the URI
      */
-    URI getSourceMediaLocator(final SynthesizedOutput output)
+    URI getSourceMediaLocator(SynthesizedOutput output)
         throws URISyntaxException;
 
     /**
@@ -74,6 +68,6 @@ public interface OutputMediaLocatorFactory {
      * @exception URISyntaxException
      *            error creating the URI
      */
-    URI getSinkMediaLocator(final SynthesizedOutput output,
-            final URI sourceLocator) throws URISyntaxException;
+    URI getSinkMediaLocator(SynthesizedOutput output,
+            URI sourceLocator) throws URISyntaxException;
 }

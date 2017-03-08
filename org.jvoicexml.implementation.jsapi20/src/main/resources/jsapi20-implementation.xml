@@ -4,13 +4,13 @@
     xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
     <repository>jsapi20</repository>
     <classpath>org.jvoicexml.implementation.jsapi20-@@VERSION@@.jar</classpath>
-    <classpath>jsr113.jar
+    <classpath>javax.speech-0.5.1-SNAPSHOT.jar
     </classpath>
-    <classpath>org.jvoicexml.jsapi2.jar
+    <classpath>org.jvoicexml.jsapi2-0.5.1-SNAPSHOT.jar
     </classpath>
-    <classpath>org.jvoicexml.jsapi2.freetts.jar
+    <classpath>org.jvoicexml.jsapi2.freetts-0.5.1-SNAPSHOT.jar
     </classpath>
-    <classpath>org.jvoicexml.jsapi2.sphinx4.jar
+    <classpath>org.jvoicexml.jsapi2.sphinx4-0.5.1-SNAPSHOT.jar
     </classpath>
     <classpath>freetts.jar</classpath>
     <classpath>cmu_us_kal.jar</classpath>

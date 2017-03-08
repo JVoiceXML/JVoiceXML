@@ -181,8 +181,9 @@ applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').bui
 run {
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
 
-    dependsOn configurations.jvxmlImplementationText
+    //dependsOn configurations.jvxmlImplementationJSAPI20
     dependsOn configurations.jvxmlImplementationMrcpv2   
+    dependsOn configurations.jvxmlImplementationText
     dependsOn configurations.jvxmlInterpreterGrammarLUIS
     
     dependsOn configurations.jvxmlJNDI
