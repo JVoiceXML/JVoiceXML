@@ -5,7 +5,7 @@
   xmlns:beans="http://www.springframework.org/schema/beans"
   elementFormDefault="qualified">
   <xsi:import namespace="http://www.springframework.org/schema/beans"
-    schemaLocation="spring-beans-2.0.xsd" />
+    schemaLocation="spring-beans-4.0.xsd" />
   <xsi:element name="callmanager">
     <xsi:annotation>
       <xsi:documentation>
