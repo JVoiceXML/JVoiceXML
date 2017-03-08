@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -34,7 +29,8 @@ import javax.speech.recognition.RecognizerProperties;
 import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultToken;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.datamodel.DataModel;
@@ -45,12 +41,11 @@ import org.jvoicexml.xml.srgs.ModeType;
  * 
  * @author Dirk Schnelle-Walka
  * @author Markus Baumgart
- * @version $Revision$
  * @since 0.6
  */
 public final class Jsapi20RecognitionResult implements RecognitionResult {
     /** The Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(Jsapi20RecognitionResult.class);
 
     /** The semantic interpretation of the utterance. */

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -38,7 +33,8 @@ import javax.speech.EngineManager;
 import javax.speech.EngineMode;
 import javax.speech.synthesis.SynthesizerMode;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
@@ -49,13 +45,12 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * JSAPI 2.0.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5.5
  */
 public final class Jsapi20SynthesizedOutputFactory
         implements ResourceFactory<SynthesizedOutput> {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
+    private static final Logger LOGGER = LogManager
             .getLogger(Jsapi20SynthesizedOutputFactory.class);
 
     /** Number of instances that this factory will create. */
@@ -76,10 +71,6 @@ public final class Jsapi20SynthesizedOutputFactory
      */
     public Jsapi20SynthesizedOutputFactory(final String engineFactory) {
         type = "jsapi20";
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("registering engine list factory '"
-                    + engineFactory + "' for synthesized output...");
-        }
         try {
             EngineManager.registerEngineListFactory(engineFactory);
             LOGGER.info("registered '" + engineFactory
@@ -113,13 +104,9 @@ public final class Jsapi20SynthesizedOutputFactory
      * {@inheritDoc}
      */
     public SynthesizedOutput createResource() throws NoresourceError {
-        final SynthesizerMode desc = getEngineProperties();
-        if (desc == null) {
-            throw new NoresourceError(
-                    "Cannot find any suitable SynthesizerMode");
-        }
+        final SynthesizerMode mode = getEngineProperties();
         final Jsapi20SynthesizedOutput output =
-            new Jsapi20SynthesizedOutput(desc, locatorFactory);
+            new Jsapi20SynthesizedOutput(mode, locatorFactory);
         output.setType(type);
         if (locatorFactory != null) {
             URI locator;
@@ -174,7 +161,7 @@ public final class Jsapi20SynthesizedOutputFactory
      * @return Required engine properties or <code>null</code> for default
      *         engine selection
      * @exception NoresourceError
-     *            error creating the synthesizer mode.
+     *            error creating the synthesizer mode or none found
      */
     public SynthesizerMode getEngineProperties() throws NoresourceError {
         try {
@@ -183,8 +170,8 @@ public final class Jsapi20SynthesizedOutputFactory
             if (engines.size() > 0) {
                 return (SynthesizerMode) (engines.elementAt(0));
             } else {
-                LOGGER.error("no synthesizer for mode '" + mode + "'");
-                return null;
+                throw new NoresourceError(
+                        "no synthesizer for mode '" + mode + "'");
             }
         } catch (SecurityException ex) {
             throw new NoresourceError(ex.getMessage(), ex);
