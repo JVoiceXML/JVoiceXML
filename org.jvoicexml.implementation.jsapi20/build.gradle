@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
@@ -37,6 +38,7 @@ dependencies {
     compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2', version: '0.5.1-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.freetts', version: '0.5.1-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sphinx4', version: '0.5.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sapi', version: '0.5.1-SNAPSHOT'
     
     //compile fileTree(dir: './3rdparty/jsapi2.0/lib', include: ['*.jar'])
     
@@ -49,10 +51,21 @@ dependencies {
     compile project(':org.jvoicexml.client')
 }
 
-xslt {
+task xsltSphinxFreeTTS(type: com.github.eerohele.SaxonXsltTask) {
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/jsapi20-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi20-implementation.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        version: version,
+        libs: configurations.compile
+    )
+}
+
+task xsltSAPI(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/jsapi20-sapi-implementation.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi20-sapi-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
         version: version,
@@ -72,8 +85,31 @@ task copyReferencedLibraries(type: Copy) {
     }
 }
 
+task copyJNI(type: Copy) {
+    dependsOn copyReferencedLibraries
+    
+    from(zipTree("$buildDir/libs/org.jvoicexml.jsapi2.sapi-0.5.1-SNAPSHOT.jar")) {
+         include '*.dll'
+    }
+    into "${project(':org.jvoicexml').buildDir}/jni"
+}
+
 jar {
-    dependsOn xslt
+    dependsOn xsltSphinxFreeTTS {
+        onlyIf { 
+            project.property('org.jvoicexml.implementation.jsapi20.freettssphinx') == 'true'
+        }
+    }
+    dependsOn xsltSAPI {
+        onlyIf { 
+            project.property('org.jvoicexml.implementation.jsapi20.sapi') == 'true'
+        }
+    }
+    dependsOn copyJNI {
+        onlyIf { 
+            project.property('org.jvoicexml.implementation.jsapi20.sapi') == 'true'
+        }
+    }
     dependsOn copyReferencedLibraries
 
     manifest {
@@ -86,4 +122,7 @@ jar {
 
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi20-implementation.xml")
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi20-sapi-implementation.xml")
+    delete file("${project(':org.jvoicexml').buildDir}/jni/Jsapi2SapiBridge.dll")
+    delete file("${project(':org.jvoicexml').buildDir}/jni/Jsapi2SapiBridge_x64.dll")
 }

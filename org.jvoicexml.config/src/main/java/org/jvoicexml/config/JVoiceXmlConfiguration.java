@@ -366,9 +366,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
                         }
                     }
                 }
-            } catch (IOException e) {
-                throw new ConfigurationException(e.getMessage(), e);
-            } catch (BeansException e) {
+            } catch (IOException | BeansException e) {
                 throw new ConfigurationException(e.getMessage(), e);
             }
         }
@@ -397,7 +395,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
                 LOGGER.debug("loading bean with id '" + key + "'");
             }
             object = context.getBean(key, baseClass);
-        } catch (org.springframework.beans.BeansException e) {
+        } catch (BeansException e) {
             throw new ConfigurationException(e.getMessage(), e);
         }
 

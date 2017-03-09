@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <implementation xmlns:beans="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
-  <repository>jsapi20sapi</repository>
-  <classpath>org.jvoicexml.implementation.jsapi20-@@VERSION@@.jar</classpath>
-  <classpath>jsr113.jar</classpath>
-  <classpath>org.jvoicexml.jsapi2.jar</classpath>
-  <classpath>org.jvoicexml.jsapi2.sapi.jar</classpath>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+    <repository>jsapi20sapi</repository>
+    <classpath>org.jvoicexml.implementation.jsapi20-@@VERSION@@.jar
+    </classpath>
+    <classpath>javax.speech-0.5.1-SNAPSHOT.jar
+    </classpath>
+    <classpath>org.jvoicexml.jsapi2-0.5.1-SNAPSHOT.jar</classpath>
+    <classpath>org.jvoicexml.jsapi2.sapi-0.5.1-SNAPSHOT.jar</classpath>
 
-  <beans:bean
-    class="org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutputFactory">
-    <beans:constructor-arg type="java.lang.String"
-      value="org.jvoicexml.jsapi2.sapi.SapiEngineListFactory"/>
-    <beans:property name="instances" value="1" />
-    <beans:property name="type" value="jsapi20sapi" />
-  </beans:bean>
+    <beans:bean
+        class="org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutputFactory">
+        <beans:constructor-arg type="java.lang.String"
+            value="org.jvoicexml.jsapi2.sapi.SapiEngineListFactory" />
+        <beans:property name="instances" value="1" />
+        <beans:property name="type" value="jsapi20sapi" />
+    </beans:bean>
 
-  <beans:bean class="org.jvoicexml.implementation.jsapi20.Jsapi20SpokenInputFactory">
-    <beans:constructor-arg type="java.lang.String"
-      value="org.jvoicexml.jsapi2.sapi.SapiEngineListFactory"/>
-    <beans:property name="instances" value="1" />
-    <beans:property name="type" value="jsapi20sapi" />
-  </beans:bean>
- 
+    <beans:bean
+        class="org.jvoicexml.implementation.jsapi20.Jsapi20SpokenInputFactory">
+        <beans:constructor-arg type="java.lang.String"
+            value="org.jvoicexml.jsapi2.sapi.SapiEngineListFactory" />
+        <beans:property name="instances" value="1" />
+        <beans:property name="type" value="jsapi20sapi" />
+    </beans:bean>
+
 </implementation>

@@ -96,7 +96,7 @@ public final class Jsapi20SpokenInput
     private final Collection<SpokenInputListener> listeners;
 
     /** The default recognizer mode descriptor. */
-    private final RecognizerMode desc;
+    private final RecognizerMode mode;
 
     /** The recognition listener. */
     private JVoiceXMLResultListener currentResultListener;
@@ -120,7 +120,7 @@ public final class Jsapi20SpokenInput
      */
     public Jsapi20SpokenInput(final RecognizerMode defaultDescriptor,
             final InputMediaLocatorFactory mediaLocatorFactory) {
-        desc = defaultDescriptor;
+        mode = defaultDescriptor;
         listeners = new java.util.ArrayList<SpokenInputListener>();
         locatorFactory = mediaLocatorFactory;
         currentResultListener = null;
@@ -145,10 +145,10 @@ public final class Jsapi20SpokenInput
     @Override
     public void open() throws NoresourceError {
         try {
-            recognizer = (Recognizer) EngineManager.createEngine(desc);
+            recognizer = (Recognizer) EngineManager.createEngine(mode);
             if (recognizer == null) {
                 throw new NoresourceError("no recognizer found matching "
-                        + desc);
+                        + mode);
             }
             LOGGER.info("allocating JSAPI 2.0 recognizer...");
 
