@@ -9,6 +9,8 @@
     <classpath>cairo-rtp-0.1-SNAPSHOT.jar</classpath>
     <classpath>cairo-sip-0.1-SNAPSHOT.jar</classpath>
     <classpath>halef-mrcp4j-0.1-SNAPSHOT.jar</classpath>
+    <classpath>halefdbwriter-0.0.1-SHAPSHOT.jar</classpath>
+    <classpath>mysql-connector-java-5.1.40.jar</classpath>
     <!-- classpath>halef-zanzibar-0.1-SNAPSHOT.jar</classpath-->
     <classpath>zanzibar-SNAPSHOT.jar</classpath>
     <classpath>speechcloud-client.jar</classpath>
