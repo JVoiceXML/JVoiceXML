@@ -30,6 +30,7 @@
         </beans:property>
         <beans:property name="applications">
             <beans:map>
+                <!--APPLICATION PLACEHOLDER-->
             </beans:map>
         </beans:property>
         <beans:property name="cloudUrl">
