@@ -21,8 +21,8 @@
 
 package org.jvoicexml.demo.helloworlddemo;
 
-import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.naming.NamingException;
 
@@ -38,8 +38,8 @@ import org.jvoicexml.event.error.NoresourceError;
  * Demo implementation of the venerable "Hello World".
  * <p>
  * Must be run with the system property
- * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
- * the <code>config</code> folder added to the classpath.
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and the
+ * <code>config</code> folder added to the classpath.
  * </p>
  * <p>
  * This demo requires that JVoiceXML is configured with the jsapi20
@@ -50,12 +50,14 @@ import org.jvoicexml.event.error.NoresourceError;
  */
 public final class HelloWorldDemo {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            LogManager.getLogger(HelloWorldDemo.class);
+    private static final Logger LOGGER = LogManager
+            .getLogger(HelloWorldDemo.class);
 
     /**
      * The main method.
-     * @param args Command line arguments. None expected.
+     * 
+     * @param args
+     *            Command line arguments. None expected.
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
@@ -63,9 +65,9 @@ public final class HelloWorldDemo {
                 + "http://jvoicexml.sourceforge.net/");
 
         final GenericClient client = new GenericClient();
-        final File file = new File("helloworld.vxml");
-        final URI dialog = file.toURI();
         try {
+            final URI dialog = HelloWorldDemo.class
+                    .getResource("/helloworld.vxml").toURI();
             Session session = client.call(dialog, "jsapi20", "jsapi20",
                     "dummy");
             session.waitSessionEnd();
@@ -79,6 +81,8 @@ public final class HelloWorldDemo {
         } catch (ErrorEvent e) {
             LOGGER.fatal(e.getMessage(), e);
         } catch (UnsupportedResourceIdentifierException e) {
+            LOGGER.fatal(e.getMessage(), e);
+        } catch (URISyntaxException e) {
             LOGGER.fatal(e.getMessage(), e);
         } finally {
             client.close();
