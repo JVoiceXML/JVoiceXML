@@ -34,15 +34,15 @@ sourceSets {
 
 dependencies {
     compile fileTree(dir: "${project(':org.jvoicexml').projectDir}/3rdparty/freetts1.2/lib", include: ['*.jar'])
-    compile group: 'org.jvoicexml', name: 'javax.speech', version: '0.5.1-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2', version: '0.5.1-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.freetts', version: '0.5.1-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sphinx4', version: '0.5.1-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sapi', version: '0.5.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'javax.speech', version: '0.6-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2', version: '0.6-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.freetts', version: '0.6-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sphinx4', version: '0.6-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sapi', version: '0.6-SNAPSHOT'
     
     //compile fileTree(dir: './3rdparty/jsapi2.0/lib', include: ['*.jar'])
     
-    testCompile fileTree(dir: "${project(':org.jvoicexml').projectDir}/3rdparty/sphinx4/lib", include: ['*.jar'])
+    //testCompile fileTree(dir: "${project(':org.jvoicexml').projectDir}/3rdparty/sphinx4/lib", include: ['*.jar'])
     
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
@@ -80,6 +80,7 @@ task copyReferencedLibraries(type: Copy) {
          'cmu_us_kal*.jar',
          'cmulex*.jar',
          'en_us*.jar',
+         'sphinx4*.jar',
          'javax.speech*.jar',
          'org.jvoicexml.jsapi2*.jar'
     }
@@ -88,7 +89,7 @@ task copyReferencedLibraries(type: Copy) {
 task copyJNI(type: Copy) {
     dependsOn copyReferencedLibraries
     
-    from(zipTree("$buildDir/libs/org.jvoicexml.jsapi2.sapi-0.5.1-SNAPSHOT.jar")) {
+    from(zipTree("$buildDir/libs/org.jvoicexml.jsapi2.sapi-0.6-SNAPSHOT.jar")) {
          include '*.dll'
     }
     into "${project(':org.jvoicexml').buildDir}/jni"

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2015-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,7 +31,6 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * A media locator factory to convert audio format.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 public final class FormatMediaLocatorFactory
@@ -165,11 +159,11 @@ public final class FormatMediaLocatorFactory
         final StringBuilder str = new StringBuilder();
         str.append(protocol);
         str.append("://audio?");
+        maybeAppendParameter(str, "rate", rate);
         maybeAppendParameter(str, "bits", bits);
         maybeAppendParameter(str, "channels", channels);
         maybeAppendParameter(str, "encoding", encoding);
         maybeAppendParameter(str, "endian", endian);
-        maybeAppendParameter(str, "rate", rate);
         appendParameter(str, "signed", signed);
         final String locator = str.toString();
         return new URI(locator);
@@ -210,7 +204,9 @@ public final class FormatMediaLocatorFactory
         if (value <= 0) {
             return;
         }
-        str.append('&');
+        if (str.charAt(str.length() - 1) != '?') {
+            str.append('&');
+        }
         str.append(name);
         str.append("=");
         str.append(value);

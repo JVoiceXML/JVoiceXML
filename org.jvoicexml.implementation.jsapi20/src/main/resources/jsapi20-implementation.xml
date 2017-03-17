@@ -4,19 +4,21 @@
     xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
     <repository>jsapi20</repository>
     <classpath>org.jvoicexml.implementation.jsapi20-@@VERSION@@.jar</classpath>
-    <classpath>javax.speech-0.5.1-SNAPSHOT.jar
+    <classpath>javax.speech-0.6-SNAPSHOT.jar
     </classpath>
-    <classpath>org.jvoicexml.jsapi2-0.5.1-SNAPSHOT.jar
+    <classpath>org.jvoicexml.jsapi2-0.6-SNAPSHOT.jar
     </classpath>
-    <classpath>org.jvoicexml.jsapi2.freetts-0.5.1-SNAPSHOT.jar
+    <classpath>org.jvoicexml.jsapi2.freetts-0.6-SNAPSHOT.jar
     </classpath>
-    <classpath>org.jvoicexml.jsapi2.sphinx4-0.5.1-SNAPSHOT.jar
+    <classpath>org.jvoicexml.jsapi2.sphinx4-0.6-SNAPSHOT.jar
     </classpath>
     <classpath>freetts.jar</classpath>
     <classpath>cmu_us_kal.jar</classpath>
     <classpath>cmulex.jar</classpath>
     <classpath>en_us.jar</classpath>
-    <classpath>sphinx4-core-1.0-SNAPSHOT.jar
+    <classpath>sphinx4-core-5prealpha-SNAPSHOT.jar
+    </classpath>
+    <classpath>sphinx4-data-5prealpha-SNAPSHOT.jar
     </classpath>
     <classpath>WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar
     </classpath>
@@ -56,7 +58,7 @@
             <beans:bean
                 class="org.jvoicexml.implementation.jsapi20.FormatMediaLocatorFactory">
                 <beans:property name="protocol" value="capture" />
-                <beans:property name="rate" value="8000" />
+                <beans:property name="rate" value="16000" />
                 <beans:property name="bits" value="16" />
                 <beans:property name="channels" value="2" />
                 <beans:property name="endian" value="big" />
