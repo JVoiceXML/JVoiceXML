@@ -237,6 +237,20 @@ public final class SipCallManager
 
                 // Create a jvoicxml session and initiate a call at JVoiceXML.
                 final Session jsession = jvxml.createSession(remote);
+
+                // HALEF Event logging
+                final String hevent = String.format("INSERT INTO halef_test"
+                    + " (databasedate, machineIP, machinedate, class, level,"
+                    + " message) VALUES(%s, \"%s\", %s,"
+                    + " \"%s\", \"%s\", \"%s\")", 
+                    "now()",
+                    System.getenv("IP"),
+                    "now()",
+                    "callmanager.mrcpv2.SipCallManager",
+                    "INFO",
+                    "created session " + jsession.getSessionID());
+                HalefDbWriter.execute(hevent);
+
                 
                 //add a listener to capture the end of voicexml session event
                 jsession.addSessionListener(this);
@@ -267,7 +281,7 @@ public final class SipCallManager
                     String[] parts2[] = parts[1].split("@");
                     asteriskCallID = parts2[0];
                     LOGGER.warn(String.format("The remote party display name seems to be an"
-                                + " invalid asterisk SIP callId (%s)",
+                                + " invalid asterisk SIP callId (\"%s\")",
                                 asteriskCallId));
                 } else {
                     asteriskCallID = remoteDisplayName;
@@ -281,7 +295,7 @@ public final class SipCallManager
                             jsession.getSessionID());
                 final String q = String.format("INSERT INTO testing_jvxml"
                     + " (asteriskCallId, jvxmlCallId, jsessionId)"
-                    + " VALUES(%s, %s, %s)", 
+                    + " VALUES(\"%s\", \"%s\", \"%s\")", 
                     asteriskCallId, 
                     jCallID,
                     jsession.getSessionID());
@@ -295,6 +309,19 @@ public final class SipCallManager
                 //use the number for looking up the application
                 LOGGER.info("called number: '" + calledNumber + "'");
                 LOGGER.info("calling application '" + applicationUri + "'...");
+
+                // HALEF Event logging
+                final String hevent2 = String.format("INSERT INTO halef_test"
+                    + " (databasedate, machineIP, machinedate, class, level,"
+                    + " message) VALUES(%s, \"%s\", %s,"
+                    + " \"%s\", \"%s\", \"%s\")", 
+                    "now()",
+                    System.getenv("IP"),
+                    "now()",
+                    "callmanager.mrcpv2.SipCallManager",
+                    "INFO",
+                    "calling application '" + applicationUri + "'...");
+                HalefDbWriter.execute(hevent2);
 
                 //start the application
                 final URI uri = new URI(applicationUri);
