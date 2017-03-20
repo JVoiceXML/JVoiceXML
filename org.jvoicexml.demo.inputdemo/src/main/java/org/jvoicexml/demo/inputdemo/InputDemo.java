@@ -290,8 +290,8 @@ public final class InputDemo {
     public char readDTMF() {
         LOGGER.info("Enter a DTMF and hit <return>. ");
 
-        Reader reader = new InputStreamReader(System.in);
-        BufferedReader br = new BufferedReader(reader);
+        final Reader reader = new InputStreamReader(System.in);
+        final BufferedReader br = new BufferedReader(reader);
 
         try {
             String dtmf = br.readLine();
