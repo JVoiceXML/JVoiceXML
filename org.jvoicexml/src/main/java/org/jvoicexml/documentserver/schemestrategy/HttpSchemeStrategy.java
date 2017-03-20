@@ -26,27 +26,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
 import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.CoreConnectionPNames;
-import org.apache.http.params.HttpParams;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.documentserver.ReadBuffer;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
@@ -73,11 +71,7 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
     public static final String HTTP_SCHEME_NAME = "http";
 
     /** the storage of session identifiers. */
-    private static final SessionStorage<HttpClient> SESSION_STORAGE;
-
-    /** Encoding that should be used to encode/decode URLs. */
-    private static String encoding = System.getProperty(
-            "jvoicexml.xml.encoding", "UTF-8");
+    private static final SessionStorage<HttpClientBuilder> SESSION_STORAGE;
 
     /** Scheme name for this strategy. */
     private String scheme;
@@ -86,8 +80,8 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
     private int defaultFetchTimeout;
 
     static {
-        final SessionIdentifierFactory<HttpClient> factory = new HttpClientSessionIdentifierFactory();
-        SESSION_STORAGE = new SessionStorage<HttpClient>(factory);
+        final SessionIdentifierFactory<HttpClientBuilder> factory = new HttpClientSessionIdentifierFactory();
+        SESSION_STORAGE = new SessionStorage<HttpClientBuilder>(factory);
     }
 
     /**
@@ -138,43 +132,40 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
     public InputStream getInputStream(final String sessionId, final URI uri,
             final RequestMethod method, final long timeout,
             final Collection<KeyValuePair> parameters) throws BadFetchError {
-        final HttpClient client = SESSION_STORAGE
+        final HttpClientBuilder builder = SESSION_STORAGE
                 .getSessionIdentifier(sessionId);
-        final URI fullUri;
-        try {
+        final RequestConfig config = setTimeout(timeout);
+        try (CloseableHttpClient client = builder
+                .setDefaultRequestConfig(config).build()) {
             final URI fragmentLessUri = new URI(uri.getScheme(),
                     uri.getAuthority(), uri.getPath(), uri.getQuery(), null);
-            fullUri = addParameters(parameters, fragmentLessUri);
-        } catch (URISyntaxException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        } catch (SemanticError e) {
-            throw new BadFetchError(e.getMessage(), e);
-        }
-        final String url = fullUri.toString();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("connecting to '" + url + "'...");
-        }
-
-        final HttpUriRequest request;
-        if (method == RequestMethod.GET) {
-            request = new HttpGet(url);
-        } else {
-            request = new HttpPost(url);
-        }
-        attachFiles(request, parameters);
-        try {
-            final HttpParams params = client.getParams();
-            setTimeout(timeout, params);
+            final URI requestUri = addParameters(parameters, fragmentLessUri);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("connecting to '" + requestUri + "'...");
+            }
+            final HttpUriRequest request;
+            if (method == RequestMethod.GET) {
+                request = new HttpGet(requestUri);
+            } else {
+                request = new HttpPost(requestUri);
+            }
+            attachFiles(request, parameters);
             final HttpResponse response = client.execute(request);
             final StatusLine statusLine = response.getStatusLine();
             final int status = statusLine.getStatusCode();
             if (status != HttpStatus.SC_OK) {
-                throw new BadFetchError(statusLine.getReasonPhrase()
+                final String reasonPhrase = statusLine.getReasonPhrase();
+                LOGGER.error("error accessing '" + uri + "': " + reasonPhrase
                         + " (HTTP error code " + status + ")");
+                return null;
             }
             final HttpEntity entity = response.getEntity();
-            return entity.getContent();
-        } catch (IOException e) {
+            final InputStream input = entity.getContent();
+            final ReadBuffer buffer = new ReadBuffer();
+            buffer.read(input);
+            return buffer.getInputStream();
+        } catch (IOException | URISyntaxException | ParseException
+                | SemanticError e) {
             throw new BadFetchError(e.getMessage(), e);
         }
     }
@@ -184,25 +175,27 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
      * 
      * @param timeout
      *            timeout as it is declared in the document.
-     * @param params
-     *            connection parameters.
+     * @return created request config for the timeout
      * @since 0.7
      */
-    private void setTimeout(final long timeout, final HttpParams params) {
+    private RequestConfig setTimeout(final long timeout) {
+        final int usedTimeout;
         if (timeout != 0) {
-            params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,
-                    new Integer((int) timeout));
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("timeout set to '" + timeout + "'");
-            }
+            usedTimeout = (int) timeout;
         } else if (defaultFetchTimeout != 0) {
-            params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,
-                    defaultFetchTimeout);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("timeout set to default '" + defaultFetchTimeout
-                        + "'");
-            }
+            usedTimeout = defaultFetchTimeout;
+        } else {
+            return RequestConfig.custom().build();
+
         }
+        final RequestConfig config = RequestConfig.custom()
+                .setConnectTimeout(usedTimeout * 1000)
+                .setConnectionRequestTimeout((int) (timeout * 1000))
+                .setSocketTimeout((int) (timeout * 1000)).build();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("timeout set to '" + timeout + "'");
+        }
+        return config;
     }
 
     /**
@@ -210,8 +203,8 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
      * 
      * @param parameters
      *            parameters to add
-     * @param uri
-     *            the given URI
+     * @param builder
+     *            the given URI builder
      * @return URI with the given parameters
      * @throws URISyntaxException
      *             error creating a URI
@@ -223,24 +216,15 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
         if ((parameters == null) || parameters.isEmpty()) {
             return uri;
         }
-        final ArrayList<NameValuePair> queryParameters = new ArrayList<NameValuePair>();
+        final URIBuilder builder = new URIBuilder(uri);
         for (KeyValuePair current : parameters) {
             final Object value = current.getValue();
             if (!(value instanceof File)) {
                 final String name = current.getKey();
-                final NameValuePair pair = new BasicNameValuePair(name,
-                        value.toString());
-                queryParameters.add(pair);
+                builder.addParameter(name, value.toString());
             }
         }
 
-        final Collection<NameValuePair> parameterList = URLEncodedUtils.parse(
-                uri, encoding);
-        queryParameters.addAll(parameterList);
-
-        final String query = URLEncodedUtils.format(queryParameters, encoding);
-        final URIBuilder builder = new URIBuilder(uri);
-        builder.setQuery(query);
         return builder.build();
     }
 

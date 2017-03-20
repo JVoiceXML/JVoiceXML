@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -34,9 +29,10 @@ import java.net.URL;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
-import org.apache.log4j.Logger;
-import org.jvoicexml.JVoiceXml;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -55,11 +51,10 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class HelloWorldDemo {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(HelloWorldDemo.class);
+    private static final Logger LOGGER = LogManager.getLogger(HelloWorldDemo.class);
 
     /** The JNDI context. */
     private Context context;
@@ -116,7 +111,7 @@ public final class HelloWorldDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' servlet demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2014 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2017 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         if (args.length != 1) {

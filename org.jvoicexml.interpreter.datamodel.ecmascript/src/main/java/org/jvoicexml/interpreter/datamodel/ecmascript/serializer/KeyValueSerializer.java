@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,7 +34,6 @@ import org.mozilla.javascript.ScriptableObject;
  * Serializes the scriptable objects as key-value pairs.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4080 $
  * @since 0.7.5
  */
 public final class KeyValueSerializer implements DataModelObjectSerializer {
@@ -50,7 +49,8 @@ public final class KeyValueSerializer implements DataModelObjectSerializer {
             final Scriptable scriptable = (Scriptable) value;
             serialize(scriptable, name, pairs);
         } else {
-
+            final KeyValuePair pair = new KeyValuePair(name, value.toString());
+            pairs.add(pair);
         }
         return pairs;
     }

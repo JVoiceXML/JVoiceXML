@@ -21,6 +21,7 @@
 
 package org.jvoicexml.documentserver;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +38,7 @@ import org.mozilla.intl.chardet.nsDetector;
  * @author Dirk Schnelle-Walka
  * @since 0.7.5
  */
-class ReadBuffer {
+public class ReadBuffer {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LogManager.getLogger(ReadBuffer.class);
@@ -123,6 +124,16 @@ class ReadBuffer {
      */
     public byte[] getBytes() {
         return buffer.toByteArray();
+    }
+
+    /**
+     * Obtain an input stream for the buffer.
+     * @return associated input stream
+     * @since 0.7.8
+     */
+    public InputStream getInputStream() {
+        final byte[] bytes = getBytes();
+        return new ByteArrayInputStream(bytes);
     }
 
     /**

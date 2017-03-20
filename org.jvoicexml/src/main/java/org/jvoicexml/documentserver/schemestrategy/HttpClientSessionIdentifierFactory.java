@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,19 +22,16 @@
 package org.jvoicexml.documentserver.schemestrategy;
 
 import org.apache.http.HttpHost;
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.params.ConnRoutePNames;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpParams;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 /**
  * Session identifier factory for the {@link HttpSchemeStrategy}.
+ * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 final class HttpClientSessionIdentifierFactory
-        implements SessionIdentifierFactory<HttpClient> {
+        implements SessionIdentifierFactory<HttpClientBuilder> {
     /** The default proxy port. */
     private static final int DEFAULT_PROXY_PORT = 80;
 
@@ -63,14 +55,13 @@ final class HttpClientSessionIdentifierFactory
      * {@inheritDoc}
      */
     @Override
-    public HttpClient createSessionIdentifier(final String sessionId) {
-        final HttpClient client = new DefaultHttpClient();
+    public HttpClientBuilder createSessionIdentifier(final String sessionId) {
+        final HttpClientBuilder builder = HttpClientBuilder.create();
         if (PROXY_HOST != null) {
             HttpHost proxy = new HttpHost(PROXY_HOST, PROXY_PORT);
-            HttpParams params = client.getParams();
-            params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+            builder.setProxy(proxy);
         }
-        return client;
+        return builder;
     }
 
 }
