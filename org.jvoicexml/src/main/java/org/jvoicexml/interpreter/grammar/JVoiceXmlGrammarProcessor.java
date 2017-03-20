@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -51,7 +46,6 @@ import org.jvoicexml.xml.srgs.ModeType;
  *
  * @author Christoph Buente
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class JVoiceXmlGrammarProcessor implements GrammarProcessor {
     /** grammar identifier central. */
@@ -133,12 +127,17 @@ public final class JVoiceXmlGrammarProcessor implements GrammarProcessor {
     private GrammarDocument identifyGrammar(final Grammar grammar,
             final GrammarDocument document) throws UnsupportedFormatError {
         // now we need to know the actual type.
-        final GrammarType expectedType = grammar.getType();
+        final GrammarType expectedType;
+        try {
+            expectedType = grammar.getType();
+        } catch (IllegalArgumentException e) {
+            throw new UnsupportedFormatError(e.getMessage(), e);
+        }
         final GrammarType actualType = identifier.identifyGrammar(document,
                 expectedType);
         // let's check, if the declared type is supported.
         if (actualType == null) {
-            throw new UnsupportedFormatError(grammar.getType()
+            throw new UnsupportedFormatError(expectedType
                     + " is not supported.");
         }
 

@@ -126,8 +126,7 @@ public final class GrammarIdentifierCentral {
             }
         }
 
-        LOGGER.warn("unable to identify grammar!");
-
+        LOGGER.warn("unable to identify grammar");
         return null;
     }
 

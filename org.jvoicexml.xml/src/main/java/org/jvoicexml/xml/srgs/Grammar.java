@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group
+ * Copyright (C) 2005-2017 JVoiceXML group
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -64,8 +64,6 @@ import org.w3c.dom.Node;
  *
  * @author Steve Doyle
  * @author Dirk Schnelle-Walka
- *
- * @version $Revision$
  */
 public final class Grammar
         extends AbstractSrgsNode implements VoiceXmlNode {
@@ -677,7 +675,6 @@ public final class Grammar
      */
     public GrammarType getType() {
         final String type = getTypename();
-
         if (type == null) {
             return null;
         }
