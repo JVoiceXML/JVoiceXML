@@ -22,7 +22,6 @@
 package org.jvoicexml.demo.inputdemo;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -63,8 +62,8 @@ import org.jvoicexml.xml.vxml.Vxml;
  * Demo implementation for an interaction with the user.
  * <p>
  * Must be run with the system property
- * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
- * the <code>config</code> folder added to the classpath.
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and the
+ * <code>config</code> folder added to the classpath.
  * </p>
  * <p>
  * This demo requires that JVoiceXML is configured with the jsapi20
@@ -96,20 +95,15 @@ public final class InputDemo {
     /**
      * Create the VoiceXML document.
      *
-     * @return Created VoiceXML document, <code>null</code> if an error
-     * occurs.
+     * @return Created VoiceXML document, <code>null</code> if an error occurs.
+     * @throws URISyntaxException
+     *             error creating the document
+     * @throws ParserConfigurationException
+     *             error creating the document
      */
-    private VoiceXmlDocument createDocument() {
-        final VoiceXmlDocument document;
-
-        try {
-            document = new VoiceXmlDocument();
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-
-            return null;
-        }
-
+    private VoiceXmlDocument createDocument()
+            throws URISyntaxException, ParserConfigurationException {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         vxml.setXmlLang(Locale.US);
 
@@ -118,7 +112,7 @@ public final class InputDemo {
 
         final Prompt promptMenu = menu.appendChild(Prompt.class);
         promptMenu.addText(
-            "Please enter 1 to list the titles or 2 to watch a movie");
+                "Please enter 1 to list the titles or 2 to watch a movie");
         final Choice choiceList = menu.appendChild(Choice.class);
         choiceList.setNext("#list");
         choiceList.setDtmf("1");
@@ -166,11 +160,12 @@ public final class InputDemo {
 
         final Prompt prompt = field.appendChild(Prompt.class);
         prompt.addText("Which movie do you want to watch?");
-		prompt.setTimeout("10s");
+        prompt.setTimeout("10s");
 
         final Grammar grammar = field.appendChild(Grammar.class);
-        final File movies = new File("config/movies.gram");
-        grammar.setSrc(movies.toURI());
+        final URI grammarUri = InputDemo.class.getResource("/movies.gram")
+                .toURI();
+        grammar.setSrc(grammarUri);
         grammar.setType(GrammarType.JSGF);
 
         final Noinput noinput = field.appendChild(Noinput.class);
@@ -196,13 +191,13 @@ public final class InputDemo {
     }
 
     /**
-     * Print the given VoiceXML document to <code>stdout</code>. Does nothing
-     * if an error occurs.
+     * Print the given VoiceXML document to <code>stdout</code>. Does nothing if
+     * an error occurs.
      *
      * @param document
-     * The VoiceXML document to print.
-     * @return VoiceXML document as an XML string, <code>null</code> in case
-     * of an error.
+     *            The VoiceXML document to print.
+     * @return VoiceXML document as an XML string, <code>null</code> in case of
+     *         an error.
      */
     private String printDocument(final VoiceXmlDocument document) {
         final String xml;
@@ -221,14 +216,16 @@ public final class InputDemo {
 
     /**
      * Add the given document as a single document application.
-     * @param document The only document in this application.
+     * 
+     * @param document
+     *            The only document in this application.
      * @return URI of the first document.
      */
     private URI addDocument(final VoiceXmlDocument document) {
         MappedDocumentRepository repository;
         try {
-            repository = (MappedDocumentRepository)
-                         context.lookup("MappedDocumentRepository");
+            repository = (MappedDocumentRepository) context
+                    .lookup("MappedDocumentRepository");
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining the documentrepository", ne);
 
@@ -250,12 +247,12 @@ public final class InputDemo {
     /**
      * Call the VoiceXML interpreter context to process the given XML document.
      *
-     * @param uri URI of the first document to load
+     * @param uri
+     *            URI of the first document to load
      * @exception JVoiceXMLEvent
-     *            Error processing the call
+     *                Error processing the call
      */
-    private void interpretDocument(final URI uri)
-            throws JVoiceXMLEvent {
+    private void interpretDocument(final URI uri) throws JVoiceXMLEvent {
         JVoiceXml jvxml;
         try {
             jvxml = (JVoiceXml) context.lookup("JVoiceXml");
@@ -265,8 +262,8 @@ public final class InputDemo {
             return;
         }
 
-        final ConnectionInformation client =
-            new BasicConnectionInformation("dummy", "jsapi20", "jsapi20");
+        final ConnectionInformation client = new BasicConnectionInformation(
+                "dummy", "jsapi20", "jsapi20");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
@@ -285,6 +282,7 @@ public final class InputDemo {
 
     /**
      * Read an input from the command line.
+     * 
      * @return DTMF from the command line.
      */
     public char readDTMF() {
@@ -309,7 +307,7 @@ public final class InputDemo {
      * The main method.
      *
      * @param args
-     * Command line arguments.  None expected.
+     *            Command line arguments. None expected.
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'input' demo for JVoiceXML...");
@@ -318,24 +316,14 @@ public final class InputDemo {
 
         final InputDemo demo = new InputDemo();
 
-        final VoiceXmlDocument document = demo.createDocument();
-        if (document == null) {
-            return;
-        }
-
-        final String xml = demo.printDocument(document);
-        if (xml == null) {
-            return;
-        }
-
-        final URI uri = demo.addDocument(document);
-        if (uri == null) {
-            return;
-        }
-
         try {
+            final VoiceXmlDocument document = demo.createDocument();
+            demo.printDocument(document);
+            final URI uri = demo.addDocument(document);
+
             demo.interpretDocument(uri);
-        } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
+        } catch (org.jvoicexml.event.JVoiceXMLEvent | URISyntaxException
+                | ParserConfigurationException e) {
             LOGGER.error("error processing the document", e);
         }
     }
