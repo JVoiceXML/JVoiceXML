@@ -279,7 +279,7 @@ public final class SipCallManager
                     remoteDisplayName.startsWith("sip:")) {
                     final String uri = remoteParty.getURI().toString();
                     String[] parts = uri.split(":");
-                    String[] parts2[] = parts[1].split("@");
+                    String[] parts2 = parts[1].split("@");
                     asteriskCallID = parts2[0];
                     LOGGER.warn(String.format("The remote party display name seems to be an"
                                 + " invalid asterisk SIP callId (\"%s\")",
