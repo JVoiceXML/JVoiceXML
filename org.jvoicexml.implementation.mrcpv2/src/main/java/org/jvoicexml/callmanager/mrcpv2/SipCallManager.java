@@ -283,7 +283,7 @@ public final class SipCallManager
                     asteriskCallID = parts2[0];
                     LOGGER.warn(String.format("The remote party display name seems to be an"
                                 + " invalid asterisk SIP callId (\"%s\")",
-                                asteriskCallId));
+                                asteriskCallID));
                 } else {
                     asteriskCallID = remoteDisplayName;
                 }
@@ -297,7 +297,7 @@ public final class SipCallManager
                 final String q = String.format("INSERT INTO testing_jvxml"
                     + " (asteriskCallId, jvxmlCallId, jsessionId)"
                     + " VALUES(\"%s\", \"%s\", \"%s\")", 
-                    asteriskCallId, 
+                    asteriskCallID, 
                     jCallID,
                     jsession.getSessionID());
                 HalefDbWriter.execute(q);
