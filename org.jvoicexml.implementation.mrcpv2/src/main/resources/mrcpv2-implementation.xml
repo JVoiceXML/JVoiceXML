@@ -5,9 +5,9 @@
   <repository>mrcpv2</repository>
   <classpath>org.jvoicexml.implementation.mrcpv2-@@VERSION@@.jar</classpath>
   <classpath>org.jvoicexml.interpreter.grammar.halef-@@VERSION@@.jar</classpath>
-  <classpath>cairo-client-0.1-SNAPSHOT.jar</classpath>
-  <classpath>cairo-rtp-0.1-SNAPSHOT.jar</classpath>
-  <classpath>cairo-sip-0.1-SNAPSHOT.jar</classpath>
+  <classpath>cairo-client-0.2-SNAPSHOT.jar</classpath>
+  <classpath>cairo-rtp-0.2-SNAPSHOT.jar</classpath>
+  <classpath>cairo-sip-0.2-SNAPSHOT.jar</classpath>
   <classpath>halef-mrcp4j-0.1-SNAPSHOT.jar</classpath>
   <!-- classpath>halef-zanzibar-0.1-SNAPSHOT.jar</classpath-->
   <classpath>zanzibar-SNAPSHOT.jar</classpath>

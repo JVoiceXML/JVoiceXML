@@ -36,10 +36,10 @@ configurations.all {
 }
 
 dependencies {
-    compile group: 'net.sourceforge.halef', name: 'cairo-client', version: '0.1-SNAPSHOT'
+    compile group: 'net.sourceforge.halef', name: 'cairo-client', version: '0.2-SNAPSHOT'
     compile fileTree(dir: './3rdparty/speechcloud/lib', include: ['*.jar'])
-    compile group: 'net.sourceforge.halef', name: 'cairo-sip', version: '0.1-SNAPSHOT'
-    compile group: 'net.sourceforge.halef', name: 'cairo-rtp', version: '0.1-SNAPSHOT'
+    compile group: 'net.sourceforge.halef', name: 'cairo-sip', version: '0.2-SNAPSHOT'
+    compile group: 'net.sourceforge.halef', name: 'cairo-rtp', version: '0.2-SNAPSHOT'
     compile group: 'net.sourceforge.halef', name: 'halef-mrcp4j', version: '0.1-SNAPSHOT'
     compile group: 'net.sourceforge.halef', name: 'halefdbwriter', version: '0.0.1-SNAPSHOT'
     compile group: 'mysql' name: 'mysql-connector-java', version: '5.1.40'
