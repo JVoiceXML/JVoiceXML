@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -32,7 +27,6 @@ package org.jvoicexml.demo.objecttagdemo;
  * A simple calculator to demo the object execution.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public final class Calculator {
@@ -45,9 +39,9 @@ public final class Calculator {
      * @param b second number to add.
      * @return <code>a+b</code>
      */
-    public int add(final Integer a, final Integer b) {
-        overallSum += a + b;;
-        return a + b;
+    public int add(final Double a, final Double b) {
+        overallSum += a.intValue() + b.intValue();
+        return a.intValue() + b.intValue();
     }
 
     /**

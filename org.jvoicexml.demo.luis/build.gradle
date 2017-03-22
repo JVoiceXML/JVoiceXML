@@ -38,7 +38,7 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    stylesheet "${projectDir}/src/main/config/patch-vxml.xsl"
     input "${projectDir}/src/main/config/pizza.vxml"
     output "${sourceSets.main.output.resourcesDir}/pizza.vxml"
     parameters(

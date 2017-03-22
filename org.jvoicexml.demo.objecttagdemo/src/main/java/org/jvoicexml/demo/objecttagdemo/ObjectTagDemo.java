@@ -24,8 +24,8 @@
 
 package org.jvoicexml.demo.objecttagdemo;
 
-import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -43,8 +43,8 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * Demo implementation for a simple object call.
  * <p>
  * Must be run with the system property
- * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
- * the <code>config</code> folder added to the classpath.
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and the
+ * <code>config</code> folder added to the classpath.
  * </p>
  * <p>
  * This demo requires that JVoiceXML is configured with the jsapi20
@@ -55,8 +55,8 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  */
 public final class ObjectTagDemo {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            LogManager.getLogger(ObjectTagDemo.class);
+    private static final Logger LOGGER = LogManager
+            .getLogger(ObjectTagDemo.class);
 
     /** The JNDI context. */
     private Context context;
@@ -70,12 +70,13 @@ public final class ObjectTagDemo {
 
     /**
      * Calls the VoiceXML interpreter context to process the given XML document.
-     * @param uri URI of the first document to load
+     * 
+     * @param uri
+     *            URI of the first document to load
      * @exception JVoiceXMLEvent
-     *            Error processing the call.
+     *                Error processing the call.
      */
-    private void interpretDocument(final URI uri)
-        throws JVoiceXMLEvent {
+    private void interpretDocument(final URI uri) throws JVoiceXMLEvent {
         JVoiceXml jvxml;
         try {
             jvxml = (JVoiceXml) context.lookup("JVoiceXml");
@@ -85,8 +86,8 @@ public final class ObjectTagDemo {
             return;
         }
 
-        final ConnectionInformation client =
-            new BasicConnectionInformation("dummy", "jsapi20", "jsapi20");
+        final ConnectionInformation client = new BasicConnectionInformation(
+                "dummy", "jsapi20", "jsapi20");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
@@ -96,7 +97,9 @@ public final class ObjectTagDemo {
 
     /**
      * The main method.
-     * @param args Command line arguments. None expected.
+     * 
+     * @param args
+     *            Command line arguments. None expected.
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
@@ -105,13 +108,17 @@ public final class ObjectTagDemo {
 
         try {
             final ObjectTagDemo demo = new ObjectTagDemo();
-            final File dialog = new File("objectdemo.vxml");
-            final URI uri = dialog.toURI();
+            final URI uri = ObjectTagDemo.class.getResource("/objectdemo.vxml")
+                    .toURI();
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
             LOGGER.error("error processing the document: " + e.getMessage(), e);
         } catch (NamingException e) {
-            LOGGER.error("error obtaining the initial context: "
+            LOGGER.error(
+                    "error obtaining the initial context: " + e.getMessage(),
+                    e);
+        } catch (URISyntaxException e) {
+            LOGGER.error("error creating a URI for the VoiceXML code: "
                     + e.getMessage(), e);
         }
     }

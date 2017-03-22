@@ -262,12 +262,12 @@ final class ObjectExecutorThread extends Thread {
             }
         } catch (ClassNotFoundException e) {
             throw new NoresourceError("class not found '" + className + "'", e);
-        } catch (IllegalAccessException iae) {
+        } catch (IllegalAccessException e) {
             throw new NoresourceError("unable to access '" + className + "'",
-                    iae);
-        } catch (InstantiationException ie) {
+                    e);
+        } catch (InstantiationException e) {
             throw new NoresourceError("unable to instantiate '" + className
-                    + "'", ie);
+                    + "'", e);
         }
 
         return invocationTarget;
@@ -309,7 +309,7 @@ final class ObjectExecutorThread extends Thread {
                 i++;
             } catch (MalformedURLException e) {
                 throw new SemanticError("Must specify a valid URI for: "
-                        + ObjectTag.ATTRIBUTE_DATA);
+                        + ObjectTag.ATTRIBUTE_DATA + " (" + uri + ")");
             }
         }
         loader = new URLClassLoader(urls, LOADER);

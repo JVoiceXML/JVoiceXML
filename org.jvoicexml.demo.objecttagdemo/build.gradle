@@ -1,21 +1,53 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
+
 apply plugin: 'java'
+apply plugin: "com.github.eerohele.saxon-gradle"
 apply plugin: 'application'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
+configurations {
+    jvxmlConfiguration
+}
+
 dependencies {
+    jvxmlConfiguration fileTree(dir: "src/main/config")
+    
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.8'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.8'
 
-    compile project(':org.jvoicexml')
-    compile project(':org.jvoicexml.client')
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: version
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: version
 
-    runtime project(':org.jvoicexml.implementation.jsapi20')
+    runtime group: 'org.jvoicexml', name: 'org.jvoicexml.jndi', version: version
+}
+
+xslt {
+    stylesheet "${projectDir}/src/main/config/patch-vxml.xsl"
+    input "${projectDir}/src/main/config/objectdemo.vxml"
+    output "${sourceSets.main.output.resourcesDir}/objectdemo.vxml"
+    parameters(
+        datapath: "${sourceSets.main.output.classesDir.toURL()}/"
+    )
 }
 
 jar {
+    dependsOn xslt
+
     manifest {
         attributes("Implementation-Title": "JVoiceXML Object Tag Demo",
                    "Implementation-Vendor": "JVoiceXML group",
@@ -25,5 +57,8 @@ jar {
 }
 
 mainClassName = "org.jvoicexml.demo.objecttagdemo.ObjectTagDemo"
-applicationDefaultJvmArgs = ["-Djava.security.policy=${projectDir}/src/main/resources/jvoicexml.policy" ]
+applicationDefaultJvmArgs = ["-Djava.security.policy=${projectDir}/src/main/config/jvoicexml.policy" ]
 
+run {
+    dependsOn xslt
+}
