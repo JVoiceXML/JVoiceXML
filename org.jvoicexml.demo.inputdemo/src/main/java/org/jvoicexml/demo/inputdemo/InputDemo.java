@@ -163,10 +163,10 @@ public final class InputDemo {
         prompt.setTimeout("10s");
 
         final Grammar grammar = field.appendChild(Grammar.class);
-        final URI grammarUri = InputDemo.class.getResource("/movies.gram")
+        final URI grammarUri = InputDemo.class.getResource("/movies.srgs")
                 .toURI();
         grammar.setSrc(grammarUri);
-        grammar.setType(GrammarType.JSGF);
+        grammar.setType(GrammarType.SRGS_XML);
 
         final Noinput noinput = field.appendChild(Noinput.class);
         noinput.addText("Please say something!");

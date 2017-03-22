@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" root="movies" xml:lang="en"
+    xmlns="http://www.w3.org/2001/06/grammar" mode="voice"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+                        http://www.w3.org/TR/speech-grammar/grammar.xsd">
+    <rule id="movies">
+        <one-of>
+            <item>
+                lord of the rings
+            </item>
+            <item>
+                the magnificent seven
+            </item>
+            <item>
+                two thousand one a space odyssey
+            </item>
+            <item>
+                the matrix
+            </item>
+            <item>
+                finding nemo
+            </item>
+            <item>
+                spider man
+            </item>
+            <item>
+                mystic river
+            </item>
+            <item>
+                the italian job
+            </item>
+            <item>
+                chicago
+            </item>
+            <item>
+                a beautiful mind
+            </item>
+            <item>
+                gladiator
+            </item>
+            <item>
+                american beauty
+            </item>
+            <item>
+                shakespeare in love
+            </item>
+            <item>
+                titanic
+            </item>
+            <item>
+                the english patient
+            </item>
+            <item>
+                brave heart
+            </item>
+            <item>
+                unforgiven
+            </item>
+            <item>
+                the silence of the lambs
+            </item>
+            <item>
+                dances with wolves
+            </item>
+            <item>
+                driving miss daisy
+            </item>
+            <item>
+                rain man
+            </item>
+            <item>
+                the last empero
+            </item>
+            <item>
+                platoon
+            </item>
+            <item>
+                out of africa
+            </item>
+            <item>
+                terms of endearment
+            </item>
+            <item>
+                chariots of fire
+            </item>
+            <item>
+                the empire strikes back
+            </item>
+            <item>
+                star wars
+            </item>
+            <item>
+                ordinary people
+            </item>
+        </one-of>
+    </rule>
+</grammar>
