@@ -36,7 +36,6 @@ import org.w3c.dom.Document;
  * A {@link GrammarDocument} referencing a grammar inside a VoiceXML document.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public final class InternalGrammarDocument implements GrammarDocument {

@@ -177,12 +177,12 @@ public final class SrgsXmlGrammarIdentifier
             }
 
             /* Is there a standard compliant version attribute? */
-            if (!versionIsCompliant(gr)) {
+            if (!isVersionCompliant(gr)) {
                 return null;
             }
 
             /* Is there a standard compliant mode attribute? */
-            if (!modeIsCompliant(gr)) {
+            if (!isModeCompliant(gr)) {
                 return null;
             }
         } catch (ParserConfigurationException e) {
@@ -214,7 +214,7 @@ public final class SrgsXmlGrammarIdentifier
      * @return true, if version attribute of provided node is
      *         compliant, else false.
      */
-    private boolean versionIsCompliant(final Grammar grammar) {
+    private boolean isVersionCompliant(final Grammar grammar) {
         /* Is there any version attribute? */
         final String version = grammar.getVersion();
 
@@ -239,14 +239,10 @@ public final class SrgsXmlGrammarIdentifier
      * @return true, if mode attribute of provided node is compliant,
      *         else false.
      */
-    private boolean modeIsCompliant(final Grammar grammar) {
-        /* Is there an optional mode attribut? */
+    private boolean isModeCompliant(final Grammar grammar) {
+        /* Is there an optional mode attribute? */
         if (ModeType.VOICE == grammar.getMode()) {
             /* yes, there is an optional mode attribute */
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("mode attribute provided");
-            }
-
             /* then, there has to be a xml:lang attribute */
             if (grammar.getAttribute(Grammar.ATTRIBUTE_XML_LANG) == null) {
                 LOGGER.warn("If mode is provided and equals voice, "
@@ -261,12 +257,6 @@ public final class SrgsXmlGrammarIdentifier
                 LOGGER.info("locale is " + lang.getLanguage());
             }
         }
-
-        /* no, there is no optional mode attribute */
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("no mode attribute provided, that's ok.");
-        }
-
         return true;
     }
 

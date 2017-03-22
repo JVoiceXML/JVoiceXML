@@ -70,7 +70,7 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
     private final Collection<SpokenInputListener> listener;
 
     /** Active grammars. */
-    private final Collection<GrammarImplementation<?>> activeGrammars;
+    private volatile Collection<GrammarImplementation<?>> activeGrammars;
 
     /** The thread reading the dtmf sequences. */
     private Thread inputThread;

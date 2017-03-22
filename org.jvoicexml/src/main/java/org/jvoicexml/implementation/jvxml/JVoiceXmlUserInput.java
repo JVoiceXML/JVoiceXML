@@ -84,8 +84,7 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
      * @param dtmf
      *            the buffered character input.
      */
-    JVoiceXmlUserInput(final SpokenInput input,
-            final BufferedDtmfInput dtmf) {
+    JVoiceXmlUserInput(final SpokenInput input, final BufferedDtmfInput dtmf) {
         spokenInput = input;
         dtmfInput = dtmf;
         cache = new GrammarCache();
@@ -127,8 +126,8 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
         final Collection<GrammarImplementation<?>> dtmfGrammars =
                 new java.util.ArrayList<GrammarImplementation<?>>();
         for (GrammarDocument grammar : grammars) {
-            final GrammarImplementation<?> grammarImplementation =
-                    loadGrammar(grammar);
+            final GrammarImplementation<?> grammarImplementation = loadGrammar(
+                    grammar);
             final ModeType type = grammarImplementation.getModeType();
             // A grammar is voice by default.
             if (type == ModeType.DTMF) {
@@ -137,7 +136,7 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
                 voiceGrammars.add(grammarImplementation);
             }
         }
-        
+
         // Activate the specific grammars per mode type
         if (!voiceGrammars.isEmpty()) {
             spokenInput.activateGrammars(voiceGrammars);
@@ -237,10 +236,15 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
 
         // Actually load and cache the grammar
         final GrammarType type = document.getMediaType();
+        final ModeType mode = document.getModeType();
         try {
             LOGGER.info("loading '" + type + "' grammar from '" + uri + "'");
-            final GrammarImplementation<?> implementation = spokenInput
-                    .loadGrammar(uri, type);
+            final GrammarImplementation<?> implementation;
+            if (mode == ModeType.DTMF) {
+                implementation = dtmfInput.loadGrammar(uri, type);
+            } else {
+                implementation = spokenInput.loadGrammar(uri, type);
+            }
             final LoadedGrammar loaded = new LoadedGrammar(document,
                     implementation);
             cache.add(loaded);
@@ -277,8 +281,8 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
     public void startRecognition(final DataModel model,
             final Collection<ModeType> types,
             final SpeechRecognizerProperties speech,
-            final DtmfRecognizerProperties dtmf) throws NoresourceError,
-            BadFetchError {
+            final DtmfRecognizerProperties dtmf)
+            throws NoresourceError, BadFetchError {
         if (types.contains(ModeType.VOICE)) {
             spokenInput.startRecognition(model, speech, dtmf);
         }
