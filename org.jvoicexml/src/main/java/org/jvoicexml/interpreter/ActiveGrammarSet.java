@@ -28,6 +28,8 @@ import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedSet;
 import org.jvoicexml.interpreter.scope.ScopedSetObserver;
+import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * The set of grammars active during a VoiceXML interpreter context's input
@@ -162,6 +164,40 @@ public class ActiveGrammarSet implements ScopedSetObserver<GrammarDocument> {
         return grammars;
     }
 
+    /**
+     * Retrieves the grammar types in the active grammar set.
+     * @return grammar types
+     * @since 0.7.8
+     */
+    public Collection<GrammarType> getGrammarTypes() {
+        final Collection<GrammarType> types =
+                new java.util.HashSet<GrammarType>();
+        for (GrammarDocument document : grammars) {
+            final GrammarType type = document.getMediaType();
+            if (type != null) {
+                types.add(type);
+            }
+        }
+        return types;
+    }
+
+    /**
+     * Retrieves the mode types in the active grammar set.
+     * @return mode types
+     * @since 0.7.8
+     */
+    public Collection<ModeType> getModeTypes() {
+        final Collection<ModeType> types =
+                new java.util.HashSet<ModeType>();
+        for (GrammarDocument document : grammars) {
+            final ModeType type = document.getModeType();
+            if (type != null) {
+                types.add(type);
+            }
+        }
+        return types;
+    }
+    
     /**
      * {@inheritDoc}
      */

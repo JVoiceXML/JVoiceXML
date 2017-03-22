@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -49,7 +44,6 @@ import org.jvoicexml.xml.srgs.ModeType;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5.5
  */
 public interface GrammarDocument {
@@ -69,7 +63,7 @@ public interface GrammarDocument {
      *            the new URI
      * @since 0.7.7
      */
-    void setURI(final URI uri);
+    void setURI(URI uri);
 
     /**
      * Retrieves the URI of the source grammar.
@@ -85,7 +79,7 @@ public interface GrammarDocument {
      * @param type
      *            the new media type.
      */
-    void setMediaType(final GrammarType type);
+    void setMediaType(GrammarType type);
 
     /**
      * Returns the declared media type of the grammar.
@@ -101,7 +95,7 @@ public interface GrammarDocument {
      *            the mode type
      * @since 0.7.5
      */
-    void setModeType(final ModeType type);
+    void setModeType(ModeType type);
 
     /**
      * Returns the mode type of the grammar.
@@ -155,5 +149,5 @@ public interface GrammarDocument {
      * @return <code>true</code> if the grammar documents are equal.
      * @since 0.7.2
      */
-    boolean equals(final GrammarDocument other);
+    boolean equals(GrammarDocument other);
 }

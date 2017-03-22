@@ -58,7 +58,7 @@ class InterdigitTimeoutThread extends Thread {
      *          input
      * @param term the terminate character
      */
-    public InterdigitTimeoutThread(
+    InterdigitTimeoutThread(
             final BufferedDtmfInput characterInput,
             final long timeout, final char term) {
         setDaemon(true);

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -73,7 +68,6 @@ import org.mockito.stubbing.Answer;
  * Test case for {@link FormInterpretationAlgorithm}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 
@@ -785,7 +779,7 @@ public final class TestFormInterpretationAlgorithm {
         Mockito.when(result.isAccepted()).thenReturn(true);
         final JVoiceXMLEvent recognitionEvent = new RecognitionEvent(null,
                 null, result);
-        input.stopRecognition();
+        input.stopRecognition(null);
         handler.onEvent(recognitionEvent);
         // Processing should continue with the second field
         // from level grammar and field grammar should be active

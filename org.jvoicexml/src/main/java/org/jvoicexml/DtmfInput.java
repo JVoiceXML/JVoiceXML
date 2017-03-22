@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,21 +31,21 @@ package org.jvoicexml;
  * </p>
  *
  * <p>
- * If an input resource is not available, an <code>error.noresource</code>
- * event must be thrown.
+ * If an input resource is not available, an <code>error.noresource</code> event
+ * must be thrown.
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5
  */
 public interface DtmfInput {
     /**
      * The user entered a DTMF.
      *
-     * @param dtmf Entered DTMF.
-     * @throws IllegalArgumentException if the char is not one of
-     *         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, #, *.
+     * @param dtmf
+     *            Entered DTMF.
+     * @throws IllegalArgumentException
+     *             if the char is not one of 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, #, *.
      */
-    void addDtmf(final char dtmf) throws IllegalArgumentException;
+    void addDtmf(char dtmf) throws IllegalArgumentException;
 }

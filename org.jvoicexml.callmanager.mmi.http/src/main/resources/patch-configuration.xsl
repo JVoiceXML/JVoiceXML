@@ -20,5 +20,4 @@
             <xsl:apply-templates select="@*|*|text()|comment()" />
         </xsl:copy>
     </xsl:template>
-
 </xsl:stylesheet>

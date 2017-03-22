@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,7 +42,6 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 /**
  * Test cases for {@link ActiveGrammarSet}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.2
  */
 public final class TestActiveGrammarSet {
@@ -87,6 +81,7 @@ public final class TestActiveGrammarSet {
         item3.addText("Fargo");
 
         document1 = new InternalGrammarDocument(grammar1);
+        document1.setMediaType(GrammarType.SRGS_XML);
 
         final SrgsXmlDocument doc2 = new SrgsXmlDocument();
         final Grammar grammar2 = doc2.getGrammar();
@@ -97,6 +92,7 @@ public final class TestActiveGrammarSet {
         grammar2.setRoot(rule2);
 
         document2 = new InternalGrammarDocument(grammar2);
+        document2.setMediaType(GrammarType.SRGS_XML);
     }
 
     /**
@@ -122,6 +118,20 @@ public final class TestActiveGrammarSet {
         Assert.assertEquals(2, docs.size());
     }
 
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.ActiveGrammarSet#getGrammarTypes()}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testGetGrammarTypes() throws Exception {
+        final ActiveGrammarSet set = new ActiveGrammarSet(observer);
+        set.add(document1);
+        set.add(document2);
+        final Collection<GrammarType> types = set.getGrammarTypes();
+        Assert.assertEquals(1, types.size());
+    }
+    
     /**
      * Test method for {@link ActiveGrammarSet#add(GrammarDocument)}.
      * @throws Exception test failed

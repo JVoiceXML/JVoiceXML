@@ -55,7 +55,7 @@ class DtmfInputThread extends Thread {
      * @param dtmf
      *            DTM recognition properties
      */
-    public DtmfInputThread(final BufferedDtmfInput characterInput,
+    DtmfInputThread(final BufferedDtmfInput characterInput,
             final DtmfRecognizerProperties dtmf) {
         setDaemon(true);
         setName("CharacterInput");

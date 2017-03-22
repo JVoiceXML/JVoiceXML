@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,16 +26,19 @@ import org.jvoicexml.GrammarDocument;
 
 /**
  * An observer for changes in the {@link ActiveGrammarSet}.
+ * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  */
 public interface ActiveGrammarSetObserver {
     /**
      * The given set changed due to a scope change.
-     * @param set the changed set
-     * @param removed the removed items
+     * 
+     * @param set
+     *            the changed set
+     * @param removed
+     *            the removed items
      */
-    void removedGrammars(final ActiveGrammarSet set,
-            final Collection<GrammarDocument> removed);
+    void removedGrammars(ActiveGrammarSet set,
+            Collection<GrammarDocument> removed);
 }

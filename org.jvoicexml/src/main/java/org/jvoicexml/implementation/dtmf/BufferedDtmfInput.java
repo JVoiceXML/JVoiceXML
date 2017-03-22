@@ -27,7 +27,6 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.BlockingQueue;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,8 +60,11 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
     private static final Logger LOGGER = LogManager
             .getLogger(BufferedDtmfInput.class);
 
+    /** Maximum number of DTMFs in this buffer. */
+    private static final int MAX_DTMF_INPUT = 512;
+
     /** All queued characters. */
-    private final BlockingQueue<Character> buffer;
+    private volatile List<Character> buffer;
 
     /** Listener for user input events. */
     private final Collection<SpokenInputListener> listener;
@@ -84,12 +86,13 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
 
     /** The data model in use. */
     private DataModel model;
-    
+
     /**
      * Constructs a new object.
      */
     public BufferedDtmfInput() {
-        buffer = new java.util.concurrent.LinkedBlockingQueue<Character>();
+        buffer = new java.util.ArrayList<Character>(
+                MAX_DTMF_INPUT);
         listener = new java.util.ArrayList<SpokenInputListener>();
         activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
         parsers = new java.util.HashMap<GrammarType, GrammarParser<?>>();
@@ -97,7 +100,9 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
 
     /**
      * Sets the grammar parsers to use.
-     * @param grammarParsers the grammar parsers to use
+     * 
+     * @param grammarParsers
+     *            the grammar parsers to use
      * @since 0.7.8
      */
     public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
@@ -170,10 +175,13 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
     public synchronized void addDtmf(final char dtmf)
             throws IllegalArgumentException {
         if ("01234567890#*".indexOf(Character.toString(dtmf)) < 0) {
-            throw new IllegalArgumentException("'" + dtmf
-                    + "' is not one of 0123456789#* ");
+            throw new IllegalArgumentException(
+                    "'" + dtmf + "' is not one of 0123456789#* ");
         }
-        buffer.add(dtmf);
+        synchronized (buffer) {
+            buffer.add(dtmf);
+            buffer.notifyAll();
+        }
         final char termchar = props.getTermchar();
         if (dtmf == termchar) {
             return;
@@ -202,7 +210,10 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      * @since 0.7
      */
     char getNextCharacter() throws InterruptedException {
-        return buffer.take();
+        synchronized (buffer) {
+            buffer.wait();
+            return buffer.remove(0);
+        }
     }
 
     /**
@@ -211,8 +222,8 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
     @Override
     public synchronized void startRecognition(final DataModel dataModel,
             final SpeechRecognizerProperties speech,
-            final DtmfRecognizerProperties dtmf) throws NoresourceError,
-            BadFetchError {
+            final DtmfRecognizerProperties dtmf)
+            throws NoresourceError, BadFetchError {
         model = dataModel;
         props = dtmf;
         inputThread = new DtmfInputThread(this, props);
@@ -236,9 +247,8 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
                     final GrammarEvaluator evaluator =
                             (GrammarEvaluator) grammar;
                     final String utterance = result.getUtterance();
-                    final Object interpretation =
-                            evaluator.getSemanticInterpretation(model,
-                                    utterance);
+                    final Object interpretation = evaluator
+                            .getSemanticInterpretation(model, utterance);
                     if (interpretation != null) {
                         final DtmfInputResult dtmfResult =
                                 (DtmfInputResult) result;
@@ -377,8 +387,8 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      */
     @Override
     public GrammarImplementation<?> loadGrammar(final URI uri,
-            final GrammarType type) throws NoresourceError, IOException,
-            UnsupportedFormatError {
+            final GrammarType type)
+            throws NoresourceError, IOException, UnsupportedFormatError {
         final GrammarParser<?> parser = parsers.get(type);
         if (parser == null) {
             throw new UnsupportedFormatError("'" + type + "' is not supported");
@@ -398,8 +408,8 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public URI getUriForNextSpokenInput() throws NoresourceError,
-            URISyntaxException {
+    public URI getUriForNextSpokenInput()
+            throws NoresourceError, URISyntaxException {
         return null;
     }
 }

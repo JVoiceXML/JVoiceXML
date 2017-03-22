@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -52,13 +47,15 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public interface UserInput {
     /**
      * Detects and reports character and/or spoken input simultaneously.
      *
-     * @param model the data model for generating a semantic interpretation
+     * @param model
+     *            the data model for generating a semantic interpretation
+     * @param types
+     *            the recognizer types to activate
      * @param speech
      *            the speech recognizer properties to use
      * @param dtmf
@@ -68,17 +65,20 @@ public interface UserInput {
      * @exception BadFetchError
      *                The active grammar contains some errors.
      */
-    void startRecognition(final DataModel model,
-            final SpeechRecognizerProperties speech,
-            final DtmfRecognizerProperties dtmf) throws NoresourceError,
-            BadFetchError;
+    void startRecognition(DataModel model, Collection<ModeType> types,
+            SpeechRecognizerProperties speech, DtmfRecognizerProperties dtmf)
+            throws NoresourceError, BadFetchError;
 
     /**
      * Stops a previously started recognition.
+     * 
+     * @param types
+     *            the recognizer types to activate, {@code null} would stop all
+     *            recognizers
      *
      * @see #startRecognition
      */
-    void stopRecognition();
+    void stopRecognition(Collection<ModeType> types);
 
     /**
      * Retrieves the grammar types that are supported by this implementation for
@@ -96,7 +96,7 @@ public interface UserInput {
      *
      * @since 0.5.5
      */
-    Collection<GrammarType> getSupportedGrammarTypes(final ModeType mode);
+    Collection<GrammarType> getSupportedGrammarTypes(ModeType mode);
 
     /**
      * Activates the given grammars. It is guaranteed that all grammars types
@@ -105,13 +105,13 @@ public interface UserInput {
      *
      * <p>
      * {@link org.jvoicexml.implementation.GrammarImplementation}s may be
-     * cached. This means that a grammar
-     * implementation object is loaded either by this or by another instance of
-     * the {@link UserInput}. For some implementation platforms it may be
-     * necessary that the instance activating the grammar also loaded the
-     * grammar. In these cases, the grammar implementation must be loaded in
-     * this call. The grammar source may be accessed by the grammar
-     * implementation itself, e.g. SRGS grammar sources can be accessed via
+     * cached. This means that a grammar implementation object is loaded either
+     * by this or by another instance of the {@link UserInput}. For some
+     * implementation platforms it may be necessary that the instance activating
+     * the grammar also loaded the grammar. In these cases, the grammar
+     * implementation must be loaded in this call. The grammar source may be
+     * accessed by the grammar implementation itself, e.g. SRGS grammar sources
+     * can be accessed via
      * {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#getGrammarDocument()}
      * .
      * </p>
@@ -131,7 +131,7 @@ public interface UserInput {
      * @exception UnsupportedFormatError
      *                the grammar format is not supported
      */
-    int activateGrammars(final Collection<GrammarDocument> grammars)
+    int activateGrammars(Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError,
             UnsupportedFormatError;
 
@@ -148,7 +148,7 @@ public interface UserInput {
      * @exception NoresourceError
      *                The input resource is not available.
      */
-    int deactivateGrammars(final Collection<GrammarDocument> grammars)
+    int deactivateGrammars(Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError;
 
     /**

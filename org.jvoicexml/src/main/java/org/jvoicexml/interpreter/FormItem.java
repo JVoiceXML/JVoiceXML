@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,7 +36,6 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  * @since 0.4
  */
@@ -57,7 +51,7 @@ public interface FormItem extends FormItemVisitable, DialogConstruct {
      *             error initializing this form item
      * @since 0.7.3
      */
-    void init(final DataModel model) throws SemanticError, BadFetchError;
+    void init(DataModel model) throws SemanticError, BadFetchError;
 
     /**
      * Retrieves the form item variable.
@@ -79,11 +73,11 @@ public interface FormItem extends FormItemVisitable, DialogConstruct {
      *
      * @param value
      *            new value for the form item variable.
-     * @return {@code 0} if setting the form item variaable was successful
+     * @return {@code 0} if setting the form item variable was successful
      * @exception SemanticError
      *                error setting the value
      */
-    int setFormItemVariable(final Object value) throws SemanticError;
+    int setFormItemVariable(Object value) throws SemanticError;
 
     /**
      * Retrieves the name of this <code>FormItem</code>..
@@ -133,7 +127,7 @@ public interface FormItem extends FormItemVisitable, DialogConstruct {
      * @exception SemanticError
      *                error evaluating the <code>expr</code> attribute.
      */
-    Object evaluateExpression(final DataModel model) throws SemanticError;
+    Object evaluateExpression(DataModel model) throws SemanticError;
 
     /**
      * An expression to evaluate in conjunction with the test of the form item

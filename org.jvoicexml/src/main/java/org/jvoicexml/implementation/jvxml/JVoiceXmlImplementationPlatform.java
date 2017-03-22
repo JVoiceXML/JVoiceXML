@@ -130,7 +130,7 @@ public final class JVoiceXmlImplementationPlatform
     private final Object inputLock;
 
     /** Support for DTMF input. */
-    private final BufferedDtmfInput dtmfInput;
+    private volatile BufferedDtmfInput dtmfInput;
 
     /** The calling device. */
     private JVoiceXmlCallControl call;
@@ -551,7 +551,7 @@ public final class JVoiceXmlImplementationPlatform
 
         if (input != null) {
             if (hungup) {
-                input.stopRecognition();
+                input.stopRecognition(null);
             } else {
                 try {
                     waitInputNotBusy();

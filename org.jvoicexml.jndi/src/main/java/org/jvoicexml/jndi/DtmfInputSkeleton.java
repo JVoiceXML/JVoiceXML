@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,11 +31,10 @@ import org.jvoicexml.client.jndi.RemoteDtmfInput;
  * Skeleton for the {@link org.jvoicexml.DtmfInput}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5
  */
-public final class DtmfInputSkeleton
-        extends UnicastRemoteObject implements RemoteDtmfInput, Skeleton {
+public final class DtmfInputSkeleton extends UnicastRemoteObject
+        implements RemoteDtmfInput, Skeleton {
     /** The serial version UID. */
     private static final long serialVersionUID = -5497137347016070409L;
 
@@ -52,23 +46,25 @@ public final class DtmfInputSkeleton
 
     /**
      * Constructs a new object.
+     * 
      * @throws RemoteException
-     *         Error creating the skeleton.
+     *             Error creating the skeleton.
      */
-    public DtmfInputSkeleton()
-            throws RemoteException {
+    public DtmfInputSkeleton() throws RemoteException {
         input = null;
     }
 
     /**
      * Constructs a new object.
-     * @param id The session ID.
-     * @param characterInput The character input device.
+     * 
+     * @param id
+     *            The session ID.
+     * @param characterInput
+     *            The character input device.
      * @throws RemoteException
-     *         Error creating the skeleton.
+     *             Error creating the skeleton.
      */
-    public DtmfInputSkeleton(final String id,
-                                  final DtmfInput characterInput)
+    public DtmfInputSkeleton(final String id, final DtmfInput characterInput)
             throws RemoteException {
         sessionID = id;
         input = characterInput;
@@ -77,11 +73,9 @@ public final class DtmfInputSkeleton
     /**
      * {@inheritDoc}
      */
-    public void addCharacter(final char dtmf)
-            throws RemoteException {
+    public void addCharacter(final char dtmf) throws RemoteException {
         if (input == null) {
-            throw new RemoteException("No input! Cannot process dtmf: "
-                    + dtmf);
+            throw new RemoteException("No input! Cannot process dtmf: " + dtmf);
         }
         input.addDtmf(dtmf);
     }
@@ -89,8 +83,7 @@ public final class DtmfInputSkeleton
     /**
      * {@inheritDoc}
      */
-    public String getSkeletonName()
-            throws RemoteException {
+    public String getSkeletonName() throws RemoteException {
         return RemoteDtmfInput.class.getSimpleName() + "." + sessionID;
     }
 }

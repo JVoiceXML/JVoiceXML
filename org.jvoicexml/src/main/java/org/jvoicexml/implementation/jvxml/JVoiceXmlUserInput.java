@@ -275,11 +275,14 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
      */
     @Override
     public void startRecognition(final DataModel model,
+            final Collection<ModeType> types,
             final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf) throws NoresourceError,
             BadFetchError {
-        spokenInput.startRecognition(model, speech, dtmf);
-        if (dtmfInput != null) {
+        if (types.contains(ModeType.VOICE)) {
+            spokenInput.startRecognition(model, speech, dtmf);
+        }
+        if (dtmfInput != null && types.contains(ModeType.DTMF)) {
             dtmfInput.startRecognition(model, speech, dtmf);
         }
     }
@@ -288,9 +291,12 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
      * {@inheritDoc}
      */
     @Override
-    public void stopRecognition() {
-        spokenInput.stopRecognition();
-        if (dtmfInput != null) {
+    public void stopRecognition(final Collection<ModeType> types) {
+        if (types == null || types.contains(ModeType.VOICE)) {
+            spokenInput.stopRecognition();
+        }
+        if (dtmfInput != null
+                && (types == null || types.contains(ModeType.DTMF))) {
             dtmfInput.stopRecognition();
         }
     }

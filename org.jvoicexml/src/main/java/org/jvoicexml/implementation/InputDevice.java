@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,7 +31,6 @@ import org.jvoicexml.interpreter.datamodel.DataModel;
  * An input device for spoken or character input.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5
  */
 public interface InputDevice {
@@ -52,9 +46,9 @@ public interface InputDevice {
      * @exception BadFetchError
      * The active grammar contains some errors.
      */
-    void startRecognition(final DataModel model,
-            final SpeechRecognizerProperties speech,
-            final DtmfRecognizerProperties dtmf)
+    void startRecognition(DataModel model,
+            SpeechRecognizerProperties speech,
+            DtmfRecognizerProperties dtmf)
             throws NoresourceError, BadFetchError;
 
     /**

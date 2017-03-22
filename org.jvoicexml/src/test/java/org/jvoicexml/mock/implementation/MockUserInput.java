@@ -21,7 +21,6 @@
 package org.jvoicexml.mock.implementation;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Collection;
 import java.util.Set;
 
@@ -51,7 +50,8 @@ import org.jvoicexml.xml.vxml.BargeInType;
  */
 public class MockUserInput implements UserInput {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(MockUserInput.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(MockUserInput.class);
 
     /** Supported grammar types of this user input. */
     private static final Collection<GrammarType> SUPPORTED_GRAMMAR_TYPES;
@@ -231,6 +231,7 @@ public class MockUserInput implements UserInput {
      */
     @Override
     public void startRecognition(final DataModel model,
+            final Collection<ModeType> types,
             final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf) throws NoresourceError,
             BadFetchError {
@@ -271,30 +272,10 @@ public class MockUserInput implements UserInput {
     /**
      * {@inheritDoc}
      */
-    public void stopRecognition() {
+    @Override
+    public void stopRecognition(final Collection<ModeType> types) {
         synchronized (recognitionStartedLock) {
             recognitionStarted = false;
         }
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void addCharacter(final char dtmf) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public URI getUriForNextSpokenInput() throws NoresourceError {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public SpokenInput getSpokenInput() throws NoresourceError {
-        return input;
-    }
-
 }

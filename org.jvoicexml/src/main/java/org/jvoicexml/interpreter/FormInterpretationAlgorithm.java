@@ -76,6 +76,7 @@ import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
@@ -677,7 +678,11 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final boolean hasUserInput = platform.isUserInputActive();
         if (hasUserInput) {
             final UserInput userInput = platform.getUserInput();
-            userInput.stopRecognition();
+            final ActiveGrammarSet activeGrammars =
+                    context.getActiveGrammarSet();
+            final Collection<ModeType> types =
+                    activeGrammars.getModeTypes();
+            userInput.stopRecognition(types);
         }
         final CallControl call = platform.getCallControl();
         if (call != null) {
@@ -1200,7 +1205,11 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                     .getSpeechRecognizerProperties(this);
             final DtmfRecognizerProperties dtmf = context
                     .getDtmfRecognizerProperties(this);
-            input.startRecognition(model, speech, dtmf);
+            final ActiveGrammarSet activeGrammars =
+                    context.getActiveGrammarSet();
+            final Collection<ModeType> types =
+                    activeGrammars.getModeTypes();
+            input.startRecognition(model, types, speech, dtmf);
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
         } catch (IOException e) {
@@ -1245,7 +1254,11 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                     .getSpeechRecognizerProperties(this);
             final DtmfRecognizerProperties dtmf = context
                     .getDtmfRecognizerProperties(this);
-            input.startRecognition(model, speech, dtmf);
+            final ActiveGrammarSet activeGrammars =
+                    context.getActiveGrammarSet();
+            final Collection<ModeType> types =
+                    activeGrammars.getModeTypes();
+            input.startRecognition(model, types, speech, dtmf);
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
         }

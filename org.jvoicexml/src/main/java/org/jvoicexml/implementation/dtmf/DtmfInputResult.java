@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -63,7 +63,7 @@ class DtmfInputResult implements RecognitionResult {
      *            <code>true</code> if the result is accepted.
      * @since 0.7
      */
-    public DtmfInputResult(final String dtmf, final boolean isAccepted) {
+    DtmfInputResult(final String dtmf, final boolean isAccepted) {
         utterance = dtmf;
         accepted = isAccepted;
     }
