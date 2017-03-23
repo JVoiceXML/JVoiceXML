@@ -34,6 +34,7 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.ReturnEvent;
 import org.jvoicexml.event.plain.jvxml.SubdialogResultEvent;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.interpreter.scope.Scope;
 
 /**
  * Asynchronous execution of a subdialog.
@@ -96,6 +97,7 @@ final class SubdialogExecutorThread extends Thread {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("initializing parameters...");
         }
+        model.createScope(Scope.DIALOG);
         for (String name : parameters.keySet()) {
             final Object value = parameters.get(name);
             model.createVariable(name, value);
@@ -120,6 +122,8 @@ final class SubdialogExecutorThread extends Thread {
         } catch (JVoiceXMLEvent e) {
             eventbus.publish(e);
             return;
+        } finally {
+            model.deleteScope(Scope.DIALOG);
         }
         // The VoiceXML spec leaves it open what should happen if there was no
         // return or exit and the dialog terminated because all forms were

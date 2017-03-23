@@ -1,13 +1,7 @@
 /*
- * File:    $RCSfile: FormItemVisitor.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -44,8 +38,7 @@ import org.jvoicexml.interpreter.formitem.TransferFormItem;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.interpreter.FormItem
  *
- * @author Dirk Schnelle
- * @version $Revision$
+ * @author Dirk Schnelle-Walka
  */
 public interface FormItemVisitor {
     /**
@@ -59,7 +52,7 @@ public interface FormItemVisitor {
      * @exception JVoiceXMLEvent
      *            Error or event executing the block.
      */
-    void visitBlockFormItem(final BlockFormItem block)
+    void visitBlockFormItem(BlockFormItem block)
             throws JVoiceXMLEvent;
 
     /**
@@ -74,7 +67,7 @@ public interface FormItemVisitor {
      * @exception JVoiceXMLEvent
      *            Error or event executing the field.
      */
-    void visitFieldFormItem(final InputItem item)
+    void visitFieldFormItem(InputItem item)
             throws JVoiceXMLEvent;
 
     /**
@@ -90,7 +83,7 @@ public interface FormItemVisitor {
      * @exception JVoiceXMLEvent
      *            Error or event executing the initial form item.
      */
-    void visitInitialFormItem(final InitialFormItem initial)
+    void visitInitialFormItem(InitialFormItem initial)
             throws JVoiceXMLEvent;
 
     /**
@@ -114,7 +107,7 @@ public interface FormItemVisitor {
      * @exception JVoiceXMLEvent
      *            Error or event executing the object form item.
      */
-    void visitObjectFormItem(final ObjectFormItem object)
+    void visitObjectFormItem(ObjectFormItem object)
             throws JVoiceXMLEvent;
 
     /**
@@ -127,7 +120,7 @@ public interface FormItemVisitor {
      * @exception JVoiceXMLEvent
      *            Error or event executing the record form item.
      */
-    void visitRecordFormItem(final RecordFormItem record)
+    void visitRecordFormItem(RecordFormItem record)
             throws JVoiceXMLEvent;
 
     /**
@@ -140,7 +133,7 @@ public interface FormItemVisitor {
      * @exception JVoiceXMLEvent
      *            Error or event executing the subdialog form item.
      */
-    void visitSubdialogFormItem(final SubdialogFormItem subdialog)
+    void visitSubdialogFormItem(SubdialogFormItem subdialog)
             throws JVoiceXMLEvent;
 
     /**
@@ -153,6 +146,6 @@ public interface FormItemVisitor {
      * @exception JVoiceXMLEvent
      *            Error or event executing the transfer form item.
      */
-    void visitTransferFormItem(final TransferFormItem transfer)
+    void visitTransferFormItem(TransferFormItem transfer)
             throws JVoiceXMLEvent;
 }

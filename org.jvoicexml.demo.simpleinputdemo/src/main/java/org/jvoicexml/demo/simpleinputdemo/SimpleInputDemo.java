@@ -66,7 +66,7 @@ public final class SimpleInputDemo {
         try {
             final URI dialog = SimpleInputDemo.class
                     .getResource("/simpleexample.vxml").toURI();
-            Session session = client.call(dialog, "jsapi20", "jsapi20",
+            final Session session = client.call(dialog, "jsapi20", "jsapi20",
                     "dummy");
             session.waitSessionEnd();
             session.hangup();

@@ -24,8 +24,8 @@
 
 package org.jvoicexml.demo.subdialogdemo;
 
-import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.naming.NamingException;
 
@@ -40,8 +40,8 @@ import org.jvoicexml.event.ErrorEvent;
  * Demo implementation of the subdialog tag.
  * <p>
  * Must be run with the system property
- * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
- * the <code>config</code> folder added to the classpath.
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and the
+ * <code>config</code> folder added to the classpath.
  * </p>
  * <p>
  * This demo requires that JVoiceXML is configured with the jsapi20
@@ -53,22 +53,24 @@ import org.jvoicexml.event.ErrorEvent;
  */
 public final class SubdialogDemo {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            LogManager.getLogger(SubdialogDemo.class);
+    private static final Logger LOGGER = LogManager
+            .getLogger(SubdialogDemo.class);
 
     /**
      * The main method.
-     * @param args Command line arguments. None expected.
+     * 
+     * @param args
+     *            Command line arguments. None expected.
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'subdialog' demo for JVoiceXML...");
         LOGGER.info("(c) 2010-2017 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
         final GenericClient client = new GenericClient();
-        final File file = new File("subdialog.vxml");
-        final URI subdialog = file.toURI();
         try {
-            Session session = client.call(subdialog, "jsapi20", "jsapi20",
+            final URI dialog = SubdialogDemo.class
+                    .getResource("/subdialog.vxml").toURI();
+            final Session session = client.call(dialog, "jsapi20", "jsapi20",
                     "dummy");
             session.waitSessionEnd();
             session.hangup();
@@ -79,6 +81,9 @@ public final class SubdialogDemo {
             LOGGER.fatal(e.getMessage(), e);
             return;
         } catch (UnsupportedResourceIdentifierException e) {
+            LOGGER.fatal(e.getMessage(), e);
+            return;
+        } catch (URISyntaxException e) {
             LOGGER.fatal(e.getMessage(), e);
             return;
         } finally {
