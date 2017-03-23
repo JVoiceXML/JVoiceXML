@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +25,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.Locale;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -75,7 +76,8 @@ public final class TestTextSenderThread implements TextListener {
         server.addTextListener(this);
         server.waitStarted();
         final InetAddress address = InetAddress.getLocalHost();
-        final SocketAddress socketAddress = new InetSocketAddress(address, PORT);
+        final SocketAddress socketAddress = new InetSocketAddress(address,
+                PORT);
         final Socket socket = new Socket();
         socket.connect(socketAddress);
         server.waitConnected();
@@ -112,7 +114,8 @@ public final class TestTextSenderThread implements TextListener {
     @Test
     public void testSendData() throws Exception {
         final String test1 = "test1";
-        final SpeakableSsmlText speakable1 = new SpeakableSsmlText(test1);
+        final SpeakableSsmlText speakable1 = new SpeakableSsmlText(test1,
+                Locale.US);
         sender.sendData(speakable1);
         synchronized (lock) {
             lock.wait(MAX_WAIT);
@@ -133,7 +136,8 @@ public final class TestTextSenderThread implements TextListener {
         final int max = 100;
         for (int i = 0; i < max; i++) {
             final String test = "test " + i;
-            final SpeakableText speakable = new SpeakableSsmlText(test);
+            final SpeakableText speakable = new SpeakableSsmlText(test,
+                    Locale.US);
             sender.sendData(speakable);
         }
         int i = 0;
@@ -155,7 +159,8 @@ public final class TestTextSenderThread implements TextListener {
      *            the document to check
      * @since 0.7.6
      */
-    private void assertEquals(final SsmlDocument doc1, final SsmlDocument doc2) {
+    private void assertEquals(final SsmlDocument doc1,
+            final SsmlDocument doc2) {
         Assert.assertNotNull(doc1);
         Assert.assertNotNull(doc2);
         Assert.assertEquals(doc1.getTextContent(), doc2.getTextContent());

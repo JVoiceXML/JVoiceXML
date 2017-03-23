@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +24,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.junit.Assert;
@@ -43,8 +39,8 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
  * Test cases for {@link MarcFeedback}.
+ * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  */
 public final class TestMarcFeedback implements SynthesizedOutputListener {
@@ -62,16 +58,21 @@ public final class TestMarcFeedback implements SynthesizedOutputListener {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.marc.MarcFeedback#run()}.
-     * @exception Exception test failed
-     * @exception JVoiceXMLEvent test failed
+     * Test method for
+     * {@link org.jvoicexml.implementation.marc.MarcFeedback#run()}.
+     * 
+     * @exception Exception
+     *                test failed
+     * @exception JVoiceXMLEvent
+     *                test failed
      */
     @Test
     public void testRun() throws Exception, JVoiceXMLEvent {
         final MarcSynthesizedOutput output = new MarcSynthesizedOutput();
         output.connect(null);
         output.addListener(this);
-        final SpeakableText speakable = new SpeakableSsmlText("test");
+        final SpeakableText speakable = new SpeakableSsmlText("test",
+                Locale.US);
         final String sessionId = UUID.randomUUID().toString();
         output.queueSpeakable(speakable, sessionId, null);
         final MarcFeedback feedback = new MarcFeedback(output, 4011);

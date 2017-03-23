@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +22,7 @@
 package org.jvoicexml.implementation.text;
 
 import java.net.InetSocketAddress;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -124,7 +125,8 @@ public final class TestTextTelephony
     public void testPlay() throws Exception, JVoiceXMLEvent {
         final TextSynthesizedOutput textOutput = new TextSynthesizedOutput();
         final String prompt = "testPlay";
-        final SpeakableSsmlText speakable = new SpeakableSsmlText(prompt);
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(prompt,
+                Locale.US);
         textOutput.queueSpeakable(speakable, sessionId, null);
         telephony.play(textOutput, null);
         synchronized (lock) {
@@ -172,16 +174,17 @@ public final class TestTextTelephony
      * @since 0.7.6
      */
     private void mockGrammarChecker(final TextSpokenInput textInput,
-            final String utterance) throws JVoiceXMLEvent,
-            ParserConfigurationException {
+            final String utterance)
+            throws JVoiceXMLEvent, ParserConfigurationException {
         SrgsXmlDocument doc = new SrgsXmlDocument();
         doc.setGrammarSimple("mock", utterance);
-//        final SrgsXmlGrammarImplementation impl = new SrgsXmlGrammarImplementation(
-//                doc, null);
-//        final Collection<GrammarImplementation<?>> grammars;
-//        grammars = new java.util.ArrayList<>();
-//        grammars.add(impl);
-//        textInput.activateGrammars(grammars);
+        // final SrgsXmlGrammarImplementation impl = new
+        // SrgsXmlGrammarImplementation(
+        // doc, null);
+        // final Collection<GrammarImplementation<?>> grammars;
+        // grammars = new java.util.ArrayList<>();
+        // grammars.add(impl);
+        // textInput.activateGrammars(grammars);
     }
 
     /**
@@ -193,7 +196,8 @@ public final class TestTextTelephony
      *            the document to check
      * @since 0.7.6
      */
-    private void assertEquals(final SsmlDocument doc1, final SsmlDocument doc2) {
+    private void assertEquals(final SsmlDocument doc1,
+            final SsmlDocument doc2) {
         Assert.assertNotNull(doc1);
         Assert.assertNotNull(doc2);
         Assert.assertEquals(doc1.getTextContent(), doc2.getTextContent());
@@ -203,7 +207,8 @@ public final class TestTextTelephony
      * {@inheritDoc}
      */
     @Override
-    public void outputSsml(final TextMessageEvent event, final SsmlDocument document) {
+    public void outputSsml(final TextMessageEvent event,
+            final SsmlDocument document) {
         receivedDocument = document;
         synchronized (lock) {
             lock.notifyAll();
