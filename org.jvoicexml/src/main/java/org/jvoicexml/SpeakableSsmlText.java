@@ -21,6 +21,8 @@
 
 package org.jvoicexml;
 
+import java.util.Locale;
+
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jvoicexml.xml.ssml.Speak;
@@ -61,13 +63,15 @@ public final class SpeakableSsmlText
      * Constructs a new object. The given text is encapsulated in an
      * {@link SsmlDocument}.
      * @param text the text that should be contained in the speakable
+     * @param locale the locale of this speakable
      * @throws ParserConfigurationException
      *         error creating the {@link SsmlDocument}.
      */
-    public SpeakableSsmlText(final String text)
+    public SpeakableSsmlText(final String text, final Locale locale)
             throws ParserConfigurationException {
         document = new SsmlDocument();
         final Speak speak = document.getSpeak();
+        speak.setXmlLang(locale);
         speak.addText(text);
         timeout = -1;
         bargeInType = null;
@@ -147,7 +151,6 @@ public final class SpeakableSsmlText
         }
 
         final Speak speak = document.getSpeak();
-
         return !speak.hasChildNodes();
     }
 

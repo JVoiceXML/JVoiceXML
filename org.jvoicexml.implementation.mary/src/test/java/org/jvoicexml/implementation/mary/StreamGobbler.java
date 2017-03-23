@@ -40,7 +40,6 @@ import java.io.PrintWriter;
  * 
  * @author <a href="mailto:smccrory@users.sourceforge.net">Scott McCrory </a>.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 class StreamGobbler extends Thread {
 
@@ -56,7 +55,7 @@ class StreamGobbler extends Thread {
     /**
      * Basic constructor for StreamGobbler.
      */
-    public StreamGobbler() {
+    StreamGobbler() {
         super();
     }
 
@@ -66,7 +65,7 @@ class StreamGobbler extends Thread {
      * @param stream
      *            the input stream of a process.
      */
-    public StreamGobbler(final InputStream stream) {
+    StreamGobbler(final InputStream stream) {
         this();
         in = stream;
         this.pwOut = new PrintWriter(System.out, true);
@@ -82,7 +81,7 @@ class StreamGobbler extends Thread {
      * @param outstream
      *            the output stream of a process
      */
-    public StreamGobbler(final InputStream instream,
+    StreamGobbler(final InputStream instream,
             final OutputStream outstream) {
         this();
         in = instream;
@@ -99,7 +98,7 @@ class StreamGobbler extends Thread {
      * @param out
      *            PrintWriter
      */
-    public StreamGobbler(final InputStream instream, final PrintWriter out) {
+    StreamGobbler(final InputStream instream, final PrintWriter out) {
         this();
         in = instream;
         pwOut = out;

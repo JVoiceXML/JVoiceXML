@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,9 +25,8 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.UUID;
 
-import marytts.client.MaryClient;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -46,35 +45,38 @@ import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 
+import marytts.client.MaryClient;
+
 /**
  * Test cases for {@link MarySynthesizedOutput}.
+ * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.3
  */
 public final class TestMarySynthesizedOutput
-    implements SynthesizedOutputListener {
+        implements SynthesizedOutputListener {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(TestMarySynthesizedOutput.class);
-    
+    private static final Logger LOGGER = LogManager
+            .getLogger(TestMarySynthesizedOutput.class);
+
     /** Delay between to lookups if the Mary server has been started. */
     private static final int DELAY = 1000;
 
     /** The test object. */
     private MarySynthesizedOutput output;
 
-    /** Output Ended  notification mechanism. */
+    /** Output Ended notification mechanism. */
     private final Object outputEndedLock = new Object();
 
     /** Output Started notification mechanism. */
     private final Object outputStartedLock = new Object();
 
-    /**Flag that indicates if the current output has ended. */
+    /** Flag that indicates if the current output has ended. */
     private boolean outputEnded;
 
-    /**Flag that indicates if the current output has started. */
+    /** Flag that indicates if the current output has started. */
     private boolean outputStarted;
-       
+
     /** The Mary process. */
     private static Process process;
 
@@ -92,8 +94,9 @@ public final class TestMarySynthesizedOutput
 
     /**
      * Starts the Mary server.
+     * 
      * @throws Exception
-     *         start failed
+     *             start failed
      */
     @BeforeClass
     public static void init() throws Exception {
@@ -110,7 +113,7 @@ public final class TestMarySynthesizedOutput
             final InputStream err = process.getErrorStream();
             errgobbler = new StreamGobbler(err, System.out);
             errgobbler.start();
-            
+
             boolean started = false;
             do {
                 Thread.sleep(DELAY);
@@ -149,15 +152,16 @@ public final class TestMarySynthesizedOutput
 
     /**
      * Set up the test environment.
+     * 
      * @exception Exception
-     *            setup failed
+     *                setup failed
      */
     @Before
     public void setUp() throws Exception {
         output = new MarySynthesizedOutput();
         output.setAudioType("WAVE");
         output.setLang("en-US");
-        output.setVoiceName("cmu-slt-hsmm");
+        output.setVoiceName("cmu-slt");
         output.addListener(this);
         output.activate();
         output.connect(null);
@@ -176,11 +180,15 @@ public final class TestMarySynthesizedOutput
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.mary.MarySynthesizedOutput#queueSpeakable(org.jvoicexml.SpeakableText, org.jvoicexml.DocumentServer)}.
-     * @exception Exception test failed
-     * @exception JVoiceXMLEvent test failed
+     * Test method for
+     * {@link org.jvoicexml.implementation.mary.MarySynthesizedOutput#queueSpeakable(org.jvoicexml.SpeakableText, org.jvoicexml.DocumentServer)}.
+     * 
+     * @exception Exception
+     *                test failed
+     * @exception JVoiceXMLEvent
+     *                test failed
      */
-    @Test//(timeout = 6000)
+    @Test // (timeout = 6000)
     public void testQueueSpeakable() throws Exception, JVoiceXMLEvent {
         final SsmlDocument doc = new SsmlDocument();
         final Speak speak = doc.getSpeak();
@@ -194,56 +202,63 @@ public final class TestMarySynthesizedOutput
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.mary.MarySynthesizedOutput#queueSpeakable(org.jvoicexml.SpeakableText, org.jvoicexml.DocumentServer)}.
-     * @exception Exception test failed
-     * @exception JVoiceXMLEvent test failed
+     * Test method for
+     * {@link org.jvoicexml.implementation.mary.MarySynthesizedOutput#queueSpeakable(org.jvoicexml.SpeakableText, org.jvoicexml.DocumentServer)}.
+     * 
+     * @exception Exception
+     *                test failed
+     * @exception JVoiceXMLEvent
+     *                test failed
      */
     @Test
-    public void testQueueMultipleSpeakables()
-            throws Exception, JVoiceXMLEvent {
+    public void testQueueMultipleSpeakables() throws Exception, JVoiceXMLEvent {
         for (int i = 0; i < 10; i++) {
-            final SpeakableSsmlText speakable =
-                new SpeakableSsmlText("a " + i + " b");
-     
+            final SpeakableSsmlText speakable = new SpeakableSsmlText(
+                    "a " + i + " b", Locale.US);
+
             output.queueSpeakable(speakable, sessionId, documentServer);
         }
         output.waitQueueEmpty();
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.mary.MarySynthesizedOutput#waitQueueEmpty()}.
-     * @exception Exception test failed
-     * @exception JVoiceXMLEvent test failed
-     */ 
+     * Test method for
+     * {@link org.jvoicexml.implementation.mary.MarySynthesizedOutput#waitQueueEmpty()}.
+     * 
+     * @exception Exception
+     *                test failed
+     * @exception JVoiceXMLEvent
+     *                test failed
+     */
     @Test(timeout = 20000)
     public void testWaitQueueEmpty() throws Exception, JVoiceXMLEvent {
-        
+
         final SsmlDocument doc1 = new SsmlDocument();
         final Speak speak1 = doc1.getSpeak();
         speak1.setXmlLang(Locale.US);
         speak1.addText("Test 1 from SSML");
-        final SpeakableSsmlText ssml1 =
-            new SpeakableSsmlText(doc1, true, BargeInType.SPEECH);
+        final SpeakableSsmlText ssml1 = new SpeakableSsmlText(doc1, true,
+                BargeInType.SPEECH);
 
         final SsmlDocument doc2 = new SsmlDocument();
         final Speak speak2 = doc2.getSpeak();
         speak2.setXmlLang(Locale.US);
         speak2.addText("Test 2 from SSML");
-        final SpeakableSsmlText ssml2 =
-            new SpeakableSsmlText(doc2, true, BargeInType.SPEECH);
-        
-        SpeakableSsmlText plainText =
-            new SpeakableSsmlText("Test 3");
-        
-        SpeakableSsmlText plainText2 =
-            new SpeakableSsmlText("Test 4");
-        
+        final SpeakableSsmlText ssml2 = new SpeakableSsmlText(doc2, true,
+                BargeInType.SPEECH);
+
+        SpeakableSsmlText plainText = new SpeakableSsmlText("Test 3",
+                Locale.US);
+
+        SpeakableSsmlText plainText2 = new SpeakableSsmlText("Test 4",
+                Locale.US);
+
         final SsmlDocument doc3 = new SsmlDocument();
         final Speak speak3 = doc3.getSpeak();
         speak3.setXmlLang(Locale.US);
         speak3.addText("Test 5 from SSML");
-        final SpeakableSsmlText ssml3 =
-            new SpeakableSsmlText(doc3, true, BargeInType.SPEECH);
+        final SpeakableSsmlText ssml3 = new SpeakableSsmlText(doc3, true,
+                BargeInType.SPEECH);
 
         output.queueSpeakable(ssml1, sessionId, documentServer);
         output.queueSpeakable(ssml2, sessionId, documentServer);
@@ -259,18 +274,22 @@ public final class TestMarySynthesizedOutput
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.mary.MarySynthesizedOutput#cancelOutput()}.
-     * @exception Exception test failed
-     * @exception JVoiceXMLEvent test failed
-     */  
+     * Test method for
+     * {@link org.jvoicexml.implementation.mary.MarySynthesizedOutput#cancelOutput()}.
+     * 
+     * @exception Exception
+     *                test failed
+     * @exception JVoiceXMLEvent
+     *                test failed
+     */
     @Test(timeout = 20000)
     public void testCancelOutput() throws Exception, JVoiceXMLEvent {
         final SsmlDocument doc1 = new SsmlDocument();
         final Speak speak1 = doc1.getSpeak();
         speak1.setXmlLang(Locale.US);
         speak1.addText("Test 1.Barge-in on.");
-        final SpeakableSsmlText ssml1 =
-            new SpeakableSsmlText(doc1, true, BargeInType.SPEECH);
+        final SpeakableSsmlText ssml1 = new SpeakableSsmlText(doc1, true,
+                BargeInType.SPEECH);
         output.queueSpeakable(ssml1, sessionId, documentServer);
         LOGGER.info(ssml1.getSpeakableText() + " offered to queue");
         synchronized (outputStartedLock) {
@@ -289,11 +308,11 @@ public final class TestMarySynthesizedOutput
         final Speak speak2 = doc2.getSpeak();
         speak2.setXmlLang(Locale.US);
         speak2.addText("Test 2.Barge-in on.");
-        final SpeakableSsmlText ssml2 =
-            new SpeakableSsmlText(doc2, true, BargeInType.SPEECH);
+        final SpeakableSsmlText ssml2 = new SpeakableSsmlText(doc2, true,
+                BargeInType.SPEECH);
         output.queueSpeakable(ssml2, sessionId, documentServer);
         LOGGER.info(ssml2.getSpeakableText() + " offered to queue");
-       
+
         synchronized (outputStartedLock) {
             while (!outputStarted) {
                 outputStartedLock.wait();
@@ -305,10 +324,10 @@ public final class TestMarySynthesizedOutput
             while (!outputEnded) {
                 outputEndedLock.wait();
             }
-        } 
+        }
 
         SpeakableSsmlText plainText = new SpeakableSsmlText(
-                "Test 3.Barge-in off.You can not skip this audio");
+                "Test 3. Barge-in off.You can not skip this audio", Locale.US);
         output.queueSpeakable(plainText, sessionId, documentServer);
         LOGGER.info(plainText + " offered to queue");
         synchronized (outputStartedLock) {
@@ -320,13 +339,13 @@ public final class TestMarySynthesizedOutput
         output.cancelOutput(BargeInType.SPEECH);
 
         synchronized (outputEndedLock) {
-            while (!outputEnded) { 
+            while (!outputEnded) {
                 outputEndedLock.wait();
             }
-        } 
+        }
 
         plainText = new SpeakableSsmlText(
-                "Test 4.Barge-in off.You can not skip this audio");
+                "Test 4.Barge-in off.You can not skip this audio", Locale.US);
         output.queueSpeakable(plainText, sessionId, documentServer);
         LOGGER.info(plainText + " offered to queue");
         synchronized (outputStartedLock) {
@@ -334,21 +353,21 @@ public final class TestMarySynthesizedOutput
                 outputStartedLock.wait();
             }
 
-        }     
+        }
         Thread.sleep(DELAY);
         output.cancelOutput(BargeInType.SPEECH);
         synchronized (outputEndedLock) {
             while (!outputEnded) {
                 outputEndedLock.wait();
             }
-        } 
+        }
 
         final SsmlDocument doc3 = new SsmlDocument();
         final Speak speak3 = doc3.getSpeak();
         speak3.setXmlLang(Locale.US);
         speak3.addText("Test 5.Barge-in on. ");
-        final SpeakableSsmlText ssml3 =
-            new SpeakableSsmlText(doc3, true, BargeInType.SPEECH);
+        final SpeakableSsmlText ssml3 = new SpeakableSsmlText(doc3, true,
+                BargeInType.SPEECH);
         output.queueSpeakable(ssml3, sessionId, documentServer);
         LOGGER.info(ssml3.getSpeakableText() + " offered to queue");
         synchronized (outputStartedLock) {
@@ -358,29 +377,29 @@ public final class TestMarySynthesizedOutput
         }
         Thread.sleep(DELAY);
         output.cancelOutput(BargeInType.SPEECH);
-              
+
         synchronized (outputEndedLock) {
             while (!outputEnded) {
                 outputEndedLock.wait();
             }
-        } 
+        }
 
         plainText = new SpeakableSsmlText(
-                "Test 6.Barge-in off.You can not skip this audio");
+                "Test 6.Barge-in off.You can not skip this audio", Locale.US);
         output.queueSpeakable(plainText, sessionId, documentServer);
         LOGGER.info(plainText + " offered to queue");
         synchronized (outputStartedLock) {
             while (!outputStarted) {
                 outputStartedLock.wait();
             }
-        }     
+        }
         Thread.sleep(DELAY);
         output.cancelOutput(BargeInType.SPEECH);
         synchronized (outputEndedLock) {
-            while (!outputEnded) { 
+            while (!outputEnded) {
                 outputEndedLock.wait();
             }
-        } 
+        }
     }
 
     /**
@@ -394,14 +413,14 @@ public final class TestMarySynthesizedOutput
                 outputStarted = false;
                 outputEndedLock.notifyAll();
             }
-        }    
+        }
         if (event instanceof OutputStartedEvent) {
             synchronized (outputStartedLock) {
                 outputStarted = true;
                 outputEnded = false;
                 outputStartedLock.notifyAll();
             }
-        }     
+        }
     }
 
     /**
@@ -410,6 +429,5 @@ public final class TestMarySynthesizedOutput
     @Override
     public void outputError(final ErrorEvent error) {
     }
-   
-}
 
+}
