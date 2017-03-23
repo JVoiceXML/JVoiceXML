@@ -24,7 +24,6 @@
 
 package org.jvoicexml.demo.scriptdemo;
 
-import java.io.File;
 import java.net.URI;
 
 import javax.naming.Context;
@@ -42,8 +41,8 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * Demo implementation to demonstrate scripting and var-handling.
  * <p>
  * Must be run with the system property
- * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
- * the <code>config</code> folder added to the classpath.
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and the
+ * <code>config</code> folder added to the classpath.
  * </p>
  * <p>
  * This demo requires that JVoiceXML is configured with the jsapi20
@@ -91,8 +90,8 @@ public final class ScriptDemo {
             return;
         }
 
-        final ConnectionInformation client =
-            new BasicConnectionInformation("dummy", "jsapi20sapi", "jsapi20sapi");
+        final ConnectionInformation client = new BasicConnectionInformation(
+                "dummy", "jsapi20", "jsapi20");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
@@ -120,13 +119,13 @@ public final class ScriptDemo {
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final ScriptDemo demo = new ScriptDemo();
-            final File file = new File("scriptdemo.vxml");
-            final URI uri = file.toURI();
+            final URI uri = ScriptDemo.class.getResource("/scriptdemo.vxml")
+                    .toURI();
 
             LOGGER.info("interpreting document '" + uri + "'...");
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
-        	LOGGER.error("error processing the document", e);
+            LOGGER.error("error processing the document", e);
         } catch (Exception e) {
             e.printStackTrace();
         }

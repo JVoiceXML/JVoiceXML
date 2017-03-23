@@ -15,9 +15,8 @@ dependencies {
 
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.8'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.8'
-
-    compile project(':org.jvoicexml')
-    compile project(':org.jvoicexml.client')
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: version
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: version
 
     runtime group: 'org.jvoicexml', name: 'org.jvoicexml.jndi', version: version
 }
