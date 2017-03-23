@@ -21,8 +21,8 @@
 
 package org.jvoicexml.demo.simpleinputdemo;
 
-import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.naming.NamingException;
 
@@ -59,13 +59,13 @@ public final class SimpleInputDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'simple input' demo for JVoiceXML...");
-        LOGGER.info("(c) 2014 by JVoiceXML group - "
+        LOGGER.info("(c) 2014-2017 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final GenericClient client = new GenericClient();
-        final File file = new File("simpleexample.vxml");
-        final URI dialog = file.toURI();
         try {
+            final URI dialog = SimpleInputDemo.class
+                    .getResource("/simpleexample.vxml").toURI();
             Session session = client.call(dialog, "jsapi20", "jsapi20",
                     "dummy");
             session.waitSessionEnd();
@@ -79,6 +79,8 @@ public final class SimpleInputDemo {
         } catch (ErrorEvent e) {
             LOGGER.fatal(e.getMessage(), e);
         } catch (UnsupportedResourceIdentifierException e) {
+            LOGGER.fatal(e.getMessage(), e);
+        } catch (URISyntaxException e) {
             LOGGER.fatal(e.getMessage(), e);
         } finally {
             client.close();
