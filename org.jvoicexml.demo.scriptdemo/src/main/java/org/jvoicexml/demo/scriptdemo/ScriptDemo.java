@@ -121,7 +121,6 @@ public final class ScriptDemo {
             final ScriptDemo demo = new ScriptDemo();
             final URI uri = ScriptDemo.class.getResource("/scriptdemo.vxml")
                     .toURI();
-
             LOGGER.info("interpreting document '" + uri + "'...");
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {

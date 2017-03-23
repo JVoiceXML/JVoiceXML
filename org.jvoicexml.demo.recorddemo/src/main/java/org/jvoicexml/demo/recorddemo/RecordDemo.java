@@ -24,8 +24,8 @@
 
 package org.jvoicexml.demo.recorddemo;
 
-import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.naming.NamingException;
 
@@ -53,46 +53,47 @@ import org.jvoicexml.event.error.NoresourceError;
  * @since 0.6
  */
 public final class RecordDemo {
-	/** Logger for this class. */
-	private static final Logger LOGGER = LogManager.getLogger(RecordDemo.class);
+    /** Logger for this class. */
+    private static final Logger LOGGER = LogManager.getLogger(RecordDemo.class);
 
-	/**
-	 * Do not create from outside.
-	 */
-	private RecordDemo() {
-	}
+    /**
+     * Do not create from outside.
+     */
+    private RecordDemo() {
+    }
 
-	/**
-	 * The main method.
-	 * 
-	 * @param args
-	 *            Command line arguments. None expected.
-	 */
-	public static void main(final String[] args) {
-		LOGGER.info("Starting 'record' demo for JVoiceXML...");
-		LOGGER.info("(c) 2008-2017 by JVoiceXML group - "
-				+ "http://jvoicexml.sourceforge.net/");
+    /**
+     * The main method.
+     * 
+     * @param args
+     *            Command line arguments. None expected.
+     */
+    public static void main(final String[] args) {
+        LOGGER.info("Starting 'record' demo for JVoiceXML...");
+        LOGGER.info("(c) 2008-2017 by JVoiceXML group - "
+                + "http://jvoicexml.sourceforge.net/");
 
-		final GenericClient client = new GenericClient();
-		final File file = new File("record.vxml");
-		final URI dialog = file.toURI();
-		try {
-			Session session = client
-					.call(dialog, "jsapi20", "jsapi20", "dummy");
-			session.waitSessionEnd();
-			session.hangup();
-		} catch (NamingException e) {
-			LOGGER.fatal(e.getMessage(), e);
-		} catch (NoresourceError e) {
-			LOGGER.info("do you have the jsapi20 implementation platform"
-					+ " configured?");
-			LOGGER.fatal(e.getMessage(), e);
-		} catch (ErrorEvent e) {
-			LOGGER.fatal(e.getMessage(), e);
-		} catch (UnsupportedResourceIdentifierException e) {
-			LOGGER.fatal(e.getMessage(), e);
-		} finally {
-			client.close();
-		}
-	}
+        final GenericClient client = new GenericClient();
+        try {
+            final URI uri = RecordDemo.class.getResource("/record.vxml")
+                    .toURI();
+            Session session = client.call(uri, "jsapi20", "jsapi20", "dummy");
+            session.waitSessionEnd();
+            session.hangup();
+        } catch (NamingException e) {
+            LOGGER.fatal(e.getMessage(), e);
+        } catch (NoresourceError e) {
+            LOGGER.info("do you have the jsapi20 implementation platform"
+                    + " configured?");
+            LOGGER.fatal(e.getMessage(), e);
+        } catch (ErrorEvent e) {
+            LOGGER.fatal(e.getMessage(), e);
+        } catch (UnsupportedResourceIdentifierException e) {
+            LOGGER.fatal(e.getMessage(), e);
+        } catch (URISyntaxException e) {
+            LOGGER.fatal(e.getMessage(), e);
+        } finally {
+            client.close();
+        }
+    }
 }
