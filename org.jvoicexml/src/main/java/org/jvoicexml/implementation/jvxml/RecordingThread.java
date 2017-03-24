@@ -52,22 +52,29 @@ final class RecordingThread extends Thread {
     private final OutputStream out;
 
     /** The line used for recording. */
-    private TargetDataLine line;
+    private final TargetDataLine line;
 
     /** The recording audio format. */
     private final AudioFormat format;
 
+    /** Flag to check if recording should be stopped. */
+    private boolean shouldStop;
+    
     /**
      * Constructs a new object.
      * @param stream the stream where to write the recording.
-     * @param recordingFormat the audio format of the recording 
+     * @param recordingFormat the audio format of the recording
+     * @throws LineUnavailableException 
      */
     RecordingThread(final OutputStream stream,
-            final AudioFormat recordingFormat) {
+            final AudioFormat recordingFormat) throws LineUnavailableException {
         out = stream;
         format = recordingFormat;
+        shouldStop = false; 
         setDaemon(true);
         setName("RecordingThread");
+        line = AudioSystem.getTargetDataLine(format);
+        line.open();
     }
 
     /**
@@ -79,19 +86,15 @@ final class RecordingThread extends Thread {
             LOGGER.debug("recording started");
         }
         try {
-            line = AudioSystem.getTargetDataLine(format);
-            line.open();
             line.start();
             final byte[] buffer = new byte[BUFFER_SIZE];
-            while (!isInterrupted()) {
+            while (!shouldStop) {
                 final int count = line.read(buffer, 0, buffer.length);
                 if (count > 0) {
                     out.write(buffer, 0, count);
                 }
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (LineUnavailableException ex) {
             ex.printStackTrace();
         }
         if (LOGGER.isDebugEnabled()) {
@@ -105,6 +108,6 @@ final class RecordingThread extends Thread {
     public void stopRecording() {
         line.stop();
         line.close();
-        interrupt();
+        shouldStop = true;
     }
 }

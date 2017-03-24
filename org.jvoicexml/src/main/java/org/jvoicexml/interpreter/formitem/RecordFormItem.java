@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $Revision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2012 JVoiceXML group
+ * Copyright (C) 2005-2017 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,7 +33,6 @@ import org.jvoicexml.xml.vxml.Record;
  * instance.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class RecordFormItem
         extends AbstractGrammarContainer {

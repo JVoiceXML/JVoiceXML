@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.util.Collection;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.LineUnavailableException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -253,8 +254,12 @@ public final class DummyTelephonySupport implements Telephony {
             throw new NoresourceError("dummy telephony is no longer active");
         }
         busy = true;
-        recording = new RecordingThread(stream, RECORDING_AUDIO_FORMAT);
-        recording.start();
+        try {
+            recording = new RecordingThread(stream, RECORDING_AUDIO_FORMAT);
+            recording.start();
+        } catch (LineUnavailableException e) {
+            throw new IOException(e.getMessage(), e);
+        }
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
                     new java.util.ArrayList<TelephonyListener>();
