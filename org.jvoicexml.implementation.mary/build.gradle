@@ -52,7 +52,9 @@ xslt {
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
-        include'marytts-client*.jar'
+        include'marytts-client*.jar',
+        'marytts-common*.jar',
+        'marytts-signalproc*.jar'
     }
 }
 

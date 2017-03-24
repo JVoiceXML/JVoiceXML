@@ -4,8 +4,9 @@
     xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
     <repository>mary</repository>
     <classpath>org.jvoicexml.implementation.mary-@@VERSION@@.jar</classpath>
-    <classpath>marytts-client-5.2.jar
-    </classpath>
+    <classpath>marytts-client-5.2.jar</classpath>
+    <classpath>marytts-common-5.2.jar</classpath>
+    <classpath>marytts-signalproc-5.2.jar</classpath>
     <beans:bean
         class="org.jvoicexml.implementation.mary.MarySynthesizedOutputFactory">
         <beans:property name="instances" value="1" />
