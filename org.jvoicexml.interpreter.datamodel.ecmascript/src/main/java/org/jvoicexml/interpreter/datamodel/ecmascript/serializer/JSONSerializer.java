@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,7 +32,6 @@ import org.jvoicexml.interpreter.datamodel.KeyValuePair;
  * Serializes the scriptable objects as a JSON object..
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4080 $
  * @since 0.7.5
  */
 public final class JSONSerializer implements DataModelObjectSerializer {

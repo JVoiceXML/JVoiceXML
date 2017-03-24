@@ -49,7 +49,12 @@ public final class KeyValueSerializer implements DataModelObjectSerializer {
             final Scriptable scriptable = (Scriptable) value;
             serialize(scriptable, name, pairs);
         } else {
-            final KeyValuePair pair = new KeyValuePair(name, value.toString());
+            final KeyValuePair pair;
+            if (value == null) {
+                pair = new KeyValuePair(name, "");
+            } else {
+                pair = new KeyValuePair(name, value.toString());
+            }
             pairs.add(pair);
         }
         return pairs;
