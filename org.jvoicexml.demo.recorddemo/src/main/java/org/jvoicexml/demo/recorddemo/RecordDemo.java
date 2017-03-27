@@ -77,7 +77,7 @@ public final class RecordDemo {
         try {
             final URI uri = RecordDemo.class.getResource("/record.vxml")
                     .toURI();
-            Session session = client.call(uri, "jsapi20", "jsapi20", "dummy");
+            Session session = client.call(uri, "jsapi20", "mary", "dummy");
             session.waitSessionEnd();
             session.hangup();
         } catch (NamingException e) {

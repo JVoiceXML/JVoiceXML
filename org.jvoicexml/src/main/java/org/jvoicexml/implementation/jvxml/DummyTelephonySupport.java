@@ -59,7 +59,7 @@ public final class DummyTelephonySupport implements Telephony {
             .getLogger(DummyTelephonySupport.class);
 
     /** Audio format to use for recording. */
-    private static final AudioFormat RECORDING_AUDIO_FORMAT;
+    private final AudioFormat recordingAudioFormat;
 
     /** Registered output listener. */
     private final Collection<TelephonyListener> listener;
@@ -73,18 +73,13 @@ public final class DummyTelephonySupport implements Telephony {
     /** Asynchronous recording of audio. */
     private RecordingThread recording;
 
-    static {
-        final AudioFormat.Encoding encoding = new AudioFormat.Encoding(
-                "PCM_SIGNED");
-        RECORDING_AUDIO_FORMAT = new AudioFormat(encoding, ((float) 8000.0),
-                16, 1, 2, ((float) 8000.0), false);
-    }
-
     /**
      * Constructs a new object.
+     * @param format the audio format to use for recording
      */
-    public DummyTelephonySupport() {
+    public DummyTelephonySupport(final AudioFormat format) {
         listener = new java.util.ArrayList<TelephonyListener>();
+        recordingAudioFormat = format;
     }
 
     /**
@@ -239,8 +234,9 @@ public final class DummyTelephonySupport implements Telephony {
     /**
      * {@inheritDoc}
      */
+    @Override
     public AudioFormat getRecordingAudioFormat() {
-        return RECORDING_AUDIO_FORMAT;
+        return recordingAudioFormat;
     }
 
     /**
@@ -255,7 +251,7 @@ public final class DummyTelephonySupport implements Telephony {
         }
         busy = true;
         try {
-            recording = new RecordingThread(stream, RECORDING_AUDIO_FORMAT);
+            recording = new RecordingThread(stream, recordingAudioFormat);
             recording.start();
         } catch (LineUnavailableException e) {
             throw new IOException(e.getMessage(), e);

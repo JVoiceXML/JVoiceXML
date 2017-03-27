@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.UUID;
@@ -583,27 +582,6 @@ public final class Jsapi20SpokenInput
                 new java.util.ArrayList<GrammarType>();
         types.add(GrammarType.SRGS_XML);
         return types;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getUriForNextSpokenInput() throws NoresourceError,
-            URISyntaxException {
-        if (recognizer == null) {
-            throw new NoresourceError("No recognizer");
-        }
-        if (locatorFactory == null) {
-            return null;
-        }
-        final AudioManager manager = recognizer.getAudioManager();
-        final String locator = manager.getMediaLocator();
-        if (locator == null) {
-            return null;
-        }
-        final URI uri = new URI(locator);
-        return locatorFactory.getSinkMediaLocator(this, uri);
     }
 
     /**

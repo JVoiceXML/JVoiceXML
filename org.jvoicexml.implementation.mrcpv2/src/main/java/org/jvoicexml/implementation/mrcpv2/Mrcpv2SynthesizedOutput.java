@@ -177,7 +177,7 @@ public final class Mrcpv2SynthesizedOutput
             final String sessionId, final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
         String speakText = null;
-      	boolean urlPrompt = false;
+        boolean urlPrompt = false;
         queueCount++;
         LOGGER.info("Queue count incremented,, now " + queueCount);
         try {
@@ -195,25 +195,27 @@ public final class Mrcpv2SynthesizedOutput
                 SsmlDocument ssml = new SsmlDocument(src);
                 speakText = ssml.getSpeak().getTextContent();
 
-		LOGGER.info("Text content is " + speakText);
-		// TODO Implement a better way of detecting and extracting
-		// audio URLs
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = factory.newDocumentBuilder();
-		Document document = builder.parse(new InputSource(new StringReader(temp)));
-		NodeList list = document.getElementsByTagName("audio");
-		if (list != null && list.getLength() > 0) {
-		    Element audioTag = (Element) list.item(0);
-		    String url = audioTag.getAttribute("src");
-		    try {
-			new URI(url);
-			speakText = url;
-			urlPrompt = true;
-		    } catch (URISyntaxException e) {
-			// 'src' attribute is not a valid URI
-		    }	
-		}
-	    }
+                LOGGER.info("Text content is " + speakText);
+                // TODO Implement a better way of detecting and extracting
+                // audio URLs
+                DocumentBuilderFactory factory = DocumentBuilderFactory
+                        .newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document document = builder
+                        .parse(new InputSource(new StringReader(temp)));
+                NodeList list = document.getElementsByTagName("audio");
+                if (list != null && list.getLength() > 0) {
+                    Element audioTag = (Element) list.item(0);
+                    String url = audioTag.getAttribute("src");
+                    try {
+                        new URI(url);
+                        speakText = url;
+                        urlPrompt = true;
+                    } catch (URISyntaxException e) {
+                        // 'src' attribute is not a valid URI
+                    }
+                }
+            }
 
             speechClient.queuePrompt(urlPrompt, speakText);
 
@@ -314,8 +316,8 @@ public final class Mrcpv2SynthesizedOutput
      * @exception BadFetchError
      *                Synthesizer in wrong state.
      */
-    public void queuePlaintext(final String text) throws NoresourceError,
-            BadFetchError {
+    public void queuePlaintext(final String text)
+            throws NoresourceError, BadFetchError {
         try {
             speechClient.queuePrompt(false, text);
 
@@ -466,7 +468,8 @@ public final class Mrcpv2SynthesizedOutput
             speechClient = null;
         }
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Disconnected the  synthesizedoutput mrcpv2 client form the server");
+            LOGGER.debug(
+                    "Disconnected the  synthesizedoutput mrcpv2 client form the server");
         }
     }
 
@@ -485,20 +488,6 @@ public final class Mrcpv2SynthesizedOutput
      */
     public void setType(final String resourceType) {
         type = resourceType;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getUriForNextSynthesisizedOutput() throws NoresourceError,
-            URISyntaxException {
-        final StringBuilder str = new StringBuilder();
-        str.append("rtp://");
-        str.append(hostAddress);
-        str.append(':');
-        str.append(rtpReceiverPort);
-        return new URI(str.toString());
     }
 
     /**

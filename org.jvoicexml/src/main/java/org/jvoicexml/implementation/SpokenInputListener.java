@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,7 +29,6 @@ import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
  * Listener for events from the {@link SpokenInput} implementation.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @see org.jvoicexml.UserInput
  * @since 0.5
  */
@@ -44,7 +38,7 @@ public interface SpokenInputListener {
      * @param event the input event..
      * @since 0.6
      */
-    void inputStatusChanged(final SpokenInputEvent event);
+    void inputStatusChanged(SpokenInputEvent event);
 
     /**
      * An error occured while an output processes an input.
@@ -55,5 +49,5 @@ public interface SpokenInputListener {
      * @param error the error
      * @since 0.7.4
      */
-    void inputError(final ErrorEvent error);
+    void inputError(ErrorEvent error);
 }

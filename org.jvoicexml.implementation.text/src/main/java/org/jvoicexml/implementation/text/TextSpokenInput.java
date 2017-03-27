@@ -330,14 +330,6 @@ final class TextSpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public URI getUriForNextSpokenInput() throws NoresourceError {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean isBusy() {
         return recognizing;
     }

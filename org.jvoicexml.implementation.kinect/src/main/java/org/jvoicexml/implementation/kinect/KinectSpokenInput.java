@@ -302,15 +302,6 @@ public final class KinectSpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public URI getUriForNextSpokenInput() throws NoresourceError,
-            URISyntaxException {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
         final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
         types.add(GrammarType.SRGS_XML);

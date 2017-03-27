@@ -30,8 +30,6 @@
 package org.jvoicexml.implementation.red5;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
@@ -166,19 +164,6 @@ public class Red5SynthesizedOutput implements SynthesizedOutput {
     public void removeListener(SynthesizedOutputListener listener) {
         // TODO Auto-generated method stub
 
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.jvoicexml.implementation.SynthesizedOutput#
-     * getUriForNextSynthesisizedOutput()
-     */
-    @Override
-    public URI getUriForNextSynthesisizedOutput() throws NoresourceError,
-            URISyntaxException {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     /**

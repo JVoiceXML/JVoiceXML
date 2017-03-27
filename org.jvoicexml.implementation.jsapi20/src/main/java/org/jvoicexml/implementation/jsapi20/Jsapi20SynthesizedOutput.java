@@ -26,7 +26,6 @@ package org.jvoicexml.implementation.jsapi20;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Queue;
@@ -679,27 +678,6 @@ public final class Jsapi20SynthesizedOutput
      */
     public void setType(final String resourceType) {
         type = resourceType;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getUriForNextSynthesisizedOutput() throws NoresourceError,
-            URISyntaxException {
-        if (synthesizer == null) {
-            throw new NoresourceError("No synthesizer!");
-        }
-        if (locatorFactory == null) {
-            return null;
-        }
-        final AudioManager manager = synthesizer.getAudioManager();
-        final String locator = manager.getMediaLocator();
-        if (locator == null) {
-            return null;
-        }
-        final URI uri = new URI(locator);
-        return locatorFactory.getSinkMediaLocator(this, uri);
     }
 
     /**

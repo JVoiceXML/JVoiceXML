@@ -31,8 +31,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Collection;
 
@@ -390,15 +388,6 @@ public final class MarcSynthesizedOutput
         synchronized (listeners) {
             listeners.remove(listener);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getUriForNextSynthesisizedOutput() throws NoresourceError,
-            URISyntaxException {
-        return null;
     }
 
     /**

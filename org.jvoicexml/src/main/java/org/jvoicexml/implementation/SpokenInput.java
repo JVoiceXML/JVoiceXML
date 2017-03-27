@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +23,6 @@ package org.jvoicexml.implementation;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.jvoicexml.event.error.BadFetchError;
@@ -49,23 +43,23 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  *
  * <p>
- * If an input resource is not available, an <code>error.noresource</code>
- * event must be thrown.
+ * If an input resource is not available, an <code>error.noresource</code> event
+ * must be thrown.
  * </p>
  * <p>
  * It is guaranteed that the session remains the same between the calls to
- * {@link org.jvoicexml.RemoteConnectable#connect(org.jvoicexml.ConnectionInformation)} and
+ * {@link org.jvoicexml.RemoteConnectable#connect(org.jvoicexml.ConnectionInformation)}
+ * and
  * {@link org.jvoicexml.RemoteConnectable#disconnect(org.jvoicexml.ConnectionInformation)}.
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5
  */
-public interface SpokenInput
-        extends ExternalResource, InputDevice {
+public interface SpokenInput extends ExternalResource, InputDevice {
     /**
      * Retrieves the grammar types that are supported by this implementation.
+     * 
      * @return supported grammars.
      *
      * @since 0.5.5
@@ -76,23 +70,22 @@ public interface SpokenInput
      * Activates the given grammars. It is guaranteed that all grammars types
      * are supported by this implementation.
      * <p>
-     * It is guaranteed that the {@link #loadGrammar(URI, GrammarType)}
-     * method is always called before a grammar becomes active via this method.
+     * It is guaranteed that the {@link #loadGrammar(URI, GrammarType)} method
+     * is always called before a grammar becomes active via this method.
      * </p>
      * 
      * @param grammars
-     *        Grammars to activate.
+     *            Grammars to activate.
      * @exception BadFetchError
-     *            Grammar is not known by the recognizer.
+     *                Grammar is not known by the recognizer.
      * @exception UnsupportedLanguageError
-     *            The specified language is not supported.
+     *                The specified language is not supported.
      * @exception UnsupportedFormatError
-     *            the grammar format is not supported
+     *                the grammar format is not supported
      * @exception NoresourceError
-     *            The input resource is not available.
+     *                The input resource is not available.
      */
-    void activateGrammars(
-            final Collection<GrammarImplementation<?>> grammars)
+    void activateGrammars(Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError,
             UnsupportedFormatError, NoresourceError;
 
@@ -102,20 +95,19 @@ public interface SpokenInput
      * implementation.
      *
      * @param grammars
-     *        Grammars to deactivate.
+     *            Grammars to deactivate.
      *
      * @exception BadFetchError
-     *            Grammar is not known by the recognizer.
+     *                Grammar is not known by the recognizer.
      * @exception NoresourceError
-     *            The input resource is not available.
+     *                The input resource is not available.
      */
-    void deactivateGrammars(
-            final Collection<GrammarImplementation<?>> grammars)
+    void deactivateGrammars(Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError;
 
     /**
-     * Creates a {@link GrammarImplementation} from the contents provided by
-     * the Reader. If the grammar contained in the Reader already exists, it is
+     * Creates a {@link GrammarImplementation} from the contents provided by the
+     * Reader. If the grammar contained in the Reader already exists, it is
      * over-written.
      *
      * <p>
@@ -134,64 +126,55 @@ public interface SpokenInput
      * </code>
      * </p>
      *
-     * @param uri the URI to load the grammar
-     * @param type type of the grammar to read. The type is one of the supported
-     *             types of the implementation, that has been requested via
-     *             {@link #getSupportedGrammarTypes()}.
+     * @param uri
+     *            the URI to load the grammar
+     * @param type
+     *            type of the grammar to read. The type is one of the supported
+     *            types of the implementation, that has been requested via
+     *            {@link #getSupportedGrammarTypes()}.
      *
      * @return Read grammar.
      *
      * @since 0.3
      *
      * @exception NoresourceError
-     *            the input resource is not available.
+     *                the input resource is not available.
      * @exception IOException
-     *            error reading the grammar.
+     *                error reading the grammar.
      * @exception UnsupportedFormatError
-     *            invalid grammar format.
+     *                invalid grammar format.
      */
-    GrammarImplementation<?> loadGrammar(final URI uri,
-            final GrammarType type)
+    GrammarImplementation<?> loadGrammar(URI uri, GrammarType type)
             throws NoresourceError, IOException, UnsupportedFormatError;
 
     /**
      * Retrieves the barge-in types supported by this <code>UserInput</code>.
-     * @return Collection of supported barge-in types, an empty
-     * collection, if no types are supported.
+     * 
+     * @return Collection of supported barge-in types, an empty collection, if
+     *         no types are supported.
      */
     Collection<BargeInType> getSupportedBargeInTypes();
-
-    /**
-     * Obtains an URI that can be used as an input source for a
-     * {@link org.jvoicexml.CallControl} object. This method is called each
-     * time, before an output is requested from this object.
-     * @return URI of the input source, maybe <code>null</code> if the
-     * streaming uses other means of audio output.
-     * @throws NoresourceError
-     *         Error accessing the device.
-     * @exception URISyntaxException
-     *         error creating the URI
-     */
-    URI getUriForNextSpokenInput() throws NoresourceError, URISyntaxException;
 
     /**
      * Adds a listener for user input events.
      *
      * <p>
-     * The implementation of this interface must notify the listener
-     * about all events.
+     * The implementation of this interface must notify the listener about all
+     * events.
      * </p>
      *
-     * @param listener The listener.
+     * @param listener
+     *            The listener.
      * @since 0.5
      */
-    void addListener(final SpokenInputListener listener);
+    void addListener(SpokenInputListener listener);
 
     /**
      * Removes a listener for user input events.
      *
-     * @param listener The listener.
+     * @param listener
+     *            The listener.
      * @since 0.6
      */
-    void removeListener(final SpokenInputListener listener);
+    void removeListener(SpokenInputListener listener);
 }

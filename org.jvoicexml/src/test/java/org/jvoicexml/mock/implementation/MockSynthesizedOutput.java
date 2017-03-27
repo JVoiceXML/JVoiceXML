@@ -21,7 +21,6 @@
 package org.jvoicexml.mock.implementation;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Collection;
 import java.util.Queue;
 
@@ -72,15 +71,6 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
         thread = new SpeechThread(this);
         thread.setDaemon(true);
         thread.start();
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
-        return null;
     }
 
     /**

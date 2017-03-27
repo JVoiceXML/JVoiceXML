@@ -399,15 +399,6 @@ public final class BMLSynthesizedOutput
      * {@inheritDoc}
      */
     @Override
-    public URI getUriForNextSynthesisizedOutput() throws NoresourceError,
-            URISyntaxException {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void queueSpeakable(final SpeakableText speakable,
             final String id, final DocumentServer documentServer)
         throws NoresourceError,

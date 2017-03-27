@@ -32,7 +32,6 @@ package org.jvoicexml.implementation.jtapi;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 
 import javax.sound.sampled.AudioFormat;
@@ -119,11 +118,12 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
             throw new NoresourceError("No active telephony connection!");
         }
         final URI uri;
-        try {
-            uri = output.getUriForNextSynthesisizedOutput();
-        } catch (URISyntaxException e) {
-            throw new IOException(e.getMessage(), e);
-        }
+//        try {
+            // TODO add a more generic interface here
+            uri = null;//output.getUriForNextSynthesisizedOutput();
+//        } catch (URISyntaxException e) {
+//            throw new IOException(e.getMessage(), e);
+//        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("playing URI '" + uri + "'");
         }
@@ -145,11 +145,12 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
         }
 
         final URI uri;
-        try {
-            uri = input.getUriForNextSpokenInput();
-        } catch (URISyntaxException e) {
-            throw new IOException(e.getMessage(), e);
-        }
+//        try {
+            // TODO add a more generic interface here
+            uri =null;// input.getUriForNextSpokenInput();
+//        } catch (URISyntaxException e) {
+//            throw new IOException(e.getMessage(), e);
+//        }
         // TODO Do the actual recording.
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("recording to URI '" + uri + "'...");

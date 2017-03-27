@@ -31,7 +31,6 @@ package org.jvoicexml.implementation.red5;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.jvoicexml.ConnectionInformation;
@@ -195,16 +194,6 @@ public final class Red5SpokenInput implements SpokenInput {
             throws NoresourceError, BadFetchError {
         // TODO Auto-generated method stub
 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getUriForNextSpokenInput() throws NoresourceError,
-            URISyntaxException {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     /**

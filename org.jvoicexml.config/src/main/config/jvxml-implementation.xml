@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <implementation xmlns:beans="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
-  <beans:bean
-    class="org.jvoicexml.implementation.jvxml.DummyTelephonySupportFactory">
-    <beans:property name="instances" value="1" />
-  </beans:bean>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+    <beans:bean
+        class="org.jvoicexml.implementation.jvxml.DummyTelephonySupportFactory">
+        <beans:property name="instances" value="1" />
+        <beans:property name="recordingAudioFormat">
+            <beans:bean class="javax.sound.sampled.AudioFormat">
+                <beans:constructor-arg>
+                    <beans:bean
+                        class="javax.sound.sampled.AudioFormat.Encoding">
+                        <beans:constructor-arg
+                            type="java.lang.String" value="PCM_SIGNED" />
+                    </beans:bean>
+                </beans:constructor-arg>
+                <beans:constructor-arg type="float"
+                    value="16000" />
+                <beans:constructor-arg type="int"
+                    value="16" />
+                <beans:constructor-arg type="int"
+                    value="2" />
+                <beans:constructor-arg type="int"
+                    value="4" />
+                <beans:constructor-arg type="float"
+                    value="16000" />
+                <beans:constructor-arg type="boolean"
+                    value="true" />
+            </beans:bean>
+        </beans:property>
+    </beans:bean>
 </implementation>

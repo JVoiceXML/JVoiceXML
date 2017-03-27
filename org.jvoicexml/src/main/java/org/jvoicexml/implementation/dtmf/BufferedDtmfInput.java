@@ -23,7 +23,6 @@ package org.jvoicexml.implementation.dtmf;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -401,15 +400,6 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      */
     @Override
     public Collection<BargeInType> getSupportedBargeInTypes() {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getUriForNextSpokenInput()
-            throws NoresourceError, URISyntaxException {
         return null;
     }
 }

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 200-20176 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -21,22 +21,26 @@
 
 package org.jvoicexml.implementation.jvxml;
 
+import javax.sound.sampled.AudioFormat;
+
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.Telephony;
 
 /**
- * Demo implementation of a
- * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link Telephony} interface.
+ * Demo implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
+ * for the {@link Telephony} interface.
  *
  * @author Dirk Schnelle-Walka
  * @since 0.5.5
  */
 public final class DummyTelephonySupportFactory
-    implements ResourceFactory<Telephony> {
+        implements ResourceFactory<Telephony> {
     /** Number of instances that this factory will create. */
     private int instances;
+
+    /** Teh audio format to use for recording. */
+    private AudioFormat recordingAudioFormat;
 
     /**
      * Constructs a new object.
@@ -47,14 +51,15 @@ public final class DummyTelephonySupportFactory
     /**
      * {@inheritDoc}
      */
-    public Telephony createResource()
-        throws NoresourceError {
-        return new DummyTelephonySupport();
+    public Telephony createResource() throws NoresourceError {
+        return new DummyTelephonySupport(recordingAudioFormat);
     }
 
     /**
      * Sets the number of instances that this factory will create.
-     * @param number Number of instances to create.
+     * 
+     * @param number
+     *            Number of instances to create.
      */
     public void setInstances(final int number) {
         instances = number;
@@ -63,13 +68,26 @@ public final class DummyTelephonySupportFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getInstances() {
         return instances;
     }
 
     /**
+     * Sets the audio format to use for recording.
+     * 
+     * @param format
+     *            the audio format
+     * @since 0.7.8
+     */
+    public void setRecordingAudioFormat(final AudioFormat format) {
+        recordingAudioFormat = format;
+    }
+
+    /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return "dummy";
     }
@@ -77,6 +95,7 @@ public final class DummyTelephonySupportFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<Telephony> getResourceType() {
         return Telephony.class;
     }

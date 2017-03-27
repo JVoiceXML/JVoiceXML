@@ -27,7 +27,6 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
 
@@ -134,14 +133,6 @@ final class TextSynthesizedOutput
     @Override
     public void disconnect(final ConnectionInformation client) {
         texts.clear();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
-        return null;
     }
 
     /**

@@ -20,8 +20,6 @@
 package org.jvoicexml.implementation.mary;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -101,15 +99,6 @@ public final class MarySynthesizedOutput
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         emptyLock = new Object();
         maryRequestParameters = new java.util.HashMap<String, String>();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getUriForNextSynthesisizedOutput() throws NoresourceError,
-            URISyntaxException {
-        return null;
     }
 
     /**
