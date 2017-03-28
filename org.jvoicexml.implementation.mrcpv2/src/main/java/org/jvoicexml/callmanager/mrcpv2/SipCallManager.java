@@ -289,7 +289,7 @@ public final class SipCallManager
                 }
                 final String jCallURI = dialog.getCallId().getCallId();
                 final String jCallID = jCallURI.split("@")[0];
-                final String cCallID = mrcpSession.getSipDialog().getCallId.getCallId();
+                final String cCallID = mrcpSession.getSipDialog().getCallId().getCallId();
 
                 LOGGER.info("Logging real-time mapping:\n%s %s %s",
                             asteriskCallID,
