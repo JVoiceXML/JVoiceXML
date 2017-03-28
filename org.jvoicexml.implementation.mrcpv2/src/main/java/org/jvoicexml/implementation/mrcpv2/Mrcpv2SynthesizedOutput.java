@@ -197,8 +197,9 @@ public final class Mrcpv2SynthesizedOutput
                 SsmlDocument ssml = new SsmlDocument(src);
                 speakText = ssml.getSpeak().getTextContent();
 
-        		LOGGER.info("Text content is " + speakText);
-        		// TODO Implement a better way of detecting and extracting
+        	    LOGGER.info("Text content is " + speakText);
+        		
+                // TODO Implement a better way of detecting and extracting
         		// audio URLs
         		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         		DocumentBuilder builder = factory.newDocumentBuilder();
