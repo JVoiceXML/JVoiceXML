@@ -69,7 +69,7 @@ public final class HelloWorldDemo {
             final URI dialog = HelloWorldDemo.class
                     .getResource("/helloworld.vxml").toURI();
             Session session = client.call(dialog, "jsapi20", "jsapi20",
-                    "dummy");
+                    "desktop");
             session.waitSessionEnd();
             session.hangup();
         } catch (NamingException e) {

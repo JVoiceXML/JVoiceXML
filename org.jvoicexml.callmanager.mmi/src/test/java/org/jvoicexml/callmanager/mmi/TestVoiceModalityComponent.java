@@ -73,7 +73,7 @@ public final class TestVoiceModalityComponent {
         final ConnectionInformationFactory factory =
                 new JVoiceXmlConnectionInformationFactory();
         cm.setConnectionInformationFactory(factory);
-        cm.setCall("dummy");
+        cm.setCall("desktop");
         cm.setInput("jsapi20");
         cm.setOutput("jsapi20");
         cm.start();

@@ -87,7 +87,7 @@ public final class MarcDemo {
         }
 
         final ConnectionInformation client = new BasicConnectionInformation(
-                "dummy", "marc", "jsapi20");
+                "desktop", "marc", "jsapi20");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);

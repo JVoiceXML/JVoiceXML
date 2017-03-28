@@ -466,7 +466,7 @@ public final class AvatarControl {
         }
 
         final ConnectionInformation client = new BasicConnectionInformation(
-                "dummy", "bml", "jsapi20");
+                "desktop", "bml", "jsapi20");
         Session session;
         try {
             session = jvxml.createSession(client);
@@ -678,7 +678,7 @@ public final class AvatarControl {
             filled.append(obj);
             filled.append(" ");
             filled.append(verb);
-            filled.append(" wird ausgeführt.");
+            filled.append(" wird ausgefï¿½hrt.");
             filled.append(sysNewLine);
             filled.append("\t\t\t\t\t\t\t<ns1:gesture "
                     + "xmlns:ns1=\"http://www.mindmakers.org/projects/bml-1-0/wiki\" "

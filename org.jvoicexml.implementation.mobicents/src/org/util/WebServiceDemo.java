@@ -71,9 +71,9 @@ public final class WebServiceDemo {
         final URI dialog = file.toURI();
         try {
             final ConnectionInformation client = new BasicConnectionInformation(
-                "dummy", "mobicents", "mobicents");
+                "desktop", "mobicents", "mobicents");
 //            Session session = client.call(dialog, "jsapi10", "jsapi10",
-//                    "dummy");
+//                    "desktop");
             Context context = new InitialContext();
             JVoiceXml jvxml= (JVoiceXml) context.lookup("JVoiceXml");
             final Session session = jvxml.createSession(client);

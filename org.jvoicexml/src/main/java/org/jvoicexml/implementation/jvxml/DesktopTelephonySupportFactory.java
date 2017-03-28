@@ -28,13 +28,13 @@ import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.Telephony;
 
 /**
- * Demo implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
- * for the {@link Telephony} interface.
+ * Implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
+ * for the {@link Telephony} interface for desktop/like environments.
  *
  * @author Dirk Schnelle-Walka
  * @since 0.5.5
  */
-public final class DummyTelephonySupportFactory
+public final class DesktopTelephonySupportFactory
         implements ResourceFactory<Telephony> {
     /** Number of instances that this factory will create. */
     private int instances;
@@ -45,14 +45,14 @@ public final class DummyTelephonySupportFactory
     /**
      * Constructs a new object.
      */
-    public DummyTelephonySupportFactory() {
+    public DesktopTelephonySupportFactory() {
     }
 
     /**
      * {@inheritDoc}
      */
     public Telephony createResource() throws NoresourceError {
-        return new DummyTelephonySupport(recordingAudioFormat);
+        return new DesktopTelephonySupport(recordingAudioFormat);
     }
 
     /**
@@ -89,7 +89,7 @@ public final class DummyTelephonySupportFactory
      */
     @Override
     public String getType() {
-        return "dummy";
+        return "desktop";
     }
 
     /**

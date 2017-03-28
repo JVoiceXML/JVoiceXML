@@ -57,7 +57,7 @@ public final class TestKeyedResourcePool {
         pool = new KeyedResourcePool<SynthesizedOutput>();
         pool.addResourceFactory(factory);
         Assert.assertEquals(instances, pool.getNumIdle());
-        final String key = "dummy";
+        final String key = "desktop";
         final SynthesizedOutput[] outputs = new SynthesizedOutput[instances];
         for (int i = 0; i < instances; i++) {
             outputs[i] = pool.borrowObject(key);
@@ -87,7 +87,7 @@ public final class TestKeyedResourcePool {
         pool = new KeyedResourcePool<SynthesizedOutput>();
         pool.addResourceFactory(factory);
         Assert.assertEquals(instances, pool.getNumIdle());
-        final String key = "dummy";
+        final String key = "desktop";
         final SynthesizedOutput[] outputs = new SynthesizedOutput[instances];
         for (int i = 0; i < instances; i++) {
             Assert.assertEquals(i, pool.getNumActive(key));

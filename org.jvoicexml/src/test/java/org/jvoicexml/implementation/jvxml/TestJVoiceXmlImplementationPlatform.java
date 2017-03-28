@@ -77,8 +77,8 @@ public final class TestJVoiceXmlImplementationPlatform {
         synthesizedOutputFactory.setInstances(1);
         synthesizerPool.addResourceFactory(synthesizedOutputFactory);
         telephonyPool = new KeyedResourcePool<Telephony>();
-        final DummyTelephonySupportFactory telephonyFactory =
-            new DummyTelephonySupportFactory();
+        final DesktopTelephonySupportFactory telephonyFactory =
+            new DesktopTelephonySupportFactory();
         telephonyFactory.setInstances(1);
         telephonyPool.addResourceFactory(telephonyFactory);
         recognizerPool = new KeyedResourcePool<SpokenInput>();

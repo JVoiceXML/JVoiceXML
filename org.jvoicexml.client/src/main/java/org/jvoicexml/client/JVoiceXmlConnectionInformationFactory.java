@@ -78,7 +78,7 @@ public final class JVoiceXmlConnectionInformationFactory
      */
     @Override
     public String[] getCallControlIdentifiers() {
-        return new String[] {"dummy"};
+        return new String[] {"desktop"};
     }
 
     /**

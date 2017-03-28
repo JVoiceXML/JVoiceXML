@@ -34,7 +34,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.implementation.jvxml.DummyTelephonySupportFactory;
+import org.jvoicexml.implementation.jvxml.DesktopTelephonySupportFactory;
 
 /**
  * Test cases for {@link JVoiceXmlConfiguration}.
@@ -95,7 +95,7 @@ public final class TestJVoiceXmlConfiguration {
             config.loadObjects(ResourceFactory.class, "implementation");
         Assert.assertEquals(1, factories.size());
         final ResourceFactory factory = factories.iterator().next();
-        Assert.assertEquals(DummyTelephonySupportFactory.class,
+        Assert.assertEquals(DesktopTelephonySupportFactory.class,
                 factory.getClass());
     }
 }

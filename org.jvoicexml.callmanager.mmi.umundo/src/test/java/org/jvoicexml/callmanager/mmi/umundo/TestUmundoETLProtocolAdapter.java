@@ -106,7 +106,7 @@ public final class TestUmundoETLProtocolAdapter {
         final UmundoETLProtocolAdapter adapter = new UmundoETLProtocolAdapter();
         adapter.start();
         Thread.sleep(1000);
-        adapter.sendMMIEvent("dummy", mmi);
+        adapter.sendMMIEvent("desktop", mmi);
         receiver.waitReceivedObject();
         final Object object = receiver.getReceivedObject();
         adapter.stop();

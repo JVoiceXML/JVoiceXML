@@ -118,7 +118,7 @@ public final class Mrcpv2ConnectionInformation
      * Constructs a new object.
      */
     public Mrcpv2ConnectionInformation() {
-        super("dummy", "mrcpv2", "mrcpv2");
+        super("desktop", "mrcpv2", "mrcpv2");
     }
 
     /**
@@ -128,7 +128,7 @@ public final class Mrcpv2ConnectionInformation
      */
     public Mrcpv2ConnectionInformation(final URI callingDevice,
             final URI calledDevice) {
-        super("dummy", "mrcpv2", "mrcpv2");
+        super("desktop", "mrcpv2", "mrcpv2");
         setCalledDevice(callingDevice);
         setCalledDevice(calledDevice);
     }

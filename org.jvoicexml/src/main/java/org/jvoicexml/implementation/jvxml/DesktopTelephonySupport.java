@@ -40,7 +40,8 @@ import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
 
 /**
- * Dummy implementation of a {@link Telephony} resource.
+ * Implementation of a {@link Telephony} resource to be used in desktop/like
+ * environments.
  *
  * <p>
  * This implementation of a {@link Telephony} resource can be used, if there is
@@ -53,10 +54,10 @@ import org.jvoicexml.implementation.TelephonyListener;
  *
  * @since 0.5.5
  */
-public final class DummyTelephonySupport implements Telephony {
+public final class DesktopTelephonySupport implements Telephony {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
-            .getLogger(DummyTelephonySupport.class);
+            .getLogger(DesktopTelephonySupport.class);
 
     /** Audio format to use for recording. */
     private final AudioFormat recordingAudioFormat;
@@ -77,7 +78,7 @@ public final class DummyTelephonySupport implements Telephony {
      * Constructs a new object.
      * @param format the audio format to use for recording
      */
-    public DummyTelephonySupport(final AudioFormat format) {
+    public DesktopTelephonySupport(final AudioFormat format) {
         listener = new java.util.ArrayList<TelephonyListener>();
         recordingAudioFormat = format;
     }
@@ -104,7 +105,7 @@ public final class DummyTelephonySupport implements Telephony {
      */
     @Override
     public String getType() {
-        return "dummy";
+        return "desktop";
     }
 
     /**

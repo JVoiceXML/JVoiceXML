@@ -71,7 +71,7 @@ public final class SubdialogDemo {
             final URI dialog = SubdialogDemo.class
                     .getResource("/subdialog.vxml").toURI();
             final Session session = client.call(dialog, "jsapi20", "jsapi20",
-                    "dummy");
+                    "desktop");
             session.waitSessionEnd();
             session.hangup();
         } catch (NamingException e) {

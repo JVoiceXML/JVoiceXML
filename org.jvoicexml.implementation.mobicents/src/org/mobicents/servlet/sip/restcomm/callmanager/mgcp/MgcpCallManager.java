@@ -625,7 +625,7 @@ public final class MgcpCallManager extends SipServlet
 //            return;
 //        }
 //        final ConnectionInformation client = new BasicConnectionInformation(
-//                "dummy", "mobicents", "mobicents");
+//                "desktop", "mobicents", "mobicents");
 //        final Session session = jvxml.createSession(client);
 //        
 //        session.call(uri);

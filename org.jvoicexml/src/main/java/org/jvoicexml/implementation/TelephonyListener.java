@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,7 +40,7 @@ public interface TelephonyListener {
      * @param event
      *            the event.
      */
-    void telephonyCallAnswered(final TelephonyEvent event);
+    void telephonyCallAnswered(TelephonyEvent event);
 
     /**
      * Invoked when the {@link Telephony} implementation triggered an event that
@@ -49,7 +49,7 @@ public interface TelephonyListener {
      * @param event
      *            the event.
      */
-    void telephonyMediaEvent(final TelephonyEvent event);
+    void telephonyMediaEvent(TelephonyEvent event);
 
     /**
      * Invoked when the {@link Telephony} implementation recognized a DTMF
@@ -59,7 +59,7 @@ public interface TelephonyListener {
      *            the DTMF character
      * @since 0.7.8
      */
-    void dtmfInput(final char dtmf);
+    void dtmfInput(char dtmf);
 
     /**
      * Invoked when the {@link Telephony} implementation triggered a call hangup
@@ -68,7 +68,7 @@ public interface TelephonyListener {
      * @param event
      *            the event.
      */
-    void telephonyCallHungup(final TelephonyEvent event);
+    void telephonyCallHungup(TelephonyEvent event);
 
     /**
      * Invoked when the {@link Telephony} implementation triggered a transfer
@@ -77,7 +77,7 @@ public interface TelephonyListener {
      * @param event
      *            the event.
      */
-    void telephonyCallTransferred(final TelephonyEvent event);
+    void telephonyCallTransferred(TelephonyEvent event);
 
     /**
      * An error occurred while communicating over the telephony.
@@ -90,5 +90,5 @@ public interface TelephonyListener {
      *            the error
      * @since 0.7.4
      */
-    void telephonyError(final ErrorEvent error);
+    void telephonyError(ErrorEvent error);
 }

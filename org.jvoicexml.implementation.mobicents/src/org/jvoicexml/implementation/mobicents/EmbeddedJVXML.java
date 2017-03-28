@@ -268,7 +268,7 @@ public final class EmbeddedJVXML implements JVoiceXmlMainListener
         wait();
 
         final ConnectionInformation client = new BasicConnectionInformation(
-                "dummy", "jsapi10", "jsapi10");
+                "desktop", "jsapi10", "jsapi10");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);

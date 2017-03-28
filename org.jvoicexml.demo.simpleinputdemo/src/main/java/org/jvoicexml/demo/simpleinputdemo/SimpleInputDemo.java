@@ -67,7 +67,7 @@ public final class SimpleInputDemo {
             final URI dialog = SimpleInputDemo.class
                     .getResource("/simpleexample.vxml").toURI();
             final Session session = client.call(dialog, "jsapi20", "jsapi20",
-                    "dummy");
+                    "desktop");
             session.waitSessionEnd();
             session.hangup();
         } catch (NamingException e) {

@@ -86,7 +86,7 @@ public final class MixedInitiativeDemo {
         }
 
         final ConnectionInformation client =
-            new BasicConnectionInformation("dummy", "jsapi20", "jsapi20");
+            new BasicConnectionInformation("desktop", "jsapi20", "jsapi20");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);

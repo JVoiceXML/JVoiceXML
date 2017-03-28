@@ -91,7 +91,7 @@ public final class ScriptDemo {
         }
 
         final ConnectionInformation client = new BasicConnectionInformation(
-                "dummy", "jsapi20", "jsapi20");
+                "desktop", "jsapi20", "jsapi20");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
