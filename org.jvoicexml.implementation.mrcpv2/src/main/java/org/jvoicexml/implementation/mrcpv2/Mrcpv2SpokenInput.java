@@ -283,7 +283,7 @@ public final class Mrcpv2SpokenInput
         LOGGER.info(String.format("Starting recognition with url: %s", firstGrammarDocument.getDocument()));
 
         // HALEF Event logging
-        final String hevent = String.format("INSERT INTO halef_test"
+        final String hevent = String.format("INSERT INTO haleflogs"
             + " (databasedate, machineIP, machinedate, class, level,"
             + " message) VALUES(%s, \"%s\", %s,"
             + " \"%s\", \"%s\", \"%s\")", 

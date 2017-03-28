@@ -221,7 +221,7 @@ public final class Mrcpv2SynthesizedOutput
                 LOGGER.info(String.format("Using URL!: %s", speakText));
 
                 // HALEF Event logging
-                final String hevent = String.format("INSERT INTO halef_test"
+                final String hevent = String.format("INSERT INTO haleflogs"
                     + " (databasedate, machineIP, machinedate, class, level,"
                     + " message) VALUES(%s, \"%s\", %s,"
                     + " \"%s\", \"%s\", \"%s\")", 
@@ -236,7 +236,7 @@ public final class Mrcpv2SynthesizedOutput
                 LOGGER.info(String.format("Using TTS!: %s", speakText));
 
                 // HALEF Event logging
-                final String hevent = String.format("INSERT INTO halef_test"
+                final String hevent = String.format("INSERT INTO haleflogs"
                     + " (databasedate, machineIP, machinedate, class, level,"
                     + " message) VALUES(%s, \"%s\", %s,"
                     + " \"%s\", \"%s\", \"%s\")", 
