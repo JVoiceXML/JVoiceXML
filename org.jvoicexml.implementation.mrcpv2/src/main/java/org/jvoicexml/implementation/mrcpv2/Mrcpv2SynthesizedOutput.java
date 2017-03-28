@@ -65,6 +65,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import net.sourceforge.halef.HalefDbWriter;
+
 /**
  * Audio output that uses the MRCPv2 to address the TTS engine.
  * 
@@ -195,26 +197,57 @@ public final class Mrcpv2SynthesizedOutput
                 SsmlDocument ssml = new SsmlDocument(src);
                 speakText = ssml.getSpeak().getTextContent();
 
-                LOGGER.info("Text content is " + speakText);
+        	    LOGGER.info("Text content is " + speakText);
+        		
                 // TODO Implement a better way of detecting and extracting
-                // audio URLs
-                DocumentBuilderFactory factory = DocumentBuilderFactory
-                        .newInstance();
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                Document document = builder
-                        .parse(new InputSource(new StringReader(temp)));
-                NodeList list = document.getElementsByTagName("audio");
-                if (list != null && list.getLength() > 0) {
-                    Element audioTag = (Element) list.item(0);
-                    String url = audioTag.getAttribute("src");
-                    try {
-                        new URI(url);
-                        speakText = url;
-                        urlPrompt = true;
-                    } catch (URISyntaxException e) {
-                        // 'src' attribute is not a valid URI
-                    }
-                }
+        		// audio URLs
+        		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        		DocumentBuilder builder = factory.newDocumentBuilder();
+        		Document document = builder.parse(new InputSource(new StringReader(temp)));
+        		NodeList list = document.getElementsByTagName("audio");
+        		if (list != null && list.getLength() > 0) {
+        		    Element audioTag = (Element) list.item(0);
+        		    String url = audioTag.getAttribute("src");
+        		    try {
+        			new URI(url);
+        			speakText = url;
+        			urlPrompt = true;
+        		    } catch (URISyntaxException e) {
+                        LOGGER.error("'src' attribute is not a valid URI");
+        		    }	
+        		}
+	        }
+
+            if (urlPrompt){
+                LOGGER.info(String.format("Using URL!: %s", speakText));
+
+                // HALEF Event logging
+                final String hevent = String.format("INSERT INTO haleflogs"
+                    + " (databasedate, machineIP, machinedate, class, level,"
+                    + " message) VALUES(%s, \"%s\", %s,"
+                    + " \"%s\", \"%s\", \"%s\")", 
+                    "now()",
+                    System.getenv("IP"),
+                    "now()",
+                    "implementation.mrcpv2.Mrcpv2SynthesizedOutput",
+                    "INFO",
+                    "Using URL!: " + speakText);
+                HalefDbWriter.execute(hevent);
+            } else {
+                LOGGER.info(String.format("Using TTS!: %s", speakText));
+
+                // HALEF Event logging
+                final String hevent = String.format("INSERT INTO haleflogs"
+                    + " (databasedate, machineIP, machinedate, class, level,"
+                    + " message) VALUES(%s, \"%s\", %s,"
+                    + " \"%s\", \"%s\", \"%s\")", 
+                    "now()",
+                    System.getenv("IP"),
+                    "now()",
+                    "implementation.mrcpv2.Mrcpv2SynthesizedOutput",
+                    "INFO",
+                    "Using TTS!: " + speakText);
+                HalefDbWriter.execute(hevent);
             }
 
             speechClient.queuePrompt(urlPrompt, speakText);
