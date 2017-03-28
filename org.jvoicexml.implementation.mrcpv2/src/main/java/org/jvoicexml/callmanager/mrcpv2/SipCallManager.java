@@ -301,7 +301,7 @@ public final class SipCallManager
                     asteriskCallID, 
                     jCallID,
                     jsession.getSessionID(),
-                    cairoCallID);
+                    cCallID);
                 HalefDbWriter.execute(q);
 
                 // Append the sessionId to the application uri
