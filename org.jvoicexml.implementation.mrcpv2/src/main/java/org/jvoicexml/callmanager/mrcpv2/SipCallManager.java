@@ -289,17 +289,19 @@ public final class SipCallManager
                 }
                 final String jCallURI = dialog.getCallId().getCallId();
                 final String jCallID = jCallURI.split("@")[0];
+                final String cCallID = mrcpSession.getSipDialog().getCallId.getCallId();
 
                 LOGGER.info("Logging real-time mapping:\n%s %s %s",
                             asteriskCallID,
                             jCallID,
                             jsession.getSessionID());
                 final String q = String.format("INSERT INTO realtime_jvxml_linklogs"
-                    + " (asteriskCallId, jvxmlCallId, jsessionId)"
-                    + " VALUES(\"%s\", \"%s\", \"%s\")", 
+                    + " (asteriskCallId, jvxmlCallId, jsessionId, cairoCallId)"
+                    + " VALUES(\"%s\", \"%s\", \"%s\", \"%s\")", 
                     asteriskCallID, 
                     jCallID,
-                    jsession.getSessionID());
+                    jsession.getSessionID(),
+                    cairoCallID);
                 HalefDbWriter.execute(q);
 
                 // Append the sessionId to the application uri
