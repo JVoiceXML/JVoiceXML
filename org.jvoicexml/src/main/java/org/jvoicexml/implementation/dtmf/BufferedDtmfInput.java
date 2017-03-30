@@ -179,15 +179,15 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
         }
         synchronized (buffer) {
             buffer.add(dtmf);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added char '" + dtmf + "' buffer is now '"
+                        + buffer.toString() + "'");
+            }
             buffer.notifyAll();
         }
         final char termchar = props.getTermchar();
         if (dtmf == termchar) {
             return;
-        }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("added char '" + dtmf + "' buffer is now '"
-                    + buffer.toString() + "'");
         }
         if (interDigitTimeout == null) {
             final long interdigittimeout = props.getInterdigittimeoutAsMsec();

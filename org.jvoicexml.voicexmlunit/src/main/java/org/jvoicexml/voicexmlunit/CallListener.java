@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,7 +28,6 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 /**
  * A listener to monitor the call including the conversation.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 public interface CallListener {
@@ -41,31 +35,31 @@ public interface CallListener {
      * The given URI has been called.
      * @param uri the called URI
      */
-    void called(final URI uri);
+    void called(URI uri);
 
     /**
      * The given document has been heard.
      * @param document the document that has been heard
      */
-    void heard(final SsmlDocument document);
+    void heard(SsmlDocument document);
 
     /**
      * The given utterance has been said.
      * @param utterance the utterance
      */
-    void said(final String utterance);
+    void said(String utterance);
 
     /**
      * The given DTMF has been entered.
      * @param dtmf the DTMF
      */
-    void entered(final String dtmf);
+    void entered(String dtmf);
 
     /**
      * The given error happened during calling.
      * @param error the caught error
      */
-    void error(final AssertionError error);
+    void error(AssertionError error);
 
     /**
      * The call has been hung up.

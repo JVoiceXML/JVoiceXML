@@ -26,7 +26,7 @@ import java.io.InputStream;
 import javax.sound.sampled.AudioFormat;
 
 /**
- * An audio source consumes audio data from an {@link InputStream}.
+ * An audio source consumes audio data to an {@link InputStream}.
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
  */
@@ -38,9 +38,8 @@ public interface AudioSink {
     AudioFormat getAudioFormat();
 
     /**
-     * Retrieves the stream to deliver audio data.
-     * @return audio data stream
+     * Sets the stream to send audio data.
+     * @param in audio data stream
      */
-    InputStream getInputStream();
-
+    void setInputStream(InputStream in);
 }

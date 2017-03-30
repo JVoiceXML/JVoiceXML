@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -70,7 +70,7 @@ public interface Call {
      *            is zero
      * @return the next output that has been captured
      */
-    SsmlDocument getNextOutput(final long timeout);
+    SsmlDocument getNextOutput(long timeout);
 
     /**
      * Retrieves the last obtained output.
@@ -86,7 +86,7 @@ public interface Call {
      * @param utterance
      *            the expected utterance
      */
-    void hears(final String utterance);
+    void hears(String utterance);
 
     /**
      * Waits for the next output and checks if this output matches the given
@@ -98,7 +98,7 @@ public interface Call {
      *            the timeout to wait at max in msec, waits forever, if timeout
      *            is zero
      */
-    void hears(final String utterance, final long timeout);
+    void hears(String utterance, long timeout);
 
     /**
      * Waits for the next audio output and checks if this output matches the
@@ -108,7 +108,7 @@ public interface Call {
      *            the URI of the expected audio file
      * @since 0.7.8
      */
-    void hearsAudio(final URI uri);
+    void hearsAudio(URI uri);
 
     /**
      * Waits for the next audio output and checks if this output matches the
@@ -121,7 +121,7 @@ public interface Call {
      *            is zero
      * @since 0.7.8
      */
-    void hearsAudio(final URI uri, final long timeout);
+    void hearsAudio(URI uri, long timeout);
 
     /**
      * Waits until an input is expected and then sends the given utterance to
@@ -130,7 +130,7 @@ public interface Call {
      * @param utterance
      *            the utterance to send
      */
-    void say(final String utterance);
+    void say(String utterance);
 
     /**
      * Waits until an input is expected and then sends the given utterance to
@@ -141,7 +141,7 @@ public interface Call {
      * @param timeout
      *            max timeout to wait in msec, waits forever, if timeout is zero
      */
-    void say(final String utterance, final long timeout);
+    void say(String utterance, long timeout);
 
     /**
      * Sends the given utterance to JVoiceXML.
@@ -149,7 +149,7 @@ public interface Call {
      * @param digits
      *            the digits to enter
      */
-    void enter(final String digits);
+    void enter(String digits);
 
     /**
      * Sends the given utterance to JVoiceXML.
@@ -160,7 +160,7 @@ public interface Call {
      *            the timeout to wait at max in msec, waits forever, if timeout
      *            is zero
      */
-    void enter(final String digits, final long timeout);
+    void enter(String digits, long timeout);
 
     /**
      * Delays until an input is expected, i.e. the voice browser is expecting

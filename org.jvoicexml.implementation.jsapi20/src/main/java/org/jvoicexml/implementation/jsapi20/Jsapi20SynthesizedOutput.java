@@ -25,13 +25,16 @@
 package org.jvoicexml.implementation.jsapi20;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Queue;
 
+import javax.sound.sampled.AudioFormat;
 import javax.speech.AudioException;
 import javax.speech.AudioManager;
+import javax.speech.Engine;
 import javax.speech.EngineException;
 import javax.speech.EngineManager;
 import javax.speech.EngineMode;
@@ -58,8 +61,10 @@ import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.implementation.AudioSource;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.jsapi2.synthesis.BaseSynthesizerAudioManager;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -77,7 +82,8 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @since 0.6
  */
 public final class Jsapi20SynthesizedOutput
-        implements SynthesizedOutput, SpeakableListener, SynthesizerListener {
+        implements SynthesizedOutput, SpeakableListener, SynthesizerListener,
+        AudioSource {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
             .getLogger(Jsapi20SynthesizedOutput.class);
@@ -99,9 +105,6 @@ public final class Jsapi20SynthesizedOutput
 
     /** The media locator to use. */
     private String mediaLocator;
-
-    /** Media locator factory to create a sink media locator. */
-    private final OutputMediaLocatorFactory locatorFactory;
 
     /** Object lock for an empty queue. */
     private final Object emptyLock;
@@ -132,7 +135,6 @@ public final class Jsapi20SynthesizedOutput
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
         queueIds = new java.util.HashMap<SpeakableText, Integer>();
-        locatorFactory = mediaLocatorFactory;
         emptyLock = new Object();
     }
 
@@ -157,8 +159,8 @@ public final class Jsapi20SynthesizedOutput
         try {
             synthesizer = (Synthesizer) EngineManager.createEngine(desc);
             if (synthesizer == null) {
-                throw new NoresourceError("no synthesizer found matching "
-                        + desc);
+                throw new NoresourceError(
+                        "no synthesizer found matching " + desc);
             }
             LOGGER.info("allocating JSAPI 2.0 synthesizer...");
             if (mediaLocator != null) {
@@ -395,8 +397,7 @@ public final class Jsapi20SynthesizedOutput
                 sessionId, speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy =
-                    new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -415,8 +416,7 @@ public final class Jsapi20SynthesizedOutput
                 sessionId, mark);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy =
-                    new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -435,8 +435,7 @@ public final class Jsapi20SynthesizedOutput
                 sessionId, speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy =
-                    new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -452,8 +451,7 @@ public final class Jsapi20SynthesizedOutput
                 sessionId);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy =
-                    new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -520,8 +518,7 @@ public final class Jsapi20SynthesizedOutput
                 return;
             }
 
-            final Collection<SpeakableText> skipped =
-                    new java.util.ArrayList<SpeakableText>();
+            final Collection<SpeakableText> skipped = new java.util.ArrayList<SpeakableText>();
             for (SpeakableText speakable : queuedSpeakables) {
                 if (speakable.isBargeInEnabled(bargeInType)) {
                     skipped.add(speakable);
@@ -537,8 +534,8 @@ public final class Jsapi20SynthesizedOutput
                 final Integer id = queueIds.get(speakable);
                 if (id != null) {
                     if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("cancelling queued id '" + id.intValue()
-                                + "'");
+                        LOGGER.debug(
+                                "cancelling queued id '" + id.intValue() + "'");
                     }
                     synthesizer.cancel(id.intValue());
                 }
@@ -582,7 +579,7 @@ public final class Jsapi20SynthesizedOutput
                 return;
             }
             if (!speakable.isBargeInEnabled(BargeInType.SPEECH)
-                    && !speakable.isBargeInEnabled(BargeInType.HOTWORD)) { 
+                    && !speakable.isBargeInEnabled(BargeInType.HOTWORD)) {
                 return;
             }
         }
@@ -629,19 +626,54 @@ public final class Jsapi20SynthesizedOutput
      * {@inheritDoc}
      */
     @Override
-    public void activate() {
+    public void activate() throws NoresourceError {
+        synthesizer.resume();
+        try {
+            synthesizer.waitEngineState(Engine.RESUMED);
+        } catch (IllegalArgumentException | IllegalStateException
+                | InterruptedException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
     }
 
+    @Override
+    public AudioFormat getAudioFormat() {
+        final AudioManager manager = synthesizer.getAudioManager();
+        final BaseSynthesizerAudioManager baseAudioManager =
+                (BaseSynthesizerAudioManager) manager;
+        return baseAudioManager.getTargetAudioFormat();
+    }
+
+    @Override
+    public void setOutputStream(final OutputStream out) {
+//        final AudioManager manager = synthesizer.getAudioManager();
+//        try {
+//            manager.audioStop();
+//            manager.setMediaLocator(null, out);
+//            manager.audioStart();
+//        } catch (AudioException | IllegalStateException
+//                | IllegalArgumentException | SecurityException e) {
+//            LOGGER.error(e.getMessage(), e);
+//        }
+    }
+    
     /**
      * {@inheritDoc}
      */
     @Override
-    public void passivate() {
+    public void passivate() throws NoresourceError {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("passivating output " + queuedSpeakables.size()
-                    + "...");
+            LOGGER.debug(
+                    "passivating output " + queuedSpeakables.size() + "...");
         }
         listeners.clear();
+        synthesizer.pause();
+        try {
+            synthesizer.waitEngineState(Engine.PAUSED);
+        } catch (IllegalArgumentException | IllegalStateException
+                | InterruptedException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
         }
@@ -710,8 +742,8 @@ public final class Jsapi20SynthesizedOutput
                 speakable = queuedSpeakables.poll();
                 final Integer queueId = queueIds.remove(speakable);
                 if (LOGGER.isDebugEnabled() && queueId != null) {
-                    LOGGER.debug("queued id '" + queueId.intValue()
-                            + "' ended ");
+                    LOGGER.debug(
+                            "queued id '" + queueId.intValue() + "' ended ");
                 }
             }
 
@@ -726,8 +758,8 @@ public final class Jsapi20SynthesizedOutput
         } else if (id == SpeakableEvent.SPEAKABLE_FAILED) {
             LOGGER.warn("speakable failed: " + event);
             final SpeakableException exception = event.getSpeakableException();
-            final BadFetchError error =
-                    new BadFetchError(exception.getMessage(), exception);
+            final BadFetchError error = new BadFetchError(
+                    exception.getMessage(), exception);
             notifyError(error);
         }
     }
@@ -755,8 +787,7 @@ public final class Jsapi20SynthesizedOutput
      */
     private void notifyError(final ErrorEvent error) {
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy =
-                    new java.util.ArrayList<SynthesizedOutputListener>();
+            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputError(error);

@@ -25,7 +25,7 @@ import java.io.OutputStream;
 import javax.sound.sampled.AudioFormat;
 
 /**
- * An audio source delivers audio data via an {@link OutputStream}.
+ * An audio source delivers audio data to an {@link OutputStream}.
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
  */
@@ -37,8 +37,8 @@ public interface AudioSource {
     AudioFormat getAudioFormat();
 
     /**
-     * Retrieves the stream to read audio data.
-     * @return audio data stream
+     * Sets the stream to write audio data to.
+     * @param out audio data stream
      */
-    OutputStream getOutputStream();
+    void setOutputStream(OutputStream out);
 }

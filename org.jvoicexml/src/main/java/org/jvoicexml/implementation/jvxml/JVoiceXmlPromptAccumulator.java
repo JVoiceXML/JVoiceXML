@@ -131,12 +131,12 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
                     timeout = currentTimeout;
                 }
             }
-            output.queueSpeakable(speakable, sessionId, server);
             try {
                 call.play(output, callProps);
             } catch (IOException e) {
                 throw new BadFetchError("error playing to calling device", e);
             }
+            output.queueSpeakable(speakable, sessionId, server);
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("timeout after prompt queuing: " + timeout);

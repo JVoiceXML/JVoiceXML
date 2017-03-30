@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2015-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ class BufferedSsmlDocument {
      * Creates a new object without a document.
      * @param msg the received message
      */
-    public BufferedSsmlDocument(final TextMessage msg) {
+    BufferedSsmlDocument(final TextMessage msg) {
         document = null;
         message = msg;
     }
@@ -49,7 +49,7 @@ class BufferedSsmlDocument {
      * @param doc the received document
      * @param msg the received message
      */
-    public BufferedSsmlDocument(final SsmlDocument doc, final TextMessage msg) {
+    BufferedSsmlDocument(final SsmlDocument doc, final TextMessage msg) {
         document = doc;
         message = msg;
     }

@@ -50,7 +50,7 @@ final class TextReceiverThread extends Thread {
     private final TextTelephony telephony;
 
     /** Set to <code>true</code> if the receiver thread is started. */
-    private boolean started;
+    private transient boolean started;
 
     /** Wait for termination semaphore. */
     private final Object lock;

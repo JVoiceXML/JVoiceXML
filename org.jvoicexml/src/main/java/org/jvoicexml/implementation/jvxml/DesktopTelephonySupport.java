@@ -33,6 +33,7 @@ import org.apache.logging.log4j.Logger;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.AudioSource;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
@@ -74,9 +75,14 @@ public final class DesktopTelephonySupport implements Telephony {
     /** Asynchronous recording of audio. */
     private RecordingThread recording;
 
+    /** Th associated speaker output stream. */
+    private SpeakerOutputStream out;
+
     /**
      * Constructs a new object.
-     * @param format the audio format to use for recording
+     * 
+     * @param format
+     *            the audio format to use for recording
      */
     public DesktopTelephonySupport(final AudioFormat format) {
         listener = new java.util.ArrayList<TelephonyListener>();
@@ -170,10 +176,18 @@ public final class DesktopTelephonySupport implements Telephony {
      */
     @Override
     public void play(final SynthesizedOutput output,
-            final CallControlProperties props) throws IOException,
-            NoresourceError {
+            final CallControlProperties props)
+            throws IOException, NoresourceError {
         if (!active) {
-            throw new NoresourceError("dummy telephony is no longer active");
+            throw new NoresourceError("desktop telephony is no longer active");
+        }
+        if (output instanceof AudioSource) {
+            final AudioSource source = (AudioSource) output;
+            try {
+                play(source);
+            } catch (LineUnavailableException e) {
+                throw new NoresourceError(e.getMessage(), e);
+            }
         }
         busy = true;
         synchronized (listener) {
@@ -189,6 +203,25 @@ public final class DesktopTelephonySupport implements Telephony {
     }
 
     /**
+     * Play backs audio from the given audio source.
+     * 
+     * @param source
+     *            the current audio source
+     * @throws LineUnavailableException
+     *             error opening the speaker
+     * @throws IOException
+     *             error starting the speaker line
+     * @since 0.7.8
+     */
+    private void play(final AudioSource source)
+            throws LineUnavailableException, IOException {
+        final AudioFormat format = source.getAudioFormat();
+        out = new SpeakerOutputStream(format);
+        out.open();
+        source.setOutputStream(out);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -197,6 +230,15 @@ public final class DesktopTelephonySupport implements Telephony {
             return;
         }
         busy = false;
+        if (out != null) {
+            try {
+                out.close();
+            } catch (IOException e) {
+                throw new NoresourceError(e.getMessage(), e);
+            } finally {
+                out = null;
+            }
+        }
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
                     new java.util.ArrayList<TelephonyListener>();
@@ -214,10 +256,10 @@ public final class DesktopTelephonySupport implements Telephony {
      */
     @Override
     public void record(final SpokenInput input,
-            final CallControlProperties props) throws IOException,
-            NoresourceError {
+            final CallControlProperties props)
+            throws IOException, NoresourceError {
         if (!active) {
-            throw new NoresourceError("dummy telephony is no longer active");
+            throw new NoresourceError("desktop telephony is no longer active");
         }
         busy = true;
         synchronized (listener) {
@@ -248,7 +290,7 @@ public final class DesktopTelephonySupport implements Telephony {
             final OutputStream stream, final CallControlProperties props)
             throws IOException, NoresourceError {
         if (!active) {
-            throw new NoresourceError("dummy telephony is no longer active");
+            throw new NoresourceError("desktop telephony is no longer active");
         }
         busy = true;
         try {

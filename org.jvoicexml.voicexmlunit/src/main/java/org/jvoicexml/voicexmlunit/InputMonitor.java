@@ -56,11 +56,13 @@ public final class InputMonitor implements TextListener {
      * 
      * @throws InterruptedException
      *             waiting interrupted
+     * @throws TimeoutException
+     *             input closed while waiting for input
      * @throws JVoiceXMLEvent
      *             error while waiting
      */
     public void waitUntilExpectingInput() throws InterruptedException,
-            JVoiceXMLEvent {
+            TimeoutException, JVoiceXMLEvent {
         synchronized (monitor) {
             try {
                 if (expectingInput) {
@@ -69,6 +71,10 @@ public final class InputMonitor implements TextListener {
                 monitor.wait();
                 if (event != null) {
                     throw event;
+                }
+                if (!expectingInput) {
+                    throw new TimeoutException(
+                          "input closed while waiting for expected input");
                 }
             } finally {
                 expectingInput = false;
@@ -149,6 +155,10 @@ public final class InputMonitor implements TextListener {
      */
     @Override
     public void inputClosed(final TextMessageEvent evt) {
+        synchronized (monitor) {
+            expectingInput = false;
+            monitor.notifyAll();
+        }
     }
 
     /**

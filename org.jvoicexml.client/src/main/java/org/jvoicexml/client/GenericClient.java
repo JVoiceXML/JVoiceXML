@@ -112,7 +112,7 @@ public final class GenericClient {
             return current.createConnectionInformation(call, output, input);
         }
         final String message = String.format(
-                "No matching factoy found for '%s', %s', '%s'", call, output,
+                "No matching factory found for '%s', %s', '%s'", call, output,
                 input);
         throw new UnsupportedResourceIdentifierException(message);
     }

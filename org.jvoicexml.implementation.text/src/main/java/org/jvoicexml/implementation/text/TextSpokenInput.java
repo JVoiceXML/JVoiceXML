@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -294,9 +294,7 @@ final class TextSpokenInput implements SpokenInput {
             return;
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("received utterance '" + text + "'");
-        }
+        LOGGER.info("received utterance '" + text + "'");
 
         final SpokenInputEvent inputStartedEvent = new InputStartedEvent(this,
                 null, ModeType.VOICE);

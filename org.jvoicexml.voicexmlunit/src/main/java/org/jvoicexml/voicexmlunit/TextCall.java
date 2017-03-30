@@ -368,7 +368,7 @@ public final class TextCall implements Call {
         try {
             inputMonitor.waitUntilExpectingInput();
             input = session.getDtmfInput();
-        } catch (JVoiceXMLEvent | InterruptedException e) {
+        } catch (JVoiceXMLEvent | InterruptedException | TimeoutException e) {
             throw new AssertionError(e);
         }
         for (int i = 0; i < digits.length(); i++) {
@@ -416,7 +416,7 @@ public final class TextCall implements Call {
         Assert.assertNotNull("no active session", session);
         try {
             inputMonitor.waitUntilExpectingInput();
-        } catch (InterruptedException | JVoiceXMLEvent e) {
+        } catch (InterruptedException | TimeoutException | JVoiceXMLEvent e) {
             try {
                 lastError = session.getLastError();
             } catch (ErrorEvent ex) {
@@ -497,7 +497,7 @@ public final class TextCall implements Call {
             for (CallListener listener : listeners) {
                 listener.hungup();
             }
-            LOGGER.info("hungup");
+            LOGGER.info("remote hungup");
             session = null;
         }
 

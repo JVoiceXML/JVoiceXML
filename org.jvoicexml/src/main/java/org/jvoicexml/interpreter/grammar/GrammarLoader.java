@@ -132,13 +132,8 @@ final class GrammarLoader {
         // Create an internal grammar document thereof and publicize it to the
         // server
         final GrammarDocument document = new InternalGrammarDocument(grammar);
+        adaptGrammarAttributes(grammar, document);
         server.addGrammarDocument(sessionId, document);
-
-        // Pre-set grammar and mode type
-        final GrammarType type = grammar.getType();
-        document.setMediaType(type);
-        final ModeType mode = grammar.getMode();
-        document.setModeType(mode);
 
         return document;
     }
@@ -201,14 +196,26 @@ final class GrammarLoader {
         if (document == null) {
             throw new BadFetchError("Unable to load grammar '" + src + "'!");
         }
-
-        // Pre-set grammar and mode type
-        final GrammarType type = grammar.getType();
-        document.setMediaType(type);
-        final ModeType mode = grammar.getMode();
-        document.setModeType(mode);
+        adaptGrammarAttributes(grammar, document);
 
         return document;
+    }
+
+    /**
+     * Adapt the attributes of a loaded grammar document, i.e. type and mode.
+     * @param grammar the grammar
+     * @param document the loaded grammar document.
+     * @since 0.7.8
+     */
+    private void adaptGrammarAttributes(final Grammar grammar,
+            final GrammarDocument document) {
+        final GrammarType type = grammar.getType();
+        document.setMediaType(type);
+        ModeType mode = grammar.getMode();
+        if (mode == null) {
+            mode = ModeType.VOICE;
+        }
+        document.setModeType(mode);
     }
 
     /**

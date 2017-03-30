@@ -158,7 +158,10 @@ public final class JVoiceXmlGrammarProcessor implements GrammarProcessor {
      */
     private void adaptMode(final Grammar grammar,
             final GrammarDocument document) {
-        final ModeType mode = grammar.getMode();
+        ModeType mode = grammar.getMode();
+        if (mode == null) {
+            mode = ModeType.VOICE;
+        }
         document.setModeType(mode);
     }
 }
