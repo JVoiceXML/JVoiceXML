@@ -41,10 +41,11 @@ public final class SipCallParameters extends CallParameters {
     /** Port for RTP input (The Server port/recognizers port).*/
     private int serverPort;
     
-    /** The spech client. */
+    /** The speech client. */
     private SpeechClient speechClient;
 
     /**
+     * Retrieves the speech client.
      * @return the speechClient
      */
     public SpeechClient getSpeechClient() {
@@ -52,10 +53,11 @@ public final class SipCallParameters extends CallParameters {
     }
 
     /**
-     * @param speechClient the speechClient to set
+     * Sets the speech client.
+     * @param client the speechClient to set
      */
-    public void setSpeechClient(SpeechClient speechClient) {
-        this.speechClient = speechClient;
+    public void setSpeechClient(final SpeechClient client) {
+        speechClient = client;
     }
 
     /**

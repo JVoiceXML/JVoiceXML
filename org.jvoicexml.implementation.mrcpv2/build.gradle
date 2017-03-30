@@ -45,7 +45,6 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.40'
     //compile group: 'net.sourceforge.halef', name: 'halef-zanzibar', version: '0.1-SNAPSHOT'
     compile fileTree(dir: './3rdparty/zanzibar/lib', include: ['*.jar'])
-    compile project(':org.jvoicexml.interpreter.grammar.halef')
     compile group: 'javax.sip', name: 'jain-sip-api', version: '1.2.1.4'
     compile group: 'javax.sip', name: 'jain-sip-ri', version: '1.2.324'
     compile group: 'javax.sdp', name: 'nist-sdp', version: '1.0'
@@ -59,6 +58,7 @@ dependencies {
 
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
+    compile project(':org.jvoicexml.interpreter.grammar.halef')
 }
 
 task xsltImplementation(type: com.github.eerohele.SaxonXsltTask) {

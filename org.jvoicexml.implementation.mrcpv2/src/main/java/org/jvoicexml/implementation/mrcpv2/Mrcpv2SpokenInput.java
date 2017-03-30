@@ -81,9 +81,6 @@ public final class Mrcpv2SpokenInput
     private static final Logger LOGGER = LogManager
             .getLogger(Mrcpv2SpokenInput.class);
 
-    /** Size of the read buffer when reading objects. */
-    private static final int READ_BUFFER_SIZE = 1024;
-
     /** The port that will receive the stream from mrcp server. **/
     private int rtpReceiverPort;
 
@@ -93,9 +90,6 @@ public final class Mrcpv2SpokenInput
 
     /** The local host address. */
     private String hostAddress;
-
-    private String remoteRtpHost;
-    private int remoteRtpPort;
 
     /** Listener for user input events. */
     private final Collection<SpokenInputListener> listeners;
@@ -359,7 +353,6 @@ public final class Mrcpv2SpokenInput
             LOGGER.warn("No Media Control Channel Exception while stopping "
                     + "recognition." + e.getLocalizedMessage());
         }
-
     }
 
     /**
@@ -367,9 +360,6 @@ public final class Mrcpv2SpokenInput
      */
     @Override
     public void activate() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("activating input...");
-        }
     }
 
     /**
@@ -377,9 +367,6 @@ public final class Mrcpv2SpokenInput
      */
     @Override
     public void passivate() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("passivating input...");
-        }
     }
 
     /**
@@ -387,16 +374,15 @@ public final class Mrcpv2SpokenInput
      */
     @Override
     public void connect(final ConnectionInformation client) throws IOException {
-        final Mrcpv2ConnectionInformation mrcpv2Client = (Mrcpv2ConnectionInformation) client;
+        final Mrcpv2ConnectionInformation mrcpv2Client =
+                (Mrcpv2ConnectionInformation) client;
         LOGGER.info("connecting to '" + mrcpv2Client + "'");
 
-        if (mrcpv2Client.getAsrClient() != null) {
-            speechClient = mrcpv2Client.getAsrClient();
-            speechClient.addListener(this);
-            return;
-        } else {
+        speechClient = mrcpv2Client.getAsrClient();
+        if (speechClient == null) {
             throw new IOException("No ASR client");
         }
+        speechClient.addListener(this);
     }
 
     /**
