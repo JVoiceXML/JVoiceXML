@@ -117,11 +117,12 @@ public final class Mrcpv2SynthesizedOutput
 
     private int queueCount = 0;
 
+    private final Object lock = new Object();
+
     /**
      * Constructs a object.
      */
     public Mrcpv2SynthesizedOutput() {
-
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
 
         // TODO Should there be a queue here on the client side too? There is
@@ -147,12 +148,14 @@ public final class Mrcpv2SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addListener(final SynthesizedOutputListener outputListener) {
         synchronized (listeners) {
             listeners.add(outputListener);
@@ -162,6 +165,7 @@ public final class Mrcpv2SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeListener(final SynthesizedOutputListener outputListener) {
         synchronized (listeners) {
             listeners.remove(outputListener);
@@ -197,56 +201,54 @@ public final class Mrcpv2SynthesizedOutput
                 SsmlDocument ssml = new SsmlDocument(src);
                 speakText = ssml.getSpeak().getTextContent();
 
-        	    LOGGER.info("Text content is " + speakText);
-        		
-                // TODO Implement a better way of detecting and extracting
-        		// audio URLs
-        		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        		DocumentBuilder builder = factory.newDocumentBuilder();
-        		Document document = builder.parse(new InputSource(new StringReader(temp)));
-        		NodeList list = document.getElementsByTagName("audio");
-        		if (list != null && list.getLength() > 0) {
-        		    Element audioTag = (Element) list.item(0);
-        		    String url = audioTag.getAttribute("src");
-        		    try {
-        			new URI(url);
-        			speakText = url;
-        			urlPrompt = true;
-        		    } catch (URISyntaxException e) {
-                        LOGGER.error("'src' attribute is not a valid URI");
-        		    }	
-        		}
-	        }
+                LOGGER.info("Text content is " + speakText);
 
-            if (urlPrompt){
+                // TODO Implement a better way of detecting and extracting
+                // audio URLs
+                DocumentBuilderFactory factory = DocumentBuilderFactory
+                        .newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document document = builder
+                        .parse(new InputSource(new StringReader(temp)));
+                NodeList list = document.getElementsByTagName("audio");
+                if (list != null && list.getLength() > 0) {
+                    Element audioTag = (Element) list.item(0);
+                    String url = audioTag.getAttribute("src");
+                    try {
+                        new URI(url);
+                        speakText = url;
+                        urlPrompt = true;
+                    } catch (URISyntaxException e) {
+                        LOGGER.error("'src' attribute is not a valid URI");
+                    }
+                }
+            }
+
+            if (urlPrompt) {
                 LOGGER.info(String.format("Using URL!: %s", speakText));
 
                 // HALEF Event logging
-                final String hevent = String.format("INSERT INTO haleflogs"
-                    + " (databasedate, machineIP, machinedate, class, level,"
-                    + " message) VALUES(%s, \"%s\", %s,"
-                    + " \"%s\", \"%s\", \"%s\")", 
-                    "now()",
-                    System.getenv("IP"),
-                    "now()",
-                    "implementation.mrcpv2.Mrcpv2SynthesizedOutput",
-                    "INFO",
-                    "Using URL!: " + speakText);
+                final String hevent = String.format(
+                        "INSERT INTO haleflogs"
+                                + " (databasedate, machineIP, machinedate, class, level,"
+                                + " message) VALUES(%s, \"%s\", %s,"
+                                + " \"%s\", \"%s\", \"%s\")",
+                        "now()", System.getenv("IP"), "now()",
+                        "implementation.mrcpv2.Mrcpv2SynthesizedOutput", "INFO",
+                        "Using URL!: " + speakText);
                 HalefDbWriter.execute(hevent);
             } else {
                 LOGGER.info(String.format("Using TTS!: %s", speakText));
 
                 // HALEF Event logging
-                final String hevent = String.format("INSERT INTO haleflogs"
-                    + " (databasedate, machineIP, machinedate, class, level,"
-                    + " message) VALUES(%s, \"%s\", %s,"
-                    + " \"%s\", \"%s\", \"%s\")", 
-                    "now()",
-                    System.getenv("IP"),
-                    "now()",
-                    "implementation.mrcpv2.Mrcpv2SynthesizedOutput",
-                    "INFO",
-                    "Using TTS!: " + speakText);
+                final String hevent = String.format(
+                        "INSERT INTO haleflogs"
+                                + " (databasedate, machineIP, machinedate, class, level,"
+                                + " message) VALUES(%s, \"%s\", %s,"
+                                + " \"%s\", \"%s\", \"%s\")",
+                        "now()", System.getenv("IP"), "now()",
+                        "implementation.mrcpv2.Mrcpv2SynthesizedOutput", "INFO",
+                        "Using TTS!: " + speakText);
                 HalefDbWriter.execute(hevent);
             }
 
@@ -340,35 +342,6 @@ public final class Mrcpv2SynthesizedOutput
     }
 
     /**
-     * Speaks a plain text string.
-     * 
-     * @param text
-     *            String contains plain text to be spoken.
-     * @exception NoresourceError
-     *                No synthesizer allocated.
-     * @exception BadFetchError
-     *                Synthesizer in wrong state.
-     */
-    public void queuePlaintext(final String text)
-            throws NoresourceError, BadFetchError {
-        try {
-            speechClient.queuePrompt(false, text);
-
-            queueCount++;
-            LOGGER.info("Queue count incremented, now " + queueCount);
-
-        } catch (MrcpInvocationException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (IOException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (InterruptedException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (NoMediaControlChannelException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -392,17 +365,14 @@ public final class Mrcpv2SynthesizedOutput
      */
     @Override
     public void waitNonBargeInPlayed() {
-        synchronized (_lock) {
-
+        synchronized (lock) {
             while (queueCount > 0) {
                 try {
                     checkInterrupted();
-                    _lock.wait();
+                    lock.wait();
                 } catch (InterruptedException e) {
                     LOGGER.warn("q count " + queueCount);
-
                 }
-
             }
         }
     }
@@ -413,22 +383,17 @@ public final class Mrcpv2SynthesizedOutput
     @Override
     public void waitQueueEmpty() {
 
-        synchronized (_lock) {
-
+        synchronized (lock) {
             while (queueCount > 0) {
                 try {
                     checkInterrupted();
-                    _lock.wait();
+                    lock.wait();
                 } catch (InterruptedException e) {
                     LOGGER.warn("q count " + queueCount);
-
                 }
-
             }
         }
     }
-
-    private final Object _lock = new Object();
 
     private void checkInterrupted() throws InterruptedException {
         if (Thread.interrupted()) {
@@ -553,8 +518,8 @@ public final class Mrcpv2SynthesizedOutput
             // server or both?
             queueCount--;
             LOGGER.info("Queue count decremented, now " + queueCount);
-            synchronized (_lock) {
-                _lock.notifyAll();
+            synchronized (lock) {
+                lock.notifyAll();
             }
             if (queueCount == 0)
                 fireQueueEmpty();

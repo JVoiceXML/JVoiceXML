@@ -91,7 +91,6 @@ public final class Mrcpv2SynthesizedOutputFactory
         return instances;
     }
 
-
     /**
      * {@inheritDoc}
      */

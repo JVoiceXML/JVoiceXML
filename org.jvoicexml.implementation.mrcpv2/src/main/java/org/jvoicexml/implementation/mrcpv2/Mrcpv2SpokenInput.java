@@ -359,7 +359,6 @@ public final class Mrcpv2SpokenInput
             LOGGER.warn("No Media Control Channel Exception while stopping "
                     + "recognition." + e.getLocalizedMessage());
         }
-
     }
 
     /**
@@ -390,13 +389,11 @@ public final class Mrcpv2SpokenInput
         final Mrcpv2ConnectionInformation mrcpv2Client = (Mrcpv2ConnectionInformation) client;
         LOGGER.info("connecting to '" + mrcpv2Client + "'");
 
-        if (mrcpv2Client.getAsrClient() != null) {
-            speechClient = mrcpv2Client.getAsrClient();
-            speechClient.addListener(this);
-            return;
-        } else {
+        speechClient = mrcpv2Client.getAsrClient();
+        if (speechClient == null) {
             throw new IOException("No ASR client");
         }
+        speechClient.addListener(this);
     }
 
     /**

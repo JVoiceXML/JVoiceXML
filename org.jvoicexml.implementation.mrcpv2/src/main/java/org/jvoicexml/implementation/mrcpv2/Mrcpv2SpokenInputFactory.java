@@ -72,7 +72,7 @@ public final class Mrcpv2SpokenInputFactory
         final Mrcpv2SpokenInput input = new Mrcpv2SpokenInput();
         input.setRtpReceiverPort(basePort + (currentInstance++) * 2);
         input.setSessionManager(sessionManager);
-	input.setGrammarParsers(parsers);
+        input.setGrammarParsers(parsers);
 
         return input;
     }
@@ -147,6 +147,7 @@ public final class Mrcpv2SpokenInputFactory
 
     /**
      * Sets the session manager.
+     * 
      * @param manager
      *            the session manager
      */
@@ -155,6 +156,6 @@ public final class Mrcpv2SpokenInputFactory
     }
 
     public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
-	parsers = grammarParsers;
+        parsers = grammarParsers;
     }
 }

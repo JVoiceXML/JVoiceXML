@@ -51,9 +51,9 @@ import org.speechforge.zanzibar.speechlet.SpeechletContext;
 import org.speechforge.zanzibar.speechlet.SpeechletService;
 import org.speechforge.zanzibar.telephony.TelephonyClient;
 
-import net.sourceforge.halef.HalefDbWriter;
-
 import com.spokentech.speechdown.client.rtp.RtpTransmitter;
+
+import net.sourceforge.halef.HalefDbWriter;
 
 /**
  * A SIP call manager.
@@ -96,14 +96,12 @@ public final class SipCallManager
         return cloudUrl;
     }
 
-
     /**
      * @param url the cloudUrl to set
      */
     public void setCloudUrl(final String url) {
         cloudUrl = url;
     }
-
 
     /**
      * Sets the SIP server.
