@@ -67,7 +67,6 @@ public final class Mrcpv2SynthesizedOutputFactory
         final Mrcpv2SynthesizedOutput output = new Mrcpv2SynthesizedOutput();
 
         output.setType(type);
-        output.setRtpReceiverPort(basePort + (currentInstance++) * 2);
         output.setSessionManager(sessionManager);
 
         return output;

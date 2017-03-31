@@ -70,7 +70,6 @@ public final class Mrcpv2SpokenInputFactory
      */
     public SpokenInput createResource() throws NoresourceError {
         final Mrcpv2SpokenInput input = new Mrcpv2SpokenInput();
-        input.setRtpReceiverPort(basePort + (currentInstance++) * 2);
         input.setSessionManager(sessionManager);
         input.setGrammarParsers(parsers);
 

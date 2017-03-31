@@ -145,7 +145,6 @@ public final class SipCallManager
      *            the session id.
      */
     private void cleanupSession(final String id) {
-
         final SipCallManagerSession session = sessions.get(id);
         if (session == null) {
             LOGGER.error("no session given. unable to cleanup session");
@@ -188,15 +187,6 @@ public final class SipCallManager
      * {@inheritDoc}
      */
     @Override
-    public void dtmf(final SipSession session, final char dtmf) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void startNewMrcpDialog(final SipSession pbxSession,
             final SipSession mrcpSession) throws Exception {
         final MrcpChannel ttsChannel = mrcpSession.getTtsChannel();
@@ -204,11 +194,11 @@ public final class SipCallManager
         final SpeechClient speechClient = new SpeechClientImpl(ttsChannel,
                 asrChannel);
         final TelephonyClient telephonyClient = null;
-        // new TelephonyClientImpl(pbxSession.getChannelName());
         final Dialog dialog = pbxSession.getSipDialog();
         final Address localParty = dialog.getLocalParty();
         final String displayName = localParty.getDisplayName();
         final String calledNumber;
+
         // separate the scheme and port from the address
         if ((displayName == null) || displayName.startsWith("sip:")) {
             final String uri = localParty.getURI().toString();
@@ -337,75 +327,7 @@ public final class SipCallManager
     public void startNewCloudDialog(final SipSession pbxSession,
             final RTPStreamReplicator rtpReplicator,
             final RtpTransmitter rtpTransmitter) throws Exception {
-        // final SpeechClient speechClient =
-        // new SpeechCloudClient(rtpReplicator, rtpTransmitter, cloudUrl);
-        // TelephonyClient telephonyClient = null;
-        // //new TelephonyClientImpl(pbxSession.getChannelName());
-        // final Dialog dialog = pbxSession.getSipDialog();
-        // final Address localParty = dialog.getLocalParty();
-        // final String applicationUri = applications.get(
-        // localParty.getDisplayName());
-        // final String displayName = localParty.getDisplayName();
-        // final String calledNumber;
-        // //separate the scheme and port from the address
-        // if ((displayName == null) || displayName.startsWith("sip:")) {
-        // final String uri = localParty.getURI().toString();
-        // String[] parts = uri.split(":");
-        // // get the first part of the address, which is the number that
-        // // was called.
-        // String[] parts2 = parts[1].split("@");
-        // calledNumber = parts2[0];
-        // } else {
-        // calledNumber = displayName;
-        // }
-        //
-        // // Create a session (so we can get other signals from the caller)
-        // // and release resources upon call completion
-        // String id = pbxSession.getId();
-        // SipCallManagerSession session =
-        // new SipCallManagerSession(id, pbxSession, null, speechClient,
-        // telephonyClient);
-        //
-        // try {
-        // final Address remoteParty = dialog.getRemoteParty();
-        // final String callingNumber = remoteParty.getURI().toString();
-        // final URI calledDevice = new URI(calledNumber);
-        // final URI callingDevice = new URI(callingNumber);
-        // final Mrcpv2ConnectionInformation remote =
-        // new Mrcpv2ConnectionInformation(callingDevice, calledDevice);
-        // remote.setTtsClient(speechClient);
-        // remote.setAsrClient(speechClient);
-        //
-        // // Create a session and initiate a call at JVoiceXML.
-        // final Session jsession = getJVoiceXml().createSession(remote);
-        //
-        // //add a listener to capture the end of voicexml session event
-        // jsession.addSessionListener(this);
-        //
-        // //start the application
-        // final URI uri = new URI(applicationUri);
-        // jsession.call(uri);
-        //
-        // //add the jvoicexml session to the session bag
-        // session.setJvxmlSession(jsession);
-        // synchronized (sessions) {
-        // sessions.put(id, session);
-        // }
-        //
-        // //workaround to deal with two id's
-        // //maps the voicexml sessionid to sip session id
-        // //needed for case when the voicxml session ends before a hang up and
-        // // need to get to close the sip session
-        // synchronized (ids) {
-        // ids.put(session.getId(), id);
-        // }
-        // } catch (Exception e) {
-        // LOGGER.error(e.getMessage(), e);
-        // throw e;
-        // } catch (ErrorEvent e) {
-        // LOGGER.error(e.getMessage(), e);
-        // throw new Exception(e);
-        // }
+        LOGGER.warn("cloud dialogs are not supported!");
     }
 
     /**
@@ -425,11 +347,10 @@ public final class SipCallManager
         jvxml = jvoicexml;
     }
 
-    // TODO startup/shutdown are in the DialogManagerInterface
-    // and start/stop are in the CallManager Interface -- don't need both sets.
-
     /**
      * {@inheritDoc}
+     * 
+     * Unused. Compatibility for {@link SpeechletService}
      */
     @Override
     public void startup() {
@@ -437,20 +358,30 @@ public final class SipCallManager
 
     /**
      * {@inheritDoc}
+     * 
+     * Unused. Compatibility for {@link SpeechletService}
      */
     @Override
     public void shutdown() {
-        LOGGER.info("shutdown mrcp sip callManager");
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * Unused. Compatibility for {@link SpeechletService}
+     */
+    @Override
+    public void dtmf(final SipSession session, final char dtmf) {
+    }
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public void start() throws NoresourceError, IOException {
-        LOGGER.info("startup mrcp sip callManager");
         sessions = new java.util.HashMap<String, SipCallManagerSession>();
         ids = new java.util.HashMap<String, String>();
+        LOGGER.info("SIP CallManager started");
     }
 
     /**
@@ -469,6 +400,7 @@ public final class SipCallManager
         } finally {
             sipServer = null;
         }
+        LOGGER.info("SIP CallManager stopped");
     }
 
     /**

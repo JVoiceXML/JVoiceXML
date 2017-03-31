@@ -129,7 +129,7 @@ public final class Mrcpv2RecognitionResult
      */
     @Override
     public ModeType getMode() {
-        return ModeType.valueOf("VOICE");
+        return ModeType.VOICE;
     }
     /**
      * {@inheritDoc}

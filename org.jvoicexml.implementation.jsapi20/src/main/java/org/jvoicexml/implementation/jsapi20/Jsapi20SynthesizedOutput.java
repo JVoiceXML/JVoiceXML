@@ -668,12 +668,13 @@ public final class Jsapi20SynthesizedOutput
         }
         listeners.clear();
         synthesizer.pause();
-        try {
-            synthesizer.waitEngineState(Engine.PAUSED);
-        } catch (IllegalArgumentException | IllegalStateException
-                | InterruptedException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
+        // TODO fix the pause in the JSAPI20 implementation
+//        try {
+//            synthesizer.waitEngineState(Engine.PAUSED);
+//        } catch (IllegalArgumentException | IllegalStateException
+//                | InterruptedException e) {
+//            throw new NoresourceError(e.getMessage(), e);
+//        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
         }

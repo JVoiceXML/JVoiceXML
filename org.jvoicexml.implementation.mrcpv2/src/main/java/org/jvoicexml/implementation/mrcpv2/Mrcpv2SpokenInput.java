@@ -22,9 +22,7 @@
 package org.jvoicexml.implementation.mrcpv2;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URI;
-import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -36,10 +34,12 @@ import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.implementation.InputStartedEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
@@ -81,16 +81,6 @@ public final class Mrcpv2SpokenInput
     private static final Logger LOGGER = LogManager
             .getLogger(Mrcpv2SpokenInput.class);
 
-    /** The port that will receive the stream from mrcp server. **/
-    private int rtpReceiverPort;
-
-    // TODO Workaround for JMF. Even though only sending audio,
-    // JMF rtp setup needs a local rtp port too.
-    // Really should not be needed.
-
-    /** The local host address. */
-    private String hostAddress;
-
     /** Listener for user input events. */
     private final Collection<SpokenInputListener> listeners;
 
@@ -105,6 +95,7 @@ public final class Mrcpv2SpokenInput
 
     // TODO Handle multiple grammars, now just the first one activated is
     // active.
+    /** Current active grammars. */
     private final Collection<GrammarImplementation<?>> activeGrammars;
 
     /** The session manager. */
@@ -145,16 +136,6 @@ public final class Mrcpv2SpokenInput
      */
     @Override
     public void open() throws NoresourceError {
-        LOGGER.info("Opening mrcpv2 spoken input.");
-        // get the local host address (used for rtp audio stream)
-        // TODO Maybe the receiver (call control) could be remote -- then this
-        // wont work.
-        try {
-            InetAddress addr = InetAddress.getLocalHost();
-            hostAddress = addr.getHostAddress();
-        } catch (UnknownHostException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
     }
 
     /**
@@ -162,7 +143,6 @@ public final class Mrcpv2SpokenInput
      */
     @Override
     public void close() {
-        LOGGER.info("Closing mrcpv2 spoken input.");
     }
 
     /**
@@ -190,7 +170,8 @@ public final class Mrcpv2SpokenInput
      */
     @Override
     public Collection<BargeInType> getSupportedBargeInTypes() {
-        final Collection<BargeInType> types = new java.util.ArrayList<BargeInType>();
+        final Collection<BargeInType> types =
+                new java.util.ArrayList<BargeInType>();
 
         types.add(BargeInType.SPEECH);
         types.add(BargeInType.HOTWORD);
@@ -255,9 +236,6 @@ public final class Mrcpv2SpokenInput
             final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf)
             throws NoresourceError, BadFetchError {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("starting recognition...");
-        }
         if (activeGrammars.size() == 0) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.warn("No active grammars");
@@ -328,6 +306,7 @@ public final class Mrcpv2SpokenInput
 
         final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
         fireInputEvent(event);
+        LOGGER.debug("recognition started");
     }
 
     /**
@@ -335,9 +314,6 @@ public final class Mrcpv2SpokenInput
      */
     @Override
     public void stopRecognition() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("stoping recognition...");
-        }
         try {
             speechClient.stopActiveRecognitionRequests();
         } catch (MrcpInvocationException e) {
@@ -353,6 +329,7 @@ public final class Mrcpv2SpokenInput
             LOGGER.warn("No Media Control Channel Exception while stopping "
                     + "recognition." + e.getLocalizedMessage());
         }
+        LOGGER.debug("recognition stopped");
     }
 
     /**
@@ -453,10 +430,29 @@ public final class Mrcpv2SpokenInput
      */
     void fireInputEvent(final SpokenInputEvent event) {
         synchronized (listeners) {
-            final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
+            final Collection<SpokenInputListener> copy =
+                    new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listeners);
             for (SpokenInputListener current : copy) {
                 current.inputStatusChanged(event);
+            }
+        }
+    }
+
+    /**
+     * Notifies all registered listeners about the given error.
+     * 
+     * @param error
+     *            the error vent.
+     * @since 0.7.8
+     */
+    void fireErrorEvent(final ErrorEvent error) {
+        synchronized (listeners) {
+            final Collection<SpokenInputListener> copy =
+                    new java.util.ArrayList<SpokenInputListener>();
+            copy.addAll(listeners);
+            for (SpokenInputListener current : copy) {
+                current.inputError(error);
             }
         }
     }
@@ -474,15 +470,13 @@ public final class Mrcpv2SpokenInput
         if (event == SpeechEventType.START_OF_INPUT) {
             try {
                 speechClient.sendBargeinRequest();
-            } catch (MrcpInvocationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            } catch (MrcpInvocationException | IOException 
+                    | InterruptedException e) {
+                LOGGER.warn(e.getMessage(), e);
+                final ErrorEvent error =
+                        new ExceptionWrapper(e.getMessage(), e);
+                fireErrorEvent(error);
+                return;
             }
 
             final SpokenInputEvent spokenInputEvent = new InputStartedEvent(
@@ -490,11 +484,9 @@ public final class Mrcpv2SpokenInput
             fireInputEvent(spokenInputEvent);
 
         } else if (event == SpeechEventType.RECOGNITION_COMPLETE) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Recognition results are: " + result.getText());
-            }
-            final org.jvoicexml.RecognitionResult recognitionResult = new Mrcpv2RecognitionResult(
-                    result);
+            LOGGER.info("Recognition results are: " + result.getText());
+            final org.jvoicexml.RecognitionResult recognitionResult =
+                    new Mrcpv2RecognitionResult(result);
 
             final SpokenInputEvent spokenInputEvent = new RecognitionEvent(this,
                     null, recognitionResult);
@@ -519,23 +511,6 @@ public final class Mrcpv2SpokenInput
     public void speechSynthEventReceived(final SpeechEventType event) {
         LOGGER.warn("Speech Synth event received not implemented in "
                 + "SpokenInput: " + event);
-    }
-
-    /**
-     * @return the rtpReceiverPort
-     */
-    public int getRtpReceiverPort() {
-        return rtpReceiverPort;
-    }
-
-    /**
-     * Sets the RTP receiver port.
-     * 
-     * @param port
-     *            the rtpReceiverPort to set
-     */
-    public void setRtpReceiverPort(final int port) {
-        rtpReceiverPort = port;
     }
 
     /**

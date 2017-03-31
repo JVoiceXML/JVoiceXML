@@ -25,10 +25,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.UnknownHostException;
 import java.util.Collection;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -106,25 +104,18 @@ public final class Mrcpv2SynthesizedOutput
     /** The speech client. */
     private SpeechClient speechClient;
 
-    /** The port that will receive the stream from mrcp server. **/
-    private int rtpReceiverPort;
+    /** Number of queued prompts. */
+    private int queueCount;
 
-    // TODO Perhaps this port should be managed by call manager -- it is the
-    // one that uses it.
-
-    /** the local host address. **/
-    private String hostAddress;
-
-    private int queueCount = 0;
-
-    private final Object lock = new Object();
+    /** Synchronization of speech events from the MRCPv2 server. */
+    private final Object lock;
 
     /**
      * Constructs a object.
      */
     public Mrcpv2SynthesizedOutput() {
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
-
+        lock = new Object();
         // TODO Should there be a queue here on the client side too? There is
         // one on the server.
         // queuedSpeakables = new java.util.ArrayList<SpeakableText>();
@@ -135,14 +126,6 @@ public final class Mrcpv2SynthesizedOutput
      */
     @Override
     public void open() throws NoresourceError {
-        // get the local host address (used to send the audio stream)
-        // TODO Maybe the receiver (call control) could be remote?
-        try {
-            InetAddress addr = InetAddress.getLocalHost();
-            hostAddress = addr.getHostAddress();
-        } catch (UnknownHostException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
     }
 
     /**
@@ -409,6 +392,7 @@ public final class Mrcpv2SynthesizedOutput
      */
     public void passivate() {
         listeners.clear();
+        queueCount = 0;
     }
 
     /**
@@ -452,7 +436,7 @@ public final class Mrcpv2SynthesizedOutput
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                    "Disconnected the  synthesizedoutput mrcpv2 client form the server");
+                    "Disconnected the synthesizedoutput mrcpv2 client form the server");
         }
     }
 
@@ -493,7 +477,6 @@ public final class Mrcpv2SynthesizedOutput
             LOGGER.debug("Speech synth event " + event);
         }
         if (event == SpeechEventType.SPEAK_COMPLETE) {
-
             // TODO get the speakable object from the event?
             // fireOutputStarted(new SpeakablePlainText());
             // TODO Should there be a queue here in the client or over on the
@@ -532,23 +515,6 @@ public final class Mrcpv2SynthesizedOutput
     public void characterEventReceived(final String c,
             final DtmfEventType status) {
         LOGGER.warn("characterEventReceived not implemented");
-    }
-
-    /**
-     * @return the receiverPort
-     */
-    public int getRtpReceiverPort() {
-        return rtpReceiverPort;
-    }
-
-    /**
-     * Sets the RTP receiver port.
-     * 
-     * @param port
-     *            the receiverPort to set
-     */
-    public void setRtpReceiverPort(final int port) {
-        rtpReceiverPort = port;
     }
 
     /**
