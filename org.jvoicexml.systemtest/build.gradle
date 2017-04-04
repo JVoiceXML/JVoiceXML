@@ -2,10 +2,17 @@ apply plugin: 'java'
 apply plugin: 'application'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
+configurations {
+    jvxmlConfiguration
+}
+
 dependencies {
+    jvxmlConfiguration fileTree(dir: "src/main/config")
+
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
 
     compile project(':org.jvoicexml')
@@ -24,6 +31,6 @@ jar {
     baseName 'org.jvoicexml.systemtest'
 }
 
-mainClassName = "org.jvoicexml.demo.textdemo.TextDemo"
-applicationDefaultJvmArgs = ["-Djava.security.policy=${projectDir}/src/main/resources/jvoicexml.policy" ]
+mainClassName = "org.jvoicexml.systemtest.SystemTestMain"
+applicationDefaultJvmArgs = ["-Djava.security.policy=${projectDir}/src/main/config/jvoicexml.policy" ]
 

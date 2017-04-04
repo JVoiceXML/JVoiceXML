@@ -194,6 +194,16 @@ run {
 }
 
 task(runDebug, dependsOn: 'jar', type: JavaExec) {
+    dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
+
+    dependsOn configurations.jvxmlImplementationJSAPI20
+    dependsOn configurations.jvxmlImplementationMary
+    dependsOn configurations.jvxmlImplementationMrcpv2   
+    dependsOn configurations.jvxmlImplementationText
+    dependsOn configurations.jvxmlInterpreterGrammarLUIS
+    
+    dependsOn configurations.jvxmlJNDI
+
     main = "org.jvoicexml.startup.Startup"
     classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",

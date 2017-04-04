@@ -663,9 +663,9 @@ public final class Jsapi20SynthesizedOutput
     @Override
     public void passivate() throws NoresourceError {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(
-                    "passivating output " + queuedSpeakables.size() + "...");
+            LOGGER.debug("passivating output...");
         }
+        queuedSpeakables.clear();
         listeners.clear();
         synthesizer.pause();
         // TODO fix the pause in the JSAPI20 implementation

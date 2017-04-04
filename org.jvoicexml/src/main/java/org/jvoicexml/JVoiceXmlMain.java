@@ -61,8 +61,8 @@ import org.jvoicexml.profile.Profile;
  */
 public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            LogManager.getLogger(JVoiceXmlMain.class);
+    private static final Logger LOGGER = LogManager
+            .getLogger(JVoiceXmlMain.class);
 
     /** Semaphore to handle the shutdown notification. */
     private final Object shutdownSemaphore;
@@ -192,8 +192,8 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         final String profileName = info.getProfile();
         final Profile profile = profiles.get(profileName);
         if (profile == null) {
-            throw new BadFetchError("Unable to find a profile named '"
-                    + profileName + "'");
+            throw new BadFetchError(
+                    "Unable to find a profile named '" + profileName + "'");
         }
         final ImplementationPlatform platform = implementationPlatformFactory
                 .getImplementationPlatform(info);
@@ -313,13 +313,9 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         // Initialize the configuration object.
         final Configuration config = getConfiguration();
         if (config == null) {
-            LOGGER.fatal("no configuration found. exiting...");
-            final Exception exception =
-                    new IllegalArgumentException("no configuration available");
-            fireJVoiceXmlStartupError(exception);
-            synchronized (shutdownSemaphore) {
-                shutdownSemaphore.notifyAll();
-            }
+            final Exception exception = new IllegalArgumentException(
+                    "no configuration available");
+            abortStartup(exception);
             return;
         }
         LOGGER.info("using configuration '"
@@ -332,28 +328,32 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         try {
             // Load configuration
             documentServer = config.loadObject(DocumentServer.class);
+            if (documentServer == null) {
+                final Exception exception = new ConfigurationException(
+                        "no document server available");
+                abortStartup(exception);
+            }
             documentServer.start();
             implementationPlatformFactory = configuration
                     .loadObject(ImplementationPlatformFactory.class);
+            if (implementationPlatformFactory == null) {
+                final Exception exception = new ConfigurationException(
+                        "no implementation factory available");
+                abortStartup(exception);
+            }
             implementationPlatformFactory.init(config);
             grammarProcessor = config.loadObject(GrammarProcessor.class);
+            if (grammarProcessor == null) {
+                final Exception exception = new ConfigurationException(
+                        "no grammar processor available");
+                abortStartup(exception);
+            }
             grammarProcessor.init(config);
             initCallManager(config);
             initProfiles(config);
             initJndi(config);
-        } catch (Exception e) {
-            LOGGER.fatal(e.getMessage(), e);
-            synchronized (shutdownSemaphore) {
-                shutdownSemaphore.notifyAll();
-            }
-            fireJVoiceXmlStartupError(e);
-            return;
-        } catch (NoresourceError e) {
-            LOGGER.fatal(e.getMessage(), e);
-            synchronized (shutdownSemaphore) {
-                shutdownSemaphore.notifyAll();
-            }
-            fireJVoiceXmlStartupError(e);
+        } catch (Exception | NoresourceError e) {
+            abortStartup(e);
             return;
         }
 
@@ -362,6 +362,21 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         LOGGER.info("interpreter state " + state);
         LOGGER.info("VoiceXML interpreter " + getVersion() + " started.");
         fireJVoiceXmlStarted();
+    }
+
+    /**
+     * Aborts a startup of JVoiceXML, e.g., because of configuration errors.
+     * 
+     * @param exception
+     *            the exception causing all that trouble
+     * @since 0.7.8
+     */
+    private void abortStartup(final Throwable exception) {
+        LOGGER.fatal(exception.getMessage(), exception);
+        fireJVoiceXmlStartupError(exception);
+        synchronized (shutdownSemaphore) {
+            shutdownSemaphore.notifyAll();
+        }
     }
 
     /**
@@ -374,10 +389,10 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
      * @exception ConfigurationException
      *                error loading the configuration
      */
-    private void initJndi(final Configuration config) throws IOException,
-            ConfigurationException {
-        final Collection<JndiSupport> jndis = config.loadObjects(
-                JndiSupport.class, "jndi");
+    private void initJndi(final Configuration config)
+            throws IOException, ConfigurationException {
+        final Collection<JndiSupport> jndis = config
+                .loadObjects(JndiSupport.class, "jndi");
         if (jndis == null) {
             return;
         }
@@ -428,8 +443,8 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
      */
     private void initProfiles(final Configuration config)
             throws NoresourceError, IOException, ConfigurationException {
-        final Collection<Profile> loadedProfiles = config.loadObjects(
-                Profile.class, "profile");
+        final Collection<Profile> loadedProfiles = config
+                .loadObjects(Profile.class, "profile");
         if (loadedProfiles != null) {
             for (Profile profile : loadedProfiles) {
                 final String name = profile.getName();

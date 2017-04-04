@@ -132,9 +132,11 @@ public final class TestJsapi20SynthesizedOutput {
      * Test tear down.
      * @exception Exception
      *            tear down failed
+     * @throws JVoiceXMLEvent
+     *         Test failed.
      */
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() throws Exception, JVoiceXMLEvent {
         output.passivate();
         output.close();
     }
