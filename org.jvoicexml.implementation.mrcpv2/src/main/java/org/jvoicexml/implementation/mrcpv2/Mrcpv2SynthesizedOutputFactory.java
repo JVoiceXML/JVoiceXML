@@ -63,13 +63,9 @@ public final class Mrcpv2SynthesizedOutputFactory
      * {@inheritDoc}
      */
     public SynthesizedOutput createResource() throws NoresourceError {
-
         final Mrcpv2SynthesizedOutput output = new Mrcpv2SynthesizedOutput();
-
         output.setType(type);
-        output.setRtpReceiverPort(basePort + (currentInstance++) * 2);
         output.setSessionManager(sessionManager);
-
         return output;
     }
 

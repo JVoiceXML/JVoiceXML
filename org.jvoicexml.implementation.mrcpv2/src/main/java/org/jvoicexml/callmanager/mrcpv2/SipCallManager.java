@@ -257,10 +257,28 @@ public final class SipCallManager
                 ids.put(jsession.getSessionID(), id);
             }
 
+            // Get the random code
+            final String randomCode;
+            if (callingNumber.startsWith("sip:")) {
+                String[] parts = callingNumber.split(":");
+                String[] parts2 = parts[1].split("@");
+                String number = parts2[0];
+                if (number.length() > 8) {
+                    randomCode = number.substring(8);
+                } else {
+                    randomCode = "";
+                    LOGGER.warn("No randomCode used.");
+                }
+            } else {
+                randomCode = "";
+                LOGGER.warn("No randomCode used.");
+            }
+
             // Write real-time information for Halef system
             // remote party display name (set to Asterisk SIP callId)
             // JVoiceXML sessionID
             // JVoiceXML SIP callId
+            // randomCode use by client
             final String remoteDisplayName = remoteParty.getDisplayName();
             final String asteriskCallID;
             if ((remoteDisplayName == null)
@@ -284,14 +302,16 @@ public final class SipCallManager
                     jCallID, jsession.getSessionID());
             final String q = String.format(
                     "INSERT INTO realtime_jvxml_linklogs"
-                            + " (asteriskCallId, jvxmlCallId, jsessionId, cairoCallId)"
-                            + " VALUES(\"%s\", \"%s\", \"%s\", \"%s\")",
-                    asteriskCallID, jCallID, jsession.getSessionID(), cCallID);
+                            + " (asteriskCallId, jvxmlCallId, jsessionId, cairoCallId, randomCode)"
+                            + " VALUES(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
+                    asteriskCallID, jCallID, jsession.getSessionID(), cCallID,
+                    randomCode);
             HalefDbWriter.execute(q);
 
             // Append the sessionId to the application uri
             final String applicationUri = applications.get(calledNumber)
-                    + "?sessionId=" + jsession.getSessionID();
+                    + "?sessionId=" + jsession.getSessionID() + "&randomCode="
+                    + randomCode;
 
             // use the number for looking up the application
             LOGGER.info("called number: '" + calledNumber + "'");
@@ -373,7 +393,7 @@ public final class SipCallManager
     @Override
     public void dtmf(final SipSession session, final char dtmf) {
     }
-    
+
     /**
      * {@inheritDoc}
      */
