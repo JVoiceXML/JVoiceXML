@@ -313,7 +313,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         // Initialize the configuration object.
         final Configuration config = getConfiguration();
         if (config == null) {
-            final Exception exception = new IllegalArgumentException(
+            final Exception exception = new ConfigurationException(
                     "no configuration available");
             abortStartup(exception);
             return;

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -82,7 +77,8 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     private String tempIgnores;
 
     /**
-     * @param ignores string.
+     * @param ignores
+     *            string.
      */
     public final void setIgnores(final String ignores) {
         tempIgnores = ignores;
@@ -91,37 +87,34 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
 
     /**
      * ignore list file path.
-     * @param ignoresFile path
+     * 
+     * @param ignoresFile
+     *            path
      */
     public final void setIgnoreList(final String ignoresFile) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("ignoresFile = " + ignoresFile);
         }
-        try {
-            final URI uri = guessURI(ignoresFile);
-            IgnoresRootElement rootElment = loadObject(
-                    IgnoresRootElement.class, uri.toURL().openStream());
-            ignoreList.addAll(rootElment.ignoreList);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("total " + ignoreList.size() + " ignores loaded.");
-            }
-        } catch (URISyntaxException e) {
-            LOGGER.error("unknown uri format, check config file.", e);
-        } catch (IOException e) {
-            LOGGER.error("can not load ignore list with " + ignoresFile + ".",
-                    e);
+        final InputStream in = IgnoresRootElement.class
+                .getResourceAsStream(ignoresFile);
+        IgnoresRootElement rootElment = loadObject(IgnoresRootElement.class,
+                in);
+        ignoreList.addAll(rootElment.ignoreList);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("total " + ignoreList.size() + " ignores loaded.");
         }
         ignoresUpdated = false;
     }
 
     /**
      * guess URI by string.
-     * @param location of resource
+     * 
+     * @param location
+     *            of resource
      * @return URI
      * @throws URISyntaxException
      */
-    private URI guessURI(final String location)
-            throws URISyntaxException {
+    private URI guessURI(final String location) throws URISyntaxException {
         URI uri = new URI(location);
         if (uri.getScheme() == null) {
             // default is file
@@ -133,27 +126,28 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
 
     /**
      * set manifest URI.
-     * @param manifest URI
+     * 
+     * @param manifest
+     *            URI
      */
     public final void setTestManifest(final String manifest) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading manifest '" + manifest + "'");
         }
-        
+
         try {
-            final URI uri = guessURI(manifest);
-            final URL url = uri.toURL();
+            final URL url = new URL(manifest);
             final InputStream in = url.openStream();
-            final TestsRootElement rootElement =
-                loadObject(TestsRootElement.class, in);
+            final TestsRootElement rootElement = loadObject(
+                    TestsRootElement.class, in);
             if (rootElement != null) {
                 testCaseList.addAll(rootElement.testCaseList);
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("total " + testCaseList.size()
                             + " testcase loaded.");
                 }
-    
-                final URI testRoot = uri.resolve("vxml-srgs/");
+
+                final URI testRoot = url.toURI().resolve("vxml-srgs/");
                 for (IRTestCase tc : testCaseList) {
                     tc.setBaseURI(testRoot);
                 }
@@ -161,8 +155,8 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
         } catch (URISyntaxException e) {
             LOGGER.error("unknown uri format, check config file.", e);
         } catch (IOException e) {
-            LOGGER.error("can not load test case library with " + manifest
-                    + ".", e);
+            LOGGER.error(
+                    "can not load test case library with " + manifest + ".", e);
         }
         ignoresUpdated = false;
     }
@@ -170,10 +164,13 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     /**
      * Load XML from InputStream.
      *
-     * @param clazz Object class.
-     * @param source configuration stream
+     * @param clazz
+     *            Object class.
+     * @param source
+     *            configuration stream
      * @return object of load
-     * @param <T> type of the object to load
+     * @param <T>
+     *            type of the object to load
      */
     private <T extends Object> T loadObject(final Class<T> clazz,
             final InputStream source) {
@@ -230,9 +227,9 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("tc.getId()  = " + tc.getId()
                                 + " ignore.id" + ignore.id);
-                    
+
                         LOGGER.debug("tc.getIgnoreReason()  = "
-                            + tc.getIgnoreReason());
+                                + tc.getIgnoreReason());
                     }
                 }
             }
@@ -298,9 +295,7 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
                 continue;
             }
 
-            LOGGER.info("unknown testcases '"
-                    + testcases + "' at '" + s + "'");
-
+            LOGGER.info("unknown testcases '" + testcases + "' at '" + s + "'");
 
         }
         return fetched;
@@ -342,7 +337,8 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     /**
      * fetch test case by id.
      *
-     * @param id of test case.
+     * @param id
+     *            of test case.
      * @return null if not such id test case
      */
     public final IRTestCase fetch(final int id) {
@@ -357,7 +353,6 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
         }
         return null;
     }
-
 
     /**
      * for XML file load only.

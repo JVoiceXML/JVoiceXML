@@ -379,9 +379,9 @@ public final class SipCallManager
      */
     @Override
     public void start() throws NoresourceError, IOException {
+        LOGGER.info("startup mrcp sip callManager");
         sessions = new java.util.HashMap<String, SipCallManagerSession>();
         ids = new java.util.HashMap<String, String>();
-        LOGGER.info("SIP CallManager started");
     }
 
     /**
@@ -400,7 +400,6 @@ public final class SipCallManager
         } finally {
             sipServer = null;
         }
-        LOGGER.info("SIP CallManager stopped");
     }
 
     /**

@@ -34,9 +34,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
-import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 
 /**
@@ -45,7 +43,7 @@ import org.apache.log4j.spi.LoggingEvent;
  * @version $Revision$
  * @since 0.7.6
  */
-public final class SystemTestAppender extends AppenderSkeleton {
+public final class SystemTestAppender {//extends AppenderSkeleton {
     /** Collected messages. */
     private final List<LoggingEvent> events =
         new java.util.ArrayList<LoggingEvent>();
@@ -53,14 +51,14 @@ public final class SystemTestAppender extends AppenderSkeleton {
     /**
      * {@inheritDoc}
      */
-    @Override
+//    @Override
     public void close() {
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
+//    @Override
     public boolean requiresLayout() {
         return false;
     }
@@ -68,7 +66,7 @@ public final class SystemTestAppender extends AppenderSkeleton {
     /**
      * {@inheritDoc}
      */
-    @Override
+//    @Override
     protected void append(final LoggingEvent event) {
         synchronized (events) {
             events.add(event);
@@ -90,10 +88,10 @@ public final class SystemTestAppender extends AppenderSkeleton {
     public boolean hasErrorLevelEvent() {
         synchronized (events) {
             for (LoggingEvent event : events) {
-                final Level level = event.getLevel();
-                if (level.isGreaterOrEqual(Level.ERROR)) {
-                    return true;
-                }
+//                final Level level = event.getLevel();
+//                if (level.isGreaterOrEqual(Level.ERROR)) {
+//                    return true;
+//                }
             }
         }
         return false;
@@ -105,14 +103,14 @@ public final class SystemTestAppender extends AppenderSkeleton {
             for (LoggingEvent event : events) {
                 final String message = layout.format(event);
                 content.append(message);
-                final String[] throwable = event.getThrowableStrRep();
-                final String lf = System.getProperty("line.separator");
-                if (throwable != null) {
-                    for (String str : throwable) {
-                        content.append(str);
-                        content.append(lf);
-                    }
-                }
+//                final String[] throwable = event.getThrowableStrRep();
+//                final String lf = System.getProperty("line.separator");
+//                if (throwable != null) {
+//                    for (String str : throwable) {
+//                        content.append(str);
+//                        content.append(lf);
+//                    }
+//                }
             }
         }
         return content.toString();
@@ -133,14 +131,14 @@ public final class SystemTestAppender extends AppenderSkeleton {
                 for (LoggingEvent event : events) {
                     final String message = layout.format(event);
                     writer.write(message);
-                    final String[] throwable = event.getThrowableStrRep();
-                    final String lf = System.getProperty("line.separator");
-                    if (throwable != null) {
-                        for (String str : throwable) {
-                            writer.write(str);
-                            writer.write(lf);
-                        }
-                    }
+//                    final String[] throwable = event.getThrowableStrRep();
+//                    final String lf = System.getProperty("line.separator");
+//                    if (throwable != null) {
+//                        for (String str : throwable) {
+//                            writer.write(str);
+//                            writer.write(lf);
+//                        }
+//                    }
                 }
             }
         } finally {

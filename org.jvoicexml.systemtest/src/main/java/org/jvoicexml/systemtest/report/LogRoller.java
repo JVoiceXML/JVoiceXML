@@ -28,7 +28,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.varia.ExternallyRolledFileAppender;
 
 /**
  * Log4j ExternallyRolledFileAppender roller.
@@ -125,15 +124,15 @@ public class LogRoller {
             final DataOutputStream dos = new DataOutputStream(out);
             final InputStream in = socket.getInputStream();
             final DataInputStream dis = new DataInputStream(in);
-            dos.writeUTF(ExternallyRolledFileAppender.ROLL_OVER);
-            String rc = dis.readUTF();
-            if (ExternallyRolledFileAppender.OK.equals(rc)) {
-                LOGGER.info("Roll over signal acknowledged "
-                        + "by remote appender.");
-            } else {
-                LOGGER.warn("Unexpected return code " + rc
-                        + " from remote entity.");
-            }
+//            dos.writeUTF(ExternallyRolledFileAppender.ROLL_OVER);
+//            String rc = dis.readUTF();
+//            if (ExternallyRolledFileAppender.OK.equals(rc)) {
+//                LOGGER.info("Roll over signal acknowledged "
+//                        + "by remote appender.");
+//            } else {
+//                LOGGER.warn("Unexpected return code " + rc
+//                        + " from remote entity.");
+//            }
             socket.close();
         } catch (UnknownHostException e) {
             LOGGER.info("UnknownHostException", e);

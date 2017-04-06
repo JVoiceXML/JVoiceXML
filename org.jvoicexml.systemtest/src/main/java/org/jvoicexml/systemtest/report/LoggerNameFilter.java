@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -34,7 +29,6 @@ import org.apache.log4j.spi.LoggingEvent;
 /**
  * A filter to filter events by their name.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public final class LoggerNameFilter extends Filter {
@@ -54,10 +48,10 @@ public final class LoggerNameFilter extends Filter {
      */
     @Override
     public int decide(final LoggingEvent event) {
-        final String loggerName = event.getLoggerName();
-        if (loggerName == null || loggerName.startsWith(name)) {
-            return Filter.DENY;
-        }
+//        final String loggerName = event.getLoggerName();
+//        if (loggerName == null || loggerName.startsWith(name)) {
+//            return Filter.DENY;
+//        }
         return Filter.ACCEPT;
     }
 

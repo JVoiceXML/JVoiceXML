@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -21,25 +21,26 @@ package org.jvoicexml.systemtest;
 
 import java.net.URL;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.JVoiceXmlMain;
 import org.jvoicexml.JVoiceXmlMainListener;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Main class of the JVoiceXML System test.
  *
  * @author Zhang Nan
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public final class SystemTestMain implements JVoiceXmlMainListener {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(SystemTestMain.class);
+    private static final Logger LOGGER = LogManager
+            .getLogger(SystemTestMain.class);
 
     /** JVoiceXML shutdown monitor. */
     private final Object monitor;
@@ -54,17 +55,18 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
     /**
      * The main method.
      *
-     * @param args Command line arguments. None expected.
+     * @param args
+     *            Command line arguments. None expected.
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting SystemTest for JVoiceXML...");
 
         final String filename = System.getProperty("systemtestconfig.config",
                 "/systemtestconfig.xml");
-        final SystemTestConfigLoader config =
-            new SystemTestConfigLoader(filename);
-        final SystemTestCallManager cm = config.loadObject(
-                SystemTestCallManager.class, "callmanager");
+        final SystemTestConfigLoader config = new SystemTestConfigLoader(
+                filename);
+        final SystemTestCallManager cm = config
+                .loadObject(SystemTestCallManager.class, "callmanager");
         if (cm == null) {
             LOGGER.fatal("error loading the call manager");
             System.exit(-1);
@@ -84,12 +86,12 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
 
     /**
      * Starts JVoiceXML.
+     * 
      * @return reference to the JVoiceXML interpreter
      * @throws InterruptedException
-     *         error waiting until JVoiceXML started
+     *             error waiting until JVoiceXML started
      */
     private JVoiceXml startInterpreter() throws InterruptedException {
-        System.setProperty("jvoicexml.config", "../org.jvoicexml/config");
         final JVoiceXmlConfiguration config = new JVoiceXmlConfiguration();
         final JVoiceXmlMain jvxml = new JVoiceXmlMain(config);
         jvxml.addListener(this);
@@ -104,8 +106,9 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
 
     /**
      * Waits until the interpreter shutdown.
+     * 
      * @throws InterruptedException
-     *         waiting interrupted
+     *             waiting interrupted
      */
     private void waitInterpreterShutdown() throws InterruptedException {
         synchronized (monitor) {
@@ -120,34 +123,36 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
      */
     private static final class SystemTestConfigLoader {
         /** Logger for this class. */
-        private static final Logger LOGGER =
-            Logger.getLogger(SystemTestConfigLoader.class);
+        private static final Logger LOGGER = LogManager
+                .getLogger(SystemTestConfigLoader.class);
 
         /** The factory to retrieve configured objects. */
         private final ApplicationContext context;
 
         /**
          * Construct a new object.
-         * @param filename configuration file name.
+         * 
+         * @param filename
+         *            configuration file name.
          */
-        public SystemTestConfigLoader(final String filename) {
-            final URL resource =
-                    SystemTestConfigLoader.class.getResource(filename);
-            context = new FileSystemXmlApplicationContext(
-                    resource.toExternalForm());
+        SystemTestConfigLoader(final String filename) {
+            final URL resource = SystemTestConfigLoader.class
+                    .getResource(filename);
+            context = new ClassPathXmlApplicationContext(
+                    filename);
         }
 
         /**
          * Loads the object which the class defined by the given key.
          *
          * @param <T>
-         *        Type of the object to load.
+         *            Type of the object to load.
          * @param baseClass
-         *        Base class of the return type.
+         *            Base class of the return type.
          * @param key
-         *        Key of the object to load.
-         * @return Instance of the class, <code>null</code> if the
-         *         object could not be loaded.
+         *            Key of the object to load.
+         * @return Instance of the class, <code>null</code> if the object could
+         *         not be loaded.
          */
         public <T extends Object> T loadObject(final Class<T> baseClass,
                 final String key) {

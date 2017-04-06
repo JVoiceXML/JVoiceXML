@@ -27,7 +27,6 @@ import java.io.OutputStream;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 import org.apache.log4j.spi.LoggingEvent;
 import org.jvoicexml.systemtest.Result;
 import org.jvoicexml.systemtest.TestCase;
@@ -86,17 +85,17 @@ public final class TestRecorder implements TestCaseListener {
         remoteAppender = new SystemTestAppender();
         final LoggerNameFilter filter = new LoggerNameFilter();
         filter.setName("org.jvoicexml.systemtest");
-        remoteAppender.addFilter(filter);
-        final Logger jvxmlLogger = Logger.getLogger("org.jvoicexml");
-        jvxmlLogger.addAppender(remoteAppender);
+//        remoteAppender.addFilter(filter);
+//        final Logger jvxmlLogger = Logger.getLogger("org.jvoicexml");
+//        jvxmlLogger.addAppender(remoteAppender);
         localAppender = new SystemTestAppender();
-        final Logger systemtestLogger =
-                Logger.getLogger("org.jvoicexml.systemtest");
-        systemtestLogger.addAppender(localAppender);
+//        final Logger systemtestLogger =
+//                Logger.getLogger("org.jvoicexml.systemtest");
+//        systemtestLogger.addAppender(localAppender);
         resourceAppender = new SystemTestAppender();
-        final Logger resourceLogger =
-                Logger.getLogger("org.jvoicexml.implementation.pool");
-        resourceLogger.addAppender(resourceAppender);
+//        final Logger resourceLogger =
+//                Logger.getLogger("org.jvoicexml.implementation.pool");
+//        resourceLogger.addAppender(resourceAppender);
     }
 
     /**
@@ -118,26 +117,26 @@ public final class TestRecorder implements TestCaseListener {
         String prefix = "" + currentTestCase.getId() + ".";
 
         if (result.getAssert() != TestResult.SKIP) {
-            final PatternLayout layout = new PatternLayout();
-            layout.setConversionPattern(
-                    "%6r [%-20.20t] %-5p %30.30c (%6L) %x %m%n");
-            final File remoteFile = new File(reportDir, prefix + "remote.log");
-            final File localFile = new File(reportDir, prefix + "local.log");
-            final File resourceFile = new File(reportDir,
-                    prefix + "resource.log");
-            try {
-                remoteAppender.writeToFile(layout, remoteFile);
-                item.remoteLogURI = "file:" + remoteFile.getName();
-                boolean hasError = remoteAppender.hasErrorLevelEvent();
-                item.hasErrorLevelLog = Boolean.toString(hasError);
-                localAppender.writeToFile(layout, localFile);
-                item.localLogURI = "file:" + localFile.getName();
-                resourceAppender.writeToFile(layout, resourceFile);
-                item.resourceLog = filterReturn(resourceAppender);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-                return;
-            }
+//            final PatternLayout layout = new PatternLayout();
+//            layout.setConversionPattern(
+//                    "%6r [%-20.20t] %-5p %30.30c (%6L) %x %m%n");
+//            final File remoteFile = new File(reportDir, prefix + "remote.log");
+//            final File localFile = new File(reportDir, prefix + "local.log");
+//            final File resourceFile = new File(reportDir,
+//                    prefix + "resource.log");
+//            try {
+//                remoteAppender.writeToFile(layout, remoteFile);
+//                item.remoteLogURI = "file:" + remoteFile.getName();
+//                boolean hasError = remoteAppender.hasErrorLevelEvent();
+//                item.hasErrorLevelLog = Boolean.toString(hasError);
+//                localAppender.writeToFile(layout, localFile);
+//                item.localLogURI = "file:" + localFile.getName();
+//                resourceAppender.writeToFile(layout, resourceFile);
+//                item.resourceLog = filterReturn(resourceAppender);
+//            } catch (IOException e) {
+//                LOGGER.error(e.getMessage(), e);
+//                return;
+//            }
         }
 
         reportDoc.add(item);
@@ -166,17 +165,17 @@ public final class TestRecorder implements TestCaseListener {
         final StringBuilder str = new StringBuilder();
         final String lf = System.getProperty("line.separator");
         for (LoggingEvent event : events) {
-            String message = (String) event.getMessage();
-            int end = message.indexOf(" after return");
-            if (end < 0) {
-                continue;
-            }
-            message = message.substring("pool has now ".length(),
-                    end);
-            message = message.replaceAll(
-                    "for key 'text' .org.jvoicexml.implementation.text.", "(");
-            str.append(message);
-            str.append(lf);
+//            String message = (String) event.getMessage();
+//            int end = message.indexOf(" after return");
+//            if (end < 0) {
+//                continue;
+//            }
+//            message = message.substring("pool has now ".length(),
+//                    end);
+//            message = message.replaceAll(
+//                    "for key 'text' .org.jvoicexml.implementation.text.", "(");
+//            str.append(message);
+//            str.append(lf);
         }
         return str.toString();
     }

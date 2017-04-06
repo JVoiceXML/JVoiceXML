@@ -107,7 +107,7 @@ public final class Mrcpv2SynthesizedOutput
     /** Number of queued prompts. */
     private int queueCount;
 
-    /** Synchronization of speech events from the MRCPv2 server. */
+    /** Synchronisation of speech events from the MRCPv2 server. */
     private final Object lock;
 
     /**
