@@ -82,26 +82,8 @@ public final class SipCallManager
     /** The local SIP server. */
     private SipServer sipServer;
 
-    /** The URL of the cloud. */
-    private String cloudUrl;
-
     /** Reference to JVoiceXML. */
     private JVoiceXml jvxml;
-
-    /**
-     * @return the cloudUrl
-     */
-    public String getCloudUrl() {
-        return cloudUrl;
-    }
-
-    /**
-     * @param url
-     *            the cloudUrl to set
-     */
-    public void setCloudUrl(final String url) {
-        cloudUrl = url;
-    }
 
     /**
      * Sets the SIP server.
@@ -153,8 +135,7 @@ public final class SipCallManager
         session.getJvxmlSession().hangup();
 
         try {
-            // need to check for null mrcp session (in speechcloud case it
-            // will be null)
+            // need to check for null mrcp session
             final SipSession mrcpsession = session.getMrcpSession();
             if (mrcpsession != null) {
                 mrcpsession.bye();
@@ -196,20 +177,8 @@ public final class SipCallManager
         final TelephonyClient telephonyClient = null;
         final Dialog dialog = pbxSession.getSipDialog();
         final Address localParty = dialog.getLocalParty();
-        final String displayName = localParty.getDisplayName();
-        final String calledNumber;
 
-        // separate the scheme and port from the address
-        if ((displayName == null) || displayName.startsWith("sip:")) {
-            final String uri = localParty.getURI().toString();
-            String[] parts = uri.split(":");
-            // get the first part of the address, which is the number that
-            // was called.
-            String[] parts2 = parts[1].split("@");
-            calledNumber = parts2[0];
-        } else {
-            calledNumber = displayName;
-        }
+        final String calledNumber = getCalledNumber(localParty);
 
         // Create a session (so we can get other signals from the caller)
         // and release resources upon call completion
@@ -258,21 +227,7 @@ public final class SipCallManager
             }
 
             // Get the random code
-            final String randomCode;
-            if (callingNumber.startsWith("sip:")) {
-                String[] parts = callingNumber.split(":");
-                String[] parts2 = parts[1].split("@");
-                String number = parts2[0];
-                if (number.length() > 8) {
-                    randomCode = number.substring(8);
-                } else {
-                    randomCode = "";
-                    LOGGER.warn("No randomCode used.");
-                }
-            } else {
-                randomCode = "";
-                LOGGER.warn("No randomCode used.");
-            }
+            final String randomCode = getRandomCode(callingNumber);
 
             // Write real-time information for Halef system
             // remote party display name (set to Asterisk SIP callId)
@@ -337,6 +292,49 @@ public final class SipCallManager
         } catch (ErrorEvent e) {
             LOGGER.error(e.getMessage(), e);
             throw new Exception(e);
+        }
+    }
+
+    /**
+     * Extracts the called number from the local party address
+     * @param localParty the local party address
+     * @return called number
+     * @since 0.7.8
+     */
+    private String getCalledNumber(final Address localParty) {
+        final String displayName = localParty.getDisplayName();
+        if ((displayName == null) || displayName.startsWith("sip:")) {
+            final String uri = localParty.getURI().toString();
+            final String[] parts = uri.split(":");
+            // get the first part of the address, which is the number that
+            // was called.
+            final String[] parts2 = parts[1].split("@");
+            return parts2[0];
+        } else {
+            return displayName;
+        }
+    }
+
+    /**
+     * Tries to obtain a random code from the calling number
+     * @param callingNumber the calling number
+     * @return random code, empty string if there is none.
+     * @since 0.7.8
+     */
+    private String getRandomCode(final String callingNumber) {
+        if (callingNumber.startsWith("sip:")) {
+            String[] parts = callingNumber.split(":");
+            String[] parts2 = parts[1].split("@");
+            String number = parts2[0];
+            if (number.length() > 8) {
+                return number.substring(8);
+            } else {
+                LOGGER.warn("No randomCode used.");
+                return "";
+            }
+        } else {
+            LOGGER.warn("No randomCode used.");
+            return "";
         }
     }
 
