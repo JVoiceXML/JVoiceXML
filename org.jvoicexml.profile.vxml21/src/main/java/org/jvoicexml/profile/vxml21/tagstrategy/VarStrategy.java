@@ -133,13 +133,19 @@ final class VarStrategy extends AbstractTagStrategy {
         }
 
         final DataModel model = context.getDataModel();
-        if (value == null) {
-            model.createVariable(name);
+        if (model.existsVariable(name)) {
+            if (value != null) {
+                model.updateVariable(name, value);
+                LOGGER.info("update var name '" + name + "': '" + value + "'");
+            }
         } else {
-            model.createVariable(name, value);
-        }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("created var name '" + name + "': '" + value + "'");
+            if (value == null) {
+                model.createVariable(name);
+                LOGGER.info("created var name '" + name + "'");
+            } else {
+                model.createVariable(name, value);
+                LOGGER.info("created var name '" + name + "': '" + value + "'");
+            }
         }
     }
 }

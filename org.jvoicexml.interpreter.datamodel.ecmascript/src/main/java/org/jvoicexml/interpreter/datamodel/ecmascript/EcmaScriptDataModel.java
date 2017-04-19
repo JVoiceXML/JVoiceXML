@@ -358,22 +358,8 @@ public class EcmaScriptDataModel implements DataModel {
             name = variableName;
         }
         if (ScriptableObject.hasProperty(subscope, name)) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("'" + variableName + "' already defined");
-            }
-            // We want to recreate the variable even if it is already defined.
-            // Otherwise, something like the following code will produce wrong
-            // output in the second run.
-            // 
-            // E.g.
-            // var lastresult = <lastresult>;
-            // lastresult = lastresult + SOMETHING;
-            // lastresult = lastresult + </lastresult>;
-            //
-            // If we don't recreate the variable we will end up with
-            // <lastresult>SOMETHING</lastresult>SOMETHING</lastresult>
-            //
-            // return ERROR_VARIABLE_ALREADY_DEFINED;
+            LOGGER.warn("'" + variableName + "' already defined");
+            return ERROR_VARIABLE_ALREADY_DEFINED;
         }
         final Object wrappedValue = Context.javaToJS(value, start);
         ScriptableObject.putProperty(subscope, name, wrappedValue);
