@@ -67,9 +67,17 @@ task copyReferencedLibraries(type: Copy) {
     }
 }
 
+task copyJNI(type: Copy) {
+    from("./3rdparty/talkingjava/lib") {
+         include '*.dll'
+    }
+    into "${project(':org.jvoicexml').buildDir}/jni"
+}
+
 jar {
     dependsOn xslt
     dependsOn copyReferencedLibraries
+    dependsOn copyJNI
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML JSAPI 1.0 implementation platform",
@@ -81,4 +89,6 @@ jar {
 
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi10-talking-java-implementation.xml")
+    delete file("${project(':org.jvoicexml').buildDir}/jni/cgjsapi170.dll")
+    delete file("${project(':org.jvoicexml').buildDir}/jni/cgjsapi170_x64.dll")
 }
