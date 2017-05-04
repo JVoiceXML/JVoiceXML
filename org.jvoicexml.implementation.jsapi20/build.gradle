@@ -38,6 +38,8 @@ dependencies {
     compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.freetts', version: '0.6-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sphinx4', version: '0.6-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sapi', version: '0.6-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'cmu_us_kal', version: '1.2.3-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'cmu_time_awb', version: '1.2.3-SNAPSHOT'
     
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'

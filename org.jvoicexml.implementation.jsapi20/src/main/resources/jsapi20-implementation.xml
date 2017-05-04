@@ -12,10 +12,10 @@
     </classpath>
     <classpath>org.jvoicexml.jsapi2.sphinx4-0.6-SNAPSHOT.jar
     </classpath>
-    <classpath>freetts.jar</classpath>
-    <classpath>cmu_us_kal.jar</classpath>
-    <classpath>cmulex.jar</classpath>
-    <classpath>en_us.jar</classpath>
+    <classpath>freetts-1.2.3-SNAPSHOT.jar</classpath>
+    <classpath>cmu_us_kal-1.2.3-SNAPSHOT.jar</classpath>
+    <classpath>cmulex-1.2.3-SNAPSHOT.jar</classpath>
+    <classpath>en_us-1.2.3-SNAPSHOT.jar</classpath>
     <classpath>sphinx4-core-5prealpha-SNAPSHOT.jar
     </classpath>
     <classpath>sphinx4-data-5prealpha-SNAPSHOT.jar
