@@ -93,7 +93,7 @@ final class SessionSkeleton extends UnicastRemoteObject
      */
     public String getSkeletonName() {
         return RemoteSession.class.getSimpleName() + "."
-                + session.getSessionID();
+                + session.getSessionId();
     }
 
     /**
@@ -106,7 +106,7 @@ final class SessionSkeleton extends UnicastRemoteObject
 
         try {
             final Application application = session.call(uri);
-            final String id = session.getSessionID();
+            final String id = session.getSessionId();
             final ApplicationSkeleton skeleton = new ApplicationSkeleton(id,
                     application);
             final ApplicationStub stub = new ApplicationStub(id);
@@ -141,7 +141,7 @@ final class SessionSkeleton extends UnicastRemoteObject
         }
 
         try {
-            final String id = session.getSessionID();
+            final String id = session.getSessionId();
             final DtmfInput input = session.getDtmfInput();
             final Skeleton skeleton = new DtmfInputSkeleton(id, input);
             final DtmfInput characterInput = new DtmfInputStub(id);

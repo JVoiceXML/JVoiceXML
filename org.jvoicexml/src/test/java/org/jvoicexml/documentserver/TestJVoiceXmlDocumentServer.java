@@ -191,9 +191,9 @@ public final class TestJVoiceXmlDocumentServer {
     public void testGetAudioInputStream() throws Exception, JVoiceXMLEvent {
         final File file = new File("unittests/config/test.wav");
         final Session session = Mockito.mock(Session.class);
-        Mockito.when(session.getSessionID()).thenReturn(
+        Mockito.when(session.getSessionId()).thenReturn(
                 UUID.randomUUID().toString());
-        final String sessionId = session.getSessionID();
+        final String sessionId = session.getSessionId();
         final AudioInputStream in = server.getAudioInputStream(sessionId,
                 file.toURI());
         Assert.assertNotNull(in);
@@ -215,9 +215,9 @@ public final class TestJVoiceXmlDocumentServer {
         map.addDocument(uri, document);
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final Session session = Mockito.mock(Session.class);
-        Mockito.when(session.getSessionID()).thenReturn(
+        Mockito.when(session.getSessionId()).thenReturn(
                 UUID.randomUUID().toString());
-        final String sessionId = session.getSessionID();
+        final String sessionId = session.getSessionId();
         final VoiceXmlDocument retrievedDocument = server.getDocument(
                 sessionId, descriptor);
         Assert.assertEquals(document.toString(), retrievedDocument.toString());
@@ -241,9 +241,9 @@ public final class TestJVoiceXmlDocumentServer {
         final DocumentDescriptor descriptor = new DocumentDescriptor(
                 fragmentUri);
         final Session session = Mockito.mock(Session.class);
-        Mockito.when(session.getSessionID()).thenReturn(
+        Mockito.when(session.getSessionId()).thenReturn(
                 UUID.randomUUID().toString());
-        final String sessionId = session.getSessionID();
+        final String sessionId = session.getSessionId();
         final VoiceXmlDocument retrievedDocument = server.getDocument(
                 sessionId, descriptor);
         Assert.assertEquals(document.toString(), retrievedDocument.toString());
@@ -269,9 +269,9 @@ public final class TestJVoiceXmlDocumentServer {
         map.addDocument(uri, document);
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final Session session = Mockito.mock(Session.class);
-        Mockito.when(session.getSessionID()).thenReturn(
+        Mockito.when(session.getSessionId()).thenReturn(
                 UUID.randomUUID().toString());
-        final String sessionId = session.getSessionID();
+        final String sessionId = session.getSessionId();
         final VoiceXmlDocument retrievedDocument = server.getDocument(
                 sessionId, descriptor);
         Assert.assertEquals(document, retrievedDocument);

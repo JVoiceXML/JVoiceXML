@@ -22,6 +22,7 @@ package org.jvoicexml.callmanager.mrcpv2;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import javax.sip.Dialog;
@@ -47,7 +48,6 @@ import org.speechforge.cairo.rtp.server.RTPStreamReplicator;
 import org.speechforge.cairo.sip.SipSession;
 import org.speechforge.zanzibar.sip.SipServer;
 import org.speechforge.zanzibar.speechlet.SpeechletService;
-import org.speechforge.zanzibar.telephony.TelephonyClient;
 
 import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 
@@ -129,7 +129,7 @@ public final class SipCallManager
     private void cleanupSession(final String id) {
         final SipCallManagerSession session = sessions.get(id);
         if (session == null) {
-            LOGGER.error("no session given. unable to cleanup session");
+            LOGGER.warn("no session given. unable to cleanup session");
             return;
         }
         session.getJvxmlSession().hangup();
@@ -157,9 +157,6 @@ public final class SipCallManager
             LOGGER.error(e.getMessage(), e);
         }
 
-        // TODO Clean up after telephony client?
-        // session.getTelephonyClient();
-
         // remove the session from the map
         sessions.remove(id);
     }
@@ -170,44 +167,18 @@ public final class SipCallManager
     @Override
     public void startNewMrcpDialog(final SipSession pbxSession,
             final SipSession mrcpSession) throws Exception {
-        final MrcpChannel ttsChannel = mrcpSession.getTtsChannel();
-        final MrcpChannel asrChannel = mrcpSession.getRecogChannel();
-        final SpeechClient speechClient = new SpeechClientImpl(ttsChannel,
-                asrChannel);
-        final TelephonyClient telephonyClient = null;
-        final Dialog dialog = pbxSession.getSipDialog();
-        final Address localParty = dialog.getLocalParty();
-
-        final String calledNumber = getCalledNumber(localParty);
-
         // Create a session (so we can get other signals from the caller)
         // and release resources upon call completion
         final String id = pbxSession.getId();
+        final SpeechClient speechClient = createSpeechClient(mrcpSession);
         final SipCallManagerSession session = new SipCallManagerSession(id,
-                pbxSession, mrcpSession, speechClient, telephonyClient);
+                pbxSession, mrcpSession, speechClient, null);
         try {
-            final Address remoteParty = dialog.getRemoteParty();
-            final String callingNumber = remoteParty.getURI().toString();
-            final URI calledDevice = new URI(calledNumber);
-            final URI callingDevice = new URI(callingNumber);
-            final Mrcpv2ConnectionInformation remote = new Mrcpv2ConnectionInformation(
-                    callingDevice, calledDevice);
-            remote.setTtsClient(speechClient);
-            remote.setAsrClient(speechClient);
+            final Mrcpv2ConnectionInformation info =
+                    createConnectionInformation(pbxSession, mrcpSession);
 
             // Create a jvoicxml session and initiate a call at JVoiceXML.
-            final Session jsession = jvxml.createSession(remote);
-
-            // HALEF Event logging
-            final String hevent = String.format(
-                    "INSERT INTO haleflogs"
-                            + " (databasedate, machineIP, machinedate, class, level,"
-                            + " message) VALUES(%s, \"%s\", %s,"
-                            + " \"%s\", \"%s\", \"%s\")",
-                    "now()", System.getenv("IP"), "now()",
-                    "callmanager.mrcpv2.SipCallManager", "INFO",
-                    "created session " + jsession.getSessionID());
-            HalefDbWriter.execute(hevent);
+            final Session jsession = jvxml.createSession(info);
 
             // add a listener to capture the end of voicexml session event
             jsession.addSessionListener(this);
@@ -223,65 +194,20 @@ public final class SipCallManager
             // needed for case when the voicxml session ends before a hang up
             // and need to get to close the sip session
             synchronized (ids) {
-                ids.put(jsession.getSessionID(), id);
+                ids.put(jsession.getSessionId(), id);
             }
 
             // Get the random code
-            final String randomCode = getRandomCode(callingNumber);
-
-            // Write real-time information for Halef system
-            // remote party display name (set to Asterisk SIP callId)
-            // JVoiceXML sessionID
-            // JVoiceXML SIP callId
-            // randomCode use by client
-            final String remoteDisplayName = remoteParty.getDisplayName();
-            final String asteriskCallID;
-            if ((remoteDisplayName == null)
-                    || remoteDisplayName.startsWith("sip:")) {
-                final String uri = remoteParty.getURI().toString();
-                String[] parts = uri.split(":");
-                String[] parts2 = parts[1].split("@");
-                asteriskCallID = parts2[0];
-                LOGGER.warn(String.format(
-                        "The remote party display name seems to be an"
-                                + " invalid asterisk SIP callId (\"%s\")",
-                        asteriskCallID));
-            } else {
-                asteriskCallID = remoteDisplayName;
-            }
-            final String jCallID = dialog.getCallId().getCallId();
-            final String cCallID = mrcpSession.getSipDialog().getCallId()
-                    .getCallId();
-
-            LOGGER.info("Logging real-time mapping:\n%s %s %s", asteriskCallID,
-                    jCallID, jsession.getSessionID());
-            final String q = String.format(
-                    "INSERT INTO realtime_jvxml_linklogs"
-                            + " (asteriskCallId, jvxmlCallId, jsessionId, cairoCallId, randomCode)"
-                            + " VALUES(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
-                    asteriskCallID, jCallID, jsession.getSessionID(), cCallID,
-                    randomCode);
-            HalefDbWriter.execute(q);
-
+            final String randomCode = getRandomCode(info);
             // Append the sessionId to the application uri
-            final String applicationUri = applications.get(calledNumber)
-                    + "?sessionId=" + jsession.getSessionID() + "&randomCode="
+            final String applicationUri = applications.get(info.getCalledDevice().toString())
+                    + "?sessionId=" + jsession.getSessionId() + "&randomCode="
                     + randomCode;
 
-            // use the number for looking up the application
-            LOGGER.info("called number: '" + calledNumber + "'");
+            LOGGER.info("called number: '" + info.getCalledDevice() + "'");
             LOGGER.info("calling application '" + applicationUri + "'...");
 
-            // HALEF Event logging
-            final String hevent2 = String.format(
-                    "INSERT INTO haleflogs"
-                            + " (databasedate, machineIP, machinedate, class, level,"
-                            + " message) VALUES(%s, \"%s\", %s,"
-                            + " \"%s\", \"%s\", \"%s\")",
-                    "now()", System.getenv("IP"), "now()",
-                    "callmanager.mrcpv2.SipCallManager", "INFO",
-                    "calling application '" + applicationUri + "'...");
-            HalefDbWriter.execute(hevent2);
+            logToHalef(info, jsession, applicationUri, pbxSession, mrcpSession);
 
             // start the application
             final URI uri = new URI(applicationUri);
@@ -295,13 +221,83 @@ public final class SipCallManager
         }
     }
 
+    private Mrcpv2ConnectionInformation createConnectionInformation(
+            final SipSession pbxSession, final SipSession mrcpSession)
+                    throws URISyntaxException {
+
+        // Create a session (so we can get other signals from the caller)
+        // and release resources upon call completion
+        final Dialog dialog = pbxSession.getSipDialog();
+        final Address remoteParty = dialog.getRemoteParty();
+        final URI callingDevice = getURI(remoteParty);
+        final Address localParty = dialog.getLocalParty();
+        final URI calledDevice = getCalledNumber(localParty);
+        final Mrcpv2ConnectionInformation info =
+                new Mrcpv2ConnectionInformation(callingDevice, calledDevice);
+        final SpeechClient speechClient = createSpeechClient(mrcpSession);
+        info.setTtsClient(speechClient);
+        info.setAsrClient(speechClient);
+        return info;
+    }
+    
+    private URI getURI(final Address address) throws URISyntaxException {
+        final javax.sip.address.URI uri = address.getURI();
+        final String str = uri.toString();
+        return new URI(str);
+    }
+    
     /**
-     * Extracts the called number from the local party address
-     * @param localParty the local party address
-     * @return called number
+     * Creates an instance of a speech client.
+     * @param mrcpSession the current mrcp session
+     * @return created speech client
      * @since 0.7.8
      */
-    private String getCalledNumber(final Address localParty) {
+    private SpeechClient createSpeechClient(final SipSession mrcpSession) {
+        final MrcpChannel ttsChannel = mrcpSession.getTtsChannel();
+        final MrcpChannel asrChannel = mrcpSession.getRecogChannel();
+        final SpeechClient speechClient = new SpeechClientImpl(ttsChannel,
+                asrChannel);
+        return speechClient;
+    }
+
+    /**
+     * Retrieves the asterisk call id
+     * 
+     * @param remoteParty
+     *            the remote party
+     * @param remoteDisplayName
+     *            the remote display name
+     * @return asterisk call id
+     * @since 0.7.8
+     */
+    private String getAsteriskCallId(final Address remoteParty,
+            final String remoteDisplayName) {
+        if ((remoteDisplayName == null)
+                || remoteDisplayName.startsWith("sip:")) {
+            final String uri = remoteParty.getURI().toString();
+            String[] parts = uri.split(":");
+            String[] parts2 = parts[1].split("@");
+            final String asteriskCallID = parts2[0];
+            LOGGER.warn(String.format(
+                    "The remote party display name seems to be an"
+                            + " invalid asterisk SIP callId (\"%s\")",
+                    asteriskCallID));
+            return asteriskCallID;
+        } else {
+            return remoteDisplayName;
+        }
+    }
+
+    /**
+     * Extracts the called number from the local party address
+     * 
+     * @param localParty
+     *            the local party address
+     * @return called number
+     * @throws URISyntaxException error converting the address into a URI
+     * @since 0.7.8
+     */
+    private URI getCalledNumber(final Address localParty) throws URISyntaxException {
         final String displayName = localParty.getDisplayName();
         if ((displayName == null) || displayName.startsWith("sip:")) {
             final String uri = localParty.getURI().toString();
@@ -309,19 +305,23 @@ public final class SipCallManager
             // get the first part of the address, which is the number that
             // was called.
             final String[] parts2 = parts[1].split("@");
-            return parts2[0];
+            return new URI(parts2[0]);
         } else {
-            return displayName;
+            return new URI(displayName);
         }
     }
 
     /**
      * Tries to obtain a random code from the calling number
-     * @param callingNumber the calling number
+     * 
+     * @param callingNumber
+     *            the calling number
      * @return random code, empty string if there is none.
      * @since 0.7.8
      */
-    private String getRandomCode(final String callingNumber) {
+    private String getRandomCode(final Mrcpv2ConnectionInformation info) {
+        final URI callingDevice = info.getCallingDevice();
+        final String callingNumber = callingDevice.toString();
         if (callingNumber.startsWith("sip:")) {
             String[] parts = callingNumber.split(":");
             String[] parts2 = parts[1].split("@");
@@ -338,6 +338,50 @@ public final class SipCallManager
         }
     }
 
+    private void logToHalef(final Mrcpv2ConnectionInformation info,
+            final Session jsession, final String applicationUri,
+            final SipSession pbxSession, final SipSession mrcpSession)
+                    throws Exception {
+        final Dialog dialog = pbxSession.getSipDialog();
+        final Address remoteParty = dialog.getRemoteParty();
+
+        // Write real-time information for Halef system
+        // remote party display name (set to Asterisk SIP callId)
+        // JVoiceXML sessionID
+        // JVoiceXML SIP callId
+        // randomCode use by client
+        final String remoteDisplayName = remoteParty.getDisplayName();
+        final String asteriskCallID = getAsteriskCallId(remoteParty,
+                remoteDisplayName);
+        final String jCallID = dialog.getCallId().getCallId();
+        final String cCallID = mrcpSession.getSipDialog().getCallId()
+                .getCallId();
+
+        // Get the random code
+        final String randomCode = getRandomCode(info);
+
+        LOGGER.info("Logging real-time mapping:\n%s %s %s", asteriskCallID,
+                jCallID, jsession.getSessionId());
+        final String q = String.format(
+                "INSERT INTO realtime_jvxml_linklogs"
+                        + " (asteriskCallId, jvxmlCallId, jsessionId, cairoCallId, randomCode)"
+                        + " VALUES(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
+                asteriskCallID, jCallID, jsession.getSessionId(), cCallID,
+                randomCode);
+        HalefDbWriter.execute(q);
+
+        // HALEF Event logging
+        final String hevent2 = String.format(
+                "INSERT INTO haleflogs"
+                        + " (databasedate, machineIP, machinedate, class, level,"
+                        + " message) VALUES(%s, \"%s\", %s,"
+                        + " \"%s\", \"%s\", \"%s\")",
+                "now()", System.getenv("IP"), "now()",
+                "callmanager.mrcpv2.SipCallManager", "INFO",
+                "calling application '" + applicationUri + "'...");
+        HalefDbWriter.execute(hevent2);
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -432,7 +476,7 @@ public final class SipCallManager
      */
     @Override
     public void sessionEnded(final Session session) {
-        String id = session.getSessionID();
+        String id = session.getSessionId();
         // workaround to deal with two id's
         // maps the voicexml sessionid to sip session id
         // needed for case when the voicxml session ends before a hang up and

@@ -85,7 +85,7 @@ public interface Session {
      * @return Universal unique identifier for this session.
      * @since 0.4
      */
-    String getSessionID();
+    String getSessionId();
 
     /**
      * Handles a call request.

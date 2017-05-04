@@ -252,7 +252,7 @@ public final class MMICallManager implements CallManager {
         final Session session = jvxml.createSession(info);
         sessions.put(session, controller);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("session '" + session.getSessionID() + "' created");
+            LOGGER.debug("session '" + session.getSessionId() + "' created");
         }
         return session;
     }
@@ -269,7 +269,7 @@ public final class MMICallManager implements CallManager {
         if (controller == null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.info("no controller known for session '"
-                        + session.getSessionID() + "'");
+                        + session.getSessionId() + "'");
             }
             return;
         }

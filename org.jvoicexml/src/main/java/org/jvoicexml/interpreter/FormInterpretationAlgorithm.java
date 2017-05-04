@@ -799,7 +799,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         }
         final DocumentServer server = context.getDocumentServer();
         final Session session = context.getSession();
-        final String sessionId = session.getSessionID();
+        final String sessionId = session.getSessionId();
         try {
             final CallControlProperties callProps = context
                     .getCallControlProperties(this);
@@ -1325,7 +1325,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final RecordingReceiverThread recording = new RecordingReceiverThread(
                 eventbus, maxTime);
         final Session session = context.getSession();
-        final String sessionId = session.getSessionID();
+        final String sessionId = session.getSessionId();
         final RecordingStartedEvent started =
                 new RecordingStartedEvent(sessionId);
         eventbus.publish(started);

@@ -118,7 +118,7 @@ class JVoiceXmlSkeleton
         }
 
         final Skeleton sessionSkeleton = new SessionSkeleton(context, session);
-        final Stub sessionStub = new SessionStub(session.getSessionID());
+        final Stub sessionStub = new SessionStub(session.getSessionId());
 
         JVoiceXmlJndiSupport.bind(context, sessionSkeleton, sessionStub);
 

@@ -208,7 +208,7 @@ public class JVoiceXmlSession extends Thread
      * 
      * @return Universal unique identifier for this session.
      */
-    public String getSessionID() {
+    public String getSessionId() {
         return uuid.toString();
     }
 
@@ -238,7 +238,7 @@ public class JVoiceXmlSession extends Thread
         // Some initialization stuff
         application = new JVoiceXmlApplication(scopeObserver);
         applicationUri = uri;
-        final String sessionId = getSessionID();
+        final String sessionId = getSessionId();
         setName(sessionId);
 
         // Start processing of the given URI
@@ -422,7 +422,7 @@ public class JVoiceXmlSession extends Thread
 
         profile.terminate(context);
         implementationPlatform.close();
-        final String sessionId = getSessionID();
+        final String sessionId = getSessionId();
         documentServer.sessionClosed(sessionId);
         scopeObserver.exitScope(Scope.SESSION);
         context.close();

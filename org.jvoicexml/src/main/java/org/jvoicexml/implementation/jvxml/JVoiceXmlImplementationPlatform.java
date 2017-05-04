@@ -654,7 +654,7 @@ public final class JVoiceXmlImplementationPlatform
             result.setMark(markname);
 
             final RecognitionEvent recognitionEvent = new RecognitionEvent(
-                    input.getSpokenInput(), session.getSessionID(), result);
+                    input.getSpokenInput(), session.getSessionId(), result);
             eventbus.publish(recognitionEvent);
         }
 
@@ -677,7 +677,7 @@ public final class JVoiceXmlImplementationPlatform
         if (eventbus != null) {
             result.setMark(markname);
             final NomatchEvent noMatchEvent = new NomatchEvent(
-                    input.getSpokenInput(), session.getSessionID(), result);
+                    input.getSpokenInput(), session.getSessionId(), result);
             eventbus.publish(noMatchEvent);
         }
         synchronized (inputLock) {

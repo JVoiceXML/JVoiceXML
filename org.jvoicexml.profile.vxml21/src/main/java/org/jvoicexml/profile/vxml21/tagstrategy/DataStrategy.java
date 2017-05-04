@@ -167,7 +167,7 @@ final class DataStrategy extends AbstractTagStrategy {
             appendVariables(context, descriptor);
             final FetchAttributes attributes = getFetchAttributes();
             descriptor.setAttributes(attributes);
-            final String sessionId = session.getSessionID();
+            final String sessionId = session.getSessionId();
             final Document document = (Document) server.getObject(sessionId,
                     descriptor, DocumentServer.TEXT_XML);
             final String name = (String) getAttribute(Data.ATTRIBUTE_NAME);

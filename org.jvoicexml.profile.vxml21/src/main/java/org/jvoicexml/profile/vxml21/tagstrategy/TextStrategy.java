@@ -113,7 +113,7 @@ final class TextStrategy extends AbstractTagStrategy
             platform.queuePrompt(speakable);
             if (!fia.isQueuingPrompts()) {
                 final Session session = context.getSession();
-                final String sessionId = session.getSessionID();
+                final String sessionId = session.getSessionId();
                 try {
                     final CallControlProperties callProps = context
                             .getCallControlProperties(fia);

@@ -148,7 +148,7 @@ class PromptStrategy extends AbstractTagStrategy {
             if (!fia.isQueuingPrompts()) {
                 final DocumentServer server = context.getDocumentServer();
                 final Session session = context.getSession();
-                final String sessionId = session.getSessionID();
+                final String sessionId = session.getSessionId();
                 try {
                     final CallControlProperties callProps = context
                             .getCallControlProperties(fia);

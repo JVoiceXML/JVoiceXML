@@ -916,7 +916,7 @@ public final class VoiceModalityComponent
                     .getVoiceXmlInterpreterContext();
             final EventBus bus = interpreterContext.getEventBus();
             final RecognitionEvent event = new RecognitionEvent(null,
-                    session.getSessionID(), result);
+                    session.getSessionId(), result);
             bus.publish(event);
         } catch (ConversionException e) {
             LOGGER.error("error parsing the recognition result", e);
@@ -991,13 +991,13 @@ public final class VoiceModalityComponent
      *         session
      */
     private MMIContext findContext(final Session session) {
-        final String sessionId = session.getSessionID();
+        final String sessionId = session.getSessionId();
         synchronized (contexts) {
             for (String contextId : contexts.keySet()) {
                 final MMIContext context = contexts.get(contextId);
                 final Session other = context.getSession();
                 if (other != null) {
-                    final String otherSessionId = other.getSessionID();
+                    final String otherSessionId = other.getSessionId();
                     if (otherSessionId.equals(sessionId)) {
                         return context;
                     }
@@ -1014,7 +1014,7 @@ public final class VoiceModalityComponent
     public void sessionEnded(final Session session) {
         final MMIContext context = findContext(session);
         if (context == null) {
-            LOGGER.warn("session " + session.getSessionID()
+            LOGGER.warn("session " + session.getSessionId()
                     + " ended without MMI identifiers");
             return;
         }

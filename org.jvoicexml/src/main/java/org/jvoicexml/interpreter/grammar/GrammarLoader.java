@@ -81,7 +81,7 @@ final class GrammarLoader {
                 return loadExternalGrammar(context, attributes, grammar);
             } else {
                 final Session session = context.getSession();
-                final String sessionId = session.getSessionID();
+                final String sessionId = session.getSessionId();
                 final DocumentServer server = context.getDocumentServer();
                 return loadInternalGrammar(sessionId, server, grammar,
                         language);

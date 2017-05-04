@@ -217,7 +217,7 @@ public final class SessionStub
     /**
      * {@inheritDoc}
      */
-    public String getSessionID() {
+    public String getSessionId() {
         return sessionID;
     }
 

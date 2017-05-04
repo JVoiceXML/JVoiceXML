@@ -744,7 +744,7 @@ public class VoiceXmlInterpreterContext {
         }
         descriptor.setURI(nextUri);
         final DocumentServer server = session.getDocumentServer();
-        final String sessionId = session.getSessionID();
+        final String sessionId = session.getSessionId();
         return server.getDocument(sessionId, descriptor);
     }
 
@@ -776,7 +776,7 @@ public class VoiceXmlInterpreterContext {
         } else {
             grammarUri = application.resolve(uri);
         }
-        final String sessionId = session.getSessionID();
+        final String sessionId = session.getSessionId();
         return server.getGrammarDocument(sessionId, grammarUri, attributes);
     }
 

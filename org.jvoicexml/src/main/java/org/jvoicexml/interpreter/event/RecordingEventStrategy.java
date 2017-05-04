@@ -115,7 +115,7 @@ final class RecordingEventStrategy
         // Notify that recording has stopped.
         final Session session = context.getSession();
         final RecordingStoppedEvent stopped = new RecordingStoppedEvent(
-                session.getSessionID(), result);
+                session.getSessionId(), result);
         final EventBus bus = context.getEventBus();
         bus.publish(stopped);
         return true;

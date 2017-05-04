@@ -200,7 +200,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         final Session session = new org.jvoicexml.interpreter.JVoiceXmlSession(
                 platform, this, info, profile);
         platform.setSession(session);
-        LOGGER.info("created session " + session.getSessionID());
+        LOGGER.info("created session " + session.getSessionId());
 
         return session;
     }

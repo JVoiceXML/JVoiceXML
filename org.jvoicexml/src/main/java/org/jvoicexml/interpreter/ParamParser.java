@@ -85,7 +85,7 @@ class ParamParser {
         node = vxml;
         model = dataModel;
         server = documentServer;
-        sessionId = currentSession.getSessionID();
+        sessionId = currentSession.getSessionId();
     }
 
     /**

@@ -166,7 +166,7 @@ class ScriptStrategy extends AbstractTagStrategy {
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final FetchAttributes attributes = getFetchAttributes();
         descriptor.setAttributes(attributes);
-        final String sessionId = session.getSessionID();
+        final String sessionId = session.getSessionId();
         final String externalScript = (String) server.getObject(sessionId,
                 descriptor, DocumentServer.TEXT_PLAIN);
         model.evaluateExpression(externalScript, Object.class);
