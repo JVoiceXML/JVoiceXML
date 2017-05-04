@@ -138,7 +138,6 @@ dependencies {
     runtime project(':org.jvoicexml.config')
     runtime project(':org.jvoicexml.srgs')
     runtime project(':org.jvoicexml.profile.vxml21')
-    //runtime project(':org.jvoicexml.jndi')
 }
 
 clean {
@@ -160,6 +159,29 @@ task jvxmlservlet(dependsOn: ':org.jvoicexml.callmanager.mmi.servlet:war') {
     }
 }
 
+task jvxmlConfigurations {
+    dependsOn configurations.jvxmlJNDI
+
+    dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
+    if (project.property('org.jvoicexml.interpreter.grammar.luis') == 'true') {
+        dependsOn configurations.jvxmlInterpreterGrammarLUIS
+    }
+
+    if (project.property('org.jvoicexml.implementation.jsapi20') == 'true') {
+        dependsOn configurations.jvxmlImplementationJSAPI20 
+    }
+    if (project.property('org.jvoicexml.implementation.mary') == 'true') {
+        dependsOn configurations.jvxmlImplementationMary
+    }
+    if (project.property('org.jvoicexml.implementation.mrcpv2') == 'true') {
+        dependsOn configurations.jvxmlImplementationMrcpv2
+        }
+    if (project.property('org.jvoicexml.implementation.text') == 'true') {
+        dependsOn configurations.jvxmlImplementationText
+    }
+}
+
+
 distributions {
     main {
         baseName 'jvoicexml'
@@ -180,27 +202,13 @@ applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').bui
                              "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
 
 run {
-    dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
-
-    dependsOn configurations.jvxmlImplementationJSAPI20
-    dependsOn configurations.jvxmlImplementationMary
-    dependsOn configurations.jvxmlImplementationMrcpv2   
-    dependsOn configurations.jvxmlImplementationText
-    dependsOn configurations.jvxmlInterpreterGrammarLUIS
-    
-    dependsOn configurations.jvxmlJNDI
+    dependsOn jvxmlConfigurations
 
     classpath += files("${project(':org.jvoicexml').buildDir}/config")
 }
 
 task(runDebug, dependsOn: 'jar', type: JavaExec) {
-    dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
-
-    dependsOn configurations.jvxmlImplementationJSAPI20
-    dependsOn configurations.jvxmlImplementationMary
-    dependsOn configurations.jvxmlImplementationMrcpv2   
-    dependsOn configurations.jvxmlImplementationText
-    dependsOn configurations.jvxmlInterpreterGrammarLUIS
+    dependsOn jvxmlConfigurations
     
     dependsOn configurations.jvxmlJNDI
 
