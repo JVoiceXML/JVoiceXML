@@ -33,9 +33,6 @@
                 <!--APPLICATION PLACEHOLDER-->
             </beans:map>
         </beans:property>
-        <beans:property name="cloudUrl">
-            <beans:value>http://spokentech.net/speechcloud</beans:value>
-        </beans:property>
     </beans:bean>
     <beans:bean id="sipServer" class="org.speechforge.zanzibar.sip.SipServer"
         init-method="startup" destroy-method="shutdown">
