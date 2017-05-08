@@ -321,21 +321,19 @@ public final class SipCallManager
      */
     private String getRandomCode(final Mrcpv2ConnectionInformation info) {
         final URI callingDevice = info.getCallingDevice();
-        final String callingNumber = callingDevice.toString();
-        if (callingNumber.startsWith("sip:")) {
-            String[] parts = callingNumber.split(":");
-            String[] parts2 = parts[1].split("@");
-            String number = parts2[0];
-            if (number.length() > 8) {
-                return number.substring(8);
-            } else {
-                LOGGER.warn("No randomCode used.");
-                return "";
-            }
-        } else {
-            LOGGER.warn("No randomCode used.");
-            return "";
-        }
+	if (callingDevice != null) {
+	    final String callingNumber = callingDevice.toString();
+	        if (callingNumber.startsWith("sip:")) {
+	            String[] parts = callingNumber.split(":");
+	            String[] parts2 = parts[1].split("@");
+	            String number = parts2[0];
+	            if (number.length() > 8) {
+		        return number.substring(8);
+	            }
+	    }
+	}
+	LOGGER.warn("No randomCode used.");
+	return "";
     }
 
     private void logToHalef(final Mrcpv2ConnectionInformation info,
