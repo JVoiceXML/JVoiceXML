@@ -163,20 +163,20 @@ task jvxmlConfigurations {
     dependsOn configurations.jvxmlJNDI
 
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
-    if (project.property('org.jvoicexml.interpreter.grammar.luis') == 'true') {
+    if (project.property('org_jvoicexml_interpreter_grammar_luis') == 'true') {
         dependsOn configurations.jvxmlInterpreterGrammarLUIS
     }
 
-    if (project.property('org.jvoicexml.implementation.jsapi20') == 'true') {
+    if (project.property('org_jvoicexml_implementation_jsapi20') == 'true') {
         dependsOn configurations.jvxmlImplementationJSAPI20 
     }
-    if (project.property('org.jvoicexml.implementation.mary') == 'true') {
+    if (project.property('org_jvoicexml_implementation_mary') == 'true') {
         dependsOn configurations.jvxmlImplementationMary
     }
-    if (project.property('org.jvoicexml.implementation.mrcpv2') == 'true') {
+    if (project.property('org_jvoicexml_implementation_mrcpv2') == 'true') {
         dependsOn configurations.jvxmlImplementationMrcpv2
         }
-    if (project.property('org.jvoicexml.implementation.text') == 'true') {
+    if (project.property('org_jvoicexml_implementation_text') == 'true') {
         dependsOn configurations.jvxmlImplementationText
     }
 }
