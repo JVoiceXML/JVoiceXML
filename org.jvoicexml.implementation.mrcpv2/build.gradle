@@ -80,11 +80,11 @@ task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
         buildpath: "${buildDir}/libs",
         version: version,
         libs: configurations.compile,
-        address: "sip:127.0.0.1:4245",
-        port: 4245,
-        cairoAddress: "sip:cairo@speechforge.org",
-        cairoHost: "127.0.0.1",
-        cairoPort: 5050
+        address: System.getenv("JVOICEXML_SIP_ADDRESS") ?: "sip:127.0.0.1:4245",
+        port: System.getenv("JVOICEXML_SIP_PORT") ?: 4245,
+        cairoAddress: System.getenv("JVOICEXML_CAIRO_ADDRESS") ?: "sip:cairo@speechforge.org",
+        cairoHost: System.getenv("JVOICEXML_CAIRO_HOST") ?: "127.0.0.1",
+        cairoPort: System.getenv("JVOICEXML_CAIRO_PORT") ?: 5050
     )
 }
 

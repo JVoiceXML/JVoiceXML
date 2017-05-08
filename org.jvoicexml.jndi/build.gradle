@@ -31,7 +31,7 @@ xslt {
         repositoryname: "text",
         version: version,
         buildpath: "${buildDir}/libs",
-        port: "1099"
+        port: System.getenv("JVOICEXML_JNDI_PORT") ?: "1099"
     )
 }
 
