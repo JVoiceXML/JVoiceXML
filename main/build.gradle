@@ -197,11 +197,14 @@ distributions {
                 from configurations.jvxmlImplementationMary
                 from configurations.jvxmlImplementationMrcpv2
                 from configurations.jvxmlImplementationText
+
+                from configurations.jvxmlVoiceXMLUnit
             }
             
             into('config') { 
                 from("${project(':org.jvoicexml').buildDir}/config") 
             }
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         }
     }
 }
