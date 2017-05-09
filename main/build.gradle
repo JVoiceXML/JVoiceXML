@@ -8,6 +8,7 @@ distributions {
 
 repositories {
     mavenCentral()
+    jcenter()
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
@@ -187,6 +188,17 @@ distributions {
         baseName 'jvoicexml'
         
         contents {
+            into ('lib') {
+                from configurations.jvxmlJNDI
+            
+                from configurations.jvxmlInterpreterDatamodelECMAScript
+                from configurations.jvxmlInterpreterGrammarLUIS
+                from configurations.jvxmlImplementationJSAPI20 
+                from configurations.jvxmlImplementationMary
+                from configurations.jvxmlImplementationMrcpv2
+                from configurations.jvxmlImplementationText
+            }
+            
             into('config') { 
                 from("${project(':org.jvoicexml').buildDir}/config") 
             }
