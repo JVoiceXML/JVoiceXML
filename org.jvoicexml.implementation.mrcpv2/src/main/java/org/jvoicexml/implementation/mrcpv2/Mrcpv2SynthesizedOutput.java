@@ -208,7 +208,7 @@ public final class Mrcpv2SynthesizedOutput
             }
 
             if (urlPrompt) {
-                LOGGER.info(String.format("Using URL!: %s", speakText));
+                LOGGER.info(String.format("Using URL: %s", speakText));
 
                 // HALEF Event logging
                 final String hevent = String.format(
