@@ -198,7 +198,7 @@ public final class SipCallManager
             }
 
             // Get the random code
-            final String randomCode = getRandomCode(info);
+            final String randomCode = getRandomCode(pbxSession);
             // Append the sessionId to the application uri
             final String applicationUri = applications.get(info.getCalledDevice().toString())
                     + "?sessionId=" + jsession.getSessionId() + "&randomCode="
@@ -319,19 +319,16 @@ public final class SipCallManager
      * @return random code, empty string if there is none.
      * @since 0.7.8
      */
-    private String getRandomCode(final Mrcpv2ConnectionInformation info) {
-        final URI callingDevice = info.getCallingDevice();
-	if (callingDevice != null) {
-	    final String callingNumber = callingDevice.toString();
-	        if (callingNumber.startsWith("sip:")) {
-	            String[] parts = callingNumber.split(":");
-	            String[] parts2 = parts[1].split("@");
-	            String number = parts2[0];
-	            if (number.length() > 8) {
-		        return number.substring(8);
-	            }
+    private String getRandomCode(final SipSession pbxSession) {
+        final String callingNumber = pbxSession.getSipDialog().getRemoteParty().getURI().toString();
+	if (callingNumber.startsWith("sip:")) {
+	    String[] parts = callingNumber.split(":");
+	    String[] parts2 = parts[1].split("@");
+	    String number = parts2[0];
+	    if (number.length() > 8) {
+		return number.substring(8);
 	    }
-	}
+    	}
 	LOGGER.warn("No randomCode used.");
 	return "";
     }
@@ -356,7 +353,7 @@ public final class SipCallManager
                 .getCallId();
 
         // Get the random code
-        final String randomCode = getRandomCode(info);
+        final String randomCode = getRandomCode(pbxSession);
 
         LOGGER.info("Logging real-time mapping:\n%s %s %s", asteriskCallID,
                 jCallID, jsession.getSessionId());
