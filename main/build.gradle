@@ -89,6 +89,16 @@ configurations {
         description = "JVoiceXML JNDI support"
         extendsFrom compile
     }
+
+    jvxmlProfileVXML21 {
+        description = "VoiceXML 2.1 Profile"
+        extendsFrom compile
+    }
+
+    jvxmlProfileMMI {
+        description = "VoiceXML MMI Profile"
+        extendsFrom compile
+    }
 }
 
 dependencies {
@@ -113,13 +123,6 @@ dependencies {
     jvxmlImplementationMrcpv2 project(':org.jvoicexml.implementation.mrcpv2')
     jvxmlImplementationMrcpv2 project(':org.jvoicexml.callmanager.sip')
 
-    jvxmlImplementationMMI project(':org.jvoicexml.mmi.events')
-    jvxmlImplementationMMI project(':org.jvoicexml.profile.mmi')
-    jvxmlImplementationMMI project(':org.jvoicexml.callmanager.mmi')
-    jvxmlImplementationMMI project(':org.jvoicexml.callmanager.mmi.http')
-    jvxmlImplementationMMI project(':org.jvoicexml.callmanager.mmi.socket')
-    jvxmlImplementationMMI project(':org.jvoicexml.callmanager.mmi.umundo')
-
     jvxmlImplementationText project(':org.jvoicexml.client.text')
     jvxmlImplementationText project(':org.jvoicexml.implementation.text')
     jvxmlImplementationText project(':org.jvoicexml.callmanager.text')
@@ -134,11 +137,19 @@ dependencies {
 
     jvxmlVoiceXMLUnit project(':org.jvoicexml.voicexmlunit')
     
+    jvxmlProfileVXML21 project(':org.jvoicexml.profile.vxml21')
+
+    jvxmlProfileMMI project(':org.jvoicexml.mmi.events')
+    jvxmlProfileMMI project(':org.jvoicexml.profile.mmi')
+    jvxmlProfileMMI project(':org.jvoicexml.callmanager.mmi')
+    jvxmlProfileMMI project(':org.jvoicexml.callmanager.mmi.http')
+    jvxmlProfileMMI project(':org.jvoicexml.callmanager.mmi.socket')
+    jvxmlProfileMMI project(':org.jvoicexml.callmanager.mmi.umundo')
+    
     runtime project(':org.jvoicexml.xml')
     runtime project(':org.jvoicexml')
     runtime project(':org.jvoicexml.config')
     runtime project(':org.jvoicexml.srgs')
-    runtime project(':org.jvoicexml.profile.vxml21')
 }
 
 clean {
@@ -180,6 +191,13 @@ task jvxmlConfigurations {
     if (project.property('org_jvoicexml_implementation_text') == 'true') {
         dependsOn configurations.jvxmlImplementationText
     }
+    
+    if (project.property('org_jvoicexml_profile_vxml21') == 'true') {
+        dependsOn configurations.jvxmlProfileVXML21
+    }
+    if (project.property('org_jvoicexml_profile_mmi') == 'true') {
+        dependsOn configurations.jvxmlProfileMMI
+    }
 }
 
 
@@ -199,6 +217,9 @@ distributions {
                 from configurations.jvxmlImplementationText
 
                 from configurations.jvxmlVoiceXMLUnit
+            
+                from configurations.jvxmlProfileVXML21
+                from configurations.jvxmlProfileMMI
             }
             
             into('config') { 
