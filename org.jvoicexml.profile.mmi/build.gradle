@@ -47,8 +47,17 @@ xslt {
     )
 }
 
+task copyReferencedLibraries(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile) {
+         include 'org.jvoicexml.profile.vxml21*.jar',
+            'org.jvoicexml.profile.mmi*.jar'
+    }
+}
+
 jar {
     dependsOn xslt
+    dependsOn copyReferencedLibraries
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML MMI Profile",

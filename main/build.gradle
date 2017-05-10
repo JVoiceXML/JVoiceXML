@@ -99,6 +99,18 @@ configurations {
         description = "VoiceXML MMI Profile"
         extendsFrom compile
     }
+    jvxmlProfileMMIHTTP {
+        description = "VoiceXML MMI Profile with an HTTP ETL"
+        extendsFrom compile
+    }
+    jvxmlProfileMMISocket {
+        description = "VoiceXML MMI Profile with a Socket ETL"
+        extendsFrom compile
+    }
+    jvxmlProfileMMIuMundo {
+        description = "VoiceXML MMI Profile with a uMundo ETL"
+        extendsFrom compile
+    }
 }
 
 dependencies {
@@ -142,9 +154,9 @@ dependencies {
     jvxmlProfileMMI project(':org.jvoicexml.mmi.events')
     jvxmlProfileMMI project(':org.jvoicexml.profile.mmi')
     jvxmlProfileMMI project(':org.jvoicexml.callmanager.mmi')
-    jvxmlProfileMMI project(':org.jvoicexml.callmanager.mmi.http')
-    jvxmlProfileMMI project(':org.jvoicexml.callmanager.mmi.socket')
-    jvxmlProfileMMI project(':org.jvoicexml.callmanager.mmi.umundo')
+    jvxmlProfileMMIHTTP project(':org.jvoicexml.callmanager.mmi.http')
+    jvxmlProfileMMISocket project(':org.jvoicexml.callmanager.mmi.socket')
+    jvxmlProfileMMIuMundo project(':org.jvoicexml.callmanager.mmi.umundo')
     
     runtime project(':org.jvoicexml.xml')
     runtime project(':org.jvoicexml')
@@ -197,6 +209,15 @@ task jvxmlConfigurations {
     }
     if (project.property('org_jvoicexml_profile_mmi') == 'true') {
         dependsOn configurations.jvxmlProfileMMI
+        if (project.property('org.jvoicexml.callmanager.mmi.http') == 'true') {
+            dependsOn configurations.jvxmlProfileMMIHTTP
+        }
+        if (project.property('org.jvoicexml.callmanager.mmi.socket') == 'true') {
+            dependsOn configurations.jvxmlProfileMMISocket
+        }
+        if (project.property('org.jvoicexml.callmanager.mmi.umundo') == 'true') {
+            dependsOn configurations.jvxmlProfileMMIuMundo
+        }
     }
 }
 
@@ -220,6 +241,9 @@ distributions {
             
                 from configurations.jvxmlProfileVXML21
                 from configurations.jvxmlProfileMMI
+                from configurations.jvxmlProfileMMIHTTP
+                from configurations.jvxmlProfileMMISocket
+                from configurations.jvxmlProfileMMIuMundo
             }
             
             into('config') { 
