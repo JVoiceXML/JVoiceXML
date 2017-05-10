@@ -154,6 +154,7 @@ dependencies {
     jvxmlProfileMMI project(':org.jvoicexml.mmi.events')
     jvxmlProfileMMI project(':org.jvoicexml.profile.mmi')
     jvxmlProfileMMI project(':org.jvoicexml.callmanager.mmi')
+    jvxmlProfileMMI project(':org.jvoicexml.callmanager.mmi.servlet')
     jvxmlProfileMMIHTTP project(':org.jvoicexml.callmanager.mmi.http')
     jvxmlProfileMMISocket project(':org.jvoicexml.callmanager.mmi.socket')
     jvxmlProfileMMIuMundo project(':org.jvoicexml.callmanager.mmi.umundo')
@@ -172,14 +173,6 @@ clean {
 jar {
     onlyIf { 
         false
-    }
-}
-
-task jvxmlservlet(dependsOn: ':org.jvoicexml.callmanager.mmi.servlet:war') {
-    doLast {
-        applicationDistribution.into("servlets") {
-            from(project(':org.jvoicexml.callmanager.mmi.servlet').war.outputs.files)
-        }
     }
 }
 
@@ -222,6 +215,14 @@ task jvxmlConfigurations {
 }
 
 
+task jvxmlServlet(dependsOn: ':org.jvoicexml.callmanager.mmi.servlet:war') {
+    doLast {
+        applicationDistribution.into("servlets") {
+            from(project(':org.jvoicexml.callmanager.mmi.servlet').war.outputs.files)
+        }
+    }
+}
+
 distributions {
     main {
         baseName 'jvoicexml'
@@ -249,10 +250,15 @@ distributions {
             into('config') { 
                 from("${project(':org.jvoicexml').buildDir}/config") 
             }
+            
+            from(jvxmlServlet) {
+                into "servlets"
+            }
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         }
     }
 }
+
 
 mainClassName = "org.jvoicexml.startup.Startup"
 applicationDefaultJvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
