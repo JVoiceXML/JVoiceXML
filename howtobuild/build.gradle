@@ -1,0 +1,16 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'com.github.csabasulyok', name: 'gradle-latex', version: '1.0'
+    }
+}
+
+
+apply plugin: 'latex'
+
+latex {
+    tex tex:'/howtobuild.tex', bib: 'howtobuild.bib'
+}
