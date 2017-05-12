@@ -8,8 +8,9 @@ buildscript {
     }
 }
 
+
 apply plugin: 'latex'
 
 latex {
-    tex tex:'howtobuild.tex', bib: 'howtobuild.bib', pdf:"jvxml-howtobuild-${version}.pdf"
+    tex tex:'userguide.tex', bib: 'userguide.bib', pdf:"jvxml-userguide-${version}.pdf"
 }
