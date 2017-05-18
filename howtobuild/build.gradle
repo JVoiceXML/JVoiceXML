@@ -10,6 +10,12 @@ buildscript {
 
 apply plugin: 'latex'
 
+task createVersionFile() << {
+    def file = new File("version.tex")
+    file.createNewFile()
+    file.text = "\\newcommand{\\jvxmlversion} {$version}"
+}
+
 latex {
     tex tex:'howtobuild.tex', bib: 'howtobuild.bib', pdf:"jvxml-howtobuild-${version}.pdf"
 }

@@ -60,10 +60,11 @@ JTAPI~\cite{sun:jsapi}.
 
 VoiceXML is hosted at SourceForge~\cite{sourceforge} as an open source project.
 You find everything that is related to this project under
-\url{http://sourceforge.net/projects/jvoicexml/}.
+\url{http://sourceforge.net/projects/jvoicexml/}. The code hase been made available at
+GitHub at \url{https://github.com/JVoiceXML/JVoiceXML}.
 
 This document refers to UNIX and Windows systems. JVoiceXML will work 
-any other operating systems that support Java 7, too.
+any other operating systems that support Java 8, too.
 
 Nobody is perfect, so you may find some errors or small things to correct.
 Please let me know if you think you found something that should be written
@@ -75,16 +76,11 @@ differently.
 JVoiceXML uses the GNU library general public license~\cite{gnu:lgpg}. 
 This is mentioned in all our source files as a unique header, see
 section~\ref{sec:code-conventions}.
-You can find a copy in the file COPYING in the \$\{JVOICEXML\_HOME\}
+You can find a copy in the file \texttt{doc/copying.xhtml} in the \$\{JVOICEXML\_HOME\}
 directory. This means that you are allowed to use JVoiceXML
 library in your commercial programs. If you make some nice
-enhancements it would be great, if you could send us your
-modifications so that we can make it available to the public.
-
-JVoiceXML is free software; you can redistribute it and/or
-modify it under the terms of the GNU Library General Public
-License as published by the Free Software Foundation; either
-version 2 of the License, or (at your option) any later version.
+enhancements it would be great, if you could share them
+with us, e.g. by a pull request, so that we can make it available to the community.
 
 JVoiceXML is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -157,7 +153,7 @@ comparable repository or from their home pages. The file
 \subsection{IDE}
 \label{sec:ide}
 
-JVoiceXML is being developed using eclipse 4.4, but you can use the IDE of your
+JVoiceXML is being developed using eclipse 4.6, but you can use the IDE of your
 choice to edit the sources and compile the binaries. You can even use a simple
 text editor to perform this job. Nevertheless there are some restriction that
 you cannot work around.
@@ -166,14 +162,14 @@ Your IDE must support
 
 \begin{itemize}
 \item JavaSE 7
-\item ANT 1.7
+\item Gradle
 \end{itemize}
 
 \subsection{JAVA}
 \label{sec:java}
 
-Parts of the code of JVoiceXML are using features from the JAVA 7 API, so that
-you will need at least J2SE 7 to compile the code. You can download it
+Parts of the code of JVoiceXML are using features from the JAVA 8 API, so that
+you will need at least JSE 8 to compile the code. You can download it
 for free from \url{http://oracle.com/technetwork/java/javase/downloads/index.html}.
 
 In case you are using another IDE, you will have to manually adapt
@@ -185,20 +181,20 @@ libraries are listed in \lstinline{JVOICEXML_HOME/doc/libraries.xhtml}.
 \label{sec:eclipse}
 
 If you are not using eclipse as your favorite IDE, you may ignore this section.
-We are using the \emph{Eclipse IDE for Java EE Developers} version 4.4 (Luna))
+We are using the \emph{Eclipse IDE for Java EE Developers} version 4.6 (Neon))
 for the development of JVoiceXML. The subversion repository contains the eclipse
 project settings. This way, you there is no need to import the
 project into eclipse. The project settings will be detected 
 automatically when you checkout the projects. However you are requested to configure the execution
-environment development for Java 7 \emph{JavaSE-1.7} to point to a valid JDK.
+environment development for Java 8 \emph{JavaSE-1.8} to point to a valid JDK.
 The use of execution environments makes the development independent of the
-used version of the Java 7 SDK.
+used version of the Java 8 SDK.
 
 A screenshot for a possible configuration is shown in
 figure~\ref{fig:eclipse-execution-environments}.
 \begin{figure}
 \includegraphics[width=\linewidth]{eclipse-execution-environments}
-\caption{Configuration of the Java 7 Execution Environment in eclipse}
+\caption{Configuration of the Java 8 Execution Environment in eclipse}
 \label{fig:eclipse-execution-environments}
 \end{figure}
 
@@ -215,6 +211,7 @@ Software Update mechanism.
 Below is a list of the required update URLs.
 
 \begin{description}
+\item[Buildship] \url{https://projects.eclipse.org/projects/tools.buildship}
 \item[Checkstyle] \url{http://eclipse-cs.sourceforge.net/update} (Note that you
 only need the 5.x version)
 \item[TeXlipse] \url{http://texlipse.sourceforge.net} (optional if you want to
@@ -224,23 +221,25 @@ edit the documentation)
 \texttt{org.jvoicexml.mmi.events} or \texttt{org.jvoicexml.client.text})
 \end{description}
 
-\subsection{ANT}
-\label{sec:ant}
+However, the preferred way to install the plugins is via the eclipse market place.
 
-JVoiceXML is being built by an ANT build file It is recommended that
-you use at least ANT 1.7.0. 
-If you don't have ANT installed, you can download the current release
-from \url{http://ant.apache.org}. This should not be necessary if ANT is builtin
-your IDE as it is the case with eclipse.
+\subsection{Gradle}
+\label{sec:gradle}
+
+JVoiceXML is being built by Gradle. It is recommended that
+you use at least Gradle 3.0. 
+If you don't have Gradle installed, you can download the current release
+from \url{http://www.gradle.org}. This should not be necessary if Gradle is builtin
+your IDE.
 
 The build file allows you to override the settings by using a custom 
-properties file jvoicexml.properties in the \$\{JVOICEXML\_HOME\}
+properties file \texttt{gradle.properties} in the \texttt{\$\{HOME\}/.gradle}
 directory.
 
-Since almost all IDEs feature an ANT integration, it will be possible to use
-your favorite IDE. However, it might take you some manual effort to add all the needed libraries.
+Since almost all IDEs feature support for Gradle, at least with the help of plugins, it will be possible to
+use your favorite IDE.
 
-\subsubsection{ANT Support for Eclipse}
+\subsubsection{Gradle Support for Eclipse}
 \label{sec:ant-eclipse}
 
 The ANT project files are usually named \texttt{build.xml} and reside in
