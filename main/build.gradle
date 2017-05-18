@@ -256,8 +256,8 @@ distributions {
             }
             
             into('doc') {
-                from(project(':howtobuild'))
-                from(project(':userguide'))
+                from("${project(':howtobuild').projectDir}/jvxml-howtobuild-${version}.pdf")
+                from("${project(':userguide').projectDir}/jvxml-userguide-${version}.pdf")
             }
             
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -268,7 +268,7 @@ distributions {
 run {
     dependsOn jvxmlConfigurations
 
-    main = "org.jvoicexml.startup.Startup"
+    mainClassName = "org.jvoicexml.startup.Startup"
     classpath += files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
@@ -283,7 +283,7 @@ task(runDebug, dependsOn: 'jar', type: JavaExec) {
     
     dependsOn configurations.jvxmlJNDI
 
-    main = "org.jvoicexml.startup.Startup"
+    mainClassName = "org.jvoicexml.startup.Startup"
     classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
