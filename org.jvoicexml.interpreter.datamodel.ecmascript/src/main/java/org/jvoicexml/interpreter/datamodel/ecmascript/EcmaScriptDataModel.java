@@ -213,6 +213,7 @@ public class EcmaScriptDataModel implements DataModel {
         if (scope == null) {
             return deleteScope();
         }
+        
         // Is there such a scope?
         if (!scopes.values().contains(scope)) {
             return ERROR_SCOPE_NOT_FOUND;

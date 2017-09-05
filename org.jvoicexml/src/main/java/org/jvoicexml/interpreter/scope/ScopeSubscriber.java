@@ -38,7 +38,7 @@ public interface ScopeSubscriber {
     /**
      * The application has entered the <code>next</code> scope and the
      * <code>previous</code> scope is no more the current scope.
-     * @param previous The old scope.
+     * @param previous the old scope.
      * @param next The new scope.
      */
     void enterScope(final Scope previous, final Scope next);
@@ -46,8 +46,8 @@ public interface ScopeSubscriber {
     /**
      * The application has left the <code>previous</code> scope and the
      * <code>next</code> scope is valid.
-     * @param previous The old scope.
-     * @param next The new scope.
+     * @param previous the old scope.
+     * @param next the new scope.
      */
     void exitScope(final Scope previous, final Scope next);
 }
