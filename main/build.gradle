@@ -302,3 +302,31 @@ task(shutdown, dependsOn: 'jar', type: JavaExec) {
                              "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
 }
 
+startScripts {
+    classpath += files('../config')
+    doLast {
+        def windowsScriptFile = file getWindowsScript()
+        def unixScriptFile = file getUnixScript()
+        windowsScriptFile.text = windowsScriptFile.text.replace('%APP_HOME%\\lib\\config', '%APP_HOME%\\config')
+        unixScriptFile.text = unixScriptFile.text.replace('$APP_HOME/lib/config', '$APP_HOME/config')
+    }
+}
+ 
+mainClassName = "org.jvoicexml.startup.Startup"
+applicationName = 'jvxml-startup'
+
+applicationDefaultJvmArgs = ["-Xms512m", "-Xmx1024m"]
+
+task createShutdownApp(type: CreateStartScripts) {
+    mainClassName = "org.jvoicexml.startup.Shutdown"
+    classpath = startScripts.classpath
+    outputDir = startScripts.outputDir
+    applicationName = 'jvxml-shutdown'
+    defaultJvmOpts = ["-Xms1024m", "-Xmx2048m"]
+}
+
+applicationDistribution.into("bin") {
+    duplicatesStrategy= DuplicatesStrategy.EXCLUDE
+    from(createShutdownApp)
+    fileMode = 0755
+}
