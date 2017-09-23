@@ -16,7 +16,7 @@ public class TestMeta {
     @Test
     public void testLatest() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .loadDocument("unittests/staticTestFiles/metaCurrentText.srgs");
+                .loadDocument("/metaCurrentText.srgs");
 
         MatchConsumption mc = parsedGrammar.match("one two");
         Assert.assertNotNull(mc);

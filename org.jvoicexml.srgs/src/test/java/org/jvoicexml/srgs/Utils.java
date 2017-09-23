@@ -27,7 +27,13 @@ public class Utils {
             throws Exception {
         Assert.assertNotNull("filename to load was null", filename);
 
-        final InputStream input = new FileInputStream(filename);
+        File file = new File(filename);
+        final InputStream input;
+        if (file.exists()) {
+            input = new FileInputStream(filename);
+        } else {
+            input = Utils.class.getResourceAsStream(filename);
+        }
         Assert.assertNotNull("unable to create input stream", input);
 
         final InputSource source = new InputSource(input);

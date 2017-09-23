@@ -6,8 +6,8 @@
 	<rule id="choice" scope="public">
 		<item>
 			<item repeat="0-1"><ruleref uri="#filler"/></item>
-			<ruleref uri="ExternalChild.srgs#dig2_3"/>
-			<ruleref uri="ExternalChild.srgs#things"/>
+			<ruleref uri="/ExternalChild.srgs#dig2_3"/>
+			<ruleref uri="/ExternalChild.srgs#things"/>
 		</item>
 		<tag><![CDATA[out.count=rules.dig2_3; out.thing=rules.things;]]></tag>
 	</rule>

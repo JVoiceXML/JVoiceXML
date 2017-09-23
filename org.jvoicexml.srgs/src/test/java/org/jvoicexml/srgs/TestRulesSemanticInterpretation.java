@@ -16,7 +16,7 @@ public class TestRulesSemanticInterpretation {
     @Test
     public void testLatest() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .loadDocument("unittests/staticTestFiles/rulesLatest.srgs");
+                .loadDocument("/rulesLatest.srgs");
 
         MatchConsumption mc = parsedGrammar.match("one");
         Assert.assertNotNull(mc);
@@ -28,7 +28,7 @@ public class TestRulesSemanticInterpretation {
     @Test
     public void testRuleByName() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
-                .loadDocument("unittests/staticTestFiles/rulesLatest.srgs");
+                .loadDocument("/rulesLatest.srgs");
 
         MatchConsumption mc = parsedGrammar.match("one");
         Assert.assertNotNull(mc);

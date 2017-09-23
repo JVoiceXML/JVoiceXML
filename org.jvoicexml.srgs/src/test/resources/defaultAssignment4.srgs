@@ -1,0 +1,35 @@
+<grammar version="1.0" xmlns="http://www.w3.org/2001/06/grammar" xml:lang="en-US" tag-format="semantics/1.0" root="answer">
+    <rule id="answer" scope="public">
+        <ruleref uri="#filler" />
+        <one-of>
+            <ruleref uri="#yes" />
+            <ruleref uri="#no" />
+        </one-of>
+    </rule>
+    
+    <rule id="no">
+        <one-of>
+            <item>no</item>
+            <item>nope</item>
+        </one-of>
+        <tag>out="no";</tag>
+    </rule>
+    
+    <rule id="yes">
+        <one-of>
+            <item>yes</item>
+            <item>yeah</item>
+        </one-of>
+        <tag>out="yes";</tag>
+    </rule>
+    
+    <rule id="filler">
+        <item repeat="0-1">
+            <one-of>
+                <item>umm</item>
+                <item>ah</item>
+            </one-of>
+        </item>
+    </rule>
+    
+</grammar>

@@ -18,7 +18,7 @@ public class TestMatching {
     @Before
     public void loadGrammar() throws Exception {
         parsedGrammar = Utils
-                .loadDocument("unittests/staticTestFiles/MediumGrammar.srgs");
+                .loadDocument("/MediumGrammar.srgs");
         parsedGrammar.dump();
     }
 
