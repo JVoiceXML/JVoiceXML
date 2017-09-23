@@ -45,6 +45,8 @@ dependencies {
 
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
+    
+    runtime fileTree(dir: "./3rdparty/talkingjava/lib", include: ['*.dll'])
 }
 
 xslt {

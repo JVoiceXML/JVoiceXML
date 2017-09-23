@@ -233,6 +233,7 @@ distributions {
             
                 from configurations.jvxmlInterpreterDatamodelECMAScript
                 from configurations.jvxmlInterpreterGrammarLUIS
+                from configurations.jvxmlImplementationJSAPI10 
                 from configurations.jvxmlImplementationJSAPI20 
                 from configurations.jvxmlImplementationMary
                 from configurations.jvxmlImplementationMrcpv2
@@ -304,6 +305,7 @@ task(shutdown, dependsOn: 'jar', type: JavaExec) {
 
 startScripts {
     classpath += files('../config')
+    optsEnvironmentVar += " -Djava.library.path=lib"
     doLast {
         def windowsScriptFile = file getWindowsScript()
         def unixScriptFile = file getUnixScript()
