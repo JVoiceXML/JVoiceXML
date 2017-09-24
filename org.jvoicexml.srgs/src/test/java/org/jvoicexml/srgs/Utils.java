@@ -44,15 +44,13 @@ public class Utils {
         final InputSource source = new InputSource(input);
         Assert.assertNotNull("unable to create input source", source);
 
-        SrgsXmlDocument document = new SrgsXmlDocument(source);
+        final SrgsXmlDocument document = new SrgsXmlDocument(source);
         Assert.assertNotNull("unable to create document", document);
 
         final SrgsSisrXmlGrammarParser parser = new SrgsSisrXmlGrammarParser();
 
-        File f = new File(filename);
+        final File f = new File(filename);
         return parser.parse(document, uri);
-//        return parser.parse(document, new URI("file:///"
-//                + f.getCanonicalPath().replace('\\', '/')));
     }
 
     public static Object getItemOnNativeObject(Object o, String key) {

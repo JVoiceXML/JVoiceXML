@@ -58,7 +58,8 @@ public class OneOfRuleExpansion implements RuleExpansion {
 
     @Override
     public MatchConsumption match(List<String> tokens, int offset) {
-        if (subRules.isEmpty()) { // Not allowed per DTD, but not validating
+     // Not allowed per DTD, but not validating
+        if (subRules.isEmpty()) {
             return new MatchConsumption(executableSI);
         }
 

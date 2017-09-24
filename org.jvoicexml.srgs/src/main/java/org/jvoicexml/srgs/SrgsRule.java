@@ -32,17 +32,25 @@ import org.jvoicexml.xml.srgs.Rule;
 public class SrgsRule implements RuleExpansion {
     private static final Logger LOGGER = Logger.getLogger(SrgsRule.class);
 
+    /** Id of this rule. */
     private String id;
-    private boolean isPublic = true;
+    
+    /** {@code true} if this is a public rule. */
+    private boolean isPublic;
 
-    private SemanticInterpretationBlock initialSI;
+    /** The initial semantic interpretation. */
+    private SemanticInterpretationBlock semanticInterpretation;
+    
+    /** The encapsulated rule expansion. */
     private RuleExpansion innerRule;
 
-    public SrgsRule(Rule rule) {
+    public SrgsRule(final Rule rule) {
         id = rule.getId();
         final String scope = rule.getScope();
         if (scope != null && scope.equals("private")) {
             isPublic = false;
+        } else {
+            isPublic = true;
         }
     }
 
@@ -58,11 +66,24 @@ public class SrgsRule implements RuleExpansion {
         innerRule = rule;
     }
 
-    public void addInitialSI(String si) {
-        if (initialSI == null) {
-            initialSI = new SemanticInterpretationBlock();
+    final RuleExpansion getInnerRule() {
+        return innerRule;
+    }
+
+    public void addInitialSemanticInterpretation(String interpretation) {
+        if (semanticInterpretation == null) {
+            semanticInterpretation = new SemanticInterpretationBlock();
         }
-        initialSI.append(si);
+        semanticInterpretation.append(interpretation);
+    }
+
+    SemanticInterpretationBlock getInitialSemanticInterpretation() {
+        return semanticInterpretation;
+    }
+
+    @Override
+    public void setExecutionSemanticInterpretation(ExecutableSemanticInterpretation si) {
+        LOGGER.error("setExecutionSI should never be called on a rule");
     }
 
     /**
@@ -82,8 +103,10 @@ public class SrgsRule implements RuleExpansion {
 
         // Wrap it in a new execution context and return
         final Context context = new Context(getId());
-        if (getInitialSI() != null) {
-            context.addExecutableContent(getInitialSI());
+        if (getInitialSemanticInterpretation() != null) {
+            final SemanticInterpretationBlock interpretation =
+                    getInitialSemanticInterpretation();
+            context.addExecutableContent(interpretation);
         }
         context.addExecutableContent(result.getExecutationCollection());
         return new MatchConsumption(result.getTokensConsumed(), context);
@@ -103,18 +126,4 @@ public class SrgsRule implements RuleExpansion {
         str.append(")");
         return str.toString();
     }
-    
-    @Override
-    public void setExecutionSemanticInterpretation(ExecutableSemanticInterpretation si) {
-        LOGGER.error("setExecutionSI should never be called on a rule");
     }
-
-    SemanticInterpretationBlock getInitialSI() {
-        return initialSI;
-    }
-
-    RuleExpansion getInnerRule() {
-        return innerRule;
-    }
-
-}

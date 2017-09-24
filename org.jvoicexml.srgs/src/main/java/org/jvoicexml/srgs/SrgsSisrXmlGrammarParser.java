@@ -96,15 +96,15 @@ public class SrgsSisrXmlGrammarParser
         }
     }
 
-    public SrgsSisrGrammar parse(SrgsXmlDocument document, URI uri)
+    public SrgsSisrGrammar parse(final SrgsXmlDocument document, final URI uri)
             throws SrgsSisrParsingException {
         final Map<URI, SrgsSisrGrammar> pool =
                 new java.util.HashMap<URI, SrgsSisrGrammar>();
         return parse(document, uri, pool);
     }
 
-    private SrgsSisrGrammar parse(SrgsXmlDocument document, URI uri,
-            Map<URI, SrgsSisrGrammar> grammarPool)
+    private SrgsSisrGrammar parse(final SrgsXmlDocument document, final URI uri,
+            final Map<URI, SrgsSisrGrammar> grammarPool)
             throws SrgsSisrParsingException {
         final Grammar grammar = document.getGrammar();
         currentGrammar = new SrgsSisrGrammar(grammar, uri, grammarPool);
@@ -113,33 +113,38 @@ public class SrgsSisrXmlGrammarParser
 
         // Load global tags and identify rules(not going to parse in the first
         // pass)
-        Node childNode = document.getGrammar().getFirstChild();
-        while (childNode != null) {
-            if (childNode instanceof Tag) {
-                currentGrammar.addGlobalTagContent(childNode.getTextContent());
-            } else if (childNode instanceof Rule) {
-                currentGrammar.addRule(new SrgsRule((Rule) childNode));
-            } else if (childNode instanceof org.jvoicexml.xml.Text) {
+        Node child = document.getGrammar().getFirstChild();
+        while (child != null) {
+            if (child instanceof Tag) {
+                final String text = child.getTextContent();
+                currentGrammar.addGlobalTagContent(text);
+            } else if (child instanceof Rule) {
+                final Rule rule = (Rule) child;
+                final SrgsRule srgsrule = new SrgsRule(rule);
+                currentGrammar.addRule(srgsrule);
+            } else if (child instanceof org.jvoicexml.xml.Text) {
                 // ignore
             } else {
                 LOGGER.warn("Found unknown node type: "
-                        + childNode.getClass().getCanonicalName() + " "
-                        + childNode.getTextContent());
+                        + child.getClass().getCanonicalName() + " "
+                        + child.getTextContent());
             }
 
-            childNode = childNode.getNextSibling();
+            child = child.getNextSibling();
         }
 
         // Now that all rules are known, we can safely parse and properly link
         // rulerefs as we go along
-        childNode = document.getGrammar().getFirstChild();
-        while (childNode != null) {
-            if (childNode instanceof Rule) {
-                SrgsRule grammarRule = currentGrammar.getRule(
-                        ((Rule) childNode).getId(), false);
-                parseRule(grammarRule, (Rule) childNode);
+        child = document.getGrammar().getFirstChild();
+        while (child != null) {
+            if (child instanceof Rule) {
+                final Rule rule = (Rule) child;
+                final String id = rule.getId();
+                final SrgsRule grammarRule = currentGrammar.getRule(
+                        id, false);
+                parseRule(grammarRule, rule);
             }
-            childNode = childNode.getNextSibling();
+            child = child.getNextSibling();
         }
 
         return currentGrammar;
@@ -149,39 +154,41 @@ public class SrgsSisrXmlGrammarParser
             throws SrgsSisrParsingException {
         RuleExpansion lastExpansion = null;
 
-        NodeList children = node.getChildNodes();
+        final NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
-            Node childNode = children.item(i);
-            if (childNode instanceof Item) {
-                lastExpansion = parseItem((Item) childNode);
+            final Node child = children.item(i);
+            if (child instanceof Item) {
+                final Item item = (Item) child;
+                lastExpansion = parseItem(item);
                 grammarRule.setRule(lastExpansion);
-            } else if (childNode instanceof OneOf) {
-                lastExpansion = parseOneOf((OneOf) childNode);
+            } else if (child instanceof OneOf) {
+                final OneOf oneof = (OneOf) child;
+                lastExpansion = parseOneOf(oneof);
                 grammarRule.setRule(lastExpansion);
-            } else if (childNode instanceof Ruleref) {
-                lastExpansion = parseRuleref((Ruleref) childNode);
+            } else if (child instanceof Ruleref) {
+                final Ruleref ruleref = (Ruleref) child;
+                lastExpansion = parseRuleref(ruleref);
                 grammarRule.setRule(lastExpansion);
-            } else if (childNode instanceof Tag) {
-                String textContent = childNode.getTextContent();
+            } else if (child instanceof Tag) {
+                String textContent = child.getTextContent();
                 if (currentGrammar.isLiteral())
                     textContent = "out='" + escapeSingleQuotes(textContent)
                             + "';";
-
-                if (lastExpansion == null)
-                    grammarRule.addInitialSI(textContent);
-                else
+                if (lastExpansion == null) {
+                    grammarRule.addInitialSemanticInterpretation(textContent);
+                } else {
+                    final SemanticInterpretationBlock interpretation =
+                            new SemanticInterpretationBlock(textContent);
                     lastExpansion
-                            .setExecutionSemanticInterpretation(new SemanticInterpretationBlock(
-                                    textContent));
-            } else if (childNode instanceof org.jvoicexml.xml.Text) {
+                            .setExecutionSemanticInterpretation(interpretation);
+                }
+            } else if (child instanceof org.jvoicexml.xml.Text) {
                 // ignore
             } else {
-
                 LOGGER.warn("Unknown node type "
-                        + childNode.getClass().getCanonicalName());
+                        + child.getClass().getCanonicalName());
             }
         }
-
     }
 
     private String escapeSingleQuotes(String textContent) {
