@@ -14,7 +14,7 @@ public class TestOneOfRuleRef {
     
 
     @Test
-    public void testDefaultAssignment4no() throws Exception {
+    public void testDefaultAssignment4No() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
                 .loadDocument("/defaultAssignment4.srgs");
         MatchConsumption mc = parsedGrammar.match("nope");
@@ -25,7 +25,7 @@ public class TestOneOfRuleRef {
     }
     
     @Test
-    public void testDefaultAssignment4yeah() throws Exception {
+    public void testDefaultAssignment4Yeah() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
                 .loadDocument("/defaultAssignment4.srgs");
         MatchConsumption mc = parsedGrammar.match("yes");
@@ -36,7 +36,7 @@ public class TestOneOfRuleRef {
     }
     
     @Test
-    public void testDefaultAssignment4ah_nope() throws Exception {
+    public void testDefaultAssignment4AhNope() throws Exception {
         SrgsSisrGrammar parsedGrammar = Utils
                 .loadDocument("/defaultAssignment4.srgs");
         MatchConsumption mc = parsedGrammar.match("ah nope");

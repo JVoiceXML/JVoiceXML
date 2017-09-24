@@ -172,8 +172,8 @@ public class SrgsSisrGrammar
     }
 
     MatchConsumption match(final String text) {
-        String[] parts = text.split(" ");
-        List<String> tokens = Arrays.asList(parts);
+        final String[] parts = text.split(" ");
+        final List<String> tokens = Arrays.asList(parts);
         return match(tokens);
     }
 

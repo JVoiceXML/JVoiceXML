@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2015-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -70,17 +70,18 @@ public class SrgsRule implements RuleExpansion {
      */
     @Override
     public MatchConsumption match(List<String> tokens, int index) {
-        if (getInnerRule() == null) {
+        final RuleExpansion rule = getInnerRule();
+        if (rule == null) {
             return null;
         }
 
-        MatchConsumption result = getInnerRule().match(tokens, index);
+        final MatchConsumption result = rule.match(tokens, index);
         if (result == null) {
             return null;
         }
 
         // Wrap it in a new execution context and return
-        Context context = new Context(getId());
+        final Context context = new Context(getId());
         if (getInitialSI() != null) {
             context.addExecutableContent(getInitialSI());
         }
@@ -90,10 +91,19 @@ public class SrgsRule implements RuleExpansion {
 
     @Override
     public void dump(String pad) {
-        LOGGER.debug(pad + "rule(id=" + id + ")");
+        LOGGER.debug(pad + toString());
         innerRule.dump(pad + " ");
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append("rule(id=");
+        str.append(id);
+        str.append(")");
+        return str.toString();
+    }
+    
     @Override
     public void setExecutionSemanticInterpretation(ExecutableSemanticInterpretation si) {
         LOGGER.error("setExecutionSI should never be called on a rule");

@@ -84,8 +84,17 @@ public class RuleRefExpansion implements RuleExpansion {
     }
 
     public void dump(String pad) {
-        LOGGER.debug(pad + "RuleRefExpansion(" + referencedRule.getId() + ") ");
+        LOGGER.debug(pad + toString());
         if (executableSematicInterpretation != null)
             executableSematicInterpretation.dump(pad);
+    }
+    
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append("RuleRefExpansion(");
+        str.append(referencedRule.getId());
+        str.append(")");
+        return str.toString();
     }
 }

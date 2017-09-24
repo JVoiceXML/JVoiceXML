@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -29,10 +30,14 @@ public class Utils {
 
         File file = new File(filename);
         final InputStream input;
+        URI uri;
         if (file.exists()) {
-            input = new FileInputStream(filename);
+            input = new FileInputStream(file);
+            uri = file.toURI();
         } else {
-            input = Utils.class.getResourceAsStream(filename);
+            URL url = Utils.class.getResource(filename);
+            input = url.openStream();
+            uri = url.toURI();
         }
         Assert.assertNotNull("unable to create input stream", input);
 
@@ -45,8 +50,9 @@ public class Utils {
         final SrgsSisrXmlGrammarParser parser = new SrgsSisrXmlGrammarParser();
 
         File f = new File(filename);
-        return parser.parse(document, new URI("file:///"
-                + f.getCanonicalPath().replace('\\', '/')));
+        return parser.parse(document, uri);
+//        return parser.parse(document, new URI("file:///"
+//                + f.getCanonicalPath().replace('\\', '/')));
     }
 
     public static Object getItemOnNativeObject(Object o, String key) {

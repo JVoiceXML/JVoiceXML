@@ -108,20 +108,22 @@ public class TokenRuleExpansion implements RuleExpansion {
 
     @Override
     public void dump(String pad) {
-        StringBuilder sb = new StringBuilder();
-        boolean first = true;
-        for (String s : tokens) {
-            if (first)
-                first = false;
-            else
-                sb.append(' ');
-            sb.append(s);
-        }
-
-        LOGGER.debug(pad + "token(" + sb + ") ");
-        if (executableSI != null)
+        final String str = toString();
+        LOGGER.debug(pad + "token(" + str + ") ");
+        if (executableSI != null) {
             executableSI.dump(pad);
-
+        }
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        for (String s : tokens) {
+            if (str.length() != 0) {
+                str.append(' ');
+            }
+            str.append(s);
+        }
+        return str.toString();
+    }
 }

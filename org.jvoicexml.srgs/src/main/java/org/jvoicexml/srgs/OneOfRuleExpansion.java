@@ -21,6 +21,7 @@
 
 package org.jvoicexml.srgs;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -86,4 +87,19 @@ public class OneOfRuleExpansion implements RuleExpansion {
             executableSI.dump(pad);
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append("one-of[");
+        final Iterator<RuleExpansion> iterator = subRules.iterator();
+        while (iterator.hasNext()) {
+            final RuleExpansion rule = iterator.next();
+            str.append(rule);
+            if (iterator.hasNext()) {
+                str.append(',');
+            }
+        }
+        str.append("]");
+        return str.toString();
+    }
 }
