@@ -11,3 +11,6 @@
 /tmp/
 /userguide.synctex.gz
 /.gradle/
+/userguide.bbl
+/userguide.blg
+/jvxml-userguide-0.7.8-SNAPSHOT.pdf

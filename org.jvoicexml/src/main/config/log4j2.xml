@@ -22,11 +22,9 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="org.jvoicexml" level="debug">
-        </Logger>
+        <Logger name="org.jvoicexml" level="debug"/>
 
-        <Logger name="org.eclipse.jetty" level="info">
-        </Logger>
+        <Logger name="org.eclipse.jetty" level="info"/>
 
         <Root level="warn">
             <AppenderRef ref="stdout" />
