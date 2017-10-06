@@ -69,7 +69,7 @@ public class AddToMatchedText implements ExecutableSemanticInterpretation {
         } else {
             context.evaluateString(scope,
                     "meta.current=function() {return {text:'" + metaCurrent
-                            + " " + matchedText + "', score:1.0}};",
+                            + " " + matchedText + "', score:1.0}};".replace("'", "\\'"),
                     "AddToMatchedText:set meta1", 0, null);
         }
     }
