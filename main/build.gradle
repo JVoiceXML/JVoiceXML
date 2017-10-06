@@ -235,6 +235,7 @@ distributions {
                 from configurations.jvxmlInterpreterGrammarLUIS
                 from configurations.jvxmlImplementationJSAPI10 
                 from configurations.jvxmlImplementationJSAPI20 
+                from configurations.jvxmlImplementationKinect 
                 from configurations.jvxmlImplementationMary
                 from configurations.jvxmlImplementationMrcpv2
                 from configurations.jvxmlImplementationText

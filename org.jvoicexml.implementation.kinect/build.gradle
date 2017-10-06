@@ -15,7 +15,7 @@ buildscript {
         classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
         classpath "com.ullink.gradle:gradle-msbuild-plugin:2.9"
     }
-}
+}   
 
 sourceSets {
     main {
@@ -26,11 +26,14 @@ sourceSets {
 }
 
 dependencies {
+    testCompile project(':org.jvoicexml').sourceSets.test.output
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
+    
+    runtime fileTree(dir: "$buildDir/jni", include: ['*.dll'])
 }
 
 xslt {
@@ -60,7 +63,7 @@ task cleanJniWin32(type: com.ullink.Msbuild) {
     dependsOn generateJniHeaders
 
     solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
-    projectName = "Jsapi2SapiBridge"
+    projectName = "JVoiceXmlKinectRecognizer"
     targets = ['Clean']
     configuration = 'Release'
     platform = 'Win32'
@@ -71,7 +74,7 @@ task cleanJniWin64(type: com.ullink.Msbuild) {
     dependsOn generateJniHeaders
 
     solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
-    projectName = "Jsapi2SapiBridge"
+    projectName = "JVoiceXmlKinectRecognizer"
     targets = ['Clean']
     configuration = 'Release'
     platform = 'x64'
@@ -86,13 +89,15 @@ task cleanJni {
 clean {
     dependsOn cleanJni
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/kinect-implementation.xml")
+    delete file("${project(':org.jvoicexml').buildDir}/jni/JVoiceXmlKinectRecognizer.dll")
+    delete file("${project(':org.jvoicexml').buildDir}/jni/JVoiceXmlKinectRecognizer_x64.dll")
 }
 
 task buildJniWin32(type: com.ullink.Msbuild) {
     dependsOn generateJniHeaders
 
     solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
-    projectName = "Jsapi2SapiBridge"
+    projectName = "JVoiceXmlKinectRecognizer"
     targets = ['Build']
     configuration = 'Release'
     platform = 'Win32'
@@ -103,7 +108,7 @@ task buildJniWin64(type: com.ullink.Msbuild) {
     dependsOn generateJniHeaders
 
     solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
-    projectName = "Jsapi2SapiBridge"
+    projectName = "JVoiceXmlKinectRecognizer"
     targets = ['Build']
     configuration = 'Release'
     platform = 'x64'
@@ -129,9 +134,18 @@ task buildJni {
     }
 }
 
+task copyJNI(type: Copy) {
+    dependsOn buildJni
+
+    from("$buildDir/jni") {
+         include '*.dll'
+    }
+    into "${project(':org.jvoicexml').buildDir}/jni"
+}
+
 jar {
     dependsOn xslt
-    dependsOn buildJni
+    dependsOn copyJNI
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML Kinect implementation platform",
