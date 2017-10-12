@@ -250,7 +250,21 @@ distributions {
             }
             
             into('config') { 
-                from("${project(':org.jvoicexml').buildDir}/config") 
+                from("${project(':org.jvoicexml').buildDir}/config") {
+                    exclude "**/kinect-implementation.xml",
+                        "**/mmi-callmanager-umundo.xml",
+                        "**/jtapi-callmanager.xml",
+                        "**/jtapi-implementation.xml"
+                }
+            }
+
+            into('config/disabled') { 
+                from("${project(':org.jvoicexml').buildDir}/config") {
+                    include "**/kinect-implementation.xml",
+                        "**/mmi-callmanager-umundo.xml",
+                        "**/jtapi-callmanager.xml",
+                        "**/jtapi-implementation.xml"
+                }
             }
             
             from(jvxmlServlet) {
@@ -263,7 +277,8 @@ distributions {
             }
             
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        }
+
+        }       
     }
 }
 
@@ -277,7 +292,6 @@ run {
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
                "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
-
 }
 
 task(runDebug, dependsOn: 'jar', type: JavaExec) {
@@ -306,7 +320,10 @@ task(shutdown, dependsOn: 'jar', type: JavaExec) {
 
 startScripts {
     classpath += files('../config')
-    defaultJvmOpts = [ "-Djava.library.path=lib" ]
+    defaultJvmOpts = [ "-Djava.library.path=lib",
+               "-Djava.security.policy=config/jvoicexml.policy",
+               "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
+               "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
     doLast {
         def windowsScriptFile = file getWindowsScript()
         def unixScriptFile = file getUnixScript()
@@ -326,6 +343,17 @@ task createShutdownApp(type: CreateStartScripts) {
     outputDir = startScripts.outputDir
     applicationName = 'jvxml-shutdown'
     defaultJvmOpts = ["-Xms1024m", "-Xmx2048m"]
+    classpath += files('../config')
+    defaultJvmOpts = [ "-Djava.library.path=lib",
+               "-Djava.security.policy=config/jvoicexml.policy",
+               "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
+               "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
+    doLast {
+        def windowsScriptFile = file getWindowsScript()
+        def unixScriptFile = file getUnixScript()
+        windowsScriptFile.text = windowsScriptFile.text.replace('%APP_HOME%\\lib\\config', '%APP_HOME%\\config')
+        unixScriptFile.text = unixScriptFile.text.replace('$APP_HOME/lib/config', '$APP_HOME/config')
+    }
 }
 
 applicationDistribution.into("bin") {

@@ -39,14 +39,14 @@ import javax.telephony.media.MediaBindException;
 import javax.telephony.media.MediaConfigException;
 import javax.telephony.media.MediaProvider;
 
-import net.sourceforge.gjtapi.GenericJtapiPeer;
-import net.sourceforge.gjtapi.media.GenericMediaService;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallManager;
 import org.jvoicexml.callmanager.BaseCallManager;
 import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.event.error.NoresourceError;
+
+import net.sourceforge.gjtapi.GenericJtapiPeer;
+import net.sourceforge.gjtapi.media.GenericMediaService;
 
 /**
  * JTAPI based implementation of a {@link CallManager}.
@@ -106,7 +106,8 @@ public final class JtapiCallManager extends BaseCallManager
                 (Class<JtapiPeer>) loader.loadClass(peerName);
             peer = peerClass.newInstance();
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("successfully loaded the jtapi peer");
+                LOGGER.debug("successfully loaded the jtapi peer '"
+                        + peerName + "'");
             }
         } catch (ClassNotFoundException e) {
             throw new NoresourceError("Failed to load thejtapi peer", e);
