@@ -294,10 +294,8 @@ run {
                "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
 }
 
-task(runDebug, dependsOn: 'jar', type: JavaExec) {
+task(runDebug, type: JavaExec) {
     dependsOn jvxmlConfigurations
-    
-    dependsOn configurations.jvxmlJNDI
 
     mainClassName = "org.jvoicexml.startup.Startup"
     classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")
@@ -309,7 +307,9 @@ task(runDebug, dependsOn: 'jar', type: JavaExec) {
                "-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=12367" ]
 }
 
-task(shutdown, dependsOn: 'jar', type: JavaExec) {
+task(shutdown, type: JavaExec) {
+    dependsOn jvxmlConfigurations
+
     main = "org.jvoicexml.startup.Shutdown"
     classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",

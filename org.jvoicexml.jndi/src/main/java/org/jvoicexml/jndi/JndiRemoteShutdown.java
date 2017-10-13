@@ -23,6 +23,7 @@ package org.jvoicexml.jndi;
 
 import java.rmi.RMISecurityManager;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -72,6 +73,7 @@ public final class JndiRemoteShutdown implements RemoteShutdown {
      * @since 0.7.5
      */
     Context getInitialContext() throws NamingException {
+        // We take the values from jndi.properties but override the port
         final Hashtable<String, String> environment =
             new Hashtable<String, String>();
         environment.put(Context.INITIAL_CONTEXT_FACTORY,
@@ -84,16 +86,30 @@ public final class JndiRemoteShutdown implements RemoteShutdown {
      * Shutdown the interpreter.
      */
     public void shutdown() {
-        JVoiceXml jvxml;
+        final JVoiceXml jvxml;
+        final String providerUrl;
+        Context context = null;
         try {
-            final Context context = getInitialContext();
+            context = getInitialContext();
+            final Map<?, ?> environment = context.getEnvironment();
+            providerUrl = environment.get(Context.PROVIDER_URL).toString();
             jvxml = (JVoiceXml) context.lookup("JVoiceXml");
         } catch (javax.naming.NamingException e) {
             LOGGER.error("error obtaining JVoiceXml. Server not running?", e);
+            if (context != null) {
+                try {
+                    final Map<?, ?> environment = context.getEnvironment();
+                    for (Object key : environment.keySet()) {
+                        final Object value = environment.get(key);
+                        LOGGER.error(key + ": " + value);
+                    }
+                } catch (NamingException ignore) {
+                }
+            }
             return;
         }
 
-        LOGGER.info("shutting down JVoiceXML...");
+        LOGGER.info("shutting down JVoiceXML at '" + providerUrl + "'...");
         jvxml.shutdown();
         LOGGER.info("...shutdown request sent");
     }

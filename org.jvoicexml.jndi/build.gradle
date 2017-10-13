@@ -23,6 +23,16 @@ configurations {
     jvxmlConfiguration
 }
 
+dependencies {
+    jvxmlConfiguration fileTree(dir: "src/main/config")
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+    compile project(':org.jvoicexml')
+    compile project(':org.jvoicexml.client')
+}
+
 xslt {
     stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
     input "${projectDir}/src/main/config/jvxml-jndi.xml"
@@ -35,19 +45,18 @@ xslt {
     )
 }
 
-dependencies {
-    jvxmlConfiguration fileTree(dir: "src/main/config")
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
-
-    compile project(':org.jvoicexml')
-    compile project(':org.jvoicexml.client')
+task copyConfiguration(type: Copy) {
+    from configurations.jvxmlConfiguration.files {
+        include "jndi.properties"
+    }
+    into "${project(':org.jvoicexml').copyConfiguration.destinationDir}"
 }
 
 
 jar {
     dependsOn xslt
+    dependsOn copyConfiguration
     
     manifest {
         attributes("Implementation-Title": "JVoiceXML JNDI library",
