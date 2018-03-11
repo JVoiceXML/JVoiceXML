@@ -119,8 +119,14 @@ public final class TestFormLevelRecognitionEventStrategy {
                 model.readVariable("application.lastresult$.interpretation."
                         + field1.getSlot(), Object.class)).thenReturn(drink);
         Mockito.when(
+                model.existsVariable("application.lastresult$.interpretation."
+                        + field1.getSlot())).thenReturn(true);
+        Mockito.when(
                 model.readVariable("application.lastresult$.interpretation."
                         + field2.getSlot(), Object.class)).thenReturn(food);
+        Mockito.when(
+                model.existsVariable("application.lastresult$.interpretation."
+                        + field2.getSlot())).thenReturn(true);
 
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         strategy.process(event);
@@ -170,6 +176,9 @@ public final class TestFormLevelRecognitionEventStrategy {
         Mockito.when(
                 model.readVariable("application.lastresult$.interpretation."
                         + field1.getSlot(), Object.class)).thenReturn(drink);
+        Mockito.when(
+                model.existsVariable("application.lastresult$.interpretation."
+                        + field1.getSlot())).thenReturn(true);
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         strategy.process(event);
         Mockito.verify(model).updateVariable(field1.getName(), drink);
