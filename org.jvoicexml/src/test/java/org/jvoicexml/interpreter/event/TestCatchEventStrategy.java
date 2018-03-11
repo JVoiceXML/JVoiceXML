@@ -32,12 +32,14 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
@@ -51,6 +53,11 @@ import org.jvoicexml.xml.vxml.Noinput;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
+
+import java.util.Collections;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 
 /**
  * Test cases for {@link CatchEventStrategy}.
@@ -73,7 +80,7 @@ public final class TestCatchEventStrategy {
      *             setup failed.
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws Exception, SemanticError {
         final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final Profile profile = Mockito.mock(Profile.class);
@@ -85,6 +92,12 @@ public final class TestCatchEventStrategy {
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile);
         final Configuration configuration = Mockito.mock(Configuration.class);
+        final DataModel dataModel = Mockito.mock(DataModel.class);
+        Mockito.when(dataModel.evaluateExpression(eq("true"), any())).thenReturn(Boolean.TRUE);
+        Mockito.when(dataModel.evaluateExpression(eq("false"), any())).thenReturn(Boolean.FALSE);
+        Mockito.when(configuration.loadObjects(DataModel.class, "datamodel"))
+                .thenReturn(Collections.singleton(dataModel));
+
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
     }
