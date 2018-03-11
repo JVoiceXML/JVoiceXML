@@ -48,6 +48,8 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
 
+import static org.mockito.Matchers.endsWith;
+
 /**
  * Test cases for {@link FieldFormItem}.
  * 
@@ -167,8 +169,10 @@ public final class TestFieldFormItem {
         Mockito.when(result.isAccepted()).thenReturn(true);
         Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
         Mockito.when(context.getDataModel()).thenReturn(model);
-        Mockito.when(model.readVariable("pizza.size", Object.class))
+        Mockito.when(model.readVariable("application.lastresult$.interpretation.pizza.size", Object.class))
                 .thenReturn("large");
+        Mockito.when(model.existsVariable(endsWith("application.lastresult$.interpretation.pizza.size")))
+                .thenReturn(true);
         field.setSlot("pizza.size");
         item.setFormItemVariable(result);
         Mockito.verify(model).updateVariable(item.getName(), "large");
