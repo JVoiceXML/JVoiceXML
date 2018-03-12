@@ -77,8 +77,7 @@ public final class TestGslGrammarIdentifier {
     @Test
     public void testIdentify() throws Exception {
         final GrammarDocument document =
-            GrammarUtil.getGrammarFromResource(
-                "/org/jvoicexml/interpreter/grammar/identifier/test.gsl");
+            GrammarUtil.getGrammarFromResource("/test.gsl");
         final GrammarType type = identifier.identify(document);
         Assert.assertEquals(GrammarType.GSL, type);
     }
