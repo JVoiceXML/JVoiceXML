@@ -41,6 +41,12 @@ public final class MockConnectionInformation implements ConnectionInformation {
     /** The serial version UID. */
     private static final long serialVersionUID = -3795809583703263932L;
 
+    private String callControl = "not set";
+
+    public MockConnectionInformation(final String callControl) {
+        this.callControl = callControl;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -54,7 +60,7 @@ public final class MockConnectionInformation implements ConnectionInformation {
      */
     @Override
     public String getCallControl() {
-        return "dummy";
+        return callControl;
     }
 
     /**

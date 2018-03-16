@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter.event;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.interpreter.EventStrategy;
@@ -77,12 +78,13 @@ public final class TestEventStrategyDecoratorFactory {
 
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile);
-        context = new VoiceXmlInterpreterContext(session, null);
+        final Configuration configuration = Mockito.mock(Configuration.class);
+        context = new VoiceXmlInterpreterContext(session, configuration);
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.event.EventStrategyDecoratorFactory#getDecorator(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * {@link org.jvoicexml.interpreter.event.EventStrategyDecoratorFactory#getDecorator(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.CatchContainer)}
      * .
      * 
      * @exception Exception

@@ -2,3 +2,9 @@
 /local.properties
 /version.tex
 /version.log
+work/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/

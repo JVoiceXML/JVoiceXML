@@ -86,7 +86,7 @@ public final class TestJVoiceXmlImplementationPlatform {
             new MockSpokenInputFactory();
         spokenInputFactory.setInstances(1);
         recognizerPool.addResourceFactory(spokenInputFactory);
-        info = new MockConnectionInformation();
+        info = new MockConnectionInformation(telephonyFactory.getType());
         platform = new JVoiceXmlImplementationPlatform(telephonyPool,
                 synthesizerPool, recognizerPool, info);
     }

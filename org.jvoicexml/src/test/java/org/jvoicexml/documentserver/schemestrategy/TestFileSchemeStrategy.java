@@ -29,6 +29,7 @@ package org.jvoicexml.documentserver.schemestrategy;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -58,7 +59,7 @@ public final class TestFileSchemeStrategy {
     }
 
     /**
-     * Test for {@link FileSchemeStrategy#getInputStream(org.jvoicexml.Session, java.net.URI, org.jvoicexml.xml.vxml.RequestMethod, long, java.util.Map)}.
+     * Test for {@link FileSchemeStrategy#getInputStream(String, java.net.URI, org.jvoicexml.xml.vxml.RequestMethod, long, java.util.Collection)}.
      * @exception Exception
      *            test failed
      * @exception JVoiceXMLEvent
@@ -66,7 +67,7 @@ public final class TestFileSchemeStrategy {
      */
     @Test
     public void testGetInputStream() throws Exception, JVoiceXMLEvent {
-       final File file = new File("unittests/config/hello.vxml");
+       final URL file = this.getClass().getResource("/hello.vxml");
        final URI uri = file.toURI();
        InputStream in = strategy.getInputStream(null, uri, null, 5000, null);
        Assert.assertNotNull(in);
@@ -74,7 +75,7 @@ public final class TestFileSchemeStrategy {
     }
 
     /**
-     * Test for {@link FileSchemeStrategy#getInputStream(org.jvoicexml.Session, java.net.URI, org.jvoicexml.xml.vxml.RequestMethod, long, java.util.Map)}.
+     * Test for {@link FileSchemeStrategy#getInputStream(String, java.net.URI, org.jvoicexml.xml.vxml.RequestMethod, long, java.util.Collection)}.
      * @exception Exception
      *            test failed
      * @exception JVoiceXMLEvent
@@ -82,7 +83,7 @@ public final class TestFileSchemeStrategy {
      */
     @Test
     public void testGetInputStreamFragment() throws Exception, JVoiceXMLEvent {
-       final File file = new File("unittests/config/hello.vxml");
+       final URL file = this.getClass().getResource("/hello.vxml");
        final URI uri = file.toURI();
        final URI fragmentUri = new URI(uri.toString() + "#fragment");
        InputStream in = strategy.getInputStream(null, fragmentUri, null, 5000,

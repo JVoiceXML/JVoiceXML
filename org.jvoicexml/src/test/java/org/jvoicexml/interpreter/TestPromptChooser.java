@@ -47,6 +47,11 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.when;
+
 /**
  * Test cases for {@link PromptChooser}.
  * 
@@ -55,6 +60,15 @@ import org.mockito.Mockito;
  * @since 0.7.6
  */
 public final class TestPromptChooser {
+
+    public static final String TRUE_CONDITION = "2 == 2";
+    public static final String FALSE_CONDITION = "1 == 2";
+
+    /**
+     * Prompts with no condition set have 'true' condition value
+     */
+    public static final String DEFAULT_CONDITION = "true";
+
     /** The VoiceXmlInterpreterContext to use. */
     private VoiceXmlInterpreterContext context;
     /** The document containing the field. */
@@ -80,23 +94,26 @@ public final class TestPromptChooser {
         field.setName("testfield");
         final JVoiceXmlCore jvxml = Mockito.mock(JVoiceXmlCore.class);
         final Configuration configuration = Mockito.mock(Configuration.class);
-        Mockito.when(jvxml.getConfiguration()).thenReturn(configuration);
+        when(jvxml.getConfiguration()).thenReturn(configuration);
         final ImplementationPlatform platform = Mockito
                 .mock(ImplementationPlatform.class);
         final Profile profile = Mockito.mock(Profile.class);
         final SsmlParsingStrategyFactory factory = Mockito
                 .mock(SsmlParsingStrategyFactory.class);
-        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
+        when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
         final JVoiceXmlSession session = Mockito.spy(new JVoiceXmlSession(
                 platform, jvxml, null, profile));
         context = Mockito.spy(new VoiceXmlInterpreterContext(session,
                 configuration));
-        Mockito.when(session.getVoiceXmlInterpreterContext()).thenReturn(
+        when(session.getVoiceXmlInterpreterContext()).thenReturn(
                 context);
-        final DataModel model = Mockito.mock(DataModel.class);
-        Mockito.when(context.getDataModel()).thenReturn(model);
 
+        final DataModel model = Mockito.mock(DataModel.class);
+        when(model.evaluateExpression(eq(DEFAULT_CONDITION), any())).thenReturn(Boolean.TRUE);
+        when(model.evaluateExpression(eq(TRUE_CONDITION), any())).thenReturn(Boolean.TRUE);
+        when(model.evaluateExpression(eq(FALSE_CONDITION), any())).thenReturn(Boolean.FALSE);
+        Mockito.doReturn(model).when(context).getDataModel();
     }
 
     /**
@@ -107,7 +124,7 @@ public final class TestPromptChooser {
      *                test failed
      */
     @Test
-    public void testCollect() throws JVoiceXMLEvent {
+    public void testCollectPromptsWithoutCondition() throws JVoiceXMLEvent {
         final Prompt prompt1 = field.appendChild(Prompt.class);
         prompt1.addText("prompt 1");
         final Prompt prompt2 = field.appendChild(Prompt.class);
@@ -129,13 +146,15 @@ public final class TestPromptChooser {
      *                test failed
      */
     @Test
-    public void testCollectCond() throws JVoiceXMLEvent {
+    public void testCollectPromptsWithCondition() throws JVoiceXMLEvent {
         final Prompt prompt1 = field.appendChild(Prompt.class);
         prompt1.addText("prompt 1");
-        prompt1.setCond("1 == 2");
+        prompt1.setCond(FALSE_CONDITION);
+
         final Prompt prompt2 = field.appendChild(Prompt.class);
         prompt2.addText("prompt 2");
-        prompt2.setCond("2 == 2");
+        prompt2.setCond(TRUE_CONDITION);
+
         final PromptCountable countable = new FieldFormItem(context, field);
         final PromptChooser chooser = new PromptChooser(countable, context);
         final Collection<VoiceXmlNode> prompts = chooser.collect();

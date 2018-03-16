@@ -32,11 +32,15 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
+import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
+import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.vxml.Form;
+import org.jvoicexml.xml.vxml.Menu;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
@@ -59,7 +63,14 @@ public final class TestVoiceXmlInterpreter {
      * Test setup.
      */
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
+        configuration = Mockito.mock(Configuration.class);
+        JVoiceXmlDialogFactory dialogFactory = new JVoiceXmlDialogFactory();
+        dialogFactory.addDialogMapping(Form.TAG_NAME, new ExecutablePlainForm());
+        dialogFactory.addDialogMapping(Menu.TAG_NAME, new ExecutableMenuForm());
+        Mockito.when(configuration.loadObject(DialogFactory.class))
+                .thenReturn(dialogFactory);
+
         final ImplementationPlatform platform = new MockImplementationPlatform();
         final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         final Profile profile = Mockito.mock(Profile.class);
@@ -71,9 +82,9 @@ public final class TestVoiceXmlInterpreter {
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile);
         final VoiceXmlInterpreterContext context = new VoiceXmlInterpreterContext(
-                session, null);
+                session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
-        configuration = Mockito.mock(Configuration.class);
+
     }
 
     /**
@@ -87,7 +98,7 @@ public final class TestVoiceXmlInterpreter {
     }
 
     /**
-     * Test method for {@link VoiceXmlInterpreter#setDocument()}.
+     * Test method for {@link VoiceXmlInterpreter#setDocument(VoiceXmlDocument, String, Configuration)}.
      *
      * @exception Exception
      *                test failed
@@ -106,7 +117,7 @@ public final class TestVoiceXmlInterpreter {
     }
 
     /**
-     * Test method for {@link VoiceXmlInterpreter#setDocument()} with 2 forms.
+     * Test method for {@link VoiceXmlInterpreter#setDocument(VoiceXmlDocument, String, Configuration)} with 2 forms.
      *
      * @exception Exception
      *                test failed
@@ -129,7 +140,7 @@ public final class TestVoiceXmlInterpreter {
     }
 
     /**
-     * Test method for {@link VoiceXmlInterpreter#setDocument()} without forms.
+     * Test method for {@link VoiceXmlInterpreter#setDocument(VoiceXmlDocument, String, Configuration)} without forms.
      *
      * @exception Exception
      *                test failed
@@ -144,7 +155,7 @@ public final class TestVoiceXmlInterpreter {
     }
 
     /**
-     * Test method for {@link VoiceXmlInterpreter#setDocument()} with a null
+     * Test method for {@link VoiceXmlInterpreter#setDocument(VoiceXmlDocument, String, Configuration)} with a null
      * document.
      *
      * @exception Exception
@@ -188,7 +199,7 @@ public final class TestVoiceXmlInterpreter {
     }
 
     /**
-     * Test method for {@link VoiceXmlInterpreter#getDialog(java.lang.String}
+     * Test method for {@link VoiceXmlInterpreter#getDialog(java.lang.String)}
      * without a document.
      *
      * @exception Exception

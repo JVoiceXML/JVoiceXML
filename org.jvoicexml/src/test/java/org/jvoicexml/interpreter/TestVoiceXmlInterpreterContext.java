@@ -37,6 +37,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
+import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -78,6 +79,7 @@ public final class TestVoiceXmlInterpreterContext {
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
+        server.setDocumentStorage(Mockito.mock(DocumentStorage.class));
         server.start();
 
         final ImplementationPlatform platform = new MockImplementationPlatform();
@@ -91,6 +93,8 @@ public final class TestVoiceXmlInterpreterContext {
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile);
         final Configuration configuration = Mockito.mock(Configuration.class);
+        Mockito.when(configuration.loadObject(SpeechRecognizerProperties.class))
+                .thenReturn(new SpeechRecognizerProperties());
         context = new VoiceXmlInterpreterContext(session, configuration);
     }
 
@@ -116,7 +120,7 @@ public final class TestVoiceXmlInterpreterContext {
 
     /**
      * Test method for
-     * {@link VoiceXmlInterpreterContext#getSpeechRecognizerProperties()}.
+     * {@link VoiceXmlInterpreterContext#getSpeechRecognizerProperties(FormInterpretationAlgorithm)}.
      * 
      * @exception Exception
      *                test failed
@@ -145,7 +149,7 @@ public final class TestVoiceXmlInterpreterContext {
 
     /**
      * Test method for
-     * {@link VoiceXmlInterpreterContext#getSpeechRecognizerProperties()}.
+     * {@link VoiceXmlInterpreterContext#getSpeechRecognizerProperties(FormInterpretationAlgorithm)}.
      * 
      * @exception Exception
      *                test failed
