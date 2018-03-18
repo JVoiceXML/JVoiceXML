@@ -33,7 +33,7 @@ import org.apache.logging.log4j.Logger;
  * @since 0.7
  * @param <T> type of the session identifier
  */
-public final class SessionStorage<T> {
+public class SessionStorage<T> {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LogManager.getLogger(SessionStorage.class);

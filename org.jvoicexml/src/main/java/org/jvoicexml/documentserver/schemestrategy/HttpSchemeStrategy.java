@@ -26,8 +26,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -71,7 +73,7 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
     public static final String HTTP_SCHEME_NAME = "http";
 
     /** the storage of session identifiers. */
-    private static final SessionStorage<HttpClientBuilder> SESSION_STORAGE;
+    protected static SessionStorage<HttpClientBuilder> SESSION_STORAGE;
 
     /** Scheme name for this strategy. */
     private String scheme;
@@ -137,8 +139,8 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
         final RequestConfig config = setTimeout(timeout);
         try (CloseableHttpClient client = builder
                 .setDefaultRequestConfig(config).build()) {
-            final URI fragmentLessUri = new URI(uri.getScheme(),
-                    uri.getAuthority(), uri.getPath(), uri.getQuery(), null);
+            final String fragmentLessUriString = StringUtils.substringBeforeLast(uri.toString(), "#");
+            final URI fragmentLessUri = new URI(fragmentLessUriString);
             final URI requestUri = addParameters(parameters, fragmentLessUri);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("connecting to '" + requestUri + "'...");
@@ -203,8 +205,8 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
      * 
      * @param parameters
      *            parameters to add
-     * @param builder
-     *            the given URI builder
+     * @param uri
+     *            uri to add parameters to
      * @return URI with the given parameters
      * @throws URISyntaxException
      *             error creating a URI
