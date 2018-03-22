@@ -72,12 +72,39 @@ task xsltImplementation(type: com.github.eerohele.SaxonXsltTask) {
     )
 }
 
+task xsltImplementationDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/mrcpv2-implementation.xml"
+    output "${project(':main').buildDir}/config/mrcpv2-implementation.xml"
+    parameters(
+        buildpath: "lib",
+        version: version,
+        libs: configurations.compile
+    )
+}
+
 task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
     stylesheet "${projectDir}/src/main/resources/patch-callmanager-configuration.xsl"
     input "${projectDir}/src/main/resources/mrcpv2-callmanager.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-callmanager.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        version: version,
+        libs: configurations.compile,
+        address: System.getenv("JVOICEXML_SIP_ADDRESS") ?: "sip:127.0.0.1:4245",
+        port: System.getenv("JVOICEXML_SIP_PORT") ?: 4245,
+        cairoAddress: System.getenv("JVOICEXML_CAIRO_ADDRESS") ?: "sip:cairo@speechforge.org",
+        cairoHost: System.getenv("JVOICEXML_CAIRO_HOST") ?: "127.0.0.1",
+        cairoPort: System.getenv("JVOICEXML_CAIRO_PORT") ?: 5050
+    )
+}
+
+task xsltCallmanagerDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/resources/patch-callmanager-configuration.xsl"
+    input "${projectDir}/src/main/resources/mrcpv2-callmanager.xml"
+    output "${project(':main').buildDir}/config/mrcpv2-callmanager.xml"
+    parameters(
+        buildpath: "lib",
         version: version,
         libs: configurations.compile,
         address: System.getenv("JVOICEXML_SIP_ADDRESS") ?: "sip:127.0.0.1:4245",
@@ -112,7 +139,9 @@ task copyReferencedLibraries(type: Copy) {
 
 jar {
     dependsOn xsltImplementation
+    dependsOn xsltImplementationDistribution
     dependsOn xsltCallmanager
+    dependsOn xsltCallmanagerDistribution
     dependsOn copyReferencedLibraries
 
     manifest {

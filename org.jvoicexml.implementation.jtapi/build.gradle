@@ -50,6 +50,18 @@ task xsltImplementation(type: com.github.eerohele.SaxonXsltTask) {
     )
 }
 
+task xsltImplementationDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/jtapi-implementation.xml"
+    output "${project(':main').buildDir}/config/jtapi-implementation.xml"
+    parameters(
+        buildpath: "lib",
+        version: version,
+        libs: configurations.compile
+    )
+}
+
+
 task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
     stylesheet "${projectDir}/src/main/config/patch-callmanager-configuration.xsl"
     input "${projectDir}/src/main/config/jtapi-callmanager.xml"
@@ -64,6 +76,22 @@ task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
         outputType: project.property('org.jvoicexml.callmanager.jtapi.sip.outputType')
     )
 }
+
+task xsltCallmanagerDistribution(type: com.github.eerohele.SaxonXsltTask)  {
+    stylesheet "${projectDir}/src/main/config/patch-callmanager-configuration.xsl"
+    input "${projectDir}/src/main/config/jtapi-callmanager.xml"
+    output "${project(':main').buildDir}/config/jtapi-callmanager.xml"
+    parameters(
+        buildpath: "lib",
+        version: version,
+        libs: configurations.compile,
+        providername: project.property('org.jvoicexml.callmanager.jtapi.sip.providername'),
+        terminal: project.property('org.jvoicexml.callmanager.jtapi.sip.terminal'),
+        inputType: project.property('org.jvoicexml.callmanager.jtapi.sip.inputType'),
+        outputType: project.property('org.jvoicexml.callmanager.jtapi.sip.outputType')
+    )
+}
+
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
@@ -85,7 +113,9 @@ task copyConfiguration(type: Copy) {
 
 jar {
     dependsOn xsltImplementation
+    dependsOn xsltImplementationDistribution
     dependsOn xsltCallmanager
+    dependsOn xsltCallmanagerDistribution
     dependsOn copyReferencedLibraries
     dependsOn copyConfiguration
 

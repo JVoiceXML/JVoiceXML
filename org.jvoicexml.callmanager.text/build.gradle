@@ -48,6 +48,17 @@ xslt {
     )
 }
 
+task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/text-callmanager.xml"
+    output "${project(':main').buildDir}/config/text-callmanager.xml"
+    parameters(
+        buildpath: "lib",
+        version: version,
+        libs: configurations.compile
+    )
+}
+
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
@@ -59,6 +70,7 @@ task copyReferencedLibraries(type: Copy) {
 
 jar {
     dependsOn xslt
+    dependsOn xsltDistribution
     dependsOn copyReferencedLibraries
 
     manifest {

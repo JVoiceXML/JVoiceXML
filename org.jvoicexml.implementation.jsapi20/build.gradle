@@ -39,7 +39,6 @@ dependencies {
     compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sphinx4', version: '0.6-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sapi', version: '0.6-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'cmu_us_kal', version: '1.2.3-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'cmu_time_awb', version: '1.2.3-SNAPSHOT'
     
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
@@ -59,6 +58,17 @@ task xsltSphinxFreeTTS(type: com.github.eerohele.SaxonXsltTask) {
     )
 }
 
+task xsltSphinxFreeTTSDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/jsapi20-implementation.xml"
+    output "${project(':main').buildDir}/config/jsapi20-implementation.xml"
+    parameters(
+        buildpath: "lib",
+        version: version,
+        libs: configurations.compile
+    )
+}
+
 task xsltSAPI(type: com.github.eerohele.SaxonXsltTask) {
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/jsapi20-sapi-implementation.xml"
@@ -70,12 +80,24 @@ task xsltSAPI(type: com.github.eerohele.SaxonXsltTask) {
     )
 }
 
+task xsltSAPIDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/jsapi20-sapi-implementation.xml"
+    output "${project(':main').buildDir}/config/jsapi20-sapi-implementation.xml"
+    parameters(
+        buildpath: "lib",
+        version: version,
+        libs: configurations.compile
+    )
+}
+
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
     from(configurations.compile) {
          include 'freetts*.jar',
          'cmu_us_kal*.jar',
          'cmulex*.jar',
+         'cmutimelex*.jar',
          'en_us*.jar',
          'sphinx4*.jar',
          'javax.speech*.jar',
@@ -98,16 +120,15 @@ jar {
             project.property('org.jvoicexml.implementation.jsapi20.freettssphinx') == 'true'
         }
     }
+    dependsOn xsltSphinxFreeTTSDistribution
     dependsOn xsltSAPI {
         onlyIf { 
             project.property('org.jvoicexml.implementation.jsapi20.sapi') == 'true'
         }
     }
-    dependsOn copyJNI {
-        onlyIf { 
-            project.property('org.jvoicexml.implementation.jsapi20.sapi') == 'true'
-        }
-    }
+    dependsOn xsltSAPIDistribution
+    
+    dependsOn copyJNI
     dependsOn copyReferencedLibraries
 
     manifest {

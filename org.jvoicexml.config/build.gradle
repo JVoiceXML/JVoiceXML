@@ -33,8 +33,14 @@ task copyConfiguration(type: Copy) {
     into "${project(':org.jvoicexml').copyConfiguration.destinationDir}"
 }
 
+task copyConfigurationDistribution(type: Copy) {
+    from configurations.jvxmlConfiguration.files
+    into "${project(':main').buildDir}/config"
+}
+
 jar {
     dependsOn copyConfiguration
+    dependsOn copyConfigurationDistribution
     
     from ('./src/main/resources') {
         include 'services/*'

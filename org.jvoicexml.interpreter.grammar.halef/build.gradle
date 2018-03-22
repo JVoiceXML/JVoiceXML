@@ -45,8 +45,20 @@ xslt {
     )
 }
 
+task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/halef-grammar.xml"
+    output "${project(':main').buildDir}/config/halef-grammar.xml"
+    parameters(
+        buildpath: "lib",
+        version: version,
+        libs: configurations.compile
+    )
+}
+
 jar {
     dependsOn xslt
+    dependsOn xsltDistribution
 
     from ('./src/main/resources') {
         include 'services/*'

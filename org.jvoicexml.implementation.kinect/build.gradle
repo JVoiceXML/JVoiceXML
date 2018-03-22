@@ -47,6 +47,17 @@ xslt {
     )
 }
 
+task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
+    input "${projectDir}/src/main/resources/kinect-implementation.xml"
+    output "${project(':main').buildDir}/config/kinect-implementation.xml"
+    parameters(
+        buildpath: "lib",
+        version: version,
+        libs: configurations.compile
+    )
+}
+
 task generateJniHeaders(type: Exec) {
     dependsOn classes
     
@@ -145,6 +156,7 @@ task copyJNI(type: Copy) {
 
 jar {
     dependsOn xslt
+    dependsOn xsltDistribution
     dependsOn copyJNI
 
     manifest {

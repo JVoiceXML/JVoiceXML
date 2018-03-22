@@ -247,10 +247,12 @@ distributions {
                 from configurations.jvxmlProfileMMIHTTP
                 from configurations.jvxmlProfileMMISocket
                 from configurations.jvxmlProfileMMIuMundo
+                
+                from("${project(':org.jvoicexml').buildDir}/jni")
             }
             
             into('config') { 
-                from("${project(':org.jvoicexml').buildDir}/config") {
+                from("${buildDir}/config") {
                     exclude "**/kinect-implementation.xml",
                         "**/mmi-callmanager-umundo.xml",
                         "**/jtapi-callmanager.xml",
@@ -259,7 +261,7 @@ distributions {
             }
 
             into('config/disabled') { 
-                from("${project(':org.jvoicexml').buildDir}/config") {
+                from("${buildDir}/config") {
                     include "**/kinect-implementation.xml",
                         "**/mmi-callmanager-umundo.xml",
                         "**/jtapi-callmanager.xml",
@@ -308,12 +310,12 @@ task(runDebug, type: JavaExec) {
 }
 
 task(shutdown, type: JavaExec) {
-    dependsOn jvxmlConfigurations
+    dependsOn configurations.jvxmlJNDI
 
     main = "org.jvoicexml.startup.Shutdown"
     classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
-                             "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
+                             "-Djava.security.policy=file://${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                              "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
                              "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
 }
