@@ -117,6 +117,6 @@ public final class MockCallControl implements CallControl {
      */
     @Override
     public boolean isCallActive() {
-        return false;
+        return true;
     }
 }

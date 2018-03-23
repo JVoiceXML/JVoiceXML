@@ -28,6 +28,7 @@ package org.jvoicexml.documentserver;
 import java.io.File;
 import java.io.StringReader;
 import java.net.URI;
+import java.net.URL;
 import java.util.UUID;
 
 import javax.sound.sampled.AudioInputStream;
@@ -39,6 +40,7 @@ import org.junit.Test;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
+import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
@@ -79,6 +81,7 @@ public final class TestJVoiceXmlDocumentServer {
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
         server.addSchemeStrategy(new FileSchemeStrategy());
+        server.setDocumentStorage(Mockito.mock(DocumentStorage.class));
         server.start();
     }
 
@@ -148,7 +151,7 @@ public final class TestJVoiceXmlDocumentServer {
      */
     @Test
     public void testGetObjectBinary() throws JVoiceXMLEvent, Exception {
-        final File file = new File("unittests/config/test.wav");
+        final URL file = this.getClass().getResource("/test.wav");
         final URI uri = file.toURI();
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final Object object = server.getObject(null, descriptor, null);
@@ -169,7 +172,7 @@ public final class TestJVoiceXmlDocumentServer {
      */
     @Test
     public void testStoreAudio() throws Exception, JVoiceXMLEvent {
-        final File file = new File("unittests/config/test.wav");
+        final URL file = this.getClass().getResource("/test.wav");
         final AudioInputStream ain = AudioSystem.getAudioInputStream(file);
         final URI result = server.storeAudio(ain);
         Assert.assertNotNull(result);
@@ -179,7 +182,7 @@ public final class TestJVoiceXmlDocumentServer {
 
     /**
      * Test method for
-     * {@link JVoiceXmlDocumentServer#getAudioInputStream(Session, URI)}.
+     * {@link JVoiceXmlDocumentServer#getAudioInputStream(String, URI)}.
      * 
      * @since 0.7.2
      * @exception Exception
@@ -189,7 +192,7 @@ public final class TestJVoiceXmlDocumentServer {
      */
     @Test
     public void testGetAudioInputStream() throws Exception, JVoiceXMLEvent {
-        final File file = new File("unittests/config/test.wav");
+        final URL file = this.getClass().getResource("/test.wav");
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
                 UUID.randomUUID().toString());
@@ -201,7 +204,7 @@ public final class TestJVoiceXmlDocumentServer {
 
     /**
      * Test case for
-     * {@link JVoiceXmlDocumentServer#getDocument(Session, DocumentDescriptor)}.
+     * {@link JVoiceXmlDocumentServer#getDocument(String, DocumentDescriptor)}.
      * 
      * @throws Exception
      *             test failed
@@ -225,7 +228,7 @@ public final class TestJVoiceXmlDocumentServer {
 
     /**
      * Test case for
-     * {@link JVoiceXmlDocumentServer#getDocument(Session, DocumentDescriptor)}.
+     * {@link JVoiceXmlDocumentServer#getDocument(String, DocumentDescriptor)}.
      * 
      * @throws Exception
      *             test failed
@@ -251,7 +254,7 @@ public final class TestJVoiceXmlDocumentServer {
 
     /**
      * Test case for
-     * {@link JVoiceXmlDocumentServer#getDocument(Session, DocumentDescriptor)}.
+     * {@link JVoiceXmlDocumentServer#getDocument(String, DocumentDescriptor)}.
      * 
      * @throws Exception
      *             test failed

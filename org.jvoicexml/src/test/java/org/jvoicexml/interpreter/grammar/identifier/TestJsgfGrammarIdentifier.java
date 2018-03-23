@@ -78,8 +78,7 @@ public final class TestJsgfGrammarIdentifier {
     @Test
     public void testIdentify() throws Exception {
         final GrammarDocument document =
-            GrammarUtil.getGrammarFromResource(
-                "/org/jvoicexml/interpreter/grammar/identifier/jvoicexml.gram");
+            GrammarUtil.getGrammarFromResource("/jvoicexml.gram");
         final GrammarType type = identifier.identify(document);
         Assert.assertEquals(GrammarType.JSGF, type);
     }

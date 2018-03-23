@@ -51,12 +51,12 @@ public final class TestSrgsXmlGrammarIdentifier {
     /**
      * Defines the base directory to VXML 2.1 IRP the test grammars.
      */
-    private static final String BASE21 = "unittests/config/irp_vxml21/";
+    private static final String BASE21 = "/irp_vxml21/";
 
     /**
      * Defines the base directory to VXML 2.0 IRP the test grammars.
      */
-    private static final String BASE20 = "unittests/config/irp_vxml20/";
+    private static final String BASE20 = "/irp_vxml20/";
 
     /**
      * Set up the test environment.
@@ -86,7 +86,7 @@ public final class TestSrgsXmlGrammarIdentifier {
     @Test
     public void test1() throws Exception {
         GrammarDocument doc =
-            GrammarUtil.getGrammarFromFile(BASE21 + "1/1_grammar.grxml");
+            GrammarUtil.getGrammarFromResource(BASE21 + "1/1_grammar.grxml");
 
         final GrammarType type = identifier.identify(doc);
         Assert.assertEquals(GrammarType.SRGS_XML, type);
@@ -100,7 +100,7 @@ public final class TestSrgsXmlGrammarIdentifier {
     @Test
     public void test2a() throws Exception {
         GrammarDocument doc =
-            GrammarUtil.getGrammarFromFile(BASE21 + "2/2_grammar_a.grxml");
+            GrammarUtil.getGrammarFromResource(BASE21 + "2/2_grammar_a.grxml");
 
         final GrammarType type = identifier.identify(doc);
         Assert.assertEquals(GrammarType.SRGS_XML, type);
@@ -114,7 +114,7 @@ public final class TestSrgsXmlGrammarIdentifier {
     @Test
     public void test2b() throws Exception {
         GrammarDocument doc =
-                GrammarUtil.getGrammarFromFile(BASE21 + "2/2_grammar_b.grxml");
+                GrammarUtil.getGrammarFromResource(BASE21 + "2/2_grammar_b.grxml");
 
         final GrammarType type = identifier.identify(doc);
         Assert.assertEquals(GrammarType.SRGS_XML, type);
@@ -128,7 +128,7 @@ public final class TestSrgsXmlGrammarIdentifier {
     @Test
     public void test3() throws Exception {
         GrammarDocument doc =
-                GrammarUtil.getGrammarFromFile(BASE21 + "3/3_grammar_a.grxml");
+                GrammarUtil.getGrammarFromResource(BASE21 + "3/3_grammar_a.grxml");
 
         final GrammarType type = identifier.identify(doc);
         Assert.assertEquals(GrammarType.SRGS_XML, type);
@@ -142,7 +142,7 @@ public final class TestSrgsXmlGrammarIdentifier {
     @Test
     public void test5() throws Exception {
         GrammarDocument doc =
-            GrammarUtil.getGrammarFromFile(BASE21 + "5/first.grxml");
+            GrammarUtil.getGrammarFromResource(BASE21 + "5/first.grxml");
 
         final GrammarType type = identifier.identify(doc);
         Assert.assertEquals(GrammarType.SRGS_XML, type);
@@ -156,7 +156,7 @@ public final class TestSrgsXmlGrammarIdentifier {
     @Test
     public void test7() throws Exception {
         GrammarDocument doc =
-            GrammarUtil.getGrammarFromFile(BASE21 + "7/7.grxml");
+            GrammarUtil.getGrammarFromResource(BASE21 + "7/7.grxml");
 
         final GrammarType type = identifier.identify(doc);
         Assert.assertEquals(GrammarType.SRGS_XML, type);
@@ -171,7 +171,7 @@ public final class TestSrgsXmlGrammarIdentifier {
     @Test
     public void test338() throws Exception {
         GrammarDocument doc =
-                GrammarUtil.getGrammarFromFile(BASE20 + "338/338Grammar.grxml");
+                GrammarUtil.getGrammarFromResource(BASE20 + "338/338Grammar.grxml");
 
         final GrammarType type = identifier.identify(doc);
         Assert.assertNull(type);

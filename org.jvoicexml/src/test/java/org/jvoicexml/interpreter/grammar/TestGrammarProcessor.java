@@ -27,20 +27,20 @@
 package org.jvoicexml.interpreter.grammar;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Locale;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.UserInput;
+import org.jvoicexml.*;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
@@ -151,8 +151,7 @@ public final class TestGrammarProcessor {
         final Grammar grammar = document.getGrammar();
         grammar.setType(GrammarType.SRGS_XML);
         grammar.setRoot("city");
-        final File file = new File(
-                "unittests/config/irp_srgs10/conformance-1.grxml");
+        final URL file = this.getClass().getResource("/irp_srgs10/conformance-1.grxml");
         grammar.setSrc(file.toURI());
         final GrammarDocument processed = processor.process(context, null,
                 grammar, Locale.US);
@@ -175,8 +174,7 @@ public final class TestGrammarProcessor {
         final Grammar grammar = document.getGrammar();
         grammar.setType(GrammarType.SRGS_XML);
         grammar.setRoot("city");
-        final File file = new File(
-                "unittests/config/irp_srgs10/conformance-1.grxml");
+        final URL file = this.getClass().getResource("/irp_srgs10/conformance-1.grxml");
         grammar.setSrc(file.toURI().toString() + "#main");
         final GrammarDocument processed = processor.process(context, null,
                 grammar, Locale.US);
@@ -231,6 +229,12 @@ public final class TestGrammarProcessor {
                 factory);
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile);
-        context = new VoiceXmlInterpreterContext(session, null);
+
+        Configuration configuration = Mockito.mock(Configuration.class);
+        DataModel dataModel = Mockito.mock(DataModel.class);
+        Mockito.when(configuration.loadObjects(DataModel.class, "datamodel"))
+                .thenReturn(Collections.singleton(dataModel));
+
+        context = new VoiceXmlInterpreterContext(session, configuration);
     }
 }

@@ -26,16 +26,10 @@ import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.Filter;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
@@ -56,9 +50,9 @@ import org.jvoicexml.interpreter.grammar.InternalGrammarDocument;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.mock.MockRecognitionResult;
-import org.jvoicexml.mock.TestAppender;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
+import org.jvoicexml.profile.TagStrategyFactory;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -77,6 +71,8 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
 import org.xml.sax.SAXException;
+
+import static org.mockito.Mockito.never;
 
 /**
  * Test cases for {@link JVoiceXmlEventHandler}.
@@ -98,28 +94,6 @@ public final class TestJVoiceXmlEventHandler {
     private Profile profile;
 
     /**
-     * Adds the test appender.
-     * 
-     * @exception Exception
-     *                init failed
-     * @since 0.7.1
-     */
-    @BeforeClass
-    public static void init() throws Exception {
-        final LoggerContext context = LoggerContext.getContext(false);
-        final Configuration config = context.getConfiguration();
-        final Appender appender = new TestAppender();
-        appender.start();
-        config.addAppender(appender);
-        final Level level = null;
-        final Filter filter = null;
-        for (final LoggerConfig loggerConfig : config.getLoggers().values()) {
-            loggerConfig.addAppender(appender, level, filter);
-        }
-        config.getRootLogger().addAppender(appender, level, filter);
-    }
-
-    /**
      * Sets up the test environment.
      * 
      * @throws java.lang.Exception
@@ -130,12 +104,21 @@ public final class TestJVoiceXmlEventHandler {
         context = Mockito.mock(VoiceXmlInterpreterContext.class);
         model = Mockito.mock(DataModel.class);
         Mockito.when(context.getDataModel()).thenReturn(model);
+        Configuration configuration = Mockito.mock(Configuration.class);
+        Mockito.when(context.getConfiguration()).thenReturn(configuration);
+        Mockito.when(context.getProperty("confidencelevel", "0.5")).thenReturn("0.5");
+
         interpreter = new VoiceXmlInterpreter(context);
         profile = Mockito.mock(Profile.class);
         final SsmlParsingStrategyFactory factory = Mockito
                 .mock(SsmlParsingStrategyFactory.class);
+        final TagStrategyFactory tagStrategyFactory = Mockito.mock(TagStrategyFactory.class);
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
+        Mockito.when(profile.getInitializationTagStrategyFactory()).thenReturn(
+                tagStrategyFactory);
+        Mockito.when(profile.getTagStrategyFactory()).thenReturn(
+                tagStrategyFactory);
     }
 
     /**
@@ -218,7 +201,7 @@ public final class TestJVoiceXmlEventHandler {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.CatchContainer)}
      * .
      * 
      * @exception Exception
@@ -258,7 +241,7 @@ public final class TestJVoiceXmlEventHandler {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.CatchContainer)}
      * .
      * <p>
      * Test for dialog changes.
@@ -337,7 +320,7 @@ public final class TestJVoiceXmlEventHandler {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.CatchContainer)}
      * .
      * 
      * @exception Exception
@@ -398,7 +381,7 @@ public final class TestJVoiceXmlEventHandler {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.CatchContainer)}
      * .
      * 
      * @exception Exception
@@ -428,6 +411,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
+        fia.initialize(profile);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
                 context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
@@ -447,12 +431,11 @@ public final class TestJVoiceXmlEventHandler {
         handler.processEvent(item);
 
         Mockito.verify(model).updateVariable(name, utterance);
-        Assert.assertTrue(TestAppender.containsMessage("test: " + utterance));
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.CatchContainer)}
      * .
      * 
      * @exception Exception
@@ -498,14 +481,11 @@ public final class TestJVoiceXmlEventHandler {
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
         handler.processEvent(item);
-
-        Thread.sleep(500);
-        Assert.assertTrue(TestAppender.containsMessage("test: nomatch"));
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.CatchContainer)}
      * .
      * 
      * @exception Exception
@@ -551,12 +531,11 @@ public final class TestJVoiceXmlEventHandler {
         handler.processEvent(item);
 
         Mockito.verify(model).updateVariable(name, utterance);
-        Assert.assertTrue(TestAppender.containsMessage("test: " + utterance));
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.CatchContainer)}
      * .
      * 
      * @exception Exception
@@ -603,13 +582,13 @@ public final class TestJVoiceXmlEventHandler {
         handler.onEvent(event);
         handler.processEvent(item);
 
-        Mockito.verifyZeroInteractions(model);
+        Mockito.verify(model, never()).updateVariable(name, utterance);
         // The nomatch will not be processed since there is no related FIA.
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.CatchContainer)}
      * .
      * 
      * @exception Exception
@@ -669,28 +648,33 @@ public final class TestJVoiceXmlEventHandler {
         Mockito.when(result.isAccepted()).thenReturn(true);
         Mockito.when(result.getConfidence()).thenReturn(1.0f);
         Mockito.when(result.getSemanticInterpretation(model)).thenReturn("out");
+        Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
 
         Mockito.when(
                 model.readVariable("application.lastresult$.interpretation."
                         + field1.getName(), Object.class)).thenReturn(
                 utterance1);
         Mockito.when(
+                model.existsVariable("application.lastresult$.interpretation."
+                        + field1.getName())).thenReturn(true);
+        Mockito.when(
                 model.readVariable("application.lastresult$.interpretation."
                         + field2.getName(), Object.class)).thenReturn(
                 utterance2);
+        Mockito.when(
+                model.existsVariable("application.lastresult$.interpretation."
+                        + field2.getName())).thenReturn(true);
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
 
         handler.processEvent(item2);
         Mockito.verify(model).updateVariable(name1, utterance1);
         Mockito.verify(model).updateVariable(name2, utterance2);
-        Assert.assertTrue(TestAppender.containsMessage("test: " + utterance1));
-        Assert.assertTrue(TestAppender.containsMessage("test: " + utterance2));
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.CatchContainer}
      * .
      * 
      * @exception Exception
@@ -752,20 +736,22 @@ public final class TestJVoiceXmlEventHandler {
         Mockito.when(result.isAccepted()).thenReturn(true);
         Mockito.when(result.getConfidence()).thenReturn(1.0f);
         Mockito.when(result.getSemanticInterpretation(model)).thenReturn("out");
+        Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
 
         Mockito.when(
                 model.readVariable("application.lastresult$.interpretation."
                         + field1.getName(), Object.class))
                 .thenReturn(utterance);
+        Mockito.when(
+                model.existsVariable("application.lastresult$.interpretation."
+                        + field1.getName())).thenReturn(true);
 
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
 
         handler.processEvent(item2);
         Mockito.verify(model).updateVariable(name1, utterance);
-        Mockito.verifyNoMoreInteractions(model);
-        Assert.assertTrue(TestAppender.containsMessage("test: " + name1));
-        Assert.assertFalse(TestAppender.containsMessage("test: " + name2));
+        Mockito.verify(model, never()).updateVariable(name2, utterance);
     }
 
     /**
@@ -801,7 +787,7 @@ public final class TestJVoiceXmlEventHandler {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.CatchContainer)}
      * .
      * 
      * @exception Exception
@@ -853,7 +839,7 @@ public final class TestJVoiceXmlEventHandler {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}
+     * {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.CatchContainer)}
      * .
      * 
      * @exception Exception
@@ -883,6 +869,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
+        fia.initialize(profile);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
@@ -896,12 +883,10 @@ public final class TestJVoiceXmlEventHandler {
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
         handler.processEvent(item);
-
-        Assert.assertTrue(TestAppender.containsMessage("test: help"));
     }
 
     /**
-     * Test method for {@link JVoiceXmlEventHandler#notifyEvent(JVoiceXMLEvent)}
+     * Test method for {@link JVoiceXmlEventHandler#onEvent(JVoiceXMLEvent)}
      * .
      * 
      * @since 0.7.4
@@ -922,7 +907,7 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link JVoiceXmlEventHandler#notifyEvent(JVoiceXMLEvent)}
+     * Test method for {@link JVoiceXmlEventHandler#onEvent(JVoiceXMLEvent)}
      * .
      * 
      * @since 0.7.4
@@ -944,7 +929,7 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
-     * Test method for {@link JVoiceXmlEventHandler#notifyEvent(JVoiceXMLEvent)}
+     * Test method for {@link JVoiceXmlEventHandler#onEvent(JVoiceXMLEvent)}
      * .
      * 
      * @since 0.7.4
