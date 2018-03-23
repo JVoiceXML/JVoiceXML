@@ -64,12 +64,12 @@ public class AddToMatchedText implements ExecutableSemanticInterpretation {
         if (metaCurrent.length() == 0) {
             context.evaluateString(scope,
                     "meta.current=function() {return {text:'" + matchedText
-                            + "', score:1.0}};", "AddToMatchedText:set meta1",
+                            + "', score:1.0};};", "AddToMatchedText:set meta1",
                     0, null);
         } else {
             context.evaluateString(scope,
                     "meta.current=function() {return {text:'" + metaCurrent
-                            + " " + matchedText + "', score:1.0}};".replace("'", "\\'"),
+                            + " " + matchedText + "', score:1.0};};".replace("'", "\\'"),
                     "AddToMatchedText:set meta1", 0, null);
         }
     }

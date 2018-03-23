@@ -117,7 +117,7 @@ public class Context implements ExecutableSemanticInterpretation {
                         "Context:rule get meta", 0, null);
                 LOGGER.debug("default assignment(meta): " + ruleMetaCurrent);
                 out = context.evaluateString(ruleScope, "out = '"
-                        + ruleMetaCurrent + "'", "Context:out", 0, null);
+                        + ruleMetaCurrent + "';", "Context:out", 0, null);
             }
         }
         return out;
@@ -157,7 +157,7 @@ public class Context implements ExecutableSemanticInterpretation {
 //        LOGGER.debug("about to execute: "+"meta."+ruleName+"=function() {return {text:'"+ruleMetaCurrent+"', score:1.0}};");
         context.evaluateString(parentScope, "meta." + ruleName
                 + "=function() {return {text:'" + ruleMetaCurrent
-                + "', score:1.0}};", "Context:rule set meta." + ruleName, 0,
+                + "', score:1.0};};", "Context:rule set meta." + ruleName, 0,
                 null);
 
         if (ruleMetaCurrent.length() > 0) {
@@ -168,27 +168,27 @@ public class Context implements ExecutableSemanticInterpretation {
             if (parentMetaCurrent.length() == 0) {
                 context.evaluateString(parentScope,
                         "meta.current=function() {return {text:'"
-                                + ruleMetaCurrent + "', score:1.0}};",
+                                + ruleMetaCurrent + "', score:1.0};};",
                         "AddToMatchedText:set meta1", 0, null);
             } else {
                 context.evaluateString(parentScope,
                         "meta.current=function() {return {text:'"
                                 + parentMetaCurrent + " " + ruleMetaCurrent
-                                + "', score:1.0}};",
+                                + "', score:1.0};};",
                         "AddToMatchedText:set meta1", 0, null);
             }
         }
     }
 
     private String getRulesLastestScript(String contextName) {
-        return "rules.latest = function() {return this." + contextName + ";}"; 
+        return "rules.latest = function() {return this." + contextName + ";};";
         // We are within the rules context, so the rule id should be valid
     }
 
     private String contextInitSemanticInterpretation(String contextName) {
         return "var out=new Object();\n"
                 + "var rules=new Object();\n"
-                + "var meta={current: function() {return {text:'', score:1.0}}};\n";
+                + "var meta={current: function() {return {text:'', score:1.0};}};\n";
     }
 
     public void dumpScope(final Scriptable scope) {
