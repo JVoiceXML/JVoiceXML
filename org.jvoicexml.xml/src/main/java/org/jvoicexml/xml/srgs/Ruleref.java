@@ -71,19 +71,19 @@ public final class Ruleref
      * special rule - GARBAGE.
      * @see <a href="http://www.w3.org/TR/2003/PR-speech-grammar-20031218/#S2.2.3">Speech Recognition Grammar Specification Version 1.0 - 2.2.3 Special Rules</a>
      */
-    private static final String SPECIAL_VALUE_GARBAGE = "GARBAGE";
+    public static final String SPECIAL_VALUE_GARBAGE = "GARBAGE";
 
     /**
      * special rule - NULL.
      * @see <a href="http://www.w3.org/TR/2003/PR-speech-grammar-20031218/#S2.2.3">Speech Recognition Grammar Specification Version 1.0 - 2.2.3 Special Rules</a>
      */
-    private static final String SPECIAL_VALUE_NULL = "NULL";
+    public static final String SPECIAL_VALUE_NULL = "NULL";
 
     /**
      * special rule - VOID.
      * @see <a href="http://www.w3.org/TR/2003/PR-speech-grammar-20031218/#S2.2.3">Speech Recognition Grammar Specification Version 1.0 - 2.2.3 Special Rules</a>
      */
-    private static final String SPECIAL_VALUE_VOID = "VOID";
+    public static final String SPECIAL_VALUE_VOID = "VOID";
 
     /**
      * Supported attribute names for this node.

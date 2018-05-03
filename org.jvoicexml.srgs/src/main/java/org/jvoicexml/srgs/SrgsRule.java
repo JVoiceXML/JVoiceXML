@@ -44,6 +44,10 @@ public class SrgsRule implements RuleExpansion {
     /** The encapsulated rule expansion. */
     private RuleExpansion innerRule;
 
+    /**
+     * Constructs a new object.
+     * @param rule the underlying rule
+     */
     public SrgsRule(final Rule rule) {
         id = rule.getId();
         final String scope = rule.getScope();
@@ -54,6 +58,15 @@ public class SrgsRule implements RuleExpansion {
         }
     }
 
+    /**
+     * Creates a new object for special rules.
+     * @param ruleId id of the special rule.
+     */
+    protected SrgsRule(final String ruleId) {
+        id = ruleId;
+        isPublic = true;
+    }
+    
     public String getId() {
         return id;
     }

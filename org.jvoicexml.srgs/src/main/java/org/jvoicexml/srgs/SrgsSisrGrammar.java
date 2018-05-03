@@ -72,7 +72,7 @@ public class SrgsSisrGrammar
         grammarNode = grammar;
         this.uri = uri;
         rootRule = grammar.getRoot();
-        String tagFormat = grammar.getTagFormat();
+        final String tagFormat = grammar.getTagFormat();
         isLiteral = tagFormat != null
                 && tagFormat.equals("semantics/1.0-literals");
         this.grammarPool = grammarPool;

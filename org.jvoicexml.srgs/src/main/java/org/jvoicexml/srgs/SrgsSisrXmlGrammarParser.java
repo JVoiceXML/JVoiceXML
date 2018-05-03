@@ -69,6 +69,22 @@ public class SrgsSisrXmlGrammarParser
     /** The currently parsed grammar. */
     private SrgsSisrGrammar currentGrammar;
 
+    /** Special Rules as per https://www.w3.org/TR/speech-grammar/#S2.2.3. */
+    private Map<String, SrgsRule> specialRules;
+    
+    /**
+     * Constructs a new object.
+     */
+    public SrgsSisrXmlGrammarParser() {
+        specialRules = new java.util.HashMap<String, SrgsRule>();
+        final SrgsRule voidRule = new VoidRule();
+        specialRules.put(Ruleref.SPECIAL_VALUE_VOID, voidRule);
+        final SrgsRule nullRule = new NullRule();
+        specialRules.put(Ruleref.SPECIAL_VALUE_NULL, nullRule);
+        final SrgsRule garbageRule = new GarbageRule();
+        specialRules.put(Ruleref.SPECIAL_VALUE_GARBAGE, garbageRule);
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -326,28 +342,40 @@ public class SrgsSisrXmlGrammarParser
 
     private RuleRefExpansion parseRuleref(Ruleref ruleNode)
             throws SrgsSisrParsingException {
-        String uri = ruleNode.getUri();
+        final String special = ruleNode.getSpecial();
+        if (special != null) {
+            final SrgsRule rule = specialRules.get(special);
+            if (rule == null) {
+                throw new SrgsSisrParsingException(
+                        "Ruleref is referencing an unknown special '"
+                                + special + "'");
+            }
+            return new RuleRefExpansion(rule);
+        }
+        final String uri = ruleNode.getUri();
         if (uri == null || uri.length() == 0)
             throw new SrgsSisrParsingException(
                     "Ruleref is missing or has empty URI");
         int poundIdx = uri.indexOf('#');
 
         // Fragment references a public rule
-        if (poundIdx > 0)
+        if (poundIdx > 0) {
             return getExternalRuleRef(uri.substring(0, poundIdx),
                     uri.substring(poundIdx + 1));
+        }
 
         // Use default rule defined with root attribute
-        if (poundIdx == -1)
+        if (poundIdx == -1) {
             return getExternalRuleRef(uri, null);
+        }
 
         // Rule in current grammar
-        String ruleName = uri.substring(1);
-        SrgsRule rule = currentGrammar.getRule(ruleName, false);
-        if (rule == null)
+        final String ruleName = uri.substring(1);
+        final SrgsRule rule = currentGrammar.getRule(ruleName, false);
+        if (rule == null) {
             throw new SrgsSisrParsingException("Unable to find rule ("
                     + ruleName + ") in current grammar.");
-
+        }
         return new RuleRefExpansion(rule);
     }
 

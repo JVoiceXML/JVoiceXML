@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,27 +23,24 @@ package org.jvoicexml.srgs;
 
 import java.util.List;
 
-import org.jvoicexml.srgs.sisr.ExecutableSemanticInterpretation;
+import org.jvoicexml.xml.srgs.Ruleref;
 
 /**
- * An expansion to the rule to actually work on the received tokens.
+ * Speial rule VOID as defined in https://www.w3.org/TR/speech-grammar/#S2.2.3
  * @author Dirk Schnelle-Walka
+ * @since 0.7.8
+ *
  */
-public interface RuleExpansion {
+class VoidRule extends SrgsRule {
+    public VoidRule() {
+        super(Ruleref.SPECIAL_VALUE_VOID);
+    }
     /**
-     * Process the token at offset.
-     * @param tokens received tokens
-     * @param offset current offset in tokens
-     * @return
+     * @see SrgsRule#match(List, int)
      */
-    MatchConsumption match(List<String> tokens, int offset);
-
-    void setExecutionSemanticInterpretation(
-            final ExecutableSemanticInterpretation si);
-
-    /**
-     * Dumps the current contents on the console.
-     * @param pad space padding
-     */
-    void dump(String pad);
+    @Override
+    public MatchConsumption match(List<String> tokens, int index) {
+        // Never match
+        return null;
+    }
 }
