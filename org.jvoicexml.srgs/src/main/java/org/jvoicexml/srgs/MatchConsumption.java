@@ -159,7 +159,7 @@ public class MatchConsumption {
         context.evaluateString(
                 workingScope,
                 "var out=new Object();\nvar rules=new Object();\n"
-                        + "var meta={current: function() {return {text:'', score:1.0}}};\n",
+                        + "var meta={current: function() {return {text:'', score:1.0};}};\n",
                 "SISR init from MatchConsumer", 0, null);
 
         if (executationCollection.size() != 1) {
