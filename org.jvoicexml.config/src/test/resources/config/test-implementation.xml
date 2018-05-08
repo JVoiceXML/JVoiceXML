@@ -3,9 +3,9 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>deschd</repository>
-  <classpath>unittests/classes</classpath>
+  <classpath>src/test/java</classpath>
   <beans:bean
-    class="org.jvoicexml.implementation.jvxml.DummyTelephonySupportFactory">
+    class="org.jvoicexml.implementation.jvxml.DesktopTelephonySupportFactory">
     <beans:property name="instances" value="1" />
   </beans:bean>
 </implementation>
