@@ -153,6 +153,7 @@ public final class ConfigurationFolderMonitor extends Thread {
                         LOGGER.warn(e.getMessage(), e);
                     }
                 }
+                key.reset(); // Reset to await further events on the file
             } catch (ClosedWatchServiceException | InterruptedException e1) {
                 return;
             }

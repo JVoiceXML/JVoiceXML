@@ -11,6 +11,11 @@ sourceSets {
             exclude '**'
         }
     }
+    test {
+        resources {
+            srcDir "src/main/config"
+        }
+    }
 }
 configurations {
     jvxmlConfiguration
