@@ -255,8 +255,10 @@ distributions {
                 from("${buildDir}/config") {
                     exclude "**/kinect-implementation.xml",
                         "**/mmi-callmanager-umundo.xml",
-                        "**/jtapi-callmanager.xml",
-                        "**/jtapi-implementation.xml"
+                        "**/jsapi10-talking-java-implementation.xml",
+                        "**/jsapi20-sapi-implementation.xml",
+                        "**/jtapi-implementation.xml",
+                        "**/sip-callmanager.xml"
                 }
             }
 
@@ -264,8 +266,10 @@ distributions {
                 from("${buildDir}/config") {
                     include "**/kinect-implementation.xml",
                         "**/mmi-callmanager-umundo.xml",
-                        "**/jtapi-callmanager.xml",
-                        "**/jtapi-implementation.xml"
+                        "**/jsapi10-talking-java-implementation.xml",
+                        "**/jsapi20-sapi-implementation.xml",
+                        "**/jtapi-implementation.xml",
+                        "**/sip-callmanager.xml"
                 }
             }
             
