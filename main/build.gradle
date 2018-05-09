@@ -282,9 +282,128 @@ distributions {
                 from("${project(':userguide').projectDir}/jvxml-userguide-${version}.pdf")
             }
             
+            into('demo/org.jvoicexml.demo.helloworlddemo') {
+                from(project(':org.jvoicexml.demo.helloworlddemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.helloworldservletdemo') {
+                from(project(':org.jvoicexml.demo.helloworldservletdemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.helloworldservletdemo.servlet') {
+                from(project(':org.jvoicexml.demo.helloworldservletdemo.servlet').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.inputdemo') {
+                from(project(':org.jvoicexml.demo.inputdemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.jtapidemo') {
+                from(project(':org.jvoicexml.demo.jtapidemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.luis') {
+                from(project(':org.jvoicexml.demo.luis').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.marcdemo') {
+                from(project(':org.jvoicexml.demo.marcdemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.mixedinitiativedemo') {
+                from(project(':org.jvoicexml.demo.mixedinitiativedemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.mmi.simpledemo') {
+                from(project(':org.jvoicexml.demo.mmi.simpledemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.objecttagdemo') {
+                from(project(':org.jvoicexml.demo.objecttagdemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.recorddemo') {
+                from(project(':org.jvoicexml.demo.recorddemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.scriptdemo') {
+                from(project(':org.jvoicexml.demo.scriptdemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.simpleinputdemo') {
+                from(project(':org.jvoicexml.demo.simpleinputdemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.talkingheaddemo') {
+                from(project(':org.jvoicexml.demo.talkingheaddemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.talkingheaddemo') {
+                from(project(':org.jvoicexml.demo.talkingheaddemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.textdemo') {
+                from(project(':org.jvoicexml.demo.textdemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            into('demo/org.jvoicexml.demo.voicexmlcreationdemo') {
+                from(project(':org.jvoicexml.demo.voicexmlcreationdemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin"
+                }
+            }
+            
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-        }       
+        }
     }
 }
 
