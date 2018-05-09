@@ -65,7 +65,7 @@ public class GrammarContext implements ExecutableSemanticInterpretation {
         context.evaluateString(
                 grammarScope,
                 "var out=new Object();\nvar rules=new Object();\n"
-                        + "var meta={current: function() {return {text:'', score:1.0}}};\n",
+                        + "var meta={current: function() {return {text:'', score:1.0};}};\n",
                 "SISR init from MatchConsumer", 0, null);
 
         executableSI.execute(context, grammarScope);
@@ -115,7 +115,7 @@ public class GrammarContext implements ExecutableSemanticInterpretation {
 
         parentContext.evaluateString(parentScope, "meta." + ruleName
                 + "=function() {return {text:'" + ruleMetaCurrent
-                + "', score:1.0}};", "Context:rule set meta." + ruleName, 0,
+                + "', score:1.0};};", "Context:rule set meta." + ruleName, 0,
                 null);
 
         if (ruleMetaCurrent.length() > 0) {
@@ -126,13 +126,13 @@ public class GrammarContext implements ExecutableSemanticInterpretation {
             if (parentMetaCurrent.length() == 0) {
                 parentContext.evaluateString(parentScope,
                         "meta.current=function() {return {text:'"
-                                + ruleMetaCurrent + "', score:1.0}};",
+                                + ruleMetaCurrent + "', score:1.0};};",
                         "AddToMatchedText:set meta1", 0, null);
             } else {
                 parentContext.evaluateString(parentScope,
                         "meta.current=function() {return {text:'"
                                 + parentMetaCurrent + " " + ruleMetaCurrent
-                                + "', score:1.0}};",
+                                + "', score:1.0};};",
                         "AddToMatchedText:set meta1", 0, null);
             }
         }
