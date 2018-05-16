@@ -54,6 +54,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -112,9 +113,6 @@ public final class JVoiceXmlConfiguration implements Configuration {
     /** Known class loader repositories. */
     private final Map<String, JVoiceXmlClassLoader> loaderRepositories;
 
-    /** Location of the config folder. */
-    private final File configFolder;
-
     /** The configuration file storage. */
     private ConfigurationRepository configurationRepository;
 
@@ -122,12 +120,13 @@ public final class JVoiceXmlConfiguration implements Configuration {
     private SAXParserFactory parserFactory;
 
     /**
-     * Constructs a new object.
+     * Constructs a new configuration from system defined config folder.
+     * The config folder is set as system property jvoicexml.config
      */
     public JVoiceXmlConfiguration() {
         final String filename =
             System.getProperty("jvoicexml.config", "config");
-        configFolder = new File(filename);
+        final File configFolder = new File(filename);
         loaderRepositories =
             new java.util.HashMap<String, JVoiceXmlClassLoader>();
         final File resource = new File(configFolder, "jvoicexml.xml");
@@ -155,6 +154,31 @@ public final class JVoiceXmlConfiguration implements Configuration {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             return;
+        }
+    }
+
+
+    /**
+     * Constructs a new configuration from given config resources.
+     * @param configLocation Full path of jvoicexml.xml root config definition.
+     * @param repository Directory containing repository resources
+     */
+    public JVoiceXmlConfiguration(String configLocation, File repository) {
+        loaderRepositories = new java.util.HashMap<>();
+
+        // Load the application context from given XML file at configLocation
+        try {
+            context = new ClassPathXmlApplicationContext(configLocation);
+        } catch (BeansException e) {
+            LOGGER.error("unable to load configuration", e);
+        }
+
+        // Set up the config folder as the configuration repository.
+        // This directory will be scanned for supporting configuration.
+        try {
+            configurationRepository = new ConfigurationRepository(repository);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
