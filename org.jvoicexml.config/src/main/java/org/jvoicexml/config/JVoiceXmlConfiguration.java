@@ -150,7 +150,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
             }
         }
         try {
-            configurationRepository = new ConfigurationRepository(configFolder);
+            configurationRepository = new FileConfigurationRepository(configFolder);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             return;
@@ -176,7 +176,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
         // Set up the config folder as the configuration repository.
         // This directory will be scanned for supporting configuration.
         try {
-            configurationRepository = new ConfigurationRepository(repository);
+            configurationRepository = new FileConfigurationRepository(repository);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
