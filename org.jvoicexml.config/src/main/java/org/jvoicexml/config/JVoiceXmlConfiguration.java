@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -160,10 +161,11 @@ public final class JVoiceXmlConfiguration implements Configuration {
 
     /**
      * Constructs a new configuration from given config resources.
-     * @param configLocation Full path of jvoicexml.xml root config definition.
-     * @param repository Directory containing repository resources
+     * @param configLocation root config definition relative to classpath.
+     *                       Usually named jvoicexml.xml
+     * @param resourceFiles XML repository resource file names, accessible from classpath
      */
-    public JVoiceXmlConfiguration(String configLocation, File repository) {
+    public JVoiceXmlConfiguration(String configLocation, List<String> resourceFiles) {
         loaderRepositories = new java.util.HashMap<>();
 
         // Load the application context from given XML file at configLocation
@@ -176,7 +178,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
         // Set up the config folder as the configuration repository.
         // This directory will be scanned for supporting configuration.
         try {
-            configurationRepository = new FileConfigurationRepository(repository);
+            configurationRepository = new ClasspathConfigurationRepository(resourceFiles);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
