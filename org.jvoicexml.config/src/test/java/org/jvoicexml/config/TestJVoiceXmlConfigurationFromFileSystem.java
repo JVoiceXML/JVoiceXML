@@ -42,7 +42,7 @@ import org.jvoicexml.implementation.jvxml.DesktopTelephonySupportFactory;
  * @version $Revision$
  * @since 0.7
  */
-public final class TestJVoiceXmlConfiguration {
+public final class TestJVoiceXmlConfigurationFromFileSystem {
     /**
      * Initializes this test case.
      * @exception Exception
