@@ -28,10 +28,12 @@ dependencies {
 }
 
 jar {
+    version = JVOICEXML_VERSION
+
     manifest {
         attributes("Implementation-Title": "JVoiceXML System Test",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": version)
+                   "Implementation-Version": JVOICEXML_VERSION)
     }
     baseName 'org.jvoicexml.systemtest'
 }

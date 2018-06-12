@@ -12,5 +12,7 @@ buildscript {
 apply plugin: 'latex'
 
 latex {
-    tex tex:'userguide.tex', bib: 'userguide.bib', pdf:"jvxml-userguide-${version}.pdf"
+    tex tex:'userguide.tex',
+        bib: 'userguide.bib',
+        pdf:"jvxml-userguide-${JVOICEXML_VERSION}.pdf"
 }

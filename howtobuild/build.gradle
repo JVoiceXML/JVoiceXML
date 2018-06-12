@@ -13,9 +13,11 @@ apply plugin: 'latex'
 task createVersionFile() << {
     def file = new File("version.tex")
     file.createNewFile()
-    file.text = "\\newcommand{\\jvxmlversion} {$version}"
+    file.text = "\\newcommand{\\jvxmlversion} {$JVOICEXML_VERSION}"
 }
 
 latex {
-    tex tex:'howtobuild.tex', bib: 'howtobuild.bib', pdf:"jvxml-howtobuild-${version}.pdf"
+    tex tex:'howtobuild.tex', 
+        bib: 'howtobuild.bib', 
+        pdf:"jvxml-howtobuild-${JVOICEXML_VERSION}.pdf"
 }

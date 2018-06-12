@@ -26,10 +26,11 @@ dependencies {
 war {
     from 'WebContent' 
     baseName 'org.jvoicexml.systemtest.servlet'
+    version = JVOICEXML_VERSION
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML Systemtest Servlet",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": version)
+                   "Implementation-Version": JVOICEXML_VERSION)
     }
 }
