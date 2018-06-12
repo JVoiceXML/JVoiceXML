@@ -26,4 +26,5 @@ dependencies {
 war {
     from 'WebContent' 
     baseName 'org.jvoicexml.callmanager.mmi.servlet'
+    version = JVOICEXML_VERSION
 }

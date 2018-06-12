@@ -23,10 +23,12 @@ dependencies {
     compile project(':org.jvoicexml.voicexmlunit')}
 
 jar {
+    version = JVOICEXML_VERSION
+
     manifest {
         attributes("Implementation-Title": "JVoiceXML Unit Test Demo",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": version)
+                   "Implementation-Version": JVOICEXML_VERSION)
     }
     baseName 'org.jvoicexml.voicexmlunit.demo'
 }

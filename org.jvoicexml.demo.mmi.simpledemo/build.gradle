@@ -19,10 +19,12 @@ dependencies {
 }
 
 jar {
+    version = JVOICEXML_VERSION
+
     manifest {
         attributes("Implementation-Title": "JVoiceXML Simple MMI Demo",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": version)
+                   "Implementation-Version": JVOICEXML_VERSION)
     }
     baseName 'org.jvoicexml.demo.mmi.simpledemo'
 }

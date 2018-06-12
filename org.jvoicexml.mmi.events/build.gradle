@@ -52,10 +52,12 @@ protobuf {
 }
 
 jar {
+    version = JVOICEXML_VERSION
+
     manifest {
         attributes("Implementation-Title": "JVoiceXML MMI Event library",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": version)
+                   "Implementation-Version": JVOICEXML_VERSION)
     }
     baseName 'org.jvoicexml.mmi.events'
 }

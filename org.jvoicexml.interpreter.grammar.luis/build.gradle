@@ -39,7 +39,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/luis-grammar.xml"
     parameters(
         buildpath: "${buildDir}/libs",
-        version: version,
+        version: JVOICEXML_VERSION,
         libs: configurations.compile
     )
 }
@@ -50,7 +50,7 @@ task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
     output "${project(':main').buildDir}/config/luis-grammar.xml"
     parameters(
         buildpath: "lib",
-        version: version,
+        version: JVOICEXML_VERSION,
         libs: configurations.compile
     )
 }
@@ -65,6 +65,8 @@ task copyReferencedLibraries(type: Copy) {
 }
 
 jar {
+    version = JVOICEXML_VERSION
+
     dependsOn xslt
     dependsOn xsltDistribution
     dependsOn copyReferencedLibraries
@@ -77,7 +79,7 @@ jar {
     manifest {
         attributes("Implementation-Title": "JVoiceXML LUIS Grammar support",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": version)
+                   "Implementation-Version": JVOICEXML_VERSION)
     }
     baseName 'org.jvoicexml.interpreter.grammar.luis'
 }

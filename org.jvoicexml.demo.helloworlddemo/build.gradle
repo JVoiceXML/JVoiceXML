@@ -15,17 +15,19 @@ dependencies {
 
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.1'
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: version
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: version
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: JVOICEXML_VERSION
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: JVOICEXML_VERSION
 
-    runtime group: 'org.jvoicexml', name: 'org.jvoicexml.jndi', version: version
+    runtime group: 'org.jvoicexml', name: 'org.jvoicexml.jndi', version: JVOICEXML_VERSION
 }
 
 jar {
+    version = JVOICEXML_VERSION
+
     manifest {
         attributes("Implementation-Title": "JVoiceXML Hello World Demo",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": version)
+                   "Implementation-Version": JVOICEXML_VERSION)
     }
     baseName 'org.jvoicexml.demo.helloworlddemo'
 }

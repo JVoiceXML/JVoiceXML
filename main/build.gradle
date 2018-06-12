@@ -226,6 +226,7 @@ task jvxmlServlet(dependsOn: ':org.jvoicexml.callmanager.mmi.servlet:war') {
 distributions {
     main {
         baseName 'jvoicexml'
+        version = JVOICEXML_VERSION
         
         contents {
             into ('lib') {
@@ -278,15 +279,20 @@ distributions {
             }
             
             into('doc') {
-                from("${project(':howtobuild').projectDir}/jvxml-howtobuild-${version}.pdf")
-                from("${project(':userguide').projectDir}/jvxml-userguide-${version}.pdf")
+                from("${project(':howtobuild').projectDir}/jvxml-howtobuild-${JVOICEXML_VERSION}.pdf")
+                from("${project(':userguide').projectDir}/jvxml-userguide-${JVOICEXML_VERSION}.pdf")
             }
             
             into('demo/org.jvoicexml.demo.helloworlddemo') {
                 from(project(':org.jvoicexml.demo.helloworlddemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
+                }
+                from(project(':org.jvoicexml.demo.helloworlddemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
                 }
             }
             into('demo/org.jvoicexml.demo.helloworldservletdemo') {
@@ -295,12 +301,9 @@ distributions {
                     "**/logging",
                     "**/bin"
                 }
-            }
-            into('demo/org.jvoicexml.demo.helloworldservletdemo.servlet') {
-                from(project(':org.jvoicexml.demo.helloworldservletdemo.servlet').projectDir) {
-                    exclude "**/build",
-                    "**/logging",
-                    "**/bin"
+                from(project(':org.jvoicexml.demo.helloworldservletdemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
                 }
             }
             into('demo/org.jvoicexml.demo.inputdemo') {
@@ -309,12 +312,20 @@ distributions {
                     "**/logging",
                     "**/bin"
                 }
+                from(project(':org.jvoicexml.demo.inputdemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
+                }
             }
             into('demo/org.jvoicexml.demo.jtapidemo') {
                 from(project(':org.jvoicexml.demo.jtapidemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
                     "**/bin"
+                }
+                from(project(':org.jvoicexml.demo.jtapidemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
                 }
             }
             into('demo/org.jvoicexml.demo.luis') {
@@ -323,12 +334,20 @@ distributions {
                     "**/logging",
                     "**/bin"
                 }
+                from(project(':org.jvoicexml.demo.luis').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
+                }
             }
             into('demo/org.jvoicexml.demo.marcdemo') {
                 from(project(':org.jvoicexml.demo.marcdemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
                     "**/bin"
+                }
+                from(project(':org.jvoicexml.demo.marcdemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
                 }
             }
             into('demo/org.jvoicexml.demo.mixedinitiativedemo') {
@@ -337,12 +356,20 @@ distributions {
                     "**/logging",
                     "**/bin"
                 }
+                from(project(':org.jvoicexml.demo.mixedinitiativedemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
+                }
             }
             into('demo/org.jvoicexml.demo.mmi.simpledemo') {
                 from(project(':org.jvoicexml.demo.mmi.simpledemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
                     "**/bin"
+                }
+                from(project(':org.jvoicexml.demo.mmi.simpledemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
                 }
             }
             into('demo/org.jvoicexml.demo.objecttagdemo') {
@@ -351,12 +378,20 @@ distributions {
                     "**/logging",
                     "**/bin"
                 }
+                from(project(':org.jvoicexml.demo.objecttagdemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
+                }
             }
             into('demo/org.jvoicexml.demo.recorddemo') {
                 from(project(':org.jvoicexml.demo.recorddemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
                     "**/bin"
+                }
+                from(project(':org.jvoicexml.demo.recorddemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
                 }
             }
             into('demo/org.jvoicexml.demo.scriptdemo') {
@@ -365,6 +400,10 @@ distributions {
                     "**/logging",
                     "**/bin"
                 }
+                from(project(':org.jvoicexml.demo.scriptdemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
+                }
             }
             into('demo/org.jvoicexml.demo.simpleinputdemo') {
                 from(project(':org.jvoicexml.demo.simpleinputdemo').projectDir) {
@@ -372,12 +411,9 @@ distributions {
                     "**/logging",
                     "**/bin"
                 }
-            }
-            into('demo/org.jvoicexml.demo.talkingheaddemo') {
-                from(project(':org.jvoicexml.demo.talkingheaddemo').projectDir) {
-                    exclude "**/build",
-                    "**/logging",
-                    "**/bin"
+                from(project(':org.jvoicexml.demo.simpleinputdemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
                 }
             }
             into('demo/org.jvoicexml.demo.talkingheaddemo') {
@@ -385,6 +421,10 @@ distributions {
                     exclude "**/build",
                     "**/logging",
                     "**/bin"
+                }
+                from(project(':org.jvoicexml.demo.talkingheaddemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
                 }
             }
             into('demo/org.jvoicexml.demo.textdemo') {
@@ -393,12 +433,20 @@ distributions {
                     "**/logging",
                     "**/bin"
                 }
+                from(project(':org.jvoicexml.demo.textdemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
+                }
             }
             into('demo/org.jvoicexml.demo.voicexmlcreationdemo') {
                 from(project(':org.jvoicexml.demo.voicexmlcreationdemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
                     "**/bin"
+                }
+                from(project(':org.jvoicexml.demo.voicexmlcreationdemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
                 }
             }
             
@@ -409,6 +457,7 @@ distributions {
 
 run {
     dependsOn jvxmlConfigurations
+    version = JVOICEXML_VERSION
 
     mainClassName = "org.jvoicexml.startup.Startup"
     classpath += files("${project(':org.jvoicexml').buildDir}/config")
@@ -421,6 +470,7 @@ run {
 
 task(runDebug, type: JavaExec) {
     dependsOn jvxmlConfigurations
+    version = JVOICEXML_VERSION
 
     mainClassName = "org.jvoicexml.startup.Startup"
     classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")

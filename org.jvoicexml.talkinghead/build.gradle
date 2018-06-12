@@ -29,12 +29,14 @@ task copyReferencedLibraries(type: Copy) {
 }
 
 jar {
+    version = JVOICEXML_VERSION
+
     dependsOn copyReferencedLibraries
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML Talking Head",
                    "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": "version")
+                   "Implementation-Version": "JVOICEXML_VERSION")
     }
     baseName 'org.jvoicexml.talkinghead'
 }
