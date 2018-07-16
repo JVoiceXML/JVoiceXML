@@ -24,7 +24,6 @@ configurations {
 dependencies {
     jvxmlConfiguration fileTree(dir: "src/main/config")
 
-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'org.springframework', name: 'spring-context', version: '4.3.4.RELEASE'
     compile group: 'org.springframework', name: 'spring-beans', version: '4.3.4.RELEASE'
     

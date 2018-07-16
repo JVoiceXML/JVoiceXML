@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.jvoicexml.srgs.MatchConsumption;
+import org.jvoicexml.srgs.SrgsSisrGrammar;
 import org.mozilla.javascript.Scriptable;
 
 /** Most SI tests */
