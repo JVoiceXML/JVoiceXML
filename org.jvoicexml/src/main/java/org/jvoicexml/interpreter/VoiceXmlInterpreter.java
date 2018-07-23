@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@ package org.jvoicexml.interpreter;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -231,10 +232,13 @@ public final class VoiceXmlInterpreter {
      *
      * @param dialog
      *            the dialog to be processed.
+     * @param parameters
+     *            passed parameters when executing this dialog
      * @exception JVoiceXMLEvent
      *                Error or event processing the dialog.
      */
-    public void process(final Dialog dialog) throws JVoiceXMLEvent {
+    public void process(final Dialog dialog,
+            final Map<String, Object> parameters) throws JVoiceXMLEvent {
         // There is no next dialog by default.
         nextDialog = null;
         fia = new FormInterpretationAlgorithm(context, this, dialog);
@@ -249,8 +253,7 @@ public final class VoiceXmlInterpreter {
         // Start the fia.
         try {
             try {
-                fia.initialize(profile);
-                context.finalizedInitialization();
+                fia.initialize(profile, parameters);
             } catch (JVoiceXMLEvent event) {
                 final EventBus eventbus = context.getEventBus();
                 eventbus.publish(event);

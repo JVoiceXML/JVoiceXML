@@ -472,7 +472,7 @@ task(runDebug, type: JavaExec) {
     dependsOn jvxmlConfigurations
     version = JVOICEXML_VERSION
 
-    mainClassName = "org.jvoicexml.startup.Startup"
+    main = "org.jvoicexml.startup.Startup"
     classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",

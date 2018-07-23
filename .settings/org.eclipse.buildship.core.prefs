@@ -1,5 +1,4 @@
 connection.arguments=
-connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)
 connection.java.home=C\:\\Program Files\\Java\\jdk1.8.0_91
 connection.jvm.arguments=
 connection.project.dir=
