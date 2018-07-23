@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -106,12 +106,6 @@ public class VoiceXmlInterpreterContext {
 
     /** The event handler to use in this context. */
     private final EventHandler eventHandler;
-
-    /**
-     * <code>true</code> if the interpreter is in the initializing phase of a
-     * subdialog.
-     */
-    private boolean initializingSubdialog;
 
     /** The configuration to use. */
     private final Configuration configuration;
@@ -540,7 +534,7 @@ public class VoiceXmlInterpreterContext {
                 } else {
                     dialog = null;
                 }
-                descriptor = interpret(document, dialog);
+                descriptor = interpret(document, dialog, null);
                 if (descriptor == null) {
                     document = null;
                 } else {
@@ -578,12 +572,14 @@ public class VoiceXmlInterpreterContext {
      *            the application to process.
      * @param desc
      *            the document descriptor for the subdialog
+     * @param parameters
+     *            passed parameters when executing this dialog
      * @exception JVoiceXMLEvent
      *                Error processing the document.
      */
     public void processSubdialog(final Application appl,
-            final DocumentDescriptor desc) throws JVoiceXMLEvent {
-        initializingSubdialog = true;
+            final DocumentDescriptor desc,
+            final Map<String, Object> parameters) throws JVoiceXMLEvent {
         application = appl;
         VoiceXmlDocument document = application.getCurrentDocument();
         DocumentDescriptor descriptor = desc;
@@ -597,7 +593,7 @@ public class VoiceXmlInterpreterContext {
                 } else {
                     dialog = null;
                 }
-                descriptor = interpret(document, dialog);
+                descriptor = interpret(document, dialog, parameters);
                 if (descriptor == null) {
                     document = null;
                 } else {
@@ -614,26 +610,6 @@ public class VoiceXmlInterpreterContext {
                 exitScope(Scope.DOCUMENT);
             }
         }
-    }
-
-    /**
-     * Checks if the interpreter is in the initialzing phase of a subdialog.
-     * 
-     * @return <code>true</code> if the interpreter is in the initialzing phase
-     *         of a subdialog.
-     * @since 0.7.4
-     */
-    public boolean isInitializingSubdialog() {
-        return initializingSubdialog;
-    }
-
-    /**
-     * The FIA finalized the initialization phase.
-     * 
-     * @since 0.7.4
-     */
-    void finalizedInitialization() {
-        initializingSubdialog = false;
     }
 
     /**
@@ -787,13 +763,16 @@ public class VoiceXmlInterpreterContext {
      *            VoiceXML document to interpret.
      * @param startDialog
      *            the dialog where to start interpretation
+     * @param parameters
+     *            passed parameters when executing this dialog
      * @return Descriptor of the next document to process or <code>null</code>
      *         if there is no next document.
      * @exception JVoiceXMLEvent
      *                Error or event processing the document.
      */
     private DocumentDescriptor interpret(final VoiceXmlDocument document,
-            final String startDialog) throws JVoiceXMLEvent {
+            final String startDialog, final Map<String, Object> parameters)
+                    throws JVoiceXMLEvent {
         final VoiceXmlInterpreter interpreter = new VoiceXmlInterpreter(this);
         try {
             interpreter.setDocument(document, startDialog, configuration);
@@ -814,7 +793,7 @@ public class VoiceXmlInterpreterContext {
         while (dialog != null) {
             try {
                 enterScope(Scope.DIALOG);
-                interpreter.process(dialog);
+                interpreter.process(dialog, parameters);
                 dialog = interpreter.getNextDialog();
             } catch (GotoNextFormEvent e) {
                 final String id = e.getForm();

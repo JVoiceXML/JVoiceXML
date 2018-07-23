@@ -58,9 +58,6 @@ final class VarStrategy extends AbstractTagStrategy {
         EVAL_ATTRIBUTES.add(Var.ATTRIBUTE_EXPR);
     }
 
-    /** Flag indicating that we are in a subdialog context. */
-    private boolean isSubdialog;
-
     /** Name of the variable. */
     private String name;
 
@@ -86,10 +83,7 @@ final class VarStrategy extends AbstractTagStrategy {
     @Override
     public void evalAttributes(final VoiceXmlInterpreterContext context)
             throws SemanticError {
-        isSubdialog = context.isInitializingSubdialog();
-        if (!isSubdialog) {
-            super.evalAttributes(context);
-        }
+        super.evalAttributes(context);
     }
 
     /**
@@ -104,9 +98,7 @@ final class VarStrategy extends AbstractTagStrategy {
          *       error.semantic in that case. Check if this is handled by the
          *       scripting environment.
          */
-        if (!isSubdialog) {
-            value = getAttribute(Var.ATTRIBUTE_EXPR);
-        }
+        value = getAttribute(Var.ATTRIBUTE_EXPR);
     }
 
     /**
@@ -118,13 +110,6 @@ final class VarStrategy extends AbstractTagStrategy {
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem item,
             final VoiceXmlNode node) throws JVoiceXMLEvent {
-        if (isSubdialog) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("ignoring expr of name '" + name
-                        + "' in a subdialog");
-            }
-            return;
-        }
         if (name == null) {
             // The VXML specification leaves it undefined, what happens, if
             // no name is given. So we simply ignore it.

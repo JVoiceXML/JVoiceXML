@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,8 +24,6 @@ import java.net.URI;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.EventBus;
@@ -43,10 +41,6 @@ import org.jvoicexml.interpreter.scope.Scope;
  * @since 0.7.4
  */
 final class SubdialogExecutorThread extends Thread {
-    /** Logger for this class. */
-    private static final Logger LOGGER = LogManager
-            .getLogger(SubdialogExecutorThread.class);
-
     /** The URI of the subdialog. */
     private final URI uri;
 
@@ -94,20 +88,10 @@ final class SubdialogExecutorThread extends Thread {
     @Override
     public void run() {
         final DataModel model = context.getDataModel();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("initializing parameters...");
-        }
         model.createScope(Scope.DIALOG);
-        for (String name : parameters.keySet()) {
-            final Object value = parameters.get(name);
-            model.createVariable(name, value);
-        }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...initialized parameters");
-        }
         try {
             final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
-            context.processSubdialog(application, descriptor);
+            context.processSubdialog(application, descriptor, parameters);
         } catch (ReturnEvent e) {
             final Object result;
             try {
