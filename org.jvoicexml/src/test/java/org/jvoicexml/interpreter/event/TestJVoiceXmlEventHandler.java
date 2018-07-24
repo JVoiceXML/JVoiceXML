@@ -21,6 +21,8 @@
 
 package org.jvoicexml.interpreter.event;
 
+import static org.mockito.Mockito.never;
+
 import java.io.IOException;
 import java.util.Collection;
 
@@ -71,8 +73,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
 import org.xml.sax.SAXException;
-
-import static org.mockito.Mockito.never;
 
 /**
  * Test cases for {@link JVoiceXmlEventHandler}.
@@ -411,7 +411,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile);
+        fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
                 context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
@@ -468,7 +468,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile);
+        fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
                 context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
@@ -515,7 +515,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, null, dialog);
-        fia.initialize(profile);
+        fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         handler.collect(context, interpreter, document);
@@ -567,7 +567,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile);
+        fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         handler.collect(context, interpreter, dialog);
@@ -634,7 +634,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile);
+        fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         final InitialFormItem initialItem = new InitialFormItem(context,
@@ -723,7 +723,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile);
+        fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         final InitialFormItem initialItem = new InitialFormItem(context,
@@ -816,7 +816,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile);
+        fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
@@ -869,7 +869,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile);
+        fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver());
         handler.collect(context, interpreter, fia, item);
