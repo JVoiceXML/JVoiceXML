@@ -235,7 +235,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile);
+                    fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -288,7 +288,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile);
+                    fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -361,7 +361,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile);
+                    fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -421,7 +421,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile);
+                    fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -474,7 +474,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile);
+                    fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -540,7 +540,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile);
+                    fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -606,7 +606,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile);
+                    fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -681,7 +681,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile);
+                    fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
@@ -756,7 +756,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile);
+                    fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     Assert.fail(e.getMessage());
