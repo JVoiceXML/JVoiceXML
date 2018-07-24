@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -248,10 +248,13 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      * 
      * @param prof
      *            the profile
+     * @param parameters
+     *            passed parameters when executing this dialog
      * @throws JVoiceXMLEvent
      *             Error initializing the {@link FormItem}s.
      */
-    public void initialize(final Profile prof) throws JVoiceXMLEvent {
+    public void initialize(final Profile prof,
+            final Map<String, Object> parameters) throws JVoiceXMLEvent {
         profile = prof;
         if (profile == null) {
             throw new BadFetchError("No profile given."
@@ -291,6 +294,23 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                     strategy.validateAttributes(model);
                     strategy.execute(context, interpreter, this, null, node);
                 }
+            }
+        }
+
+        if (parameters != null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("updating parameters...");
+            }
+            for (String name : parameters.keySet()) {
+                final Object value = parameters.get(name);
+                int rc = model.updateVariable(name, value);
+                if (rc != 0) {
+                    throw new SemanticError("Parameter '" + name
+                            + "' has not been defined!"); 
+                }
+            }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...updated parameters");
             }
         }
 
@@ -1382,7 +1402,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 documentServer, session);
         final Map<String, Object> parameters = parser.getParameters();
         final ScopeObserver observer = new ScopeObserver();
-        // TODO aquire the configuration object
+        // TODO acquire the configuration object
         final Configuration configuration = context.getConfiguration();
         final VoiceXmlInterpreterContext subdialogContext =
                 new VoiceXmlInterpreterContext(session, configuration,
