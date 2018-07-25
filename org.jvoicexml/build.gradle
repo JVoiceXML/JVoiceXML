@@ -7,11 +7,13 @@ repositories {
 
 configurations {
     jvxmlConfiguration
+    testArtifacts
 }
 
 dependencies {
     jvxmlConfiguration fileTree(dir: "src/main/config")
-
+    testArtifacts sourceSets.test.output
+    
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.9.1'
