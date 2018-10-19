@@ -23,6 +23,7 @@ package org.jvoicexml;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Map;
 
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.vxml.RequestMethod;
@@ -137,6 +138,14 @@ public final class DocumentDescriptor {
 
     /**
      * Adds the given parameter to the list of known parameters.
+     * @param pairs the parameters to add
+     */
+    public void addParameters(final Collection<KeyValuePair> pairs) {
+        parameters.addAll(pairs);
+    }
+    
+    /**
+     * Adds the given parameter to the list of known parameters.
      * @param pair the parameter to add
      */
     public void addParameter(final KeyValuePair pair) {
@@ -145,10 +154,25 @@ public final class DocumentDescriptor {
 
     /**
      * Adds the given parameter to the list of known parameters.
-     * @param pairs the parameters to add
+     * @param key the name of the parameter to add
+     * @param value the value of the parameter to add
+     * @since 0.7.8
      */
-    public void addParameter(final Collection<KeyValuePair> pairs) {
-        parameters.addAll(pairs);
+    public void addParamater(final String key, final Object value) {
+        final KeyValuePair pair = new KeyValuePair(key, value);
+        addParameter(pair);
+    }
+    
+    /**
+     * Adds the given parameters to the list of known parameters.
+     * @param parameters the parameters to add
+     * @since 0.7.8
+     */
+    public void addParameters(final Map<String, Object> parameters) {
+        for (String key : parameters.keySet()) {
+            final Object value = parameters.get(key);
+            addParamater(key, value);
+        }
     }
     
     /**
