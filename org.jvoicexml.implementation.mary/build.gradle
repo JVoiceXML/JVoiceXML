@@ -84,6 +84,11 @@ jar {
     baseName 'org.jvoicexml.implementation.mary'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mary-implementation.xml")
 }

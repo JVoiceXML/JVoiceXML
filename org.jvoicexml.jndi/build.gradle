@@ -80,6 +80,11 @@ jar {
     baseName 'org.jvoicexml.jndi'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jvxml-jndi.xml")
 }

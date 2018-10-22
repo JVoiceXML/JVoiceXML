@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: "com.github.eerohele.saxon-gradle"
+apply plugin: 'maven'
 
 buildscript {
     repositories {
@@ -83,6 +84,11 @@ jar {
                    "Implementation-Version": JVOICEXML_VERSION)
     }
     baseName 'org.jvoicexml.interpreter.datamodel.ecmascript'
+}
+
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
 }
 
 clean {

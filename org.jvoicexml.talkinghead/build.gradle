@@ -41,4 +41,9 @@ jar {
     baseName 'org.jvoicexml.talkinghead'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
 mainClassName = "org.jvoicexml.talkinghead.TalkingHead"

@@ -81,6 +81,11 @@ jar {
     baseName 'org.jvoicexml.profile.mmi'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-profile.xml")
 }

@@ -76,6 +76,11 @@ jar {
     baseName 'org.jvoicexml.interpreter.grammar.regex'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/regex-grammar.xml")
 }

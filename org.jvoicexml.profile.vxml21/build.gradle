@@ -71,6 +71,11 @@ jar {
     baseName 'org.jvoicexml.profile.vxml21'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/vxml2.1-profile.xml")
 }

@@ -93,6 +93,11 @@ jar {
     baseName 'org.jvoicexml.callmanager.mmi.http'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-callmanager-http.xml")
 }
