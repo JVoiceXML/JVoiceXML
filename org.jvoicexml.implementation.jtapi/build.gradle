@@ -129,6 +129,11 @@ jar {
     baseName 'org.jvoicexml.implementation.jtapi'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-callmanager.xml")
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-implementation.xml")

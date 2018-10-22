@@ -36,3 +36,8 @@ jar {
     }
     baseName 'org.jvoicexml.callmanager.mmi'
 }
+
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}

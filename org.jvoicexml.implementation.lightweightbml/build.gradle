@@ -81,6 +81,11 @@ jar {
     baseName 'org.jvoicexml.implementation.lightweightbml'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/lightweightbml-implementation.xml")
 }

@@ -28,3 +28,8 @@ war {
     baseName 'org.jvoicexml.callmanager.mmi.servlet'
     version = JVOICEXML_VERSION
 }
+
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}

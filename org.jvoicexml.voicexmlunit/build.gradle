@@ -33,3 +33,8 @@ jar {
     }
     baseName 'org.jvoicexml.voicexmlunit'
 }
+
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
