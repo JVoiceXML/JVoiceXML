@@ -103,6 +103,11 @@ jar {
     baseName 'org.jvoicexml.implementation.jsapi10'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi10-talking-java-implementation.xml")
     delete file("${project(':org.jvoicexml').buildDir}/jni/cgjsapi170.dll")

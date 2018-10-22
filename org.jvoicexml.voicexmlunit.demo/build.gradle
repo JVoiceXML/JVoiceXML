@@ -33,6 +33,11 @@ jar {
     baseName 'org.jvoicexml.voicexmlunit.demo'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
 test {
     jvmArgs = ["-Djava.security.policy=src/test/config/jvoicexml.policy" ]
 }

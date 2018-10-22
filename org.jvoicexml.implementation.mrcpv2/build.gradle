@@ -154,6 +154,11 @@ jar {
     baseName 'org.jvoicexml.implementation.mrcpv2'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-callmanager.xml")
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-implementation.xml")

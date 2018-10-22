@@ -35,3 +35,8 @@ jar {
     }
     baseName 'org.jvoicexml.client'
 }
+
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}

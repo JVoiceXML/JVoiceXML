@@ -169,3 +169,7 @@ jar {
     baseName 'org.jvoicexml.implementation.kinect'
 }
 
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}

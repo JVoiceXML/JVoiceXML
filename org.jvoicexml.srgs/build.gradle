@@ -29,3 +29,8 @@ jar {
     }
     baseName 'org.jvoicexml.srgs'
 }
+
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
