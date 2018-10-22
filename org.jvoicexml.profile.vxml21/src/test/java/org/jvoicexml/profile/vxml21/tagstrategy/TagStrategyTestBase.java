@@ -249,7 +249,7 @@ public abstract class TagStrategyTestBase {
     protected final void executeTagStrategy(final VoiceXmlNode node,
             final TagStrategy strategy) throws JVoiceXMLEvent, Exception {
         if (fia != null) {
-            fia.initialize(profile);
+            fia.initialize(profile, null);
         }
         strategy.getAttributes(context, fia, node);
         strategy.evalAttributes(context);
