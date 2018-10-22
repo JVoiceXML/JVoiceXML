@@ -164,12 +164,12 @@ final class SubmitStrategy extends AbstractTagStrategy {
                 } else {
                     final Collection<KeyValuePair> pairs = serializer
                             .serialize(model, name, value);
-                    descriptor.addParameter(pairs);
+                    descriptor.addParameters(pairs);
                 }
             } else {
                 final Collection<KeyValuePair> pairs = serializer.serialize(
                         model, name, value);
-                descriptor.addParameter(pairs);
+                descriptor.addParameters(pairs);
             }
         }
     }
