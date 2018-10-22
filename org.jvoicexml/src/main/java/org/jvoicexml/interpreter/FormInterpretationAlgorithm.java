@@ -1389,18 +1389,21 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         LOGGER.info("calling subdialog '" + subdialog.getName() + "' at '"
                 + resolvedUri + "'...");
 
-        // Prepare running the subdialog in an own thread.
+        // Retrieve the nested param elements
         final JVoiceXmlSession session = (JVoiceXmlSession) context
                 .getSession();
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
-        final VoiceXmlDocument doc = context.loadDocument(descriptor);
-        application.addDocument(resolvedUri, doc);
         final DataModel model = context.getDataModel();
         final DocumentServer documentServer = context.getDocumentServer();
-        // Retrieve the nested param elements
         final ParamParser parser = new ParamParser(subdialog.getNode(), model,
                 documentServer, session);
         final Map<String, Object> parameters = parser.getParameters();
+
+        // Prepare running the subdialog in an own thread.
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        descriptor.addParameters(parameters);
+        final VoiceXmlDocument doc = context.loadDocument(descriptor);
+        application.addDocument(resolvedUri, doc);
+        
         final ScopeObserver observer = new ScopeObserver();
         // TODO acquire the configuration object
         final Configuration configuration = context.getConfiguration();
