@@ -99,14 +99,17 @@ configurations {
         description = "VoiceXML MMI Profile"
         extendsFrom compile
     }
+
     jvxmlProfileMMIHTTP {
         description = "VoiceXML MMI Profile with an HTTP ETL"
         extendsFrom compile
     }
+
     jvxmlProfileMMISocket {
         description = "VoiceXML MMI Profile with a Socket ETL"
         extendsFrom compile
     }
+
     jvxmlProfileMMIuMundo {
         description = "VoiceXML MMI Profile with a uMundo ETL"
         extendsFrom compile
@@ -237,7 +240,9 @@ distributions {
                 from configurations.jvxmlImplementationJSAPI10 
                 from configurations.jvxmlImplementationJSAPI20 
                 from configurations.jvxmlImplementationKinect 
+                from configurations.jvxmlImplementationLightweightBML 
                 from configurations.jvxmlImplementationMary
+                from configurations.jvxmlImplementationMarc
                 from configurations.jvxmlImplementationMrcpv2
                 from configurations.jvxmlImplementationText
 
