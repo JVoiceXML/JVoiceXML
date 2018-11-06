@@ -10,14 +10,32 @@ buildscript {
 
 apply plugin: 'latex'
 
-task createVersionFile() << {
-    def file = new File("version.tex")
+defaultTasks 'pdfLatex'
+
+configurations {
+    "default" {
+        description = "How to build documentation"
+    }
+}
+
+dependencies {
+    "default" fileTree(dir: "${projectDir}", includes: ['*.tex', '*.bib', '*.jpg', '*.png', '"*.eps'])
+}
+
+task createVersionFile {
+    def file = new File("${projectDir}/version.tex")
     file.createNewFile()
     file.text = "\\newcommand{\\jvxmlversion} {$JVOICEXML_VERSION}"
 }
 
-latex {
+latex {   
     tex tex:'howtobuild.tex', 
         bib: 'howtobuild.bib', 
         pdf:"jvxml-howtobuild-${JVOICEXML_VERSION}.pdf"
+}
+
+pdfLatex {
+    doFirst {
+        createVersionFile
+    }
 }

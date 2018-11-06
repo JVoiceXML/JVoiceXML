@@ -97,7 +97,7 @@ configurations {
 
     jvxmlProfileMMI {
         description = "VoiceXML MMI Profile"
-        extendsFrom compile
+        extendsFrom archives
     }
 
     jvxmlProfileMMIHTTP {
@@ -113,6 +113,10 @@ configurations {
     jvxmlProfileMMIuMundo {
         description = "VoiceXML MMI Profile with a uMundo ETL"
         extendsFrom compile
+    }
+    
+    jvxmlDocumentation {
+        description = "JVoiceXML documentation"
     }
 }
 
@@ -161,6 +165,9 @@ dependencies {
     jvxmlProfileMMIHTTP project(':org.jvoicexml.callmanager.mmi.http')
     jvxmlProfileMMISocket project(':org.jvoicexml.callmanager.mmi.socket')
     jvxmlProfileMMIuMundo project(':org.jvoicexml.callmanager.mmi.umundo')
+
+    jvxmlDocumentation project(':howtobuild')
+    jvxmlDocumentation project(':userguide')
     
     runtime project(':org.jvoicexml.xml')
     runtime project(':org.jvoicexml')
@@ -181,7 +188,8 @@ jar {
 
 task jvxmlConfigurations {
     dependsOn configurations.jvxmlJNDI
-
+    dependsOn configurations.jvxmlDocumentation
+    
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
     if (project.property('org_jvoicexml_interpreter_grammar_luis') == 'true') {
         dependsOn configurations.jvxmlInterpreterGrammarLUIS
@@ -224,6 +232,11 @@ task jvxmlServlet(dependsOn: ':org.jvoicexml.callmanager.mmi.servlet:war') {
             from(project(':org.jvoicexml.callmanager.mmi.servlet').war.outputs.files)
         }
     }
+}
+
+task jvxmlDocumentation(dependsOn: configurations.jvxmlDocumentation) {
+    dependsOn ':howtobuild:pdfLatex'
+    dependsOn ':userguide:pdfLatex'
 }
 
 distributions {
@@ -283,9 +296,11 @@ distributions {
                 into "servlets"
             }
             
-            into('doc') {
-                from("${project(':howtobuild').projectDir}/jvxml-howtobuild-${JVOICEXML_VERSION}.pdf")
-                from("${project(':userguide').projectDir}/jvxml-userguide-${JVOICEXML_VERSION}.pdf")
+            from(jvxmlDocumentation) {
+                into('doc') {
+                    from("${project(':howtobuild').projectDir}/jvxml-howtobuild-${JVOICEXML_VERSION}.pdf")
+                    from("${project(':userguide').projectDir}/jvxml-userguide-${JVOICEXML_VERSION}.pdf")
+                }
             }
             
             into('demo/org.jvoicexml.demo.helloworlddemo') {
