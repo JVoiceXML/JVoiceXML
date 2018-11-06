@@ -300,6 +300,7 @@ distributions {
                 into('doc') {
                     from("${project(':howtobuild').projectDir}/jvxml-howtobuild-${JVOICEXML_VERSION}.pdf")
                     from("${project(':userguide').projectDir}/jvxml-userguide-${JVOICEXML_VERSION}.pdf")
+                    from("${project(':org.jvoicexml').projectDir}/src/main/doc")
                 }
             }
             
