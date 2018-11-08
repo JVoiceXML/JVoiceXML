@@ -494,7 +494,10 @@ task(shutdown, type: JavaExec) {
 }
 
 startScripts {
+    mainClassName = "org.jvoicexml.startup.Startup"
     classpath += files('../config')
+    applicationName = 'jvxml-startup'
+    defaultJvmOpts = ["-Xms1024m", "-Xmx2048m"]
     defaultJvmOpts = [ "-Djava.library.path=lib",
                "-Djava.security.policy=config/jvoicexml.policy",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
@@ -507,11 +510,6 @@ startScripts {
     }
 }
  
-mainClassName = "org.jvoicexml.startup.Startup"
-applicationName = 'jvxml-startup'
-
-applicationDefaultJvmArgs = ["-Xms512m", "-Xmx1024m"]
-
 task createShutdownApp(type: CreateStartScripts) {
     mainClassName = "org.jvoicexml.startup.Shutdown"
     classpath = startScripts.classpath

@@ -65,12 +65,20 @@ task copyConfiguration(type: Copy) {
 }
 
 
+task copyReferencedLibraries(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile) {
+        include 'org.jvoicexml.client*.jar'
+    }
+}
+
 jar {
     version = JVOICEXML_VERSION
 
     dependsOn xslt
     dependsOn xsltDistribution
     dependsOn copyConfiguration
+    dependsOn copyReferencedLibraries
     
     manifest {
         attributes("Implementation-Title": "JVoiceXML JNDI library",
