@@ -462,6 +462,7 @@ run {
     mainClassName = "org.jvoicexml.startup.Startup"
     classpath += files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
+               "-Djava.security.manager",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
@@ -475,6 +476,7 @@ task(runDebug, type: JavaExec) {
     main = "org.jvoicexml.startup.Startup"
     classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
+               "-Djava.security.manager",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
@@ -488,9 +490,10 @@ task(shutdown, type: JavaExec) {
     main = "org.jvoicexml.startup.Shutdown"
     classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
-                             "-Djava.security.policy=file://${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
-                             "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
-                             "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
+               "-Djava.security.manager",
+               "-Djava.security.policy=file://${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
+               "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
+               "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
 }
 
 startScripts {
