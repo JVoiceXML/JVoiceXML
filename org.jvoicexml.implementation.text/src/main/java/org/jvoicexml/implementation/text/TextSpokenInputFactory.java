@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@ package org.jvoicexml.implementation.text;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
@@ -39,6 +40,10 @@ import org.jvoicexml.implementation.grammar.GrammarParser;
  */
 public final class TextSpokenInputFactory
         implements ResourceFactory<SpokenInput> {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(TextSpokenInputFactory.class);
+
     /** Number of instances that this factory will create. */
     private int instances;
 
@@ -60,6 +65,10 @@ public final class TextSpokenInputFactory
      */
     public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
         parsers = grammarParsers;
+        for (GrammarParser<?> parser : parsers) {
+            LOGGER.info("added grammar parser '" + parser.getClass()
+                + "' for grammar type '" + parser.getType() +"'");
+        }
     }
 
     /**
