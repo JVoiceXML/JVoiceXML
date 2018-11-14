@@ -177,9 +177,8 @@ jar {
 }
 
 task jvxmlConfigurations {
-    dependsOn configurations.jvxmlJNDI
-
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
+
     if (project.property('org_jvoicexml_interpreter_grammar_luis') == 'true') {
         dependsOn configurations.jvxmlInterpreterGrammarLUIS
     }
@@ -457,6 +456,8 @@ distributions {
 
 run {
     dependsOn jvxmlConfigurations
+    dependsOn configurations.jvxmlJNDI
+
     version = JVOICEXML_VERSION
 
     mainClassName = "org.jvoicexml.startup.Startup"
@@ -471,6 +472,8 @@ run {
 
 task(runDebug, type: JavaExec) {
     dependsOn jvxmlConfigurations
+    dependsOn configurations.jvxmlJNDI
+
     version = JVOICEXML_VERSION
 
     main = "org.jvoicexml.startup.Startup"
@@ -488,7 +491,7 @@ task(shutdown, type: JavaExec) {
     dependsOn configurations.jvxmlJNDI
 
     main = "org.jvoicexml.startup.Shutdown"
-    classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")
+    classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config") + files("${project(':org.jvoicexml.jndi').buildDir}/libs/org.jvoicexml.jndi-${JVOICEXML_VERSION}.jar")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.manager",
                "-Djava.security.policy=file://${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",

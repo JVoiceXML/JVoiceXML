@@ -20,7 +20,6 @@
  */
 package org.jvoicexml.startup;
 
-import java.rmi.RMISecurityManager;
 import java.util.Collection;
 import java.util.ServiceLoader;
 
@@ -82,12 +81,6 @@ public final class Shutdown {
      * @param args Command line arguments. None expected.
      */
     public static void main(final String[] args) {
-        SecurityManager securityManager = System.getSecurityManager();
-        if (securityManager == null) {
-            securityManager = new RMISecurityManager();
-            System.setSecurityManager(securityManager);
-            LOGGER.info("security manager set to " + securityManager);
-        }
         final Shutdown shutdown = new Shutdown();
         final Configuration configuration = shutdown.getConfiguration();
         if (configuration == null) {

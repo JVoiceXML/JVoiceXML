@@ -21,7 +21,6 @@
 
 package org.jvoicexml.jndi;
 
-import java.rmi.RMISecurityManager;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -120,12 +119,6 @@ public final class JndiRemoteShutdown implements RemoteShutdown {
      *             JNDI port number.
      */
     public static void main(final String[] args) {
-        SecurityManager securityManager = System.getSecurityManager();
-        if (securityManager == null) {
-            securityManager = new RMISecurityManager();
-            System.setSecurityManager(securityManager);
-            LOGGER.info("security manager set to " + securityManager);
-        }
         final int portNumber;
         if (args.length > 0) {
             final String arg = args[0];
