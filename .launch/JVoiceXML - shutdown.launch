@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.buildship.core.launch.runconfiguration">
+<listAttribute key="arguments">
+<listEntry value="-info"/>
+</listAttribute>
+<booleanAttribute key="build_scans_enabled" value="false"/>
+<stringAttribute key="gradle_distribution" value="GRADLE_DISTRIBUTION(WRAPPER)"/>
+<stringAttribute key="gradle_user_home" value=""/>
+<stringAttribute key="java_home" value="C:\Program Files\Java\jdk1.8.0_91"/>
+<listAttribute key="jvm_arguments"/>
+<booleanAttribute key="offline_mode" value="false"/>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
+<booleanAttribute key="override_workspace_settings" value="false"/>
+<booleanAttribute key="show_console_view" value="true"/>
+<booleanAttribute key="show_execution_view" value="true"/>
+<listAttribute key="tasks">
+<listEntry value="shutdown"/>
+</listAttribute>
+<booleanAttribute key="use_gradle_distribution_from_import" value="false"/>
+<stringAttribute key="working_dir" value="${workspace_loc:/main}"/>
+</launchConfiguration>
