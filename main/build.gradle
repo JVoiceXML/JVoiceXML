@@ -187,10 +187,9 @@ jar {
 }
 
 task jvxmlConfigurations {
-    dependsOn configurations.jvxmlJNDI
     dependsOn configurations.jvxmlDocumentation
-    
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
+
     if (project.property('org_jvoicexml_interpreter_grammar_luis') == 'true') {
         dependsOn configurations.jvxmlInterpreterGrammarLUIS
     }
@@ -478,11 +477,14 @@ distributions {
 
 run {
     dependsOn jvxmlConfigurations
+    dependsOn configurations.jvxmlJNDI
+
     version = JVOICEXML_VERSION
 
     mainClassName = "org.jvoicexml.startup.Startup"
     classpath += files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
+               "-Djava.security.manager",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
@@ -491,11 +493,15 @@ run {
 
 task(runDebug, type: JavaExec) {
     dependsOn jvxmlConfigurations
+    dependsOn configurations.jvxmlJNDI
+
     version = JVOICEXML_VERSION
 
     main = "org.jvoicexml.startup.Startup"
-    classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")
+    classpath = sourceSets.main.runtimeClasspath \
+                + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
+               "-Djava.security.manager",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
@@ -507,15 +513,22 @@ task(shutdown, type: JavaExec) {
     dependsOn configurations.jvxmlJNDI
 
     main = "org.jvoicexml.startup.Shutdown"
-    classpath = sourceSets.main.runtimeClasspath + files("${project(':org.jvoicexml').buildDir}/config")
+    classpath = sourceSets.main.runtimeClasspath \
+                + files("${project(':org.jvoicexml').buildDir}/config") \
+                + files("${project(':org.jvoicexml.jndi').buildDir}/libs/org.jvoicexml.jndi-${JVOICEXML_VERSION}.jar")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
-                             "-Djava.security.policy=file://${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
-                             "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
-                             "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
+               "-Djava.security.manager",
+               "-Djava.security.policy=file://${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
+               "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
+               "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
 }
 
 startScripts {
-    classpath += files('../config')
+    mainClassName = "org.jvoicexml.startup.Startup"
+    classpath += files('../config') \
+              + files("../lib/org.jvoicexml.jndi-${JVOICEXML_VERSION}.jar")
+    applicationName = "jvxml-startup"
+    defaultJvmOpts = ["-Xms1024m", "-Xmx2048m"]
     defaultJvmOpts = [ "-Djava.library.path=lib",
                "-Djava.security.policy=config/jvoicexml.policy",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
@@ -528,18 +541,13 @@ startScripts {
     }
 }
  
-mainClassName = "org.jvoicexml.startup.Startup"
-applicationName = 'jvxml-startup'
-
-applicationDefaultJvmArgs = ["-Xms512m", "-Xmx1024m"]
-
 task createShutdownApp(type: CreateStartScripts) {
     mainClassName = "org.jvoicexml.startup.Shutdown"
-    classpath = startScripts.classpath
+    classpath = startScripts.classpath \
+                + files('../config')
     outputDir = startScripts.outputDir
     applicationName = 'jvxml-shutdown'
     defaultJvmOpts = ["-Xms1024m", "-Xmx2048m"]
-    classpath += files('../config')
     defaultJvmOpts = [ "-Djava.library.path=lib",
                "-Djava.security.policy=config/jvoicexml.policy",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",

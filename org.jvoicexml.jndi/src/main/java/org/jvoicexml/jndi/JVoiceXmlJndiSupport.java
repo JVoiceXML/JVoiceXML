@@ -22,7 +22,6 @@
 package org.jvoicexml.jndi;
 
 import java.io.IOException;
-import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.util.Hashtable;
 
@@ -113,14 +112,6 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
                 registry.start();
             }
     
-            // Set the security manager
-            SecurityManager securityManager = System.getSecurityManager();
-            if (securityManager == null) {
-                securityManager = new RMISecurityManager();
-                System.setSecurityManager(securityManager);
-                LOGGER.info("security manager set to '" + securityManager
-                        + "'");
-            }
             final Context context = getInitialContext();
             if (context == null) {
                 LOGGER.warn("unable to create initial context");
