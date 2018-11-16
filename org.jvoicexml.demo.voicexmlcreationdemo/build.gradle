@@ -23,5 +23,10 @@ jar {
     baseName 'org.jvoicexml.demo.voicexmlcreationdemo'
 }
 
-mainClassName = "org.jvoicexml.demo.voicexmlcreationdemo.VoiceXMLCreationDemo"
-
+run {
+    mainClassName = "org.jvoicexml.demo.voicexmlcreationdemo.VoiceXMLCreationDemo"
+    classpath += files("${buildDir}/resources/main")
+    jvmArgs = ["-Djvoicexml.config=${buildDir}/resources/main",
+               "-Djava.security.manager",
+               "-Djava.security.policy=${projectDir}/src/main/config/jvoicexml.policy"]
+}

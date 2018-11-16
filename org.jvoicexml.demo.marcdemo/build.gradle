@@ -24,6 +24,10 @@ jar {
     baseName 'org.jvoicexml.demo.marc'
 }
 
-mainClassName = "org.jvoicexml.demo.marcdemo.MarcDemo"
-applicationDefaultJvmArgs = ["-Djava.security.policy=${projectDir}/src/main/resources/jvoicexml.policy" ]
-
+run {
+    mainClassName = "org.jvoicexml.demo.marcdemo.MarcDemo"
+    classpath += files("${buildDir}/resources/main")
+    jvmArgs = ["-Djvoicexml.config=${buildDir}/resources/main",
+               "-Djava.security.manager",
+               "-Djava.security.policy=${projectDir}/src/main/config/jvoicexml.policy"]
+}
