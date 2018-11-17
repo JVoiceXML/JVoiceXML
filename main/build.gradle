@@ -319,7 +319,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.helloworldservletdemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.helloworldservletdemo').projectDir) {
                     include "build.gradle"
@@ -330,7 +331,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.inputdemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.inputdemo').projectDir) {
                     include "build.gradle"
@@ -341,7 +343,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.jtapidemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.jtapidemo').projectDir) {
                     include "build.gradle"
@@ -352,7 +355,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.luis').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.luis').projectDir) {
                     include "build.gradle"
@@ -363,7 +367,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.marcdemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.marcdemo').projectDir) {
                     include "build.gradle"
@@ -374,7 +379,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.mixedinitiativedemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.mixedinitiativedemo').projectDir) {
                     include "build.gradle"
@@ -385,7 +391,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.mmi.simpledemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.mmi.simpledemo').projectDir) {
                     include "build.gradle"
@@ -396,7 +403,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.objecttagdemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.objecttagdemo').projectDir) {
                     include "build.gradle"
@@ -407,7 +415,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.recorddemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.recorddemo').projectDir) {
                     include "build.gradle"
@@ -418,7 +427,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.scriptdemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.scriptdemo').projectDir) {
                     include "build.gradle"
@@ -429,7 +439,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.simpleinputdemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.simpleinputdemo').projectDir) {
                     include "build.gradle"
@@ -440,7 +451,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.talkingheaddemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.talkingheaddemo').projectDir) {
                     include "build.gradle"
@@ -451,7 +463,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.textdemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.textdemo').projectDir) {
                     include "build.gradle"
@@ -462,7 +475,8 @@ distributions {
                 from(project(':org.jvoicexml.demo.voicexmlcreationdemo').projectDir) {
                     exclude "**/build",
                     "**/logging",
-                    "**/bin"
+                    "**/bin",
+                    "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.voicexmlcreationdemo').projectDir) {
                     include "build.gradle"

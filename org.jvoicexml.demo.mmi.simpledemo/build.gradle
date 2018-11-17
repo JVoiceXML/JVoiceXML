@@ -9,13 +9,13 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.1'
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.3'
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: JVOICEXML_VERSION
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: JVOICEXML_VERSION
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.mmi.events', version: JVOICEXML_VERSION
 
-    compile project(':org.jvoicexml')
-    compile project(':org.jvoicexml.client')
-    compile project(':org.jvoicexml.mmi.events')
-
-    runtime project(':org.jvoicexml.callmanager.mmi')
-    runtime project(':org.jvoicexml.callmanager.mmi.http')
+    runtime group: 'org.jvoicexml', name: 'org.jvoicexml.callmanager.mmi', version: JVOICEXML_VERSION
+    runtime group: 'org.jvoicexml', name: 'org.jvoicexml.callmanager.mmi.http', version: JVOICEXML_VERSION
+    runtime group: 'org.jvoicexml', name: 'org.jvoicexml.jndi', version: JVOICEXML_VERSION
 }
 
 jar {
