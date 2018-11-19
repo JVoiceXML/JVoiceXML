@@ -42,6 +42,9 @@ public class RegexGrammarIdentifier implements GrammarIdentifier {
     public GrammarType identify(final GrammarDocument grammar) {
         // Check if we are able to compile it into a pattern.
         final String content = grammar.getTextContent();
+        if (content == null) {
+            return null;
+        }
         try {
             Pattern.compile(content);
         } catch (PatternSyntaxException e) {

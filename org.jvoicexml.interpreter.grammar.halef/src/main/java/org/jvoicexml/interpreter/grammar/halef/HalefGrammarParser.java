@@ -20,9 +20,7 @@
  */
 package org.jvoicexml.interpreter.grammar.halef;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -41,9 +39,6 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * @since 0.7.8
  */
 public class HalefGrammarParser implements GrammarParser<GrammarDocument> {
-    /** Buffer size when reading the gramamr. */
-    private static final int BUFFER_SIZE = 1024;
-
     /**
      * {@inheritDoc}
      */
