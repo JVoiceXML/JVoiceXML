@@ -193,7 +193,8 @@ task jvxmlConfigurations {
     if (project.property('org_jvoicexml_interpreter_grammar_luis') == 'true') {
         dependsOn configurations.jvxmlInterpreterGrammarLUIS
     }
-
+    dependsOn configurations.jvxmlInterpreterGrammarRegex
+    
     if (project.property('org_jvoicexml_implementation_jsapi20') == 'true') {
         dependsOn configurations.jvxmlImplementationJSAPI20 
     }
@@ -249,6 +250,7 @@ distributions {
             
                 from configurations.jvxmlInterpreterDatamodelECMAScript
                 from configurations.jvxmlInterpreterGrammarLUIS
+                from configurations.jvxmlInterpreterGrammarRegex
                 from configurations.jvxmlImplementationJSAPI10 
                 from configurations.jvxmlImplementationJSAPI20 
                 from configurations.jvxmlImplementationKinect 
@@ -275,6 +277,7 @@ distributions {
                         "**/mmi-callmanager-umundo.xml",
                         "**/jsapi10-talking-java-implementation.xml",
                         "**/jsapi20-sapi-implementation.xml",
+                        "**/jtapi-callmanager.xml",
                         "**/jtapi-implementation.xml",
                         "**/sip-callmanager.xml"
                 }
@@ -286,6 +289,7 @@ distributions {
                         "**/mmi-callmanager-umundo.xml",
                         "**/jsapi10-talking-java-implementation.xml",
                         "**/jsapi20-sapi-implementation.xml",
+                        "**/jtapi-callmanager.xml",
                         "**/jtapi-implementation.xml",
                         "**/sip-callmanager.xml"
                 }
