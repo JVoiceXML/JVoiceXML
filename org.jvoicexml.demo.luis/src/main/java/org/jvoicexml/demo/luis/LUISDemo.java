@@ -49,7 +49,8 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * </p>
  *
  * <p>
- * This demo uses the text platform.
+ * This demo uses the text platform. Take care to update the subscription key
+ * in <code>config/text-implementation.xml"</code> before running this demo.
  * </p>
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
