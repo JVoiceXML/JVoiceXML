@@ -241,6 +241,27 @@ task jvxmlConfigurations {
     }
 }
 
+task jvxmlDistributioConfigurations {
+    dependsOn configurations.jvxmlDocumentation
+    dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
+    dependsOn configurations.jvxmlInterpreterGrammarLUIS
+    dependsOn configurations.jvxmlInterpreterGrammarRegex
+    dependsOn configurations.jvxmlImplementationJSAPI10 
+    dependsOn configurations.jvxmlImplementationJSAPI20 
+    dependsOn configurations.jvxmlImplementationJTAPI 
+    dependsOn configurations.jvxmlImplementationKinect 
+    dependsOn configurations.jvxmlImplementationLightweightBML 
+    dependsOn configurations.jvxmlImplementationMarc 
+    dependsOn configurations.jvxmlImplementationMary
+    dependsOn configurations.jvxmlImplementationMrcpv2
+    dependsOn configurations.jvxmlImplementationText
+    dependsOn configurations.jvxmlProfileVXML21
+    dependsOn configurations.jvxmlProfileMMI
+    dependsOn configurations.jvxmlProfileMMIHTTP
+    dependsOn configurations.jvxmlProfileMMISocket
+    dependsOn configurations.jvxmlProfileMMIuMundo
+}
+
 
 task jvxmlServlet(dependsOn: ':org.jvoicexml.callmanager.mmi.servlet:war') {
     doLast {
