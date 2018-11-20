@@ -208,18 +208,18 @@ task jvxmlConfigurations {
         dependsOn configurations.jvxmlImplementationText
     }
     
-    if (project.property('org_jvoicexml_profile_vxml21') == 'true') {
+    if (project.property('JVOICEXML_PROFILE_VXML21') == 'true') {
         dependsOn configurations.jvxmlProfileVXML21
     }
-    if (project.property('org_jvoicexml_profile_mmi') == 'true') {
+    if (project.property('JVOICEXML_PROFILE_MMI') == 'true') {
         dependsOn configurations.jvxmlProfileMMI
-        if (project.property('org.jvoicexml.callmanager.mmi.http') == 'true') {
+        if (project.property('JVOICEXML_CALLMANAGER_MMI_HTTP') == 'true') {
             dependsOn configurations.jvxmlProfileMMIHTTP
         }
-        if (project.property('org.jvoicexml.callmanager.mmi.socket') == 'true') {
+        if (project.property('JVOICEXML_CALLMANAGER_MMI_SOCKET') == 'true') {
             dependsOn configurations.jvxmlProfileMMISocket
         }
-        if (project.property('org.jvoicexml.callmanager.mmi.umundo') == 'true') {
+        if (project.property('JVOICEXML_CALLMANAGER_MMI_UMUNDO') == 'true') {
             dependsOn configurations.jvxmlProfileMMIuMundo
         }
     }
