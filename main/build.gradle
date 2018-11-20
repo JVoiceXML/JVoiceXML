@@ -190,7 +190,7 @@ task jvxmlConfigurations {
     dependsOn configurations.jvxmlDocumentation
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
 
-    if (project.property('org_jvoicexml_interpreter_grammar_luis') == 'true') {
+    if (project.property('JVOICEXML_INTERPRETER_GRAMMAR_LUIS') == 'true') {
         dependsOn configurations.jvxmlInterpreterGrammarLUIS
     }
     dependsOn configurations.jvxmlInterpreterGrammarRegex
@@ -198,7 +198,7 @@ task jvxmlConfigurations {
     if (project.property('org_jvoicexml_implementation_jsapi20') == 'true') {
         dependsOn configurations.jvxmlImplementationJSAPI20 
     }
-    if (project.property('org_jvoicexml_implementation_mary') == 'true') {
+    if (project.property('JVOICEXML_IMPLEMENTATION_MARY') == 'true') {
         dependsOn configurations.jvxmlImplementationMary
     }
     if (project.property('org_jvoicexml_implementation_mrcpv2') == 'true') {

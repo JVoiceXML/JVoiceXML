@@ -42,7 +42,7 @@ xslt {
     input "${projectDir}/src/main/config/pizza.vxml"
     output "${sourceSets.main.output.resourcesDir}/pizza.vxml"
     parameters(
-        applicationId: project.property('org.jvoicexml.demo.luis.applicationId')
+        applicationId: project.property('JVOICEXML_DEMO_LUIS_APPLICATIONID')
     )
 }
 
