@@ -193,18 +193,34 @@ task jvxmlConfigurations {
     if (project.property('JVOICEXML_INTERPRETER_GRAMMAR_LUIS') == 'true') {
         dependsOn configurations.jvxmlInterpreterGrammarLUIS
     }
-    dependsOn configurations.jvxmlInterpreterGrammarRegex
-    
-    if (project.property('org_jvoicexml_implementation_jsapi20') == 'true') {
+    if (project.property('JVOICEXML_INTERPRETER_GRAMMAR_REGEX') == 'true') {
+        dependsOn configurations.jvxmlInterpreterGrammarRegex
+    }
+    if (project.property('JVOICEXML_IMPLEMENTATION_JSAPI10') == 'true') {
+        dependsOn configurations.jvxmlImplementationJSAPI10 
+    }
+    if (project.property('JVOICEXML_IMPLEMENTATION_JSAPI20') == 'true') {
         dependsOn configurations.jvxmlImplementationJSAPI20 
+    }
+    if (project.property('JVOICEXML_IMPLEMENTATION_JTAPI') == 'true') {
+        dependsOn configurations.jvxmlImplementationJTAPI 
+    }
+    if (project.property('JVOICEXML_IMPLEMENTATION_KINECT') == 'true') {
+        dependsOn configurations.jvxmlImplementationKinect 
+    }
+    if (project.property('JVOICEXML_IMPLEMENTATION_BML') == 'true') {
+        dependsOn configurations.jvxmlImplementationLightweightBML 
+    }
+    if (project.property('JVOICEXML_IMPLEMENTATION_MARC') == 'true') {
+        dependsOn configurations.jvxmlImplementationMarc 
     }
     if (project.property('JVOICEXML_IMPLEMENTATION_MARY') == 'true') {
         dependsOn configurations.jvxmlImplementationMary
     }
-    if (project.property('org_jvoicexml_implementation_mrcpv2') == 'true') {
+    if (project.property('JVOICEXML_IMPLEMENTATION_MRCPV2') == 'true') {
         dependsOn configurations.jvxmlImplementationMrcpv2
         }
-    if (project.property('org_jvoicexml_implementation_text') == 'true') {
+    if (project.property('JVOICEXML_IMPLEMENTATION_TEXT') == 'true') {
         dependsOn configurations.jvxmlImplementationText
     }
     

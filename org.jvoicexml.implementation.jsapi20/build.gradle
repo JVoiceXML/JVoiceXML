@@ -120,13 +120,13 @@ jar {
 
     dependsOn xsltSphinxFreeTTS {
         onlyIf { 
-            project.property('org.jvoicexml.implementation.jsapi20.freettssphinx') == 'true'
+            project.property('JVOICEXML_IMPLEMENTATION_JSAPI20_FREETTSSPHINX') == 'true'
         }
     }
     dependsOn xsltSphinxFreeTTSDistribution
     dependsOn xsltSAPI {
         onlyIf { 
-            project.property('org.jvoicexml.implementation.jsapi20.sapi') == 'true'
+            project.property('JVOICEXML_IMPLEMENTATION_JSAPI20_SAPI') == 'true'
         }
     }
     dependsOn xsltSAPIDistribution

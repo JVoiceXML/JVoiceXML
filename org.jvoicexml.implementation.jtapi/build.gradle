@@ -70,10 +70,10 @@ task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
         buildpath: "${buildDir}/libs",
         version: JVOICEXML_VERSION,
         libs: configurations.compile,
-        providername: project.property('org.jvoicexml.callmanager.jtapi.sip.providername'),
-        terminal: project.property('org.jvoicexml.callmanager.jtapi.sip.terminal'),
-        inputType: project.property('org.jvoicexml.callmanager.jtapi.sip.inputType'),
-        outputType: project.property('org.jvoicexml.callmanager.jtapi.sip.outputType')
+        providername: project.property('JVOICEXML_IMPLEMENTATION__JTAPI_SIP_PROVIDERNAME'),
+        terminal: project.property('JVOICEXML_IMPLEMENTATION__JTAPI_SIP_TERMINAL'),
+        inputType: project.property('JVOICEXML_IMPLEMENTATION__JTAPI_SIP_INPUTTYPE'),
+        outputType: project.property('JVOICEXML_IMPLEMENTATION__JTAPI_SIP_OUTPUTTYPE')
     )
 }
 
@@ -85,10 +85,10 @@ task xsltCallmanagerDistribution(type: com.github.eerohele.SaxonXsltTask)  {
         buildpath: "lib",
         version: JVOICEXML_VERSION,
         libs: configurations.compile,
-        providername: project.property('org.jvoicexml.callmanager.jtapi.sip.providername'),
-        terminal: project.property('org.jvoicexml.callmanager.jtapi.sip.terminal'),
-        inputType: project.property('org.jvoicexml.callmanager.jtapi.sip.inputType'),
-        outputType: project.property('org.jvoicexml.callmanager.jtapi.sip.outputType')
+        providername: project.property('JVOICEXML_IMPLEMENTATION__JTAPI_SIP_PROVIDERNAME'),
+        terminal: project.property('JVOICEXML_IMPLEMENTATION__JTAPI_SIP_TERMINAL'),
+        inputType: project.property('JVOICEXML_IMPLEMENTATION__JTAPI_SIP_INPUTTYPE'),
+        outputType: project.property('JVOICEXML_IMPLEMENTATION__JTAPI_SIP_OUTPUTTYPE')
     )
 }
 
