@@ -155,6 +155,7 @@ dependencies {
     jvxmlJNDI project(':org.jvoicexml.jndi')
 
     jvxmlVoiceXMLUnit project(':org.jvoicexml.voicexmlunit')
+    jvxmlVoiceXMLUnit project(':org.jvoicexml.voicexmlunit.demo')
     
     jvxmlProfileVXML21 project(':org.jvoicexml.profile.vxml21')
 
@@ -520,6 +521,18 @@ distributions {
                     "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.voicexmlcreationdemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
+                }
+            }
+            into('demo/org.jvoicexml.voicexmlunit') {
+                from(project(':org.jvoicexml.voicexmlunit.demo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin",
+                    "build.gradle"
+                }
+                from(project(':org.jvoicexml.voicexmlunit.demo').projectDir) {
                     include "build.gradle"
                     filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
                 }

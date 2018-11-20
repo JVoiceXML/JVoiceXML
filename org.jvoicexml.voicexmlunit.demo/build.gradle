@@ -39,5 +39,8 @@ install {
 }
 
 test {
-    jvmArgs = ["-Djava.security.policy=src/test/config/jvoicexml.policy" ]
+    classpath += files("${buildDir}/resources/main")
+    jvmArgs = ["-Djvoicexml.config=${buildDir}/resources/main",
+               "-Djava.security.manager",
+               "-Djava.security.policy=${projectDir}/src/test/config/jvoicexml.policy"]
 }
