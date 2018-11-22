@@ -105,23 +105,23 @@ public final class Block
         CHILD_TAGS = new java.util.HashSet<String>();
 
         CHILD_TAGS.add(Assign.TAG_NAME);
-        CHILD_TAGS.add(Prompt.TAG_NAME);
-        CHILD_TAGS.add(Data.TAG_NAME);
-        CHILD_TAGS.add(Enumerate.TAG_NAME);
-        CHILD_TAGS.add(Value.TAG_NAME);
         CHILD_TAGS.add(Audio.TAG_NAME);
         CHILD_TAGS.add(Clear.TAG_NAME);
+        CHILD_TAGS.add(Data.TAG_NAME);
         CHILD_TAGS.add(Disconnect.TAG_NAME);
+        CHILD_TAGS.add(Enumerate.TAG_NAME);
         CHILD_TAGS.add(Exit.TAG_NAME);
         CHILD_TAGS.add(Foreach.TAG_NAME);
         CHILD_TAGS.add(Goto.TAG_NAME);
         CHILD_TAGS.add(If.TAG_NAME);
         CHILD_TAGS.add(Log.TAG_NAME);
+        CHILD_TAGS.add(Prompt.TAG_NAME);
         CHILD_TAGS.add(Reprompt.TAG_NAME);
         CHILD_TAGS.add(Return.TAG_NAME);
         CHILD_TAGS.add(Script.TAG_NAME);
         CHILD_TAGS.add(Submit.TAG_NAME);
         CHILD_TAGS.add(Throw.TAG_NAME);
+        CHILD_TAGS.add(Value.TAG_NAME);
         CHILD_TAGS.add(Var.TAG_NAME);
     }
 

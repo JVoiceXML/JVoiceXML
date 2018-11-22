@@ -45,6 +45,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -277,11 +278,37 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         }
 
         // Initialize variables etc.
+        final DataModel model = context.getDataModel();
+        final Collection<XmlNode> children = dialog.getChildNodes();
+        initializeNodes(model, children);
+        if (parameters != null) {
+            updateParameters(parameters, model);
+        }
+
+        // Print a short summary.
+        final int elements = formItems.size();
+        LOGGER.info("found " + elements + " form items in dialog '" + id
+                + "'...");
+    }
+
+    /**
+     * Initializes the given nodes.
+     * @param model the current data model
+     * @param nodes the nodes to initialize
+     * @throws SemanticError
+     *          error evaluating the node's attributes
+     * @throws ErrorEvent
+     *          error validating the attributes
+     * @throws JVoiceXMLEvent
+     *          error executing the corresponding tag strategy
+     * @since 0.7.8
+     */
+    private void initializeNodes(final DataModel model,
+            final Collection<? extends XmlNode> nodes)
+            throws SemanticError, ErrorEvent, JVoiceXMLEvent {
         final TagStrategyFactory factory = profile
                 .getInitializationTagStrategyFactory();
-        final Collection<XmlNode> children = dialog.getChildNodes();
-        final DataModel model = context.getDataModel();
-        for (XmlNode currentNode : children) {
+        for (XmlNode currentNode : nodes) {
             if (currentNode instanceof VoiceXmlNode) {
                 final VoiceXmlNode node = (VoiceXmlNode) currentNode;
                 final TagStrategy strategy = factory.getTagStrategy(node);
@@ -296,29 +323,34 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 }
             }
         }
+    }
 
-        if (parameters != null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("updating parameters...");
-            }
-            for (String name : parameters.keySet()) {
-                final Object value = parameters.get(name);
-                int rc = model.updateVariable(name, value);
-                if (rc != 0) {
-                    throw new SemanticError("Parameter '" + name
-                            + "' has not been defined!"); 
-                }
-            }
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...updated parameters");
+    /**
+     * Update the given set of parameters in the data model.
+     * @param parameters the parameters to update
+     * @param model the data model to use
+     * @throws SemanticError
+     *          a parameter has not been defined previously
+     * @since 0.7.8
+     */
+    private void updateParameters(final Map<String, Object> parameters,
+            final DataModel model) throws SemanticError {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("updating parameters...");
+        }
+        for (String name : parameters.keySet()) {
+            final Object value = parameters.get(name);
+            int rc = model.updateVariable(name, value);
+            if (rc != 0) {
+                throw new SemanticError("Parameter '" + name
+                        + "' has not been defined!"); 
             }
         }
-
-        // Print a short summary.
-        final int elements = formItems.size();
-        LOGGER.info("found " + elements + " form items in dialog '" + id
-                + "'...");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...updated parameters");
+        }
     }
+
 
     /**
      * Initializes the given {@link FormItem}.
@@ -333,6 +365,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      */
     private void initFormItem(final FormItem formItem) throws SemanticError,
             BadFetchError {
+        // Add this form item to the list of known form items
         final String name = formItem.getName();
         formItems.add(formItem);
         final FormItem previousItem = formItemMap.put(name, formItem);
@@ -436,6 +469,13 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 activeDialogChanged = !name.equals(lastFormItem);
                 lastFormItem = name;
                 try {
+                    // Initialize the child nodes of this form item
+                    final VoiceXmlNode node = item.getNode();
+                    final Collection<? extends XmlNode> children =
+                            node.getChildren();
+                    final DataModel model = context.getDataModel();
+                    initializeNodes(model, children);
+                    
                     // Execute the form item
                     interpreter.setState(InterpreterState.WAITING);
                     collect(item);
@@ -615,7 +655,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
     private void collect(final FormItem formItem) throws JVoiceXMLEvent {
         if (formItem == null) {
             LOGGER.warn("no item given: cannot collect.");
-
             return;
         }
 
@@ -677,9 +716,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
 
         // Clear all "just_filled" flags.
         justFilled.clear();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("cleared all just_filled flags");
-        }
+        LOGGER.info("cleared all just_filled flags");
 
         // If there is an input item or an initial form item, wait until the
         // events coming from the implementation platform are processed.
@@ -720,9 +757,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         }
 
         if (reprompt) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("reprompt: clearing all just filled elements");
-            }
+            LOGGER.info("reprompt: clearing all just filled elements");
             // Clear all just-filled attributes
             final DataModel model = context.getDataModel();
             for (InputItem input : justFilled) {
@@ -763,10 +798,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      */
     public void setJustFilled(final InputItem input) {
         justFilled.add(input);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("set just_filled flag for '" + input.getName() + "'");
-        }
+        LOGGER.info("set just_filled flag for '" + input.getName() + "'");
     }
 
     /**
