@@ -59,35 +59,35 @@ signing {
 }
 
 uploadArchives {
-    println JVOICEXML_OSSRH_USERNAME
-    println JVOICEXML_OSSRH_PASSWORD
-  repositories {
-    mavenDeployer {
-      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+    repositories {
+        mavenDeployer {
+            beforeDeployment { 
+                MavenDeployment deployment -> signing.signPom(deployment) 
+            }
 
-      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-        authentication(userName: JVOICEXML_OSSRH_USERNAME, password: JVOICEXML_OSSRH_PASSWORD)
-      }
+        repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            authentication(userName: JVOICEXML_OSSRH_USERNAME, password: JVOICEXML_OSSRH_PASSWORD)
+        }
 
-      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-        authentication(userName: JVOICEXML_OSSRH_USERNAME, password: JVOICEXML_OSSRH_PASSWORD)
-      }
+        snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+            authentication(userName: JVOICEXML_OSSRH_USERNAME, password: JVOICEXML_OSSRH_PASSWORD)
+        }
 
-      pom.project {
-        groupId = "org.jvoicexml"
-        licenses {
-          license {
-            name 'GNU Lesser General Public License, Version 2.1'
-            url 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
-          }
+        pom.project {
+            groupId = "org.jvoicexml"
+            licenses {
+            license {
+                name 'GNU Lesser General Public License, Version 2.1'
+                url 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
+            }
         }
 
         developers {
-          developer {
-            id 'dirk'
-            name 'Dirk Schnelle-Walka'
-            email 'dirk.schnelle@jvoicexml.org'
-          }
+            developer {
+                id 'dirk'
+                name 'Dirk Schnelle-Walka'
+                email 'dirk.schnelle@jvoicexml.org'
+            }
         }
       }
     }
