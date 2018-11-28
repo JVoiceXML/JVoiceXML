@@ -126,8 +126,7 @@ public final class Grammar
      * The URI specifying the location of the grammar and optionally a rulename
      * within that grammar, if it is external. The URI is interpreted as a rule
      * reference as defined in Section 2.2 of the Speech Recognition Grammar
-     * Specification <A
-     * href="http://www.w3.org/TR/voicexml20/#ref_SRGS"shape=rect>[SRGS] </A>
+     * Specification <a href="http://www.w3.org/TR/voicexml20/#ref_SRGS"> [SRGS] </a>
      * but not all forms of rule reference are permitted from within VoiceXML.
      * The rule reference capabilities are described in detail below this table.
      */
@@ -258,7 +257,7 @@ public final class Grammar
      * <p>
      * This is necessary for the node factory.
      * </p>
-     * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
+     * @see SrgsNodeFactory
      */
     public Grammar() {
         super(null);

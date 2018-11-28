@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,12 +31,13 @@ import org.w3c.dom.Node;
 
 /**
  * <code>&lt;datamodel&gt;</code> is a wrapper element which encapsulates any
- * number of <data> elements, each of which defines a single data object.
+ * number of {@code <data>} elements, each of which defines a single data object.
  * The exact nature of the data object depends on the data model language used.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
+ * @see State
  */
 public final class Datamodel
         extends AbstractScxmlNode {

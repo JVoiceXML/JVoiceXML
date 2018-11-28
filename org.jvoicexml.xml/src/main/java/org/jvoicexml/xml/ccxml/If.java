@@ -40,7 +40,7 @@ import org.w3c.dom.Node;
  * appear within an <code>&lt;if&gt;</code> as immediate children, and serve
  * to partition the elements within an <code>&lt;if&gt;</code>.
  * <code>&lt;else&gt;</code> and <code>&lt;elseif&gt;</code> have no
- * content. <else/> is a synonym for <elseif cond="true"/>.
+ * content. {@code <else/>} is a synonym for {@code <elseif cond="true"/>}.
  *
  * @author Steve Doyle
  * @version $Revision$
@@ -116,7 +116,7 @@ public final class If
      * This is necessary for the node factory.
      * </p>
      *
-     * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
+     * @see CcxmlNodeFactory
      */
     public If() {
         super(null);

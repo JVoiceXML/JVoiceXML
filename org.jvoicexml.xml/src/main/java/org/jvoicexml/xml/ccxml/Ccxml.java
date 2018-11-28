@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,7 +39,6 @@ import org.w3c.dom.Node;
  *
  *
  * @author Steve Doyle
- * @version $Revision$
  */
 public final class Ccxml
         extends AbstractCcxmlNode {
@@ -130,7 +124,7 @@ public final class Ccxml
      * This is necessary for the node factory.
      * </p>
      *
-     * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
+     * @see CcxmlNodeFactory
      */
     public Ccxml() {
         super(null);

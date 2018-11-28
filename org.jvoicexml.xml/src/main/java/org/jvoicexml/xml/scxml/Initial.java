@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -36,11 +31,13 @@ import org.w3c.dom.Node;
 /**
  * This element represents the default initial state for a complex
  * <code>&lt;state&gt;</code> element (i.e. one one containing child
- * <code>&lt;state&gt;</code> or <parallel> elements.
+ * <code>&lt;state&gt;</code> or {@code <parallel>} elements.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
+ * @see State
+ * @see Parallel
  */
 public final class Initial
         extends AbstractScxmlNode {

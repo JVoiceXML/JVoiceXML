@@ -96,7 +96,6 @@ public final class Transfer
     /**
      * Determines whether the platform remains in the connection with the caller
      * and callee.
-     * <p>
      * <dl>
      * <dt>bridge="true"
      *
@@ -134,7 +133,6 @@ public final class Transfer
      * regardless of whether the transfer was successful or not.
      * </p>
      * </dl>
-     * </p>
      */
     public static final String ATTRIBUTE_BRIDGE = "bridge";
 

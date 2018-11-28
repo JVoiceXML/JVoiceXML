@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -33,10 +28,9 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * <code>&lt;else&gt;</code> is a synonym for <elseif cond="true"/>.
+ * <code>&lt;else&gt;</code> is a synonym for {@code <elseif cond="true"/>}.
  *
  * @author Steve Doyle
- * @version $Revision$
  */
 public final class Else
         extends AbstractCcxmlNode {
@@ -63,7 +57,7 @@ public final class Else
      * This is necessary for the node factory.
      * </p>
      *
-     * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
+     * @see CcxmlNodeFactory
      */
     public Else() {
         super(null);

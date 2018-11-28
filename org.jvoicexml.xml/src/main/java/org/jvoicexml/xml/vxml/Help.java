@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net *
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net *
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -47,7 +42,7 @@ import org.w3c.dom.Node;
  * </p>
  * <p>
  * <code>
- * &lt;help&gt;No help is available.&lt/help&gt;
+ * &lt;help&gt;No help is available.&lt;/help&gt;
  * </code>
  * </p>
  *
@@ -55,7 +50,6 @@ import org.w3c.dom.Node;
  *
  * @author Steve Doyle
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class Help
         extends AbstractCatchElement {

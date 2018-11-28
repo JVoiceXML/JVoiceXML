@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -39,13 +34,12 @@ import org.w3c.dom.Node;
  * other information directly to another CCXML Interpreter other external
  * systems using an Event I/O Processor.
  *
- * The event target of <send/> is specified using the target and targettype
+ * The event target of {@code <send/>} is specified using the target and targettype
  * attributes. These attributes control how the platform should dispatch the
  * event to its final destination.
  *
  *
  * @author Steve Doyle
- * @version $Revision$
  */
 public final class Send
         extends AbstractCcxmlNode {
@@ -156,7 +150,7 @@ public final class Send
      * This is necessary for the node factory.
      * </p>
      *
-     * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
+     * @see CcxmlNodeFactory
      */
     public Send() {
         super(null);

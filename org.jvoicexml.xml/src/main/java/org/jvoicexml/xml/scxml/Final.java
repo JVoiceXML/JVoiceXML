@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,12 +30,14 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * <code>&lt;final&gt></code> represents a final state of an
- * <code>&lt;scxml&gt;</code> or compound <state> element.
+ * <code>&lt;final&gt;</code> represents a final state of an
+ * <code>&lt;scxml&gt;</code> or compound {@code <state>} element.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.6
+ * @see State
+ * @see Scxml
  */
 public final class Final
         extends AbstractScxmlNode {
