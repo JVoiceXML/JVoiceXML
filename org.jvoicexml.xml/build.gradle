@@ -4,9 +4,7 @@ apply plugin: 'signing'
 
 repositories {
     mavenCentral()
-    maven {
-        url "http://repository.ops4j.org/maven2/"
-    }}
+}
 
 sourceSets {
     main {
