@@ -44,7 +44,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * A client for the {@link org.jvoicexml.callmanager.text.TextCallManager}.
+ * A client for the text based call manager.
  * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.5
