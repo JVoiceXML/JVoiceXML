@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,7 +29,6 @@ import org.jvoicexml.event.ErrorEvent;
  * available during execution.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public class NoresourceError
         extends ErrorEvent {
@@ -56,7 +50,7 @@ public class NoresourceError
     /**
      * Constructs a new event with the specified detail message. the given
      * detail message is expanded to the form
-     * <code>&lt;EVENT_TYPE&gt>: &lt;message&gt;</code>.
+     * <code>&lt;EVENT_TYPE&gt;: &lt;message&gt;</code>.
      * The cause is not initialized.
      *
      * @param message

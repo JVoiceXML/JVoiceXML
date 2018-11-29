@@ -124,7 +124,7 @@ public interface FormItemVisitor {
             throws JVoiceXMLEvent;
 
     /**
-     * A <code>&lt;>subdialog&gt;</code> input item is roughly like a function
+     * A <code>&lt;subdialog&gt;</code> input item is roughly like a function
      * call. It invokes another dialog on the current page, or invokes another
      * VoiceXML document. It returns an ECMAScript Object as its result.
      *

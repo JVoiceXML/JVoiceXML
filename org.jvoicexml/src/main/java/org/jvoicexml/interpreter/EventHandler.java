@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -75,8 +70,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  *
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
- *
  * @see org.jvoicexml.ImplementationPlatform
  */
 public interface EventHandler
@@ -155,7 +148,7 @@ public interface EventHandler
     /**
      * Removes the given strategies.
      * @param strategies strategies to remove
-     * @return <code>true<</code> if at least one strategy was removed
+     * @return {@code true} if at least one strategy was removed
      * @since 0.7.2
      */
     boolean removeStrategies(final Collection<EventStrategy> strategies);

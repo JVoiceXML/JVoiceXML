@@ -21,7 +21,6 @@
  * initiate calls in JVoiceXML and call the configured URI for the terminal.
  * </li>
  * </ol>
- * </p>
  */
 
 package org.jvoicexml.callmanager;

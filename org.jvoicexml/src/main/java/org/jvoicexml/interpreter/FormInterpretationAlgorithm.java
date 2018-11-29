@@ -91,6 +91,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  *
  * <p>
  * Interpreting a form item generally involves:
+ * </p>
  * <ul>
  * <li>Selecting and playing one or more prompts.</li>
  * <li>Collecting a user input, either a response that fills in one ore more
@@ -98,7 +99,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * <li>Interpreting any <code>&lt;filled&gt;</code> action that pertained todo
  * the newly filled in input items.</li>
  * </ul>
- * </p>
  *
  * <p>
  * The FIA ends when it interprets a transfer of control statements (e.g. a
@@ -1452,11 +1452,11 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
     /**
      * {@inheritDoc}
      *
-     * @todo Implement bridge transfer.
-     * @todo Have to send event "connection.disconnect.transfer"
      */
     public void visitTransferFormItem(final TransferFormItem transfer)
             throws JVoiceXMLEvent {
+        // TODO Implement bridge transfer.
+        // TODO Have to send event "connection.disconnect.transfer"
 
         final ImplementationPlatform platform = context
                 .getImplementationPlatform();

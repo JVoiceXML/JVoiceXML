@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -31,7 +26,6 @@ package org.jvoicexml.event.error;
  * <code>http</code> protocol.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public class BadFetchHttpResponsecodeError
         extends BadFetchProtocolResponsecodeError {
@@ -61,7 +55,7 @@ public class BadFetchHttpResponsecodeError
     /**
      * Constructs a new event with the specified detail message. the given
      * detail message is expanded to the form
-     * <code>&lt;getEventType()&gt>: &lt;message&gt;</code>.
+     * <code>&lt;getEventType()&gt;: &lt;message&gt;</code>.
      * The cause is not initialized.
      *
      * <p>

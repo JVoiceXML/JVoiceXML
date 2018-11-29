@@ -35,7 +35,7 @@ package org.jvoicexml.interpreter;
  * noinput or nomatch event) received while in the waiting state. While in the
  * transitioning state no speech input is collected, accepted or interpreted.
  * Consequently root and document level speech grammars (such as defined in
- * <code>&lt;link&gt,</code>s) may not be active at all times. However, DTMF
+ * <code>&lt;link&gt;</code>s) may not be active at all times. However, DTMF
  * input (including timing information) should be collected and buffered in the
  * transition state. Similarly, asynchronously generated events not related
  * directly to execution of the transition should also be buffered until the
@@ -60,7 +60,7 @@ public enum InterpreterState {
      * events such as a noinput or nomatch event) received while in the waiting
      * state. While in the transitioning state no speech input is collected,
      * accepted or interpreted. Consequently root and document level speech
-     * grammars (such as defined in <code>&lt;link&gt,</code>s) may not be
+     * grammars (such as defined in <code>&lt;link&gt;</code>s) may not be
      * active at all times. However, DTMF input (including timing information)
      * should be collected and buffered in the transition state. Similarly,
      * asynchronously generated events not related directly to execution of the

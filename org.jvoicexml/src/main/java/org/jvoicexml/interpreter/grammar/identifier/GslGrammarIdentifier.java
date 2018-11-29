@@ -47,7 +47,6 @@ public final class GslGrammarIdentifier
      * A GSL grammar must have a self identifying header
      * <code>;GSL2.0</code>.
      *
-     * @todo Evaluate encoding and version.
      */
     @Override
     public GrammarType identify(final GrammarDocument grammar) {

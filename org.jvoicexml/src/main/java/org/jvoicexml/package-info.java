@@ -3,8 +3,8 @@
  * interact with the JVoiceXML VoiceXML interpreter.
  * 
  * <p>
- * An overview about the architecture is given in the following figure:<br/>
- * <img src="doc-files/main-components.jpg"/>
+ * An overview about the architecture is given in the following figure:<br>
+ * <img src="doc-files/main-components.jpg" alt="main components">
  * </p>
  */
 package org.jvoicexml;

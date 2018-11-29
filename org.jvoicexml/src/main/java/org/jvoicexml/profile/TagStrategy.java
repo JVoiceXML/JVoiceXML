@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -48,7 +43,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * </ol>
  *
  * <p>
- * <b>Form initialization</b><br/>
+ * <b>Form initialization</b><br>
  * Strategy of the interpreter and the FIA to initialize a form. When the
  * {@link VoiceXmlInterpreter} iterates overall VoiceXML tags, and asks a
  * {@link TagStrategyFactory} for a strategy how to initialize the current node.
@@ -56,7 +51,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * </p>
  *
  * <p>
- * <b>Tag execution by the FIA</b><br/>
+ * <b>Tag execution by the FIA</b><br>
  * Strategy of the FIA to execute a Node. When the
  * {@link FormInterpretationAlgorithm} comes to a VoiceXML tag, it asks a
  * {@link TagStrategyFactory} for a strategy how to process the current node. If
@@ -85,7 +80,6 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * execute}<br>
  * Process the node.</li>
  * </ol>
- * </p>
  *
  * <p>
  * The tags for which a <code>TagStrategy</code> exists are executable content.
@@ -103,7 +97,6 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * procedural logic. If an executable element generates an error, that error is
  * thrown immediately. Subsequent executable elements in that block of
  * procedural logic are not executed.
- * </p>
  *
  * @see org.jvoicexml.profile.TagStrategyFactory
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
@@ -114,7 +107,6 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @see org.jvoicexml.interpreter.formitem.SubdialogFormItem
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public interface TagStrategy {
     /**

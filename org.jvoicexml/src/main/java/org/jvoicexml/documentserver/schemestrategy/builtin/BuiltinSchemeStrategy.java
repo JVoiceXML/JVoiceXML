@@ -41,20 +41,17 @@ import org.jvoicexml.xml.vxml.RequestMethod;
  * Schemestrategy for builtin grammars.
  * <p>
  * This class provides basic support for built grammars as specified at
- * <a href="http://www.w3.org/TR/voicexml20#dmlABuiltins>
+ * <a href="http://www.w3.org/TR/voicexml20#dmlABuiltins">
  * http://www.w3.org/TR/voicexml20#dmlABuiltins</a>.
  * </p>
  * <p>
  * The URI can be platform dependent. This implementation expects the URIs
  * to be of the following form
- * <pre>
- * builtin:&lt;mode&gt;/&lt;type&gt;[?parameters]
- * </pre>
+ * <pre>builtin:&lt;mode&gt;/&lt;type&gt;[?parameters]</pre>
  * where mode is a lower-case presentation of
  * {@link org.jvoicexml.xml.srgs.ModeType} and type and parameters as
- * specified in <a href="http://www.w3.org/TR/voicexml20#dmlABuiltins>
+ * specified in <a href="http://www.w3.org/TR/voicexml20#dmlABuiltins">
  * http://www.w3.org/TR/voicexml20#dmlABuiltins</a>.
- * </p>
  * <p>
  * Custom grammar types can be added by
  * {@link #addGrammarCreator(GrammarCreator)} or

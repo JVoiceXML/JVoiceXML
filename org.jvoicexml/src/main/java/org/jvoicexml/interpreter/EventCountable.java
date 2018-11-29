@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -65,9 +60,13 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
- * @see org.jvoicexml.interpreter.formitem.AbstractInputItem
+ * @see org.jvoicexml.interpreter.formitem.FieldFormItem
+ * @see org.jvoicexml.interpreter.formitem.ObjectFormItem
+ * @see org.jvoicexml.interpreter.formitem.RecordFormItem
+ * @see org.jvoicexml.interpreter.formitem.SubdialogFormItem
+ * @see org.jvoicexml.interpreter.formitem.TransferFormItem
+ * 
  */
 public interface EventCountable {
     /**

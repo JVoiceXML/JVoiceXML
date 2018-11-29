@@ -1,13 +1,7 @@
 /*
- * File:    $RCSfile: UnsupportedElementError.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,7 +32,6 @@ import org.jvoicexml.event.ErrorEvent;
  * event handling to adapt to different platform capabilities.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public class UnsupportedElementError
         extends ErrorEvent {
@@ -73,7 +66,7 @@ public class UnsupportedElementError
     /**
      * Constructs a new event with the specified detail message. the given
      * detail message is expanded to the form
-     * <code>&lt;EVENT_TYPE&gt>: &lt;message&gt;</code>.
+     * <code>&lt;EVENT_TYPE&gt;: &lt;message&gt;</code>.
      * The cause is not initialized.
      *
      * <p>
