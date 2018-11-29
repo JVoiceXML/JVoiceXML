@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: "com.github.eerohele.saxon-gradle"
 apply plugin: 'maven'
+apply plugin: 'signing'
 
 buildscript {
     repositories {
@@ -95,4 +96,58 @@ install {
 
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jvxml-jndi.xml")
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { 
+                MavenDeployment deployment -> signing.signPom(deployment) 
+            }
+
+        repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            authentication(userName: JVOICEXML_OSSRH_USERNAME, password: JVOICEXML_OSSRH_PASSWORD)
+        }
+
+        snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+            authentication(userName: JVOICEXML_OSSRH_USERNAME, password: JVOICEXML_OSSRH_PASSWORD)
+        }
+
+        pom.project {
+            groupId = "org.jvoicexml"
+            licenses {
+            license {
+                name 'GNU Lesser General Public License, Version 2.1'
+                url 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
+            }
+        }
+
+        developers {
+            developer {
+                id 'dirk'
+                name 'Dirk Schnelle-Walka'
+                email 'dirk.schnelle@jvoicexml.org'
+            }
+        }
+      }
+    }
+  }
 }
