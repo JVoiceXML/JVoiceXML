@@ -95,6 +95,9 @@ signing {
 }
 
 uploadArchives {
+    version = JVOICEXML_VERSION
+    group = JVOICEXML_GROUP
+
     repositories {
         mavenDeployer {
             beforeDeployment { 
