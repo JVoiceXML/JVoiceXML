@@ -49,7 +49,7 @@ xslt {
     parameters(
         buildpath: "${buildDir}/libs",
         version: JVOICEXML_VERSION,
-        subscriptionId: project.property('org.jvoicexml.interpreter.grammar.luis.subscriptionId'),
+        subscriptionId: project.property('JVOICEXML_INTERPRETER_GRAMMAR_LUIS_SUBSCRIPTIONID'),
         libs: configurations.compile
     )
 }
@@ -61,6 +61,7 @@ task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
+        subscriptionId: project.property('JVOICEXML_INTERPRETER_GRAMMAR_LUIS_SUBSCRIPTIONID'),
         libs: configurations.compile
     )
 }

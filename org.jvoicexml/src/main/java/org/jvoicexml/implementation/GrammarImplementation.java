@@ -33,6 +33,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  *
  * <p>
  * VoiceXML is designed to support at least
+ * </p>
  * <ul>
  * <li>JSGF</li>
  * <li>SRGS grammar with ABNF format</li>
@@ -40,7 +41,6 @@ import org.jvoicexml.xml.srgs.ModeType;
  * </ul>
  * Custom implementations must implement this interface to hook their own
  * grammar specification.
- * </p>
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$

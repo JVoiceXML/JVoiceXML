@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,14 +36,13 @@ import org.w3c.dom.Node;
  * <code>&lt;lexicon&gt;</code> element. This element is the container for all
  * other elements of the PLS language.
  * A <code>&lt;lexicon&gt;</code> element MUST contain zero or more
- * <code>&lt;meta&gt;</code>> elements, followed by an OPTIONAL
+ * <code>&lt;meta&gt;</code> elements, followed by an OPTIONAL
  * <code>&lt;metadata&gt;</code> element, followed by zero or more
  * <code>&lt;lexeme&gt;</code> elements. Note that a PLS document without any
  * <code>&lt;lexeme&gt;</code> elements may be useful as a placeholder for
  * future lexical entries.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class Lexicon
         extends AbstractPlsNode {
@@ -128,7 +122,7 @@ public final class Lexicon
      * This is necessary for the node factory.
      * </p>
      *
-     * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
+     * @see PlsNodeFactory
      */
     public Lexicon() {
         super(null);

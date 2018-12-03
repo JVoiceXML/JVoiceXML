@@ -6,7 +6,11 @@
     <meta content="2014 JVoiceXML group - http://jvoicexml.sourceforge.net"
         name="copyright" />
     <form>
+        <block name="dummy">
+            <property name="timeout-block" value="30s" />
+        </block>
         <field name="like">
+            <property name="timeout" value="60s" />
             <grammar src="yesno.srgs" type="application/srgs+xml" />
             <prompt>
                 Do you like this example

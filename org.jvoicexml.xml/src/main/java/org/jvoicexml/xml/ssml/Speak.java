@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date $, Dirk Schnelle-Walka, project lead
@@ -46,7 +41,6 @@ import org.w3c.dom.Node;
  * This is the root element of all SSML documents.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5
  */
 public final class Speak
@@ -141,7 +135,7 @@ public final class Speak
      * This is necessary for the node factory.
      * </p>
      *
-     * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
+     * @see SsmlNodeFactory
      */
     public Speak() {
         super(null);

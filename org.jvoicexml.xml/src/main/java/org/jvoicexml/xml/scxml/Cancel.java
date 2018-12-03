@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,13 +29,13 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * The <code>&lt;cancel&gt;></code> element is used to cancel a delayed
+ * The <code>&lt;cancel&gt;</code> element is used to cancel a delayed
  * <code>&lt;send&gt;</code> event. The SCXML Processor MUST NOT allow
  * <code>&lt;cancel&gt;</code> to affect events that were not raised in the
  * same document. The Processor SHOULD make its best attempt to cancel the
  * delayed event. Note, however, that it can not be guaranteed to succeed,
  * for example if the event has already been delivered by the time the
- *  <code>&lt;cancel&gt;></code> tag executes.
+ *  <code>&lt;cancel&gt;</code> tag executes.
  * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$

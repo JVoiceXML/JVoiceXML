@@ -47,7 +47,7 @@ import java.net.URI;
  * </p>
  *
  * <p>
- * A {@link ConnectionInformation}> may also specify the server side resource it
+ * A {@link ConnectionInformation} may also specify the server side resource it
  * wants to use. Each {@link SystemOutput}, {@link UserInput}, and
  * {@link CallControl} can be identified using a unique string. If the
  * {@link ConnectionInformation} does not specify a resource, the default

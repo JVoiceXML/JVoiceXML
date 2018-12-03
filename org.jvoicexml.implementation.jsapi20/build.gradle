@@ -42,6 +42,7 @@ dependencies {
     
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+    testCompile project(path: ':org.jvoicexml', configuration: 'testArtifacts')
 
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
@@ -119,13 +120,13 @@ jar {
 
     dependsOn xsltSphinxFreeTTS {
         onlyIf { 
-            project.property('org.jvoicexml.implementation.jsapi20.freettssphinx') == 'true'
+            project.property('JVOICEXML_IMPLEMENTATION_JSAPI20_FREETTSSPHINX') == 'true'
         }
     }
     dependsOn xsltSphinxFreeTTSDistribution
     dependsOn xsltSAPI {
         onlyIf { 
-            project.property('org.jvoicexml.implementation.jsapi20.sapi') == 'true'
+            project.property('JVOICEXML_IMPLEMENTATION_JSAPI20_SAPI') == 'true'
         }
     }
     dependsOn xsltSAPIDistribution

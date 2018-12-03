@@ -50,8 +50,6 @@ public final class JsgfGrammarIdentifier
      *
      * A JSGF grammar must have a self identifying header
      * <code>#JSGF V1.0</code>.
-     *
-     * @todo Evaluate encoding and version.
      */
     @Override
     public GrammarType identify(final GrammarDocument grammar) {
@@ -85,6 +83,7 @@ public final class JsgfGrammarIdentifier
         if (header.startsWith(JSGF_HEDAER)) {
             return GrammarType.JSGF;
         }
+        // TODO Evaluate encoding and version.
         return null;
     }
 

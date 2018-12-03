@@ -1,13 +1,7 @@
 /*
- * File:    $RCSfile: UnsupportedObjectnameError.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,7 +27,6 @@ package org.jvoicexml.event.error;
  * the unsupported object.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public class UnsupportedObjectnameError
         extends UnsupportedElementError {
@@ -61,7 +54,7 @@ public class UnsupportedObjectnameError
     /**
      * Constructs a new event with the specified detail message. the given
      * detail message is expanded to the form
-     * <code>&lt;EVENT_TYPE&gt>: &lt;message&gt;</code>.
+     * <code>&lt;EVENT_TYPE&gt;: &lt;message&gt;</code>.
      * The cause is not initialized.
      *
      * <p>

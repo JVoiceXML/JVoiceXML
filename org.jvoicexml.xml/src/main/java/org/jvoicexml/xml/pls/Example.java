@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,19 +34,19 @@ import org.w3c.dom.Node;
  * generation of pronunciation lexicon documentation.
  *
  * @author Dirk Schnelle
- * @version $Revision$
  */
 public final class Example
         extends AbstractPlsNode {
     /** Name of the tag. */
     public static final String TAG_NAME = "example";
+    
     /**
      * Construct a new object without a node.
      * <p>
      * This is necessary for the node factory.
      * </p>
      *
-     * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
+     * @see PlsNodeFactory
      */
     public Example() {
         super(null);

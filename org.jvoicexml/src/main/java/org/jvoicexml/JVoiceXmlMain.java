@@ -52,8 +52,8 @@ import org.jvoicexml.profile.Profile;
  * <p>
  * During its life, the interpreter passes several states as shown in the
  * following figure. JVoiceXML can only process calls while it is in the running
- * state.<br/>
- * <img src="doc-files/interpreter-lifecycle.jpg" />
+ * state.<br>
+ * <img src="doc-files/interpreter-lifecycle.jpg" alt="interpreter lifecyle">
  * </p>
  * 
  *

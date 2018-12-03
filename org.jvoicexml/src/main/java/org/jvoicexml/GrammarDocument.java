@@ -31,11 +31,13 @@ import org.jvoicexml.xml.srgs.ModeType;
  *
  * <p>
  * VoiceXML is designed to support at least
+ * </p>
  * <ul>
  * <li>SRGS grammar with XML format</li>
  * <li>SRGS grammar with ABNF format</li>
  * <li>JSGF</li>
  * </ul>
+ * <p>
  * Usually grammar documents will be text based, but also precompiled binary
  * grammars are supported. This can be checked by {@link #isAscii()}. The
  * contents of text based grammars can be retrieved by {@link #getDocument()}.

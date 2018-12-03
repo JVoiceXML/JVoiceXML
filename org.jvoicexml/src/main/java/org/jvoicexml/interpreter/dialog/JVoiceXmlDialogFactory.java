@@ -56,7 +56,7 @@ public final class JVoiceXmlDialogFactory
 
     /**
      * Adds the given mappings of dialogs to tag names.
-     * @param mappings 
+     * @param mappings the mappings to add
      * @since 0.7.5
      */
     public void setDialogs(final Map<String, Dialog> mappings) {

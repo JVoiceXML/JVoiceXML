@@ -57,7 +57,7 @@ public interface OutputDevice {
      * <p>
      * The implementation has to maintain a list of cancelable outputs
      * depending on the <code>barge-in</code> flag of
-     * {@link org.jvoicexml.xml.Prompt}.
+     * {@link org.jvoicexml.xml.vxml.Prompt}.
      * </p>
      * @param type the barge in type to cancel
      * @exception NoresourceError

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,9 +31,8 @@ import org.jvoicexml.mock.MockConnectionInformation;
 import org.jvoicexml.mock.MockRecognitionResult;
 
 /**
- * 
- * @author dirk
- * @version $Revision: $
+ * Test cases for {@link ImplicitVariable}.
+ * @author Dirk Schnelle-Walka
  * @since 0.7.7
  */
 public class ImplicitVariableTest {
@@ -95,7 +89,7 @@ public class ImplicitVariableTest {
         final DataModel data = new EcmaScriptDataModel();
         Assert.assertEquals(0, data.createScope(Scope.SESSION));
         Assert.assertEquals(0, data.createScope(Scope.APPLICATION));
-        final ConnectionInformation info = new MockConnectionInformation();
+        final ConnectionInformation info = new MockConnectionInformation("dummy");
         final Connection connection = new Connection(info);
         Assert.assertEquals(0, data.createVariable("session.connection",
                 connection, Scope.SESSION));

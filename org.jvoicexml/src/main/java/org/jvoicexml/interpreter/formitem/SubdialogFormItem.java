@@ -31,7 +31,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Subdialog;
 
 /**
- * A <code>&lt;>subdialog&gt;</code> input item is roughly like a function call.
+ * A <code>&lt;subdialog&gt;</code> input item is roughly like a function call.
  * It invokes another dialog on the current page, or invokes another VoiceXML
  * document. It returns an ECMAScript Object as its result.
  *

@@ -80,7 +80,7 @@ public final class Lexicon
      * This is necessary for the node factory.
      * </p>
      *
-     * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
+     * @see SsmlNodeFactory
      */
     public Lexicon() {
         super(null);

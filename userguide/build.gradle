@@ -11,8 +11,32 @@ buildscript {
 
 apply plugin: 'latex'
 
+defaultTasks 'pdfLatex'
+
+configurations {
+    "default" {
+        description = "How to build documentation"
+    }
+}
+
+dependencies {
+    "default" fileTree(dir: "${projectDir}", includes: ['*.tex', '*.bib', '*.jpg', '*.png', '"*.eps'])
+}
+
+task createVersionFile {
+    def file = new File("${projectDir}/version.tex")
+    file.createNewFile()
+    file.text = "\\newcommand{\\jvxmlversion} {$JVOICEXML_VERSION}"
+}
+
 latex {
     tex tex:'userguide.tex',
         bib: 'userguide.bib',
         pdf:"jvxml-userguide-${JVOICEXML_VERSION}.pdf"
+}
+
+pdfLatex {
+    doFirst {
+        createVersionFile
+    }
 }

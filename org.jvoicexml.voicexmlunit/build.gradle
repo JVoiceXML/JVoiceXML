@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'signing'
 
 repositories {
     mavenCentral()
@@ -37,4 +38,72 @@ jar {
 install {
    version = JVOICEXML_VERSION
    group = JVOICEXML_GROUP
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    version = JVOICEXML_VERSION
+    group = JVOICEXML_GROUP
+
+    repositories {
+        mavenDeployer {
+            beforeDeployment { 
+                MavenDeployment deployment -> signing.signPom(deployment) 
+            }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: JVOICEXML_OSSRH_USERNAME, password: JVOICEXML_OSSRH_PASSWORD)
+            }
+    
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: JVOICEXML_OSSRH_USERNAME, password: JVOICEXML_OSSRH_PASSWORD)
+            }
+    
+            pom.project {
+                name 'JVoiceXML'
+                groupId = JVOICEXML_GROUP
+                packaging 'jar'
+                description 'The Open Source Voice Browser'
+                url 'https://github.com/JVoiceXML/JVoiceXML'
+                
+                scm {
+                    connection 'scm:git:git@github.com:JVoiceXML/JVoiceXML.git'
+                    developerConnection 'scm:git:ssh://github.com:JVoiceXML/JVoiceXML.git'
+                    url "https://github.com/JVoiceXML/JVoiceXML/tree/release/${JVOICEXML_VERSION}"
+                }
+                    
+                licenses {
+                    license {
+                        name 'GNU Lesser General Public License, Version 2.1'
+                        url 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
+                    }
+                }
+    
+                developers {
+                    developer {
+                        id 'schnelle'
+                        name 'Dirk Schnelle-Walka'
+                        email 'dirk.schnelle@jvoicexml.org'
+                    }
+                }
+            }
+        }
+    }
 }

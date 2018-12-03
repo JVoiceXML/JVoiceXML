@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,7 +35,6 @@ import org.w3c.dom.Node;
  * information.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class Lexeme
         extends AbstractPlsNode {
@@ -102,7 +96,7 @@ public final class Lexeme
      * This is necessary for the node factory.
      * </p>
      *
-     * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
+     * @see PlsNodeFactory
      */
     public Lexeme() {
         super(null);

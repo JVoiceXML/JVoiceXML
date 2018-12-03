@@ -21,8 +21,6 @@
 
 package org.jvoicexml.interpreter.grammar.halef;
 
-import java.net.URI;
-
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -42,6 +40,10 @@ public class HalefGrammarIdentifier implements GrammarIdentifier {
         final GrammarType requestedType = grammar.getMediaType();
         if (requestedType.equals(HalefGrammarType.HALEF)) {
             return HalefGrammarType.HALEF;
+        }
+        final String content = grammar.getTextContent();
+        if (content == null) {
+            return null;
         }
         if (grammar.getTextContent().equals("wfst\n")) {
             return HalefGrammarType.HALEF;

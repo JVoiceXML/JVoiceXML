@@ -49,13 +49,11 @@ import org.w3c.dom.Node;
  * not permitted to specify scope. When one of these grammars is matched, the
  * link activates, and either:
  * </p>
- * <p>
  * <ul>
  * <li>Transitions to a new document or dialog (like <code>&lt;goto&gt;</code>),
  * or</li>
  * <li>Throws an event (like <code>&lt;throw&gt;</code>).</li>
  * </ul>
- * </p>
  * <p>
  * The <code>&lt;link&gt;</code> element can be a child of
  * <code>&lt;vxml&gt;</code>,<code>&lt;form&gt;</code>, or of the form

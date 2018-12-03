@@ -79,7 +79,7 @@ public final class Mark
      * This is necessary for the node factory.
      * </p>
      *
-     * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
+     * @see SsmlNodeFactory
      */
     public Mark() {
         super(null);

@@ -76,7 +76,7 @@ public class BadFetchProtocolResponsecodeError
     /**
      * Constructs a new event with the specified detail message. the given
      * detail message is expanded to the form
-     * <code>&lt;getEventType()&gt>: &lt;message&gt;</code>.
+     * <code>&lt;getEventType()&gt;: &lt;message&gt;</code>.
      * The cause is not initialized.
      *
      * <p>

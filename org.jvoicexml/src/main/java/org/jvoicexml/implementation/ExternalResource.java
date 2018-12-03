@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,13 +29,13 @@ import org.jvoicexml.event.error.NoresourceError;
  * platform.
  * 
  * <p>
- * An externalk resource features a lifecycle as shown in the following
- * image:<br/>
- * <img src="doc-files/External-Resource-Lifecycle.jpg"/>
+ * An external resource features a lifecycle as shown in the following
+ * image:<br>
+ * <img src="doc-files/External-Resource-Lifecycle.jpg" 
+ *      alt="External ressource lifecyle">
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision$
  * @see org.jvoicexml.ImplementationPlatform
  */
 public interface ExternalResource

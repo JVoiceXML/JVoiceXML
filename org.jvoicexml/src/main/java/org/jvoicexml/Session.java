@@ -42,11 +42,11 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * <p>
  * A client usually performs the following method calls to interact with
  * the interpreter:
+ * </p>
  * <ol>
  * <li>{@link #call(URI) call}</li>
  * <li>{@link #hangup() hangup}</li>
  * </ol>
- * </p>
  *
  * <p>
  * Note, that a call to {@link #call(URI)} <b>must</b> be followed by

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright 2005-2013 JVoiceXML group
+ * Copyright 2005-2018 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -47,7 +42,7 @@ import org.w3c.dom.Node;
  * <p>
  * If it occurs in executable content, it declares a variable in the anonymous
  * scope associated with the enclosing <code>&lt;block&gt;</code>,
- * <code>&lt;filled&gt</code>; or catch element. This declaration is made
+ * <code>&lt;filled&gt;</code>; or catch element. This declaration is made
  * only when the &lt;var&gt; element is executed. If the variable is already
  * declared in this scope, subsequent declarations act as assignments, as in
  * ECMAScript.
@@ -70,7 +65,6 @@ import org.w3c.dom.Node;
  * </p>
  *
  * @author Steve Doyle
- * @version $Revision$
  */
 public final class Var
         extends AbstractVoiceXmlNode {

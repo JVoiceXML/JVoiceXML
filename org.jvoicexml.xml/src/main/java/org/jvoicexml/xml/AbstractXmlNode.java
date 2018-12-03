@@ -193,8 +193,9 @@ public abstract class AbstractXmlNode
     }
 
     /**
-     * Appends a deep clone of the given node to the cildren of this node.
+     * Appends a deep clone of the given node to the children of this node.
      * @param origin the node to clone
+     * @return the cloned node
      * @since 0.7.5
      */
     public AbstractXmlNode appendDeepClone(final AbstractXmlNode origin) {

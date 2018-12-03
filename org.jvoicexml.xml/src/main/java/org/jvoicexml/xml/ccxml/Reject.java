@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,13 +31,12 @@ import org.w3c.dom.Node;
 
 /**
  * When a CCXML document receives a connection.alerting event within an
- * <code>&lt;code>&lt;eventprocessor&gt;</code&gt;</code>, the execution
+ * {@code <eventprocessor>}, the execution
  * of a <code>&lt;reject&gt;</code> within the
  * <code>&lt;transition&gt;</code> block will cause the underlying
  * platform to signal the telephony system to reject the call.
  *
  * @author Steve Doyle
- * @version $Revision$
  */
 public final class Reject
         extends AbstractCcxmlNode {
@@ -113,7 +107,7 @@ public final class Reject
      * This is necessary for the node factory.
      * </p>
      *
-     * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
+     * @see CcxmlNodeFactory
      */
     public Reject() {
         super(null);

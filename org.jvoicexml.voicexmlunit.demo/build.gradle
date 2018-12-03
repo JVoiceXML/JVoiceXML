@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -16,11 +17,12 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
-    compile project(':org.jvoicexml')
-    compile project(':org.jvoicexml.client')
-    compile project(':org.jvoicexml.client.text')
-    compile project(':org.jvoicexml.jndi')
-    compile project(':org.jvoicexml.voicexmlunit')}
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: JVOICEXML_VERSION
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.client.text', version: JVOICEXML_VERSION
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: JVOICEXML_VERSION
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jndi', version: JVOICEXML_VERSION
+    compile group: 'org.jvoicexml', name: 'org.jvoicexml.voicexmlunit', version: JVOICEXML_VERSION
+}
 
 jar {
     version = JVOICEXML_VERSION
@@ -39,5 +41,8 @@ install {
 }
 
 test {
-    jvmArgs = ["-Djava.security.policy=src/test/config/jvoicexml.policy" ]
+    classpath += files("${buildDir}/resources/main")
+    jvmArgs = ["-Djvoicexml.config=${buildDir}/resources/main",
+               "-Djava.security.manager",
+               "-Djava.security.policy=${projectDir}/src/test/config/jvoicexml.policy"]
 }

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -46,7 +46,6 @@ import org.xml.sax.SAXException;
  *
  * @author Christoph Buente
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class SrgsXmlDocument
         extends XmlDocument {
@@ -142,12 +141,12 @@ public final class SrgsXmlDocument
 
     /**
      * Sets the simplest grammar possible as root with the given id and text.
-     * @param id
-     * @param text
+     * @param id the id of the grammar
+     * @param text the grammar text
      * @return the grammar
      * @since 0.7.5
      */
-    public Grammar setGrammarSimple(String id, String text) {
+    public Grammar setGrammarSimple(final String id, final String text) {
         final Grammar grammar = getGrammar();
         final Rule rule = grammar.appendChild(Rule.class);
         rule.addText(text);
