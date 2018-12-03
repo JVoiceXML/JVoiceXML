@@ -634,3 +634,13 @@ applicationDistribution.into("bin") {
     from(createShutdownApp)
     fileMode = 0755
 }
+
+
+uploadArchives {
+    dependsOn ':org.jvoicexml.xml:uploadArchives'
+    dependsOn ':org.jvoicexml:uploadArchives'
+    dependsOn ':org.jvoicexml.client:uploadArchives'
+    dependsOn ':org.jvoicexml.client.text:uploadArchives'
+    dependsOn ':org.jvoicexml.jndi:uploadArchives'
+    dependsOn ':org.jvoicexml.voicexmlunit:uploadArchives'
+}
