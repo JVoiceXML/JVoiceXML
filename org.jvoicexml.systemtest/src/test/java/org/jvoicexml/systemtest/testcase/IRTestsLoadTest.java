@@ -1,6 +1,7 @@
 package org.jvoicexml.systemtest.testcase;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 
@@ -33,11 +34,12 @@ public class IRTestsLoadTest {
             url = f.toURI().toURL();
         }
         lib = new IRTestCaseLibrary();
-        lib.setTestManifest(docURI);
+        lib.setBaseURL("http:Localhost:8080/irtest");
+        lib.setTestsuite("vxml21_0.0.5");
     }
 
     @Test
-    public void testLoad() {
+    public void testLoad() throws IOException {
 
         LOGGER.debug("total test case = " + lib.size());
         Assert.assertTrue(lib.size() > 0);
@@ -116,11 +118,10 @@ public class IRTestsLoadTest {
     @Test
     public void testServletBaseURI() throws Exception {
 
-        URL url = null;
-
-        url = new URL(docBase + "manifest.xml");
+        URL url = new URL(docBase + "manifest.xml");
         IRTestCaseLibrary lib = new IRTestCaseLibrary();
-        lib.setTestManifest(docBase + "manifest.xml");
+        lib.setBaseURL("http:Localhost:8080/irtest");
+        lib.setTestsuite("vxml21_0.0.5");
         Assert.assertTrue(lib.size() > 0);
         IRTestCase tc = lib.fetch(1);
         Assert

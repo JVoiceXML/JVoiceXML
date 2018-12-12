@@ -26,6 +26,8 @@ dependencies {
     compile project(':org.jvoicexml.client.text')
     compile project(':org.jvoicexml.voicexmlunit')
     compile project(':org.jvoicexml.srgs')
+
+    runtime project(':org.jvoicexml.jndi')
 }
 
 jar {
@@ -44,15 +46,16 @@ install {
    group = JVOICEXML_GROUP
 }
 
-mainClassName = "org.jvoicexml.systemtest.SystemTestMain"
-applicationDefaultJvmArgs = ["-Djava.security.policy=${projectDir}/src/main/config/jvoicexml.policy",
-                             "-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
-                             "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
-                             "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
-                             "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
-                             "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
-
 run {
+    version = JVOICEXML_VERSION
+
+    mainClassName = "org.jvoicexml.systemtest.SystemTestMain"
     classpath += files("${project(':org.jvoicexml').buildDir}/config")
+    jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
+               "-Djava.security.manager",
+               "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
+               "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
+               "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
+               "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
 }
 

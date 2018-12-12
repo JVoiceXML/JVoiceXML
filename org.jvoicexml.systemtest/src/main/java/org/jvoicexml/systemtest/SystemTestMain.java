@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -19,7 +19,7 @@
  */
 package org.jvoicexml.systemtest;
 
-import java.net.URL;
+import java.io.IOException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,7 +58,7 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
      * @param args
      *            Command line arguments. None expected.
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws IOException {
         LOGGER.info("Starting SystemTest for JVoiceXML...");
 
         final String filename = System.getProperty("systemtestconfig.config",
@@ -79,7 +79,7 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
             LOGGER.info("Waiting for JVoiceXML shutdown...");
             test.waitInterpreterShutdown();
             LOGGER.info("...JVoiceXML shutdown");
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             LOGGER.fatal(e.getMessage(), e);
         }
     }
@@ -136,8 +136,6 @@ public final class SystemTestMain implements JVoiceXmlMainListener {
          *            configuration file name.
          */
         SystemTestConfigLoader(final String filename) {
-            final URL resource = SystemTestConfigLoader.class
-                    .getResource(filename);
             context = new ClassPathXmlApplicationContext(
                     filename);
         }

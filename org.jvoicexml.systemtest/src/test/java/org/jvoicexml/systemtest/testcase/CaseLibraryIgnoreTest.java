@@ -1,5 +1,7 @@
 package org.jvoicexml.systemtest.testcase;
 
+import java.io.IOException;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +18,8 @@ public class CaseLibraryIgnoreTest {
     public void setUp() throws Exception {
 
         lib = new IRTestCaseLibrary();
-        lib.setTestManifest(manifest);
+        lib.setBaseURL("http:Localhost:8080/irtest");
+        lib.setTestsuite("vxml21_0.0.5");
 
         Assert.assertEquals(607, lib.size());
 
@@ -51,7 +54,7 @@ public class CaseLibraryIgnoreTest {
     }
 
     @Test
-    public void testTemporaryIgnoreWork() {
+    public void testTemporaryIgnoreWork() throws IOException {
         IRTestCase tc;
 
         tc = lib.fetch(1);
@@ -64,7 +67,7 @@ public class CaseLibraryIgnoreTest {
     }
     
     @Test
-    public void testManualWork() {
+    public void testManualWork() throws IOException {
         IRTestCase tc;
 
         tc = lib.fetch(1184);

@@ -20,6 +20,7 @@
 package org.jvoicexml.systemtest.report;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,11 +58,12 @@ public class ReportTest {
             url = f.toURI().toURL();
         }
         lib = new IRTestCaseLibrary();
-        lib.setTestManifest(docURI);
+        lib.setBaseURL("http:Localhost:8080/irtest");
+        lib.setTestsuite("vxml21_0.0.5");
     }
 
     @Test
-    public void testAll() {
+    public void testAll() throws IOException {
         String reportLocation = "./irtest/results/";
 
         String reportName = "ir-report.xml";
@@ -84,7 +86,7 @@ public class ReportTest {
     }
 
     @Test
-    public void testSummary() {
+    public void testSummary() throws IOException {
         TestRecorder report = new TestRecorder();
         report.testStarted(lib.fetch(1), VERSION);
         report.testStopped(new DummyResult(TestResult.PASS, ""));

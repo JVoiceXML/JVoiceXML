@@ -19,6 +19,7 @@
  */
 package org.jvoicexml.systemtest;
 
+import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -113,15 +114,15 @@ class AutoTestThread extends Thread {
                 continue;
             }
 
-            LOGGER.info("\n\n");
-            LOGGER.info("###########################################");
-            LOGGER.info("start testcase: '" + testcase.toString() + "'");
-            LOGGER.info("start uri     : '" + testcase.getStartURI() + "'");
-            LOGGER.info("start TextServer at port " + textServerPort);
-
-            final Executor executor =
-                new Executor(testcase, script);
             try {
+                LOGGER.info("\n\n");
+                LOGGER.info("###########################################");
+                LOGGER.info("start testcase: '" + testcase.toString() + "'");
+                LOGGER.info("start uri     : '" + testcase.getStartURI() + "'");
+                LOGGER.info("start TextServer at port " + textServerPort);
+
+                final Executor executor =
+                        new Executor(testcase, script);
                 TestResult testResult = executor.execute(jvxml);
                 if (testResult == TestResult.PASS) {
                     result = new PassedResult();
@@ -129,6 +130,8 @@ class AutoTestThread extends Thread {
                     final Throwable lastError = executor.getLastError();
                     result = new FailedResult(lastError);
                 }
+            } catch (URISyntaxException e) {
+                LOGGER.error(e.getMessage(), e);
             } finally {
                 LOGGER.info("testcase " + testcase.getId() + " finished");
                 LOGGER.info(result.toString());

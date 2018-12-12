@@ -32,7 +32,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -83,43 +82,33 @@ public final class IRTestCase implements TestCase {
      * dependence Element.
      */
     @XmlElement(name = "dep")
-    List<Dep> dependencies = new ArrayList<Dep>();
+    List<Dep> dependencies = new java.util.ArrayList<Dep>();
 
     /**
      * reason of ignore.
      */
-    private String ignoreReason = null;
+    private String ignoreReason;
 
     /**
      * base URI.
      */
-    private URI baseURI = null;
+    private String baseURI;
 
     /**
      * @param base URI of document.
      */
-    void setBaseURI(final URI base) {
+    void setBaseURI(final String base) {
         baseURI = base;
     }
 
     /**
      * {@inheritDoc}
      */
-    public URI getStartURI() {
-        String str = start.uri;
-        int idx = str.indexOf(".txml");
-        if (idx != -1) {
-            str = str.substring(0, idx) + ".vxml";
-        }
-        
-        try {
-            if (baseURI == null) {
-                return new URI(str);
-            } else {
-                return baseURI.resolve(str);
-            }
-        } catch (URISyntaxException e) {
-            return null;
+    public URI getStartURI() throws URISyntaxException{
+        if (baseURI == null) {
+            return new URI(start.uri);
+        } else {
+            return new URI(baseURI + "&assertId=" + description.id);
         }
     }
 
@@ -195,30 +184,30 @@ public final class IRTestCase implements TestCase {
      */
     @Override
     public boolean completenessCheck() {
-        URI checkedURI = null;
-        try {
-            checkedURI = getStartURI();
-            readTextStream(checkedURI);
-            for (Dep dependeny : dependencies) {
-                String uri = dependeny.uri;
-                int idx = uri.indexOf(".txml");
-                if (idx != -1) {
-                    uri = uri.substring(0, idx) + ".vxml";
-                }
-                checkedURI = baseURI.resolve(uri.trim());
-                if (isText(dependeny.type)) {
-                    readTextStream(checkedURI);
-                } else {
-                    // TODO read other resource.
-                }
-            }
-        } catch (Exception e) {
-            LOGGER.error("the uri '" + checkedURI
-                    + "' can not read. ignore this test case.", e);
-            ignoreReason = "can not read '" + checkedURI
-                    + "'. ignore this test case";
-            return false;
-        }
+//        URI checkedURI = null;
+//        try {
+//            checkedURI = getStartURI();
+//            readTextStream(checkedURI);
+//            for (Dep dependeny : dependencies) {
+//                String uri = dependeny.uri;
+//                int idx = uri.indexOf(".txml");
+//                if (idx != -1) {
+//                    uri = uri.substring(0, idx) + ".vxml";
+//                }
+//                checkedURI = baseURI.resolve(uri.trim());
+//                if (isText(dependeny.type)) {
+//                    readTextStream(checkedURI);
+//                } else {
+//                    // TODO read other resource.
+//                }
+//            }
+//        } catch (Exception e) {
+//            LOGGER.error("the uri '" + checkedURI
+//                    + "' can not read. ignore this test case.", e);
+//            ignoreReason = "can not read '" + checkedURI
+//                    + "'. ignore this test case";
+//            return false;
+//        }
         return true;
     }
 

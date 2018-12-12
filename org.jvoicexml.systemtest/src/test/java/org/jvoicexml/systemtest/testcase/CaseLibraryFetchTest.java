@@ -20,7 +20,8 @@ public class CaseLibraryFetchTest {
     public void setUp() throws Exception {
 
         lib = new IRTestCaseLibrary();
-        lib.setTestManifest(docURI);
+        lib.setBaseURL("http:Localhost:8080/irtest");
+        lib.setTestsuite("vxml21_0.0.5");
     }
 
     @Test

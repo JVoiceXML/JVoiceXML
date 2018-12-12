@@ -20,6 +20,7 @@
 package org.jvoicexml.systemtest;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  *  a test case.
@@ -31,8 +32,10 @@ public interface TestCase {
 
     /**
      * @return start URI of this test case.
+     * @throws URISyntaxException
+     *          the URI could not be determined
      */
-    URI getStartURI();
+    URI getStartURI() throws URISyntaxException;
 
     /**
      * @return id or this test case.

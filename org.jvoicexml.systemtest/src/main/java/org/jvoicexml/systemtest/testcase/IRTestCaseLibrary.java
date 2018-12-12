@@ -21,15 +21,11 @@
 
 package org.jvoicexml.systemtest.testcase;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,11 +47,16 @@ import org.jvoicexml.systemtest.TestCaseLibrary;
  * @author Dirk Schnelle-Walka
  *
  */
-public class IRTestCaseLibrary implements TestCaseLibrary {
+public final class IRTestCaseLibrary implements TestCaseLibrary {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(IRTestCaseLibrary.class.getName());
-
+    /** The base URL of the system test servlet. */
+    private String baseURL;
+    
+    /** The test suit to use, e.g. vxml20_1.0.1d, vxml21_0.0.5. */
+    private String testsuite;
+    
     /**
      * ignore list updated flag.
      */
@@ -64,12 +65,12 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     /**
      * ignore list.
      */
-    private final List<Ignore> ignoreList = new ArrayList<Ignore>();
+    private final List<Ignore> ignoreList = new java.util.ArrayList<Ignore>();
 
     /**
      * test cases list.
      */
-    private final List<IRTestCase> testCaseList = new ArrayList<IRTestCase>();
+    private final List<IRTestCase> testCaseList = new java.util.ArrayList<IRTestCase>();
 
     /**
      * ignore case string.
@@ -91,7 +92,7 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
      * @param ignoresFile
      *            path
      */
-    public final void setIgnoreList(final String ignoresFile) {
+    public void setIgnoreList(final String ignoresFile) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("ignoresFile = " + ignoresFile);
         }
@@ -107,37 +108,37 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     }
 
     /**
-     * guess URI by string.
-     * 
-     * @param location
-     *            of resource
-     * @return URI
-     * @throws URISyntaxException
+     * Sets the bas URL of the sytem test servlet. 
+     * @param url
+     * @since 0.7.9
      */
-    private URI guessURI(final String location) throws URISyntaxException {
-        URI uri = new URI(location);
-        if (uri.getScheme() == null) {
-            // default is file
-            File f = new File(location);
-            uri = f.toURI();
-        }
-        return uri;
+    public void setBaseURL(final String url) {
+        baseURL = url;
     }
-
+    
     /**
-     * set manifest URI.
-     * 
-     * @param manifest
-     *            URI
+     * Sets the test suite to use.
+     * @param suite
+     * @since 0.7.9
      */
-    public final void setTestManifest(final String manifest) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("loading manifest '" + manifest + "'");
-        }
-
+    public void setTestsuite(final String suite) {
+        testsuite = suite;
+    }
+    
+    /**
+     * Loads all test cases
+     * 
+     * @throws IOException if the manifest could not be loaded
+     */
+    public void loadTestcases() throws IOException {
+        URL manifest = null;
         try {
-            final URL url = new URL(manifest);
-            final InputStream in = url.openStream();
+            manifest = new URL(baseURL + "/" + testsuite 
+                    + "/manifest.xml"); 
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("loading manifest '" + manifest + "'");
+            }
+            final InputStream in = manifest.openStream();
             final TestsRootElement rootElement = loadObject(
                     TestsRootElement.class, in);
             if (rootElement != null) {
@@ -146,17 +147,19 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
                     LOGGER.debug("total " + testCaseList.size()
                             + " testcase loaded.");
                 }
-
-                final URI testRoot = url.toURI().resolve("vxml-srgs/");
+                
+                final String testRoot = baseURL + "/testmenu.jsp?testSuite=vxml21_0.0.5";
                 for (IRTestCase tc : testCaseList) {
                     tc.setBaseURI(testRoot);
                 }
             }
-        } catch (URISyntaxException e) {
-            LOGGER.error("unknown uri format, check config file.", e);
         } catch (IOException e) {
             LOGGER.error(
-                    "can not load test case library with " + manifest + ".", e);
+                    "can not load test case library with " + manifest 
+                        + ". Is the servlet deployed?", e);
+            throw new IOException("can not load test case library with "
+                        + manifest
+                        + ". Is the servlet deployed?", e);
         }
         ignoresUpdated = false;
     }
@@ -216,9 +219,12 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     }
 
     /**
-     * update ignores.
+     * Update ignores.
+     * 
+     * @throws IOException
+     *         error fetching the test cases
      */
-    private void updateIgnores() {
+    private void updateIgnores() throws IOException {
         ignoresUpdated = true;
         for (Ignore ignore : ignoreList) {
             for (IRTestCase tc : testCaseList) {
@@ -256,8 +262,10 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     /**
      * {@inheritDoc}
      */
-    public final Set<TestCase> fetch(final String testcases) {
-
+    public final Set<TestCase> fetch(final String testcases) throws IOException {
+        if (testCaseList.isEmpty()) {
+            loadTestcases();
+        }
         if (testcases.equalsIgnoreCase("ALL")) {
             Set<TestCase> fetched = new LinkedHashSet<TestCase>();
             fetched.addAll(fetchAll());
@@ -304,12 +312,14 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
 
     /**
      * @return all test cases
+     * @throws IOException
+     *          error fetching the test cases
      */
-    public List<IRTestCase> fetchAll() {
+    public List<IRTestCase> fetchAll() throws IOException {
         if (!ignoresUpdated) {
             updateIgnores();
         }
-        List<IRTestCase> list = new ArrayList<IRTestCase>();
+        List<IRTestCase> list = new java.util.ArrayList<IRTestCase>();
 
         for (IRTestCase tc : testCaseList) {
             list.add(tc);
@@ -320,12 +330,15 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     /**
      * @param section
      * @return return test cases list by request section, if it is exist.
+     * @throws IOException
+     *          error fetching the test cases
      */
-    public final List<IRTestCase> fetchSection(final String section) {
+    public final List<IRTestCase> fetchSection(final String section)
+                throws IOException{
         if (!ignoresUpdated) {
             updateIgnores();
         }
-        List<IRTestCase> list = new ArrayList<IRTestCase>();
+        List<IRTestCase> list = new java.util.ArrayList<IRTestCase>();
         for (IRTestCase tc : testCaseList) {
             if (tc.getSpec().startsWith(section)) {
                 list.add(tc);
@@ -340,8 +353,10 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
      * @param id
      *            of test case.
      * @return null if not such id test case
+     * @throws IOException
+     *          error ethcing the test cases
      */
-    public final IRTestCase fetch(final int id) {
+    public final IRTestCase fetch(final int id) throws IOException {
         if (!ignoresUpdated) {
             updateIgnores();
         }
@@ -363,7 +378,7 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     static class TestsRootElement {
         /* test case list. */
         @XmlElement(name = "test")
-        List<IRTestCase> testCaseList = new ArrayList<IRTestCase>();
+        List<IRTestCase> testCaseList = new java.util.ArrayList<IRTestCase>();
     }
 
     /**
@@ -375,7 +390,7 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     static class IgnoresRootElement {
         /* ignore list. */
         @XmlElement(name = "ignore")
-        List<Ignore> ignoreList = new ArrayList<Ignore>();
+        List<Ignore> ignoreList = new java.util.ArrayList<Ignore>();
     }
 
 }

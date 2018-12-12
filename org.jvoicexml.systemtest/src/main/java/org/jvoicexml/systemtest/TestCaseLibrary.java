@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +21,7 @@
 
 package org.jvoicexml.systemtest;
 
+import java.io.IOException;
 import java.util.Set;
 
 
@@ -39,6 +35,8 @@ public interface TestCaseLibrary {
     /**
      * Retrieves the total number of tests in this library.
      * @return total number of test case in library.
+     * @throws IOException
+     *         error loading the test cases
      */
     int size();
 
@@ -46,7 +44,9 @@ public interface TestCaseLibrary {
      * Fetch test case by expression.
      * @param testcases expression of test cases;
      * @return test case set
+     * @throws IOException
+     *         error loading the test cases
      */
-    Set<TestCase> fetch(final String testcases);
+    Set<TestCase> fetch(final String testcases) throws IOException;
 
 }

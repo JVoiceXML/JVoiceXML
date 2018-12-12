@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -19,6 +19,7 @@
  */
 package org.jvoicexml.systemtest;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -67,7 +68,7 @@ public final class SystemTestCallManager {
     /**
      * Starts the test cases.
      */
-    public void performTests() {
+    public void performTests()throws IOException {
         final Collection<TestCase> jobs = testcaseLibrary.fetch(testcases);
         LOGGER.info("There were " + jobs.size() + " test case(s).");
 

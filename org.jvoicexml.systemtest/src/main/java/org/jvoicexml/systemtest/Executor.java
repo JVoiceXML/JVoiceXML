@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -20,6 +20,7 @@
 package org.jvoicexml.systemtest;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -79,8 +80,10 @@ public final class Executor {
      * Executes the test.
      * @param jvxml the interpreter.
      * @return result of this test
+     * @throws URISyntaxException
+     *          error determining the start URI of a test
      */
-    public TestResult execute(final JVoiceXml jvxml) {
+    public TestResult execute(final JVoiceXml jvxml) throws URISyntaxException {
         final URI testURI = testcase.getStartURI();
 
         LOGGER.info("create session and call '" + testURI + "'");
