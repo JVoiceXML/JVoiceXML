@@ -1,5 +1,20 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'de.undercouch:gradle-download-task:3.4.3'
+        classpath 'gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1'
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'war'
+apply plugin: 'de.undercouch.download'
+apply plugin: "com.github.eerohele.saxon-gradle"
 
 repositories {
     mavenCentral()
@@ -23,7 +38,44 @@ dependencies {
 
 }
 
+task downloadTestsuite(type: Download) {
+    src 'http://www.voicexml.org/wp-content/uploads/sites/2/static/vxml_test_suite_2.1_Rel_1.01.tar_.gz'
+    dest "${buildDir}/testsuite/vxml_test_suite_2.1.tar.gz"
+    overwrite false
+}
+
+task untarTestsuite (type: Copy) {
+    dependsOn downloadTestsuite
+
+    from tarTree("${buildDir}/testsuite/vxml_test_suite_2.1.tar.gz")
+    into "${buildDir}/testsuite/" 
+}
+
+task copyTestsuite(type: Copy) {
+    from ("${buildDir}/testsuite/vxml_test_suite_2.1_Rel_1.01") {
+        exclude 'WEB-INF/web.xml'
+    }
+    into "${projectDir}/WebContent/"
+}
+
+xslt {
+    dependsOn untarTestsuite
+
+    stylesheet "${projectDir}/src/main/resources/patch-web-xml.xsl"
+    input "${buildDir}/testsuite/vxml_test_suite_2.1_Rel_1.01/WEB-INF/web.xml"
+    output "${projectDir}/WebContent/WEB-INF/web.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        version: JVOICEXML_VERSION,
+        subscriptionId: project.property('JVOICEXML_INTERPRETER_GRAMMAR_LUIS_SUBSCRIPTIONID'),
+        libs: configurations.compile
+    )
+}
+
 war {
+    dependsOn copyTestsuite
+    dependsOn xslt
+    
     from 'WebContent' 
     baseName 'org.jvoicexml.systemtest.servlet'
     version = JVOICEXML_VERSION
