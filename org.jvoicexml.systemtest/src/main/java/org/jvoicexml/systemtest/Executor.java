@@ -84,9 +84,9 @@ public final class Executor {
      * @throws URISyntaxException
      *          error determining the start URI of a test
      */
-    public TestResult execute(final JVoiceXml jvxml, final int port) throws URISyntaxException {
+    public TestResult execute(final JVoiceXml jvxml, final int port)
+            throws URISyntaxException {
         final URI testURI = testcase.getStartURI();
-
         LOGGER.info("create session and call '" + testURI + "'");
         Call call = null;
         try {

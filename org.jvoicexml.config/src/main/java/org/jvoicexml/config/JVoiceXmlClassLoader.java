@@ -36,7 +36,7 @@ public final class JVoiceXmlClassLoader extends URLClassLoader {
     /** Dynamically added URLs. */
     private final Collection<URL> urls;
 
-    /** The repository that this class laoder is responsible for. */
+    /** The repository that this class loader is responsible for. */
     private final String repository;
 
     /**
@@ -71,37 +71,6 @@ public final class JVoiceXmlClassLoader extends URLClassLoader {
         for (URL url : additions) {
             addURL(url);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class<?> loadClass(final String name)
-        throws ClassNotFoundException {
-        Class<?> loadedClass = findLoadedClass(name);
-        if (loadedClass == null) {
-            try {
-                if (name.startsWith("java.")) {
-                    loadedClass = Class.forName(name);
-                } else {
-                    loadedClass = findClass(name);
-                }
-            } catch (ClassNotFoundException e) {
-                // Swallow exception
-                // does not exist locally
-            }
-            if (loadedClass == null) {
-                if (name.startsWith("java.")) {
-                    final ClassLoader systemLoader =
-                        ClassLoader.getSystemClassLoader();
-                    loadedClass = systemLoader.loadClass(name);
-                } else {
-                    loadedClass = super.loadClass(name);
-                }
-            }
-        }
-        return loadedClass;
     }
 
     /**

@@ -426,16 +426,14 @@ public final class TextTelephony implements Telephony {
         throws IOException {
         final InetAddress address = client.getAddress();
         final int port = client.getPort();
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("connecting to '" + client.getCallingDevice()
-                    + "'...");
-        }
-
         final SocketAddress socketAddress =
             new InetSocketAddress(address, port);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("connecting to '" + socketAddress + "'");
+        }
         final Socket endpoint = new Socket();
         endpoint.connect(socketAddress, MAX_TIMEOUT_CONNECT);
+        LOGGER.info("connected to '" + client.getCallingDevice() + "'");
         return endpoint;
     }
 

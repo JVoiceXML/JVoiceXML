@@ -7,7 +7,7 @@
     <!-- 
     <property name="shutdownInterpreter" value="true" />
      -->
-    <property name="textServerPort" value="5900" />
+    <property name="textServerPort" value="6000" />
     <property name="testCaseListener">
       <bean class="org.jvoicexml.systemtest.report.TestRecorder">
         <property name="reportDir" value="../org.jvoicexml/dist/systemtest" />

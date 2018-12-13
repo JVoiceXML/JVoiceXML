@@ -4,7 +4,6 @@
   xsi:noNamespaceSchemaLocation="jvxml-jndi-0-7.xsd">
   <repository></repository>
   <classpath>org.jvoicexml.client-@@VERSION@@.jar</classpath>
-  <classpath>org.jvoicexml.client.text-@@VERSION@@.jar</classpath>
   <classpath>org.jvoicexml.jndi-@@VERSION@@.jar</classpath>
   <beans:bean id="org.jvoicexml.JndiSupport"
     class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
