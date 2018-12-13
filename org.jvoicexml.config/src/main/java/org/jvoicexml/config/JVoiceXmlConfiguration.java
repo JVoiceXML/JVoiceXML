@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -168,16 +168,14 @@ public final class JVoiceXmlConfiguration implements Configuration {
         if (repository == null) {
             final Thread thread = Thread.currentThread();
             final ClassLoader parent = thread.getContextClassLoader();
-            return new JVoiceXmlClassLoader(parent);
+            return new JVoiceXmlClassLoader(parent, repository);
         }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("using loader repository '" + repository + "'");
-        }
+        LOGGER.info("using loader repository '" + repository + "'");
         JVoiceXmlClassLoader loader = loaderRepositories.get(repository);
         if (loader == null) {
             final Thread thread = Thread.currentThread();
             final ClassLoader parent = thread.getContextClassLoader();
-            loader = new JVoiceXmlClassLoader(parent);
+            loader = new JVoiceXmlClassLoader(parent, repository);
             loaderRepositories.put(repository, loader);
         }
         return loader;

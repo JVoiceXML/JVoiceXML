@@ -453,6 +453,13 @@ public final class TextTelephony implements Telephony {
 //                (ConnectedTextConnectionInformation) info;
 //            socket = textClient.getSocket();
         } else {
+            LOGGER.error("Unsupported connection information '" + info + "'");
+            LOGGER.error("Telephony - CLassLoader:                      " 
+                    + getClass().getClassLoader());
+            LOGGER.error("Expected ConnectionInformation - CLassLoader: " 
+                    + TextConnectionInformation.class.getClassLoader());
+            LOGGER.error("Actual ConnectionInformation - CLassLoader:   " 
+                    + info.getClass().getClassLoader());
             throw new IOException("Unsupported connection information '"
                     + info + "'");
         }

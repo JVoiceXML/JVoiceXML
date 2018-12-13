@@ -79,17 +79,18 @@ public final class Executor {
     /**
      * Executes the test.
      * @param jvxml the interpreter.
+     * @param port the port to use for the text server
      * @return result of this test
      * @throws URISyntaxException
      *          error determining the start URI of a test
      */
-    public TestResult execute(final JVoiceXml jvxml) throws URISyntaxException {
+    public TestResult execute(final JVoiceXml jvxml, final int port) throws URISyntaxException {
         final URI testURI = testcase.getStartURI();
 
         LOGGER.info("create session and call '" + testURI + "'");
         Call call = null;
         try {
-            call = new TextCall("127.0.0.1", 5000);
+            call = new TextCall("127.0.0.1", port);
             call.call(testURI);
             script.perform(call);
             return TestResult.PASS;

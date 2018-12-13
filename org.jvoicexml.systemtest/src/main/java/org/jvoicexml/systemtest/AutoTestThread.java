@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-20013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -40,9 +40,7 @@ class AutoTestThread extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(AutoTestThread.class);
 
-    /**
-     *
-     */
+    /** The text server port to use. */
     private final int textServerPort;
 
     /**
@@ -119,11 +117,10 @@ class AutoTestThread extends Thread {
                 LOGGER.info("###########################################");
                 LOGGER.info("start testcase: '" + testcase.toString() + "'");
                 LOGGER.info("start uri     : '" + testcase.getStartURI() + "'");
-                LOGGER.info("start TextServer at port " + textServerPort);
 
                 final Executor executor =
                         new Executor(testcase, script);
-                TestResult testResult = executor.execute(jvxml);
+                TestResult testResult = executor.execute(jvxml, textServerPort);
                 if (testResult == TestResult.PASS) {
                     result = new PassedResult();
                 } else {
