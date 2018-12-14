@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -708,13 +708,13 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         final T resource = pool.borrowObject(key);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("connecting external resource ("
-                    + resource.getClass().getCanonicalName() + ").");
-        }
+        LOGGER.info("connecting external resource ("
+                + resource.getClass().getCanonicalName() + ")");
         try {
             resource.connect(info);
         } catch (IOException ioe) {
+            LOGGER.error("error connecting to resource: "
+                    + ioe.getMessage(), ioe);
             try {
                 pool.returnObject(key, resource);
             } catch (Exception e) {

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,11 +21,15 @@
 
 package org.jvoicexml.client.text;
 
+import java.net.UnknownHostException;
+
 import org.jvoicexml.CallControl;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.client.ConnectionInformationController;
 import org.jvoicexml.client.ConnectionInformationFactory;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
+
+import com.google.protobuf.Message;
 
 /**
  * A connection information factory for text based clients.
@@ -102,7 +106,11 @@ public final class TextConnectionInformationFactory
         checkIdentifiers(input, inputs, UserInput.class);
 
         // If successful: create a new connection info
-        return new TextConnectionInformationController();
+        try {
+            return new TextConnectionInformationController();
+        } catch (UnknownHostException e) {
+            throw new UnsupportedResourceIdentifierException(e.getMessage(), e);
+        }
     }
 
 }

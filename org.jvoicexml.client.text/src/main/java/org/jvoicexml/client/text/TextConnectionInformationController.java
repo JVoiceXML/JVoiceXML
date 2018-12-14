@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -46,8 +46,10 @@ class TextConnectionInformationController
 
     /**
      * Constructs a new object.
+     * @throws UnknownHostException 
+     *  if the local host name could not be determined
      */
-    public TextConnectionInformationController() {
+    public TextConnectionInformationController() throws UnknownHostException {
         server = new TextServer(DEFAULT_SERVER_PORT);
     }
 

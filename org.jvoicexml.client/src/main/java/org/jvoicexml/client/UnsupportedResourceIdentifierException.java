@@ -36,4 +36,15 @@ public class UnsupportedResourceIdentifierException extends Exception {
     public UnsupportedResourceIdentifierException(final String message) {
         super(message);
     }
+
+    /**
+     * Constructs a new object with the given detail message and root cause.
+     * @param message the detail message
+     * @param throwable the root cause
+     * @since 0.7.9
+     */
+    public UnsupportedResourceIdentifierException(final String message,
+            Throwable throwable) {
+        super(message, throwable);
+    }
 }

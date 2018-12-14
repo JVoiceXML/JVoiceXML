@@ -172,9 +172,11 @@ public final class TextServer extends Thread {
      *
      * @param serverPort
      *            port number to use.
+     * @throws UnknownHostException 
+     *          if the local host name could not be determined
      */
-    public TextServer(final int serverPort) {
-        this(null, serverPort);
+    public TextServer(final int serverPort) throws UnknownHostException {
+        this(InetAddress.getLocalHost().getHostName(), serverPort);
     }
 
     /**
@@ -318,16 +320,17 @@ public final class TextServer extends Thread {
      * call.
      *
      * @return connection information
-     * @throws UnknownHostException
-     *             IP address could not be determined.
+     * @throws UnknownHostException 
+     *  if the current address could not be determined
      */
     public ConnectionInformation getConnectionInformation()
             throws UnknownHostException {
-        final TextConnectionInformation remote = new TextConnectionInformation(
-                port);
-        remote.setCalledDevice(calledId);
-        remote.setCallingDevice(callingId);
-        return remote;
+        final InetAddress addr = getAddress();
+        final TextConnectionInformation info = new TextConnectionInformation(
+                port, addr);
+        info.setCalledDevice(calledId);
+        info.setCallingDevice(callingId);
+        return info;
     }
 
     /**
@@ -339,11 +342,7 @@ public final class TextServer extends Thread {
      */
     private InetAddress getAddress() throws UnknownHostException {
         if (address == null) {
-            if (host == null) {
-                address = InetAddress.getLocalHost();
-            } else {
-                address = InetAddress.getByName(host);
-            }
+            address = InetAddress.getByName(host);
         }
         return address;
     }
@@ -370,7 +369,7 @@ public final class TextServer extends Thread {
             return;
         }
 
-        LOGGER.info("text server started at port '" + port + "'");
+        LOGGER.info("text server started at '" + callingId + "'");
         fireStarted();
 
         try {

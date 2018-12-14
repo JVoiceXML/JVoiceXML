@@ -57,15 +57,11 @@ public final class TextConnectionInformation
     /**
      * Constructs a new object.
      * @param clientPort the port number to use for the output.
-     * @throws UnknownHostException
-     *         Error determining the local IP address.
      */
-    TextConnectionInformation(final int clientPort)
-        throws UnknownHostException {
+    TextConnectionInformation(final int clientPort, InetAddress addr) {
         super(RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER);
         port = clientPort;
-        // TODO Fixed to localhost for now.
-        address = InetAddress.getLocalHost();
+        address = addr;
     }
 
     /**

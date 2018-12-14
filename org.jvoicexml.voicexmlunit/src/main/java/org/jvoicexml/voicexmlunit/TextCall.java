@@ -146,7 +146,6 @@ public final class TextCall implements Call {
      */
     @Override
     public void call(final URI uri) {
-        LOGGER.info("calling '" + uri + "'");
         try {
             lastError = null;
             final Context context = new InitialContext();
@@ -159,6 +158,7 @@ public final class TextCall implements Call {
             // run the dialog
             final ConnectionInformation info = server
                     .getConnectionInformation();
+            LOGGER.info("calling '" + uri + "' with '" + info + "'");
             session = jvxml.createSession(info);
             session.call(uri);
             for (CallListener listener : listeners) {
