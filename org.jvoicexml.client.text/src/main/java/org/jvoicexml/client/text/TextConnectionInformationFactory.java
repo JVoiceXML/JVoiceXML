@@ -29,8 +29,6 @@ import org.jvoicexml.client.ConnectionInformationController;
 import org.jvoicexml.client.ConnectionInformationFactory;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
 
-import com.google.protobuf.Message;
-
 /**
  * A connection information factory for text based clients.
  * @author Dirk Schnelle-Walka

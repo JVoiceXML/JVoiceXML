@@ -22,7 +22,6 @@
 package org.jvoicexml.client.text;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import org.jvoicexml.client.BasicConnectionInformation;
 
