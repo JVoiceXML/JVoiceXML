@@ -207,6 +207,42 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
     /**
      * Retrieves the value of an attribute that may alternatively defined by an
      * evaluated expression.
+     *
+     * @param pure
+     *            the original name of the attribute
+     * @param expr
+     *            the name of the attribute that has been evaluated by the
+     *            scripting engine
+     * @return value of the attribute, or null if neither pure nor expr are defined
+     * @throws BadFetchError
+     *             if both of the attributes are defined
+     * @since 0.7.7
+     */
+    protected Object getOptionalAttributeWithAlternativeExpr(final DataModel model,
+            final String pure, final String expr) throws BadFetchError {
+        final boolean pureDefined = isAttributeDefined(model, pure);
+        final boolean exprDefined = isAttributeDefined(model, expr);
+
+        // Both are defined
+        if ((pureDefined && exprDefined)) {
+            throw new BadFetchError("Exactly one of '" + pure + "' or '" + expr
+                    + "' may be defined!");
+        }
+
+        if (pureDefined) {
+            return getAttribute(pure);
+        }
+
+        if (exprDefined) {
+            return getAttribute(expr);
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieves the value of an attribute that may alternatively defined by an
+     * evaluated expression.
      * 
      * @param pure
      *            the original name of the attribute
