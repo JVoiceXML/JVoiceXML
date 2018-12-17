@@ -210,7 +210,9 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      */
     char getNextCharacter() throws InterruptedException {
         synchronized (buffer) {
-            buffer.wait();
+            if (buffer.isEmpty()) {
+                buffer.wait();
+            }
             return buffer.remove(0);
         }
     }
