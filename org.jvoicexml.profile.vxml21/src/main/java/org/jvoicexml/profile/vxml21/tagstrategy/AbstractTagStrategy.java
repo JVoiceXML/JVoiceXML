@@ -205,8 +205,8 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
     }
 
     /**
-     * Retrieves the value of an attribute that may alternatively defined by an
-     * evaluated expression.
+     * Retrieves the value of an optional attribute that may alternatively
+     * defined by an evaluated expression.
      *
      * @param pure
      *            the original name of the attribute
