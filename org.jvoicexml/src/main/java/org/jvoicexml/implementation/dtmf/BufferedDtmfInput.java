@@ -26,6 +26,7 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,7 +64,7 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
     private static final int MAX_DTMF_INPUT = 512;
 
     /** All queued characters. */
-    private volatile List<Character> buffer;
+    private volatile LinkedBlockingDeque<Character> buffer;
 
     /** Listener for user input events. */
     private final Collection<SpokenInputListener> listener;
@@ -90,8 +91,7 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      * Constructs a new object.
      */
     public BufferedDtmfInput() {
-        buffer = new java.util.ArrayList<Character>(
-                MAX_DTMF_INPUT);
+        buffer = new LinkedBlockingDeque<>(MAX_DTMF_INPUT);
         listener = new java.util.ArrayList<SpokenInputListener>();
         activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
         parsers = new java.util.HashMap<GrammarType, GrammarParser<?>>();
@@ -177,13 +177,10 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
             throw new IllegalArgumentException(
                     "'" + dtmf + "' is not one of 0123456789#* ");
         }
-        synchronized (buffer) {
-            buffer.add(dtmf);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("added char '" + dtmf + "' buffer is now '"
-                        + buffer.toString() + "'");
-            }
-            buffer.notifyAll();
+        buffer.addLast(dtmf);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("added char '" + dtmf + "' buffer is now '"
+                    + buffer.toString() + "'");
         }
         final char termchar = props.getTermchar();
         if (dtmf == termchar) {
@@ -209,10 +206,7 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      * @since 0.7
      */
     char getNextCharacter() throws InterruptedException {
-        synchronized (buffer) {
-            buffer.wait();
-            return buffer.remove(0);
-        }
+        return buffer.takeFirst();
     }
 
     /**
