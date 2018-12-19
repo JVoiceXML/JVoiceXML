@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2015-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -144,9 +144,9 @@ public class MatchConsumption {
     }
 
     public Object executeSisr() {
-        Context context = Context.enter();
+        final Context context = Context.enter();
         context.setLanguageVersion(Context.VERSION_DEFAULT);
-        Scriptable globalScope = context.initStandardObjects();
+        final Scriptable globalScope = context.initStandardObjects();
 
         if (globalExecutation != null) {
             globalExecutation.execute(context, globalScope);
@@ -155,11 +155,12 @@ public class MatchConsumption {
 
         // Set up working scope - note out initialized at this level, but
         // shouldn't be used
-        Scriptable workingScope = context.newObject(globalScope);
+        final Scriptable workingScope = context.newObject(globalScope);
         context.evaluateString(
                 workingScope,
-                "var out=new Object();\nvar rules=new Object();\n"
-                        + "var meta={current: function() {return {text:'', score:1.0}}};\n",
+                "var out=new Object();\n"
+                + "var rules=new Object();\n"
+                + "var meta={current: function() {return {text:'', score:1.0};}};\n",
                 "SISR init from MatchConsumer", 0, null);
 
         if (executationCollection.size() != 1) {

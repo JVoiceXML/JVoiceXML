@@ -31,7 +31,7 @@
         <property name="scripts">
             <map>
                 <entry key="1">
-                    <bean class="org.jvoicexml.systemtest.script.PressDigitScript"/>
+                    <bean class="org.jvoicexml.systemtest.script.EnterAssertionIdScript"/>
                 </entry>
                 <entry key="5">
                     <bean class="org.jvoicexml.systemtest.script.PressDigitScript">
