@@ -1,0 +1,20 @@
+configurations {
+    irtest
+}
+ 
+repositories {
+    mavenCentral()
+} 
+ 
+dependencies {
+    irtest fileTree(dir: "..", include: ['*.jar'])
+}
+ 
+def antClassLoader = org.apache.tools.ant.Project.class.classLoader
+configurations.irtest.each { File f ->
+    antClassLoader.addURL(f.toURI().toURL())
+} 
+
+ant.importBuild 'patched-build.xml'
+ant.project.basedir = projectDir
+

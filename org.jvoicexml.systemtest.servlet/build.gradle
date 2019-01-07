@@ -44,14 +44,40 @@ task downloadTestsuite(type: Download) {
     overwrite false
 }
 
-task untarTestsuite (type: Copy) {
+task untarTestsuite(type: Copy) {
     dependsOn downloadTestsuite
 
     from tarTree("${buildDir}/testsuite/vxml_test_suite_2.1.tar.gz")
     into "${buildDir}/testsuite/" 
 }
 
+task copyBuildGradleVxml21(type: Copy) {
+    from "${projectDir}/src/main/resources/build.gradle"
+    into"${buildDir}/testsuite/vxml_test_suite_2.1_Rel_1.01/vxml21_0.0.5"
+}
+
+task patchVxml21BuildXml(type: com.github.eerohele.SaxonXsltTask) {
+    dependsOn copyBuildGradleVxml21
+
+    stylesheet "${projectDir}/src/main/resources/patch-build-xml.xsl"
+    input "${buildDir}/testsuite/vxml_test_suite_2.1_Rel_1.01/vxml21_0.0.5/build.xml"
+    output "${buildDir}/testsuite/vxml_test_suite_2.1_Rel_1.01/vxml21_0.0.5/patched-build.xml"
+    parameters(
+        irtestdir: "${buildDir}/testsuite/vxml_test_suite_2.1_Rel_1.01/vxml21_0.0.5",
+    )
+}
+
+task buildGradleVxml21(type: GradleBuild) {
+    dependsOn patchVxml21BuildXml
+    
+    dir = "${buildDir}/testsuite/vxml_test_suite_2.1_Rel_1.01/vxml21_0.0.5/"
+    buildFile = "${buildDir}/testsuite/vxml_test_suite_2.1_Rel_1.01/vxml21_0.0.5/build.gradle"
+    tasks = ['dist']
+}
+
 task copyTestsuite(type: Copy) {
+    dependsOn buildGradleVxml21
+    
     from ("${buildDir}/testsuite/vxml_test_suite_2.1_Rel_1.01") {
         exclude 'WEB-INF/web.xml'
     }
