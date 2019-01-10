@@ -148,7 +148,8 @@ public final class IRTestCaseLibrary implements TestCaseLibrary {
                             + " testcase loaded.");
                 }
                 
-                final String testRoot = baseURL + "/testmenu.jsp?testSuite=vxml21_0.0.5";
+                final String testRoot = baseURL + "/" + testsuite
+                        + "/vxml-srgs";
                 for (IRTestCase tc : testCaseList) {
                     tc.setBaseURI(testRoot);
                 }

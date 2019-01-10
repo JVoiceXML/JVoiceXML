@@ -24,7 +24,6 @@ dependencies {
     compile project(':org.jvoicexml.config')
     compile project(':org.jvoicexml.client')
     compile project(':org.jvoicexml.client.text')
-    compile project(':org.jvoicexml.client')
     compile project(':org.jvoicexml.profile.vxml21')
     compile project(':org.jvoicexml.voicexmlunit')
     compile project(':org.jvoicexml.srgs')

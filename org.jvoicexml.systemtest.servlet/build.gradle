@@ -51,7 +51,16 @@ task untarTestsuite(type: Copy) {
     into "${buildDir}/testsuite/" 
 }
 
+task copyVendorProperties(type: Copy) {
+    dependsOn untarTestsuite
+
+    from "${projectDir}/src/main/resources/vendor.properties"
+    into"${buildDir}/testsuite/vxml_test_suite_2.1_Rel_1.01"
+}
+
 task copyBuildGradleVxml21(type: Copy) {
+    dependsOn copyVendorProperties
+
     from "${projectDir}/src/main/resources/build.gradle"
     into"${buildDir}/testsuite/vxml_test_suite_2.1_Rel_1.01/vxml21_0.0.5"
 }

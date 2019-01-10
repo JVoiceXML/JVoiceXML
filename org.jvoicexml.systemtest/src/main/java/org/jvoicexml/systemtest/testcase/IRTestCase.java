@@ -108,7 +108,9 @@ public final class IRTestCase implements TestCase {
         if (baseURI == null) {
             return new URI(start.uri);
         } else {
-            return new URI(baseURI + "&assertId=" + description.id);
+            int index = start.uri.lastIndexOf(".");
+            final String uri = start.uri.substring(0, index) + ".vxml";
+            return new URI(baseURI + "/" + uri);
         }
     }
 
