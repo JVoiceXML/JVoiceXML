@@ -92,26 +92,20 @@ public final class IRTestCase implements TestCase {
     /**
      * base URI.
      */
-    private String baseURI;
+    private URI baseURI;
 
     /**
      * @param base URI of document.
      */
-    void setBaseURI(final String base) {
+    void setBaseURI(final URI base) {
         baseURI = base;
     }
 
     /**
      * {@inheritDoc}
      */
-    public URI getStartURI() throws URISyntaxException{
-        if (baseURI == null) {
-            return new URI(start.uri);
-        } else {
-            int index = start.uri.lastIndexOf(".");
-            final String uri = start.uri.substring(0, index) + ".vxml";
-            return new URI(baseURI + "/" + uri);
-        }
+    public URI getStartURI() throws URISyntaxException {
+        return resolve(start.uri);
     }
 
     /**
@@ -182,34 +176,51 @@ public final class IRTestCase implements TestCase {
     }
 
     /**
+     * Resolves the given URI.
+     * @param uri the URI to resolve
+     * @return resolved URI
+     * @throws URISyntaxException error resolving the URI
+     * @since 0.7.9
+     */
+    private URI resolve(String uri) throws URISyntaxException {
+        int idx = uri.indexOf(".txml");
+        if (idx != -1) {
+            uri = uri.substring(0, idx) + ".vxml";
+        }
+        uri = uri.trim();
+        if (baseURI == null) {
+            final URI startURI = new URI(start.uri);
+            return startURI.resolve(uri);
+
+        }
+        return baseURI.resolve(uri);
+    }
+    
+    /**
      * {@inheritDoc}
      */
     @Override
     public boolean completenessCheck() {
-//        URI checkedURI = null;
-//        try {
-//            checkedURI = getStartURI();
-//            readTextStream(checkedURI);
-//            for (Dep dependeny : dependencies) {
-//                String uri = dependeny.uri;
-//                int idx = uri.indexOf(".txml");
-//                if (idx != -1) {
-//                    uri = uri.substring(0, idx) + ".vxml";
-//                }
-//                checkedURI = baseURI.resolve(uri.trim());
-//                if (isText(dependeny.type)) {
-//                    readTextStream(checkedURI);
-//                } else {
-//                    // TODO read other resource.
-//                }
-//            }
-//        } catch (Exception e) {
-//            LOGGER.error("the uri '" + checkedURI
-//                    + "' can not read. ignore this test case.", e);
-//            ignoreReason = "can not read '" + checkedURI
-//                    + "'. ignore this test case";
-//            return false;
-//        }
+        URI checkedURI = null;
+        try {
+            checkedURI = resolve(start.uri);
+            readTextStream(checkedURI);
+            for (Dep dependeny : dependencies) {
+                String dependentURI = dependeny.uri;
+                checkedURI = resolve(dependentURI);
+                if (isText(dependeny.type)) {
+                    readTextStream(checkedURI);
+                } else {
+                    // TODO read other resource.
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("the uri '" + checkedURI
+                    + "' can not read. ignore test case " + id, e);
+            ignoreReason = "can not read '" + checkedURI
+                    + "'. ignore test case " + id;
+            return false;
+        }
         return true;
     }
 

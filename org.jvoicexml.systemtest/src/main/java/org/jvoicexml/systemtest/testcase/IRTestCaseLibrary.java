@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -148,13 +150,13 @@ public final class IRTestCaseLibrary implements TestCaseLibrary {
                             + " testcase loaded.");
                 }
                 
-                final String testRoot = baseURL + "/" + testsuite
-                        + "/vxml-srgs";
+                final URI testRoot = new URI(baseURL + "/" + testsuite
+                        + "/vxml-srgs/");
                 for (IRTestCase tc : testCaseList) {
                     tc.setBaseURI(testRoot);
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             LOGGER.error(
                     "can not load test case library with " + manifest 
                         + ". Is the servlet deployed?", e);

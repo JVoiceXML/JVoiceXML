@@ -4,14 +4,11 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans
       http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
   <bean id="callmanager" class="org.jvoicexml.systemtest.SystemTestCallManager">
-    <!-- 
-    <property name="shutdownInterpreter" value="true" />
-     -->
     <property name="textServerPort" value="62342" />
     <property name="testCaseListener">
       <bean class="org.jvoicexml.systemtest.report.TestRecorder">
-        <property name="reportDir" value="../org.jvoicexml/dist/systemtest" />
-        <property name="reportName" value="ir-report.xml" />
+        <property name="reportDir" value="build/testresult" />
+        <property name="reportName" value="irtest-report.xml" />
       </bean>
     </property>
 
