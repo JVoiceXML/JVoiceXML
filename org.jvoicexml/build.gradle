@@ -20,7 +20,6 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.9.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.9.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.9.1'
-    compile group: 'org.mozilla', name: 'rhino', version: '1.7R4'
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.3.14.v20161028'
     compile group: 'net.sourceforge.jchardet', name: 'jchardet', version: '1.0'
