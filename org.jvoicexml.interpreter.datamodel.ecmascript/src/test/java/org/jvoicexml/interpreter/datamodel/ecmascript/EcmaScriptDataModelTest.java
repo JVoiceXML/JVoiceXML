@@ -327,6 +327,28 @@ public class EcmaScriptDataModelTest {
         fail("Not yet implemented");
     }
 
+    @Test
+    public void testCopyValuesDatamodel() throws SemanticError {
+        final EcmaScriptDataModel data = new EcmaScriptDataModel();
+        Assert.assertEquals(0, data.createScope(Scope.SESSION));
+        final String testvarlevel2 = "testvar.level1.level2";
+        Assert.assertEquals(0, data.createVariable(testvarlevel2));
+        Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                data.createVariable("testvar.level1"));
+        Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                data.createVariable("testvar.level1.level2"));
+        final EcmaScriptDataModel targetModel = new EcmaScriptDataModel();
+        data.copyValues(targetModel);
+        Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                targetModel.createVariable("testvar"));
+        Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                targetModel.createVariable("testvar.level1"));
+        Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                targetModel.createVariable("testvar.level1.level2"));
+        Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                targetModel.createVariable("session.testvar.level1.level2"));
+    }
+
     public class TestObject {
         private final int value1;
 

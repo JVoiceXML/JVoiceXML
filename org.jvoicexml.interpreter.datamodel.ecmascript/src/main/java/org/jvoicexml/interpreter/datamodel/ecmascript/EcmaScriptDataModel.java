@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +22,7 @@
 package org.jvoicexml.interpreter.datamodel.ecmascript;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -137,6 +138,37 @@ public class EcmaScriptDataModel implements DataModel {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int copyValues(final DataModel model) throws SemanticError {
+        if (topmostScope == null) {
+            return ERROR_SCOPE_NOT_FOUND;
+        }
+        
+        // Find all scopes in the right order.
+        Scriptable current = topmostScope;
+        List<Scriptable> scopeStack = new java.util.LinkedList<Scriptable>();
+        while (current != null) {
+            scopeStack.add(0, current);
+            current = current.getParentScope();
+        }
+        
+        // Copy all values per scope.
+        for (Scriptable scriptable : scopeStack) {
+            final Scope scope = scopes.get(scriptable);
+            model.createScope(scope);
+            final Object[] ids = scriptable.getIds();
+            for (Object id : ids) {
+                final String name = id.toString();
+                final Object value = readVariable(name, scope, Object.class);
+                model.createVariable(name, value, scope);
+            }
+        }
+        return 0;
+    }
+    
     /**
      * Creates an implicit variable for the given scope
      * 
@@ -871,6 +903,11 @@ public class EcmaScriptDataModel implements DataModel {
         return t;
     }
 
+    /**
+     * Perform some unified cleanup and adaptation of the given expression.
+     * @param expr the expression to prepare
+     * @return prepared expression
+     */
     private String prepareExpression(final String expr) {
         if (expr == null) {
             return null;
