@@ -58,8 +58,6 @@ import org.mockito.Mockito;
  * Test case for {@link org.jvoicexml.interpreter.SubdialogExecutorThread}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4097 $
- * @since 0.7.7
  */
 @Ignore("Unmaintained test is currently failing. TODO: Fix or delete")
 public class TestSubdialogExecutorThread {
@@ -134,7 +132,7 @@ public class TestSubdialogExecutorThread {
         application.addDocument(new URI("test"), doc);
 
         final SubdialogExecutorThread executor = new SubdialogExecutorThread(
-                uri, context, application, params, eventbus);
+                uri, context, application, params, eventbus, null);
 
         executor.start();
         executor.join();

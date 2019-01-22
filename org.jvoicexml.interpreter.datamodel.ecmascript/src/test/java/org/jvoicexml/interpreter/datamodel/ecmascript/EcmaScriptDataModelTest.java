@@ -10,6 +10,8 @@ import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Context;
 
 public class EcmaScriptDataModelTest {
+    /** Any exception in async tests. */
+    Throwable throwable;
 
     @Test
     public void testGetUndefinedValue() {
@@ -347,6 +349,43 @@ public class EcmaScriptDataModelTest {
                 targetModel.createVariable("testvar.level1.level2"));
         Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
                 targetModel.createVariable("session.testvar.level1.level2"));
+    }
+
+    @Test
+    public void testCopyValuesDatamodelAsync() throws SemanticError, InterruptedException {
+        final EcmaScriptDataModel data = new EcmaScriptDataModel();
+        Assert.assertEquals(0, data.createScope(Scope.SESSION));
+        final String testvarlevel2 = "testvar.level1.level2";
+        Assert.assertEquals(0, data.createVariable(testvarlevel2));
+        Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                data.createVariable("testvar.level1"));
+        Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                data.createVariable("testvar.level1.level2"));
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final EcmaScriptDataModel targetModel = new EcmaScriptDataModel();
+                try {
+                    data.copyValues(targetModel);
+                } catch (SemanticError e) {
+                    throwable = e;
+                    e.printStackTrace();
+                }
+                Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                        targetModel.createVariable("testvar"));
+                Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                        targetModel.createVariable("testvar.level1"));
+                Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                        targetModel.createVariable("testvar.level1.level2"));
+                Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                        targetModel.createVariable("session.testvar.level1.level2"));
+            }
+        };
+        final Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(2000);
+        thread.join();
+        Assert.assertNull(throwable);
     }
 
     public class TestObject {

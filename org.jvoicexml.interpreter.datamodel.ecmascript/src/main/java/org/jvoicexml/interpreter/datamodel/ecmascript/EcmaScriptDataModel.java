@@ -54,9 +54,7 @@ public class EcmaScriptDataModel implements DataModel {
     private static final Logger LOGGER = Logger
             .getLogger(EcmaScriptDataModel.class);
 
-    /** The javascript context. */
-    private final Context context;
-
+    /** The root scope. */
     private Scriptable rootScope;
 
     /** The topmost scope. */
@@ -81,11 +79,23 @@ public class EcmaScriptDataModel implements DataModel {
      */
     public EcmaScriptDataModel() {
         scopes = new java.util.HashMap<Scriptable, Scope>();
-        context = Context.enter();
-        context.setLanguageVersion(Context.VERSION_DEFAULT);
 
     }
 
+    /**
+     * Safe retrieval of the current context.
+     * @return context
+     * @since 0.7.9
+     */
+    private Context getContext() {
+        Context context = Context.getCurrentContext();
+        if (context == null) {
+            context = Context.enter();
+            context.setLanguageVersion(Context.VERSION_DEFAULT);
+        }
+        return context;
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -107,6 +117,7 @@ public class EcmaScriptDataModel implements DataModel {
      */
     @Override
     public Object createNewObject() {
+        final Context context = getContext();
         return context.newObject(topmostScope);
     }
     
@@ -119,7 +130,8 @@ public class EcmaScriptDataModel implements DataModel {
             return createScope();
         }
         if (topmostScope == null) {
-            // create a initial scope if none present
+            // create an initial scope if none present
+            final Context context = getContext();
             rootScope = context.initStandardObjects();
             topmostScope = rootScope;
         }
@@ -178,7 +190,7 @@ public class EcmaScriptDataModel implements DataModel {
     private Scriptable createImplicitVariable(final Scope scope) {
         // Do not create implicit variables for anonymous scopes
         if (scope == Scope.ANONYMOUS) {
-            final Context context = Context.getCurrentContext();
+            final Context context = getContext();
             return context.newObject(topmostScope);
         }
 
@@ -194,9 +206,10 @@ public class EcmaScriptDataModel implements DataModel {
             LOGGER.error(
                     "unable to create an implicit variable: " + e.getMessage(),
                     e);
-            final Context context = Context.getCurrentContext();
+            final Context context = getContext();
             return context.newObject(topmostScope);
         }
+        final Context context = getContext();
         final Scriptable scriptable = context.newObject(rootScope,
                 clazz.getSimpleName());
 
@@ -465,7 +478,7 @@ public class EcmaScriptDataModel implements DataModel {
 
         // Fill the array
         for (int i = 0; i < dimension; i++) {
-            final Context context = Context.getCurrentContext();
+            final Context context = getContext();
             final Scriptable scriptable = context.newObject(topmostScope);
             ScriptableObject.putProperty(array, i, scriptable);
         }
@@ -523,7 +536,7 @@ public class EcmaScriptDataModel implements DataModel {
                 final Object value = oldArray.get(i);
                 ScriptableObject.putProperty(array, i, value);
             } else {
-                final Context context = Context.getCurrentContext();
+                final Context context = getContext();
                 final Scriptable scriptable = context.newObject(topmostScope);
                 ScriptableObject.putProperty(array, i, scriptable);
             }
@@ -956,6 +969,7 @@ public class EcmaScriptDataModel implements DataModel {
             return null;
         }
         try {
+            final Context context = getContext();
             final Object value = context.evaluateString(start,
                     preparedExpression, "expr", 1, null);
             if (value == getUndefinedValue()) {

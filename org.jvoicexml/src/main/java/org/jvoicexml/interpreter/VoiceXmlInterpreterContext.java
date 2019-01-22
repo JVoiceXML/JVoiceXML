@@ -120,27 +120,7 @@ public class VoiceXmlInterpreterContext {
      */
     public VoiceXmlInterpreterContext(final JVoiceXmlSession currentSession,
             final Configuration config) {
-        session = currentSession;
-        configuration = config;
-        scopeObserver = session.getScopeObserver();
-
-        grammars = new ActiveGrammarSet(scopeObserver);
-
-        // Add a grammar deactivator as observer to the active grammar set
-        // that will deactivate grammars once a scope is left.
-        final ImplementationPlatform platform = session
-                .getImplementationPlatform();
-        final GrammarDeactivator deactivator = new GrammarDeactivator(
-                platform);
-        grammars.addActiveGrammarSetObserver(deactivator);
-
-        // Subscribe the default event handler to all events of the event bus.
-        eventbus = new EventBus();
-        properties = new ScopedMap<String, String>(scopeObserver);
-        final DataModel dataModel = getDataModel();
-        eventHandler = new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
-                dataModel, scopeObserver);
-        eventbus.subscribe("", eventHandler);
+        this(currentSession, config, currentSession.getScopeObserver(), null);
     }
 
     /**
@@ -153,12 +133,16 @@ public class VoiceXmlInterpreterContext {
      *            the configuration to use
      * @param observer
      *            the scope observer
+     * @param dataModel
+     *            the data model
      */
     public VoiceXmlInterpreterContext(final JVoiceXmlSession currentSession,
-            final Configuration config, final ScopeObserver observer) {
+            final Configuration config, final ScopeObserver observer,
+            final DataModel dataModel) {
         session = currentSession;
         scopeObserver = observer;
         configuration = config;
+        model = dataModel;
 
         grammars = new ActiveGrammarSet(scopeObserver);
 
