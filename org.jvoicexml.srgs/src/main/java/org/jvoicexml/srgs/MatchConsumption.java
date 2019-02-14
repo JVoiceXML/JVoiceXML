@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2015-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.jvoicexml.srgs.sisr.ExecutableSemanticInterpretation;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
@@ -47,6 +48,17 @@ public class MatchConsumption {
     private List<ExecutableSemanticInterpretation> executationCollection =
             new java.util.ArrayList<ExecutableSemanticInterpretation>();
 
+    static {
+        if (!ContextFactory.hasExplicitGlobal()) {
+            // Initialize GlobalFactory with custom factory
+            final ContextFactory factory = new SrgsContextFactory();
+            ContextFactory.initGlobal(factory);
+        }
+    }
+
+    /**
+     * Constructs a new object.
+     */
     public MatchConsumption() {
     }
 
@@ -144,14 +156,15 @@ public class MatchConsumption {
     }
 
     public Object executeSisr() {
-        Context context = Context.enter();
+        final Context context = Context.enter();
         context.setLanguageVersion(Context.VERSION_DEFAULT);
-        Scriptable globalScope = context.initStandardObjects();
+        final Scriptable globalScope = context.initStandardObjects();
 
         if (globalExecutation != null) {
             globalExecutation.execute(context, globalScope);
         }
-        ((ScriptableObject) globalScope).sealObject();
+        final ScriptableObject scriptable = (ScriptableObject) globalScope;
+        scriptable.sealObject();
 
         // Set up working scope - note out initialized at this level, but
         // shouldn't be used
@@ -159,7 +172,7 @@ public class MatchConsumption {
         context.evaluateString(
                 workingScope,
                 "var out=new Object();\nvar rules=new Object();\n"
-                        + "var meta={current: function() {return {text:'', score:1.0}}};\n",
+                        + "var meta={current: function() {return {text:'', score:1.0};}};\n",
                 "SISR init from MatchConsumer", 0, null);
 
         if (executationCollection.size() != 1) {
