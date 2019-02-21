@@ -1,3 +1,5 @@
+import static org.apache.tools.ant.taskdefs.condition.Os.*
+
 apply plugin: 'java'
 apply plugin: "com.github.eerohele.saxon-gradle"
 apply plugin: 'maven'
@@ -37,6 +39,9 @@ dependencies {
 }
 
 xslt {
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/kinect-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/kinect-implementation.xml"
@@ -48,6 +53,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/kinect-implementation.xml"
     output "${project(':main').buildDir}/config/kinect-implementation.xml"
@@ -71,6 +79,10 @@ task generateJniHeaders(type: Exec) {
 }
 
 task cleanJniWin32(type: com.ullink.Msbuild) {
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
+
     dependsOn generateJniHeaders
 
     solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
@@ -82,6 +94,10 @@ task cleanJniWin32(type: com.ullink.Msbuild) {
 }
 
 task cleanJniWin64(type: com.ullink.Msbuild) {
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
+
     dependsOn generateJniHeaders
 
     solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
@@ -93,6 +109,10 @@ task cleanJniWin64(type: com.ullink.Msbuild) {
 }
 
 task cleanJni {
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
+
     dependsOn cleanJniWin32
     dependsOn cleanJniWin64
 }
@@ -105,6 +125,9 @@ clean {
 }
 
 task buildJniWin32(type: com.ullink.Msbuild) {
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
     dependsOn generateJniHeaders
 
     solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
@@ -116,6 +139,9 @@ task buildJniWin32(type: com.ullink.Msbuild) {
 }
 
 task buildJniWin64(type: com.ullink.Msbuild) {
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
     dependsOn generateJniHeaders
 
     solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
@@ -127,6 +153,10 @@ task buildJniWin64(type: com.ullink.Msbuild) {
 }
 
 task buildJni {
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
+
     dependsOn buildJniWin32
     dependsOn buildJniWin64
     
@@ -146,6 +176,10 @@ task buildJni {
 }
 
 task copyJNI(type: Copy) {
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
+
     dependsOn buildJni
 
     from("$buildDir/jni") {
@@ -170,6 +204,9 @@ jar {
 }
 
 install {
-   version = JVOICEXML_VERSION
-   group = JVOICEXML_GROUP
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
+    version = JVOICEXML_VERSION
+    group = JVOICEXML_GROUP
 }

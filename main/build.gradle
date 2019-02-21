@@ -251,7 +251,7 @@ task jvxmlDistributioConfigurations {
     dependsOn configurations.jvxmlImplementationJSAPI10 
     dependsOn configurations.jvxmlImplementationJSAPI20 
     dependsOn configurations.jvxmlImplementationJTAPI 
-    dependsOn configurations.jvxmlImplementationKinect 
+    dependsOn configurations.jvxmlImplementationKinect
     dependsOn configurations.jvxmlImplementationLightweightBML 
     dependsOn configurations.jvxmlImplementationMarc 
     dependsOn configurations.jvxmlImplementationMary
