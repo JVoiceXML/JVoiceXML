@@ -1,3 +1,5 @@
+import static org.apache.tools.ant.taskdefs.condition.Os.*
+
 apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'distribution'
@@ -207,7 +209,7 @@ task jvxmlConfigurations {
     if (project.property('JVOICEXML_IMPLEMENTATION_JTAPI') == 'true') {
         dependsOn configurations.jvxmlImplementationJTAPI 
     }
-    if (project.property('JVOICEXML_IMPLEMENTATION_KINECT') == 'true') {
+    if (project.property('JVOICEXML_IMPLEMENTATION_KINECT') == 'true' && isFamily(FAMILY_WINDOWS)) {
         dependsOn configurations.jvxmlImplementationKinect 
     }
     if (project.property('JVOICEXML_IMPLEMENTATION_BML') == 'true') {
@@ -250,8 +252,12 @@ task jvxmlDistributioConfigurations {
     dependsOn configurations.jvxmlInterpreterGrammarRegex
     dependsOn configurations.jvxmlImplementationJSAPI10 
     dependsOn configurations.jvxmlImplementationJSAPI20 
-    dependsOn configurations.jvxmlImplementationJTAPI 
-    dependsOn configurations.jvxmlImplementationKinect
+    dependsOn configurations.jvxmlImplementationJTAPI
+    dependsOn configurations.jvxmlImplementationKinect {
+        onlyIf { 
+            isFamily(FAMILY_WINDOWS)
+        }
+    }
     dependsOn configurations.jvxmlImplementationLightweightBML 
     dependsOn configurations.jvxmlImplementationMarc 
     dependsOn configurations.jvxmlImplementationMary
