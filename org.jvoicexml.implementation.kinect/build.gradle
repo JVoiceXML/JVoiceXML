@@ -3,7 +3,9 @@ import static org.apache.tools.ant.taskdefs.condition.Os.*
 apply plugin: 'java'
 apply plugin: "com.github.eerohele.saxon-gradle"
 apply plugin: 'maven'
-apply plugin: 'msbuild'
+if (isFamily(FAMILY_WINDOWS)) {
+    apply plugin: 'msbuild'
+}
 
 buildscript {
     repositories {
