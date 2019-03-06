@@ -80,122 +80,108 @@ task generateJniHeaders(type: Exec) {
         "org.jvoicexml.implementation.kinect.KinectRecognizer"
 }
 
-task cleanJniWin32(type: com.ullink.Msbuild) {
-    onlyIf { 
-        isFamily(FAMILY_WINDOWS)
+if (isFamily(FAMILY_WINDOWS)) {
+    task cleanJniWin32(type: com.ullink.Msbuild) {
+        dependsOn generateJniHeaders
+    
+        solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
+        projectName = "JVoiceXmlKinectRecognizer"
+        targets = ['Clean']
+        configuration = 'Release'
+        platform = 'Win32'
+        destinationDir = "$buildDir/jni"
     }
 
-    dependsOn generateJniHeaders
-
-    solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
-    projectName = "JVoiceXmlKinectRecognizer"
-    targets = ['Clean']
-    configuration = 'Release'
-    platform = 'Win32'
-    destinationDir = "$buildDir/jni"
-}
-
-task cleanJniWin64(type: com.ullink.Msbuild) {
-    onlyIf { 
-        isFamily(FAMILY_WINDOWS)
+    task cleanJniWin64(type: com.ullink.Msbuild) {
+        dependsOn generateJniHeaders
+    
+        solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
+        projectName = "JVoiceXmlKinectRecognizer"
+        targets = ['Clean']
+        configuration = 'Release'
+        platform = 'x64'
+        destinationDir = "$buildDir/jni"
     }
-
-    dependsOn generateJniHeaders
-
-    solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
-    projectName = "JVoiceXmlKinectRecognizer"
-    targets = ['Clean']
-    configuration = 'Release'
-    platform = 'x64'
-    destinationDir = "$buildDir/jni"
-}
-
-task cleanJni {
-    onlyIf { 
-        isFamily(FAMILY_WINDOWS)
+    
+    task cleanJni {
+        dependsOn cleanJniWin32
+        dependsOn cleanJniWin64
     }
-
-    dependsOn cleanJniWin32
-    dependsOn cleanJniWin64
 }
 
 clean {
-    dependsOn cleanJni
+    if (isFamily(FAMILY_WINDOWS)) {
+        dependsOn cleanJni
+    }
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/kinect-implementation.xml")
     delete file("${project(':org.jvoicexml').buildDir}/jni/JVoiceXmlKinectRecognizer.dll")
     delete file("${project(':org.jvoicexml').buildDir}/jni/JVoiceXmlKinectRecognizer_x64.dll")
 }
 
-task buildJniWin32(type: com.ullink.Msbuild) {
-    onlyIf { 
-        isFamily(FAMILY_WINDOWS)
-    }
-    dependsOn generateJniHeaders
-
-    solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
-    projectName = "JVoiceXmlKinectRecognizer"
-    targets = ['Build']
-    configuration = 'Release'
-    platform = 'Win32'
-    destinationDir = "$buildDir/jni"
-}
-
-task buildJniWin64(type: com.ullink.Msbuild) {
-    onlyIf { 
-        isFamily(FAMILY_WINDOWS)
-    }
-    dependsOn generateJniHeaders
-
-    solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
-    projectName = "JVoiceXmlKinectRecognizer"
-    targets = ['Build']
-    configuration = 'Release'
-    platform = 'x64'
-    destinationDir = "$buildDir/jni"
-}
-
-task buildJni {
-    onlyIf { 
-        isFamily(FAMILY_WINDOWS)
-    }
-
-    dependsOn buildJniWin32
-    dependsOn buildJniWin64
+if (isFamily(FAMILY_WINDOWS)) {
+    task buildJniWin32(type: com.ullink.Msbuild) {
+        dependsOn generateJniHeaders
     
-    doLast {
-        copy {
-            from 'src/main/cpp/Release'
-            into "$buildDir/jni"
-            include '*.dll'
+        solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
+        projectName = "JVoiceXmlKinectRecognizer"
+        targets = ['Build']
+        configuration = 'Release'
+        platform = 'Win32'
+        destinationDir = "$buildDir/jni"
+    }
+    
+    task buildJniWin64(type: com.ullink.Msbuild) {
+        dependsOn generateJniHeaders
+    
+        solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
+        projectName = "JVoiceXmlKinectRecognizer"
+        targets = ['Build']
+        configuration = 'Release'
+        platform = 'x64'
+        destinationDir = "$buildDir/jni"
+    }
+    
+    task buildJni {
+        onlyIf { 
+            isFamily(FAMILY_WINDOWS)
         }
-
-        copy {
-            from 'src/main/cpp/Release_x64'
-            into "$buildDir/jni"
-            include '*.dll'
+    
+        dependsOn buildJniWin32
+        dependsOn buildJniWin64
+        
+        doLast {
+            copy {
+                from 'src/main/cpp/Release'
+                into "$buildDir/jni"
+                include '*.dll'
+            }
+    
+            copy {
+                from 'src/main/cpp/Release_x64'
+                into "$buildDir/jni"
+                include '*.dll'
+            }
         }
     }
-}
-
-task copyJNI(type: Copy) {
-    onlyIf { 
-        isFamily(FAMILY_WINDOWS)
+    
+    task copyJNI(type: Copy) {
+        dependsOn buildJni
+    
+        from("$buildDir/jni") {
+             include '*.dll'
+        }
+        into "${project(':org.jvoicexml').buildDir}/jni"
     }
-
-    dependsOn buildJni
-
-    from("$buildDir/jni") {
-         include '*.dll'
-    }
-    into "${project(':org.jvoicexml').buildDir}/jni"
 }
 
 jar {
     version = JVOICEXML_VERSION
 
-    dependsOn xslt
-    dependsOn xsltDistribution
-    dependsOn copyJNI
+    if (isFamily(FAMILY_WINDOWS)) {
+        dependsOn xslt
+        dependsOn xsltDistribution
+        dependsOn copyJNI
+    }
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML Kinect implementation platform",
