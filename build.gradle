@@ -11,13 +11,13 @@ buildscript {
     }
 }
 
-apply plugin: 'com.gradle.build-scan' 
-
 allprojects {
     repositories {
         mavenCentral()
     }
 }
+
+apply plugin: 'com.gradle.build-scan' 
 
 task clean(type: Delete) {
     delete rootProject.buildDir
