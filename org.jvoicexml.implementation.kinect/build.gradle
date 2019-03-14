@@ -1,7 +1,11 @@
+import static org.apache.tools.ant.taskdefs.condition.Os.*
+
 apply plugin: 'java'
 apply plugin: "com.github.eerohele.saxon-gradle"
 apply plugin: 'maven'
-apply plugin: 'msbuild'
+if (isFamily(FAMILY_WINDOWS)) {
+    apply plugin: 'msbuild'
+}
 
 buildscript {
     repositories {
@@ -37,6 +41,9 @@ dependencies {
 }
 
 xslt {
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/kinect-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/kinect-implementation.xml"
@@ -48,6 +55,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
     stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
     input "${projectDir}/src/main/resources/kinect-implementation.xml"
     output "${project(':main').buildDir}/config/kinect-implementation.xml"
@@ -70,96 +80,108 @@ task generateJniHeaders(type: Exec) {
         "org.jvoicexml.implementation.kinect.KinectRecognizer"
 }
 
-task cleanJniWin32(type: com.ullink.Msbuild) {
-    dependsOn generateJniHeaders
+if (isFamily(FAMILY_WINDOWS)) {
+    task cleanJniWin32(type: com.ullink.Msbuild) {
+        dependsOn generateJniHeaders
+    
+        solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
+        projectName = "JVoiceXmlKinectRecognizer"
+        targets = ['Clean']
+        configuration = 'Release'
+        platform = 'Win32'
+        destinationDir = "$buildDir/jni"
+    }
 
-    solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
-    projectName = "JVoiceXmlKinectRecognizer"
-    targets = ['Clean']
-    configuration = 'Release'
-    platform = 'Win32'
-    destinationDir = "$buildDir/jni"
-}
-
-task cleanJniWin64(type: com.ullink.Msbuild) {
-    dependsOn generateJniHeaders
-
-    solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
-    projectName = "JVoiceXmlKinectRecognizer"
-    targets = ['Clean']
-    configuration = 'Release'
-    platform = 'x64'
-    destinationDir = "$buildDir/jni"
-}
-
-task cleanJni {
-    dependsOn cleanJniWin32
-    dependsOn cleanJniWin64
+    task cleanJniWin64(type: com.ullink.Msbuild) {
+        dependsOn generateJniHeaders
+    
+        solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
+        projectName = "JVoiceXmlKinectRecognizer"
+        targets = ['Clean']
+        configuration = 'Release'
+        platform = 'x64'
+        destinationDir = "$buildDir/jni"
+    }
+    
+    task cleanJni {
+        dependsOn cleanJniWin32
+        dependsOn cleanJniWin64
+    }
 }
 
 clean {
-    dependsOn cleanJni
+    if (isFamily(FAMILY_WINDOWS)) {
+        dependsOn cleanJni
+    }
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/kinect-implementation.xml")
     delete file("${project(':org.jvoicexml').buildDir}/jni/JVoiceXmlKinectRecognizer.dll")
     delete file("${project(':org.jvoicexml').buildDir}/jni/JVoiceXmlKinectRecognizer_x64.dll")
 }
 
-task buildJniWin32(type: com.ullink.Msbuild) {
-    dependsOn generateJniHeaders
-
-    solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
-    projectName = "JVoiceXmlKinectRecognizer"
-    targets = ['Build']
-    configuration = 'Release'
-    platform = 'Win32'
-    destinationDir = "$buildDir/jni"
-}
-
-task buildJniWin64(type: com.ullink.Msbuild) {
-    dependsOn generateJniHeaders
-
-    solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
-    projectName = "JVoiceXmlKinectRecognizer"
-    targets = ['Build']
-    configuration = 'Release'
-    platform = 'x64'
-    destinationDir = "$buildDir/jni"
-}
-
-task buildJni {
-    dependsOn buildJniWin32
-    dependsOn buildJniWin64
+if (isFamily(FAMILY_WINDOWS)) {
+    task buildJniWin32(type: com.ullink.Msbuild) {
+        dependsOn generateJniHeaders
     
-    doLast {
-        copy {
-            from 'src/main/cpp/Release'
-            into "$buildDir/jni"
-            include '*.dll'
+        solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
+        projectName = "JVoiceXmlKinectRecognizer"
+        targets = ['Build']
+        configuration = 'Release'
+        platform = 'Win32'
+        destinationDir = "$buildDir/jni"
+    }
+    
+    task buildJniWin64(type: com.ullink.Msbuild) {
+        dependsOn generateJniHeaders
+    
+        solutionFile = "${projectDir}/src/main/cpp/JVoiceXmlKinectRecognizer.sln"
+        projectName = "JVoiceXmlKinectRecognizer"
+        targets = ['Build']
+        configuration = 'Release'
+        platform = 'x64'
+        destinationDir = "$buildDir/jni"
+    }
+    
+    task buildJni {
+        onlyIf { 
+            isFamily(FAMILY_WINDOWS)
         }
-
-        copy {
-            from 'src/main/cpp/Release_x64'
-            into "$buildDir/jni"
-            include '*.dll'
+    
+        dependsOn buildJniWin32
+        dependsOn buildJniWin64
+        
+        doLast {
+            copy {
+                from 'src/main/cpp/Release'
+                into "$buildDir/jni"
+                include '*.dll'
+            }
+    
+            copy {
+                from 'src/main/cpp/Release_x64'
+                into "$buildDir/jni"
+                include '*.dll'
+            }
         }
     }
-}
-
-task copyJNI(type: Copy) {
-    dependsOn buildJni
-
-    from("$buildDir/jni") {
-         include '*.dll'
+    
+    task copyJNI(type: Copy) {
+        dependsOn buildJni
+    
+        from("$buildDir/jni") {
+             include '*.dll'
+        }
+        into "${project(':org.jvoicexml').buildDir}/jni"
     }
-    into "${project(':org.jvoicexml').buildDir}/jni"
 }
 
 jar {
     version = JVOICEXML_VERSION
 
-    dependsOn xslt
-    dependsOn xsltDistribution
-    dependsOn copyJNI
+    if (isFamily(FAMILY_WINDOWS)) {
+        dependsOn xslt
+        dependsOn xsltDistribution
+        dependsOn copyJNI
+    }
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML Kinect implementation platform",
@@ -170,6 +192,9 @@ jar {
 }
 
 install {
-   version = JVOICEXML_VERSION
-   group = JVOICEXML_GROUP
+    onlyIf { 
+        isFamily(FAMILY_WINDOWS)
+    }
+    version = JVOICEXML_VERSION
+    group = JVOICEXML_GROUP
 }
