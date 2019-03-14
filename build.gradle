@@ -1,7 +1,3 @@
-plugins {
-    id 'com.gradle.build-scan' version '2.1' 
-}
-
 buildscript {
     repositories {
         mavenCentral()
@@ -14,6 +10,11 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
+
+plugins {
+    id 'com.gradle.build-scan' version '2.1' 
+}
+
 
 allprojects {
     repositories {
