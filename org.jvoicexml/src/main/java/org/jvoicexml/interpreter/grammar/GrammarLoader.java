@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
  */
 package org.jvoicexml.interpreter.grammar;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
@@ -131,11 +132,15 @@ final class GrammarLoader {
 
         // Create an internal grammar document thereof and publicize it to the
         // server
-        final GrammarDocument document = new InternalGrammarDocument(grammar);
-        adaptGrammarAttributes(grammar, document);
-        server.addGrammarDocument(sessionId, document);
-
-        return document;
+        try {
+            final GrammarDocument document =
+                    new InternalGrammarDocument(grammar);
+            adaptGrammarAttributes(grammar, document);
+            server.addGrammarDocument(sessionId, document);
+            return document;
+        } catch (UnsupportedEncodingException e) {
+            throw new UnsupportedFormatError(e.getMessage(), e);
+        }
     }
 
     /**

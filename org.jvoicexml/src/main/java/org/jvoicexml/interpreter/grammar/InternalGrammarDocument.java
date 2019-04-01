@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -76,8 +76,11 @@ public final class InternalGrammarDocument implements GrammarDocument {
      * 
      * @param node
      *            the grammar node
+     * @throws UnsupportedEncodingException 
+     *          the node contains a grammar with an invalid character set
      */
-    public InternalGrammarDocument(final Grammar node) {
+    public InternalGrammarDocument(final Grammar node)
+            throws UnsupportedEncodingException {
         // Try getting the encoding of the owner document
         final Document owner = node.getOwnerDocument();
         final String ownerEncoding = owner.getInputEncoding();
@@ -87,7 +90,7 @@ public final class InternalGrammarDocument implements GrammarDocument {
             charset = ownerEncoding;
         }
         document = null;
-        buffer = node.toString().getBytes();
+        buffer = node.toString().getBytes(charset);
         grammar = node;
     }
 
