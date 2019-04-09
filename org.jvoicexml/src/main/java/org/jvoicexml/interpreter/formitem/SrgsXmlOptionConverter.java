@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
@@ -36,7 +37,9 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.Option;
 
 /**
- * An option converter for SRGS XML grammars.
+ * An option converter for SRGS XML grammars. Grammars that are described
+ * implicitly by a {@code <menu>} tag are expanded to an internal grammar
+ * document.
  * @author Dirk Schnelle-Walka
  */
 public final class SrgsXmlOptionConverter implements OptionConverter {
@@ -89,6 +92,7 @@ public final class SrgsXmlOptionConverter implements OptionConverter {
             final SrgsXmlDocument document = new SrgsXmlDocument();
             final Grammar grammar = document.getGrammar();
             grammar.setXmlLang(language);
+            grammar.setType(GrammarType.SRGS_XML);
             final Rule rule = grammar.appendChild(Rule.class);
             final String name = getName(ModeType.VOICE);
             rule.setId(name);
@@ -117,6 +121,7 @@ public final class SrgsXmlOptionConverter implements OptionConverter {
         try {
             final SrgsXmlDocument document = new SrgsXmlDocument();
             final Grammar grammar = document.getGrammar();
+            grammar.setType(GrammarType.SRGS_XML);
             final Rule rule = grammar.appendChild(Rule.class);
             final String name = getName(ModeType.DTMF);
             rule.setId(name);
