@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -46,12 +46,15 @@ final class ConditionEventTypeFilter implements EventFilter {
     public void filter(final Collection<EventStrategy> strategies,
             final JVoiceXMLEvent event, final CatchContainer item)
         throws SemanticError {
+        final Collection<EventStrategy> removeStractegies =
+                new java.util.ArrayList<EventStrategy>();
         for (EventStrategy strategy : strategies) {
             final boolean active = strategy.isActive();
             if (!active) {
-                strategies.remove(strategy);
+                removeStractegies.add(strategy);
             }
         }
+        strategies.removeAll(removeStractegies);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("found " + strategies.size()
                     + " event strategies whose condition evaluate to true");
