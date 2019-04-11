@@ -1,0 +1,28 @@
+<cairo>
+
+  <resources>
+
+    <resource type="receiver">
+      <name>receiver1</name>
+      <mrcpPort>32416</mrcpPort>
+      <rtpBasePort>42050</rtpBasePort>
+      <maxConnects>50</maxConnects>
+      <engines>1</engines>
+      <baseRecordingDir>/temp/cairo/recordingDir</baseRecordingDir>
+      <baseGrammarDir>/temp/cairo/baseGrammarDir</baseGrammarDir>
+      <!-- uncomment the following line to override sphinx config file in cairo.jar (generally you should not need to do this) -->
+      <!-- sphinxConfigURL>file:///myconfigdir/sphinx-config.xml</sphinxConfigURL -->
+    </resource>
+
+    <resource type="transmitter">
+      <name>transmitter1</name>
+      <mrcpPort>32417</mrcpPort>
+      <rtpBasePort>42150</rtpBasePort>
+      <maxConnects>50</maxConnects>
+      <engines>1</engines>
+      <basePromptDir>/temp/cairo/basePromptDir</basePromptDir>
+    </resource>
+
+  </resources>
+
+</cairo>

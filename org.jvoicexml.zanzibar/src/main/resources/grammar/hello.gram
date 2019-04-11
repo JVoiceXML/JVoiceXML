@@ -1,0 +1,16 @@
+#JSGF V1.0;
+
+/**
+ * Dummy JSGF Grammar for rec server start-up
+ */
+
+grammar hello;
+
+public <main> = ( <greet> <name> ) | <exit> ;
+
+<greet> = Good morning | Hello ;
+
+<name> = Niels | Paul | Philip | Rita | Will | John | Peter;
+
+<exit> = ( Exit | quit ) { true } ;
+

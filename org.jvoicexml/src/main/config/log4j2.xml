@@ -24,6 +24,7 @@
     <Loggers>
         <Logger name="org.jvoicexml" level="debug" />
         <Logger name="org.speechforge.cairo" level="debug"/>
+        <Logger name="org.speechforge.zanzibar" level="debug"/>
         <Logger name="org.eclipse.jetty" level="info"/>
 
         <Root level="warn">

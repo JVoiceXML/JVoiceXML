@@ -63,8 +63,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import net.sourceforge.halef.HalefDbWriter;
-
 /**
  * Audio output that uses the MRCPv2 to address the TTS engine.
  * 
@@ -219,7 +217,7 @@ public final class Mrcpv2SynthesizedOutput
                         "now()", System.getenv("IP"), "now()",
                         "implementation.mrcpv2.Mrcpv2SynthesizedOutput", "INFO",
                         "Using URL!: " + speakText);
-                HalefDbWriter.execute(hevent);
+                //HalefDbWriter.execute(hevent);
             } else {
                 LOGGER.info(String.format("Using TTS!: %s", speakText));
 
@@ -232,7 +230,7 @@ public final class Mrcpv2SynthesizedOutput
                         "now()", System.getenv("IP"), "now()",
                         "implementation.mrcpv2.Mrcpv2SynthesizedOutput", "INFO",
                         "Using TTS!: " + speakText);
-                HalefDbWriter.execute(hevent);
+                //HalefDbWriter.execute(hevent);
             }
 
             speechClient.queuePrompt(urlPrompt, speakText);

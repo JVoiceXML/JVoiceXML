@@ -141,6 +141,7 @@ dependencies {
 
     jvxmlImplementationMary project(':org.jvoicexml.implementation.mary')
 
+    jvxmlImplementationMrcpv2 project(':org.jvoicexml.zanzibar')
     jvxmlImplementationMrcpv2 project(':org.jvoicexml.interpreter.grammar.halef')
     jvxmlImplementationMrcpv2 project(':org.jvoicexml.implementation.mrcpv2')
     jvxmlImplementationMrcpv2 project(':org.jvoicexml.callmanager.sip')
@@ -223,7 +224,7 @@ task jvxmlConfigurations {
     }
     if (project.property('JVOICEXML_IMPLEMENTATION_MRCPV2') == 'true') {
         dependsOn configurations.jvxmlImplementationMrcpv2
-        }
+    }
     if (project.property('JVOICEXML_IMPLEMENTATION_TEXT') == 'true') {
         dependsOn configurations.jvxmlImplementationText
     }

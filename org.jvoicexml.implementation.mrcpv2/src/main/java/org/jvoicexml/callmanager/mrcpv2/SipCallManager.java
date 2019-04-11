@@ -51,8 +51,6 @@ import org.speechforge.zanzibar.speechlet.SpeechletService;
 
 import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 
-import net.sourceforge.halef.HalefDbWriter;
-
 /**
  * A SIP call manager.
  * 
@@ -363,7 +361,7 @@ public final class SipCallManager
                         + " VALUES(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
                 asteriskCallID, jCallID, jsession.getSessionId(), cCallID,
                 randomCode);
-        HalefDbWriter.execute(q);
+        //HalefDbWriter.execute(q);
 
         // HALEF Event logging
         final String hevent2 = String.format(
@@ -374,7 +372,7 @@ public final class SipCallManager
                 "now()", System.getenv("IP"), "now()",
                 "callmanager.mrcpv2.SipCallManager", "INFO",
                 "calling application '" + applicationUri + "'...");
-        HalefDbWriter.execute(hevent2);
+        //HalefDbWriter.execute(hevent2);
     }
     
     /**

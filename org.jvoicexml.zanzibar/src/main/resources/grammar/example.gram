@@ -1,0 +1,17 @@
+#JSGF V1.0;
+
+/**
+ * JSGF Grammar for Hello World example
+ */
+
+grammar example;
+
+public <main> = [ <pre> ] ( <weather> {WEATHER} | <sports>  {SPORTS} | <stocks> {STOCKS} );
+
+<pre> = (I would like [ to hear ] ) | ( [please] get [me] );
+
+<weather> = [ the ] weather;
+
+<sports> = sports [ news ];
+
+<stocks> = ( [ a ] stock ( quote | quotes | look up ) ) | stocks;

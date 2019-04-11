@@ -51,6 +51,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.voicexmlunit', \
     'org.jvoicexml.voicexmlunit.demo', \
     'org.jvoicexml.xml', \
+    'org.jvoicexml.zanzibar', \
     'howtobuild', \
     'userguide', \
     'main'

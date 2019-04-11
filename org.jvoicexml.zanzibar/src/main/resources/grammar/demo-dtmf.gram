@@ -1,0 +1,11 @@
+#JSGF V1.0;
+
+/**
+ * JSGF Grammar for demo examples
+ */
+
+grammar example;
+
+public <main> = <quit> {QUIT};
+
+<quit> = exit | goodbye | quit;

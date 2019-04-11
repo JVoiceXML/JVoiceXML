@@ -1,0 +1,9 @@
+#JSGF V1.0;
+
+/**
+ * JSGF Grammar for directory examples
+ */
+
+grammar example;
+
+public <main> = (stop the song |new song | next [song] | I dont like this [song] |this [song] sucks |I'm tired of this [song]|enough){NEXT};

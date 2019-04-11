@@ -60,8 +60,6 @@ import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechEventListener;
 import org.speechforge.cairo.client.recog.RecognitionResult;
 
-import net.sourceforge.halef.HalefDbWriter;
-
 /**
  * Audio input that uses a mrcpv2 client to use a recognition resource.
  * 
@@ -265,7 +263,7 @@ public final class Mrcpv2SpokenInput
                 "implementation.mrcpv2.Mrcpv2SpokenInput",
                 "INFO",
                 "Starting recognition with url: " + firstGrammarDocument.getDocument());
-            HalefDbWriter.execute(hevent);
+//            HalefDbWriter.execute(hevent);
 
             speechClient.setContentType("application/wfst");
             speechClient.recognize(
