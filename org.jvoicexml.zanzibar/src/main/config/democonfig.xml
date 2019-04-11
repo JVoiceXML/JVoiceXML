@@ -3,6 +3,8 @@
 "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
 
+	 <import resource="jvoicexml.xml"/>
+
 	<bean id="main" class="org.speechforge.zanzibar.server.SpeechletServerMain"
 		init-method="startup" destroy-method="shutdown">
 	</bean>
@@ -26,11 +28,25 @@
 				    <value>sip:cairo@speechforge.org</value>
 		</property>
 		<property name="cairoSipHostName">
-				    <value>192.168.0.100</value>
+				    <value>192.168.10.153</value>
 		</property>
 		<property name="cairoSipPort">
 				    <value>5050</value>
 		</property>
+		
+		<property name="mode">
+			<value>mrcpv2</value>
+		</property>
+				<property name="baseReceiverRtpPort">
+			<value>42150</value>
+		</property>
+		<property name="baseXmitRtpPort">
+			<value>42050</value>
+		</property>
+		<property name="maxConnects">
+			<value>50</value>
+		</property>
+
 	</bean>
 
 	
@@ -40,12 +56,18 @@
 		  <property name="instrumentation">
 				    <value>false</value>
 		  </property>
+		  <property name="cloudUrl">
+			<value>http://speechapi.com:8000/speechcloud</value>
+		  </property>
+		  <property name="tempDirForPrompts">
+			   <value>c:/temp/</value>
+		  </property>
 	</bean>
 
     <bean id="callControl" class="org.speechforge.zanzibar.asterisk.CallControl"
 		init-method="startup" destroy-method="shutdown">
 		<property name="address">
-				    <value>192.168.0.103</value>
+				    <value>192.168.10.153</value>
 		</property>
 		<property name="name">
 				    <value>manager</value>
@@ -132,6 +154,8 @@
 	   		<property name="appUrl">
 				    <value>http://localhost:8080/voicexml/hello.vxml</value>
 		</property>
+	     <property name="vxml"> <ref bean="vxmlWrapper"/></property>
+		
 	</bean>	
 	
 	<bean id="_6000"
@@ -140,6 +164,8 @@
 	   		<property name="appUrl">
 				    <value>http://localhost:8080/voicexml/test.vxml</value>
 		</property>
+		<property name="vxml"> <ref bean="vxmlWrapper"/></property>
+		
 	</bean>	
 	
     <bean id="_7000"
@@ -148,65 +174,12 @@
 	   		<property name="appUrl">
 				    <value>http://localhost:8080/voicexml/parrot.vxml</value>
 		</property>
-	</bean>	
-
-	<bean id="implementationplatform" 
-	      class="org.speechforge.zanzibar.jvoicexml.impl.MrcpImplementationPlatform"
-	      singleton="false">
+		<property name="vxml"> <ref bean="vxmlWrapper"/></property>
+		
 	</bean>
 	
-    <bean id="jvoicexmlcore" 
-          class="org.speechforge.zanzibar.jvoicexml.impl.MrcpJVoiceXMLCore" 
-          singleton="false">
+	<bean id="vxmlWrapper" 
+          class="org.speechforge.zanzibar.jvoicexml.impl.VoiceXmlWrapper" singleton="true" init-method="startUp">
 	</bean>
-	
-	<bean id="documentserver"
-		class="org.jvoicexml.documentserver.JVoiceXmlDocumentServer">
-		<property name="schemeStrategies">
-			<list>
-				<bean
-					class="org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy" />
-				<bean
-					class="org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy" />
-				<bean
-					class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy" />
-			</list>
-		</property>
-	</bean>
-
-	<bean id="grammarprocessor"
-		class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor">
-		<property name="grammaridentifier">
-			<bean
-				class="org.jvoicexml.interpreter.grammar.GrammarIdentifierCentral">
-				<property name="identifier">
-					<list>
-						<bean
-							class="org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier" />
-						<bean
-							class="org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier" />
-						<bean
-							class="org.jvoicexml.interpreter.grammar.identifier.JsgfGrammarIdentifier" />
-					</list>
-				</property>
-			</bean>
-		</property>
-		<property name="grammartransformer">
-			<bean
-				class="org.jvoicexml.interpreter.grammar.GrammarTransformerCentral">
-				<property name="transformer">
-					<list>
-					     <bean
-                             class="org.jvoicexml.interpreter.grammar.transformer.SrgsXml2JsgfGrammarTransformer" />
-                         <bean
-                              class="org.jvoicexml.interpreter.grammar.transformer.Jsgf2JsgfGrammarTransformer" />
-                         <bean
-                              class="org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer" />
-					</list>
-				</property>
-			</bean>
-		</property>
-	</bean>
-	
 
 </beans>

@@ -24,7 +24,10 @@ package org.jvoicexml.zanzibar.speechlet;
 
 import javax.sip.SipException;
 
+import org.speechforge.cairo.rtp.server.RTPStreamReplicator;
 import org.speechforge.cairo.sip.SipSession;
+
+import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -40,20 +43,16 @@ public interface SpeechletService {
     public abstract void startup();
 
     /**
-     * Shutdown.  This methods is called whens shutding down the speech application container
+     * Shutdown.  This methods is called whens shutting down the speech application container
      */
     public abstract void shutdown();
 
-    /**
-     * Start new dialog.
-     * 
-     * @param session the session
-     * 
-     * @return the session processor
-     * 
-     * @throws Exception the exception
-     */
-    public abstract SessionProcessor startNewDialog(SpeechletContext context) throws Exception;
+    
+    public void startNewMrcpDialog(SipSession pbxSession, SipSession mrcpSession) throws Exception;
+    
+    	  
+    public void startNewCloudDialog(SipSession pbxSession, RTPStreamReplicator rtpReplicator, RtpTransmitter rtpTransmitter ) throws Exception;
+    
 
     /**
      * Stop dialog.

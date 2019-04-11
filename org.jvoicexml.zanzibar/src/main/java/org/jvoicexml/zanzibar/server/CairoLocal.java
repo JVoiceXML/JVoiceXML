@@ -2,6 +2,7 @@ package org.jvoicexml.zanzibar.server;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.rmi.Naming;
@@ -24,6 +25,7 @@ import org.speechforge.cairo.server.resource.ResourceRegistryImpl;
 import org.speechforge.cairo.server.resource.ResourceServerImpl;
 import org.speechforge.cairo.server.resource.TransmitterResource;
 import org.speechforge.cairo.util.CairoUtil;
+
 
 /**
  * Starts up the cairo server processes in the local JVM.  Not really ment for use in a high volume
@@ -54,11 +56,31 @@ public class CairoLocal {
     private String sipTransport ;
     private String publicAddress;
 
+	private String zanzibarAddress = null;
+
 
     //TODO: When Spring is used to configure Cairo, this class can be removed.  Can just configure the 3 servers to startup individually.
     
     
-    public void startup() {
+    public String getZanzibarAddress() {
+		return this.zanzibarAddress;
+	}
+
+	public void setZanzibarAddress(String zanzibarAddress) {
+		this.zanzibarAddress = zanzibarAddress;
+	}
+
+	public void startup() {
+			try {
+				if (zanzibarAddress == null)
+					zanzibarAddress = CairoUtil.getLocalHost().getHostName();
+			} catch (SocketException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (UnknownHostException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
         try {
             startRM();
             startReceiver();
@@ -92,13 +114,7 @@ public class CairoLocal {
     public void startRM() throws RemoteException, SipException {
     
         rr = new ResourceRegistryImpl();
-        String hostName;
-		try {
-			hostName = InetAddress.getLocalHost().getHostName();
-		} catch (UnknownHostException e) {
-			throw new RemoteException(e.getMessage(), e);
-		}
-        rs = new ResourceServerImpl(rr,  sipPort,  sipTransport, hostName, publicAddress);
+        rs = new ResourceServerImpl(rr,  sipPort,  sipTransport, zanzibarAddress, publicAddress);
     
         Registry registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
         registry.rebind(ResourceRegistry.NAME, rr);
@@ -115,7 +131,7 @@ public class CairoLocal {
         ReceiverConfig resourceConfig = config.getReceiverConfig(receiverResourceName);
 
         StringBuilder rmiUrl = new StringBuilder("rmi://");
-        rmiUrl.append(InetAddress.getLocalHost().getHostName());        
+        rmiUrl.append(zanzibarAddress);        
         rmiUrl.append('/').append(ResourceRegistry.NAME);
 
         _logger.info("looking up: " + rmiUrl);
@@ -138,7 +154,7 @@ public class CairoLocal {
         TransmitterConfig resourceConfig = config.getTransmitterConfig(transmitterResourceName);
 
         StringBuilder rmiUrl = new StringBuilder("rmi://");
-        rmiUrl.append(InetAddress.getLocalHost().getHostName());
+        rmiUrl.append(zanzibarAddress);
         rmiUrl.append('/').append(ResourceRegistry.NAME);
 
         _logger.info("looking up: " + rmiUrl);

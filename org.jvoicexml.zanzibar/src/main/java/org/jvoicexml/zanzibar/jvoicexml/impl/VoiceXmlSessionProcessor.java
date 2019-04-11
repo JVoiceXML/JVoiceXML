@@ -30,22 +30,22 @@ import javax.media.rtp.InvalidSessionAddressException;
 import javax.sip.SipException;
 
 import org.apache.log4j.Logger;
-import org.apache.mina.util.EventType;
-import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
-import org.jvoicexml.zanzibar.server.SpeechletServerMain;
+import org.jvoicexml.SessionListener;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.zanzibar.speechlet.SessionProcessor;
 import org.jvoicexml.zanzibar.speechlet.SpeechletContext;
+import org.jvoicexml.zanzibar.speechlet.SpeechletContextMrcpv2Impl;
 import org.mrcp4j.client.MrcpInvocationException;
-import org.mrcp4j.message.MrcpEvent;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechEventListener;
 import org.speechforge.cairo.client.recog.RecognitionResult;
 import org.speechforge.cairo.sip.SipSession;
 
-public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, SpeechEventListener{
+public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, SpeechEventListener, SessionListener{
     private static Logger _logger = Logger.getLogger(VoiceXmlSessionProcessor.class);
     //private SpeechClient client;
     //private SipSession session;
@@ -54,12 +54,29 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
     Session jvxmlSession = null;
     private SpeechletContext _context;
 	boolean instrumentation = false;
-    
+	private JVoiceXml jvxml;
+	private VoiceXmlWrapper vxml;
     
     //private static Map<String, VoiceXmlSessionProcessor> dialogs = new Hashtable<String, VoiceXmlSessionProcessor>();
 
-    public String getId() {
-        return _context.getExternalSession().getId();
+    public VoiceXmlSessionProcessor(JVoiceXml jvxml) {
+		this.jvxml = jvxml;
+	}
+    
+	public VoiceXmlSessionProcessor() {
+	}
+    
+    public VoiceXmlWrapper getVxml() {
+		return vxml;
+	}
+
+	public void setVxml(VoiceXmlWrapper vxml) {
+		this.vxml = vxml;
+		this.jvxml = vxml.getJvxml();
+	}
+    
+	public String getId() {
+        return _context.getPBXSession().getId();
     }
 
     /**
@@ -72,10 +89,12 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
 
     public void stop() throws SipException {
         jvxmlSession.hangup();
-        _context.getInternalSession().bye();
+        if (_context instanceof SpeechletContextMrcpv2Impl)
+        	((SpeechletContextMrcpv2Impl)_context).getMRCPv2Session().bye();
+
     }
 
-    public void recognitionEventReceived(MrcpEvent event, RecognitionResult r) {
+    public void recognitionEventReceived(SpeechEventType event, RecognitionResult r) {
         _logger.debug("Recog result: "+r.getText());
         try {
             _context.getSpeechClient().playBlocking(false,r.getText());
@@ -92,12 +111,12 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
         } catch (InvalidSessionAddressException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}       
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+        }       
     }
 
-    public void speechSynthEventReceived(MrcpEvent event) {
+    public void speechSynthEventReceived(SpeechEventType event) {
         // TODO Auto-generated method stub       
     }
     
@@ -123,11 +142,13 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
 
         stopFlag = false;        
 
+        /*  OLD CODE
         ImplementationPlatform platform = (ImplementationPlatform) SpeechletServerMain.context.getBean("implementationplatform");
         //TODO: Fix the need to cast to the implementation and call setMRcpClient.  Maybe another i/f?...
         ((MrcpImplementationPlatform) platform).setMrcpClient(_context.getSpeechClient());
         JVoiceXmlCore core = (JVoiceXmlCore) SpeechletServerMain.context.getBean("jvoicexmlcore");
-        jvxmlSession = new org.jvoicexml.interpreter.JVoiceXmlSession(platform, core, null, null);      
+        RemoteClient dummyClient = null;
+		jvxmlSession = new org.jvoicexml.interpreter.JVoiceXmlSession(platform, core, dummyClient);      
   
         
         URI uri = null;
@@ -140,11 +161,66 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
         try {
             jvxmlSession.call(uri);
             jvxmlSession.waitSessionEnd();
+            _context.dialogCompleted();
             //jvxmlSession.hangup();
         } catch (org.jvoicexml.event.JVoiceXMLEvent e ) {
            e.printStackTrace();
         }
+        END OLD CODE */
         
+        String calledNumber ="123";
+        String callingNumber ="456";
+        //Address remoteParty = dialog.getRemoteParty();
+        //String callingNumber = remoteParty.getURI().toString();
+        URI calledDevice = new URI(calledNumber);
+        URI callingDevice = new URI(callingNumber);
+        final ConnectionInformation remote = null;
+//            new Mrcpv2ConnectionInformation(callingDevice, calledDevice);
+        //speechClient = _context.getSpeechClient();
+//		remote.setTtsClient(_context.getSpeechClient());
+//        remote.setAsrClient(_context.getSpeechClient());
+
+        // Create a jvoicxml session and initiate a call at JVoiceXML.
+        Session jsession = null;
+		try {
+			jsession = jvxml.createSession(remote);
+		} catch (ErrorEvent e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
+        //add a listener to capture the end of voicexml session event
+        jsession.addSessionListener(this);
+        
+        //add the jvoicexml session to the session bag
+       // session.setJvxmlSession(jsession);
+       // synchronized (sessions) {
+       //     sessions.put(id, session);
+       // }
+        
+        //workaround to deal with two id's
+        //maps the voicexml sessionid to sip session id 
+        //needed for case when the voicxml session ends before a hang up
+        // and need to get to close the sip session
+       // synchronized (ids) {
+       //    ids.put(jsession.getSessionID(), id);
+       // }
+
+        URI uri = null;
+        try {
+            _logger.info("app name:"+this.appUrl);
+           uri = new URI(this.appUrl);
+        } catch ( URISyntaxException e ) {
+           e.printStackTrace();
+        }
+        try {
+			jsession.call(uri);
+		} catch (ErrorEvent e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+     
     }
 
     /**
@@ -162,7 +238,7 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
     }
 
 
-    public void characterEventReceived(String c, EventType status) {
+    public void characterEventReceived(String c, DtmfEventType status) {
         // TODO Auto-generated method stub
         _logger.info("Character Event! status= "+ status+" code= "+c);
         
@@ -177,7 +253,7 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
     }
 
     public SipSession getSession() {
-        return _context.getExternalSession();
+        return _context.getPBXSession();
     }
     
     /* (non-Javadoc)
@@ -205,13 +281,13 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
 
     public class InstrumentationListener implements SpeechEventListener {
 
-	    public void characterEventReceived(String arg0, EventType arg1) {
+	    public void characterEventReceived(String arg0, DtmfEventType arg1) {
 		    // TODO Auto-generated method stub
 
 	    }
 
-	    public void recognitionEventReceived(MrcpEvent arg0, RecognitionResult arg1) {
-	    	SipSession sipSession = _context.getExternalSession();
+	    public void recognitionEventReceived(SpeechEventType arg0, RecognitionResult arg1) {
+	    	SipSession sipSession = _context.getPBXSession();
 	    	try {
 	            sipSession.getAgent().sendInfoRequest(sipSession, "application", "mrcp-event", arg0.toString());
             } catch (SipException e) {
@@ -220,8 +296,8 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
             }
 	    }
 
-	    public void speechSynthEventReceived(MrcpEvent arg0) {
-	    	SipSession sipSession = _context.getExternalSession();
+	    public void speechSynthEventReceived(SpeechEventType arg0) {
+	    	SipSession sipSession = _context.getPBXSession();
 	    	try {
 	            sipSession.getAgent().sendInfoRequest(sipSession, "application", "mrcp-event", arg0.toString());
             } catch (SipException e) {
@@ -229,24 +305,6 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
 	            e.printStackTrace();
             }
 	    }
-
-		@Override
-		public void recognitionEventReceived(SpeechEventType event, RecognitionResult r) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void speechSynthEventReceived(SpeechEventType event) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void characterEventReceived(String c, DtmfEventType status) {
-			// TODO Auto-generated method stub
-			
-		}
 
     }
 
@@ -263,21 +321,32 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
     public void setInstrumentation(boolean instrumentation) {
     	this.instrumentation = instrumentation;
     }
+    
 
-	@Override
-	public void recognitionEventReceived(SpeechEventType event, RecognitionResult r) {
+
+
+	public void sessionEnded(Session arg0) {
 		// TODO Auto-generated method stub
 		
 	}
+	
+    /**
+     * Retrieves the reference to the interpreter.
+     * @return the interpreter
+     */
+    public JVoiceXml getJvxml() {
+        return jvxml;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setJvxml( JVoiceXml jvxml) {
+       this.jvxml = jvxml;
+    }
 
 	@Override
-	public void speechSynthEventReceived(SpeechEventType event) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void characterEventReceived(String c, DtmfEventType status) {
+	public void sessionStarted(Session session) {
 		// TODO Auto-generated method stub
 		
 	}

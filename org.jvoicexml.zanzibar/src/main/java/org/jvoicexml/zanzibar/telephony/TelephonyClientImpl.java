@@ -47,7 +47,7 @@ public class TelephonyClientImpl implements TelephonyClient , ManagerEventListen
     
 
     /**
-     * The _channel.
+     * The _channel.	
      */
     private String _channel;
     

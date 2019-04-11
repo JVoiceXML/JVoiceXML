@@ -65,6 +65,8 @@ public class Mrcpv2UserInput implements UserInput {
     //private UserInputListener _listener;
     private int count = 0;
 
+	private String grammar;
+
     public Mrcpv2UserInput(SpeechClient client) {
         super();
         this.client = client;
@@ -108,8 +110,10 @@ public class Mrcpv2UserInput implements UserInput {
     public void startRecognition() throws NoresourceError, BadFetchError {
         _logger.debug("Mrcpv2UserInput: start recognition");
         try {
-            _loadedGrammarReader.reset();
-            client.recognize(_loadedGrammarReader, false, true, 30000);
+            //_loadedGrammarReader.reset();
+        	//not hotword, grammar is attached (not a url)
+        	_logger.warn("recognizing with grammar: "+grammar);
+            client.recognize(grammar, false, true, 30000);
             iplatform.inputStarted();
         } catch (MrcpInvocationException e) {
             // TODO Auto-generated catch block
@@ -163,7 +167,7 @@ public class Mrcpv2UserInput implements UserInput {
 
     public GrammarImplementation<?> newGrammar(final String name, 
             final GrammarType type) throws NoresourceError {
-        _logger.debug("NewGrammar ot implemented!.  creating new null grammar");
+        _logger.debug("NewGrammar not implemented!.  creating new null grammar");
         return null;
         //final RuleGrammar grammar = _grammar.getRuleGrammar();
         //return new RuleGrammarImplementation(grammar);
@@ -191,14 +195,13 @@ public class Mrcpv2UserInput implements UserInput {
                 e1.printStackTrace();
             }
 
-            
-            _logger.debug(sb.toString());
+            grammar = sb.toString();
+            _logger.debug(grammar);
             
           
             return new JSGFGrammarImplementation(sb.toString());
            
     }
-
 
 
     public void record(final OutputStream out) throws NoresourceError {
@@ -240,6 +243,46 @@ public class Mrcpv2UserInput implements UserInput {
     }
 
 
+
+
+
+	public Collection<GrammarType> getSupportedGrammarTypes(ModeType mode) {
+	    // TODO Auto-generated method stub
+        _logger.debug("getSupportedGrammarTypes");
+        final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
+        types.add(GrammarType.JSGF);
+        return types;
+
+    }
+	
+    public boolean isBusy() {
+        return iplatform.isInputBusy();
+    }
+
+
+	public int activateGrammars(Collection<GrammarDocument> arg0)
+			throws BadFetchError, UnsupportedLanguageError, NoresourceError,
+			UnsupportedFormatError {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public int deactivateGrammars(Collection<GrammarDocument> arg0)
+			throws NoresourceError, BadFetchError {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public void startRecognition(SpeechRecognizerProperties arg0,
+			DtmfRecognizerProperties arg1) throws NoresourceError,
+			BadFetchError {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	@Override
 	public void startRecognition(DataModel model, Collection<ModeType> types, SpeechRecognizerProperties speech,
 			DtmfRecognizerProperties dtmf) throws NoresourceError, BadFetchError {
@@ -253,26 +296,5 @@ public class Mrcpv2UserInput implements UserInput {
 		// TODO Auto-generated method stub
 		
 	}
-
-
-	@Override
-	public Collection<GrammarType> getSupportedGrammarTypes(ModeType mode) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public int activateGrammars(Collection<GrammarDocument> grammars)
-			throws BadFetchError, UnsupportedLanguageError, NoresourceError, UnsupportedFormatError {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public int deactivateGrammars(Collection<GrammarDocument> grammars) throws NoresourceError, BadFetchError {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    
 }

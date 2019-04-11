@@ -151,6 +151,11 @@ public final class Mrcpv2RecognitionResult implements RecognitionResult {
         return ModeType.VOICE;
     }
 
+	public Object getSemanticInterpretation() {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
+
 	@Override
 	public Object getSemanticInterpretation(DataModel model) throws SemanticError {
 		// TODO Auto-generated method stub

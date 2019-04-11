@@ -13,7 +13,7 @@
 
   <!-- Example: switch this priority value to "debug" to see each sip messages. -->
   <category name="org.speechforge.cairo.sip">
-    <priority value="info"/>
+    <priority value="debug"/>
   </category>
 
   <root>

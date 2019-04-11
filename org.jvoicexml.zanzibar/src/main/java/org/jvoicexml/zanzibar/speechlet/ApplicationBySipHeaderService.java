@@ -28,11 +28,16 @@ import java.util.Map;
 import javax.sip.SipException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.zanzibar.jvoicexml.impl.VoiceXmlSessionProcessor;
+import org.jvoicexml.zanzibar.jvoicexml.impl.VoiceXmlWrapper;
 import org.jvoicexml.zanzibar.server.SpeechletServerMain;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechClientProvider;
+import org.speechforge.cairo.rtp.server.RTPStreamReplicator;
 import org.speechforge.cairo.sip.SipSession;
+
+import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 
 
 /**
@@ -48,9 +53,40 @@ public class ApplicationBySipHeaderService implements SpeechletService {
     //contains the active Dialogs   (TODO: Maybe should rename Dialog to Speech Applications or Speech Sessions)
     private  Map<String, SessionProcessor> dialogs;
     
-    private SpeechletContext _context;
+	private String cloudUrl;
 
-    private boolean instrumentation;
+
+	private boolean instrumentation;
+	
+	private String tempDirForPrompts;
+
+	private JVoiceXml jvxml;
+	private VoiceXmlWrapper vxml;
+
+	
+    public VoiceXmlWrapper getVxml() {
+		return vxml;
+	}
+
+	public void setVxml(VoiceXmlWrapper vxml) {
+		this.vxml = vxml;
+		this.jvxml = vxml.getJvxml();
+	}
+    
+    /**
+     * @return the tempDirForPrompts
+     */
+    public String getTempDirForPrompts() {
+    	return tempDirForPrompts;
+    }
+
+	/**
+     * @param tempDirForPrompts the tempDirForPrompts to set
+     */
+    public void setTempDirForPrompts(String tempDirForPrompts) {
+    	this.tempDirForPrompts = tempDirForPrompts;
+    }
+	
     
     /**
      * Instantiates a new dialog service impl.
@@ -73,16 +109,67 @@ public class ApplicationBySipHeaderService implements SpeechletService {
         dialogs = null;
     }
 
-    /* (non-Javadoc)
-     * @see com.speechdynamix.mrcp.client.DialogService#startNewDialog(org.speechforge.cairo.util.sip.SipSession)
-     */
+    public void startNewMrcpDialog(SipSession pbxSession, SipSession mrcpSession) throws Exception {
+    
+		// setup the context (for speechlet to communicate back to container and access to container services)
+		SpeechletContext c = new SpeechletContextMrcpv2Impl();
+	
+		// The context needs a reference to the conatiner
+		((SpeechletContext) c).setContainer(this);
+	
+		// The context needs both the internal and external sessions
+		c.setPBXSession(pbxSession); 
+		((SpeechletContextMrcpProvider) c).setMRCPSession(mrcpSession);
+	
+		// create the actual speechlet (running in a thread within the session processor)
+		SessionProcessor d = this.startNewDialog(c);
+	
+		// the sessionprocessor needs a referenece to the context
+		d.setContext(c);
+	
+		// the context also needs a reference to the speechlet
+		((SpeechletContext) c).setSpeechlet(d);
+		
+
+	
+    }
+
+	public void startNewCloudDialog(SipSession pbxSession, RTPStreamReplicator rtpReplicator, RtpTransmitter rtpTransmitter ) throws Exception {
+		// setup the context (for speechlet to communicate back to container and access to container services)
+		SpeechletContext c = new SpeechletContextCloudImpl();
+	
+		// The context needs a reference to the conatiner
+		((SpeechletContext) c).setContainer(this);
+	
+		// The context needs both the internal and external sessions
+		c.setPBXSession(pbxSession); 
+		
+		//rtpTransmitter.setTempDirForPrompts(tempDirForPrompts);
+		
+		((SpeechletContextCloudProvider) c).setRtpReplicator(rtpReplicator);
+		((SpeechletContextCloudProvider) c).setRtpTransmitter(rtpTransmitter);
+		((SpeechletContextCloudProvider) c).setUrl(cloudUrl);
+		
+		// create the actual speechlet (running in a thread within the session processor)
+		SessionProcessor d = this.startNewDialog(c);
+	
+		// the sessionprocessor needs a referenece to the context
+		d.setContext(c);
+	
+		// the context also needs a reference to the speechlet
+		((SpeechletContext) c).setSpeechlet(d);
+
+    }
+	
+
     public SessionProcessor startNewDialog(SpeechletContext context) throws Exception {
 
-        _context = context;
+    	
+    	//SpeechletContextMrcpProvider _context = context;
        
         // Get the application name (origninally set  in the underlying platform.  and sent in the sip header
         // It is of the form applicationType|applicationName (for example vxml:HelloWorld or basic|Parrot)
-        String aname = context.getExternalSession().getApplicationName();
+        String aname = context.getPBXSession().getApplicationName();
         if (aname == null) 
             throw new Exception("No Application Specified");
 
@@ -90,7 +177,7 @@ public class ApplicationBySipHeaderService implements SpeechletService {
         _logger.debug("Starting ne dialog, app name: "+aname);
         SessionProcessor dialog = null;
         if (app[0].equals("vxml")) {
-            dialog = new VoiceXmlSessionProcessor();
+            dialog = new VoiceXmlSessionProcessor(jvxml);
         } else if (app[0].equals("beanId")) {
             // Create an instance of the Speech application/Session  usinh the application name to lookup beanId
             dialog = (SessionProcessor) SpeechletServerMain.context.getBean(app[1]);
@@ -109,7 +196,7 @@ public class ApplicationBySipHeaderService implements SpeechletService {
         //turn on or off the instrumentation for this dialog
         dialog.setInstrumentation(instrumentation);
         
-        _logger.info("Starting a new "+context.getExternalSession().getApplicationName()+" speechlet with session id = "+ context.getExternalSession().getId());
+        _logger.info("Starting a new "+context.getPBXSession().getApplicationName()+" speechlet with session id = "+ context.getPBXSession().getId());
         dialog.startup(context, app[1]);
         addDialog(dialog);
         return dialog;
@@ -197,6 +284,36 @@ public class ApplicationBySipHeaderService implements SpeechletService {
      */
     public void setInstrumentation(boolean instrumentation) {
     	this.instrumentation = instrumentation;
+    }
+
+
+    /**
+     * @return the cloudUrl
+     */
+    public String getCloudUrl() {
+    	return cloudUrl;
+    }
+
+	/**
+     * @param cloudUrl the cloudUrl to set
+     */
+    public void setCloudUrl(String cloudUrl) {
+    	this.cloudUrl = cloudUrl;
+    }
+    
+    /**
+     * Retrieves the reference to the interpreter.
+     * @return the interpreter
+     */
+    public JVoiceXml getJvxml() {
+        return jvxml;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setJvxml( JVoiceXml jvxml) {
+       this.jvxml = jvxml;
     }
 
 }

@@ -31,9 +31,9 @@ import javax.sound.sampled.AudioFormat;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
-import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 
 public final class DummyCallControl implements CallControl {

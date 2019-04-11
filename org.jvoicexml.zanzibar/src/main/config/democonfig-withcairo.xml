@@ -46,11 +46,25 @@
 				    <value>sip:cairo@speechforge.org</value>
 		</property>
 		<property name="cairoSipHostName">
-				    <value>192.168.0.100</value>
+				    <value>192.168.10.113</value>
 		</property>
 		<property name="cairoSipPort">
 				    <value>5050</value>
 		</property>
+		
+		<property name="mode">
+			<value>mrcpv2</value>
+		</property>
+		<property name="baseReceiverRtpPort">
+			<value>42150</value>
+		</property>
+		<property name="baseXmitRtpPort">
+			<value>42050</value>
+		</property>
+		<property name="maxConnects">
+			<value>50</value>
+		</property>
+		
 	</bean>
 
 	
@@ -60,12 +74,18 @@
 		  <property name="instrumentation">
 				<value>false</value>
 		  </property>
+		  		  <property name="cloudUrl">
+			<value>http://spokentech.net/speechcloud</value>
+		  </property>
+		  <property name="tempDirForPrompts">
+			   <value>c:/temp/</value>
+		  </property>
 	</bean>
 
     <bean id="callControl" class="org.speechforge.zanzibar.asterisk.CallControl"
 		init-method="startup" destroy-method="shutdown">
 		<property name="address">
-				    <value>192.168.0.103</value>
+				    <value>192.168.10.113</value>
 		</property>
 		<property name="name">
 				    <value>manager</value>

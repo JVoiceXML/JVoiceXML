@@ -22,16 +22,16 @@
  */
 package org.jvoicexml.zanzibar.speechlet;
 
+import javax.media.rtp.InvalidSessionAddressException;
 import javax.sip.SipException;
 
 import org.apache.log4j.Logger;
-import org.apache.mina.util.EventType;
 import org.mrcp4j.message.MrcpEvent;
+import org.speechforge.cairo.sip.SipSession;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechEventListener;
 import org.speechforge.cairo.client.recog.RecognitionResult;
-import org.speechforge.cairo.sip.SipSession;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -43,13 +43,13 @@ public abstract class Speechlet implements Runnable, SessionProcessor {
 
     public class InstrumentationListener implements SpeechEventListener {
 
-	    public void characterEventReceived(String arg0, EventType arg1) {
+	    public void characterEventReceived(String arg0, DtmfEventType arg1) {
 		    // TODO Auto-generated method stub
 
 	    }
 
-	    public void recognitionEventReceived(MrcpEvent arg0, RecognitionResult arg1) {
-	    	SipSession sipSession = _context.getExternalSession();
+	    public void recognitionEventReceived(SpeechEventType arg0, RecognitionResult arg1) {
+	    	SipSession sipSession = _context.getPBXSession();
 	    	try {
 	            sipSession.getAgent().sendInfoRequest(sipSession, "application", "mrcp-event", arg0.toString());
             } catch (SipException e) {
@@ -58,8 +58,8 @@ public abstract class Speechlet implements Runnable, SessionProcessor {
             }
 	    }
 
-	    public void speechSynthEventReceived(MrcpEvent arg0) {
-	    	SipSession sipSession = _context.getExternalSession();
+	    public void speechSynthEventReceived(SpeechEventType arg0) {
+	    	SipSession sipSession = _context.getPBXSession();
 	    	try {
 	            sipSession.getAgent().sendInfoRequest(sipSession, "application", "mrcp-event", arg0.toString());
             } catch (SipException e) {
@@ -67,24 +67,6 @@ public abstract class Speechlet implements Runnable, SessionProcessor {
 	            e.printStackTrace();
             }
 	    }
-
-		@Override
-		public void recognitionEventReceived(SpeechEventType event, RecognitionResult r) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void speechSynthEventReceived(SpeechEventType event) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void characterEventReceived(String c, DtmfEventType status) {
-			// TODO Auto-generated method stub
-			
-		}
 
     }
 
@@ -107,7 +89,7 @@ public abstract class Speechlet implements Runnable, SessionProcessor {
      * @see org.speechforge.modules.common.dialog.SessionProcessor#getId()
      */
     public String getId() {
-        return this._context.getExternalSession().getId();
+        return this._context.getPBXSession().getId();
     }
 
     /* (non-Javadoc)
@@ -124,7 +106,8 @@ public abstract class Speechlet implements Runnable, SessionProcessor {
     public void stop() throws SipException {
         stopFlag = true;
         //_context.getSpeechClient().hangup();
-        _context.getInternalSession().bye();
+        if (_context instanceof SpeechletContextMrcpv2Impl)
+        	((SpeechletContextMrcpv2Impl)_context).getMRCPv2Session().bye();
     }
 
     /* (non-Javadoc)
@@ -149,7 +132,7 @@ public abstract class Speechlet implements Runnable, SessionProcessor {
      * @see org.speechforge.modules.common.dialog.SessionProcessor#getSession()
      */
     public SipSession getSession() {
-        return _context.getExternalSession();
+        return _context.getPBXSession();
     }
 
     /* (non-Javadoc)
@@ -183,14 +166,20 @@ public abstract class Speechlet implements Runnable, SessionProcessor {
         } catch (NoMediaControlChannelException e) {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
+        } catch (InvalidSessionAddressException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+
+	        
         }
     }
     
     /**
      * Run application.
      * @throws NoMediaControlChannelException 
+     * @throws InvalidSessionAddressException 
      */
-    protected abstract void  runApplication() throws NoMediaControlChannelException;
+    protected abstract void  runApplication() throws NoMediaControlChannelException, InvalidSessionAddressException;
 
 	/**
      * @return the instrumentation

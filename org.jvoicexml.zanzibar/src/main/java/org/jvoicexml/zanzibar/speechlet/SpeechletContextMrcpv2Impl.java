@@ -34,28 +34,29 @@ import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechClientImpl;
 import org.speechforge.cairo.sip.SipSession;
 
-public class SpeechletContextImpl implements SpeechletContext {
+public class SpeechletContextMrcpv2Impl implements SpeechletContext, SpeechletContextMrcpProvider {
     
-    private SpeechletService container;
-    private SessionProcessor speechlet;
-    SipSession internalSession;
-    SipSession externalSession;
+    SpeechletService container;
+    SessionProcessor speechlet;
+    
+    SipSession mrcpSession;
+    SipSession pbxSession;
     
     SpeechClient speechClient;
     TelephonyClient telephonyClient;
 
     
     public void init() throws InvalidContextException {
-        if (internalSession == null )
+        if (mrcpSession == null )
             throw new InvalidContextException();
         
-        this.speechClient = new SpeechClientImpl(internalSession.getTtsChannel(),internalSession.getRecogChannel());
-        this.telephonyClient = new TelephonyClientImpl(externalSession.getChannelName());
+        this.speechClient = new SpeechClientImpl(mrcpSession.getTtsChannel(),mrcpSession.getRecogChannel());
+        this.telephonyClient = new TelephonyClientImpl(pbxSession.getChannelName());
     }
     
     public void cleanup() {
-        internalSession = null;
-        externalSession = null;
+        mrcpSession = null;
+        pbxSession = null;
         speechClient = null;
         telephonyClient = null;
     }
@@ -71,14 +72,14 @@ public class SpeechletContextImpl implements SpeechletContext {
             // only need to do this if dialog completed gracefully
             // like here whne the speech applet notifies the container that it completed
             //other scenario is that a bye received from teh remote side (phone was hungup)
-            externalSession.getAgent().sendBye(externalSession);
+            pbxSession.getAgent().sendBye(pbxSession);
             //platformSession.getAgent().dispose();
             
             //cancel any active recognition requests
             speechClient.stopActiveRecognitionRequests();
             
             //clean up the dialog (the speech server session is cleaned up here)
-            container.StopDialog(externalSession);
+            container.StopDialog(pbxSession);
         } catch (SipException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -134,32 +135,32 @@ public class SpeechletContextImpl implements SpeechletContext {
     /**
      * @return the externalSession
      */
-    public SipSession getExternalSession() {
-        return externalSession;
+    public SipSession getPBXSession() {
+        return pbxSession;
     }
 
 
     /**
      * @param externalSession the externalSession to set
      */
-    public void setExternalSession(SipSession externalSession) {
-        this.externalSession = externalSession;
+    public void setPBXSession(SipSession externalSession) {
+        this.pbxSession = externalSession;
     }
 
 
     /**
      * @return the internalSession
      */
-    public SipSession getInternalSession() {
-        return internalSession;
+    public SipSession getMRCPv2Session() {
+        return mrcpSession;
     }
 
 
     /**
      * @param internalSession the internalSession to set
      */
-    public void setInternalSession(SipSession internalSession) {
-        this.internalSession = internalSession;
+    public void setMRCPSession(SipSession internalSession) {
+        this.mrcpSession = internalSession;
     }
 
     /**

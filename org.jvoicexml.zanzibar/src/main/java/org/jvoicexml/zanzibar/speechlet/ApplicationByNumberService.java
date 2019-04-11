@@ -30,10 +30,14 @@ import javax.sip.address.SipURI;
 import javax.sip.address.URI;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.zanzibar.server.SpeechletServerMain;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechClientProvider;
+import org.speechforge.cairo.rtp.server.RTPStreamReplicator;
 import org.speechforge.cairo.sip.SipSession;
+
+import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 
 import gov.nist.javax.sip.header.SIPHeaderNames;
 import gov.nist.javax.sip.header.To;
@@ -54,9 +58,27 @@ public class ApplicationByNumberService implements SpeechletService {
     private  Map<String, SessionProcessor> dialogs;
 
     private boolean instrumentation;
-    
+	private String cloudUrl;
+
+	private String tempDirForPrompts;
+
+	private JVoiceXml jvxml;
     
     /**
+     * @return the tempDirForPrompts
+     */
+    public String getTempDirForPrompts() {
+    	return tempDirForPrompts;
+    }
+
+	/**
+     * @param tempDirForPrompts the tempDirForPrompts to set
+     */
+    public void setTempDirForPrompts(String tempDirForPrompts) {
+    	this.tempDirForPrompts = tempDirForPrompts;
+    }
+
+	/**
      * Instantiates a new application by number dialog service.
      */
     public ApplicationByNumberService() {
@@ -77,14 +99,63 @@ public class ApplicationByNumberService implements SpeechletService {
         dialogs = null;
     }
 
-    /* (non-Javadoc)
-     * @see com.speechdynamix.mrcp.client.DialogService#startNewDialog(org.speechforge.cairo.util.sip.SipSession)
-     */
+    public void startNewMrcpDialog(SipSession pbxSession, SipSession mrcpSession) throws Exception {
+        
+		// setup the context (for speechlet to communicate back to container and access to container services)
+		SpeechletContext c = new SpeechletContextMrcpv2Impl();
+	
+		// The context needs a reference to the conatiner
+		((SpeechletContext) c).setContainer(this);
+	
+		// The context needs both the internal and external sessions
+		c.setPBXSession(pbxSession);
+		((SpeechletContextMrcpProvider) c).setMRCPSession(mrcpSession);
+	
+		// create the actual speechlet (running in a thread within the session processor)
+		SessionProcessor d = this.startNewDialog(c);
+	
+		// the sessionprocessor needs a referenece to the context
+		d.setContext(c);
+	
+		// the context also needs a reference to the speechlet
+		((SpeechletContext) c).setSpeechlet(d);
+		
+
+	
+    }
+	public void startNewCloudDialog(SipSession pbxSession, RTPStreamReplicator rtpReplicator, RtpTransmitter rtpTransmitter ) throws Exception {
+		// setup the context (for speechlet to communicate back to container and access to container services)
+		SpeechletContext c = new SpeechletContextCloudImpl();
+	
+		// The context needs a reference to the conatiner
+		((SpeechletContext) c).setContainer(this);
+	
+		// The context needs both the internal and external sessions
+		c.setPBXSession(pbxSession); 
+		//rtpTransmitter.setTempDirForPrompts(tempDirForPrompts);
+		
+		((SpeechletContextCloudProvider) c).setRtpReplicator(rtpReplicator);
+		((SpeechletContextCloudProvider) c).setRtpTransmitter(rtpTransmitter);
+		((SpeechletContextCloudProvider) c).setUrl(cloudUrl);
+		
+		// create the actual speechlet (running in a thread within the session processor)
+		SessionProcessor d = this.startNewDialog(c);
+	
+		// the sessionprocessor needs a referenece to the context
+		d.setContext(c);
+	
+		// the context also needs a reference to the speechlet
+		((SpeechletContext) c).setSpeechlet(d);
+		
+
+    }
+    
+
     public SessionProcessor startNewDialog(SpeechletContext context) throws Exception {
 
         //Get the Application name from the Sip TO Header. Theis Dialog Services uses the phone number called as the name of the application/session/dialog to run
         //TODO: revisit the location of the application name.  SHould it be in this session rather in the forwarding session? 
-        SipSession session = context.getExternalSession();
+        SipSession session = context.getPBXSession();
         To toHeader = (To) session.getRequest().getRequest().getHeader(SIPHeaderNames.TO);
         URI uri = toHeader.getAddress().getURI();
         String aname = null;
@@ -96,7 +167,7 @@ public class ApplicationByNumberService implements SpeechletService {
 
         
         _logger.debug("session id:" +session.getId());
-        _logger.debug("session id.forward:" +session.getForward().getId());
+        //_logger.debug("session id.forward:" +session.getForward().getId());
         if (aname == null) 
             throw new Exception("No Application Specified");
         
@@ -206,6 +277,36 @@ public class ApplicationByNumberService implements SpeechletService {
      */
     public void setInstrumentation(boolean instrumentation) {
     	this.instrumentation = instrumentation;
+    }
+
+
+    /**
+     * @return the cloudUrl
+     */
+    public String getCloudUrl() {
+    	return cloudUrl;
+    }
+
+	/**
+     * @param cloudUrl the cloudUrl to set
+     */
+    public void setCloudUrl(String cloudUrl) {
+    	this.cloudUrl = cloudUrl;
+    }
+    
+    /**
+     * Retrieves the reference to the interpreter.
+     * @return the interpreter
+     */
+    public JVoiceXml getJvxml() {
+        return jvxml;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setJvxml( JVoiceXml jvxml) {
+       this.jvxml = jvxml;
     }
 
 }

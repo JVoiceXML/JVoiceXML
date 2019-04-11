@@ -22,8 +22,10 @@
  */
 package org.jvoicexml.zanzibar.jvoicexml.impl;
 
+
 import java.net.URI;
 
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -68,11 +70,20 @@ public final class JSGFGrammarImplementation
         return null;
     }
 
-	@Override
+	public boolean accepts(RecognitionResult result) {
+	    // TODO Auto-generated method stub
+	    return false;
+    }
+
+	public boolean equals(GrammarImplementation<String> other) {
+	    // TODO Auto-generated method stub
+	    return false;
+    }
+
 	public ModeType getModeType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	    // TODO Auto-generated method stub
+	    return null;
+    }
 
 	@Override
 	public String getGrammarDocument() {
@@ -84,11 +95,5 @@ public final class JSGFGrammarImplementation
 	public URI getURI() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public boolean equals(GrammarImplementation<String> other) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

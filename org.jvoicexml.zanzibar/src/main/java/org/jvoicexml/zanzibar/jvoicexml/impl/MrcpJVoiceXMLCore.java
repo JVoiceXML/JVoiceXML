@@ -43,7 +43,7 @@ public class MrcpJVoiceXMLCore implements JVoiceXmlCore {
         return (GrammarProcessor) SpeechletServerMain.context.getBean("grammarprocessor");
     }
 
-    public Session createSession(ConnectionInformation info) throws ErrorEvent {
+    public Session createSession(ConnectionInformation arg0) throws ErrorEvent {
         _logger.debug("MrcpJVoiceXMLCore.getSession(remoteclient) called.  Not implemented.");
         return null;
     }
@@ -58,7 +58,6 @@ public class MrcpJVoiceXMLCore implements JVoiceXmlCore {
 
     }
 
-	@Override
 	public Configuration getConfiguration() {
 		// TODO Auto-generated method stub
 		return null;

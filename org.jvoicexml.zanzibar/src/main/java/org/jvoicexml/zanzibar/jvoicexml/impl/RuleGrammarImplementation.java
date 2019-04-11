@@ -30,7 +30,8 @@ import java.net.URI;
 
 import javax.speech.recognition.RuleGrammar;
 
-import org.jvoicexml.implementation.GrammarImplementation;
+
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
@@ -49,7 +50,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @since 0.5.5
  */
 public final class RuleGrammarImplementation
-    implements GrammarImplementation<RuleGrammar> {
+    implements org.jvoicexml.implementation.GrammarImplementation<RuleGrammar> {
     /** The encapsulated grammar. */
     private final RuleGrammar grammar;
 
@@ -91,11 +92,20 @@ public final class RuleGrammarImplementation
         return true;
     }
 
-	@Override
+	public boolean accepts(RecognitionResult result) {
+	    // TODO Auto-generated method stub
+	    return false;
+    }
+
+	public boolean equals(org.jvoicexml.implementation.GrammarImplementation<RuleGrammar> other) {
+	    // TODO Auto-generated method stub
+	    return false;
+    }
+
 	public ModeType getModeType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	    // TODO Auto-generated method stub
+	    return null;
+    }
 
 	@Override
 	public RuleGrammar getGrammarDocument() {
@@ -109,9 +119,5 @@ public final class RuleGrammarImplementation
 		return null;
 	}
 
-	@Override
-	public boolean equals(GrammarImplementation<RuleGrammar> other) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 }
