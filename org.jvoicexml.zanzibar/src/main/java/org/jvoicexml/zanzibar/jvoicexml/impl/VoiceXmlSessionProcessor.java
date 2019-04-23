@@ -34,6 +34,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
+import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.zanzibar.speechlet.SessionProcessor;
 import org.jvoicexml.zanzibar.speechlet.SpeechletContext;
@@ -174,11 +175,11 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
         //String callingNumber = remoteParty.getURI().toString();
         URI calledDevice = new URI(calledNumber);
         URI callingDevice = new URI(callingNumber);
-        final ConnectionInformation remote = null;
-//            new Mrcpv2ConnectionInformation(callingDevice, calledDevice);
-        //speechClient = _context.getSpeechClient();
-//		remote.setTtsClient(_context.getSpeechClient());
-//        remote.setAsrClient(_context.getSpeechClient());
+        final Mrcpv2ConnectionInformation remote = 
+            new Mrcpv2ConnectionInformation(callingDevice, calledDevice);
+//        speechClient = _context.getSpeechClient();
+		remote.setTtsClient(_context.getSpeechClient());
+        remote.setAsrClient(_context.getSpeechClient());
 
         // Create a jvoicxml session and initiate a call at JVoiceXML.
         Session jsession = null;

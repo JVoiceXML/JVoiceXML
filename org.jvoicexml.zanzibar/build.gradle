@@ -5,6 +5,10 @@ apply plugin: 'signing'
 repositories {
     mavenLocal()
     mavenCentral()
+    jcenter()
+    maven {
+        url "https://repository.jboss.org/nexus/content/groups/public"
+    }
 }
 
 sourceSets {
@@ -15,16 +19,21 @@ sourceSets {
     }
 }
 
+configurations.all {
+    exclude group: 'log4j', module: 'log4j'
+}
+
 dependencies {
     compile project(':org.jvoicexml')
+    compile project(':org.jvoicexml.client.mrcpv2')
     compile project(':org.jvoicexml.config')
 
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.1'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.1'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.9.1'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.9.1'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.9.1'
-    compile group: 'org.asteriskjava', name: 'asterisk-java', version: '1.0.0.M3'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.11.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.11.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.2'
+    compile group: 'org.asteriskjava', name: 'asterisk-java', version: '1.0.0-final'
     compile group: 'net.sourceforge.halef', name: 'cairo-sip', version: '0.3-SNAPSHOT'
     compile group: 'net.sourceforge.halef', name: 'cairo-rtp', version: '0.3-SNAPSHOT'
     compile group: 'net.sourceforge.halef', name: 'cairo-client', version: '0.3-SNAPSHOT'
