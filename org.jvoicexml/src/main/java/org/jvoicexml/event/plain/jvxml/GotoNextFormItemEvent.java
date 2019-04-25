@@ -1,13 +1,7 @@
 /*
- * File:    $RCSfile: GotoNextFormItemEvent.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,7 +27,6 @@ import org.jvoicexml.event.PlainEvent;
  * The FIA processed a <code>&lt;goto&gt;</code> event to another form item.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.3
  */
 public final class GotoNextFormItemEvent

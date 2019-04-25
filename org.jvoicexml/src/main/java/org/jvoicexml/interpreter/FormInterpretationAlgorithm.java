@@ -55,6 +55,7 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.implementation.RecordingStartedEvent;
+import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
@@ -373,9 +374,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             throw new BadFetchError("Duplicate form item name '" + name + "'");
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("initializing form item '" + name + "'");
-        }
+        LOGGER.info("initializing form item '" + name + "'");
         final DataModel model = context.getDataModel();
         formItem.init(model);
         if (formItem instanceof FieldFormItem) {
@@ -475,7 +474,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                             node.getChildren();
                     final DataModel model = context.getDataModel();
                     initializeNodes(model, children);
-                    
+
                     // Execute the form item
                     interpreter.setState(InterpreterState.WAITING);
                     collect(item);
@@ -485,10 +484,15 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 } catch (InternalExitEvent e) {
                     LOGGER.info("exiting...");
                     break;
+                } catch (GotoNextDocumentEvent e) {
+                    LOGGER.info("going to document '" + e.getUri() + "'...");
+                    throw e;
                 } catch (GotoNextFormEvent e) {
                     LOGGER.info("going to form '" + e.getForm() + "'...");
                     throw e;
                 } catch (GotoNextFormItemEvent e) {
+                    // we must stay here to retain the variables at dialog
+                    // scope as only the fraction part was specified
                     gotoFormItemName = e.getItem();
                     LOGGER.info("going to form item '" + gotoFormItemName
                             + "'...");
@@ -500,6 +504,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                         eventbus.publish(e);
                         processEvent(e);
                     } catch (GotoNextFormItemEvent ie) {
+                        // we must stay here to retain the variables at dialog
+                        // scope as only the fraction part was specified
                         gotoFormItemName = ie.getItem();
                         LOGGER.info("going to form item '" + gotoFormItemName
                                 + "'...");
