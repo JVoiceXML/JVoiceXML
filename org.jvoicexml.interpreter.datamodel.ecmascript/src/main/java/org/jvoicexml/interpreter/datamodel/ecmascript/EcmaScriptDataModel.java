@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -134,7 +134,7 @@ public class EcmaScriptDataModel implements DataModel {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("created scope '" + scope.name() + "'");
         }
-        return 0;
+        return NO_ERROR;
     }
 
     /**
@@ -219,7 +219,7 @@ public class EcmaScriptDataModel implements DataModel {
             return ERROR_SCOPE_NOT_FOUND;
         }
         if (topmostScope == null) {
-            return 0;
+            return NO_ERROR;
         }
 
         // See if we are already there.
@@ -236,7 +236,7 @@ public class EcmaScriptDataModel implements DataModel {
                 topmostScope = null;
                 rootScope = null;
             }
-            return 0;
+            return NO_ERROR;
         }
         // Dig deeper...
         return deleteScope(scope);
@@ -374,7 +374,7 @@ public class EcmaScriptDataModel implements DataModel {
                         + scope + "' with '" + json + "'");
             }
         }
-        return 0;
+        return NO_ERROR;
     }
 
     /**
@@ -437,7 +437,7 @@ public class EcmaScriptDataModel implements DataModel {
             final Scriptable scriptable = context.newObject(topmostScope);
             ScriptableObject.putProperty(array, i, scriptable);
         }
-        return 0;
+        return NO_ERROR;
     }
 
     /**
@@ -458,7 +458,22 @@ public class EcmaScriptDataModel implements DataModel {
         return resizeArray(arrayName, dimension, null, start);
     }
 
-    public int resizeArray(final String arrayName, final int dimension,
+    /**
+     * Resizes an array with the given dimension at the specified scope. All
+     * values are initialized with {@linkplain #getUndefinedValue()}.
+     * 
+     * @param arrayName
+     *            name of the array to create
+     * @param dimension
+     *            new dimension of the array after resizing
+     * @param scope
+     *            scope, where to create the variable
+     * @param start
+     *            scope, where to start looking for scope
+     * @return {@code NO_ERROR} upon success, failure status if the array could
+     *           not be found
+     */
+    private int resizeArray(final String arrayName, final int dimension,
             final Scope scope, final Scriptable start) {
         if (start == null) {
             return ERROR_SCOPE_NOT_FOUND;
@@ -506,9 +521,16 @@ public class EcmaScriptDataModel implements DataModel {
                         + "' to an array of " + dimension);
             }
         }
-        return 0;
+        return NO_ERROR;
     }
 
+    /**
+     * Retrieves the scope identified by the variable's full name.
+     * @param scope the scope to start searching
+     * @param name the fully qualified name of a variable
+     * @return found scope, {@code null} if no such scope exists
+     * @since 0.7.7
+     */
     private Scriptable getScope(final Scriptable scope, final String name) {
         int dotPos = name.indexOf('.');
         if (dotPos >= 0) {
