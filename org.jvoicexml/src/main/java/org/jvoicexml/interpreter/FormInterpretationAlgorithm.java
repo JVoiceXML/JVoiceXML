@@ -1211,8 +1211,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             LOGGER.debug("visiting block '" + block.getName() + "'...");
         }
 
-        context.enterScope(Scope.ANONYMOUS);
         block.setVisited();
+        context.enterScope(Scope.ANONYMOUS);
         final ImplementationPlatform platform = context
                 .getImplementationPlatform();
         final EventBus eventbus = context.getEventBus();

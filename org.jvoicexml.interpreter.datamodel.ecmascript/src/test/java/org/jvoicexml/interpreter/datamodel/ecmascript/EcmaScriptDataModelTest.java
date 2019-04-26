@@ -88,6 +88,10 @@ public class EcmaScriptDataModelTest {
                 data.deleteScope(Scope.APPLICATION));
         Assert.assertEquals(DataModel.ERROR_SCOPE_NOT_FOUND,
                 data.deleteScope(Scope.APPLICATION));
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.deleteScope(Scope.SESSION));
+        Assert.assertEquals(DataModel.ERROR_SCOPE_NOT_FOUND,
+                data.deleteScope());
     }
 
     @Test
@@ -152,6 +156,48 @@ public class EcmaScriptDataModelTest {
         Assert.assertEquals(DataModel.NO_ERROR, data.createVariable(testvar));
         Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
                 data.createVariable(testvar));
+    }
+
+    @Test
+    public void testCreateVariableStringMultipleScopesReenterSetValue()
+            throws SemanticError {
+        final DataModel data = new EcmaScriptDataModel();
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.createScope(Scope.SESSION));
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.createScope(Scope.APPLICATION));
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.createScope(Scope.DIALOG));
+        final String testvar = "testvar";
+        Assert.assertEquals(DataModel.NO_ERROR, data.createVariable(testvar));
+        Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
+                data.createVariable(testvar));
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.updateVariable(testvar, Boolean.TRUE));
+        Assert.assertEquals(Boolean.TRUE,
+                data.readVariable(testvar, Boolean.class));
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.createScope(Scope.ANONYMOUS));
+        Assert.assertEquals(Boolean.TRUE, data.existsVariable(testvar));
+        Assert.assertEquals(Boolean.TRUE,
+                data.readVariable(testvar, Boolean.class));
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.deleteScope(Scope.ANONYMOUS));
+        Assert.assertEquals(Boolean.TRUE, data.existsVariable(testvar));
+        Assert.assertEquals(Boolean.TRUE,
+                data.readVariable(testvar, Boolean.class));
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.deleteScope(Scope.DIALOG));
+        Assert.assertEquals(Boolean.FALSE, data.existsVariable(testvar));
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.createScope(Scope.DIALOG));
+        Assert.assertEquals(DataModel.NO_ERROR, data.createVariable(testvar));
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.deleteScope(Scope.DIALOG));
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.deleteScope(Scope.APPLICATION));
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.deleteScope(Scope.SESSION));
     }
 
     @Test

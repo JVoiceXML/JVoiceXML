@@ -21,7 +21,6 @@
 
 package org.jvoicexml.interpreter.datamodel.ecmascript;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -53,9 +52,7 @@ public class EcmaScriptDataModel implements DataModel {
     private static final Logger LOGGER = Logger
             .getLogger(EcmaScriptDataModel.class);
 
-    /** The javascript context. */
-    private final Context context;
-
+    /** The root scope. */
     private Scriptable rootScope;
 
     /** The topmost scope. */
@@ -80,7 +77,7 @@ public class EcmaScriptDataModel implements DataModel {
      */
     public EcmaScriptDataModel() {
         scopes = new java.util.HashMap<Scriptable, Scope>();
-        context = Context.enter();
+        final Context context = Context.enter();
         context.setLanguageVersion(Context.VERSION_DEFAULT);
 
     }
@@ -106,6 +103,7 @@ public class EcmaScriptDataModel implements DataModel {
      */
     @Override
     public Object createNewObject() {
+        final Context context = Context.getCurrentContext();
         return context.newObject(topmostScope);
     }
     
@@ -118,68 +116,31 @@ public class EcmaScriptDataModel implements DataModel {
             return createScope();
         }
         if (topmostScope == null) {
-            // create a initial scope if none present
+            // create an initial scope if none present
+            final Context context = Context.getCurrentContext();
             rootScope = context.initStandardObjects();
             topmostScope = rootScope;
         }
 
         // Create the implicit variable as the scriptable on the scope stack.
-        final Scriptable newScope = createImplicitVariable(scope);
+        final Context context = Context.getCurrentContext();
+        final Scriptable newScope = context.newObject(topmostScope);
         newScope.setParentScope(topmostScope);
         newScope.setPrototype(topmostScope);
-        topmostScope = newScope;
+        
+        // Create an implicit variable to access this scope if no anonymous
+        // scope
+        if (scope != Scope.ANONYMOUS) {
+            ScriptableObject.putProperty(newScope, scope.getName(), newScope);
+        }
 
         // Remember the new scope
+        topmostScope = newScope;
         scopes.put(topmostScope, scope);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("created scope '" + scope.name() + "'");
         }
         return NO_ERROR;
-    }
-
-    /**
-     * Creates an implicit variable for the given scope
-     * 
-     * @param scope
-     *            the scope for the implicit variable
-     */
-    private Scriptable createImplicitVariable(final Scope scope) {
-        // Do not create implicit variables for anonymous scopes
-        if (scope == Scope.ANONYMOUS) {
-            final Context context = Context.getCurrentContext();
-            return context.newObject(topmostScope);
-        }
-
-        // Create a template for the implicit variable
-        final Object template = new ImplicitVariable();
-        @SuppressWarnings("unchecked")
-        final Class<ScriptableObject> clazz = (Class<ScriptableObject>) template
-                .getClass();
-        try {
-            ScriptableObject.defineClass(rootScope, clazz);
-        } catch (IllegalAccessException | InstantiationException
-                | InvocationTargetException e) {
-            LOGGER.error(
-                    "unable to create an implicit variable: " + e.getMessage(),
-                    e);
-            final Context context = Context.getCurrentContext();
-            return context.newObject(topmostScope);
-        }
-        final Scriptable scriptable = context.newObject(rootScope,
-                clazz.getSimpleName());
-
-        // Set required attributes in the object created from rhino to actually
-        // work
-        final ImplicitVariable implicit = (ImplicitVariable) scriptable;
-        implicit.setDatamodel(this);
-        implicit.setScope(scope);
-
-        // Create the variable in the given scope
-        final String name = scope.getName();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("creating implicit variable for '" + name + "'");
-        }
-        return implicit;
     }
 
     /**
@@ -227,8 +188,8 @@ public class EcmaScriptDataModel implements DataModel {
         if (topscope == null) {
             return ERROR_SCOPE_NOT_FOUND;
         }
+        topmostScope = topmostScope.getParentScope();
         if (topscope == scope) {
-            topmostScope = topmostScope.getParentScope();
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("deleted scope '" + scope.name() + "'");
             }
@@ -367,11 +328,11 @@ public class EcmaScriptDataModel implements DataModel {
         if (LOGGER.isDebugEnabled()) {
             final String json = toString(wrappedValue);
             if (scope == null) {
-                LOGGER.debug("created '" + variableName + "' with '" + json
-                        + "'");
+                LOGGER.debug("created '" + variableName + "' in scope '"
+                        + scopes.get(subscope) + "' with '" + json + "'");
             } else {
                 LOGGER.debug("created '" + variableName + "' in scope '"
-                        + scope + "' with '" + json + "'");
+                        + scopes.get(subscope) + "' with '" + json + "'");
             }
         }
         return NO_ERROR;
@@ -941,6 +902,7 @@ public class EcmaScriptDataModel implements DataModel {
             return null;
         }
         try {
+            final Context context = Context.getCurrentContext();
             final Object value = context.evaluateString(start,
                     preparedExpression, "expr", 1, null);
             if (value == getUndefinedValue()) {
