@@ -45,7 +45,7 @@ task copyConfigurationDistribution(type: Copy) {
     into "${project(':main').buildDir}/config"
 }
 
-task createVersionFile() << {
+task createVersionFile() {
     def file = new File("${sourceSets.main.output.resourcesDir}/jvoicexml.version")
     file.createNewFile()
     file.text = "jvxml.version=${JVOICEXML_VERSION}"
