@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 
 package org.jvoicexml.interpreter.datamodel;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeSubscriber;
 
@@ -32,6 +33,10 @@ import org.jvoicexml.interpreter.scope.ScopeSubscriber;
  * @since 0.7.7
  */
 public class DataModelScopeSubscriber implements ScopeSubscriber {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(DataModelScopeSubscriber.class);
+
     /** The datamodel. */
     private final DataModel model;
 
@@ -50,7 +55,11 @@ public class DataModelScopeSubscriber implements ScopeSubscriber {
      */
     @Override
     public void enterScope(final Scope previous, final Scope next) {
-        model.createScope(next);
+        final int rc = model.createScope(next);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error entering scope '" + previous + "' to '"
+                    + next + "'");
+        }
     }
 
     /**
@@ -58,6 +67,10 @@ public class DataModelScopeSubscriber implements ScopeSubscriber {
      */
     @Override
     public void exitScope(final Scope previous, final Scope next) {
-        model.deleteScope(next);
+        final int rc = model.deleteScope(previous);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error exiting scope '" + previous + "' to '"
+                    + next + "'");
+        }
     }
 }

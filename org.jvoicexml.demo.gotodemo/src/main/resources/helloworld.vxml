@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	version="2.1" xml:lang="en"
+	xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+	<meta content="JVoiceXML group" name="author" />
+	<meta content="2019 JVoiceXML group - http://jvoicexml.sourceforge.net"
+		name="copyright" />
+	<form id="say_hello">
+		<block name="dummy">
+			Hello World!
+			<goto next="goodbye.vxml" />
+		</block>
+	</form>
+</vxml>

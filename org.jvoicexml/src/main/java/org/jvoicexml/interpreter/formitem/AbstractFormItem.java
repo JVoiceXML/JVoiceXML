@@ -145,6 +145,9 @@ abstract class AbstractFormItem
     public final Object evaluateExpression(final DataModel model)
             throws SemanticError {
         final String expr = node.getAttribute("expr");
+        if (expr == null) {
+            return null;
+        }
         final String unescapedExpr = StringEscapeUtils.unescapeXml(expr);
         return model.evaluateExpression(unescapedExpr, Object.class);
     }
