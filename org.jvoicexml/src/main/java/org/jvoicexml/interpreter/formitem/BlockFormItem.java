@@ -132,7 +132,11 @@ public final class BlockFormItem extends AbstractControlItem {
     public void init(final DataModel model) throws SemanticError, BadFetchError {
         final String name = getName();
         final Object expression = evaluateExpression(model);
-        model.createVariable(name, expression);
+        if (expression == null) {
+            model.createVariable(name);
+        } else {
+            model.createVariable(name, expression);
+        }
         LOGGER.info("initialized block form item '" + name + "' with '"
                 + expression + "'");
     }
