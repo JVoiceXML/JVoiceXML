@@ -20,6 +20,7 @@
 
     <var name="target" />
     <var name="fact" expr="6" />
+   
 
     <block>
       <prompt>
@@ -27,7 +28,7 @@
         <value expr="testvar" />
         World!
       </prompt>
-      <assign name="third" expr="true" />
+      <assign name="dialog.third" expr="true"/>
     </block>
 
     <block name="third">
@@ -37,8 +38,8 @@
     </block>
 
     <block name="second">
+      <clear namelist="dialog.third"/>
       Second scripting demo:
-      <clear namelist="third" />
       17 + 4 =
       <value expr="17+4" />
     </block>

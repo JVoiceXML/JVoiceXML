@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -72,11 +72,11 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
      * {@inheritDoc}
      */
     @Override
-    public void setPromptTimeout(final long promptTimeout) {
+    public void startPromptQueuing(final long promptTimeout) {
         timeout = promptTimeout;
         prompts.clear();
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("initial timeout after prompt queuing is " + timeout);
+            LOGGER.debug("start prompt queuing with a timeout of " + timeout);
         }
     }
 
@@ -94,6 +94,7 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
     @Override
     public void queuePrompt(final SpeakableText speakable) {
         prompts.add(speakable);
+        LOGGER.info("queuing prompt " + speakable);
     }
 
     /**
@@ -119,7 +120,7 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
         final CallControl call = platform.getCallControl();
         if (!call.isCallActive()) {
             throw new NoresourceError(
-                    "cannot render prompts. call is no longer acttive");
+                    "cannot render prompts. call is no longer active");
         }
         final SystemOutput output = platform.getSystemOutput();
         for (SpeakableText speakable : prompts) {
@@ -138,6 +139,9 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
             }
             output.queueSpeakable(speakable, sessionId, server);
         }
+        
+        // Cleanup after rendering has been completed
+        prompts.clear();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("timeout after prompt queuing: " + timeout);
         }

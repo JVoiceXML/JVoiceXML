@@ -125,8 +125,8 @@ public class EcmaScriptDataModel implements DataModel {
         // Create the implicit variable as the scriptable on the scope stack.
         final Context context = Context.getCurrentContext();
         final Scriptable newScope = context.newObject(topmostScope);
-        newScope.setParentScope(topmostScope);
         newScope.setPrototype(topmostScope);
+        newScope.setParentScope(null);
         
         // Create an implicit variable to access this scope if no anonymous
         // scope
@@ -188,7 +188,7 @@ public class EcmaScriptDataModel implements DataModel {
         if (topscope == null) {
             return ERROR_SCOPE_NOT_FOUND;
         }
-        topmostScope = topmostScope.getParentScope();
+        topmostScope = topmostScope.getPrototype();
         if (topscope == scope) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("deleted scope '" + scope.name() + "'");
@@ -329,10 +329,10 @@ public class EcmaScriptDataModel implements DataModel {
             final String json = toString(wrappedValue);
             if (scope == null) {
                 LOGGER.debug("created '" + variableName + "' in scope '"
-                        + scopes.get(subscope) + "' with '" + json + "'");
+                        + getScope(subscope) + "' with '" + json + "'");
             } else {
                 LOGGER.debug("created '" + variableName + "' in scope '"
-                        + scopes.get(subscope) + "' with '" + json + "'");
+                        + getScope(subscope) + "' with '" + json + "'");
             }
         }
         return NO_ERROR;
@@ -388,7 +388,8 @@ public class EcmaScriptDataModel implements DataModel {
         final NativeArray array = new NativeArray(dimension);
         ScriptableObject.putProperty(targetScope, name, array);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("created '" + arrayName + "' as an array of "
+            LOGGER.debug("created '" + arrayName  + "' in scope '"
+                    + getScope(targetScope) + "' as an array of "
                     + dimension);
         }
 
@@ -439,7 +440,7 @@ public class EcmaScriptDataModel implements DataModel {
         if (start == null) {
             return ERROR_SCOPE_NOT_FOUND;
         }
-        final Scriptable subcope = getAndCreateScope(start, arrayName);
+        final Scriptable subscope = getAndCreateScope(start, arrayName);
         final String name;
         int dotPos = arrayName.lastIndexOf('.');
         if (dotPos >= 0) {
@@ -447,14 +448,14 @@ public class EcmaScriptDataModel implements DataModel {
         } else {
             name = arrayName;
         }
-        if (!ScriptableObject.hasProperty(subcope, name)) {
+        if (!ScriptableObject.hasProperty(subscope, name)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("'" + arrayName + "' not found");
             }
             return ERROR_VARIABLE_NOT_FOUND;
         }
         final NativeArray oldArray;
-        final Object oldValue = ScriptableObject.getProperty(subcope, name);
+        final Object oldValue = ScriptableObject.getProperty(subscope, name);
         if (oldValue instanceof NativeArray) {
             oldArray = (NativeArray) oldValue;
         } else {
@@ -472,19 +473,33 @@ public class EcmaScriptDataModel implements DataModel {
                 ScriptableObject.putProperty(array, i, scriptable);
             }
         }
-        ScriptableObject.putProperty(subcope, name, array);
+        ScriptableObject.putProperty(subscope, name, array);
         if (LOGGER.isDebugEnabled()) {
             if (scope == null) {
-                LOGGER.debug("resized '" + arrayName + "' to an array of "
-                        + dimension);
+                LOGGER.debug("resized '" + arrayName + "' in scope '"
+                        + getScope(subscope)  + "' to an array of " + dimension);
             } else {
-                LOGGER.debug("resized '" + arrayName + "' in scope '" + scope
-                        + "' to an array of " + dimension);
+                LOGGER.debug("resized '" + arrayName + "' in scope '"
+                        + getScope(subscope) + "' to an array of " + dimension);
             }
         }
         return NO_ERROR;
     }
 
+    /**
+     * Retrieves the scope that is identified by the given scriptable.
+     * @param scriptable the scriptable
+     * @return determined scope.
+     * @since 0.7.9
+     */
+    private Scope getScope(Scriptable scriptable) {
+        final Scope scope = scopes.get(scriptable);
+        if (scope != null) {
+            return scope;
+        }
+        return scopes.get(topmostScope);
+    }
+    
     /**
      * Retrieves the scope identified by the variable's full name.
      * @param scope the scope to start searching
@@ -690,10 +705,11 @@ public class EcmaScriptDataModel implements DataModel {
         if (LOGGER.isDebugEnabled()) {
             final String json = toString(jsValue);
             if (scope == null) {
-                LOGGER.debug("set '" + variableName + "' to '" + json + "'");
+                LOGGER.debug("set '" + variableName + "' in scope '"
+                        + getScope(subscope) + "' to '" + json + "'");
             } else {
-                LOGGER.debug("set '" + variableName + "' in scope '" + scope
-                        + "' to '" + json + "'");
+                LOGGER.debug("set '" + variableName + "' in scope '"
+                        + getScope(subscope) + "' to '" + json + "'");
             }
         }
         return 0;
