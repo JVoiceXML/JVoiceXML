@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -140,11 +140,7 @@ public final class TagStrategyExecutor {
         final Collection<VoiceXmlNode> nodes = container
                 .getLocalExecutableTags();
         for (VoiceXmlNode node : nodes) {
-            final TagStrategy strategy = prepareTagStrategyExecution(context,
-                    fia, node);
-            if (strategy != null) {
-                strategy.execute(context, interpreter, fia, formItem, node);
-            }
+            executeTagStrategy(context, interpreter, fia, formItem, node);
         }
     }
 
@@ -171,10 +167,11 @@ public final class TagStrategyExecutor {
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem formItem,
             final NodeList list) throws JVoiceXMLEvent {
-        if (list == null) {
+        if (list == null || list.getLength() == 0) {
             return;
         }
-
+        
+        // Execute the tag strategy per child node.
         for (int i = 0; i < list.getLength(); i++) {
             final VoiceXmlNode node = (VoiceXmlNode) list.item(i);
             executeTagStrategy(context, interpreter, fia, formItem, node);
@@ -232,7 +229,7 @@ public final class TagStrategyExecutor {
             return null;
         }
 
-        // Execute the node.
+        // Prepare execution of the node.
         strategy.getAttributes(context, fia, node);
         strategy.evalAttributes(context);
         final DataModel model = context.getDataModel();

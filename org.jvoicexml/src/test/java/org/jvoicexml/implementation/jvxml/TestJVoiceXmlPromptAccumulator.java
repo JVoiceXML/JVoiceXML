@@ -69,7 +69,7 @@ public final class TestJVoiceXmlPromptAccumulator {
     @Test
     public void testSetPromptTimeout() {
         final long promptTimeout = 30L;
-        accumulator.setPromptTimeout(promptTimeout);
+        accumulator.startPromptQueuing(promptTimeout);
         Assert.assertEquals(promptTimeout, accumulator.getPromptTimeout());
         Assert.assertNull(accumulator.getLastSpeakableText());
     }

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -113,7 +113,7 @@ public final class Jsapi20SynthesizedOutput
     private final Queue<SpeakableText> queuedSpeakables;
 
     /** A map of queued speakables to their id returned in speak requests. */
-    private final Map<SpeakableText, Integer> queueIds;
+    private final Map<SpeakableText, Integer> queuedIds;
 
     /** <code>true</code> if the synthesizer supports SSML. */
     private boolean supportsMarkup;
@@ -134,7 +134,7 @@ public final class Jsapi20SynthesizedOutput
         desc = defaultDescriptor;
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
-        queueIds = new java.util.HashMap<SpeakableText, Integer>();
+        queuedIds = new java.util.HashMap<SpeakableText, Integer>();
         emptyLock = new Object();
     }
 
@@ -212,7 +212,9 @@ public final class Jsapi20SynthesizedOutput
         }
 
         waitQueueEmpty();
-        queueIds.clear();
+        synchronized (queuedIds) {
+            queuedIds.clear();
+        }
 
         LOGGER.info("deallocating  JSAPI 2.0 synthesizer...");
 
@@ -327,14 +329,13 @@ public final class Jsapi20SynthesizedOutput
         }
         final SsmlDocument document = ssmlText.getDocument();
         final String doc = document.toString();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("speaking SSML");
-            LOGGER.debug(doc);
-        }
+        LOGGER.info("speaking " + doc);
         try {
             synthesizer.resume();
             int id = synthesizer.speakMarkup(doc, null);
-            queueIds.put(ssmlText, id);
+            synchronized (queuedIds) {
+                queuedIds.put(ssmlText, id);
+            }
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("queued id '" + id + "'");
             }
@@ -477,13 +478,13 @@ public final class Jsapi20SynthesizedOutput
         final SsmlDocument ssml = speakable.getDocument();
         final Speak speak = ssml.getSpeak();
         final String text = speak.getTextContent();
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("speaking '" + text + "'...");
-        }
+        LOGGER.info("speaking '" + text + "'...");
         try {
             synthesizer.resume();
             int id = synthesizer.speak(text, null);
-            queueIds.put(speakable, id);
+            synchronized (queuedIds) {
+                queuedIds.put(speakable, id);
+            }
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("queued id '" + id + "'");
             }
@@ -531,7 +532,10 @@ public final class Jsapi20SynthesizedOutput
 
             queuedSpeakables.removeAll(skipped);
             for (SpeakableText speakable : skipped) {
-                final Integer id = queueIds.get(speakable);
+                final Integer id;
+                synchronized (queuedIds) {
+                    id = queuedIds.get(speakable);
+                }
                 if (id != null) {
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug(
@@ -741,7 +745,10 @@ public final class Jsapi20SynthesizedOutput
         } else if (id == SpeakableEvent.SPEAKABLE_ENDED) {
             synchronized (queuedSpeakables) {
                 speakable = queuedSpeakables.poll();
-                final Integer queueId = queueIds.remove(speakable);
+                final Integer queueId;
+                synchronized (queuedIds) {
+                    queueId= queuedIds.remove(speakable);
+                }
                 if (LOGGER.isDebugEnabled() && queueId != null) {
                     LOGGER.debug(
                             "queued id '" + queueId.intValue() + "' ended ");

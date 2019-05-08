@@ -848,7 +848,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final ImplementationPlatform platform = context
                 .getImplementationPlatform();
         final long timeout = getPromptTimeout();
-        platform.setPromptTimeout(timeout);
+        platform.startPromptQueuing(timeout);
 
         // Actually queue the prompts
         for (VoiceXmlNode node : prompts) {
@@ -872,10 +872,15 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
     }
 
     /**
-     * Checks if the FIA is currently queuing prompts. The behaviour of the
+     * Checks if the FIA is currently queuing prompts. The behavior of the
      * {@link TagStrategy}s might be different dependent on the queuing mode.
+     * <p>
+     * In prompt queuing mode, prompts are collected as actual {@code <prompt>}
+     * nodes. Otherwise, they are rendered directly, e.g. as pure text
+     * within a {@code <block>}.
+     * </p>
      * 
-     * @return <code>true</code> if the FIA is currently queiung prompts.
+     * @return <code>true</code> if the FIA is currently queuing prompts.
      */
     public boolean isQueuingPrompts() {
         return queuingPrompts;
