@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -112,18 +112,11 @@ final class TextSenderThread extends Thread {
                             || (type == TextMessageType.ACK
                                 && acknowledgeBye);
             }
-        } catch (InterruptedException | IOException e) {
+        } catch (InterruptedException ignore) {
             messages.clear();
-            if (pending == null) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error sending text message", e);
-                }
-            } else {
-                final TextMessage message = pending.getMessage();
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error sending text message: " + message, e);
-                }
-            }
+        } catch (IOException e) {
+            final TextMessage message = pending.getMessage();
+            LOGGER.warn("error sending text message: " + message, e);
             telephony.fireHungup();
         }
         if (LOGGER.isDebugEnabled()) {

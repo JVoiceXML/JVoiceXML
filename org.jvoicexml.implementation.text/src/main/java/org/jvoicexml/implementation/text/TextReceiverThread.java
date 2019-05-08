@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -125,10 +125,8 @@ final class TextReceiverThread extends Thread {
                 }
             }
         } catch (IOException e) {
-            if (LOGGER.isDebugEnabled()) {
-                if ((socket.isConnected() && !isInterrupted())) {
-                    LOGGER.debug("error reading text message", e);
-                }
+            if ((socket.isConnected() && !isInterrupted())) {
+                LOGGER.warn("error reading text message", e);
             }
         } finally {
             synchronized (lock) {

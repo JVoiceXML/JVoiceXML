@@ -103,7 +103,7 @@ final class AudioTagStrategy extends AbstractTagStrategy
         final ImplementationPlatform platform = context
                 .getImplementationPlatform();
         if (!fia.isQueuingPrompts()) {
-            platform.setPromptTimeout(-1);
+            platform.startPromptQueuing(-1);
         }
         platform.queuePrompt(speakable);
         if (!fia.isQueuingPrompts()) {

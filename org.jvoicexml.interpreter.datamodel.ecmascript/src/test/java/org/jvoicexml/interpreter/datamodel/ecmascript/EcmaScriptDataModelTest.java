@@ -173,19 +173,23 @@ public class EcmaScriptDataModelTest {
         Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
                 data.createVariable(testvar));
         Assert.assertEquals(DataModel.NO_ERROR,
-                data.updateVariable(testvar, Boolean.TRUE));
-        Assert.assertEquals(Boolean.TRUE,
-                data.readVariable(testvar, Boolean.class));
+                data.updateVariable(testvar, 42));
+        Assert.assertEquals(new Integer(42),
+                data.readVariable(testvar, Integer.class));
         Assert.assertEquals(DataModel.NO_ERROR,
                 data.createScope(Scope.ANONYMOUS));
         Assert.assertEquals(Boolean.TRUE, data.existsVariable(testvar));
-        Assert.assertEquals(Boolean.TRUE,
-                data.readVariable(testvar, Boolean.class));
+        Assert.assertEquals(new Integer(42),
+                data.readVariable(testvar, Integer.class));
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.updateVariable(testvar, 43));
+        Assert.assertEquals(new Integer(43),
+                data.readVariable(testvar, Integer.class));
         Assert.assertEquals(DataModel.NO_ERROR,
                 data.deleteScope(Scope.ANONYMOUS));
         Assert.assertEquals(Boolean.TRUE, data.existsVariable(testvar));
-        Assert.assertEquals(Boolean.TRUE,
-                data.readVariable(testvar, Boolean.class));
+        Assert.assertEquals(new Integer(42),
+                data.readVariable(testvar, Integer.class));
         Assert.assertEquals(DataModel.NO_ERROR,
                 data.deleteScope(Scope.DIALOG));
         Assert.assertEquals(Boolean.FALSE, data.existsVariable(testvar));

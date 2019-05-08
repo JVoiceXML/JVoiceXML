@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,6 +36,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
@@ -116,15 +117,37 @@ public final class ValueStrategy extends AbstractTagStrategy
         }
         final SpeakableSsmlText speakable = new SpeakableSsmlText(document,
                 false, null);
+        if (!speakable.isSpeakableTextEmpty()) {
+            queueSpeakable(context, fia, speakable);
+        }
+    }
+
+    /**
+     * Queues the speakable to be played back in the {@link ImplementationPlatform}
+     * @param context the current context
+     * @param fia the current FIA
+     * @param speakable the speakable to be queued
+     * @exception BadFetchError
+     *            error queuing the prompt
+     * @exception NoresourceError
+     *            Output device is not available.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
+     * @since 0.7.9
+     */
+    private void queueSpeakable(final VoiceXmlInterpreterContext context,
+            final FormInterpretationAlgorithm fia,
+            final SpeakableSsmlText speakable) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
         final long timeout = getTimeout();
         speakable.setTimeout(timeout);
-        if (!speakable.isSpeakableTextEmpty()) {
-            final ImplementationPlatform platform = context
-                    .getImplementationPlatform();
-            if (!fia.isQueuingPrompts()) {
-                platform.setPromptTimeout(-1);
-            }
-            platform.queuePrompt(speakable);
+        final ImplementationPlatform platform = context
+                .getImplementationPlatform();
+        if (!fia.isQueuingPrompts()) {
+            platform.startPromptQueuing(-1);
+        }
+        platform.queuePrompt(speakable);
+        if (!fia.isQueuingPrompts()) {
             final Session session = context.getSession();
             final String sessionId = session.getSessionId();
             try {
