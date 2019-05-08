@@ -94,7 +94,6 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
     @Override
     public void queuePrompt(final SpeakableText speakable) {
         prompts.add(speakable);
-        LOGGER.info("queuing prompt " + speakable);
     }
 
     /**
