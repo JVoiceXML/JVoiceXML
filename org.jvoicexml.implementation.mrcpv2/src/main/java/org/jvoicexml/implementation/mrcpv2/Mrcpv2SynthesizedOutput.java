@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -21,17 +21,8 @@
 
 package org.jvoicexml.implementation.mrcpv2;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,6 +40,10 @@ import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.ssml.Audio;
+import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.mrcp4j.client.MrcpInvocationException;
@@ -57,11 +52,6 @@ import org.speechforge.cairo.client.SessionManager;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechEventListener;
 import org.speechforge.cairo.client.recog.RecognitionResult;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * Audio output that uses the MRCPv2 to address the TTS engine.
@@ -163,82 +153,11 @@ public final class Mrcpv2SynthesizedOutput
     public void queueSpeakable(final SpeakableText speakable,
             final String sessionId, final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
-        String speakText = null;
-        boolean urlPrompt = false;
-        queueCount++;
-        LOGGER.info("Queue count incremented,, now " + queueCount);
         try {
-            // TODO Pass on the entire SSML doc (and remove the code that
-            // extracts the text)
-            // The following code extract the text from the SSML since
-            // the mrcp server (cairo) does not support SSML yet
-            // (really the tts engine needs to support it i.e freetts)
             if (speakable instanceof SpeakableSsmlText) {
-                InputStream is = null;
-                String temp = speakable.getSpeakableText();
-                byte[] b = temp.getBytes();
-                is = new ByteArrayInputStream(b);
-                InputSource src = new InputSource(is);
-                SsmlDocument ssml = new SsmlDocument(src);
-                speakText = ssml.getSpeak().getTextContent();
-
-                LOGGER.info("Text content is " + speakText);
-
-                // TODO Implement a better way of detecting and extracting
-                // audio URLs
-                DocumentBuilderFactory factory = DocumentBuilderFactory
-                        .newInstance();
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                Document document = builder
-                        .parse(new InputSource(new StringReader(temp)));
-                NodeList list = document.getElementsByTagName("audio");
-                if (list != null && list.getLength() > 0) {
-                    Element audioTag = (Element) list.item(0);
-                    String url = audioTag.getAttribute("src");
-                    try {
-                        new URI(url);
-                        speakText = url;
-                        urlPrompt = true;
-                    } catch (URISyntaxException e) {
-                        LOGGER.error("'src' attribute is not a valid URI");
-                    }
-                }
+                final SpeakableSsmlText text = (SpeakableSsmlText) speakable;
+                queuePrompts(text);
             }
-
-            if (urlPrompt) {
-                LOGGER.info(String.format("Using URL: %s", speakText));
-
-                // HALEF Event logging
-                final String hevent = String.format(
-                        "INSERT INTO haleflogs"
-                                + " (databasedate, machineIP, machinedate, class, level,"
-                                + " message) VALUES(%s, \"%s\", %s,"
-                                + " \"%s\", \"%s\", \"%s\")",
-                        "now()", System.getenv("IP"), "now()",
-                        "implementation.mrcpv2.Mrcpv2SynthesizedOutput", "INFO",
-                        "Using URL!: " + speakText);
-                //HalefDbWriter.execute(hevent);
-            } else {
-                LOGGER.info(String.format("Using TTS!: %s", speakText));
-
-                // HALEF Event logging
-                final String hevent = String.format(
-                        "INSERT INTO haleflogs"
-                                + " (databasedate, machineIP, machinedate, class, level,"
-                                + " message) VALUES(%s, \"%s\", %s,"
-                                + " \"%s\", \"%s\", \"%s\")",
-                        "now()", System.getenv("IP"), "now()",
-                        "implementation.mrcpv2.Mrcpv2SynthesizedOutput", "INFO",
-                        "Using TTS!: " + speakText);
-                //HalefDbWriter.execute(hevent);
-            }
-
-            speechClient.queuePrompt(urlPrompt, speakText);
-
-        } catch (ParserConfigurationException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (SAXException e) {
-            throw new NoresourceError(e.getMessage(), e);
         } catch (MrcpInvocationException e) {
             throw new NoresourceError(e.getMessage(), e);
         } catch (IOException e) {
@@ -250,6 +169,89 @@ public final class Mrcpv2SynthesizedOutput
         }
     }
 
+    /**
+     * Queues the given speakable to the audio stream.
+     * @param text the text to be queued
+     * @throws MrcpInvocationException
+     *          error invoking the MRCP
+     * @throws IOException
+     *          error opening a file
+     * @throws InterruptedException
+     *          execution was interrupted
+     * @throws NoMediaControlChannelException
+     *          no media accessible
+     * @since 0.7.9
+     */
+    private void queuePrompts(final SpeakableSsmlText speakable) 
+            throws MrcpInvocationException, IOException, InterruptedException,
+                NoMediaControlChannelException {
+        // TODO Pass on the entire SSML doc (and remove the code that
+        // extracts the text)
+        // The following code extract the text from the SSML since
+        // the mrcp server (cairo) does not support SSML yet
+        // (really the tts engine needs to support it i.e freetts)
+        final SsmlDocument ssml = speakable.getDocument();
+        final Speak speak = ssml.getSpeak();
+        final Collection<XmlNode> children = speak.getChildren();
+        for (XmlNode node : children) {
+            if (node instanceof Text) {
+                final Text text = (Text) node;
+                queuePrompt(text);
+            } else if (node instanceof Audio) {
+                final Audio audio = (Audio) node;
+                queuePrompt(audio);
+            }
+        }
+    }
+    
+    /**
+     * Queues the given text prompt to the audio stream.
+     * @param text the text to be queued
+     * @throws MrcpInvocationException
+     *          error invoking the MRCP
+     * @throws IOException
+     *          error opening a file
+     * @throws InterruptedException
+     *          execution was interrupted
+     * @throws NoMediaControlChannelException
+     *          no media accessible
+     * @since 0.7.9
+     */
+    private void queuePrompt(final Text text)
+            throws MrcpInvocationException, IOException, InterruptedException,
+                NoMediaControlChannelException {
+        final String value = text.getNodeValue();
+        final String prompt = value.trim();
+        if (prompt.isEmpty()) {
+            return;
+        }
+        LOGGER.info("queueing URL '" + prompt + "'");
+        speechClient.queuePrompt(false, prompt);
+        queueCount++;
+    }
+
+    /**
+     * Queues the given text prompt to the audio stream.
+     * @param text the text to be queued
+     * @throws MrcpInvocationException
+     *          error invoking the MRCP
+     * @throws IOException
+     *          error opening a file
+     * @throws InterruptedException
+     *          execution was interrupted
+     * @throws NoMediaControlChannelException
+     *          no media accessible
+     * @since 0.7.9
+     */
+    private void queuePrompt(final Audio audio)
+            throws MrcpInvocationException, IOException, InterruptedException,
+                NoMediaControlChannelException {
+        final String src = audio.getSrc();
+        LOGGER.info("queueing URL '" + src + "'");
+        speechClient.queuePrompt(true, src);
+        queueCount++;
+    }
+    
     /**
      * Notifies all listeners that output has started.
      * 
