@@ -78,14 +78,6 @@ public final class Mrcpv2SynthesizedOutput
     /** Type of this resources. */
     private String type;
 
-    /**
-     * Flag to indicate that TTS output and audio can be canceled.
-     * 
-     * @todo Replace this by a solution that does not cancel output without
-     *       bargein, if there is mixed output.
-     */
-    private boolean enableBargeIn;
-
     /** The session manager. */
     private SessionManager sessionManager;
 
@@ -95,7 +87,7 @@ public final class Mrcpv2SynthesizedOutput
     /** Number of queued prompts. */
     private int queueCount;
 
-    /** Synchronisation of speech events from the MRCPv2 server. */
+    /** Synchronization of speech events from the MRCPv2 server. */
     private final Object lock;
 
     /**
@@ -104,9 +96,6 @@ public final class Mrcpv2SynthesizedOutput
     public Mrcpv2SynthesizedOutput() {
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
         lock = new Object();
-        // TODO Should there be a queue here on the client side too? There is
-        // one on the server.
-        // queuedSpeakables = new java.util.ArrayList<SpeakableText>();
     }
 
     /**
@@ -227,7 +216,12 @@ public final class Mrcpv2SynthesizedOutput
         }
         LOGGER.info("queueing URL '" + prompt + "'");
         speechClient.queuePrompt(false, prompt);
-        queueCount++;
+        synchronized (lock) {
+            queueCount++;
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("queue size " + queueCount);
+            }
+        }
     }
 
     /**
@@ -249,7 +243,12 @@ public final class Mrcpv2SynthesizedOutput
         final String src = audio.getSrc();
         LOGGER.info("queueing URL '" + src + "'");
         speechClient.queuePrompt(true, src);
-        queueCount++;
+        synchronized (lock) {
+            queueCount++;
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("queue size " + queueCount);
+            }
+        }
     }
     
     /**
@@ -310,13 +309,14 @@ public final class Mrcpv2SynthesizedOutput
     }
 
     /**
-     * Notifies all listeners that output queue us empty.
+     * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
         final SynthesizedOutputEvent event = new QueueEmptyEvent(this, null);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -346,16 +346,7 @@ public final class Mrcpv2SynthesizedOutput
      */
     @Override
     public void waitNonBargeInPlayed() {
-        synchronized (lock) {
-            while (queueCount > 0) {
-                try {
-                    checkInterrupted();
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    LOGGER.warn("q count " + queueCount);
-                }
-            }
-        }
+        waitQueueEmpty();
     }
 
     /**
@@ -363,41 +354,43 @@ public final class Mrcpv2SynthesizedOutput
      */
     @Override
     public void waitQueueEmpty() {
+        LOGGER.info("waiting for empty queue...");
         synchronized (lock) {
             while (queueCount > 0) {
                 try {
-                    checkInterrupted();
                     lock.wait();
                 } catch (InterruptedException e) {
-                    LOGGER.warn("q count " + queueCount);
+                    LOGGER.warn("waiting interrupted", e);
+                    return;
                 }
             }
         }
+        LOGGER.info("...queue empty");
     }
-
-    private void checkInterrupted() throws InterruptedException {
-        if (Thread.interrupted()) {
-            throw new InterruptedException();
-        }
-    }
-
+    
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activate() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void passivate() {
         listeners.clear();
-        queueCount = 0;
+        synchronized (lock) {
+            queueCount = 0;
+            lock.notifyAll();
+        }
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void connect(final ConnectionInformation client) throws IOException {
         // If the connection is already established, use this connection.
 
@@ -462,11 +455,13 @@ public final class Mrcpv2SynthesizedOutput
      */
     public boolean isBusy() {
         // TODO query server to determine if queue is non-empty
-        LOGGER.info("Is busy : " + queueCount);
-        return queueCount > 0;
+        synchronized (lock) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("is busy : " + queueCount);
+            }
+            return queueCount > 0;
+        }
     }
-
-    // Cairo Client Speech event methods (from SpeechEventListener i/f)
 
     /**
      * {@inheritDoc}
@@ -477,27 +472,40 @@ public final class Mrcpv2SynthesizedOutput
             LOGGER.debug("Speech synth event " + event);
         }
         if (event == SpeechEventType.SPEAK_COMPLETE) {
-            // TODO get the speakable object from the event?
-            // fireOutputStarted(new SpeakablePlainText());
-            // TODO Should there be a queue here in the client or over on the
-            // server or both?
-            queueCount--;
-            LOGGER.info("Queue count decremented, now " + queueCount);
-            synchronized (lock) {
-                lock.notifyAll();
-            }
-            if (queueCount == 0) {
-                fireQueueEmpty();
-            }
-            // TODO Handle speech markers
-            // } else if
-            // (MrcpEventName.SPEECH_MARKER.equals(event.getEventName())) {
-            // fireMarkerReached(mark);
+            processSpeakComplete(event);
         } else {
             LOGGER.warn("Unhandled mrcp speech synth event " + event);
         }
+        // TODO Handle speech markers
+        // } else if
+        // (MrcpEventName.SPEECH_MARKER.equals(event.getEventName())) {
+        // fireMarkerReached(mark);
     }
 
+    /**
+     * A {@code SpeechEventType.SPEAK_COMPLETE} event has been received.
+     * @param event the received event.
+     * @since 0.7.9
+     */
+    private void processSpeakComplete(final SpeechEventType event) {
+        // TODO get the speakable object from the event?
+        // fireOutputStarted(new SpeakablePlainText());
+        // TODO Should there be a queue here in the client or over on the
+        // server or both?
+        LOGGER.info("speakable completed");
+        synchronized (lock) {
+            queueCount--;
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("queue size " + queueCount);
+            }
+            
+            if (queueCount == 0) {
+                fireQueueEmpty();
+            }
+            lock.notifyAll();
+        }
+    }
+    
     /**
      * {@inheritDoc}
      */
