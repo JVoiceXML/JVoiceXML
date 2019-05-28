@@ -128,8 +128,8 @@ public final class Mrcpv2ConnectionInformation
      */
     public Mrcpv2ConnectionInformation(final URI callingDevice,
             final URI calledDevice) {
-        super("desktop", "mrcpv2", "mrcpv2");
-        setCalledDevice(callingDevice);
+        super("mrcpv2", "mrcpv2", "mrcpv2");
+        setCallingDevice(callingDevice);
         setCalledDevice(calledDevice);
     }
 

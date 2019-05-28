@@ -1,7 +1,6 @@
 package org.jvoicexml.zanzibar.server;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;

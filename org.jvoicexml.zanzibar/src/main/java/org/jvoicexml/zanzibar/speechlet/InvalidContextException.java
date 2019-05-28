@@ -22,6 +22,7 @@
  */
 package org.jvoicexml.zanzibar.speechlet;
 
+@SuppressWarnings("serial")
 public class InvalidContextException extends Exception {
 
 }

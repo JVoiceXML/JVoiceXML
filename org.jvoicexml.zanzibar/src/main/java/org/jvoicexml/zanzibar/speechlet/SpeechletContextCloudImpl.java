@@ -9,7 +9,6 @@ import org.jvoicexml.zanzibar.telephony.TelephonyClientImpl;
 import org.mrcp4j.client.MrcpInvocationException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SpeechClient;
-import org.speechforge.cairo.client.cloudimpl.SpeechCloudClient;
 import org.speechforge.cairo.rtp.server.RTPStreamReplicator;
 import org.speechforge.cairo.sip.SipSession;
 

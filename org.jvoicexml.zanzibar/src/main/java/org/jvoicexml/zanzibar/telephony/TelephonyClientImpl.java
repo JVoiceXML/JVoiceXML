@@ -29,7 +29,7 @@ import org.asteriskjava.manager.ManagerEventListener;
 import org.asteriskjava.manager.TimeoutException;
 import org.asteriskjava.manager.event.HangupEvent;
 import org.asteriskjava.manager.event.ManagerEvent;
-import org.jvoicexml.zanzibar.asterisk.CallControl;
+import org.jvoicexml.zanzibar.asterisk.AsteriskCallControl;
 import org.jvoicexml.zanzibar.server.SpeechletServerMain;
 
 // TODO: Auto-generated Javadoc
@@ -59,7 +59,7 @@ public class TelephonyClientImpl implements TelephonyClient , ManagerEventListen
     /**
      * The cc.
      */
-    CallControl cc = null;
+    AsteriskCallControl cc = null;
 
     /**
      * Instantiates a new telephony client impl.
@@ -71,7 +71,7 @@ public class TelephonyClientImpl implements TelephonyClient , ManagerEventListen
         if (channel != null)
            _channel = channel.trim();
          
-        cc  =  (CallControl) SpeechletServerMain.context.getBean("callControl");
+        cc  =  (AsteriskCallControl) SpeechletServerMain.context.getBean("callControl");
         
     }
 

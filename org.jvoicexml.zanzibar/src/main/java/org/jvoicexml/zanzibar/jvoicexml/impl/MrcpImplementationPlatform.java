@@ -107,7 +107,7 @@ public final class MrcpImplementationPlatform implements SpeechEventListener, Im
      */
     public void setMrcpClient(SpeechClient mrcpClient) {
         this.mrcpClient = mrcpClient;
-        mrcpClient.setListener(this);
+        mrcpClient.addListener(this);
         output = new Mrcpv2SystemOutput(mrcpClient);
         ((Mrcpv2SystemOutput) output).setImplementationPlatform(this);
         input = new Mrcpv2UserInput(mrcpClient);

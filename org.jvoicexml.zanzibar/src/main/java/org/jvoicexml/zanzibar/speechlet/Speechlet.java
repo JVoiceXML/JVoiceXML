@@ -26,14 +26,12 @@ import javax.media.rtp.InvalidSessionAddressException;
 import javax.sip.SipException;
 
 import org.apache.log4j.Logger;
-import org.mrcp4j.message.MrcpEvent;
-import org.speechforge.cairo.sip.SipSession;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechEventListener;
 import org.speechforge.cairo.client.recog.RecognitionResult;
+import org.speechforge.cairo.sip.SipSession;
 
-// TODO: Auto-generated Javadoc
 /**
  * Speechlet abstract class.  handles basic starup and shutdown of a instance of a speech application
  * 

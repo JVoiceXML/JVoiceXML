@@ -42,7 +42,6 @@ import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 import gov.nist.javax.sip.header.SIPHeaderNames;
 import gov.nist.javax.sip.header.To;
 
-// TODO: Auto-generated Javadoc
 /**
  * An Speech Application Container that creates applications using name in the TO header (the number called) prepended by an underscore.
  * 

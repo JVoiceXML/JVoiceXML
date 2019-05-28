@@ -183,7 +183,7 @@ public class ApplicationBySipHeaderService implements SpeechletService {
             dialog = (SessionProcessor) SpeechletServerMain.context.getBean(app[1]);
         } else if (app[0].equals("classname")) {
             //TODO: catch no class found exception
-            Class clazz = Class.forName(app[1]);
+            Class<?> clazz = Class.forName(app[1]);
             dialog = (SessionProcessor) clazz.newInstance();
         } else {
             throw new Exception("Application Type "+ app[0] + " not supported");  

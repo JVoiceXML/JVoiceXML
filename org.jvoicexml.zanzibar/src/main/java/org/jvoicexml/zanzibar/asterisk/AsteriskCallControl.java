@@ -35,18 +35,17 @@ import org.asteriskjava.manager.action.OriginateAction;
 import org.asteriskjava.manager.action.RedirectAction;
 import org.asteriskjava.manager.response.ManagerResponse;
 
-// TODO: Auto-generated Javadoc
 /**
  * Module that does call control on Asterisk pbx.
  * 
  * @author Spencer Lord {@literal <}<a href="mailto:salord@users.sourceforge.net">salord@users.sourceforge.net</a>{@literal >}
  */
-public class CallControl  {
+public class AsteriskCallControl  {
     
     /**
      * The _logger.
      */
-    private static Logger _logger = Logger.getLogger(CallControl.class);
+    private static Logger _logger = Logger.getLogger(AsteriskCallControl.class);
     
     /**
      * The address.
@@ -173,7 +172,7 @@ public class CallControl  {
             originateAction.setExten(connectTo.trim());
             //originateAction.setActionId(channel);
             originateAction.setPriority(new Integer(1));
-            originateAction.setTimeout(new Integer(30000));
+            originateAction.setTimeout(new Long(30000));
        
         
             // send the originate action and wait for a maximum of 30 seconds for Asterisk
