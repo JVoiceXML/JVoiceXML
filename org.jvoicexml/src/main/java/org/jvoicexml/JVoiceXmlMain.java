@@ -116,7 +116,8 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
     public JVoiceXmlMain(final Configuration config) {
         LOGGER.info("----------------------------------------------------");
         LOGGER.info("starting VoiceXML interpreter " + getVersion() + "...");
-
+        reportEnvironmentInformation();
+        
         shutdownSemaphore = new Object();
         setName(JVoiceXmlMain.class.getSimpleName());
         configuration = config;
@@ -149,6 +150,23 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         return props.getProperty("jvxml.version");
     }
 
+    /**
+     * Provides logging information about the used environment like host system
+     * and sued Java version
+     * 
+     * @since 0.7.9
+     */
+    private void reportEnvironmentInformation() {
+        final Package pkg = Runtime.class.getPackage();
+        final String version = pkg.getImplementationVersion();
+        final String vendor = pkg.getImplementationVendor();
+        final String title = pkg.getImplementationTitle();
+        LOGGER.info("Java:\t\t\t" + title + " " + version);
+        LOGGER.info("Java vendor:\t\t" + vendor);
+        final String os = System.getProperty("os.name", "generic");
+        LOGGER.info("Operating system:\t" + os);        
+    }
+    
     /**
      * Adds the given listener.
      * 

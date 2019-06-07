@@ -9,13 +9,23 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.3'
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: JVOICEXML_VERSION
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: JVOICEXML_VERSION
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.mmi.events', version: JVOICEXML_VERSION
+    if (project.property('JVOICEXML_DEVELOPMENT_ENVIRONMENT') == 'true') {
+        compile project(':org.jvoicexml.client')
+        compile project(':org.jvoicexml.xml')
+        compile project(':org.jvoicexml.mmi.events')
 
-    runtime group: 'org.jvoicexml', name: 'org.jvoicexml.callmanager.mmi', version: JVOICEXML_VERSION
-    runtime group: 'org.jvoicexml', name: 'org.jvoicexml.callmanager.mmi.http', version: JVOICEXML_VERSION
-    runtime group: 'org.jvoicexml', name: 'org.jvoicexml.jndi', version: JVOICEXML_VERSION
+        runtime project(':org.jvoicexml.callmanager.mmi')
+        runtime project(':org.jvoicexml.callmanager.mmi.http')
+        runtime project(':org.jvoicexml.jndi')
+    } else {
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.mmi.events', version: JVOICEXML_VERSION
+    
+        runtime group: 'org.jvoicexml', name: 'org.jvoicexml.callmanager.mmi', version: JVOICEXML_VERSION
+        runtime group: 'org.jvoicexml', name: 'org.jvoicexml.callmanager.mmi.http', version: JVOICEXML_VERSION
+        runtime group: 'org.jvoicexml', name: 'org.jvoicexml.jndi', version: JVOICEXML_VERSION
+    }
 }
 
 jar {
@@ -23,8 +33,13 @@ jar {
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML Simple MMI Demo",
-                   "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": JVOICEXML_VERSION)
+                   'Implementation-Vendor': 'switch',
+                   'Implementation-Version': JVOICEXML_VERSION,
+                   'Built-By'       : System.properties['user.name'],
+                   'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                   'Created-By'     : "Gradle ${gradle.gradleVersion}",
+                   'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                   'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}")
     }
     baseName 'org.jvoicexml.demo.mmi.simpledemo'
 }
