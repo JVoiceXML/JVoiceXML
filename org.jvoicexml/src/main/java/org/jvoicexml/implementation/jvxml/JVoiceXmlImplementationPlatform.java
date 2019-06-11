@@ -803,11 +803,16 @@ public final class JVoiceXmlImplementationPlatform
      * been collected by the {@link org.jvoicexml.PromptAccumulator}.
      */
     private synchronized void startTimer() {
+        // Avoid starting a second timer
         if (timer != null) {
             return;
         }
 
-        final long timeout = promptAccumulator.getPromptTimeout();
+        if (input == null) {
+            return;
+        }
+        final SpokenInput spokenInput = input.getSpokenInput();
+        final long timeout = spokenInput.getNoInputTimeout();
         if (timeout > 0) {
             timer = new TimerThread(eventbus, timeout);
             timer.start();
@@ -1032,8 +1037,8 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public void startPromptQueuing(final long timeout) {
-        promptAccumulator.startPromptQueuing(timeout);
+    public void startPromptQueuing() {
+        promptAccumulator.startPromptQueuing();
     }
 
     /**

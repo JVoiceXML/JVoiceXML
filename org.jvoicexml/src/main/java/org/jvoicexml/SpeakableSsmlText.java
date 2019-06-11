@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -50,9 +50,6 @@ public final class SpeakableSsmlText
     /** The SSML formatted text to be spoken. */
     private final SsmlDocument document;
 
-    /** Timeout that will be used for the following user input. */
-    private long timeout;
-
     /** The barge-in type. */
     private final BargeInType bargeInType;
 
@@ -73,7 +70,6 @@ public final class SpeakableSsmlText
         final Speak speak = document.getSpeak();
         speak.setXmlLang(locale);
         speak.addText(text);
-        timeout = -1;
         bargeInType = null;
         bargein = true;
     }
@@ -85,7 +81,6 @@ public final class SpeakableSsmlText
      */
     public SpeakableSsmlText(final SsmlDocument doc) {
         document = doc;
-        timeout = -1;
         bargeInType = null;
         bargein = true;
     }
@@ -103,7 +98,6 @@ public final class SpeakableSsmlText
     public SpeakableSsmlText(final SsmlDocument doc, final boolean useBargein,
             final BargeInType type) {
         document = doc;
-        timeout = -1;
         bargeInType = type;
         bargein = useBargein;
     }
@@ -172,30 +166,6 @@ public final class SpeakableSsmlText
     }
 
     /**
-     * Retrieves the timeout of this speakable to wait before a
-     * noinput event is generated.
-     * @return number of milliseconds to wait, <code>-1</code> if there is
-     * no timeout specified.
-     * @since 0.6
-     */
-    public long getTimeout() {
-        if (document == null) {
-            return -1;
-        }
-
-        return timeout;
-    }
-
-    /**
-     * Sets the timeout that will be used for the following user input.
-     * @param msec number of milliseconds to wait.
-     * @since 0.6
-     */
-    public void setTimeout(final long msec) {
-        timeout = msec;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -209,10 +179,7 @@ public final class SpeakableSsmlText
         if (text == null) {
             return otherText == null;
         }
-        if (!text.equals(otherText)) {
-            return false;
-        }
-        return timeout == speakable.getTimeout();
+        return text.equals(otherText);
     }
 
 
@@ -226,9 +193,7 @@ public final class SpeakableSsmlText
         if (document != null) {
             hash += document.hashCode();
         }
-        hash *= HASH_CODE_MULTIPLIER;
-
-        return (int) (hash + timeout);
+        return hash;
     }
 
     /**

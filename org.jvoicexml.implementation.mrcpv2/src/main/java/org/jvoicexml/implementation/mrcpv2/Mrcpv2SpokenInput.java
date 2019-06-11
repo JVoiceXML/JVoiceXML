@@ -114,6 +114,16 @@ public final class Mrcpv2SpokenInput
     }
 
     /**
+     * {@inheritDoc}
+     * 
+     * The no input timeout is handled by the MRCPv2 provider
+     */
+    @Override
+    public long getNoInputTimeout() {
+        return -1;
+    }
+
+    /**
      * Set the grammar parsers to use.
      * 
      * @param grammarParsers
@@ -244,7 +254,7 @@ public final class Mrcpv2SpokenInput
         }
         try {
 
-            long noInputTimeout = 0;
+            long noInputTimeout = speech.getNoInputTimeoutAsMsec();
             boolean hotword = false;
             boolean attachGrammar = true;
             GrammarImplementation<?> firstGrammar = activeGrammars.iterator().next(); 

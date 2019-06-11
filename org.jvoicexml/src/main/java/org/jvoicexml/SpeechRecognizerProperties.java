@@ -1,10 +1,4 @@
-/*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
- * JVoiceXML - A free VoiceXML implementation.
+/*7 * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2011-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
@@ -39,10 +33,12 @@ import org.jvoicexml.xml.TimeParser;
  * This class must be extended to specify platform specific values.
  * </p>
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  */
 public class SpeechRecognizerProperties {
+    /** Name of the <code>no-input-timeout</code> property. */
+    public static final String NO_INPUT_TIMEOUT = "no-input-timeout";
+
     /** Name of the <code>confidencelevel</code> property. */
     public static final String PROPERTY_CONFIDENCE_LEVEL = "confidencelevel";
 
@@ -72,6 +68,9 @@ public class SpeechRecognizerProperties {
     /** The default balance between speed vs. accuracy. */
     public static final float DEFAULT_SPEED_VS_ACCURACY = 0.5f;
 
+    /** The default no-input timeout in msec. */
+    public static final int DEFAULT_NO_INPUT_TIMEOUT = 30000;
+
     /**
      * The speech recognition confidence level, a float value in the range of
      * 0.0 to 1.0.
@@ -98,6 +97,9 @@ public class SpeechRecognizerProperties {
 
     /** The maximum duration of user speech. */
     private long maxspeechtimeout;
+
+    /** The no input timeout. */
+    private long noInputTimeout;
 
     /**
      * Constructs a new object.
@@ -254,5 +256,33 @@ public class SpeechRecognizerProperties {
     public final void setMaxspeechtimeout(final String value) {
         final TimeParser parser = new TimeParser(value);
         maxspeechtimeout = parser.parse();
+    }
+    
+    /**
+    /* Retrieves the duration when recognition is started and there is no speech
+     * detected.
+     * @return the no input timeout
+     */
+    public final long getNoInputTimeoutAsMsec() {
+        return noInputTimeout;
+    }
+
+    /**
+    /* Sets the the duration when recognition is started and there is no speech
+     * detected.
+     * @param value the no input timeout to set as a time designation
+     */
+    public final void setNoInputTimeout(final String value) {
+        final TimeParser parser = new TimeParser(value);
+        noInputTimeout = parser.parse();
+    }
+
+    /**
+    /* Sets the the duration when recognition is started and there is no speech
+     * detected.
+     * @param value the no input timeout to set as a time designation
+     */
+    public final void setNoInputTimeout(final long value) {
+        noInputTimeout = value;
     }
 }

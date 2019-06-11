@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,9 +39,8 @@ public interface PromptAccumulator {
      * via {@link #queuePrompt(SpeakableText)}, so it also clears the list of
      * queued prompts.
      * </p>
-     * @param timeout default timeout.
      */
-    void startPromptQueuing(final long timeout);
+    void startPromptQueuing();
 
     /**
      * Queues the given prompt without rendereing it.

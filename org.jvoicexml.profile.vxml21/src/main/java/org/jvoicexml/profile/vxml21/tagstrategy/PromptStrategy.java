@@ -44,7 +44,6 @@ import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParser;
 import org.jvoicexml.profile.vxml21.VoiceXml21SsmlParser;
-import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -159,12 +158,10 @@ class PromptStrategy extends AbstractTagStrategy {
             final FormInterpretationAlgorithm fia,
             final SpeakableSsmlText speakable) throws BadFetchError,
             NoresourceError, ConnectionDisconnectHangupEvent {
-        final long timeout = getTimeout();
-        speakable.setTimeout(timeout);
         final ImplementationPlatform platform = context
                 .getImplementationPlatform();
         if (!fia.isQueuingPrompts()) {
-            platform.startPromptQueuing(-1);
+            platform.startPromptQueuing();
         }
         platform.queuePrompt(speakable);
         if (!fia.isQueuingPrompts()) {
@@ -195,21 +192,5 @@ class PromptStrategy extends AbstractTagStrategy {
         }
         final String type = bargeInType.toUpperCase();
         return BargeInType.valueOf(type);
-    }
-
-    /**
-     * Retrieves the timeout attribute.
-     * 
-     * @return timeout to use for this prompt.
-     * @since 0.7
-     */
-    private long getTimeout() {
-        final String timeoutAttribute = (String) getAttribute(Prompt.ATTRIBUTE_TIMEOUT);
-        if (timeoutAttribute == null) {
-            return -1;
-        } else {
-            final TimeParser timeParser = new TimeParser(timeoutAttribute);
-            return timeParser.parse();
-        }
     }
 }
