@@ -82,7 +82,7 @@ final class TextSpokenInput implements SpokenInput {
     private DataModel model;
     
     /** The no input timeout. */
-    private final long timeout = -1;
+    private long timeout = -1;
 
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();

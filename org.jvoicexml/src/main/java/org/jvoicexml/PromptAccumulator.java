@@ -33,7 +33,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  */
 public interface PromptAccumulator {
     /**
-     * Startes the prompt queing with the specifed default timeout to use.
+     * Starts the prompt queuing with the specified default timeout to use.
      * <p>
      * This method is intended to be called prior to queuing prompts
      * via {@link #queuePrompt(SpeakableText)}, so it also clears the list of
@@ -54,7 +54,7 @@ public interface PromptAccumulator {
 
     /**
      * Notifies the implementation platform about the end of the prompt
-     * queuing that has been started by {@link #startPromptQueuing(long)}.
+     * queuing that has been started by {@link #startPromptQueuing()}.
      * <p>
      * It is assumed that the {@link PromptAccumulator} has knowledge about
      * the {@link ImplementationPlatform} to render the output.

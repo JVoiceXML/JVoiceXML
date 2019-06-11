@@ -73,6 +73,14 @@ public final class MockSpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
+    public long getNoInputTimeout() {
+        return -1;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
     public void activateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
