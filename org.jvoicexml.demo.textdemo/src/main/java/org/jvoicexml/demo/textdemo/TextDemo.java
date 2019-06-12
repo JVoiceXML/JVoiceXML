@@ -62,7 +62,7 @@ public final class TextDemo implements TextListener {
     private static final Logger LOGGER = LogManager.getLogger(TextDemo.class);
 
     /** Maximum number of session. */
-    private static final int MAX_SESSIONS = 100;
+    private static final int MAX_SESSIONS = 1;
 
     /**
      * Runs the text demo in sequential mod, i.e. {@link #MAX_SESSIONS} sessions

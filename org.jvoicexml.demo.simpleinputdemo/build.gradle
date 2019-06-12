@@ -32,7 +32,7 @@ jar {
     version = JVOICEXML_VERSION
 
     manifest {
-        attributes("Implementation-Title": "JVoiceXML Subdialog Demo",
+        attributes("Implementation-Title": "JVoiceXML Simple Input Demo",
                    'Implementation-Vendor': 'switch',
                    'Implementation-Version': JVOICEXML_VERSION,
                    'Built-By'       : System.properties['user.name'],
