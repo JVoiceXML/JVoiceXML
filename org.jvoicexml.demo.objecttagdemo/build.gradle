@@ -47,7 +47,7 @@ xslt {
     input "${projectDir}/src/main/config/objectdemo.vxml"
     output "${sourceSets.main.output.resourcesDir}/objectdemo.vxml"
     parameters(
-        datapath: "${sourceSets.main.output.classesDir.toURL()}/"
+        datapath: "${sourceSets.main.output.classesDirs.singleFile.toURL()}/"
     )
 }
 
