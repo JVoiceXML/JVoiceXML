@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,15 +33,14 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  */
 public interface PromptAccumulator {
     /**
-     * Startes the prompt queing with the specifed default timeout to use.
+     * Starts the prompt queuing with the specified default timeout to use.
      * <p>
      * This method is intended to be called prior to queuing prompts
      * via {@link #queuePrompt(SpeakableText)}, so it also clears the list of
      * queued prompts.
      * </p>
-     * @param timeout default timeout.
      */
-    void startPromptQueuing(final long timeout);
+    void startPromptQueuing();
 
     /**
      * Queues the given prompt without rendereing it.
@@ -60,7 +54,7 @@ public interface PromptAccumulator {
 
     /**
      * Notifies the implementation platform about the end of the prompt
-     * queuing that has been started by {@link #startPromptQueuing(long)}.
+     * queuing that has been started by {@link #startPromptQueuing()}.
      * <p>
      * It is assumed that the {@link PromptAccumulator} has knowledge about
      * the {@link ImplementationPlatform} to render the output.

@@ -86,6 +86,9 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
     /** The data model in use. */
     private DataModel model;
 
+    /** The no input timeout. */
+    private long timeout = -1;
+
     /**
      * Constructs a new object.
      */
@@ -97,6 +100,14 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
         parsers = new java.util.HashMap<GrammarType, GrammarParser<?>>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getNoInputTimeout() {
+        return timeout;
+    }
+    
     /**
      * Sets the grammar parsers to use.
      * 
@@ -225,6 +236,7 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
             final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf)
             throws NoresourceError, BadFetchError {
+        timeout = dtmf.getNoInputTimeoutAsMsec();
         model = dataModel;
         props = dtmf;
         inputThread = new DtmfInputThread(this, props);
@@ -276,6 +288,7 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
             interDigitTimeout = null;
         }
         props = null;
+        timeout = -1;
         LOGGER.info("stopped DTMF recognition");
     }
 

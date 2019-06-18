@@ -29,7 +29,6 @@ package org.jvoicexml.implementation.kinect;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
 
@@ -79,6 +78,9 @@ public final class KinectSpokenInput implements SpokenInput {
     /** Reference to the Kinect. */
     private KinectRecognizer recognizer;
 
+    /** The no input timeout. */
+    private long timeout = -1;
+
     /**
      * Constructs a new object
      */
@@ -86,6 +88,14 @@ public final class KinectSpokenInput implements SpokenInput {
         listeners = new java.util.ArrayList<SpokenInputListener>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getNoInputTimeout() {
+        return timeout;
+    }
+    
     /**
      * Sets the type.
      * 
@@ -231,6 +241,7 @@ public final class KinectSpokenInput implements SpokenInput {
         } catch (KinectRecognizerException e) {
             throw new NoresourceError(e.getMessage(), e);
         }
+        timeout = speech.getNoInputTimeoutAsMsec();
         recognizer.startRecognition();
 
         final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
@@ -243,6 +254,7 @@ public final class KinectSpokenInput implements SpokenInput {
      */
     @Override
     public void stopRecognition() {
+        timeout = -1;
         try {
             recognizer.stopRecognition();
             recognizer.deallocate();

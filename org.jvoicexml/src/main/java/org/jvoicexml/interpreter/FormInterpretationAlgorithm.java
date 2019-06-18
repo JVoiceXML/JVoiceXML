@@ -120,9 +120,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
     private static final Logger LOGGER = LogManager
             .getLogger(FormInterpretationAlgorithm.class);
 
-    /** The default prompt timeout in msec. */
-    private static final int DEFAULT_PROMPT_TIMEOUT = 30000;
-
     /** The default recording maxtime. */
     private static final int DEFAULT_RECORDING_MAXTIME = 30000;
 
@@ -844,17 +841,44 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 context);
         final Collection<VoiceXmlNode> prompts = promptChooser.collect();
 
-        // Set the timeout to use for the prompts
+        // Now, we may start queuing
         final ImplementationPlatform platform = context
                 .getImplementationPlatform();
-        final long timeout = getPromptTimeout();
-        platform.startPromptQueuing(timeout);
+        platform.startPromptQueuing();
 
         // Actually queue the prompts
+        Prompt lastPrompt = null;
         for (VoiceXmlNode node : prompts) {
+            if (node instanceof Prompt) {
+                lastPrompt = (Prompt)node;
+            }
             executor.executeTagStrategy(context, interpreter, this, formItem,
                     node);
         }
+
+        // Determine the timeout to use for the next speech recognition task
+        long timeout = getPromptTimeout();
+        if (lastPrompt != null) {
+            final long lastTimeout = lastPrompt.getTimeoutAsMsec();
+            if (lastTimeout > 0) {
+                timeout = lastTimeout;
+            }
+        }
+
+        // Set the timeout value in the speech recognizer and DTMF properties
+        try {
+            final SpeechRecognizerProperties speechProperties =
+                    context.getSpeechRecognizerProperties(this);
+            speechProperties.setNoInputTimeout(timeout);
+            final DtmfRecognizerProperties dtmfProperties =
+                    context.getDtmfRecognizerProperties(this);
+            dtmfProperties.setNoInputTimeout(timeout);
+        } catch (ConfigurationException e) {
+            LOGGER.error("error setting the timeout value", e);
+            throw new BadFetchError("error setting the timeout value", e);
+        }
+
+        
         final DocumentServer server = context.getDocumentServer();
         final Session session = context.getSession();
         final String sessionId = session.getSessionId();
@@ -894,7 +918,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
     private long getPromptTimeout() {
         final String timeout = context.getProperty(Prompt.ATTRIBUTE_TIMEOUT);
         if (timeout == null) {
-            return DEFAULT_PROMPT_TIMEOUT;
+            return SpeechRecognizerProperties.DEFAULT_NO_INPUT_TIMEOUT;
         }
         final TimeParser timeParser = new TimeParser(timeout);
         return timeParser.parse();

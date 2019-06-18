@@ -111,6 +111,9 @@ public final class Jsapi10SpokenInput
     /** The encapsulated streamable input. */
     private StreamableSpokenInput streamableInput;
 
+    /** The no input timeout. */
+    private long timeout = -1;
+
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
         BARGE_IN_TYPES.add(BargeInType.SPEECH);
@@ -121,7 +124,7 @@ public final class Jsapi10SpokenInput
     }
 
     /**
-     * Constructs a new audio input.
+     * Constructs a new JSAPI 1.0 input.
      * 
      * @param defaultDescriptor
      *            the default recognizer mode descriptor.
@@ -129,6 +132,14 @@ public final class Jsapi10SpokenInput
     public Jsapi10SpokenInput(final RecognizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
         listener = new java.util.ArrayList<SpokenInputListener>();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getNoInputTimeout() {
+        return timeout;
     }
 
     /**
@@ -391,6 +402,8 @@ public final class Jsapi10SpokenInput
             throw new NoresourceError("recognizer not available");
         }
 
+        timeout = speech.getNoInputTimeoutAsMsec();
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("starting recognition...");
         }
@@ -443,7 +456,7 @@ public final class Jsapi10SpokenInput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("stopping recognition...");
         }
-
+        timeout = -1;
         // If a result listener exists: Remove it.
         if (resultListener != null) {
             recognizer.removeResultListener(resultListener);

@@ -81,6 +81,9 @@ final class TextSpokenInput implements SpokenInput {
     /** The data model in use. */
     private DataModel model;
     
+    /** The no input timeout. */
+    private long timeout = -1;
+
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
         BARGE_IN_TYPES.add(BargeInType.SPEECH);
@@ -100,6 +103,14 @@ final class TextSpokenInput implements SpokenInput {
         activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
         parsers = new java.util.HashMap<String, GrammarParser<?>>();
         listener = new java.util.ArrayList<SpokenInputListener>();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getNoInputTimeout() {
+        return timeout;
     }
 
     /**
@@ -249,6 +260,8 @@ final class TextSpokenInput implements SpokenInput {
             BadFetchError {
         model = dataModel;
         recognizing = true;
+        timeout = speech.getNoInputTimeoutAsMsec();
+
         final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
         fireInputEvent(event);
     }
@@ -258,6 +271,7 @@ final class TextSpokenInput implements SpokenInput {
      */
     @Override
     public void stopRecognition() {
+        timeout = -1;
         recognizing = false;
         final SpokenInputEvent event = new RecognitionStoppedEvent(this, null);
         fireInputEvent(event);

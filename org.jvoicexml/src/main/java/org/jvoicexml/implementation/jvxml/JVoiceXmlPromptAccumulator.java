@@ -31,7 +31,6 @@ import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.PromptAccumulator;
-import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
@@ -51,9 +50,6 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
     /** The implementation platform to use. */
     private final ImplementationPlatform platform;
 
-    /** The prompt timeout. */
-    private long timeout;
-
     /** The accumulated prompts. */
     private final List<SpeakableText> prompts;
 
@@ -65,27 +61,17 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
             final ImplementationPlatform implementationPlatform) {
         platform = implementationPlatform;
         prompts = new java.util.ArrayList<SpeakableText>();
-        timeout = -1;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void startPromptQueuing(final long promptTimeout) {
-        timeout = promptTimeout;
+    public void startPromptQueuing() {
         prompts.clear();
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("start prompt queuing with a timeout of " + timeout);
+            LOGGER.debug("start prompt queuing");
         }
-    }
-
-    /**
-     * Retrieves the prompt timeout.
-     * @return the prompt timeout
-     */
-    public long getPromptTimeout() {
-        return timeout;
     }
 
     /**
@@ -123,14 +109,6 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
         }
         final SystemOutput output = platform.getSystemOutput();
         for (SpeakableText speakable : prompts) {
-            if (speakable instanceof SpeakableSsmlText) {
-                final SpeakableSsmlText ssmlSpeakable =
-                        (SpeakableSsmlText) speakable;
-                final long currentTimeout = ssmlSpeakable.getTimeout();
-                if (currentTimeout >= 0) {
-                    timeout = currentTimeout;
-                }
-            }
             try {
                 call.play(output, callProps);
             } catch (IOException e) {
@@ -141,8 +119,5 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
         
         // Cleanup after rendering has been completed
         prompts.clear();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("timeout after prompt queuing: " + timeout);
-        }
     }
 }

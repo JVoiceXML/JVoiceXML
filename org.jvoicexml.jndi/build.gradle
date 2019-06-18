@@ -39,7 +39,7 @@ xslt {
     input "${projectDir}/src/main/config/jvxml-jndi.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jvxml-jndi.xml"
     parameters(
-        repositoryname: "text",
+        repositoryname: JVOICEXML_JNDI_REPOSITORY,
         version: JVOICEXML_VERSION,
         buildpath: "${buildDir}/libs",
         port: System.getenv("JVOICEXML_JNDI_PORT") ?: "1099"
@@ -52,7 +52,7 @@ task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
     output "${project(':main').buildDir}/config/jvxml-jndi.xml"
     parameters(
         buildpath: "lib",
-        repositoryname: "text",
+        repositoryname: JVOICEXML_JNDI_REPOSITORY,
         version: JVOICEXML_VERSION,
         port: System.getenv("JVOICEXML_JNDI_PORT") ?: "1099"
     )

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -64,17 +59,6 @@ public final class TestJVoiceXmlPromptAccumulator {
     }
 
     /**
-     * Test of setPromptTimeout method, of class JVoiceXmlPromptAccumulator.
-     */
-    @Test
-    public void testSetPromptTimeout() {
-        final long promptTimeout = 30L;
-        accumulator.startPromptQueuing(promptTimeout);
-        Assert.assertEquals(promptTimeout, accumulator.getPromptTimeout());
-        Assert.assertNull(accumulator.getLastSpeakableText());
-    }
-
-    /**
      * Test of getLastSpeakableText method, of class JVoiceXmlPromptAccumulator.
      * @exception Exception
      *            test failed
@@ -116,11 +100,8 @@ public final class TestJVoiceXmlPromptAccumulator {
         final Speak speak2 = ssml2.getSpeak();
         speak2.addText("this is another test");
         final SpeakableSsmlText speakable2 = new SpeakableSsmlText(ssml2);
-        final long timeout = 40;
-        speakable2.setTimeout(timeout);
         accumulator.queuePrompt(speakable2);
         final CallControlProperties props = new CallControlProperties();
         accumulator.renderPrompts(null, null, props);
-        Assert.assertEquals(timeout, accumulator.getPromptTimeout());
     }
 }

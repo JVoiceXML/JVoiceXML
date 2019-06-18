@@ -57,7 +57,7 @@ public final class TimeParser {
      */
     public long parse() {
         if (time == null) {
-            return 0;
+            return -1;
         }
         final boolean isSeconds;
         if (time.endsWith("ms")) {

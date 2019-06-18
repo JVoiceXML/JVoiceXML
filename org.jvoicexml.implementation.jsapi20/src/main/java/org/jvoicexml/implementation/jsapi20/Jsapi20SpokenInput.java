@@ -109,6 +109,9 @@ public final class Jsapi20SpokenInput
     /** Type of this resources. */
     private String type;
 
+    /** The no input timeout. */
+    private long timeout = -1;
+
     /**
      * Constructs a new audio input.
      * 
@@ -123,6 +126,14 @@ public final class Jsapi20SpokenInput
         listeners = new java.util.ArrayList<SpokenInputListener>();
         locatorFactory = mediaLocatorFactory;
         currentResultListener = null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getNoInputTimeout() {
+        return timeout;
     }
 
     /**
@@ -417,6 +428,8 @@ public final class Jsapi20SpokenInput
             // TODO search a corresponding option in JSAPI2
         }
 
+        timeout = speech.getNoInputTimeoutAsMsec();
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("starting recognition...");
         }
@@ -481,6 +494,7 @@ public final class Jsapi20SpokenInput
             LOGGER.debug("stopping recognition...");
         }
 
+        timeout = -1;
         // If a result listener exists: Remove it.
         if (currentResultListener != null) {
             recognizer.removeResultListener(currentResultListener);

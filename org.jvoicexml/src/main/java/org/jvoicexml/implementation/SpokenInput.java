@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -57,6 +57,19 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @since 0.5
  */
 public interface SpokenInput extends ExternalResource, InputDevice {
+    /**
+     * Retrieves the no input timeout that was provided in the
+     * {@link org.jvoicexml.SpeechRecognizerProperties} when recognition was
+     * started. This value will be used to start a no input timer if the
+     * platform is not able to handle this. In case the platform is able
+     * to prove a behavior as specified at
+     * <a href="https://www.w3.org/TR/voicexml20/#dml4.1.7">https://www.w3.org/TR/voicexml20/#dml4.1.7</a>
+     * a value smaller than 0 may be returned.
+     * @return no input timeout to be used by the no input timer
+     * @since 0.7.9
+     */
+    long getNoInputTimeout();
+
     /**
      * Retrieves the grammar types that are supported by this implementation.
      * 

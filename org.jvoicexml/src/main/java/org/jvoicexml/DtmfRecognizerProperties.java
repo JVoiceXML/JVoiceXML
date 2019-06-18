@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,10 +34,12 @@ import org.jvoicexml.xml.TimeParser;
  * This class must be extended to specify platform specific values.
  * </p>
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  */
 public class DtmfRecognizerProperties {
+    /** Name of the <code>no-input-timeout</code> property. */
+    public static final String NO_INPUT_TIMEOUT = "no-input-timeout";
+
     /** Name of the <code>interdigittimeout</code> property. */
     public static final String PROPERTY_INTERDIGIT_TIMEOUT
         = "interdigittimeout";
@@ -58,6 +55,27 @@ public class DtmfRecognizerProperties {
 
     /** The default value for the terminating character. */
     public static final char DEFAULT_TERM_CHAR = '#';
+
+    /** The default no-input timeout in msec. */
+    public static final int DEFAULT_NO_INPUT_TIMEOUT = 30000;
+
+    /**
+     * The inter-digit timeout value to use when recognizing DTMF input.
+     */
+    private long interdigittimeout;
+
+    /**
+     * The terminating timeout to use when recognizing DTMF input.
+     */
+    private long termtimeout;
+
+    /**
+     * The terminating DTMF character for DTMF input recognition.
+     */
+    private char termchar;
+
+    /** The no input timeout. */
+    private long noInputTimeout;
 
     /**
      * Constructs a new object.
@@ -97,21 +115,6 @@ public class DtmfRecognizerProperties {
     protected void setEnhancedProperties(final Map<String, String> props) {
     }
     
-    /**
-     * The inter-digit timeout value to use when recognizing DTMF input.
-     */
-    private long interdigittimeout;
-
-    /**
-     * The terminating timeout to use when recognizing DTMF input.
-     */
-    private long termtimeout;
-
-    /**
-     * The terminating DTMF character for DTMF input recognition.
-     */
-    private char termchar;
-
     /**
      * Retrieves the inter-digit timeout value to use when recognizing DTMF
      * input.
@@ -163,5 +166,33 @@ public class DtmfRecognizerProperties {
      */
     public final void setTermchar(final char value) {
         termchar = value;
+    }
+
+    /**
+    /* Retrieves the duration when recognition is started and there is no speech
+     * detected.
+     * @return the no input timeout
+     */
+    public final long getNoInputTimeoutAsMsec() {
+        return noInputTimeout;
+    }
+
+    /**
+    /* Sets the the duration when recognition is started and there is no speech
+     * detected.
+     * @param value the no input timeout to set as a time designation
+     */
+    public final void setNoInputTimeout(final String value) {
+        final TimeParser parser = new TimeParser(value);
+        noInputTimeout = parser.parse();
+    }
+
+    /**
+    /* Sets the the duration when recognition is started and there is no speech
+     * detected.
+     * @param value the no input timeout to set as a time designation
+     */
+    public final void setNoInputTimeout(final long value) {
+        noInputTimeout = value;
     }
 }
