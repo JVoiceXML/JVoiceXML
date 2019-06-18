@@ -72,7 +72,7 @@ task generateJniHeaders(type: Exec) {
     dependsOn classes
     
     def FileCollection classpath = files(sourceSets.main.compileClasspath,
-                                         sourceSets.main.output.classesDir) 
+                                         sourceSets.main.output.classesDirs) 
     def nativeIncludes = "$buildDir/include"
     
     commandLine "javah", "-d", nativeIncludes,
