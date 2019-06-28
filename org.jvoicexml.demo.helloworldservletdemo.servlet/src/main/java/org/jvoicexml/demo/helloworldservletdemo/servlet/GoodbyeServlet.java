@@ -108,13 +108,13 @@ public final class GoodbyeServlet
                       final HttpServletResponse response)
             throws ServletException,
             IOException {
-        response.setContentType("text/plain");
+        response.setContentType("text/xml");
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("creating goodbye VoiceXML document...");
         }
 
-        final String message = request.getParameter("message");
+        final String message = request.getParameter("message") == null ? "Goodbye!" : request.getParameter("message");
 
         final VoiceXmlDocument document = createResponse(message);
         final String xml = document.toXml();
