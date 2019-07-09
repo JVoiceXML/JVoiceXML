@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -115,5 +115,12 @@ public class MockSpokenInputListener implements SpokenInputListener {
     @Override
     public void inputError(final ErrorEvent error) {
         LOGGER.error(error.getMessage(), error);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void timeout(long timeout) {
     }
 }

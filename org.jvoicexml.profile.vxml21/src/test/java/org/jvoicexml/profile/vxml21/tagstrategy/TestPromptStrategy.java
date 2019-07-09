@@ -89,7 +89,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing(30000);
+        platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
         final CallControlProperties props = new CallControlProperties();
         platform.renderPrompts(null, null, props);
@@ -145,7 +145,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
 
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing(30000);
+        platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
         final CallControlProperties props = new CallControlProperties();
         platform.renderPrompts(null, null, props);
@@ -178,7 +178,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing(30000);
+        platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
         final CallControlProperties props = new CallControlProperties();
         platform.renderPrompts(null, null, props);
@@ -209,7 +209,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing(30000);
+        platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
         final CallControlProperties props = new CallControlProperties();
         platform.renderPrompts(null, null, props);
@@ -219,8 +219,6 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         speak.addText("test execute timeout");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        final int timeout = 10000;
-        speakable.setTimeout(timeout);
         Assert.assertEquals(speakable, queuedSpeakable);
     }
 
@@ -245,7 +243,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing(30000);
+        platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
         final CallControlProperties props = new CallControlProperties();
         platform.renderPrompts(null, null, props);
@@ -255,8 +253,6 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         speak.addText("test execute timeout");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        final int timeout = 20000;
-        speakable.setTimeout(timeout);
         Assert.assertEquals(speakable, queuedSpeakable);
     }
 
