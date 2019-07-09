@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,7 +41,7 @@ public interface SpokenInputListener {
     void inputStatusChanged(SpokenInputEvent event);
 
     /**
-     * An error occured while an output processes an input.
+     * An error occurred while an output processes an input.
      * <p>
      * This method is intended to feed back errors that happen while the
      * {@link org.jvoicexml.UserInput} processes an input asynchronously.
@@ -50,4 +50,14 @@ public interface SpokenInputListener {
      * @since 0.7.4
      */
     void inputError(ErrorEvent error);
+    
+    /**
+     * Notification that the user did not provide input in the specified
+     * time.
+     * 
+     * @param the timeout
+     * 
+     * @since 0.7.9
+     */
+    void timeout(long timeout);
 }

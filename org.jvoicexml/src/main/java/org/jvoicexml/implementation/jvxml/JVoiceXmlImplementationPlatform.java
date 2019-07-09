@@ -46,6 +46,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.event.plain.NoinputEvent;
 import org.jvoicexml.event.plain.implementation.InputStartedEvent;
 import org.jvoicexml.event.plain.implementation.MarkerReachedEvent;
 import org.jvoicexml.event.plain.implementation.NomatchEvent;
@@ -799,6 +800,16 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void timeout(final long timeout) {
+        LOGGER.info("timeout: no input detected for " + timeout + " msecs");
+        final NoinputEvent event = new NoinputEvent(timeout);
+        eventbus.publish(event);
+    }
+
+    /**
      * Starts the <code>noinput</code> timer with the given timeout that has
      * been collected by the {@link org.jvoicexml.PromptAccumulator}.
      */
@@ -814,7 +825,7 @@ public final class JVoiceXmlImplementationPlatform
         final SpokenInput spokenInput = input.getSpokenInput();
         final long timeout = spokenInput.getNoInputTimeout();
         if (timeout > 0) {
-            timer = new TimerThread(eventbus, timeout);
+            timer = new TimerThread(this, timeout);
             timer.start();
         }
     }
