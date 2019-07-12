@@ -86,7 +86,6 @@ public final class Mrcpv2SpokenInput
 
     /** The grammar parser to use. */
     private final Map<String, GrammarParser<?>> parsers;
-    // private JSGFGrammar _grammar = new JSGFGrammar();
 
     // TODO Handle load and activate grammars properly on the server. At
     // present the mrcpv2 server does not support it. So just saving the grammar
@@ -104,6 +103,9 @@ public final class Mrcpv2SpokenInput
     /** The ASR client. */
     private SpeechClient speechClient;
 
+    /** The timeout value that was used to start a recognition. */
+    private long lastUsedTimeout;
+    
     /**
      * Constructs a new object.
      */
@@ -111,6 +113,7 @@ public final class Mrcpv2SpokenInput
         activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
         listeners = new java.util.ArrayList<SpokenInputListener>();
         parsers = new java.util.HashMap<String, GrammarParser<?>>();
+        lastUsedTimeout = SpeechRecognizerProperties.DEFAULT_NO_INPUT_TIMEOUT;
     }
 
     /**
@@ -254,7 +257,7 @@ public final class Mrcpv2SpokenInput
         }
         try {
 
-            long noInputTimeout = speech.getNoInputTimeoutAsMsec();
+            lastUsedTimeout = speech.getNoInputTimeoutAsMsec();
             boolean hotword = false;
             boolean attachGrammar = true;
             GrammarImplementation<?> firstGrammar = activeGrammars.iterator().next(); 
@@ -280,7 +283,7 @@ public final class Mrcpv2SpokenInput
             speechClient.setContentType("application/wfst");
             speechClient.recognize(
                     firstGrammarDocument.getDocument(), hotword,
-                    attachGrammar, noInputTimeout);
+                    attachGrammar, lastUsedTimeout);
         } catch (MrcpInvocationException e) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Mrcpv2 invocation exception while initiating a "
@@ -325,6 +328,8 @@ public final class Mrcpv2SpokenInput
     @Override
     public void stopRecognition() {
         try {
+            lastUsedTimeout =
+                    SpeechRecognizerProperties.DEFAULT_NO_INPUT_TIMEOUT;
             speechClient.stopActiveRecognitionRequests();
         } catch (MrcpInvocationException e) {
             LOGGER.warn("MrcpException while stopping recognition."
@@ -468,6 +473,24 @@ public final class Mrcpv2SpokenInput
     }
 
     /**
+     * Notifies all registered listeners about the given event.
+     * 
+     * @param event
+     *            the event.
+     * @since 0.6
+     */
+    void fireTimeoutEvent() {
+        synchronized (listeners) {
+            final Collection<SpokenInputListener> copy =
+                    new java.util.ArrayList<SpokenInputListener>();
+            copy.addAll(listeners);
+            for (SpokenInputListener current : copy) {
+                current.timeout(lastUsedTimeout);
+            }
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -494,13 +517,19 @@ public final class Mrcpv2SpokenInput
             fireInputEvent(spokenInputEvent);
 
         } else if (event == SpeechEventType.RECOGNITION_COMPLETE) {
-            LOGGER.info("Recognition results are: " + result.getText());
-            final org.jvoicexml.RecognitionResult recognitionResult =
-                    new Mrcpv2RecognitionResult(result);
-
-            final SpokenInputEvent spokenInputEvent = new RecognitionEvent(this,
-                    null, recognitionResult);
-            fireInputEvent(spokenInputEvent);
+            // Some implementations may return an empty recognition result.
+            // Handle these as timeouts as the input cannot be used at all.
+            if (result == null) {
+                fireTimeoutEvent();
+            } else {
+                LOGGER.info("Recognition results are: " + result.getText());
+                final org.jvoicexml.RecognitionResult recognitionResult =
+                        new Mrcpv2RecognitionResult(result);
+    
+                final SpokenInputEvent spokenInputEvent =
+                        new RecognitionEvent(this, null, recognitionResult);
+                fireInputEvent(spokenInputEvent);
+            }
         }
     }
 

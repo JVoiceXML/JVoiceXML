@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,8 +23,7 @@ package org.jvoicexml.implementation.jvxml;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jvoicexml.event.EventBus;
-import org.jvoicexml.event.plain.NoinputEvent;
+import org.jvoicexml.implementation.SpokenInputListener;
 
 /**
  * Timer to send timeout events if the user did not say anything.
@@ -43,8 +42,8 @@ final class TimerThread
     /** Flag, if the thread has been stopped. */
     private boolean stopped;
 
-    /** The event bus to notify when the timeout expired. */
-    private final EventBus eventbus;
+    /** The listener to notify when the timeout expired. */
+    private final SpokenInputListener listener;
 
     /** Semaphore to handle the wait/notify mechanism. */
     private final Object semaphor;
@@ -54,15 +53,15 @@ final class TimerThread
 
     /**
      * Constructs a new object.
-     * @param bus the event bus to notify when the timeout expired.
+     * @param inputListener the listener to notify when the timeout expired.
      * @param delay milliseconds to wait, a value <code>&lt;0</code> indicates
      *              that the default timeout should be taken.
      */
-    TimerThread(final EventBus bus, final long delay) {
+    TimerThread(final SpokenInputListener inputListener, final long delay) {
         setDaemon(true);
         setName("noinput-TimerThread");
 
-        eventbus = bus;
+        listener = inputListener;
         if (delay > 0) {
             timeout = delay;
         } else {
@@ -92,8 +91,7 @@ final class TimerThread
                 LOGGER.debug("sending no input event");
             }
 
-            final NoinputEvent event = new NoinputEvent();
-            eventbus.publish(event);
+            listener.timeout(timeout);
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -109,7 +107,7 @@ final class TimerThread
             LOGGER.debug("stopping timer...");
         }
 
-        if (eventbus != null) {
+        if (listener != null) {
             stopped = true;
         }
 

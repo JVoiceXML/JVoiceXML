@@ -28,6 +28,10 @@ sourceSets {
     }
 }
 
+configurations.all {
+    exclude group: 'log4j', module: 'log4j'
+}
+
 dependencies {
     compile group: 'de.dfki.mary', name: 'marytts-client', version: '5.2'
     

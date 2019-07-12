@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,6 +36,9 @@ public class NoinputEvent
     /** The detail message. */
     public static final String EVENT_TYPE = "noinput";
 
+    /** The timeout in msec. */
+    private long timeout;
+
     /**
      * Constructs a new event with the event type as its detail message. The
      * cause is not initialized.
@@ -44,6 +47,18 @@ public class NoinputEvent
      */
     public NoinputEvent() {
         super();
+    }
+
+    /**
+     * Constructs a new event with the event type as its detail message. The
+     * cause is not initialized.
+     *
+     * @param msec the timeout in msec
+     * @see #getEventType()
+     */
+    public NoinputEvent(final long msec) {
+        super();
+        timeout = msec;
     }
 
     /**
@@ -93,5 +108,14 @@ public class NoinputEvent
     @Override
     public final String getEventType() {
         return EVENT_TYPE;
+    }
+    
+    /**
+     * Retrieves the expired timeout in msec.
+     * @return the the timeout
+     * @since 0.7.9
+     */
+    public long getTimeout() {
+        return timeout;
     }
 }
