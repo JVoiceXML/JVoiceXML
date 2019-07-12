@@ -56,6 +56,8 @@ final class SubdialogExecutorThread extends Thread {
     /** Parameters of the subdialog call. */
     private final Map<String, Object> parameters;
 
+    final DataModel sourceModel;
+    
     /**
      * Constructs a new object.
      * 
@@ -74,12 +76,13 @@ final class SubdialogExecutorThread extends Thread {
     SubdialogExecutorThread(final URI subdialogUri,
             final VoiceXmlInterpreterContext subdialogContext,
             final Application appl, final Map<String, Object> params,
-            final EventBus bus) {
+            final EventBus bus, final DataModel model) {
         uri = subdialogUri;
         context = subdialogContext;
         application = appl;
         eventbus = bus;
         parameters = params;
+        sourceModel = model;
     }
 
     /**
@@ -88,8 +91,12 @@ final class SubdialogExecutorThread extends Thread {
     @Override
     public void run() {
         final DataModel model = context.getDataModel();
-        model.createScope(Scope.DIALOG);
         try {
+            // We need to copy the values here to ensure that the contexts are
+            // associated with this thread.
+            sourceModel.copyValues(model);
+            Object o = model.readVariable("session", Object.class);
+            model.createScope(Scope.DIALOG);
             final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
             context.processSubdialog(application, descriptor, parameters);
         } catch (ReturnEvent e) {
@@ -111,7 +118,7 @@ final class SubdialogExecutorThread extends Thread {
         }
         // The VoiceXML spec leaves it open what should happen if there was no
         // return or exit and the dialog terminated because all forms were
-        // processed. So we return TRUE in this case.
+        // processed. So we simply return TRUE in this case.
         final SubdialogResultEvent event = new SubdialogResultEvent(
                 Boolean.TRUE);
         eventbus.publish(event);

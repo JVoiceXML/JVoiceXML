@@ -21,6 +21,7 @@
 
 package org.jvoicexml.interpreter.datamodel.ecmascript;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -77,11 +78,22 @@ public class EcmaScriptDataModel implements DataModel {
      */
     public EcmaScriptDataModel() {
         scopes = new java.util.HashMap<Scriptable, Scope>();
-        final Context context = Context.enter();
-        context.setLanguageVersion(Context.VERSION_DEFAULT);
-
     }
 
+    /**
+     * Safe retrieval of the current context.
+     * @return context
+     * @since 0.7.9
+     */
+    private Context getContext() {
+        Context context = Context.getCurrentContext();
+        if (context == null) {
+            context = Context.enter();
+            context.setLanguageVersion(Context.VERSION_DEFAULT);
+        }
+        return context;
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -103,7 +115,7 @@ public class EcmaScriptDataModel implements DataModel {
      */
     @Override
     public Object createNewObject() {
-        final Context context = Context.getCurrentContext();
+        final Context context = getContext();
         return context.newObject(topmostScope);
     }
     
@@ -117,7 +129,7 @@ public class EcmaScriptDataModel implements DataModel {
         }
         if (topmostScope == null) {
             // create an initial scope if none present
-            final Context context = Context.getCurrentContext();
+            final Context context = getContext();
             rootScope = context.initStandardObjects();
             topmostScope = rootScope;
         }
@@ -143,6 +155,36 @@ public class EcmaScriptDataModel implements DataModel {
         return NO_ERROR;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int copyValues(final DataModel model) throws SemanticError {
+        if (topmostScope == null) {
+            return ERROR_SCOPE_NOT_FOUND;
+        }
+        
+        // Find all scopes in the right order.
+        Scriptable current = topmostScope;
+        List<Scriptable> scopeStack = new java.util.LinkedList<Scriptable>();
+        while (current != null) {
+            scopeStack.add(0, current);
+            current = current.getParentScope();
+        }
+        
+        // Copy all values per scope.
+        for (Scriptable scriptable : scopeStack) {
+            final Scope scope = scopes.get(scriptable);
+            model.createScope(scope);
+            final Object[] ids = scriptable.getIds();
+            for (Object id : ids) {
+                final String name = id.toString();
+                final Object value = readVariable(name, scope, Object.class);
+                model.createVariable(name, value, scope);
+            }
+        }
+        return 0;
+    }
     /**
      * {@inheritDoc}
      */
@@ -395,7 +437,7 @@ public class EcmaScriptDataModel implements DataModel {
 
         // Fill the array
         for (int i = 0; i < dimension; i++) {
-            final Context context = Context.getCurrentContext();
+            final Context context = getContext();
             final Scriptable scriptable = context.newObject(topmostScope);
             ScriptableObject.putProperty(array, i, scriptable);
         }
@@ -468,7 +510,7 @@ public class EcmaScriptDataModel implements DataModel {
                 final Object value = oldArray.get(i);
                 ScriptableObject.putProperty(array, i, value);
             } else {
-                final Context context = Context.getCurrentContext();
+                final Context context = getContext();
                 final Scriptable scriptable = context.newObject(topmostScope);
                 ScriptableObject.putProperty(array, i, scriptable);
             }
@@ -870,6 +912,11 @@ public class EcmaScriptDataModel implements DataModel {
         return t;
     }
 
+    /**
+     * Perform some unified cleanup and adaptation of the given expression.
+     * @param expr the expression to prepare
+     * @return prepared expression
+     */
     private String prepareExpression(final String expr) {
         if (expr == null) {
             return null;
@@ -918,7 +965,7 @@ public class EcmaScriptDataModel implements DataModel {
             return null;
         }
         try {
-            final Context context = Context.getCurrentContext();
+            final Context context = getContext();
             final Object value = context.evaluateString(start,
                     preparedExpression, "expr", 1, null);
             if (value == getUndefinedValue()) {
