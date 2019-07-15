@@ -292,7 +292,9 @@ final class TextSynthesizedOutput
                 }
                 // Delay until the next text is removed or processing ended.
                 synchronized (texts) {
-                    texts.wait();
+                    if (isBusy()) {
+                        texts.wait();
+                    }
                 }
             } catch (InterruptedException e) {
                 return;

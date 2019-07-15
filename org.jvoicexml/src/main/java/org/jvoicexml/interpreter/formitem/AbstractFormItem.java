@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -145,6 +145,9 @@ abstract class AbstractFormItem
     public final Object evaluateExpression(final DataModel model)
             throws SemanticError {
         final String expr = node.getAttribute("expr");
+        if (expr == null) {
+            return null;
+        }
         final String unescapedExpr = StringEscapeUtils.unescapeXml(expr);
         return model.evaluateExpression(unescapedExpr, Object.class);
     }
@@ -172,11 +175,11 @@ abstract class AbstractFormItem
         final Object result = getFormItemVariable();
         final boolean cond = evaluateCondition();
         final DataModel model = context.getDataModel();
-        final boolean selectable = ((result == model.getUndefinedValue()) || (result == null))
-                && cond;
+        final boolean selectable = ((result == model.getUndefinedValue()) 
+                || (result == null)) && cond;
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("checking if selectable");
+            LOGGER.debug("checking if '" + name +"' is selectable");
             final String logResult = model.toString(result);
             LOGGER.debug("value of   '" + name + "': '" + logResult + "'");
             LOGGER.debug("cond of    '" + name + "': '" + cond + "'");

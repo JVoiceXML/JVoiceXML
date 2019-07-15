@@ -1,6 +1,7 @@
 include 'org.jvoicexml', \
     'org.jvoicexml.config', \
     'org.jvoicexml.demo.embedded', \
+    'org.jvoicexml.demo.gotodemo', \
     'org.jvoicexml.demo.helloworlddemo', \
     'org.jvoicexml.demo.helloworldservletdemo', \
     'org.jvoicexml.demo.helloworldservletdemo.servlet', \

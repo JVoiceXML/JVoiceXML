@@ -46,9 +46,11 @@ task copyConfigurationDistribution(type: Copy) {
 }
 
 task createVersionFile() {
-    def file = new File("${sourceSets.main.output.resourcesDir}/jvoicexml.version")
-    file.createNewFile()
-    file.text = "jvxml.version=${JVOICEXML_VERSION}"
+    doLast {
+        def file = new File("${sourceSets.main.output.resourcesDir}/jvoicexml.version")
+        file.createNewFile()
+        file.text = "jvxml.version=${JVOICEXML_VERSION}"
+    }
 }
 
 jar {

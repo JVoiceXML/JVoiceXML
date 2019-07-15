@@ -354,6 +354,18 @@ distributions {
                 }
             }
             
+            into('demo/org.jvoicexml.demo.gotodemo') {
+                from(project(':org.jvoicexml.demo.gotodemo').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin",
+                    "build.gradle"
+                }
+                from(project(':org.jvoicexml.demo.gotodemo').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
+                }
+            }
             into('demo/org.jvoicexml.demo.helloworlddemo') {
                 from(project(':org.jvoicexml.demo.helloworlddemo').projectDir) {
                     exclude "**/build",

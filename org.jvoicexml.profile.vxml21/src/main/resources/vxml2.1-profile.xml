@@ -34,10 +34,6 @@
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.ScriptStrategy" />
                         </beans:entry>
-                        <beans:entry key="#text">
-                            <beans:bean
-                                class="org.jvoicexml.profile.vxml21.tagstrategy.TextStrategy" />
-                        </beans:entry>
                         <beans:entry key="var">
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.VarStrategy" />
