@@ -411,4 +411,11 @@ public final class MrcpImplementationPlatform implements SpeechEventListener, Im
 		
 	}
 
+
+	@Override
+	public void startPromptQueuing(long timeout) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
