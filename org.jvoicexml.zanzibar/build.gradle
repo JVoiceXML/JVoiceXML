@@ -38,7 +38,7 @@ dependencies {
     compile group: 'org.jvoicexml', name: 'cairo-sip', version: '0.3-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'cairo-rtp', version: '0.3-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'cairo', version: '0.3-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'halef-mrcp4j', version: '0.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'mrcp4j', version: '0.3-SNAPSHOT'
     compile group: 'commons-configuration', name: 'commons-configuration', version: '1.6'
     compile group: 'org.springframework', name: 'spring-core', version: '3.0.5.RELEASE'
     compile group: 'org.springframework', name: 'spring-beans', version: '3.0.5.RELEASE'
