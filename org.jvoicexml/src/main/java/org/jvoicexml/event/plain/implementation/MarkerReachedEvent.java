@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,13 +21,13 @@
 
 package org.jvoicexml.event.plain.implementation;
 
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * A notification that a certain mark within an SSML document has been reached.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.1
  */
 @SuppressWarnings("serial")
@@ -65,7 +60,7 @@ public final class MarkerReachedEvent extends SynthesizedOutputEvent {
      *            name of the mark that has been reached.
      */
     public MarkerReachedEvent(final SynthesizedOutput output,
-            final String sessionId, final String name) {
+            final SessionIdentifier sessionId, final String name) {
         super(output, DETAIL, sessionId);
         mark = name;
     }

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedBuiltinError;
@@ -107,8 +108,8 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
      * {@inheritDoc}
      */
     @Override
-    public InputStream getInputStream(final String sessionId, final URI uri,
-            final RequestMethod method, final long timeout,
+    public InputStream getInputStream(final SessionIdentifier sessionId,
+            final URI uri, final RequestMethod method, final long timeout,
             final Collection<KeyValuePair> parameters)
             throws BadFetchError, UnsupportedElementError, IOException {
         final String type = extractBuiltinType(uri);
@@ -149,7 +150,7 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void sessionClosed(final String sessionId) {
+    public void sessionClosed(final SessionIdentifier sessionId) {
     }
 
 }

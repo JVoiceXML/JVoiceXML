@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,6 +27,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
@@ -41,7 +37,6 @@ import org.jvoicexml.xml.vxml.RequestMethod;
  * Scheme strategy for the {@link MappedDocumentRepository}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class MappedDocumentStrategy
         implements SchemeStrategy {
@@ -66,8 +61,8 @@ public final class MappedDocumentStrategy
      * {@inheritDoc}
      */
     @Override
-    public InputStream getInputStream(final String sessionId, final URI uri,
-            final RequestMethod method, final long timeout,
+    public InputStream getInputStream(final SessionIdentifier sessionId,
+            final URI uri, final RequestMethod method, final long timeout,
             final Collection<KeyValuePair> parameters)
             throws BadFetchError {
         if (uri == null) {
@@ -125,6 +120,6 @@ public final class MappedDocumentStrategy
      * {@inheritDoc}
      */
     @Override
-    public void sessionClosed(final String sessionId) {
+    public void sessionClosed(final SessionIdentifier sessionId) {
     }
 }

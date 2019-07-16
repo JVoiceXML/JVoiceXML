@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@ package org.jvoicexml.mock.implementation;
 import java.util.Collection;
 
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
@@ -53,7 +54,7 @@ public final class MockSystemOutput implements SystemOutput {
     private final SynthesizedOutput output;
 
     /** the session id. */
-    private String sessionId;
+    private SessionIdentifier sessionId;
 
     /**
      * Constructs a new object.
@@ -83,7 +84,7 @@ public final class MockSystemOutput implements SystemOutput {
      */
     @Override
     public void queueSpeakable(final SpeakableText speakableText,
-            final String id, final DocumentServer documentServer)
+            final SessionIdentifier id, final DocumentServer documentServer)
         throws NoresourceError, BadFetchError {
         speakable = speakableText;
         sessionId = id;

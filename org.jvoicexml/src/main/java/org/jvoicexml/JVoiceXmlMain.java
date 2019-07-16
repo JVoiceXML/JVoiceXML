@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2016 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -197,6 +197,13 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
     @Override
     public Session createSession(final ConnectionInformation info)
             throws ErrorEvent {
+        final SessionIdentifier id = new UuidSessionIdentifer();
+        return createSession(info, id);
+    }
+
+    @Override
+    public Session createSession(ConnectionInformation info,
+            SessionIdentifier id) throws ErrorEvent {
         if (state != InterpreterState.RUNNING) {
             throw new NoresourceError(
                     "JVoiceXML not running. Can't create a session!");
@@ -216,7 +223,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         final ImplementationPlatform platform = implementationPlatformFactory
                 .getImplementationPlatform(info);
         final Session session = new org.jvoicexml.interpreter.JVoiceXmlSession(
-                platform, this, info, profile);
+                platform, this, info, profile, id);
         platform.setSession(session);
         LOGGER.info("created session " + session.getSessionId());
 

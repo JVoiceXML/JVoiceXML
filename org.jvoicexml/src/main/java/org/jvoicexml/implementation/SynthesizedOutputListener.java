@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,7 +28,6 @@ import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
  * Listener for events from the {@link SynthesizedOutput} implementation.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  * @see org.jvoicexml.SystemOutput
  * @since 0.5
@@ -53,7 +47,7 @@ public interface SynthesizedOutputListener {
      * {@link org.jvoicexml.SystemOutput} processes an output asynchronously.
      * Errors that happen while the output is queued should be reported
      * by throwing an appropriate error in the
-     * {@link org.jvoicexml.SystemOutput#queueSpeakable(org.jvoicexml.SpeakableText, String, org.jvoicexml.DocumentServer)}
+     * {@link org.jvoicexml.SystemOutput#queueSpeakable(org.jvoicexml.SpeakableText, org.jvoicexml.SessionIdentifier, org.jvoicexml.DocumentServer)}
      * method.
      * </p>
      * @param error the error

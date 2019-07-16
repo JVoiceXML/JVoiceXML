@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +26,8 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
@@ -51,7 +48,6 @@ import org.mockito.Mockito;
  * This class provides a dummy implementation for {@link JVoiceXmlCore}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public final class MockJvoiceXmlCore implements JVoiceXmlCore {
@@ -102,6 +98,16 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
      */
     public Session createSession(final ConnectionInformation info)
             throws ErrorEvent {
+        final SessionIdentifier id = new UuidSessionIdentifer();
+        return createSession(info, id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Session createSession(final ConnectionInformation info,
+            final SessionIdentifier id)
+            throws ErrorEvent {
         final ImplementationPlatform platform = new MockImplementationPlatform();
         final Profile profile = Mockito.mock(Profile.class);
         final SsmlParsingStrategyFactory factory = Mockito
@@ -109,7 +115,7 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
 
-        return new JVoiceXmlSession(platform, this, info, profile);
+        return new JVoiceXmlSession(platform, this, info, profile, id);
     }
 
     /**

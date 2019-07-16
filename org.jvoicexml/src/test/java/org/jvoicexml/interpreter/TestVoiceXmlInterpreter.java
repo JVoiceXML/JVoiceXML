@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,6 +27,8 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
@@ -49,7 +46,6 @@ import org.mockito.Mockito;
  * This class tests the {@link VoiceXmlInterpreter}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public final class TestVoiceXmlInterpreter {
@@ -79,8 +75,9 @@ public final class TestVoiceXmlInterpreter {
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
 
+        final SessionIdentifier id = new UuidSessionIdentifer();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null, profile);
+                null, profile, id);
         final VoiceXmlInterpreterContext context = new VoiceXmlInterpreterContext(
                 session, configuration);
         interpreter = new VoiceXmlInterpreter(context);

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +20,10 @@
  */
 package org.jvoicexml.interpreter;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.when;
+
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -34,6 +33,8 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
@@ -47,16 +48,10 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.when;
-
 /**
  * Test cases for {@link PromptChooser}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public final class TestPromptChooser {
@@ -102,8 +97,9 @@ public final class TestPromptChooser {
                 .mock(SsmlParsingStrategyFactory.class);
         when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
+        final SessionIdentifier id = new UuidSessionIdentifer();
         final JVoiceXmlSession session = Mockito.spy(new JVoiceXmlSession(
-                platform, jvxml, null, profile));
+                platform, jvxml, null, profile, id));
         context = Mockito.spy(new VoiceXmlInterpreterContext(session,
                 configuration));
         when(session.getVoiceXmlInterpreterContext()).thenReturn(

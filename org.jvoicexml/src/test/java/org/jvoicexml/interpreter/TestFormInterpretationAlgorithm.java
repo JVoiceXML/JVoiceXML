@@ -36,8 +36,10 @@ import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.NoinputEvent;
@@ -125,8 +127,9 @@ public final class TestFormInterpretationAlgorithm {
         Mockito.when(jvxml.getConfiguration()).thenReturn(configuration);
         final ConnectionInformation info = Mockito
                 .mock(ConnectionInformation.class);
+        final SessionIdentifier id = new UuidSessionIdentifer();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                info, profile);
+                info, profile, id);
         context = session.getVoiceXmlInterpreterContext();
         final GrammarDocument document = Mockito.mock(GrammarDocument.class);
         Mockito.when(

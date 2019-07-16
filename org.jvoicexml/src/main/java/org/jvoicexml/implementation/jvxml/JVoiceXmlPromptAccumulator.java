@@ -31,6 +31,7 @@ import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.PromptAccumulator;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
@@ -98,7 +99,7 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
      * {@inheritDoc}
      */
     @Override
-    public void renderPrompts(final String sessionId,
+    public void renderPrompts(final SessionIdentifier sessionId,
             final DocumentServer server, final CallControlProperties callProps)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent {

@@ -33,6 +33,7 @@ import java.util.concurrent.BlockingQueue;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextConnectionInformation;
@@ -140,9 +141,9 @@ final class TextSynthesizedOutput
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final String sessionId, final DocumentServer documentServer)
-        throws NoresourceError,
-            BadFetchError {
+            final SessionIdentifier sessionId,
+                final DocumentServer documentServer)
+                        throws NoresourceError, BadFetchError {
         final Object o;
         if (speakable instanceof SpeakableSsmlText) {
             SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;

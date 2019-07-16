@@ -33,6 +33,8 @@ import javax.naming.NamingException;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.event.ErrorEvent;
@@ -104,17 +106,19 @@ public final class JVoiceXmlStub
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final ConnectionInformation client)
-            throws ErrorEvent {
+    @Override
+    public Session createSession(final ConnectionInformation info,
+            final SessionIdentifier id) throws ErrorEvent {
         final RemoteJVoiceXml jvxml = getSkeleton();
-
         Session session;
         try {
-            if (client instanceof BasicConnectionInformation) {
+            // In case we are calling via JNDI adapt the info to have
+            // something meaningful to use in JVoiceXML
+            if (info instanceof BasicConnectionInformation) {
                 final Context context = getContext();
                 final Map<?, ?> env = context.getEnvironment();
                 final BasicConnectionInformation basic =
-                    (BasicConnectionInformation) client;
+                    (BasicConnectionInformation) info;
                 if (basic.getCalledDevice() == null) {
                     final Object prov = env.get(Context.PROVIDER_URL);
                     basic.setCalledDevice(new URI(prov.toString()));
@@ -128,7 +132,7 @@ public final class JVoiceXmlStub
                     basic.setProtocolName("rmi");
                 }
             }
-            session = jvxml.createSession(client);
+            session = jvxml.createSession(info, id);
         } catch (java.rmi.RemoteException re) {
             clearSkeleton();
             session = null;
@@ -161,6 +165,15 @@ public final class JVoiceXmlStub
         }
 
         return session;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Session createSession(final ConnectionInformation info)
+            throws ErrorEvent {
+        final SessionIdentifier id = new UuidSessionIdentifer();
+        return createSession(info, id);
     }
 
     /**

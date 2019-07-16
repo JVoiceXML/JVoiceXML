@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,25 +18,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml;
 
-/**
- * A listener for the {@link Session}.
- * @author Dirk Schnelle-Walka
- * @version $Revision$
- * @since 0.7.3
- */
-public interface SessionListener {
-    /**
-     * Notification that the session has been started.
-     * @param session the session
-     * @since 0.7.5
-     */
-    void sessionStarted(final Session session);
+import java.io.Serializable;
 
+/**
+ * An identifier for a {@link org.jvoicexml.Session} within JVoiceXML.
+ * 
+ * This instance is as unique as the session and may be used to distinguish
+ * multiple sessions. It is insufficient if a call to {@link #getId()} returns
+ * different ids.
+ * 
+ * Note, that it may be helpful to also override the {@code #toString()} method
+ * to have something meaningful in log statements.
+ *  
+ * @author Dirk Schnelle-Walka
+ * @since 0.7.9
+ */
+public interface SessionIdentifier extends Serializable {
     /**
-     * Notification that the session has ended.
-     * @param session the session.
+     * Retrieves the session identifier. Subsequent calls to this method
+     * must always return the same value for this object.
+     * @return String representation of the session identifier
+     * @since 0.7.9
      */
-    void sessionEnded(final Session session);
+    String getId();
 }

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,6 +35,7 @@ import org.apache.logging.log4j.Logger;
 import org.jvoicexml.CallManager;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
 import org.jvoicexml.event.ErrorEvent;
@@ -74,7 +75,7 @@ public final class SipCallManager
     // sip id (rather than have it create its own UUID) or maybe there
     // is a way to attach the voicexml id to the sip session...
     /** Map of sip id's to voicexml session ids. **/
-    private Map<String, String> ids;
+    private Map<SessionIdentifier, String> ids;
 
     /** Map of terminal names associated to an application. */
     private Map<String, String> applications;
@@ -438,7 +439,7 @@ public final class SipCallManager
     public void start() throws NoresourceError, IOException {
         LOGGER.info("startup mrcp sip callManager");
         sessions = new java.util.HashMap<String, SipCallManagerSession>();
-        ids = new java.util.HashMap<String, String>();
+        ids = new java.util.HashMap<SessionIdentifier, String>();
     }
 
     /**
@@ -471,7 +472,7 @@ public final class SipCallManager
      */
     @Override
     public void sessionEnded(final Session session) {
-        String id = session.getSessionId();
+        SessionIdentifier id = session.getSessionId();
         // workaround to deal with two id's
         // maps the voicexml sessionid to sip session id
         // needed for case when the voicxml session ends before a hang up and
@@ -483,7 +484,7 @@ public final class SipCallManager
         final String sipId;
         synchronized (ids) {
             sipId = ids.get(id);
-            ids.remove(id);
+            ids.remove(sipId);
         }
 
         // clean up the session

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,7 +22,6 @@
 package org.jvoicexml.implementation.jsapi10;
 
 import java.util.Locale;
-import java.util.UUID;
 
 import javax.speech.Central;
 import javax.speech.EngineException;
@@ -39,8 +33,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -66,7 +62,6 @@ import com.cloudgarden.speech.CGEngineCentral;
  * Test cases for {@link JVoiceXmlSynthesizerModeDescFactory}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public final class TestJsapi10SynthesizedOutput {
@@ -83,7 +78,7 @@ public final class TestJsapi10SynthesizedOutput {
     private DocumentServer documentServer;
 
     /** the session id. */
-    private String sessionId;
+    private SessionIdentifier sessionId;
 
     /**
      * Global initialization.
@@ -113,7 +108,7 @@ public final class TestJsapi10SynthesizedOutput {
         listener = new MockSynthesizedOutputListener();
         synthesizer.addListener(listener);
         documentServer = new JVoiceXmlDocumentServer();
-        sessionId = UUID.randomUUID().toString();
+        sessionId = new UuidSessionIdentifer();
     }
 
     /**

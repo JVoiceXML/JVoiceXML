@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -45,6 +45,7 @@ import javax.speech.synthesis.SynthesizerModeDesc;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
@@ -167,7 +168,7 @@ public final class Jsapi10SynthesizedOutput
     private final Object endplayLock;
 
     /** The Id of the current session. */
-    private String sessionId;
+    private SessionIdentifier sessionId;
 
     static {
         SPEAK_FACTORY = new org.jvoicexml.implementation.jsapi10.speakstrategy.JVoiceXmlSpeakStratgeyFactory();
@@ -277,7 +278,7 @@ public final class Jsapi10SynthesizedOutput
      * @return the Id of the current session
      * @since 0.7.5
      */
-    public String getSessionid() {
+    public SessionIdentifier getSessionid() {
         return sessionId;
     }
 
@@ -306,8 +307,9 @@ public final class Jsapi10SynthesizedOutput
      * output or for plain text output.
      */
     @Override
-    public void queueSpeakable(final SpeakableText speakable, final String id,
-            final DocumentServer server) throws NoresourceError, BadFetchError {
+    public void queueSpeakable(final SpeakableText speakable,
+            final SessionIdentifier id, final DocumentServer server)
+                    throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }

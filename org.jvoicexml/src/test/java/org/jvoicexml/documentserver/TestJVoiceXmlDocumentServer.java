@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
-import java.util.UUID;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -33,6 +32,8 @@ import org.junit.Test;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
@@ -51,7 +52,6 @@ import org.xml.sax.InputSource;
  * Test case for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public final class TestJVoiceXmlDocumentServer {
@@ -188,8 +188,8 @@ public final class TestJVoiceXmlDocumentServer {
         final URL file = this.getClass().getResource("/test.wav");
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
-                UUID.randomUUID().toString());
-        final String sessionId = session.getSessionId();
+                new UuidSessionIdentifer());
+        final SessionIdentifier sessionId = session.getSessionId();
         final AudioInputStream in = server.getAudioInputStream(sessionId,
                 file.toURI());
         Assert.assertNotNull(in);
@@ -212,8 +212,8 @@ public final class TestJVoiceXmlDocumentServer {
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
-                UUID.randomUUID().toString());
-        final String sessionId = session.getSessionId();
+                new UuidSessionIdentifer());
+        final SessionIdentifier sessionId = session.getSessionId();
         final VoiceXmlDocument retrievedDocument = server.getDocument(
                 sessionId, descriptor);
         Assert.assertEquals(document.toString(), retrievedDocument.toString());
@@ -238,8 +238,8 @@ public final class TestJVoiceXmlDocumentServer {
                 fragmentUri);
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
-                UUID.randomUUID().toString());
-        final String sessionId = session.getSessionId();
+                new UuidSessionIdentifer());
+        final SessionIdentifier sessionId = session.getSessionId();
         final VoiceXmlDocument retrievedDocument = server.getDocument(
                 sessionId, descriptor);
         Assert.assertEquals(document.toString(), retrievedDocument.toString());
@@ -266,8 +266,8 @@ public final class TestJVoiceXmlDocumentServer {
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
-                UUID.randomUUID().toString());
-        final String sessionId = session.getSessionId();
+                new UuidSessionIdentifer());
+        final SessionIdentifier sessionId = session.getSessionId();
         final VoiceXmlDocument retrievedDocument = server.getDocument(
                 sessionId, descriptor);
         Assert.assertEquals(document, retrievedDocument);

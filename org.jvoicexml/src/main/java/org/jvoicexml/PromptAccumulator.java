@@ -46,7 +46,7 @@ public interface PromptAccumulator {
      * Queues the given prompt without rendereing it.
      * <p>
      * After all prompts have been queued, the end of prompt queuing must be
-     * indicated by {@link #renderPrompts(String, DocumentServer, CallControlProperties)}.
+     * indicated by {@link #renderPrompts(SessionIdentifier, DocumentServer, CallControlProperties)}.
      * </p>
      * @param speakable the prompt to queue.
      */
@@ -69,8 +69,8 @@ public interface PromptAccumulator {
      * @exception ConnectionDisconnectHangupEvent
      *            the user hung up
      */
-    void renderPrompts(final String sessionId, final DocumentServer server,
-            final CallControlProperties callProps)
+    void renderPrompts(final SessionIdentifier sessionId,
+            final DocumentServer server, final CallControlProperties callProps)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent;
 }

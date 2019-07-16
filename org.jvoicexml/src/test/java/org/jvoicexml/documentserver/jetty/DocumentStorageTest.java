@@ -29,6 +29,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.ExternalGrammarDocument;
 import org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator;
 import org.jvoicexml.documentserver.schemestrategy.builtin.DigitsGrammarCreator;
@@ -88,7 +90,8 @@ public class DocumentStorageTest {
         final SrgsXmlDocument srgsdocument = new SrgsXmlDocument();
         final Grammar grammar = srgsdocument.getGrammar();
         final GrammarDocument document = new InternalGrammarDocument(grammar);
-        storage.addGrammarDocument("12345", document);
+        final SessionIdentifier id = new UuidSessionIdentifer();
+        storage.addGrammarDocument(id, document);
         final URI uri = document.getURI();
         Assert.assertNotNull(uri);
         final URI path = new URI(uri.getPath());
@@ -107,11 +110,12 @@ public class DocumentStorageTest {
     public void testClear() throws Exception {
         final GrammarDocument document = new ExternalGrammarDocument(null,
                 null, null, true);
-        storage.addGrammarDocument("12345", document);
+        final SessionIdentifier id = new UuidSessionIdentifer();
+        storage.addGrammarDocument(id, document);
         final URI uri = document.getURI();
         Assert.assertNotNull(uri);
         Assert.assertEquals(document, storage.getDocument(uri));
-        storage.clear("12345");
+        storage.clear(id);
         Assert.assertNull("document not cleared", storage.getDocument(uri));
     }
 
@@ -127,11 +131,12 @@ public class DocumentStorageTest {
     public void testClearOtherSession() throws Exception {
         final GrammarDocument document = new ExternalGrammarDocument(null,
                 null, null, true);
-        storage.addGrammarDocument("12345", document);
+        final SessionIdentifier id = new UuidSessionIdentifer();
+        storage.addGrammarDocument(id, document);
         final URI uri = document.getURI();
         Assert.assertNotNull(uri);
         Assert.assertEquals(document, storage.getDocument(uri));
-        storage.clear("54321");
+        storage.clear(id);
         Assert.assertEquals(document, storage.getDocument(uri));
     }
 

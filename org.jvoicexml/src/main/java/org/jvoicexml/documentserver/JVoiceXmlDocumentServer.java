@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -44,6 +44,7 @@ import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedElementError;
@@ -209,7 +210,7 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      * {@inheritDoc}
      */
     @Override
-    public VoiceXmlDocument getDocument(final String sessionId,
+    public VoiceXmlDocument getDocument(final SessionIdentifier sessionId,
             final DocumentDescriptor descriptor) throws BadFetchError {
         final URI uri = descriptor.getUri();
         final SchemeStrategy strategy = getSchemeStrategy(uri);
@@ -315,7 +316,7 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      * {@inheritDoc}
      */
     @Override
-    public URI addGrammarDocument(final String sessionId,
+    public URI addGrammarDocument(final SessionIdentifier sessionId,
             final GrammarDocument document) throws URISyntaxException {
         return storage.addGrammarDocument(sessionId, document);
     }
@@ -324,7 +325,7 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      * {@inheritDoc}
      */
     @Override
-    public GrammarDocument getGrammarDocument(final String sessionId,
+    public GrammarDocument getGrammarDocument(final SessionIdentifier sessionId,
             final URI uri, final FetchAttributes attrs) throws BadFetchError {
         // Only prefetch the document if not explicitly asked to load on demand.
         if (attrs.isFetchintSafe()) {
@@ -350,7 +351,8 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      * {@inheritDoc}
      */
     @Override
-    public AudioInputStream getAudioInputStream(final String sessionId,
+    public AudioInputStream getAudioInputStream(
+            final SessionIdentifier sessionId,
             final URI uri) throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving audio input stream '" + uri + "'");
@@ -384,7 +386,7 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      * supported.
      */
     @Override
-    public Object getObject(final String sessionId,
+    public Object getObject(final SessionIdentifier sessionId,
             final DocumentDescriptor descriptor, final String type)
             throws BadFetchError {
         final URI uri = descriptor.getUri();
@@ -497,7 +499,7 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      * {@inheritDoc}
      */
     @Override
-    public void sessionClosed(final String sessionId) {
+    public void sessionClosed(final SessionIdentifier sessionId) {
         final Collection<SchemeStrategy> knownStrategies = strategies.values();
         for (SchemeStrategy strategy : knownStrategies) {
             strategy.sessionClosed(sessionId);

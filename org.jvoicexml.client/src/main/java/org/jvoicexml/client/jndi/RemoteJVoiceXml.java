@@ -26,6 +26,7 @@ import java.rmi.RemoteException;
 
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 
 /**
  * Remote interface to enable remote method calls to
@@ -69,6 +70,33 @@ public interface RemoteJVoiceXml
      *            Error creating the session.
      */
     Session createSession(ConnectionInformation connectionInformation)
+            throws RemoteException;
+
+    /**
+     * Creates a new session.
+     *
+     * <p>
+     * The <code>Session</code> is the entry point to start the interpreter. A
+     * session is obtained by a client.
+     * </p>
+     *
+     * @param connectionInformation
+     *        The connection information to use in this session,
+     *        maybe <code>null</code>. If it is <code>null</code> the
+     *        default implementation platform is used.
+     *
+     *@param id
+     *          the session identifier
+     *          
+     * @return The new session.
+     *
+     * @see org.jvoicexml.ImplementationPlatform
+     *
+     * @exception RemoteException
+     *            Error creating the session.
+     */
+    Session createSession(ConnectionInformation connectionInformation,
+            SessionIdentifier id)
             throws RemoteException;
 
     /**

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@ import javax.naming.Context;
 
 import org.jvoicexml.Application;
 import org.jvoicexml.LastResult;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
@@ -44,7 +45,7 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
     private static final long serialVersionUID = 6891917167049375298L;
 
     /** The session ID. */
-    private String sessionID;
+    private SessionIdentifier sessionIdentifier;
 
     /**
      * Constructs a new object.
@@ -56,8 +57,8 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      * Constructs a new object.
      * @param id the session id
      */
-    public ApplicationStub(final String id) {
-        sessionID = id;
+    public ApplicationStub(final SessionIdentifier id) {
+        sessionIdentifier = id;
     }
 
     /**
@@ -76,7 +77,7 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      */
     @Override
     public String getStubName() {
-        return Application.class.getSimpleName() + "." + sessionID;
+        return Application.class.getSimpleName() + "." + sessionIdentifier.getId();
     }
 
     /**

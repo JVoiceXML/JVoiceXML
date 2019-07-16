@@ -27,6 +27,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -110,7 +111,7 @@ public final class MarySynthesizedOutput
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final String sessionId, final DocumentServer server)
+            final SessionIdentifier sessionId, final DocumentServer server)
             throws NoresourceError {
         if (processor == null) {
             throw new NoresourceError("no synthesizer: cannot speak");

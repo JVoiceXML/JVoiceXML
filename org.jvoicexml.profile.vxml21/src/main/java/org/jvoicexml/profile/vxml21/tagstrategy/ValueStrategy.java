@@ -31,6 +31,7 @@ import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -145,7 +146,7 @@ public final class ValueStrategy extends AbstractTagStrategy
         platform.queuePrompt(speakable);
         if (!fia.isQueuingPrompts()) {
             final Session session = context.getSession();
-            final String sessionId = session.getSessionId();
+            final SessionIdentifier sessionId = session.getSessionId();
             try {
                 final CallControlProperties callProps = context
                         .getCallControlProperties(fia);

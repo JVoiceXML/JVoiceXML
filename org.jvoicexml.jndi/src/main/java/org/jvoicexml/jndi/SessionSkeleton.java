@@ -32,6 +32,7 @@ import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DtmfInput;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.client.jndi.ApplicationStub;
 import org.jvoicexml.client.jndi.DtmfInputStub;
 import org.jvoicexml.client.jndi.RemoteSession;
@@ -93,7 +94,7 @@ final class SessionSkeleton extends UnicastRemoteObject
      */
     public String getSkeletonName() {
         return RemoteSession.class.getSimpleName() + "."
-                + session.getSessionId();
+                + session.getSessionId().getId();
     }
 
     /**
@@ -106,7 +107,7 @@ final class SessionSkeleton extends UnicastRemoteObject
 
         try {
             final Application application = session.call(uri);
-            final String id = session.getSessionId();
+            final SessionIdentifier id = session.getSessionId();
             final ApplicationSkeleton skeleton = new ApplicationSkeleton(id,
                     application);
             final ApplicationStub stub = new ApplicationStub(id);
@@ -141,7 +142,7 @@ final class SessionSkeleton extends UnicastRemoteObject
         }
 
         try {
-            final String id = session.getSessionId();
+            final SessionIdentifier id = session.getSessionId();
             final DtmfInput input = session.getDtmfInput();
             final Skeleton skeleton = new DtmfInputSkeleton(id, input);
             final DtmfInput characterInput = new DtmfInputStub(id);

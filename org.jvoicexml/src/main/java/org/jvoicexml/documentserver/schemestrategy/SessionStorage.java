@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.SessionIdentifier;
 
 /**
  * Container that associates a JVoiceXML session to a custom strategy object,
@@ -39,7 +40,7 @@ public class SessionStorage<T> {
             LogManager.getLogger(SessionStorage.class);
 
     /** Association storage. */
-    private final Map<String, T> sessions;
+    private final Map<SessionIdentifier, T> sessions;
 
     /** Factory for new session identifiers. */
     private final SessionIdentifierFactory<T> factory;
@@ -49,7 +50,7 @@ public class SessionStorage<T> {
      * @param identifierFactory the factory for new session identifiers.
      */
     public SessionStorage(final SessionIdentifierFactory<T> identifierFactory) {
-        sessions = new java.util.HashMap<String, T>();
+        sessions = new java.util.HashMap<SessionIdentifier, T>();
         factory = identifierFactory;
     }
 
@@ -60,7 +61,8 @@ public class SessionStorage<T> {
      * @return session identifier, <code>null</code> if the given session is
      *         <code>null</code>.
      */
-    public synchronized T getSessionIdentifier(final String sessionId) {
+    public synchronized T getSessionIdentifier(
+            final SessionIdentifier sessionId) {
         if (sessionId == null) {
             LOGGER.warn("No session given. Unable to determine a session"
                     + " identifier");
@@ -78,7 +80,7 @@ public class SessionStorage<T> {
      * Removes the identifier from the list of known session identifiers.
      * @param sessionId the Id of the JVoiceXML session
      */
-    public synchronized void releaseSession(final String sessionId) {
+    public synchronized void releaseSession(final SessionIdentifier sessionId) {
         sessions.remove(sessionId);
     }
 }

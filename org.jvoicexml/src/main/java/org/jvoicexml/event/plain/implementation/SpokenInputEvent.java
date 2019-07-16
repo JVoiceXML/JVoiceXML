@@ -21,6 +21,7 @@
 
 package org.jvoicexml.event.plain.implementation;
 
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SpokenInput;
 
@@ -59,7 +60,7 @@ public class SpokenInputEvent extends JVoiceXMLEvent {
     private final SpokenInput source;
 
     /** The id of the related session. */
-    private final String sessionId;
+    private final SessionIdentifier sessionId;
 
     /**
      * Constructs a new object.
@@ -74,7 +75,7 @@ public class SpokenInputEvent extends JVoiceXMLEvent {
      *                if an illegal event type is passed.
      */
     public SpokenInputEvent(final SpokenInput output,
-            final String detailedType, final String id)
+            final String detailedType, final SessionIdentifier id)
             throws IllegalArgumentException {
         source = output;
         detail = detailedType;
@@ -91,8 +92,8 @@ public class SpokenInputEvent extends JVoiceXMLEvent {
      * @exception IllegalArgumentException
      *                if an illegal event type is passed.
      */
-    public SpokenInputEvent(final SpokenInput output, final String id)
-            throws IllegalArgumentException {
+    public SpokenInputEvent(final SpokenInput output,
+            final SessionIdentifier id) throws IllegalArgumentException {
         source = output;
         detail = null;
         sessionId = id;
@@ -113,7 +114,7 @@ public class SpokenInputEvent extends JVoiceXMLEvent {
      * @return the session id
      * @since 0.7.7
      */
-    public final String getSessionId() {
+    public final SessionIdentifier getSessionId() {
         return sessionId;
     }
 

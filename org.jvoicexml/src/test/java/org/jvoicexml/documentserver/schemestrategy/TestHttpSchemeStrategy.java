@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -42,6 +37,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.mock.http.MockHttpResponse;
@@ -55,13 +52,13 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Test cases for {@link HttpSchemeStrategy}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  */
 @RunWith(MockitoJUnitRunner.class)
 public final class TestHttpSchemeStrategy {
 
-    private static final String SESSION_ID = "SESSION_ID";
+    private static final SessionIdentifier SESSION_ID =
+            new UuidSessionIdentifer();
     private static final String BASE_URL = "http://example.com:8080";
     private static final long TIMEOUT = 0;
 

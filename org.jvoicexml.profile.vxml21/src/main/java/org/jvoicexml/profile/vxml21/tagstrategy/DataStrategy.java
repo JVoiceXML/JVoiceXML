@@ -33,6 +33,7 @@ import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -167,7 +168,7 @@ final class DataStrategy extends AbstractTagStrategy {
             appendVariables(context, descriptor);
             final FetchAttributes attributes = getFetchAttributes();
             descriptor.setAttributes(attributes);
-            final String sessionId = session.getSessionId();
+            final SessionIdentifier sessionId = session.getSessionId();
             final Document document = (Document) server.getObject(sessionId,
                     descriptor, DocumentServer.TEXT_XML);
             final String name = (String) getAttribute(Data.ATTRIBUTE_NAME);

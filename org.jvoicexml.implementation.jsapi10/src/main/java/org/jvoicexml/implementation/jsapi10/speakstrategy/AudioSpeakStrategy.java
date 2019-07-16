@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -30,6 +25,7 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
@@ -40,7 +36,6 @@ import org.jvoicexml.xml.ssml.Audio;
  * SSML strategy to play back an <code>&lt;audio&gt;</code> node.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5
  */
 class AudioSpeakStrategy
@@ -79,7 +74,7 @@ class AudioSpeakStrategy
         // Play the audio.
         try {
             final DocumentServer server = output.getDocumentServer();
-            final String sessionId = output.getSessionid();
+            final SessionIdentifier sessionId = output.getSessionid();
             final AudioFilePlayer player =
                     new AudioFilePlayer(server, sessionId);
             player.play(uri);

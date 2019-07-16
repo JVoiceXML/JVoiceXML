@@ -508,6 +508,8 @@ public interface DataModel {
      *            target data model 
      * @return {@code 0} upon success, failure status if the specified variable,
      *         field, or scope cannot be found.
+     * @throws SemanticError
+     *         error copying the values
      * @since 0.7.9
      */
     int copyValues(final DataModel model) throws SemanticError;

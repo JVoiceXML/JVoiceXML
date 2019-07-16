@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,23 +20,30 @@
  */
 package org.jvoicexml;
 
-/**
- * A listener for the {@link Session}.
- * @author Dirk Schnelle-Walka
- * @version $Revision$
- * @since 0.7.3
- */
-public interface SessionListener {
-    /**
-     * Notification that the session has been started.
-     * @param session the session
-     * @since 0.7.5
-     */
-    void sessionStarted(final Session session);
+import java.util.UUID;
 
+/**
+ * A session identifier that is based on a random {@link UUID}.
+ * @author Dirk Schnelle-Walka
+ * @since 0.7.9
+ */
+public class UuidSessionIdentifer implements SessionIdentifier {
+    /** The session identifier */
+    private final UUID uuid;
+    
     /**
-     * Notification that the session has ended.
-     * @param session the session.
+     * Constructs a new object.
      */
-    void sessionEnded(final Session session);
+    public UuidSessionIdentifer() {
+        uuid = UUID.randomUUID();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getId() {
+        return uuid.toString();
+    }
+
 }

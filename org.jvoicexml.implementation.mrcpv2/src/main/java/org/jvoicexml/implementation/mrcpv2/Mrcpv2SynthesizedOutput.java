@@ -37,6 +37,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
@@ -163,8 +164,9 @@ public final class Mrcpv2SynthesizedOutput
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final String sessionId, final DocumentServer documentServer)
-            throws NoresourceError, BadFetchError {
+            final SessionIdentifier sessionId,
+            final DocumentServer documentServer)
+                    throws NoresourceError, BadFetchError {
         String speakText = null;
         boolean urlPrompt = false;
         queueCount++;

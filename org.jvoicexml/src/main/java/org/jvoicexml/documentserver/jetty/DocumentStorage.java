@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.documentserver.schemestrategy.builtin.GrammarCreator;
 
 /**
@@ -47,7 +48,7 @@ public class DocumentStorage {
             .getLogger(DocumentStorage.class);
 
     /** Generated documents per session. */
-    private final Map<String, Collection<GrammarDocument>> sessionDocuments;
+    private final Map<SessionIdentifier, Collection<GrammarDocument>> sessionDocuments;
 
     /** Stored documents. */
     private final Map<URI, GrammarDocument> documents;
@@ -69,7 +70,8 @@ public class DocumentStorage {
      * 
      */
     public DocumentStorage() {
-        sessionDocuments = new java.util.HashMap<String, Collection<GrammarDocument>>();
+        sessionDocuments =
+                new java.util.HashMap<SessionIdentifier, Collection<GrammarDocument>>();
         documents = new java.util.HashMap<URI, GrammarDocument>();
         storagePort = 9595;
         internalGrammarHandler = new InternalGrammarDocumentHandler(this);
@@ -163,9 +165,10 @@ public class DocumentStorage {
      * @throws URISyntaxException
      *             if the URI could not be created
      */
-    public URI addGrammarDocument(final String sessionId,
+    public URI addGrammarDocument(final SessionIdentifier sessionId,
             final GrammarDocument document) throws URISyntaxException {
-        Collection<GrammarDocument> currentDocuments = getCurrentSessionDocuments(sessionId);
+        Collection<GrammarDocument> currentDocuments =
+                getCurrentSessionDocuments(sessionId);
         currentDocuments.add(document);
         final URI localUri = new URI(
                 InternalGrammarDocumentHandler.CONTEXT_PATH + "/" + sessionId
@@ -193,7 +196,7 @@ public class DocumentStorage {
      * @since 0.7.8
      */
     private Collection<GrammarDocument> getCurrentSessionDocuments(
-            final String sessionId) {
+            final SessionIdentifier sessionId) {
         Collection<GrammarDocument> currentDocuments = sessionDocuments
                 .get(sessionId);
         if (currentDocuments != null) {
@@ -228,7 +231,8 @@ public class DocumentStorage {
      *            the id of the session
      * @throws URISyntaxException if the URI does not feature a valid path
      */
-    public void clear(final String sessionId) throws URISyntaxException {
+    public void clear(final SessionIdentifier sessionId)
+            throws URISyntaxException {
         final Collection<GrammarDocument> currentDocuments = sessionDocuments
                 .get(sessionId);
         if (currentDocuments == null) {

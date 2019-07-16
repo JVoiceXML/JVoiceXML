@@ -31,6 +31,8 @@ import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.client.jndi.SessionStub;
 import org.jvoicexml.client.jndi.Stub;
@@ -102,15 +104,26 @@ class JVoiceXmlSkeleton
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final ConnectionInformation client)
+    public Session createSession(final ConnectionInformation info)
             throws RemoteException {
+        final SessionIdentifier id = new UuidSessionIdentifer();
+        return createSession(info, id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Session createSession(
+            final ConnectionInformation info,
+            final SessionIdentifier id) throws RemoteException {
         if (jvxml == null) {
             return null;
         }
 
         final Session session;
         try {
-            session = jvxml.createSession(client);
+            session = jvxml.createSession(info, id);
         } catch (ErrorEvent ee) {
             LOGGER.error("unable to create session", ee);
 
@@ -124,7 +137,6 @@ class JVoiceXmlSkeleton
 
         return (Session) sessionStub;
     }
-
 
     /**
      * {@inheritDoc}
