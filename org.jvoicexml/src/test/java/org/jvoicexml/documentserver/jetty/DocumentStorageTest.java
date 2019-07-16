@@ -136,7 +136,8 @@ public class DocumentStorageTest {
         final URI uri = document.getURI();
         Assert.assertNotNull(uri);
         Assert.assertEquals(document, storage.getDocument(uri));
-        storage.clear(id);
+        final SessionIdentifier otherId = new UuidSessionIdentifer();
+        storage.clear(otherId);
         Assert.assertEquals(document, storage.getDocument(uri));
     }
 

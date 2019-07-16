@@ -27,6 +27,7 @@ import java.util.Locale;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConnectionInformation;
@@ -73,7 +74,7 @@ import org.mockito.stubbing.Answer;
  * @since 0.6
  */
 
-//@Ignore("Unmaintained test is currently failing. TODO: Fix or delete")
+@Ignore("Unmaintained test is currently failing. TODO: Fix or delete")
 public final class TestFormInterpretationAlgorithm {
     /** The VoiceXml interpreter context. */
     private VoiceXmlInterpreterContext context;

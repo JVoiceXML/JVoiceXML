@@ -41,7 +41,7 @@ public final class TestSessionStorage {
     private SessionIdentifier sessionId;
 
     /** The storage to test. */
-    private SessionStorage<SessionIdentifier> storage;
+    private SessionStorage<String> storage;
 
     /**
      * Test set up.
@@ -49,26 +49,19 @@ public final class TestSessionStorage {
     @Before
     public void setUp() {
         @SuppressWarnings("unchecked")
-        final SessionIdentifierFactory<SessionIdentifier> factory = Mockito
+        final SessionIdentifierFactory<String> factory = Mockito
                 .mock(SessionIdentifierFactory.class);
-        final Answer<SessionIdentifier> answer = new Answer<SessionIdentifier>() {
+        final Answer<String> answer = new Answer<String>() {
             @Override
-            public SessionIdentifier answer(InvocationOnMock invocation) throws Throwable {
-                return invocation.getArgumentAt(0, SessionIdentifier.class);
+            public String answer(InvocationOnMock invocation) throws Throwable {
+                return invocation.getArgumentAt(0,
+                        SessionIdentifier.class).getId() + "_GEN";
             }
         };
         Mockito.when(factory.createSessionIdentifier(Mockito.anyObject()))
                 .then(answer);
-        sessionId = factory.createSessionIdentifier(new SessionIdentifier() {
-            private static final long serialVersionUID = 1907169201694843275L;
-
-            @Override
-            public String getId() {
-                // TODO Auto-generated method stub
-                return "dummy";
-            }
-        });
-        storage = new SessionStorage<SessionIdentifier>(factory);
+        sessionId = new UuidSessionIdentifer();
+        storage = new SessionStorage<String>(factory);
     }
 
     /**
@@ -78,14 +71,15 @@ public final class TestSessionStorage {
      */
     @Test
     public void testGetSessionIdentifier() {
-        final SessionIdentifier id1 = storage.getSessionIdentifier(sessionId);
+        
+        final String id1 = storage.getSessionIdentifier(sessionId);
         Assert.assertNotNull(id1);
-        final SessionIdentifier id2 = storage.getSessionIdentifier(sessionId);
+        final String id2 = storage.getSessionIdentifier(sessionId);
         Assert.assertEquals(id1, id2);
         final SessionIdentifier sessionId3 = new UuidSessionIdentifer();
-        final SessionIdentifier id3 = storage.getSessionIdentifier(sessionId3);
+        final String id3 = storage.getSessionIdentifier(sessionId3);
         Assert.assertNotSame(id1, id3);
-        final SessionIdentifier id4 = storage.getSessionIdentifier(null);
+        final String id4 = storage.getSessionIdentifier(null);
         Assert.assertNull("expected tosessionId retrieve a null identifer", id4);
     }
 
@@ -96,10 +90,10 @@ public final class TestSessionStorage {
      */
     @Test
     public void testReleaseSession() {
-        final SessionIdentifier id1 = storage.getSessionIdentifier(sessionId);
+        final String id1 = storage.getSessionIdentifier(sessionId);
         Assert.assertNotNull(id1);
         storage.releaseSession(sessionId);
-        final SessionIdentifier id2 = storage.getSessionIdentifier(sessionId);
+        final String id2 = storage.getSessionIdentifier(sessionId);
         Assert.assertNotSame(id1, id2);
     }
 

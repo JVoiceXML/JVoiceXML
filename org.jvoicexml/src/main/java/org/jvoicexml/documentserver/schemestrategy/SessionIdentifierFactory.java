@@ -31,7 +31,7 @@ import org.jvoicexml.SessionIdentifier;
  */
 public interface SessionIdentifierFactory<T> {
     /**
-     * Creates a new session identifier.
+     * Creates a new session identifier for the {@link SessionStorage}.
      * @param sessionId the Id of the current JVoiceXML session
      * @return new session identifier.
      */
