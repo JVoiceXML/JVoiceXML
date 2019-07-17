@@ -1,7 +1,7 @@
 /*
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -24,6 +24,7 @@ package org.jvoicexml.demo.luis;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.net.UnknownHostException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -85,8 +86,11 @@ public final class LUISDemo implements TextListener {
      * Starts the text server.
      * @throws InterruptedException
      *         error waiting for the text server to start
+     * @throws UnknownHostException 
+     *          if the local host name could not be determined
      */
-    private void startTextServer() throws InterruptedException {
+    private void startTextServer()
+            throws InterruptedException, UnknownHostException {
         server = new TextServer(4242);
         server.addTextListener(this);
         server.start();
@@ -176,7 +180,7 @@ public final class LUISDemo implements TextListener {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting LUIS demo for JVoiceXML...");
-        LOGGER.info("(c) 2017 by JVoiceXML group - "
+        LOGGER.info("(c) 2017-2019 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final LUISDemo demo = new LUISDemo();
