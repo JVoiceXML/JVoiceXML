@@ -102,14 +102,14 @@ public final class TextDemo implements TextListener {
      */
     public void parallelMode() {
         final TextServer[] servers = new TextServer[MAX_SESSIONS];
-        for (int i = 0; i < MAX_SESSIONS; i++) {
-            final TextServer server = new TextServer(14242 + i);
-            server.addTextListener(new TextDemo());
-            server.start();
-            servers[i] = server;
-        }
-
         try {
+            for (int i = 0; i < MAX_SESSIONS; i++) {
+                final TextServer server = new TextServer(14242 + i);
+                server.addTextListener(new TextDemo());
+                server.start();
+                servers[i] = server;
+            }
+
             final Context context = new InitialContext();
             final JVoiceXml jvxml = (JVoiceXml) context.lookup(
                     JVoiceXml.class.getSimpleName());
