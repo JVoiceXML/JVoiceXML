@@ -459,7 +459,6 @@ public final class TextTelephony implements Telephony {
             // (ConnectedTextConnectionInformation) info;
             // socket = textClient.getSocket();
         } else {
-<<<<<<< HEAD
             LOGGER.error("Unsupported connection information '" + info + "'");
             LOGGER.error("Telephony - CLassLoader:                      " 
                     + getClass().getClassLoader());
@@ -469,10 +468,6 @@ public final class TextTelephony implements Telephony {
                     + info.getClass().getClassLoader());
             throw new IOException("Unsupported connection information '"
                     + info + "'");
-=======
-            throw new IOException(
-                    "Unsupported connection information '" + info + "'");
->>>>>>> refs/remotes/origin/feature/upgrade-gradle-to-5.4.1
         }
         receiver = new TextReceiverThread(socket, this);
         receiver.start();
