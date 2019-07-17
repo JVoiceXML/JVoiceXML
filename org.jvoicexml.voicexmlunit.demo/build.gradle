@@ -17,11 +17,18 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: JVOICEXML_VERSION
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.client.text', version: JVOICEXML_VERSION
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: JVOICEXML_VERSION
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jndi', version: JVOICEXML_VERSION
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.voicexmlunit', version: JVOICEXML_VERSION
+    if (project.property('JVOICEXML_DEVELOPMENT_ENVIRONMENT') == 'true') {
+        compile project(':org.jvoicexml.client')
+        compile project(':org.jvoicexml.client.text')
+        compile project(':org.jvoicexml.xml')
+        compile project(':org.jvoicexml.jndi')
+        compile project(':org.jvoicexml.voicexmlunit')
+    } else {
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.client.text', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.jndi', version: JVOICEXML_VERSION
+    }
 }
 
 jar {
@@ -29,8 +36,13 @@ jar {
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML Unit Test Demo",
-                   "Implementation-Vendor": "JVoiceXML group",
-                   "Implementation-Version": JVOICEXML_VERSION)
+                   'Implementation-Vendor': 'switch',
+                   'Implementation-Version': JVOICEXML_VERSION,
+                   'Built-By'       : System.properties['user.name'],
+                   'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                   'Created-By'     : "Gradle ${gradle.gradleVersion}",
+                   'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                   'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}")
     }
     baseName 'org.jvoicexml.voicexmlunit.demo'
 }

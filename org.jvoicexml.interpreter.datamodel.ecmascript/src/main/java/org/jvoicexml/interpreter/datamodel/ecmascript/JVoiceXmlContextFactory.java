@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,7 +29,6 @@ import org.mozilla.javascript.ContextFactory;
  * requires the activation of certain features, like strict variable
  * declarations. This implementation takes care that they are set properly.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4080 $
  * @since 0.7.5
  */
 class JVoiceXmlContextFactory extends ContextFactory {

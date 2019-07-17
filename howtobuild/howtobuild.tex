@@ -58,10 +58,10 @@ document creation and a VoiceXML interpreter to process
 VoiceXML documents using JAVA standard APIs such as JSAPI~\cite{sun:jsapi} and
 JTAPI~\cite{sun:jsapi}.
 
-VoiceXML is hosted at SourceForge~\cite{sourceforge} as an open source project.
+VoiceXML was previously hosted at SourceForge~\cite{sourceforge} as an open source project.
 You find everything that is related to this project under
-\url{http://sourceforge.net/projects/jvoicexml/}. The code hase been made available at
-GitHub at \url{https://github.com/JVoiceXML/JVoiceXML}.
+\url{http://sourceforge.net/projects/jvoicexml/}. Now, the code hase been made
+available at GitHub at \url{https://github.com/JVoiceXML/JVoiceXML}.
 
 This document refers to UNIX and Windows systems. JVoiceXML will work 
 any other operating systems that support Java 8, too.
@@ -144,7 +144,7 @@ is built by the project \lstinline{org.jvoicexm.xml}.
 
 Since JVoiceXML is written in JAVA you will at least need a
 JAVA compiler, see section~\ref{sec:ide}, an editor or preferably a JAVA
-IDE, see section~\ref{sec:ide}, and ANT, see section~\ref{sec:ant}, to build the
+IDE, see section~\ref{sec:ide}, and Gradle, to build the
 binaries. All used third party libraries can be downloaded from the CVS, SVN or
 comparable repository or from their home pages. The file
 \texttt{doc/libraries.xhtml} contains a list of all used libraries.
@@ -198,10 +198,6 @@ figure~\ref{fig:eclipse-execution-environments}.
 \label{fig:eclipse-execution-environments}
 \end{figure}
 
-Eclipse is configured to use the folder \texttt{eclipse-compiled} as output
-since this may cause some interference with the ANT build
-scripts\footnote{\url{https://bugs.eclipse.org/bugs/show_bug.cgi?id=210746}}.
-
 \paragraph{Required Eclipse Plug-ins for Development}
 
 The development of JVoiceXML relies on some plug-ins that are not part of the
@@ -215,10 +211,12 @@ Below is a list of the required update URLs.
 \item[Checkstyle] \url{http://eclipse-cs.sourceforge.net/update} (Note that you
 only need the 5.x version)
 \item[TeXlipse] \url{http://texlipse.sourceforge.net} (optional if you want to
-edit the documentation)
+edit the documentation) This will also require an existing \LaTeX installation.
 \item[Protocol Buffers Development Tools] \url{http://code.google.com/p/protobuf-dt/}
 (optional if you want to edit the protobuf files in the sub project
 \texttt{org.jvoicexml.mmi.events} or \texttt{org.jvoicexml.client.text})
+\item[Microsoft Visual Studio 2019] \url{https://visualstudio.microsoft.com/}
+Only required, if you are running on Windows
 \end{description}
 
 However, the preferred way to install the plugins is via the eclipse market place.
@@ -240,34 +238,20 @@ Since almost all IDEs feature support for Gradle, at least with the help of plug
 use your favorite IDE.
 
 \subsubsection{Gradle Support for Eclipse}
-\label{sec:ant-eclipse}
+\label{sec:gradle-eclipse}
 
-The ANT project files are usually named \texttt{build.xml} and reside in
-the folders of the subprojects. In order to run an ANT target from within
-eclipse you can open these build files with the ANT editor as shown in
-figure~\ref{fig:eclipse-open-ant-editor}.
+The Gradle project files are usually named \texttt{build.gradle} and reside the 
+project root folder as well as in the folders of the subprojects. 
+In order to run an Gradle target from within
+eclipse you can use the \emph{Gradle Tasks} view as shown in
+figure~\ref{fig:eclipse-run-gradle}.
 \begin{figure}
-\includegraphics[width=\linewidth]{eclipse-open-ant-editor}
-\caption{Open the ANT build file with the ANT editor}
-\label{fig:eclipse-open-ant-editor}
+\includegraphics[width=\linewidth]{eclipse-run-gradle}
+\caption{Run a Gradle tasks from within Eclipse}
+\label{fig:eclipse-run-gradle}
 \end{figure}
-The targets that can be executed will be shown in eclipse's outline view.
-Right-click the target to execute and select \emph{Run As} and the
-\emph{ANT Build} as shown in figure~\ref{fig:eclipse-run-ant}.
-\begin{figure}
-\includegraphics[width=\linewidth]{eclipse-run-ant}
-\caption{Run an ANT target}
-\label{fig:eclipse-run-ant}
-\end{figure}
-Afterwards, it may be necessary to refresh the project to synchronize generated
-files with eclipse's view onto the file system.
 
-Some more information for executing ANT targets from within eclipse are given at
-the end of section~\ref{sec:ant-build-file}. 
-
-Note: Please use the ANT build system. An attempt to run JVoiceXML from eclipse
-directly may result in strange errors and a huge amount of adaptations to the
-classpath.
+This view is part of Eclipse's Buildship integration for Gradle.
 
 \subsection{Tomcat}
 \label{sec:tomcat}
@@ -327,20 +311,17 @@ For instance, the JSAPI 1.0 implementation platform resides in package
 \end{figure}
 
 
-Within a project the following directory structure applies
+Within a project the following directory structure applies as suggested by
+Gradle
 
 \begin{description}
-\item[3rdparty] third party libraries. This directory contains all libraries
-that are used by the specific project 
-\item[classes] compiled binaries
-\item[etc] resource files
-\item[src] Java source code
-\item[unittests] JUnit tests and other tests. The code is located within a
-dedicated \texttt{src} subfolder. The binaries are built into the subfolder
-\texttt{classes}.
-\item[3rdparty-libs.xml] ANT setting for the third party libraries
-\item[build.xml] main ANT build file for this project
-\item[test.xml] ANT build file to to run the unit tests for this project.
+\item[build] compiled binaries
+\item[src/main/java] Java source code
+\item[src/main/resources] Additional resource files to be integrated in the Jar
+\item[src/main/config] Project specific configuration files
+\item[src/test/java] JUnit tests and other tests.
+\item[src/test/resources]  Additional resource files for the tests
+\item[build.gradle] Gradle build file
 \ref{sec:create-configuration})
 \end{description}
 
@@ -432,112 +413,13 @@ you will need
 A simple demo to test that implementation platform is
 \lstinline{org.jvoicexml.demo.text}.
 
-\subsection{Project \texttt{org.jvoicexml}}
+\subsection{Project \texttt{main}}
 
 This project is the core of the JVoiceXML browser and the central point of
 building and configuring the environment.
 
-\subsubsection{Directory Structure}
-\label{sec:directory-structure}
+\subsection{Project \texttt{org.jvoicexml}}
 
-Having the source code in your \$\{JVOICEXML\_HOME\}/org.jvoicexml
-directory you find the following directory structure:
-
-\begin{description}
-\item[3rdparty] third party libraries. This directory contains all libraries
-that are used by the core or by more that one subproject. Hence, it serves as a
-central library repository. 
-\item[classes] compiled binaries
-\item[config] configuration setting to run the voice browser
-\item[config-props] configuration templates for the ant build files
-\item[dist] distribution files
-\item[etc] resource files
-\item[personal-props] adapted configuration from the configuration templates
-for the ant build files. The contents of this folder is never committed to the
-SVN repository except the \texttt{README.TXT}.
-\item[logging] logging output of JVoiceXML
-\item[src] Java source code
-\item[unittests] JUnit tests and other tests
-\item[work] Recorded audio files
-\item[3rdparty-libs.xml] ANT setting for the third party libraries
-\item[build.xml] main ANT build file
-\item[configuration.xml] ANT build file to create a customized configuration
-\item[distribution.xml] ANT build file to create the distribution
-\item[nightly.xml] ANT build for the nightly build process
-\item[run.xml] ANT build file to run the voice browser
-\item[test.xml] ANT build file to to run the unit tests
-\item[platform-targets.xml] Included ANT build file that will call the
-configured implementation platforms (see sections \ref{sec:adapt-ant} and
-\ref{sec:create-configuration})
-\end{description}
-
-Not all of the files are present at start but are created by the
-ANT build file or through procedures described in this 
-document, see section~\ref{sec:ant-build-file} or while running the interpreter.
-
-\subsubsection{Adapting the ANT Configuration}
-\label{sec:adapt-ant}
-
-The directory \texttt{personal-props} provides a developer with the 
-possibility to override some 
-default properties defined by files in \texttt{config-props}. 
-Any file that is to be
-substituted must be copied from \texttt{config-props} 
-(preserving the directory structure) to that directory and can then be 
-modified. Do not modify the settings in the \texttt{config-props} folder. This
-is a possible source for SVN conflicts.
-
-The settings in the build.xml files assure that the files
-found in this directory have precedence over those in config-props.
-
-\subsubsection{Third Party Libraries}
-\label{sec:third-party-libr}
-
-JVoiceXML uses some third party libraries. This section names them and tell
-you where you can get them. All of them are at least freeware
-so that it was possible to store them in the SVN repository at
-SourceForge. You can download them either from that location or
-from their home pages. 
-
-In this section, only those libraries are described, that are required
-to build the main project. Some implementation platforms or demos may
-require additional libraries.
-
-You can also use your local copy by adjusting the settings in your
-custom properties file. However, this is not recommended.
-
-The settings of these libraries are stored in the file \emph{3rdparty-libs.xml}
-which is imported by the main build file.
-
-All third party libraries are located in the directory \\
-\$\{JVOICEXML\_HOME\}/3rdparty.
-
-This directory is assigned to the property \\
-\texttt{3rdparty.dir}
-
-Each library is located in a specific subfolder of the \$\{3rdparty.dir\}
-folder. These subfolder follow the following convention:
-
-\begin{itemize}
-\item The name of the subfolder is a combination of the library name and
-the version of this library, e.g. \texttt{log4j1.2.17} for the \emph{log4j}
-library with the version number\emph{1.2.16}.
-\item The jars of this library are located in a subfolder of this folder
-called \emph{lib}
-\item The Javadoc documentation for the library is compressed into a zip
-archive and added to the subfolder.
-\end{itemize}
-
-You find a copy of the license terms for the libraries in the folder\\
-\$\{JVOICEXML\_HOME\}/etc/legal.
-
-\paragraph{Library Snapshots}
-
-Some of the used libraries are under active development and have not yet
-released a patched release. In these cases the lib folder contains a snapshot
-from their repository. The presence of a snapshot is marked in the file
-\texttt{doc/libraries.xhtml} e.g. with the comment \emph{(SVN snapshot from
-<date>)}.
 
 \subsubsection{Libraries Needed to Compile JVoiceXML}
 \label{sec:libr-need-comp}
@@ -604,89 +486,22 @@ one single implementation platform are located in the implementation platform's
 Currently there are eleven implementations for the implementation platform
 that reside in co-projects, refer to section~\ref{sec:git-repository}.
 
-Section~\ref{sec:adapt-ant} describes how to prepare your personal settings.
-If you want to use one of them, you have to adapt the corresponding setting in
-your copy of \texttt{platforms.xml} in the folder\texttt{personal-props} by
-simply uncommenting it.
-An example to enable the JSAPI 1.0 platform is shown below:
-\begin{lstlisting}[language=XML]
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<platforms>
-  <!--
-     Uncomment the platforms that you want to use or add your own platform.
-  -->
-  <platform name="org.jvoicexml.implementation.jsapi10">
-    <property name="jvxml.jsapi10.talkingJava" value ="false" />
-    <property name="jvxml.jsapi10.talkingJava.path"
-        value ="../org.jvoicexml.implementation.jsapi10/3rdparty/talkingjava/lib" />
-  </platform>
-  <!-- platform name="org.jvoicexml.implementation.jsapi20">
-    <property name="jvxml.jsapi20.sapi" value ="false" />
-    <property name="jvxml.jsapi20.mac" value ="false" />
-  </platform-->
-  <!-- platform name="org.jvoicexml.implementation.jtapi"/-->
-  <!-- platform name="org.jvoicexml.implementation.mary"/-->
-  <!-- platform name="org.jvoicexml.implementation.marc"/-->
-  <!-- platform name="org.jvoicexml.implementation.mrcpv2"/-->
-  <!-- platform name="org.jvoicexml.implementation.red5"/-->
-  <!-- platform name="org.jvoicexml.callmanager.sip"/-->
-  <!-- platform name="org.jvoicexml.callmanager.mmi">
-    <subproject name="org.jvoicexml.mmi.events" order="pre" />
-    <!-- For this platform to work you will need at least one of the
-         following subprojects -->
-    <!-- uncomment if MMI events should be handled over umundo -->
-    <!-- subproject name="org.jvoicexml.callmanager.mmi.umundo"
-        order="post" /-->
-    <!-- uncomment if MMI events should be handled over sockets -->
-    <!-- subproject name="org.jvoicexml.callmanager.mmi.socket"
-        order="post" /-->
-  </platform-->
-  <!-- platform name="org.jvoicexml.callmanager.text"/-->
-  <!-- platform name="org.jvoicexml.implementation.text"/-->
-</platforms>
-\end{lstlisting}
+The file \texttt{\$JVOICEXML\_HOME/gradle.properties} contains templates for all
+the switches and settings that may be used to enable or disable certain
+implementation platforms or adapt needed configuration settings.
 
-This will enable the JSAPI 1.0 platform to work with Sphinx 4 and FreeTTS. 
+This adaptation should be done via your local copy of this file in your
+local copy of that content at \texttt{gradle.properties} in
+\texttt{\$HOME/.gradle}.
 
-This setting is also used if you call ant for the main build file as described
-in the following section.
-Note that you need at least one implementation platform to use the voice
-browser.
-
-An implementation platform or callmanager is configured using the
-\lstinline{platform}-tag. The name of the platform given via the
-\lstinline{name} attribute must match the name of a project, i.e. the
-platform or callmanager to configure.
-
-A \lstinline{platform}-tag may contain nested ANT tags, e.g.
-\lstinline{property}, which are copied into the resulting ANT build file. Moreover, a \lstinline{platform}-tag
-may have nested \lstinline{subproject} tags. Its \lstinline{name} attribute
-is used to identify subprojects that have to be compiled before
-(\lstinline{order} set to \texttt{pre}) or after the platform project
-(\lstinline{order} set to \texttt{post}). Again the value given at the
-\lstinline{name} attribute must match the name of the project.
-
-Once you changed the settings call
+Once you changed the settings cd to the main subproject and call
 \begin{lstlisting}
-ant -f configuration.xml
+gradle run
 \end{lstlisting}
-to create your adapted configuration settings. In addition you also get
-a customized ant build file \texttt{run.xml} as well as the included
-\texttt{platform-targets.xml} to start and
-stop the interpreter using the libraries from the co-projects.
-Eclipse users may want to read section~\ref{sec:ant-eclipse} if they do
-not how hot wo run ANT build files from eclipse. 
-
-Note that it is required to create a configuration after you changed the
-settings in the \texttt{ant.properties} file.
-
-The voice browser can be started by
+to start the Voice Browser.
+and stopped it by
 \begin{lstlisting}
-ant -f run.xml run
-\end{lstlisting}
-and stopped by
-\begin{lstlisting}
-ant -f run.xml shutdown
+gradle shutdown
 \end{lstlisting}
 
 Please do not stop the voice browser by \texttt{CTRL-C} or similar. It may occur
@@ -694,10 +509,10 @@ that some resources are not closed properly and may cause conflicts with the nex
 start of JVoiceXML. This is because it is not possible to properly shutdown the
 RMI registry.
 
-The created \texttt{run.xml} also contains a target to enable remote
+The \texttt{build.gradle} also contains a target to enable remote
 debugging. It can be called by
 \begin{lstlisting}
-ant -f run.xml debug
+gradle runDebug
 \end{lstlisting}
 The code will be compiled using your current configuration and the start of the
 voice browser will be delayed until you connect with a remote debugger. The
@@ -705,38 +520,26 @@ used server port is 12367. This allows to set breakpoints using your IDE and
 debug JVoiceXML.
 
 \subsubsection{The Main Build File}
-\label{sec:ant-build-file}
+\label{sec:main-build-file}
 
 This section explains the most important targets of the main build file
-\texttt{build.xml}. All others build files from the implementation platforms
+\texttt{build.gradle} in the main subproject. All others build files from the
+implementation platforms
 are called from this central point. Just start ant without any target specified
 if you want to build everything. Call
 \begin{lstlisting}
-ant -projecthelp
+gradle tasks
 \end{lstlisting}
 to get an overview of the targets and their purpose.
 
-Some of the targets use third party extensions to ANT. These 
-extensions are not described in this document, but are part of
-the 3rdparty folder. In contrast to the libraries to link with,
-these libraries are not defined in the file \texttt{3rdparty-libs.xml}
-but in the corresponding target of this build file. Each features
-a preceding target that checks if the library is required. If
-the library is not found, the target will not be called.
-
 \begin{description}
 \item[clean]
-Delete all compiled class files in the directory \emph{classes}
+Delete all compiled class files in the directory \emph{build}
 and the jars that are created by the \emph{jar} target in the directory 
 \emph{dist}.
 
-\item[compile]
- Compile all JAVA files in the directory \emph{src} into the directory
-\emph{classes}.
-
 \item[jar]
- This target depends on the target \emph{compile} and creates the jar
-files of your distribution in the directory \emph{dist}.
+This target dcreates the jar files of your distribution.
 If successful, you will find at minimum the following jar archives:
 \begin{itemize}
 \item org.jvoicexml.jar This jar file contains the core of JVoiceXML.
@@ -750,26 +553,21 @@ a client.
 \item some other jars, depending on your configuration settings
 \end{itemize}
 
-\item[apidoc]
-Create JAVADOC documentation from the JAVA files in the directory
-doc/api.
-\item[checkstyle]
-Perform a check of the JVoiceXML coding standard as specified 
-in section~\ref{sec:code-conventions}.
+\item[javadoc]
+Create JAVADOC documentation from the JAVA files in the directory.
 \end{description}
 
 Call
 \begin{lstlisting}
-ant <target>
+gradle <target>
 \end{lstlisting}
 to run ant for the the given target.
 
-The ANT launch configurations for eclipse are part of the SVN repository. They
-are available as a shortcut in the external tools configuration after a first
-run. A screenshot is shown in figure~\ref{fig:eclipse-launch}.
+The ANT launch configurations for eclipse are part of the Git repository. They
+are available as a shortcut in the run. A screenshot is shown in figure~\ref{fig:eclipse-launch}.
 \begin{figure}
 \includegraphics[width=\linewidth]{eclipse-launch.png}
-\caption{Eclipse External Tools Configuration for JVoiceXML}
+\caption{Run configuration for JVoiceXML}
 \label{fig:eclipse-launch}
 \end{figure}
 
@@ -1319,7 +1117,7 @@ Example:
 
 We use checkstyle~\cite{checkstyle} to check our coding conventions.
 All developers are requested to execute the \emph{checkstyle} target
-of our ANT buildfile, see section~\ref{sec:ant-build-file}. 
+of our ANT buildfile, see section~\ref{sec:main-build-file}. 
 There are plug-ins for some IDEs, which you can use if you want to. The
 \texttt{checkstyle.xml} can be found in the folder 
 \texttt{etc} and is called \texttt{jvoicexml-checks.xml}.

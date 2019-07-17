@@ -1,0 +1,17 @@
+language: java
+install: true
+
+jdk:
+  - oraclejdk8
+
+before_install:
+ - sudo apt-get update 
+ - sudo apt-get install -y texlive-latex-base
+ - sudo apt-get install -y texlive-fonts-recommended
+ - sudo apt-get install -y texlive-fonts-extra
+ - sudo apt-get install -y texlive-latex-extra
+ - chmod +x gradlew
+ 
+script:
+  - ./gradlew jar 
+

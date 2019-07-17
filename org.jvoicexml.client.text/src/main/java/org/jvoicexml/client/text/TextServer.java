@@ -380,12 +380,15 @@ public final class TextServer extends Thread {
                 final InetSocketAddress remote = (InetSocketAddress) client
                         .getRemoteSocketAddress();
                 calledId = TcpUriFactory.createUri(remote);
-                final InetSocketAddress local = (InetSocketAddress) client
-                        .getLocalSocketAddress();
-                callingId = TcpUriFactory.createUri(local);
-
-                LOGGER.info("connected to " + calledId);
-                fireConnected(remote);
+                synchronized (client) {
+                    if (client != null) {
+                        final InetSocketAddress local = (InetSocketAddress) client
+                                .getLocalSocketAddress();
+                        callingId = TcpUriFactory.createUri(local);
+                        LOGGER.info("connected to " + calledId);
+                        fireConnected(remote);
+                    }
+                }
 
                 if (readOutput()) {
                     break;

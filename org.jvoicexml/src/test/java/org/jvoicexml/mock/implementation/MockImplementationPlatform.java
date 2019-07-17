@@ -174,7 +174,7 @@ public final class MockImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public void setPromptTimeout(final long timeout) {
+    public void startPromptQueuing(final long timeout) {
         prompts = null;
     }
 

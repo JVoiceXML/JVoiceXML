@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -50,10 +50,10 @@ import org.jvoicexml.implementation.TelephonyListener;
  * 
  * <p>
  * This class provides the basic communication means with a client. System
- * output is taken from the {@link TextSynthesizedOutput} and handed to
- * the {@link TextSenderThread} to send them to the client. User input
- * is received from the {@link TextReceiverThread} to forward the received
- * messages to the {@link TextSpokenInput}.
+ * output is taken from the {@link TextSynthesizedOutput} and handed to the
+ * {@link TextSenderThread} to send them to the client. User input is received
+ * from the {@link TextReceiverThread} to forward the received messages to the
+ * {@link TextSpokenInput}.
  * </p>
  *
  * @author Dirk Schnelle-Walka
@@ -61,15 +61,14 @@ import org.jvoicexml.implementation.TelephonyListener;
  */
 public final class TextTelephony implements Telephony {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
-            .getLogger(TextTelephony.class);
+    private static final Logger LOGGER = Logger.getLogger(TextTelephony.class);
 
     /** Maximal number of milliseconds to wait for a connect. */
     private static final int MAX_TIMEOUT_CONNECT = 1000;
 
     /** Maximal number of milliseconds to wait for acknowledgment. */
     private static final int MAX_TIMEOUT_ACK = 100;
-    
+
     /** The connection to the client. */
     private Socket socket;
 
@@ -132,7 +131,9 @@ public final class TextTelephony implements Telephony {
 
     /**
      * Acknowledges the given message.
-     * @param message the message to acknowledge
+     * 
+     * @param message
+     *            the message to acknowledge
      */
     void addAcknowledgeMessage(final TextMessage message) {
         if (sender != null) {
@@ -142,7 +143,9 @@ public final class TextTelephony implements Telephony {
 
     /**
      * Adds the given sequence number to the list of pending messages.
-     * @param message the sent message
+     * 
+     * @param message
+     *            the sent message
      */
     void addPendingMessage(final PendingMessage message) {
         synchronized (pendingMessages) {
@@ -157,7 +160,9 @@ public final class TextTelephony implements Telephony {
 
     /**
      * Removes the given sequence number from the list of pending messages.
-     * @param sequenceNumber the sequence number to add.
+     * 
+     * @param sequenceNumber
+     *            the sequence number to add.
      * @return <code>true</code> if the message has been removed.
      */
     boolean removePendingMessage(final int sequenceNumber) {
@@ -169,8 +174,8 @@ public final class TextTelephony implements Telephony {
             if (removed) {
                 final SpeakableText speakable = pending.getSpeakable();
                 if (LOGGER.isDebugEnabled()) {
-                    final Collection<Integer> pengingSequenveNumbers =
-                            pendingMessages.keySet();
+                    final Collection<Integer> pengingSequenveNumbers = pendingMessages
+                            .keySet();
                     LOGGER.debug("removed pending message " + sequenceNumber
                             + " remaining " + pengingSequenveNumbers);
                 }
@@ -201,8 +206,8 @@ public final class TextTelephony implements Telephony {
      * Notifies all listeners that play has started.
      */
     private void firePlayStarted() {
-        final TelephonyEvent event =
-            new TelephonyEvent(this, TelephonyEvent.PLAY_STARTED);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.PLAY_STARTED);
         fireTelephonyEvent(event);
     }
 
@@ -210,8 +215,8 @@ public final class TextTelephony implements Telephony {
      * Notifies all listeners that play has stopped.
      */
     private void firePlayStopped() {
-        final TelephonyEvent event =
-            new TelephonyEvent(this, TelephonyEvent.PLAY_STOPPED);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.PLAY_STOPPED);
         fireTelephonyEvent(event);
     }
 
@@ -280,8 +285,8 @@ public final class TextTelephony implements Telephony {
      * Notifies all listeners that play has started.
      */
     private void fireRecordStarted() {
-        final TelephonyEvent event =
-            new TelephonyEvent(this, TelephonyEvent.RECORD_STARTED);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.RECORD_STARTED);
         fireTelephonyEvent(event);
     }
 
@@ -289,13 +294,14 @@ public final class TextTelephony implements Telephony {
      * Notifies all listeners that play has stopped.
      */
     private void fireRecordStopped() {
-        final TelephonyEvent event =
-            new TelephonyEvent(this, TelephonyEvent.RECORD_STOPPED);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.RECORD_STOPPED);
         fireTelephonyEvent(event);
     }
 
     /**
      * Notifies all listeners about an unexpected disconnect.
+     * 
      * @since 0.7
      */
     synchronized void fireHungup() {
@@ -306,8 +312,8 @@ public final class TextTelephony implements Telephony {
         if (textOutput != null) {
             textOutput.disconnected();
         }
-        final TelephonyEvent event =
-            new TelephonyEvent(this, TelephonyEvent.HUNGUP);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.HUNGUP);
         fireTelephonyEvent(event);
     }
 
@@ -362,8 +368,8 @@ public final class TextTelephony implements Telephony {
     public boolean isBusy() {
         synchronized (pendingMessages) {
             return (sender != null && sender.isSending())
-            || !pendingMessages.isEmpty()
-            || (receiver != null && receiver.isRecording());
+                    || !pendingMessages.isEmpty()
+                    || (receiver != null && receiver.isRecording());
         }
     }
 
@@ -377,7 +383,7 @@ public final class TextTelephony implements Telephony {
         }
         return !sentHungup;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -416,21 +422,24 @@ public final class TextTelephony implements Telephony {
 
     /**
      * Opens a connection to a server socket on the client side.
-     * @param client connection info
+     * 
+     * @param client
+     *            connection info
      * @return created socket
      * @throws IOException
-     *         if the connection could not be established
+     *             if the connection could not be established
      * @since 0.7.3
      */
     private Socket openConnection(final TextConnectionInformation client)
-        throws IOException {
+            throws IOException {
         final InetAddress address = client.getAddress();
         final int port = client.getPort();
-        final SocketAddress socketAddress =
-            new InetSocketAddress(address, port);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("connecting to '" + socketAddress + "'");
+            LOGGER.debug(
+                    "connecting to '" + client.getCallingDevice() + "'...");
         }
+        final SocketAddress socketAddress = new InetSocketAddress(address,
+                port);
         final Socket endpoint = new Socket();
         endpoint.connect(socketAddress, MAX_TIMEOUT_CONNECT);
         LOGGER.info("connected to '" + client.getCallingDevice() + "'");
@@ -443,14 +452,14 @@ public final class TextTelephony implements Telephony {
     @Override
     public void connect(final ConnectionInformation info) throws IOException {
         if (info instanceof TextConnectionInformation) {
-            final TextConnectionInformation textClient =
-                (TextConnectionInformation) info;
+            final TextConnectionInformation textClient = (TextConnectionInformation) info;
             socket = openConnection(textClient);
-//        } else if (info instanceof ConnectedTextConnectionInformation) {
-//            final ConnectedTextConnectionInformation textClient =
-//                (ConnectedTextConnectionInformation) info;
-//            socket = textClient.getSocket();
+            // } else if (info instanceof ConnectedTextConnectionInformation) {
+            // final ConnectedTextConnectionInformation textClient =
+            // (ConnectedTextConnectionInformation) info;
+            // socket = textClient.getSocket();
         } else {
+<<<<<<< HEAD
             LOGGER.error("Unsupported connection information '" + info + "'");
             LOGGER.error("Telephony - CLassLoader:                      " 
                     + getClass().getClassLoader());
@@ -460,6 +469,10 @@ public final class TextTelephony implements Telephony {
                     + info.getClass().getClassLoader());
             throw new IOException("Unsupported connection information '"
                     + info + "'");
+=======
+            throw new IOException(
+                    "Unsupported connection information '" + info + "'");
+>>>>>>> refs/remotes/origin/feature/upgrade-gradle-to-5.4.1
         }
         receiver = new TextReceiverThread(socket, this);
         receiver.start();
@@ -559,25 +572,25 @@ public final class TextTelephony implements Telephony {
      * {@inheritDoc}
      */
     @Override
-    public void removeListener(
-            final TelephonyListener callListener) {
-            synchronized (listener) {
-                listener.remove(callListener);
-            }
+    public void removeListener(final TelephonyListener callListener) {
+        synchronized (listener) {
+            listener.remove(callListener);
+        }
     }
 
     /**
      * Notifies all registered listeners about the given event.
-     * @param event the event.
+     * 
+     * @param event
+     *            the event.
      */
     private void fireTelephonyEvent(final TelephonyEvent event) {
-        final Collection<TelephonyListener> copy =
-                new java.util.ArrayList<TelephonyListener>();
+        final Collection<TelephonyListener> copy = new java.util.ArrayList<TelephonyListener>();
         synchronized (listener) {
             copy.addAll(listener);
         }
         for (TelephonyListener current : copy) {
-            switch(event.getEvent()) {
+            switch (event.getEvent()) {
             case TelephonyEvent.ANSWERED:
                 current.telephonyCallAnswered(event);
                 break;

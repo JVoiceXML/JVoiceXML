@@ -1032,8 +1032,8 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public void setPromptTimeout(final long timeout) {
-        promptAccumulator.setPromptTimeout(timeout);
+    public void startPromptQueuing(final long timeout) {
+        promptAccumulator.startPromptQueuing(timeout);
     }
 
     /**

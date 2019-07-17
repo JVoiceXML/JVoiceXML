@@ -6,7 +6,7 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
-			<name>net.sourceforge.texlipse.builder.TexlipseBuilder</name>
+			<name>org.eclipse.texlipse.builder.TexlipseBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -22,6 +22,7 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.eclipse.texlipse.builder.TexlipseNature</nature>
 		<nature>net.sourceforge.texlipse.builder.TexlipseNature</nature>
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
