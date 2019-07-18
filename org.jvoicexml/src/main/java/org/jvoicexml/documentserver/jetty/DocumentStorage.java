@@ -27,9 +27,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.documentserver.schemestrategy.builtin.GrammarCreator;
 
@@ -41,7 +39,7 @@ import org.jvoicexml.documentserver.schemestrategy.builtin.GrammarCreator;
  * @author Dirk Schnelle-Walka
  * @since 0.7.7
  */
-public class DocumentStorage {
+public class DocumentStorage implements ContextHandlerProvider {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
             .getLogger(DocumentStorage.class);
@@ -52,39 +50,23 @@ public class DocumentStorage {
     /** Stored documents. */
     private final Map<URI, GrammarDocument> documents;
 
-    /** The integrated web server. */
-    private Server server;
-
-    /** Port of the document storage. */
-    private int storagePort;
-
     /** Handler for internale gramamrs. */
     private final Handler internalGrammarHandler;
 
     /** Handler for builtin grammars. */
     private final BuiltinGrammarHandler builtinGrammarHandler;
 
+    /** The server base uri. */
+    private URI baseUri;
+    
     /**
      * Creates a new object.
-     * 
      */
     public DocumentStorage() {
         sessionDocuments = new java.util.HashMap<String, Collection<GrammarDocument>>();
         documents = new java.util.HashMap<URI, GrammarDocument>();
-        storagePort = 9595;
         internalGrammarHandler = new InternalGrammarDocumentHandler(this);
         builtinGrammarHandler = new BuiltinGrammarHandler();
-    }
-
-    /**
-     * Sets the storage port.
-     * 
-     * @param port
-     *            port number for the integrated web server
-     * @since 0.7.8
-     */
-    public void setStoragePort(final int port) {
-        storagePort = port;
     }
 
     /**
@@ -99,36 +81,6 @@ public class DocumentStorage {
         builtinGrammarHandler.setGrammarCreators(col);
     }
 
-    /**
-     * Starts the document storage. Afterwards it will be ready to serve
-     * documents.
-     * 
-     * @throws Exception
-     *             error starting the web server
-     * 
-     * @since 0.7.8
-     */
-    public void start() throws Exception {
-        if (storagePort < 0) {
-            return;
-        }
-        server = new Server(storagePort);
-        ContextHandler rootContext = new ContextHandler();
-        rootContext.setHandler(internalGrammarHandler);
-        ContextHandler internalGrammarContext = new ContextHandler(
-                InternalGrammarDocumentHandler.CONTEXT_PATH);
-        internalGrammarContext.setHandler(internalGrammarHandler);
-        ContextHandler builtinGrammarContext = new ContextHandler(
-                BuiltinGrammarHandler.CONTEXT_PATH);
-        ContextHandlerCollection contexts = new ContextHandlerCollection();
-        builtinGrammarContext.setHandler(builtinGrammarHandler);
-        ContextHandler[] handlers = new ContextHandler[] { rootContext,
-                internalGrammarContext, builtinGrammarContext };
-        contexts.setHandlers(handlers);
-        server.setHandler(contexts);
-        server.start();
-        LOGGER.info("document storage started on port " + storagePort);
-    }
 
     /**
      * Resolves the given URI of a builtin grammar to an URI that can be handled
@@ -140,9 +92,8 @@ public class DocumentStorage {
      * @since 0.7.8
      */
     public URI resolveBuiltinUri(final URI uri) {
-        final URI serverUri = server.getURI();
         try {
-            return new URI(serverUri
+            return new URI(baseUri
                     + BuiltinGrammarHandler.CONTEXT_PATH.substring(1) + "/"
                     + uri.getSchemeSpecificPart());
         } catch (URISyntaxException e) {
@@ -171,8 +122,7 @@ public class DocumentStorage {
                 InternalGrammarDocumentHandler.CONTEXT_PATH + "/" + sessionId
                         + "/" + document.hashCode());
         documents.put(localUri, document);
-        final URI serverUri = server.getURI();
-        final URI uri = new URI(serverUri
+        final URI uri = new URI(baseUri
                 + InternalGrammarDocumentHandler.CONTEXT_PATH.substring(1)
                 + "/" + sessionId + "/" + document.hashCode());
         document.setURI(uri);
@@ -245,18 +195,29 @@ public class DocumentStorage {
         LOGGER.info("cleared document storage for session '" + sessionId + "'");
     }
 
+    @Override
+    public Collection<ContextHandler> getContextHandlers() {
+        final Collection<ContextHandler> handlers =
+                new java.util.ArrayList<ContextHandler>();
+        ContextHandler rootContext = new ContextHandler();
+        rootContext.setHandler(internalGrammarHandler);
+        handlers.add(rootContext);
+        ContextHandler internalGrammarContext = new ContextHandler(
+                InternalGrammarDocumentHandler.CONTEXT_PATH);
+        internalGrammarContext.setHandler(internalGrammarHandler);
+        handlers.add(internalGrammarContext);
+        ContextHandler builtinGrammarContext = new ContextHandler(
+                BuiltinGrammarHandler.CONTEXT_PATH);
+        builtinGrammarContext.setHandler(builtinGrammarHandler);
+        handlers.add(builtinGrammarContext);
+        return handlers;
+    }
+
     /**
-     * Stops the storage.
-     * 
-     * @throws Exception
-     *             error closing the storage
-     * @since 0.7.7
+     * {@inheritDoc}
      */
-    public void stop() throws Exception {
-        if (storagePort < 0) {
-            return;
-        }
-        server.stop();
-        LOGGER.info("document storage stopped");
+    @Override
+    public void setServerUri(final URI uri) {
+        baseUri = uri;
     }
 }

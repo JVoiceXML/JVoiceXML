@@ -45,6 +45,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.documentserver.jetty.DocumentStorage;
+import org.jvoicexml.documentserver.jetty.JVoiceXmlWebServer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
@@ -76,6 +77,9 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
     /** The default fetch attributes. */
     private FetchAttributes attributes;
 
+    /** The internal web server. */
+    private JVoiceXmlWebServer webserver;
+    
     /** The document storage. */
     private DocumentStorage storage;
 
@@ -93,12 +97,13 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
     }
 
     /**
-     * Sets the document storage
-     * @param documentStorage the document storage
-     * @since 0.7.8
+     * Sets the internal web server
+     * @param server the web server
+     * @since 0.7.9
      */
-    public void setDocumentStorage(final DocumentStorage documentStorage) {
-        storage = documentStorage;
+    public void setWebServer(final JVoiceXmlWebServer server) {
+        webserver = server;
+        storage = webserver.getDocumentStorage();
     }
 
     /**
@@ -106,7 +111,9 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      */
     @Override
     public void start() throws Exception {
-        storage.start();
+        if (webserver != null) {
+            webserver.start();
+        }
     }
 
     /**
@@ -511,10 +518,12 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
 
     @Override
     public void stop() {
-        try {
-            storage.stop();
-        } catch (Exception e) {
-            LOGGER.warn("error closing the document storage", e);
+        if (webserver != null) {
+            try {
+                webserver.stop();
+            } catch (Exception e) {
+                LOGGER.warn("error stopping the web server", e);
+            }
         }
     }
 }
