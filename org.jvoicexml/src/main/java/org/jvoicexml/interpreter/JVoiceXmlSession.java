@@ -41,7 +41,6 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.EventSubscriber;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
@@ -346,6 +345,7 @@ public class JVoiceXmlSession extends Thread
      */
     @Override
     public void run() {
+        processingError = null;
         createContext();
 
         try {
@@ -354,7 +354,13 @@ public class JVoiceXmlSession extends Thread
             final VoiceXmlDocument doc = context.loadDocument(descriptor);
             final URI resolvedUri = descriptor.getUri();
             application.addDocument(resolvedUri, doc);
-        } catch (BadFetchError e) {
+        } catch (ErrorEvent e) {
+            LOGGER.error("error processing application '" + application + "'",
+                    e);
+            processingError = e;
+            cleanup();
+            return;
+        } catch (Exception e) {
             LOGGER.error("error processing application '" + application + "'",
                     e);
             processingError = new ExceptionWrapper(e.getMessage(), e);
