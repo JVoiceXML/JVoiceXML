@@ -155,9 +155,11 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
                 "com.sun.jndi.rmi.registry.RegistryContextFactory");
         final int port = registry.getPort();
         environment.put(Context.PROVIDER_URL, "rmi://localhost:" + port);
-        for (String key : environment.keySet()) {
-            final String value = environment.get(key);
-            LOGGER.info("JNDI environment: " + key + " = " + value);
+        if (LOGGER.isDebugEnabled()) {
+            for (String key : environment.keySet()) {
+                final String value = environment.get(key);
+                LOGGER.debug("JNDI environment: " + key + " = " + value);
+            }
         }
         try {
             return new InitialContext(environment);

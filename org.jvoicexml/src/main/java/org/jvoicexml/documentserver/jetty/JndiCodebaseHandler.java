@@ -59,7 +59,10 @@ public class JndiCodebaseHandler extends AbstractHandler
      * Constructs a new object.
      */
     public JndiCodebaseHandler() {
-        loader = new URLClassLoader(new URL[0], null);
+        final ClassLoader parent =
+                Thread.currentThread().getContextClassLoader();
+        final URL[] urls = new URL[0];
+        loader = new URLClassLoader(urls, parent);
     }
 
     /**
@@ -89,17 +92,26 @@ public class JndiCodebaseHandler extends AbstractHandler
      * @param request URI
      */
     private String getPath(final String requestUri) {
-        final String path = requestUri.substring(CONTEXT_PATH.length() + 1);
-        int index = path.indexOf(".class ");
-        if (index != -1) {
-            return path.substring(0, index).replace('/', '.');
+        if (requestUri.length() < CONTEXT_PATH.length() + 2) {
+            return null;
         }
-        return null;
+        return requestUri.substring(CONTEXT_PATH.length() + 1);
     }
 
+    /**
+     * Writes the class to the output stream.
+     * @param path path of the class to load
+     * @param out output stream to write to
+     * @throws IOException
+     *         the class could not be written
+     * @since 0.7.9
+     */
     private void writeClassToOutputStream(final String path,
             final OutputStream out) throws IOException {
         final InputStream in = loader.getResourceAsStream(path);
+        if (in == null) {
+            throw new IOException("unable to load '" + path + "'");
+        }
         final byte[] bytes = new byte[1024];
         int read = 0;;
         do

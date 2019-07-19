@@ -562,6 +562,25 @@ distributions {
     }
 }
 
+def getIP() {
+    InetAddress result = null;
+    Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+    while (interfaces.hasMoreElements()) {
+        Enumeration<InetAddress> addresses = interfaces.nextElement().getInetAddresses();
+        while (addresses.hasMoreElements()) {
+            InetAddress address = addresses.nextElement();
+            if (!address.isLoopbackAddress()) {
+                if (address.isSiteLocalAddress()) {
+                    return address.getHostAddress();
+                } else if (result == null) {
+                    result = address;
+                }
+            }
+        }
+    }
+    return (result != null ? result : InetAddress.getLocalHost()).getHostAddress();
+}
+
 run {
     dependsOn jvxmlConfigurations
     dependsOn configurations.jvxmlJNDI
@@ -573,7 +592,8 @@ run {
                 + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.manager",
-               "-Djava.rmi.server.codebase=http://localhost:9595/jndi/",
+               "-Djava.rmi.server.codebase=http://${getIP()}:9595/jndi/",
+               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
@@ -591,7 +611,8 @@ task(runDebug, type: JavaExec) {
                 + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.manager",
-               "-Djava.rmi.server.codebase=http://localhost:9595/jndi/",
+               "-Djava.rmi.server.codebase=http://${getIP()}:9595/jndi/",
+               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
@@ -620,6 +641,9 @@ startScripts {
     applicationName = "jvxml-startup"
     defaultJvmOpts = ["-Xms1024m", "-Xmx2048m"]
     defaultJvmOpts = [ "-Djava.library.path=lib",
+               "-Djava.security.manager",
+               "-Djava.rmi.server.codebase=http://${getIP()}:9595/jndi/",
+               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.security.policy=config/jvoicexml.policy",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
                "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
