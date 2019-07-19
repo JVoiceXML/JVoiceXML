@@ -1,20 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndi xmlns:beans="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="jvxml-jndi-0-7.xsd">
-  <repository></repository>
-  <classpath>org.jvoicexml.client-@@VERSION@@.jar</classpath>
-  <classpath>org.jvoicexml.jndi-@@VERSION@@.jar</classpath>
-  <beans:bean id="org.jvoicexml.JndiSupport"
-    class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
-    <beans:property name="registry">
-      <beans:bean id="registry" class="org.jvoicexml.jndi.JVoiceXmlRegistry">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="jvxml-jndi-0-7.xsd">
+    <repository></repository>
+    <classpath>org.jvoicexml.client-@@VERSION@@.jar</classpath>
+    <classpath>org.jvoicexml.jndi-@@VERSION@@.jar</classpath>
+    <beans:bean id="org.jvoicexml.JndiSupport"
+        class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
+        <beans:property name="registry">
+            <beans:bean id="registry"
+                class="org.jvoicexml.jndi.JVoiceXmlRegistry">
+                <beans:property name="port" />
+            </beans:bean>
+        </beans:property>
+        <beans:property name="environment">
+            <beans:map>
+                <beans:entry
+                    key="java.naming.factory.initial"
+                    value="com.sun.jndi.rmi.registry.RegistryContextFactory" />
+                <beans:entry
+                    key="java.naming.rmi.security.manager" value="true" />
+                <beans:entry key="java.rmi.server.codebase"
+                    value="http://localhost:9595/jndi/" />
+                <beans:entry key="java.rmi.server.useCodebaseOnly"
+                    value="true" />
+            </beans:map>
+        </beans:property>
+    </beans:bean>
+    <beans:bean id="org.jvoicexml.startup.RemoteShutdown"
+        class="org.jvoicexml.jndi.JndiRemoteShutdown">
         <beans:property name="port" />
-      </beans:bean>
-    </beans:property>
-  </beans:bean>
-  <beans:bean id="org.jvoicexml.startup.RemoteShutdown"
-    class="org.jvoicexml.jndi.JndiRemoteShutdown">
-    <beans:property name="port" />
-  </beans:bean>
+        <beans:property name="environment">
+            <beans:map>
+                <beans:entry
+                    key="java.naming.factory.initial"
+                    value="com.sun.jndi.rmi.registry.RegistryContextFactory" />
+                <beans:entry
+                    key="java.naming.rmi.security.manager" value="true" />
+                <beans:entry key="java.rmi.server.codebase"
+                    value="http://localhost:9595/jndi/" />
+            </beans:map>
+        </beans:property>
+    </beans:bean>
 </jndi>

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@ package org.jvoicexml.jndi;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -75,10 +76,14 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
     /** The registry. */
     private JVoiceXmlRegistry registry;
 
+    /** JNDI properties. */
+    private final Hashtable<String, String> environment;
+
     /**
      * Constructs a new object.
      */
     public JVoiceXmlJndiSupport() {
+        environment = new Hashtable<String, String>();
     }
 
     /**
@@ -99,8 +104,18 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
     }
 
     /**
+     * Sets the JNDI environment.
+     * @param env the JNDI environment
+     * @since 0.7.9
+     */
+    public void setEnvironment(final Map<String, String> env) {
+        environment.putAll(env);
+    }
+
+    /**
      * {@inheritDoc}
      */
+    @Override
     public void startup() throws IOException {
         final ClassLoader originalClassLoader =
                 Thread.currentThread().getContextClassLoader();
@@ -135,12 +150,15 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
      * @since 0.5
      */
     Context getInitialContext() {
-        final Hashtable<String, String> environment =
-            new Hashtable<String, String>();
+        // We take the values from jndi.properties but override the port
         environment.put(Context.INITIAL_CONTEXT_FACTORY,
                 "com.sun.jndi.rmi.registry.RegistryContextFactory");
         final int port = registry.getPort();
         environment.put(Context.PROVIDER_URL, "rmi://localhost:" + port);
+        for (String key : environment.keySet()) {
+            final String value = environment.get(key);
+            LOGGER.info("JNDI environment: " + key + " = " + value);
+        }
         try {
             return new InitialContext(environment);
         } catch (javax.naming.NamingException ne) {
@@ -218,6 +236,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void shutdown() {
         LOGGER.info("stopping JNDI support...");
         if (registry != null) {

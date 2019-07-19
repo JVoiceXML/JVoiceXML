@@ -21,6 +21,7 @@
 
 package org.jvoicexml.jndi;
 
+import java.rmi.registry.Registry;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -43,17 +44,18 @@ public final class JndiRemoteShutdown implements RemoteShutdown {
     private static final Logger LOGGER =
         Logger.getLogger(JndiRemoteShutdown.class);
 
-    /** The default port number. */
-    private static final int DEFAULT_PORT = 1099;
-
     /** The JNDI port number. */
     private int port;
+
+    /** JNDI properties. */
+    private final Hashtable<String, String> environment;
 
     /**
      * Constructs a new object.
      */
     public JndiRemoteShutdown() {
-        port = DEFAULT_PORT;
+        port = Registry.REGISTRY_PORT;
+        environment = new Hashtable<String, String>();
     }
 
     /**
@@ -65,6 +67,15 @@ public final class JndiRemoteShutdown implements RemoteShutdown {
     }
 
     /**
+     * Sets the JNDI environment.
+     * @param env the JNDI environment
+     * @since 0.7.9
+     */
+    public void setEnvironment(final Map<String, String> env) {
+        environment.putAll(env);
+    }
+
+    /**
      * Retrieves the initial context.
      * @return The context to use or <code>null</code> in case of an error.
      * @throws NamingException
@@ -73,8 +84,6 @@ public final class JndiRemoteShutdown implements RemoteShutdown {
      */
     Context getInitialContext() throws NamingException {
         // We take the values from jndi.properties but override the port
-        final Hashtable<String, String> environment =
-            new Hashtable<String, String>();
         environment.put(Context.INITIAL_CONTEXT_FACTORY,
                 "com.sun.jndi.rmi.registry.RegistryContextFactory");
         environment.put(Context.PROVIDER_URL, "rmi://localhost:" + port);
@@ -119,15 +128,12 @@ public final class JndiRemoteShutdown implements RemoteShutdown {
      *             JNDI port number.
      */
     public static void main(final String[] args) {
-        final int portNumber;
+        final JndiRemoteShutdown shutdown = new JndiRemoteShutdown();
         if (args.length > 0) {
             final String arg = args[0];
-            portNumber = Integer.parseInt(arg);
-        } else {
-            portNumber = DEFAULT_PORT;
+            final int portNumber = Integer.parseInt(arg);
+            shutdown.setPort(portNumber);
         }
-        final JndiRemoteShutdown shutdown = new JndiRemoteShutdown();
-        shutdown.setPort(portNumber);
         shutdown.shutdown();
     }
 }

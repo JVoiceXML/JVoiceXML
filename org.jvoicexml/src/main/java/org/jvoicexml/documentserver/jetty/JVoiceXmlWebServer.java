@@ -20,6 +20,7 @@
  */
 package org.jvoicexml.documentserver.jetty;
 
+import java.net.BindException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
@@ -109,7 +110,13 @@ public final class JVoiceXmlWebServer {
         final ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(handlers);
         server.setHandler(contexts);
-        server.start();
+        try {
+            server.start();
+        } catch (BindException e) {
+            LOGGER.error("Unable to start the JVoiceXML internal web server.");
+            LOGGER.error("Is another JVoiceXML instance running?");
+            throw e;
+        }
         populateServerUri();
         LOGGER.info("JVoiceXML internal web server started on port "
                 + storagePort);

@@ -59,9 +59,6 @@ task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
 }
 
 task copyConfiguration(type: Copy) {
-    from configurations.jvxmlConfiguration.files {
-        include "jndi.properties"
-    }
     into "${project(':org.jvoicexml').copyConfiguration.destinationDir}"
 }
 

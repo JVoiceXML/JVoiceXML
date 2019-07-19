@@ -77,6 +77,8 @@
                            </list>
                        </property>
                    </bean>
+                   <bean class="org.jvoicexml.documentserver.jetty.JndiCodebaseHandler">
+                   </bean>
                 </list>
             </property>
         </bean>

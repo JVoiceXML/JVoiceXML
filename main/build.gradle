@@ -569,9 +569,11 @@ run {
     version = JVOICEXML_VERSION
 
     mainClassName = "org.jvoicexml.startup.Startup"
-    classpath += files("${project(':org.jvoicexml').buildDir}/config")
+    classpath = sourceSets.main.runtimeClasspath \
+                + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.manager",
+               "-Djava.rmi.server.codebase=http://localhost:9595/jndi/",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
@@ -589,6 +591,7 @@ task(runDebug, type: JavaExec) {
                 + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.manager",
+               "-Djava.rmi.server.codebase=http://localhost:9595/jndi/",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",

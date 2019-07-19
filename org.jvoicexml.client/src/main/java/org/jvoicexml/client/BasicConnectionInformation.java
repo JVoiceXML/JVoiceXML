@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -53,7 +48,7 @@ public class BasicConnectionInformation
     /**
      * The serial version UID.
      */
-    private static final long serialVersionUID = -382549466379933472L;
+    private static final long serialVersionUID = -8506051361967016535L;
 
     /** The profile name. */
     private String profile;

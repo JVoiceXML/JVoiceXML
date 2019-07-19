@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -78,9 +78,14 @@ public final class JVoiceXmlRegistry {
      * @exception RemoteException error starting the registry
      */
     public void start() throws RemoteException {
-        LOGGER.info("starting RMI registry at port " + port + "...");
-        registry = LocateRegistry.createRegistry(port);
-        LOGGER.info("...RMI registry started");
+        try {
+            registry = LocateRegistry.createRegistry(port);
+            LOGGER.info("RMI registry started at port " + port);
+        } catch (java.rmi.server.ExportException e) {
+            LOGGER.error("Unable to start the RMI Registry.");
+            LOGGER.error("Is another JVoiceXML instance running?");
+            throw e;
+        }
     }
 
     /**
