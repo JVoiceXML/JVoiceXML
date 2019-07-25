@@ -1,4 +1,4 @@
-package org.jvoicexml.mock.http;
+package org.jvoicexml.documentserver.schemestrategy.http;
 
 import org.apache.http.ProtocolVersion;
 import org.apache.http.StatusLine;

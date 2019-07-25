@@ -1,11 +1,15 @@
-package org.jvoicexml.mock.http;
-
-import org.apache.http.*;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.params.HttpParams;
+package org.jvoicexml.documentserver.schemestrategy.http;
 
 import java.io.IOException;
 import java.util.Locale;
+
+import org.apache.http.Header;
+import org.apache.http.HeaderIterator;
+import org.apache.http.HttpEntity;
+import org.apache.http.ProtocolVersion;
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.params.HttpParams;
 
 public class MockHttpResponse implements CloseableHttpResponse {
 

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,6 +40,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.Configurable;
+import org.jvoicexml.Configuration;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
@@ -66,7 +69,8 @@ import org.xml.sax.SAXException;
  *
  * @author Dirk Schnelle-Walka
 */
-public final class JVoiceXmlDocumentServer implements DocumentServer {
+public final class JVoiceXmlDocumentServer
+    implements DocumentServer, Configurable {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
             .getLogger(JVoiceXmlDocumentServer.class);
@@ -94,6 +98,19 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      */
     public JVoiceXmlDocumentServer() {
         strategies = new java.util.HashMap<String, SchemeStrategy>();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void init(Configuration configuration)
+            throws ConfigurationException {
+        final Collection<SchemeStrategy> configuredStrategies = configuration
+                .loadObjects(SchemeStrategy.class, "schemestrategy");
+        for (SchemeStrategy current : configuredStrategies) {
+            addSchemeStrategy(current);
+        }
     }
 
     /**

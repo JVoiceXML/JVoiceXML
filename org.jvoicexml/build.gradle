@@ -24,8 +24,6 @@ dependencies {
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.3.14.v20161028'
     compile group: 'net.sourceforge.jchardet', name: 'jchardet', version: '1.0'
-    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.5'
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
     compile group: 'commons-pool', name: 'commons-pool', version: '1.6'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
     

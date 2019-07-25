@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.documentserver.schemestrategy;
+package org.jvoicexml.documentserver.schemestrategy.http;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -42,9 +37,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.jvoicexml.documentserver.schemestrategy.SessionStorage;
+import org.jvoicexml.documentserver.schemestrategy.http.HttpSchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
-import org.jvoicexml.mock.http.MockHttpResponse;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -55,7 +51,6 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Test cases for {@link HttpSchemeStrategy}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  */
 @RunWith(MockitoJUnitRunner.class)

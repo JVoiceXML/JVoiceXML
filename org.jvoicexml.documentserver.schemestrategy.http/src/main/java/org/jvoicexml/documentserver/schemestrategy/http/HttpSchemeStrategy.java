@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -19,14 +19,13 @@
  *
  */
 
-package org.jvoicexml.documentserver.schemestrategy;
+package org.jvoicexml.documentserver.schemestrategy.http;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +47,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.documentserver.ReadBuffer;
 import org.jvoicexml.documentserver.SchemeStrategy;
+import org.jvoicexml.documentserver.schemestrategy.SessionIdentifierFactory;
+import org.jvoicexml.documentserver.schemestrategy.SessionStorage;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;

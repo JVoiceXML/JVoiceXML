@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,10 +19,11 @@
  *
  */
 
-package org.jvoicexml.documentserver.schemestrategy;
+package org.jvoicexml.documentserver.schemestrategy.http;
 
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.jvoicexml.documentserver.schemestrategy.SessionIdentifierFactory;
 
 /**
  * Session identifier factory for the {@link HttpSchemeStrategy}.

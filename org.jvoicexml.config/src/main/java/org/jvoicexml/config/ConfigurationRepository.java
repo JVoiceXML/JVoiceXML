@@ -190,6 +190,10 @@ final class ConfigurationRepository
                 }
             }
         }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("found " + files.size() +
+                    " matching configurations for '" + root + "'");
+        }
         return files;
     }
 

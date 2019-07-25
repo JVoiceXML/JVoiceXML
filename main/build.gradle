@@ -18,6 +18,11 @@ repositories {
 }
 
 configurations {
+    jvxmlDocumentServerSchemestrategyHttp {
+        description = "HTTP scheme strategy for the document server"
+        extendsFrom compile
+    }
+
     jvxmlInterpreterDatamodelECMAScript {
         description = "ECMAScript data model"
         extendsFrom compile
@@ -126,6 +131,8 @@ configurations {
 dependencies {
     compile project(':org.jvoicexml.client')
 
+    jvxmlDocumentServerSchemestrategyHttp project(':org.jvoicexml.documentserver.schemestrategy.http')
+    
     jvxmlImplementationJSAPI10 project(':org.jvoicexml.implementation.jsapi10')
 
     jvxmlImplementationJSAPI20 project(':org.jvoicexml.implementation.jsapi20')
@@ -192,6 +199,7 @@ jar {
 
 task jvxmlConfigurations {
     dependsOn configurations.jvxmlDocumentation
+    dependsOn configurations.jvxmlDocumentServerSchemestrategyHttp
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
 
     if (project.property('JVOICEXML_INTERPRETER_GRAMMAR_LUIS') == 'true') {
@@ -247,6 +255,7 @@ task jvxmlConfigurations {
 
 task jvxmlDistributioConfigurations {
     dependsOn configurations.jvxmlDocumentation
+    dependsOn configurations.jvxmlDocumentServerSchemestrategyHttp
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
     dependsOn configurations.jvxmlInterpreterGrammarLUIS
     dependsOn configurations.jvxmlInterpreterGrammarRegex
@@ -293,6 +302,8 @@ distributions {
             into ('lib') {
                 from configurations.jvxmlJNDI
             
+                from configurations.jvxmlDocumentServerSchemestrategyHttp
+                
                 from configurations.jvxmlInterpreterDatamodelECMAScript
                 from configurations.jvxmlInterpreterGrammarLUIS
                 from configurations.jvxmlInterpreterGrammarRegex
