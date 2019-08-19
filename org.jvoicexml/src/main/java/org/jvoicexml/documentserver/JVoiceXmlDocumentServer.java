@@ -47,8 +47,6 @@ import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.jetty.DocumentStorage;
-import org.jvoicexml.documentserver.jetty.JVoiceXmlWebServer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
@@ -81,12 +79,9 @@ public final class JVoiceXmlDocumentServer
     /** The default fetch attributes. */
     private FetchAttributes attributes;
 
-    /** The internal web server. */
-    private JVoiceXmlWebServer webserver;
+    /** The internal document repository. */
+    private DocumentRepository repository;
     
-    /** The document storage. */
-    private DocumentStorage storage;
-
     /**
      * Creates a new object.
      *
@@ -114,13 +109,12 @@ public final class JVoiceXmlDocumentServer
     }
 
     /**
-     * Sets the internal web server
-     * @param server the web server
+     * Sets the internal document repository
+     * @param repo the document repository
      * @since 0.7.9
      */
-    public void setWebServer(final JVoiceXmlWebServer server) {
-        webserver = server;
-        storage = webserver.getDocumentStorage();
+    public void setDocumentRepository(final DocumentRepository server) {
+        repository = server;
     }
 
     /**
@@ -128,8 +122,10 @@ public final class JVoiceXmlDocumentServer
      */
     @Override
     public void start() throws Exception {
-        if (webserver != null) {
-            webserver.start();
+        if (repository != null) {
+            LOGGER.info("starting document repositroy '" 
+                    + repository.getClass().getCanonicalName() + "'");
+            repository.start();
         }
     }
 
@@ -332,7 +328,7 @@ public final class JVoiceXmlDocumentServer
      */
     @Override
     public URI resolveBuiltinUri(final URI uri) {
-        return storage.resolveBuiltinUri(uri);
+        return repository.resolveBuiltinUri(uri);
     }
 
     /**
@@ -341,7 +337,7 @@ public final class JVoiceXmlDocumentServer
     @Override
     public URI addGrammarDocument(final String sessionId,
             final GrammarDocument document) throws URISyntaxException {
-        return storage.addGrammarDocument(sessionId, document);
+        return repository.addGrammarDocument(sessionId, document);
     }
 
     /**
@@ -526,20 +522,18 @@ public final class JVoiceXmlDocumentServer
         for (SchemeStrategy strategy : knownStrategies) {
             strategy.sessionClosed(sessionId);
         }
-        try {
-            storage.clear(sessionId);
-        } catch (URISyntaxException e) {
-            LOGGER.warn("error clearing session", e);
-        }
+        repository.sessionClosed(sessionId);
     }
 
     @Override
     public void stop() {
-        if (webserver != null) {
+        if (repository != null) {
             try {
-                webserver.stop();
+                LOGGER.info("stopping document repositroy '" 
+                        + repository.getClass().getCanonicalName() + "'");
+                repository.stop();
             } catch (Exception e) {
-                LOGGER.warn("error stopping the web server", e);
+                LOGGER.warn("error stopping the document repository", e);
             }
         }
     }

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -44,7 +39,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  * @since 0.5.5
  */
@@ -80,7 +74,7 @@ public interface DocumentServer {
             final DocumentDescriptor descriptor) throws BadFetchError;
 
     /**
-     * Resolves the given URI ofg a builtin grammar to an URI that can be
+     * Resolves the given URI of a builtin grammar to an URI that can be
      * handled by this document server.
      * @param uri the builtin URI
      * @return the resolved URI

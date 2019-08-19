@@ -22,6 +22,7 @@ package org.jvoicexml.documentserver.jetty;
 
 import java.net.BindException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,13 +31,15 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.documentserver.DocumentRepository;
 
 /**
  * An integrated web server for JVoiceXML.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-public final class JVoiceXmlWebServer {
+public final class JVoiceXmlWebServer implements DocumentRepository {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
             .getLogger(JVoiceXmlWebServer.class);
@@ -62,7 +65,6 @@ public final class JVoiceXmlWebServer {
      * 
      * @param port
      *            port number for the integrated web server
-     * @since 0.7.8
      */
     public void setStoragePort(final int port) {
         storagePort = port;
@@ -95,8 +97,6 @@ public final class JVoiceXmlWebServer {
      * 
      * @throws Exception
      *             error starting the web server
-     * 
-     * @since 0.7.8
      */
     public void start() throws Exception {
         if (storagePort < 0) {
@@ -152,11 +152,53 @@ public final class JVoiceXmlWebServer {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI addGrammarDocument(final String sessionId,
+            final GrammarDocument document)
+            throws URISyntaxException {
+        final DocumentStorage storage = getDocumentStorage();
+        if (storage == null) {
+            return null;
+        }
+        return storage.addGrammarDocument(sessionId, document);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI resolveBuiltinUri(final URI uri) {
+        final DocumentStorage storage = getDocumentStorage();
+        if (storage == null) {
+            return uri;
+        }
+        return storage.resolveBuiltinUri(uri);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sessionClosed(String sessionId) {
+        final DocumentStorage storage = getDocumentStorage();
+        if (storage == null) {
+            return;
+        }
+        try {
+            storage.clear(sessionId);
+        } catch (URISyntaxException e) {
+            LOGGER.warn("error clearing session", e);
+        }
+    }
+    
+
+    /**
      * Stops the web server..
      * 
      * @throws Exception
      *             error closing the web server
-     * @since 0.7.7
      */
     public void stop() throws Exception {
         if (storagePort < 0) {

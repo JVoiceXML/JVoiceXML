@@ -48,7 +48,7 @@
           <property name="fetchTimeout" value="5000"/>
         </bean>
     </property>
-    <property name="webServer">
+    <property name="documentRepository">
         <bean class="org.jvoicexml.documentserver.jetty.JVoiceXmlWebServer">
             <property name="storagePort" value="9595" />
             <property name="contextHandlerProviders">
