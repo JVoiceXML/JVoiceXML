@@ -18,6 +18,11 @@ repositories {
 }
 
 configurations {
+    jvxmlDocumentServerSchemestrategyFile {
+        description = "File scheme strategy for the document server"
+        extendsFrom compile
+    }
+
     jvxmlDocumentServerSchemestrategyHttp {
         description = "HTTP scheme strategy for the document server"
         extendsFrom compile
@@ -131,6 +136,7 @@ configurations {
 dependencies {
     compile project(':org.jvoicexml.client')
 
+    jvxmlDocumentServerSchemestrategyFile project(':org.jvoicexml.documentserver.schemestrategy.file')
     jvxmlDocumentServerSchemestrategyHttp project(':org.jvoicexml.documentserver.schemestrategy.http')
     
     jvxmlImplementationJSAPI10 project(':org.jvoicexml.implementation.jsapi10')
@@ -199,6 +205,7 @@ jar {
 
 task jvxmlConfigurations {
     dependsOn configurations.jvxmlDocumentation
+    dependsOn configurations.jvxmlDocumentServerSchemestrategyFile
     dependsOn configurations.jvxmlDocumentServerSchemestrategyHttp
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
 

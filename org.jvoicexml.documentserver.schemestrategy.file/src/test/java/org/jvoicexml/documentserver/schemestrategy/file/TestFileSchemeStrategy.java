@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,7 +19,7 @@
  *
  */
 
-package org.jvoicexml.documentserver.schemestrategy;
+package org.jvoicexml.documentserver.schemestrategy.file;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -34,13 +29,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.documentserver.SchemeStrategy;
+import org.jvoicexml.documentserver.schemestrategy.file.FileSchemeStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
  * Test case for {@link FileSchemeStrategy}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.1
  */
 public final class TestFileSchemeStrategy {

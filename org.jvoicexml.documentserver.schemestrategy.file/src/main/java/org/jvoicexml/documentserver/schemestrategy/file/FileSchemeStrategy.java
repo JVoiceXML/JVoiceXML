@@ -19,7 +19,7 @@
  *
  */
 
-package org.jvoicexml.documentserver.schemestrategy;
+package org.jvoicexml.documentserver.schemestrategy.file;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,8 +28,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;

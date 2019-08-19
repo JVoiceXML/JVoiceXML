@@ -28,7 +28,7 @@ import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
-import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
+import org.jvoicexml.documentserver.schemestrategy.file.FileSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.http.HttpSchemeStrategy;
 import org.jvoicexml.implementation.PlatformFactory;
 import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;

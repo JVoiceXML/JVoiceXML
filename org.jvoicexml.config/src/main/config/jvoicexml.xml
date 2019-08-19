@@ -32,8 +32,6 @@
       <list>
         <bean
           class="org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy" />
-        <bean
-          class="org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy" />
         <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BuiltinSchemeStrategy">
           <property name="grammarCreators">
             <list>
