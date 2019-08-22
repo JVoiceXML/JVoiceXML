@@ -1,3 +1,4 @@
+package org.jvoicexml.documentserver.jetty;
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -18,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.documentserver.jetty;
+
 
 import java.net.URI;
 import java.util.Collection;

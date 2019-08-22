@@ -33,7 +33,6 @@ import org.junit.Test;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
-import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.documentserver.schemestrategy.file.FileSchemeStrategy;
@@ -46,6 +45,8 @@ import org.mockito.Mockito;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
+
+import DocumentStorage;
 
 /**
  * Test case for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer}.

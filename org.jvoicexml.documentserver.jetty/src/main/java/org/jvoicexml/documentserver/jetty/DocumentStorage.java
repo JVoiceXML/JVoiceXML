@@ -1,3 +1,4 @@
+package org.jvoicexml.documentserver.jetty;
 /*
  * Copyright (C) 2014-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
@@ -17,7 +18,7 @@
  *
  */
 
-package org.jvoicexml.documentserver.jetty;
+
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -130,7 +131,7 @@ public class DocumentStorage implements ContextHandlerProvider {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("added document " + document);
         }
-        return null;
+        return uri;
     }
 
     /**

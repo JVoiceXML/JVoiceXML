@@ -38,7 +38,6 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
-import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -54,6 +53,8 @@ import org.jvoicexml.xml.vxml.ParamValueType;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
+
+import DocumentStorage;
 
 /**
  * Test case for {@link org.jvoicexml.interpreter.ParamParser}.

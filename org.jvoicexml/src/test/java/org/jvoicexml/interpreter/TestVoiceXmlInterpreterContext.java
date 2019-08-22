@@ -37,7 +37,6 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
-import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -48,6 +47,8 @@ import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.mockito.Mockito;
 import org.w3c.dom.Document;
+
+import DocumentStorage;
 
 /**
  * Test cases for {@link VoiceXmlInterpreterContext}.

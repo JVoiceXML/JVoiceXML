@@ -1,0 +1,102 @@
+apply plugin: 'java'
+apply plugin: "com.github.eerohele.saxon-gradle"
+apply plugin: 'maven'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        resources {
+            exclude '**'
+        }
+    }
+}
+
+configurations {
+    jvxmlConfiguration
+}
+
+dependencies {
+    jvxmlConfiguration fileTree(dir: "src/main/config")
+
+    compile project(':org.jvoicexml')
+
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.20.v20190813'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+}
+
+xslt {
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/jetty-documentrepository.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jetty-documentrepository.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        version: JVOICEXML_VERSION,
+        libs: configurations.compile
+    )
+}
+
+task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/jetty-documentrepository.xml"
+    output "${project(':main').buildDir}/config/jetty-documentrepository.xml"
+    parameters(
+        buildpath: "lib",
+        version: JVOICEXML_VERSION,
+        libs: configurations.compile
+    )
+}
+
+task copyReferencedLibraries(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile) {
+         include 'jetty-server-*.jar',
+         'jetty-http-*.jar',
+         'jetty-io-*.jar',
+         'jetty-util-*.jar',
+         'javax.servlet-api-*.jar'
+    }
+}
+
+jar {
+    version = JVOICEXML_VERSION
+
+    dependsOn xslt
+    dependsOn xsltDistribution
+    dependsOn copyReferencedLibraries
+    
+    manifest {
+        attributes("Implementation-Title": "Document repository based on Jetty",
+                   'Implementation-Vendor': 'switch',
+                   'Implementation-Version': JVOICEXML_VERSION,
+                   'Built-By'       : System.properties['user.name'],
+                   'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                   'Created-By'     : "Gradle ${gradle.gradleVersion}",
+                   'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                   'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}")
+    }
+    baseName 'org.jvoicexml.documentserver.jetty'
+}
+
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}

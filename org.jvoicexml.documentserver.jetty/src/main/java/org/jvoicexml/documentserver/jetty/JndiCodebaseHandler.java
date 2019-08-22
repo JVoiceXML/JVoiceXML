@@ -1,3 +1,4 @@
+package org.jvoicexml.documentserver.jetty;
 /*
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
@@ -17,7 +18,7 @@
  *
  */
 
-package org.jvoicexml.documentserver.jetty;
+
 
 import java.io.IOException;
 import java.io.InputStream;

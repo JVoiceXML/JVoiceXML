@@ -18,6 +18,11 @@ repositories {
 }
 
 configurations {
+    jvxmlDocumentServerJetty {
+        description = "Document repository based on Jetty"
+        extendsFrom compile
+    }
+
     jvxmlDocumentServerSchemestrategyFile {
         description = "File scheme strategy for the document server"
         extendsFrom compile
@@ -136,6 +141,8 @@ configurations {
 dependencies {
     compile project(':org.jvoicexml.client')
 
+    jvxmlDocumentServerJetty project(':org.jvoicexml.documentserver.jetty')
+
     jvxmlDocumentServerSchemestrategyFile project(':org.jvoicexml.documentserver.schemestrategy.file')
     jvxmlDocumentServerSchemestrategyHttp project(':org.jvoicexml.documentserver.schemestrategy.http')
     
@@ -205,6 +212,7 @@ jar {
 
 task jvxmlConfigurations {
     dependsOn configurations.jvxmlDocumentation
+    dependsOn configurations.jvxmlDocumentServerJetty
     dependsOn configurations.jvxmlDocumentServerSchemestrategyFile
     dependsOn configurations.jvxmlDocumentServerSchemestrategyHttp
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
@@ -262,6 +270,8 @@ task jvxmlConfigurations {
 
 task jvxmlDistributioConfigurations {
     dependsOn configurations.jvxmlDocumentation
+    dependsOn configurations.jvxmlDocumentServerJetty
+    dependsOn configurations.jvxmlDocumentServerSchemestrategyFile
     dependsOn configurations.jvxmlDocumentServerSchemestrategyHttp
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
     dependsOn configurations.jvxmlInterpreterGrammarLUIS
@@ -309,6 +319,9 @@ distributions {
             into ('lib') {
                 from configurations.jvxmlJNDI
             
+                from configurations.jvxmlDocumentServerJetty
+
+                from configurations.jvxmlDocumentServerSchemestrategyFile
                 from configurations.jvxmlDocumentServerSchemestrategyHttp
                 
                 from configurations.jvxmlInterpreterDatamodelECMAScript

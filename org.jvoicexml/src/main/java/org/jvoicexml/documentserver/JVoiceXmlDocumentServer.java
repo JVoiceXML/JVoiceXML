@@ -106,15 +106,17 @@ public final class JVoiceXmlDocumentServer
         for (SchemeStrategy current : configuredStrategies) {
             addSchemeStrategy(current);
         }
-    }
-
-    /**
-     * Sets the internal document repository
-     * @param repo the document repository
-     * @since 0.7.9
-     */
-    public void setDocumentRepository(final DocumentRepository server) {
-        repository = server;
+        final Collection<DocumentRepository> repositories =
+                configuration.loadObjects(DocumentRepository.class,
+                "documentrepository");
+        for (DocumentRepository current : repositories) {
+            repository = current;
+            break;
+        }
+        if (repository != null) {
+            LOGGER.info("using document repository '" +
+                    repository.getClass().getCanonicalName() + "'");
+        }
     }
 
     /**

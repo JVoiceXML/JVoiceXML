@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsi:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.jvoicexml.org/xsd/jvxml-schemestrategy-0-7.xsd"
+  xmlns:tns="http://www.example.org/jvxml-documentrepository"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  elementFormDefault="qualified">
+  <xsi:import namespace="http://www.springframework.org/schema/beans"
+    schemaLocation="spring-beans-4.0.xsd" />
+  <xsi:element name="documentrepository">
+    <xsi:annotation>
+      <xsi:documentation>
+        Document repositry configuration for the documentserver of JVoiceXML
+      </xsi:documentation>
+    </xsi:annotation>
+    <xsi:complexType>
+      <xsi:sequence minOccurs="0" maxOccurs="unbounded">
+        <xsi:element name="repository" type="xsi:string"
+          minOccurs="0" maxOccurs="1">
+          <xsi:annotation>
+            <xsi:documentation>
+              The name of the loader repository.
+            </xsi:documentation>
+          </xsi:annotation>
+        </xsi:element>
+        <xsi:element name="classpath" type="xsi:string"
+          minOccurs="0" maxOccurs="unbounded">
+          <xsi:annotation>
+            <xsi:documentation>
+              Entry to be added to the CLASSPATH when
+              loading this document repository.
+            </xsi:documentation>
+          </xsi:annotation>
+        </xsi:element>
+        <xsi:element ref="beans:bean" minOccurs="1"
+          maxOccurs="unbounded">
+          <xsi:annotation>
+            <xsi:documentation>
+                Spring bean configuration
+            </xsi:documentation>
+          </xsi:annotation>
+        </xsi:element>
+      </xsi:sequence>
+    </xsi:complexType>
+  </xsi:element>
+</xsi:schema>

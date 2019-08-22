@@ -37,6 +37,7 @@ import org.jvoicexml.interpreter.grammar.InternalGrammarDocument;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
+
 /**
  * Test methods for {@link DocumentStorage}.
  * 
@@ -56,12 +57,12 @@ public class DocumentStorageTest {
     @Before
     public void setUp() throws Exception {
         storage = new DocumentStorage();
-        storage.setStoragePort(9494);
+        final URI uri = new URI("http://localhost:5423/");
+        storage.setServerUri(uri);
         final Collection<GrammarCreator> creators = new java.util.ArrayList<GrammarCreator>();
         creators.add(new BooleanGrammarCreator());
         creators.add(new DigitsGrammarCreator());
         storage.setGrammarCreators(creators);
-        storage.start();
     }
 
     /**
@@ -72,12 +73,11 @@ public class DocumentStorageTest {
      */
     @After
     public void tearDown() throws Exception {
-        storage.stop();
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.documentserver.jetty.DocumentStorage#addGrammarDocument(java.lang.String, org.jvoicexml.GrammarDocument)}
+     * {@link DocumentStorage#addGrammarDocument(java.lang.String, org.jvoicexml.GrammarDocument)}
      * .
      * 
      * @throws Exception
@@ -97,7 +97,7 @@ public class DocumentStorageTest {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.documentserver.jetty.DocumentStorage#clear(java.lang.String)}
+     * {@link DocumentStorage#clear(java.lang.String)}
      * .
      * 
      * @throws Exception
@@ -117,7 +117,7 @@ public class DocumentStorageTest {
 
     /**
      * Test method for
-     * {@link org.jvoicexml.documentserver.jetty.DocumentStorage#clear(java.lang.String)}
+     * {@link DocumentStorage#clear(java.lang.String)}
      * .
      * 
      * @throws Exception

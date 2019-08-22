@@ -1,3 +1,4 @@
+package org.jvoicexml.documentserver.jetty;
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -23,5 +24,4 @@
  * Jetty document storage.
  */
 
-package org.jvoicexml.documentserver.jetty;
 

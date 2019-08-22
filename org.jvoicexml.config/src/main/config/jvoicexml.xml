@@ -48,28 +48,6 @@
           <property name="fetchTimeout" value="5000"/>
         </bean>
     </property>
-    <property name="documentRepository">
-        <bean class="org.jvoicexml.documentserver.jetty.JVoiceXmlWebServer">
-            <property name="storagePort" value="9595" />
-            <property name="contextHandlerProviders">
-                <list>
-                   <bean class="org.jvoicexml.documentserver.jetty.DocumentStorage">
-                       <!-- port number for the document storage -->
-                       <!-- a value of 0 will start the storage at port 9595 -->
-                       <!-- negative values cause that no storage will be started -->
-                       <property name="grammarCreators">
-                           <list>
-                               <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator"/>
-                               <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.DigitsGrammarCreator"/>
-                           </list>
-                       </property>
-                   </bean>
-                   <bean class="org.jvoicexml.documentserver.jetty.JndiCodebaseHandler">
-                   </bean>
-                </list>
-            </property>
-        </bean>
-    </property>
   </bean>
   
   <!-- The dialog strategy factory -->

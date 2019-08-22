@@ -1,3 +1,4 @@
+package org.jvoicexml.documentserver.jetty;
 /*
  * Copyright (c) 1996, 1996, 1997 Sun Microsystems, Inc. All Rights Reserved.
  * 
@@ -8,7 +9,7 @@
  * SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
  * THIS SOFTWARE OR ITS DERIVATIVES.
  */
-package org.jvoicexml.documentserver.jetty;
+
 
 import java.io.DataInputStream;
 import java.io.File;
