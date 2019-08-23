@@ -35,6 +35,7 @@ dependencies {
     jvxmlConfiguration fileTree(dir: "src/main/config")
 
     compile project(':org.jvoicexml')
+    compile project(':org.jvoicexml.client')
 
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.20.v20190813'
@@ -72,7 +73,8 @@ task copyReferencedLibraries(type: Copy) {
          'jetty-http-*.jar',
          'jetty-io-*.jar',
          'jetty-util-*.jar',
-         'javax.servlet-api-*.jar'
+         'javax.servlet-api-*.jar',
+         'org.jvoicexml.client*.jar'
     }
 }
 

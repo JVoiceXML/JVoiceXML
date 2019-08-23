@@ -54,8 +54,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
 
-import DocumentStorage;
-
 /**
  * Test case for {@link org.jvoicexml.interpreter.ParamParser}.
  *
@@ -82,7 +80,6 @@ public final class TestParamParser {
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
-        server.setDocumentStorage(Mockito.mock(DocumentStorage.class));
         server.start();
 
         final ImplementationPlatform platform = new MockImplementationPlatform();

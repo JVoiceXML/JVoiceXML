@@ -35,7 +35,6 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
-import org.jvoicexml.documentserver.schemestrategy.file.FileSchemeStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.Form;
@@ -45,8 +44,6 @@ import org.mockito.Mockito;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
-
-import DocumentStorage;
 
 /**
  * Test case for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer}.
@@ -74,8 +71,6 @@ public final class TestJVoiceXmlDocumentServer {
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
-        server.addSchemeStrategy(new FileSchemeStrategy());
-        server.setDocumentStorage(Mockito.mock(DocumentStorage.class));
         server.start();
     }
 

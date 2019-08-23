@@ -28,7 +28,6 @@ import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
-import org.jvoicexml.documentserver.schemestrategy.file.FileSchemeStrategy;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
@@ -60,7 +59,6 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
         if (documentServer == null) {
             documentServer = new JVoiceXmlDocumentServer();
             documentServer.addSchemeStrategy(new MappedDocumentStrategy());
-            documentServer.addSchemeStrategy(new FileSchemeStrategy());
             try {
                 documentServer.start();
             } catch (Exception e) {

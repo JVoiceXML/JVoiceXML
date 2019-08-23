@@ -24,8 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Collection;
 
 import javax.servlet.ServletException;
@@ -54,16 +52,14 @@ public class JndiCodebaseHandler extends AbstractHandler
     public static String CONTEXT_PATH = "/jndi";
 
     /** The class loader to load the requested class files. */
-    private final URLClassLoader loader;
+    private final ClassLoader loader;
     
     /**
      * Constructs a new object.
      */
     public JndiCodebaseHandler() {
-        final ClassLoader parent =
-                Thread.currentThread().getContextClassLoader();
-        final URL[] urls = new URL[0];
-        loader = new URLClassLoader(urls, parent);
+        loader = JndiCodebaseHandler.class.getClassLoader();
+        LOGGER.info("using JNDI class loader '" + loader + "'");
     }
 
     /**
@@ -82,6 +78,7 @@ public class JndiCodebaseHandler extends AbstractHandler
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
+        LOGGER.info("Loading '" + path + "'");
         final OutputStream out = response.getOutputStream();
         writeClassToOutputStream(path, out);
         baseRequest.setHandled(true);

@@ -48,8 +48,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.mockito.Mockito;
 import org.w3c.dom.Document;
 
-import DocumentStorage;
-
 /**
  * Test cases for {@link VoiceXmlInterpreterContext}.
  * 
@@ -80,7 +78,6 @@ public final class TestVoiceXmlInterpreterContext {
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
-        server.setDocumentStorage(Mockito.mock(DocumentStorage.class));
         server.start();
 
         final ImplementationPlatform platform = new MockImplementationPlatform();

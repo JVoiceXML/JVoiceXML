@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -58,7 +53,6 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 /**
  * Test cases for {@link Jsapi20SynthesizedOutput}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.4
  */
 public final class TestJsapi20SpokenInput implements SpokenInputListener {
@@ -201,6 +195,15 @@ public final class TestJsapi20SpokenInput implements SpokenInputListener {
      */
     @Override
     public void inputError(final ErrorEvent error) {
-        System.out.println(error);
+        synchronized (monitor) {
+            monitor.notifyAll();
+        }
+    }
+
+    @Override
+    public void timeout(long timeout) {
+        synchronized (monitor) {
+            monitor.notifyAll();
+        }
     }
 }

@@ -39,7 +39,6 @@ import org.jvoicexml.ConnectionInformation;
  * By default the {@code VoiceXML21} profile is used.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public class BasicConnectionInformation
