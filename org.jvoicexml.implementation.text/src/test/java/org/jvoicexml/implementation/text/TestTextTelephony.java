@@ -277,4 +277,11 @@ public final class TestTextTelephony
     @Override
     public void inputClosed(final TextMessageEvent event) {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void timeout(long timeout) {
+    }
 }

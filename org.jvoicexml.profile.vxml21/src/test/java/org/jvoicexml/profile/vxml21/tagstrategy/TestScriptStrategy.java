@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/unittests/src/org/jvoicexml/interpreter/tagstrategy/TestScriptStrategy.java $
- * Version: $LastChangedRevision: 4175 $
- * Date:    $Date: 2014-05-06 10:37:12 +0200 (Tue, 06 May 2014) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,7 +32,6 @@ import org.junit.Test;
 import org.jvoicexml.Application;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
-import org.jvoicexml.documentserver.schemestrategy.file.FileSchemeStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.JVoiceXmlApplication;
@@ -52,7 +46,6 @@ import org.mockito.Mockito;
  * Test case for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4175 $
  * @since 0.6
  */
 public final class TestScriptStrategy extends TagStrategyTestBase {
@@ -74,7 +67,6 @@ public final class TestScriptStrategy extends TagStrategyTestBase {
     public void setUp() throws Exception {
         final JVoiceXmlDocumentServer server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
-        server.addSchemeStrategy(new FileSchemeStrategy());
         final URL url = TestScriptStrategy.class.getResource("factorial.js");
         uri = url.toURI();
         final VoiceXmlInterpreterContext context = getContext();
