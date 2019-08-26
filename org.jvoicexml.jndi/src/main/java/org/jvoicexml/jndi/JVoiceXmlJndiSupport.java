@@ -28,13 +28,12 @@ import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.JndiSupport;
-import org.jvoicexml.client.jndi.JVoiceXmlStub;
-import org.jvoicexml.client.jndi.MappedDocumentRepositoryStub;
 import org.jvoicexml.client.jndi.Stub;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 
@@ -179,8 +178,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
         try {
             final Skeleton skeleton =
                     new MappedDocumentRepositorySkeleton(map);
-            final Stub stub = new MappedDocumentRepositoryStub();
-            bind(context, skeleton, stub);
+            bind(context, skeleton);
         } catch (java.rmi.RemoteException re) {
             LOGGER.error("error creating the skeleton", re);
             return false;
@@ -188,8 +186,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
 
         try {
             final Skeleton skeleton = new JVoiceXmlSkeleton(context, jvxml);
-            final Stub stub = new JVoiceXmlStub();
-            bind(context, skeleton, stub);
+            bind(context, skeleton);
         } catch (java.rmi.RemoteException re) {
             LOGGER.error("error creating the skeleton", re);
             return false;
@@ -200,43 +197,20 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
 
     /**
      * Binds the given stub and skeleton.
-     *
-     * <p>
-     * Both have to be exported. The skeleton has to be accessed from the
-     * stub via RMI and the stub has to be exported to be accessible via
-     * JNDI.
-     * </p>
-     *
-     * @param context The context to bind skeleton and stub.
+     * @param context The context to bind skeleton.
      * @param skeleton The skeleton to bind.
-     * @param stub The stub to bind.
      */
-    static void bind(final Context context, final Skeleton skeleton,
-                     final Stub stub) {
+    static void bind(final Context context, final Skeleton skeleton) {
         final String skeletonName;
         try {
             skeletonName = skeleton.getSkeletonName();
-        } catch (RemoteException re) {
-            LOGGER.error("error retrieving the skeleton name", re);
-            return;
-        }
-
-        final String stubName = stub.getStubName();
-        try {
             context.rebind(skeletonName, skeleton);
             LOGGER.info("bound '" + skeletonName + "' to '"
                     + skeleton.getClass().getName() + "'");
-            context.rebind(stubName, stub);
-            LOGGER.info("bound '" + stubName + "' to '"
-                    + stub.getClass().getName() + "'");
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("naming exception while exporting '" + skeletonName
-                         + "'", ne);
+        } catch (RemoteException | NamingException e) {
+            LOGGER.error("error binding the skeleton", e);
             return;
         }
-
-        LOGGER.info("bound '" + skeletonName + "' to '"
-                + skeleton.getClass().getName() + "'");
     }
 
     /**

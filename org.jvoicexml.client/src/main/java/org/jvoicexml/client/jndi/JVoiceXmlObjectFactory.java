@@ -28,11 +28,6 @@ import javax.naming.Name;
 import javax.naming.Reference;
 import javax.naming.spi.ObjectFactory;
 
-import org.jvoicexml.Application;
-import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.Session;
-import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
-
 /**
  * Object factory to create the stubs on the client side.
  * 
@@ -82,25 +77,25 @@ public final class JVoiceXmlObjectFactory implements ObjectFactory {
      */
     private Object resolveReference(final String className,
             final Context context) {
-        if (className.equals(MappedDocumentRepository.class.getName())) {
+        if (className.equals(RemoteMappedDocumentRepository.class.getName())) {
             if (context == null) {
                 return new MappedDocumentRepositoryStub();
             } else {
                 return new MappedDocumentRepositoryStub(context);
             }
-        } else if (className.equals(JVoiceXml.class.getName())) {
+        } else if (className.equals(RemoteJVoiceXml.class.getName())) {
             if (context == null) {
                 return new JVoiceXmlStub();
             } else {
                 return new JVoiceXmlStub(context);
             }
-        } else if (className.equals(Session.class.getName())) {
+        } else if (className.equals(RemoteSession.class.getName())) {
             if (context == null) {
                 return new SessionStub();
             } else {
                 return new SessionStub(context);
             }
-        } else if (className.equals(Application.class.getName())) {
+        } else if (className.equals(RemoteApplication.class.getName())) {
             if (context == null) {
                 return new ApplicationStub();
             } else {
