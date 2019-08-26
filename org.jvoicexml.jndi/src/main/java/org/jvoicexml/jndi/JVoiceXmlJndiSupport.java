@@ -224,15 +224,19 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
         final String stubName = stub.getStubName();
         try {
             context.rebind(skeletonName, skeleton);
+            LOGGER.info("bound '" + skeletonName + "' to '"
+                    + skeleton.getClass().getName() + "'");
             context.rebind(stubName, stub);
+            LOGGER.info("bound '" + stubName + "' to '"
+                    + stub.getClass().getName() + "'");
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("naming exception while exporting '" + skeletonName
                          + "'", ne);
             return;
         }
 
-        LOGGER.info("bound '" + stubName + "' to '"
-                + stub.getClass().getName() + "'");
+        LOGGER.info("bound '" + skeletonName + "' to '"
+                + skeleton.getClass().getName() + "'");
     }
 
     /**

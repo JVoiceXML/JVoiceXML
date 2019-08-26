@@ -111,10 +111,10 @@ class JVoiceXmlSkeleton
         final Session session;
         try {
             session = jvxml.createSession(client);
-        } catch (ErrorEvent ee) {
-            LOGGER.error("unable to create session", ee);
+        } catch (ErrorEvent e) {
+            LOGGER.error("unable to create session", e);
 
-            throw new RemoteException("unable to create session", ee);
+            throw new RemoteException("unable to create session", e);
         }
 
         final Skeleton sessionSkeleton = new SessionSkeleton(context, session);

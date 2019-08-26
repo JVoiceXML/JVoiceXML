@@ -50,7 +50,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 final class SessionSkeleton extends UnicastRemoteObject
         implements RemoteSession, Skeleton {
     /** The serial version UID. */
-    private static final long serialVersionUID = 7903915853416003896L;
+    private static final long serialVersionUID = 8769061372251173641L;
 
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager

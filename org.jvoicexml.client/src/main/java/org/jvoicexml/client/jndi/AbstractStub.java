@@ -156,7 +156,7 @@ abstract class AbstractStub<T extends Remote>
      *
      * <p>
      * This method must be called in case of a remote exception. As
-     * a consequence a following method call will try to retreive a new
+     * a consequence a following method call will try to retrieve a new
      * fresh reference to the skeleton.
      * </p>
      */
