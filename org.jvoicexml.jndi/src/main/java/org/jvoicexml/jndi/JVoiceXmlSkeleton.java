@@ -107,7 +107,6 @@ class JVoiceXmlSkeleton
         if (jvxml == null) {
             return null;
         }
-
         final Session session;
         try {
             session = jvxml.createSession(client);

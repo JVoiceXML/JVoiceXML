@@ -116,31 +116,28 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
      */
     @Override
     public void startup() throws IOException {
-        final ClassLoader originalClassLoader =
-                Thread.currentThread().getContextClassLoader();
-        try {
-            Thread.currentThread().setContextClassLoader(
-                    getClass().getClassLoader());
-            LOGGER.info("starting JNDI support...");
-            if (registry != null) {
-                registry.start();
-            }
-    
-            final Context context = getInitialContext();
-            if (context == null) {
-                LOGGER.warn("unable to create initial context");
-                return;
-            }
-    
-            // Bind all JVoiceXML objects to the context
-            final boolean success = bindObjects(context);
-            if (!success) {
-                LOGGER.warn("not all object are bound");
-            }
-            LOGGER.info("...JNDI support started");
-        } finally {
-            Thread.currentThread().setContextClassLoader(originalClassLoader);
+        // Ensure that the registry is using the same classloader that was
+        // used to load this class
+        final ClassLoader loader = getClass().getClassLoader();
+        final Thread currentThread = Thread.currentThread();
+        currentThread.setContextClassLoader(loader);
+        LOGGER.info("starting JNDI support...");
+        if (registry != null) {
+            registry.start();
         }
+
+        final Context context = getInitialContext();
+        if (context == null) {
+            LOGGER.warn("unable to create initial context");
+            return;
+        }
+
+        // Bind all JVoiceXML objects to the context
+        final boolean success = bindObjects(context);
+        if (!success) {
+            LOGGER.warn("not all object are bound");
+        }
+        LOGGER.info("...JNDI support started");
     }
 
     /**

@@ -22,6 +22,8 @@
                     key="java.naming.rmi.security.manager" value="true" />
                 <beans:entry key="java.rmi.server.codebase"
                     value="http://localhost:9595/jndi/" />
+                <beans:entry key="java.rmi.server.useCodebaseOnly"
+                    value="false" />
             </beans:map>
         </beans:property>
     </beans:bean>
@@ -37,6 +39,8 @@
                     key="java.naming.rmi.security.manager" value="true" />
                 <beans:entry key="java.rmi.server.codebase"
                     value="http://localhost:9595/jndi/" />
+                <beans:entry key="java.rmi.server.useCodebaseOnly"
+                    value="false" />
             </beans:map>
         </beans:property>
     </beans:bean>
