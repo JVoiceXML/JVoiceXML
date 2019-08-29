@@ -164,19 +164,20 @@ public final class JVoiceXmlConfiguration implements Configuration {
      * @return parent class loader
      * @since 0.7.9
      */
+    @SuppressWarnings("resource")
     private ClassLoader getParentClassLoader() {
         final Thread thread = Thread.currentThread();
         final ClassLoader parent = thread.getContextClassLoader();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("parent class loader '" + parent + "'");
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("parent class loader '" + parent + "'");
             if (parent instanceof URLClassLoader) {
                 final URLClassLoader loader = (URLClassLoader) parent;
                 final URL[] urls = loader.getURLs();
                 if (urls.length == 0) {
-                    LOGGER.debug("parent class loader entry: none");
+                    LOGGER.trace("parent class loader entry: none");
                 } else {
                     for (URL url : urls) {
-                        LOGGER.debug("parent class loader entry: '" + url
+                        LOGGER.trace("parent class loader entry: '" + url
                                 + "'");
                     }
                 }

@@ -78,7 +78,9 @@ public class JndiCodebaseHandler extends AbstractHandler
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-        LOGGER.info("Loading '" + path + "'");
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.info("Loading '" + path + "'");
+        }
         final OutputStream out = response.getOutputStream();
         writeClassToOutputStream(path, out);
         baseRequest.setHandled(true);
