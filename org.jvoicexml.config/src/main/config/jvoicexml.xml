@@ -32,19 +32,6 @@
       <list>
         <bean
           class="org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy" />
-        <bean
-          class="org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy" />
-        <bean
-          class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy">
-          <!-- Strategy default fetch timeout in msec -->
-          <property name="fetchTimeout" value="5000"/>
-        </bean>
-        <bean
-          class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy">
-          <!-- Strategy default fetch timeout in msec -->
-          <property name="fetchTimeout" value="5000"/>
-          <property name="scheme" value="https" />
-        </bean>
         <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BuiltinSchemeStrategy">
           <property name="grammarCreators">
             <list>
@@ -61,22 +48,8 @@
           <property name="fetchTimeout" value="5000"/>
         </bean>
     </property>
-    <property name="documentStorage">
-        <bean class="org.jvoicexml.documentserver.jetty.DocumentStorage">
-            <!-- port number for the document storage -->
-            <!-- a value of 0 will start the storage at port 9595 -->
-            <!-- negative values cause that no storage will be started -->
-            <property name="storagePort" value="9595" />
-            <property name="grammarCreators">
-                <list>
-                    <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator"/>
-                    <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.DigitsGrammarCreator"/>
-                </list>
-            </property>
-        </bean>
-    </property>
   </bean>
-
+  
   <!-- The dialog strategy factory -->
   <bean id="org.jvoicexml.interpreter.DialogFactory"
     class="org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory">

@@ -18,6 +18,21 @@ repositories {
 }
 
 configurations {
+    jvxmlDocumentServerJetty {
+        description = "Document repository based on Jetty"
+        extendsFrom compile
+    }
+
+    jvxmlDocumentServerSchemestrategyFile {
+        description = "File scheme strategy for the document server"
+        extendsFrom compile
+    }
+
+    jvxmlDocumentServerSchemestrategyHttp {
+        description = "HTTP scheme strategy for the document server"
+        extendsFrom compile
+    }
+
     jvxmlInterpreterDatamodelECMAScript {
         description = "ECMAScript data model"
         extendsFrom compile
@@ -124,8 +139,11 @@ configurations {
 }
 
 dependencies {
-    compile project(':org.jvoicexml.client')
+    jvxmlDocumentServerJetty project(':org.jvoicexml.documentserver.jetty')
 
+    jvxmlDocumentServerSchemestrategyFile project(':org.jvoicexml.documentserver.schemestrategy.file')
+    jvxmlDocumentServerSchemestrategyHttp project(':org.jvoicexml.documentserver.schemestrategy.http')
+    
     jvxmlImplementationJSAPI10 project(':org.jvoicexml.implementation.jsapi10')
 
     jvxmlImplementationJSAPI20 project(':org.jvoicexml.implementation.jsapi20')
@@ -192,6 +210,9 @@ jar {
 
 task jvxmlConfigurations {
     dependsOn configurations.jvxmlDocumentation
+    dependsOn configurations.jvxmlDocumentServerJetty
+    dependsOn configurations.jvxmlDocumentServerSchemestrategyFile
+    dependsOn configurations.jvxmlDocumentServerSchemestrategyHttp
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
 
     if (project.property('JVOICEXML_INTERPRETER_GRAMMAR_LUIS') == 'true') {
@@ -246,7 +267,12 @@ task jvxmlConfigurations {
 }
 
 task jvxmlDistributioConfigurations {
+    dependsOn project(':org.jvoicexml.client')
+
     dependsOn configurations.jvxmlDocumentation
+    dependsOn configurations.jvxmlDocumentServerJetty
+    dependsOn configurations.jvxmlDocumentServerSchemestrategyFile
+    dependsOn configurations.jvxmlDocumentServerSchemestrategyHttp
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
     dependsOn configurations.jvxmlInterpreterGrammarLUIS
     dependsOn configurations.jvxmlInterpreterGrammarRegex
@@ -293,6 +319,11 @@ distributions {
             into ('lib') {
                 from configurations.jvxmlJNDI
             
+                from configurations.jvxmlDocumentServerJetty
+
+                from configurations.jvxmlDocumentServerSchemestrategyFile
+                from configurations.jvxmlDocumentServerSchemestrategyHttp
+                
                 from configurations.jvxmlInterpreterDatamodelECMAScript
                 from configurations.jvxmlInterpreterGrammarLUIS
                 from configurations.jvxmlInterpreterGrammarRegex
@@ -562,6 +593,25 @@ distributions {
     }
 }
 
+def getIP() {
+    InetAddress result = null;
+    Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+    while (interfaces.hasMoreElements()) {
+        Enumeration<InetAddress> addresses = interfaces.nextElement().getInetAddresses();
+        while (addresses.hasMoreElements()) {
+            InetAddress address = addresses.nextElement();
+            if (!address.isLoopbackAddress()) {
+                if (address.isSiteLocalAddress()) {
+                    return address.getHostAddress();
+                } else if (result == null) {
+                    result = address;
+                }
+            }
+        }
+    }
+    return (result != null ? result : InetAddress.getLocalHost()).getHostAddress();
+}
+
 run {
     dependsOn jvxmlConfigurations
     dependsOn configurations.jvxmlJNDI
@@ -569,9 +619,12 @@ run {
     version = JVOICEXML_VERSION
 
     mainClassName = "org.jvoicexml.startup.Startup"
-    classpath += files("${project(':org.jvoicexml').buildDir}/config")
+    classpath = sourceSets.main.runtimeClasspath \
+                + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.manager",
+               "-Djava.rmi.server.codebase=http://${getIP()}:9595/jndi/",
+               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
@@ -589,6 +642,8 @@ task(runDebug, type: JavaExec) {
                 + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.manager",
+               "-Djava.rmi.server.codebase=http://${getIP()}:9595/jndi/",
+               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
@@ -617,6 +672,9 @@ startScripts {
     applicationName = "jvxml-startup"
     defaultJvmOpts = ["-Xms1024m", "-Xmx2048m"]
     defaultJvmOpts = [ "-Djava.library.path=lib",
+               "-Djava.security.manager",
+               "-Djava.rmi.server.codebase=http://${getIP()}:9595/jndi/",
+               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.security.policy=config/jvoicexml.policy",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
                "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]

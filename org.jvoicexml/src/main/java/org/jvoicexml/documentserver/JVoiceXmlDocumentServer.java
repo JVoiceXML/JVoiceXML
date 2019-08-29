@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,11 +40,13 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.Configurable;
+import org.jvoicexml.Configuration;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
@@ -65,7 +67,8 @@ import org.xml.sax.SAXException;
  *
  * @author Dirk Schnelle-Walka
 */
-public final class JVoiceXmlDocumentServer implements DocumentServer {
+public final class JVoiceXmlDocumentServer
+    implements DocumentServer, Configurable {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
             .getLogger(JVoiceXmlDocumentServer.class);
@@ -76,9 +79,9 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
     /** The default fetch attributes. */
     private FetchAttributes attributes;
 
-    /** The document storage. */
-    private DocumentStorage storage;
-
+    /** The internal document repository. */
+    private DocumentRepository repository;
+    
     /**
      * Creates a new object.
      *
@@ -91,14 +94,29 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
     public JVoiceXmlDocumentServer() {
         strategies = new java.util.HashMap<String, SchemeStrategy>();
     }
-
+    
     /**
-     * Sets the document storage
-     * @param documentStorage the document storage
-     * @since 0.7.8
+     * {@inheritDoc}
      */
-    public void setDocumentStorage(final DocumentStorage documentStorage) {
-        storage = documentStorage;
+    @Override
+    public void init(Configuration configuration)
+            throws ConfigurationException {
+        final Collection<SchemeStrategy> configuredStrategies = configuration
+                .loadObjects(SchemeStrategy.class, "schemestrategy");
+        for (SchemeStrategy current : configuredStrategies) {
+            addSchemeStrategy(current);
+        }
+        final Collection<DocumentRepository> repositories =
+                configuration.loadObjects(DocumentRepository.class,
+                "documentrepository");
+        for (DocumentRepository current : repositories) {
+            repository = current;
+            break;
+        }
+        if (repository != null) {
+            LOGGER.info("using document repository '" +
+                    repository.getClass().getCanonicalName() + "'");
+        }
     }
 
     /**
@@ -106,7 +124,11 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      */
     @Override
     public void start() throws Exception {
-        storage.start();
+        if (repository != null) {
+            LOGGER.info("starting document repositroy '" 
+                    + repository.getClass().getCanonicalName() + "'");
+            repository.start();
+        }
     }
 
     /**
@@ -308,7 +330,7 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
      */
     @Override
     public URI resolveBuiltinUri(final URI uri) {
-        return storage.resolveBuiltinUri(uri);
+        return repository.resolveBuiltinUri(uri);
     }
 
     /**
@@ -317,7 +339,7 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
     @Override
     public URI addGrammarDocument(final String sessionId,
             final GrammarDocument document) throws URISyntaxException {
-        return storage.addGrammarDocument(sessionId, document);
+        return repository.addGrammarDocument(sessionId, document);
     }
 
     /**
@@ -502,19 +524,19 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
         for (SchemeStrategy strategy : knownStrategies) {
             strategy.sessionClosed(sessionId);
         }
-        try {
-            storage.clear(sessionId);
-        } catch (URISyntaxException e) {
-            LOGGER.warn("error clearing session", e);
-        }
+        repository.sessionClosed(sessionId);
     }
 
     @Override
     public void stop() {
-        try {
-            storage.stop();
-        } catch (Exception e) {
-            LOGGER.warn("error closing the document storage", e);
+        if (repository != null) {
+            try {
+                LOGGER.info("stopping document repositroy '" 
+                        + repository.getClass().getCanonicalName() + "'");
+                repository.stop();
+            } catch (Exception e) {
+                LOGGER.warn("error stopping the document repository", e);
+            }
         }
     }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentrepository xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="jvxml-documentrepository-0-7.xsd">
+    <repository>jetty</repository>
+    <classpath>jetty-server-9.4.20.v20190813.jar</classpath>
+    <classpath>jetty-http-9.4.20.v20190813.jar</classpath>
+    <classpath>jetty-io-9.4.20.v20190813.jar</classpath>
+    <classpath>jetty-util-9.4.20.v20190813.jar</classpath>
+    <classpath>jetty-server-9.4.20.v20190813.jar</classpath>
+    <classpath>javax.servlet-api-3.1.0.jar</classpath>
+    <classpath>org.jvoicexml.documentserver.jetty-@@VERSION@@.jar</classpath>
+    <classpath>org.jvoicexml.client-@@VERSION@@.jar</classpath>
+    <beans:bean id="documentrepository"
+        class="org.jvoicexml.documentserver.jetty.JVoiceXmlWebServer">
+        <beans:property name="storagePort" value="9595" />
+        <beans:property name="contextHandlerProviders">
+            <beans:list>
+               <beans:bean class="org.jvoicexml.documentserver.jetty.DocumentStorage">
+                   <!-- port number for the document storage -->
+                   <!-- a value of 0 will start the storage at port 9595 -->
+                   <!-- negative values cause that no storage will be started -->
+                   <beans:property name="grammarCreators">
+                       <beans:list>
+                           <beans:bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator"/>
+                           <beans:bean class="org.jvoicexml.documentserver.schemestrategy.builtin.DigitsGrammarCreator"/>
+                       </beans:list>
+                   </beans:property>
+               </beans:bean>
+               <beans:bean class="org.jvoicexml.documentserver.jetty.JndiCodebaseHandler">
+               </beans:bean>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+</documentrepository>

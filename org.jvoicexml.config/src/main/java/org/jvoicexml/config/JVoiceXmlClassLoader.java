@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,15 +36,37 @@ public final class JVoiceXmlClassLoader extends URLClassLoader {
     /** Dynamically added URLs. */
     private final Collection<URL> urls;
 
+    /** The repository that this class loader is responsible for. */
+    private final String repository;
+
     /**
      * Constructs a new object.
      * @param parent the parent class loader.
      */
     public JVoiceXmlClassLoader(final ClassLoader parent) {
-        super(new URL[0], parent);
-        urls = new java.util.ArrayList<URL>();
+        this(parent, null);
     }
 
+    /**
+     * Constructs a new object.
+     * @param parent the parent class loader.
+     * @param repo the repository that this class loader is responsible for
+     */
+    public JVoiceXmlClassLoader(final ClassLoader parent, final String repo) {
+        super(new URL[0], parent);
+        urls = new java.util.ArrayList<URL>();
+        repository = repo;
+    }
+
+    /**
+     * Retrieves the used repository
+     * @return the repository.
+     * @since 0.7.9
+     */
+    public String getRepository() {
+        return repository;
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -68,37 +90,7 @@ public final class JVoiceXmlClassLoader extends URLClassLoader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class<?> loadClass(final String name)
-        throws ClassNotFoundException {
-        Class<?> loadedClass = findLoadedClass(name);
-        if (loadedClass == null) {
-            try {
-                if (name.startsWith("java.")) {
-                    loadedClass = Class.forName(name);
-                } else {
-                    loadedClass = findClass(name);
-                }
-            } catch (ClassNotFoundException e) {
-                // Swallow exception
-                // does not exist locally
-            }
-            if (loadedClass == null) {
-                if (name.startsWith("java.")) {
-                    final ClassLoader systemLoader =
-                        ClassLoader.getSystemClassLoader();
-                    loadedClass = systemLoader.loadClass(name);
-                } else {
-                    loadedClass = super.loadClass(name);
-                }
-            }
-        }
-        return loadedClass;
-    }
-
+    
     /**
      * {@inheritDoc}
      */
@@ -107,15 +99,14 @@ public final class JVoiceXmlClassLoader extends URLClassLoader {
         final StringBuilder str = new StringBuilder();
         str.append(getClass());
         str.append('[');
-        boolean first = true;
+        str.append("repo=");
+        str.append(repository);
         for (URL url : urls) {
-            if (!first) {
-                str.append(',');
-            } else {
-                first = false;
-            }
+            str.append(',');
             str.append(url);
         }
+        str.append(",parent=");
+        str.append(getParent());
         str.append(']');
         return str.toString();
     }

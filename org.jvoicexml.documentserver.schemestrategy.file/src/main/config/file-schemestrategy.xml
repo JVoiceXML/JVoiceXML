@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemestrategy xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="jvxml-schemestrategy-0-7.xsd">
+    <repository>file</repository>
+    <classpath>org.jvoicexml.documentserver.schemestrategy.file-@@VERSION@@.jar</classpath>
+    <beans:bean id="schemestrategy" 
+          class="org.jvoicexml.documentserver.schemestrategy.file.FileSchemeStrategy">
+    </beans:bean>
+</schemestrategy>

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,9 +27,6 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
-import org.jvoicexml.documentserver.jetty.DocumentStorage;
-import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
-import org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
@@ -51,7 +43,6 @@ import org.mockito.Mockito;
  * This class provides a dummy implementation for {@link JVoiceXmlCore}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public final class MockJvoiceXmlCore implements JVoiceXmlCore {
@@ -68,9 +59,6 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
         if (documentServer == null) {
             documentServer = new JVoiceXmlDocumentServer();
             documentServer.addSchemeStrategy(new MappedDocumentStrategy());
-            documentServer.addSchemeStrategy(new FileSchemeStrategy());
-            documentServer.addSchemeStrategy(new HttpSchemeStrategy());
-            documentServer.setDocumentStorage(Mockito.mock(DocumentStorage.class));
             try {
                 documentServer.start();
             } catch (Exception e) {

@@ -224,4 +224,10 @@ public final class Red5SpokenInput implements SpokenInput {
         return null;
     }
 
+    @Override
+    public long getNoInputTimeout() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }

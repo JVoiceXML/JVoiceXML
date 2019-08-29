@@ -8,3 +8,4 @@ work/
 .idea/
 *.iml
 out/
+/org.jvoicexml.demo.marcdemo/
