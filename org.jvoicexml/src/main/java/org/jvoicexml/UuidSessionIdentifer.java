@@ -28,6 +28,9 @@ import java.util.UUID;
  * @since 0.7.9
  */
 public class UuidSessionIdentifer implements SessionIdentifier {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -7232508857573720831L;
+    
     /** The session identifier */
     private final UUID uuid;
     
