@@ -58,7 +58,8 @@ public class JndiCodebaseHandler extends AbstractHandler
      * Constructs a new object.
      */
     public JndiCodebaseHandler() {
-        loader = JndiCodebaseHandler.class.getClassLoader();
+        final Thread thread = Thread.currentThread();
+        loader = thread.getContextClassLoader();
         LOGGER.info("using JNDI class loader '" + loader + "'");
     }
 
