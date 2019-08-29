@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -120,20 +120,18 @@ class JVoiceXmlSkeleton
         if (jvxml == null) {
             return null;
         }
-
         final Session session;
         try {
             session = jvxml.createSession(info, id);
-        } catch (ErrorEvent ee) {
-            LOGGER.error("unable to create session", ee);
-
-            throw new RemoteException("unable to create session", ee);
+        } catch (ErrorEvent e) {
+            LOGGER.error("unable to create session", e);
+            throw new RemoteException("unable to create session", e);
         }
 
         final Skeleton sessionSkeleton = new SessionSkeleton(context, session);
         final Stub sessionStub = new SessionStub(session.getSessionId());
 
-        JVoiceXmlJndiSupport.bind(context, sessionSkeleton, sessionStub);
+        JVoiceXmlJndiSupport.bind(context, sessionSkeleton);
 
         return (Session) sessionStub;
     }

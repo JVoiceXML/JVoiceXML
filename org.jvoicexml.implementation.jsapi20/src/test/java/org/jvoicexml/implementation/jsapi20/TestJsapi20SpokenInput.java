@@ -195,7 +195,16 @@ public final class TestJsapi20SpokenInput implements SpokenInputListener {
      */
     @Override
     public void inputError(final ErrorEvent error) {
-        System.out.println(error);
+        synchronized (monitor) {
+            monitor.notifyAll();
+        }
+    }
+
+    @Override
+    public void timeout(long timeout) {
+        synchronized (monitor) {
+            monitor.notifyAll();
+        }
     }
 
     /**

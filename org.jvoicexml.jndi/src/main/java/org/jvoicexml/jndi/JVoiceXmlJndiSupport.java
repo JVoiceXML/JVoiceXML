@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,16 +24,16 @@ package org.jvoicexml.jndi;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.JndiSupport;
-import org.jvoicexml.client.jndi.JVoiceXmlStub;
-import org.jvoicexml.client.jndi.MappedDocumentRepositoryStub;
 import org.jvoicexml.client.jndi.Stub;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 
@@ -75,10 +75,14 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
     /** The registry. */
     private JVoiceXmlRegistry registry;
 
+    /** JNDI properties. */
+    private final Hashtable<String, String> environment;
+
     /**
      * Constructs a new object.
      */
     public JVoiceXmlJndiSupport() {
+        environment = new Hashtable<String, String>();
     }
 
     /**
@@ -99,34 +103,41 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
     }
 
     /**
+     * Sets the JNDI environment.
+     * @param env the JNDI environment
+     * @since 0.7.9
+     */
+    public void setEnvironment(final Map<String, String> env) {
+        environment.putAll(env);
+    }
+
+    /**
      * {@inheritDoc}
      */
+    @Override
     public void startup() throws IOException {
-        final ClassLoader originalClassLoader =
-                Thread.currentThread().getContextClassLoader();
-        try {
-            Thread.currentThread().setContextClassLoader(
-                    getClass().getClassLoader());
-            LOGGER.info("starting JNDI support...");
-            if (registry != null) {
-                registry.start();
-            }
-    
-            final Context context = getInitialContext();
-            if (context == null) {
-                LOGGER.warn("unable to create initial context");
-                return;
-            }
-    
-            // Bind all JVoiceXML objects to the context
-            final boolean success = bindObjects(context);
-            if (!success) {
-                LOGGER.warn("not all object are bound");
-            }
-            LOGGER.info("...JNDI support started");
-        } finally {
-            Thread.currentThread().setContextClassLoader(originalClassLoader);
+        // Ensure that the registry is using the same classloader that was
+        // used to load this class
+        final ClassLoader loader = getClass().getClassLoader();
+        final Thread currentThread = Thread.currentThread();
+        currentThread.setContextClassLoader(loader);
+        LOGGER.info("starting JNDI support...");
+        if (registry != null) {
+            registry.start();
         }
+
+        final Context context = getInitialContext();
+        if (context == null) {
+            LOGGER.warn("unable to create initial context");
+            return;
+        }
+
+        // Bind all JVoiceXML objects to the context
+        final boolean success = bindObjects(context);
+        if (!success) {
+            LOGGER.warn("not all object are bound");
+        }
+        LOGGER.info("...JNDI support started");
     }
 
     /**
@@ -135,12 +146,17 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
      * @since 0.5
      */
     Context getInitialContext() {
-        final Hashtable<String, String> environment =
-            new Hashtable<String, String>();
+        // We take the values from jndi.properties but override the port
         environment.put(Context.INITIAL_CONTEXT_FACTORY,
                 "com.sun.jndi.rmi.registry.RegistryContextFactory");
         final int port = registry.getPort();
         environment.put(Context.PROVIDER_URL, "rmi://localhost:" + port);
+        if (LOGGER.isDebugEnabled()) {
+            for (String key : environment.keySet()) {
+                final String value = environment.get(key);
+                LOGGER.debug("JNDI environment: " + key + " = " + value);
+            }
+        }
         try {
             return new InitialContext(environment);
         } catch (javax.naming.NamingException ne) {
@@ -159,8 +175,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
         try {
             final Skeleton skeleton =
                     new MappedDocumentRepositorySkeleton(map);
-            final Stub stub = new MappedDocumentRepositoryStub();
-            bind(context, skeleton, stub);
+            bind(context, skeleton);
         } catch (java.rmi.RemoteException re) {
             LOGGER.error("error creating the skeleton", re);
             return false;
@@ -168,8 +183,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
 
         try {
             final Skeleton skeleton = new JVoiceXmlSkeleton(context, jvxml);
-            final Stub stub = new JVoiceXmlStub();
-            bind(context, skeleton, stub);
+            bind(context, skeleton);
         } catch (java.rmi.RemoteException re) {
             LOGGER.error("error creating the skeleton", re);
             return false;
@@ -180,44 +194,26 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
 
     /**
      * Binds the given stub and skeleton.
-     *
-     * <p>
-     * Both have to be exported. The skeleton has to be accessed from the
-     * stub via RMI and the stub has to be exported to be accessible via
-     * JNDI.
-     * </p>
-     *
-     * @param context The context to bind skeleton and stub.
+     * @param context The context to bind skeleton.
      * @param skeleton The skeleton to bind.
-     * @param stub The stub to bind.
      */
-    static void bind(final Context context, final Skeleton skeleton,
-                     final Stub stub) {
+    static void bind(final Context context, final Skeleton skeleton) {
         final String skeletonName;
         try {
             skeletonName = skeleton.getSkeletonName();
-        } catch (RemoteException re) {
-            LOGGER.error("error retrieving the skeleton name", re);
-            return;
-        }
-
-        final String stubName = stub.getStubName();
-        try {
             context.rebind(skeletonName, skeleton);
-            context.rebind(stubName, stub);
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("naming exception while exporting '" + skeletonName
-                         + "'", ne);
+            LOGGER.info("bound '" + skeletonName + "' to '"
+                    + skeleton.getClass().getName() + "'");
+        } catch (RemoteException | NamingException e) {
+            LOGGER.error("error binding the skeleton", e);
             return;
         }
-
-        LOGGER.info("bound '" + stubName + "' to '"
-                + stub.getClass().getName() + "'");
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void shutdown() {
         LOGGER.info("stopping JNDI support...");
         if (registry != null) {

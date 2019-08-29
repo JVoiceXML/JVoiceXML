@@ -31,6 +31,7 @@ import javax.naming.NamingException;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.client.jndi.JVoiceXmlStub;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 
@@ -55,7 +56,7 @@ public final class GenericClient {
     private JVoiceXml getJVoiceXml() throws NamingException {
         if (jvxml == null) {
             final Context context = new InitialContext();
-            jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+            jvxml = new JVoiceXmlStub(context);
         }
         return jvxml;
     }

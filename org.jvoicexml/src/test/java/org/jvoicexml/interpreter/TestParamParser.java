@@ -35,7 +35,6 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
-import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -77,7 +76,6 @@ public final class TestParamParser {
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
-        server.setDocumentStorage(Mockito.mock(DocumentStorage.class));
         server.start();
 
         final ImplementationPlatform platform = new MockImplementationPlatform();

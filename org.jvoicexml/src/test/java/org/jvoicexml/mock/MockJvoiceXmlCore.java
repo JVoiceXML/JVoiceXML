@@ -29,9 +29,6 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
-import org.jvoicexml.documentserver.jetty.DocumentStorage;
-import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
-import org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
@@ -64,9 +61,6 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
         if (documentServer == null) {
             documentServer = new JVoiceXmlDocumentServer();
             documentServer.addSchemeStrategy(new MappedDocumentStrategy());
-            documentServer.addSchemeStrategy(new FileSchemeStrategy());
-            documentServer.addSchemeStrategy(new HttpSchemeStrategy());
-            documentServer.setDocumentStorage(Mockito.mock(DocumentStorage.class));
             try {
                 documentServer.start();
             } catch (Exception e) {

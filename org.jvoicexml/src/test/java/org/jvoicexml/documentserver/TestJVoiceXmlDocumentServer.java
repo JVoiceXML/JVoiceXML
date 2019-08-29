@@ -34,9 +34,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifer;
-import org.jvoicexml.documentserver.jetty.DocumentStorage;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
-import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -73,8 +71,6 @@ public final class TestJVoiceXmlDocumentServer {
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
-        server.addSchemeStrategy(new FileSchemeStrategy());
-        server.setDocumentStorage(Mockito.mock(DocumentStorage.class));
         server.start();
     }
 

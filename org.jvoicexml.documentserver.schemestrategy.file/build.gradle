@@ -1,0 +1,87 @@
+apply plugin: 'java'
+apply plugin: "com.github.eerohele.saxon-gradle"
+apply plugin: 'maven'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        resources {
+            exclude '**'
+        }
+    }
+}
+
+configurations {
+    jvxmlConfiguration
+}
+
+dependencies {
+    jvxmlConfiguration fileTree(dir: "src/main/config")
+
+    compile project(':org.jvoicexml')
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+}
+
+xslt {
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/file-schemestrategy.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/file-schemestrategy.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        version: JVOICEXML_VERSION,
+        libs: configurations.compile
+    )
+}
+
+task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/file-schemestrategy.xml"
+    output "${project(':main').buildDir}/config/file-schemestrategy.xml"
+    parameters(
+        buildpath: "lib",
+        version: JVOICEXML_VERSION,
+        libs: configurations.compile
+    )
+}
+
+jar {
+    version = JVOICEXML_VERSION
+
+    dependsOn xslt
+    dependsOn xsltDistribution
+    
+    manifest {
+        attributes("Implementation-Title": "JVoiceXML File scheme strategy for the document server",
+                   'Implementation-Vendor': 'switch',
+                   'Implementation-Version': JVOICEXML_VERSION,
+                   'Built-By'       : System.properties['user.name'],
+                   'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                   'Created-By'     : "Gradle ${gradle.gradleVersion}",
+                   'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                   'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}")
+    }
+    baseName 'org.jvoicexml.documentserver.schemestrategy.file'
+}
+
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}

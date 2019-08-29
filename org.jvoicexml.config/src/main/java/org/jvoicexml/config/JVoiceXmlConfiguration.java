@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.Map;
 
@@ -158,7 +159,33 @@ public final class JVoiceXmlConfiguration implements Configuration {
         }
     }
 
-
+    /**
+     * Retrieves the parent class loader to use.
+     * @return parent class loader
+     * @since 0.7.9
+     */
+    @SuppressWarnings("resource")
+    private ClassLoader getParentClassLoader() {
+        final Thread thread = Thread.currentThread();
+        final ClassLoader parent = thread.getContextClassLoader();
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("parent class loader '" + parent + "'");
+            if (parent instanceof URLClassLoader) {
+                final URLClassLoader loader = (URLClassLoader) parent;
+                final URL[] urls = loader.getURLs();
+                if (urls.length == 0) {
+                    LOGGER.trace("parent class loader entry: none");
+                } else {
+                    for (URL url : urls) {
+                        LOGGER.trace("parent class loader entry: '" + url
+                                + "'");
+                    }
+                }
+            }
+        }
+        return parent;
+    }
+    
     /**
      * Retrieves the class loader to use for the given loader repository.
      * @param repository name of the loader repository
@@ -166,8 +193,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
      */
     private JVoiceXmlClassLoader getClassLoader(final String repository) {
         if (repository == null) {
-            final Thread thread = Thread.currentThread();
-            final ClassLoader parent = thread.getContextClassLoader();
+            final ClassLoader parent = getParentClassLoader();
             return new JVoiceXmlClassLoader(parent);
         }
         if (LOGGER.isDebugEnabled()) {
@@ -175,8 +201,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
         }
         JVoiceXmlClassLoader loader = loaderRepositories.get(repository);
         if (loader == null) {
-            final Thread thread = Thread.currentThread();
-            final ClassLoader parent = thread.getContextClassLoader();
+            final ClassLoader parent = getParentClassLoader();
             loader = new JVoiceXmlClassLoader(parent, repository);
             loaderRepositories.put(repository, loader);
         }

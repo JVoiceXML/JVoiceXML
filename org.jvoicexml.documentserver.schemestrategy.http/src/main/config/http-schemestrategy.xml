@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemestrategy xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="jvxml-schemestrategy-0-7.xsd">
+    <repository>http</repository>
+    <classpath>org.jvoicexml.documentserver.schemestrategy.http-@@VERSION@@.jar</classpath>
+    <classpath>httpclient-4.5.9.jar</classpath>
+    <classpath>httpcore-4.4.11.jar</classpath>
+    <classpath>commons-codec-1.11.jar</classpath>
+    <beans:bean id="schemestrategy" 
+          class="org.jvoicexml.documentserver.schemestrategy.http.HttpSchemeStrategy">
+          <!-- Strategy default fetch timeout in msec -->
+          <property name="fetchTimeout" value="5000"/>
+          <property name="scheme" value="https" />
+    </beans:bean>
+</schemestrategy>

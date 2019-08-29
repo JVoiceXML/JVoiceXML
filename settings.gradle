@@ -19,6 +19,9 @@ include 'org.jvoicexml', \
     'org.jvoicexml.demo.talkingheaddemo', \
     'org.jvoicexml.demo.textdemo', \
     'org.jvoicexml.demo.voicexmlcreationdemo', \
+    'org.jvoicexml.documentserver.jetty', \
+    'org.jvoicexml.documentserver.schemestrategy.file', \
+    'org.jvoicexml.documentserver.schemestrategy.http', \
     'org.jvoicexml.jndi', \
     'org.jvoicexml.interpreter.datamodel.ecmascript',
     'org.jvoicexml.interpreter.grammar.halef', \

@@ -23,6 +23,9 @@ package org.jvoicexml.demo.helloworlddemo;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 import javax.naming.NamingException;
 
@@ -58,10 +61,11 @@ public final class HelloWorldDemo {
      * 
      * @param args
      *            Command line arguments. None expected.
+     * @throws RemoteException 
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws RemoteException {
         LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2017 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2019 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final GenericClient client = new GenericClient();

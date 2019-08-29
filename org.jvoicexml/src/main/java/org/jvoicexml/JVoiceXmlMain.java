@@ -352,13 +352,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
 
         try {
             // Load configuration
-            documentServer = config.loadObject(DocumentServer.class);
-            if (documentServer == null) {
-                final Exception exception = new ConfigurationException(
-                        "no document server available");
-                abortStartup(exception);
-            }
-            documentServer.start();
+            initDocumentServer(config);
             implementationPlatformFactory = configuration
                     .loadObject(ImplementationPlatformFactory.class);
             if (implementationPlatformFactory == null) {
@@ -404,6 +398,31 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         }
     }
 
+    /**
+     * Initializes the call manager.
+     * 
+     * @param config
+     *            current configuration.
+     * @exception NoresourceError
+     *                error starting the call manager
+     * @throws Exception 
+     *          error starting the document server
+     */
+    private void initDocumentServer(final Configuration config)
+            throws NoresourceError, Exception {
+        documentServer = config.loadObject(DocumentServer.class);
+        if (documentServer == null) {
+            final Exception exception = new ConfigurationException(
+                    "no document server available");
+            abortStartup(exception);
+        }
+        if (documentServer instanceof Configurable) {
+            final Configurable configurable = (Configurable) documentServer;
+            configurable.init(config);
+        }
+        documentServer.start();
+    }
+    
     /**
      * Initialization of the JNDI hook.
      * 
