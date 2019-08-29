@@ -287,12 +287,11 @@ public class JVoiceXmlSession extends Thread
      */
     @Override
     public void waitSessionEnd() throws ErrorEvent {
-        LOGGER.info("waiting for end of session...");
-
         // Do not wait, if there is already an error.
         if (processingError != null) {
             throw processingError;
         }
+        LOGGER.info("waiting for end of session...");
 
         // Wait until the session ends.
         synchronized (sem) {

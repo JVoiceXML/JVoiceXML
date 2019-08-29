@@ -139,8 +139,6 @@ configurations {
 }
 
 dependencies {
-    compile project(':org.jvoicexml.client')
-
     jvxmlDocumentServerJetty project(':org.jvoicexml.documentserver.jetty')
 
     jvxmlDocumentServerSchemestrategyFile project(':org.jvoicexml.documentserver.schemestrategy.file')
@@ -269,6 +267,8 @@ task jvxmlConfigurations {
 }
 
 task jvxmlDistributioConfigurations {
+    dependsOn project(':org.jvoicexml.client')
+
     dependsOn configurations.jvxmlDocumentation
     dependsOn configurations.jvxmlDocumentServerJetty
     dependsOn configurations.jvxmlDocumentServerSchemestrategyFile

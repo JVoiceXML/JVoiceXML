@@ -90,36 +90,6 @@ public final class JVoiceXmlClassLoader extends URLClassLoader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class<?> loadClass(final String name)
-        throws ClassNotFoundException {
-        Class<?> loadedClass = findLoadedClass(name);
-        if (loadedClass == null) {
-            try {
-                if (name.startsWith("java.")) {
-                    loadedClass = Class.forName(name);
-                } else {
-                    loadedClass = findClass(name);
-                }
-            } catch (ClassNotFoundException e) {
-                // Swallow exception
-                // does not exist locally
-            }
-            if (loadedClass == null) {
-                if (name.startsWith("java.")) {
-                    final ClassLoader systemLoader =
-                        ClassLoader.getSystemClassLoader();
-                    loadedClass = systemLoader.loadClass(name);
-                } else {
-                    loadedClass = super.loadClass(name);
-                }
-            }
-        }
-        return loadedClass;
-    }
     
     /**
      * {@inheritDoc}

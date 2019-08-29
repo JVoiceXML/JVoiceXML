@@ -165,9 +165,8 @@ public final class JVoiceXmlConfiguration implements Configuration {
      * @since 0.7.9
      */
     private ClassLoader getParentClassLoader() {
-//        final Thread thread = Thread.currentThread();
-//        final ClassLoader parent = thread.getContextClassLoader();
-        final ClassLoader parent = JVoiceXmlClassLoader.getSystemClassLoader();
+        final Thread thread = Thread.currentThread();
+        final ClassLoader parent = thread.getContextClassLoader();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("parent class loader '" + parent + "'");
             if (parent instanceof URLClassLoader) {
