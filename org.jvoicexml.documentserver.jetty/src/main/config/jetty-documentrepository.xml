@@ -10,7 +10,6 @@
     <classpath>jetty-server-9.4.20.v20190813.jar</classpath>
     <classpath>javax.servlet-api-3.1.0.jar</classpath>
     <classpath>org.jvoicexml.documentserver.jetty-@@VERSION@@.jar</classpath>
-    <classpath>org.jvoicexml.client-@@VERSION@@.jar</classpath>
     <beans:bean id="documentrepository"
         class="org.jvoicexml.documentserver.jetty.JVoiceXmlWebServer">
         <beans:property name="storagePort" value="9595" />

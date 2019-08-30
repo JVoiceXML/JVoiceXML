@@ -64,7 +64,7 @@ import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
  * @see Stub
  * @since 0.4
  */
-public final class JVoiceXmlJndiSupport implements JndiSupport {
+public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LogManager.getLogger(JVoiceXmlJndiSupport.class);
@@ -78,11 +78,18 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
     /** JNDI properties. */
     private final Hashtable<String, String> environment;
 
+    /** Starting notification lock. */
+    private final Object lock;
+    
+    /** A possibly thrown exception when starting the JNDI support. */
+    private Exception startException;
+    
     /**
      * Constructs a new object.
      */
     public JVoiceXmlJndiSupport() {
         environment = new Hashtable<String, String>();
+        lock = new Object();
     }
 
     /**
@@ -116,36 +123,68 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
      */
     @Override
     public void startup() throws IOException {
-        // Ensure that the registry is using the same classloader that was
-        // used to load this class
+        if (registry == null) {
+            throw new IOException("no registry configured");
+        }
+        // Ensure that the registry is using the correct class loader
         final ClassLoader loader = getClass().getClassLoader();
-        final Thread currentThread = Thread.currentThread();
-        currentThread.setContextClassLoader(loader);
-        LOGGER.info("starting JNDI support...");
-        if (registry != null) {
-            registry.start();
+        final Thread thread = new Thread(this);
+        thread.setContextClassLoader(loader);
+        thread.start();
+        synchronized (lock) {
+            try {
+                lock.wait();
+            } catch (InterruptedException e) {
+                return;
+            }
         }
-
-        final Context context = getInitialContext();
-        if (context == null) {
-            LOGGER.warn("unable to create initial context");
-            return;
+        if (startException != null) {
+            LOGGER.error("error starting the JNDI support", startException);
+            throw new IOException("error starting the JNDI support",
+                    startException);
         }
-
-        // Bind all JVoiceXML objects to the context
-        final boolean success = bindObjects(context);
-        if (!success) {
-            LOGGER.warn("not all object are bound");
-        }
-        LOGGER.info("...JNDI support started");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void run() {
+        LOGGER.info("starting JNDI support...");
+        try {
+            registry.start();
+            final Context context = getInitialContext();
+            if (context == null) {
+                LOGGER.warn("unable to create initial context");
+                synchronized (lock) {
+                    lock.notifyAll();
+                }
+                return;
+            }
+    
+            // Bind all JVoiceXML objects to the context
+            final boolean success = bindObjects(context);
+            if (!success) {
+                LOGGER.warn("not all object are bound");
+            }
+            LOGGER.info("...JNDI support started");
+        } catch (Exception e) {
+            startException = e;
+        } finally {
+            synchronized (lock) {
+                lock.notifyAll();
+            }
+        }
+    }
+    
     /**
      * Retrieves the initial context.
      * @return The context to use or <code>null</code> in case of an error.
      * @since 0.5
+     * @exception NamingException
+     *                  error obtaining the initial context
      */
-    Context getInitialContext() {
+    Context getInitialContext() throws NamingException {
         // We take the values from jndi.properties but override the port
         environment.put(Context.INITIAL_CONTEXT_FACTORY,
                 "com.sun.jndi.rmi.registry.RegistryContextFactory");
@@ -157,12 +196,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
                 LOGGER.debug("JNDI environment: " + key + " = " + value);
             }
         }
-        try {
-            return new InitialContext(environment);
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error obtaining the initial context", ne);
-            return null;
-        }
+        return new InitialContext(environment);
     }
 
     /**

@@ -50,6 +50,7 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jetty-documentrepository.xml"
     parameters(
         buildpath: "${buildDir}/libs",
+        repositoryname: JVOICEXML_JNDI_REPOSITORY,
         version: JVOICEXML_VERSION,
         libs: configurations.compile
     )
@@ -61,6 +62,7 @@ task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
     output "${project(':main').buildDir}/config/jetty-documentrepository.xml"
     parameters(
         buildpath: "lib",
+        repositoryname: JVOICEXML_JNDI_REPOSITORY,
         version: JVOICEXML_VERSION,
         libs: configurations.compile
     )
@@ -73,8 +75,7 @@ task copyReferencedLibraries(type: Copy) {
          'jetty-http-*.jar',
          'jetty-io-*.jar',
          'jetty-util-*.jar',
-         'javax.servlet-api-*.jar',
-         'org.jvoicexml.client*.jar'
+         'javax.servlet-api-*.jar'
     }
 }
 

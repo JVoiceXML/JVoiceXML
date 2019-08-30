@@ -58,8 +58,7 @@ public class JndiCodebaseHandler extends AbstractHandler
      * Constructs a new object.
      */
     public JndiCodebaseHandler() {
-        final Thread thread = Thread.currentThread();
-        loader = thread.getContextClassLoader();
+        loader = getClass().getClassLoader();
         LOGGER.info("using JNDI class loader '" + loader + "'");
     }
 
@@ -96,7 +95,7 @@ public class JndiCodebaseHandler extends AbstractHandler
         if (requestUri.length() < CONTEXT_PATH.length() + 2) {
             return null;
         }
-        return requestUri.substring(CONTEXT_PATH.length() + 1);
+        return requestUri.substring(CONTEXT_PATH.length());
     }
 
     /**

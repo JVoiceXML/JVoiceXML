@@ -15,8 +15,18 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="2.0"
     xmlns:beans="http://www.springframework.org/schema/beans">
+    <xsl:param name="repositoryname" />
     <xsl:param name="buildpath" />
     <xsl:param name="version" />
+
+    <xsl:template match="repository">
+        <xsl:copy>
+            <xsl:apply-templates select="@*" />
+            <xsl:value-of select="$repositoryname" />
+            <!-- Keep current settings -->
+            <xsl:apply-templates select="@*|*|comment()" />
+        </xsl:copy>
+    </xsl:template>
 
     <xsl:template match="classpath">
         <xsl:copy>
