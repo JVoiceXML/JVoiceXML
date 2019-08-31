@@ -1,13 +1,14 @@
 package org.jvoicexml.callmanager.mrcpv2;
 
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.sip.SipSession;
 import org.speechforge.zanzibar.telephony.TelephonyClient;
 
 public class SipCallManagerSession {
     
-    private String id;
+    private final SessionIdentifier id;
 
     private SipSession pbxSession;
     private SipSession mrcpSession;
@@ -16,7 +17,8 @@ public class SipCallManagerSession {
     private Session jvxmlSession;
 
 
-    public SipCallManagerSession(String id,SipSession pbxSession, SipSession mrcpSession,
+    public SipCallManagerSession(SessionIdentifier id,
+            SipSession pbxSession, SipSession mrcpSession,
             SpeechClient speechClient, TelephonyClient telephonyClient) {
         super();
         this.id = id;
@@ -28,17 +30,10 @@ public class SipCallManagerSession {
     /**
      * @return the id
      */
-    public String getId() {
+    public SessionIdentifier getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-    
     /**
      * @return the jvxmlSession
      */

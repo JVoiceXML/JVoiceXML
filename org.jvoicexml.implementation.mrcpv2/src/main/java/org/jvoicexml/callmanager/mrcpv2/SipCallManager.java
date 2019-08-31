@@ -69,13 +69,7 @@ public final class SipCallManager
 
     // TODO Better management (clean out orphaned sessions, or leases/timeouts)
     /** Map of sessions. */
-    private Map<String, SipCallManagerSession> sessions;
-
-    // TODO make the ids the same. Perhaps set the voicexml session id with
-    // sip id (rather than have it create its own UUID) or maybe there
-    // is a way to attach the voicexml id to the sip session...
-    /** Map of sip id's to voicexml session ids. **/
-    private Map<SessionIdentifier, String> ids;
+    private Map<SessionIdentifier, SipCallManagerSession> sessions;
 
     /** Map of terminal names associated to an application. */
     private Map<String, String> applications;
@@ -117,23 +111,26 @@ public final class SipCallManager
      */
     @Override
     public void StopDialog(final SipSession pbxSession) throws SipException {
+        LOGGER.info("stopping dialog");
         final String id = pbxSession.getId();
-        cleanupSession(id);
+        final SessionIdentifier sessionId = new SipSessionIdentifier(id);
+        cleanupSession(sessionId);
     }
 
     /**
      * Cleanup the session after the call ended.
      * 
-     * @param id
+     * @param sessionId
      *            the session id.
      */
-    private void cleanupSession(final String id) {
-        final SipCallManagerSession session = sessions.get(id);
+    private void cleanupSession(final SessionIdentifier sessionId) {
+        final SipCallManagerSession session = sessions.get(sessionId);
         if (session == null) {
             LOGGER.warn("no session given. unable to cleanup session");
             return;
         }
-        session.getJvxmlSession().hangup();
+        final Session jvxmlSession = session.getJvxmlSession();
+        jvxmlSession.hangup();
 
         try {
             // need to check for null mrcp session
@@ -159,7 +156,7 @@ public final class SipCallManager
         }
 
         // remove the session from the map
-        sessions.remove(id);
+        sessions.remove(sessionId);
     }
 
     /**
@@ -170,7 +167,8 @@ public final class SipCallManager
             final SipSession mrcpSession) throws Exception {
         // Create a session (so we can get other signals from the caller)
         // and release resources upon call completion
-        final String id = pbxSession.getId();
+        final String sessionId = pbxSession.getId();
+        final SessionIdentifier id = new SipSessionIdentifier(sessionId);
         final SpeechClient speechClient = createSpeechClient(mrcpSession);
         final SipCallManagerSession session = new SipCallManagerSession(id,
                 pbxSession, mrcpSession, speechClient, null);
@@ -188,14 +186,6 @@ public final class SipCallManager
             session.setJvxmlSession(jsession);
             synchronized (sessions) {
                 sessions.put(id, session);
-            }
-
-            // workaround to deal with two id's
-            // maps the voicexml sessionid to sip session id
-            // needed for case when the voicxml session ends before a hang up
-            // and need to get to close the sip session
-            synchronized (ids) {
-                ids.put(jsession.getSessionId(), id);
             }
 
             // Get the random code
@@ -438,8 +428,8 @@ public final class SipCallManager
     @Override
     public void start() throws NoresourceError, IOException {
         LOGGER.info("startup mrcp sip callManager");
-        sessions = new java.util.HashMap<String, SipCallManagerSession>();
-        ids = new java.util.HashMap<SessionIdentifier, String>();
+        sessions = new java.util.HashMap<SessionIdentifier,
+                SipCallManagerSession>();
     }
 
     /**
@@ -472,22 +462,12 @@ public final class SipCallManager
      */
     @Override
     public void sessionEnded(final Session session) {
-        SessionIdentifier id = session.getSessionId();
-        // workaround to deal with two id's
-        // maps the voicexml sessionid to sip session id
-        // needed for case when the voicxml session ends before a hang up and
-        // need to get to close the sip session
-
-        // get the sip sesison id
-
-        // remove the session id mapping
-        final String sipId;
-        synchronized (ids) {
-            sipId = ids.get(id);
-            ids.remove(sipId);
+        final SessionIdentifier id = session.getSessionId();
+        synchronized (sessions) {
+            sessions.remove(id);
         }
 
         // clean up the session
-        cleanupSession(sipId);
+        cleanupSession(id);
     }
 }

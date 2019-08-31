@@ -40,9 +40,6 @@ public final class Mrcpv2SynthesizedOutputFactory
     /** Number of instances that this factory will create. */
     private int instances;
 
-    /** Number of created instances. */
-    private int currentInstance;
-
     /** The RTP base port. */
     private int basePort;
 
