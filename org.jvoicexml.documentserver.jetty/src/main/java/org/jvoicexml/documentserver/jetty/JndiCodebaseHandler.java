@@ -95,9 +95,28 @@ public class JndiCodebaseHandler extends AbstractHandler
         if (requestUri.length() < CONTEXT_PATH.length() + 2) {
             return null;
         }
-        return requestUri.substring(CONTEXT_PATH.length());
+        // Classloaders start searching from the root, so the initial slash
+        // should not be needed.
+        return requestUri.substring(CONTEXT_PATH.length() + 1);
     }
 
+    /**
+     * Retrieves an input stream to read the resource at the given path.
+     * @param path the path of the resource to load
+     * @return associated input stream, {@code null} if the resource cannot be
+     * loaded.
+     */
+    private InputStream getInputStream(final String path) {
+        InputStream in = loader.getResourceAsStream(path);
+        if (in == null) {
+            in = loader.getResourceAsStream("/" + path);
+        }
+        if (in == null) {
+            in = getClass().getResourceAsStream("/" + path);
+        }
+        return in;
+    }
+    
     /**
      * Writes the class to the output stream.
      * @param path path of the class to load
@@ -108,8 +127,13 @@ public class JndiCodebaseHandler extends AbstractHandler
      */
     private void writeClassToOutputStream(final String path,
             final OutputStream out) throws IOException {
-        final InputStream in = loader.getResourceAsStream(path);
+        final InputStream in2 = getInputStream("org/jvoicexml/Application.class");
+        LOGGER.info("org/jvoicexml/Application.class: " + in2);
+        final InputStream in3 = getInputStream("org/jvoicexml/documentserver/jetty/DocumentStorage.class");
+        LOGGER.info("org/jvoicexml/documentserver/jetty/DocumentStorage.class:" + in3);
+        final InputStream in = getInputStream(path);
         if (in == null) {
+            LOGGER.info("unable to load '" + path + "' from " + loader);
             throw new IOException("unable to load '" + path + "'");
         }
         final byte[] bytes = new byte[1024];

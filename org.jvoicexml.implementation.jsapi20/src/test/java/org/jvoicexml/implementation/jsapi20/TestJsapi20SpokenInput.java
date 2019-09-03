@@ -206,11 +206,4 @@ public final class TestJsapi20SpokenInput implements SpokenInputListener {
             monitor.notifyAll();
         }
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void timeout(long timeout) {
-    }
 }

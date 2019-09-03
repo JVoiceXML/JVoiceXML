@@ -23,6 +23,8 @@ package org.jvoicexml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -164,7 +166,19 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         LOGGER.info("Java:\t\t\t" + title + " " + version);
         LOGGER.info("Java vendor:\t\t" + vendor);
         final String os = System.getProperty("os.name", "generic");
-        LOGGER.info("Operating system:\t" + os);        
+        LOGGER.info("Operating system:\t" + os);
+        if (LOGGER.isDebugEnabled()) {
+            final ClassLoader loader = getClass().getClassLoader();
+            LOGGER.debug("Class loader: " + loader);
+            if (loader instanceof URLClassLoader) {
+                @SuppressWarnings("resource")
+                final URLClassLoader urlloader = (URLClassLoader) loader;
+                final URL[] urls = urlloader.getURLs();
+                for (URL url : urls) {
+                    LOGGER.debug("- " + url);
+                }
+            }
+        }
     }
     
     /**

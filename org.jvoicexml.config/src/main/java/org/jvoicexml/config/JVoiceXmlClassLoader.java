@@ -23,19 +23,19 @@ package org.jvoicexml.config;
 
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Collection;
 
 /**
  * A class loader to allow for loading of other jars that are added as a
  * URL.
  *
+ *<p>
+ *The main purpose of having this class loader is to dynamically add URLs as
+ *needed, which is not visible by a {@link URLClassLoader}.
+ *</p>
  * @author Dirk Schnelle-Walka
  * @since 0.7
  */
 public final class JVoiceXmlClassLoader extends URLClassLoader {
-    /** Dynamically added URLs. */
-    private final Collection<URL> urls;
-
     /** The repository that this class loader is responsible for. */
     private final String repository;
 
@@ -53,8 +53,7 @@ public final class JVoiceXmlClassLoader extends URLClassLoader {
      * @param repo the repository that this class loader is responsible for
      */
     public JVoiceXmlClassLoader(final ClassLoader parent, final String repo) {
-        super(new URL[0], parent);
-        urls = new java.util.ArrayList<URL>();
+        super(new URL[0]);
         repository = repo;
     }
 
@@ -72,11 +71,6 @@ public final class JVoiceXmlClassLoader extends URLClassLoader {
      */
     @Override
     public void addURL(final URL url) {
-        if (urls.contains(url)) {
-            return;
-        }
-
-        urls.add(url);
         super.addURL(url);
     }
 
@@ -100,6 +94,7 @@ public final class JVoiceXmlClassLoader extends URLClassLoader {
         str.append('[');
         str.append("repo=");
         str.append(repository);
+        final URL[] urls = getURLs();
         for (URL url : urls) {
             str.append(',');
             str.append(url);

@@ -756,7 +756,9 @@ public final class Jsapi20SynthesizedOutput
                 }
             }
 
-            fireOutputEnded(speakable);
+            if (speakable != null) { 
+                fireOutputEnded(speakable);
+            }
             try {
                 processNextSpeakable();
             } catch (NoresourceError e) {
