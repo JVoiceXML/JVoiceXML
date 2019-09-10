@@ -346,6 +346,12 @@ public class JVoiceXmlSession extends Thread
      */
     @Override
     public void run() {
+        LOGGER.info("starting session " + identifier.getId());
+        if (LOGGER.isDebugEnabled()) {
+            final Thread thread = Thread.currentThread();
+            final ClassLoader loader = thread.getContextClassLoader();
+            LOGGER.debug("using class loader " + loader);
+        }
         processingError = null;
         createContext();
 
