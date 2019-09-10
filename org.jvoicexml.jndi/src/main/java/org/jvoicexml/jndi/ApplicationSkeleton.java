@@ -23,7 +23,6 @@ package org.jvoicexml.jndi;
 
 import java.net.URI;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 import org.jvoicexml.Application;
@@ -39,12 +38,8 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @author Dirk Schnelle-Walka
  * @since 0.7.5
  */
-public class ApplicationSkeleton extends UnicastRemoteObject
+public class ApplicationSkeleton
         implements RemoteApplication, Skeleton {
-
-    /** The serial version UID. */
-    private static final long serialVersionUID = 6976197627560263588L;
-
     /** The session ID. */
     private SessionIdentifier sessionIdentifier;
 

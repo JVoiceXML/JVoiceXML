@@ -90,6 +90,52 @@ public class JVoiceXmlClassLoaderTest {
     }
 
     /**
+     * Test method for {@link java.net.URLClassLoader#getResourceAsStream(java.lang.String)}.
+     * @throws InterruptedException 
+     */
+    @Test
+    public void testGetResourceAsStreamAsync() throws InterruptedException {
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final InputStream in = loader.getResourceAsStream("org/jvoicexml/Application.class");
+                Assert.assertNotNull(in);
+                synchronized (this) {
+                    notifyAll();
+                }
+            }
+        };
+        final Thread thread = new Thread(runnable);
+        thread.start();
+        synchronized (runnable) {
+            runnable.wait();
+        }
+    }
+
+    /**
+     * Test method for {@link java.net.URLClassLoader#getResourceAsStream(java.lang.String)}.
+     * @throws InterruptedException 
+     */
+    @Test
+    public void testGetResourceAsStreamExternalAsync() throws InterruptedException {
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final InputStream in = loader.getResourceAsStream("org/jvoicexml/dummy/Dummy.class");
+                Assert.assertNotNull(in);
+                synchronized (this) {
+                    notifyAll();
+                }
+            }
+        };
+        final Thread thread = new Thread(runnable);
+        thread.start();
+        synchronized (runnable) {
+            runnable.wait();
+        }
+    }
+
+    /**
      * Tear down the test environment
      * @throws Exception
      *          error tearing down the environment

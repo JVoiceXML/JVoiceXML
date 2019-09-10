@@ -623,8 +623,6 @@ run {
                 + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.manager",
-               "-Djava.rmi.server.codebase=http://${getIP()}:9595/jndi/",
-               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
@@ -642,8 +640,6 @@ task(runDebug, type: JavaExec) {
                 + files("${project(':org.jvoicexml').buildDir}/config")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.manager",
-               "-Djava.rmi.server.codebase=http://${getIP()}:9595/jndi/",
-               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.security.policy=${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
                "-Djava.library.path=${project(':org.jvoicexml').buildDir}/jni",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",

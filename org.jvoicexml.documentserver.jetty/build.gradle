@@ -35,7 +35,6 @@ dependencies {
     jvxmlConfiguration fileTree(dir: "src/main/config")
 
     compile project(':org.jvoicexml')
-    compile project(':org.jvoicexml.client')
 
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.20.v20190813'
@@ -50,7 +49,6 @@ xslt {
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jetty-documentrepository.xml"
     parameters(
         buildpath: "${buildDir}/libs",
-        repositoryname: JVOICEXML_JNDI_REPOSITORY,
         version: JVOICEXML_VERSION,
         libs: configurations.compile
     )
@@ -62,7 +60,6 @@ task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
     output "${project(':main').buildDir}/config/jetty-documentrepository.xml"
     parameters(
         buildpath: "lib",
-        repositoryname: JVOICEXML_JNDI_REPOSITORY,
         version: JVOICEXML_VERSION,
         libs: configurations.compile
     )

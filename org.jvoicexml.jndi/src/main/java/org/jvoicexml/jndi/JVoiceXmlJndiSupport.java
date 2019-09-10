@@ -22,7 +22,7 @@
 package org.jvoicexml.jndi;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -34,8 +34,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.JndiSupport;
+import org.jvoicexml.client.jndi.RemoteJVoiceXml;
+import org.jvoicexml.client.jndi.RemoteMappedDocumentRepository;
 import org.jvoicexml.client.jndi.Stub;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
+import org.jvoicexml.jndi.classserver.ClassServer;
+import org.jvoicexml.jndi.classserver.ClassloaderServer;
 
 /**
  * JNDI support for remote access to the VoiceXML interpreter.
@@ -83,7 +87,9 @@ public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
     
     /** A possibly thrown exception when starting the JNDI support. */
     private Exception startException;
-    
+   
+    private ClassServer server;
+
     /**
      * Constructs a new object.
      */
@@ -123,6 +129,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
      */
     @Override
     public void startup() throws IOException {
+        server = new ClassloaderServer(9698);
         if (registry == null) {
             throw new IOException("no registry configured");
         }
@@ -207,41 +214,41 @@ public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
     private boolean bindObjects(final Context context) {
         final DocumentMap map = DocumentMap.getInstance();
         try {
-            final Skeleton skeleton =
+            final RemoteMappedDocumentRepository repository =
                     new MappedDocumentRepositorySkeleton(map);
-            bind(context, skeleton);
-        } catch (java.rmi.RemoteException re) {
+            final RemoteMappedDocumentRepository stub = 
+                    (RemoteMappedDocumentRepository) 
+                        UnicastRemoteObject.exportObject(repository, 0);
+            final String name = 
+                    RemoteMappedDocumentRepository.class.getSimpleName();
+            context.rebind(name, stub);
+            LOGGER.info("bound '" + name + "' to '" 
+                    + stub.getClass().getCanonicalName() + "(" 
+                    + MappedDocumentRepositorySkeleton.class.getCanonicalName()
+                    + ")'");
+        } catch (java.rmi.RemoteException | NamingException re) {
             LOGGER.error("error creating the skeleton", re);
             return false;
         }
 
         try {
-            final Skeleton skeleton = new JVoiceXmlSkeleton(context, jvxml);
-            bind(context, skeleton);
-        } catch (java.rmi.RemoteException re) {
+            final RemoteJVoiceXml skeleton = new JVoiceXmlSkeleton(context, jvxml);
+            final RemoteJVoiceXml stub = 
+                    (RemoteJVoiceXml) 
+                        UnicastRemoteObject.exportObject(skeleton, 0);
+            final String name = 
+                    RemoteJVoiceXml.class.getSimpleName();
+            context.rebind(name, stub);
+            LOGGER.info("bound '" + name + "' to '" 
+                    + stub.getClass().getCanonicalName() + "("
+                    + JVoiceXmlSkeleton.class.getCanonicalName()
+                    + ")'");
+        } catch (java.rmi.RemoteException | NamingException re) {
             LOGGER.error("error creating the skeleton", re);
             return false;
         }
 
         return true;
-    }
-
-    /**
-     * Binds the given stub and skeleton.
-     * @param context The context to bind skeleton.
-     * @param skeleton The skeleton to bind.
-     */
-    static void bind(final Context context, final Skeleton skeleton) {
-        final String skeletonName;
-        try {
-            skeletonName = skeleton.getSkeletonName();
-            context.rebind(skeletonName, skeleton);
-            LOGGER.info("bound '" + skeletonName + "' to '"
-                    + skeleton.getClass().getName() + "'");
-        } catch (RemoteException | NamingException e) {
-            LOGGER.error("error binding the skeleton", e);
-            return;
-        }
     }
 
     /**

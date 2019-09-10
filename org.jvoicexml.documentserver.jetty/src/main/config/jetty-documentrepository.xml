@@ -26,8 +26,6 @@
                        </beans:list>
                    </beans:property>
                </beans:bean>
-               <beans:bean class="org.jvoicexml.documentserver.jetty.JndiCodebaseHandler">
-               </beans:bean>
             </beans:list>
         </beans:property>
     </beans:bean>

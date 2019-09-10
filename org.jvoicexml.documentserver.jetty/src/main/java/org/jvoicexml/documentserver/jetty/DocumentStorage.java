@@ -201,14 +201,14 @@ public class DocumentStorage implements ContextHandlerProvider {
     public Collection<ContextHandler> getContextHandlers() {
         final Collection<ContextHandler> handlers =
                 new java.util.ArrayList<ContextHandler>();
-        ContextHandler rootContext = new ContextHandler();
+        final ContextHandler rootContext = new ContextHandler();
         rootContext.setHandler(internalGrammarHandler);
         handlers.add(rootContext);
-        ContextHandler internalGrammarContext = new ContextHandler(
+        final ContextHandler internalGrammarContext = new ContextHandler(
                 InternalGrammarDocumentHandler.CONTEXT_PATH);
         internalGrammarContext.setHandler(internalGrammarHandler);
         handlers.add(internalGrammarContext);
-        ContextHandler builtinGrammarContext = new ContextHandler(
+        final ContextHandler builtinGrammarContext = new ContextHandler(
                 BuiltinGrammarHandler.CONTEXT_PATH);
         builtinGrammarContext.setHandler(builtinGrammarHandler);
         handlers.add(builtinGrammarContext);

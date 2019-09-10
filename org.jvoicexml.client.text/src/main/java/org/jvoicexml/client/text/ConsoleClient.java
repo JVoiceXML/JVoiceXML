@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,6 +35,8 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -83,7 +85,8 @@ public final class ConsoleClient implements TextListener {
         }
         LOGGER.info("server started");
         final ConnectionInformation info = server.getConnectionInformation();
-        final Session session = jvxml.createSession(info);
+        final SessionIdentifier id = new UuidSessionIdentifer();
+        final Session session = jvxml.createSession(info, id);
         LOGGER.info("calling application at '" + uri + "'...");
         session.call(uri);
     }

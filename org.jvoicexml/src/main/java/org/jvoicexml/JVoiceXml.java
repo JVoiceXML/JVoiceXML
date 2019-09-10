@@ -40,27 +40,6 @@ public interface JVoiceXml {
     String getVersion();
 
     /**
-     * Creates a new session.
-     *
-     * <p>
-     * The <code>Session</code> is the entry point to start the interpreter. A
-     * session is obtained by a {@link ConnectionInformation}.
-     * </p>
-     *
-     * @param info
-     *        information about the current connection,
-     *        maybe <code>null</code>. If it is <code>null</code> the
-     *        default implementation platform is used.
-     *
-     * @return The new session.
-     *
-     * @exception ErrorEvent
-     *            Error creating the session.
-     */
-    Session createSession(final ConnectionInformation info)
-            throws ErrorEvent;
-
-    /**
      * Creates a new session with the specified session identifier.
      * 
      * <p>

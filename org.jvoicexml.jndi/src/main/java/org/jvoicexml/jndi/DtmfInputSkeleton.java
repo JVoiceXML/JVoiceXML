@@ -22,7 +22,6 @@
 package org.jvoicexml.jndi;
 
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 
 import org.jvoicexml.DtmfInput;
 import org.jvoicexml.SessionIdentifier;
@@ -34,11 +33,8 @@ import org.jvoicexml.client.jndi.RemoteDtmfInput;
  * @author Dirk Schnelle-Walka
  * @since 0.5
  */
-public final class DtmfInputSkeleton extends UnicastRemoteObject
+public final class DtmfInputSkeleton
         implements RemoteDtmfInput, Skeleton {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -5497137347016070409L;
-
     /** The character input device. */
     private final DtmfInput input;
 
