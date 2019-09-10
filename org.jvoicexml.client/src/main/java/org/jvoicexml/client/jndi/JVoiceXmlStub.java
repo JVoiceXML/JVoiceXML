@@ -91,10 +91,10 @@ public final class JVoiceXmlStub
      * {@inheritDoc}
      */
     public String getVersion() {
-        final RemoteJVoiceXml jvxml = getSkeleton();
         try {
+            final RemoteJVoiceXml jvxml = getSkeleton();
             return jvxml.getVersion();
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
 
             re.printStackTrace();
@@ -109,9 +109,9 @@ public final class JVoiceXmlStub
     @Override
     public Session createSession(final ConnectionInformation info,
             final SessionIdentifier id) throws ErrorEvent {
-        final RemoteJVoiceXml jvxml = getSkeleton();
         Session session;
         try {
+            final RemoteJVoiceXml jvxml = getSkeleton();
             // In case we are calling via JNDI adapt the info to have
             // something meaningful to use in JVoiceXML
             if (info instanceof BasicConnectionInformation) {
@@ -180,16 +180,13 @@ public final class JVoiceXmlStub
      * {@inheritDoc}
      */
     public void shutdown() {
-        final RemoteJVoiceXml jvxml = getSkeleton();
-        if (jvxml == null) {
-            return;
-        }
         try {
+            final RemoteJVoiceXml jvxml = getSkeleton();
             jvxml.shutdown();
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
 
-            re.printStackTrace();
+            return;
         }
     }
 }

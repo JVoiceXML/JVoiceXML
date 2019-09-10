@@ -48,5 +48,4 @@ public class UuidSessionIdentifer implements SessionIdentifier {
     public String getId() {
         return uuid.toString();
     }
-
 }

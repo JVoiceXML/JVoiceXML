@@ -361,7 +361,7 @@ public class JVoiceXmlSession extends Thread
             processingError = e;
             cleanup();
             return;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LOGGER.error("error processing application '" + application + "'",
                     e);
             processingError = new ExceptionWrapper(e.getMessage(), e);

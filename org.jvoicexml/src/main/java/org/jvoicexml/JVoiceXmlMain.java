@@ -205,16 +205,6 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Session createSession(final ConnectionInformation info)
-            throws ErrorEvent {
-        final SessionIdentifier id = new UuidSessionIdentifer();
-        return createSession(info, id);
-    }
-
     @Override
     public Session createSession(ConnectionInformation info,
             SessionIdentifier id) throws ErrorEvent {

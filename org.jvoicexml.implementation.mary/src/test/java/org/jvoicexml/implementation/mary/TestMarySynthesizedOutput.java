@@ -23,7 +23,6 @@ package org.jvoicexml.implementation.mary;
 
 import java.io.InputStream;
 import java.util.Locale;
-import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

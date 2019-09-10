@@ -136,6 +136,7 @@ public final class JVoiceXmlWebServer implements DocumentRepository {
             final Collection<ContextHandler> providedHandlers =
                     provider.getContextHandlers();
             for (ContextHandler handler : providedHandlers) {
+                handler.setUsingSecurityManager(false);
                 handlers.add(handler);
                 LOGGER.debug("adding handler for path "
                         + handler.getContextPath());

@@ -74,7 +74,7 @@ final class TextConnection extends Thread {
         try {
             final ConnectionInformation client =
                 new ConnectedTextConnectionInformation(socket);
-            final Session session = jvxml.createSession(client);
+            final Session session = jvxml.createSession(client, null);
             session.call(uri);
             session.waitSessionEnd();
             socket.close();

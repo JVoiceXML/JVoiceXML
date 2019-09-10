@@ -26,6 +26,7 @@ import java.net.URI;
 import java.util.List;
 
 import javax.naming.Context;
+import javax.naming.NamingException;
 
 import org.jvoicexml.Application;
 import org.jvoicexml.LastResult;
@@ -86,10 +87,10 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
     @Override
     public void addDocument(final URI uri, final VoiceXmlDocument doc)
             throws BadFetchError {
-        final RemoteApplication application = getSkeleton();
         try {
+            final RemoteApplication application = getSkeleton();
             application.addDocument(uri, doc);
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
         }
@@ -100,10 +101,10 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      */
     @Override
     public VoiceXmlDocument getCurrentDocument() {
-        final RemoteApplication application = getSkeleton();
         try {
+            final RemoteApplication application = getSkeleton();
             return application.getCurrentDocument();
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
             return null;
@@ -115,10 +116,10 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      */
     @Override
     public URI getApplication() {
-        final RemoteApplication application = getSkeleton();
         try {
+            final RemoteApplication application = getSkeleton();
             return application.getApplication();
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
             return null;
@@ -131,10 +132,10 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
     @Override
     public void setRootDocument(final VoiceXmlDocument document)
             throws BadFetchError {
-        final RemoteApplication application = getSkeleton();
         try {
+            final RemoteApplication application = getSkeleton();
             application.setRootDocument(document);
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
         }
@@ -145,10 +146,10 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      */
     @Override
     public boolean isLoaded(final URI uri) {
-        final RemoteApplication application = getSkeleton();
         try {
+            final RemoteApplication application = getSkeleton();
             return application.isLoaded(uri);
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
             return false;
@@ -160,10 +161,10 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      */
     @Override
     public URI getXmlBase() {
-        final RemoteApplication application = getSkeleton();
         try {
+            final RemoteApplication application = getSkeleton();
             return application.getXmlBase();
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
             return null;
@@ -175,10 +176,10 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      */
     @Override
     public URI resolve(final URI uri) {
-        final RemoteApplication application = getSkeleton();
         try {
+            final RemoteApplication application = getSkeleton();
             return application.resolve(uri);
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
             return null;
@@ -190,10 +191,10 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      */
     @Override
     public URI resolve(final URI baseUri, final URI uri) {
-        final RemoteApplication application = getSkeleton();
         try {
+            final RemoteApplication application = getSkeleton();
             return application.resolve(baseUri, uri);
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
             return null;
@@ -205,10 +206,10 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      */
     @Override
     public void setLastResult(final List<LastResult> lastresult) {
-        final RemoteApplication application = getSkeleton();
         try {
+            final RemoteApplication application = getSkeleton();
             application.setLastResult(lastresult);
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
         }
@@ -219,10 +220,10 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      */
     @Override
     public List<LastResult> getLastResult() {
-        final RemoteApplication application = getSkeleton();
         try {
+            final RemoteApplication application = getSkeleton();
             return application.getLastResult();
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
             return null;

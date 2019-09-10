@@ -23,6 +23,8 @@ package org.jvoicexml.client.jndi;
 
 import java.io.Serializable;
 
+import javax.naming.NamingException;
+
 import org.jvoicexml.DtmfInput;
 import org.jvoicexml.SessionIdentifier;
 
@@ -84,10 +86,10 @@ public final class DtmfInputStub
      * {@inheritDoc}
      */
     public void addDtmf(final char dtmf) {
-        final RemoteDtmfInput input = getSkeleton(sessionIentifier.getId());
         try {
+            final RemoteDtmfInput input = getSkeleton(sessionIentifier.getId());
             input.addCharacter(dtmf);
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
 
             re.printStackTrace();
