@@ -57,7 +57,9 @@ public class ClassloaderServer extends ClassServer {
      */
     public InputStream getInputStream(final String path) {
         String loaderPath = path.replace('.', '/') + ".class";
-        LOGGER.info("loading " + loaderPath);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("loading " + loaderPath);
+        }
         InputStream in = loader.getResourceAsStream(loaderPath);
         if (in == null) {
             in = loader.getResourceAsStream('/' + loaderPath);
@@ -74,7 +76,7 @@ public class ClassloaderServer extends ClassServer {
         final InputStream in = getInputStream(path);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         if (in == null) {
-            LOGGER.info("unable to load '" + path + "' from " + loader);
+            LOGGER.warn("unable to load '" + path + "' from " + loader);
             throw new IOException("unable to load '" + path + "'");
         }
         final byte[] bytes = new byte[1024];

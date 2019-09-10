@@ -126,8 +126,10 @@ public abstract class ClassServer implements Runnable {
                 String path = getPath(in);
                 // retrieve bytecodes
                 byte[] bytecodes = getBytes(path);
-                LOGGER.info("path: '" + path  + "', length:"
-                + bytecodes.length);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("path: '" + path  + "', length:"
+                            + bytecodes.length);
+                }
                 // send bytecodes in response (assumes HTTP/1.0 or later)
                 out.writeBytes("HTTP/1.0 200 OK\r\n");
                 out.writeBytes(
