@@ -177,7 +177,7 @@ public final class SipCallManager
                     createConnectionInformation(pbxSession, mrcpSession);
 
             // Create a jvoicxml session and initiate a call at JVoiceXML.
-            final Session jsession = jvxml.createSession(info);
+            final Session jsession = jvxml.createSession(info, id);
 
             // add a listener to capture the end of voicexml session event
             jsession.addSessionListener(this);
