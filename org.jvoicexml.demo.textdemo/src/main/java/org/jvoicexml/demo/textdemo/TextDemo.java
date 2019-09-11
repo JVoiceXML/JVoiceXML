@@ -1,7 +1,7 @@
 /*
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -35,6 +35,8 @@ import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.client.text.TextServer;
@@ -81,7 +83,8 @@ public final class TextDemo implements TextListener {
                 server.waitStarted();
                 LOGGER.info("initiating  calls " + i + "...");
                 final ConnectionInformation info = server.getConnectionInformation();
-                final Session session = jvxml.createSession(info);
+                final SessionIdentifier id = new UuidSessionIdentifer();
+                final Session session = jvxml.createSession(info, id);
                 session.call(dialog);
                 LOGGER.info("waiting for the end of session...");
                 session.waitSessionEnd();
@@ -120,7 +123,8 @@ public final class TextDemo implements TextListener {
             for (int i = 0; i < MAX_SESSIONS; i++) {
                 final ConnectionInformation info = servers[i]
                         .getConnectionInformation();
-                final Session session = jvxml.createSession(info);
+                final SessionIdentifier id = new UuidSessionIdentifer();
+                final Session session = jvxml.createSession(info, id);
                 sessions[i] = session;
             }
             for (int i = 0; i < MAX_SESSIONS; i++) {
@@ -148,7 +152,7 @@ public final class TextDemo implements TextListener {
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' parallel text demo for "
                 + "JVoiceXML...");
-        LOGGER.info("(c) 2014-2018 by JVoiceXML group - "
+        LOGGER.info("(c) 2014-2019 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final TextDemo demo = new TextDemo();

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2017 JVoiceXML group
+ * Copyright (C) 2005-2019 JVoiceXML group
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -39,6 +39,8 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfInput;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -264,7 +266,8 @@ public final class InputDemo {
 
         final ConnectionInformation client = new BasicConnectionInformation(
                 "desktop", "jsapi20", "jsapi20");
-        final Session session = jvxml.createSession(client);
+        final SessionIdentifier id = new UuidSessionIdentifer();
+        final Session session = jvxml.createSession(client, id);
 
         session.call(uri);
 
@@ -311,7 +314,7 @@ public final class InputDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'input' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2017 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2019 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final InputDemo demo = new InputDemo();
