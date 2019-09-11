@@ -52,8 +52,6 @@ import org.speechforge.zanzibar.speechlet.SpeechletService;
 
 import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 
-import net.sourceforge.halef.HalefDbWriter;
-
 /**
  * A SIP call manager.
  * 
@@ -198,8 +196,6 @@ public final class SipCallManager
             LOGGER.info("called number: '" + info.getCalledDevice() + "'");
             LOGGER.info("calling application '" + applicationUri + "'...");
 
-            logToHalef(info, jsession, applicationUri, pbxSession, mrcpSession);
-
             // start the application
             final URI uri = new URI(applicationUri);
             jsession.call(uri);
@@ -322,50 +318,6 @@ public final class SipCallManager
     	}
 	LOGGER.warn("No randomCode used.");
 	return "";
-    }
-
-    private void logToHalef(final Mrcpv2ConnectionInformation info,
-            final Session jsession, final String applicationUri,
-            final SipSession pbxSession, final SipSession mrcpSession)
-                    throws Exception {
-        final Dialog dialog = pbxSession.getSipDialog();
-        final Address remoteParty = dialog.getRemoteParty();
-
-        // Write real-time information for Halef system
-        // remote party display name (set to Asterisk SIP callId)
-        // JVoiceXML sessionID
-        // JVoiceXML SIP callId
-        // randomCode use by client
-        final String remoteDisplayName = remoteParty.getDisplayName();
-        final String asteriskCallID = getAsteriskCallId(remoteParty,
-                remoteDisplayName);
-        final String jCallID = dialog.getCallId().getCallId();
-        final String cCallID = mrcpSession.getSipDialog().getCallId()
-                .getCallId();
-
-        // Get the random code
-        final String randomCode = getRandomCode(pbxSession);
-
-        LOGGER.info("Logging real-time mapping:\n%s %s %s", asteriskCallID,
-                jCallID, jsession.getSessionId());
-        final String q = String.format(
-                "INSERT INTO realtime_jvxml_linklogs"
-                        + " (asteriskCallId, jvxmlCallId, jsessionId, cairoCallId, randomCode)"
-                        + " VALUES(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
-                asteriskCallID, jCallID, jsession.getSessionId(), cCallID,
-                randomCode);
-        HalefDbWriter.execute(q);
-
-        // HALEF Event logging
-        final String hevent2 = String.format(
-                "INSERT INTO haleflogs"
-                        + " (databasedate, machineIP, machinedate, class, level,"
-                        + " message) VALUES(%s, \"%s\", %s,"
-                        + " \"%s\", \"%s\", \"%s\")",
-                "now()", System.getenv("IP"), "now()",
-                "callmanager.mrcpv2.SipCallManager", "INFO",
-                "calling application '" + applicationUri + "'...");
-        HalefDbWriter.execute(hevent2);
     }
     
     /**
