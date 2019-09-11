@@ -30,8 +30,8 @@ sourceSets {
 dependencies {
     compile group: 'org.mozilla', name: 'rhino', version: '1.7.10'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.5'
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
+    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.11'
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.9'
     
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.20.v20190813'
