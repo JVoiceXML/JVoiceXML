@@ -194,6 +194,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
      * Creates a session for the given terminal and initiates a call at
      * JVoiceXml.
      *
+     * @param id the session identifier
      * @param term
      *            the connecting terminal
      * @param parameters

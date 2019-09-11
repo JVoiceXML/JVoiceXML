@@ -36,7 +36,8 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  *
  * <p>
  * A <code>Session</code> can be obtained via the
- * {@linkplain JVoiceXml#createSession(ConnectionInformation)} method.
+ * {@linkplain JVoiceXml#createSession(ConnectionInformation, SessionIdentifier)}
+ * method.
  * </p>
  *
  * <p>
@@ -62,7 +63,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @see org.jvoicexml.JVoiceXml#createSession(ConnectionInformation)
+ * @see org.jvoicexml.JVoiceXml#createSession(ConnectionInformation, SessionIdentifier)
  *
  */
 public interface Session {

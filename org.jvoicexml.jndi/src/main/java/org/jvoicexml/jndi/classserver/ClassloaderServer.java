@@ -42,6 +42,9 @@ public class ClassloaderServer extends ClassServer {
      *
      * @param port
      *            the server port
+     * @exception IOException
+     *                  if the server could not be started
+     * 
      */
     public ClassloaderServer(int port) throws IOException {
         super(port);

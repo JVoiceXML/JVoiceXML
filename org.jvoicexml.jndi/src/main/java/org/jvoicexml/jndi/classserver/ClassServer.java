@@ -55,8 +55,6 @@ import org.apache.logging.log4j.Logger;
  * For loading remote classes, an RMI application can use a concrete subclass of
  * this server in place of an HTTP server.
  * <p>
- *
- * @see ClassFileServer
  */
 public abstract class ClassServer implements Runnable {
     /** Logger instance. */
@@ -86,7 +84,7 @@ public abstract class ClassServer implements Runnable {
      * Returns an array of bytes containing the bytecodes for the class
      * represented by the argument <b>path</b>. The <b>path</b> is a dot
      * separated class name with the ".class" extension removed.
-     *
+     * @param path the path to look for
      * @return the bytecodes for the class
      * @exception ClassNotFoundException
      *                if the class corresponding to <b>path</b> could not be
@@ -94,7 +92,7 @@ public abstract class ClassServer implements Runnable {
      * @exception IOException
      *                if error occurs reading the class
      */
-    public abstract byte[] getBytes(String path)
+    public abstract byte[] getBytes(final String path)
             throws IOException, ClassNotFoundException;
 
     /**

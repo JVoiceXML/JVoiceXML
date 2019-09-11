@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,6 +37,8 @@ import org.jvoicexml.DtmfInput;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
@@ -159,7 +161,8 @@ public final class TextCall implements Call {
             // run the dialog
             final ConnectionInformation info = server
                     .getConnectionInformation();
-            session = jvxml.createSession(info);
+            final SessionIdentifier id = new UuidSessionIdentifer();
+            session = jvxml.createSession(info, id);
             session.call(uri);
             for (CallListener listener : listeners) {
                 listener.called(uri);
