@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -43,6 +43,7 @@ import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.ErrorEvent;
@@ -881,7 +882,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         
         final DocumentServer server = context.getDocumentServer();
         final Session session = context.getSession();
-        final String sessionId = session.getSessionId();
+        final SessionIdentifier sessionId = session.getSessionId();
         try {
             final CallControlProperties callProps = context
                     .getCallControlProperties(this);
@@ -1412,7 +1413,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final RecordingReceiverThread recording = new RecordingReceiverThread(
                 eventbus, maxTime);
         final Session session = context.getSession();
-        final String sessionId = session.getSessionId();
+        final SessionIdentifier sessionId = session.getSessionId();
         final RecordingStartedEvent started =
                 new RecordingStartedEvent(sessionId);
         eventbus.publish(started);

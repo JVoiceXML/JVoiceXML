@@ -32,6 +32,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -82,7 +83,7 @@ final class GrammarLoader {
                 return loadExternalGrammar(context, attributes, grammar);
             } else {
                 final Session session = context.getSession();
-                final String sessionId = session.getSessionId();
+                final SessionIdentifier sessionId = session.getSessionId();
                 final DocumentServer server = context.getDocumentServer();
                 return loadInternalGrammar(sessionId, server, grammar,
                         language);
@@ -116,7 +117,8 @@ final class GrammarLoader {
      * @throws URISyntaxException
      *             error generating the URI for the document
      */
-    private GrammarDocument loadInternalGrammar(final String sessionId,
+    private GrammarDocument loadInternalGrammar(
+            final SessionIdentifier sessionId,
             final DocumentServer server, final Grammar grammar,
             final Locale language)
             throws UnsupportedFormatError, URISyntaxException {

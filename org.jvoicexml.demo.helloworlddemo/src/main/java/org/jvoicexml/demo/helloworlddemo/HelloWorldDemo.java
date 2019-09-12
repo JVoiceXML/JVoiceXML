@@ -32,6 +32,8 @@ import javax.naming.NamingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.client.GenericClient;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
 import org.jvoicexml.event.ErrorEvent;
@@ -72,8 +74,9 @@ public final class HelloWorldDemo {
         try {
             final URI dialog = HelloWorldDemo.class
                     .getResource("/helloworld.vxml").toURI();
-            Session session = client.call(dialog, "jsapi20", "jsapi20",
-                    "desktop");
+            final SessionIdentifier id = new UuidSessionIdentifer();
+            final Session session = client.call(dialog, "jsapi20", "jsapi20",
+                    "desktop", id);
             session.waitSessionEnd();
             session.hangup();
         } catch (NamingException e) {

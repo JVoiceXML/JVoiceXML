@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.documentserver.ExternalGrammarDocument;
 import org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator;
 import org.jvoicexml.documentserver.schemestrategy.builtin.DigitsGrammarCreator;
@@ -88,7 +89,13 @@ public class DocumentStorageTest {
         final SrgsXmlDocument srgsdocument = new SrgsXmlDocument();
         final Grammar grammar = srgsdocument.getGrammar();
         final GrammarDocument document = new InternalGrammarDocument(grammar);
-        storage.addGrammarDocument("12345", document);
+        final SessionIdentifier id = new SessionIdentifier() {
+            @Override
+            public String getId() {
+                return "12345";
+            }
+        };
+        storage.addGrammarDocument(id, document);
         final URI uri = document.getURI();
         Assert.assertNotNull(uri);
         final URI path = new URI(uri.getPath());
@@ -107,11 +114,17 @@ public class DocumentStorageTest {
     public void testClear() throws Exception {
         final GrammarDocument document = new ExternalGrammarDocument(null,
                 null, null, true);
-        storage.addGrammarDocument("12345", document);
+        final SessionIdentifier id = new SessionIdentifier() {
+            @Override
+            public String getId() {
+                return "12345";
+            }
+        };
+        storage.addGrammarDocument(id, document);
         final URI uri = document.getURI();
         Assert.assertNotNull(uri);
         Assert.assertEquals(document, storage.getDocument(uri));
-        storage.clear("12345");
+        storage.clear(id);
         Assert.assertNull("document not cleared", storage.getDocument(uri));
     }
 
@@ -127,11 +140,23 @@ public class DocumentStorageTest {
     public void testClearOtherSession() throws Exception {
         final GrammarDocument document = new ExternalGrammarDocument(null,
                 null, null, true);
-        storage.addGrammarDocument("12345", document);
+        final SessionIdentifier id = new SessionIdentifier() {
+            @Override
+            public String getId() {
+                return "12345";
+            }
+        };
+        storage.addGrammarDocument(id, document);
         final URI uri = document.getURI();
         Assert.assertNotNull(uri);
         Assert.assertEquals(document, storage.getDocument(uri));
-        storage.clear("54321");
+        final SessionIdentifier otherId = new SessionIdentifier() {
+            @Override
+            public String getId() {
+                return "54321";
+            }
+        };
+        storage.clear(otherId);
         Assert.assertEquals(document, storage.getDocument(uri));
     }
 

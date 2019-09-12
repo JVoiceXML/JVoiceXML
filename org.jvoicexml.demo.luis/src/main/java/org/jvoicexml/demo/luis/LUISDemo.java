@@ -1,7 +1,7 @@
 /*
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2017-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -33,6 +33,8 @@ import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.client.text.TextServer;
@@ -117,7 +119,8 @@ public final class LUISDemo implements TextListener {
         }
 
         final ConnectionInformation client = server.getConnectionInformation();
-        final Session session = jvxml.createSession(client);
+        final SessionIdentifier id = new UuidSessionIdentifer();
+        final Session session = jvxml.createSession(client, id);
 
         session.call(uri);
 
@@ -176,7 +179,7 @@ public final class LUISDemo implements TextListener {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting LUIS demo for JVoiceXML...");
-        LOGGER.info("(c) 2017 by JVoiceXML group - "
+        LOGGER.info("(c) 2017-2019 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final LUISDemo demo = new LUISDemo();

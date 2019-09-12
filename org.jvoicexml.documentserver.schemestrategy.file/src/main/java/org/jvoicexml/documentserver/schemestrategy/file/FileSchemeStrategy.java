@@ -30,24 +30,24 @@ import java.util.Collection;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
- * {@link SchemeStrategy} to read VoiceXML document from the file system.
- * The files are retrieved by their {@link URI} which has to be
+ * {@link SchemeStrategy} to read VoiceXML document from the file system. The
+ * files are retrieved by their {@link URI} which has to be
  * <em>hierarchical</em>.
  *
  * @author Dirk Schnelle-Walka
  * @since 0.3
  */
-public final class FileSchemeStrategy
-        implements SchemeStrategy {
+public final class FileSchemeStrategy implements SchemeStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            LogManager.getLogger(FileSchemeStrategy.class);
+    private static final Logger LOGGER = LogManager
+            .getLogger(FileSchemeStrategy.class);
 
     /** Scheme for which this scheme strategy is responsible. */
     public static final String SCHEME_NAME = "file";
@@ -66,15 +66,13 @@ public final class FileSchemeStrategy
         return SCHEME_NAME;
     }
 
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public InputStream getInputStream(final String sessionId, final URI uri,
-            final RequestMethod method, final long timeout,
-            final Collection<KeyValuePair> parameters)
-            throws BadFetchError {
+    public InputStream getInputStream(final SessionIdentifier sessionId,
+            final URI uri, final RequestMethod method, final long timeout,
+            final Collection<KeyValuePair> parameters) throws BadFetchError {
 
         try {
             // Remove the fragment.
@@ -100,6 +98,6 @@ public final class FileSchemeStrategy
      * {@inheritDoc}
      */
     @Override
-    public void sessionClosed(final String sessionId) {
+    public void sessionClosed(final SessionIdentifier sessionId) {
     }
 }

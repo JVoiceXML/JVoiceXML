@@ -33,6 +33,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.documentserver.DocumentRepository;
 
 /**
@@ -60,6 +61,7 @@ public final class JVoiceXmlWebServer implements DocumentRepository {
         storagePort = 9595;
         providers = new java.util.ArrayList<ContextHandlerProvider>();
     }
+    
     
     /**
      * Sets the storage port.
@@ -134,6 +136,7 @@ public final class JVoiceXmlWebServer implements DocumentRepository {
             final Collection<ContextHandler> providedHandlers =
                     provider.getContextHandlers();
             for (ContextHandler handler : providedHandlers) {
+                handler.setUsingSecurityManager(false);
                 handlers.add(handler);
                 LOGGER.debug("adding handler for path "
                         + handler.getContextPath());
@@ -156,7 +159,7 @@ public final class JVoiceXmlWebServer implements DocumentRepository {
      * {@inheritDoc}
      */
     @Override
-    public URI addGrammarDocument(final String sessionId,
+    public URI addGrammarDocument(final SessionIdentifier sessionId,
             final GrammarDocument document)
             throws URISyntaxException {
         final DocumentStorage storage = getDocumentStorage();
@@ -182,7 +185,7 @@ public final class JVoiceXmlWebServer implements DocumentRepository {
      * {@inheritDoc}
      */
     @Override
-    public void sessionClosed(String sessionId) {
+    public void sessionClosed(SessionIdentifier sessionId) {
         final DocumentStorage storage = getDocumentStorage();
         if (storage == null) {
             return;

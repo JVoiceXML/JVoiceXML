@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,7 +36,8 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  *
  * <p>
  * A <code>Session</code> can be obtained via the
- * {@linkplain JVoiceXml#createSession(ConnectionInformation)} method.
+ * {@linkplain JVoiceXml#createSession(ConnectionInformation, SessionIdentifier)}
+ * method.
  * </p>
  *
  * <p>
@@ -62,7 +63,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @see org.jvoicexml.JVoiceXml#createSession(ConnectionInformation)
+ * @see org.jvoicexml.JVoiceXml#createSession(ConnectionInformation, SessionIdentifier)
  *
  */
 public interface Session {
@@ -85,7 +86,7 @@ public interface Session {
      * @return Universal unique identifier for this session.
      * @since 0.4
      */
-    String getSessionId();
+    SessionIdentifier getSessionId();
 
     /**
      * Handles a call request.

@@ -22,6 +22,7 @@
 package org.jvoicexml.implementation;
 
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -60,7 +61,7 @@ public interface SynthesizedOutput extends ExternalResource, OutputDevice {
      *                A URI within the speakable could not be obtained or a
      *                parsing error occurred.
      */
-    void queueSpeakable(SpeakableText speakable, String sessionId,
+    void queueSpeakable(SpeakableText speakable, SessionIdentifier sessionId,
             DocumentServer documentServer)
             throws NoresourceError, BadFetchError;
 

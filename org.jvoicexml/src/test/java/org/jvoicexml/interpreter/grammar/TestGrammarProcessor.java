@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,7 +21,6 @@
 
 package org.jvoicexml.interpreter.grammar;
 
-import java.io.File;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,7 +29,13 @@ import java.util.Locale;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.*;
+import org.jvoicexml.Configuration;
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UserInput;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
@@ -65,8 +65,6 @@ import org.mockito.Mockito;
  *
  * @author Christoph Buente
  * @author Dirk Schnelle-Walka
- *
- * @version $Revision$
  */
 public final class TestGrammarProcessor {
     /**
@@ -227,8 +225,9 @@ public final class TestGrammarProcessor {
                 .mock(SsmlParsingStrategyFactory.class);
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
+        final SessionIdentifier id = new UuidSessionIdentifer();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null, profile);
+                null, profile, id);
 
         Configuration configuration = Mockito.mock(Configuration.class);
         DataModel dataModel = Mockito.mock(DataModel.class);

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,6 +31,8 @@ import javax.naming.NamingException;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.client.jndi.JVoiceXmlStub;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -155,6 +157,42 @@ public final class GenericClient {
     /**
      * Calls JVoiceXML with the given URI and the specified platform
      * configuration.
+     * <p>
+     * After the session has ended and {@link Session#hangup()} has been called,
+     * {@link #close()} must be called to free potentially acquired resources.
+     * </p>
+     * @param uri the URI to call
+     * @param call unique identifier for the {@link org.jvoicexml.CallControl}.
+     * @param output unique identifier for the
+     *  {@link org.jvoicexml.SystemOutput}.
+     * @param input unique identifier for the {@link org.jvoicexml.UserInput}.
+     * @param id the session identifier
+     * @return JVoiceXML session for the call
+     * @throws NamingException
+     *         JVoiceXML server could not be found.
+     * @throws ErrorEvent
+     *         if an error occurs when calling JVoiceXML
+     * @throws UnsupportedResourceIdentifierException
+     *         if the combination of the identifiers is invalid
+     */
+    public Session call(final URI uri, final String input, final String output,
+            final String call, final SessionIdentifier id)
+                    throws NamingException, ErrorEvent,
+            UnsupportedResourceIdentifierException {
+        // Cleanup if the user forgot to call cleanup.
+        if (infoController != null) {
+            close();
+        }
+
+        // Create a new connection info
+        infoController = createConnectionInformation(input, output, call);
+        ConnectionInformation info = infoController.getConnectionInformation();
+        return call(uri, info, id);
+    }
+    
+    /**
+     * Calls JVoiceXML with the given URI and the specified platform
+     * configuration.
      * @param uri the URI to call
      * @param info the connection information to use.
      * @return JVoiceXML session for the call
@@ -165,12 +203,32 @@ public final class GenericClient {
      */
     public Session call(final URI uri, final ConnectionInformation info)
             throws NamingException, ErrorEvent {
+        final SessionIdentifier id = new UuidSessionIdentifer(); 
+        return call(uri, info, id);
+    }
+
+    /**
+     * Calls JVoiceXML with the given URI and the specified platform
+     * configuration.
+     * @param uri the URI to call
+     * @param info the connection information to use.
+     * @param id the session identifier
+     * @return JVoiceXML session for the call
+     * @throws NamingException
+     *         JVoiceXML server could not be found.
+     * @throws ErrorEvent
+     *         if an error occurs when calling JVoiceXML
+     * @since 0.7.9
+     */
+    public Session call(final URI uri, final ConnectionInformation info,
+            final SessionIdentifier id)
+            throws NamingException, ErrorEvent {
     final JVoiceXml jvoicexml = getJVoiceXml();
         if (jvoicexml == null) {
           throw new NoresourceError(
                     "JVoiceXML server could not be found");
         }
-        final Session session = jvoicexml.createSession(info);
+        final Session session = jvoicexml.createSession(info, id);
         if (session == null) {
           throw new NoresourceError(
                     "Session unavailable, no usable implementation");
@@ -179,7 +237,7 @@ public final class GenericClient {
         }
         return session;
     }
-
+    
     /**
      * Release potentially acquired resources.
      *

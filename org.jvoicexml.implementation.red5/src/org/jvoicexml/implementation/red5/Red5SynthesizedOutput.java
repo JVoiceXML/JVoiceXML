@@ -33,6 +33,7 @@ import java.io.IOException;
 
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -171,7 +172,8 @@ public class Red5SynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final String sessionId, final DocumentServer documentServer)
+            final SessionIdentifier sessionId,
+            final DocumentServer documentServer)
         throws NoresourceError,
             BadFetchError {
         // TODO Auto-generated method stub

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -47,7 +42,6 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public interface SystemOutput {
     /**
@@ -66,9 +60,10 @@ public interface SystemOutput {
      *            A URI within the speakable could not be obtained or a parsing
      *            error occurred.
      */
-    void queueSpeakable(final SpeakableText speakable, final String sessionId,
-            final DocumentServer documentServer) throws NoresourceError,
-            BadFetchError;
+    void queueSpeakable(final SpeakableText speakable,
+            final SessionIdentifier sessionId,
+                final DocumentServer documentServer) throws NoresourceError,
+                    BadFetchError;
 
     /**
      * Cancels the current output from the TTS engine and queued audio

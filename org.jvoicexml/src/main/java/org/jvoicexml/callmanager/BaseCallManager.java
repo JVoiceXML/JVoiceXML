@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,6 +32,7 @@ import org.jvoicexml.CallManager;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -193,6 +194,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
      * Creates a session for the given terminal and initiates a call at
      * JVoiceXml.
      *
+     * @param id the session identifier
      * @param term
      *            the connecting terminal
      * @param parameters
@@ -202,6 +204,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
      *                Error creating the session.
      */
     public final Session createSession(
+            final SessionIdentifier id,
             final org.jvoicexml.callmanager.Terminal term,
             final CallParameters parameters)
             throws ErrorEvent {
@@ -220,7 +223,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
             throw new NoresourceError(e.getMessage(), e);
         }
         // Create a session and initiate a call at JVoiceXML.
-        final Session session = jvxml.createSession(remote);
+        final Session session = jvxml.createSession(remote, id);
         final URI uri = application.getUriObject();
         session.call(uri);
 
@@ -234,7 +237,8 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
     public final void terminalConnected(final Terminal terminal,
             final CallParameters parameters) {
         try {
-            final Session session = createSession(terminal, parameters);
+            final SessionIdentifier id = terminal.getSessionIdentifier();
+            final Session session = createSession(id, terminal, parameters);
             synchronized (sessions) {
                 sessions.put(terminal, session);
             }

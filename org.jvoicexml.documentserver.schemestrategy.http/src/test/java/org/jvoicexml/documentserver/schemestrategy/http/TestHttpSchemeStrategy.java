@@ -37,8 +37,9 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.schemestrategy.SessionStorage;
-import org.jvoicexml.documentserver.schemestrategy.http.HttpSchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.vxml.RequestMethod;
@@ -56,7 +57,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public final class TestHttpSchemeStrategy {
 
-    private static final String SESSION_ID = "SESSION_ID";
+    private static final SessionIdentifier SESSION_ID =
+            new UuidSessionIdentifer();
     private static final String BASE_URL = "http://example.com:8080";
     private static final long TIMEOUT = 0;
 

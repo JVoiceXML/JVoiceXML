@@ -23,7 +23,10 @@ package org.jvoicexml.client.jndi;
 
 import java.io.Serializable;
 
+import javax.naming.NamingException;
+
 import org.jvoicexml.DtmfInput;
+import org.jvoicexml.SessionIdentifier;
 
 /**
  * Stub for the {@link DtmfInput}.
@@ -40,7 +43,7 @@ public final class DtmfInputStub
     private static final long serialVersionUID = -7040136029975498559L;
 
     /** The session ID. */
-    private String sessionID;
+    private SessionIdentifier sessionIentifier;
 
     /**
      * Constructs a new object.
@@ -52,8 +55,8 @@ public final class DtmfInputStub
      * Constructs a new object.
      * @param id The session ID.
      */
-    public DtmfInputStub(final String id) {
-        sessionID = id;
+    public DtmfInputStub(final SessionIdentifier id) {
+        sessionIentifier = id;
     }
 
     /**
@@ -76,17 +79,17 @@ public final class DtmfInputStub
      * {@inheritDoc}
      */
     public String getStubName() {
-        return DtmfInput.class.getSimpleName() + "." + sessionID;
+        return DtmfInput.class.getSimpleName() + "." + sessionIentifier.getId();
     }
 
     /**
      * {@inheritDoc}
      */
     public void addDtmf(final char dtmf) {
-        final RemoteDtmfInput input = getSkeleton(sessionID);
         try {
+            final RemoteDtmfInput input = getSkeleton(sessionIentifier.getId());
             input.addCharacter(dtmf);
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
 
             re.printStackTrace();

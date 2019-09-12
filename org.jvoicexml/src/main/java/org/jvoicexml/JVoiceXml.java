@@ -1,13 +1,7 @@
 /*
-/*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,7 +28,6 @@ import org.jvoicexml.event.ErrorEvent;
  * Main entry point for all {@link ConnectionInformation}s.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @see org.jvoicexml.Session
  */
 public interface JVoiceXml {
@@ -47,8 +40,8 @@ public interface JVoiceXml {
     String getVersion();
 
     /**
-     * Creates a new session.
-     *
+     * Creates a new session with the specified session identifier.
+     * 
      * <p>
      * The <code>Session</code> is the entry point to start the interpreter. A
      * session is obtained by a {@link ConnectionInformation}.
@@ -59,14 +52,17 @@ public interface JVoiceXml {
      *        maybe <code>null</code>. If it is <code>null</code> the
      *        default implementation platform is used.
      *
+     * @param id 
+     *          the session identifier to use.
      * @return The new session.
      *
      * @exception ErrorEvent
      *            Error creating the session.
      */
-    Session createSession(final ConnectionInformation info)
+    Session createSession(final ConnectionInformation info,
+            final SessionIdentifier id)
             throws ErrorEvent;
-
+    
     /**
      * Shuts down the interpreter and frees all resources.
      */

@@ -26,10 +26,12 @@ import java.net.URI;
 import java.rmi.RemoteException;
 
 import javax.naming.Context;
+import javax.naming.NamingException;
 
 import org.jvoicexml.Application;
 import org.jvoicexml.DtmfInput;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -47,13 +49,10 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 public final class SessionStub
         extends AbstractStub<RemoteSession>
         implements Session, Serializable {
-    /**
-     * The serial version UID.
-     */
-    private static final long serialVersionUID = -828689666056894186L;
-
+    /** The serial version UID  */
+    private static final long serialVersionUID = -3205385620722771514L;
     /** The session ID. */
-    private String sessionID;
+    private SessionIdentifier sessionIdentifier;
 
     /**
      * Constructs a new object.
@@ -74,15 +73,15 @@ public final class SessionStub
      * Constructs a new object.
      * @param id The session id.
      */
-    public SessionStub(final String id) {
-        sessionID = id;
+    public SessionStub(final SessionIdentifier id) {
+        sessionIdentifier = id;
     }
 
     /**
      * {@inheritDoc}
      */
     public String getStubName() {
-        return Session.class.getSimpleName() + "." + sessionID;
+        return Session.class.getSimpleName() + "." + sessionIdentifier.getId();
     }
 
     /**
@@ -104,13 +103,13 @@ public final class SessionStub
     /**
      * {@inheritDoc}
      */
+    @Override
     public Application call(final URI uri)
             throws ErrorEvent {
-        final RemoteSession session = getSkeleton(sessionID);
-
         try {
+            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
             return session.call(uri);
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
 
             final ErrorEvent event = getErrorEvent(re);
@@ -126,14 +125,15 @@ public final class SessionStub
     /**
      * {@inheritDoc}
      */
+    @Override
     public void hangup() {
-        final RemoteSession session = getSkeleton(sessionID);
-        if (session == null) {
-            return;
-        }
         try {
+            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
+            if (session == null) {
+                return;
+            }
             session.hangup();
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
         }
@@ -144,10 +144,10 @@ public final class SessionStub
      */
     @Override
     public Application getApplication() {
-        final RemoteSession session = getSkeleton(sessionID);
         try {
+            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
             return session.getApplication();
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             return null;
         }
@@ -159,10 +159,10 @@ public final class SessionStub
     @Override
     public DtmfInput getDtmfInput()
             throws NoresourceError, ConnectionDisconnectHangupEvent {
-        final RemoteSession session = getSkeleton(sessionID);
         try {
+            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
             return session.getDtmfInput();
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             final ErrorEvent event = getErrorEvent(re);
             if ((event == null) || !(event instanceof NoresourceError)) {
@@ -179,13 +179,13 @@ public final class SessionStub
     /**
      * {@inheritDoc}
      */
+    @Override
     public void waitSessionEnd()
             throws ErrorEvent {
-        final RemoteSession session = getSkeleton(sessionID);
-
         try {
+            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
             session.waitSessionEnd();
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
 
             final ErrorEvent event = getErrorEvent(re);
@@ -202,11 +202,10 @@ public final class SessionStub
      */
     @Override
     public boolean hasEnded() {
-        final RemoteSession session = getSkeleton(sessionID);
-
         try {
+            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
             return session.hasEnded();
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
             return true;
@@ -217,18 +216,20 @@ public final class SessionStub
     /**
      * {@inheritDoc}
      */
-    public String getSessionId() {
-        return sessionID;
+    @Override
+    public SessionIdentifier getSessionId() {
+        return sessionIdentifier;
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public ErrorEvent getLastError() {
-        final RemoteSession session = getSkeleton(sessionID);
         try {
+            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
             return session.getLastError();
-        } catch (RemoteException e) {
+        } catch (RemoteException | NamingException e) {
             e.printStackTrace();
             return null;
         }

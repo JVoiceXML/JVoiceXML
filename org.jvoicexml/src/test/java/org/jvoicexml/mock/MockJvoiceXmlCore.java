@@ -26,6 +26,8 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.ErrorEvent;
@@ -90,6 +92,16 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
      */
     public Session createSession(final ConnectionInformation info)
             throws ErrorEvent {
+        final SessionIdentifier id = new UuidSessionIdentifer();
+        return createSession(info, id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Session createSession(final ConnectionInformation info,
+            final SessionIdentifier id)
+            throws ErrorEvent {
         final ImplementationPlatform platform = new MockImplementationPlatform();
         final Profile profile = Mockito.mock(Profile.class);
         final SsmlParsingStrategyFactory factory = Mockito
@@ -97,7 +109,7 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
 
-        return new JVoiceXmlSession(platform, this, info, profile);
+        return new JVoiceXmlSession(platform, this, info, profile, id);
     }
 
     /**

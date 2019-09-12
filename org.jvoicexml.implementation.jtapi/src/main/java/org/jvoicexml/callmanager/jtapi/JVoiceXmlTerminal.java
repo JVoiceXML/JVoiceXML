@@ -50,13 +50,14 @@ import javax.telephony.Terminal;
 import javax.telephony.TerminalConnection;
 import javax.telephony.callcontrol.CallControlCall;
 
-import net.sourceforge.gjtapi.media.GenericMediaService;
-
 import org.apache.log4j.Logger;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.callmanager.CallParameters;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
+
+import net.sourceforge.gjtapi.media.GenericMediaService;
 
 /**
  * A connection to a JTAPI terminal.
@@ -96,6 +97,9 @@ public final class JVoiceXmlTerminal
     /** CallControl Listeners. */
     private final List<TelephonyListener> callControlListeners;
 
+    /** The session identifier. */
+    private SessionIdentifier id;
+    
     /**
      * Constructs a new object.
      *
@@ -599,5 +603,13 @@ public final class JVoiceXmlTerminal
         } catch (InvalidArgumentException ex) {
             throw new IOException(ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SessionIdentifier getSessionIdentifier() {
+        return id;
     }
 }

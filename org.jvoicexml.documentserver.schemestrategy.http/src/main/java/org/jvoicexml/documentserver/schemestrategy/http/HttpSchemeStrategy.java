@@ -45,6 +45,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.documentserver.ReadBuffer;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.SessionIdentifierFactory;
@@ -132,7 +133,8 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
      * {@inheritDoc}
      */
     @Override
-    public InputStream getInputStream(final String sessionId, final URI uri,
+    public InputStream getInputStream(final SessionIdentifier sessionId,
+            final URI uri,
             final RequestMethod method, final long timeout,
             final Collection<KeyValuePair> parameters) throws BadFetchError {
         final HttpClientBuilder builder = SESSION_STORAGE
@@ -261,7 +263,7 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void sessionClosed(final String sessionId) {
+    public void sessionClosed(final SessionIdentifier sessionId) {
         SESSION_STORAGE.releaseSession(sessionId);
     }
 }

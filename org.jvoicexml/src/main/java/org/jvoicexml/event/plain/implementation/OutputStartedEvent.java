@@ -26,6 +26,7 @@
 
 package org.jvoicexml.event.plain.implementation;
 
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.implementation.SynthesizedOutput;
 
@@ -66,7 +67,8 @@ public final class OutputStartedEvent extends SynthesizedOutputEvent {
      *            the speakable that has ended
      */
     public OutputStartedEvent(final SynthesizedOutput output,
-            final String sessionId, final SpeakableText speakableText) {
+            final SessionIdentifier sessionId,
+                final SpeakableText speakableText) {
         super(output, DETAIL, sessionId);
         speakable = speakableText;
     }

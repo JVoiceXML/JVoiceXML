@@ -27,6 +27,8 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -51,7 +53,6 @@ import org.mockito.Mockito;
  * Test case for {@link EventStrategyDecoratorFactory}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public final class TestEventStrategyDecoratorFactory {
@@ -71,8 +72,9 @@ public final class TestEventStrategyDecoratorFactory {
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
 
+        final SessionIdentifier id = new UuidSessionIdentifer();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null, profile);
+                null, profile, id);
         final Configuration configuration = Mockito.mock(Configuration.class);
         context = new VoiceXmlInterpreterContext(session, configuration);
     }

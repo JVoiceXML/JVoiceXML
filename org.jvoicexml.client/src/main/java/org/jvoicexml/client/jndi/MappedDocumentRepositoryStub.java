@@ -25,6 +25,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.naming.Context;
+import javax.naming.NamingException;
 
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -81,31 +82,25 @@ public final class MappedDocumentRepositoryStub
      * {@inheritDoc}
      */
     public URI getUri(final String path) throws URISyntaxException {
-        final RemoteMappedDocumentRepository repository = getSkeleton();
-
-        URI uri;
-
         try {
-            uri = repository.getUri(path);
-        } catch (java.rmi.RemoteException re) {
+            final RemoteMappedDocumentRepository repository = getSkeleton();
+            return repository.getUri(path);
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
-            uri = null;
 
             re.printStackTrace();
+            return null;
         }
-
-        return uri;
     }
 
     /**
      * {@inheritDoc}
      */
     public void addDocument(final URI uri, final String document) {
-        final RemoteMappedDocumentRepository repository = getSkeleton();
-
         try {
+            final RemoteMappedDocumentRepository repository = getSkeleton();
             repository.addDocument(uri, document);
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
 
             re.printStackTrace();
@@ -116,11 +111,10 @@ public final class MappedDocumentRepositoryStub
      * {@inheritDoc}
      */
     public void addDocument(final URI uri, final VoiceXmlDocument document) {
-        final RemoteMappedDocumentRepository repository = getSkeleton();
-
         try {
+            final RemoteMappedDocumentRepository repository = getSkeleton();
             repository.addDocument(uri, document);
-        } catch (java.rmi.RemoteException re) {
+        } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
 
             re.printStackTrace();

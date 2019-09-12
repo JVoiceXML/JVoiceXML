@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,6 +33,7 @@ import javax.sound.sampled.LineListener;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 
@@ -45,7 +41,6 @@ import org.jvoicexml.event.error.NoresourceError;
  * Utility class to play back an audio file.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 final class AudioFilePlayer implements LineListener {
@@ -57,7 +52,7 @@ final class AudioFilePlayer implements LineListener {
     private final DocumentServer documentServer;
 
     /** The current session. */
-    private final String sessionId;
+    private final SessionIdentifier sessionId;
 
     /** The currently played clip. */
     private Clip clip;
@@ -70,7 +65,8 @@ final class AudioFilePlayer implements LineListener {
      * @param server the document server
      * @param id the id of the current session
      */
-    public AudioFilePlayer(final DocumentServer server, final String id) {
+    public AudioFilePlayer(final DocumentServer server,
+            final SessionIdentifier id) {
         sem = new Semaphore(1);
         documentServer = server;
         sessionId = id;

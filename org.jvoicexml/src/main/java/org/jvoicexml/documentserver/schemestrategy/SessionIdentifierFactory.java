@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,19 +21,19 @@
 
 package org.jvoicexml.documentserver.schemestrategy;
 
+import org.jvoicexml.SessionIdentifier;
 
 /**
  * Factory for session identifiers that can be used in a {@link SessionStorage}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  * @param <T> type of the session identifier
  */
 public interface SessionIdentifierFactory<T> {
     /**
-     * Creates a new session identifier.
+     * Creates a new session identifier for the {@link SessionStorage}.
      * @param sessionId the Id of the current JVoiceXML session
      * @return new session identifier.
      */
-    T createSessionIdentifier(final String sessionId);
+    T createSessionIdentifier(final SessionIdentifier sessionId);
 }

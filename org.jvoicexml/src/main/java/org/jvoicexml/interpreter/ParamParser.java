@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.datamodel.DataModel;
@@ -66,7 +67,7 @@ class ParamParser {
     private final DocumentServer server;
 
     /** The Id of the current JVoiceXML session. */
-    private final String sessionId;
+    private final SessionIdentifier sessionId;
 
     /**
      * Constructs a new object.

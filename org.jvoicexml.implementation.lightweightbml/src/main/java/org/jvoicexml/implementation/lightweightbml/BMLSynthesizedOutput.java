@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,8 +27,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Collection;
 
@@ -39,6 +37,7 @@ import javax.xml.stream.XMLStreamWriter;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
@@ -105,7 +104,7 @@ public final class BMLSynthesizedOutput
     private final SpeakableQueue speakables;
 
     /** the current session id. */
-    private String sessionId;
+    private SessionIdentifier sessionId;
     
     /** An external BML publisher. */
     private ExternalBMLPublisher external;
@@ -400,7 +399,7 @@ public final class BMLSynthesizedOutput
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final String id, final DocumentServer documentServer)
+            final SessionIdentifier id, final DocumentServer documentServer)
         throws NoresourceError,
             BadFetchError {
         synchronized (speakables) {

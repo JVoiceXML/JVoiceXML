@@ -60,7 +60,7 @@ public interface Telephony extends ExternalResource {
      * Plays a stream from the given output device.
      * This method gets called
      *  prior to calling
-     * {@link SystemOutput#queueSpeakable(org.jvoicexml.SpeakableText, String, org.jvoicexml.DocumentServer)}
+     * {@link SystemOutput#queueSpeakable(org.jvoicexml.SpeakableText, org.jvoicexml.SessionIdentifier, org.jvoicexml.DocumentServer)}
      * to prepare streaming from the synthesizer. Implementations may use this, 
      * method, e.g., to propagate {@link java.io.OutputStream}s to the
      * {@link SystemOutput} implementation.

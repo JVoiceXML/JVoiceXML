@@ -55,7 +55,7 @@ public interface SpokenInputListener {
      * Notification that the user did not provide input in the specified
      * time.
      * 
-     * @param the timeout
+     * @param timeout the timeout
      * 
      * @since 0.7.9
      */

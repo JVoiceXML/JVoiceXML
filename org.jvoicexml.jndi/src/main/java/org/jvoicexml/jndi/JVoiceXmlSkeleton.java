@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,15 +25,18 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import javax.naming.Context;
+import javax.naming.NamingException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.client.jndi.RemoteJVoiceXml;
+import org.jvoicexml.client.jndi.RemoteSession;
 import org.jvoicexml.client.jndi.SessionStub;
-import org.jvoicexml.client.jndi.Stub;
 import org.jvoicexml.event.ErrorEvent;
 
 /**
@@ -43,11 +46,7 @@ import org.jvoicexml.event.ErrorEvent;
  * @since 0.4
  * @see org.jvoicexml.JVoiceXml
  */
-class JVoiceXmlSkeleton
-        extends UnicastRemoteObject implements RemoteJVoiceXml, Skeleton {
-    /** The serial version UID. */
-    private static final long serialVersionUID = 3777294862730171402L;
-
+class JVoiceXmlSkeleton implements RemoteJVoiceXml, Skeleton {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LogManager.getLogger(JVoiceXmlSkeleton.class);
@@ -102,28 +101,48 @@ class JVoiceXmlSkeleton
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final ConnectionInformation client)
+    public Session createSession(final ConnectionInformation info)
             throws RemoteException {
+        final SessionIdentifier id = new UuidSessionIdentifer();
+        return createSession(info, id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Session createSession(
+            final ConnectionInformation info,
+            final SessionIdentifier id) throws RemoteException {
         if (jvxml == null) {
             return null;
         }
         final Session session;
         try {
-            session = jvxml.createSession(client);
+            session = jvxml.createSession(info, id);
         } catch (ErrorEvent e) {
             LOGGER.error("unable to create session", e);
-
             throw new RemoteException("unable to create session", e);
         }
 
-        final Skeleton sessionSkeleton = new SessionSkeleton(context, session);
-        final Stub sessionStub = new SessionStub(session.getSessionId());
+        final RemoteSession sessionSkeleton =
+                new SessionSkeleton(context, session);
+        final RemoteSession stub = (RemoteSession) 
+                    UnicastRemoteObject.exportObject(sessionSkeleton, 0);
+        final String name = 
+                ((SessionSkeleton) sessionSkeleton).getSkeletonName();
+        try {
+            context.rebind(name, stub);
+        } catch (NamingException e) {
+            throw new RemoteException(e.getMessage(), e);
+        }
+        LOGGER.info("bound '" + name + "' to '" 
+                + stub.getClass().getCanonicalName() + "("
+                + SessionSkeleton.class.getCanonicalName()
+                + ")'");
 
-        JVoiceXmlJndiSupport.bind(context, sessionSkeleton);
-
-        return (Session) sessionStub;
+        return new SessionStub(session.getSessionId());
     }
-
 
     /**
      * {@inheritDoc}

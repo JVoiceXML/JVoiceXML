@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +26,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.Collection;
 
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
@@ -51,7 +47,6 @@ import org.jvoicexml.xml.vxml.RequestMethod;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision$
  *
  */
 public interface SchemeStrategy {
@@ -87,7 +82,7 @@ public interface SchemeStrategy {
      *
      * @since 0.3
      */
-    InputStream getInputStream(final String sessionId, final URI uri,
+    InputStream getInputStream(final SessionIdentifier sessionId, final URI uri,
             final RequestMethod method, final long timeout,
             final Collection<KeyValuePair> parameters) throws BadFetchError,
             UnsupportedElementError, IOException;
@@ -101,5 +96,5 @@ public interface SchemeStrategy {
      *            the Id of the current JVoiceXML session.
      * @since 0.7
      */
-    void sessionClosed(final String sessionId);
+    void sessionClosed(final SessionIdentifier sessionId);
 }

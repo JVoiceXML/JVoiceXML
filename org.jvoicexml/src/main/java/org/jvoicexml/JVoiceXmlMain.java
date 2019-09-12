@@ -23,6 +23,8 @@ package org.jvoicexml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -164,7 +166,19 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         LOGGER.info("Java:\t\t\t" + title + " " + version);
         LOGGER.info("Java vendor:\t\t" + vendor);
         final String os = System.getProperty("os.name", "generic");
-        LOGGER.info("Operating system:\t" + os);        
+        LOGGER.info("Operating system:\t" + os);
+        if (LOGGER.isDebugEnabled()) {
+            final ClassLoader loader = getClass().getClassLoader();
+            LOGGER.debug("Class loader: " + loader);
+            if (loader instanceof URLClassLoader) {
+                @SuppressWarnings("resource")
+                final URLClassLoader urlloader = (URLClassLoader) loader;
+                final URL[] urls = urlloader.getURLs();
+                for (URL url : urls) {
+                    LOGGER.debug("- " + url);
+                }
+            }
+        }
     }
     
     /**
@@ -191,12 +205,9 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public Session createSession(final ConnectionInformation info)
-            throws ErrorEvent {
+    public Session createSession(ConnectionInformation info,
+            SessionIdentifier id) throws ErrorEvent {
         if (state != InterpreterState.RUNNING) {
             throw new NoresourceError(
                     "JVoiceXML not running. Can't create a session!");
@@ -216,9 +227,9 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         final ImplementationPlatform platform = implementationPlatformFactory
                 .getImplementationPlatform(info);
         final Session session = new org.jvoicexml.interpreter.JVoiceXmlSession(
-                platform, this, info, profile);
+                platform, this, info, profile, id);
         platform.setSession(session);
-        LOGGER.info("created session " + session.getSessionId());
+        LOGGER.info("created session " + session.getSessionId().getId());
 
         return session;
     }

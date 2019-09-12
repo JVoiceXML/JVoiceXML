@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,6 +37,7 @@ import org.jvoicexml.DtmfInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
@@ -654,8 +655,9 @@ public final class JVoiceXmlImplementationPlatform
         if (eventbus != null) {
             result.setMark(markname);
 
+            final SessionIdentifier id = session.getSessionId();
             final RecognitionEvent recognitionEvent = new RecognitionEvent(
-                    input.getSpokenInput(), session.getSessionId(), result);
+                    input.getSpokenInput(), id, result);
             eventbus.publish(recognitionEvent);
         }
 
@@ -677,8 +679,9 @@ public final class JVoiceXmlImplementationPlatform
 
         if (eventbus != null) {
             result.setMark(markname);
+            final SessionIdentifier id = session.getSessionId();
             final NomatchEvent noMatchEvent = new NomatchEvent(
-                    input.getSpokenInput(), session.getSessionId(), result);
+                    input.getSpokenInput(), id, result);
             eventbus.publish(noMatchEvent);
         }
         synchronized (inputLock) {
@@ -1064,7 +1067,7 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public void renderPrompts(final String sessionId,
+    public void renderPrompts(final SessionIdentifier sessionId,
             final DocumentServer server, final CallControlProperties props)
             throws BadFetchError, NoresourceError,
             ConnectionDisconnectHangupEvent {

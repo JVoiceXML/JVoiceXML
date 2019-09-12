@@ -1,13 +1,7 @@
 /*
- * File:    $RCSfile: NomatchEvent.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +22,7 @@
 package org.jvoicexml.event.plain.implementation;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.plain.jvxml.InputEvent;
 import org.jvoicexml.implementation.SpokenInput;
 
@@ -35,7 +30,6 @@ import org.jvoicexml.implementation.SpokenInput;
  * The user input something, but it was not recognized.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class NomatchEvent extends SpokenInputEvent implements InputEvent {
     /** The serial version UID. */
@@ -57,7 +51,8 @@ public final class NomatchEvent extends SpokenInputEvent implements InputEvent {
      * @param recognitionResult
      *            the recognition result
      */
-    public NomatchEvent(final SpokenInput input, final String sessionId,
+    public NomatchEvent(final SpokenInput input,
+            final SessionIdentifier sessionId,
             final RecognitionResult recognitionResult) {
         super(input, sessionId);
         result = recognitionResult;

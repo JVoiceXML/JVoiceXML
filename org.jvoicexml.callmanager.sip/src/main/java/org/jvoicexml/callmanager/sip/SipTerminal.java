@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +28,8 @@ import javax.sip.SipException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.callmanager.ObservableTerminal;
 import org.jvoicexml.callmanager.Terminal;
 import org.jvoicexml.callmanager.TerminalListener;
@@ -58,11 +60,15 @@ public final class SipTerminal
     /** Registered terminal listeners. */
     private final Collection<TerminalListener> terminalListeners;
 
+    /** The session identifier. */
+    final SessionIdentifier id;
+    
     /**
      * Constructs a new object.
      */
     public SipTerminal() {
         terminalListeners = new java.util.ArrayList<TerminalListener>();
+        id = new UuidSessionIdentifer();
     }
 
     /**
@@ -168,5 +174,13 @@ public final class SipTerminal
         for (TerminalListener listener : terminalListeners) {
             listener.terminalDisconnected(this);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SessionIdentifier getSessionIdentifier() {
+        return id;
     }
 }

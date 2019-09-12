@@ -40,6 +40,7 @@ import org.jvoicexml.Application;
 import org.jvoicexml.LastResult;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.client.UnsupportedResourceIdentifierException;
 import org.jvoicexml.event.ErrorEvent;
@@ -991,13 +992,14 @@ public final class VoiceModalityComponent
      *         session
      */
     private MMIContext findContext(final Session session) {
-        final String sessionId = session.getSessionId();
+        final SessionIdentifier sessionId = session.getSessionId();
         synchronized (contexts) {
             for (String contextId : contexts.keySet()) {
                 final MMIContext context = contexts.get(contextId);
                 final Session other = context.getSession();
                 if (other != null) {
-                    final String otherSessionId = other.getSessionId();
+                    final SessionIdentifier otherSessionId =
+                            other.getSessionId();
                     if (otherSessionId.equals(sessionId)) {
                         return context;
                     }

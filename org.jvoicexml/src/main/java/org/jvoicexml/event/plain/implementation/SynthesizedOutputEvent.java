@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +21,7 @@
 
 package org.jvoicexml.event.plain.implementation;
 
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 
@@ -35,7 +31,6 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * session.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 @SuppressWarnings("serial")
@@ -51,7 +46,7 @@ public class SynthesizedOutputEvent extends JVoiceXMLEvent {
     private final SynthesizedOutput source;
 
     /** The id of the related session. */
-    private final String sessionId;
+    private final SessionIdentifier sessionId;
 
     /**
      * Constructs a new object.
@@ -66,7 +61,7 @@ public class SynthesizedOutputEvent extends JVoiceXMLEvent {
      *                if an illegal event type is passed.
      */
     public SynthesizedOutputEvent(final SynthesizedOutput output,
-            final String detailedType, final String id)
+            final String detailedType, final SessionIdentifier id)
             throws IllegalArgumentException {
         source = output;
         detail = detailedType;
@@ -88,7 +83,7 @@ public class SynthesizedOutputEvent extends JVoiceXMLEvent {
      * @return the session id
      * @since 0.7.5
      */
-    public final String getSessionId() {
+    public final SessionIdentifier getSessionId() {
         return sessionId;
     }
 

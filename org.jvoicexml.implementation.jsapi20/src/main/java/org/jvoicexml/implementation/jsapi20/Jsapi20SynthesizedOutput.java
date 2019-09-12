@@ -51,6 +51,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
@@ -119,7 +120,7 @@ public final class Jsapi20SynthesizedOutput
     private boolean supportsMarkup;
 
     /** The current session id. */
-    private String sessionId;
+    private SessionIdentifier sessionId;
 
     /**
      * Constructs a new audio output.
@@ -266,7 +267,7 @@ public final class Jsapi20SynthesizedOutput
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final String sessId, final DocumentServer documentServer)
+            final SessionIdentifier sessId, final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
@@ -755,7 +756,9 @@ public final class Jsapi20SynthesizedOutput
                 }
             }
 
-            fireOutputEnded(speakable);
+            if (speakable != null) { 
+                fireOutputEnded(speakable);
+            }
             try {
                 processNextSpeakable();
             } catch (NoresourceError e) {

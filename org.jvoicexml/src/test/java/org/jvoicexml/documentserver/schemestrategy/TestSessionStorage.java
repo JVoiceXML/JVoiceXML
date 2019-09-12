@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -26,11 +21,11 @@
 
 package org.jvoicexml.documentserver.schemestrategy;
 
-import java.util.UUID;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -39,12 +34,11 @@ import org.mockito.stubbing.Answer;
  * Test case for {@link SessionStorage}.
  * 
  * @author Dirk Schnelle
- * @version $Revision$
  * @since 0.7
  */
 public final class TestSessionStorage {
     /** The default session to use. */
-    private String sessionId;
+    private SessionIdentifier sessionId;
 
     /** The storage to test. */
     private SessionStorage<String> storage;
@@ -60,12 +54,13 @@ public final class TestSessionStorage {
         final Answer<String> answer = new Answer<String>() {
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
-                return invocation.getArgumentAt(0, String.class) + "-G";
+                return invocation.getArgumentAt(0,
+                        SessionIdentifier.class).getId() + "_GEN";
             }
         };
-        Mockito.when(factory.createSessionIdentifier(Mockito.anyString()))
+        Mockito.when(factory.createSessionIdentifier(Mockito.anyObject()))
                 .then(answer);
-        sessionId = factory.createSessionIdentifier("dummy");
+        sessionId = new UuidSessionIdentifer();
         storage = new SessionStorage<String>(factory);
     }
 
@@ -76,11 +71,12 @@ public final class TestSessionStorage {
      */
     @Test
     public void testGetSessionIdentifier() {
+        
         final String id1 = storage.getSessionIdentifier(sessionId);
         Assert.assertNotNull(id1);
         final String id2 = storage.getSessionIdentifier(sessionId);
         Assert.assertEquals(id1, id2);
-        final String sessionId3 = UUID.randomUUID().toString();
+        final SessionIdentifier sessionId3 = new UuidSessionIdentifer();
         final String id3 = storage.getSessionIdentifier(sessionId3);
         Assert.assertNotSame(id1, id3);
         final String id4 = storage.getSessionIdentifier(null);

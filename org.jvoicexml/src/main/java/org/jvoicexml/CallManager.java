@@ -44,6 +44,10 @@ import org.jvoicexml.event.error.NoresourceError;
 public interface CallManager {
     /**
      * Sets a reference to JVoiceXml.
+     * <p>
+     * Usually this method is called when JVoiceXML starts up so that
+     * the call managers would know to whom to talk to.
+     * </p>
      * @param jvxml reference to JVoiceXml.
      */
     void setJVoiceXml(JVoiceXml jvxml);

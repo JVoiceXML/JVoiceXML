@@ -29,7 +29,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.documentserver.SchemeStrategy;
-import org.jvoicexml.documentserver.schemestrategy.file.FileSchemeStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**

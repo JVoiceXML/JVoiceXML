@@ -28,6 +28,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -60,7 +61,7 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
     private final SpeechThread thread;
 
     /** The session id. */
-    private String id;
+    private SessionIdentifier id;
 
     /**
      * Constructs a new object.
@@ -78,7 +79,8 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void queueSpeakable(final SpeakableText speakableText,
-            final String sessionId, final DocumentServer documentServer)
+            final SessionIdentifier sessionId,
+            final DocumentServer documentServer)
         throws NoresourceError,
             BadFetchError {
         id = sessionId;

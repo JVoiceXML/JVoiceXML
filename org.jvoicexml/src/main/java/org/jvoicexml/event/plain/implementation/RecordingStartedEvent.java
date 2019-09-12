@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/event/plain/implementation/OutputStartedEvent.java $
- * Version: $LastChangedRevision: 4233 $
- * Date:    $Date: 2014-09-02 09:14:31 +0200 (Tue, 02 Sep 2014) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,13 +21,13 @@
 
 package org.jvoicexml.event.plain.implementation;
 
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
  * Notification that the recoding has started.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4233 $
  * @since 0.7.7
  */
 @SuppressWarnings("serial")
@@ -45,7 +40,7 @@ public final class RecordingStartedEvent extends JVoiceXMLEvent {
             .getCanonicalName() + "." + DETAIL;
 
     /** The id of the related session. */
-    private final String sessionId;
+    private final SessionIdentifier sessionId;
 
     /**
      * Constructs a new event with the event type as its detail message. The
@@ -60,7 +55,7 @@ public final class RecordingStartedEvent extends JVoiceXMLEvent {
      * @param id
      *            the session id
      */
-    public RecordingStartedEvent(final String id) {
+    public RecordingStartedEvent(final SessionIdentifier id) {
         sessionId = id;
     }
 
@@ -69,7 +64,7 @@ public final class RecordingStartedEvent extends JVoiceXMLEvent {
      * 
      * @return the session id
      */
-    public String getSessionId() {
+    public SessionIdentifier getSessionId() {
         return sessionId;
     }
 

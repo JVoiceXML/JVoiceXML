@@ -24,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.SessionIdentifier;
 
 /**
  * A repository that might be used for storing intermediate documents that
@@ -52,7 +53,7 @@ public interface DocumentRepository {
      * @exception URISyntaxException
      *                error generating the URI for the document
      */
-    URI addGrammarDocument(final String sessionId,
+    URI addGrammarDocument(final SessionIdentifier sessionId,
             final GrammarDocument document) throws URISyntaxException;
 
     /**
@@ -70,7 +71,7 @@ public interface DocumentRepository {
      * @param sessionId
      *            the Id of the current JVoiceXML session.
      */
-    void sessionClosed(final String sessionId);
+    void sessionClosed(final SessionIdentifier sessionId);
 
     /**
      * Stops this document repository.

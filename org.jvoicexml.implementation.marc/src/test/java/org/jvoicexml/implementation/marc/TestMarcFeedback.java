@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,12 +25,13 @@ import java.net.DatagramSocket;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.Locale;
-import java.util.UUID;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
@@ -73,7 +74,7 @@ public final class TestMarcFeedback implements SynthesizedOutputListener {
         output.addListener(this);
         final SpeakableText speakable = new SpeakableSsmlText("test",
                 Locale.US);
-        final String sessionId = UUID.randomUUID().toString();
+        final SessionIdentifier sessionId = new UuidSessionIdentifer();
         output.queueSpeakable(speakable, sessionId, null);
         final MarcFeedback feedback = new MarcFeedback(output, 4011);
         final DatagramSocket server = new DatagramSocket(4012);

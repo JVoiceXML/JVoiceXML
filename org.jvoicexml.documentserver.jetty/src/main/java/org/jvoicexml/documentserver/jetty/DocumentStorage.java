@@ -30,6 +30,7 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.documentserver.schemestrategy.builtin.GrammarCreator;
 
 /**
@@ -46,7 +47,7 @@ public class DocumentStorage implements ContextHandlerProvider {
             .getLogger(DocumentStorage.class);
 
     /** Generated documents per session. */
-    private final Map<String, Collection<GrammarDocument>> sessionDocuments;
+    private final Map<SessionIdentifier, Collection<GrammarDocument>> sessionDocuments;
 
     /** Stored documents. */
     private final Map<URI, GrammarDocument> documents;
@@ -64,7 +65,7 @@ public class DocumentStorage implements ContextHandlerProvider {
      * Creates a new object.
      */
     public DocumentStorage() {
-        sessionDocuments = new java.util.HashMap<String, Collection<GrammarDocument>>();
+        sessionDocuments = new java.util.HashMap<SessionIdentifier, Collection<GrammarDocument>>();
         documents = new java.util.HashMap<URI, GrammarDocument>();
         internalGrammarHandler = new InternalGrammarDocumentHandler(this);
         builtinGrammarHandler = new BuiltinGrammarHandler();
@@ -115,7 +116,7 @@ public class DocumentStorage implements ContextHandlerProvider {
      * @throws URISyntaxException
      *             if the URI could not be created
      */
-    public URI addGrammarDocument(final String sessionId,
+    public URI addGrammarDocument(final SessionIdentifier sessionId,
             final GrammarDocument document) throws URISyntaxException {
         Collection<GrammarDocument> currentDocuments = getCurrentSessionDocuments(sessionId);
         currentDocuments.add(document);
@@ -144,7 +145,7 @@ public class DocumentStorage implements ContextHandlerProvider {
      * @since 0.7.8
      */
     private Collection<GrammarDocument> getCurrentSessionDocuments(
-            final String sessionId) {
+            final SessionIdentifier sessionId) {
         Collection<GrammarDocument> currentDocuments = sessionDocuments
                 .get(sessionId);
         if (currentDocuments != null) {
@@ -179,7 +180,7 @@ public class DocumentStorage implements ContextHandlerProvider {
      *            the id of the session
      * @throws URISyntaxException if the URI does not feature a valid path
      */
-    public void clear(final String sessionId) throws URISyntaxException {
+    public void clear(final SessionIdentifier sessionId) throws URISyntaxException {
         final Collection<GrammarDocument> currentDocuments = sessionDocuments
                 .get(sessionId);
         if (currentDocuments == null) {
@@ -200,14 +201,14 @@ public class DocumentStorage implements ContextHandlerProvider {
     public Collection<ContextHandler> getContextHandlers() {
         final Collection<ContextHandler> handlers =
                 new java.util.ArrayList<ContextHandler>();
-        ContextHandler rootContext = new ContextHandler();
+        final ContextHandler rootContext = new ContextHandler();
         rootContext.setHandler(internalGrammarHandler);
         handlers.add(rootContext);
-        ContextHandler internalGrammarContext = new ContextHandler(
+        final ContextHandler internalGrammarContext = new ContextHandler(
                 InternalGrammarDocumentHandler.CONTEXT_PATH);
         internalGrammarContext.setHandler(internalGrammarHandler);
         handlers.add(internalGrammarContext);
-        ContextHandler builtinGrammarContext = new ContextHandler(
+        final ContextHandler builtinGrammarContext = new ContextHandler(
                 BuiltinGrammarHandler.CONTEXT_PATH);
         builtinGrammarContext.setHandler(builtinGrammarHandler);
         handlers.add(builtinGrammarContext);

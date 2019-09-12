@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +22,7 @@
 package org.jvoicexml.event.plain.implementation;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.plain.jvxml.InputEvent;
 import org.jvoicexml.implementation.SpokenInput;
 
@@ -34,7 +30,6 @@ import org.jvoicexml.implementation.SpokenInput;
  * The user has responded within the timeout interval.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 @SuppressWarnings("serial")
 public final class RecognitionEvent
@@ -58,8 +53,8 @@ public final class RecognitionEvent
      *        Result of the recognition process.
      */
     public RecognitionEvent(final SpokenInput input,
-            final String sessionId, final RecognitionResult recognitionResult) {
-        super(input, sessionId, DETAIL);
+            final SessionIdentifier sessionId, final RecognitionResult recognitionResult) {
+        super(input, DETAIL, sessionId);
 
         if (recognitionResult == null) {
             throw new IllegalArgumentException(

@@ -23,6 +23,7 @@ package org.jvoicexml.documentserver.schemestrategy.http;
 
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.documentserver.schemestrategy.SessionIdentifierFactory;
 
 /**
@@ -56,7 +57,8 @@ final class HttpClientSessionIdentifierFactory
      * {@inheritDoc}
      */
     @Override
-    public HttpClientBuilder createSessionIdentifier(final String sessionId) {
+    public HttpClientBuilder createSessionIdentifier(
+            final SessionIdentifier sessionId) {
         final HttpClientBuilder builder = HttpClientBuilder.create();
         if (PROXY_HOST != null) {
             HttpHost proxy = new HttpHost(PROXY_HOST, PROXY_PORT);

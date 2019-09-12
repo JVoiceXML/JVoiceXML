@@ -29,6 +29,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.DtmfInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
@@ -187,7 +188,7 @@ public final class MockImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public void renderPrompts(final String sessionId,
+    public void renderPrompts(final SessionIdentifier sessionId,
             final DocumentServer server, final CallControlProperties callProps)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent {

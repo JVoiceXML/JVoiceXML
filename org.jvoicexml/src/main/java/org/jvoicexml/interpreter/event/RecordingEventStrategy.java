@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,6 +33,7 @@ import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -114,8 +115,9 @@ final class RecordingEventStrategy
 
         // Notify that recording has stopped.
         final Session session = context.getSession();
+        final SessionIdentifier id = session.getSessionId();
         final RecordingStoppedEvent stopped = new RecordingStoppedEvent(
-                session.getSessionId(), result);
+                id.getId(), result);
         final EventBus bus = context.getEventBus();
         bus.publish(stopped);
         return true;

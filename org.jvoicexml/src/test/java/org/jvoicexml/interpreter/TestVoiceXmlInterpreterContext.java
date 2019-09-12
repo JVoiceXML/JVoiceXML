@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,7 +30,9 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeechRecognizerProperties;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
@@ -52,7 +49,7 @@ import org.w3c.dom.Document;
  * Test cases for {@link VoiceXmlInterpreterContext}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
+* @version $Revision$
  * @since 0.7
  */
 public final class TestVoiceXmlInterpreterContext {
@@ -88,8 +85,9 @@ public final class TestVoiceXmlInterpreterContext {
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
 
+        final SessionIdentifier id = new UuidSessionIdentifer();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
-                null, profile);
+                null, profile, id);
         final Configuration configuration = Mockito.mock(Configuration.class);
         Mockito.when(configuration.loadObject(SpeechRecognizerProperties.class))
                 .thenReturn(new SpeechRecognizerProperties());

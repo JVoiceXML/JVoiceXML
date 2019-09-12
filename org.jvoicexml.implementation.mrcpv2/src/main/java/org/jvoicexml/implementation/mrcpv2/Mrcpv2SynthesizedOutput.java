@@ -37,6 +37,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
@@ -62,8 +63,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import net.sourceforge.halef.HalefDbWriter;
 
 /**
  * Audio output that uses the MRCPv2 to address the TTS engine.
@@ -163,8 +162,9 @@ public final class Mrcpv2SynthesizedOutput
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final String sessionId, final DocumentServer documentServer)
-            throws NoresourceError, BadFetchError {
+            final SessionIdentifier sessionId,
+            final DocumentServer documentServer)
+                    throws NoresourceError, BadFetchError {
         String speakText = null;
         boolean urlPrompt = false;
         queueCount++;
@@ -209,30 +209,8 @@ public final class Mrcpv2SynthesizedOutput
 
             if (urlPrompt) {
                 LOGGER.info(String.format("Using URL: %s", speakText));
-
-                // HALEF Event logging
-                final String hevent = String.format(
-                        "INSERT INTO haleflogs"
-                                + " (databasedate, machineIP, machinedate, class, level,"
-                                + " message) VALUES(%s, \"%s\", %s,"
-                                + " \"%s\", \"%s\", \"%s\")",
-                        "now()", System.getenv("IP"), "now()",
-                        "implementation.mrcpv2.Mrcpv2SynthesizedOutput", "INFO",
-                        "Using URL!: " + speakText);
-                HalefDbWriter.execute(hevent);
             } else {
                 LOGGER.info(String.format("Using TTS!: %s", speakText));
-
-                // HALEF Event logging
-                final String hevent = String.format(
-                        "INSERT INTO haleflogs"
-                                + " (databasedate, machineIP, machinedate, class, level,"
-                                + " message) VALUES(%s, \"%s\", %s,"
-                                + " \"%s\", \"%s\", \"%s\")",
-                        "now()", System.getenv("IP"), "now()",
-                        "implementation.mrcpv2.Mrcpv2SynthesizedOutput", "INFO",
-                        "Using TTS!: " + speakText);
-                HalefDbWriter.execute(hevent);
             }
 
             speechClient.queuePrompt(urlPrompt, speakText);

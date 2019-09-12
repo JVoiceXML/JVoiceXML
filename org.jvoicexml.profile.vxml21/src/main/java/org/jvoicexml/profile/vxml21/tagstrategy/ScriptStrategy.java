@@ -33,6 +33,7 @@ import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -166,7 +167,7 @@ class ScriptStrategy extends AbstractTagStrategy {
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final FetchAttributes attributes = getFetchAttributes();
         descriptor.setAttributes(attributes);
-        final String sessionId = session.getSessionId();
+        final SessionIdentifier sessionId = session.getSessionId();
         final String externalScript = (String) server.getObject(sessionId,
                 descriptor, DocumentServer.TEXT_PLAIN);
         model.evaluateExpression(externalScript, Object.class);

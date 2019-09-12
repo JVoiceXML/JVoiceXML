@@ -23,7 +23,6 @@ package org.jvoicexml.implementation.mary;
 
 import java.io.InputStream;
 import java.util.Locale;
-import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +31,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -90,7 +91,7 @@ public final class TestMarySynthesizedOutput
     private DocumentServer documentServer;
 
     /** The session id. */
-    private String sessionId;
+    private SessionIdentifier sessionId;
 
     /**
      * Starts the Mary server.
@@ -166,7 +167,7 @@ public final class TestMarySynthesizedOutput
         output.activate();
         output.connect(null);
         documentServer = new JVoiceXmlDocumentServer();
-        sessionId = UUID.randomUUID().toString();
+        sessionId = new UuidSessionIdentifer();
     }
 
     /**

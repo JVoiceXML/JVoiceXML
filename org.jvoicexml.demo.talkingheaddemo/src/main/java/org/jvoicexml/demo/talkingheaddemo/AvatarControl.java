@@ -47,6 +47,8 @@ import javax.naming.NamingException;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.client.GenericClient;
 import org.jvoicexml.event.ErrorEvent;
@@ -469,7 +471,8 @@ public final class AvatarControl {
                 "desktop", "bml", "jsapi20");
         Session session;
         try {
-            session = jvxml.createSession(client);
+            final SessionIdentifier id = new UuidSessionIdentifer();
+            session = jvxml.createSession(client, id);
 
             session.call(uri);
 

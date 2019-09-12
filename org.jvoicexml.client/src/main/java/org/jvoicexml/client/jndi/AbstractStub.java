@@ -127,26 +127,24 @@ abstract class AbstractStub<T extends Remote>
      * @param suffix List of suffixes to be appended.
      * @return The skeleton to use for remote method calls,
      *         <code>null</code> in case of an error.
+     * @throws NamingException 
+     *          skeleton could not be found
      */
-    protected final T getSkeleton(final String ...suffix) {
+    protected final T getSkeleton(final String ...suffix)
+            throws NamingException {
         if (skeleton != null) {
             return skeleton;
         }
 
         final Class<T> remoteClass = getRemoteClass();
-
-        try {
-            String name = remoteClass.getSimpleName();
-            for (int i = 0; i < suffix.length; i++) {
-                name += ".";
-                name += suffix[i];
-            }
-
-            final Object remote = context.lookup(name);
-            skeleton = remoteClass.cast(remote);
-        } catch (Exception e) {
-            e.printStackTrace();
+        String name = remoteClass.getSimpleName();
+        for (int i = 0; i < suffix.length; i++) {
+            name += ".";
+            name += suffix[i];
         }
+
+        final Object remote = context.lookup(name);
+        skeleton = remoteClass.cast(remote);
 
         return skeleton;
     }

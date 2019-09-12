@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,6 +40,7 @@ import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.EventBus;
@@ -704,7 +705,7 @@ public class VoiceXmlInterpreterContext {
         }
         descriptor.setURI(nextUri);
         final DocumentServer server = session.getDocumentServer();
-        final String sessionId = session.getSessionId();
+        final SessionIdentifier sessionId = session.getSessionId();
         return server.getDocument(sessionId, descriptor);
     }
 
@@ -736,7 +737,7 @@ public class VoiceXmlInterpreterContext {
         } else {
             grammarUri = application.resolve(uri);
         }
-        final String sessionId = session.getSessionId();
+        final SessionIdentifier sessionId = session.getSessionId();
         return server.getGrammarDocument(sessionId, grammarUri, attributes);
     }
 

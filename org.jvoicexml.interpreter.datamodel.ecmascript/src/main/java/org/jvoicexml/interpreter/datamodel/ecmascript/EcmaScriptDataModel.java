@@ -45,7 +45,6 @@ import org.mozilla.javascript.ScriptableObject;
  * ECMA Script data model for JVoiceXML.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
  * @since 0.7.7
  */
 public class EcmaScriptDataModel implements DataModel {

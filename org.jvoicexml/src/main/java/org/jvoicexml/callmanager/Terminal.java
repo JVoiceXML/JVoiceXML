@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +22,8 @@
 package org.jvoicexml.callmanager;
 
 import java.io.IOException;
+
+import org.jvoicexml.SessionIdentifier;
 
 /**
  * Terminals are object that are waiting for incoming connections. Once
@@ -52,10 +49,16 @@ import java.io.IOException;
  * calls, once the resource is needed.
  * </p>
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public interface Terminal {
+    /**
+     * Retrieves the session identifier.
+     * @return the session identifier
+     * @since 0.7.9
+     */
+    SessionIdentifier getSessionIdentifier();
+    
     /**
      * Retrieves the name of a terminal.
      * @return name of the terminal
