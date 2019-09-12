@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2014-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -44,8 +39,6 @@ import javax.swing.WindowConstants;
  * @author Matthias Mettel
  * @author Markus Ermuth
  * @author Alex Krause
- * 
- * @version $LastChangedRevision$
  * @since 0.7.7
  */
 public class TestEventTriggerGUI extends JFrame {
@@ -219,7 +212,7 @@ public class TestEventTriggerGUI extends JFrame {
         deadlineButton = new JButton("Termin");
         deadlineButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent evt) {
-                fill("Markus möchte in einer Stunde mit Ihnen Billiard "
+                fill("Markus mÃ¶chte in einer Stunde mit Ihnen Billiard "
                         + "spielen. Soll ich zusagen?",
                         "Der Termin wurde zugesagt. Ein "
                                 + "Taxi steht in zehn Minuten bereit.", "Ok.");
@@ -230,10 +223,10 @@ public class TestEventTriggerGUI extends JFrame {
         leaveButton = new JButton("Verlassen");
         leaveButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent evt) {
-                fill("Ihr Taxi steht vor der Haustür. Soll ich für Sie das "
-                        + "Fenster schließen und das Licht löschen?",
-                        "Ok. Viel Spaß beim Billiard.",
-                        "Viel Spaß beim Billiard.");
+                fill("Ihr Taxi steht vor der HaustÃ¼r. Soll ich fÃ¼r Sie das "
+                        + "Fenster schlieÃŸen und das Licht lÃ¶schen?",
+                        "Ok. Viel Spaï¿½ beim Billiard.",
+                        "Viel SpaÃŸ beim Billiard.");
             }
         });
 
@@ -250,7 +243,7 @@ public class TestEventTriggerGUI extends JFrame {
         childrenButton = new JButton("Kinder");
         childrenButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent evt) {
-                fill("Sie haben sich schon länger nicht bei Ihren Kindern "
+                fill("Sie haben sich schon lÃ¤nger nicht bei Ihren Kindern "
                         + "gemeldet. Soll ich eine Nachricht schicken und sagen, "
                         + "dass Sie sich bald melden?",
                         "Ihre Kinder wurden benachrichtigt.", "Ok.");
@@ -261,18 +254,18 @@ public class TestEventTriggerGUI extends JFrame {
         birthdayButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent evt) {
                 fill("Markus hat heute Geburtstag. Soll ich ein Taxi rufen?",
-                        "Das Taxi ist unterwegs. Für die Route zu Markus gibt es keine "
+                        "Das Taxi ist unterwegs. FÃ¼r die Route zu Markus gibt es keine "
                                 + "aktuellen Staumeldungen. In Wiesbaden wird es in zwei "
                                 + "Stunden regnen.", "Ok.");
             }
         });
 
-        gadgetButton = new JButton("Geräte");
+        gadgetButton = new JButton("GerÃ¤te");
         gadgetButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent evt) {
                 fill("Sie wollen die Wohnung verlassen, das Radio und das Licht im "
                         + "Wohnzimmer sind noch angeschaltet. Soll ich Sie abschalten?",
-                        "Die Geräte werden abgeschaltet. Auf Wiedersehen.",
+                        "Die GerÃ¤te werden abgeschaltet. Auf Wiedersehen.",
                         "Auf Wiedersehen.");
             }
         });
@@ -284,7 +277,7 @@ public class TestEventTriggerGUI extends JFrame {
         jButton9 = new JButton("jButton9");
 
         //
-        submitEvent = new JButton("Event ausführen");
+        submitEvent = new JButton("Event ausfï¿½hren");
         submitEvent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(final ActionEvent evt) {
                 avatar.queueEvent(new DummyEvent(offerText.getText(),
