@@ -65,7 +65,6 @@ public final class SipCallManager
     private static final Logger LOGGER = LogManager
             .getLogger(SipCallManager.class);
 
-    // TODO Better management (clean out orphaned sessions, or leases/timeouts)
     /** Map of sessions. */
     private Map<SessionIdentifier, SipCallManagerSession> sessions;
 
@@ -127,6 +126,8 @@ public final class SipCallManager
             LOGGER.warn("no session given. unable to cleanup session");
             return;
         }
+        
+        // Hangup the dialog
         final Session jvxmlSession = session.getJvxmlSession();
         jvxmlSession.hangup();
 
@@ -154,7 +155,9 @@ public final class SipCallManager
         }
 
         // remove the session from the map
-        sessions.remove(sessionId);
+        synchronized (sessions) {
+            sessions.remove(sessionId);
+        }
     }
 
     /**
@@ -414,12 +417,8 @@ public final class SipCallManager
      */
     @Override
     public void sessionEnded(final Session session) {
-        final SessionIdentifier id = session.getSessionId();
-        synchronized (sessions) {
-            sessions.remove(id);
-        }
-
         // clean up the session
+        final SessionIdentifier id = session.getSessionId();
         cleanupSession(id);
     }
 }
