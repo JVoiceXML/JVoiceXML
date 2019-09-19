@@ -88,19 +88,34 @@ public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
     /** A possibly thrown exception when starting the JNDI support. */
     private Exception startException;
    
+    /** The codebase server. */
     private ClassServer server;
 
+    /** The port of the class server. */
+    private int classServerPort;
+    
     /**
      * Constructs a new object.
      */
     public JVoiceXmlJndiSupport() {
         environment = new Hashtable<String, String>();
         lock = new Object();
+        classServerPort = 9698;
     }
 
     /**
+     * Sets the class server port.
+     * @param port
+     * @since 0.7.9
+     */
+    public void setClassServerPort(final int port) {
+        classServerPort = port;
+    }
+    
+    /**
      * {@inheritDoc}
      */
+    @Override
     public void setJVoiceXml(final JVoiceXml jvoicexml) {
         jvxml = jvoicexml;
     }
@@ -129,7 +144,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
      */
     @Override
     public void startup() throws IOException {
-        server = new ClassloaderServer(9698);
+        server = new ClassloaderServer(classServerPort);
         if (registry == null) {
             throw new IOException("no registry configured");
         }

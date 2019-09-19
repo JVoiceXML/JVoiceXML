@@ -7,6 +7,7 @@
     <classpath>org.jvoicexml.jndi-@@VERSION@@.jar</classpath>
     <beans:bean id="org.jvoicexml.JndiSupport"
         class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
+        <beans:property name="classServerPort"/>
         <beans:property name="registry">
             <beans:bean id="registry"
                 class="org.jvoicexml.jndi.JVoiceXmlRegistry">
