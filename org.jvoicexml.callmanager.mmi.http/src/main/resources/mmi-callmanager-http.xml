@@ -8,8 +8,16 @@
     <classpath>org.jvoicexml.callmanager.mmi.http-@@VERSION@@.jar</classpath>
     <classpath>org.jvoicexml.profile.mmi-@@VERSION@@.jar</classpath>
     <classpath>org.jvoicexml.profile.vxml21-@@VERSION@@.jar</classpath>
-    <classpath>rhino-1.7R4.jar</classpath>
+    <classpath>org.jvoicexml.client-@@VERSION@@.jar</classpath>
+    <classpath>rhino-1.7.10.jar</classpath>
     <classpath>json-simple-1.1.1.jar</classpath>
+    <classpath>httpcore-4.4.11.jar</classpath>
+    <classpath>httpclient-4.5.9.jar</classpath>
+    <classpath>jetty-server-9.4.20.v20190813.jar</classpath>
+    <classpath>jetty-http-9.4.20.v20190813.jar</classpath>
+    <classpath>jetty-io-9.4.20.v20190813.jar</classpath>
+    <classpath>jetty-util-9.4.20.v20190813.jar</classpath>
+    <classpath>javax.servlet-api-3.1.0.jar</classpath>
 
     <beans:bean id="callmanager"
         class="org.jvoicexml.callmanager.mmi.MMICallManager">

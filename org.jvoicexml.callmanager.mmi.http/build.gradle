@@ -74,9 +74,16 @@ task copyReferencedLibraries(type: Copy) {
         include 'rhino*.jar',
         'json-simple*.jar',
         'httpcore*.jar',
-        'http-client*.jar',
+        'httpclient*.jar',
+        'jetty-server-*.jar',
+        'jetty-http-*.jar',
+        'jetty-io-*.jar',
+        'jetty-util-*.jar',
+        'javax.servlet-api-*.jar',
+        'org.jvoicexml.client*.jar',
         'org.jvoicexml.mmi.events*.jar',
-        'org.jvoicexml.mmi.profile.mmi*.jar',
+        'org.jvoicexml.profile.mmi*.jar',
+        'org.jvoicexml.profile.vxml21*.jar',
         'org.jvoicexml.callmanager.mmi*.jar'
     }
 }
