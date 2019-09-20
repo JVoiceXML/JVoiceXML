@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -56,7 +51,6 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.7.6
  */
 @XmlType(name = "contentURLType")
 public final class ContentURLType implements Serializable {

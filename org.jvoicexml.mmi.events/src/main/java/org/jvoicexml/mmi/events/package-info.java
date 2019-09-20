@@ -1,5 +1,16 @@
 /**
  * MMI lifecycle events.
+ * 
+ * <p>
+ * This library provides container classes to handle MMI lifecycle events
+ * as specified in {@link https://www.w3.org/TR/mmi-arch/}. This library is
+ * independent to the JVoiceXML project and can also be used separately.
+ * </p>
+ * The current implementations supports the following formats
+ * <ul>
+ * <li>XML</li>
+ * <li>protobuf</li>
+ * </ul>
  */
 
 @javax.xml.bind.annotation.XmlSchema(elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED,

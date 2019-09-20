@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -33,7 +28,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 /**
  * An MMI status request.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public final class StatusRequest extends LifeCycleEvent
