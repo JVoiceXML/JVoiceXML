@@ -19,6 +19,7 @@
     <xsl:param name="buildpath" />
     <xsl:param name="version" />
     <xsl:param name="port" />
+    <xsl:param name="classServerPort" />
 
     <xsl:template match="repository">
         <xsl:copy>
@@ -42,6 +43,15 @@
         <xsl:copy>
             <xsl:apply-templates select="@*" />
             <xsl:attribute name="value"><xsl:value-of select="$port" /></xsl:attribute>
+            <!-- Keep current settings -->
+            <xsl:apply-templates select="@*|*|comment()" />
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="beans:property[@name='classServerPort']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*" />
+            <xsl:attribute name="value"><xsl:value-of select="$classServerPort" /></xsl:attribute>
             <!-- Keep current settings -->
             <xsl:apply-templates select="@*|*|comment()" />
         </xsl:copy>

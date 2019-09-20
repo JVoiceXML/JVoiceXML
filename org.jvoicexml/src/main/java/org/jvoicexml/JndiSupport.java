@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,7 +27,6 @@ import java.io.IOException;
  * JNDI support for remote access to the VoiceXML interpreter.
  *
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision$
  * @since 0.5.5
  */
 public interface JndiSupport {
@@ -43,7 +37,8 @@ public interface JndiSupport {
     void startup() throws IOException;
 
     /**
-     * Sets the reference to the interpreter.
+     * Sets the reference to the interpreter. This method is called when
+     * the JNDI support is started by the core interpreter.
      * @param jvxml the interpreter.
      */
     void setJVoiceXml(final JVoiceXml jvxml);

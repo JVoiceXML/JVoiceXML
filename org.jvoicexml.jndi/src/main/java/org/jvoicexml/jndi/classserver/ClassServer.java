@@ -61,8 +61,8 @@ public abstract class ClassServer implements Runnable {
     private static final Logger LOGGER = LogManager
             .getLogger(ClassServer.class);
 
-    private ServerSocket server = null;
-    private final int port;
+    /** The server socket to handle code downloads. */
+    private final ServerSocket server;
 
     /**
      * Constructs a ClassServer that listens on <b>port</b> and obtains a
@@ -74,7 +74,6 @@ public abstract class ClassServer implements Runnable {
      *                if the ClassServer could not listen on <b>port</b>.
      */
     protected ClassServer(int port) throws IOException {
-        this.port = port;
         server = new ServerSocket(port);
         newListener();
         LOGGER.info("class server started on port " + port);
