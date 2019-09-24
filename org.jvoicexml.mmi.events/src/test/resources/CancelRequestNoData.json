@@ -1,0 +1,7 @@
+{
+  "context": "context1",
+  "requestID": "request1",
+  "source": "source1",
+  "target": "target1",
+  "mmi": "CancelRequest"
+}

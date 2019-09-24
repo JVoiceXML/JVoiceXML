@@ -30,6 +30,7 @@ import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.Bar;
 import org.jvoicexml.mmi.events.CancelRequest;
 import org.jvoicexml.mmi.events.Foo;
+import org.jvoicexml.mmi.events.LifeCycleEvent;
 
 /**
  * Test cases for [{@link JsonMmi}.
@@ -84,4 +85,17 @@ public class JsonMmiTest {
         Assert.assertEquals(ref, json);
     }
 
+    @Test
+    public void testFromJson() throws IOException {
+        final String json = getResourceAsString("/CancelRequestNoData.json");
+        final JsonMmi mmi = JsonMmi.fromJson(json);
+        final LifeCycleEvent event = mmi.getLifeCycleEvent();
+        Assert.assertTrue(event instanceof CancelRequest);
+        final CancelRequest cancelRequest = (CancelRequest) event;
+        Assert.assertEquals("context1", cancelRequest.getContext());
+        Assert.assertEquals("source1", cancelRequest.getSource());
+        Assert.assertEquals("request1", cancelRequest.getRequestId());
+        Assert.assertEquals("target1", cancelRequest.getTarget());
+        Assert.assertNull(cancelRequest.getData());
+    }
 }

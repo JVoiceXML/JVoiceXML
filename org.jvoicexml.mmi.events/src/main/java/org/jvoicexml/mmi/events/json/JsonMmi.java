@@ -20,11 +20,14 @@
  */
 package org.jvoicexml.mmi.events.json;
 
+import java.lang.reflect.Type;
+
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * JSON support for MMI events.
@@ -69,6 +72,13 @@ public class JsonMmi {
                         new AnyComplexTypeSerializer())
                 .create();
         return gson.toJson(this);
+    }
+
+    public static JsonMmi fromJson(final String json) {
+        final Gson gson = new GsonBuilder()
+                .registerTypeAdapter(JsonMmi.class, new JsonMmiDeserializer())
+                .create();
+        return gson.fromJson(json, JsonMmi.class);
     }
 
 }
