@@ -12,7 +12,6 @@ public class Bar {
     private String value;
     
     public Bar() {
-        // TODO Auto-generated constructor stub
     }
 
     public String getValue() {

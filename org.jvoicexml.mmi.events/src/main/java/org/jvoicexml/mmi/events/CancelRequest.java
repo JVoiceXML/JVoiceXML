@@ -28,7 +28,7 @@ import java.io.Serializable;
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
  */
-public final class CancelRequest extends LifeCycleRequest
+public class CancelRequest extends LifeCycleRequest
     implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = -3312276773549810941L;

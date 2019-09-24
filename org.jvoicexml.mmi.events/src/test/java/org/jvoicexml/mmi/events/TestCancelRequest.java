@@ -33,24 +33,21 @@ public class TestCancelRequest {
         request.setSource("source1");
         request.setTarget("target1");
         request.setContext("context1");
-        List<Object> data = new ArrayList<Object>();
         final Bar bar = new Bar();
         bar.setValue("hurz");
+        final AnyComplexType anyBars = new AnyComplexType();
+        anyBars.addContent(bar);
         final Foo foo = new Foo();
-        final AnyComplexType any = new AnyComplexType();
-//        List<Object> bars = new ArrayList<Object>();
-        any.addContent(bar);
-        foo.setBars(any);
+        foo.setBars(anyBars);
         foo.setValue("lamm");
-        data.add(foo);
-        request.setData(any);
+        final AnyComplexType data = new AnyComplexType();
+        data.addContent(foo);
+        request.setData(data);
         final JAXBContext ctx = JAXBContext.newInstance(Mmi.class, Foo.class,
                 Bar.class);
         final Marshaller marshaller = ctx.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         marshaller.marshal(mmi, System.out);
-//        marshaller.marshal(foo, System.out);
-
     }
 
     @Test

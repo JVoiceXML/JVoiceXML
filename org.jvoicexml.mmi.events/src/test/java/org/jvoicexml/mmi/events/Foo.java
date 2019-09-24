@@ -2,11 +2,8 @@ package org.jvoicexml.mmi.events;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -15,12 +12,10 @@ public class Foo {
     @XmlAttribute(name = "Value", namespace="http://none", required = true)
     private String value;
 
-//    @XmlElementWrapper(name = "Bars")
     @XmlElement(name = "Bars")
     private AnyComplexType bars;
 
     public Foo() {
-        // TODO Auto-generated constructor stub
     }
 
     public String getValue() {
