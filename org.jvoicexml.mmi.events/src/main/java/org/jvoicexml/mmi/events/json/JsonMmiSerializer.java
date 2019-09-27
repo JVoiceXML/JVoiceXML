@@ -34,7 +34,7 @@ import com.google.gson.JsonSerializer;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-public class LifeCycleEventSerializer implements JsonSerializer<JsonMmi> {
+final class JsonMmiSerializer implements JsonSerializer<JsonMmi> {
 
     /**
      * Adds the type information as an additional field to the serialized JSON

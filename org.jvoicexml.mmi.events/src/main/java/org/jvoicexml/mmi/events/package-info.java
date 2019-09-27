@@ -9,6 +9,7 @@
  * The current implementations supports the following formats
  * <ul>
  * <li>XML</li>
+ * <li>JSON</li>
  * <li>protobuf</li>
  * </ul>
  */

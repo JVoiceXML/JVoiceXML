@@ -23,6 +23,7 @@ package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -55,7 +56,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "anyComplexType", propOrder = { "content" })
 public final class AnyComplexType implements Serializable {
-
     /** The serial version UID. */
     private static final long serialVersionUID = 2818338467950863521L;
 
@@ -80,5 +80,31 @@ public final class AnyComplexType implements Serializable {
      */
     public List<Object> getContent() {
         return content;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(content);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        AnyComplexType other = (AnyComplexType) obj;
+        return Objects.equals(content, other.content);
     }
 }

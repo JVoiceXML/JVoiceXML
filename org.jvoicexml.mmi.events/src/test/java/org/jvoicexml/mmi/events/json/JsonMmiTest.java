@@ -23,6 +23,7 @@ package org.jvoicexml.mmi.events.json;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,6 +32,13 @@ import org.jvoicexml.mmi.events.Bar;
 import org.jvoicexml.mmi.events.CancelRequest;
 import org.jvoicexml.mmi.events.Foo;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 /**
  * Test cases for [{@link JsonMmi}.
@@ -86,7 +94,7 @@ public class JsonMmiTest {
     }
 
     @Test
-    public void testFromJson() throws IOException {
+    public void testFromJsonNoData() throws IOException {
         final String json = getResourceAsString("/CancelRequestNoData.json");
         final JsonMmi mmi = JsonMmi.fromJson(json);
         final LifeCycleEvent event = mmi.getLifeCycleEvent();
@@ -97,5 +105,56 @@ public class JsonMmiTest {
         Assert.assertEquals("request1", cancelRequest.getRequestId());
         Assert.assertEquals("target1", cancelRequest.getTarget());
         Assert.assertNull(cancelRequest.getData());
+    }
+
+    class FooDeserializer implements JsonDeserializer<Foo> {
+        @Override
+        public Foo deserialize(JsonElement json, Type typeOfT,
+                JsonDeserializationContext context) throws JsonParseException {
+            final JsonObject object = json.getAsJsonObject();
+            final JsonElement valueElement = object.get("value");
+            final String value = valueElement.getAsString();
+            final Foo foo = new Foo();
+            foo.setValue(value);
+            if (object.has("bars")) {
+                final AnyComplexType any = new AnyComplexType();
+                final JsonElement dataElement = object.get("bars");
+                final JsonArray data = dataElement.getAsJsonArray();
+                for (int i=0; i< data.size(); i++) {
+                    final JsonElement current = data.get(i);
+                    final Bar bar = context.deserialize(current, Bar.class);
+                    any.addContent(bar);
+                }
+                foo.setBars(any);
+            }
+            
+            return foo;
+        }
+        
+    }
+    
+    @Test
+    public void testFromJson() throws IOException {
+        final String json = getResourceAsString("/CancelRequest.json");
+        final JsonDeserializerConfiguration foodeser = new JsonDeserializerConfiguration(Foo.class, new FooDeserializer());
+        final JsonMmi mmi = JsonMmi.fromJson(json, Foo.class, foodeser);
+        final JsonMmi otherMmi = new JsonMmi();
+        final CancelRequest request = new CancelRequest();
+        otherMmi.setLifeCycleEvent(request);
+        request.setRequestId("request1");
+        request.setSource("source1");
+        request.setTarget("target1");
+        request.setContext("context1");
+        final Bar bar = new Bar();
+        bar.setValue("hurz");
+        final Foo foo = new Foo();
+        final AnyComplexType any = new AnyComplexType();
+        any.addContent(bar);
+        foo.setBars(any);
+        foo.setValue("lamm");
+        final AnyComplexType data = new AnyComplexType();
+        data.addContent(foo);
+        request.setData(data);
+        Assert.assertEquals(otherMmi, mmi);
     }
 }

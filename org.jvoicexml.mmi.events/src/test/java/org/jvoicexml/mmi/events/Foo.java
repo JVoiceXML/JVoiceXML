@@ -1,5 +1,7 @@
 package org.jvoicexml.mmi.events;
 
+import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -32,6 +34,33 @@ public class Foo {
 
     public void setBars(AnyComplexType bars) {
         this.bars = bars;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(bars, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Foo)) {
+            return false;
+        }
+        Foo other = (Foo) obj;
+        return Objects.equals(bars, other.bars)
+                && Objects.equals(value, other.value);
     }
 
 }

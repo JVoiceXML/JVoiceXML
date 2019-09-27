@@ -32,4 +32,48 @@ public final class ResumeResponse extends LifeCycleResponse
     implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = 8914923128779130054L;
+
+    /**
+     * Constructs a new object.
+     */
+    public ResumeResponse() {
+    }
+
+    /**
+     * Constructs a new object with the provided values.
+     * @param requestId the request id
+     * @param source the source
+     * @param target the target
+     * @param context the context
+     * @since 0.7.9
+     */
+    public ResumeResponse(final String requestId, final String source,
+            final String target, final String context) {
+        super(requestId, source, target, context);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof ResumeResponse)) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -21,13 +21,15 @@
 package org.jvoicexml.mmi.events.json;
 
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 import org.jvoicexml.mmi.events.AnyComplexType;
+import org.jvoicexml.mmi.events.CancelRequest;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonDeserializer;
 
 /**
  * JSON support for MMI events.
@@ -38,6 +40,20 @@ import com.google.gson.reflect.TypeToken;
 public class JsonMmi {
     /** The event to serialize. */
     private LifeCycleEvent event;
+
+    /**
+     * Constructs a new object.
+     */
+    public JsonMmi() {
+    }
+    
+    /**
+     * Constructs a new objects with the given encapsulated lifecycle event.
+     * @param ev the lifecycle event
+     */
+    public JsonMmi(final LifeCycleEvent ev) {
+        event = ev;
+    }
 
     /**
      * Sets the encapsulated lifecycle event.
@@ -62,23 +78,74 @@ public class JsonMmi {
      * Converts this event to JSON
      * 
      * @return JSON representation of this object.
-     * @since 0.7.9
      */
     public String toJson() {
-        final Gson gson = new GsonBuilder().setPrettyPrinting()
+        final GsonBuilder builder = new GsonBuilder().setPrettyPrinting()
                 .registerTypeAdapter(JsonMmi.class,
-                        new LifeCycleEventSerializer())
+                        new JsonMmiSerializer())
                 .registerTypeAdapter(AnyComplexType.class,
-                        new AnyComplexTypeSerializer())
-                .create();
+                        new AnyComplexTypeSerializer());
+        final Gson gson = builder.create();
         return gson.toJson(this);
     }
 
+    /**
+     * Converts JSON into a {@link JsonMmi} object.
+     * @param json the JSON to parse
+     * @return parsed object
+     */
     public static JsonMmi fromJson(final String json) {
-        final Gson gson = new GsonBuilder()
+        final GsonBuilder builder = new GsonBuilder()
                 .registerTypeAdapter(JsonMmi.class, new JsonMmiDeserializer())
-                .create();
+                .registerTypeAdapter(CancelRequest.class, new CancelRequestDeserializer());
+        final Gson gson = builder.create();
         return gson.fromJson(json, JsonMmi.class);
     }
 
+    /**
+     * Converts JSON into a {@link JsonMmi} object.
+     * @param json the JSON to parse
+     * @param dataType type of the object in the data section
+     * @return parsed object
+     */
+    public static JsonMmi fromJson(final String json, final Type dataType,
+            final JsonDeserializerConfiguration... deserializers) {
+        final GsonBuilder builder = new GsonBuilder()
+                .registerTypeAdapter(JsonMmi.class, new JsonMmiDeserializer())
+                .registerTypeAdapter(CancelRequest.class,
+                        new CancelRequestDeserializer(dataType));
+        for (JsonDeserializerConfiguration current : deserializers) {
+            final Type type = current.getType();
+            final JsonDeserializer<?> deserializer = current.getDeserializer();
+            builder.registerTypeAdapter(type, deserializer);
+        }
+        final Gson gson =  builder.create();
+        return gson.fromJson(json, JsonMmi.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(event);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof JsonMmi)) {
+            return false;
+        }
+        JsonMmi other = (JsonMmi) obj;
+        return Objects.equals(event, other.event);
+    }
 }

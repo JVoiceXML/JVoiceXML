@@ -32,4 +32,48 @@ public final class DoneNotification extends LifeCycleResponse
     implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = -6780336880993618024L;
+
+    /**
+     * Constructs a new object.
+     */
+    public DoneNotification() {
+    }
+
+    /**
+     * Constructs a new object with the provided values.
+     * @param requestId the request id
+     * @param source the source
+     * @param target the target
+     * @param context the context
+     * @since 0.7.9
+     */
+    public DoneNotification(final String requestId, final String source,
+            final String target, final String context) {
+        super(requestId, source, target, context);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof DoneNotification)) {
+            return false;
+        }
+        return true;
+    }
 }

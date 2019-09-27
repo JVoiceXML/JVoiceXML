@@ -32,12 +32,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 /**
- * TODO insert comment
- * @author Dwalka
+ * A deserializer for {@link JsonMmi}.
+ * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-public class JsonMmiDeserializer implements JsonDeserializer<JsonMmi> {
-
+final class JsonMmiDeserializer implements JsonDeserializer<JsonMmi> {
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JsonMmi deserialize(JsonElement json, Type typeOfT,
             JsonDeserializationContext context) throws JsonParseException {
@@ -50,9 +52,7 @@ public class JsonMmiDeserializer implements JsonDeserializer<JsonMmi> {
         } else {
             throw new JsonParseException("Unable to identify MMI type");
         }
-        final JsonMmi jsonMmi = new JsonMmi();
-        jsonMmi.setLifeCycleEvent(event);
-        return jsonMmi;
+        return new JsonMmi(event);
     }
 
 }

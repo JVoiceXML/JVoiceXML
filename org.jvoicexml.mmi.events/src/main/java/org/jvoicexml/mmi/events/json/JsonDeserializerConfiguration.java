@@ -21,30 +21,43 @@
 package org.jvoicexml.mmi.events.json;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
-import org.jvoicexml.mmi.events.AnyComplexType;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.JsonDeserializer;
 
 /**
- * A JSON serializer for {@link AnyComplexType}.
+ * A JSON deserializer configuration.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class AnyComplexTypeSerializer implements JsonSerializer<AnyComplexType> {
-
+public final class JsonDeserializerConfiguration {
+    /** The type to deserialize. */
+    private final Type type;
+    /** The actual deserializer. */
+    private final JsonDeserializer<?> deserializer;
+    
     /**
-     * Removes the content attribute from the serialized JSON.. 
-     * {@inheritDoc}
+     * Constructs a new object.
+     * @param t the type to deserialize
+     * @param d the actual deserializer
      */
-    @Override
-    public JsonElement serialize(AnyComplexType src, Type typeOfSrc,
-            JsonSerializationContext context) {
-        final  List<Object> content = src.getContent();
-        return context.serialize(content);
+    public JsonDeserializerConfiguration(final Type t, final JsonDeserializer<?> d) {
+        type = t;
+        deserializer = d;
+    }
+    
+    /**
+     * Retrieves the type to deserialize
+     * @return the type
+     */
+    public Type getType() {
+        return type;
     }
 
+    /**
+     * Retrieves the actual deserializer.
+     * @return the deserializer
+     */
+    public JsonDeserializer<?> getDeserializer() {
+        return deserializer;
+    }
 }

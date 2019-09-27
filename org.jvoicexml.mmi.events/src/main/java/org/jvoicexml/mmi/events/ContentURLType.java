@@ -22,6 +22,7 @@
 package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
@@ -134,4 +135,31 @@ public final class ContentURLType implements Serializable {
         fetchtimeout = value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(fetchtimeout, href, maxAge);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof ContentURLType)) {
+            return false;
+        }
+        ContentURLType other = (ContentURLType) obj;
+        return Objects.equals(fetchtimeout, other.fetchtimeout)
+                && Objects.equals(href, other.href)
+                && Objects.equals(maxAge, other.maxAge);
+    }
 }
