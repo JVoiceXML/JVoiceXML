@@ -25,7 +25,15 @@ import java.util.Objects;
 
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.CancelRequest;
+import org.jvoicexml.mmi.events.ClearContextRequest;
+import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.NewContextRequest;
+import org.jvoicexml.mmi.events.PauseRequest;
+import org.jvoicexml.mmi.events.PrepareRequest;
+import org.jvoicexml.mmi.events.ResumeRequest;
+import org.jvoicexml.mmi.events.StartRequest;
+import org.jvoicexml.mmi.events.StatusRequest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -46,10 +54,12 @@ public class JsonMmi {
      */
     public JsonMmi() {
     }
-    
+
     /**
      * Constructs a new objects with the given encapsulated lifecycle event.
-     * @param ev the lifecycle event
+     * 
+     * @param ev
+     *            the lifecycle event
      */
     public JsonMmi(final LifeCycleEvent ev) {
         event = ev;
@@ -81,8 +91,7 @@ public class JsonMmi {
      */
     public String toJson() {
         final GsonBuilder builder = new GsonBuilder().setPrettyPrinting()
-                .registerTypeAdapter(JsonMmi.class,
-                        new JsonMmiSerializer())
+                .registerTypeAdapter(JsonMmi.class, new JsonMmiSerializer())
                 .registerTypeAdapter(AnyComplexType.class,
                         new AnyComplexTypeSerializer());
         final Gson gson = builder.create();
@@ -91,21 +100,43 @@ public class JsonMmi {
 
     /**
      * Converts JSON into a {@link JsonMmi} object.
-     * @param json the JSON to parse
+     * 
+     * @param json
+     *            the JSON to parse
      * @return parsed object
      */
     public static JsonMmi fromJson(final String json) {
         final GsonBuilder builder = new GsonBuilder()
                 .registerTypeAdapter(JsonMmi.class, new JsonMmiDeserializer())
-                .registerTypeAdapter(CancelRequest.class, new CancelRequestDeserializer());
+                .registerTypeAdapter(CancelRequest.class,
+                        new CancelRequestDeserializer())
+                .registerTypeAdapter(ClearContextRequest.class,
+                        new ClearContextRequestDeserializer())
+                .registerTypeAdapter(ExtensionNotification.class,
+                        new ExtensionNotificationDeserializer())
+                .registerTypeAdapter(NewContextRequest.class,
+                        new NewContextRequestDeserializer())
+                .registerTypeAdapter(PauseRequest.class,
+                        new PauseRequestDeserializer())
+                .registerTypeAdapter(PrepareRequest.class,
+                        new PrepareRequestDeserializer())
+                .registerTypeAdapter(ResumeRequest.class,
+                        new ResumeRequestDeserializer())
+                .registerTypeAdapter(StartRequest.class,
+                        new StartRequestDeserializer())
+                .registerTypeAdapter(StatusRequest.class,
+                        new StatusRequestDeserializer());
         final Gson gson = builder.create();
         return gson.fromJson(json, JsonMmi.class);
     }
 
     /**
      * Converts JSON into a {@link JsonMmi} object.
-     * @param json the JSON to parse
-     * @param dataType type of the object in the data section
+     * 
+     * @param json
+     *            the JSON to parse
+     * @param dataType
+     *            type of the object in the data section
      * @return parsed object
      */
     public static JsonMmi fromJson(final String json, final Type dataType,
@@ -113,13 +144,29 @@ public class JsonMmi {
         final GsonBuilder builder = new GsonBuilder()
                 .registerTypeAdapter(JsonMmi.class, new JsonMmiDeserializer())
                 .registerTypeAdapter(CancelRequest.class,
-                        new CancelRequestDeserializer(dataType));
+                        new CancelRequestDeserializer(dataType))
+                .registerTypeAdapter(ClearContextRequest.class,
+                        new ClearContextRequestDeserializer(dataType))
+                .registerTypeAdapter(ExtensionNotification.class,
+                        new ExtensionNotificationDeserializer(dataType))
+                .registerTypeAdapter(NewContextRequest.class,
+                        new NewContextRequestDeserializer(dataType))
+                .registerTypeAdapter(PauseRequest.class,
+                        new PauseRequestDeserializer(dataType))
+                .registerTypeAdapter(PrepareRequest.class,
+                        new PrepareRequestDeserializer(dataType))
+                .registerTypeAdapter(ResumeRequest.class,
+                        new ResumeRequestDeserializer(dataType))
+                .registerTypeAdapter(StartRequest.class,
+                        new StartRequestDeserializer(dataType))
+                .registerTypeAdapter(StatusRequest.class,
+                        new StatusRequestDeserializer(dataType));
         for (JsonDeserializerConfiguration current : deserializers) {
             final Type type = current.getType();
             final JsonDeserializer<?> deserializer = current.getDeserializer();
             builder.registerTypeAdapter(type, deserializer);
         }
-        final Gson gson =  builder.create();
+        final Gson gson = builder.create();
         return gson.fromJson(json, JsonMmi.class);
     }
 

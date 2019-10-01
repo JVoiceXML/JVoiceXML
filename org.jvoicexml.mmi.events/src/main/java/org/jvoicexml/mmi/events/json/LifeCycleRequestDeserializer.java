@@ -22,19 +22,24 @@ package org.jvoicexml.mmi.events.json;
 
 import java.lang.reflect.Type;
 
-import org.jvoicexml.mmi.events.CancelRequest;
+import org.jvoicexml.mmi.events.LifeCycleRequest;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 /**
- * A deserializer for {@link CancelRequest}.
+ * A deserializer for {@link LifeCycleRequest}s.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class CancelRequestDeserializer extends LifeCycleRequestDeserializer<CancelRequest> {
+abstract class LifeCycleRequestDeserializer<T extends LifeCycleRequest> extends LifeCycleEventDeserializer<T> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Obejct}.
      */
-    public CancelRequestDeserializer() {
+    public LifeCycleRequestDeserializer() {
     }
     
     /**
@@ -42,7 +47,7 @@ final class CancelRequestDeserializer extends LifeCycleRequestDeserializer<Cance
      * type {@code type}.
      * @param type type of the object in the data field
      */
-    public CancelRequestDeserializer(final Type type) {
+    public LifeCycleRequestDeserializer(final Type type) {
         super(type);
     }
     
@@ -50,7 +55,12 @@ final class CancelRequestDeserializer extends LifeCycleRequestDeserializer<Cance
      * {@inheritDoc}
      */
     @Override
-    CancelRequest createLifeCycleEvent() {
-        return new CancelRequest();
+    public T deserialize(JsonElement json, Type typeOfT,
+            JsonDeserializationContext context) throws JsonParseException {
+        final T request = super.deserialize(json, typeOfT, context);
+        final JsonObject object = json.getAsJsonObject();
+        final String ctx = getAsString(object, "context");
+        request.setContext(ctx);
+        return request;
     }
-}
+    }

@@ -22,19 +22,24 @@ package org.jvoicexml.mmi.events.json;
 
 import java.lang.reflect.Type;
 
-import org.jvoicexml.mmi.events.CancelRequest;
+import org.jvoicexml.mmi.events.StatusRequest;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 /**
- * A deserializer for {@link CancelRequest}.
+ * A deserializer for {@link StatusRequest}.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class CancelRequestDeserializer extends LifeCycleRequestDeserializer<CancelRequest> {
+final class StartRequestDeserializer extends LifeCycleEventDeserializer<StatusRequest> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Obejct}.
      */
-    public CancelRequestDeserializer() {
+    public StartRequestDeserializer() {
     }
     
     /**
@@ -42,7 +47,7 @@ final class CancelRequestDeserializer extends LifeCycleRequestDeserializer<Cance
      * type {@code type}.
      * @param type type of the object in the data field
      */
-    public CancelRequestDeserializer(final Type type) {
+    public StartRequestDeserializer(final Type type) {
         super(type);
     }
     
@@ -50,7 +55,23 @@ final class CancelRequestDeserializer extends LifeCycleRequestDeserializer<Cance
      * {@inheritDoc}
      */
     @Override
-    CancelRequest createLifeCycleEvent() {
-        return new CancelRequest();
+    public StatusRequest deserialize(JsonElement json, Type typeOfT,
+            JsonDeserializationContext context) throws JsonParseException {
+        final StatusRequest request =
+                super.deserialize(json, typeOfT, context);
+        final JsonObject object = json.getAsJsonObject();
+        if (object.has("context")) {
+            final String ctx = getAsString(object, "context");
+            request.setContext(ctx);
+        }
+        return request;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    StatusRequest createLifeCycleEvent() {
+        return new StatusRequest();
     }
 }

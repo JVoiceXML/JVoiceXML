@@ -105,7 +105,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
 
     /**
      * Sets the class server port.
-     * @param port
+     * @param port port of the class server
      * @since 0.7.9
      */
     public void setClassServerPort(final int port) {
