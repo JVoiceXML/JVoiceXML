@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 201-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +22,8 @@
 
 package org.jvoicexml.mmi.events;
 
+import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -35,7 +32,6 @@ import org.w3c.dom.Element;
 /**
  * Base class for MMI lifecycle responses.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  *
  */
@@ -54,6 +50,32 @@ public class LifeCycleResponse extends LifeCycleEvent {
      */
     public LifeCycleResponse() {
         super();
+    }
+
+    /**
+     * Constructs a new object with the provided values.
+     * @param requestId the request id
+     * @param source the source
+     * @param target the target
+     * @since 0.7.9
+     */
+    public LifeCycleResponse(final String requestId, final String source,
+            final String target) {
+        super(requestId, source, target);
+    }
+
+    /**
+     * Constructs a new object with the provided values.
+     * @param requestId the request id
+     * @param source the source
+     * @param target the target
+     * @param ctx the context
+     * @since 0.7.9
+     */
+    public LifeCycleResponse(final String requestId, final String source,
+            final String target, final String ctx) {
+        super(requestId, source, target);
+        context = ctx;
     }
 
     /**
@@ -154,5 +176,35 @@ public class LifeCycleResponse extends LifeCycleEvent {
             statusInfo = new AnyComplexType();
         }
         statusInfo.addContent(element);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Objects.hash(context, status, statusInfo);
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof LifeCycleResponse)) {
+            return false;
+        }
+        LifeCycleResponse other = (LifeCycleResponse) obj;
+        return Objects.equals(context, other.context) && status == other.status
+                && Objects.equals(statusInfo, other.statusInfo);
     }
 }

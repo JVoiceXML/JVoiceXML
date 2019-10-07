@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -27,12 +22,13 @@
 
 package org.jvoicexml.mmi.events;
 
+import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
  * Base class for MMI lifecycle requests.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  *
  */
@@ -45,6 +41,32 @@ public class LifeCycleRequest extends LifeCycleEvent {
      */
     public LifeCycleRequest() {
         super();
+    }
+
+    /**
+     * Constructs a new object with the provided values.
+     * @param requestId the request id
+     * @param source the source
+     * @param target the target
+     * @since 0.7.9
+     */
+    public LifeCycleRequest(final String requestId, final String source,
+            final String target) {
+        super(requestId, source, target);
+    }
+
+    /**
+     * Constructs a new object with the provided values.
+     * @param requestId the request id
+     * @param source the source
+     * @param target the target
+     * @param ctx the context
+     * @since 0.7.9
+     */
+    public LifeCycleRequest(final String requestId, final String source,
+            final String target, final String ctx) {
+        super(requestId, source, target);
+        context = ctx;
     }
 
     /**
@@ -69,4 +91,32 @@ public class LifeCycleRequest extends LifeCycleEvent {
         context = value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Objects.hash(context);
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof LifeCycleRequest)) {
+            return false;
+        }
+        LifeCycleRequest other = (LifeCycleRequest) obj;
+        return Objects.equals(context, other.context);
+    }
 }

@@ -1,0 +1,21 @@
+{
+  "context": "context1",
+  "status": "SUCCESS",
+  "statusInfo": [
+    "ois is guat"
+  ],
+  "requestID": "request1",
+  "source": "source1",
+  "target": "target1",
+  "data": [
+    {
+      "value": "lamm2",
+      "bars": [
+        {
+          "value": "hurz2"
+        }
+      ]
+    }
+  ],
+  "mmi": "CancelResponse"
+}

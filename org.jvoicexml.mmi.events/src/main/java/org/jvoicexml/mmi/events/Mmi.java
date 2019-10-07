@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +24,7 @@ package org.jvoicexml.mmi.events;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -115,7 +111,6 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -678,5 +673,57 @@ public final class Mmi implements Serializable {
         } catch (JAXBException e) {
             return super.toString();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(cancelRequest, cancelResponse, clearContextRequest,
+                clearContextResponse, doneNotification, extensionNotification,
+                newContextRequest, newContextResponse, pauseRequest,
+                pauseResponse, prepareRequest, prepareResponse, resumeRequest,
+                resumeResponse, startRequest, startResponse, statusRequest,
+                statusResponse, version);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Mmi)) {
+            return false;
+        }
+        Mmi other = (Mmi) obj;
+        return Objects.equals(cancelRequest, other.cancelRequest)
+                && Objects.equals(cancelResponse, other.cancelResponse)
+                && Objects.equals(clearContextRequest,
+                        other.clearContextRequest)
+                && Objects.equals(clearContextResponse,
+                        other.clearContextResponse)
+                && Objects.equals(doneNotification, other.doneNotification)
+                && Objects.equals(extensionNotification,
+                        other.extensionNotification)
+                && Objects.equals(newContextRequest, other.newContextRequest)
+                && Objects.equals(newContextResponse, other.newContextResponse)
+                && Objects.equals(pauseRequest, other.pauseRequest)
+                && Objects.equals(pauseResponse, other.pauseResponse)
+                && Objects.equals(prepareRequest, other.prepareRequest)
+                && Objects.equals(prepareResponse, other.prepareResponse)
+                && Objects.equals(resumeRequest, other.resumeRequest)
+                && Objects.equals(resumeResponse, other.resumeResponse)
+                && Objects.equals(startRequest, other.startRequest)
+                && Objects.equals(startResponse, other.startResponse)
+                && Objects.equals(statusRequest, other.statusRequest)
+                && Objects.equals(statusResponse, other.statusResponse)
+                && Objects.equals(version, other.version);
     }
 }

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +22,7 @@
 package org.jvoicexml.mmi.events;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
@@ -56,7 +52,6 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.7.6
  */
 @XmlType(name = "contentURLType")
 public final class ContentURLType implements Serializable {
@@ -140,4 +135,31 @@ public final class ContentURLType implements Serializable {
         fetchtimeout = value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(fetchtimeout, href, maxAge);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof ContentURLType)) {
+            return false;
+        }
+        ContentURLType other = (ContentURLType) obj;
+        return Objects.equals(fetchtimeout, other.fetchtimeout)
+                && Objects.equals(href, other.href)
+                && Objects.equals(maxAge, other.maxAge);
+    }
 }

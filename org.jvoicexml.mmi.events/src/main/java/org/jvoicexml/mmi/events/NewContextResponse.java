@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,11 +26,54 @@ import java.io.Serializable;
 /**
  * An MMI new context response.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public final class NewContextResponse extends LifeCycleResponse
     implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = -7705362653556599214L;
+
+    /**
+     * Constructs a new object.
+     */
+    public NewContextResponse() {
+    }
+
+    /**
+     * Constructs a new object with the provided values.
+     * @param requestId the request id
+     * @param source the source
+     * @param target the target
+     * @param context the context
+     * @since 0.7.9
+     */
+    public NewContextResponse(final String requestId, final String source,
+            final String target, final String context) {
+        super(requestId, source, target, context);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof NewContextResponse)) {
+            return false;
+        }
+        return true;
+    }
 }

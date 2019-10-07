@@ -46,23 +46,22 @@ import org.apache.logging.log4j.Logger;
  * extended and the concrete subclass should define the <b>getBytes</b> method
  * which is responsible for retrieving the bytecodes for a class.
  * <p>
- *
  * The ClassServer creates a thread that listens on a socket and accepts HTTP
  * GET requests. The HTTP response contains the bytecodes for the class that
  * requested in the GET header.
+ * </p>
  * <p>
- *
  * For loading remote classes, an RMI application can use a concrete subclass of
  * this server in place of an HTTP server.
- * <p>
+ * </p>
  */
 public abstract class ClassServer implements Runnable {
     /** Logger instance. */
     private static final Logger LOGGER = LogManager
             .getLogger(ClassServer.class);
 
-    private ServerSocket server = null;
-    private final int port;
+    /** The server socket to handle code downloads. */
+    private final ServerSocket server;
 
     /**
      * Constructs a ClassServer that listens on <b>port</b> and obtains a
@@ -74,7 +73,6 @@ public abstract class ClassServer implements Runnable {
      *                if the ClassServer could not listen on <b>port</b>.
      */
     protected ClassServer(int port) throws IOException {
-        this.port = port;
         server = new ServerSocket(port);
         newListener();
         LOGGER.info("class server started on port " + port);

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,11 +26,54 @@ import java.io.Serializable;
 /**
  * An MMI prepare response.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public final class PrepareResponse extends LifeCycleResponse
     implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = -5792903636309992682L;
+
+    /**
+     * Constructs a new object.
+     */
+    public PrepareResponse() {
+    }
+
+    /**
+     * Constructs a new object with the provided values.
+     * @param requestId the request id
+     * @param source the source
+     * @param target the target
+     * @param context the context
+     * @since 0.7.9
+     */
+    public PrepareResponse(final String requestId, final String source,
+            final String target, final String context) {
+        super(requestId, source, target, context);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof PrepareResponse)) {
+            return false;
+        }
+        return true;
+    }
 }

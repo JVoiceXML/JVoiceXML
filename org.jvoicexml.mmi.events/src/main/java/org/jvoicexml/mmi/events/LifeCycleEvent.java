@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,13 +22,14 @@
 
 package org.jvoicexml.mmi.events;
 
+import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
  * Basic MMI Lifecycle attributes.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public class LifeCycleEvent {
@@ -60,6 +56,20 @@ public class LifeCycleEvent {
         super();
     }
 
+    /**
+     * Constructs a new object with the provided values.
+     * @param id the request id
+     * @param src the source
+     * @param trgt the target
+     * @since 0.7.9
+     */
+    public LifeCycleEvent(final String id, final String src,
+            final String trgt) {
+        requestID = id;
+        source = src;
+        target = trgt;
+    }
+    
     /**
      * Gets the value of the requestID property.
      * 
@@ -141,5 +151,34 @@ public class LifeCycleEvent {
      */
     public final void setData(final AnyComplexType value) {
         data = value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(data, requestID, source, target);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof LifeCycleEvent)) {
+            return false;
+        }
+        LifeCycleEvent other = (LifeCycleEvent) obj;
+        return Objects.equals(data, other.data)
+                && Objects.equals(requestID, other.requestID)
+                && Objects.equals(source, other.source)
+                && Objects.equals(target, other.target);
     }
 }

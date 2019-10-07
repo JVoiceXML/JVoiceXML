@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2013-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,13 +24,13 @@ package org.jvoicexml.mmi.events;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URL;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlElement;
 
 /**
  * An MMI prepare request.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public final class PrepareRequest extends LifeCycleRequest
@@ -49,6 +44,25 @@ public final class PrepareRequest extends LifeCycleRequest
     /** Arbitrary content. */
     private AnyComplexType content;
 
+    /**
+     * Constructs a new object.
+     */
+    public PrepareRequest() {
+    }
+
+    /**
+     * Constructs a new object with the provided values.
+     * @param requestId the request id
+     * @param source the source
+     * @param target the target
+     * @param context the context
+     * @since 0.7.9
+     */
+    public PrepareRequest(final String requestId, final String source,
+            final String target, final String context) {
+        super(requestId, source, target, context);
+    }
+    
     /**
      * Gets the value of the contentURL property.
      * 
@@ -123,6 +137,36 @@ public final class PrepareRequest extends LifeCycleRequest
      */
     public void setContent(final AnyComplexType value) {
         content = value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Objects.hash(content, contentURL);
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof PrepareRequest)) {
+            return false;
+        }
+        PrepareRequest other = (PrepareRequest) obj;
+        return Objects.equals(content, other.content)
+                && Objects.equals(contentURL, other.contentURL);
     }
 }
 
