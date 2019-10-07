@@ -9,10 +9,4 @@
 		<serializable />
 		<xjc:superInterface name="org.jvoicexml.mmi.events.xml.MMIEvent" />
 	</globalBindings>
-
-	<!-- bindings schemaLocation="xsd/StartRequest.xsd" node="/xs:schema">
-		<bindings node="//xs:element[position() == 1]">
-			<property name="dataAttibute" />
-		</bindings>
-	</bindings-->
 </bindings>

@@ -22,35 +22,37 @@ package org.jvoicexml.mmi.events.json;
 
 import java.lang.reflect.Type;
 
-import org.jvoicexml.mmi.events.ResumeRequest;
+import org.jvoicexml.mmi.events.ResumeResponse;
+
 
 /**
- * A deserializer for {@link ResumeRequest}.
+ * A deserializer for {@link ResumeResponse}.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class ResumeRequestDeserializer extends LifeCycleRequestDeserializer<ResumeRequest> {
+final class ResumeResponseDeserializer extends LifeCycleResponseDeserializer<ResumeResponse> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public ResumeRequestDeserializer() {
+    public ResumeResponseDeserializer() {
     }
     
     /**
      * Constructs a new object assuming the data field containing an object of
      * type {@code type}.
-     * @param type type of the object in the data field
+     * @param data type of the object in the data field
+     * @param statusInfo type of the object in the status field
      */
-    public ResumeRequestDeserializer(final Type type) {
-        super(type);
+    public ResumeResponseDeserializer(final Type data, final Type statusInfo) {
+        super(data, statusInfo);
     }
     
     /**
      * {@inheritDoc}
      */
     @Override
-    ResumeRequest createLifeCycleEvent() {
-        return new ResumeRequest();
+    ResumeResponse createLifeCycleEvent() {
+        return new ResumeResponse();
     }
 }

@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 /**
  * An MMI status request.
+ * Since the {@code context} attribute is optional, this {@link LifeCycleEvent}
+ * must not inherit from {@link org.jvoicexml.mmi.events.LifeCycleRequest}.
  * @author Dirk Schnelle-Walka
  * @since 0.7.6
  */

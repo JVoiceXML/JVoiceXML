@@ -32,7 +32,7 @@ import org.jvoicexml.mmi.events.CancelRequest;
 final class CancelRequestDeserializer extends LifeCycleRequestDeserializer<CancelRequest> {
     /**
      * Constructs a new object assuming the data field contains any
-     * {@link Obejct}.
+     * {@link Object}.
      */
     public CancelRequestDeserializer() {
     }
@@ -40,10 +40,10 @@ final class CancelRequestDeserializer extends LifeCycleRequestDeserializer<Cance
     /**
      * Constructs a new object assuming the data field containing an object of
      * type {@code type}.
-     * @param type type of the object in the data field
+     * @param data type of the object in the data field
      */
-    public CancelRequestDeserializer(final Type type) {
-        super(type);
+    public CancelRequestDeserializer(final Type data) {
+        super(data);
     }
     
     /**

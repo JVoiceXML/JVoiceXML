@@ -30,8 +30,10 @@ import org.junit.Test;
 import org.jvoicexml.mmi.events.AnyComplexType;
 import org.jvoicexml.mmi.events.Bar;
 import org.jvoicexml.mmi.events.CancelRequest;
+import org.jvoicexml.mmi.events.CancelResponse;
 import org.jvoicexml.mmi.events.Foo;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.StatusType;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -70,7 +72,7 @@ public class JsonMmiTest {
      *          test failed
      */
     @Test
-    public void testToJson() throws IOException {
+    public void testToJsonCancelRequest() throws IOException {
         final JsonMmi mmi = new JsonMmi();
         final CancelRequest request = new CancelRequest();
         mmi.setLifeCycleEvent(request);
@@ -94,7 +96,7 @@ public class JsonMmiTest {
     }
 
     @Test
-    public void testFromJsonNoData() throws IOException {
+    public void testFromJsonCancelRequestNoData() throws IOException {
         final String json = getResourceAsString("/CancelRequestNoData.json");
         final JsonMmi mmi = JsonMmi.fromJson(json);
         final LifeCycleEvent event = mmi.getLifeCycleEvent();
@@ -134,10 +136,11 @@ public class JsonMmiTest {
     }
     
     @Test
-    public void testFromJson() throws IOException {
+    public void testFromJsonCancelRequest() throws IOException {
         final String json = getResourceAsString("/CancelRequest.json");
         final JsonDeserializerConfiguration foodeser = new JsonDeserializerConfiguration(Foo.class, new FooDeserializer());
-        final JsonMmi mmi = JsonMmi.fromJson(json, Foo.class, foodeser);
+        final JsonMmi mmi = JsonMmi.fromJson(json, Foo.class, Object.class, 
+                foodeser);
         final JsonMmi otherMmi = new JsonMmi();
         final CancelRequest request = new CancelRequest();
         otherMmi.setLifeCycleEvent(request);
@@ -155,6 +158,65 @@ public class JsonMmiTest {
         final AnyComplexType data = new AnyComplexType();
         data.addContent(foo);
         request.setData(data);
+        Assert.assertEquals(otherMmi, mmi);
+    }
+
+    /**
+     * Test case for {@link JsonMmi#toJson()}.
+     * @throws IOException
+     *          test failed
+     */
+    @Test
+    public void testToJsonCancelResponse() throws IOException {
+        final JsonMmi mmi = new JsonMmi();
+        final CancelResponse response = new CancelResponse();
+        mmi.setLifeCycleEvent(response);
+        response.setRequestId("request1");
+        response.setSource("source1");
+        response.setTarget("target1");
+        response.setContext("context1");
+        final Bar bar = new Bar();
+        bar.setValue("hurz2");
+        final Foo foo = new Foo();
+        final AnyComplexType any = new AnyComplexType();
+        any.addContent(bar);
+        foo.setBars(any);
+        foo.setValue("lamm2");
+        final AnyComplexType data = new AnyComplexType();
+        data.addContent(foo);
+        response.setData(data);
+        response.setStatus(StatusType.SUCCESS);
+        response.addStatusInfo("ois is guat");
+        final String json = mmi.toJson();
+        final String ref = getResourceAsString("/CancelResponse.json");
+        Assert.assertEquals(ref, json);
+    }
+
+    @Test
+    public void testFromJsonCancelResponse() throws IOException {
+        final String json = getResourceAsString("/CancelResponse.json");
+        final JsonDeserializerConfiguration foodeser = new JsonDeserializerConfiguration(Foo.class, new FooDeserializer());
+        final JsonMmi mmi = JsonMmi.fromJson(json, Foo.class, String.class, 
+                foodeser);
+        final JsonMmi otherMmi = new JsonMmi();
+        final CancelResponse response = new CancelResponse();
+        otherMmi.setLifeCycleEvent(response);
+        response.setRequestId("request1");
+        response.setSource("source1");
+        response.setTarget("target1");
+        response.setContext("context1");
+        final Bar bar = new Bar();
+        bar.setValue("hurz2");
+        final Foo foo = new Foo();
+        final AnyComplexType any = new AnyComplexType();
+        any.addContent(bar);
+        foo.setBars(any);
+        foo.setValue("lamm2");
+        final AnyComplexType data = new AnyComplexType();
+        data.addContent(foo);
+        response.setData(data);
+        response.setStatus(StatusType.SUCCESS);
+        response.addStatusInfo("ois is guat");
         Assert.assertEquals(otherMmi, mmi);
     }
 }

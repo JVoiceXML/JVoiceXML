@@ -32,7 +32,7 @@ import org.jvoicexml.mmi.events.PrepareRequest;
 final class PrepareRequestDeserializer extends LifeCycleRequestDeserializer<PrepareRequest> {
     /**
      * Constructs a new object assuming the data field contains any
-     * {@link Obejct}.
+     * {@link Object}.
      */
     public PrepareRequestDeserializer() {
     }

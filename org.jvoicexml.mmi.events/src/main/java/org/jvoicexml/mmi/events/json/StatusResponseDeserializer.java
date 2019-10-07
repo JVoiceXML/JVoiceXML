@@ -22,56 +22,79 @@ package org.jvoicexml.mmi.events.json;
 
 import java.lang.reflect.Type;
 
-import org.jvoicexml.mmi.events.StatusRequest;
+import org.jvoicexml.mmi.events.AnyComplexType;
+import org.jvoicexml.mmi.events.StatusResponse;
+import org.jvoicexml.mmi.events.StatusResponseType;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 /**
- * A deserializer for {@link StatusRequest}.
+ * A deserializer for {@link StatusResponse}.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class StartRequestDeserializer extends LifeCycleEventDeserializer<StatusRequest> {
+final class StatusResponseDeserializer extends LifeCycleEventDeserializer<StatusResponse> {
+    /** Type of the statusInfo field. */
+    private final Type statusInfoType;
+
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public StartRequestDeserializer() {
+    public StatusResponseDeserializer() {
+        this(Object.class, Object.class);
     }
     
     /**
      * Constructs a new object assuming the data field containing an object of
      * type {@code type}.
      * @param type type of the object in the data field
+     * @param statusInfo type of the object in the status field
      */
-    public StartRequestDeserializer(final Type type) {
-        super(type);
+    public StatusResponseDeserializer(final Type data, final Type statusInfo) {
+        super(data);
+        statusInfoType = statusInfo;
     }
     
     /**
      * {@inheritDoc}
      */
     @Override
-    public StatusRequest deserialize(JsonElement json, Type typeOfT,
+    StatusResponse createLifeCycleEvent() {
+        return new StatusResponse();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public StatusResponse deserialize(JsonElement json, Type typeOfT,
             JsonDeserializationContext context) throws JsonParseException {
-        final StatusRequest request =
+        final StatusResponse response =
                 super.deserialize(json, typeOfT, context);
         final JsonObject object = json.getAsJsonObject();
         if (object.has("context")) {
             final String ctx = getAsString(object, "context");
-            request.setContext(ctx);
+            response.setContext(ctx);
         }
-        return request;
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    StatusRequest createLifeCycleEvent() {
-        return new StatusRequest();
+        final String statusString = getAsString(object, "status");
+        final StatusResponseType status = StatusResponseType.valueOf(statusString);
+        response.setStatus(status);
+        if (object.has("statusInfo")) {
+            final AnyComplexType any = new AnyComplexType();
+            final JsonElement dataElement = object.get("statusInfo");
+            final JsonArray statusInfo = dataElement.getAsJsonArray();
+            for (int i=0; i< statusInfo.size(); i++) {
+                final JsonElement current = statusInfo.get(i);
+                final Object o = context.deserialize(current, statusInfoType);
+                any.addContent(o);
+            }
+            response.setStatusInfo(any);
+        }
+        return response;
     }
 }

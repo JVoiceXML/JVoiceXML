@@ -21,9 +21,27 @@
 package org.jvoicexml.mmi.events.json;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 
 import org.jvoicexml.mmi.events.CancelRequest;
+import org.jvoicexml.mmi.events.CancelResponse;
+import org.jvoicexml.mmi.events.ClearContextRequest;
+import org.jvoicexml.mmi.events.ClearContextResponse;
+import org.jvoicexml.mmi.events.DoneNotification;
+import org.jvoicexml.mmi.events.ExtensionNotification;
 import org.jvoicexml.mmi.events.LifeCycleEvent;
+import org.jvoicexml.mmi.events.NewContextRequest;
+import org.jvoicexml.mmi.events.NewContextResponse;
+import org.jvoicexml.mmi.events.PauseRequest;
+import org.jvoicexml.mmi.events.PauseResponse;
+import org.jvoicexml.mmi.events.PrepareRequest;
+import org.jvoicexml.mmi.events.PrepareResponse;
+import org.jvoicexml.mmi.events.ResumeRequest;
+import org.jvoicexml.mmi.events.ResumeResponse;
+import org.jvoicexml.mmi.events.StartRequest;
+import org.jvoicexml.mmi.events.StartResponse;
+import org.jvoicexml.mmi.events.StatusRequest;
+import org.jvoicexml.mmi.events.StatusResponse;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -33,10 +51,46 @@ import com.google.gson.JsonParseException;
 
 /**
  * A deserializer for {@link JsonMmi}.
+ * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
 final class JsonMmiDeserializer implements JsonDeserializer<JsonMmi> {
+    final static Map<String, Type> MMI_TYPES;
+
+    static {
+        MMI_TYPES = new java.util.HashMap<String, Type>();
+        MMI_TYPES.put(CancelRequest.class.getSimpleName(), CancelRequest.class);
+        MMI_TYPES.put(CancelResponse.class.getSimpleName(),
+                CancelResponse.class);
+        MMI_TYPES.put(ClearContextRequest.class.getSimpleName(),
+                ClearContextRequest.class);
+        MMI_TYPES.put(ClearContextResponse.class.getSimpleName(),
+                ClearContextResponse.class);
+        MMI_TYPES.put(DoneNotification.class.getSimpleName(),
+                DoneNotification.class);
+        MMI_TYPES.put(ExtensionNotification.class.getSimpleName(),
+                ExtensionNotification.class);
+        MMI_TYPES.put(NewContextRequest.class.getSimpleName(),
+                NewContextRequest.class);
+        MMI_TYPES.put(NewContextResponse.class.getSimpleName(),
+                NewContextResponse.class);
+        MMI_TYPES.put(PauseRequest.class.getSimpleName(), PauseRequest.class);
+        MMI_TYPES.put(PauseResponse.class.getSimpleName(), PauseResponse.class);
+        MMI_TYPES.put(PrepareRequest.class.getSimpleName(),
+                PrepareRequest.class);
+        MMI_TYPES.put(PrepareResponse.class.getSimpleName(),
+                PrepareResponse.class);
+        MMI_TYPES.put(ResumeRequest.class.getSimpleName(), ResumeRequest.class);
+        MMI_TYPES.put(ResumeResponse.class.getSimpleName(),
+                ResumeResponse.class);
+        MMI_TYPES.put(StartRequest.class.getSimpleName(), StartRequest.class);
+        MMI_TYPES.put(StartResponse.class.getSimpleName(), StartResponse.class);
+        MMI_TYPES.put(StatusRequest.class.getSimpleName(), StatusRequest.class);
+        MMI_TYPES.put(StatusResponse.class.getSimpleName(),
+                StatusResponse.class);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -44,14 +98,14 @@ final class JsonMmiDeserializer implements JsonDeserializer<JsonMmi> {
     public JsonMmi deserialize(JsonElement json, Type typeOfT,
             JsonDeserializationContext context) throws JsonParseException {
         final JsonObject object = json.getAsJsonObject();
-        final JsonElement mmiType = object.get("mmi");
-        final String typeName = mmiType.getAsString();
-        final LifeCycleEvent event;
-        if (typeName.equalsIgnoreCase(CancelRequest.class.getSimpleName())) {
-            event = context.deserialize(json, CancelRequest.class);
-        } else {
-            throw new JsonParseException("Unable to identify MMI type");
+        final JsonElement mmiTypeElement = object.get("mmi");
+        final String typeName = mmiTypeElement.getAsString();
+        final Type mmiType = MMI_TYPES.get(typeName);
+        if (mmiType == null) {
+            throw new JsonParseException(
+                    "Unable to identify MMI type '" + typeName + "'");
         }
+        final LifeCycleEvent event = context.deserialize(json, mmiType);
         return new JsonMmi(event);
     }
 

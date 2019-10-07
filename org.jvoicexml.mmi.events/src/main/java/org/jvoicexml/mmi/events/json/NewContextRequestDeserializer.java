@@ -32,7 +32,7 @@ import org.jvoicexml.mmi.events.NewContextRequest;
 final class NewContextRequestDeserializer extends LifeCycleRequestDeserializer<NewContextRequest> {
     /**
      * Constructs a new object assuming the data field contains any
-     * {@link Obejct}.
+     * {@link Object}.
      */
     public NewContextRequestDeserializer() {
     }

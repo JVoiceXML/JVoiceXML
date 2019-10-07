@@ -22,17 +22,22 @@ package org.jvoicexml.mmi.events.json;
 
 import java.lang.reflect.Type;
 
-import org.jvoicexml.mmi.events.StartRequest;
+import org.jvoicexml.mmi.events.StatusRequest;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 /**
- * A deserializer for {@link StartRequest}.
+ * A deserializer for {@link StatusRequest}.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class StatusRequestDeserializer extends LifeCycleRequestDeserializer<StartRequest> {
+final class StatusRequestDeserializer extends LifeCycleEventDeserializer<StatusRequest> {
     /**
      * Constructs a new object assuming the data field contains any
-     * {@link Obejct}.
+     * {@link Object}.
      */
     public StatusRequestDeserializer() {
     }
@@ -50,7 +55,28 @@ final class StatusRequestDeserializer extends LifeCycleRequestDeserializer<Start
      * {@inheritDoc}
      */
     @Override
-    StartRequest createLifeCycleEvent() {
-        return new StartRequest();
+    StatusRequest createLifeCycleEvent() {
+        return new StatusRequest();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public StatusRequest deserialize(JsonElement json, Type typeOfT,
+            JsonDeserializationContext context) throws JsonParseException {
+        final StatusRequest request =
+                super.deserialize(json, typeOfT, context);
+        final JsonObject object = json.getAsJsonObject();
+        if (object.has("context")) {
+            final String ctx = getAsString(object, "context");
+            request.setContext(ctx);
+        }
+        if (object.has("requestAutomaticUpdate")) {
+            final JsonElement automaticUpdateElement = object.get("requestAutomaticUpdate");
+            final boolean automaticUpdate = automaticUpdateElement.getAsBoolean();
+            request.setRequestAutomaticUpdate(automaticUpdate);
+        }
+        return request;
     }
 }

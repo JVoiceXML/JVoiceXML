@@ -42,24 +42,24 @@ abstract class LifeCycleEventDeserializer<T extends LifeCycleEvent>
     /** Type of the data field. */
     private final Type dataType;
     
-    /** The desirialized event. */
+    /** The deserialized event. */
     protected T event;
     
     /**
      * Constructs a new object assuming the data field contains any
-     * {@link Obejct}.
+     * {@link Object}.
      */
     public LifeCycleEventDeserializer() {
-        dataType = Object.class;
+        this(Object.class);
     }
-    
+
     /**
      * Constructs a new object assuming the data field containing an object of
      * type {@code type}.
-     * @param type type of the object in the data field
+     * @param data type of the object in the data field
      */
-    public LifeCycleEventDeserializer(final Type type) {
-        dataType = type;
+    public LifeCycleEventDeserializer(final Type data) {
+        dataType = data;
     }
     
     /**

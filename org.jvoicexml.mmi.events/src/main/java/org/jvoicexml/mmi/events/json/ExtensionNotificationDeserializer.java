@@ -37,7 +37,7 @@ import com.google.gson.JsonParseException;
 final class ExtensionNotificationDeserializer extends LifeCycleRequestDeserializer<ExtensionNotification> {
     /**
      * Constructs a new object assuming the data field contains any
-     * {@link Obejct}.
+     * {@link Object}.
      */
     public ExtensionNotificationDeserializer() {
     }

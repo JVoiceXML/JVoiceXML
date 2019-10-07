@@ -37,7 +37,7 @@ import com.google.gson.JsonParseException;
 abstract class LifeCycleRequestDeserializer<T extends LifeCycleRequest> extends LifeCycleEventDeserializer<T> {
     /**
      * Constructs a new object assuming the data field contains any
-     * {@link Obejct}.
+     * {@link Object}.
      */
     public LifeCycleRequestDeserializer() {
     }
@@ -63,4 +63,4 @@ abstract class LifeCycleRequestDeserializer<T extends LifeCycleRequest> extends 
         request.setContext(ctx);
         return request;
     }
-    }
+}
