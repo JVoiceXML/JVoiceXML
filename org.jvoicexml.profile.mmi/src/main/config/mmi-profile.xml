@@ -2,16 +2,17 @@
 <profile xmlns:beans="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="jvxml-profile-0-7.xsd">
-    <repository>vxml21</repository>
+    <repository>mmi-http</repository>
     <classpath>org.jvoicexml.profile.vxml21-@@VERSION@@.jar</classpath>
+    <classpath>org.jvoicexml.profile.mmi-@@VERSION@@.jar</classpath>
 
     <!-- Tag strategies for the VoiceXML 21 profile -->
     <beans:bean id="org.jvoicexml.profile.Profile"
-        class="org.jvoicexml.profile.vxml21.VoiceXml21Profile" scope="singleton">
+        class="org.jvoicexml.profile.mmi.MmiProfile" scope="singleton">
         <!-- Initialization of form items -->
         <beans:property name="initializationTagStrategyFactory">
             <beans:bean
-                class="org.jvoicexml.profile.vxml21.VoiceXml21TagStrategyFactory">
+                class="org.jvoicexml.profile.mmi.MmiTagStrategyFactory">
                 <beans:property name="tagStrategies">
                     <beans:map>
                         <beans:entry key="data">
@@ -21,6 +22,10 @@
                         <beans:entry key="grammar">
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.GrammarStrategy" />
+                        </beans:entry>
+                        <beans:entry key="log">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.LogStrategy" />
                         </beans:entry>
                         <beans:entry key="meta">
                             <beans:bean
@@ -34,6 +39,10 @@
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.ScriptStrategy" />
                         </beans:entry>
+                        <beans:entry key="#text">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.TextStrategy" />
+                        </beans:entry>
                         <beans:entry key="var">
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.VarStrategy" />
@@ -46,7 +55,7 @@
         <!-- pure tag execution -->
         <beans:property name="tagStrategyFactory">
             <beans:bean
-                class="org.jvoicexml.profile.vxml21.VoiceXml21TagStrategyFactory">
+                class="org.jvoicexml.profile.mmi.MmiTagStrategyFactory">
                 <beans:property name="tagStrategies">
                     <beans:map>
                         <beans:entry key="assign">
@@ -128,6 +137,14 @@
                         <beans:entry key="var">
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.VarStrategy" />
+                        </beans:entry>
+                        <beans:entry key="send">
+                            <beans:bean
+                                class="org.jvoicexml.profile.mmi.tagstrategy.SendStrategy" />
+                        </beans:entry>
+                        <beans:entry key="receive">
+                            <beans:bean
+                                class="org.jvoicexml.profile.mmi.tagstrategy.ReceiveStrategy" />
                         </beans:entry>
                     </beans:map>
                 </beans:property>

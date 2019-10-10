@@ -19,6 +19,10 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    jvxmlConfiguration
+}
+
 sourceSets {
     main {
         resources {
@@ -28,16 +32,18 @@ sourceSets {
 }
 
 dependencies {
+    jvxmlConfiguration fileTree(dir: "src/main/config")
+
+    compile project(':org.jvoicexml')
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     testCompile project(path: ':org.jvoicexml', configuration: 'testArtifacts')
-
-    compile project(':org.jvoicexml')
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/vxml2.1-profile.xml"
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/vxml2.1-profile.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/vxml2.1-profile.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -47,8 +53,8 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/vxml2.1-profile.xml"
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/vxml2.1-profile.xml"
     output "${project(':main').buildDir}/config/vxml2.1-profile.xml"
     parameters(
         buildpath: "lib",

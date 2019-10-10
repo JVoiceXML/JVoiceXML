@@ -21,14 +21,14 @@
 
 package org.jvoicexml.mock;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.ErrorHandler;
-import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
-import org.slf4j.event.LoggingEvent;
+import org.apache.logging.log4j.message.Message;
 
 /**
  * Test appender to monitor behavior.
@@ -57,100 +57,88 @@ public final class TestAppender implements Appender {
         new java.util.ArrayList<String>();;
 
     /** Name of the appender. */
-    private String name;
+    private final String name;
 
-    /** A filter. */
-    private Filter filter;
-
+    /** Flag if the appender has been started. */
+    private boolean started;
+    
     /**
-     * {@inheritDoc}
+     * Constructs a new object.
      */
-    public void addFilter(final Filter value) {
-        filter = value;
+    public TestAppender() {
+        name = "test";
     }
 
     /**
      * {@inheritDoc}
      */
-    public Filter getFilter() {
-        return filter;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void clearFilters() {
-        filter = null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void close() {
-        messages.clear();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void doAppend(final LoggingEvent event) {
-        final String message = event.toString();
-        if (!message.startsWith(TEST_PREFIX)) {
-            return;
+    @Override
+    public State getState() {
+        if (started) {
+            return State.STARTED;
+        } else {
+            return State.STOPPED;
         }
-        messages.add(message);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setErrorHandler(final ErrorHandler handler) {
+    @Override
+    public void initialize() {
     }
 
     /**
      * {@inheritDoc}
      */
-    public ErrorHandler getErrorHandler() {
-        return null;
+    @Override
+    public void start() {
+        started = true;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setLayout(final Layout layout) {
+    @Override
+    public void stop() {
+        messages.clear();
+        started = false;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Layout getLayout() {
-        return null;
+    @Override
+    public boolean isStarted() {
+        return started;
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean requiresLayout() {
-        return false;
+    @Override
+    public boolean isStopped() {
+        return !started;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setName(final String value) {
-        name = value;
+    @Override
+    public void append(LogEvent event) {
+      final Message message = event.getMessage();
+      final String formattedMessage = message.getFormattedMessage();
+      if (!formattedMessage.startsWith(TEST_PREFIX)) {
+          return;
+      }
+      messages.add(formattedMessage);
     }
 
     /**
      * Checks if the given message is contained in the list of messages.
-     * @param message the message to look for.
+     * 
+     * @param message
+     *            the message to look for.
      * @return <code>true</code> if the message is contained.
      */
     public static boolean containsMessage(final String message) {
@@ -158,71 +146,41 @@ public final class TestAppender implements Appender {
     }
 
     /**
-     * Clears all previously stored messages.
-     * 
-     * @since 0.7.4
+     * {@inheritDoc}
      */
-    public static void clear() {
-        messages.clear();
+    @Override
+    public String getName() {
+        return name;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public State getState() {
-        // TODO Auto-generated method stub
+    public Layout<? extends Serializable> getLayout() {
         return null;
     }
 
-    @Override
-    public void initialize() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void start() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void stop() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public boolean isStarted() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean isStopped() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void append(LogEvent event) {
-        // TODO Auto-generated method stub
-        
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean ignoreExceptions() {
-        // TODO Auto-generated method stub
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ErrorHandler getHandler() {
-        // TODO Auto-generated method stub
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setHandler(ErrorHandler handler) {
-        // TODO Auto-generated method stub
-        
     }
 }
