@@ -144,13 +144,15 @@ final class DataStrategy extends AbstractTagStrategy {
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the XML document from the {@link DocumentServer}.
+     * @param context the interpreter context
+     * @return obtained document
+     * @throws BadFetchError error obtaining the document
+     * @throws SemanticError error creating the query to the document server
+     * @since 0.7.9
      */
-    @Override
-    public void execute(final VoiceXmlInterpreterContext context,
-            final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia, final FormItem item,
-            final VoiceXmlNode node) throws JVoiceXMLEvent {
+    private Document getDocument(final VoiceXmlInterpreterContext context)
+            throws BadFetchError, SemanticError {
         final DocumentServer server = context.getDocumentServer();
         final Session session = context.getSession();
 
@@ -169,17 +171,42 @@ final class DataStrategy extends AbstractTagStrategy {
             final FetchAttributes attributes = getFetchAttributes();
             descriptor.setAttributes(attributes);
             final SessionIdentifier sessionId = session.getSessionId();
-            final Document document = (Document) server.getObject(sessionId,
+            return (Document) server.getObject(sessionId,
                     descriptor, DocumentServer.TEXT_XML);
-            final String name = (String) getAttribute(Data.ATTRIBUTE_NAME);
-            if (name == null) {
-                return;
-            }
-            final DataModel model = context.getDataModel();
-            model.updateVariable(name, document);
         } catch (BadFetchError e) {
             throw new BadFetchError("error reading data from '" + uri + "': "
                     + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void execute(final VoiceXmlInterpreterContext context,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
+        final Document document = getDocument(context);
+        final String name = (String) getAttribute(Data.ATTRIBUTE_NAME);
+        if (name == null) {
+            LOGGER.info("name of data tat not provided."
+                    + " ignoring the retrieved content.");
+            return;
+        }
+        final DataModel model = context.getDataModel();
+        if (model.existsVariable(name)) {
+            int rc = model.updateVariable(name, document);
+            if (rc != DataModel.NO_ERROR) {
+                LOGGER.warn("error updating '" + name + "':" + rc);
+                throw new SemanticError("error updating '" + name + "':" + rc);
+            }
+        } else {
+            int rc = model.createVariable(name, document);
+            if (rc != DataModel.NO_ERROR) {
+                LOGGER.warn("error updating '" + name + "':" + rc);
+                throw new SemanticError("error updating '" + name + "':" + rc);
+            }
         }
     }
 
