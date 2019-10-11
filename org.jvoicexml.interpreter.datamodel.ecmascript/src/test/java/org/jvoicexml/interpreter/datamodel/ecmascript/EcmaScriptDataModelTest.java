@@ -21,12 +21,22 @@
 
 package org.jvoicexml.interpreter.datamodel.ecmascript;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Context;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Test cases for {@link DataModel}.
@@ -168,8 +178,7 @@ public class EcmaScriptDataModelTest {
                 data.createScope(Scope.SESSION));
         Assert.assertEquals(DataModel.NO_ERROR,
                 data.createScope(Scope.APPLICATION));
-        Assert.assertEquals(DataModel.NO_ERROR,
-                data.createScope(Scope.DIALOG));
+        Assert.assertEquals(DataModel.NO_ERROR, data.createScope(Scope.DIALOG));
         final String testvar = "testvar";
         Assert.assertEquals(DataModel.NO_ERROR, data.createVariable(testvar));
         Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
@@ -192,14 +201,11 @@ public class EcmaScriptDataModelTest {
         Assert.assertEquals(Boolean.TRUE, data.existsVariable(testvar));
         Assert.assertEquals(new Integer(42),
                 data.readVariable(testvar, Integer.class));
-        Assert.assertEquals(DataModel.NO_ERROR,
-                data.deleteScope(Scope.DIALOG));
+        Assert.assertEquals(DataModel.NO_ERROR, data.deleteScope(Scope.DIALOG));
         Assert.assertEquals(Boolean.FALSE, data.existsVariable(testvar));
-        Assert.assertEquals(DataModel.NO_ERROR,
-                data.createScope(Scope.DIALOG));
+        Assert.assertEquals(DataModel.NO_ERROR, data.createScope(Scope.DIALOG));
         Assert.assertEquals(DataModel.NO_ERROR, data.createVariable(testvar));
-        Assert.assertEquals(DataModel.NO_ERROR,
-                data.deleteScope(Scope.DIALOG));
+        Assert.assertEquals(DataModel.NO_ERROR, data.deleteScope(Scope.DIALOG));
         Assert.assertEquals(DataModel.NO_ERROR,
                 data.deleteScope(Scope.APPLICATION));
         Assert.assertEquals(DataModel.NO_ERROR,
@@ -528,7 +534,8 @@ public class EcmaScriptDataModelTest {
     }
 
     @Test
-    public void testCopyValuesDatamodelAsync() throws SemanticError, InterruptedException {
+    public void testCopyValuesDatamodelAsync()
+            throws SemanticError, InterruptedException {
         final EcmaScriptDataModel data = new EcmaScriptDataModel();
         Assert.assertEquals(0, data.createScope(Scope.SESSION));
         final String testvarlevel2 = "testvar.level1.level2";
@@ -554,7 +561,8 @@ public class EcmaScriptDataModelTest {
                 Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
                         targetModel.createVariable("testvar.level1.level2"));
                 Assert.assertEquals(DataModel.ERROR_VARIABLE_ALREADY_DEFINED,
-                        targetModel.createVariable("session.testvar.level1.level2"));
+                        targetModel.createVariable(
+                                "session.testvar.level1.level2"));
             }
         };
         final Thread thread = new Thread(runnable);
@@ -562,6 +570,28 @@ public class EcmaScriptDataModelTest {
         Thread.sleep(2000);
         thread.join();
         Assert.assertNull(throwable);
+    }
+
+    @Test
+    public void testSetXmlValue() throws SemanticError,
+            ParserConfigurationException, SAXException, IOException {
+        final EcmaScriptDataModel data = new EcmaScriptDataModel();
+        Assert.assertEquals(0, data.createScope(Scope.SESSION));
+        final InputStream in = EcmaScriptDataModelTest.class
+                .getResourceAsStream("/test.xml");
+        final InputSource source = new InputSource(in);
+        final DocumentBuilderFactory factory = DocumentBuilderFactory
+                .newInstance();
+        factory.setNamespaceAware(true);
+        final DocumentBuilder builder = factory.newDocumentBuilder();
+        final Document document = builder.parse(source);
+        Assert.assertEquals(DataModel.NO_ERROR,
+                data.createVariable("xml", document));
+        final String price = data.evaluateExpression(
+                "xml.documentElement.getElementsByTagNameNS("
+                + "\"http://www.example.org\", \"last\").item(0).firstChild."
+                + "data", String.class);
+        Assert.assertEquals("30.00", price);
     }
 
     public class TestObject {

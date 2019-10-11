@@ -20,6 +20,9 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    jvxmlConfiguration
+}
 
 sourceSets {
     main {
@@ -30,20 +33,21 @@ sourceSets {
 }
 
 dependencies {
+    jvxmlConfiguration fileTree(dir: "src/main/config")
+
     compile group: 'org.mozilla', name: 'rhino', version: '1.7.10'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+    compile project(':org.jvoicexml')
     
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     testCompile project(path: ':org.jvoicexml', configuration: 'testArtifacts')
-
-    compile project(':org.jvoicexml')
-    compile project(':org.jvoicexml.client')
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/ecmascript-datamodel.xml"
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/ecmascript-datamodel.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/ecmascript-datamodel.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -53,8 +57,8 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/ecmascript-datamodel.xml"
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/ecmascript-datamodel.xml"
     output "${project(':main').buildDir}/config/ecmascript-datamodel.xml"
     parameters(
         buildpath: "lib",

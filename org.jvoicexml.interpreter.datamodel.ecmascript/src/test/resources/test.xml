@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quote xmlns="http://www.example.org">
+    <ticker>F</ticker>
+    <name>Ford Motor Company</name>
+    <change>1.00</change>
+    <last>30.00</last>
+</quote>

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/unittests/src/org/jvoicexml/interpreter/tagstrategy/TestDataStrategy.java $
- * Version: $LastChangedRevision: 4080 $
- * Date:    $Date: 2013-12-17 09:46:17 +0100 (Tue, 17 Dec 2013) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -49,7 +44,6 @@ import org.w3c.dom.Document;
  * Test case for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4080 $
  * @since 0.7.1
  */
 public final class TestDataStrategy extends TagStrategyTestBase {
@@ -96,7 +90,7 @@ public final class TestDataStrategy extends TagStrategyTestBase {
      *                test failed
      */
     @Test
-    public void testExecute() throws JVoiceXMLEvent, Exception {
+    public void testExecuteVariableExists() throws JVoiceXMLEvent, Exception {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Var var = vxml.appendChild(Var.class);
@@ -107,10 +101,12 @@ public final class TestDataStrategy extends TagStrategyTestBase {
         data.setSrc(uri);
         data.setName(name);
 
+        final DataModel model = getDataModel();
+        Mockito.when(model.existsVariable(name)).thenReturn(Boolean.TRUE);
+
         final DataStrategy strategy = new DataStrategy();
         executeTagStrategy(data, strategy);
 
-        final DataModel model = getDataModel();
         Mockito.verify(model).updateVariable(Mockito.eq(name),
                 Mockito.isA(Document.class));
     }
@@ -126,7 +122,41 @@ public final class TestDataStrategy extends TagStrategyTestBase {
      *                test failed
      */
     @Test
-    public void testExecuteExpr() throws JVoiceXMLEvent, Exception {
+    public void testExecuteVariableUndefined()
+            throws JVoiceXMLEvent, Exception {
+        final VoiceXmlDocument doc = createDocument();
+        final Vxml vxml = doc.getVxml();
+        final Var var = vxml.appendChild(Var.class);
+        final String name = "quote";
+        var.setName(name);
+        final Block block = createBlock(doc);
+        final Data data = block.appendChild(Data.class);
+        data.setSrc(uri);
+        data.setName(name);
+
+        final DataModel model = getDataModel();
+        Mockito.when(model.existsVariable(name)).thenReturn(Boolean.FALSE);
+
+        final DataStrategy strategy = new DataStrategy();
+        executeTagStrategy(data, strategy);
+
+        Mockito.verify(model).createVariable(Mockito.eq(name),
+                Mockito.isA(Document.class));
+    }
+
+    /**
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
+     * @throws JVoiceXMLEvent
+     *             test failed
+     * @exception Exception
+     *                test failed
+     */
+    @Test
+    public void testExecuteExprVariableExists()
+            throws JVoiceXMLEvent, Exception {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Var var = vxml.appendChild(Var.class);
@@ -143,10 +173,50 @@ public final class TestDataStrategy extends TagStrategyTestBase {
         final DataModel model = getDataModel();
         Mockito.when(model.evaluateExpression(srcexpr, Object.class))
                 .thenReturn(uri.toString());
+        Mockito.when(model.existsVariable(name)).thenReturn(Boolean.TRUE);
+
         final DataStrategy strategy = new DataStrategy();
         executeTagStrategy(data, strategy);
 
         Mockito.verify(model).updateVariable(Mockito.eq(name),
+                Mockito.isA(Document.class));
+    }
+
+    /**
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
+     * @throws JVoiceXMLEvent
+     *             test failed
+     * @exception Exception
+     *                test failed
+     */
+    @Test
+    public void testExecuteExprVariableUndefined()
+            throws JVoiceXMLEvent, Exception {
+        final VoiceXmlDocument doc = createDocument();
+        final Vxml vxml = doc.getVxml();
+        final Var var = vxml.appendChild(Var.class);
+        final String name = "quote";
+        var.setName(name);
+        final Var varSrcexpr = vxml.appendChild(Var.class);
+        final String srcexpr = "myexpr";
+        varSrcexpr.setName(name);
+        final Block block = createBlock(doc);
+        final Data data = block.appendChild(Data.class);
+        data.setSrcexpr(srcexpr);
+        data.setName(name);
+
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression(srcexpr, Object.class))
+                .thenReturn(uri.toString());
+        Mockito.when(model.existsVariable(name)).thenReturn(Boolean.FALSE);
+
+        final DataStrategy strategy = new DataStrategy();
+        executeTagStrategy(data, strategy);
+
+        Mockito.verify(model).createVariable(Mockito.eq(name),
                 Mockito.isA(Document.class));
     }
 
@@ -218,7 +288,8 @@ public final class TestDataStrategy extends TagStrategyTestBase {
      *             test failed
      */
     @Test
-    public void testExecuteNamelist() throws JVoiceXMLEvent, Exception {
+    public void testExecuteNamelistVariableExists()
+            throws JVoiceXMLEvent, Exception {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Var var = vxml.appendChild(Var.class);
@@ -234,13 +305,53 @@ public final class TestDataStrategy extends TagStrategyTestBase {
         data.setNameList(namelist);
 
         final DataModel model = getDataModel();
-        Mockito.when(model.readVariable(name1, Object.class)).thenReturn(
-                "Horst Buchholz");
+        Mockito.when(model.readVariable(name1, Object.class))
+                .thenReturn("Horst Buchholz");
+        Mockito.when(model.existsVariable(name)).thenReturn(Boolean.TRUE);
         final DataStrategy strategy = new DataStrategy();
         executeTagStrategy(data, strategy);
 
         Mockito.verify(model).updateVariable(Mockito.eq(name),
                 Mockito.isA(Document.class));
-        // TODO chekc that the namelist was submitted
+        // TODO check that the namelist was submitted
+    }
+
+    /**
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
+     * @throws JVoiceXMLEvent
+     *             test failed.
+     * @throws Exception
+     *             test failed
+     */
+    @Test
+    public void testExecuteNamelistVariableUndefined()
+            throws JVoiceXMLEvent, Exception {
+        final VoiceXmlDocument doc = createDocument();
+        final Vxml vxml = doc.getVxml();
+        final Var var = vxml.appendChild(Var.class);
+        final String name = "quote";
+        var.setName(name);
+        final Block block = createBlock(doc);
+        final Data data = block.appendChild(Data.class);
+        data.setSrc(uri);
+        data.setName(name);
+        final String name1 = "actor";
+        final TokenList namelist = new TokenList();
+        namelist.add(name1);
+        data.setNameList(namelist);
+
+        final DataModel model = getDataModel();
+        Mockito.when(model.readVariable(name1, Object.class))
+                .thenReturn("Horst Buchholz");
+        Mockito.when(model.existsVariable(name)).thenReturn(Boolean.FALSE);
+        final DataStrategy strategy = new DataStrategy();
+        executeTagStrategy(data, strategy);
+
+        Mockito.verify(model).createVariable(Mockito.eq(name),
+                Mockito.isA(Document.class));
+        // TODO check that the namelist was submitted
     }
 }

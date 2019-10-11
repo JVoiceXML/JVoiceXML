@@ -46,6 +46,8 @@ class JVoiceXmlContextFactory extends ContextFactory {
             return true;
         case Context.FEATURE_WARNING_AS_ERROR:
             return true;
+        case Context.FEATURE_E4X:
+            return true;
         default:
             return super.hasFeature(cx, featureIndex);
         }
