@@ -582,13 +582,14 @@ public class EcmaScriptDataModelTest {
         final InputSource source = new InputSource(in);
         final DocumentBuilderFactory factory = DocumentBuilderFactory
                 .newInstance();
+        factory.setNamespaceAware(true);
         final DocumentBuilder builder = factory.newDocumentBuilder();
         final Document document = builder.parse(source);
         Assert.assertEquals(DataModel.NO_ERROR,
                 data.createVariable("xml", document));
         final String price = data.evaluateExpression(
-                "xml.documentElement.getElementsByTagName("
-                + "\"last\").item(0).firstChild."
+                "xml.documentElement.getElementsByTagNameNS("
+                + "\"http://www.example.org\", \"last\").item(0).firstChild."
                 + "data", String.class);
         Assert.assertEquals("30.00", price);
     }
