@@ -653,18 +653,19 @@ task(shutdown, type: JavaExec) {
     main = "org.jvoicexml.startup.Shutdown"
     classpath = sourceSets.main.runtimeClasspath \
                 + files("${project(':org.jvoicexml').buildDir}/config") \
-                + files("${project(':org.jvoicexml.jndi').buildDir}/libs/org.jvoicexml.jndi-${JVOICEXML_VERSION}.jar")
+                + files("${project(':org.jvoicexml.client').buildDir}/libs/org.jvoicexml.client-${JVOICEXML_VERSION}.jar")
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.manager",
                "-Djava.security.policy=file://${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
+               "-Djava.rmi.server.codebase=http://${getIP()}:9698/",
+               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
                "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
 }
 
 startScripts {
     mainClassName = "org.jvoicexml.startup.Startup"
-    classpath += files('../config') \
-              + files("../lib/org.jvoicexml.jndi-${JVOICEXML_VERSION}.jar")
+    classpath += files('../config')
     applicationName = "jvxml-startup"
     defaultJvmOpts = ["-Xms1024m", "-Xmx2048m"]
     defaultJvmOpts = [ "-Djava.library.path=lib",
@@ -685,11 +686,15 @@ startScripts {
 task createShutdownApp(type: CreateStartScripts) {
     mainClassName = "org.jvoicexml.startup.Shutdown"
     classpath = startScripts.classpath \
-                + files('../config')
+                + files('../config') \
+                + files("../libs/org.jvoicexml.client-${JVOICEXML_VERSION}.jar")
     outputDir = startScripts.outputDir
     applicationName = 'jvxml-shutdown'
     defaultJvmOpts = ["-Xms1024m", "-Xmx2048m"]
     defaultJvmOpts = [ "-Djava.library.path=lib",
+               "-Djava.security.manager",
+               "-Djava.rmi.server.codebase=http://${getIP()}:9595/jndi/",
+               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.security.policy=config/jvoicexml.policy",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
                "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]

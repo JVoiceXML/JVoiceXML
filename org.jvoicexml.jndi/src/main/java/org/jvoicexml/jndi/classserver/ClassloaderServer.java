@@ -73,15 +73,18 @@ public class ClassloaderServer extends ClassServer {
         return in;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public byte[] getBytes(String path)
             throws IOException, ClassNotFoundException {
         final InputStream in = getInputStream(path);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         if (in == null) {
             LOGGER.warn("unable to load '" + path + "' from " + loader);
             throw new IOException("unable to load '" + path + "'");
         }
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final byte[] bytes = new byte[1024];
         int read = 0;;
         do
@@ -94,6 +97,9 @@ public class ClassloaderServer extends ClassServer {
         return out.toByteArray();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void run() {
         Thread thread = Thread.currentThread();
