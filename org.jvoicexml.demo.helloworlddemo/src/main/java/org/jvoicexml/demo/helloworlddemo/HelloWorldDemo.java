@@ -24,8 +24,6 @@ package org.jvoicexml.demo.helloworlddemo;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 
 import javax.naming.NamingException;
 

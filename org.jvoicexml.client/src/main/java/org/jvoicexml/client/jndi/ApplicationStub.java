@@ -23,13 +23,11 @@ package org.jvoicexml.client.jndi;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
 
 import org.jvoicexml.Application;
-import org.jvoicexml.LastResult;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -194,35 +192,6 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
         try {
             final RemoteApplication application = getSkeleton();
             return application.resolve(baseUri, uri);
-        } catch (java.rmi.RemoteException | NamingException re) {
-            clearSkeleton();
-            re.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setLastResult(final List<LastResult> lastresult) {
-        try {
-            final RemoteApplication application = getSkeleton();
-            application.setLastResult(lastresult);
-        } catch (java.rmi.RemoteException | NamingException re) {
-            clearSkeleton();
-            re.printStackTrace();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<LastResult> getLastResult() {
-        try {
-            final RemoteApplication application = getSkeleton();
-            return application.getLastResult();
         } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
             re.printStackTrace();
