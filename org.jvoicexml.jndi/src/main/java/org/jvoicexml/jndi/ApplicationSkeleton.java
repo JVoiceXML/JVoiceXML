@@ -39,7 +39,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @since 0.7.5
  */
 public class ApplicationSkeleton
-        implements RemoteApplication, Skeleton {
+        implements RemoteApplication {
     /** The session ID. */
     private SessionIdentifier sessionIdentifier;
 
@@ -73,9 +73,9 @@ public class ApplicationSkeleton
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the name of this skeleton.
+     * @return name of the skeleton
      */
-    @Override
     public String getSkeletonName() throws RemoteException {
         return RemoteApplication.class.getSimpleName() + "." 
                 + sessionIdentifier.getId();
