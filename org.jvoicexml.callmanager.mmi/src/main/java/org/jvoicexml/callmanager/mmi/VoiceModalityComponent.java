@@ -36,8 +36,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.Application;
-import org.jvoicexml.LastResult;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
@@ -1031,21 +1029,12 @@ public final class VoiceModalityComponent
             final ErrorEvent error = session.getLastError();
             if (error == null) {
                 done.setStatus(StatusType.SUCCESS);
-                if (converter != null) {
-                    final Application application = session.getApplication();
-                    if (application != null) {
-                        final List<LastResult> lastresults = application
-                                .getLastResult();
-                        final Object result = converter
-                                .convertApplicationLastResult(lastresults);
-                        done.addStatusInfo(result);
-                    }
-                }
+                // TODO obtain the last result and add it to the status info
             } else {
                 done.setStatus(StatusType.FAILURE);
                 done.addStatusInfo(error.getMessage());
             }
-        } catch (ErrorEvent | ConversionException e) {
+        } catch (ErrorEvent e) {
             done.setStatus(StatusType.FAILURE);
             done.addStatusInfo(e.getMessage());
         }
