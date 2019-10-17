@@ -27,7 +27,6 @@
 package org.jvoicexml;
 
 import java.net.URI;
-import java.util.List;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -132,20 +131,4 @@ public interface Application {
      * @return Hierarchical URI.
      */
     URI resolve(final URI baseUri, final URI uri);
-
-    /**
-     * Sets the last result.
-     * @param lastresult the last result to set.
-     * @since 0.7.7
-     */
-    void setLastResult(final List<LastResult> lastresult);
-
-    /**
-     * Retrieves information about the last recognition to occur within this
-     * application. It is an array of elements where each element, represents a
-     * possible result.
-     * @return last recognition result information, maybe {@code null}.
-     * @since 0.7.7
-     */
-    List<LastResult> getLastResult();
 }

@@ -23,10 +23,8 @@ package org.jvoicexml.jndi;
 
 import java.net.URI;
 import java.rmi.RemoteException;
-import java.util.List;
 
 import org.jvoicexml.Application;
-import org.jvoicexml.LastResult;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.client.jndi.RemoteApplication;
 import org.jvoicexml.event.error.BadFetchError;
@@ -170,28 +168,5 @@ public class ApplicationSkeleton
             return null;
         }
         return application.resolve(baseUri, uri);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setLastResult(final List<LastResult> lastresult)
-            throws RemoteException {
-        if (application == null) {
-            return;
-        }
-        application.setLastResult(lastresult);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<LastResult> getLastResult() throws RemoteException {
-        if (application == null) {
-            return null;
-        }
-        return application.getLastResult();
     }
 }
