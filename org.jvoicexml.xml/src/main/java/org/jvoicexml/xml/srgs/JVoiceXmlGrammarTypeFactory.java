@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,7 +24,6 @@ package org.jvoicexml.xml.srgs;
 /**
  * Factory for the default grammar types.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public final class JVoiceXmlGrammarTypeFactory implements GrammarTypeFactory {

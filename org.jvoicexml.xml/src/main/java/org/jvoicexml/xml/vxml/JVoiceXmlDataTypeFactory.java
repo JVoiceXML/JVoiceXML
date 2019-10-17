@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,19 +19,30 @@
  *
  */
 
-package org.jvoicexml.xml.srgs;
+package org.jvoicexml.xml.vxml;
 
 /**
- * A factory for grammar types.
+ * Factory for the default data types.
  * @author Dirk Schnelle-Walka
- * @since 0.7
+ * @since 0.7.9
  */
-public interface GrammarTypeFactory {
+public final class JVoiceXmlDataTypeFactory implements DataTypeFactory {
+
     /**
-     * Creates a grammar for the given attribute.
-     * @param attribute name of the attribute.
-     * @return corresponding grammar type or <code>null</code> if the
-     *         attribute can not be converted to a grammar type.
+     * {@inheritDoc}
      */
-    GrammarType getGrammarType(final String attribute);
+    @Override
+    public DataType getDataType(final String attribute) {
+        if (attribute == null) {
+            return null;
+        }
+        if (DataType.XML.getType().equals(attribute)) {
+            return DataType.XML;
+        }
+        if (DataType.JSON.getType().equals(attribute)) {
+            return DataType.JSON;
+        }
+        return null;
+    }
+
 }
