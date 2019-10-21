@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,34 +21,26 @@
 
 package org.jvoicexml.xml.srgs;
 
-import java.io.File;
-import java.io.FileReader;
+import java.io.InputStream;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
 /**
- * The <code>TestSrgsXmlDocument</code> tests the integrity of the
- * specified class.
+ * The <code>TestSrgsXmlDocument</code> tests the integrity of the specified
+ * class.
  *
  * @author Christoph Buente
  * @author Dirk Schnelle-Walka
- *
- * @version $Revision$
  */
 public final class TestSrgsXmlDocument {
-
-    /** Base String for grammar documents. */
-    private static final String BASE =
-        "../org.jvoicexml/unittests/config/irp_vxml21/";
-
     /**
      * Test constructor for 'SrgsXmlDocument'.
      *
      * @see SrgsXmlDocument()
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testEmptyConstructor() throws Exception {
@@ -66,13 +53,13 @@ public final class TestSrgsXmlDocument {
      *
      * @see SrgsXmlDocument(InputSource)
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testInputConstructor() throws Exception {
-        final File testFile = new File(BASE + "2/2_grammar_b.grxml");
-        final FileReader reader = new FileReader(testFile);
-        final InputSource source = new InputSource(reader);
+        final InputStream in = TestSrgsXmlDocument.class
+                .getResourceAsStream("/places.grxml");
+        final InputSource source = new InputSource(in);
         final SrgsXmlDocument document = new SrgsXmlDocument(source);
         Assert.assertNotNull(document);
     }

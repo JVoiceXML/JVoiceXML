@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN"
+                  "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+
+<grammar xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar 
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         xml:lang="en" version="1.0" root="city_state" mode="voice">
+
+   <rule id="city" scope="public">
+     <one-of>
+       <item>Boston</item>
+       <item>Philadelphia</item>
+       <item>Fargo</item>
+     </one-of>
+   </rule>
+
+   <rule id="state" scope="public">
+     <one-of>
+       <item>Florida</item>
+       <item>North Dakota</item>
+       <item>New York</item>
+     </one-of>
+   </rule>
+
+   <!-- Reference by URI to a local rule -->
+   <!-- Artificial example allows "Boston, Florida"! -->
+   <rule id="city_state" scope="public">
+     <ruleref uri="#city"/> <ruleref uri="#state"/>
+   </rule>
+</grammar>
