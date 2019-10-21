@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,7 +27,6 @@ import org.junit.Test;
 /**
  * Test for {@link TimeParser}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 
@@ -57,6 +51,6 @@ public final class TestTimeParser {
         final TimeParser parser7 = new TimeParser("abcs");
         Assert.assertEquals(-1, parser7.parse());
         final TimeParser parser8 = new TimeParser(null);
-        Assert.assertEquals(0, parser8.parse());
+        Assert.assertEquals(-1, parser8.parse());
     }
 }
