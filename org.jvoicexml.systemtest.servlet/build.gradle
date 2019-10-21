@@ -6,7 +6,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.undercouch:gradle-download-task:3.4.3'
+        classpath 'de.undercouch:gradle-download-task:4.0.0'
         classpath 'gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1'
     }
 }
