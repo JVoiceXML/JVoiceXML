@@ -134,7 +134,7 @@ public final class Mrcpv2SpokenInput
     public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
         for (GrammarParser<?> parser : grammarParsers) {
             final GrammarType type = parser.getType();
-            parsers.put(type.getType(), parser);
+            parsers.put(type.toString(), parser);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("added parser '" + parser + "' for grammar type '"
                         + type + "'");
@@ -197,7 +197,7 @@ public final class Mrcpv2SpokenInput
     public GrammarImplementation<?> loadGrammar(final URI uri,
             final GrammarType type)
             throws NoresourceError, IOException, UnsupportedFormatError {
-        final GrammarParser<?> parser = parsers.get(type.getType());
+        final GrammarParser<?> parser = parsers.get(type.toString());
         if (parser == null) {
             throw new UnsupportedFormatError("'" + type + "' is not supported");
         }

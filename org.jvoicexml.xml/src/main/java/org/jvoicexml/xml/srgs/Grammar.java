@@ -33,6 +33,8 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.activation.MimeType;
+
 import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.LanguageIdentifierConverter;
 import org.jvoicexml.xml.Text;
@@ -682,6 +684,21 @@ public final class Grammar
     }
 
     /**
+     * Retrieves the type attribute as a {@link MimeType}.
+     *
+     * @return Value of the type attribute.
+     * @see #ATTRIBUTE_TYPE
+     */
+    public MimeType getTypeAsMimeType() {
+        final GrammarType type = getType();
+        if (type == null) {
+            return null;
+        }
+
+        return type.getType();
+    }
+    
+    /**
      * Sets the type attribute.
      *
      * @param type Value of the type attribute.
@@ -698,11 +715,24 @@ public final class Grammar
      * @see #ATTRIBUTE_TYPE
      */
     public void setType(final GrammarType type) {
-        final String str = type.getType();
+        final String str = type.toString();
 
         setType(str);
     }
 
+    /**
+     * Sets the type attribute.
+     *
+     * @param type Value of the type attribute.
+     * @see #ATTRIBUTE_TYPE
+     * @since 0.7.9
+     */
+    public void setType(final MimeType type) {
+        final String str = type.toString();
+
+        setType(str);
+    }
+    
     /**
      * Retrieve the weight attribute.
      *
