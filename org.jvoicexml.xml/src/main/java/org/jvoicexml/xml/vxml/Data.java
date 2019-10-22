@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -32,15 +27,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import javax.activation.MimeType;
+
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.w3c.dom.Node;
 
 /**
+ * The {@code <data>} element allows a VoiceXML application to fetch arbitrary
+ * XML data from a document server without transitioning to a new VoiceXML
+ * document. The XML data fetched by the {@code <data>} element is bound to
+ * ECMAScript through the named variable that exposes a read-only subset of the
+ * W3C Document Object Model.
+ * <p>
+ * As an extension JVoiceXML also allows to transfer other data formats, e.g.
+ * JSON.
+ * </p>
  *
  * @author Steve Doyle
- * @version $Revision$
+ * @author Dirk Schnelle-Walka
  */
 public final class Data
         extends AbstractVoiceXmlNode {
@@ -111,6 +118,12 @@ public final class Data
     public static final String ATTRIBUTE_MAXSTALE = "maxstale";
 
     /**
+     * JVoiceXML extension to add MIME types of the data. Defaults to
+     * {@link DataType#XML}.
+     */
+    public static final String ATTRIBUTE_JVOICEXML_TYPE = "type";
+    
+    /**
      * Supported attribute names for this node.
      */
     protected static final ArrayList<String> ATTRIBUTE_NAMES;
@@ -132,6 +145,7 @@ public final class Data
         ATTRIBUTE_NAMES.add(ATTRIBUTE_NAMELIST);
         ATTRIBUTE_NAMES.add(ATTRIBUTE_SRC);
         ATTRIBUTE_NAMES.add(ATTRIBUTE_SRCEXPR);
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_JVOICEXML_TYPE);
     }
 
     /**
@@ -522,5 +536,85 @@ public final class Data
     @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
+    }
+
+    /**
+     * Retrieves the type attribute.
+     *
+     * @return Value of the type attribute.
+     * @see #ATTRIBUTE_JVOICEXML_TYPE
+     * @since 0.7.9
+     */
+    public String getTypename() {
+        return getAttribute(ATTRIBUTE_JVOICEXML_TYPE);
+    }
+
+    /**
+     * Retrieves the type attribute.
+     *
+     * @return Value of the type attribute.
+     * @see #ATTRIBUTE_JVOICEXML_TYPE
+     * @since 0.7.9
+     */
+    public GrammarType getType() {
+        final String type = getTypename();
+        if (type == null) {
+            return null;
+        }
+
+        return GrammarType.valueOfAttribute(type);
+    }
+
+    /**
+     * Retrieves the type attribute as a {@link MimeType}.
+     *
+     * @return Value of the type attribute.
+     * @see #ATTRIBUTE_JVOICEXML_TYPE
+     * @since 0.7.9
+     */
+    public MimeType getTypeAsMimeType() {
+        final GrammarType type = getType();
+        if (type == null) {
+            return null;
+        }
+
+        return type.getType();
+    }
+    
+    /**
+     * Sets the type attribute.
+     *
+     * @param type Value of the type attribute.
+     * @see #ATTRIBUTE_JVOICEXML_TYPE
+     * @since 0.7.9
+     */
+    public void setType(final String type) {
+        setAttribute(ATTRIBUTE_JVOICEXML_TYPE, type);
+    }
+
+    /**
+     * Sets the type attribute.
+     *
+     * @param type Value of the type attribute.
+     * @see #ATTRIBUTE_JVOICEXML_TYPE
+     * @since 0.7.9
+     */
+    public void setType(final GrammarType type) {
+        final String str = type.toString();
+
+        setType(str);
+    }
+
+    /**
+     * Sets the type attribute.
+     *
+     * @param type Value of the type attribute.
+     * @see #ATTRIBUTE_JVOICEXML_TYPE
+     * @since 0.7.9
+     */
+    public void setType(final MimeType type) {
+        final String str = type.toString();
+
+        setType(str);
     }
 }
