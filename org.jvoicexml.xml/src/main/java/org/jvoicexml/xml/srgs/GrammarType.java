@@ -209,7 +209,7 @@ public class GrammarType {
             if (other.type != null) {
                 return false;
             }
-        } else if (!type.equals(other.type)) {
+        } else if (!type.match(other.type)) {
             return false;
         }
         return true;

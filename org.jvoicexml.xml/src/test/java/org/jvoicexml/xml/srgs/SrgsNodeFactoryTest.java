@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2015-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,7 +31,6 @@ import org.xml.sax.InputSource;
  * Test cases for {@link SrgsNodeFactory}.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
  * @since 0.7.7
  */
 public class SrgsNodeFactoryTest {
@@ -66,7 +60,7 @@ public class SrgsNodeFactoryTest {
     @Test
     public void testGetXmlNodeNamespaces() throws Exception {
         final InputStream input = SrgsNodeFactory.class
-                .getResourceAsStream("srgs-namespace-test.srgs");
+                .getResourceAsStream("/srgs-namespace-test.srgs");
         final InputSource source = new InputSource(input);
         final SrgsXmlDocument document = new SrgsXmlDocument(source);
         final Grammar grammar = document.getGrammar();

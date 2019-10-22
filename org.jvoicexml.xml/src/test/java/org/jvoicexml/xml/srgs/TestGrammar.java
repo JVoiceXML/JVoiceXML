@@ -86,7 +86,7 @@ public final class TestGrammar {
     @Test
     public void testGetRootRuleExternal() throws Exception {
         final InputStream in = TestGrammar.class
-                .getResourceAsStream("test.grxml");
+                .getResourceAsStream("/test.grxml");
         final InputSource source = new InputSource(in);
         SrgsXmlDocument document = new SrgsXmlDocument(source);
         Grammar grammar = document.getGrammar();
@@ -225,7 +225,7 @@ public final class TestGrammar {
         final Grammar grammar = document.getGrammar();
         grammar.setType(GrammarType.SRGS_XML);
         Assert.assertEquals(GrammarType.SRGS_XML, grammar.getType());
-        Assert.assertEquals(GrammarType.SRGS_XML.getType(),
+        Assert.assertEquals(GrammarType.SRGS_XML.toString(),
                 grammar.getTypename());
     }
 

@@ -21,6 +21,9 @@
 
 package org.jvoicexml.interpreter.grammar.halef;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.GrammarTypeFactory;
 
@@ -38,7 +41,13 @@ public class HalefGrammarTypeFactory implements GrammarTypeFactory {
         if (attribute == null) {
             return null;
         }
-        if (HalefGrammarType.GRAMMAR_TYPE.equals(attribute)) {
+        final MimeType other;
+        try {
+            other = new MimeType(attribute);
+        } catch (MimeTypeParseException e) {
+            return null;
+        }
+        if (HalefGrammarType.GRAMMAR_TYPE.match(other)) {
             return HalefGrammarType.HALEF;
         }
         return null;

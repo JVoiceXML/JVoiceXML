@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,13 +28,11 @@ import java.util.Properties;
 /**
  * Settings for the unit tests.
  * <p>
- * Property files <code>test.properties</code> are expected in the folders
- * <code>config-props</code> and <code>personal-props</code> of the core
- * project. The settings in the personal properties override the global
- * settings.
+ * It mimics the the behavior of gradle to first load the settings in
+ * {@code $PROJECT_ROOT/gradle.properties} and override these with the local
+ * copy in {@code $HOME/.gradle}.
  * </p>
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  */
 public final class TestProperties {
@@ -54,11 +47,12 @@ public final class TestProperties {
     public TestProperties() throws IOException {
         settings = new Properties();
         final InputStream globalin = new FileInputStream(
-                "../org.jvoicexml/config-props/test.properties");
+                "../gradle.properties");
         settings.load(globalin);
+        final String home = System.getProperty("user.home");
         try {
             final InputStream localin = new FileInputStream(
-                "../org.jvoicexml/personal-props/test.properties");
+                home + "/.gradle/gradle.properties");
             settings.load(localin);
         } catch (IOException ignore) {
         }

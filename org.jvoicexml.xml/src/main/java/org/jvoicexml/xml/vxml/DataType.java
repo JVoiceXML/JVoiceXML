@@ -23,6 +23,9 @@ package org.jvoicexml.xml.vxml;
 
 import java.util.ServiceLoader;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+
 import org.jvoicexml.xml.srgs.Grammar;
 
 /**
@@ -45,30 +48,48 @@ public class DataType {
      * XML formatted data.
      */
     public static final DataType XML =
-        new DataType("application/xml");
+        new DataType("application", "xml");
 
     /**
      * JSON formatted data.
      */
     public static final DataType JSON =
-        new DataType("application/json");
+        new DataType("application", "json");
 
     /** Name of the grammar type. */
-    private final String type;
+    private final MimeType type;
 
     /**
      * Do not create from outside.
-     * @param name name of the grammar type.
+     * 
+     * @param primary
+     *            the primary type, typically {@code application}
+     * @param sub
+     *            the grammar sub type
+     * @exception IllegalArgumentException if the type does not denote a mime type
      */
-    protected DataType(final String name) {
-        type = name;
+    protected DataType(final String primary, final String sub) {
+        try {
+            type = new MimeType(primary, sub);
+        } catch (MimeTypeParseException e) {
+            throw new IllegalArgumentException(
+                    "unable to parse mime type:" + e.getMessage(), e);
+        }
     }
 
+    /**
+     * Do not create from outside.
+     * @param mimeType type of the data type.
+     */
+    protected DataType(final MimeType mimeType) {
+        type = mimeType;
+    }
+    
     /**
      * Retrieves the name of this grammar type.
      * @return Name of this type.
      */
-    public final String getType() {
+    public final MimeType getType() {
         return type;
     }
 
@@ -77,7 +98,7 @@ public class DataType {
      */
     @Override
     public final String toString() {
-        return type;
+        return type.toString();
     }
 
     /**
