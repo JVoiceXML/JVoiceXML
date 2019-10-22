@@ -21,6 +21,9 @@
 
 package org.jvoicexml.xml.vxml;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+
 /**
  * Factory for the default data types.
  * @author Dirk Schnelle-Walka
@@ -36,10 +39,16 @@ public final class JVoiceXmlDataTypeFactory implements DataTypeFactory {
         if (attribute == null) {
             return null;
         }
-        if (DataType.XML.getType().equals(attribute)) {
+        final MimeType other;
+        try {
+            other = new MimeType(attribute);
+        } catch (MimeTypeParseException e) {
+            return null;
+        }
+        if (DataType.XML.getType().match(other)) {
             return DataType.XML;
         }
-        if (DataType.JSON.getType().equals(attribute)) {
+        if (DataType.JSON.getType().match(other)) {
             return DataType.JSON;
         }
         return null;
