@@ -165,7 +165,7 @@ final class DataStrategy extends AbstractTagStrategy {
         }
         LOGGER.info("obtaining data from '" + uri + "'");
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
-                method);
+                DocumentDescriptor.MIME_TYPE_XML, method);
         try {
             appendVariables(context, descriptor);
             final FetchAttributes attributes = getFetchAttributes();

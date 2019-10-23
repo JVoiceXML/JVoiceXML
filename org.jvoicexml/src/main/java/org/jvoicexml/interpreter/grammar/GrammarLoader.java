@@ -25,6 +25,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
 
+import javax.activation.MimeType;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -198,8 +200,9 @@ final class GrammarLoader {
         LOGGER.info("loading grammar from source: '" + src + "'");
         final FetchAttributes adaptedAttributes = adaptFetchAttributes(
                 attributes, grammar);
+        final MimeType type = grammar.getTypeAsMimeType();
         final GrammarDocument document = context.acquireExternalGrammar(src,
-                adaptedAttributes);
+                type, adaptedAttributes);
         if (document == null) {
             throw new BadFetchError("Unable to load grammar '" + src + "'!");
         }

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -164,7 +164,8 @@ class ScriptStrategy extends AbstractTagStrategy {
         } else {
             uri = application.resolve(src);
         }
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                DocumentDescriptor.MIME_TYPE_TEXT_JAVASCRIPT);
         final FetchAttributes attributes = getFetchAttributes();
         descriptor.setAttributes(attributes);
         final SessionIdentifier sessionId = session.getSessionId();

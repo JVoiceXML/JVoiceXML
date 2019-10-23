@@ -24,6 +24,7 @@ package org.jvoicexml;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.activation.MimeType;
 import javax.sound.sampled.AudioInputStream;
 
 import org.jvoicexml.event.error.BadFetchError;
@@ -111,6 +112,8 @@ public interface DocumentServer {
      *            the Id of the current JVoiceXML session
      * @param uri
      *            Where to find the grammar.
+     * @param type
+     *            the MIME type of the grammar
      * @param attributes
      *            attributes governing the fetch.
      *
@@ -121,7 +124,8 @@ public interface DocumentServer {
      *             retrieving the document.
      */
     GrammarDocument getGrammarDocument(final SessionIdentifier sessionId,
-            final URI uri, final FetchAttributes attributes)
+            final URI uri, final MimeType type,
+            final FetchAttributes attributes)
                     throws BadFetchError;
 
     /**

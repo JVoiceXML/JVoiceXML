@@ -27,6 +27,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.activation.MimeType;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
@@ -613,7 +615,8 @@ public class VoiceXmlInterpreterContext {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading root document...");
         }
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                DocumentDescriptor.MIME_TYPE_XML);
         final VoiceXmlDocument document = acquireVoiceXmlDocument(descriptor);
         // If a document's application attribute refers to a document that also
         // has an application attribute specified, an error.semantic event is
@@ -719,6 +722,8 @@ public class VoiceXmlInterpreterContext {
      *
      * @param uri
      *            URI of the next document to process.
+     * @param type
+     *            the MIME type of the grammar
      * @param attributes
      *            attributes governing the fetch.
      *
@@ -729,7 +734,8 @@ public class VoiceXmlInterpreterContext {
      * @since 0.3
      */
     public GrammarDocument acquireExternalGrammar(final URI uri,
-            final FetchAttributes attributes) throws BadFetchError {
+            final MimeType type, final FetchAttributes attributes)
+                    throws BadFetchError {
         final DocumentServer server = session.getDocumentServer();
         final URI grammarUri;
         if (application == null) {
@@ -738,7 +744,8 @@ public class VoiceXmlInterpreterContext {
             grammarUri = application.resolve(uri);
         }
         final SessionIdentifier sessionId = session.getSessionId();
-        return server.getGrammarDocument(sessionId, grammarUri, attributes);
+        return server.getGrammarDocument(sessionId, grammarUri, type,
+                attributes);
     }
 
     /**
@@ -789,7 +796,8 @@ public class VoiceXmlInterpreterContext {
                 }
             } catch (GotoNextDocumentEvent e) {
                 final URI uri = e.getUri();
-                return new DocumentDescriptor(uri);
+                return new DocumentDescriptor(uri,
+                        DocumentDescriptor.MIME_TYPE_XML);
             } catch (SubmitEvent e) {
                 return e.getDocumentDescriptor();
             } finally {

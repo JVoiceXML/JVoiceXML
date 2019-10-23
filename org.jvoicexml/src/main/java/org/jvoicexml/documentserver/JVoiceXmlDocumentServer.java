@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.activation.MimeType;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -348,7 +349,8 @@ public final class JVoiceXmlDocumentServer
      */
     @Override
     public GrammarDocument getGrammarDocument(final SessionIdentifier sessionId,
-            final URI uri, final FetchAttributes attrs) throws BadFetchError {
+            final URI uri, final MimeType type, 
+            final FetchAttributes attrs) throws BadFetchError {
         // Only prefetch the document if not explicitly asked to load on demand.
         if (attrs.isFetchintSafe()) {
             LOGGER.debug("not loading a fetchhint safe grammar");
@@ -359,7 +361,7 @@ public final class JVoiceXmlDocumentServer
             LOGGER.debug("retrieving grammar '" + uri + "'");
         }
 
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri, type);
         final ReadBuffer buffer = (ReadBuffer) getObject(sessionId, descriptor,
                 null);
 

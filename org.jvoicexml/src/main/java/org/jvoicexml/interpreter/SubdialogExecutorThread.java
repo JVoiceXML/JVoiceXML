@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -96,7 +96,8 @@ final class SubdialogExecutorThread extends Thread {
             // associated with this thread.
             sourceModel.copyValues(model);
             model.createScope(Scope.DIALOG);
-            final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+            final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                    DocumentDescriptor.MIME_TYPE_XML);
             context.processSubdialog(application, descriptor, parameters);
         } catch (ReturnEvent e) {
             final Object result;

@@ -49,7 +49,6 @@ import org.w3c.dom.Document;
  * Test cases for {@link VoiceXmlInterpreterContext}.
  * 
  * @author Dirk Schnelle-Walka
-* @version $Revision$
  * @since 0.7
  */
 public final class TestVoiceXmlInterpreterContext {
@@ -109,7 +108,8 @@ public final class TestVoiceXmlInterpreterContext {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final URI uri = map.getUri("/test");
         map.addDocument(uri, document);
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                DocumentDescriptor.MIME_TYPE_XML);
         final Document retrievedDocument = context.loadDocument(descriptor);
         Assert.assertEquals(document.toString(), retrievedDocument.toString());
     }

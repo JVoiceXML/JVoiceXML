@@ -133,7 +133,8 @@ final class GotoStrategy extends AbstractTagStrategy {
                 LOGGER.debug("going to uri '" + uri + "'...");
             }
 
-            final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+            final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                    DocumentDescriptor.MIME_TYPE_XML);
             final FetchAttributes attributes = getFetchAttributes();
             descriptor.setAttributes(attributes);
             final VoiceXmlDocument document = context.loadDocument(descriptor);

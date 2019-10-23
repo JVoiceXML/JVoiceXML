@@ -357,7 +357,7 @@ public class JVoiceXmlSession extends Thread
 
         try {
             final DocumentDescriptor descriptor = new DocumentDescriptor(
-                    applicationUri);
+                    applicationUri, DocumentDescriptor.MIME_TYPE_XML);
             final VoiceXmlDocument doc = context.loadDocument(descriptor);
             final URI resolvedUri = descriptor.getUri();
             application.addDocument(resolvedUri, doc);

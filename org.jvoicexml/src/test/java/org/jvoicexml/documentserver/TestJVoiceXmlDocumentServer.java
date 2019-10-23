@@ -90,7 +90,8 @@ public final class TestJVoiceXmlDocumentServer {
         final URI uri = map.getUri("/test");
         map.addDocument(uri, test);
 
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                DocumentDescriptor.MIME_TYPE_XML);
         Object object = server.getObject(null, descriptor,
                 DocumentServer.TEXT_PLAIN);
         Assert.assertEquals(test, object);
@@ -115,7 +116,8 @@ public final class TestJVoiceXmlDocumentServer {
         final URI uri = map.getUri("/test");
         map.addDocument(uri, document);
 
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                DocumentDescriptor.MIME_TYPE_XML);
         Object object = server.getObject(null, descriptor,
                 DocumentServer.TEXT_XML);
         Assert.assertTrue("object should be a document",
@@ -142,7 +144,8 @@ public final class TestJVoiceXmlDocumentServer {
     public void testGetObjectBinary() throws JVoiceXMLEvent, Exception {
         final URL file = this.getClass().getResource("/test.wav");
         final URI uri = file.toURI();
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                DocumentDescriptor.MIME_TYPE_XML);
         final Object object = server.getObject(null, descriptor, null);
         Assert.assertTrue(object instanceof ReadBuffer);
         final ReadBuffer buffer = (ReadBuffer) object;
@@ -205,7 +208,8 @@ public final class TestJVoiceXmlDocumentServer {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final URI uri = map.getUri("/test");
         map.addDocument(uri, document);
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                DocumentDescriptor.MIME_TYPE_XML);
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
                 new UuidSessionIdentifer());
@@ -231,7 +235,7 @@ public final class TestJVoiceXmlDocumentServer {
         map.addDocument(uri, document);
         final URI fragmentUri = new URI(uri.toString() + "#fragment");
         final DocumentDescriptor descriptor = new DocumentDescriptor(
-                fragmentUri);
+                fragmentUri, DocumentDescriptor.MIME_TYPE_XML);
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
                 new UuidSessionIdentifer());
@@ -259,7 +263,8 @@ public final class TestJVoiceXmlDocumentServer {
         final VoiceXmlDocument document = new VoiceXmlDocument(input);
         final URI uri = map.getUri("/test");
         map.addDocument(uri, document);
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                DocumentDescriptor.MIME_TYPE_XML);
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
                 new UuidSessionIdentifer());

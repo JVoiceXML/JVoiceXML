@@ -1467,7 +1467,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final Map<String, Object> parameters = parser.getParameters();
 
         // Prepare running the subdialog in an own thread.
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                DocumentDescriptor.MIME_TYPE_XML);
         descriptor.addParameters(parameters);
         final VoiceXmlDocument doc = context.loadDocument(descriptor);
         application.addDocument(resolvedUri, doc);
