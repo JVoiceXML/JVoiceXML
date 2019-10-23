@@ -12,13 +12,13 @@ import org.jvoicexml.xml.srgs.GrammarType;
  */
 public class LUISGrammarType extends GrammarType {
     /** The grammar type {@code application/grammar+regex}. */
-    public static MimeType GRAMMAR_TYPE;
+    public final static MimeType GRAMMAR_TYPE;
 
     static {
         try {
             GRAMMAR_TYPE = new MimeType("application", "grammar+luis");
         } catch (MimeTypeParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
     

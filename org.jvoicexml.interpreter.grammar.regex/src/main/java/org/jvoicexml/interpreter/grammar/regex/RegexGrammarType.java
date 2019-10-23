@@ -32,13 +32,13 @@ import org.jvoicexml.xml.srgs.GrammarType;
  *
  */
 final class RegexGrammarType extends GrammarType {
-    public static MimeType GRAMMAR_TYPE;
+    public final static MimeType GRAMMAR_TYPE;
 
     static {
         try {
             GRAMMAR_TYPE = new MimeType("application", "grammar+regex");
         } catch (MimeTypeParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 

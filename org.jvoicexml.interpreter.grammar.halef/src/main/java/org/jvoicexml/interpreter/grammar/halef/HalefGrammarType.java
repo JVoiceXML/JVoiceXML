@@ -33,13 +33,13 @@ import org.jvoicexml.xml.srgs.GrammarType;
  */
 final class HalefGrammarType extends GrammarType {
     /** The grammar type {@code application/wfst}. */
-    public static MimeType GRAMMAR_TYPE;
+    public static final MimeType GRAMMAR_TYPE;
     
     static {
         try {
             GRAMMAR_TYPE = new MimeType("application", "wfst");
         } catch (MimeTypeParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
