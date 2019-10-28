@@ -341,6 +341,10 @@ public final class JVoiceXmlDocumentServer
     @Override
     public URI addGrammarDocument(final SessionIdentifier sessionId,
             final GrammarDocument document) throws URISyntaxException {
+        if (repository == null) {
+            LOGGER.warn("no repository defined to add a grammar document");
+            return null;
+        }
         return repository.addGrammarDocument(sessionId, document);
     }
 

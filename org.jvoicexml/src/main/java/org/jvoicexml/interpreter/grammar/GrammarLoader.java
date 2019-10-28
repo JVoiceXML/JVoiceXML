@@ -185,8 +185,7 @@ final class GrammarLoader {
             // TODO add support for URI fragments
             LOGGER.warn("URI fragments are currently not supported: "
                     + "ignoring fragment");
-            src = new URI(src.getScheme(), src.getUserInfo(), src.getHost(),
-                    src.getPort(), src.getPath(), src.getQuery(), null);
+            src = new URI(src.getScheme(), src.getSchemeSpecificPart(), null);
         }
 
         // Maybe adapt a builtin grammar URI

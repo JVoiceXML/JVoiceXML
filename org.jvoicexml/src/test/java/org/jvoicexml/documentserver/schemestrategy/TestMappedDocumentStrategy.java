@@ -1,5 +1,5 @@
 /*
- * File:    $HeadURL$
+MappedDocumentStrategy.java * File:    $HeadURL$
  * Version: $LastChangedRevision$
  * Date:    $Date$
  * Author:  $LastChangedBy$

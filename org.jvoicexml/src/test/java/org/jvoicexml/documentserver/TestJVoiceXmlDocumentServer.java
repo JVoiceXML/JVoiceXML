@@ -36,6 +36,7 @@ import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
+import org.jvoicexml.documentserver.schemestrategy.ResourceDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.Form;
@@ -71,6 +72,7 @@ public final class TestJVoiceXmlDocumentServer {
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
+        server.addSchemeStrategy(new ResourceDocumentStrategy());
         server.start();
     }
 
@@ -142,8 +144,7 @@ public final class TestJVoiceXmlDocumentServer {
      */
     @Test
     public void testGetObjectBinary() throws JVoiceXMLEvent, Exception {
-        final URL file = this.getClass().getResource("/test.wav");
-        final URI uri = file.toURI();
+        final URI uri = new URI("res://test.wav");
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
                 DocumentDescriptor.MIME_TYPE_XML);
         final Object object = server.getObject(null, descriptor, null);
@@ -184,13 +185,13 @@ public final class TestJVoiceXmlDocumentServer {
      */
     @Test
     public void testGetAudioInputStream() throws Exception, JVoiceXMLEvent {
-        final URL file = this.getClass().getResource("/test.wav");
+        final URI uri = new URI("res://test.wav");
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
                 new UuidSessionIdentifer());
         final SessionIdentifier sessionId = session.getSessionId();
         final AudioInputStream in = server.getAudioInputStream(sessionId,
-                file.toURI());
+                uri);
         Assert.assertNotNull(in);
     }
 
