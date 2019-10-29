@@ -172,7 +172,7 @@ final class DataStrategy extends AbstractTagStrategy {
             descriptor.setAttributes(attributes);
             final SessionIdentifier sessionId = session.getSessionId();
             return (Document) server.getObject(sessionId,
-                    descriptor, DocumentServer.TEXT_XML);
+                    descriptor);
         } catch (BadFetchError e) {
             throw new BadFetchError("error reading data from '" + uri + "': "
                     + e.getMessage(), e);

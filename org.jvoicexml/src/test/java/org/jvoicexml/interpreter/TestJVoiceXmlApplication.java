@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -44,7 +39,6 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @see org.jvoicexml.application.JVoiceXmlApplication
  *
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision$
  */
 public final class TestJVoiceXmlApplication  {
     /** The scope observer. */
@@ -173,5 +167,25 @@ public final class TestJVoiceXmlApplication  {
         Assert.assertNull(application.resolve(null));
 
         application.addDocument(testUri5, null);
+    }
+
+    /**
+     * Test method for {@link JVoiceXmlApplication#resolve(URI).}
+     * @throws Exception test failed
+     * @throws JVoiceXMLEvent test failed
+     * @since 0.7.9
+     */
+    @Test
+    public void testResolveNullHostUri() throws Exception, JVoiceXMLEvent {
+        final Application application = new JVoiceXmlApplication(observer);
+        final URI uri = new URI("res://root.vxml");
+        VoiceXmlDocument doc1 = new VoiceXmlDocument();
+        final Vxml vxml1 = doc1.getVxml();
+        final URI base = new URI("res:///");
+        vxml1.setXmlBase(base);
+        application.addDocument(uri, doc1);
+        final URI relativeUri = new URI("relative.vxml");
+        final URI testUri = new URI("res://relative.vxml");
+        Assert.assertEquals(testUri, application.resolve(relativeUri));
     }
 }

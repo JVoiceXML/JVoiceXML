@@ -170,7 +170,7 @@ class ScriptStrategy extends AbstractTagStrategy {
         descriptor.setAttributes(attributes);
         final SessionIdentifier sessionId = session.getSessionId();
         final String externalScript = (String) server.getObject(sessionId,
-                descriptor, DocumentServer.TEXT_PLAIN);
+                descriptor);
         model.evaluateExpression(externalScript, Object.class);
     }
 

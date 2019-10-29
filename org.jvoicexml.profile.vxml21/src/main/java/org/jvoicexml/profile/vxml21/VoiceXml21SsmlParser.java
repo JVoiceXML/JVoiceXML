@@ -42,6 +42,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.jvoicexml.Application;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
@@ -359,15 +360,15 @@ public final class VoiceXml21SsmlParser implements SsmlParser {
      * @param uriString
      *            the URI to resolve.
      * @return Hierarchical URI.
-     * @exception SemanticError
+     * @exception BadFetchError
      *                Error resolving the uri.
      */
-    public URI resolve(final String uriString) throws SemanticError {
+    public URI resolve(final String uriString) throws BadFetchError {
         URI uri;
         try {
             uri = new URI(uriString);
         } catch (URISyntaxException e) {
-            throw new SemanticError(e.getMessage(), e);
+            throw new BadFetchError(e.getMessage(), e);
         }
         final Application application = context.getApplication();
         if (application == null) {

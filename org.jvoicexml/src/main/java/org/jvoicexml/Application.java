@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -47,7 +42,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * </p>
  * 
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision$
  * @since 0.4
  */
 public interface Application {
@@ -80,8 +74,10 @@ public interface Application {
      * @return URI of the application.
      * 
      * @since 0.6
+     * @throws BadFetchError
+     *          if the application URI cannot be resolved
      */
-    URI getApplication();
+    URI getApplication() throws BadFetchError;
 
     /**
      * Sets the new root document.
@@ -116,8 +112,10 @@ public interface Application {
      * @param uri
      *            the URI to resolve.
      * @return Hierarchical URI.
+     * @throws BadFetchError
+     *          if the URI cannot be resolved
      */
-    URI resolve(final URI uri);
+    URI resolve(final URI uri) throws BadFetchError;
 
     /**
      * Converts the given {@link URI} into a hierarchical URI. If the given
@@ -129,6 +127,8 @@ public interface Application {
      * @param uri
      *            the URI to resolve.
      * @return Hierarchical URI.
+     * @throws BadFetchError
+     *          if the URI cannot be resolved
      */
-    URI resolve(final URI baseUri, final URI uri);
+    URI resolve(final URI baseUri, final URI uri) throws BadFetchError;
 }

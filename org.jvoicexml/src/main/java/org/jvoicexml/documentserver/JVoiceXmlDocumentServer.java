@@ -412,9 +412,9 @@ public final class JVoiceXmlDocumentServer
      *
      * This implementation distinguishes the following types
      * <ul>
-     * <li>XML - will return an object of type {@link Document}</l>
-     * <li>text - will return an object of type {@link String}</l>
-     * <li>binary - will return an object of type {@link ReadBuffer}</l>
+     * <li>XML - will return an object of type {@link Document}</li>
+     * <li>text - will return an object of type {@link String}</li>
+     * <li>binary - will return an object of type {@link ReadBuffer}</li>
      * </ul>
      */
     @Override
