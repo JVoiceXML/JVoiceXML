@@ -30,7 +30,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.DocumentDescriptor;
-import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifer;
@@ -93,9 +92,8 @@ public final class TestJVoiceXmlDocumentServer {
         map.addDocument(uri, test);
 
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
-                DocumentDescriptor.MIME_TYPE_XML);
-        Object object = server.getObject(null, descriptor,
-                DocumentServer.TEXT_PLAIN);
+                DocumentDescriptor.MIME_TYPE_TEXT_PLAIN);
+        Object object = server.getObject(null, descriptor);
         Assert.assertEquals(test, object);
     }
 
@@ -120,8 +118,7 @@ public final class TestJVoiceXmlDocumentServer {
 
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
                 DocumentDescriptor.MIME_TYPE_XML);
-        Object object = server.getObject(null, descriptor,
-                DocumentServer.TEXT_XML);
+        Object object = server.getObject(null, descriptor);
         Assert.assertTrue("object should be a document",
                 object instanceof Document);
         final Document other = (Document) object;
@@ -145,9 +142,8 @@ public final class TestJVoiceXmlDocumentServer {
     @Test
     public void testGetObjectBinary() throws JVoiceXMLEvent, Exception {
         final URI uri = new URI("res://test.wav");
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
-                DocumentDescriptor.MIME_TYPE_XML);
-        final Object object = server.getObject(null, descriptor, null);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri, null);
+        final Object object = server.getObject(null, descriptor);
         Assert.assertTrue(object instanceof ReadBuffer);
         final ReadBuffer buffer = (ReadBuffer) object;
         Assert.assertFalse(buffer.isAscii());

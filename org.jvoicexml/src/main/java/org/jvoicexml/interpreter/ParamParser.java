@@ -135,8 +135,7 @@ class ParamParser {
                         final MimeType type = param.getTypeAsMimeType();
                         final DocumentDescriptor descriptor =
                                 new DocumentDescriptor(uri, type);
-                        value = server.getObject(sessionId, descriptor,
-                                type.toString());
+                        value = server.getObject(sessionId, descriptor);
                     } catch (MimeTypeParseException e) {
                         throw new BadFetchError(e.getMessage(), e);
                     }
@@ -190,8 +189,7 @@ class ParamParser {
                         final MimeType type = param.getTypeAsMimeType();
                         final DocumentDescriptor descriptor =
                                 new DocumentDescriptor(uri, type);
-                        value = server.getObject(sessionId, descriptor,
-                                type.toString());
+                        value = server.getObject(sessionId, descriptor);
                     } catch (MimeTypeParseException e) {
                         throw new BadFetchError(e.getMessage(), e);
                     }

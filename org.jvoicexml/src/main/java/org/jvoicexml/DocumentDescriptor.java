@@ -40,7 +40,10 @@ import org.jvoicexml.xml.vxml.RequestMethod;
 public final class DocumentDescriptor {
     /** Mime type of an XML document. */
     public final static MimeType MIME_TYPE_XML;
-    
+
+    /** Mime type of an XML document. */
+    public final static MimeType MIME_TYPE_SRGS_XML;
+
     /** MIME type of a JSON formatted document. */
     public final static MimeType MIME_TYPE_JSON;
 
@@ -65,6 +68,7 @@ public final class DocumentDescriptor {
     static {
         try {
             MIME_TYPE_XML = new MimeType("application", "xml");
+            MIME_TYPE_SRGS_XML = new MimeType("application", "srgs+xml");
             MIME_TYPE_JSON = new MimeType("application", "json");
             MIME_TYPE_TEXT_PLAIN = new MimeType("text", "plain");
             MIME_TYPE_TEXT_JAVASCRIPT = new MimeType("text", "javascript");

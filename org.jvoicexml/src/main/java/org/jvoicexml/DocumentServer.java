@@ -44,12 +44,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @since 0.5.5
  */
 public interface DocumentServer {
-    /** Constant for the object type <code>text/plain</code> to retrieve. */
-    String TEXT_PLAIN = "text/plain";
-
-    /** Constant for the object type <code>text/xml</code> to retrieve. */
-    String TEXT_XML = "text/xml";
-
     /**
      * Starts this document server.
      * 
@@ -150,15 +144,13 @@ public interface DocumentServer {
      *            the Id of the current JVoiceXML session
      * @param descriptor
      *            descriptor for the document to fetch.
-     * @param type
-     *            the type, e.g. <code>text/plain</code>.
      * @return retrieved object
      * @throws BadFetchError
      *             Error retrieving the object.
      * @since 0.6
      */
     Object getObject(final SessionIdentifier sessionId,
-            final DocumentDescriptor descriptor, final String type)
+            final DocumentDescriptor descriptor)
             throws BadFetchError;
 
     /**
