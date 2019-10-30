@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,35 +20,38 @@
  */
 package org.jvoicexml.interpreter.datamodel;
 
-import java.util.Collection;
+import javax.activation.MimeType;
 
 import org.jvoicexml.event.error.SemanticError;
 
 /**
- * Serializer for compound objects when submitting. The VoiceXML specification
- * leaves it open how and if compound objects are to be submitted (cf. <a
- * href="http://www.w3.org/TR/voicexml20#dml5.3.8">
- * http://www.w3.org/TR/voicexml20#dml5.3.8</a>). This interface defines the
- * behavior of JVoiceXML in this case.
+ * Deserializer for objects that have been received from external systems
  * 
  * @author Dirk Schnelle-Walka
- * @since 0.7.5
+ * @since 0.7.9
  */
-public interface DataModelObjectSerializer {
+public interface DataModelObjectDeserializer {
     /**
-     * Serializes the given {@link Object} that has been retrieved from the
-     * {@link org.jvoicexml.interpreter.datamodel.DataModel}.
+     * Retrieves the {@link MimeType} that is handled by this deserializer.
+     * @return the MIME type
+     */
+    MimeType getMimeType();
+
+
+    /**
+     * Deserializes the given {@link Object} that has been retrieved from the
+     * external systems so that it can be used by the {@link DataModel}.
      * 
      * @param model
      *            the employed data model
-     * @param name
-     *            the name of the object to serialize
+     * @param type
+     *            the MIME type of the received object
      * @param object
-     *            the object to serialize.
-     * @return the serialized object.
+     *            the object to deserialize.
+     * @return the deserialized object
      * @throws SemanticError
-     *             error serializing the given object.
+     *             error deserializing the given object.
      */
-    Collection<KeyValuePair> serialize(DataModel model,
-            String name, Object object) throws SemanticError;
+    Object deserialize(DataModel model,
+            MimeType type, Object object) throws SemanticError;
 }

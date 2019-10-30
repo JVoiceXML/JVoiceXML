@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,6 +25,8 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+
+import javax.activation.MimeType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,9 +63,10 @@ import org.w3c.dom.Document;
  * @author Dirk Schnelle-Walka
  * @since 0.7.1
  */
-final class DataStrategy extends AbstractTagStrategy {
+class DataStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(DataStrategy.class);
+    private static final Logger LOGGER = LogManager
+            .getLogger(DataStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -97,17 +100,38 @@ final class DataStrategy extends AbstractTagStrategy {
     }
 
     /**
+     * Retrieves the request method.
+     * 
+     * @return the request method
+     * @since 0.7.9
+     */
+    protected RequestMethod getRequestMethod() {
+        return method;
+    }
+
+    /**
+     * Retrieves the src.
+     * 
+     * @return the src
+     * @since 0.7.9
+     */
+    protected URI getSrc() {
+        return src;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public void validateAttributes(final DataModel model) throws ErrorEvent {
         final String names = (String) getAttribute(Data.ATTRIBUTE_NAMELIST);
         namelist = new TokenList(names);
-        final String requestMethod = (String) getAttribute(Data.ATTRIBUTE_METHOD);
+        final String requestMethod = (String) getAttribute(
+                Data.ATTRIBUTE_METHOD);
         if (requestMethod == null) {
             method = RequestMethod.GET;
-        } else if (RequestMethod.POST.getMethod().equalsIgnoreCase(
-                requestMethod)) {
+        } else if (RequestMethod.POST.getMethod()
+                .equalsIgnoreCase(requestMethod)) {
             method = RequestMethod.POST;
         } else if (RequestMethod.GET.getMethod()
                 .equalsIgnoreCase(requestMethod)) {
@@ -117,7 +141,8 @@ final class DataStrategy extends AbstractTagStrategy {
                     + RequestMethod.GET + "' or '" + RequestMethod.POST + "'!");
         }
 
-        final boolean srcDefined = isAttributeDefined(model, Data.ATTRIBUTE_SRC);
+        final boolean srcDefined = isAttributeDefined(model,
+                Data.ATTRIBUTE_SRC);
         final boolean srcexprDefined = isAttributeDefined(model,
                 Data.ATTRIBUTE_SRCEXPR);
         if (srcDefined == srcexprDefined) {
@@ -129,30 +154,37 @@ final class DataStrategy extends AbstractTagStrategy {
             try {
                 src = new URI(srcAttribute);
             } catch (URISyntaxException e) {
-                throw new SemanticError("'" + srcAttribute
-                        + "' is no valid uri!");
+                throw new SemanticError(
+                        "'" + srcAttribute + "' is no valid uri!");
             }
             return;
         }
-        final String srcExprAttribute = (String) getAttribute(Data.ATTRIBUTE_SRCEXPR);
+        final String srcExprAttribute = (String) getAttribute(
+                Data.ATTRIBUTE_SRCEXPR);
         try {
             src = new URI(srcExprAttribute);
         } catch (URISyntaxException e) {
-            throw new SemanticError("'" + srcExprAttribute
-                    + "' is no valid uri!");
+            throw new SemanticError(
+                    "'" + srcExprAttribute + "' is no valid uri!");
         }
     }
 
     /**
      * Retrieves the XML document from the {@link DocumentServer}.
-     * @param context the interpreter context
+     * 
+     * @param context
+     *            the interpreter context
+     * @param type
+     *            the MIME type
      * @return obtained document
-     * @throws BadFetchError error obtaining the document
-     * @throws SemanticError error creating the query to the document server
+     * @throws BadFetchError
+     *             error obtaining the document
+     * @throws SemanticError
+     *             error creating the query to the document server
      * @since 0.7.9
      */
-    private Document getDocument(final VoiceXmlInterpreterContext context)
-            throws BadFetchError, SemanticError {
+    protected Object getDocument(final VoiceXmlInterpreterContext context,
+            final MimeType type) throws BadFetchError, SemanticError {
         final DocumentServer server = context.getDocumentServer();
         final Session session = context.getSession();
 
@@ -164,21 +196,21 @@ final class DataStrategy extends AbstractTagStrategy {
             uri = application.resolve(src);
         }
         LOGGER.info("obtaining data from '" + uri + "'");
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
-                DocumentDescriptor.MIME_TYPE_XML, method);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri, type,
+                method);
         try {
             appendVariables(context, descriptor);
             final FetchAttributes attributes = getFetchAttributes();
             descriptor.setAttributes(attributes);
             final SessionIdentifier sessionId = session.getSessionId();
-            return (Document) server.getObject(sessionId,
-                    descriptor);
+            return server.getObject(sessionId, descriptor);
         } catch (BadFetchError e) {
-            throw new BadFetchError("error reading data from '" + uri + "': "
-                    + e.getMessage(), e);
+            throw new BadFetchError(
+                    "error reading data from '" + uri + "': " + e.getMessage(),
+                    e);
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -187,7 +219,8 @@ final class DataStrategy extends AbstractTagStrategy {
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem item,
             final VoiceXmlNode node) throws JVoiceXMLEvent {
-        final Document document = getDocument(context);
+        final Document document = (Document) getDocument(context,
+                DocumentDescriptor.MIME_TYPE_XML);
         final String name = (String) getAttribute(Data.ATTRIBUTE_NAME);
         if (name == null) {
             LOGGER.info("name of data tat not provided."
@@ -220,7 +253,7 @@ final class DataStrategy extends AbstractTagStrategy {
      * @exception SemanticError
      *                A referenced variable is undefined
      */
-    private void appendVariables(final VoiceXmlInterpreterContext context,
+    protected void appendVariables(final VoiceXmlInterpreterContext context,
             final DocumentDescriptor descriptor) throws SemanticError {
         final DataModel model = context.getDataModel();
         final DataModelObjectSerializer serializer = model.getSerializer();
@@ -238,8 +271,8 @@ final class DataStrategy extends AbstractTagStrategy {
                     descriptor.addParameters(pairs);
                 }
             } else {
-                final Collection<KeyValuePair> pairs = serializer.serialize(
-                        model, name, value);
+                final Collection<KeyValuePair> pairs = serializer
+                        .serialize(model, name, value);
                 descriptor.addParameters(pairs);
             }
         }
@@ -250,13 +283,15 @@ final class DataStrategy extends AbstractTagStrategy {
      * 
      * @return fetch attributes to use.
      */
-    private FetchAttributes getFetchAttributes() {
+    protected FetchAttributes getFetchAttributes() {
         final FetchAttributes attributes = new FetchAttributes();
-        final String fetchHint = (String) getAttribute(Data.ATTRIBUTE_FETCHHINT);
+        final String fetchHint = (String) getAttribute(
+                Data.ATTRIBUTE_FETCHHINT);
         if (fetchHint != null) {
             attributes.setFetchHint(fetchHint);
         }
-        final String fetchTimeout = (String) getAttribute(Data.ATTRIBUTE_FETCHTIMEOUT);
+        final String fetchTimeout = (String) getAttribute(
+                Data.ATTRIBUTE_FETCHTIMEOUT);
         if (fetchTimeout != null) {
             final TimeParser parser = new TimeParser(fetchTimeout);
             final long seconds = parser.parse();
