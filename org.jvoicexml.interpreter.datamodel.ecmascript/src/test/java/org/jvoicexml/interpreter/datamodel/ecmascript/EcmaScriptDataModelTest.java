@@ -651,12 +651,19 @@ public class EcmaScriptDataModelTest {
         return out.toString();
     }
 
+    /**
+     * Tests a conversion from JSON.
+     * @throws IOException test failed
+     * @since 0.7.9
+     */
     @Test
     public void testFromJSON() throws IOException {
         final String json = getResourceAsString("/address.json");
         final EcmaScriptDataModel model = new EcmaScriptDataModel();
         model.createScope();
         final ScriptableObject object = model.fromJSON(json);
-        System.out.println(object);
+        Assert.assertNotNull(object);
+        Assert.assertEquals("man", object.get("gender"));
+        Assert.assertEquals(24, object.get("age"));
     }
 }

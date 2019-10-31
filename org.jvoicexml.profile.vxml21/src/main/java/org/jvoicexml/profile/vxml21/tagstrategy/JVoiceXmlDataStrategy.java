@@ -26,6 +26,7 @@ import javax.activation.MimeTypeParseException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -75,10 +76,14 @@ final class JVoiceXmlDataStrategy extends DataStrategy {
         super.validateAttributes(model);
         final String mimeType = (String) getAttribute(
                 JVoiceXmlData.ATTRIBUTE_JVOICEXML_TYPE);
-        try {
-            type = new MimeType(mimeType);
-        } catch (MimeTypeParseException e) {
-            throw new SemanticError(e.getMessage(), e);
+        if (mimeType == null) {
+            type = DocumentDescriptor.MIME_TYPE_XML;
+        } else {
+            try {
+                type = new MimeType(mimeType);
+            } catch (MimeTypeParseException e) {
+                throw new SemanticError(e.getMessage(), e);
+            }
         }
     }
 

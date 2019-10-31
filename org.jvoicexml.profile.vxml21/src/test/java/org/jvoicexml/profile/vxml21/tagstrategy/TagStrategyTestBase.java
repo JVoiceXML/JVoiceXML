@@ -26,19 +26,27 @@
 
 package org.jvoicexml.profile.vxml21.tagstrategy;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.activation.MimeType;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.interpreter.datamodel.DataModelObjectDeserializer;
 import org.jvoicexml.interpreter.datamodel.DataModelObjectSerializer;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
@@ -130,8 +138,8 @@ public abstract class TagStrategyTestBase {
         profile = Mockito.mock(Profile.class);
         final TagStrategyFactory taginitfactory = Mockito
                 .mock(TagStrategyFactory.class);
-        Mockito.when(profile.getInitializationTagStrategyFactory()).thenReturn(
-                taginitfactory);
+        Mockito.when(profile.getInitializationTagStrategyFactory())
+                .thenReturn(taginitfactory);
         context = Mockito.mock(VoiceXmlInterpreterContext.class);
         Mockito.when(context.getProfile()).thenReturn(profile);
         final Session session = Mockito.mock(Session.class);
@@ -141,6 +149,20 @@ public abstract class TagStrategyTestBase {
         final DataModelObjectSerializer serializer = Mockito
                 .mock(DataModelObjectSerializer.class);
         Mockito.when(model.getSerializer()).thenReturn(serializer);
+        DataModelObjectDeserializer deserializer = new DataModelObjectDeserializer() {
+            @Override
+            public MimeType getMimeType() {
+                return DocumentDescriptor.MIME_TYPE_JSON;
+            }
+
+            @Override
+            public Object deserialize(DataModel model, MimeType type,
+                    Object object) throws SemanticError {
+                return object;
+            }
+        };
+        Mockito.when(model.getDeserializer(Mockito.any()))
+                .thenReturn(deserializer);
         Mockito.when(context.getDataModel()).thenReturn(model);
     }
 
@@ -256,4 +278,28 @@ public abstract class TagStrategyTestBase {
         strategy.validateAttributes(model);
         strategy.execute(context, interpreter, fia, null, node);
     }
+
+    /**
+     * Reads the specified resource as a string.
+     * @param name name of the resource to read
+     * @return read resource as a string
+     * @throws IOException if the reosurce cold not be found
+     * @since 0.7.9
+     */
+    protected String readResource(final String name) throws IOException {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final InputStream input = TestScriptStrategy.class
+                .getResourceAsStream(name);
+        final byte[] buffer = new byte[1024];
+        int read;
+        do {
+            read = input.read(buffer);
+            if (read > 0) {
+                out.write(buffer, 0, read);
+            }
+        } while (read >= 0);
+        return out.toString();
+    }
+
+
 }

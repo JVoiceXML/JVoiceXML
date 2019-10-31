@@ -20,11 +20,7 @@
  */
 package org.jvoicexml.profile.vxml21.tagstrategy;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
-import java.net.URL;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -95,21 +91,6 @@ public final class TestScriptStrategy extends TagStrategyTestBase {
 
         final DataModel model = getDataModel();
         Mockito.verify(model).evaluateExpression(SCRIPT, Object.class);
-    }
-
-    private String readResource(final String name) throws IOException {
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final InputStream input = TestScriptStrategy.class
-                .getResourceAsStream(name);
-        final byte[] buffer = new byte[1024];
-        int read;
-        do {
-            read = input.read(buffer);
-            if (read > 0) {
-                out.write(buffer, 0, read);
-            }
-        } while (read >= 0);
-        return out.toString();
     }
 
     /**
