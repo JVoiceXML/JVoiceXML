@@ -82,7 +82,8 @@ public final class DtmfInputSkeleton
      * Retrieves the name of this skeleton.
      * @return name of the skeleton
      */
-    public String getSkeletonName() throws RemoteException {
-        return RemoteDtmfInput.class.getSimpleName() + "." + sessionIdentifier;
+    public String getSkeletonName() {
+        return RemoteDtmfInput.class.getSimpleName() + "." 
+                + sessionIdentifier.getId();
     }
 }

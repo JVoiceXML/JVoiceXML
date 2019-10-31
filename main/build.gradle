@@ -593,25 +593,6 @@ distributions {
     }
 }
 
-def getIP() {
-    InetAddress result = null;
-    Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-    while (interfaces.hasMoreElements()) {
-        Enumeration<InetAddress> addresses = interfaces.nextElement().getInetAddresses();
-        while (addresses.hasMoreElements()) {
-            InetAddress address = addresses.nextElement();
-            if (!address.isLoopbackAddress()) {
-                if (address.isSiteLocalAddress()) {
-                    return address.getHostAddress();
-                } else if (result == null) {
-                    result = address;
-                }
-            }
-        }
-    }
-    return (result != null ? result : InetAddress.getLocalHost()).getHostAddress();
-}
-
 run {
     dependsOn jvxmlConfigurations
     dependsOn configurations.jvxmlJNDI
@@ -657,8 +638,6 @@ task(shutdown, type: JavaExec) {
     jvmArgs = ["-Djvoicexml.config=${project(':org.jvoicexml').buildDir}/config",
                "-Djava.security.manager",
                "-Djava.security.policy=file://${project(':org.jvoicexml').buildDir}/config/jvoicexml.policy",
-               "-Djava.rmi.server.codebase=http://${getIP()}:9698/",
-               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
                "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
 }
@@ -670,8 +649,6 @@ startScripts {
     defaultJvmOpts = ["-Xms1024m", "-Xmx2048m"]
     defaultJvmOpts = [ "-Djava.library.path=lib",
                "-Djava.security.manager",
-               "-Djava.rmi.server.codebase=http://${getIP()}:9595/jndi/",
-               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.security.policy=config/jvoicexml.policy",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
                "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]
@@ -693,8 +670,6 @@ task createShutdownApp(type: CreateStartScripts) {
     defaultJvmOpts = ["-Xms1024m", "-Xmx2048m"]
     defaultJvmOpts = [ "-Djava.library.path=lib",
                "-Djava.security.manager",
-               "-Djava.rmi.server.codebase=http://${getIP()}:9595/jndi/",
-               "-Djava.rmi.server.useCodebaseOnly=false",
                "-Djava.security.policy=config/jvoicexml.policy",
                "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
                "-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.Slf4jLog" ]

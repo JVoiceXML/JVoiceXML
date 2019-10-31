@@ -209,6 +209,16 @@ public final class JVoiceXmlConfiguration implements Configuration {
             final ClassLoader parent = getParentClassLoader();
             loader = new JVoiceXmlClassLoader(parent, repository);
             loaderRepositories.put(repository, loader);
+            // TODO resolve why the delegate principle does not work in RMI
+            // As a workaround copy the path entries from the parent loader
+            // to this instance
+            // see https://stackoverflow.com/questions/58648325/delegation-of-custom-class-loader-in-rmi
+            if (parent instanceof URLClassLoader) {
+                final URLClassLoader parentLoader = (URLClassLoader) parent;
+                for (URL url : parentLoader.getURLs()) {
+                    loader.addURL(url);
+                }
+            }
         } else {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("adding to loader repository '" + repository

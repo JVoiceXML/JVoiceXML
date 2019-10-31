@@ -76,7 +76,7 @@ public class ApplicationSkeleton
      * Retrieves the name of this skeleton.
      * @return name of the skeleton
      */
-    public String getSkeletonName() throws RemoteException {
+    public String getSkeletonName() {
         return RemoteApplication.class.getSimpleName() + "." 
                 + sessionIdentifier.getId();
     }
