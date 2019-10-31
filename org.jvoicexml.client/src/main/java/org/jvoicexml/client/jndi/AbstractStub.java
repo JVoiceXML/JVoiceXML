@@ -102,6 +102,7 @@ abstract class AbstractStub<T extends Remote>
     /**
      * {@inheritDoc}
      */
+    @Override
     public final Reference getReference()
             throws NamingException {
         final Class<?> localClass = getLocalClass();

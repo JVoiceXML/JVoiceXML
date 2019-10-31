@@ -53,7 +53,7 @@ public final class JVoiceXmlClassLoader extends URLClassLoader {
      * @param repo the repository that this class loader is responsible for
      */
     public JVoiceXmlClassLoader(final ClassLoader parent, final String repo) {
-        super(new URL[0]);
+        super(new URL[0], parent);
         repository = repo;
     }
 

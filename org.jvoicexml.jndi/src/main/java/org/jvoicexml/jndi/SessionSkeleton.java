@@ -51,7 +51,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * @see org.jvoicexml.Session
  */
 final class SessionSkeleton
-        implements RemoteSession, Skeleton {
+        implements RemoteSession {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
             .getLogger(SessionSkeleton.class);
@@ -89,7 +89,8 @@ final class SessionSkeleton
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the name of this skeleton.
+     * @return name of the skeleton
      */
     public String getSkeletonName() {
         return RemoteSession.class.getSimpleName() + "."
@@ -99,6 +100,7 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
+    @Override
     public Application call(final URI uri) throws RemoteException {
         if (session == null) {
             return null;
@@ -178,6 +180,7 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
+    @Override
     public void waitSessionEnd() throws RemoteException {
         if (session == null) {
             return;
@@ -223,6 +226,7 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
+    @Override
     public void hangup() throws RemoteException {
         if (session == null) {
             return;

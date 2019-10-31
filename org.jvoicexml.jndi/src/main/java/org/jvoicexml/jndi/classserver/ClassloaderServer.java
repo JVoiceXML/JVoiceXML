@@ -24,6 +24,8 @@ package org.jvoicexml.jndi.classserver;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,6 +52,20 @@ public class ClassloaderServer extends ClassServer {
         super(port);
         loader = getClass().getClassLoader();
         LOGGER.info("using JNDI class loader '" + loader + "'");
+        final ClassLoader parent = loader.getParent();
+        LOGGER.info("parent class loader '" + parent + "'");
+        if (parent instanceof URLClassLoader) {
+            final URLClassLoader urlLoader = (URLClassLoader) parent;
+            final URL[] urls = urlLoader.getURLs();
+            if (urls.length == 0) {
+                LOGGER.info("parent class loader entry: none");
+            } else {
+                for (URL url : urls) {
+                    LOGGER.info("parent class loader entry: '" + url
+                            + "'");
+                }
+            }
+        }
     }
 
     /**
@@ -73,15 +89,18 @@ public class ClassloaderServer extends ClassServer {
         return in;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public byte[] getBytes(String path)
             throws IOException, ClassNotFoundException {
         final InputStream in = getInputStream(path);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         if (in == null) {
             LOGGER.warn("unable to load '" + path + "' from " + loader);
             throw new IOException("unable to load '" + path + "'");
         }
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final byte[] bytes = new byte[1024];
         int read = 0;;
         do
@@ -94,6 +113,9 @@ public class ClassloaderServer extends ClassServer {
         return out.toByteArray();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void run() {
         Thread thread = Thread.currentThread();

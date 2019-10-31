@@ -39,10 +39,10 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @since 0.7.5
  */
 public class ApplicationSkeleton
-        implements RemoteApplication, Skeleton {
+        implements RemoteApplication {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager
-            .getLogger(ApplicationSkeleton.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(ApplicationSkeleton.class);
 
     /** The session ID. */
     private SessionIdentifier sessionIdentifier;
@@ -77,10 +77,10 @@ public class ApplicationSkeleton
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the name of this skeleton.
+     * @return name of the skeleton
      */
-    @Override
-    public String getSkeletonName() throws RemoteException {
+    public String getSkeletonName() {
         return RemoteApplication.class.getSimpleName() + "." 
                 + sessionIdentifier.getId();
     }
