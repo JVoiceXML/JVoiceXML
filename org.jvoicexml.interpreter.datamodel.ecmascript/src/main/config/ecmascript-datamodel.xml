@@ -23,6 +23,7 @@
         <property name="deserializers">
             <list>
               <bean class="org.jvoicexml.interpreter.datamodel.ecmascript.deserializer.JSONDeserializer"/>
+              <bean class="org.jvoicexml.interpreter.datamodel.ecmascript.deserializer.XMLDeserializer"/>
             </list>
         </property>
     </beans:bean>

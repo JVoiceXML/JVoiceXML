@@ -71,7 +71,7 @@ public class EcmaScriptDataModel implements DataModel {
     private DataModelObjectSerializer serializer;
 
     /** The known deserializers. */
-    private final Map<MimeType, DataModelObjectDeserializer> deserializers;
+    private final Collection<DataModelObjectDeserializer> deserializers;
 
     static {
         if (!ContextFactory.hasExplicitGlobal()) {
@@ -86,7 +86,7 @@ public class EcmaScriptDataModel implements DataModel {
      */
     public EcmaScriptDataModel() {
         scopes = new java.util.HashMap<Scriptable, Scope>();
-        deserializers = new java.util.HashMap<MimeType, DataModelObjectDeserializer>();
+        deserializers = new java.util.ArrayList<DataModelObjectDeserializer>();
     }
 
     /**
@@ -1151,7 +1151,7 @@ public class EcmaScriptDataModel implements DataModel {
             final Collection<DataModelObjectDeserializer> values) {
         for (DataModelObjectDeserializer deserializer : values) {
             final MimeType type = deserializer.getMimeType();
-            deserializers.put(type, deserializer);
+            deserializers.add(deserializer);
             LOGGER.info("added deserializer '" + deserializer.getClass().getCanonicalName()
                     + "' for type '" + type + "'");
         }
@@ -1162,7 +1162,17 @@ public class EcmaScriptDataModel implements DataModel {
      */
     @Override
     public DataModelObjectDeserializer getDeserializer(final MimeType type) {
-        // TODO Auto-generated method stub
+        if (type == null) {
+            return null;
+        }
+        for (DataModelObjectDeserializer deserializer : deserializers) {
+            final MimeType current = deserializer.getMimeType();
+            if (type.match(current)) {
+                return deserializer;
+            }
+        }
+        
+        LOGGER.warn("no deserializer known for type '" + type + "'");
         return null;
     }
 }
