@@ -167,7 +167,7 @@ public final class SipCallManager
     public void startNewMrcpDialog(final SipSession pbxSession,
             final SipSession mrcpSession) throws Exception {
         // Create a session (so we can get other signals from the caller)
-        // and release resources upon call completion
+        // and release resources upon call completio
         final String sessionId = pbxSession.getId();
         final SessionIdentifier id = new SipSessionIdentifier(sessionId);
         final SpeechClient speechClient = createSpeechClient(mrcpSession);
@@ -227,6 +227,7 @@ public final class SipCallManager
         final SpeechClient speechClient = createSpeechClient(mrcpSession);
         info.setTtsClient(speechClient);
         info.setAsrClient(speechClient);
+        info.setProtocolName("sip");
         return info;
     }
     
