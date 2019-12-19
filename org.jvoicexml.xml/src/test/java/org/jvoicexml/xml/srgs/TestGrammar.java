@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,8 +21,6 @@
 
 package org.jvoicexml.xml.srgs;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.util.Collection;
 
@@ -43,19 +36,16 @@ import org.xml.sax.InputSource;
 
 /**
  * Test cases for {@link Grammar}.
+ * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public final class TestGrammar {
-    /** Base directory with test grammars. */
-    private static final String SRGS_BASE =
-        "../org.jvoicexml/unittests/config/custom_grammar/";
-
     /**
      * Test method for {@link org.jvoicexml.xml.srgs.Grammar#getRootRule()}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testGetRootRule() throws Exception {
@@ -71,8 +61,9 @@ public final class TestGrammar {
 
     /**
      * Test method for {@link org.jvoicexml.xml.srgs.Grammar#getRootRule()}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testGetRootRule2() throws Exception {
@@ -88,13 +79,14 @@ public final class TestGrammar {
 
     /**
      * Test method for {@link org.jvoicexml.xml.srgs.Grammar#getRootRule()}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testGetRootRuleExternal() throws Exception {
-        final InputStream in =
-            TestGrammar.class.getResourceAsStream("test.grxml");
+        final InputStream in = TestGrammar.class
+                .getResourceAsStream("/test.grxml");
         final InputSource source = new InputSource(in);
         SrgsXmlDocument document = new SrgsXmlDocument(source);
         Grammar grammar = document.getGrammar();
@@ -105,8 +97,9 @@ public final class TestGrammar {
 
     /**
      * Test method for {@link org.jvoicexml.xml.srgs.Grammar#getRule(String))}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testGetRule() throws Exception {
@@ -127,8 +120,9 @@ public final class TestGrammar {
 
     /**
      * Test method for {@link Grammar#getRules()}.
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      */
     @Test
     public void testGetRules() throws Exception {
@@ -149,8 +143,9 @@ public final class TestGrammar {
 
     /**
      * Test method for {@link Grammar#getRules()}.
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      */
     @Test
     public void testGetRulesEmpty() throws Exception {
@@ -162,8 +157,9 @@ public final class TestGrammar {
 
     /**
      * Test method for {@link Grammar#getPublicRules()}.
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      */
     @Test
     public void testGetPublicRules() throws Exception {
@@ -184,8 +180,9 @@ public final class TestGrammar {
 
     /**
      * Test method for {@link Grammar#getPublicRules()}.
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      */
     @Test
     public void testGetPublicRulesEmpty() throws Exception {
@@ -197,8 +194,9 @@ public final class TestGrammar {
 
     /**
      * Test method for {@link Grammar#getPublicRules()}.
+     * 
      * @throws Exception
-     *         test failed
+     *             test failed
      */
     @Test
     public void testGetPublicRulesOnlyPrivate() throws Exception {
@@ -215,9 +213,11 @@ public final class TestGrammar {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.xml.srgs.Grammar#setType(GrammarType))}.
+     * Test method for
+     * {@link org.jvoicexml.xml.srgs.Grammar#setType(GrammarType))}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testSetType() throws Exception {
@@ -225,14 +225,16 @@ public final class TestGrammar {
         final Grammar grammar = document.getGrammar();
         grammar.setType(GrammarType.SRGS_XML);
         Assert.assertEquals(GrammarType.SRGS_XML, grammar.getType());
-        Assert.assertEquals(GrammarType.SRGS_XML.getType(),
+        Assert.assertEquals(GrammarType.SRGS_XML.toString(),
                 grammar.getTypename());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.xml.srgs.Grammar#Grammar(org.w3c.dom.Node)}.
+     * Test method for
+     * {@link org.jvoicexml.xml.srgs.Grammar#Grammar(org.w3c.dom.Node)}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testNamespaceSrgsDocument() throws Exception {
@@ -243,9 +245,11 @@ public final class TestGrammar {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.xml.srgs.Grammar#Grammar(org.w3c.dom.Node)}.
+     * Test method for
+     * {@link org.jvoicexml.xml.srgs.Grammar#Grammar(org.w3c.dom.Node)}.
+     * 
      * @exception Exception
-     *            test failed
+     *                test failed
      */
     @Test
     public void testNamespaceVoiceXmlDocument() throws Exception {
@@ -259,14 +263,16 @@ public final class TestGrammar {
 
     /**
      * Try to process a srgs abnf grammar.
-     * @exception Exception test failed
+     * 
+     * @exception Exception
+     *                test failed
      */
     @Test(expected = IllegalAttributeException.class)
     public void testIsExternalInvalid1() throws Exception {
-        File testFile = new File(SRGS_BASE + "external/invalid1.grxml");
-        /* create a VoiceXmlDocument from the string */
-        final VoiceXmlDocument document = new VoiceXmlDocument(
-                new InputSource(new FileReader(testFile)));
+        final InputStream in = TestGrammar.class
+                .getResourceAsStream("/invalid1.grxml");
+        final InputSource source = new InputSource(in);
+        final VoiceXmlDocument document = new VoiceXmlDocument(source);
         /* Lets test, if it is srgs+xml */
         final VoiceXmlNode node = (VoiceXmlNode) document.getFirstChild();
         if (node instanceof Grammar) {
@@ -279,14 +285,16 @@ public final class TestGrammar {
 
     /**
      * Try to process a srgs abnf grammar.
-     * @exception Exception test failed
+     * 
+     * @exception Exception
+     *                test failed
      */
     @Test(expected = IllegalAttributeException.class)
     public void testIsExternalInvalid2() throws Exception {
-        File testFile = new File(SRGS_BASE + "external/invalid2.grxml");
-        /* create a VoiceXmlDocument from the string */
-        final VoiceXmlDocument document = new VoiceXmlDocument(
-                new InputSource(new FileReader(testFile)));
+        final InputStream in = TestGrammar.class
+                .getResourceAsStream("/invalid2.grxml");
+        final InputSource source = new InputSource(in);
+        final VoiceXmlDocument document = new VoiceXmlDocument(source);
         /* Lets test, if it is srgs+xml */
         final VoiceXmlNode node = (VoiceXmlNode) document.getFirstChild();
         if (node instanceof Grammar) {
@@ -300,14 +308,16 @@ public final class TestGrammar {
 
     /**
      * Try to process a srgs abnf grammar.
-     * @exception Exception test failed
+     * 
+     * @exception Exception
+     *                test failed
      */
     @Test(expected = IllegalAttributeException.class)
     public void testIsExternalInvalid3() throws Exception {
-        File testFile = new File(SRGS_BASE + "external/invalid3.grxml");
-        /* create a VoiceXmlDocument from the string */
-        final VoiceXmlDocument document = new VoiceXmlDocument(
-                new InputSource(new FileReader(testFile)));
+        final InputStream in = TestGrammar.class
+                .getResourceAsStream("/invalid3.grxml");
+        final InputSource source = new InputSource(in);
+        final VoiceXmlDocument document = new VoiceXmlDocument(source);
         /* Lets test, if it is srgs+xml */
         final VoiceXmlNode node = (VoiceXmlNode) document.getFirstChild();
         if (node instanceof Grammar) {
@@ -321,14 +331,16 @@ public final class TestGrammar {
 
     /**
      * Try to process a srgs abnf grammar.
-     * @exception Exception test failed
+     * 
+     * @exception Exception
+     *                test failed
      */
     @Test(expected = IllegalAttributeException.class)
     public void testIsExternalInvalid4() throws Exception {
-        File testFile = new File(SRGS_BASE + "external/invalid4.grxml");
-        /* create a VoiceXmlDocument from the string */
-        final VoiceXmlDocument document = new VoiceXmlDocument(
-                new InputSource(new FileReader(testFile)));
+        final InputStream in = TestGrammar.class
+                .getResourceAsStream("/invalid4.grxml");
+        final InputSource source = new InputSource(in);
+        final VoiceXmlDocument document = new VoiceXmlDocument(source);
         /* Lets test, if it is srgs+xml */
         final VoiceXmlNode node = (VoiceXmlNode) document.getFirstChild();
         if (node instanceof Grammar) {
@@ -342,14 +354,16 @@ public final class TestGrammar {
 
     /**
      * Try to process a srgs abnf grammar.
-     * @exception Exception test failed
+     * 
+     * @exception Exception
+     *                test failed
      */
     @Test
-    public void testIsExternalValid1() throws Exception  {
-        File testFile = new File(SRGS_BASE + "external/valid1.grxml");
-        /* create a VoiceXmlDocument from the string */
-        final VoiceXmlDocument document = new VoiceXmlDocument(
-                new InputSource(new FileReader(testFile)));
+    public void testIsExternalValid1() throws Exception {
+        final InputStream in = TestGrammar.class
+                .getResourceAsStream("/valid1.grxml");
+        final InputSource source = new InputSource(in);
+        final VoiceXmlDocument document = new VoiceXmlDocument(source);
         /* Lets test, if it is srgs+xml */
         final VoiceXmlNode node = (VoiceXmlNode) document.getFirstChild();
         if (node instanceof Grammar) {
@@ -363,13 +377,15 @@ public final class TestGrammar {
 
     /**
      * Try to process a srgs abnf grammar.
-     * @exception Exception test failed
+     * 
+     * @exception Exception
+     *                test failed
      */
     public void testIsExternalValid2() throws Exception {
-        File testFile = new File(SRGS_BASE + "external/valid2.grxml");
-        /* create a VoiceXmlDocument from the string */
-        final VoiceXmlDocument document = new VoiceXmlDocument(
-                new InputSource(new FileReader(testFile)));
+        final InputStream in = TestGrammar.class
+                .getResourceAsStream("/valid2.grxml");
+        final InputSource source = new InputSource(in);
+        final VoiceXmlDocument document = new VoiceXmlDocument(source);
         /* Lets test, if it is srgs+xml */
         final VoiceXmlNode node = (VoiceXmlNode) document.getFirstChild();
         if (node instanceof Grammar) {
@@ -383,14 +399,16 @@ public final class TestGrammar {
 
     /**
      * Try to process a srgs abnf grammar.
-     * @exception Exception test failed
+     * 
+     * @exception Exception
+     *                test failed
      */
     @Test
     public void testIsExternalvalid3() throws Exception {
-        File testFile = new File(SRGS_BASE + "inline/valid1.grxml");
-        /* create a VoiceXmlDocument from the string */
-        final VoiceXmlDocument document = new VoiceXmlDocument(
-                new InputSource(new FileReader(testFile)));
+        final InputStream in = TestGrammar.class
+                .getResourceAsStream("/valid3.grxml");
+        final InputSource source = new InputSource(in);
+        final VoiceXmlDocument document = new VoiceXmlDocument(source);
         /* Lets test, if it is srgs+xml */
         final VoiceXmlNode node = (VoiceXmlNode) document.getFirstChild();
         if (node instanceof Grammar) {

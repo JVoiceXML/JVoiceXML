@@ -14,9 +14,13 @@
                 class="org.jvoicexml.profile.vxml21.VoiceXml21TagStrategyFactory">
                 <beans:property name="tagStrategies">
                     <beans:map>
-                        <beans:entry key="data">
+                        <!-- beans:entry key="data">
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.DataStrategy" />
+                        </beans:entry-->
+                        <beans:entry key="data">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.JVoiceXmlDataStrategy" />
                         </beans:entry>
                         <beans:entry key="grammar">
                             <beans:bean
@@ -65,9 +69,13 @@
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.ClearStrategy" />
                         </beans:entry>
-                        <beans:entry key="data">
+                        <!-- beans:entry key="data">
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.DataStrategy" />
+                        </beans:entry-->
+                        <beans:entry key="data">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.JVoiceXmlDataStrategy" />
                         </beans:entry>
                         <beans:entry key="disconnect">
                             <beans:bean

@@ -114,7 +114,7 @@ public class LUISGrammarEvaluator implements GrammarEvaluator {
             HttpHost proxy = new HttpHost(PROXY_HOST, PROXY_PORT);
             builder.setProxy(proxy);
         }
-        try (CloseableHttpClient client = builder.build()){
+        try (CloseableHttpClient client = builder.build()) {
             final URIBuilder uribuilder = new URIBuilder(grammarUri);
             uribuilder.addParameter("subscription-key", subscriptionKey);
             uribuilder.addParameter("q", utterance);

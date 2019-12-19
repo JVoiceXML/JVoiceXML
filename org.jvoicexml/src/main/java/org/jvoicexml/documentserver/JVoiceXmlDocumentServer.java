@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.activation.MimeType;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -67,9 +68,9 @@ import org.xml.sax.SAXException;
  * </p>
  *
  * @author Dirk Schnelle-Walka
-*/
+ */
 public final class JVoiceXmlDocumentServer
-    implements DocumentServer, Configurable {
+        implements DocumentServer, Configurable {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
             .getLogger(JVoiceXmlDocumentServer.class);
@@ -82,7 +83,7 @@ public final class JVoiceXmlDocumentServer
 
     /** The internal document repository. */
     private DocumentRepository repository;
-    
+
     /**
      * Creates a new object.
      *
@@ -95,7 +96,7 @@ public final class JVoiceXmlDocumentServer
     public JVoiceXmlDocumentServer() {
         strategies = new java.util.HashMap<String, SchemeStrategy>();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -107,16 +108,15 @@ public final class JVoiceXmlDocumentServer
         for (SchemeStrategy current : configuredStrategies) {
             addSchemeStrategy(current);
         }
-        final Collection<DocumentRepository> repositories =
-                configuration.loadObjects(DocumentRepository.class,
-                "documentrepository");
+        final Collection<DocumentRepository> repositories = configuration
+                .loadObjects(DocumentRepository.class, "documentrepository");
         for (DocumentRepository current : repositories) {
             repository = current;
             break;
         }
         if (repository != null) {
-            LOGGER.info("using document repository '" +
-                    repository.getClass().getCanonicalName() + "'");
+            LOGGER.info("using document repository '"
+                    + repository.getClass().getCanonicalName() + "'");
         }
     }
 
@@ -126,7 +126,7 @@ public final class JVoiceXmlDocumentServer
     @Override
     public void start() throws Exception {
         if (repository != null) {
-            LOGGER.info("starting document repositroy '" 
+            LOGGER.info("starting document repositroy '"
                     + repository.getClass().getCanonicalName() + "'");
             repository.start();
         }
@@ -140,7 +140,8 @@ public final class JVoiceXmlDocumentServer
      *
      * @since 0.5
      */
-    public void setSchemeStrategies(final List<SchemeStrategy> schemeStrategies) {
+    public void setSchemeStrategies(
+            final List<SchemeStrategy> schemeStrategies) {
         for (SchemeStrategy strategy : schemeStrategies) {
             addSchemeStrategy(strategy);
         }
@@ -340,6 +341,10 @@ public final class JVoiceXmlDocumentServer
     @Override
     public URI addGrammarDocument(final SessionIdentifier sessionId,
             final GrammarDocument document) throws URISyntaxException {
+        if (repository == null) {
+            LOGGER.warn("no repository defined to add a grammar document");
+            return null;
+        }
         return repository.addGrammarDocument(sessionId, document);
     }
 
@@ -348,7 +353,8 @@ public final class JVoiceXmlDocumentServer
      */
     @Override
     public GrammarDocument getGrammarDocument(final SessionIdentifier sessionId,
-            final URI uri, final FetchAttributes attrs) throws BadFetchError {
+            final URI uri, final MimeType type, final FetchAttributes attrs)
+            throws BadFetchError {
         // Only prefetch the document if not explicitly asked to load on demand.
         if (attrs.isFetchintSafe()) {
             LOGGER.debug("not loading a fetchhint safe grammar");
@@ -359,9 +365,9 @@ public final class JVoiceXmlDocumentServer
             LOGGER.debug("retrieving grammar '" + uri + "'");
         }
 
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
-        final ReadBuffer buffer = (ReadBuffer) getObject(sessionId, descriptor,
-                null);
+        // Ignoring the mime type for now as we want to have it binary
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri, null);
+        final ReadBuffer buffer = (ReadBuffer) getObject(sessionId, descriptor);
 
         final byte[] bytes = buffer.getBytes();
         final String encoding = buffer.getCharset();
@@ -374,8 +380,8 @@ public final class JVoiceXmlDocumentServer
      */
     @Override
     public AudioInputStream getAudioInputStream(
-            final SessionIdentifier sessionId,
-            final URI uri) throws BadFetchError {
+            final SessionIdentifier sessionId, final URI uri)
+            throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving audio input stream '" + uri + "'");
         }
@@ -404,14 +410,18 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      *
-     * Currently only <code>text/plain</code> and <code>text/xml</code> are
-     * supported.
+     * This implementation distinguishes the following types
+     * <ul>
+     * <li>XML - will return an object of type {@link Document}</li>
+     * <li>text - will return an object of type {@link String}</li>
+     * <li>binary - will return an object of type {@link ReadBuffer}</li>
+     * </ul>
      */
     @Override
     public Object getObject(final SessionIdentifier sessionId,
-            final DocumentDescriptor descriptor, final String type)
-            throws BadFetchError {
+            final DocumentDescriptor descriptor) throws BadFetchError {
         final URI uri = descriptor.getUri();
+        final MimeType type = descriptor.getType();
         LOGGER.info("retrieving object with type '" + type + "' from '" + uri
                 + "'");
 
@@ -428,18 +438,17 @@ public final class JVoiceXmlDocumentServer
         try {
             input = strategy.getInputStream(sessionId, uri, method, timeout,
                     parameters);
-            if (type == null) {
+            final MimeTypeMapper mapper = new MimeTypeMapper(type);
+            if (mapper.isText()) {
                 final ReadBuffer buffer = new ReadBuffer();
                 buffer.read(input);
-                return buffer;
-            } else if (type.equals(TEXT_PLAIN)) {
-                final ReadBuffer buffer = new ReadBuffer();
-                buffer.read(input);
-                return buffer.toString();
-            } else if (type.equals(TEXT_XML)) {
+                object = buffer.toString();
+            } else if (mapper.isXml()) {
                 object = readXml(input);
-            } else {
-                throw new BadFetchError("unknown type '" + type + "'");
+            } else { 
+                final ReadBuffer buffer = new ReadBuffer();
+                buffer.read(input);
+                object = buffer;
             }
         } catch (IOException e) {
             throw new BadFetchError(e.getMessage(), e);
@@ -510,8 +519,8 @@ public final class JVoiceXmlDocumentServer
     private File getRecordingsDirectory() {
         final File directory = new File("work/recordings/");
         if (!directory.exists()) {
-            LOGGER.info("created recordings directory '" + directory.toURI()
-                    + "'");
+            LOGGER.info(
+                    "created recordings directory '" + directory.toURI() + "'");
             directory.mkdirs();
         }
         return directory;
@@ -533,7 +542,7 @@ public final class JVoiceXmlDocumentServer
     public void stop() {
         if (repository != null) {
             try {
-                LOGGER.info("stopping document repositroy '" 
+                LOGGER.info("stopping document repositroy '"
                         + repository.getClass().getCanonicalName() + "'");
                 repository.stop();
             } catch (Exception e) {

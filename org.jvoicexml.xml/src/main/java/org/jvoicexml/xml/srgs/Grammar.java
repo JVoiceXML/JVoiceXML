@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group
+ * Copyright (C) 2005-2019 JVoiceXML group
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Set;
+
+import javax.activation.MimeType;
 
 import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.LanguageIdentifierConverter;
@@ -682,6 +684,21 @@ public final class Grammar
     }
 
     /**
+     * Retrieves the type attribute as a {@link MimeType}.
+     *
+     * @return Value of the type attribute.
+     * @see #ATTRIBUTE_TYPE
+     */
+    public MimeType getTypeAsMimeType() {
+        final GrammarType type = getType();
+        if (type == null) {
+            return null;
+        }
+
+        return type.getType();
+    }
+    
+    /**
      * Sets the type attribute.
      *
      * @param type Value of the type attribute.
@@ -698,11 +715,24 @@ public final class Grammar
      * @see #ATTRIBUTE_TYPE
      */
     public void setType(final GrammarType type) {
-        final String str = type.getType();
+        final String str = type.toString();
 
         setType(str);
     }
 
+    /**
+     * Sets the type attribute.
+     *
+     * @param type Value of the type attribute.
+     * @see #ATTRIBUTE_TYPE
+     * @since 0.7.9
+     */
+    public void setType(final MimeType type) {
+        final String str = type.toString();
+
+        setType(str);
+    }
+    
     /**
      * Retrieve the weight attribute.
      *

@@ -34,7 +34,7 @@ import org.jvoicexml.client.jndi.RemoteDtmfInput;
  * @since 0.5
  */
 public final class DtmfInputSkeleton
-        implements RemoteDtmfInput, Skeleton {
+        implements RemoteDtmfInput {
     /** The character input device. */
     private final DtmfInput input;
 
@@ -70,6 +70,7 @@ public final class DtmfInputSkeleton
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addCharacter(final char dtmf) throws RemoteException {
         if (input == null) {
             throw new RemoteException("No input! Cannot process dtmf: " + dtmf);
@@ -78,9 +79,11 @@ public final class DtmfInputSkeleton
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the name of this skeleton.
+     * @return name of the skeleton
      */
-    public String getSkeletonName() throws RemoteException {
-        return RemoteDtmfInput.class.getSimpleName() + "." + sessionIdentifier;
+    public String getSkeletonName() {
+        return RemoteDtmfInput.class.getSimpleName() + "." 
+                + sessionIdentifier.getId();
     }
 }

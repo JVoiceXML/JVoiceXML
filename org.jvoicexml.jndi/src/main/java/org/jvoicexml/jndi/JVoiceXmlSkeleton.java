@@ -46,7 +46,7 @@ import org.jvoicexml.event.ErrorEvent;
  * @since 0.4
  * @see org.jvoicexml.JVoiceXml
  */
-class JVoiceXmlSkeleton implements RemoteJVoiceXml, Skeleton {
+class JVoiceXmlSkeleton implements RemoteJVoiceXml {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LogManager.getLogger(JVoiceXmlSkeleton.class);
@@ -81,7 +81,8 @@ class JVoiceXmlSkeleton implements RemoteJVoiceXml, Skeleton {
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the name of this skeleton.
+     * @return name of the skeleton
      */
     public String getSkeletonName() {
         return RemoteJVoiceXml.class.getSimpleName();
@@ -90,6 +91,7 @@ class JVoiceXmlSkeleton implements RemoteJVoiceXml, Skeleton {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getVersion() {
         if (jvxml == null) {
             return null;
@@ -101,6 +103,7 @@ class JVoiceXmlSkeleton implements RemoteJVoiceXml, Skeleton {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Session createSession(final ConnectionInformation info)
             throws RemoteException {
         final SessionIdentifier id = new UuidSessionIdentifer();
@@ -147,6 +150,7 @@ class JVoiceXmlSkeleton implements RemoteJVoiceXml, Skeleton {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void shutdown()
             throws RemoteException {
         if (jvxml == null) {

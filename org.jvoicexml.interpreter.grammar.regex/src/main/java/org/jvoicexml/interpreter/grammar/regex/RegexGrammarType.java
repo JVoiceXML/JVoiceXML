@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2015-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +21,9 @@
 
 package org.jvoicexml.interpreter.grammar.regex;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
@@ -29,8 +32,15 @@ import org.jvoicexml.xml.srgs.GrammarType;
  *
  */
 final class RegexGrammarType extends GrammarType {
-    /** The grammar type {@code application/grammar+regex}. */
-    public static final String GRAMMAR_TYPE = "application/grammar+regex";
+    public final static MimeType GRAMMAR_TYPE;
+
+    static {
+        try {
+            GRAMMAR_TYPE = new MimeType("application", "grammar+regex");
+        } catch (MimeTypeParseException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
 
     /** Regex formatted grammar. */
     public static final GrammarType REGEX =

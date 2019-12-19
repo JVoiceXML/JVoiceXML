@@ -310,6 +310,8 @@ final class ObjectExecutorThread extends Thread {
             } catch (MalformedURLException e) {
                 throw new SemanticError("Must specify a valid URI for: "
                         + ObjectTag.ATTRIBUTE_DATA + " (" + uri + ")");
+            } catch (BadFetchError e) {
+                throw new SemanticError(e.getMessage(), e);
             }
         }
         loader = new URLClassLoader(urls, LOADER);

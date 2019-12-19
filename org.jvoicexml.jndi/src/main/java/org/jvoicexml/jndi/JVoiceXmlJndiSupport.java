@@ -22,6 +22,7 @@
 package org.jvoicexml.jndi;
 
 import java.io.IOException;
+import java.rmi.server.Skeleton;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Hashtable;
 import java.util.Map;
@@ -45,22 +46,9 @@ import org.jvoicexml.jndi.classserver.ClassloaderServer;
  * JNDI support for remote access to the VoiceXML interpreter.
  *
  * <p>
- * This JNDI implementation uses RMI underneath. Clients should work with
- * the original interface, which is implemented by a {@link Stub}
- * The {@link Stub} uses RMI to call methods of the {@link Skeleton}
- * This requires the existence of a {@link java.rmi.Remote} interface, which
- * mirrors all methods of the original interface for remote method calling.
- * The {@link Skeleton} forwards all calls to the original implementation.
- * </p>
- *
- * <p>
- * <b>Note:</b> {@link Stub} and {@link Skeleton} in this sense
- * must not be confused with RMI stubs and skeletons.
- * </p>
- *
- * <p>
  * Unfortunately there is no automatism to create the remote interface from
- * the original interface.
+ * the original interface, hence custom skeletons are used to simply the
+ * remote access.
  * </p>
  *
  * @author Dirk Schnelle-Walka

@@ -26,6 +26,9 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
@@ -128,10 +131,14 @@ class ParamParser {
                         throw new BadFetchError("'" + value
                                 + "' is not a valid URI");
                     }
-                    final String type = param.getType();
-                    final DocumentDescriptor descriptor =
-                            new DocumentDescriptor(uri);
-                    value = server.getObject(sessionId, descriptor, type);
+                    try {
+                        final MimeType type = param.getTypeAsMimeType();
+                        final DocumentDescriptor descriptor =
+                                new DocumentDescriptor(uri, type);
+                        value = server.getObject(sessionId, descriptor);
+                    } catch (MimeTypeParseException e) {
+                        throw new BadFetchError(e.getMessage(), e);
+                    }
                 }
             }
             parameters.put(name, value);
@@ -178,10 +185,14 @@ class ParamParser {
                         throw new BadFetchError("'" + value
                                 + "' is not a valid URI");
                     }
-                    final String type = param.getType();
-                    final DocumentDescriptor descriptor =
-                            new DocumentDescriptor(uri);
-                    value = server.getObject(sessionId, descriptor, type);
+                    try {
+                        final MimeType type = param.getTypeAsMimeType();
+                        final DocumentDescriptor descriptor =
+                                new DocumentDescriptor(uri, type);
+                        value = server.getObject(sessionId, descriptor);
+                    } catch (MimeTypeParseException e) {
+                        throw new BadFetchError(e.getMessage(), e);
+                    }
                 }
             }
             parameters.add(value);

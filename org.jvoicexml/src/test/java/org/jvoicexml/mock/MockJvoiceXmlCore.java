@@ -27,9 +27,9 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
+import org.jvoicexml.documentserver.schemestrategy.ResourceDocumentStrategy;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
@@ -49,18 +49,31 @@ import org.mockito.Mockito;
  */
 public final class MockJvoiceXmlCore implements JVoiceXmlCore {
     /** The document server. */
-    private JVoiceXmlDocumentServer documentServer;
+    private DocumentServer documentServer;
 
     /** The grammar processor. */
     private GrammarProcessor grammarProcessor;
 
     /**
+     * Sets the document server.
+     * @param server the document server
+     * @since 0.7.9
+     */
+    public void setDocumentServer(final DocumentServer server) {
+        documentServer = server;
+    }
+    
+    /**
      * {@inheritDoc}
      */
+    @Override
     public DocumentServer getDocumentServer() {
         if (documentServer == null) {
             documentServer = new JVoiceXmlDocumentServer();
-            documentServer.addSchemeStrategy(new MappedDocumentStrategy());
+            ((JVoiceXmlDocumentServer)documentServer).addSchemeStrategy(
+                    new MappedDocumentStrategy());
+            ((JVoiceXmlDocumentServer)documentServer).addSchemeStrategy(
+                    new ResourceDocumentStrategy());
             try {
                 documentServer.start();
             } catch (Exception e) {
@@ -75,6 +88,7 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarProcessor getGrammarProcessor() {
         if (grammarProcessor == null) {
             final JVoiceXmlGrammarProcessor processor = new JVoiceXmlGrammarProcessor();
@@ -90,15 +104,7 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final ConnectionInformation info)
-            throws ErrorEvent {
-        final SessionIdentifier id = new UuidSessionIdentifer();
-        return createSession(info, id);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Session createSession(final ConnectionInformation info,
             final SessionIdentifier id)
             throws ErrorEvent {
@@ -115,6 +121,7 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getVersion() {
         return null;
     }
@@ -122,6 +129,7 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void shutdown() {
     }
 

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -134,7 +134,7 @@ final class SubmitStrategy extends AbstractTagStrategy {
             LOGGER.debug("submitting to uri '" + next.toString() + "'...");
         }
         final DocumentDescriptor descriptor = new DocumentDescriptor(next,
-                method, true);
+                DocumentDescriptor.MIME_TYPE_XML, method, true);
         appendVariables(context, descriptor);
         throw new SubmitEvent(descriptor);
     }

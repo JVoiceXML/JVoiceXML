@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -38,11 +33,15 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- *
+ * The {@code <data>} element allows a VoiceXML application to fetch arbitrary
+ * XML data from a document server without transitioning to a new VoiceXML
+ * document. The XML data fetched by the {@code <data>} element is bound to
+ * ECMAScript through the named variable that exposes a read-only subset of the
+ * W3C Document Object Model.
  * @author Steve Doyle
- * @version $Revision$
+ * @author Dirk Schnelle-Walka
  */
-public final class Data
+public class Data
         extends AbstractVoiceXmlNode {
 
     /** Name of the tag. */
@@ -109,7 +108,6 @@ public final class Data
      * This defaults to the datamaxstale property.
      */
     public static final String ATTRIBUTE_MAXSTALE = "maxstale";
-
     /**
      * Supported attribute names for this node.
      */
@@ -174,7 +172,7 @@ public final class Data
      * @param factory
      *            The node factory to use.
      */
-    private Data(final Node n,
+    protected Data(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
     }

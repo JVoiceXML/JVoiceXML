@@ -166,13 +166,17 @@ public final class JVoiceXmlConfiguration implements Configuration {
      */
     @SuppressWarnings("resource")
     private ClassLoader getParentClassLoader() {
-        final Thread thread = Thread.currentThread();
-        final ClassLoader parent = thread.getContextClassLoader();
+        // Must use the classloader of this class as parent to ensure that all
+        // all repos use the same basis regardless if called via
+        // loadObjects directly or indirectly from an init method of a loaded
+        // class
+        // The class loader of this class is the app launcher class loader
+        final ClassLoader parent = JVoiceXmlConfiguration.class.getClassLoader();
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("parent class loader '" + parent + "'");
             if (parent instanceof URLClassLoader) {
-                final URLClassLoader loader = (URLClassLoader) parent;
-                final URL[] urls = loader.getURLs();
+                final URLClassLoader urlLoader = (URLClassLoader) parent;
+                final URL[] urls = urlLoader.getURLs();
                 if (urls.length == 0) {
                     LOGGER.trace("parent class loader entry: none");
                 } else {
@@ -196,14 +200,30 @@ public final class JVoiceXmlConfiguration implements Configuration {
             final ClassLoader parent = getParentClassLoader();
             return new JVoiceXmlClassLoader(parent);
         }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("using loader repository '" + repository + "'");
-        }
         JVoiceXmlClassLoader loader = loaderRepositories.get(repository);
         if (loader == null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("creating new loader repository '" + repository
+                        + "'");
+            }
             final ClassLoader parent = getParentClassLoader();
             loader = new JVoiceXmlClassLoader(parent, repository);
             loaderRepositories.put(repository, loader);
+            // TODO resolve why the delegate principle does not work in RMI
+            // As a workaround copy the path entries from the parent loader
+            // to this instance
+            // see https://stackoverflow.com/questions/58648325/delegation-of-custom-class-loader-in-rmi
+            if (parent instanceof URLClassLoader) {
+                final URLClassLoader parentLoader = (URLClassLoader) parent;
+                for (URL url : parentLoader.getURLs()) {
+                    loader.addURL(url);
+                }
+            }
+        } else {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("adding to loader repository '" + repository
+                        + "'");
+            }
         }
         return loader;
     }

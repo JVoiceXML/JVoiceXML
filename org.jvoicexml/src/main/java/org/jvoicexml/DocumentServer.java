@@ -24,6 +24,7 @@ package org.jvoicexml;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.activation.MimeType;
 import javax.sound.sampled.AudioInputStream;
 
 import org.jvoicexml.event.error.BadFetchError;
@@ -43,12 +44,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @since 0.5.5
  */
 public interface DocumentServer {
-    /** Constant for the object type <code>text/plain</code> to retrieve. */
-    String TEXT_PLAIN = "text/plain";
-
-    /** Constant for the object type <code>text/xml</code> to retrieve. */
-    String TEXT_XML = "text/xml";
-
     /**
      * Starts this document server.
      * 
@@ -111,6 +106,8 @@ public interface DocumentServer {
      *            the Id of the current JVoiceXML session
      * @param uri
      *            Where to find the grammar.
+     * @param type
+     *            the MIME type of the grammar
      * @param attributes
      *            attributes governing the fetch.
      *
@@ -121,7 +118,8 @@ public interface DocumentServer {
      *             retrieving the document.
      */
     GrammarDocument getGrammarDocument(final SessionIdentifier sessionId,
-            final URI uri, final FetchAttributes attributes)
+            final URI uri, final MimeType type,
+            final FetchAttributes attributes)
                     throws BadFetchError;
 
     /**
@@ -146,15 +144,13 @@ public interface DocumentServer {
      *            the Id of the current JVoiceXML session
      * @param descriptor
      *            descriptor for the document to fetch.
-     * @param type
-     *            the type, e.g. <code>text/plain</code>.
      * @return retrieved object
      * @throws BadFetchError
      *             Error retrieving the object.
      * @since 0.6
      */
     Object getObject(final SessionIdentifier sessionId,
-            final DocumentDescriptor descriptor, final String type)
+            final DocumentDescriptor descriptor)
             throws BadFetchError;
 
     /**

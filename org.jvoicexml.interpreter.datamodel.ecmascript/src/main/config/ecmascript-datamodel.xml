@@ -20,5 +20,11 @@
                 class="org.jvoicexml.interpreter.datamodel.ecmascript.serializer.KeyValueSerializer" />
             <!-- bean class="org.jvoicexml.interpreter.datamodel.ecmascript.serializer.JSONSerializer"/ -->
         </property>
+        <property name="deserializers">
+            <list>
+              <bean class="org.jvoicexml.interpreter.datamodel.ecmascript.deserializer.JSONDeserializer"/>
+              <bean class="org.jvoicexml.interpreter.datamodel.ecmascript.deserializer.XMLDeserializer"/>
+            </list>
+        </property>
     </beans:bean>
 </datamodel>

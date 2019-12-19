@@ -556,12 +556,6 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         // Stop all call managers to stop further calls.
         shutdownCallManager();
 
-        // Shutdown JNDI support to block further connections
-        if (jndi != null) {
-            jndi.shutdown();
-            jndi = null;
-        }
-
         // Release all references to the allocated resources.
         grammarProcessor = null;
         documentServer = null;
@@ -570,6 +564,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
             implementationPlatformFactory = null;
         }
 
+      
         // Adapt the interpreter state
         state = InterpreterState.STOPPED;
         LOGGER.info("interpreter state " + state);
@@ -577,9 +572,16 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         synchronized (shutdownSemaphore) {
             shutdownSemaphore.notifyAll();
         }
-
         // Notify that we are done
         fireJVoiceXmlTerminated();
+        
+        // Finally terminate JNDI 
+        if (jndi != null) {
+            jndi.shutdown();
+            jndi = null;
+        }
+
+        
     }
 
     /**

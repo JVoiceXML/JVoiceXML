@@ -141,7 +141,11 @@ final class AudioTagStrategy extends AbstractTagStrategy
             if (value != null) {
                 if (name.equals(Audio.ATTRIBUTE_SRC)) {
                     final VoiceXml21SsmlParser vxml21parser = (VoiceXml21SsmlParser) parser;
-                    value = vxml21parser.resolve(value.toString());
+                    try {
+                        value = vxml21parser.resolve(value.toString());
+                    } catch (BadFetchError e) {
+                        throw new SemanticError(e.getMessage(), e);
+                    }
                 }
                 audio.setAttribute(name, value.toString());
             }

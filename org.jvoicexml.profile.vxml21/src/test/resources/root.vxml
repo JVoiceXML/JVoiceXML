@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.0" xmlns="http://www.w3.org/2001/vxml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+
+  <meta name="description" content="test root document" />
+  <meta name="author" content="Dirk Schnelle-Walka" />
+  <meta name="copyright" content="JVoiceXML group" />
+</vxml>

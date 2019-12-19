@@ -21,6 +21,7 @@
 
 package org.jvoicexml.interpreter.datamodel.ecmascript;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,6 +35,7 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ScriptableObject;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -589,8 +591,9 @@ public class EcmaScriptDataModelTest {
                 data.createVariable("xml", document));
         final String price = data.evaluateExpression(
                 "xml.documentElement.getElementsByTagNameNS("
-                + "\"http://www.example.org\", \"last\").item(0).firstChild."
-                + "data", String.class);
+                        + "\"http://www.example.org\", \"last\").item(0).firstChild."
+                        + "data",
+                String.class);
         Assert.assertEquals("30.00", price);
     }
 
@@ -619,5 +622,48 @@ public class EcmaScriptDataModelTest {
         public int get(int index) {
             return index + 1;
         }
+    }
+
+    /**
+     * Retrieves the contents of the specified resource as a string.
+     * 
+     * @param resource
+     *            path of the resource
+     * @return contents of the resource
+     * @throws IOException
+     *             if the resource could not be found
+     */
+    final String getResourceAsString(final String resource) throws IOException {
+        final InputStream in = EcmaScriptDataModelTest.class
+                .getResourceAsStream(resource);
+        if (in == null) {
+            throw new IOException("Resource '" + resource + "' not found");
+        }
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final byte[] readBuffer = new byte[1024];
+        int num;
+        do {
+            num = in.read(readBuffer);
+            if (num >= 0) {
+                out.write(readBuffer, 0, num);
+            }
+        } while (num >= 0);
+        return out.toString();
+    }
+
+    /**
+     * Tests a conversion from JSON.
+     * @throws IOException test failed
+     * @since 0.7.9
+     */
+    @Test
+    public void testFromJSON() throws IOException {
+        final String json = getResourceAsString("/address.json");
+        final EcmaScriptDataModel model = new EcmaScriptDataModel();
+        model.createScope();
+        final ScriptableObject object = model.fromJSON(json);
+        Assert.assertNotNull(object);
+        Assert.assertEquals("man", object.get("gender"));
+        Assert.assertEquals(24, object.get("age"));
     }
 }

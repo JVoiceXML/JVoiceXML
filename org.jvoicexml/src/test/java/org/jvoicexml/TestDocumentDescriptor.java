@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,7 +31,6 @@ import org.jvoicexml.xml.vxml.RequestMethod;
 /**
  * Test case for {@link DocumentDescriptor}.
  * @author Dirk Schnell
- * @version $Revision$
  * @since 0.7
  */
 public final class TestDocumentDescriptor {
@@ -49,7 +43,8 @@ public final class TestDocumentDescriptor {
     @Test
     public void testDocumentDescriptorURI() throws Exception {
         final URI uri = new URI("http://jvoicexml.org");
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+                DocumentDescriptor.MIME_TYPE_XML);
         Assert.assertEquals(uri, descriptor.getUri());
         Assert.assertEquals(RequestMethod.GET, descriptor.getMethod());
         Assert.assertNull("excepted to find no attributes",
@@ -66,7 +61,8 @@ public final class TestDocumentDescriptor {
         final URI uri = new URI("http://jvoicexml.org");
         final RequestMethod method = RequestMethod.POST;
         final DocumentDescriptor descriptor =
-            new DocumentDescriptor(uri, method);
+            new DocumentDescriptor(uri, DocumentDescriptor.MIME_TYPE_XML,
+                    method);
         Assert.assertEquals(uri, descriptor.getUri());
         Assert.assertEquals(method, descriptor.getMethod());
         Assert.assertNull("excepted to find no attributes",
@@ -81,7 +77,8 @@ public final class TestDocumentDescriptor {
     @Test
     public void testSetURI() throws Exception {
         final URI uri1 = new URI("http://jvoicexml.org");
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri1);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri1,
+                DocumentDescriptor.MIME_TYPE_XML);
         Assert.assertEquals(uri1, descriptor.getUri());
         final URI uri2 = new URI("http://jvoicexml.sourceforge.net");
         descriptor.setURI(uri2);
@@ -97,7 +94,7 @@ public final class TestDocumentDescriptor {
     public void testSetAttributes() throws Exception {
         final URI uri = new URI("http://jvoicexml.org");
         final DocumentDescriptor descriptor =
-            new DocumentDescriptor(uri);
+            new DocumentDescriptor(uri, DocumentDescriptor.MIME_TYPE_XML);
         final FetchAttributes attributes = new FetchAttributes();
         descriptor.setAttributes(attributes);
         Assert.assertEquals(attributes, descriptor.getAttributes());
@@ -112,7 +109,7 @@ public final class TestDocumentDescriptor {
     public void testAddParameter() throws Exception {
         final URI uri = new URI("http://jvoicexml.org");
         final DocumentDescriptor descriptor =
-            new DocumentDescriptor(uri);
+            new DocumentDescriptor(uri, DocumentDescriptor.MIME_TYPE_XML);
         final String name1 = "name1";
         final String value1 = "value1";
         final KeyValuePair pair1 = new KeyValuePair(name1, value1);

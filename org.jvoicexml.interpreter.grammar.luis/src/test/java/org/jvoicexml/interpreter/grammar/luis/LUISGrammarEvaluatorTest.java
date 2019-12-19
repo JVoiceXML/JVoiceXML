@@ -16,16 +16,16 @@ public class LUISGrammarEvaluatorTest {
     public void testGetSemanticInterpretation()
             throws URISyntaxException, IOException {
         final TestProperties properties = new TestProperties();
-        final String subscription = properties.get("luis.subscription-key");
+        final String subscription = properties.get("JVOICEXML_INTERPRETER_GRAMMAR_LUIS_SUBSCRIPTIONID");
         final String applicationId = properties
-                .get("luis.pizza-application-id");
+                .get("JVOICEXML_DEMO_LUIS_APPLICATIONID");
 
         final URI uri = new URI(
                 "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/"
                         + applicationId);
-        LUISGrammarEvaluator evaluator = new LUISGrammarEvaluator(subscription,
+        final LUISGrammarEvaluator evaluator = new LUISGrammarEvaluator(subscription,
                 uri);
-        DataModel model = new EcmaScriptDataModel();
+        final DataModel model = new EcmaScriptDataModel();
         model.createScope();
         final Object result = evaluator.getSemanticInterpretation(model,
                 "I want a large pizza with salami");

@@ -37,7 +37,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @see org.jvoicexml.documentserver.schemestrategy.DocumentMap
  */
 class MappedDocumentRepositorySkeleton
-        implements RemoteMappedDocumentRepository, Skeleton {
+        implements RemoteMappedDocumentRepository {
     /** The encapsulated <code>DocumentMap</code>. */
     private DocumentMap map;
 
@@ -62,7 +62,8 @@ class MappedDocumentRepositorySkeleton
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the name of this skeleton.
+     * @return name of the skeleton
      */
     public String getSkeletonName() {
         return RemoteMappedDocumentRepository.class.getSimpleName();
@@ -71,6 +72,7 @@ class MappedDocumentRepositorySkeleton
     /**
      * {@inheritDoc}
      */
+    @Override
     public URI getUri(final String path) throws RemoteException {
         if (map == null) {
             return null;
@@ -86,6 +88,7 @@ class MappedDocumentRepositorySkeleton
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addDocument(final URI uri, final String document)
             throws RemoteException {
         if (map == null) {

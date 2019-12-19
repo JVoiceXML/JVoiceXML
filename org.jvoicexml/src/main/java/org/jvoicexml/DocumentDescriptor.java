@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +25,9 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
@@ -35,6 +38,21 @@ import org.jvoicexml.xml.vxml.RequestMethod;
  * @since 0.7
  */
 public final class DocumentDescriptor {
+    /** Mime type of an XML document. */
+    public final static MimeType MIME_TYPE_XML;
+
+    /** Mime type of an XML document. */
+    public final static MimeType MIME_TYPE_SRGS_XML;
+
+    /** MIME type of a JSON formatted document. */
+    public final static MimeType MIME_TYPE_JSON;
+
+    /** Mime type of a pure text document. */
+    public final static MimeType MIME_TYPE_TEXT_PLAIN;
+    
+    /** Mime type of a pure text document. */
+    public final static MimeType MIME_TYPE_TEXT_JAVASCRIPT;
+
     /** The URI of the document. */
     private URI uri;
 
@@ -47,40 +65,59 @@ public final class DocumentDescriptor {
     /** Parameters for the request. */
     private final Collection<KeyValuePair> parameters;
 
+    static {
+        try {
+            MIME_TYPE_XML = new MimeType("application", "xml");
+            MIME_TYPE_SRGS_XML = new MimeType("application", "srgs+xml");
+            MIME_TYPE_JSON = new MimeType("application", "json");
+            MIME_TYPE_TEXT_PLAIN = new MimeType("text", "plain");
+            MIME_TYPE_TEXT_JAVASCRIPT = new MimeType("text", "javascript");
+        } catch (MimeTypeParseException e) {
+            throw new RuntimeException("Failed to create MIME types", e);
+        }
+    }
+    
     /**
      * <code>true</code> if the document must be loaded although the document
      * is in the cache.
      */
     private final boolean forceLoad;
 
+    /** The MIME type of the document to retrieve. */
+    private final MimeType type;
+    
     /**
      * Constructs a new object with the request method set to
      * {@link RequestMethod#GET}.
      * @param documentUri the URI of the document.
+     * @param mimeType the MIME type of the document to fetch
      */
-    public DocumentDescriptor(final URI documentUri) {
-        this(documentUri, RequestMethod.GET, false);
+    public DocumentDescriptor(final URI documentUri, final MimeType mimeType) {
+        this(documentUri, mimeType, RequestMethod.GET, false);
     }
 
     /**
      * Constructs a new object.
      * @param documentUri the URI of the document.
+     * @param mimeType the MIME type of the document to fetch
      * @param requestMethod the request method.
      */
-    public DocumentDescriptor(final URI documentUri,
+    public DocumentDescriptor(final URI documentUri, final MimeType mimeType,
             final RequestMethod requestMethod) {
-        this(documentUri, requestMethod, false);
+        this(documentUri, mimeType, requestMethod, false);
     }
 
     /**
      * Constructs a new object.
      * @param documentUri the URI of the document.
+     * @param mimeType the MIME type of the document to fetch
      * @param requestMethod the request method.
      * @param force <code>true</code> if the document must be loaded
      */
-    public DocumentDescriptor(final URI documentUri,
+    public DocumentDescriptor(final URI documentUri, final MimeType mimeType,
             final RequestMethod requestMethod, final boolean force) {
         uri = documentUri;
+        type = mimeType;
         method = requestMethod;
         parameters = new java.util.ArrayList<KeyValuePair>();
         forceLoad = force;
@@ -182,4 +219,14 @@ public final class DocumentDescriptor {
     public Collection<KeyValuePair> getParameters() {
         return parameters;
     }
+
+    /**
+     * Retrieves the MIME type of the document to fetch.
+     * @return the MIME type
+     * @since 0.7.9
+     */
+    public MimeType getType() {
+        return type;
+    }
+
 }

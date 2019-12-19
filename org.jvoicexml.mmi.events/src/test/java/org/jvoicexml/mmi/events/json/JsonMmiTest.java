@@ -49,6 +49,13 @@ import com.google.gson.JsonParseException;
  */
 public class JsonMmiTest {
 
+    /**
+     * Retrieves the contents of the specified resource as a string.
+     * @param resource path of the resource
+     * @return contents of the resource
+     * @throws IOException
+     *          if the resource could not be found
+     */
     final String getResourceAsString(final String resource) throws IOException {
         final InputStream in = JsonMmiTest.class.getResourceAsStream(resource);
         if (in == null) {

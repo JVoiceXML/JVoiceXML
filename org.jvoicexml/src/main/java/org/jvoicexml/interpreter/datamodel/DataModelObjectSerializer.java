@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -48,7 +48,6 @@ public interface DataModelObjectSerializer {
      * @return the serialized object.
      * @throws SemanticError
      *             error serializing the given object.
-     * @since 0.7.5
      */
     Collection<KeyValuePair> serialize(DataModel model,
             String name, Object object) throws SemanticError;

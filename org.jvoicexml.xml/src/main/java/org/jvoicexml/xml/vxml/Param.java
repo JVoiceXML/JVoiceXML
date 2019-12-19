@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -32,6 +27,9 @@ package org.jvoicexml.xml.vxml;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
@@ -45,7 +43,6 @@ import org.w3c.dom.Node;
  *
  * @author Steve Doyle
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class Param
         extends AbstractVoiceXmlNode {
@@ -262,7 +259,23 @@ public final class Param
     }
 
     /**
-     * Set the type attribute.
+     * Retrieve the type attribute as a MIMI type.
+     * @return Value of the type attribute.
+     * @throws MimeTypeParseException 
+     *          error converting tine type into a MIME type
+     * @see #ATTRIBUTE_TYPE
+     * @since 0.7.9
+     */
+    public MimeType getTypeAsMimeType() throws MimeTypeParseException {
+        final String type = getType();
+        if (type == null) {
+            return null;
+        }
+        return new MimeType(type);
+    }
+    
+    /**
+     * Sets the type attribute.
      * @param type Value of the type attribute.
      * @see #ATTRIBUTE_TYPE
      */
@@ -270,6 +283,21 @@ public final class Param
         setAttribute(ATTRIBUTE_TYPE, type);
     }
 
+    /**
+     * Sets the type attribute.
+     * @param type Value of the type attribute.
+     * @see #ATTRIBUTE_TYPE
+     * @since 0.7.9
+     */
+    public void setType(final MimeType type) {
+        if (type == null) {
+            setType((String)null);
+        } else {
+            final String str = type.toString();
+            setType(str);
+        }
+    }
+    
     /**
      * {@inheritDoc}
      */

@@ -43,7 +43,7 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 }
 
-xslt {
+task xsltHttp(type: com.github.eerohele.SaxonXsltTask) {
     stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
     input "${projectDir}/src/main/config/http-schemestrategy.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/http-schemestrategy.xml"
@@ -54,10 +54,32 @@ xslt {
     )
 }
 
-task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
+task xsltHttps(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/https-schemestrategy.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/https-schemestrategy.xml"
+    parameters(
+        buildpath: "${buildDir}/libs",
+        version: JVOICEXML_VERSION,
+        libs: configurations.compile
+    )
+}
+
+task xsltDistributionHttp(type: com.github.eerohele.SaxonXsltTask) {
     stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
     input "${projectDir}/src/main/config/http-schemestrategy.xml"
     output "${project(':main').buildDir}/config/http-schemestrategy.xml"
+    parameters(
+        buildpath: "lib",
+        version: JVOICEXML_VERSION,
+        libs: configurations.compile
+    )
+}
+
+task xsltDistributionHttps(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/https-schemestrategy.xml"
+    output "${project(':main').buildDir}/config/https-schemestrategy.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
@@ -77,8 +99,10 @@ task copyReferencedLibraries(type: Copy) {
 jar {
     version = JVOICEXML_VERSION
 
-    dependsOn xslt
-    dependsOn xsltDistribution
+    dependsOn xsltHttp
+    dependsOn xsltHttps
+    dependsOn xsltDistributionHttp
+    dependsOn xsltDistributionHttps
     dependsOn copyReferencedLibraries
     
     manifest {

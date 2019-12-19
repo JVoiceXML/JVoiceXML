@@ -24,6 +24,8 @@ package org.jvoicexml.jndi;
 import java.net.URI;
 import java.rmi.RemoteException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.client.jndi.RemoteApplication;
@@ -37,7 +39,11 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @since 0.7.5
  */
 public class ApplicationSkeleton
-        implements RemoteApplication, Skeleton {
+        implements RemoteApplication {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            LogManager.getLogger(ApplicationSkeleton.class);
+
     /** The session ID. */
     private SessionIdentifier sessionIdentifier;
 
@@ -71,10 +77,10 @@ public class ApplicationSkeleton
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the name of this skeleton.
+     * @return name of the skeleton
      */
-    @Override
-    public String getSkeletonName() throws RemoteException {
+    public String getSkeletonName() {
         return RemoteApplication.class.getSimpleName() + "." 
                 + sessionIdentifier.getId();
     }
@@ -110,7 +116,13 @@ public class ApplicationSkeleton
         if (application == null) {
             return null;
         }
-        return application.getApplication();
+        try {
+            return application.getApplication();
+        } catch (BadFetchError e) {
+            LOGGER.error(e.getMessage(), e);
+
+            throw new RemoteException(e.getMessage(), e);
+        }
     }
 
     /**
@@ -155,7 +167,13 @@ public class ApplicationSkeleton
         if (application == null) {
             return null;
         }
-        return application.resolve(uri);
+        try {
+            return application.resolve(uri);
+        } catch (BadFetchError e) {
+            LOGGER.error(e.getMessage(), e);
+
+            throw new RemoteException(e.getMessage(), e);
+        }
     }
 
     /**
@@ -167,6 +185,12 @@ public class ApplicationSkeleton
         if (application == null) {
             return null;
         }
-        return application.resolve(baseUri, uri);
+        try {
+            return application.resolve(baseUri, uri);
+        } catch (BadFetchError e) {
+            LOGGER.error(e.getMessage(), e);
+
+            throw new RemoteException(e.getMessage(), e);
+        }
     }
 }

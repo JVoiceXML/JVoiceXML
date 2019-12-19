@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,10 +21,12 @@
 
 package org.jvoicexml.xml.srgs;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+
 /**
  * Factory for the default grammar types.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public final class JVoiceXmlGrammarTypeFactory implements GrammarTypeFactory {
@@ -42,19 +39,25 @@ public final class JVoiceXmlGrammarTypeFactory implements GrammarTypeFactory {
         if (attribute == null) {
             return null;
         }
-        if (GrammarType.JSGF.getType().equals(attribute)) {
+        final MimeType other;
+        try {
+            other = new MimeType(attribute);
+        } catch (MimeTypeParseException e) {
+            return null;
+        }
+        if (GrammarType.JSGF.getType().match(other)) {
             return GrammarType.JSGF;
         }
-        if (GrammarType.SRGS_ABNF.getType().equals(attribute)) {
+        if (GrammarType.SRGS_ABNF.getType().match(other)) {
             return GrammarType.SRGS_ABNF;
         }
-        if (GrammarType.SRGS_XML.getType().equals(attribute)) {
+        if (GrammarType.SRGS_XML.getType().match(other)) {
             return GrammarType.SRGS_XML;
         }
-        if (GrammarType.GSL.getType().equals(attribute)) {
+        if (GrammarType.GSL.getType().match(other)) {
             return GrammarType.GSL;
         }
-        if (GrammarType.GSL_BINARY.getType().equals(attribute)) {
+        if (GrammarType.GSL_BINARY.getType().match(other)) {
             return GrammarType.GSL_BINARY;
         }
         return null;

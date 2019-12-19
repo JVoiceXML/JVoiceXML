@@ -20,6 +20,8 @@
  */
 package org.jvoicexml.interpreter.datamodel;
 
+import javax.activation.MimeType;
+
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.Scope;
 
@@ -500,6 +502,14 @@ public interface DataModel {
      */
     DataModelObjectSerializer getSerializer();
 
+    /**
+     * Retrieves a deserializer for the given {@link MimeType}.
+     * @param type the MIME type of the object to deserialize
+     * @return deserializer to use
+     * @since 0.7.9
+     */
+    DataModelObjectDeserializer getDeserializer(final MimeType type);
+    
     /**
      * Copies all values from the current data model to the given datamodel
      * preserving the scope stack.
