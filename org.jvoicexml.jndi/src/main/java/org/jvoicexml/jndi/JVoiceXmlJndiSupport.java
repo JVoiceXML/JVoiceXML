@@ -93,11 +93,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
 
     /**
      * Sets the class server port.
-<<<<<<< HEAD
      * @param port port of the class server
-=======
-     * @param port the port of the call server
->>>>>>> refs/remotes/origin/feature/support-rmi-dynamic-code-download
      * @since 0.7.9
      */
     public void setClassServerPort(final int port) {

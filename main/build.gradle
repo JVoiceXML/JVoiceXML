@@ -599,6 +599,11 @@ run {
 
     version = JVOICEXML_VERSION
 
+// Add the following lines to the jvmArgs to enable RMI logging
+//                "-Djava.rmi.server.logCalls=true",
+//                "-Dsun.rmi.server.logLevel=VERBOSE",
+//                "-Dsun.rmi.loader.logLevel=VERBOSE",
+
     mainClassName = "org.jvoicexml.startup.Startup"
     classpath = sourceSets.main.runtimeClasspath \
                 + files("${project(':org.jvoicexml').buildDir}/config")
