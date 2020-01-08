@@ -326,6 +326,13 @@ public final class JVoiceXmlDocumentServer implements DocumentServer {
     @Override
     public GrammarDocument getGrammarDocument(final String sessionId,
             final URI uri, final FetchAttributes attrs) throws BadFetchError {
+        // Doc
+        if (attrs.isFetchintSafe()) {
+            LOGGER.debug("not loading a fetchhint safe grammar immediately");
+            return new LazyLoadingGrammarDocument(sessionId, this, uri,
+                    attrs);
+        }
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving grammar '" + uri + "'");
         }

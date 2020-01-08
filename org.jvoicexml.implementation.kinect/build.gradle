@@ -4,7 +4,7 @@ apply plugin: 'java'
 apply plugin: "com.github.eerohele.saxon-gradle"
 apply plugin: 'maven'
 if (isFamily(FAMILY_WINDOWS)) {
-    apply plugin: 'msbuild'
+    apply plugin: 'com.ullink.msbuild'
 }
 
 buildscript {
@@ -16,8 +16,8 @@ buildscript {
     }
 
     dependencies {
-        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
-        classpath "com.ullink.gradle:gradle-msbuild-plugin:2.9"
+        classpath  'gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1'
+        classpath 'com.ullink.gradle:gradle-msbuild-plugin:3.6'
     }
 }   
 
