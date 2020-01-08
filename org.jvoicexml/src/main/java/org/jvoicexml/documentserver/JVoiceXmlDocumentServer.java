@@ -355,6 +355,12 @@ public final class JVoiceXmlDocumentServer
     public GrammarDocument getGrammarDocument(final SessionIdentifier sessionId,
             final URI uri, final MimeType type, final FetchAttributes attrs)
             throws BadFetchError {
+        // Doc
+        if (attrs.isFetchintSafe()) {
+            LOGGER.debug("not loading a fetchhint safe grammar immediately");
+            return new LazyLoadingGrammarDocument(sessionId, this, type, uri,
+                    attrs);
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving grammar '" + uri + "'");
         }
