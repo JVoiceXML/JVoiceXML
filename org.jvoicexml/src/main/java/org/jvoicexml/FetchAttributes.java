@@ -156,7 +156,7 @@ public final class FetchAttributes implements Cloneable {
     }
 
     /**
-     * Checks if the fetchint has a value of {@link #HINT_PREFETCH}
+     * Checks if the fetch hint has a value of {@link #HINT_PREFETCH}
      * @return true if the it is OK to prefetch the document.
      * @since 0.7.8
      */
@@ -168,7 +168,7 @@ public final class FetchAttributes implements Cloneable {
     }
 
     /**
-     * Checks if the fetchint has a value of {@link #HINT_SAFE}
+     * Checks if the fetch hint has a value of {@link #HINT_SAFE}
      * @return true if the document should be downloaded when actually needed.
      * @since 0.7.8
      */

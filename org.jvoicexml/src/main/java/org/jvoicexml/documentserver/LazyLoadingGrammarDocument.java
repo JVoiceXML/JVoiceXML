@@ -22,20 +22,27 @@ package org.jvoicexml.documentserver;
 
 import java.net.URI;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * A grammar document that does not prefetch the grammar document but just keeps
- * its URI.
+ * its URI and loads it once it is requested.
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
  */
-public class ExternalReferenceGrammarDocument implements GrammarDocument {
-    /**
-     * The URI of the grammar document.
-     */
+public class LazyLoadingGrammarDocument implements GrammarDocument {
+    /** Logger for this class. */
+    private static final Logger LOGGER = LogManager
+            .getLogger(LazyLoadingGrammarDocument.class);
+
+    /** The URI of the grammar document. */
     private URI uri;
 
     /** The grammar type. */
@@ -44,7 +51,35 @@ public class ExternalReferenceGrammarDocument implements GrammarDocument {
     /** The mode type. */
     private ModeType mode;
 
-    public ExternalReferenceGrammarDocument(final URI source) {
+    /** The session identifier. */
+    private final String sessionIdentifier;
+    
+    /** The document server to actually load the grammar. */
+    private final DocumentServer server;
+        
+    /** The fetch attributes. */
+    private final FetchAttributes attributes;
+    
+    /** The loaded document. */
+    private GrammarDocument document;
+   
+    /**
+     * Constructs a new object.
+     * @param sessionId the session identifier
+     * @param documentServer the document server to actually load the grammar
+     * @param source the source URI
+     * @param attrs the fetch attributes
+     */
+    public LazyLoadingGrammarDocument(final String sessionId,
+            final DocumentServer documentServer, 
+            final URI source, final FetchAttributes attrs) {
+        sessionIdentifier = sessionId;
+        server = documentServer;
+        attributes = attrs;
+        // Clear a prefetch safe hint to enable loading later on.
+        if (attributes.isFetchintSafe()) {
+            attributes.setFetchHint(null);
+        }
         uri = source;
     }
     
@@ -117,7 +152,20 @@ public class ExternalReferenceGrammarDocument implements GrammarDocument {
      */
     @Override
     public String getDocument() {
-        return null;
+        if (server == null) {
+            LOGGER.warn("no server known. unable to load the document");
+            return null;
+        }
+        if (document == null) {
+            try {
+                document = server.getGrammarDocument(sessionIdentifier, uri,
+                        attributes);
+            } catch (BadFetchError e) {
+                LOGGER.warn(e.getMessage(), e);
+                return null;
+            }
+        }
+        return document.getDocument();
     }
 
     /**
@@ -125,7 +173,20 @@ public class ExternalReferenceGrammarDocument implements GrammarDocument {
      */
     @Override
     public String getTextContent() {
-        return null;
+        if (server == null) {
+            LOGGER.warn("no server known. unable to load the document");
+            return null;
+        }
+        if (document == null) {
+            try {
+                document = server.getGrammarDocument(sessionIdentifier, uri,
+                        attributes);
+            } catch (BadFetchError e) {
+                LOGGER.warn(e.getMessage(), e);
+                return null;
+            }
+        }
+        return document.getTextContent();
     }
 
     /**
@@ -133,7 +194,20 @@ public class ExternalReferenceGrammarDocument implements GrammarDocument {
      */
     @Override
     public byte[] getBuffer() {
-        return null;
+        if (server == null) {
+            LOGGER.warn("no server known. unable to load the document");
+            return null;
+        }
+        if (document == null) {
+            try {
+                document = server.getGrammarDocument(sessionIdentifier, uri,
+                        attributes);
+            } catch (BadFetchError e) {
+                LOGGER.warn(e.getMessage(), e);
+                return null;
+            }
+        }
+        return document.getBuffer();
     }
 
     /**
@@ -180,7 +254,7 @@ public class ExternalReferenceGrammarDocument implements GrammarDocument {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        ExternalReferenceGrammarDocument other = (ExternalReferenceGrammarDocument) obj;
+        LazyLoadingGrammarDocument other = (LazyLoadingGrammarDocument) obj;
         if (mode != other.mode) {
             return false;
         }
@@ -200,6 +274,7 @@ public class ExternalReferenceGrammarDocument implements GrammarDocument {
         }
         return true;
     }
+
     /**
      * {@inheritDoc}
      */
