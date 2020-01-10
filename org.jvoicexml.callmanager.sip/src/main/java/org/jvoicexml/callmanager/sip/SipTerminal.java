@@ -29,7 +29,7 @@ import javax.sip.SipException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.callmanager.ObservableTerminal;
 import org.jvoicexml.callmanager.Terminal;
 import org.jvoicexml.callmanager.TerminalListener;
@@ -68,7 +68,7 @@ public final class SipTerminal
      */
     public SipTerminal() {
         terminalListeners = new java.util.ArrayList<TerminalListener>();
-        id = new UuidSessionIdentifer();
+        id = new UuidSessionIdentifier();
     }
 
     /**
