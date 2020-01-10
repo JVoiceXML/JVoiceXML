@@ -31,7 +31,7 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.ReturnEvent;
@@ -78,7 +78,7 @@ public class TestSubdialogExecutorThread {
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
 
-        final SessionIdentifier id = new UuidSessionIdentifer();
+        final SessionIdentifier id = new UuidSessionIdentifier();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile, id);
         final Configuration configuration = Mockito.mock(Configuration.class);

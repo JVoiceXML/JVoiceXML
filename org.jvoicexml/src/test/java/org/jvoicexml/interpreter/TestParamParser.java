@@ -33,7 +33,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
@@ -87,7 +87,7 @@ public final class TestParamParser {
                 .mock(SsmlParsingStrategyFactory.class);
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
-        final SessionIdentifier id = new UuidSessionIdentifer();
+        final SessionIdentifier id = new UuidSessionIdentifier();
         session = new JVoiceXmlSession(platform, jvxml, null, profile, id);
     }
 

@@ -40,7 +40,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
@@ -120,7 +120,7 @@ public final class TestJsapi20SynthesizedOutput {
         listener = new MockSynthesizedOutputListener();
         output.addListener(listener);
         documentServer = new JVoiceXmlDocumentServer();
-        sessionId = new UuidSessionIdentifer();
+        sessionId = new UuidSessionIdentifier();
     }
 
     /**

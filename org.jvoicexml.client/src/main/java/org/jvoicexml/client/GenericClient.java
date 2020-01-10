@@ -32,7 +32,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.jndi.JVoiceXmlStub;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -203,7 +203,7 @@ public final class GenericClient {
      */
     public Session call(final URI uri, final ConnectionInformation info)
             throws NamingException, ErrorEvent {
-        final SessionIdentifier id = new UuidSessionIdentifer(); 
+        final SessionIdentifier id = new UuidSessionIdentifier(); 
         return call(uri, info, id);
     }
 

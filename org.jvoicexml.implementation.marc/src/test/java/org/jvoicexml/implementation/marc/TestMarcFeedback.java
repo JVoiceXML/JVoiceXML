@@ -31,7 +31,7 @@ import org.junit.Test;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
@@ -74,7 +74,7 @@ public final class TestMarcFeedback implements SynthesizedOutputListener {
         output.addListener(this);
         final SpeakableText speakable = new SpeakableSsmlText("test",
                 Locale.US);
-        final SessionIdentifier sessionId = new UuidSessionIdentifer();
+        final SessionIdentifier sessionId = new UuidSessionIdentifier();
         output.queueSpeakable(speakable, sessionId, null);
         final MarcFeedback feedback = new MarcFeedback(output, 4011);
         final DatagramSocket server = new DatagramSocket(4012);

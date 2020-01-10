@@ -38,7 +38,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
@@ -161,7 +161,7 @@ public final class TextCall implements Call {
             // run the dialog
             final ConnectionInformation info = server
                     .getConnectionInformation();
-            final SessionIdentifier id = new UuidSessionIdentifer();
+            final SessionIdentifier id = new UuidSessionIdentifier();
             session = jvxml.createSession(info, id);
             session.call(uri);
             for (CallListener listener : listeners) {

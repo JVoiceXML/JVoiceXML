@@ -32,7 +32,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeechRecognizerProperties;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
@@ -84,7 +84,7 @@ public final class TestVoiceXmlInterpreterContext {
         Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
 
-        final SessionIdentifier id = new UuidSessionIdentifer();
+        final SessionIdentifier id = new UuidSessionIdentifier();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 null, profile, id);
         final Configuration configuration = Mockito.mock(Configuration.class);

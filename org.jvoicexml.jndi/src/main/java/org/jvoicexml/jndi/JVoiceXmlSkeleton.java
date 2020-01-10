@@ -33,7 +33,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.client.jndi.RemoteSession;
 import org.jvoicexml.client.jndi.SessionStub;
@@ -106,7 +106,7 @@ class JVoiceXmlSkeleton implements RemoteJVoiceXml {
     @Override
     public Session createSession(final ConnectionInformation info)
             throws RemoteException {
-        final SessionIdentifier id = new UuidSessionIdentifer();
+        final SessionIdentifier id = new UuidSessionIdentifier();
         return createSession(info, id);
     }
 

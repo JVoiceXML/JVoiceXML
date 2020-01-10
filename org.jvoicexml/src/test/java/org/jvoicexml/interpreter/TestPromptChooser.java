@@ -34,7 +34,7 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
@@ -97,7 +97,7 @@ public final class TestPromptChooser {
                 .mock(SsmlParsingStrategyFactory.class);
         when(profile.getSsmlParsingStrategyFactory()).thenReturn(
                 factory);
-        final SessionIdentifier id = new UuidSessionIdentifer();
+        final SessionIdentifier id = new UuidSessionIdentifier();
         final JVoiceXmlSession session = Mockito.spy(new JVoiceXmlSession(
                 platform, jvxml, null, profile, id));
         context = Mockito.spy(new VoiceXmlInterpreterContext(session,

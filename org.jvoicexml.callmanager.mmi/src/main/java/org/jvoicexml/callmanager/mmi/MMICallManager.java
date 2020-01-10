@@ -30,7 +30,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.ConnectionInformationCallMetadataModifiable;
 import org.jvoicexml.client.ConnectionInformationController;
 import org.jvoicexml.client.ConnectionInformationFactory;
@@ -246,7 +246,7 @@ public final class MMICallManager implements CallManager {
             modifiable.setProtocolName(data.getProtocolName());
             modifiable.setProtocolVersion(data.getProtocolVersion());
         }
-        final SessionIdentifier id = new UuidSessionIdentifer();
+        final SessionIdentifier id = new UuidSessionIdentifier();
         final Session session = jvxml.createSession(info, id);
         sessions.put(session, controller);
         if (LOGGER.isDebugEnabled()) {

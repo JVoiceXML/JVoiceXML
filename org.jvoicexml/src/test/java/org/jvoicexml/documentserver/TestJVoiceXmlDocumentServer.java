@@ -32,7 +32,7 @@ import org.junit.Test;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.documentserver.schemestrategy.ResourceDocumentStrategy;
@@ -184,7 +184,7 @@ public final class TestJVoiceXmlDocumentServer {
         final URI uri = new URI("res://test.wav");
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
-                new UuidSessionIdentifer());
+                new UuidSessionIdentifier());
         final SessionIdentifier sessionId = session.getSessionId();
         final AudioInputStream in = server.getAudioInputStream(sessionId,
                 uri);
@@ -209,7 +209,7 @@ public final class TestJVoiceXmlDocumentServer {
                 DocumentDescriptor.MIME_TYPE_XML);
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
-                new UuidSessionIdentifer());
+                new UuidSessionIdentifier());
         final SessionIdentifier sessionId = session.getSessionId();
         final VoiceXmlDocument retrievedDocument = server.getDocument(
                 sessionId, descriptor);
@@ -235,7 +235,7 @@ public final class TestJVoiceXmlDocumentServer {
                 fragmentUri, DocumentDescriptor.MIME_TYPE_XML);
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
-                new UuidSessionIdentifer());
+                new UuidSessionIdentifier());
         final SessionIdentifier sessionId = session.getSessionId();
         final VoiceXmlDocument retrievedDocument = server.getDocument(
                 sessionId, descriptor);
@@ -264,7 +264,7 @@ public final class TestJVoiceXmlDocumentServer {
                 DocumentDescriptor.MIME_TYPE_XML);
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
-                new UuidSessionIdentifer());
+                new UuidSessionIdentifier());
         final SessionIdentifier sessionId = session.getSessionId();
         final VoiceXmlDocument retrievedDocument = server.getDocument(
                 sessionId, descriptor);

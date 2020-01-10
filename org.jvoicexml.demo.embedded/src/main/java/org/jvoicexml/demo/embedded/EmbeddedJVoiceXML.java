@@ -33,7 +33,7 @@ import org.jvoicexml.JVoiceXmlMain;
 import org.jvoicexml.JVoiceXmlMainListener;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
@@ -86,7 +86,7 @@ public final class EmbeddedJVoiceXML implements JVoiceXmlMainListener {
         server.start();
         server.waitStarted();
         final ConnectionInformation client = server.getConnectionInformation();
-        final SessionIdentifier id = new UuidSessionIdentifer();
+        final SessionIdentifier id = new UuidSessionIdentifier();
         final Session session = jvxml.createSession(client, id);
 
         session.call(uri);

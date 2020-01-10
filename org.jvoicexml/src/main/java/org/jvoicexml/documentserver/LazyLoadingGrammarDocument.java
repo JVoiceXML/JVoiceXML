@@ -21,6 +21,7 @@
 package org.jvoicexml.documentserver;
 
 import java.net.URI;
+import java.util.Objects;
 
 import javax.activation.MimeType;
 
@@ -149,32 +150,51 @@ public class LazyLoadingGrammarDocument implements GrammarDocument {
     }
 
     /**
+     * Lazy retrieval of the document.
+     * @return the reireved document
+     * @throws BadFetchError
+     *          error obtaining the document
+     */
+    private GrammarDocument retrieveDocument() throws BadFetchError {
+        if (document != null) {
+            return document;
+        }
+        if (server == null) {
+            LOGGER.warn("no server known. unable to load the document");
+            return null;
+        }
+        document = server.getGrammarDocument(sessionIdentifier, uri,
+                mimeType, attributes);
+        return document;
+    }
+    
+    /**
      * {@inheritDoc}
      */
     @Override
     public boolean isAscii() {
-        return false;
+        try {
+            final GrammarDocument doc = retrieveDocument();
+            return doc.isAscii();
+        } catch (BadFetchError e) {
+            LOGGER.warn(e.getMessage(), e);
+            return false;
+        }
     }
 
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public String getDocument() {
-        if (server == null) {
-            LOGGER.warn("no server known. unable to load the document");
+        try {
+            final GrammarDocument doc = retrieveDocument();
+            return doc.getDocument();
+        } catch (BadFetchError e) {
+            LOGGER.warn(e.getMessage(), e);
             return null;
         }
-        if (document == null) {
-            try {
-                document = server.getGrammarDocument(sessionIdentifier, uri,
-                        mimeType, attributes);
-            } catch (BadFetchError e) {
-                LOGGER.warn(e.getMessage(), e);
-                return null;
-            }
-        }
-        return document.getDocument();
     }
 
     /**
@@ -182,20 +202,13 @@ public class LazyLoadingGrammarDocument implements GrammarDocument {
      */
     @Override
     public String getTextContent() {
-        if (server == null) {
-            LOGGER.warn("no server known. unable to load the document");
+        try {
+            final GrammarDocument doc = retrieveDocument();
+            return doc.getTextContent();
+        } catch (BadFetchError e) {
+            LOGGER.warn(e.getMessage(), e);
             return null;
         }
-        if (document == null) {
-            try {
-                document = server.getGrammarDocument(sessionIdentifier, uri,
-                        mimeType, attributes);
-            } catch (BadFetchError e) {
-                LOGGER.warn(e.getMessage(), e);
-                return null;
-            }
-        }
-        return document.getTextContent();
     }
 
     /**
@@ -203,33 +216,23 @@ public class LazyLoadingGrammarDocument implements GrammarDocument {
      */
     @Override
     public byte[] getBuffer() {
-        if (server == null) {
-            LOGGER.warn("no server known. unable to load the document");
+        try {
+            final GrammarDocument doc = retrieveDocument();
+            return doc.getBuffer();
+        } catch (BadFetchError e) {
+            LOGGER.warn(e.getMessage(), e);
             return null;
         }
-        if (document == null) {
-            try {
-                document = server.getGrammarDocument(sessionIdentifier, uri,
-                        mimeType, attributes);
-            } catch (BadFetchError e) {
-                LOGGER.warn(e.getMessage(), e);
-                return null;
-            }
-        }
-        return document.getBuffer();
     }
+
 
     /**
      * {@inheritDoc}
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((mode == null) ? 0 : mode.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        result = prime * result + ((uri == null) ? 0 : uri.hashCode());
-        return result;
+        return Objects.hash(attributes, document, mode, server,
+                sessionIdentifier, type, uri);
     }
 
     /**
@@ -240,50 +243,30 @@ public class LazyLoadingGrammarDocument implements GrammarDocument {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (!(obj instanceof LazyLoadingGrammarDocument)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        return equals((ExternalGrammarDocument) obj);
+        LazyLoadingGrammarDocument other = (LazyLoadingGrammarDocument) obj;
+        return equals(other);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(final GrammarDocument obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+    public boolean equals(GrammarDocument obj) {
+        if (!(obj instanceof LazyLoadingGrammarDocument)) {
             return false;
         }
         LazyLoadingGrammarDocument other = (LazyLoadingGrammarDocument) obj;
-        if (mode != other.mode) {
-            return false;
-        }
-        if (type == null) {
-            if (other.type != null) {
-                return false;
-            }
-        } else if (!type.equals(other.type)) {
-            return false;
-        }
-        if (uri == null) {
-            if (other.uri != null) {
-                return false;
-            }
-        } else if (!uri.equals(other.uri)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(attributes, other.attributes)
+                && Objects.equals(document, other.document)
+                && mode == other.mode && Objects.equals(server, other.server)
+                && Objects.equals(sessionIdentifier, other.sessionIdentifier)
+                && Objects.equals(type, other.type)
+                && Objects.equals(uri, other.uri);
     }
-
+    
     /**
      * {@inheritDoc}
      */

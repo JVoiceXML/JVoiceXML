@@ -36,7 +36,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -85,7 +85,7 @@ public final class ConsoleClient implements TextListener {
         }
         LOGGER.info("server started");
         final ConnectionInformation info = server.getConnectionInformation();
-        final SessionIdentifier id = new UuidSessionIdentifer();
+        final SessionIdentifier id = new UuidSessionIdentifier();
         final Session session = jvxml.createSession(info, id);
         LOGGER.info("calling application at '" + uri + "'...");
         session.call(uri);

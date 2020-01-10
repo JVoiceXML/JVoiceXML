@@ -36,7 +36,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -108,7 +108,7 @@ public final class TestJsapi10SynthesizedOutput {
         listener = new MockSynthesizedOutputListener();
         synthesizer.addListener(listener);
         documentServer = new JVoiceXmlDocumentServer();
-        sessionId = new UuidSessionIdentifer();
+        sessionId = new UuidSessionIdentifier();
     }
 
     /**

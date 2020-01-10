@@ -34,7 +34,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.event.ErrorEvent;
@@ -172,7 +172,7 @@ public final class JVoiceXmlStub
      */
     public Session createSession(final ConnectionInformation info)
             throws ErrorEvent {
-        final SessionIdentifier id = new UuidSessionIdentifer();
+        final SessionIdentifier id = new UuidSessionIdentifier();
         return createSession(info, id);
     }
 

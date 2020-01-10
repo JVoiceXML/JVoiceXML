@@ -33,7 +33,7 @@ import org.junit.Test;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -167,7 +167,7 @@ public final class TestMarySynthesizedOutput
         output.activate();
         output.connect(null);
         documentServer = new JVoiceXmlDocumentServer();
-        sessionId = new UuidSessionIdentifer();
+        sessionId = new UuidSessionIdentifier();
     }
 
     /**

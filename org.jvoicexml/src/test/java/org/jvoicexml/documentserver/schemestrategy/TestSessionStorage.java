@@ -25,7 +25,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -60,7 +60,7 @@ public final class TestSessionStorage {
         };
         Mockito.when(factory.createSessionIdentifier(Mockito.anyObject()))
                 .then(answer);
-        sessionId = new UuidSessionIdentifer();
+        sessionId = new UuidSessionIdentifier();
         storage = new SessionStorage<String>(factory);
     }
 
@@ -76,7 +76,7 @@ public final class TestSessionStorage {
         Assert.assertNotNull(id1);
         final String id2 = storage.getSessionIdentifier(sessionId);
         Assert.assertEquals(id1, id2);
-        final SessionIdentifier sessionId3 = new UuidSessionIdentifer();
+        final SessionIdentifier sessionId3 = new UuidSessionIdentifier();
         final String id3 = storage.getSessionIdentifier(sessionId3);
         Assert.assertNotSame(id1, id3);
         final String id4 = storage.getSessionIdentifier(null);
