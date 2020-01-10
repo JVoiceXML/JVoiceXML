@@ -11,6 +11,5 @@
 /howtobuild.bbl
 /howtobuild.blg
 /.gradle/
-/jvxml-howtobuild-0.7.8-SNAPSHOT.pdf
-/jvxml-howtobuild-0.7.8.pdf
+/jvxml-howtobuild-*.pdf
 /build/
