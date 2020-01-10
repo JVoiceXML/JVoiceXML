@@ -36,7 +36,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.client.text.TextServer;
@@ -83,7 +83,7 @@ public final class TextDemo implements TextListener {
                 server.waitStarted();
                 LOGGER.info("initiating  calls " + i + "...");
                 final ConnectionInformation info = server.getConnectionInformation();
-                final SessionIdentifier id = new UuidSessionIdentifer();
+                final SessionIdentifier id = new UuidSessionIdentifier();
                 final Session session = jvxml.createSession(info, id);
                 session.call(dialog);
                 LOGGER.info("waiting for the end of session...");
@@ -123,7 +123,7 @@ public final class TextDemo implements TextListener {
             for (int i = 0; i < MAX_SESSIONS; i++) {
                 final ConnectionInformation info = servers[i]
                         .getConnectionInformation();
-                final SessionIdentifier id = new UuidSessionIdentifer();
+                final SessionIdentifier id = new UuidSessionIdentifier();
                 final Session session = jvxml.createSession(info, id);
                 sessions[i] = session;
             }

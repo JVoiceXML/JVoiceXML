@@ -34,7 +34,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.client.text.TextServer;
@@ -119,7 +119,7 @@ public final class LUISDemo implements TextListener {
         }
 
         final ConnectionInformation client = server.getConnectionInformation();
-        final SessionIdentifier id = new UuidSessionIdentifer();
+        final SessionIdentifier id = new UuidSessionIdentifier();
         final Session session = jvxml.createSession(client, id);
 
         session.call(uri);

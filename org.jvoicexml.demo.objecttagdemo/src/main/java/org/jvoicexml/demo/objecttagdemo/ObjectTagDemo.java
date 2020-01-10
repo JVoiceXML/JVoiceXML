@@ -37,7 +37,7 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
@@ -90,7 +90,7 @@ public final class ObjectTagDemo {
 
         final ConnectionInformation client = new BasicConnectionInformation(
                 "desktop", "jsapi20", "jsapi20");
-        final SessionIdentifier id = new UuidSessionIdentifer();
+        final SessionIdentifier id = new UuidSessionIdentifier();
         final Session session = jvxml.createSession(client, id);
 
         session.call(uri);
