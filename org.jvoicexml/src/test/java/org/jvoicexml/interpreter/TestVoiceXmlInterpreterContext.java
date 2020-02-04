@@ -22,10 +22,12 @@
 package org.jvoicexml.interpreter;
 
 import java.net.URI;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.Application;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.ImplementationPlatform;
@@ -37,12 +39,16 @@ import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.mock.MockJvoiceXmlCore;
 import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.w3c.dom.Document;
 
 /**
@@ -90,7 +96,9 @@ public final class TestVoiceXmlInterpreterContext {
         final Configuration configuration = Mockito.mock(Configuration.class);
         Mockito.when(configuration.loadObject(SpeechRecognizerProperties.class))
                 .thenReturn(new SpeechRecognizerProperties());
-        context = new VoiceXmlInterpreterContext(session, configuration);
+        final DataModel model = Mockito.mock(DataModel.class);
+        context = new VoiceXmlInterpreterContext(session, configuration, null, 
+                model);
     }
 
     /**
@@ -105,12 +113,37 @@ public final class TestVoiceXmlInterpreterContext {
      */
     @Test
     public void testLoadDocument() throws Exception, JVoiceXMLEvent {
+        final Application application = Mockito.mock(Application.class);
+        Mockito.when(application.resolve(Mockito.any(URI.class))).thenAnswer(
+                new Answer<URI>() {
+                    @Override
+                    public URI answer(InvocationOnMock invocation)
+                            throws Throwable {
+                        return invocation.getArgumentAt(0, URI.class);
+                    }
+                    
+        });
+        context.setApplication(application);
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final URI uri = map.getUri("/test");
         map.addDocument(uri, document);
+        Mockito.when(application.getLoadedDocuments()).then(
+                new Answer<List<URI>>() {
+                    @Override
+                    public List<URI> answer(InvocationOnMock invocation)
+                            throws Throwable {
+                        final List<URI> uris = new java.util.ArrayList<URI>();
+                        uris.add(uri);
+                        return uris;
+                    }
+                });
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
                 DocumentDescriptor.MIME_TYPE_XML);
         final Document retrievedDocument = context.loadDocument(descriptor);
+        final DataModel model = context.getDataModel();
+        Mockito.verify(model).updateArray(Mockito.eq("loadedDocumentURIs$"),
+                Mockito.eq(0), Mockito.eq(uri.toString()),  
+                Mockito.eq(Scope.APPLICATION));
         Assert.assertEquals(document.toString(), retrievedDocument.toString());
     }
 

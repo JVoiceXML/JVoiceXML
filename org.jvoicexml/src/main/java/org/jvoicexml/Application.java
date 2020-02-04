@@ -22,6 +22,7 @@
 package org.jvoicexml;
 
 import java.net.URI;
+import java.util.List;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -79,6 +80,13 @@ public interface Application {
      */
     URI getApplication() throws BadFetchError;
 
+    /**
+     * Retrieves a list of loaded documents.
+     * @return loaded documents
+     * @since 0.7.9
+     */
+    List<URI> getLoadedDocuments();
+    
     /**
      * Sets the new root document.
      * 

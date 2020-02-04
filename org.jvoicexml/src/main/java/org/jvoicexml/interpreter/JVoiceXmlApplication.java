@@ -24,6 +24,7 @@ package org.jvoicexml.interpreter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -172,6 +173,14 @@ public final class JVoiceXmlApplication
         return resolve(application);
     }
 
+    @Override
+    public List<URI> getLoadedDocuments() {
+        final Collection<URI> keys = loadedDocuments.keySet();
+        List<URI> list = new java.util.ArrayList<URI>();
+        list.addAll(keys);
+        return list;
+    }
+    
     /**
      * {@inheritDoc}
      */

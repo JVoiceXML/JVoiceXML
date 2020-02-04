@@ -23,6 +23,7 @@ package org.jvoicexml.jndi;
 
 import java.net.URI;
 import java.rmi.RemoteException;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -125,6 +126,17 @@ public class ApplicationSkeleton
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<URI> getLoadedDocuments() throws RemoteException {
+        if (application == null) {
+            return null;
+        }
+        return application.getLoadedDocuments();
+    }
+    
     /**
      * {@inheritDoc}
      */

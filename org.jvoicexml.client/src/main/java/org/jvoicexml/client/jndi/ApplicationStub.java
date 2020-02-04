@@ -23,6 +23,7 @@ package org.jvoicexml.client.jndi;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -109,6 +110,22 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<URI> getLoadedDocuments() {
+        try {
+            final RemoteApplication application = getSkeleton();
+            return application.getLoadedDocuments();
+        } catch (java.rmi.RemoteException | NamingException re) {
+            clearSkeleton();
+            re.printStackTrace();
+            return null;
+        }
+    }
+
+    
     /**
      * {@inheritDoc}
      */
@@ -214,5 +231,4 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
     protected Class<?> getLocalClass() {
         return Application.class;
     }
-
 }

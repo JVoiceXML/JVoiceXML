@@ -25,6 +25,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.activation.MimeType;
@@ -502,7 +503,8 @@ public class VoiceXmlInterpreterContext {
         model.createVariable("lastresult$.inputmode", null, Scope.APPLICATION);
         model.createVariable("lastresult$.interpretation", null,
                 Scope.APPLICATION);
-
+        exposeLoadedDocuments();
+        
         // The main loop to interpret single- and multi-document applications
         DocumentDescriptor descriptor = null;
         while (document != null) {
@@ -670,10 +672,46 @@ public class VoiceXmlInterpreterContext {
         if (application != null) {
             final URI resolvedUri = application.resolve(uri);
             application.addDocument(resolvedUri, doc);
+            exposeLoadedDocuments();
         }
         return doc;
     }
 
+    /**
+     * Saves the URIs of the loaded documents to the model. 
+     * 
+     * @since 0.7.9
+     */
+    private void exposeLoadedDocuments() {
+        final String loadedDocumentURIs = "loadedDocumentURIs$";
+        final List<URI> uris = application.getLoadedDocuments();
+        final int size = uris.size();
+        if (model.existsVariable(loadedDocumentURIs)) {
+            int rc = model.resizeArray(loadedDocumentURIs, size,
+                    Scope.APPLICATION);
+            if (rc != DataModel.NO_ERROR) {
+                LOGGER.warn("unable to resize array for loaded URIs: " + rc);
+                return;
+            }
+        } else {
+            int rc = model.createArray(loadedDocumentURIs, size, Scope.APPLICATION);
+            if (rc != DataModel.NO_ERROR) {
+                LOGGER.warn("unable to create array for loaded URIs: " + rc);
+                return;
+            }
+        }
+        for (int i = 0; i < size; i++) {
+            final URI uri = uris.get(i);
+            int rc = model.updateArray(loadedDocumentURIs, i, uri.toString(),
+                    Scope.APPLICATION);
+            if (rc != DataModel.NO_ERROR) {
+                LOGGER.warn("unable to update array for loaded URIs at " + i
+                        + ": " + rc);
+                return;
+            }
+        }
+    }
+    
     /**
      * Retrieves a reference to the document server.
      * 
