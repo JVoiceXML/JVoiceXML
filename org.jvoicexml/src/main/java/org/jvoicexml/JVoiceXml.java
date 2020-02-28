@@ -1,13 +1,7 @@
 /*
-/*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -49,10 +43,9 @@ public interface JVoiceXml {
     /**
      * Creates a new session.
      *
-     * <p>
-     * The <code>Session</code> is the entry point to start the interpreter. A
-     * session is obtained by a {@link ConnectionInformation}.
-     * </p>
+     * The {@link Session} is the entry point to start the interpreter. A
+     * session is linked to resources identified according to the info provided
+     * by {@link ConnectionInformation}.
      *
      * @param info
      *        information about the current connection,

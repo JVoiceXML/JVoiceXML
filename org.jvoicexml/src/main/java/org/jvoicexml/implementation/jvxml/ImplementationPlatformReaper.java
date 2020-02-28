@@ -22,6 +22,10 @@ package org.jvoicexml.implementation.jvxml;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Reaper for external resources to return them after a timeout when the
@@ -46,13 +50,30 @@ class ImplementationPlatformReaper extends Thread {
     /** Flag if the platform closed normally. */
     private boolean stopReaping;
 
+    /** The used input. */
+    private final SpokenInput input;
+    /** The used output. */
+    private final SynthesizedOutput output;
+    
     /**
      * Creates a new object.
      * @param impl the implementation platform
      */
     ImplementationPlatformReaper(
-            final JVoiceXmlImplementationPlatform impl) {
+            final JVoiceXmlImplementationPlatform impl, final JVoiceXmlUserInput in,
+            final JVoiceXmlSystemOutput out) {
         platform = impl;
+        if (in != null) {
+            input = in.getSpokenInput();
+        } else {
+            input = null;
+        }
+        if (out != null) {
+            output = out.getSynthesizedOutput();
+        } else {
+            output = null;
+        }
+        setName("platform-reaper");
         setDaemon(true);
     }
 
@@ -63,8 +84,8 @@ class ImplementationPlatformReaper extends Thread {
             try {
                 wait.wait(REAPING_DELAY);
                 if (!stopReaping) {
-                    LOGGER.info("delay exceeded: triggering hangup");
-                    platform.telephonyCallHungup(null);
+                    LOGGER.info("delay exceeded: cleaning up");
+                    forceReturnResources();
                 }
             } catch (InterruptedException e) {
                 return;
@@ -73,6 +94,27 @@ class ImplementationPlatformReaper extends Thread {
         LOGGER.info("reaper stopped");
     }
     
+    /**
+     * Force return of the external resources.
+     * 
+     * @since 0.7.9
+     */
+    private void forceReturnResources() {
+        LOGGER.warn("force returning resouces");
+        if ((input != null) && input.isBusy()) {
+            input.stopRecognition();
+        }
+        if ((output != null) && output.isBusy()) {
+            try {
+                output.cancelOutput(BargeInType.SPEECH);
+            } catch (NoresourceError e) {
+                LOGGER.warn("error canceling output while reaping", e);
+            }
+        }
+        // Try again...
+        platform.telephonyCallHungup(null);
+    }
+
     /**
      * Stops reaping if the platform closed normally.
      */

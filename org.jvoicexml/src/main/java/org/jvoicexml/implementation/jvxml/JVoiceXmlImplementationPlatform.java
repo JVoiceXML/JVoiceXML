@@ -281,8 +281,7 @@ public final class JVoiceXmlImplementationPlatform
 
             if (!hungup && !closed && output.isBusy()) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("output still busy. returning when queue is"
-                            + " empty");
+                    LOGGER.debug("output still busy. Delaying return...");
                 }
                 maybeStartReaper();
             } else {
@@ -314,7 +313,7 @@ public final class JVoiceXmlImplementationPlatform
         if (reaper != null) {
             return;
         }
-        reaper = new ImplementationPlatformReaper(this);
+        reaper = new ImplementationPlatformReaper(this, input, output);
         reaper.start();
     }
     
@@ -417,9 +416,9 @@ public final class JVoiceXmlImplementationPlatform
 
             if (!hungup && !closed && input.isBusy()) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("input still busy. returning when recognition"
-                            + " is stopped");
+                    LOGGER.debug("input still busy. delaying return");
                 }
+                maybeStartReaper();
             } else {
                 final JVoiceXmlUserInput userInput = input;
                 input = null;

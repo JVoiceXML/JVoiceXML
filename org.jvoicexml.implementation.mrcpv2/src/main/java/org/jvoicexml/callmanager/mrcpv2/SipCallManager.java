@@ -33,12 +33,18 @@ import javax.sip.address.Address;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.CallManager;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.implementation.jvxml.JVoiceXmlCallControl;
 import org.mrcp4j.client.MrcpChannel;
 import org.mrcp4j.client.MrcpInvocationException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
@@ -83,8 +89,11 @@ public final class SipCallManager
     private SipServer sipServer;
 
     /** Reference to JVoiceXML. */
-    private JVoiceXml jvxml;
+    private JVoiceXmlCore jvxml;
 
+    /** The implementation platform factory. */
+    private ImplementationPlatformFactory platformFactory;
+    
     /**
      * Sets the SIP server.
      * 
@@ -132,7 +141,9 @@ public final class SipCallManager
             LOGGER.warn("no session given. unable to cleanup session");
             return;
         }
-        session.getJvxmlSession().hangup();
+        // Notify the JVoiceXML Telephony implementation to process the hangup
+        final Telephony telephony = session.getTelephony();
+        telephony.hangup();
 
         try {
             // need to check for null mrcp session
@@ -171,13 +182,18 @@ public final class SipCallManager
         // and release resources upon call completion
         final String id = pbxSession.getId();
         final SpeechClient speechClient = createSpeechClient(mrcpSession);
-        final SipCallManagerSession session = new SipCallManagerSession(id,
-                pbxSession, mrcpSession, speechClient, null);
         try {
             final Mrcpv2ConnectionInformation info =
                     createConnectionInformation(pbxSession, mrcpSession);
+            final ImplementationPlatform platform =
+                    platformFactory.getImplementationPlatform(info);
+            final JVoiceXmlCallControl call = (JVoiceXmlCallControl) platform.getCallControl();
+            final Telephony telephony = call.getTelephony();
+            final SipCallManagerSession session = new SipCallManagerSession(id,
+                            pbxSession, mrcpSession, speechClient, null,
+                            telephony);
 
-            // Create a jvoicxml session and initiate a call at JVoiceXML.
+            // Create a jvoicexml session and initiate a call at JVoiceXML.
             final Session jsession = jvxml.createSession(info);
 
             // add a listener to capture the end of voicexml session event
@@ -212,12 +228,12 @@ public final class SipCallManager
             // start the application
             final URI uri = new URI(applicationUri);
             jsession.call(uri);
-        } catch (Exception e) {
+        } catch (Exception  e) {
             LOGGER.error(e.getMessage(), e);
             throw e;
-        } catch (ErrorEvent e) {
+        } catch (ErrorEvent | ConnectionDisconnectHangupEvent e) {
             LOGGER.error(e.getMessage(), e);
-            throw new Exception(e);
+            throw new Exception(e.getMessage(), e);
         }
     }
 
@@ -400,8 +416,9 @@ public final class SipCallManager
      * {@inheritDoc}
      */
     @Override
-    public void setJVoiceXml(final JVoiceXml jvoicexml) {
+    public void setJVoiceXml(final JVoiceXmlCore jvoicexml) {
         jvxml = jvoicexml;
+        platformFactory = jvxml.getImplementationPlatformFactory();
     }
 
     /**
