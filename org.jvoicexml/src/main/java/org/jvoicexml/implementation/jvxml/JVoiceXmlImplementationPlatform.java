@@ -251,6 +251,24 @@ public final class JVoiceXmlImplementationPlatform
     }
     
     /**
+     * Checks if this platform has been closed.
+     * @return {@code true} if the platform has been closed
+     * @since 0.7.9
+     */
+    boolean isClosed() {
+        return closed;
+    }
+    
+    /**
+     * Checks if the user has hungup in this platform.
+     * @return {@code true} if the user has hungup
+     * @since 0.7.9
+     */
+    boolean isHungup() {
+        return hungup;
+    }
+    
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -754,12 +772,10 @@ public final class JVoiceXmlImplementationPlatform
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("returning external resource '" + type + "' ("
                     + resource.getClass().getCanonicalName() + ") to pool...");
-            LOGGER.debug("disconnecting external resource.");
+            LOGGER.debug("disconnecting external resource");
         }
         resource.disconnect(info);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...disconnected");
-        }
+        LOGGER.debug(resource.getClass().getCanonicalName() + " disconnected");
 
         try {
             pool.returnObject(type, resource);
@@ -872,7 +888,7 @@ public final class JVoiceXmlImplementationPlatform
             }
             hungup = true;
         }
-        LOGGER.info("telephony connection closed");
+        LOGGER.info("telephony connection hung up " + event);
         
         // Publish a corresponding event
         if (eventbus != null) {
