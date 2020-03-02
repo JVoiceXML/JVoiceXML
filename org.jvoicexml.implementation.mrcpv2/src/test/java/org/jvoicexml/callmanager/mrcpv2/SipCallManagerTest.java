@@ -54,9 +54,10 @@ public class SipCallManagerTest {
         server.setCairoSipPort(5050);
         server.setStackName("Mrcpv2SessionManager");
         server.setTransport("UDP");
+        Assert.assertFalse(manager.isStarted());
         manager.start();
         Assert.assertTrue(manager.isStarted());
         manager.stop();
+        Assert.assertFalse(manager.isStarted());
     }
-
 }
