@@ -94,6 +94,9 @@ public final class SipCallManager
     /** The implementation platform factory. */
     private ImplementationPlatformFactory platformFactory;
     
+    /** Flag if the call manager has been started. */
+    private boolean started;
+    
     /**
      * Sets the SIP server.
      * 
@@ -453,16 +456,24 @@ public final class SipCallManager
      */
     @Override
     public void start() throws NoresourceError, IOException {
-        LOGGER.info("startup mrcp sip callManager");
+        LOGGER.info("startup MRCPv2 SIP CallManager");
         sessions = new java.util.HashMap<String, SipCallManagerSession>();
         ids = new java.util.HashMap<String, String>();
+        sipServer.startup();
+        started = true;
     }
 
+    @Override
+    public boolean isStarted() {
+        return started;
+    }
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public void stop() {
+        LOGGER.info("shutdown MRCPv2 SIP CallManager");
         try {
             if (sipServer != null) {
                 sipServer.shutdown();
@@ -473,6 +484,7 @@ public final class SipCallManager
             }
         } finally {
             sipServer = null;
+            started = false;
         }
     }
 

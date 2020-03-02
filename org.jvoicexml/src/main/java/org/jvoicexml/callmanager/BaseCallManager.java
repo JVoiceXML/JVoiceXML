@@ -64,6 +64,9 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
     /** Established sessions. */
     private final Map<Terminal, Session> sessions;
 
+    /** Flag if the call manager has been started. */
+    boolean started;
+    
     /**
      * Constructs a new object.
      */
@@ -178,8 +181,17 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
                observableTerminal.addListener(this);
            }
        }
+       started = true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isStarted() {
+        return started;
+    }
+    
     /**
      * Creates all terminals without starting them.
      * @return all terminals.
@@ -305,11 +317,15 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
      */
     @Override
     public final void stop() {
+        if (!started) {
+            return;
+        }
         hangupSessions();
         for (Terminal terminal : terminals) {
             terminal.stopWaiting();
         }
         handleStop();
+        started = true;
     }
 
     /**

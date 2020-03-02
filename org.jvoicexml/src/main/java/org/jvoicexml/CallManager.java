@@ -69,6 +69,13 @@ public interface CallManager {
     void start() throws NoresourceError, IOException;
 
     /**
+     * Checks if the call manager has been started.
+     * @return {@code true if the call manager has started}
+     * @since 0.7.9
+     */
+    boolean isStarted();
+    
+    /**
      * Stops the call manager and all terminals.
      */
     void stop();

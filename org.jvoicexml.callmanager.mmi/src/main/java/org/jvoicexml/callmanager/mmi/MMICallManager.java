@@ -225,6 +225,14 @@ public final class MMICallManager implements CallManager {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isStarted() {
+        return mc != null;
+    }
+
+    /**
      * Creates a session. Created sessions must be cleaned up after the session
      * has ended using {@link #cleanupSession(Session)}.
      * 

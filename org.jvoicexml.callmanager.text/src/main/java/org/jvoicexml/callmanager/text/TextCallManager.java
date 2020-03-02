@@ -51,6 +51,9 @@ public final class TextCallManager implements CallManager {
     /** The server thread waiting for incoming connections. */
     private final Collection<TextServerThread> servers;
 
+    /** Flag if the call manager has been started. */
+    private boolean started;
+    
     /**
      * Constructs a new object.
      */
@@ -94,8 +97,17 @@ public final class TextCallManager implements CallManager {
             server.start();
             servers.add(server);
         }
+        started = true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isStarted() {
+        return started;
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -109,5 +121,6 @@ public final class TextCallManager implements CallManager {
             }
         }
         servers.clear();
+        started = false;
     }
 }
