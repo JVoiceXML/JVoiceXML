@@ -242,6 +242,15 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
+     * Retrieves the session associated with this platform.
+     * @return the session
+     * @since 0.7.9
+     */
+    public Session getSession() {
+        return session;
+    }
+    
+    /**
      * {@inheritDoc}
      */
     @Override

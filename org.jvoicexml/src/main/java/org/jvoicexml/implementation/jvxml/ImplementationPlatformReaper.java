@@ -39,13 +39,13 @@ class ImplementationPlatformReaper extends Thread {
             .getLogger(ImplementationPlatformReaper.class);
 
     /** Delay to wait before returning the platform. */
-    private static final long REAPING_DELAY = 120 * 1000;
+    private static final long DEFAULT_REAPING_DELAY = 120 * 1000;
     
     /** The platform. */
     private final JVoiceXmlImplementationPlatform platform;
 
     /** The waiting lock. */
-    private Object wait;
+    private final Object lock;
     
     /** Flag if the platform closed normally. */
     private boolean stopReaping;
@@ -55,6 +55,9 @@ class ImplementationPlatformReaper extends Thread {
     /** The used output. */
     private final SynthesizedOutput output;
     
+    /** The actually used reaping delay. */
+    private long reapingDelay;
+
     /**
      * Creates a new object.
      * @param impl the implementation platform
@@ -62,6 +65,7 @@ class ImplementationPlatformReaper extends Thread {
     ImplementationPlatformReaper(
             final JVoiceXmlImplementationPlatform impl, final JVoiceXmlUserInput in,
             final JVoiceXmlSystemOutput out) {
+        lock = new Object();
         platform = impl;
         if (in != null) {
             input = in.getSpokenInput();
@@ -73,16 +77,32 @@ class ImplementationPlatformReaper extends Thread {
         } else {
             output = null;
         }
-        setName("platform-reaper");
+        final org.jvoicexml.Session session = impl.getSession();
+        final String id = session.getSessionId();
+        setName("platform-reaper-" + id);
         setDaemon(true);
+        reapingDelay = DEFAULT_REAPING_DELAY;
     }
 
+    /**
+     * Sets the reaping delay to use.
+     * @param delay the delay in msecs to use.
+     * @since 0.7.9
+     */
+    public void setReapingDelay(final long delay) {
+        reapingDelay = delay;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void run() {
-        LOGGER.info("implementation platform reaper started");
-        synchronized (wait) {
+        LOGGER.info("implementation platform reaper started with a delay of "
+                + reapingDelay + " msecs");
+        synchronized (lock) {
             try {
-                wait.wait(REAPING_DELAY);
+                lock.wait(reapingDelay);
                 if (!stopReaping) {
                     LOGGER.info("delay exceeded: cleaning up");
                     forceReturnResources();
@@ -100,7 +120,7 @@ class ImplementationPlatformReaper extends Thread {
      * @since 0.7.9
      */
     private void forceReturnResources() {
-        LOGGER.warn("force returning resouces");
+        LOGGER.warn("force returning resources");
         if ((input != null) && input.isBusy()) {
             input.stopRecognition();
         }
@@ -119,10 +139,10 @@ class ImplementationPlatformReaper extends Thread {
      * Stops reaping if the platform closed normally.
      */
     public void stopReaping() {
-        synchronized (wait) {
+        synchronized (lock) {
             LOGGER.info("stopping reaper");
             stopReaping = true;
-            wait.notifyAll();
+            lock.notifyAll();
         }
     }
 }

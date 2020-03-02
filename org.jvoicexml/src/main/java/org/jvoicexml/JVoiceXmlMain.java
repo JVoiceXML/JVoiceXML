@@ -192,8 +192,8 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
      * {@inheritDoc}
      */
     @Override
-    public Session createSession(ConnectionInformation info,
-            ImplementationPlatform platform) throws ErrorEvent {
+    public Session createSession(final ConnectionInformation info,
+            final ImplementationPlatform platform) throws ErrorEvent {
         if (state != InterpreterState.RUNNING) {
             throw new NoresourceError(
                     "JVoiceXML not running. Can't create a session!");
