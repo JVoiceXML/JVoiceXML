@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration>
+    <Appenders>
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%6r [%-20.20t] %-5p %30.30c (%6L) %x %m%n</Pattern>
+             </PatternLayout>
+        </Console>
+
+        <RollingFile name="dailyrotfile" fileName="logging/jvoicexml.log" filePattern="logging/jvoicexml-%d{MM-dd-yyyy}-%i.log">
+            <PatternLayout>
+                <Pattern>%d{ISO8601} [%-20.20t] %-5p %X{sessionId} %40.40c (%6L) - %m%n</Pattern>
+             </PatternLayout>
+             <DefaultRolloverStrategy max="10"/>
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="ACCEPT" />
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.jvoicexml" level="debug"/>
+
+        <Logger name="org.eclipse.jetty" level="info"/>
+
+        <Root level="warn">
+            <AppenderRef ref="stdout" />
+            <AppenderRef ref="dailyrotfile" />
+        </Root>
+    </Loggers>
+</Configuration>
