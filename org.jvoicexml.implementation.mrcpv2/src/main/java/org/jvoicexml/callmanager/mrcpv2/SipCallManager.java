@@ -129,6 +129,17 @@ public final class SipCallManager
     @Override
     public void StopDialog(final SipSession pbxSession) throws SipException {
         final String id = pbxSession.getId();
+        LOGGER.info("stopping dialog for '" + id + "'");
+        final SipCallManagerSession session;
+        synchronized (sessions) {
+            session = sessions.get(id);
+            if (session == null) {
+                LOGGER.warn("cannot stop dialog: no session '" + id + "'");
+                return;
+            }
+        }
+        final Telephony telephony = session.getTelephony();
+        telephony.hangup();
         cleanupSession(id);
     }
 
@@ -139,15 +150,18 @@ public final class SipCallManager
      *            the session id.
      */
     private void cleanupSession(final String id) {
-        final SipCallManagerSession session = sessions.get(id);
+        final SipCallManagerSession session;
+        synchronized (sessions) {
+            session = sessions.get(id);
+        }
         if (session == null) {
             LOGGER.warn("no session given. unable to cleanup session");
             return;
         }
         // Notify the JVoiceXML Telephony implementation to process the hangup
-        final Telephony telephony = session.getTelephony();
-        telephony.hangup();
-
+        final Session jsession = session.getJvxmlSession();
+        jsession.hangup();
+        
         try {
             // need to check for null mrcp session
             final SipSession mrcpsession = session.getMrcpSession();
@@ -172,7 +186,9 @@ public final class SipCallManager
         }
 
         // remove the session from the map
-        sessions.remove(id);
+        synchronized (sessions) {
+            sessions.remove(id);
+        }
     }
 
     /**
@@ -493,6 +509,8 @@ public final class SipCallManager
      */
     @Override
     public void sessionStarted(final Session session) {
+        final String id = session.getSessionId();
+        LOGGER.info("session "+ id + " started");
     }
 
     /**
@@ -500,7 +518,8 @@ public final class SipCallManager
      */
     @Override
     public void sessionEnded(final Session session) {
-        String id = session.getSessionId();
+        final String id = session.getSessionId();
+        LOGGER.info("session "+ id + " ended");
         // workaround to deal with two id's
         // maps the voicexml sessionid to sip session id
         // needed for case when the voicxml session ends before a hang up and
