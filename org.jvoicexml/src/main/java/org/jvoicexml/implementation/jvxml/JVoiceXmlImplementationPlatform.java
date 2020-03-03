@@ -260,11 +260,10 @@ public final class JVoiceXmlImplementationPlatform
     }
     
     /**
-     * Checks if the user has hungup in this platform.
-     * @return {@code true} if the user has hungup
-     * @since 0.7.9
+     * {@inheritDoc}
      */
-    boolean isHungup() {
+    @Override
+    public boolean isHungup() {
         return hungup;
     }
     

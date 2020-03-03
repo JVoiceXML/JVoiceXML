@@ -30,8 +30,8 @@ import java.util.List;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
-import org.jvoicexml.DtmfInput;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableText;
@@ -205,5 +205,11 @@ public final class MockImplementationPlatform
             out.queueSpeakable(speakable, sessionId, server);
         }
         prompts = null;
+    }
+
+    @Override
+    public boolean isHungup() {
+        // TODO Auto-generated method stub
+        return false;
     }
 }

@@ -151,7 +151,7 @@ public class VoiceXmlInterpreterContext {
         final ImplementationPlatform platform = session
                 .getImplementationPlatform();
         final GrammarDeactivator deactivator = new GrammarDeactivator(
-                platform);
+                platform, grammars);
         grammars.addActiveGrammarSetObserver(deactivator);
         properties = new ScopedMap<String, String>(scopeObserver);
 
@@ -161,6 +161,8 @@ public class VoiceXmlInterpreterContext {
                 new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
                         model, scopeObserver);
         eventbus.subscribe("", eventHandler);
+        eventbus.subscribe(ConnectionDisconnectHangupEvent.EVENT_TYPE,
+                deactivator);
     }
 
     /**
