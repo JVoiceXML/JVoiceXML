@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL:https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/RemoteConnectable.java $
- * Version: $LastChangedRevision:161 $
- * Date:    $Date:2006-11-30 10:36:05 +0100 (Do, 30 Nov 2006) $
- * Author:  $LastChangedBy:schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public

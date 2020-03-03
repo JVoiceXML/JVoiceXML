@@ -33,12 +33,18 @@ import javax.sip.address.Address;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.CallManager;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.implementation.jvxml.JVoiceXmlCallControl;
 import org.mrcp4j.client.MrcpChannel;
 import org.mrcp4j.client.MrcpInvocationException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
@@ -83,8 +89,14 @@ public final class SipCallManager
     private SipServer sipServer;
 
     /** Reference to JVoiceXML. */
-    private JVoiceXml jvxml;
+    private JVoiceXmlCore jvxml;
 
+    /** The implementation platform factory. */
+    private ImplementationPlatformFactory platformFactory;
+    
+    /** Flag if the call manager has been started. */
+    private boolean started;
+    
     /**
      * Sets the SIP server.
      * 
@@ -117,6 +129,17 @@ public final class SipCallManager
     @Override
     public void StopDialog(final SipSession pbxSession) throws SipException {
         final String id = pbxSession.getId();
+        LOGGER.info("stopping dialog for '" + id + "'");
+        final SipCallManagerSession session;
+        synchronized (sessions) {
+            session = sessions.get(id);
+            if (session == null) {
+                LOGGER.warn("cannot stop dialog: no session '" + id + "'");
+                return;
+            }
+        }
+        final Telephony telephony = session.getTelephony();
+        telephony.hangup();
         cleanupSession(id);
     }
 
@@ -127,13 +150,18 @@ public final class SipCallManager
      *            the session id.
      */
     private void cleanupSession(final String id) {
-        final SipCallManagerSession session = sessions.get(id);
+        final SipCallManagerSession session;
+        synchronized (sessions) {
+            session = sessions.get(id);
+        }
         if (session == null) {
             LOGGER.warn("no session given. unable to cleanup session");
             return;
         }
-        session.getJvxmlSession().hangup();
-
+        // Notify the JVoiceXML Telephony implementation to process the hangup
+        final Session jsession = session.getJvxmlSession();
+        jsession.hangup();
+        
         try {
             // need to check for null mrcp session
             final SipSession mrcpsession = session.getMrcpSession();
@@ -158,7 +186,9 @@ public final class SipCallManager
         }
 
         // remove the session from the map
-        sessions.remove(id);
+        synchronized (sessions) {
+            sessions.remove(id);
+        }
     }
 
     /**
@@ -171,13 +201,18 @@ public final class SipCallManager
         // and release resources upon call completion
         final String id = pbxSession.getId();
         final SpeechClient speechClient = createSpeechClient(mrcpSession);
-        final SipCallManagerSession session = new SipCallManagerSession(id,
-                pbxSession, mrcpSession, speechClient, null);
         try {
             final Mrcpv2ConnectionInformation info =
                     createConnectionInformation(pbxSession, mrcpSession);
+            final ImplementationPlatform platform =
+                    platformFactory.getImplementationPlatform(info);
+            final JVoiceXmlCallControl call = (JVoiceXmlCallControl) platform.getCallControl();
+            final Telephony telephony = call.getTelephony();
+            final SipCallManagerSession session = new SipCallManagerSession(id,
+                            pbxSession, mrcpSession, speechClient, null,
+                            telephony);
 
-            // Create a jvoicxml session and initiate a call at JVoiceXML.
+            // Create a jvoicexml session and initiate a call at JVoiceXML.
             final Session jsession = jvxml.createSession(info);
 
             // add a listener to capture the end of voicexml session event
@@ -212,12 +247,12 @@ public final class SipCallManager
             // start the application
             final URI uri = new URI(applicationUri);
             jsession.call(uri);
-        } catch (Exception e) {
+        } catch (Exception  e) {
             LOGGER.error(e.getMessage(), e);
             throw e;
-        } catch (ErrorEvent e) {
+        } catch (ErrorEvent | ConnectionDisconnectHangupEvent e) {
             LOGGER.error(e.getMessage(), e);
-            throw new Exception(e);
+            throw new Exception(e.getMessage(), e);
         }
     }
 
@@ -400,8 +435,9 @@ public final class SipCallManager
      * {@inheritDoc}
      */
     @Override
-    public void setJVoiceXml(final JVoiceXml jvoicexml) {
+    public void setJVoiceXml(final JVoiceXmlCore jvoicexml) {
         jvxml = jvoicexml;
+        platformFactory = jvxml.getImplementationPlatformFactory();
     }
 
     /**
@@ -436,16 +472,24 @@ public final class SipCallManager
      */
     @Override
     public void start() throws NoresourceError, IOException {
-        LOGGER.info("startup mrcp sip callManager");
+        LOGGER.info("startup MRCPv2 SIP CallManager");
         sessions = new java.util.HashMap<String, SipCallManagerSession>();
         ids = new java.util.HashMap<String, String>();
+        sipServer.startup();
+        started = true;
     }
 
+    @Override
+    public boolean isStarted() {
+        return started;
+    }
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public void stop() {
+        LOGGER.info("shutdown MRCPv2 SIP CallManager");
         try {
             if (sipServer != null) {
                 sipServer.shutdown();
@@ -456,6 +500,7 @@ public final class SipCallManager
             }
         } finally {
             sipServer = null;
+            started = false;
         }
     }
 
@@ -464,6 +509,8 @@ public final class SipCallManager
      */
     @Override
     public void sessionStarted(final Session session) {
+        final String id = session.getSessionId();
+        LOGGER.info("session "+ id + " started");
     }
 
     /**
@@ -471,7 +518,8 @@ public final class SipCallManager
      */
     @Override
     public void sessionEnded(final Session session) {
-        String id = session.getSessionId();
+        final String id = session.getSessionId();
+        LOGGER.info("session "+ id + " ended");
         // workaround to deal with two id's
         // maps the voicexml sessionid to sip session id
         // needed for case when the voicxml session ends before a hang up and

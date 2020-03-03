@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.CallManager;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.ConnectionInformationCallMetadataModifiable;
 import org.jvoicexml.client.ConnectionInformationController;
@@ -195,7 +196,7 @@ public final class MMICallManager implements CallManager {
      * {@inheritDoc}
      */
     @Override
-    public void setJVoiceXml(final JVoiceXml jvoicexml) {
+    public void setJVoiceXml(final JVoiceXmlCore jvoicexml) {
         jvxml = jvoicexml;
 
     }
@@ -221,6 +222,14 @@ public final class MMICallManager implements CallManager {
         mc = new VoiceModalityComponent(this, converter, extractor,
                 servletBaseUri);
         mc.startAcceptingLifecyleEvents(adapter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isStarted() {
+        return mc != null;
     }
 
     /**
