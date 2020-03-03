@@ -10,10 +10,7 @@
     <classpath>cairo-client-0.3-SNAPSHOT.jar</classpath>
     <classpath>cairo-rtp-0.3-SNAPSHOT.jar</classpath>
     <classpath>cairo-sip-0.3-SNAPSHOT.jar</classpath>
-    <classpath>halef-mrcp4j-0.1-SNAPSHOT.jar</classpath>
-    <classpath>halefdbwriter-0.0.2-SNAPSHOT.jar</classpath>
-    <classpath>mysql-connector-java-5.1.40.jar</classpath>
-    <classpath>speechcloud-client.jar</classpath>
+    <classpath>mrcp4j-0.3-SNAPSHOT.jar</classpath>
     <classpath>jain-sip-api-1.2.1.4.jar</classpath>
     <classpath>jain-sip-ri-1.2.324.jar</classpath>
     <classpath>nist-sdp-1.0.jar</classpath>

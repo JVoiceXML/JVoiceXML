@@ -29,7 +29,6 @@ import javax.sip.SipException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.zanzibar.jvoicexml.impl.VoiceXmlSessionProcessor;
 import org.jvoicexml.zanzibar.server.SpeechletServerMain;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechClientProvider;

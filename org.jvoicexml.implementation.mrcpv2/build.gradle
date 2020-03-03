@@ -48,13 +48,10 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.11.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.11.2'
-    compile fileTree(dir: './3rdparty/speechcloud/lib', include: ['*.jar'])
     compile group: 'org.jvoicexml', name: 'cairo-client', version: '0.3-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'cairo-sip', version: '0.3-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'cairo-rtp', version: '0.3-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'mrcp4j', version: '0.3-SNAPSHOT'
-    compile group: 'net.sourceforge.halef', name: 'halefdbwriter', version: '0.0.2-SNAPSHOT'
-    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.40'
     compile group: 'javax.sip', name: 'jain-sip-api', version: '1.2.1.4'
     compile group: 'javax.sip', name: 'jain-sip-ri', version: '1.2.324'
     compile group: 'javax.sdp', name: 'nist-sdp', version: '1.0'
@@ -144,13 +141,12 @@ task xsltCallmanagerDistribution(type: com.github.eerohele.SaxonXsltTask) {
 }
 
 task copyReferencedLibraries(type: Copy) {
-    into "$buildDir/libs"
+    into "${buildDir}/libs"
     from(configurations.compile) {
         include 'cairo-client*.jar',
          'cairo-sip*.jar',
          'cairo-rtp*.jar',
-         'halef-mrcp4j*.jar',
-         'speechcloud*.jar',
+         'mrcp4j*.jar',
          'org.jvoicexml.client.mrcpv2*.jar',
          'org.jvoicexml.zanzibar*.jar',
          'org.jvoicexml.interpreter.grammar.halef*.jar',
@@ -159,9 +155,7 @@ task copyReferencedLibraries(type: Copy) {
          'nist-sdp*.jar',
          'concurrent*.jar',
          'commons-lang*.jar',
-         'jmf*.jar',
-         'halefdbwriter*.jar',
-         'mysql-connector-java*.jar'
+         'jmf*.jar'
     }
 }
 

@@ -20,7 +20,7 @@
  * Contact: salord@users.sourceforge.net
  *
  */
-package org.jvoicexml.zanzibar.jvoicexml.impl;
+package org.jvoicexml.zanzibar.speechlet;
 
 import java.io.IOException;
 import java.net.URI;
@@ -35,9 +35,6 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.zanzibar.speechlet.SessionProcessor;
-import org.jvoicexml.zanzibar.speechlet.SpeechletContext;
-import org.jvoicexml.zanzibar.speechlet.SpeechletContextMrcpv2Impl;
 import org.mrcp4j.client.MrcpInvocationException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SpeechClient;
