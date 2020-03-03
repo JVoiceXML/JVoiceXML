@@ -418,4 +418,11 @@ public final class MrcpImplementationPlatform implements SpeechEventListener, Im
 		
 	}
 
+
+	@Override
+	public boolean isHungup() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
