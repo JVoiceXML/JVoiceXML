@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -78,9 +78,10 @@ public interface DataModel {
     Object getUndefinedValue();
 
     /**
-     * Retrieves a new empty object for this data model.
+     * Retrieves a new empty object that may contain,e.g., other variables as
+     * members for this data model.
      * 
-     * @return new object
+     * @return newly created object
      */
     Object createNewObject();
 
@@ -498,4 +499,16 @@ public interface DataModel {
      * @return serializer to use
      */
     DataModelObjectSerializer getSerializer();
+
+    /**
+     * Copies all values from the current data model to the given datamodel
+     * preserving the scope stack.
+     * 
+     * @param model 
+     *            target data model 
+     * @return {@code 0} upon success, failure status if the specified variable,
+     *         field, or scope cannot be found.
+     * @since 0.7.9
+     */
+    int copyValues(final DataModel model) throws SemanticError;
 }

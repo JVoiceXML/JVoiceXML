@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ import org.apache.logging.log4j.Logger;
 import org.jvoicexml.CallManager;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -52,7 +53,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
     private TerminalConnectionInformationFactory clientFactory;
 
     /** Reference to JVoiceXml. */
-    private JVoiceXml jvxml;
+    private JVoiceXmlCore jvxml;
 
     /** Map of terminal names associated to an application. */
     private final Map<String, ConfiguredApplication> applications;
@@ -63,6 +64,9 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
     /** Established sessions. */
     private final Map<Terminal, Session> sessions;
 
+    /** Flag if the call manager has been started. */
+    boolean started;
+    
     /**
      * Constructs a new object.
      */
@@ -75,7 +79,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
      * {@inheritDoc}
      */
     @Override
-    public final void setJVoiceXml(final JVoiceXml jvoicexml) {
+    public final void setJVoiceXml(final JVoiceXmlCore jvoicexml) {
         jvxml = jvoicexml;
     }
 
@@ -177,8 +181,17 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
                observableTerminal.addListener(this);
            }
        }
+       started = true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isStarted() {
+        return started;
+    }
+    
     /**
      * Creates all terminals without starting them.
      * @return all terminals.
@@ -304,11 +317,15 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
      */
     @Override
     public final void stop() {
+        if (!started) {
+            return;
+        }
         hangupSessions();
         for (Terminal terminal : terminals) {
             terminal.stopWaiting();
         }
         handleStop();
+        started = true;
     }
 
     /**

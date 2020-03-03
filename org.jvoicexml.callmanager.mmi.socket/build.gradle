@@ -28,7 +28,7 @@ sourceSets {
 }
 
 dependencies {
-    compile group: 'org.mozilla', name: 'rhino', version: '1.7R4'
+    compile group: 'org.mozilla', name: 'rhino', version: '1.7.10'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     
     testCompile group: 'junit', name: 'junit', version: '4.12'

@@ -242,6 +242,32 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
+     * Retrieves the session associated with this platform.
+     * @return the session
+     * @since 0.7.9
+     */
+    public Session getSession() {
+        return session;
+    }
+    
+    /**
+     * Checks if this platform has been closed.
+     * @return {@code true} if the platform has been closed
+     * @since 0.7.9
+     */
+    boolean isClosed() {
+        return closed;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isHungup() {
+        return hungup;
+    }
+    
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -281,8 +307,7 @@ public final class JVoiceXmlImplementationPlatform
 
             if (!hungup && !closed && output.isBusy()) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("output still busy. returning when queue is"
-                            + " empty");
+                    LOGGER.debug("output still busy. Delaying return...");
                 }
                 maybeStartReaper();
             } else {
@@ -314,7 +339,7 @@ public final class JVoiceXmlImplementationPlatform
         if (reaper != null) {
             return;
         }
-        reaper = new ImplementationPlatformReaper(this);
+        reaper = new ImplementationPlatformReaper(this, input, output);
         reaper.start();
     }
     
@@ -417,9 +442,9 @@ public final class JVoiceXmlImplementationPlatform
 
             if (!hungup && !closed && input.isBusy()) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("input still busy. returning when recognition"
-                            + " is stopped");
+                    LOGGER.debug("input still busy. delaying return");
                 }
+                maybeStartReaper();
             } else {
                 final JVoiceXmlUserInput userInput = input;
                 input = null;
@@ -746,12 +771,10 @@ public final class JVoiceXmlImplementationPlatform
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("returning external resource '" + type + "' ("
                     + resource.getClass().getCanonicalName() + ") to pool...");
-            LOGGER.debug("disconnecting external resource.");
+            LOGGER.debug("disconnecting external resource");
         }
         resource.disconnect(info);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...disconnected");
-        }
+        LOGGER.debug(resource.getClass().getCanonicalName() + " disconnected");
 
         try {
             pool.returnObject(type, resource);
@@ -862,9 +885,17 @@ public final class JVoiceXmlImplementationPlatform
             if (hungup) {
                 return;
             }
-            hungup = true;
         }
-        LOGGER.info("telephony connection closed");
+        LOGGER.info("telephony connection hung up " + event);
+
+        // Stop a possibly active recognition
+        if (input != null && input.isBusy()) {
+            final Collection<ModeType> types =
+                    new java.util.ArrayList<ModeType>();;
+            types.add(ModeType.VOICE);
+            types.add(ModeType.DTMF);
+            input.stopRecognition(types);
+        }
         
         // Publish a corresponding event
         if (eventbus != null) {
@@ -873,6 +904,10 @@ public final class JVoiceXmlImplementationPlatform
             eventbus.publish(hangupEvent);
         }
 
+        synchronized (this) {
+            hungup = true;
+        }
+        
         // Immediately return the resources
         LOGGER.info("returning aqcuired resources");
         returnSystemOutput();

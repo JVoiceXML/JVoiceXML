@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,10 +22,11 @@
 package org.jvoicexml.implementation;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
-import org.jvoicexml.mock.implementation.MockSynthesizedOutputFactory;
+import org.mockito.Mockito;
 
 /**
  *Test cases for {@link KeyedResourcePool}.
@@ -40,6 +36,25 @@ import org.jvoicexml.mock.implementation.MockSynthesizedOutputFactory;
 public final class TestKeyedResourcePool {
     /** The object to test. */
     private KeyedResourcePool<SynthesizedOutput> pool;
+
+    /** The resource factory inside the pool. */
+    private ResourceFactory<SynthesizedOutput> factory;
+    
+    /**
+     * Prepare the test setup.
+     * @throws NoresourceError test failed
+     * @throws Exception test failed
+     * @since 0.7.9
+     */
+    @SuppressWarnings("unchecked")
+    @Before
+    public void setup() throws NoresourceError, Exception {
+        factory = Mockito.mock(ResourceFactory.class);
+        Mockito.when(factory.getType()).thenReturn("dummy");
+        final SynthesizedOutput output = Mockito.mock(SynthesizedOutput.class);
+        Mockito.when(factory.createResource()).thenReturn(output);
+        pool = new KeyedResourcePool<SynthesizedOutput>();
+    }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.pool.KeyedResourcePool#borrowObject(java.lang.Object)}.
@@ -51,10 +66,7 @@ public final class TestKeyedResourcePool {
     @Test
     public void testBorrowObjectObject()  throws Exception, NoresourceError {
         final int instances = 500;
-        final ResourceFactory<SynthesizedOutput> factory =
-            new MockSynthesizedOutputFactory();
-        ((MockSynthesizedOutputFactory) factory).setInstances(instances);
-        pool = new KeyedResourcePool<SynthesizedOutput>();
+        Mockito.when(factory.getInstances()).thenReturn(instances);
         pool.addResourceFactory(factory);
         Assert.assertEquals(instances, pool.getNumIdle());
         final String key = factory.getType();
@@ -81,9 +93,8 @@ public final class TestKeyedResourcePool {
     public void testBorrowObjectObjectExceed()
         throws Exception, NoresourceError {
         final int instances = 10;
-        final ResourceFactory<SynthesizedOutput> factory =
-            new MockSynthesizedOutputFactory();
-        ((MockSynthesizedOutputFactory) factory).setInstances(instances);
+        Mockito.when(factory.getInstances()).thenReturn(instances);
+        pool.addResourceFactory(factory);
         pool = new KeyedResourcePool<SynthesizedOutput>();
         pool.addResourceFactory(factory);
         Assert.assertEquals(instances, pool.getNumIdle());
@@ -109,13 +120,21 @@ public final class TestKeyedResourcePool {
     public void testBorrowObjectObjectMultipleKey()
         throws Exception, NoresourceError {
         final int instancesKey1 = 3;
+        @SuppressWarnings("unchecked")
         final ResourceFactory<SynthesizedOutput> factory1 =
-            new MockSynthesizedOutputFactory();
-        ((MockSynthesizedOutputFactory) factory1).setInstances(instancesKey1);
+            Mockito.mock(ResourceFactory.class);
+        Mockito.when(factory1.getInstances()).thenReturn(instancesKey1);
+        Mockito.when(factory1.getType()).thenReturn("dummy1");
+        final SynthesizedOutput output1 = Mockito.mock(SynthesizedOutput.class);
+        Mockito.when(factory1.createResource()).thenReturn(output1);
         final int instancesKey2 = 5;
+        @SuppressWarnings("unchecked")
         final ResourceFactory<SynthesizedOutput> factory2 =
-            new MockSynthesizedOutputFactory("alt");
-        ((MockSynthesizedOutputFactory) factory2).setInstances(instancesKey2);
+                Mockito.mock(ResourceFactory.class);
+        Mockito.when(factory2.getInstances()).thenReturn(instancesKey2);
+        Mockito.when(factory2.getType()).thenReturn("dummy2");
+        final SynthesizedOutput output2 = Mockito.mock(SynthesizedOutput.class);
+        Mockito.when(factory2.createResource()).thenReturn(output2);
         pool = new KeyedResourcePool<SynthesizedOutput>();
         pool.addResourceFactory(factory1);
         pool.addResourceFactory(factory2);

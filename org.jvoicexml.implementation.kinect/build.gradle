@@ -16,8 +16,8 @@ buildscript {
     }
 
     dependencies {
-        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
-        classpath "com.ullink.gradle:gradle-msbuild-plugin:3.1"
+        classpath  'gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1'
+        classpath 'com.ullink.gradle:gradle-msbuild-plugin:3.6'
     }
 }   
 

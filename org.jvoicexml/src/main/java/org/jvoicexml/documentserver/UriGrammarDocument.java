@@ -27,15 +27,12 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
- * A grammar document that does not prefetch the grammar document but just keeps
- * its URI.
+ * A grammar document that is only expressed by a URI.
  * @author Dirk Schnelle-Walka
- * @since 0.7.8
+ * @since 0.7.9
  */
-public class ExternalReferenceGrammarDocument implements GrammarDocument {
-    /**
-     * The URI of the grammar document.
-     */
+public class UriGrammarDocument implements GrammarDocument {
+    /** The URI of the grammar document. */
     private URI uri;
 
     /** The grammar type. */
@@ -44,8 +41,18 @@ public class ExternalReferenceGrammarDocument implements GrammarDocument {
     /** The mode type. */
     private ModeType mode;
 
-    public ExternalReferenceGrammarDocument(final URI source) {
+   /**
+    * Constructs a new object.
+    * 
+    * @param source the source UI
+    * @param gramamrType the grammar type
+    * @param modeType the mode type
+    */
+    public UriGrammarDocument(final URI source, final GrammarType gramamrType,
+            final ModeType modeType) {
         uri = source;
+        type = gramamrType;
+        mode = modeType;
     }
     
     /**
@@ -180,7 +187,7 @@ public class ExternalReferenceGrammarDocument implements GrammarDocument {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        ExternalReferenceGrammarDocument other = (ExternalReferenceGrammarDocument) obj;
+        UriGrammarDocument other = (UriGrammarDocument) obj;
         if (mode != other.mode) {
             return false;
         }
@@ -200,6 +207,7 @@ public class ExternalReferenceGrammarDocument implements GrammarDocument {
         }
         return true;
     }
+
     /**
      * {@inheritDoc}
      */

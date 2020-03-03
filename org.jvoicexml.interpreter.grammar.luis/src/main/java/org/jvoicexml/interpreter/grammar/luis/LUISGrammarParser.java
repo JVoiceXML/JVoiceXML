@@ -24,12 +24,13 @@ import java.io.IOException;
 import java.net.URI;
 
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.ExternalReferenceGrammarDocument;
+import org.jvoicexml.documentserver.UriGrammarDocument;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.grammar.GrammarEvaluator;
 import org.jvoicexml.implementation.grammar.GrammarParser;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * A parser for regex gramamrs.
@@ -71,8 +72,8 @@ public class LUISGrammarParser implements GrammarParser<GrammarDocument> {
     @Override
     public GrammarImplementation<GrammarDocument> load(final URI uri)
             throws IOException {
-        final ExternalReferenceGrammarDocument document = new ExternalReferenceGrammarDocument(
-                uri);
+        final UriGrammarDocument document = new UriGrammarDocument(
+                uri, LUISGrammarType.LUIS, ModeType.VOICE);
         return new LUISGrammarImplementation(document, subscriptionKey);
     }
 

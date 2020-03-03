@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +27,8 @@ import org.apache.logging.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.event.EventSubscriber;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
@@ -39,7 +41,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * @author Dirk Schnelle-Walka
  * @since 0.7.3
  */
-class GrammarDeactivator implements ActiveGrammarSetObserver {
+class GrammarDeactivator implements ActiveGrammarSetObserver, EventSubscriber {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
             .getLogger(GrammarDeactivator.class);
@@ -47,14 +49,21 @@ class GrammarDeactivator implements ActiveGrammarSetObserver {
     /** The current implementation platform. */
     private final ImplementationPlatform platform;
 
+    /** The active grammarss. */
+    private final ActiveGrammarSet grammars;
+    
     /**
      * Constructs a new object.
      * 
      * @param ip
      *            the current implementation platform
+     * @param set
+     *            the active grammars
      */
-    public GrammarDeactivator(final ImplementationPlatform ip) {
+    public GrammarDeactivator(final ImplementationPlatform ip,
+            final ActiveGrammarSet set) {
         platform = ip;
+        grammars = set;
     }
 
     /**
@@ -64,15 +73,26 @@ class GrammarDeactivator implements ActiveGrammarSetObserver {
     @Override
     public void removedGrammars(final ActiveGrammarSet set,
             final Collection<GrammarDocument> removed) {
+        if (platform.isHungup()) {
+            LOGGER.info("no need to cleanup grammars. caller has hung up.");
+            return;
+        }
+        deactivateGramars(removed);
+    }
+
+    /**
+     * Deactivates the given set of grammars.
+     * @param grammars the grammars to deactivate
+     * @since 0.7.9
+     */
+    private void deactivateGramars(final Collection<GrammarDocument> grammars) {
         try {
             final UserInput input = platform.getUserInput();
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("deactivating " + removed.size() + " grammars...");
+                LOGGER.debug("deactivating " + grammars.size() + " grammars...");
             }
-            final int num = input.deactivateGrammars(removed);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("..." + num + " grammars deactivated");
-            }
+            final int num = input.deactivateGrammars(grammars);
+            LOGGER.info(num + " grammars deactivated");
         } catch (NoresourceError e) {
             LOGGER.error(e.getMessage(), e);
         } catch (ConnectionDisconnectHangupEvent e) {
@@ -80,5 +100,22 @@ class GrammarDeactivator implements ActiveGrammarSetObserver {
         } catch (BadFetchError e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onEvent(final JVoiceXMLEvent event) {
+        if (!event.isType(ConnectionDisconnectHangupEvent.EVENT_TYPE)) {
+            return;
+        }
+        if (platform.isHungup()) {
+            LOGGER.info("no need to cleanup grammars. caller has hung up.");
+            return;
+        }
+        LOGGER.info("hangup: deactivating all grammars");
+        final Collection<GrammarDocument> allGrammars = grammars.getGrammars();
+        deactivateGramars(allGrammars);
     }
 }
