@@ -34,10 +34,7 @@ import org.jvoicexml.zanzibar.jvoicexml.impl.VoiceXmlWrapper;
 import org.jvoicexml.zanzibar.server.SpeechletServerMain;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechClientProvider;
-import org.speechforge.cairo.rtp.server.RTPStreamReplicator;
 import org.speechforge.cairo.sip.SipSession;
-
-import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 
 
 /**
@@ -134,33 +131,6 @@ public class ApplicationBySipHeaderService implements SpeechletService {
 	
     }
 
-	public void startNewCloudDialog(SipSession pbxSession, RTPStreamReplicator rtpReplicator, RtpTransmitter rtpTransmitter ) throws Exception {
-		// setup the context (for speechlet to communicate back to container and access to container services)
-		SpeechletContext c = new SpeechletContextCloudImpl();
-	
-		// The context needs a reference to the conatiner
-		((SpeechletContext) c).setContainer(this);
-	
-		// The context needs both the internal and external sessions
-		c.setPBXSession(pbxSession); 
-		
-		//rtpTransmitter.setTempDirForPrompts(tempDirForPrompts);
-		
-		((SpeechletContextCloudProvider) c).setRtpReplicator(rtpReplicator);
-		((SpeechletContextCloudProvider) c).setRtpTransmitter(rtpTransmitter);
-		((SpeechletContextCloudProvider) c).setUrl(cloudUrl);
-		
-		// create the actual speechlet (running in a thread within the session processor)
-		SessionProcessor d = this.startNewDialog(c);
-	
-		// the sessionprocessor needs a referenece to the context
-		d.setContext(c);
-	
-		// the context also needs a reference to the speechlet
-		((SpeechletContext) c).setSpeechlet(d);
-
-    }
-	
 
     public SessionProcessor startNewDialog(SpeechletContext context) throws Exception {
 
@@ -205,7 +175,7 @@ public class ApplicationBySipHeaderService implements SpeechletService {
     /* (non-Javadoc)
      * @see com.speechdynamix.mrcp.client.DialogService#StopDialog(org.speechforge.cairo.util.sip.SipSession)
      */
-    public void StopDialog(SipSession session) throws SipException {
+    public void stopDialog(SipSession session) throws SipException {
         _logger.info("Stopping a "+session.getApplicationName()+ " speechlet with session id = "+ session.getId());
         SessionProcessor d = getDialog(session.getId());
         d.stop();

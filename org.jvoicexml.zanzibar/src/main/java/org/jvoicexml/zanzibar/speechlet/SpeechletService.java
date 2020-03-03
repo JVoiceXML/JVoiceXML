@@ -24,10 +24,7 @@ package org.jvoicexml.zanzibar.speechlet;
 
 import javax.sip.SipException;
 
-import org.speechforge.cairo.rtp.server.RTPStreamReplicator;
 import org.speechforge.cairo.sip.SipSession;
-
-import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 
 /**
  * Interface that must be implemented by Container of Speech Applications.
@@ -50,24 +47,21 @@ public interface SpeechletService {
     public void startNewMrcpDialog(SipSession pbxSession, SipSession mrcpSession) throws Exception;
     
     	  
-    public void startNewCloudDialog(SipSession pbxSession, RTPStreamReplicator rtpReplicator, RtpTransmitter rtpTransmitter ) throws Exception;
-    
-
-    /**
+    	/**
      * Stop dialog.
      * 
      * @param session the session
      * 
      * @throws SipException the sip exception
      */
-    public abstract void StopDialog(SipSession session) throws SipException;
+    public abstract void stopDialog(SipSession session) throws SipException;
 
     /**
      * Dtmf.
      * 
      * @param session the session
      * @param code the dtmf code (0-9, *, #)
-     */
+     */																																																									
     public void dtmf(SipSession session, char code);
     
     

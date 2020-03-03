@@ -46,7 +46,6 @@ dependencies {
     compile group: 'org.springframework', name: 'spring-context', version: '3.0.5.RELEASE'
     
     compile fileTree(dir: './3rdparty/jsapi1.0/lib', include: ['*.jar'])
-    compile fileTree(dir: './3rdparty/speechcloud/lib', include: ['*.jar'])
 
     testCompile 'junit:junit:4.12'
 }

@@ -33,7 +33,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * method when JVoiceXML starts. The {@link CallManager} starts as a server,
  * waiting for incoming connections, e.g. from a PBX. Once a call arrives
  * it creates a {@link org.jvoicexml.Session} using the {@link JVoiceXml}
- * reference that is delivered via the {@link #setJVoiceXml(JVoiceXml)} method.
+ * reference that is delivered via the {@link #setJVoiceXml(JVoiceXmlCore)} method.
  * </p>
  * <p>
  * Usually, it creates a {@link CallControl} when a call arrives via the

@@ -51,9 +51,7 @@ import org.mrcp4j.client.MrcpChannel;
 import org.mrcp4j.client.MrcpFactory;
 import org.mrcp4j.client.MrcpProvider;
 import org.mrcp4j.message.header.IllegalValueException;
-import org.speechforge.cairo.rtp.AudioFormats;
 import org.speechforge.cairo.rtp.server.PortPairPool;
-import org.speechforge.cairo.rtp.server.RTPStreamReplicator;
 import org.speechforge.cairo.rtp.server.RTPStreamReplicatorFactory;
 import org.speechforge.cairo.sip.ResourceUnavailableException;
 import org.speechforge.cairo.sip.SdpMessage;
@@ -61,8 +59,6 @@ import org.speechforge.cairo.sip.SessionListener;
 import org.speechforge.cairo.sip.SipAgent;
 import org.speechforge.cairo.sip.SipSession;
 import org.speechforge.cairo.util.CairoUtil;
-
-import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 
 /**
  * SipServer is the sip agent for the speech client.  It implements SessionListner, so it
@@ -461,7 +457,7 @@ public class SipServer implements SessionListener {
             _logger.info("Got a bye request");
             
             try {
-                dialogService.StopDialog(session);
+                dialogService.stopDialog(session);
             } catch (SipException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -499,37 +495,7 @@ public class SipServer implements SessionListener {
 	            }
             }
 
-            if (mode.equals("cloud")) {
-
-            	RTPStreamReplicator rtpReplicator = null;
-                try {
-                	rtpReplicator = (RTPStreamReplicator) _replicatorPool.borrowObject();
-                    AudioFormats af = AudioFormats.constructWithSdpVector(pbxFormats);
-                    _logger.info("Audio Format "+af);
-	                Vector supportedFormats = af.filterOutUnSupportedFormatsInOffer();
-	                if (_logger.isDebugEnabled()) {
-		                for (int i=0; i<supportedFormats.size(); i++) {
-		                    //_logger.debug(i+" format type is: "+supportedFormats.get(i).getClass().getCanonicalName());
-		                	 _logger.debug("Supported format # "+i+" is: "+supportedFormats.get(i).toString());
-		                }
-	                }
-                    
-	        		pbxResponse = constructInviteResponseToPbx(rtpReplicator.getPort(), zanzibarHostName, supportedFormats);
-	    			_sipAgent.sendResponse(session, pbxResponse);
-   
-	        		
-	        		InetAddress address = InetAddress.getByName(pbxHost);
-	        		int  localPort = _portPairPool.borrowPort();
-	              	RtpTransmitter rtpTransmitter = new RtpTransmitter(localPort, address, pbxRtpPort,af );
-
-	                dialogService.startNewCloudDialog(session,rtpReplicator,rtpTransmitter);
-                } catch (Exception e) {
-	                // TODO Auto-generated catch block
-	                e.printStackTrace();
-                }
-            	
-
-            } else if (mode.equals("mrcpv2")) {
+            if (mode.equals("mrcpv2")) {
             	
             	
              

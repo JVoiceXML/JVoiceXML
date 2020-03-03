@@ -79,7 +79,7 @@ public class SpeechletContextMrcpv2Impl implements SpeechletContext, SpeechletCo
             speechClient.stopActiveRecognitionRequests();
             
             //clean up the dialog (the speech server session is cleaned up here)
-            container.StopDialog(pbxSession);
+            container.stopDialog(pbxSession);
         } catch (SipException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

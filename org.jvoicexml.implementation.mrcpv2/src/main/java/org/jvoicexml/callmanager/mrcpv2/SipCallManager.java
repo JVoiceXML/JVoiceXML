@@ -52,10 +52,7 @@ import org.mrcp4j.client.MrcpInvocationException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechClientImpl;
-import org.speechforge.cairo.rtp.server.RTPStreamReplicator;
 import org.speechforge.cairo.sip.SipSession;
-
-import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 
 /**
  * A SIP call manager.
@@ -125,7 +122,7 @@ public final class SipCallManager
      * interface first in the thirdparty jar.
      */
     @Override
-    public void StopDialog(final SipSession pbxSession) throws SipException {
+    public void stopDialog(final SipSession pbxSession) throws SipException {
         final String id = pbxSession.getId();
         LOGGER.info("stopping dialog for '" + id + "'");
         final SipCallManagerSession session;
@@ -410,16 +407,6 @@ public final class SipCallManager
         //HalefDbWriter.execute(hevent2);
     }
     
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void startNewCloudDialog(final SipSession pbxSession,
-            final RTPStreamReplicator rtpReplicator,
-            final RtpTransmitter rtpTransmitter) throws Exception {
-        LOGGER.warn("cloud dialogs are not supported!");
-    }
-
     /**
      * Retrieves the reference to the interpreter.
      * 
