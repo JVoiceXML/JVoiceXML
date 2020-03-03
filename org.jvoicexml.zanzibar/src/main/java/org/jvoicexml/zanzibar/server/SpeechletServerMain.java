@@ -56,13 +56,4 @@ public class SpeechletServerMain {
     public void shutdown() {
         _logger.info("Shutting down the main Server...");    
     }
- 
-    /**
-     * The main method.
-     * 
-     * @param args the arguments
-     */
-    public static void main(String[] args) {
-       context = new ClassPathXmlApplicationContext(args[0]);
-    }
 }

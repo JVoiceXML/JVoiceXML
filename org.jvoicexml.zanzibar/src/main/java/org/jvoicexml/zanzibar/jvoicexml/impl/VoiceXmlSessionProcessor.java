@@ -30,7 +30,6 @@ import javax.media.rtp.InvalidSessionAddressException;
 import javax.sip.SipException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
@@ -56,7 +55,6 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
     private SpeechletContext _context;
 	boolean instrumentation = false;
 	private JVoiceXml jvxml;
-	private VoiceXmlWrapper vxml;
     
     //private static Map<String, VoiceXmlSessionProcessor> dialogs = new Hashtable<String, VoiceXmlSessionProcessor>();
 
@@ -67,13 +65,12 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
 	public VoiceXmlSessionProcessor() {
 	}
     
-    public VoiceXmlWrapper getVxml() {
-		return vxml;
+    public JVoiceXml getVxml() {
+		return jvxml;
 	}
 
-	public void setVxml(VoiceXmlWrapper vxml) {
-		this.vxml = vxml;
-		this.jvxml = vxml.getJvxml();
+	public void setVxml(JVoiceXml vxml) {
+		this.jvxml = vxml;
 	}
     
 	public String getId() {

@@ -30,7 +30,6 @@ import javax.sip.SipException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.zanzibar.jvoicexml.impl.VoiceXmlSessionProcessor;
-import org.jvoicexml.zanzibar.jvoicexml.impl.VoiceXmlWrapper;
 import org.jvoicexml.zanzibar.server.SpeechletServerMain;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechClientProvider;
@@ -58,16 +57,14 @@ public class ApplicationBySipHeaderService implements SpeechletService {
 	private String tempDirForPrompts;
 
 	private JVoiceXml jvxml;
-	private VoiceXmlWrapper vxml;
 
 	
-    public VoiceXmlWrapper getVxml() {
-		return vxml;
+    public JVoiceXml getVxml() {
+		return jvxml;
 	}
 
-	public void setVxml(VoiceXmlWrapper vxml) {
-		this.vxml = vxml;
-		this.jvxml = vxml.getJvxml();
+	public void setVxml(JVoiceXml vxml) {
+		this.jvxml = vxml;
 	}
     
     /**

@@ -52,7 +52,6 @@ import org.mrcp4j.client.MrcpFactory;
 import org.mrcp4j.client.MrcpProvider;
 import org.mrcp4j.message.header.IllegalValueException;
 import org.speechforge.cairo.rtp.server.PortPairPool;
-import org.speechforge.cairo.rtp.server.RTPStreamReplicatorFactory;
 import org.speechforge.cairo.sip.ResourceUnavailableException;
 import org.speechforge.cairo.sip.SdpMessage;
 import org.speechforge.cairo.sip.SessionListener;
@@ -146,7 +145,7 @@ public class SipServer implements SessionListener {
         
         
         public void startup() {
-        	_logger.info("Starting sip Server!");
+        	_logger.info("Starting SIP Server!");
 
         	try {
         		if (zanzibarHostName == null)
@@ -171,16 +170,6 @@ public class SipServer implements SessionListener {
             waitingList = new HashMap<String, SessionPair>();
         	_logger.info("Returned from call to Start sip Server!");
             
-            
-            if (mode.equals("cloud")) {
-               try {
-				_replicatorPool = RTPStreamReplicatorFactory.createObjectPool(baseReceiverRtpPort, maxConnects,  InetAddress.getByName(zanzibarHostName));
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-               _portPairPool = new PortPairPool(baseXmitRtpPort, maxConnects);
-            }
             
         }
         
