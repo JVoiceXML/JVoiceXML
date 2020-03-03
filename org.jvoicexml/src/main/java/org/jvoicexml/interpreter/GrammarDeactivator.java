@@ -110,6 +110,11 @@ class GrammarDeactivator implements ActiveGrammarSetObserver, EventSubscriber {
         if (!event.isType(ConnectionDisconnectHangupEvent.EVENT_TYPE)) {
             return;
         }
+        if (platform.isHungup()) {
+            LOGGER.info("no need to cleanup grammars. caller has hung up.");
+            return;
+        }
+        LOGGER.info("hangup: deactivating all grammars");
         final Collection<GrammarDocument> allGrammars = grammars.getGrammars();
         deactivateGramars(allGrammars);
     }

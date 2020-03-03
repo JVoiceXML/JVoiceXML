@@ -885,9 +885,17 @@ public final class JVoiceXmlImplementationPlatform
             if (hungup) {
                 return;
             }
-            hungup = true;
         }
         LOGGER.info("telephony connection hung up " + event);
+
+        // Stop a possibly active recognition
+        if (input != null && input.isBusy()) {
+            final Collection<ModeType> types =
+                    new java.util.ArrayList<ModeType>();;
+            types.add(ModeType.VOICE);
+            types.add(ModeType.DTMF);
+            input.stopRecognition(types);
+        }
         
         // Publish a corresponding event
         if (eventbus != null) {
@@ -896,6 +904,10 @@ public final class JVoiceXmlImplementationPlatform
             eventbus.publish(hangupEvent);
         }
 
+        synchronized (this) {
+            hungup = true;
+        }
+        
         // Immediately return the resources
         LOGGER.info("returning aqcuired resources");
         returnSystemOutput();
