@@ -791,7 +791,6 @@ public class EcmaScriptDataModel implements DataModel {
     public int updateArray(final String variableName, final int position,
             final Object newValue, final Scope scope) {
         final Scriptable start = getScriptable(scope);
-        ;
         return updateArray(variableName, position, newValue, scope, start);
     }
 
