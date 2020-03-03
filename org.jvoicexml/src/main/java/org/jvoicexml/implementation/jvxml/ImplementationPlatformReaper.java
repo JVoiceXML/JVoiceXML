@@ -22,6 +22,7 @@ package org.jvoicexml.implementation.jvxml;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
@@ -78,7 +79,7 @@ class ImplementationPlatformReaper extends Thread {
             output = null;
         }
         final org.jvoicexml.Session session = impl.getSession();
-        final String id = session.getSessionId();
+        final SessionIdentifier id = session.getSessionId();
         setName("platform-reaper-" + id);
         setDaemon(true);
         reapingDelay = DEFAULT_REAPING_DELAY;

@@ -148,9 +148,11 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
         return null;
     }
 
+
     @Override
     public Session createSession(ConnectionInformation info,
-            ImplementationPlatform platform) throws ErrorEvent {
+            ImplementationPlatform platform, SessionIdentifier id)
+            throws ErrorEvent {
         // TODO Auto-generated method stub
         return null;
     }

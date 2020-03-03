@@ -22,6 +22,8 @@ package org.jvoicexml.implementation.jvxml;
 
 import org.junit.Test;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionIdentifier;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.mockito.Mockito;
 
 /**
@@ -40,7 +42,8 @@ public class ImplementationPlatformReaperTest {
         final JVoiceXmlImplementationPlatform platform =
                 new JVoiceXmlImplementationPlatform(null, null, null, null);
         final Session session = Mockito.mock(Session.class);
-        Mockito.when(session.getSessionId()).thenReturn("42");
+        final SessionIdentifier id = new UuidSessionIdentifier();
+        Mockito.when(session.getSessionId()).thenReturn(id);
         platform.setSession(session);
         final ImplementationPlatformReaper reaper =
                 new ImplementationPlatformReaper(platform, null, null);
@@ -59,7 +62,8 @@ public class ImplementationPlatformReaperTest {
         final JVoiceXmlImplementationPlatform platform =
                 new JVoiceXmlImplementationPlatform(null, null, null, null);
         final Session session = Mockito.mock(Session.class);
-        Mockito.when(session.getSessionId()).thenReturn("42");
+        final SessionIdentifier id = new UuidSessionIdentifier();
+        Mockito.when(session.getSessionId()).thenReturn(id);
         platform.setSession(session);
         final ImplementationPlatformReaper reaper =
                 new ImplementationPlatformReaper(platform, null, null);
