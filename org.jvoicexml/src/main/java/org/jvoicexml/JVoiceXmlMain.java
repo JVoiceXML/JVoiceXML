@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,7 +35,6 @@ import java.util.ServiceLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.profile.Profile;
@@ -213,19 +212,31 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
                     "JVoiceXML not running. Can't create a session!");
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("creating new session...");
+        final ImplementationPlatform platform = implementationPlatformFactory
+                .getImplementationPlatform(info);
+        return createSession(info, platform, id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Session createSession(final ConnectionInformation info,
+            final ImplementationPlatform platform, final SessionIdentifier id)
+                    throws ErrorEvent {
+        if (state != InterpreterState.RUNNING) {
+            throw new NoresourceError(
+                    "JVoiceXML not running. Can't create a session!");
         }
+        LOGGER.info("creating new session...");
 
         // Create the session and link it with the implementation platform
         final String profileName = info.getProfile();
         final Profile profile = profiles.get(profileName);
         if (profile == null) {
-            throw new BadFetchError(
+            throw new NoresourceError(
                     "Unable to find a profile named '" + profileName + "'");
         }
-        final ImplementationPlatform platform = implementationPlatformFactory
-                .getImplementationPlatform(info);
         final Session session = new org.jvoicexml.interpreter.JVoiceXmlSession(
                 platform, this, info, profile, id);
         platform.setSession(session);
@@ -233,7 +244,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
 
         return session;
     }
-
+    
     /**
      * {@inheritDoc}
      */
@@ -275,6 +286,14 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         return grammarProcessor;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ImplementationPlatformFactory getImplementationPlatformFactory() {
+        return implementationPlatformFactory;
+    }
+    
     /**
      * Sets the implementation platform factory.
      * <p>

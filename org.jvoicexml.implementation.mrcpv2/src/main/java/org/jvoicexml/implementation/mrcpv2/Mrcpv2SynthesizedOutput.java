@@ -394,6 +394,7 @@ public final class Mrcpv2SynthesizedOutput
      * {@inheritDoc}
      */
     public void disconnect(final ConnectionInformation client) {
+        queueCount = 0;
         // If the connection is already established, do not touch this
         // connection.
         if (client instanceof Mrcpv2ConnectionInformation) {

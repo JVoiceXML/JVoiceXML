@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,14 +21,16 @@
 
 package org.jvoicexml;
 
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
 
 /**
- * View of the interpreter on the main class.
+ * View of the interpreter and components like the {@link CallManager} on the
+ * main class.
  *
  * <p>
- * While {@link JVoiceXml} defines the view of {@link ConnectionInformation}s on the
- * main class, the interpreter needs more functionality.
+ * While {@link JVoiceXml} defines the view of {@link ConnectionInformation}s on
+ * the main class, the interpreter needs more functionality.
  * </p>
  *
  * @author Dirk Schnelle
@@ -63,4 +60,38 @@ public interface JVoiceXmlCore
      * @since 0.7.4
      */
     Configuration getConfiguration();
+    
+    /**
+     * Retrieves the implementation platform factory.
+     * @return the implementation platform factory
+     * @since 0.7.9
+     */
+    ImplementationPlatformFactory getImplementationPlatformFactory();
+
+    /**
+     * Creates a new session given the implementation platform.
+     *
+     * <p>
+     * The {@link Session} is the entry point to start the interpreter. A
+     * session is linked to resources identified according to the info provided
+     * by {@link ConnectionInformation} and accessible in the provided
+     * {@link ImplementationPlatform}.
+     * </p>
+     *
+     * @param info
+     *        information about the current connection,
+     *        maybe <code>null</code>. If it is <code>null</code> the
+     *        default implementation platform is used.
+     * @param platform
+     *        the implementation platform to use
+     * @param id
+     *        the session identifier
+     * @return The new session.
+     *
+     * @exception ErrorEvent
+     *            Error creating the session.
+     */
+    Session createSession(final ConnectionInformation info,
+            final ImplementationPlatform platform, final SessionIdentifier id)
+            throws ErrorEvent;
 }

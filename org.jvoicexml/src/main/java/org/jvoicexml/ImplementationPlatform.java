@@ -114,6 +114,13 @@ public interface ImplementationPlatform extends PromptAccumulator {
         throws NoresourceError, ConnectionDisconnectHangupEvent;
 
     /**
+     * Checks if the user has hungup in this platform.
+     * @return {@code true} if the user has hungup
+     * @since 0.7.9
+     */
+    boolean isHungup();
+
+    /**
      * Closes all open resources.
      */
     void close();

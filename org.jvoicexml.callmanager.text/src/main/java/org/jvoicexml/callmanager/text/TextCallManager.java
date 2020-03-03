@@ -29,6 +29,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.CallManager;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -50,6 +51,9 @@ public final class TextCallManager implements CallManager {
     /** The server thread waiting for incoming connections. */
     private final Collection<TextServerThread> servers;
 
+    /** Flag if the call manager has been started. */
+    private boolean started;
+    
     /**
      * Constructs a new object.
      */
@@ -76,7 +80,7 @@ public final class TextCallManager implements CallManager {
      * {@inheritDoc}
      */
     @Override
-    public void setJVoiceXml(final JVoiceXml jvoicexml) {
+    public void setJVoiceXml(final JVoiceXmlCore jvoicexml) {
         jvxml = jvoicexml;
     }
 
@@ -93,8 +97,17 @@ public final class TextCallManager implements CallManager {
             server.start();
             servers.add(server);
         }
+        started = true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isStarted() {
+        return started;
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -108,5 +121,6 @@ public final class TextCallManager implements CallManager {
             }
         }
         servers.clear();
+        started = false;
     }
 }

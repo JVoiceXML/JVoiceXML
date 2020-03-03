@@ -201,4 +201,10 @@ public final class MockImplementationPlatform
         }
         prompts = null;
     }
+
+    @Override
+    public boolean isHungup() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

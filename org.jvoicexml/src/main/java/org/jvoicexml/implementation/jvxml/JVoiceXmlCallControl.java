@@ -46,7 +46,7 @@ import org.jvoicexml.implementation.Telephony;
  * @author Dirk Schnelle-Walka
  * @since 0.6
  */
-final class JVoiceXmlCallControl implements CallControl {
+public final class JVoiceXmlCallControl implements CallControl {
     /** Logger instance. */
     private static final Logger LOGGER =
         LogManager.getLogger(JVoiceXmlCallControl.class);

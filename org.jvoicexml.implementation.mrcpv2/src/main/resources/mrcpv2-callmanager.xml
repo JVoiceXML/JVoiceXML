@@ -32,8 +32,7 @@
             </beans:map>
         </beans:property>
     </beans:bean>
-    <beans:bean id="sipServer" class="org.speechforge.zanzibar.sip.SipServer"
-        init-method="startup" destroy-method="shutdown">
+    <beans:bean id="sipServer" class="org.speechforge.zanzibar.sip.SipServer">
         <beans:property name="dialogService">
             <beans:ref bean="callmanager" />
         </beans:property>

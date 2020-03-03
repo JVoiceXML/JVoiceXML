@@ -24,6 +24,7 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
@@ -138,6 +139,19 @@ public final class MockJvoiceXmlCore implements JVoiceXmlCore {
      */
     @Override
     public Configuration getConfiguration() {
+        return null;
+    }
+
+    @Override
+    public ImplementationPlatformFactory getImplementationPlatformFactory() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Session createSession(ConnectionInformation info,
+            ImplementationPlatform platform) throws ErrorEvent {
+        // TODO Auto-generated method stub
         return null;
     }
 

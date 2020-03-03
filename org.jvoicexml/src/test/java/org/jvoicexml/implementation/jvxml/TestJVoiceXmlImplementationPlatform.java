@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,16 +30,18 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
 import org.jvoicexml.mock.MockConnectionInformation;
-import org.jvoicexml.mock.implementation.MockSpokenInputFactory;
-import org.jvoicexml.mock.implementation.MockSynthesizedOutputFactory;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
+import org.mockito.Mockito;
 
 /**
  * Test cases for {@link KeyedResourcePool}.
@@ -68,13 +65,19 @@ public final class TestJVoiceXmlImplementationPlatform {
 
     /**
      * {@inheritDoc}
+     * @throws NoresourceError test failed
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws Exception, NoresourceError {
         synthesizerPool = new KeyedResourcePool<SynthesizedOutput>();
-        final MockSynthesizedOutputFactory synthesizedOutputFactory =
-            new MockSynthesizedOutputFactory();
-        synthesizedOutputFactory.setInstances(1);
+        @SuppressWarnings("unchecked")
+        final ResourceFactory<SynthesizedOutput> synthesizedOutputFactory =
+            Mockito.mock(ResourceFactory.class);
+        Mockito.when(synthesizedOutputFactory.getInstances()).thenReturn(1);
+        Mockito.when(synthesizedOutputFactory.getType()).thenReturn("dummy");
+        final SynthesizedOutput output = Mockito.mock(SynthesizedOutput.class);
+        Mockito.when(output.getType()).thenReturn("dummy");
+        Mockito.when(synthesizedOutputFactory.createResource()).thenReturn(output);
         synthesizerPool.addResourceFactory(synthesizedOutputFactory);
         telephonyPool = new KeyedResourcePool<Telephony>();
         final DesktopTelephonySupportFactory telephonyFactory =
@@ -82,9 +85,13 @@ public final class TestJVoiceXmlImplementationPlatform {
         telephonyFactory.setInstances(1);
         telephonyPool.addResourceFactory(telephonyFactory);
         recognizerPool = new KeyedResourcePool<SpokenInput>();
-        final MockSpokenInputFactory spokenInputFactory =
-            new MockSpokenInputFactory();
-        spokenInputFactory.setInstances(1);
+        @SuppressWarnings("unchecked")
+        final ResourceFactory<SpokenInput> spokenInputFactory =
+            Mockito.mock(ResourceFactory.class);
+        Mockito.when(spokenInputFactory.getInstances()).thenReturn(1);
+        final SpokenInput input = Mockito.mock(SpokenInput.class);
+        Mockito.when(spokenInputFactory.createResource()).thenReturn(input);
+        Mockito.when(spokenInputFactory.getType()).thenReturn("dummy");
         recognizerPool.addResourceFactory(spokenInputFactory);
         info = new MockConnectionInformation(telephonyFactory.getType());
         platform = new JVoiceXmlImplementationPlatform(telephonyPool,
@@ -183,5 +190,41 @@ public final class TestJVoiceXmlImplementationPlatform {
         output.queueSpeakable(text2, null, null);
         output.queueSpeakable(text3, null, null);
         platform.waitNonBargeInPlayed();
+    }
+
+    /**
+     * Test case for {@link JVoiceXmlImplementationPlatform#telephonyCallHungup(org.jvoicexml.implementation.TelephonyEvent)}
+     * 
+     * @since 0.7.9
+     */
+    @Test
+    public void testTelephonyCallHungup() {
+        final Telephony telephony = Mockito.mock(Telephony.class);
+        final TelephonyEvent event =
+                new TelephonyEvent(telephony, TelephonyEvent.HUNGUP);
+        platform.telephonyCallHungup(event);
+        Assert.assertFalse(platform.isUserInputActive());
+        Assert.assertTrue(platform.isHungup());
+        Assert.assertFalse(platform.isClosed());
+    }
+
+    /**
+     * Test case for {@link JVoiceXmlImplementationPlatform#telephonyCallHungup(org.jvoicexml.implementation.TelephonyEvent)}
+     * @throws JVoiceXMLEvent test failed
+     * 
+     * @since 0.7.9
+     */
+    @Test
+    public void testTelephonyCallHungupOutputActive() throws NoresourceError, JVoiceXMLEvent {
+        final Telephony telephony = Mockito.mock(Telephony.class);
+        final JVoiceXmlSystemOutput output = (JVoiceXmlSystemOutput) platform.getSystemOutput();
+        Mockito.when(output.isBusy()).thenReturn(true);
+        Assert.assertNotNull(output);
+        final TelephonyEvent event =
+                new TelephonyEvent(telephony, TelephonyEvent.HUNGUP);
+        platform.telephonyCallHungup(event);
+        Assert.assertFalse(platform.isUserInputActive());
+        Assert.assertTrue(platform.isHungup());
+        Assert.assertFalse(platform.isClosed());
     }
 }

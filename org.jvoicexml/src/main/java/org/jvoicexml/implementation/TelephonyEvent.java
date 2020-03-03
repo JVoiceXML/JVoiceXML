@@ -104,4 +104,47 @@ public final class TelephonyEvent {
     public Object getParam() {
         return param;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append(Telephony.class.getCanonicalName());
+        str.append('[');
+        str.append(source);
+        str.append(',');
+        switch (event) {
+        case ANSWERED:
+            str.append("ANSWERED");
+            break;
+        case HUNGUP:
+            str.append("HUNGUP");
+            break;
+        case PLAY_STARTED:
+            str.append("PLAY_STARTED");
+            break;
+        case PLAY_STOPPED:
+            str.append("PLAY_STOPPED");
+            break;
+        case RECORD_STARTED:
+            str.append("RECORD_STARTED");
+            break;
+        case RECORD_STOPPED:
+            str.append("RECORD_STOPPED");
+            break;
+        case TRANSFERRED:
+            str.append("TRANSFERRED");
+            break;
+        default:
+            str.append(event);
+        }
+        if (param != null) {
+            str.append(',');
+            str.append(param);
+        }
+        str.append(']');
+        return str.toString();
+    }
 }
