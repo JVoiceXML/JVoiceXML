@@ -80,7 +80,7 @@ import org.speechforge.cairo.util.CairoUtil;
 public class SipServer implements SessionListener {
  
 
-		private static Logger _logger = Logger.getLogger(SipServer.class);
+		private static Logger LOGGER = Logger.getLogger(SipServer.class);
         
         // properties need to be set either
         //   - call setters and then the no arg constructor then startup()(perhaps with SPring) OR
@@ -109,7 +109,7 @@ public class SipServer implements SessionListener {
         private PortPairPool _portPairPool;
         private String hostname;
         
-        private SipAgent _sipAgent;
+        private SipAgent sipAgent;
         
         boolean responded = false;
         SdpMessage _response;
@@ -139,38 +139,39 @@ public class SipServer implements SessionListener {
             
             
             // Construct a SIP agent to be used to send a SIP Invitation to the ciaro server
-            _sipAgent =new SipAgent(this, mySipAddress, stackName, port, transport);
+            sipAgent =new SipAgent(this, mySipAddress, stackName, port, transport);
             waitingList = new HashMap<String, SessionPair>();
         }
         
         
         public void startup() {
-        	_logger.info("Starting SIP Server!");
 
         	try {
-        		if (zanzibarHostName == null)
+        		if (zanzibarHostName == null) {
         			zanzibarHostName = CairoUtil.getLocalHost().getHostAddress();
+        		}
 
-        		if (cairoSipHostName == null)
+        		if (cairoSipHostName == null) {
         			cairoSipHostName = CairoUtil.getLocalHost().getHostAddress();
-        	} catch (SocketException e2) {
-        		// TODO Auto-generated catch block
-        		e2.printStackTrace();
-        	} catch (UnknownHostException e2) {
-        		// TODO Auto-generated catch block
-        		e2.printStackTrace();
+        		}
+        	} catch (SocketException e) {
+        		LOGGER.error("unable to start SIP server", e);
+        		return;
+        	} catch (UnknownHostException e) {
+        		LOGGER.error("unable to start SIP server", e);
+        		return;
         	}
 
             try {
-	            _sipAgent = new SipAgent(this, mySipAddress, stackName,zanzibarHostName,null, port, transport);
-            } catch (SipException e1) {
-	            // TODO Auto-generated catch block
-	            e1.printStackTrace();
+	            sipAgent = new SipAgent(this, mySipAddress, stackName,
+	            		zanzibarHostName, null, port, transport);
+            } catch (SipException e) {
+        		LOGGER.error("unable to start SIP server", e);
+        		return;
             }
             waitingList = new HashMap<String, SessionPair>();
-        	_logger.info("Returned from call to Start sip Server!");
-            
-            
+        	LOGGER.info("Zanzibar SIP server started at 'sip:cairogate@" 
+        			+ zanzibarHostName + ":" + port + "'");
         }
         
 
@@ -282,7 +283,7 @@ public class SipServer implements SessionListener {
             //_peerPort = peerPort;
             
             // Send the sip invitation
-            SipSession session = _sipAgent.sendInviteWithoutProxy(to, message, peerAddress, peerPort);
+            SipSession session = sipAgent.sendInviteWithoutProxy(to, message, peerAddress, peerPort);
 
             responded = false;
             //synchronized (this) {
@@ -300,12 +301,12 @@ public class SipServer implements SessionListener {
         }
         
         public void shutdown() throws ObjectInUseException {
-            _sipAgent.dispose();
+            sipAgent.dispose();
         }
         
 
         public synchronized SdpMessage processInviteResponse(boolean ok, SdpMessage response,SipSession session) {
-            _logger.debug("Gotta invite response, ok is: "+ok);
+            LOGGER.debug("Gotta invite response, ok is: "+ok);
             SdpMessage pbxResponse = null;
             if (ok) {
                 //_logger.debug(":::: "+session.getId()+" :::::::");
@@ -341,7 +342,7 @@ public class SipServer implements SessionListener {
                             //rtpmd.get(1).getMedia().setMediaPort(localPort);
                             supportedFormats = rtpChans.get(0).getMedia().getMediaFormats(true);    
                         } else {
-                            _logger.warn("No Media channel specified in the invite request");
+                            LOGGER.warn("No Media channel specified in the invite request");
                             //TODO:  handle no media channel in the response corresponding tp the mrcp channel (sip/sdp error)
                         } 
 
@@ -352,8 +353,8 @@ public class SipServer implements SessionListener {
                         MrcpFactory factory = MrcpFactory.newInstance();
                         MrcpProvider provider = factory.createProvider();
                         
-                        _logger.debug("New Xmitter chan: "+xmitterChannelId+" "+remoteHostAdress+" "+xmitterPort+" "+ protocol);
-                        _logger.debug("New Receiver chan: "+receiverChannelId+" "+remoteHostAdress+" "+receiverPort+" "+protocol);
+                        LOGGER.debug("New Xmitter chan: "+xmitterChannelId+" "+remoteHostAdress+" "+xmitterPort+" "+ protocol);
+                        LOGGER.debug("New Receiver chan: "+receiverChannelId+" "+remoteHostAdress+" "+receiverPort+" "+protocol);
                         
                         MrcpChannel ttsChannel = provider.createChannel(xmitterChannelId, remoteHostAdress, xmitterPort, protocol);
                         MrcpChannel recogChannel = provider.createChannel(receiverChannelId, remoteHostAdress, receiverPort, protocol);
@@ -393,10 +394,10 @@ public class SipServer implements SessionListener {
                     //session.setForward(forward);
 
                 } else {
-                    _logger.info("Could not find corresponding external request in waiting list");
+                    LOGGER.info("Could not find corresponding external request in waiting list");
                 }
             } else {
-                _logger.info("Invite Response not ok");
+                LOGGER.info("Invite Response not ok");
             }
 
             return pbxResponse;
@@ -406,7 +407,7 @@ public class SipServer implements SessionListener {
 			SdpMessage pbxResponse;
 			pbxResponse = constructInviteResponseToPbx(remoteRtpPort, remoteHostName, supportedFormats);
 	
-			_sipAgent.sendResponse(pbxSession, pbxResponse);
+			sipAgent.sendResponse(pbxSession, pbxResponse);
 	
 			dialogService.startNewMrcpDialog(pbxSession, mrcpSession);
 			
@@ -415,7 +416,7 @@ public class SipServer implements SessionListener {
                         
 
         public synchronized void processTimeout(TimeoutEvent event) {
-            _logger.debug("Timeout occurred");
+            LOGGER.debug("Timeout occurred");
            // _retryCount = _retryCount + 1;
            // _logger.info("Timeout # "+ _retryCount+" occured for SIP invite request.");
            // if (_retryCount < MAXRETRIES) {
@@ -443,7 +444,7 @@ public class SipServer implements SessionListener {
             //for (Resource r : session.getResources()) {
              //   r.bye(session.getId());
             //}
-            _logger.info("Got a bye request");
+            LOGGER.info("Got a bye request");
             
             try {
                 dialogService.stopDialog(session);
@@ -467,7 +468,7 @@ public class SipServer implements SessionListener {
             SdpMessage pbxResponse = null;
             SipSession internalSession = null;
             
-            _logger.info("Got an invite request");
+            LOGGER.info("Got an invite request");
             try {
                 for (MediaDescription md : request.getRtpChannels()) {
                     pbxRtpPort = md.getMedia().getMediaPort();
@@ -475,12 +476,12 @@ public class SipServer implements SessionListener {
                     //_logger.debug("Individual Media connection address: "+ md.getConnection().getAddress());
                 }
             } catch (SdpException e) {
-                _logger.debug(e, e);
+                LOGGER.debug(e, e);
                 throw e;
             }
-            if (_logger.isDebugEnabled()) {
+            if (LOGGER.isDebugEnabled()) {
 	            for (int i=0; i<pbxFormats.size(); i++) {
-	                _logger.debug("pbx format # "+i+" is: "+pbxFormats.get(i).toString());
+	                LOGGER.debug("pbx format # "+i+" is: "+pbxFormats.get(i).toString());
 	            }
             }
 
@@ -494,7 +495,7 @@ public class SipServer implements SessionListener {
 	            SdpMessage inviteResponse = null;
 	            try {
 	                message = constructInviteRequestToCairo(pbxRtpPort,pbxHost,pbxSessionName,pbxFormats);
-	                internalSession = _sipAgent.sendInviteWithoutProxy(cairoSipAddress, message, cairoSipHostName, cairoSipPort);
+	                internalSession = sipAgent.sendInviteWithoutProxy(cairoSipAddress, message, cairoSipHostName, cairoSipPort);
 	            } catch (UnknownHostException e1) {
 	                // TODO Auto-generated catch block
 	                e1.printStackTrace();
@@ -513,7 +514,7 @@ public class SipServer implements SessionListener {
 	            //_logger.debug(":::: AND THE External "+session.getId()+" :::::::");
 	            waitingList.put(internalSession.getCtx().toString(),sessionPair);
             } else {
-            	_logger.warn("Unrecognized SipServer mode, "+mode);
+            	LOGGER.warn("Unrecognized SipServer mode, "+mode);
             }
             return null;
         }
@@ -708,7 +709,7 @@ public class SipServer implements SessionListener {
 
         public void processInfoRequest(SipSession session, String contentType, String contentSubType, String content) {
             
-            _logger.debug("SIP INFO request: "+contentType+"/"+contentSubType+"\n"+content);
+            LOGGER.debug("SIP INFO request: "+contentType+"/"+contentSubType+"\n"+content);
            
             String code = null;
             int duration = 0 ;
@@ -718,7 +719,7 @@ public class SipServer implements SessionListener {
 
                 //Handle the client side dtmf signaling
                 if (content == null) {
-                    _logger.warn("sip info request with a dtmf-relay content type with no content.");
+                    LOGGER.warn("sip info request with a dtmf-relay content type with no content.");
                 } else {
 
                     String lines[] = content.toString().split("\n");
@@ -731,8 +732,8 @@ public class SipServer implements SessionListener {
                             duration = Integer.parseInt(parse[1].trim());
                         }
                     }
-                    _logger.debug("The DTMF code : "+code);
-                    _logger.debug("The duration: "+ duration);
+                    LOGGER.debug("The DTMF code : "+code);
+                    LOGGER.debug("The duration: "+ duration);
 
                     dialogService.dtmf(session,code.charAt(0));
 
@@ -742,7 +743,7 @@ public class SipServer implements SessionListener {
                 }
 
             } else {
-                _logger.warn("Unhandled SIP INFO request content type: "+contentType+"/"+contentSubType+"\n"+content);
+                LOGGER.warn("Unhandled SIP INFO request content type: "+contentType+"/"+contentSubType+"\n"+content);
             }
 
         }
