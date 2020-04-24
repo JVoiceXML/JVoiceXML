@@ -48,10 +48,10 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.11.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.11.2'
-    compile group: 'org.jvoicexml', name: 'cairo-client', version: '0.3.1-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'cairo-sip', version: '0.3.1-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'cairo-rtp', version: '0.3.1-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'mrcp4j', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.client', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.sip', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.rtp', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.mrcp4j', version: '0.3-SNAPSHOT'
     compile group: 'javax.sip', name: 'jain-sip-api', version: '1.2.1.4'
     compile group: 'javax.sip', name: 'jain-sip-ri', version: '1.2.324'
     compile group: 'javax.sdp', name: 'nist-sdp', version: '1.0'
@@ -143,10 +143,10 @@ task xsltCallmanagerDistribution(type: com.github.eerohele.SaxonXsltTask) {
 task copyReferencedLibraries(type: Copy) {
     into "${buildDir}/libs"
     from(configurations.compile) {
-        include 'cairo-client*.jar',
-         'cairo-sip*.jar',
-         'cairo-rtp*.jar',
-         'mrcp4j*.jar',
+        include 'org.speechforge.cairo.client*.jar',
+         'org.speechforge.cairo.sip*.jar',
+         'org.speechforge.cairo.rtp*.jar',
+         'org.mrcp4j*.jar',
          'org.jvoicexml.client.mrcpv2*.jar',
          'org.jvoicexml.zanzibar*.jar',
          'org.jvoicexml.interpreter.grammar.halef*.jar',

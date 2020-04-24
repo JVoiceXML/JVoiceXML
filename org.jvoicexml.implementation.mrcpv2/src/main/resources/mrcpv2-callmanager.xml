@@ -7,10 +7,11 @@
     <classpath>org.jvoicexml.client.mrcpv2-@@VERSION@@.jar</classpath>
     <classpath>org.jvoicexml.interpreter.grammar.halef-@@VERSION@@.jar</classpath>
     <classpath>org.jvoicexml.zanzibar-@@VERSION@@.jar</classpath>
-    <classpath>cairo-client-0.3-SNAPSHOT.jar</classpath>
-    <classpath>cairo-rtp-0.3-SNAPSHOT.jar</classpath>
-    <classpath>cairo-sip-0.3-SNAPSHOT.jar</classpath>
-    <classpath>mrcp4j-0.3-SNAPSHOT.jar</classpath>
+    <classpath>org.speechforge.cairo.client-0.3.1-SNAPSHOT.jar</classpath>
+    <classpath>org.speechforge.cairo.rtp-0.3.1-SNAPSHOT.jar</classpath>
+    <classpath>org.speechforge.cairo.sip-0.3.1-SNAPSHOT.jar</classpath>
+    <classpath>org.speechforge.cairo.server-0.3.1-SNAPSHOT.jar</classpath>
+    <classpath>org.mrcp4j-0.3-SNAPSHOT.jar</classpath>
     <classpath>jain-sip-api-1.2.1.4.jar</classpath>
     <classpath>jain-sip-ri-1.2.324.jar</classpath>
     <classpath>nist-sdp-1.0.jar</classpath>
