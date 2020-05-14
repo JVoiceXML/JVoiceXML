@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -96,6 +96,7 @@ public abstract class AbstractXmlNode
     /**
      * {@inheritDoc}
      */
+    @Override
     public final Node getNode() {
         Node current = node;
         while (current instanceof XmlNode) {
@@ -121,6 +122,7 @@ public abstract class AbstractXmlNode
     /**
      * {@inheritDoc}
      */
+    @Override
     public final String getAttribute(final String attribute) {
         final NamedNodeMap attributes = node.getAttributes();
         if (attributes == null) {
@@ -153,6 +155,7 @@ public abstract class AbstractXmlNode
     /**
      * {@inheritDoc}
      */
+    @Override
     public final void setAttribute(final String name, final String value) {
         final NamedNodeMap attributes = node.getAttributes();
 

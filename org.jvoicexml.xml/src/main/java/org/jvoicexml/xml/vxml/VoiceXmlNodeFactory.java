@@ -106,7 +106,8 @@ final class VoiceXmlNodeFactory
         NODES.put(ObjectTag.TAG_NAME, new ObjectTag());
         NODES.put(Option.TAG_NAME, new Option());
         NODES.put(Param.TAG_NAME, new Param());
-        NODES.put(Prompt.TAG_NAME, new Prompt());
+        // TODO find a way to make this configurable
+        NODES.put(Prompt.TAG_NAME, new JVoiceXmlPrompt());
         NODES.put(Property.TAG_NAME, new Property());
         NODES.put(Record.TAG_NAME, new Record());
         NODES.put(Reprompt.TAG_NAME, new Reprompt());
