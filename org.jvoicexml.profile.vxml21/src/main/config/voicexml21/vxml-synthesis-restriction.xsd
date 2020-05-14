@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://www.w3.org/2001/vxml" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns="http://www.w3.org/2001/vxml" 
+elementFormDefault="qualified">
+    <xsd:annotation>
+        <xsd:documentation>VoiceXML 2.0 restriction schema for SSML 1.0 (20060316) </xsd:documentation>
+    </xsd:annotation>
+    <xsd:annotation>
+        <xsd:documentation>
+Copyright 1998-2006 W3C (MIT, ERCIM, Keio), All Rights Reserved. Permission to
+use, copy, modify and distribute the VoiceXML SSML adaption schema and its
+accompanying documentation for any purpose and without fee is hereby granted
+in perpetuity, provided that the above copyright notice and this paragraph
+appear in all copies.  The copyright holders make no representation about the
+suitability of the schema for any purpose. It is provided "as is" without
+expressed or implied warranty.
+</xsd:documentation>
+    </xsd:annotation>
+
+
+   <xsd:import namespace="http://www.w3.org/XML/1998/namespace" 
+                schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+    
+    <xsd:annotation>
+        <xsd:documentation>restriction of SSML 1.0 no-namespace schema for use in VoiceXML 2.0 </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:redefine schemaLocation="synthesis-core.xsd">
+
+	<xsd:attributeGroup name="speak.attribs">
+      <xsd:annotation>
+        <xsd:documentation>restricts 'version' attribute to '1.0'</xsd:documentation>
+      </xsd:annotation>
+      <xsd:attribute name="version" type="version.datatype" fixed="1.0"/>
+	  <xsd:attribute ref="xml:lang"/>
+       <xsd:attribute ref="xml:base"/>
+	</xsd:attributeGroup>
+
+    </xsd:redefine>
+
+</xsd:schema>
+
+
+
+
+
