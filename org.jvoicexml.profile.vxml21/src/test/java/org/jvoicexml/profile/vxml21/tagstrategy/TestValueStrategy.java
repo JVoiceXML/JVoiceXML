@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/unittests/src/org/jvoicexml/interpreter/tagstrategy/TestValueStrategy.java $
- * Version: $LastChangedRevision: 4233 $
- * Date:    $Date: 2014-09-02 09:14:31 +0200 (Tue, 02 Sep 2014) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -75,10 +70,6 @@ public final class TestValueStrategy extends TagStrategyTestBase {
                 .thenReturn(new TextStrategy());
         final VoiceXml21Profile vxml21Profile = (VoiceXml21Profile) profile;
         vxml21Profile.setTagStrategyFactory(tagfactory);
-
-        final ImplementationPlatform platform = Mockito
-                .mock(ImplementationPlatform.class);
-        Mockito.when(context.getImplementationPlatform()).thenReturn(platform);
     }
 
     /**
@@ -98,6 +89,10 @@ public final class TestValueStrategy extends TagStrategyTestBase {
         final Value value = block.appendChild(Value.class);
         value.setExpr(name);
 
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression(name, Object.class))
+            .thenThrow(new SemanticError(name + " is not defined!"));
+        
         final ValueStrategy strategy = new ValueStrategy();
         executeTagStrategy(value, strategy);
     }

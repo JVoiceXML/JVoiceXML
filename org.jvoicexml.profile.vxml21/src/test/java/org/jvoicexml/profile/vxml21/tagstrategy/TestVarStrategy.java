@@ -65,7 +65,7 @@ public final class TestVarStrategy extends TagStrategyTestBase {
         }
 
         final DataModel model = getDataModel();
-        Mockito.verify(model.createVariable(name));
+        Mockito.verify(model).createVariable(name);
     }
 
     /**
