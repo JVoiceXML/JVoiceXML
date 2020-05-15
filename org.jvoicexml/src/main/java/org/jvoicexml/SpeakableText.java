@@ -22,6 +22,7 @@
 package org.jvoicexml;
 
 import org.jvoicexml.xml.vxml.BargeInType;
+import org.jvoicexml.xml.vxml.PriorityType;
 
 /**
  * Objects that implement this interface contain some text, that is
@@ -59,4 +60,11 @@ public interface SpeakableText {
      * @since 0.7.1
      */
     boolean isBargeInEnabled(final BargeInType type);
+    
+    /**
+     * Retrieves the priority of this prompt.
+     * @return the priority
+     * @since 0.7.9
+     */
+    PriorityType getPriority();
 }

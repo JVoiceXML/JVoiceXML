@@ -28,6 +28,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
+import org.jvoicexml.xml.vxml.PriorityType;
 
 /**
  * Text to be passed to the TTS engine. This text may contain SSML markups,
@@ -56,33 +57,16 @@ public final class SpeakableSsmlText
     /** Flag, if barge-in is supported. */
     private final boolean bargein;
 
-    /**
-     * Constructs a new object. The given text is encapsulated in an
-     * {@link SsmlDocument}.
-     * @param text the text that should be contained in the speakable
-     * @param locale the locale of this speakable
-     * @throws ParserConfigurationException
-     *         error creating the {@link SsmlDocument}.
-     */
-    public SpeakableSsmlText(final String text, final Locale locale)
-            throws ParserConfigurationException {
-        document = new SsmlDocument();
-        final Speak speak = document.getSpeak();
-        speak.setXmlLang(locale);
-        speak.addText(text);
-        bargeInType = null;
-        bargein = true;
-    }
-
+    /** The priority of this prompt. */
+    private PriorityType priority;
+    
     /**
      * Constructs a new object.
      * @param doc
      *        The SSML document to speak.
      */
     public SpeakableSsmlText(final SsmlDocument doc) {
-        document = doc;
-        bargeInType = null;
-        bargein = true;
+        this(doc, true, null);
     }
 
     /**
@@ -100,6 +84,42 @@ public final class SpeakableSsmlText
         document = doc;
         bargeInType = type;
         bargein = useBargein;
+        priority = PriorityType.APPEND;
+    }
+
+    /**
+     * Constructs a new object. The given text is encapsulated in an
+     * {@link SsmlDocument}. The speakable defaults to a priority of
+     * {@link PriorityType#APPEND}.
+     * @param text the text that should be contained in the speakable
+     * @param locale the locale of this speakable
+     * @throws ParserConfigurationException
+     *         error creating the {@link SsmlDocument}.
+     */
+    public SpeakableSsmlText(final String text, final Locale locale)
+            throws ParserConfigurationException {
+        this(text, locale, PriorityType.APPEND);
+    }
+    
+    /**
+     * Constructs a new object. The given text is encapsulated in an
+     * {@link SsmlDocument}.
+     * @param text the text that should be contained in the speakable
+     * @param locale the locale of this speakable
+     * @param speakablePriority the priority of this speakable
+     * @throws ParserConfigurationException
+     *         error creating the {@link SsmlDocument}.
+     */
+    public SpeakableSsmlText(final String text, final Locale locale,
+            final PriorityType speakablePriority)
+            throws ParserConfigurationException {
+        document = new SsmlDocument();
+        final Speak speak = document.getSpeak();
+        speak.setXmlLang(locale);
+        speak.addText(text);
+        bargeInType = null;
+        bargein = true;
+        priority = speakablePriority;
     }
 
     /**
@@ -163,6 +183,23 @@ public final class SpeakableSsmlText
      */
     public BargeInType getBargeInType() {
         return bargeInType;
+    }
+
+    /**
+     * Sets the priority of this speakeable.
+     * @param speakablePriority the priority
+     * @since 0.7.9
+     */
+    public void setPriority(final PriorityType speakablePriority) {
+        priority = speakablePriority;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PriorityType getPriority() {
+        return priority;
     }
 
     /**
