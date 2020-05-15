@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/unittests/src/org/jvoicexml/interpreter/tagstrategy/TagStrategyTestBase.java $
- * Version: $LastChangedRevision: 4318 $
- * Date:    $Date: 2014-10-16 13:32:35 +0200 (Thu, 16 Oct 2014) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,7 +35,6 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
@@ -49,7 +43,6 @@ import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.datamodel.DataModelObjectDeserializer;
 import org.jvoicexml.interpreter.datamodel.DataModelObjectSerializer;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
-import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.TagStrategy;
 import org.jvoicexml.profile.TagStrategyFactory;
@@ -70,7 +63,7 @@ import org.mockito.Mockito;
  */
 public abstract class TagStrategyTestBase {
     /** The implementation platform. */
-    private MockImplementationPlatform platform;
+    private ImplementationPlatform platform;
 
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
@@ -135,19 +128,16 @@ public abstract class TagStrategyTestBase {
      */
     @Before
     public final void baseSetUp() throws Exception {
-        platform = new MockImplementationPlatform();
-        profile = Mockito.mock(Profile.class);
+        platform = Mockito.mock(ImplementationPlatform.class);
+        profile = new VoiceXml21Profile();
         final TagStrategyFactory taginitfactory = Mockito
                 .mock(TagStrategyFactory.class);
-        Mockito.when(profile.getInitializationTagStrategyFactory())
-                .thenReturn(taginitfactory);
-        context = Mockito.mock(VoiceXmlInterpreterContext.class);
-        Mockito.when(context.getProfile()).thenReturn(profile);
+        final VoiceXml21Profile vxml21Profile = (VoiceXml21Profile) profile;
+        vxml21Profile.setInitializationTagStrategyFactory(taginitfactory);        
         final Session session = Mockito.mock(Session.class);
+        context = Mockito.mock(VoiceXmlInterpreterContext.class);
         Mockito.when(context.getSession()).thenReturn(session);
         Mockito.when(context.getProfile()).thenReturn(new VoiceXml21Profile());
-        final ImplementationPlatform platform =
-                Mockito.mock(ImplementationPlatform.class);
         Mockito.when(context.getImplementationPlatform()).thenReturn(platform);
         interpreter = new VoiceXmlInterpreter(context);
         model = Mockito.mock(DataModel.class);
@@ -169,17 +159,6 @@ public abstract class TagStrategyTestBase {
         Mockito.when(model.getDeserializer(Mockito.any()))
                 .thenReturn(deserializer);
         Mockito.when(context.getDataModel()).thenReturn(model);
-    }
-
-    /**
-     * Sets the output listener to add once the system output is obtained.
-     * 
-     * @param listener
-     *            the listener.
-     */
-    public final void setSystemOutputListener(
-            final SynthesizedOutputListener listener) {
-        platform.setSystemOutputListener(listener);
     }
 
     /**

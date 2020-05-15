@@ -33,11 +33,7 @@ import org.junit.Test;
 import org.jvoicexml.Application;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
-import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
-import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.JVoiceXmlApplication;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.ssml.Audio;
@@ -54,8 +50,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @version $Revision: 4233 $
  * @since 0.6
  */
-public final class TestAudioStrategy extends TagStrategyTestBase
-    implements SynthesizedOutputListener {
+public final class TestAudioStrategy extends TagStrategyTestBase {
     /** The queued speakable. */
     private SpeakableText queuedSpeakable;
 
@@ -74,7 +69,6 @@ public final class TestAudioStrategy extends TagStrategyTestBase
         audio.setSrc("godfather.wav");
         audio.addText("the godfather");
 
-        setSystemOutputListener(this);
         final AudioTagStrategy strategy = new AudioTagStrategy();
         executeTagStrategy(audio, strategy);
 
@@ -106,7 +100,6 @@ public final class TestAudioStrategy extends TagStrategyTestBase
         audio.setSrc("godfather.wav");
         audio.addText("the godfather");
 
-        setSystemOutputListener(this);
         final Application application = new JVoiceXmlApplication(null);
         final VoiceXmlInterpreterContext ctx = getContext();
         ctx.process(application);
@@ -123,22 +116,5 @@ public final class TestAudioStrategy extends TagStrategyTestBase
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
         Assert.assertEquals(speakable, queuedSpeakable);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void outputStatusChanged(final SynthesizedOutputEvent event) {
-        if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
-            final OutputStartedEvent started = (OutputStartedEvent) event;
-            queuedSpeakable = started.getSpeakable();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void outputError(final ErrorEvent error) {
     }
 }
