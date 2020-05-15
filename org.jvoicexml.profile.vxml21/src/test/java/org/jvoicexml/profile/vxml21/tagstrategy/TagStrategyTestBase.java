@@ -53,6 +53,7 @@ import org.jvoicexml.mock.implementation.MockImplementationPlatform;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.TagStrategy;
 import org.jvoicexml.profile.TagStrategyFactory;
+import org.jvoicexml.profile.vxml21.VoiceXml21Profile;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
@@ -144,6 +145,10 @@ public abstract class TagStrategyTestBase {
         Mockito.when(context.getProfile()).thenReturn(profile);
         final Session session = Mockito.mock(Session.class);
         Mockito.when(context.getSession()).thenReturn(session);
+        Mockito.when(context.getProfile()).thenReturn(new VoiceXml21Profile());
+        final ImplementationPlatform platform =
+                Mockito.mock(ImplementationPlatform.class);
+        Mockito.when(context.getImplementationPlatform()).thenReturn(platform);
         interpreter = new VoiceXmlInterpreter(context);
         model = Mockito.mock(DataModel.class);
         final DataModelObjectSerializer serializer = Mockito
