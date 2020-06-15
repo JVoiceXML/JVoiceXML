@@ -54,7 +54,11 @@ public class JVoiceXmlPromptStrategy extends PromptStrategy {
         super.validateAttributes(model);
         final String promptPriority = 
                 (String) getAttribute(JVoiceXmlPrompt.ATTRIBUTE_PRIORITY);
-        priority = PriorityType.valueOf(promptPriority);
+        if (promptPriority == null) {
+            priority = PriorityType.APPEND;
+        } else {
+            priority = PriorityType.valueOf(promptPriority);
+        }
     }
 
     /**

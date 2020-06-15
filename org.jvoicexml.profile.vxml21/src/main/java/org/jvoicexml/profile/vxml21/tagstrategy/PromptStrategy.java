@@ -94,7 +94,12 @@ class PromptStrategy extends AbstractTagStrategy {
     @Override
     public void validateAttributes(final DataModel model) throws ErrorEvent {
         final String enableBargein = (String) getAttribute(Prompt.ATTRIBUTE_BARGEIN);
-        bargein = Boolean.valueOf(enableBargein);
+        // Default to bargein as true if not specified
+        if (enableBargein == null) {
+            bargein = true;
+        } else {
+            bargein = Boolean.valueOf(enableBargein);
+        }
     }
 
     /**

@@ -47,7 +47,6 @@ public final class TestSpeakableSsmlText {
         final SsmlDocument simple = new SsmlDocument();
 
         final SpeakableSsmlText simpleSpeakable = new SpeakableSsmlText(simple);
-
         Assert.assertTrue(simpleSpeakable.isSpeakableTextEmpty());
 
         simpleSpeakable.appendSpeakableText("some text");
@@ -71,7 +70,6 @@ public final class TestSpeakableSsmlText {
     @Test
     public void testAppendSpeakableText() throws Exception {
         final SsmlDocument doc = new SsmlDocument();
-
         final SpeakableSsmlText speakable = new SpeakableSsmlText(doc);
         Assert.assertTrue(speakable.isSpeakableTextEmpty());
         speakable.appendSpeakableText("some");
@@ -79,6 +77,24 @@ public final class TestSpeakableSsmlText {
         Assert.assertEquals("some", speak.getTextContent());
         speakable.appendSpeakableText(" text");
         Assert.assertEquals("some text", speak.getTextContent());
+    }
+    
+
+    /**
+     * Test method for
+     * {@link SpeakableSsmlText#equals(Object)}.
+     * @exception Exception
+     *            Test failed.
+     */
+    public void testEquals() throws Exception {
+        final SsmlDocument doc = new SsmlDocument();
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(doc);
+        speakable.appendSpeakableText("some text");
+        
+        final SsmlDocument otherDoc = new SsmlDocument();
+        final SpeakableSsmlText otherSpeakable = new SpeakableSsmlText(otherDoc);
+        otherSpeakable.appendSpeakableText("some text");
+        Assert.assertEquals(speakable, otherSpeakable);
     }
     
     /**

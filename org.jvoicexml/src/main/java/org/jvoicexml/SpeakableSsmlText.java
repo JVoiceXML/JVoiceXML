@@ -22,6 +22,7 @@
 package org.jvoicexml;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -42,12 +43,6 @@ import org.jvoicexml.xml.vxml.PriorityType;
  */
 public final class SpeakableSsmlText
         implements SpeakableText {
-    /** Base hash code. */
-    private static final int HASH_CODE_BASE = 5;
-
-    /** Multiplier for hash code generation. */
-    private static final int HASH_CODE_MULTIPLIER = 59;
-
     /** The SSML formatted text to be spoken. */
     private final SsmlDocument document;
 
@@ -206,31 +201,25 @@ public final class SpeakableSsmlText
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(final Object other) {
-        if (!(other instanceof SpeakableSsmlText)) {
-            return false;
-        }
-        final SpeakableSsmlText speakable = (SpeakableSsmlText) other;
-        final String text = getSpeakableText();
-        final String otherText = speakable.getSpeakableText();
-        if (text == null) {
-            return otherText == null;
-        }
-        return text.equals(otherText);
+    public int hashCode() {
+        return Objects.hash(bargeInType, bargein, document, priority);
     }
-
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int hashCode() {
-        int hash = HASH_CODE_BASE;
-        hash *= HASH_CODE_MULTIPLIER;
-        if (document != null) {
-            hash += document.hashCode();
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
         }
-        return hash;
+        if (!(obj instanceof SpeakableSsmlText)) {
+            return false;
+        }
+        SpeakableSsmlText other = (SpeakableSsmlText) obj;
+        return bargeInType == other.bargeInType && bargein == other.bargein
+                && Objects.equals(getSpeakableText(), other.getSpeakableText())
+                && priority == other.priority;
     }
 
     /**
