@@ -105,9 +105,13 @@
                                 </beans:constructor-arg>
                             </beans:bean>
                         </beans:entry>
-                        <beans:entry key="prompt">
+                        <!-- beans:entry key="prompt">
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.PromptStrategy" />
+                        </beans:entry -->
+                        <beans:entry key="prompt">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.JVoiceXmlPromptStrategy" />
                         </beans:entry>
                         <beans:entry key="reprompt">
                             <beans:bean
