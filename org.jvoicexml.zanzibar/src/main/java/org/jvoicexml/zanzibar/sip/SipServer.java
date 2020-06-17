@@ -36,9 +36,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.sdp.Connection;
 import javax.sdp.MediaDescription;
 import javax.sdp.SdpException;
 import javax.sdp.SdpParseException;
+import javax.sdp.SessionDescription;
+import javax.sdp.SessionName;
 import javax.sip.ObjectInUseException;
 import javax.sip.SipException;
 import javax.sip.TimeoutEvent;
@@ -154,10 +157,7 @@ public class SipServer implements SessionListener {
         		if (cairoSipHostName == null) {
         			cairoSipHostName = CairoUtil.getLocalHost().getHostAddress();
         		}
-        	} catch (SocketException e) {
-        		LOGGER.error("unable to start SIP server", e);
-        		return;
-        	} catch (UnknownHostException e) {
+        	} catch (SocketException | UnknownHostException e) {
         		LOGGER.error("unable to start SIP server", e);
         		return;
         	}
@@ -455,7 +455,10 @@ public class SipServer implements SessionListener {
 
         }
 
-        public SdpMessage processInviteRequest(SdpMessage request, SipSession session) throws SdpException, ResourceUnavailableException, RemoteException {
+        public SdpMessage processInviteRequest(SdpMessage request,
+            SipSession session)
+                throws SdpException, ResourceUnavailableException,
+                    RemoteException {
             
         	//TODO: Check the callee registry here.  But then do ai need to check for all requests
         	//TODO: Investigate Pushing the check down to sipAgent/Listener?
@@ -463,9 +466,15 @@ public class SipServer implements SessionListener {
             //get the rtp channels from the invitation
             Vector pbxFormats = null;
             int pbxRtpPort = 0;
-            String pbxHost = request.getSessionDescription().getConnection().getAddress();
-            String pbxSessionName = request.getSessionDescription().getSessionName().getValue();
-            SdpMessage pbxResponse = null;
+            final SessionDescription desc = request.getSessionDescription(); 
+            final Connection connection = desc.getConnection();
+            if (connection == null) {
+                LOGGER.warn("no connection given. unable to determine PBX host: Aborting call.");
+                throw new SdpException("no connection given. unable to determin PBX host");
+            }
+            final String pbxHost = connection.getAddress();
+            final SessionName name = desc.getSessionName();
+            String pbxSessionName = name.getValue();
             SipSession internalSession = null;
             
             LOGGER.info("Got an invite request");
@@ -486,16 +495,16 @@ public class SipServer implements SessionListener {
             }
 
             if (mode.equals("mrcpv2")) {
-            	
-            	
-             
 	            //construct the invite request and send it to the cairo resource server to get the resources for the session
 	            //TODO: check which resource needed in the original invite (from pbx).  the construct method below blindly gets a tts and recog resoruce
 	            SdpMessage message = null;
 	            SdpMessage inviteResponse = null;
 	            try {
-	                message = constructInviteRequestToCairo(pbxRtpPort,pbxHost,pbxSessionName,pbxFormats);
-	                internalSession = sipAgent.sendInviteWithoutProxy(cairoSipAddress, message, cairoSipHostName, cairoSipPort);
+	                message = constructInviteRequestToCairo(pbxRtpPort, pbxHost,
+	                    pbxSessionName, pbxFormats);
+	                internalSession = sipAgent.sendInviteWithoutProxy(
+	                    cairoSipAddress, message, cairoSipHostName,
+	                    cairoSipPort);
 	            } catch (UnknownHostException e1) {
 	                // TODO Auto-generated catch block
 	                e1.printStackTrace();
@@ -523,11 +532,11 @@ public class SipServer implements SessionListener {
         
         private  SdpMessage constructInviteRequestToCairo(int pbxRtpPort,String pbxHost,String pbxSessionName,Vector pbxFormats) throws UnknownHostException, SdpException {
             SdpMessage sdpMessage = SdpMessage.createNewSdpSessionMessage(mySipAddress, zanzibarHostName, pbxSessionName);
-            MediaDescription rtpChannel = SdpMessage.createRtpChannelRequest(pbxRtpPort,pbxFormats,pbxHost);
+            MediaDescription rtpChannel = SdpMessage.createRtpChannelRequest(pbxRtpPort, pbxFormats, pbxHost);
             //rtpChannel.getMedia().setMediaFormats(pbxFormats);
             MediaDescription synthControlChannel = SdpMessage.createMrcpChannelRequest(MrcpResourceType.SPEECHSYNTH);
             MediaDescription recogControlChannel = SdpMessage.createMrcpChannelRequest(MrcpResourceType.SPEECHRECOG);
-            Vector v = new Vector();
+            Vector<MediaDescription> v = new Vector<MediaDescription>();
             v.add(synthControlChannel);
             v.add(recogControlChannel);
             v.add(rtpChannel);
@@ -538,7 +547,7 @@ public class SipServer implements SessionListener {
         private  SdpMessage constructInviteResponseToPbx(int cairoRtpPort, String cairoHost, Vector formats) throws UnknownHostException, SdpException {
             SdpMessage sdpMessage = SdpMessage.createNewSdpSessionMessage(mySipAddress, cairoHost, "The session Name");
             MediaDescription rtpChannel = SdpMessage.createRtpChannelRequest(cairoRtpPort,formats);
-            Vector v = new Vector();
+            Vector<MediaDescription> v = new Vector<MediaDescription>();
             //rtpChannel.setAttribute("ptime", "60");
             v.add(rtpChannel);
             sdpMessage.getSessionDescription().setMediaDescriptions(v);
