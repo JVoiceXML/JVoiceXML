@@ -37,6 +37,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import javax.sdp.Connection;
+import javax.sdp.Media;
 import javax.sdp.MediaDescription;
 import javax.sdp.SdpException;
 import javax.sdp.SdpParseException;
@@ -45,6 +46,7 @@ import javax.sdp.SessionName;
 import javax.sip.ObjectInUseException;
 import javax.sip.SipException;
 import javax.sip.TimeoutEvent;
+import javax.sip.header.MediaType;
 
 import org.apache.commons.pool.ObjectPool;
 import org.apache.log4j.Logger;
@@ -467,7 +469,7 @@ public class SipServer implements SessionListener {
             Vector pbxFormats = null;
             int pbxRtpPort = 0;
             final SessionDescription desc = request.getSessionDescription(); 
-            final Connection connection = desc.getConnection();
+            final Connection connection = getSdpConnection(desc);
             if (connection == null) {
                 LOGGER.warn("no connection given. unable to determine PBX host: Aborting call.");
                 throw new SdpException("no connection given. unable to determin PBX host");
@@ -477,15 +479,15 @@ public class SipServer implements SessionListener {
             String pbxSessionName = name.getValue();
             SipSession internalSession = null;
             
-            LOGGER.info("Got an invite request");
+            LOGGER.info("Got an invite request from " + pbxHost + ", " + pbxSessionName);
             try {
                 for (MediaDescription md : request.getRtpChannels()) {
-                    pbxRtpPort = md.getMedia().getMediaPort();
-                    pbxFormats = md.getMedia().getMediaFormats(true);
-                    //_logger.debug("Individual Media connection address: "+ md.getConnection().getAddress());
+                    final Media media = md.getMedia();
+                    pbxRtpPort = media.getMediaPort();
+                    pbxFormats = media.getMediaFormats(true);
                 }
             } catch (SdpException e) {
-                LOGGER.debug(e, e);
+                LOGGER.warn(e.getMessage(), e);
                 throw e;
             }
             if (LOGGER.isDebugEnabled()) {
@@ -528,7 +530,30 @@ public class SipServer implements SessionListener {
             return null;
         }
             
-   
+        /**
+         * Tries to obtain the connection from the SDP session description.
+         * @param description the session description
+         * @return connection, if it could be found, {@code null} otherwise
+         * @throws SdpException error accessing the SDP message attributes
+         */
+        private Connection getSdpConnection(
+                final SessionDescription description) throws SdpException {
+            Connection connection = description.getConnection();
+            if (connection != null) {
+                return connection;
+            }
+            @SuppressWarnings("unchecked")
+            final Vector<MediaDescription> descriptions = 
+                description.getMediaDescriptions(true);
+            for (MediaDescription md : descriptions) {
+                final Media media = md.getMedia();
+                final String mediaType = media.getMediaType();
+                if (mediaType.equalsIgnoreCase("audio")) {
+                    return md.getConnection();
+                }
+            }
+            return null;
+        }
         
         private  SdpMessage constructInviteRequestToCairo(int pbxRtpPort,String pbxHost,String pbxSessionName,Vector pbxFormats) throws UnknownHostException, SdpException {
             SdpMessage sdpMessage = SdpMessage.createNewSdpSessionMessage(mySipAddress, zanzibarHostName, pbxSessionName);
