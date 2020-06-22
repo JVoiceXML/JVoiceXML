@@ -537,45 +537,60 @@ public class SipServer implements SessionListener {
         }
 
         if (mode.equals("mrcpv2")) {
-            // construct the invite request and send it to the cairo resource
-            // server to get the resources for the session
-            // TODO: check which resource needed in the original invite (from
-            // pbx). the construct method below blindly gets a tts and recog
-            // resoruce
-            SdpMessage inviteResponse = null;
-            SipSession internalSession = null;
-            try {
-                final SdpMessage message = constructInviteRequestToCairo(
-                        pbxRtpPort, pbxHost, pbxSessionName, pbxFormats);
-                internalSession = sipAgent.sendInviteWithoutProxy(
-                        cairoSipAddress, message, cairoSipHostName,
-                        cairoSipPort);
-            } catch (UnknownHostException e) {
-                LOGGER.warn(e.getMessage(), e);
-                throw new ResourceUnavailableException(e.getMessage(), e);
-            } catch (SipException e) {
-                LOGGER.warn(e.getMessage(), e);
-                throw new SdpException(e.getMessage(), e);
-            }
-            // these sessions are linked
-            // the forward attribute is not good enough (one side is the
-            // backwards lookup)
-            // TODO: Session redesign. It has become a bucket of things that
-            // are sometimes needed in the client and sometimes in teh server
-            // and the proxy relationship is messy with the single reference
-            // "forward"
-            session.setForward(internalSession);
-            internalSession.setForward(session);
-            final SessionPair sessionPair = new SessionPair(internalSession,
-                    session);
-            final ClientTransaction transaction = internalSession.getCtx();
-            waitingList.put(transaction, sessionPair);
+            forwardInviteToCairo(session, pbxHost, pbxSessionName, pbxFormats,
+                    pbxRtpPort);
         } else {
             LOGGER.warn("Unrecognized SipServer mode '" + mode + "'");
             throw new SdpException(
                     "Unrecognized SipServer mode '" + mode + "'");
         }
         return null;
+    }
+
+    /**
+     * Construct the invite request and send it to the cairo resource server to
+     * get the resources for the session
+     * @param session the session
+     * @param pbxHost the PBX host 
+     * @param pbxSessionName the name of the session
+     * @param pbxFormats supported formats
+     * @param pbxRtpPort the RTP port
+     * @throws SdpException error creating the request for cairo
+     * @throws ResourceUnavailableException error accessing cairo
+     */
+    private void forwardInviteToCairo(SipSession session, final String pbxHost,
+            String pbxSessionName, Vector pbxFormats, int pbxRtpPort)
+            throws SdpException, ResourceUnavailableException {
+        // TODO: check which resource needed in the original invite (from
+        // pbx). the construct method below blindly gets a tts and recog
+        // resoruce
+        SipSession internalSession = null;
+        try {
+            final SdpMessage message = constructInviteRequestToCairo(
+                    pbxRtpPort, pbxHost, pbxSessionName, pbxFormats);
+            internalSession = sipAgent.sendInviteWithoutProxy(
+                    cairoSipAddress, message, cairoSipHostName,
+                    cairoSipPort);
+        } catch (UnknownHostException e) {
+            LOGGER.warn(e.getMessage(), e);
+            throw new ResourceUnavailableException(e.getMessage(), e);
+        } catch (SipException e) {
+            LOGGER.warn(e.getMessage(), e);
+            throw new SdpException(e.getMessage(), e);
+        }
+        // these sessions are linked
+        // the forward attribute is not good enough (one side is the
+        // backwards lookup)
+        // TODO: Session redesign. It has become a bucket of things that
+        // are sometimes needed in the client and sometimes in teh server
+        // and the proxy relationship is messy with the single reference
+        // "forward"
+        session.setForward(internalSession);
+        internalSession.setForward(session);
+        final SessionPair sessionPair = new SessionPair(internalSession,
+                session);
+        final ClientTransaction transaction = internalSession.getCtx();
+        waitingList.put(transaction, sessionPair);
     }
 
     /**
