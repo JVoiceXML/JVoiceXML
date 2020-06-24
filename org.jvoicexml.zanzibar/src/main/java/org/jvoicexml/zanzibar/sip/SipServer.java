@@ -306,118 +306,109 @@ public class SipServer implements SessionListener {
         LOGGER.debug("Gotta invite response, ok is: " + ok);
         SdpMessage pbxResponse = null;
         if (ok) {
-            // _logger.debug(":::: "+session.getId()+" :::::::");
-            SessionPair pair = waitingList.get(session.getCtx().toString());
-            waitingList.remove(session.getCtx().toString());
+            final ClientTransaction transcation = session.getCtx();
+            final SessionPair pair = waitingList.remove(transcation);
+            if (pair == null) {
+                LOGGER.warn(
+                        "Could not find corresponding external request in waiting list: "
+                                + transcation);
+                return null;
+            }
+            // Get the MRCP media channels (need the port number and the
+            // channelID that are sent
+            // back from the server in the response in order to setup the
+            // MRCP channel)
+            String remoteHostName = null;
+            InetAddress remoteHostAdress = null;
+            try {
+                remoteHostName = response.getSessionDescription()
+                        .getConnection().getAddress();
+                remoteHostAdress = InetAddress.getByName(remoteHostName);
 
-            if (pair != null) {
-                // Get the MRCP media channels (need the port number and the
-                // channelID that are sent
-                // back from the server in the response in order to setup the
-                // MRCP channel)
-                String remoteHostName = null;
-                InetAddress remoteHostAdress = null;
-                try {
-                    remoteHostName = response.getSessionDescription()
-                            .getConnection().getAddress();
-                    remoteHostAdress = InetAddress.getByName(remoteHostName);
+                List<MediaDescription> xmitterChans = response
+                        .getMrcpTransmitterChannels();
+                int xmitterPort = xmitterChans.get(0).getMedia()
+                        .getMediaPort();
+                String xmitterChannelId = xmitterChans.get(0)
+                        .getAttribute(SdpMessage.SDP_CHANNEL_ATTR_NAME);
 
-                    List<MediaDescription> xmitterChans = response
-                            .getMrcpTransmitterChannels();
-                    int xmitterPort = xmitterChans.get(0).getMedia()
+                List<MediaDescription> receiverChans = response
+                        .getMrcpReceiverChannels();
+                MediaDescription controlChan = receiverChans.get(0);
+                int receiverPort = controlChan.getMedia().getMediaPort();
+                String receiverChannelId = receiverChans.get(0)
+                        .getAttribute(SdpMessage.SDP_CHANNEL_ATTR_NAME);
+
+                List<MediaDescription> rtpChans = response
+                        .getAudioChansForThisControlChan(controlChan);
+                int remoteRtpPort = -1;
+                Vector supportedFormats = null;
+                if (rtpChans.size() > 0) {
+                    // TODO: What if there is more than 1 media channels?
+                    // TODO: check if there is an override for the host
+                    // attribute in the m block
+                    // InetAddress remoteHost =
+                    // InetAddress.getByName(rtpmd.get(1).getAttribute();
+                    remoteRtpPort = rtpChans.get(0).getMedia()
                             .getMediaPort();
-                    String xmitterChannelId = xmitterChans.get(0)
-                            .getAttribute(SdpMessage.SDP_CHANNEL_ATTR_NAME);
-
-                    List<MediaDescription> receiverChans = response
-                            .getMrcpReceiverChannels();
-                    MediaDescription controlChan = receiverChans.get(0);
-                    int receiverPort = controlChan.getMedia().getMediaPort();
-                    String receiverChannelId = receiverChans.get(0)
-                            .getAttribute(SdpMessage.SDP_CHANNEL_ATTR_NAME);
-
-                    List<MediaDescription> rtpChans = response
-                            .getAudioChansForThisControlChan(controlChan);
-                    int remoteRtpPort = -1;
-                    Vector supportedFormats = null;
-                    if (rtpChans.size() > 0) {
-                        // TODO: What if there is more than 1 media channels?
-                        // TODO: check if there is an override for the host
-                        // attribute in the m block
-                        // InetAddress remoteHost =
-                        // InetAddress.getByName(rtpmd.get(1).getAttribute();
-                        remoteRtpPort = rtpChans.get(0).getMedia()
-                                .getMediaPort();
-                        // rtpmd.get(1).getMedia().setMediaPort(localPort);
-                        supportedFormats = rtpChans.get(0).getMedia()
-                                .getMediaFormats(true);
-                    } else {
-                        LOGGER.warn(
-                                "No Media channel specified in the invite request");
-                        // TODO: handle no media channel in the response
-                        // corresponding tp the mrcp channel (sip/sdp error)
-                    }
-
-                    // Construct the MRCP Channels
-                    String protocol = MrcpProvider.PROTOCOL_TCP_MRCPv2;
-                    MrcpFactory factory = MrcpFactory.newInstance();
-                    MrcpProvider provider = factory.createProvider();
-
-                    LOGGER.debug("New Xmitter chan: " + xmitterChannelId + " "
-                            + remoteHostAdress + " " + xmitterPort + " "
-                            + protocol);
-                    LOGGER.debug("New Receiver chan: " + receiverChannelId + " "
-                            + remoteHostAdress + " " + receiverPort + " "
-                            + protocol);
-
-                    MrcpChannel ttsChannel = provider.createChannel(
-                            xmitterChannelId, remoteHostAdress, xmitterPort,
-                            protocol);
-                    MrcpChannel recogChannel = provider.createChannel(
-                            receiverChannelId, remoteHostAdress, receiverPort,
-                            protocol);
-                    session.setTtsChannel(ttsChannel);
-                    session.setRecogChannel(recogChannel);
-
-                    pbxResponse = startupSpeechlet(remoteHostName,
-                            remoteRtpPort, supportedFormats,
-                            pair.getMrcpSession(), pair.getPbxSession());
-
-                    // _logger.debug(">>>>Here is the invite response:");
-                    // _logger.debug(pbxResponse.getSessionDescription().toString());
-
-                } catch (UnknownHostException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (SdpParseException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IllegalArgumentException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IllegalValueException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (SdpException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    // rtpmd.get(1).getMedia().setMediaPort(localPort);
+                    supportedFormats = rtpChans.get(0).getMedia()
+                            .getMediaFormats(true);
+                } else {
+                    LOGGER.warn(
+                            "No Media channel specified in the invite request");
+                    // TODO: handle no media channel in the response
+                    // corresponding tp the mrcp channel (sip/sdp error)
                 }
 
-                // TODO: Need to keep track of the "forwarded" Session. the one
-                // that wa created to get the resourses for MRCPv2. The original
-                // Session came from the pbx
-                // session.setForward(forward);
+                // Construct the MRCP Channels
+                String protocol = MrcpProvider.PROTOCOL_TCP_MRCPv2;
+                MrcpFactory factory = MrcpFactory.newInstance();
+                MrcpProvider provider = factory.createProvider();
 
-            } else {
-                LOGGER.info(
-                        "Could not find corresponding external request in waiting list");
+                LOGGER.debug("New Xmitter chan: " + xmitterChannelId + " "
+                        + remoteHostAdress + " " + xmitterPort + " "
+                        + protocol);
+                LOGGER.debug("New Receiver chan: " + receiverChannelId + " "
+                        + remoteHostAdress + " " + receiverPort + " "
+                        + protocol);
+
+                MrcpChannel ttsChannel = provider.createChannel(
+                        xmitterChannelId, remoteHostAdress, xmitterPort,
+                        protocol);
+                MrcpChannel recogChannel = provider.createChannel(
+                        receiverChannelId, remoteHostAdress, receiverPort,
+                        protocol);
+                session.setTtsChannel(ttsChannel);
+                session.setRecogChannel(recogChannel);
+
+                pbxResponse = startupSpeechlet(remoteHostName,
+                        remoteRtpPort, supportedFormats,
+                        pair.getMrcpSession(), pair.getPbxSession());
+
+                // _logger.debug(">>>>Here is the invite response:");
+                // _logger.debug(pbxResponse.getSessionDescription().toString());
+
+            } catch (UnknownHostException e) {
+                LOGGER.warn(e.getMessage(), e);
+            } catch (SdpParseException e) {
+                LOGGER.warn(e.getMessage(), e);
+            } catch (IllegalArgumentException e) {
+                LOGGER.warn(e.getMessage(), e);
+            } catch (IllegalValueException e) {
+                LOGGER.warn(e.getMessage(), e);
+            } catch (IOException e) {
+                LOGGER.warn(e.getMessage(), e);
+            } catch (SdpException e) {
+                LOGGER.warn(e.getMessage(), e);
+            } catch (Exception e) {
+                LOGGER.warn(e.getMessage(), e);
             }
+
+            // TODO: Need to keep track of the "forwarded" Session. the one
+            // that wa created to get the resourses for MRCPv2. The original
+            // Session came from the pbx
+            // session.setForward(forward);
         } else {
             LOGGER.info("Invite Response not ok");
         }
@@ -447,22 +438,24 @@ public class SipServer implements SessionListener {
     public synchronized void processTimeout(final TimeoutEvent event) {
         final ClientTransaction transaction = event.getClientTransaction();
         LOGGER.warn("timeout occurred for " + transaction);
-        final SessionPair pair = waitingList.get(transaction);
-        if (pair != null) {
-            final SipSession session = pair.getPbxSession();
-            LOGGER.info("aborting PBX session '" + session + "'");
-            try {
-                final Request request = transaction.getRequest();
-                final String method = request.getMethod();
-                if (method.equalsIgnoreCase("INVITE")) {
-                    // TODO Need to send an error code
-                } else { 
-                    session.bye();
-                }
-            } catch (SipException e) {
-                LOGGER.warn("error terminating PBX session", e);
+        final SessionPair pair = waitingList.remove(transaction);
+        if (pair == null) {
+            LOGGER.warn("no waiting transaction found");
+            return;
+        }
+        
+        final SipSession session = pair.getPbxSession();
+        LOGGER.info("aborting PBX session '" + session + "'");
+        try {
+            final Request request = transaction.getRequest();
+            final String method = request.getMethod();
+            if (method.equalsIgnoreCase("INVITE")) {
+                // TODO Need to send an error code
+            } else { 
+                session.bye();
             }
-            waitingList.remove(transaction);
+        } catch (SipException e) {
+            LOGGER.warn("error terminating PBX session", e);
         }
         response = null;
         responded = true;
