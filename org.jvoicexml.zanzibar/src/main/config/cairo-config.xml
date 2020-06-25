@@ -1,0 +1,34 @@
+<cairo>
+
+  <resources>
+
+    <resource type="receiver">
+      <name>receiver1</name>
+      <mrcpPort>32416</mrcpPort>
+      <rtpBasePort>42050</rtpBasePort>
+      <maxConnects>50</maxConnects>
+      <engines>5</engines>
+      <recorderEngines>5</recorderEngines>
+      <baseRecordingDir>/temp/cairo/recordingDir</baseRecordingDir>
+      <baseGrammarDir>/temp/cairo/baseGrammarDir</baseGrammarDir>
+      <!--ipAddress>192.168.10.105</ipAddress-->
+      <!-- uncomment the following line to override sphinx config file in cairo.jar (generally you should not need to do this) -->
+      <!-- sphinxConfigURL>file:///myconfigdir/sphinx-config.xml</sphinxConfigURL -->
+      <!-- uncomment the following line to override sphinx recorder config file in cairo.jar (generally you should not need to do this) -->
+      <!-- sphinxRecorderConfigURL>file:///myconfigdir/sphinx-config.xml</sphinxRecorderConfigURL -->
+    </resource>
+
+    <resource type="transmitter">
+      <name>transmitter1</name>
+      <mrcpPort>32417</mrcpPort>
+      <rtpBasePort>42150</rtpBasePort>
+      <maxConnects>50</maxConnects>
+      <engines>5</engines>
+      <voiceName>kevin</voiceName>
+      <basePromptDir>/temp/cairo/basePromptDir</basePromptDir>
+      <!--ipAddress>192.168.10.105</ipAddress-->
+    </resource>
+
+  </resources>
+
+</cairo>

@@ -42,8 +42,8 @@ xslt {
         repositoryname: JVOICEXML_JNDI_REPOSITORY,
         version: JVOICEXML_VERSION,
         buildpath: "${buildDir}/libs",
-        port: System.getenv("JVOICEXML_JNDI_PORT") ?: "1099",
-        classServerPort: System.getenv("JVOICEXML_JNDI_CLASSERVER_PORT") ?: "9698"
+        port: JVOICEXML_JNDI_PORT,
+        classServerPort: JVOICEXML_JNDI_CLASSERVER_PORT
     )
 }
 
@@ -55,8 +55,8 @@ task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
         buildpath: "lib",
         repositoryname: JVOICEXML_JNDI_REPOSITORY,
         version: JVOICEXML_VERSION,
-        port: System.getenv("JVOICEXML_JNDI_PORT") ?: "1099",
-        classServerPort: System.getenv("JVOICEXML_JNDI_CLASSERVER_PORT") ?: "9698"
+        port: JVOICEXML_JNDI_PORT,
+        classServerPort: JVOICEXML_JNDI_CLASSERVER_PORT
     )
 }
 

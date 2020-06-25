@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	 <import resource="jvoicexml.xml"/>
+
+	<bean id="main" class="org.speechforge.zanzibar.server.SpeechletServerMain"
+		init-method="startup" destroy-method="shutdown">
+	</bean>
+        
+	<bean id="sipService" class="org.speechforge.zanzibar.sip.SipServer"
+		init-method="startup" destroy-method="shutdown">
+		<property name="dialogService"><ref bean="dialogService"/></property>
+		<property name="mySipAddress">
+				    <value>sip:cairogate@speechforge.org</value>
+		</property>
+		<property name="stackName">
+				    <value>Zanzibar Sip Stack</value>
+		</property>
+		<property name="port">
+				    <value>5090</value>
+		</property>
+		<property name="transport">
+				    <value>UDP</value>
+		</property>
+		<property name="cairoSipAddress">
+				    <value>sip:cairo@speechforge.org</value>
+		</property>
+		<property name="cairoSipHostName">
+				    <value>192.168.10.153</value>
+		</property>
+		<property name="cairoSipPort">
+				    <value>5050</value>
+		</property>
+		
+		<property name="mode">
+			<value>mrcpv2</value>
+		</property>
+				<property name="baseReceiverRtpPort">
+			<value>42150</value>
+		</property>
+		<property name="baseXmitRtpPort">
+			<value>42050</value>
+		</property>
+		<property name="maxConnects">
+			<value>50</value>
+		</property>
+
+	</bean>
+
+	
+	<bean id="dialogService" 
+	      class="org.speechforge.zanzibar.speechlet.ApplicationByNumberService"
+		  init-method="startup" destroy-method="shutdown">
+		  <property name="instrumentation">
+				    <value>false</value>
+		  </property>
+		  <property name="cloudUrl">
+			<value>http://speechapi.com:8000/speechcloud</value>
+		  </property>
+		  <property name="tempDirForPrompts">
+			   <value>c:/temp/</value>
+		  </property>
+	</bean>
+
+    <bean id="callControl" class="org.speechforge.zanzibar.asterisk.CallControl"
+		init-method="startup" destroy-method="shutdown">
+		<property name="address">
+				    <value>192.168.10.153</value>
+		</property>
+		<property name="name">
+				    <value>manager</value>
+		</property>
+		<property name="password">
+				    <value>cairo</value>
+		</property>
+		<property name="disabled">
+				    <value>true</value>
+		</property>
+	</bean>
+	
+    <bean id="_1000"
+	   class="org.speechforge.apps.demos.Parrot"
+	   singleton="false">
+	   	<property name="prompt">
+		    <value>You can start speaking any time.  Would you like to hear the weather, get sports news or hear a stock quote?  Say goodbye to exit.</value>
+		</property>
+		<property name="grammar">
+	        <value>file:../../demo/grammar/example-loop.gram</value>
+		</property>
+	</bean>	
+	
+	
+	<bean id="_2000"
+	   class="org.speechforge.apps.demos.DTMFDemo"
+	   singleton="false">
+	   	<property name="prompt">
+		    <value>You can press any four digit extension on your keypad.  Say goodbye to exit.</value>
+		</property>
+		<property name="grammar">
+	        <value>file:../../demo/grammar/demo-dtmf.gram</value>
+		</property>
+	</bean>
+	
+    <bean id="_3000"
+	   class="org.speechforge.apps.demos.Jukebox"
+	   singleton="false">
+	    <property name="firstPrompt">
+	        <value>Hi.  Welcome to the Demo Jukebox.  What would you like to hear Bob Dylan, Radiohead, Amy Winehouse or Rolling Stones</value>
+		</property>
+		<property name="laterPrompts">
+	        <value>Welcome back.  What would you like to hear next, Bob Dylan, Radiohead, Amy Winehouse or Rolling Stones</value>
+		</property>
+	    <property name="greetingGrammar">
+	        <value>file:../../demo/grammar/jukeboxWelcome.gram</value>
+		</property>
+	    <property name="playGrammar">
+	        <value>file:../../demo/grammar/jukeboxPlay.gram</value>
+		</property>
+		<property name="dylan">
+	        <value>file:../../../audio/jukebox/03RollinandTumblin.au</value>
+		</property>
+		<property name="amy">
+	        <value>file:../../../audio/jukebox/11YouKnowImNoGoodRemix.au</value>
+		</property>
+		<property name="stones">
+	        <value>file:../../../audio/jukebox/01FancyManBlues.au</value>
+		</property>
+		<property name="radiohead">
+	        <value>file:../../../audio/jukebox/08HouseofCards.au</value>
+		</property>	   
+	</bean>
+	
+
+    <bean id="_4000"
+	   class="org.speechforge.apps.demos.CallXferDemo"
+	   singleton="false">
+	    <property name="pbxContext">
+	        <value>stooges</value>
+		</property>
+	   	<property name="prompt">
+		    <value>Would you like to speak to Larry, Moe or Curly?  You can press any four digit extension on your keypad.  Say goodbye to exit.</value>
+		</property>
+		<property name="grammar">
+	        <value>file:../../demo/grammar/callxfer-demo.gram</value>
+		</property>
+		
+	</bean>	
+	
+    <bean id="_5000"
+	   class="org.speechforge.zanzibar.jvoicexml.impl.VoiceXmlSessionProcessor"
+	   singleton="false">
+	   		<property name="appUrl">
+				    <value>http://localhost:8080/voicexml/hello.vxml</value>
+		</property>
+	     <property name="vxml"> <ref bean="vxmlWrapper"/></property>
+		
+	</bean>	
+	
+	<bean id="_6000"
+	   class="org.speechforge.zanzibar.jvoicexml.impl.VoiceXmlSessionProcessor"
+	   singleton="false">
+	   		<property name="appUrl">
+				    <value>http://localhost:8080/voicexml/test.vxml</value>
+		</property>
+		<property name="vxml"> <ref bean="vxmlWrapper"/></property>
+		
+	</bean>	
+	
+    <bean id="_7000"
+	   class="org.speechforge.zanzibar.jvoicexml.impl.VoiceXmlSessionProcessor"
+	   singleton="false">
+	   		<property name="appUrl">
+				    <value>http://localhost:8080/voicexml/parrot.vxml</value>
+		</property>
+		<property name="vxml"> <ref bean="vxmlWrapper"/></property>
+		
+	</bean>
+	
+	<bean id="vxmlWrapper" 
+          class="org.speechforge.zanzibar.jvoicexml.impl.VoiceXmlWrapper" singleton="true" init-method="startUp">
+	</bean>
+
+</beans>

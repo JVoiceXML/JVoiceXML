@@ -3,9 +3,9 @@ package org.jvoicexml.callmanager.mrcpv2;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.zanzibar.telephony.TelephonyClient;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.sip.SipSession;
-import org.speechforge.zanzibar.telephony.TelephonyClient;
 
 public class SipCallManagerSession {
     

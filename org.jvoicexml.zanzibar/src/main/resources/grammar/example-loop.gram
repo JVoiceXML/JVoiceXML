@@ -1,0 +1,19 @@
+#JSGF V1.0;
+
+/**
+ * JSGF Grammar for demo examples
+ */
+
+grammar example;
+
+public <main> = ( [ <pre> ] ( <weather> {WEATHER} | <sports>  {SPORTS} | <stocks> {STOCKS} ) ) | <quit> {QUIT};
+
+<pre> = ( I would like [ to hear ] ) | ( hear ) | ( [ please ] get [ me ] ) | ( look up );
+
+<weather> = [ the ] weather;
+
+<sports> = sports [ news ];
+
+<stocks> = ( [ a ] stock ( quote | quotes ) ) | stocks;
+
+<quit> = exit | goodbye | quit;

@@ -25,6 +25,7 @@
         <Logger name="org.jvoicexml" level="debug" />
         <Logger name="org.speechforge.cairo" level="debug"/>
         <Logger name="org.eclipse.jetty" level="info"/>
+        <Logger name="gov.nist" level="info"/>
 
         <Root level="warn">
              <AppenderRef ref="stdout" />

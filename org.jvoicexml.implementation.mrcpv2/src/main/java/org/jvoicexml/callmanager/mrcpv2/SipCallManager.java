@@ -46,17 +46,14 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.jvxml.JVoiceXmlCallControl;
+import org.jvoicexml.zanzibar.sip.SipServer;
+import org.jvoicexml.zanzibar.speechlet.SpeechletService;
 import org.mrcp4j.client.MrcpChannel;
 import org.mrcp4j.client.MrcpInvocationException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechClientImpl;
-import org.speechforge.cairo.rtp.server.RTPStreamReplicator;
 import org.speechforge.cairo.sip.SipSession;
-import org.speechforge.zanzibar.sip.SipServer;
-import org.speechforge.zanzibar.speechlet.SpeechletService;
-
-import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 
 /**
  * A SIP call manager.
@@ -115,11 +112,10 @@ public final class SipCallManager
     }
 
     /**
-     * {@inheritDoc} TODO Rename this method to "stopDialog" Need to change the
-     * interface first in the thirdparty jar.
+     * {@inheritDoc}
      */
     @Override
-    public void StopDialog(final SipSession pbxSession) throws SipException {
+    public void stopDialog(final SipSession pbxSession) throws SipException {
         final String sessionId = pbxSession.getId();
         final SessionIdentifier id = new SipSessionIdentifier(sessionId);
         LOGGER.info("stopping dialog for '" + id + "'");
@@ -321,16 +317,6 @@ public final class SipCallManager
     	}
 	LOGGER.warn("No randomCode used.");
 	return "";
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void startNewCloudDialog(final SipSession pbxSession,
-            final RTPStreamReplicator rtpReplicator,
-            final RtpTransmitter rtpTransmitter) throws Exception {
-        LOGGER.warn("cloud dialogs are not supported!");
     }
 
     /**

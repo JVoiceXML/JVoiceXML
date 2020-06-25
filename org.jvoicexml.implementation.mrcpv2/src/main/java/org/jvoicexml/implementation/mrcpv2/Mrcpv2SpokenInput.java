@@ -264,42 +264,38 @@ public final class Mrcpv2SpokenInput
             // org.jvoicexml.interpreter.grammar.halef.HalefGrammarParser.java
             // TODO load the application type from the grammar
             LOGGER.info(String.format("Starting recognition with url: %s", firstGrammarDocument.getDocument()));
-
             speechClient.setContentType("application/wfst");
             speechClient.recognize(
                     firstGrammarDocument.getDocument(), hotword,
                     attachGrammar, lastUsedTimeout);
         } catch (MrcpInvocationException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Mrcpv2 invocation exception while initiating a "
-                        + "recognition request", e);
-            }
-            throw new NoresourceError(e);
+            LOGGER.error("MRCPv2 invocation exception while initiating a "
+                    + "recognition request", e);
+            throw new NoresourceError(
+                    "MRCPv2 invocation exception while initiating a "
+                    + "recognition request", e);
         } catch (IllegalValueException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Illegal Value exception while initiating a "
-                        + "recognition request", e);
-            }
-            throw new NoresourceError(e);
+            LOGGER.error("Illegal Value exception while initiating a "
+                    + "recognition request", e);
+            throw new NoresourceError(
+                    "Illegal Value exception while initiating a "
+                    + "recognition request", e);
         } catch (IOException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(
-                        "IO exception while initiating a recognition request",
-                        e);
-            }
-            throw new NoresourceError(e);
+            LOGGER.error("IO exception while initiating a recognition request",
+                    e);
+            throw new NoresourceError(
+                    "IO exception while initiating a recognition request", e);
         } catch (InterruptedException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Interruped exception while initiating a "
-                        + "recognition request", e);
-            }
-            throw new NoresourceError(e);
+            LOGGER.error("Interruped exception while initiating a "
+                    + "recognition request", e);
+            throw new NoresourceError("Interruped exception while initiating a "
+                    + "recognition request", e);
         } catch (NoMediaControlChannelException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("No Media Control Channel exception while "
-                        + "initiating a recognition request", e);
-            }
-            throw new NoresourceError(e);
+            LOGGER.error("No Media Control Channel exception while "
+                    + "initiating a recognition request", e);
+            throw new NoresourceError(
+                    "No Media Control Channel exception while "
+                    + "initiating a recognition request", e);
         }
 
         final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
@@ -378,7 +374,6 @@ public final class Mrcpv2SpokenInput
             }
             return;
         }
-
         // TODO not sure we should shut it down... can it be used later by
         // another object? commented it out for now.
         /*
@@ -387,7 +382,6 @@ public final class Mrcpv2SpokenInput
          * catch (InterruptedException e) { LOGGER.info(e, e); } finally {
          * speechClient = null; }
          */
-
     }
 
     /**

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!--
+    - Configuration file for the JVoiceXML VoiceXML interpreter.
+    - Copyright (C) 2005-2010 JVoiceXML group
+    - http://jvoicexml.sourceforge.net
+    -
+    - This library is free software; you can redistribute it and/or
+    - modify it under the terms of the GNU Library General Public
+    - License as published by the Free Software Foundation; either
+    - version 2 of the License, or (at your option) any later version.
+    -
+    - This library is distributed in the hope that it will be useful,
+    - but WITHOUT ANY WARRANTY; without even the implied warranty of
+    - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    - Library General Public License for more details.
+    -
+    - You should have received a copy of the GNU Library General Public
+    - License along with this library; if not, write to the Free Software
+    - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+  <!--
+    Document server with the configuration of all known strategies
+    to handle URIs.
+  -->
+  <bean id="org.jvoicexml.DocumentServer" class="org.jvoicexml.documentserver.JVoiceXmlDocumentServer">
+    <property name="schemeStrategies">
+      <list>
+        <bean
+          class="org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy" />
+        <bean
+          class="org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy" />
+        <bean
+          class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy">
+          <!-- Strategy default fetch timeout in msec -->
+          <property name="fetchTimeout" value="5000"/>
+          <property name="serializer">
+            <!--
+              The VoiceXML spec does not define how to serialize compound
+              javascript object when submitting a form. 
+              http://www.w3.org/TR/voicexml20#dml5.3.8
+              You may define one of the following serializers or remove this
+              property to get an exception when trying to submit a compound
+              object. -->
+            <bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/>
+            <!-- bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/-->
+          </property>
+        </bean>
+        <bean
+          class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy">
+          <!-- Strategy default fetch timeout in msec -->
+          <property name="fetchTimeout" value="5000"/>
+          <property name="scheme" value="https" />
+          <property name="serializer">
+            <!--
+              The VoiceXML spec does not define how to serialize compound
+              javascript object when submitting a form. 
+              http://www.w3.org/TR/voicexml20#dml5.3.8
+              You may define one of the following serializers or remove this
+              property to get an exception when trying to submit a compound
+              object. -->
+            <bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/>
+            <!-- bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/-->
+          </property>
+        </bean>
+        <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BuiltinSchemeStrategy">
+          <property name="grammarCreators">
+            <list>
+              <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator"/>
+              <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.DigitsGrammarCreator"/>
+            </list>
+          </property>
+        </bean>
+      </list>
+    </property>
+    <property name="fetchAttributes">
+        <bean class="org.jvoicexml.FetchAttributes">
+          <!-- Default fetch timeout in msec -->
+          <property name="fetchTimeout" value="5000"/>
+        </bean>
+    </property>
+  </bean>
+
+  <!-- The dialog strategy factory -->
+  <bean id="org.jvoicexml.interpreter.DialogFactory"
+    class="org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory">
+    <property name="dialogs">
+      <map>
+        <entry key="form">
+          <bean class="org.jvoicexml.interpreter.dialog.ExecutablePlainForm"/>
+        </entry>
+        <entry key="menu">
+          <bean class="org.jvoicexml.interpreter.dialog.ExecutableMenuForm">
+            <property name="choiceConverter">
+              <bean class="org.jvoicexml.interpreter.dialog.SrgsXmlChoiceConverter"/>
+            </property>
+          </bean>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <!--
+    - Grammar processor with all grammar identifiers and transformers from 
+    - a source type into a target type.
+    -->
+  <bean id="org.jvoicexml.interpreter.GrammarProcessor"
+    class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor" />
+
+  <!--
+    - Tag strategies. 
+    -->
+ <bean id="org.jvoicexml.interpreter.TagStrategyRepository"
+  class="org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository">
+ </bean>
+
+  <!--
+    - Initialization tag strategies.
+    - These tag strategies are executed before going before executing the
+    - form items. 
+    -->
+  <bean id="org.jvoicexml.interpreter.InitializationTagStrategyFactory"
+    class="org.jvoicexml.interpreter.tagstrategy.JVoiceXmlInitializationTagStrategyFactory"
+    scope="singleton">
+    <property name="tagStrategies">
+      <map>
+        <entry key="grammar">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.GrammarStrategy"/>
+        </entry>
+        <entry key="meta">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.MetaStrategy"/>
+        </entry>
+        <entry key="property">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.PropertyStrategy"/>
+        </entry>
+        <entry key="script">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.ScriptStrategy"/>
+        </entry>
+        <entry key="#text">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.TextStrategy"/>
+        </entry>
+        <entry key="var">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.VarStrategy"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="org.jvoicexml.SpeechRecognizerProperties"
+    class="org.jvoicexml.SpeechRecognizerProperties">
+  </bean>
+
+  <bean id="org.jvoicexml.DtmfRecognizerProperties"
+    class="org.jvoicexml.DtmfRecognizerProperties">
+    <property name="interdigittimeout" value="5s"/>
+  </bean>
+
+  <!--
+    Implementation platform to handle recognition and speech synthesis.
+  -->
+ <bean id="org.jvoicexml.ImplementationPlatformFactory"
+  class="org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatformFactory">
+    <!-- property name="externalRecognitionListener">
+        <bean class="YourClas" />
+    </property>
+    <property name="externalSynthesisListener">
+        <bean class="YourClas" />
+    </property-->
+ </bean>
+</beans>

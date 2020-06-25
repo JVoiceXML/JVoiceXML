@@ -1,0 +1,21 @@
+#JSGF V1.0;
+
+/**
+ * JSGF Grammar for directory examples
+ */
+
+grammar directory;
+
+public <main> = ( [ <pre> ] ( <larry> {larry} | <moe>  {moe} | <curly> {curly} )[<phoneType>] ) | <quit> {QUIT} ;
+
+<pre> =  call | (I would like [ to call ] ) | ( [ please ] (get| connect) [ me ] [to]) | dial;
+
+<larry> = larry|larry's;
+
+<curly> = curly|curly's;
+
+<moe> = moe|moe's ;
+
+<phoneType> = (cell {mobile} | mobile {mobile} | work {work} ) [phone|number] ;
+
+<quit> = exit | goodbye | quit;

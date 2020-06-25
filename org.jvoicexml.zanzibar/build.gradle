@@ -1,0 +1,139 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    maven {
+        url "https://repository.jboss.org/nexus/content/groups/public"
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            exclude '**'
+        }
+    }
+}
+
+configurations.all {
+    exclude group: 'log4j', module: 'log4j'
+}
+
+dependencies {
+    compile project(':org.jvoicexml')
+    compile project(':org.jvoicexml.client.mrcpv2')
+    compile project(':org.jvoicexml.config')
+
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.11.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.11.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.2'
+    compile group: 'org.asteriskjava', name: 'asterisk-java', version: '1.0.0-final'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.client', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.sip', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.rtp', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.server', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.mrcp4j', version: '0.3-SNAPSHOT'
+    compile group: 'commons-configuration', name: 'commons-configuration', version: '1.6'
+    compile group: 'org.springframework', name: 'spring-core', version: '3.0.5.RELEASE'
+    compile group: 'org.springframework', name: 'spring-beans', version: '3.0.5.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context', version: '3.0.5.RELEASE'
+    
+    compile fileTree(dir: './3rdparty/jsapi1.0/lib', include: ['*.jar'])
+
+    testCompile 'junit:junit:4.12'
+}
+
+jar {
+    version = JVOICEXML_VERSION
+    manifest {
+        attributes("Implementation-Title": "JVoiceXML Port of Zanzibar",
+                   'Implementation-Vendor': 'switch',
+                   'Implementation-Version': JVOICEXML_VERSION,
+                   'Built-By'       : System.properties['user.name'],
+                   'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                   'Created-By'     : "Gradle ${gradle.gradleVersion}",
+                   'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                   'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}")
+    }
+    baseName 'org.jvoicexml.zanzibar'
+}
+
+install {
+   version = JVOICEXML_VERSION
+   group = JVOICEXML_GROUP
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    version = JVOICEXML_VERSION
+    group = JVOICEXML_GROUP
+
+    repositories {
+        mavenDeployer {
+            beforeDeployment { 
+                MavenDeployment deployment -> signing.signPom(deployment) 
+            }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: JVOICEXML_OSSRH_USERNAME, password: JVOICEXML_OSSRH_PASSWORD)
+            }
+    
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: JVOICEXML_OSSRH_USERNAME, password: JVOICEXML_OSSRH_PASSWORD)
+            }
+    
+            pom.project {
+                name 'JVoiceXML'
+                groupId = JVOICEXML_GROUP
+                packaging 'jar'
+                description 'The Open Source Voice Browser'
+                url 'https://github.com/JVoiceXML/JVoiceXML'
+                
+                scm {
+                    connection 'scm:git:git@github.com:JVoiceXML/JVoiceXML.git'
+                    developerConnection 'scm:git:ssh://github.com:JVoiceXML/JVoiceXML.git'
+                    url "https://github.com/JVoiceXML/JVoiceXML/tree/release/${JVOICEXML_VERSION}"
+                }
+                    
+                licenses {
+                    license {
+                        name 'GNU Lesser General Public License, Version 2.1'
+                        url 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
+                    }
+                }
+    
+                developers {
+                    developer {
+                        id 'schnelle'
+                        name 'Dirk Schnelle-Walka'
+                        email 'dirk.schnelle@jvoicexml.org'
+                    }
+                }
+            }
+        }
+    }
+}

@@ -45,7 +45,7 @@ public class HalefGrammarIdentifier implements GrammarIdentifier {
         if (content == null) {
             return null;
         }
-        if (grammar.getTextContent().equals("wfst\n")) {
+        if (grammar.getTextContent().startsWith("wfst")) {
             return HalefGrammarType.HALEF;
         }
         return null;

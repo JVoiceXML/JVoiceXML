@@ -1,0 +1,9 @@
+#JSGF V1.0;
+
+/**
+ * JSGF Grammar for directory application
+ */
+
+grammar yesOrNo;
+
+public <main> =   yes{YES} | no{NO} ;

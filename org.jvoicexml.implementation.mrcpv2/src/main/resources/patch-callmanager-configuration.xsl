@@ -9,6 +9,8 @@
     <xsl:param name="cairoAddress" />
     <xsl:param name="cairoHost" />
     <xsl:param name="cairoPort" />
+    <xsl:param name="baseReceiverRTPPort" />
+    <xsl:param name="baseTransmitterRTPPort" />
 
     <xsl:template match="classpath">
         <xsl:copy>
@@ -51,6 +53,20 @@
         <xsl:copy>
             <xsl:apply-templates select="@*" />
             <beans:value><xsl:value-of select="$cairoPort" /></beans:value>
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="beans:property[@name='baseReceiverRtpPort']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*" />
+            <beans:value><xsl:value-of select="$baseReceiverRTPPort" /></beans:value>
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="beans:property[@name='baseXmitRtpPort']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*" />
+            <beans:value><xsl:value-of select="$baseTransmitterRTPPort" /></beans:value>
         </xsl:copy>
     </xsl:template>
     

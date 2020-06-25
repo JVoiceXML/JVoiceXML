@@ -24,7 +24,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 import org.jvoicexml.event.error.NoresourceError;
-import org.speechforge.zanzibar.sip.SipServer;
+import org.jvoicexml.zanzibar.sip.SipServer;
 
 import junit.framework.Assert;
 

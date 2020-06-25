@@ -28,6 +28,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.interpreter.grammar.luis', \
     'org.jvoicexml.interpreter.grammar.regex', \
     'org.jvoicexml.client', \
+    'org.jvoicexml.client.mrcpv2', \
     'org.jvoicexml.client.text', \
     'org.jvoicexml.srgs', \
     'org.jvoicexml.mmi.events', \
@@ -55,6 +56,7 @@ include 'org.jvoicexml', \
     'org.jvoicexml.voicexmlunit', \
     'org.jvoicexml.voicexmlunit.demo', \
     'org.jvoicexml.xml', \
+    'org.jvoicexml.zanzibar', \
     'howtobuild', \
     'userguide', \
     'main'

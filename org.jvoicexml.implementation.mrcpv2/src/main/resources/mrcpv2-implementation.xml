@@ -4,15 +4,12 @@
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>mrcpv2</repository>
   <classpath>org.jvoicexml.implementation.mrcpv2-@@VERSION@@.jar</classpath>
+  <classpath>org.jvoicexml.client.mrcpv2-@@VERSION@@.jar</classpath>
   <classpath>org.jvoicexml.interpreter.grammar.halef-@@VERSION@@.jar</classpath>
-    <classpath>cairo-client-0.3-SNAPSHOT.jar</classpath>
-    <classpath>cairo-rtp-0.3-SNAPSHOT.jar</classpath>
-    <classpath>cairo-sip-0.3-SNAPSHOT.jar</classpath>
-  <classpath>mysql-connector-java-5.1.40.jar</classpath>
-  <classpath>halef-mrcp4j-0.1-SNAPSHOT.jar</classpath>
-  <!-- classpath>halef-zanzibar-0.1-SNAPSHOT.jar</classpath-->
-  <classpath>zanzibar-SNAPSHOT.jar</classpath>
-  <classpath>speechcloud-client.jar</classpath>
+  <classpath>org.speechforge.cairo.client-0.3.1-SNAPSHOT.jar</classpath>
+  <classpath>org.speechforge.cairo.rtp-0.3.1-SNAPSHOT.jar</classpath>
+  <classpath>org.speechforge.cairo.sip-0.3.1-SNAPSHOT.jar</classpath>
+  <classpath>org.mrcp4j-0.3-SNAPSHOT.jar</classpath>
 
   <beans:bean
     class="org.jvoicexml.implementation.mrcpv2.Mrcpv2SynthesizedOutputFactory">
@@ -28,5 +25,9 @@
           <bean class="org.jvoicexml.interpreter.grammar.halef.HalefGrammarParser" />
       </list>    
      </property>
+  </beans:bean>
+
+  <beans:bean class="org.jvoicexml.implementation.mrcpv2.Mrcpv2TelephonyFactory">
+      <beans:property name="instances" value="1" />
   </beans:bean>
 </implementation>

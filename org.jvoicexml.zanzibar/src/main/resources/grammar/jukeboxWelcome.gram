@@ -1,0 +1,22 @@
+#JSGF V1.0;
+
+/**
+ * JSGF Grammar for directory examples
+ */
+
+grammar example;
+
+public <main> = ( [ <pre> ] ( <dylan> {DYLAN} | <amy>  {AMY} | <radiohead> {RADIOHEAD} | <stones> {STONES} )) | <quit> {QUIT} ;
+
+<pre> = ( I would like [ to hear ] ) | ( [ please ] (get| play));
+
+<dylan> = ([bob] dylan) | (Rolling and Tumbling);
+
+<amy> = ([amy] wine house)| (You know I'm no good);
+
+<radiohead> = (radio head)|(House of Cards);
+
+<stones> = ([rolling]stones)|(Fancy Man Blues);
+
+
+<quit> = exit | goodbye;
