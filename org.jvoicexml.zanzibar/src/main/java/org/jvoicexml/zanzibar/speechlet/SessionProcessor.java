@@ -62,7 +62,7 @@ public interface SessionProcessor {
     /**
      * Startup.
      * 
-     * @param session the session
+     * @param context the speechlet context
      * @param applicationName the application name
      * 
      * @throws Exception the exception
@@ -74,7 +74,7 @@ public interface SessionProcessor {
      * Startup the speech application.  If using this method to start a speech application, 
      * you must set the application name before calling this method using setter method (perhaps wired in using spring).
      * 
-     * @param session the session
+     * @param context the speechlet context
      * 
      * @throws Exception the exception
      */
@@ -90,7 +90,7 @@ public interface SessionProcessor {
     /**
      * Sets the context.  This object is used to communicate with the speechlet container.
      * 
-     * @param applicationName the application name
+     * @param context the speechlet context
      */
     public void setContext(SpeechletContext context);
     

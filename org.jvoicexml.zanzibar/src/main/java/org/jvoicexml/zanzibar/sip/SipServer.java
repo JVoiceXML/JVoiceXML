@@ -77,8 +77,8 @@ import org.speechforge.cairo.util.CairoUtil;
  * cairo) cairoSipPort - the port used by the speech servers sip agent
  * cairoSipAddress - the sip address of the speech server
  * 
- * @author Spencer Lord {@literal <}<a href=
- *         "mailto:salord@users.sourceforge.net">salord@users.sourceforge.net</a>{@literal >}
+ * @author Spencer Lord
+ * @author Dirk Schnelle-Walka
  */
 public class SipServer implements SessionListener {
     /** Logger instance. */
@@ -220,7 +220,7 @@ public class SipServer implements SessionListener {
     }
 
     /**
-     * @param baseRtpPort
+     * @param baseReceiverRtpPort
      *            the baseRtpPort to set
      */
     public void setBaseReceiverRtpPort(int baseReceiverRtpPort) {

@@ -152,12 +152,7 @@ task copyReferencedLibraries(type: Copy) {
          'nist-sdp*.jar',
          'concurrent*.jar',
          'commons-lang*.jar',
-<<<<<<< HEAD
-         'jmf*.jar',
-         'mysql-connector-java*.jar'
-=======
          'jmf*.jar'
->>>>>>> refs/heads/feature/add-zanzibar
     }
 }
 

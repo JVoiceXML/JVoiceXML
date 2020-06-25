@@ -44,7 +44,7 @@ public interface SpeechletContext  {
     /**
      * Notify the container that the speechlets Dialog has completed.  Typically the container will end the session(s) with the remote
      * party or parties (perhaps via SIP).  And return the resources that were allocated to this speechlet.
-     * @throws InvalidContextException 
+     * @throws InvalidContextException invalid context 
      */
     public void dialogCompleted() throws InvalidContextException;
 

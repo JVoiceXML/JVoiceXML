@@ -35,7 +35,8 @@ import org.speechforge.cairo.sip.SipSession;
 /**
  * Speechlet abstract class.  handles basic starup and shutdown of a instance of a speech application
  * 
- * @author Spencer Lord {@literal <}<a href="mailto:salord@users.sourceforge.net">salord@users.sourceforge.net</a>{@literal >}
+ * @author Spencer Lord
+ * @author Dirk Schnelle-Walka
  */
 public abstract class Speechlet implements Runnable, SessionProcessor {
 
@@ -174,8 +175,8 @@ public abstract class Speechlet implements Runnable, SessionProcessor {
     
     /**
      * Run application.
-     * @throws NoMediaControlChannelException 
-     * @throws InvalidSessionAddressException 
+     * @throws NoMediaControlChannelException no media control channel
+     * @throws InvalidSessionAddressException  invalid session address
      */
     protected abstract void  runApplication() throws NoMediaControlChannelException, InvalidSessionAddressException;
 
