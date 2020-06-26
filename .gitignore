@@ -9,3 +9,4 @@ work/
 *.iml
 out/
 /org.jvoicexml.demo.marcdemo/
+/.metadata/

@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
@@ -144,12 +145,16 @@ public final class JVoiceXmlConfiguration implements Configuration {
         }
         if (resource.exists()) {
             try {
-                context = new FileSystemXmlApplicationContext(
-                        canonicalFile.toURI().toString());
+                final URI uri = canonicalFile.toURI();
+                final String uriPath = uri.toString();
+                context = new FileSystemXmlApplicationContext(uriPath);
             } catch (BeansException e) {
                 LOGGER.error("unable to load configuration", e);
                 context = null;
             }
+        } else {
+            LOGGER.error("main configruation file '" + resource 
+                    + "' does not seam to exist. Cannot create xontext.");
         }
         try {
             configurationRepository = new ConfigurationRepository(configFolder);
