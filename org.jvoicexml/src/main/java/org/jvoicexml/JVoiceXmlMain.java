@@ -252,6 +252,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
                 }
             } catch (ServiceConfigurationError e) {
                 LOGGER.error("unable to load configuration", e);
+                return null;
             }
         }
         return configuration;

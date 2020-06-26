@@ -18,6 +18,11 @@ repositories {
 }
 
 configurations {
+    jvxmlCoreProjects {
+        description = "Core projects needed for JVoiceXML"
+        extendsFrom compile
+    }
+    
     jvxmlDocumentServerJetty {
         description = "Document repository based on Jetty"
         extendsFrom compile
@@ -139,6 +144,11 @@ configurations {
 }
 
 dependencies {
+    jvxmlCoreProjects project(':org.jvoicexml.xml')
+    jvxmlCoreProjects project(':org.jvoicexml')
+    jvxmlCoreProjects project(':org.jvoicexml.config')
+    jvxmlCoreProjects project(':org.jvoicexml.srgs')
+
     jvxmlDocumentServerJetty project(':org.jvoicexml.documentserver.jetty')
 
     jvxmlDocumentServerSchemestrategyFile project(':org.jvoicexml.documentserver.schemestrategy.file')
@@ -190,7 +200,6 @@ dependencies {
 
     jvxmlDocumentation project(':howtobuild')
     jvxmlDocumentation project(':userguide')
-    
     runtime project(':org.jvoicexml.xml')
     runtime project(':org.jvoicexml')
     runtime project(':org.jvoicexml.config')
@@ -209,6 +218,7 @@ jar {
 }
 
 task jvxmlConfigurations {
+    dependsOn configurations.jvxmlCoreProjects
     dependsOn configurations.jvxmlDocumentation
     dependsOn configurations.jvxmlDocumentServerJetty
     dependsOn configurations.jvxmlDocumentServerSchemestrategyFile
@@ -266,7 +276,7 @@ task jvxmlConfigurations {
     }
 }
 
-task jvxmlDistributioConfigurations {
+task jvxmlDistributionConfigurations {
     dependsOn project(':org.jvoicexml.client')
 
     dependsOn configurations.jvxmlDocumentation
@@ -593,9 +603,14 @@ distributions {
     }
 }
 
-run {
+task createJvxmlRunConfiguration {
     dependsOn jvxmlConfigurations
     dependsOn configurations.jvxmlJNDI
+    version = JVOICEXML_VERSION
+}
+
+run {
+    dependsOn createJvxmlRunConfiguration
 
     version = JVOICEXML_VERSION
 
@@ -611,8 +626,7 @@ run {
 }
 
 task(runDebug, type: JavaExec) {
-    dependsOn jvxmlConfigurations
-    dependsOn configurations.jvxmlJNDI
+    dependsOn createJvxmlRunConfiguration
 
     version = JVOICEXML_VERSION
 

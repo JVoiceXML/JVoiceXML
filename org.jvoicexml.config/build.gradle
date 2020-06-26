@@ -49,7 +49,7 @@ jar {
     dependsOn copyConfiguration
     dependsOn copyConfigurationDistribution
     
-    from ('./src/main/resources') {
+    from ('./src/main/resources/META-INF') {
         include 'services/*'
         into 'META-INF'
     }

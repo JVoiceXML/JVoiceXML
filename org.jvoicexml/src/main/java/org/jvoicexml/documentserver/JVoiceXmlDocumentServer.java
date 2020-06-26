@@ -126,7 +126,7 @@ public final class JVoiceXmlDocumentServer
     @Override
     public void start() throws Exception {
         if (repository != null) {
-            LOGGER.info("starting document repositroy '" 
+            LOGGER.info("starting document repository '" 
                     + repository.getClass().getCanonicalName() + "'");
             repository.start();
         }

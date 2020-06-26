@@ -52,17 +52,20 @@ public class ClassloaderServer extends ClassServer {
         super(port);
         loader = getClass().getClassLoader();
         LOGGER.info("using JNDI class loader '" + loader + "'");
-        final ClassLoader parent = loader.getParent();
-        LOGGER.info("parent class loader '" + parent + "'");
-        if (parent instanceof URLClassLoader) {
-            final URLClassLoader urlLoader = (URLClassLoader) parent;
-            final URL[] urls = urlLoader.getURLs();
-            if (urls.length == 0) {
-                LOGGER.info("parent class loader entry: none");
-            } else {
-                for (URL url : urls) {
-                    LOGGER.info("parent class loader entry: '" + url
-                            + "'");
+        if (LOGGER.isDebugEnabled()) {
+            final ClassLoader parent = loader.getParent();
+            LOGGER.debug("parent class loader '" + parent + "'");
+            if (parent instanceof URLClassLoader) {
+                @SuppressWarnings("resource")
+                final URLClassLoader urlLoader = (URLClassLoader) parent;
+                final URL[] urls = urlLoader.getURLs();
+                if (urls.length == 0) {
+                    LOGGER.debug("parent class loader entry: none");
+                } else {
+                    for (URL url : urls) {
+                        LOGGER.debug("parent class loader entry: '" + url
+                                + "'");
+                    }
                 }
             }
         }
