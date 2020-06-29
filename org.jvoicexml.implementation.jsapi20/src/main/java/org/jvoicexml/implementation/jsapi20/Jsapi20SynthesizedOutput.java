@@ -28,8 +28,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 import javax.sound.sampled.AudioFormat;
 import javax.speech.AudioException;
@@ -69,6 +69,7 @@ import org.jvoicexml.jsapi2.synthesis.BaseSynthesizerAudioManager;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
+import org.jvoicexml.xml.vxml.PriorityType;
 
 /**
  * Audio output that uses the JSAPI 2.0 to address the TTS engine.
@@ -111,7 +112,7 @@ public final class Jsapi20SynthesizedOutput
     private final Object emptyLock;
 
     /** Queued speakables. */
-    private final Queue<SpeakableText> queuedSpeakables;
+    private final List<SpeakableText> queuedSpeakables;
 
     /** A map of queued speakables to their id returned in speak requests. */
     private final Map<SpeakableText, Integer> queuedIds;
@@ -277,7 +278,18 @@ public final class Jsapi20SynthesizedOutput
         sessionId = sessId;
 
         synchronized (queuedSpeakables) {
-            queuedSpeakables.offer(speakable);
+            final PriorityType priority = speakable.getPriority();
+            if (priority.equals(PriorityType.CLEAR)) {
+                final Collection<SpeakableText> pendingSpeakables =
+                        queuedIds.keySet();
+                queuedSpeakables.retainAll(pendingSpeakables);
+            }
+            if (priority.equals(PriorityType.CLEAR)
+                    || priority.equals(PriorityType.APPEND)) {
+                queuedSpeakables.add(speakable);
+            } else if (priority.equals(PriorityType.PREPEND)) {
+                queuedSpeakables.add(0, speakable);
+            }
             // Do not process the speakable if there is some ongoing processing
             if (queuedSpeakables.size() > 1) {
                 return;
@@ -285,6 +297,15 @@ public final class Jsapi20SynthesizedOutput
         }
 
         // Otherwise process the added speakable asynchronous.
+        startSpeaking();
+    }
+
+    /**
+     * Start processing the queued speakables.
+     * 
+     * @since 0.7.9
+     */
+    private void startSpeaking() {
         final Runnable runnable = new Runnable() {
             /**
              * {@inheritDoc}
@@ -372,7 +393,7 @@ public final class Jsapi20SynthesizedOutput
                 }
                 return;
             }
-            speakable = queuedSpeakables.peek();
+            speakable = queuedSpeakables.get(0);
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -512,10 +533,10 @@ public final class Jsapi20SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot cancel output");
         }
         synchronized (queuedSpeakables) {
-            final SpeakableText curent = queuedSpeakables.peek();
-            if (curent == null) {
+            if (queuedSpeakables.isEmpty()) {
                 return;
             }
+            final SpeakableText curent = queuedSpeakables.get(0);
             if (!curent.isBargeInEnabled(bargeInType)) {
                 return;
             }
@@ -579,10 +600,10 @@ public final class Jsapi20SynthesizedOutput
     @Override
     public void waitNonBargeInPlayed() {
         synchronized (queuedSpeakables) {
-            final SpeakableText speakable = queuedSpeakables.peek();
-            if (speakable == null) {
+            if (queuedSpeakables.isEmpty()) {
                 return;
             }
+            final SpeakableText speakable = queuedSpeakables.get(0);
             if (!speakable.isBargeInEnabled(BargeInType.SPEECH)
                     && !speakable.isBargeInEnabled(BargeInType.HOTWORD)) {
                 return;
@@ -740,12 +761,12 @@ public final class Jsapi20SynthesizedOutput
         SpeakableText speakable = null;
         if (id == SpeakableEvent.SPEAKABLE_STARTED) {
             synchronized (queuedSpeakables) {
-                speakable = queuedSpeakables.peek();
+                speakable = queuedSpeakables.get(0);
             }
             fireOutputStarted(speakable);
         } else if (id == SpeakableEvent.SPEAKABLE_ENDED) {
             synchronized (queuedSpeakables) {
-                speakable = queuedSpeakables.poll();
+                speakable = queuedSpeakables.remove(0);
                 final Integer queueId;
                 synchronized (queuedIds) {
                     queueId= queuedIds.remove(speakable);

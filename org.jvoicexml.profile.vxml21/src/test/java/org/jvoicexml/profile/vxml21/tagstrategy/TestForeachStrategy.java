@@ -38,6 +38,7 @@ import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.profile.TagStrategy;
 import org.jvoicexml.profile.TagStrategyFactory;
+import org.jvoicexml.profile.vxml21.VoiceXml21Profile;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.ccxml.Script;
 import org.jvoicexml.xml.ssml.Speak;
@@ -71,10 +72,6 @@ public final class TestForeachStrategy extends TagStrategyTestBase {
                 .thenReturn(new ValueStrategy());
         final VoiceXmlInterpreterContext context = getContext();
         final Profile profile = context.getProfile();
-        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
-                factory);
-        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
-                factory);
         final TagStrategyFactory tagfactory = Mockito
                 .mock(TagStrategyFactory.class);
         Mockito.when(tagfactory.getTagStrategy(Mockito.isA(Foreach.class)))
@@ -83,7 +80,8 @@ public final class TestForeachStrategy extends TagStrategyTestBase {
                 .thenReturn(new ValueStrategy());
         Mockito.when(tagfactory.getTagStrategy(Mockito.isA(Text.class)))
                 .thenReturn(new TextStrategy());
-        Mockito.when(profile.getTagStrategyFactory()).thenReturn(tagfactory);
+        final VoiceXml21Profile vxml21Profile = (VoiceXml21Profile) profile;
+        vxml21Profile.setTagStrategyFactory(tagfactory);
 
         final ImplementationPlatform platform = Mockito
                 .mock(ImplementationPlatform.class);

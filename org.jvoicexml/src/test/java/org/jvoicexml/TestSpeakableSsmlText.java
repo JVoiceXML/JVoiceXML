@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,6 +25,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.PriorityType;
 
 /**
  * Test case for org.jvoicexml.implementation.SpeakableSsmlText.
@@ -51,7 +47,6 @@ public final class TestSpeakableSsmlText {
         final SsmlDocument simple = new SsmlDocument();
 
         final SpeakableSsmlText simpleSpeakable = new SpeakableSsmlText(simple);
-
         Assert.assertTrue(simpleSpeakable.isSpeakableTextEmpty());
 
         simpleSpeakable.appendSpeakableText("some text");
@@ -75,7 +70,6 @@ public final class TestSpeakableSsmlText {
     @Test
     public void testAppendSpeakableText() throws Exception {
         final SsmlDocument doc = new SsmlDocument();
-
         final SpeakableSsmlText speakable = new SpeakableSsmlText(doc);
         Assert.assertTrue(speakable.isSpeakableTextEmpty());
         speakable.appendSpeakableText("some");
@@ -83,5 +77,39 @@ public final class TestSpeakableSsmlText {
         Assert.assertEquals("some", speak.getTextContent());
         speakable.appendSpeakableText(" text");
         Assert.assertEquals("some text", speak.getTextContent());
+    }
+    
+
+    /**
+     * Test method for
+     * {@link SpeakableSsmlText#equals(Object)}.
+     * @exception Exception
+     *            Test failed.
+     */
+    public void testEquals() throws Exception {
+        final SsmlDocument doc = new SsmlDocument();
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(doc);
+        speakable.appendSpeakableText("some text");
+        
+        final SsmlDocument otherDoc = new SsmlDocument();
+        final SpeakableSsmlText otherSpeakable = new SpeakableSsmlText(otherDoc);
+        otherSpeakable.appendSpeakableText("some text");
+        Assert.assertEquals(speakable, otherSpeakable);
+    }
+    
+    /**
+     * Test method for
+     * {@link SpeakableSsmlText#getPriority()}.
+     * @exception Exception
+     *            Test failed.
+     */
+    @Test
+    public void testGetPriority() throws Exception {
+        final SsmlDocument doc = new SsmlDocument();
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(doc);
+        speakable.appendSpeakableText("some text");
+        Assert.assertEquals(PriorityType.APPEND, speakable.getPriority());
+        speakable.setPriority(PriorityType.CLEAR);
+        Assert.assertEquals(PriorityType.CLEAR, speakable.getPriority());
     }
 }

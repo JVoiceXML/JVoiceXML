@@ -20,8 +20,6 @@
  */
 package org.jvoicexml.profile.vxml21.tagstrategy;
 
-import static org.junit.Assert.fail;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.DocumentDescriptor;
@@ -32,13 +30,10 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.xml.ccxml.Var;
 import org.jvoicexml.xml.vxml.Block;
-import org.jvoicexml.xml.vxml.Data;
 import org.jvoicexml.xml.vxml.JVoiceXmlData;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.Mockito;
-import org.mozilla.javascript.ScriptableObject;
-import org.w3c.dom.Document;
 
 /**
  * Test cases for {@link JVoiceXmlDataStrategy}.

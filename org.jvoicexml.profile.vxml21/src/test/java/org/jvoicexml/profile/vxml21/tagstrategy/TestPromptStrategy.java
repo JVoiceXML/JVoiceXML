@@ -21,21 +21,13 @@
 
 package org.jvoicexml.profile.vxml21.tagstrategy;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
-import org.jvoicexml.SpeakableText;
-import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
-import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
-import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
-import org.jvoicexml.profile.Profile;
-import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -50,11 +42,7 @@ import org.mockito.Mockito;
  * @author Dirk Schnelle-Walka
  * @since 0.6
  */
-public final class TestPromptStrategy extends TagStrategyTestBase
-        implements SynthesizedOutputListener {
-    /** The queued speakable. */
-    private SpeakableText queuedSpeakable;
-
+public final class TestPromptStrategy extends TagStrategyTestBase {
     /**
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.PromptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
@@ -80,7 +68,6 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         audio3.setSrc("raiders.wav");
         audio3.addText("raiders of the lost ark");
 
-        setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.startPromptQueuing();
@@ -102,7 +89,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         ssmlAudio3.addText("raiders of the lost ark");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Assert.assertEquals(speakable, queuedSpeakable);
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
     }
 
     /**
@@ -122,16 +109,6 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final Value value = prompt.appendChild(Value.class);
         value.setExpr("foo");
         prompt.addText("times");
-        setSystemOutputListener(this);
-
-        final SsmlParsingStrategyFactory factory = Mockito
-                .mock(SsmlParsingStrategyFactory.class);
-        Mockito.when(factory.getParsingStrategy(Mockito.isA(Value.class)))
-                .thenReturn(new ValueStrategy());
-        final VoiceXmlInterpreterContext context = getContext();
-        final Profile profile = context.getProfile();
-        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
-                factory);
 
         final DataModel model = getDataModel();
         Mockito.when(model.evaluateExpression("foo", Object.class)).thenReturn(
@@ -149,7 +126,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         speak.addText("this is 42 times");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Assert.assertEquals(speakable, queuedSpeakable);
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
     }
 
     /**
@@ -169,16 +146,16 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         prompt.addText("demo");
         prompt.setCond("3 == 4");
 
-        setSystemOutputListener(this);
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression(prompt.getCond(), Object.class))
+                .thenReturn(false);
+        
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
-        final CallControlProperties props = new CallControlProperties();
-        platform.renderPrompts(null, null, props);
 
-        Assert.assertNull("wrong evaluation of the cond attribute",
-                queuedSpeakable);
+        Mockito.verify(platform, Mockito.never()).queuePrompt(Mockito.any());
     }
 
     /**
@@ -200,7 +177,6 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final Prompt prompt = block.appendChild(Prompt.class);
         prompt.addText("test execute timeout");
         prompt.setTimeout("10s");
-        setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.startPromptQueuing();
@@ -213,7 +189,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         speak.addText("test execute timeout");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Assert.assertEquals(speakable, queuedSpeakable);
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
     }
 
     /**
@@ -234,7 +210,6 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final Block block = createBlock();
         final Prompt prompt = block.appendChild(Prompt.class);
         prompt.addText("test execute timeout");
-        setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.startPromptQueuing();
@@ -247,23 +222,6 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         speak.addText("test execute timeout");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Assert.assertEquals(speakable, queuedSpeakable);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void outputStatusChanged(final SynthesizedOutputEvent event) {
-        if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
-            final OutputStartedEvent started = (OutputStartedEvent) event;
-            queuedSpeakable = started.getSpeakable();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void outputError(final ErrorEvent error) {
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
     }
 }

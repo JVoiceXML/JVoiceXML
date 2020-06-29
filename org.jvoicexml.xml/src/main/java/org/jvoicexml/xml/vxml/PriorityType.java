@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,42 +21,43 @@
 package org.jvoicexml.xml.vxml;
 
 /**
- * Accept mode of a choice.
+ * The type of a priority.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.5
  */
-public enum AcceptType {
+public enum PriorityType {
     /**
-     * If the accept attribute is "exact" then the user must say the entire
-     * phrase in the same order in which they occur in the choice phrase.
+     * Default for a prompt to be appended to the prompt queue.
      */
-    EXACT("exact"),
+    APPEND("append"),
 
     /**
-     * If the accept attribute is "approximate", then the choice may be matched
-     * when a user says a subphrase of the expression. For example, in response
-     * to the prompt "Stargazer astrophysics news" a user could say "Stargazer",
-     * "astrophysics", "Stargazer news", "astrophysics news", and so on.
+     * Set the value of this prompt to the top of the queue.
      */
-    APPROXIMATE("approximate");
+    PREPEND("prepend"),
+    
+    /**
+     * Clear all prompts in the queue and append this prompt
+     */
+    CLEAR("clear");
 
-    /** Name of the barge-in type. */
-    private final String type;
+    /** The priority value. */
+    private final String priority;
 
     /**
      * Do not create from outside.
-     * @param name name of the barge-in type.
+     * @param name name of the priority.
      */
-    private AcceptType(final String name) {
-        type = name;
+    private PriorityType(final String name) {
+        priority = name;
     }
 
     /**
-     * Retrieves the name of this accept type.
-     * @return Name of this type.
+     * Retrieves the name of priority.
+     * @return Name of this priority.
      */
-    public String getType() {
-        return type;
+    public String getPriority() {
+        return priority;
     }
 }

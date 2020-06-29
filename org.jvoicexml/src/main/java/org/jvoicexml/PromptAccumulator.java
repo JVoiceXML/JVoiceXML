@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,7 +43,7 @@ public interface PromptAccumulator {
     void startPromptQueuing();
 
     /**
-     * Queues the given prompt without rendereing it.
+     * Queues the given prompt without rendering it.
      * <p>
      * After all prompts have been queued, the end of prompt queuing must be
      * indicated by {@link #renderPrompts(SessionIdentifier, DocumentServer, CallControlProperties)}.

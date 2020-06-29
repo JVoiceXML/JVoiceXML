@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -94,7 +94,12 @@ class PromptStrategy extends AbstractTagStrategy {
     @Override
     public void validateAttributes(final DataModel model) throws ErrorEvent {
         final String enableBargein = (String) getAttribute(Prompt.ATTRIBUTE_BARGEIN);
-        bargein = Boolean.valueOf(enableBargein);
+        // Default to bargein as true if not specified
+        if (enableBargein == null) {
+            bargein = true;
+        } else {
+            bargein = Boolean.valueOf(enableBargein);
+        }
     }
 
     /**
@@ -155,7 +160,7 @@ class PromptStrategy extends AbstractTagStrategy {
      *            the user hung up
      * @since 0.7.9
      */
-    private void queueSpeakable(final VoiceXmlInterpreterContext context,
+    protected void queueSpeakable(final VoiceXmlInterpreterContext context,
             final FormInterpretationAlgorithm fia,
             final SpeakableSsmlText speakable) throws BadFetchError,
             NoresourceError, ConnectionDisconnectHangupEvent {

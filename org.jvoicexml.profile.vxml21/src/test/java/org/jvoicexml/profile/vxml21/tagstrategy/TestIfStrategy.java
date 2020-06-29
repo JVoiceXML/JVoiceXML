@@ -31,6 +31,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.TagStrategyFactory;
+import org.jvoicexml.profile.vxml21.VoiceXml21Profile;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.If;
@@ -66,7 +67,8 @@ public final class TestIfStrategy extends TagStrategyTestBase {
         final TagStrategyFactory tagfactory = Mockito
                 .mock(TagStrategyFactory.class);
         final Profile profile = getContext().getProfile();
-        Mockito.when(profile.getTagStrategyFactory()).thenReturn(tagfactory);
+        final VoiceXml21Profile vxml21Profile = (VoiceXml21Profile) profile;
+        vxml21Profile.setTagStrategyFactory(tagfactory);
 
         final DataModel model = getDataModel();
         Mockito.when(model.evaluateExpression(ifNode.getCond(), Boolean.class))

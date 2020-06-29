@@ -45,8 +45,26 @@ import org.jvoicexml.xml.vxml.BargeInType;
  */
 public interface SystemOutput {
     /**
-     * The Speakable object is added to the end of the speaking queue and will
-     * be spoken once it reaches the top of the queue.
+     * The {@link SpeakableText} object is offered for addition to the speaking
+     * queue.
+     * 
+     * <p>
+     * Depending on the priority of the {@link SpeakableText} it will be
+     * handled as follows:
+     * <dl>
+     * <dt>{@link org.jvoicexml.xml.vxml.PriorityType#APPEND}</dt>
+     * <dd>append the {@link SpeakableText} to the end of the queue.</dd>
+     * <dt>{@link org.jvoicexml.xml.vxml.PriorityType#PREPEND}</dt>
+     * <dd>prepend the {@link SpeakableText} to the top of the queue.</dd>
+     * <dt>{@link org.jvoicexml.xml.vxml.PriorityType#CLEAR}</dt>
+     * <dd>clear the current queue and append the {@link SpeakableText} to the
+     *          end of the queue.</dd>
+     * </dl>
+     * Not all priority types may be supported by the platform. In case the
+     * behavior is not supported, the platform defaults to 
+     * {@link org.jvoicexml.xml.vxml.PriorityType#APPEND}.
+     * </p>
+     * 
      *
      * @param speakable
      *        Text to be spoken.

@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/unittests/src/org/jvoicexml/interpreter/tagstrategy/TestValueStrategy.java $
- * Version: $LastChangedRevision: 4233 $
- * Date:    $Date: 2014-09-02 09:14:31 +0200 (Tue, 02 Sep 2014) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,6 +33,7 @@ import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.profile.TagStrategyFactory;
+import org.jvoicexml.profile.vxml21.VoiceXml21Profile;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -66,21 +62,14 @@ public final class TestValueStrategy extends TagStrategyTestBase {
                 .thenReturn(new ValueStrategy());
         final VoiceXmlInterpreterContext context = getContext();
         final Profile profile = context.getProfile();
-        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
-                factory);
-        Mockito.when(profile.getSsmlParsingStrategyFactory()).thenReturn(
-                factory);
         final TagStrategyFactory tagfactory = Mockito
                 .mock(TagStrategyFactory.class);
         Mockito.when(tagfactory.getTagStrategy(Mockito.isA(Value.class)))
                 .thenReturn(new ValueStrategy());
         Mockito.when(tagfactory.getTagStrategy(Mockito.isA(Text.class)))
                 .thenReturn(new TextStrategy());
-        Mockito.when(profile.getTagStrategyFactory()).thenReturn(tagfactory);
-
-        final ImplementationPlatform platform = Mockito
-                .mock(ImplementationPlatform.class);
-        Mockito.when(context.getImplementationPlatform()).thenReturn(platform);
+        final VoiceXml21Profile vxml21Profile = (VoiceXml21Profile) profile;
+        vxml21Profile.setTagStrategyFactory(tagfactory);
     }
 
     /**
@@ -100,6 +89,10 @@ public final class TestValueStrategy extends TagStrategyTestBase {
         final Value value = block.appendChild(Value.class);
         value.setExpr(name);
 
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression(name, Object.class))
+            .thenThrow(new SemanticError(name + " is not defined!"));
+        
         final ValueStrategy strategy = new ValueStrategy();
         executeTagStrategy(value, strategy);
     }

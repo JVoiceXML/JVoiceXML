@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://www.w3.org/2001/vxml" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns="http://www.w3.org/2001/vxml" 
+elementFormDefault="qualified">
+    <xsd:annotation>
+        <xsd:documentation>VoiceXML 2.1 restriction and additions for JVoiceXML</xsd:documentation>
+    </xsd:annotation>
+    <xsd:annotation>
+        <xsd:documentation>
+Copyright 2020 switch 
+</xsd:documentation>
+    </xsd:annotation>
+
+
+   <xsd:import namespace="http://www.w3.org/XML/1998/namespace" 
+                schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+    
+    <xsd:annotation>
+        <xsd:documentation>Add prompt priorities </xsd:documentation>
+    </xsd:annotation>
+   <xsd:include schemaLocation="vxml-synthesis-extension.xsd"/>
+
+
+    <xsd:complexType name="jvxml.speak">
+      <xsd:annotation>
+        <xsd:documentation>Add priorities</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleContent>
+        <xsd:extension base="vxml.speak">
+            <xsd:attribute name="priority">
+                <xsd:restriction>
+                    <xsd:enumeration value="append" />
+                    <xsd:enumeration value="prepend" />
+                    <xsd:enumeration value="clear" />
+                </xsd:restriction>
+            </xsd:attribute>
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+
+</xsd:schema>

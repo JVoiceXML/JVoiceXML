@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -60,7 +60,7 @@ import org.w3c.dom.Node;
  *
  * @author Dirk Schnelle-Walka
  */
-public final class Prompt
+public class Prompt
         extends AbstractVoiceXmlNode implements TextContainer {
     /** Name of the prompt tag. */
     public static final String TAG_NAME = "prompt";
@@ -194,7 +194,7 @@ public final class Prompt
      * @param factory
      *            The node factory to use.
      */
-    private Prompt(final Node n,
+    protected Prompt(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
     }

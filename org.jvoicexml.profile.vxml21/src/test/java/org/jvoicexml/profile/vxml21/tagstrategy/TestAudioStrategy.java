@@ -28,16 +28,11 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import java.net.URI;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.Application;
+import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
-import org.jvoicexml.SpeakableText;
-import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
-import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
-import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.JVoiceXmlApplication;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.ssml.Audio;
@@ -46,6 +41,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link PromptStrategy}.
@@ -54,11 +50,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @version $Revision: 4233 $
  * @since 0.6
  */
-public final class TestAudioStrategy extends TagStrategyTestBase
-    implements SynthesizedOutputListener {
-    /** The queued speakable. */
-    private SpeakableText queuedSpeakable;
-
+public final class TestAudioStrategy extends TagStrategyTestBase {
     /**
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.PromptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
@@ -74,8 +66,9 @@ public final class TestAudioStrategy extends TagStrategyTestBase
         audio.setSrc("godfather.wav");
         audio.addText("the godfather");
 
-        setSystemOutputListener(this);
         final AudioTagStrategy strategy = new AudioTagStrategy();
+        final ImplementationPlatform platform = getImplementationPlatform();
+        platform.startPromptQueuing();
         executeTagStrategy(audio, strategy);
 
         final SsmlDocument ssml = new SsmlDocument();
@@ -85,7 +78,7 @@ public final class TestAudioStrategy extends TagStrategyTestBase
         ssmlAudio.addText("the godfather");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Assert.assertEquals(speakable, queuedSpeakable);
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
     }
 
     /**
@@ -106,13 +99,14 @@ public final class TestAudioStrategy extends TagStrategyTestBase
         audio.setSrc("godfather.wav");
         audio.addText("the godfather");
 
-        setSystemOutputListener(this);
         final Application application = new JVoiceXmlApplication(null);
         final VoiceXmlInterpreterContext ctx = getContext();
         ctx.process(application);
         final URI uri = new URI("http://acme.com/start.vxml");
         application.addDocument(uri, document);
         final AudioTagStrategy strategy = new AudioTagStrategy();
+        final ImplementationPlatform platform = getImplementationPlatform();
+        platform.startPromptQueuing();
         executeTagStrategy(audio, strategy);
 
         final SsmlDocument ssml = new SsmlDocument();
@@ -122,23 +116,6 @@ public final class TestAudioStrategy extends TagStrategyTestBase
         ssmlAudio.addText("the godfather");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Assert.assertEquals(speakable, queuedSpeakable);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void outputStatusChanged(final SynthesizedOutputEvent event) {
-        if (event.isType(OutputStartedEvent.EVENT_TYPE)) {
-            final OutputStartedEvent started = (OutputStartedEvent) event;
-            queuedSpeakable = started.getSpeakable();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void outputError(final ErrorEvent error) {
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
     }
 }
