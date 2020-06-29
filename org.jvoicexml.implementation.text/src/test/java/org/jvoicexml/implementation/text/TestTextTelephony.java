@@ -21,27 +21,40 @@
 
 package org.jvoicexml.implementation.text;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
+import org.jvoicexml.SpeechRecognizerProperties;
+import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.implementation.NomatchEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
 import org.jvoicexml.event.plain.implementation.SpokenInputEvent;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInputListener;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
+import org.jvoicexml.implementation.grammar.GrammarParser;
+import org.jvoicexml.srgs.SrgsSisrXmlGrammarParser;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -52,6 +65,10 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class TestTextTelephony
         implements TextListener, SpokenInputListener {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(TestTextTelephony.class);
+
     /** Maximal number of milliseconds to wait for a receipt. */
     private static final int MAX_WAIT = 1000;
 
@@ -68,7 +85,7 @@ public final class TestTextTelephony
     private final Object lock;
 
     /** The session id. */
-    private String sessionId;
+    private SessionIdentifier sessionId;
 
     /** Last received object. */
     private SsmlDocument receivedDocument;
@@ -97,7 +114,7 @@ public final class TestTextTelephony
         telephony.connect(client);
         server.waitConnected();
         receivedDocument = null;
-        sessionId = UUID.randomUUID().toString();
+        sessionId = new UuidSessionIdentifier();
     }
 
     /**
@@ -148,9 +165,11 @@ public final class TestTextTelephony
     @Test(timeout = 5000)
     public void testRecord() throws Exception, JVoiceXMLEvent {
         final TextSpokenInput textInput = new TextSpokenInput();
-        textInput.startRecognition(null, null, null);
+        final SpeechRecognizerProperties speech =
+                new SpeechRecognizerProperties();
+        textInput.startRecognition(null, speech, null);
         textInput.addListener(this);
-        final String utterance = "testRecord";
+        final String utterance = "one";
         mockGrammarChecker(textInput, utterance);
         telephony.record(textInput, null);
         Assert.assertTrue(telephony.isBusy());
@@ -171,20 +190,30 @@ public final class TestTextTelephony
      *            the input to use the mocked grammar
      * @param utterance
      *            the valid text to be allowed in grammar
+     * @throws URISyntaxException 
+     *          error obtaining the URI from the test grammar
+     * @throws IOException 
+     *          error loading the test grammar
      * @since 0.7.6
      */
     private void mockGrammarChecker(final TextSpokenInput textInput,
             final String utterance)
-            throws JVoiceXMLEvent, ParserConfigurationException {
-        SrgsXmlDocument doc = new SrgsXmlDocument();
-        doc.setGrammarSimple("mock", utterance);
-        // final SrgsXmlGrammarImplementation impl = new
-        // SrgsXmlGrammarImplementation(
-        // doc, null);
-        // final Collection<GrammarImplementation<?>> grammars;
-        // grammars = new java.util.ArrayList<>();
-        // grammars.add(impl);
-        // textInput.activateGrammars(grammars);
+            throws JVoiceXMLEvent, ParserConfigurationException,
+                URISyntaxException, IOException {
+        final List<GrammarParser<?>> parsers =
+                new java.util.ArrayList<GrammarParser<?>>();
+        final SrgsSisrXmlGrammarParser parser = new SrgsSisrXmlGrammarParser();
+        parsers.add(parser);
+        textInput.setGrammarParsers(parsers);
+        final URL url = 
+                TestTextSenderThread.class.getResource("/SimpleGrammar.srgs");
+        final URI uri = url.toURI();
+        final GrammarImplementation<?> impl = 
+                textInput.loadGrammar(uri, GrammarType.SRGS_XML);
+        final Collection<GrammarImplementation<?>> grammars;
+        grammars = new java.util.ArrayList<>();
+        grammars.add(impl);
+        textInput.activateGrammars(grammars);
     }
 
     /**
@@ -225,6 +254,11 @@ public final class TestTextTelephony
             final RecognitionEvent recEvent = (RecognitionEvent) event;
             receivedResult = (TextRecognitionResult) recEvent
                     .getRecognitionResult();
+            synchronized (lock) {
+                lock.notifyAll();
+            }
+        } else if (type.equals(NomatchEvent.EVENT_TYPE)) {
+            LOGGER.warn("received a no match");
             synchronized (lock) {
                 lock.notifyAll();
             }

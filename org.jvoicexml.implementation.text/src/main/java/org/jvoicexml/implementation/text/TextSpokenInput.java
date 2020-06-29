@@ -121,7 +121,8 @@ final class TextSpokenInput implements SpokenInput {
     public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
         for (GrammarParser<?> parser : grammarParsers) {
             final GrammarType type = parser.getType();
-            parsers.put(type.toString(), parser);
+            final String mimeType = type.toString();
+            parsers.put(mimeType, parser);
         }
     }
 
@@ -197,7 +198,8 @@ final class TextSpokenInput implements SpokenInput {
     public GrammarImplementation<?> loadGrammar(final URI uri,
             final GrammarType type) throws NoresourceError, IOException,
             UnsupportedFormatError {
-        final GrammarParser<?> parser = parsers.get(type.getType());
+        final String mimeType = type.toString();
+        final GrammarParser<?> parser = parsers.get(mimeType);
         if (parser == null) {
             throw new UnsupportedFormatError("'" + type + "' is not supported");
         }
@@ -307,7 +309,6 @@ final class TextSpokenInput implements SpokenInput {
         if (!recognizing || (listener == null)) {
             return;
         }
-
         LOGGER.info("received utterance '" + text + "'");
 
         final SpokenInputEvent inputStartedEvent = new InputStartedEvent(this,
