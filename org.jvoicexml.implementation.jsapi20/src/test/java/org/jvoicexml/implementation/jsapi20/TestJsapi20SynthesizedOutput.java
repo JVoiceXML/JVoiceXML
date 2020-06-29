@@ -70,7 +70,7 @@ public final class TestJsapi20SynthesizedOutput {
         Logger.getLogger(TestJsapi20SynthesizedOutput.class);
 
     /** Timeout to wait for the listener. */
-    private static final int TIMEOUT = 1000;
+    private static final int TIMEOUT = 5000;
 
     /** The test object. */
     private Jsapi20SynthesizedOutput output;
@@ -94,7 +94,7 @@ public final class TestJsapi20SynthesizedOutput {
     @BeforeClass
     public static void init() throws EngineException, IOException {
         final TestProperties properties = new TestProperties();
-        final String factory = properties.get("jsapi2.tts.engineListFactory");
+        final String factory = properties.get("JVOICEXML_IMPLEMENTATION_JSAPI20_TTS_ENGINE_LIST_FACTORY");
         LOGGER.info("registering engine factory: '" + factory + "'");
         EngineManager.registerEngineListFactory(factory);
         System.setProperty("java.library.path", "3rdparty/jsr113jsebase/lib");
