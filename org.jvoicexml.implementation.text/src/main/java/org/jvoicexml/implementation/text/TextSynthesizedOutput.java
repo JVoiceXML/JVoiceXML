@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -46,6 +41,7 @@ import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.vxml.BargeInType;
+import org.jvoicexml.xml.vxml.PriorityType;
 
 /**
  * Text based implementation for a {@link SynthesizedOutput}.
@@ -152,6 +148,19 @@ final class TextSynthesizedOutput
             o = speakable.getSpeakableText();
         }
 
+        final PriorityType priority = speakable.getPriority();
+        if (priority.equals(PriorityType.PREPEND)) {
+            LOGGER.debug("priority '" + PriorityType.PREPEND 
+                    + "' not supported. Appending instead.");
+            
+        }
+        if (priority.equals(PriorityType.CLEAR)) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("priority '" + PriorityType.CLEAR 
+                        + "': clearing queue");
+            }
+            texts.clear();
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("queuing object " + o);
         }
