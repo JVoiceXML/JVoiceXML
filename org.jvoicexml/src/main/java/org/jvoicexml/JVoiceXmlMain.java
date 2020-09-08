@@ -21,6 +21,7 @@
 
 package org.jvoicexml;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -158,14 +159,28 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
      * @since 0.7.9
      */
     private void reportEnvironmentInformation() {
+        // Get JRE info
         final Package pkg = Runtime.class.getPackage();
         final String version = pkg.getImplementationVersion();
         final String vendor = pkg.getImplementationVendor();
         final String title = pkg.getImplementationTitle();
         LOGGER.info("Java:\t\t\t" + title + " " + version);
         LOGGER.info("Java vendor:\t\t" + vendor);
+        
+        // Get OS info
         final String os = System.getProperty("os.name", "generic");
         LOGGER.info("Operating system:\t" + os);
+        
+        // Check the security policy
+        final String policy = System.getProperty("java.security.policy");
+        final File policyFile = new File(policy);
+        if (policyFile.exists()) {
+            LOGGER.info("java.security.policy:\t" + policy);
+        } else {
+            LOGGER.info("java.security.policy:\t" + policy + " (not found)");
+        }
+
+        // Get classloader info
         if (LOGGER.isDebugEnabled()) {
             final ClassLoader loader = getClass().getClassLoader();
             LOGGER.debug("Class loader: " + loader);
