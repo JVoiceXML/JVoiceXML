@@ -81,8 +81,9 @@ public interface Application {
      * @return URI of the application.
      * 
      * @since 0.6
+     * @exception BadFetchError error obtaining the application
      */
-    URI getApplication();
+    URI getApplication() throws BadFetchError ;
 
     /**
      * Sets the new root document.
@@ -117,8 +118,9 @@ public interface Application {
      * @param uri
      *            the URI to resolve.
      * @return Hierarchical URI.
+     * @exception error resolving the URI
      */
-    URI resolve(final URI uri);
+    URI resolve(final URI uri) throws BadFetchError;
 
     /**
      * Converts the given {@link URI} into a hierarchical URI. If the given
@@ -130,8 +132,9 @@ public interface Application {
      * @param uri
      *            the URI to resolve.
      * @return Hierarchical URI.
+     * @throws BadFetchError 
      */
-    URI resolve(final URI baseUri, final URI uri);
+    URI resolve(final URI baseUri, final URI uri) throws BadFetchError;
 
     /**
      * Sets the last result.
