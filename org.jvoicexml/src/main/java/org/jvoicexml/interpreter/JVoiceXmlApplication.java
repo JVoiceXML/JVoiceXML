@@ -170,7 +170,8 @@ public final class JVoiceXmlApplication
     /**
      * {@inheritDoc}
      */
-    public URI getApplication() {
+    @Override
+    public URI getApplication() throws BadFetchError {
         return resolve(application);
     }
 
@@ -191,7 +192,8 @@ public final class JVoiceXmlApplication
     /**
      * {@inheritDoc}
      */
-    public URI resolve(final URI uri) {
+    @Override
+    public URI resolve(final URI uri) throws BadFetchError {
         return resolve(baseUri, uri);
     }
 
@@ -219,7 +221,8 @@ public final class JVoiceXmlApplication
     /**
      * {@inheritDoc}
      */
-    public URI resolve(final URI base, final URI uri) {
+    @Override
+    public URI resolve(final URI base, final URI uri) throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("resolving URI '" + uri + "'...");
         }
@@ -247,7 +250,26 @@ public final class JVoiceXmlApplication
             currentBase = base;
         }
 
-        final URI resolvedUri = currentBase.resolve(uri);
+        final String host = currentBase.getHost();
+        final URI resolvedUri;
+        // Check if we have a relative URI
+        if ((host == null) && !uri.isAbsolute()) {
+            final String scheme = currentBase.getScheme();
+            final String path = uri.getSchemeSpecificPart();
+            if (path.isEmpty()) {
+                resolvedUri = currentBase.resolve(uri);
+            } else {
+                try {
+                    resolvedUri = new URI(scheme + "://" + path);
+                } catch (URISyntaxException e) {
+                    throw new BadFetchError(e.getMessage(), e);
+                }
+            }
+        } else {
+            resolvedUri = currentBase.resolve(uri);
+        }
+        
+//        final URI resolvedUri = currentBase.resolve(uri);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("resolved to '" + resolvedUri + "'");
