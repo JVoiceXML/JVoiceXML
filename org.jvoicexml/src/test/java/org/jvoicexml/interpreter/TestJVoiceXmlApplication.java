@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -187,5 +187,59 @@ public final class TestJVoiceXmlApplication  {
         final URI relativeUri = new URI("relative.vxml");
         final URI testUri = new URI("res://relative.vxml");
         Assert.assertEquals(testUri, application.resolve(relativeUri));
+    }
+   
+    /**
+     * Test method for
+     * 'JVoiceXmlApplication.resolve()' with a fragment only.
+     *
+     * @see JVoiceXmlApplication#resolve(URI)
+     * @exception JVoiceXMLEvent
+     *            test failed
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testResolveFragmentOnly() throws JVoiceXMLEvent, Exception {
+        final Application application = new JVoiceXmlApplication(observer);
+        final VoiceXmlDocument doc1 = new VoiceXmlDocument();
+        final Vxml vxml1 = doc1.getVxml();
+        final URI testUri1 =
+            createUri("scheme", "host", "/path/subpath", null);
+        vxml1.setXmlBase(testUri1);
+        application.addDocument(testUri1, doc1);
+        final URI testUriFragmentOnly =
+                createUri(null, null, null, "fragment");
+        URI testUri = new URI("scheme://host/path/subpath#fragment");
+        Assert.assertEquals(testUri, application.resolve(testUriFragmentOnly));
+    }
+
+    /**
+     * Test method for
+     * 'JVoiceXmlApplication.resolve()' with a fragment only.
+     *
+     * @see JVoiceXmlApplication#resolve(URI)
+     * @exception JVoiceXMLEvent
+     *            test failed
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testResolveFragmentOnlyFile() throws JVoiceXMLEvent, Exception {
+        final URI u = new URI("http://java.sun.com/j2se/1.3");
+        System.out.println(u.getHost());
+        System.out.println(u.getSchemeSpecificPart());
+        final Application application = new JVoiceXmlApplication(observer);
+        final VoiceXmlDocument doc1 = new VoiceXmlDocument();
+        final Vxml vxml1 = doc1.getVxml();
+        final URI testUri1 = new URI(
+                "file:/C:/Users/dwalka/Documents/git/JVoiceXML/org.jvoicexml.demo.subdialogdemo/build/resources/main/subdialog.vxml");
+        vxml1.setXmlBase(testUri1);
+        application.addDocument(testUri1, doc1);
+        final URI testUriFragmentOnly =
+                createUri(null, null, null, "fragment");
+        URI testUri = new URI(
+                "file:/C:/Users/dwalka/Documents/git/JVoiceXML/org.jvoicexml.demo.subdialogdemo/build/resources/main/subdialog.vxml#fragment");
+        Assert.assertEquals(testUri, application.resolve(testUriFragmentOnly));
     }
 }

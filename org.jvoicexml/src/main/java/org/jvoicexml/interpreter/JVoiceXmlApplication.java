@@ -260,18 +260,23 @@ public final class JVoiceXmlApplication
 
         final String host = currentBase.getHost();
         final URI resolvedUri;
+        // Check if we have a relative URI
         if ((host == null) && !uri.isAbsolute()) {
             final String scheme = currentBase.getScheme();
             final String path = uri.getSchemeSpecificPart();
-            try {
-                resolvedUri = new URI(scheme + "://" + path);
-            } catch (URISyntaxException e) {
-                throw new BadFetchError(e.getMessage(), e);
+            if (path.isEmpty()) {
+                resolvedUri = currentBase.resolve(uri);
+            } else {
+                try {
+                    resolvedUri = new URI(scheme + "://" + path);
+                } catch (URISyntaxException e) {
+                    throw new BadFetchError(e.getMessage(), e);
+                }
             }
         } else {
             resolvedUri = currentBase.resolve(uri);
         }
-
+        
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("resolved to '" + resolvedUri + "'");
         }
