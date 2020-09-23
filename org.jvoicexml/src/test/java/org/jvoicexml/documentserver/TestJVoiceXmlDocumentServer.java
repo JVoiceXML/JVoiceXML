@@ -141,7 +141,7 @@ public final class TestJVoiceXmlDocumentServer {
      */
     @Test
     public void testGetObjectBinary() throws JVoiceXMLEvent, Exception {
-        final URI uri = new URI("res://test.wav");
+        final URI uri = new URI("res:/test.wav");
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri, null);
         final Object object = server.getObject(null, descriptor);
         Assert.assertTrue(object instanceof ReadBuffer);
@@ -181,7 +181,7 @@ public final class TestJVoiceXmlDocumentServer {
      */
     @Test
     public void testGetAudioInputStream() throws Exception, JVoiceXMLEvent {
-        final URI uri = new URI("res://test.wav");
+        final URI uri = new URI("res:/test.wav");
         final Session session = Mockito.mock(Session.class);
         Mockito.when(session.getSessionId()).thenReturn(
                 new UuidSessionIdentifier());

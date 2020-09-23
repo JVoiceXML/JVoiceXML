@@ -101,7 +101,7 @@ public final class TestAudioStrategy extends TagStrategyTestBase {
 
         final Application application = new JVoiceXmlApplication(null);
         final VoiceXmlInterpreterContext ctx = getContext();
-        ctx.process(application);
+        Mockito.when(ctx.getApplication()).thenReturn(application);
         final URI uri = new URI("http://acme.com/start.vxml");
         application.addDocument(uri, document);
         final AudioTagStrategy strategy = new AudioTagStrategy();

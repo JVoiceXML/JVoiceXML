@@ -74,7 +74,7 @@ public class JVoiceXmlDataStrategyTest extends TagStrategyTestBase {
         var.setName(name);
         final Block block = createBlock(doc);
         final JVoiceXmlData data = block.appendChild(JVoiceXmlData.class);
-        data.setSrc("res://address.json");
+        data.setSrc("res:/address.json");
         data.setName(name);
         data.setType(DocumentDescriptor.MIME_TYPE_JSON);
 

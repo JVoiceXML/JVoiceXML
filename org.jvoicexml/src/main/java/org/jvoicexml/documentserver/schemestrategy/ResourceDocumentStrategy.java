@@ -65,7 +65,7 @@ public final class ResourceDocumentStrategy implements SchemeStrategy {
         if (uri == null) {
             throw new BadFetchError("Unable to retrieve a document for null!");
         }
-        final String path = uri.getSchemeSpecificPart().substring(1);
+        final String path = uri.getSchemeSpecificPart();
         final InputStream in = ResourceDocumentStrategy.class
                 .getResourceAsStream(path);
         if (in == null) {

@@ -124,7 +124,7 @@ public final class TestValueStrategy extends TagStrategyTestBase {
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
         speak.addText("this is a test");
-        final SpeakableText speakable = new SpeakableSsmlText(ssml);
+        final SpeakableText speakable = new SpeakableSsmlText(ssml, false, null);
         final ImplementationPlatform platform = getContext()
                 .getImplementationPlatform();
         Mockito.verify(platform).queuePrompt(speakable);

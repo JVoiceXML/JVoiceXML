@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2019-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,8 +28,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.error.BadFetchError;
 
-
-
 /**
  * Test cases for {@link ResourceDocumentStrategy}.
  * @author Dirk SchnelleWalka
@@ -44,7 +42,7 @@ public class ResourceDocumentStrategyTest {
      */
     @Test
     public void testGetInputStream() throws URISyntaxException, BadFetchError {
-        final URI uri = new URI("res://irp_srgs10/conformance-1.grxml");
+        final URI uri = new URI("res:/irp_srgs10/conformance-1.grxml");
         final ResourceDocumentStrategy strategy = new ResourceDocumentStrategy();
         final InputStream in = strategy.getInputStream(null, uri, null, 0, null);
         Assert.assertNotNull(in);
@@ -57,7 +55,7 @@ public class ResourceDocumentStrategyTest {
      */
     @Test
     public void testGetInputStreamFragment() throws URISyntaxException, BadFetchError {
-        final URI uri = new URI("res://irp_srgs10/conformance-1.grxml#main");
+        final URI uri = new URI("res:/irp_srgs10/conformance-1.grxml#main");
         final ResourceDocumentStrategy strategy = new ResourceDocumentStrategy();
         final InputStream in = strategy.getInputStream(null, uri, null, 0, null);
         Assert.assertNotNull(in);

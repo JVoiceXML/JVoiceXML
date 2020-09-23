@@ -64,7 +64,7 @@ public final class TestScriptStrategy extends TagStrategyTestBase {
         final JVoiceXmlDocumentServer server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
         server.addSchemeStrategy(new ResourceDocumentStrategy());
-        uri = new URI("res://factorial.js");
+        uri = new URI("res:/factorial.js");
         final VoiceXmlInterpreterContext context = getContext();
         Mockito.when(context.getDocumentServer()).thenReturn(server);
     }
@@ -132,9 +132,9 @@ public final class TestScriptStrategy extends TagStrategyTestBase {
     public void testExecuteRelativeSrc() throws JVoiceXMLEvent, Exception {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
-        final URI uri = new URI("res://root.vxml");
+        final URI uri = new URI("res:/root.vxml");
         vxml.setApplication(uri);
-        final URI base = new URI("res:///");
+        final URI base = new URI("res:/");
         vxml.setXmlBase(base);
         final Script script = vxml.appendChild(Script.class);
         script.setSrc("factorial.js");

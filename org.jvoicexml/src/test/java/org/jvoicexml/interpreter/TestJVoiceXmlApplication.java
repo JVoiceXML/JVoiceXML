@@ -176,16 +176,16 @@ public final class TestJVoiceXmlApplication  {
      * @since 0.7.9
      */
     @Test
-    public void testResolveNullHostUri() throws Exception, JVoiceXMLEvent {
+    public void testResolveResourcetUri() throws Exception, JVoiceXMLEvent {
         final Application application = new JVoiceXmlApplication(observer);
-        final URI uri = new URI("res://root.vxml");
+        final URI uri = new URI("res:/root.vxml");
         VoiceXmlDocument doc1 = new VoiceXmlDocument();
         final Vxml vxml1 = doc1.getVxml();
-        final URI base = new URI("res:///");
+        final URI base = new URI("res:/");
         vxml1.setXmlBase(base);
         application.addDocument(uri, doc1);
         final URI relativeUri = new URI("relative.vxml");
-        final URI testUri = new URI("res://relative.vxml");
+        final URI testUri = new URI("res:/relative.vxml");
         Assert.assertEquals(testUri, application.resolve(relativeUri));
     }
    

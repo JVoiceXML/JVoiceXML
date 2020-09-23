@@ -158,7 +158,7 @@ public final class TestGrammarProcessor {
         final Grammar grammar = document.getGrammar();
         grammar.setType(GrammarType.SRGS_XML);
         grammar.setRoot("city");
-        grammar.setSrc("res://irp_srgs10/conformance-1.grxml");
+        grammar.setSrc("res:/irp_srgs10/conformance-1.grxml");
         final GrammarDocument processed = processor.process(context, null,
                 grammar, Locale.US);
         final GrammarType type = processed.getMediaType();
@@ -180,7 +180,7 @@ public final class TestGrammarProcessor {
         final Grammar grammar = document.getGrammar();
         grammar.setType(GrammarType.SRGS_XML);
         grammar.setRoot("city");
-        grammar.setSrc("res://irp_srgs10/conformance-1.grxml#main");
+        grammar.setSrc("res:/irp_srgs10/conformance-1.grxml#main");
         final GrammarDocument processed = processor.process(context, null,
                 grammar, Locale.US);
 
