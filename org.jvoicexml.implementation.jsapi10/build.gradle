@@ -35,7 +35,7 @@ dependencies {
     //compile fileTree(dir: './3rdparty/sphinx4/lib', include: ['*.jar'])
     compile fileTree(dir: "./3rdparty/talkingjava/lib", include: ['*.jar'])
     
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'junit', name: 'junit', version: '4.13.1'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     testCompile project(path: ':org.jvoicexml', configuration: 'testArtifacts')
     //testCompile fileTree(dir: "${project(':org.jvoicexml').projectDir}/3rdparty/freetts1.2/lib", include: ['*.jar'])
