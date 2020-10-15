@@ -6,8 +6,6 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
     if (project.property('JVOICEXML_DEVELOPMENT_ENVIRONMENT') == 'true') {
         compile project(':org.jvoicexml.client')
         compile project(':org.jvoicexml.xml')

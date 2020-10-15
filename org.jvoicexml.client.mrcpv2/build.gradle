@@ -39,9 +39,7 @@ configurations.all {
 dependencies {
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
-    
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
+
     compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.client', version: '0.3.1-SNAPSHOT'
 }
 
