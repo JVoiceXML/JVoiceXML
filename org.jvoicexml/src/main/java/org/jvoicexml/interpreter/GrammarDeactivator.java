@@ -86,6 +86,10 @@ class GrammarDeactivator implements ActiveGrammarSetObserver, EventSubscriber {
      * @since 0.7.9
      */
     private void deactivateGramars(final Collection<GrammarDocument> grammars) {
+        if (platform.isClosed()) {
+            LOGGER.debug("hungup: skip deactivation of grammars");
+            return;
+        }
         try {
             final UserInput input = platform.getUserInput();
             if (LOGGER.isDebugEnabled()) {
