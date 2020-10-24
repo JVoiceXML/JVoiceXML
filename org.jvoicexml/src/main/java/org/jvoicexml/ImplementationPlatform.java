@@ -126,6 +126,14 @@ public interface ImplementationPlatform extends PromptAccumulator {
     void close();
 
     /**
+     * Checks if this platform is closed.
+     * @return {@code true} if this platform is closed
+     * @since 0.7.9
+     */
+    boolean isClosed();
+
+    
+    /**
      * Sets the event bus to communicate events back to the interpreter.
      * @param bus the event bus
      *

@@ -257,7 +257,8 @@ public final class JVoiceXmlImplementationPlatform
      * @return {@code true} if the platform has been closed
      * @since 0.7.9
      */
-    boolean isClosed() {
+    @Override
+    public boolean isClosed() {
         return closed;
     }
     

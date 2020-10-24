@@ -207,4 +207,10 @@ public final class MockImplementationPlatform
         // TODO Auto-generated method stub
         return false;
     }
+
+    @Override
+    public boolean isClosed() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

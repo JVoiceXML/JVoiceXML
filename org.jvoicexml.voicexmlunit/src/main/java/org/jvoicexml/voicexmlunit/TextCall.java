@@ -33,12 +33,12 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.jvoicexml.DtmfInput;
 import org.jvoicexml.ConnectionInformation;
-import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.DtmfInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
+import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
@@ -152,7 +152,8 @@ public final class TextCall implements Call {
         try {
             lastError = null;
             final Context context = new InitialContext();
-            final JVoiceXml jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+            final RemoteJVoiceXml jvxml =
+                    (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
 
             // Start the text server
             server.start();
