@@ -1,63 +1,63 @@
-include 'org.jvoicexml', \
-    'org.jvoicexml.config', \
-    'org.jvoicexml.demo.embedded', \
-    'org.jvoicexml.demo.gotodemo', \
-    'org.jvoicexml.demo.helloworlddemo', \
-    'org.jvoicexml.demo.helloworldservletdemo', \
-    'org.jvoicexml.demo.helloworldservletdemo.servlet', \
-    'org.jvoicexml.demo.inputdemo', \
-    'org.jvoicexml.demo.jtapidemo', \
-    'org.jvoicexml.demo.luis', \
-    'org.jvoicexml.demo.marcdemo', \
-    'org.jvoicexml.demo.mixedinitiativedemo', \
-    'org.jvoicexml.demo.mmi.simpledemo', \
-    'org.jvoicexml.demo.objecttagdemo', \
-    'org.jvoicexml.demo.recorddemo', \
-    'org.jvoicexml.demo.scriptdemo', \
-    'org.jvoicexml.demo.simpleinputdemo', \
-    'org.jvoicexml.demo.subdialogdemo', \
-    'org.jvoicexml.demo.talkingheaddemo', \
-    'org.jvoicexml.demo.textdemo', \
-    'org.jvoicexml.demo.voicexmlcreationdemo', \
-    'org.jvoicexml.documentserver.jetty', \
-    'org.jvoicexml.documentserver.schemestrategy.file', \
-    'org.jvoicexml.documentserver.schemestrategy.http', \
-    'org.jvoicexml.jndi', \
-    'org.jvoicexml.interpreter.datamodel.ecmascript',
-    'org.jvoicexml.interpreter.grammar.halef', \
-    'org.jvoicexml.interpreter.grammar.luis', \
-    'org.jvoicexml.interpreter.grammar.regex', \
-    'org.jvoicexml.client', \
-    'org.jvoicexml.client.mrcpv2', \
-    'org.jvoicexml.client.text', \
-    'org.jvoicexml.srgs', \
-    'org.jvoicexml.mmi.events', \
-    'org.jvoicexml.profile.mmi', \
-    'org.jvoicexml.profile.vxml21', \
-    'org.jvoicexml.implementation.jsapi10', \
-    'org.jvoicexml.implementation.jsapi20', \
-    'org.jvoicexml.implementation.jtapi', \
-    'org.jvoicexml.implementation.kinect', \
-    'org.jvoicexml.implementation.lightweightbml', \
-    'org.jvoicexml.implementation.marc', \
-    'org.jvoicexml.implementation.mary', \
-    'org.jvoicexml.implementation.mrcpv2', \
-    'org.jvoicexml.implementation.text', \
-    'org.jvoicexml.callmanager.mmi', \
-    'org.jvoicexml.callmanager.mmi.http', \
-    'org.jvoicexml.callmanager.mmi.servlet', \
-    'org.jvoicexml.callmanager.mmi.socket', \
-    'org.jvoicexml.callmanager.mmi.umundo', \
-    'org.jvoicexml.callmanager.sip', \
-    'org.jvoicexml.callmanager.text', \
-    'org.jvoicexml.systemtest', \
-    'org.jvoicexml.systemtest.servlet', \
-    'org.jvoicexml.talkinghead', \
-    'org.jvoicexml.voicexmlunit', \
-    'org.jvoicexml.voicexmlunit.demo', \
-    'org.jvoicexml.xml', \
-    'org.jvoicexml.zanzibar', \
-    'howtobuild', \
-    'userguide', \
-    'main'
+include 'org.jvoicexml'
+include 'org.jvoicexml.config'
+include 'org.jvoicexml.demo.embedded'
+include 'org.jvoicexml.demo.gotodemo'
+include 'org.jvoicexml.demo.helloworlddemo'
+include 'org.jvoicexml.demo.helloworldservletdemo'
+include 'org.jvoicexml.demo.helloworldservletdemo.servlet'
+include 'org.jvoicexml.demo.inputdemo'
+include 'org.jvoicexml.demo.jtapidemo'
+include 'org.jvoicexml.demo.luis'
+include 'org.jvoicexml.demo.marcdemo'
+include 'org.jvoicexml.demo.mixedinitiativedemo'
+include 'org.jvoicexml.demo.mmi.simpledemo'
+include 'org.jvoicexml.demo.objecttagdemo'
+include 'org.jvoicexml.demo.recorddemo'
+include 'org.jvoicexml.demo.scriptdemo'
+include 'org.jvoicexml.demo.simpleinputdemo'
+include 'org.jvoicexml.demo.subdialogdemo'
+include 'org.jvoicexml.demo.talkingheaddemo'
+include 'org.jvoicexml.demo.textdemo'
+include 'org.jvoicexml.demo.voicexmlcreationdemo'
+include 'org.jvoicexml.documentserver.jetty'
+include 'org.jvoicexml.documentserver.schemestrategy.file'
+include 'org.jvoicexml.documentserver.schemestrategy.http'
+include 'org.jvoicexml.jndi'
+include 'org.jvoicexml.interpreter.datamodel.ecmascript'
+include 'org.jvoicexml.interpreter.grammar.halef'
+include 'org.jvoicexml.interpreter.grammar.luis'
+include 'org.jvoicexml.interpreter.grammar.regex'
+include 'org.jvoicexml.client'
+include 'org.jvoicexml.client.mrcpv2'
+include 'org.jvoicexml.client.text'
+include 'org.jvoicexml.srgs'
+include 'org.jvoicexml.mmi.events'
+include 'org.jvoicexml.profile.mmi'
+include 'org.jvoicexml.profile.vxml21'
+include 'org.jvoicexml.implementation.jsapi10'
+include 'org.jvoicexml.implementation.jsapi20'
+include 'org.jvoicexml.implementation.jtapi'
+include 'org.jvoicexml.implementation.kinect'
+include 'org.jvoicexml.implementation.lightweightbml'
+include 'org.jvoicexml.implementation.marc'
+include 'org.jvoicexml.implementation.mary'
+include 'org.jvoicexml.implementation.mrcpv2'
+include 'org.jvoicexml.implementation.text'
+include 'org.jvoicexml.callmanager.mmi'
+include 'org.jvoicexml.callmanager.mmi.http'
+include 'org.jvoicexml.callmanager.mmi.servlet'
+include 'org.jvoicexml.callmanager.mmi.socket'
+include 'org.jvoicexml.callmanager.mmi.umundo'
+include 'org.jvoicexml.callmanager.sip'
+include 'org.jvoicexml.callmanager.text'
+include 'org.jvoicexml.systemtest'
+include 'org.jvoicexml.systemtest.servlet'
+include 'org.jvoicexml.talkinghead'
+include 'org.jvoicexml.voicexmlunit'
+include 'org.jvoicexml.voicexmlunit.demo'
+include 'org.jvoicexml.xml'
+include 'org.jvoicexml.zanzibar'
+include 'howtobuild'
+include 'userguide'
+include 'main'
     
