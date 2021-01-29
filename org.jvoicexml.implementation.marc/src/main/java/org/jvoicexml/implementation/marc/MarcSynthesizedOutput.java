@@ -39,6 +39,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
@@ -47,6 +48,7 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
@@ -405,12 +407,19 @@ public final class MarcSynthesizedOutput
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("queued speakable '" + speakable + "'");
             }
-            if (speakables.size() == 1) {
-                sendNextSpeakable();
-            }
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
+            CallControlProperties callProps) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
+        sendNextSpeakable();
+    }
+    
     /**
      * Sends the next speakable to MARC.
      */

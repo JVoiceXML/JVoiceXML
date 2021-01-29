@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2020 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2020-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,17 +21,17 @@
 package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import org.junit.Test;
-import org.jvoicexml.CallControlProperties;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.JVoiceXmlPrompt;
 import org.jvoicexml.xml.vxml.PriorityType;
-import org.jvoicexml.xml.vxml.Prompt;
 import org.mockito.Mockito;
 
 /**
@@ -68,10 +68,7 @@ public class JVoiceXmlPromptStrategyTest extends TagStrategyTestBase {
 
         final JVoiceXmlPromptStrategy strategy = new JVoiceXmlPromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
-        final CallControlProperties props = new CallControlProperties();
-        platform.renderPrompts(null, null, props);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
@@ -87,7 +84,10 @@ public class JVoiceXmlPromptStrategyTest extends TagStrategyTestBase {
         ssmlAudio3.addText("raiders of the lost ark");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
+        final VoiceXmlInterpreterContext context = getContext();
+        final DocumentServer server = context.getDocumentServer();
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable), 
+                Mockito.eq(server));
     }
     
     /**
@@ -118,10 +118,7 @@ public class JVoiceXmlPromptStrategyTest extends TagStrategyTestBase {
 
         final JVoiceXmlPromptStrategy strategy = new JVoiceXmlPromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
-        final CallControlProperties props = new CallControlProperties();
-        platform.renderPrompts(null, null, props);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
@@ -138,6 +135,9 @@ public class JVoiceXmlPromptStrategyTest extends TagStrategyTestBase {
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
         speakable.setPriority(PriorityType.CLEAR);
-        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
+        final VoiceXmlInterpreterContext context = getContext();
+        final DocumentServer server = context.getDocumentServer();
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable), 
+                Mockito.eq(server));
     }    
 }

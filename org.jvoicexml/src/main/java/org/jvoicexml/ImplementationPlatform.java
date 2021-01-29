@@ -22,6 +22,7 @@
 package org.jvoicexml;
 
 import org.jvoicexml.event.EventBus;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
@@ -45,7 +46,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * @author Dirk Schnelle-Walka
  * @since 0.5.5
  */
-public interface ImplementationPlatform extends PromptAccumulator {
+public interface ImplementationPlatform {
     /**
      * Retrieves the audio output device.
      *
@@ -58,6 +59,41 @@ public interface ImplementationPlatform extends PromptAccumulator {
     SystemOutput getSystemOutput()
         throws NoresourceError, ConnectionDisconnectHangupEvent;
 
+    /**
+     * The {@link SpeakableText} object is offered to the outout device.
+     *
+     * @param speakable
+     *        Text to be spoken.
+     * @param server the document server to use
+     * @exception NoresourceError
+     *            Output device is not available.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
+     * @exception BadFetchError
+     *                A URI within the speakable could not be obtained or a
+     *                parsing error occurred.
+     */
+    void queuePrompt(final SpeakableText speakable, final DocumentServer server)
+            throws BadFetchError, NoresourceError, ConnectionDisconnectHangupEvent;
+
+    
+    /**
+     * Playback all queued prompts.
+     * 
+     * @param server the document server to use
+     * @param callProps properties for the call control
+     * @exception BadFetchError
+     *            error playing back the prompt
+     * @exception NoresourceError
+     *            Output device is not available.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
+     */
+    void playPrompts(final DocumentServer server, 
+            final CallControlProperties callProps)
+            throws BadFetchError, NoresourceError,
+                ConnectionDisconnectHangupEvent;
+    
     /**
      * Delays until all prompts are played. This is needed e.g. for recording
      * to ensure that we do not record and play prompts in parallel.

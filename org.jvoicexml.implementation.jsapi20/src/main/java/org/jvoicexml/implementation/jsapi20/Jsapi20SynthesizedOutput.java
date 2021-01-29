@@ -49,6 +49,7 @@ import javax.speech.synthesis.SynthesizerMode;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
@@ -57,6 +58,7 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.implementation.MarkerReachedEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
@@ -290,22 +292,16 @@ public final class Jsapi20SynthesizedOutput
             } else if (priority.equals(PriorityType.PREPEND)) {
                 queuedSpeakables.add(0, speakable);
             }
-            // Do not process the speakable if there is some ongoing processing
-            if (queuedSpeakables.size() > 1) {
-                return;
-            }
         }
-
-        // Otherwise process the added speakable asynchronous.
-        startSpeaking();
     }
 
     /**
-     * Start processing the queued speakables.
-     * 
-     * @since 0.7.9
+     * {@inheritDoc}
      */
-    private void startSpeaking() {
+    @Override
+    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
+            CallControlProperties callProps) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
         final Runnable runnable = new Runnable() {
             /**
              * {@inheritDoc}

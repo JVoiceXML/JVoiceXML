@@ -25,12 +25,15 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
@@ -123,6 +126,17 @@ public final class MarySynthesizedOutput
         speakableQueueEmpty = false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
+            CallControlProperties callProps) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
+        // TODO Refactor the synthess queue to play only here
+        
+    }
+    
     /**
      * {@inheritDoc}
      */

@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -20,8 +20,6 @@
  */
 
 package org.jvoicexml.mock.implementation;
-
-import java.util.List;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
@@ -59,9 +57,9 @@ public final class MockImplementationPlatform
 
     /** Borrowed call control. */
     private CallControl call;
-
-    /** The queued prompts. */
-    private List<SpeakableText> prompts;
+    
+    /** The session. */
+    private Session session;
 
     /**
      * {@inheritDoc}
@@ -149,6 +147,7 @@ public final class MockImplementationPlatform
      * {@inheritDoc}
      */
     public void setSession(final Session currentSession) {
+        session = currentSession;
     }
 
     /**
@@ -165,52 +164,46 @@ public final class MockImplementationPlatform
         return input != null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void startPromptQueuing() {
-        prompts = null;
-    }
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void queuePrompt(final SpeakableText speakable) {
-        if (prompts == null) {
-            prompts = new java.util.ArrayList<SpeakableText>();
-        }
-        prompts.add(speakable);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void renderPrompts(final SessionIdentifier sessionId,
-            final DocumentServer server, final CallControlProperties callProps)
-            throws BadFetchError, NoresourceError,
-                ConnectionDisconnectHangupEvent {
-        if (prompts == null) {
-            return;
-        }
-        final SystemOutput out = getSystemOutput();
-        for (SpeakableText speakable : prompts) {
-            out.queueSpeakable(speakable, sessionId, server);
-        }
-        prompts = null;
-    }
-
     @Override
     public boolean isHungup() {
         // TODO Auto-generated method stub
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isClosed() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void queuePrompt(SpeakableText speakable, DocumentServer server)
+            throws BadFetchError, NoresourceError,
+            ConnectionDisconnectHangupEvent {
+        final SystemOutput out = getSystemOutput();
+        final SessionIdentifier sessionId = session.getSessionId();
+        out.queueSpeakable(speakable, sessionId, server);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void playPrompts(DocumentServer server,
+            CallControlProperties callProps) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
+        final SystemOutput out = getSystemOutput();
+        final SessionIdentifier sessionId = session.getSessionId();
+        out.playPrompts(sessionId, server, null);
     }
 }

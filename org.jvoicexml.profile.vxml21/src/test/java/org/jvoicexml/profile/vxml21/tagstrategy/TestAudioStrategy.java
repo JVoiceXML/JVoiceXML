@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/unittests/src/org/jvoicexml/interpreter/tagstrategy/TestAudioStrategy.java $
- * Version: $LastChangedRevision: 4233 $
- * Date:    $Date: 2014-09-02 09:14:31 +0200 (Tue, 02 Sep 2014) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,6 +25,7 @@ import java.net.URI;
 
 import org.junit.Test;
 import org.jvoicexml.Application;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -68,7 +64,6 @@ public final class TestAudioStrategy extends TagStrategyTestBase {
 
         final AudioTagStrategy strategy = new AudioTagStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing();
         executeTagStrategy(audio, strategy);
 
         final SsmlDocument ssml = new SsmlDocument();
@@ -78,7 +73,10 @@ public final class TestAudioStrategy extends TagStrategyTestBase {
         ssmlAudio.addText("the godfather");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
+        final VoiceXmlInterpreterContext context = getContext();
+        final DocumentServer server = context.getDocumentServer();
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable), 
+                Mockito.eq(server));
     }
 
     /**
@@ -106,7 +104,6 @@ public final class TestAudioStrategy extends TagStrategyTestBase {
         application.addDocument(uri, document);
         final AudioTagStrategy strategy = new AudioTagStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing();
         executeTagStrategy(audio, strategy);
 
         final SsmlDocument ssml = new SsmlDocument();
@@ -116,6 +113,9 @@ public final class TestAudioStrategy extends TagStrategyTestBase {
         ssmlAudio.addText("the godfather");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
+        final VoiceXmlInterpreterContext context = getContext();
+        final DocumentServer server = context.getDocumentServer();
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable), 
+                Mockito.eq(server));
     }
 }

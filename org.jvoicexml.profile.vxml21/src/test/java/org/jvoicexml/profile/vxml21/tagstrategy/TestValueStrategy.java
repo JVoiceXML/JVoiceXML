@@ -23,6 +23,7 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
@@ -127,6 +128,9 @@ public final class TestValueStrategy extends TagStrategyTestBase {
         final SpeakableText speakable = new SpeakableSsmlText(ssml, false, null);
         final ImplementationPlatform platform = getContext()
                 .getImplementationPlatform();
-        Mockito.verify(platform).queuePrompt(speakable);
+        final VoiceXmlInterpreterContext context = getContext();
+        final DocumentServer server = context.getDocumentServer();
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable), 
+                Mockito.eq(server));
     }
 }
