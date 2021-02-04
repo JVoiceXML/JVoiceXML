@@ -85,6 +85,8 @@ public final class TestFormInterpretationAlgorithm {
     /** The mock profile. */
     private Profile profile;
 
+    private JVoiceXMLEvent fiaError;
+
     /**
      * Set up the test environment.
      * 
@@ -95,6 +97,7 @@ public final class TestFormInterpretationAlgorithm {
      */
     @Before
     public void setUp() throws Exception, JVoiceXMLEvent {
+        fiaError = null;
         platform = Mockito.mock(ImplementationPlatform.class);
         final UserInput input = Mockito.mock(UserInput.class);
         Mockito.when(platform.getUserInput()).thenReturn(input);
@@ -245,7 +248,7 @@ public final class TestFormInterpretationAlgorithm {
                     if (e instanceof CancelEvent) {
                         return;
                     }
-                    Assert.fail(e.getMessage());
+                    fiaError = e;
                 }
             };
         };
@@ -255,6 +258,12 @@ public final class TestFormInterpretationAlgorithm {
         Mockito.verify(input, Mockito.after(500)).activateGrammars(activeGrammarCaptor.capture());
         Assert.assertEquals(1, activeGrammarCaptor.getValue().size());
         final EventHandler handler = context.getEventHandler();
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
         final JVoiceXMLEvent event = new CancelEvent();
         handler.onEvent(event);
     }
@@ -301,7 +310,7 @@ public final class TestFormInterpretationAlgorithm {
                     if (e instanceof CancelEvent) {
                         return;
                     }
-                    Assert.fail(e.getMessage());
+                    fiaError = e;
                 }
             };
         };
@@ -317,6 +326,12 @@ public final class TestFormInterpretationAlgorithm {
         Thread.sleep(500);
         Mockito.verify(input, Mockito.times(2)).activateGrammars(activeGrammarCaptor2.capture());
         Assert.assertEquals(1, activeGrammarCaptor2.getValue().size());
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
         final JVoiceXMLEvent cancel = new CancelEvent();
         handler.onEvent(cancel);
     }
@@ -374,7 +389,7 @@ public final class TestFormInterpretationAlgorithm {
                     if (e instanceof CancelEvent) {
                         return;
                     }
-                    Assert.fail(e.getMessage());
+                    fiaError = e;
                 }
             };
         };
@@ -391,6 +406,12 @@ public final class TestFormInterpretationAlgorithm {
         final JVoiceXMLEvent recognitionEvent = new RecognitionEvent(null,
                 null, result);
         handler.onEvent(recognitionEvent);
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
         final JVoiceXMLEvent cancel = new CancelEvent();
         handler.onEvent(cancel);
     }
@@ -435,7 +456,7 @@ public final class TestFormInterpretationAlgorithm {
                     if (e instanceof CancelEvent) {
                         return;
                     }
-                    Assert.fail(e.getMessage());
+                    fiaError = e;
                 }
             };
         };
@@ -445,6 +466,12 @@ public final class TestFormInterpretationAlgorithm {
         Mockito.verify(input, Mockito.after(500)).activateGrammars(activeGrammarCaptor.capture());
         Assert.assertEquals(1, activeGrammarCaptor.getValue().size());
         final EventHandler handler = context.getEventHandler();
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
         final JVoiceXMLEvent event = new CancelEvent();
         handler.onEvent(event);
     }
@@ -491,7 +518,7 @@ public final class TestFormInterpretationAlgorithm {
                     if (e instanceof CancelEvent) {
                         return;
                     }
-                    Assert.fail(e.getMessage());
+                    fiaError = e;
                 }
             };
         };
@@ -507,6 +534,12 @@ public final class TestFormInterpretationAlgorithm {
         Thread.sleep(500);
         Mockito.verify(input, Mockito.times(2)).activateGrammars(activeGrammarCaptor2.capture());
         Assert.assertEquals(1, activeGrammarCaptor2.getValue().size());
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
         final JVoiceXMLEvent cancel = new CancelEvent();
         handler.onEvent(cancel);
     }
@@ -561,7 +594,7 @@ public final class TestFormInterpretationAlgorithm {
                     if (e instanceof CancelEvent) {
                         return;
                     }
-                    Assert.fail(e.getMessage());
+                    fiaError = e;
                 }
             };
         };
@@ -587,6 +620,15 @@ public final class TestFormInterpretationAlgorithm {
         }
         Mockito.verify(input).activateGrammars(
                 Mockito.anyCollectionOf(GrammarDocument.class));
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
+        final EventHandler handler = context.getEventHandler();
+        final JVoiceXMLEvent cancel = new CancelEvent();
+        handler.onEvent(cancel);       
     }
 
     /**
@@ -630,7 +672,7 @@ public final class TestFormInterpretationAlgorithm {
                     if (e instanceof CancelEvent) {
                         return;
                     }
-                    Assert.fail(e.getMessage());
+                    fiaError = e;
                 }
             };
         };
@@ -639,7 +681,16 @@ public final class TestFormInterpretationAlgorithm {
         ArgumentCaptor<Collection> activeGrammarCaptor = ArgumentCaptor.forClass(Collection.class);
         Mockito.verify(input, Mockito.after(500)).activateGrammars(activeGrammarCaptor.capture());
         Assert.assertEquals(1, activeGrammarCaptor.getValue().size());
-       }
+        
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
+        final EventHandler handler = context.getEventHandler();
+        final JVoiceXMLEvent cancel = new CancelEvent();
+        handler.onEvent(cancel);       
+    }
 
     /**
      * Test method to activate a grammar with a field scope and a form scope.
@@ -691,7 +742,7 @@ public final class TestFormInterpretationAlgorithm {
                     if (e instanceof CancelEvent) {
                         return;
                     }
-                    Assert.fail(e.getMessage());
+                    fiaError = e;
                 }
             };
         };
@@ -707,6 +758,12 @@ public final class TestFormInterpretationAlgorithm {
         Thread.sleep(500);
         Mockito.verify(input, Mockito.times(2)).activateGrammars(activeGrammarCaptor2.capture());
         Assert.assertEquals(2, activeGrammarCaptor2.getValue().size());
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
         final JVoiceXMLEvent cancel = new CancelEvent();
         handler.onEvent(cancel);
     }
@@ -770,7 +827,7 @@ public final class TestFormInterpretationAlgorithm {
                     if (e instanceof CancelEvent) {
                         return;
                     }
-                    Assert.fail(e.getMessage());
+                    fiaError = e;
                 }
             };
         };
@@ -799,6 +856,11 @@ public final class TestFormInterpretationAlgorithm {
         Thread.sleep(500);
         Mockito.verify(input, Mockito.times(2)).activateGrammars(activeGrammarCaptor2.capture());
         Assert.assertEquals(2, activeGrammarCaptor2.getValue().size());
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
         // hangup
         final JVoiceXMLEvent cancel = new CancelEvent();
         handler.onEvent(cancel);
