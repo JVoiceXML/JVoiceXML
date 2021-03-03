@@ -58,6 +58,7 @@ import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Initial;
+import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mockito.ArgumentCaptor;
@@ -889,4 +890,66 @@ public final class TestFormInterpretationAlgorithm {
         fia.setJustFilled(item);
         Assert.assertTrue(fia.isJustFilled(item));
     }
-}
+
+    /**
+     * Test method to play prompts.
+     * 
+     * @throws Exception
+     *             Test failed.
+     * @throws JVoiceXMLEvent
+     *             Test failed.
+     */
+    @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public void testPlayPrompts() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+        final Prompt prompt = field.appendChild(Prompt.class);
+        prompt.addText("Payment?");
+        final Grammar grammar = field.appendChild(Grammar.class);
+        grammar.setVersion("1.0");
+        grammar.setType(GrammarType.SRGS_XML);
+        final Rule rule = grammar.appendChild(Rule.class);
+        final OneOf oneof = rule.appendChild(OneOf.class);
+        final Item item1 = oneof.appendChild(Item.class);
+        item1.addText("visa");
+        final Item item2 = oneof.appendChild(Item.class);
+        item2.addText("mastercard");
+        final Item item3 = oneof.appendChild(Item.class);
+        item3.addText("american express");
+        final Dialog executableForm = new ExecutablePlainForm();
+        executableForm.setNode(form);
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, executableForm);
+        final DataModel model = context.getDataModel();
+        Mockito.when(model.evaluateExpression(Mockito.anyString(),
+                Mockito.any(Boolean.class.getClass()))).thenReturn(Boolean.TRUE);
+        final Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    fia.initialize(profile, null);
+                    fia.mainLoop();
+                } catch (JVoiceXMLEvent e) {
+                    if (e instanceof CancelEvent) {
+                        return;
+                    }
+                    fiaError = e;
+                }
+            };
+        };
+        thread.start();
+        final UserInput input = platform.getUserInput();
+        Mockito.verify(input, Mockito.after(500)).startRecognition(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+        final EventHandler handler = context.getEventHandler();
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
+        final JVoiceXMLEvent event = new CancelEvent();
+        handler.onEvent(event);
+    }}

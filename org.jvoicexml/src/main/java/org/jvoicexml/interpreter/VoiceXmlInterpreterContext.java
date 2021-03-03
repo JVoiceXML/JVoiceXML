@@ -21,6 +21,7 @@
 
 package org.jvoicexml.interpreter;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -33,6 +34,7 @@ import javax.activation.MimeType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
+import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
@@ -45,10 +47,12 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeechRecognizerProperties;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
@@ -553,9 +557,44 @@ public class VoiceXmlInterpreterContext {
             }
         }
         LOGGER.info("no more documents to process for '" + application + "'");
+        try {
+            playQueuedPromptsBeforeExit();
+        } catch (BadFetchError | NoresourceError | ConfigurationException e) {
+            LOGGER.warn("unable to play prompts before exit", e);
+        }
         exitScope(Scope.APPLICATION);
     }
 
+    /**
+     * Play back all queued prompts before the interpreter exits.
+     * @throws NoresourceError 
+     *          resources could not be obtained
+     * @throws ConfigurationException
+     *          should not happen here, but call properties could not be loaded
+     * @throws BadFetchError
+     *          error accessing the prompts to play back
+     * 
+     * @since 0.7.9
+     */
+    private void playQueuedPromptsBeforeExit()
+            throws BadFetchError, ConfigurationException, NoresourceError {
+        LOGGER.info("playing queued prompts before exit");
+        final CallControlProperties callProps = getCallControlProperties(null);
+        final DocumentServer server = getDocumentServer();
+        final ImplementationPlatform platform = getImplementationPlatform();
+        try {
+            SystemOutput output = platform.getSystemOutput();
+            final CallControl call = platform.getCallControl();
+            call.play(output, callProps);
+            platform.playPrompts(server, callProps);
+            platform.waitOutputQueueEmpty();
+        } catch (IOException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (ConnectionDisconnectHangupEvent e) {
+            LOGGER.info("call already hung up", e);
+        }
+    }
+    
     /**
      * Starts processing the given application.
      *
