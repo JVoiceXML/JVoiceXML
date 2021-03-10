@@ -101,9 +101,7 @@ final class TextSenderThread extends Thread {
                 if (type != TextMessageType.ACK) {
                     telephony.addPendingMessage(pending);
                 }
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("sending " + pending);
-                }
+                LOGGER.info("sending " + pending);
                 sendMessage(pending);
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("... done sending output");

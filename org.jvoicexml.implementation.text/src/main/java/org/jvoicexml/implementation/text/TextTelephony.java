@@ -117,15 +117,22 @@ public final class TextTelephony implements Telephony {
         final Thread thread = new Thread() {
             @Override
             public void run() {
-                final SpeakableText speakable = textOutput.getNextText();
-                synchronized (pendingMessages) {
-                    firePlayStarted();
-                    if (sender != null) {
-                        sender.sendData(speakable);
+                LOGGER.info("playing prompts");
+                SpeakableText speakable;
+                do {
+                    speakable = textOutput.getNextText();
+                    if (speakable != null) {
+                        synchronized (pendingMessages) {
+                            firePlayStarted();
+                            if (sender != null) {
+                                sender.sendData(speakable);
+                            }
+                        }
                     }
-                }
+                } while (speakable != null);
             }
         };
+        thread.setDaemon(true);
         thread.start();
     }
 

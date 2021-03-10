@@ -176,7 +176,7 @@ final class TextSynthesizedOutput
     public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
             CallControlProperties callProps) throws BadFetchError,
             NoresourceError, ConnectionDisconnectHangupEvent {
-        // TODO refactor to play only here
+        // Nothing done here as playing is triggered by TextTelephony
     }
     
     /**
@@ -226,6 +226,9 @@ final class TextSynthesizedOutput
     SpeakableText getNextText() {
         final SpeakableText speakable;
         try {
+            if (texts.isEmpty()) {
+                return null;
+            }
             speakable = texts.take();
             processingSpeakable = true;
             fireOutputStarted(speakable);
