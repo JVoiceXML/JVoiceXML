@@ -1273,7 +1273,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 final CallControlProperties callProps = context
                         .getCallControlProperties(this);
                 final DocumentServer server = context.getDocumentServer();
-                call.play(output, callProps);
                 platform.playPrompts(server, callProps);
                 platform.waitNonBargeInPlayed();
                 call.record(input, callProps);
@@ -1323,7 +1322,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                         .getCallControlProperties(this);
                 final DocumentServer server = context.getDocumentServer();
                 final SystemOutput output = platform.getSystemOutput();
-                call.play(output, callProps);
                 platform.playPrompts(server, callProps);
                 platform.waitNonBargeInPlayed();
                 call.record(input, callProps);
@@ -1364,21 +1362,15 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         platform.setEventBus(eventbus);
         platform.waitNonBargeInPlayed();
 
-        final CallControl call = platform.getCallControl();
         try {
-            if (call != null) {
-                final CallControlProperties callProps = context
-                        .getCallControlProperties(this);
-                final DocumentServer server = context.getDocumentServer();
-                final SystemOutput output = platform.getSystemOutput();
-                call.play(output, callProps);
-                platform.playPrompts(server, callProps);
-                platform.waitNonBargeInPlayed();
-            }
+            final CallControlProperties callProps = context
+                    .getCallControlProperties(this);
+            final DocumentServer server = context.getDocumentServer();
+            final SystemOutput output = platform.getSystemOutput();
+            platform.playPrompts(server, callProps);
+            platform.waitNonBargeInPlayed();
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
-        } catch (IOException e) {
-            throw new BadFetchError(e.getMessage(), e);
         }
 
         // Execute...
@@ -1418,19 +1410,14 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         // Wait until all non-bargein prompts have been played so that the timer
         // starts up correctly.
         try {
-            if (call != null) {
-                final CallControlProperties callProps = context
-                        .getCallControlProperties(this);
-                final DocumentServer server = context.getDocumentServer();
-                final SystemOutput output = platform.getSystemOutput();
-                call.play(output, callProps);
-                platform.playPrompts(server, callProps);
-                platform.waitNonBargeInPlayed();
-            }
+            final CallControlProperties callProps = context
+                    .getCallControlProperties(this);
+            final DocumentServer server = context.getDocumentServer();
+            final SystemOutput output = platform.getSystemOutput();
+            platform.playPrompts(server, callProps);
+            platform.waitNonBargeInPlayed();
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
-        } catch (IOException e) {
-            throw new BadFetchError(e.getMessage(), e);
         }
         
         // Notify that the recording has started
@@ -1540,19 +1527,14 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
         try {
-            if (call != null) {
-                final CallControlProperties callProps = context
-                        .getCallControlProperties(this);
-                final DocumentServer server = context.getDocumentServer();
-                final SystemOutput output = platform.getSystemOutput();
-                call.play(output, callProps);
-                platform.playPrompts(server, callProps);
-                platform.waitNonBargeInPlayed();
-            }
+            final CallControlProperties callProps = context
+                    .getCallControlProperties(this);
+            final DocumentServer server = context.getDocumentServer();
+            final SystemOutput output = platform.getSystemOutput();
+            platform.playPrompts(server, callProps);
+            platform.waitNonBargeInPlayed();
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
-        } catch (IOException e) {
-            throw new BadFetchError(e.getMessage(), e);
         }
 
         // Transfer

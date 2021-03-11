@@ -21,7 +21,6 @@
 
 package org.jvoicexml.interpreter;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -34,7 +33,6 @@ import javax.activation.MimeType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
-import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
@@ -583,13 +581,9 @@ public class VoiceXmlInterpreterContext {
         final DocumentServer server = getDocumentServer();
         final ImplementationPlatform platform = getImplementationPlatform();
         try {
-            SystemOutput output = platform.getSystemOutput();
-            final CallControl call = platform.getCallControl();
-            call.play(output, callProps);
+            final SystemOutput output = platform.getSystemOutput();
             platform.playPrompts(server, callProps);
             platform.waitOutputQueueEmpty();
-        } catch (IOException e) {
-            throw new NoresourceError(e.getMessage(), e);
         } catch (ConnectionDisconnectHangupEvent e) {
             LOGGER.info("call already hung up", e);
         }
