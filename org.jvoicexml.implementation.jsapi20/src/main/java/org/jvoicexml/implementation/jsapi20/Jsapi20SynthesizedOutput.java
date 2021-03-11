@@ -286,13 +286,16 @@ public final class Jsapi20SynthesizedOutput
                         queuedIds.keySet();
                 queuedSpeakables.retainAll(pendingSpeakables);
             }
-            if (priority.equals(PriorityType.CLEAR)
-                    || priority.equals(PriorityType.APPEND)) {
+            if (priority.equals(PriorityType.CLEAR)) {
+                queuedSpeakables.clear();
                 queuedSpeakables.add(speakable);
             } else if (priority.equals(PriorityType.PREPEND)) {
                 queuedSpeakables.add(0, speakable);
+            } else {
+                queuedSpeakables.add(speakable);
             }
         }
+        LOGGER.info("queued speakable: " + speakable);
     }
 
     /**
@@ -318,6 +321,7 @@ public final class Jsapi20SynthesizedOutput
             }
         };
         final Thread thread = new Thread(runnable);
+        thread.setDaemon(true);
         thread.start();
     }
 
@@ -380,9 +384,7 @@ public final class Jsapi20SynthesizedOutput
         final SpeakableText speakable;
         synchronized (queuedSpeakables) {
             if (queuedSpeakables.isEmpty()) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("no more speakables to process");
-                }
+                LOGGER.info("no more speakables to process");
                 fireQueueEmpty();
                 synchronized (emptyLock) {
                     emptyLock.notifyAll();
@@ -393,7 +395,7 @@ public final class Jsapi20SynthesizedOutput
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("processing next speakable: " + speakable);
+            LOGGER.info("processing next speakable: " + speakable);
         }
 
         // Actually process the next speakable

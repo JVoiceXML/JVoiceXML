@@ -72,7 +72,8 @@ public interface SynthesizedOutput extends ExternalResource, OutputDevice {
                 ConnectionDisconnectHangupEvent;
     
     /**
-     * Playback all queued prompts.
+     * Playback all queued prompts. Does nothing if all prompts are already
+     * played back.
      * 
      * @param sessionId
      *        the session Id

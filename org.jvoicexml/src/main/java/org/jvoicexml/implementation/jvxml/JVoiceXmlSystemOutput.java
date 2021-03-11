@@ -93,8 +93,7 @@ final class JVoiceXmlSystemOutput
     public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
             CallControlProperties callProps) throws BadFetchError,
             NoresourceError, ConnectionDisconnectHangupEvent {
-        // TODO Auto-generated method stub
-        
+        synthesizedOutput.playPrompts(sessionId, server, callProps);
     }
     
     /**
