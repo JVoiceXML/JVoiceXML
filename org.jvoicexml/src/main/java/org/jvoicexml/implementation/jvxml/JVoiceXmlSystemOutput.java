@@ -23,6 +23,7 @@ package org.jvoicexml.implementation.jvxml;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
@@ -30,6 +31,7 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.implementation.SynthesizedOutputProvider;
@@ -79,11 +81,21 @@ final class JVoiceXmlSystemOutput
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final SessionIdentifier sessionId, final DocumentServer documentServer)
-        throws NoresourceError, BadFetchError {
+            final SessionIdentifier sessionId,
+            final DocumentServer documentServer) throws NoresourceError, BadFetchError, ConnectionDisconnectHangupEvent {
         synthesizedOutput.queueSpeakable(speakable, sessionId, documentServer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
+            CallControlProperties callProps) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
+        synthesizedOutput.playPrompts(sessionId, server, callProps);
+    }
+    
     /**
      * {@inheritDoc}
      */

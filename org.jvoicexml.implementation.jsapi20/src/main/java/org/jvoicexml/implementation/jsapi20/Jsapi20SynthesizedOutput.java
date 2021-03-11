@@ -49,6 +49,7 @@ import javax.speech.synthesis.SynthesizerMode;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
@@ -57,6 +58,7 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.implementation.MarkerReachedEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
@@ -284,28 +286,25 @@ public final class Jsapi20SynthesizedOutput
                         queuedIds.keySet();
                 queuedSpeakables.retainAll(pendingSpeakables);
             }
-            if (priority.equals(PriorityType.CLEAR)
-                    || priority.equals(PriorityType.APPEND)) {
+            if (priority.equals(PriorityType.CLEAR)) {
+                queuedSpeakables.clear();
                 queuedSpeakables.add(speakable);
             } else if (priority.equals(PriorityType.PREPEND)) {
                 queuedSpeakables.add(0, speakable);
-            }
-            // Do not process the speakable if there is some ongoing processing
-            if (queuedSpeakables.size() > 1) {
-                return;
+            } else {
+                queuedSpeakables.add(speakable);
             }
         }
-
-        // Otherwise process the added speakable asynchronous.
-        startSpeaking();
+        LOGGER.info("queued speakable: " + speakable);
     }
 
     /**
-     * Start processing the queued speakables.
-     * 
-     * @since 0.7.9
+     * {@inheritDoc}
      */
-    private void startSpeaking() {
+    @Override
+    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
+            CallControlProperties callProps) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
         final Runnable runnable = new Runnable() {
             /**
              * {@inheritDoc}
@@ -322,6 +321,7 @@ public final class Jsapi20SynthesizedOutput
             }
         };
         final Thread thread = new Thread(runnable);
+        thread.setDaemon(true);
         thread.start();
     }
 
@@ -384,9 +384,7 @@ public final class Jsapi20SynthesizedOutput
         final SpeakableText speakable;
         synchronized (queuedSpeakables) {
             if (queuedSpeakables.isEmpty()) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("no more speakables to process");
-                }
+                LOGGER.info("no more speakables to process");
                 fireQueueEmpty();
                 synchronized (emptyLock) {
                     emptyLock.notifyAll();
@@ -397,7 +395,7 @@ public final class Jsapi20SynthesizedOutput
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("processing next speakable: " + speakable);
+            LOGGER.info("processing next speakable: " + speakable);
         }
 
         // Actually process the next speakable

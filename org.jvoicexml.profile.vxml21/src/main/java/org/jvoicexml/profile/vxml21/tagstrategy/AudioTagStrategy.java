@@ -23,16 +23,11 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import java.util.Collection;
 
-import org.jvoicexml.CallControlProperties;
-import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.Session;
-import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -103,21 +98,7 @@ final class AudioTagStrategy extends AbstractTagStrategy
         }
         final ImplementationPlatform platform = context
                 .getImplementationPlatform();
-        if (!fia.isQueuingPrompts()) {
-            platform.startPromptQueuing();
-        }
-        platform.queuePrompt(speakable);
-        if (!fia.isQueuingPrompts()) {
-            final Session session = context.getSession();
-            final SessionIdentifier sessionId = session.getSessionId();
-            try {
-                final CallControlProperties callProps = context
-                        .getCallControlProperties(fia);
-                platform.renderPrompts(sessionId, documentServer, callProps);
-            } catch (ConfigurationException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
-            }
-        }
+        platform.queuePrompt(speakable, documentServer);
     }
 
     /**

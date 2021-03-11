@@ -23,6 +23,7 @@ package org.jvoicexml;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -63,26 +64,46 @@ public interface SystemOutput {
      * Not all priority types may be supported by the platform. In case the
      * behavior is not supported, the platform defaults to 
      * {@link org.jvoicexml.xml.vxml.PriorityType#APPEND}.
-     * </p>
      * 
      *
      * @param speakable
      *        Text to be spoken.
      * @param sessionId
      *        the session Id
-     * @param documentServer
-     *        The document server to use.
+     * @param server the document server to use
      * @exception NoresourceError
      *            The output resource is not available.
      * @exception BadFetchError
-     *            A URI within the speakable could not be obtained or a parsing
-     *            error occurred.
+     *                A URI within the speakable could not be obtained or a
+     *                parsing error occurred.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
      */
     void queueSpeakable(final SpeakableText speakable,
             final SessionIdentifier sessionId,
-                final DocumentServer documentServer) throws NoresourceError,
-                    BadFetchError;
+            final DocumentServer server) 
+                    throws BadFetchError, NoresourceError, 
+                        ConnectionDisconnectHangupEvent;
 
+    /**
+     * Playback all queued prompts.
+     * 
+     * @param sessionId
+     *        the session Id
+     * @param server the document server to use
+     * @param callProps properties for the call control
+     * @exception BadFetchError
+     *            error playing back the prompt
+     * @exception NoresourceError
+     *            Output device is not available.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
+     */
+    void playPrompts(final SessionIdentifier sessionId,
+            final DocumentServer server, final CallControlProperties callProps)
+            throws BadFetchError, NoresourceError,
+                ConnectionDisconnectHangupEvent;
+    
     /**
      * Cancels the current output from the TTS engine and queued audio
      * for all entries in the queue that allow barge-in.

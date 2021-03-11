@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import org.junit.Test;
 import org.jvoicexml.CallControlProperties;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -70,10 +71,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase {
 
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
-        final CallControlProperties props = new CallControlProperties();
-        platform.renderPrompts(null, null, props);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
@@ -89,7 +87,10 @@ public final class TestPromptStrategy extends TagStrategyTestBase {
         ssmlAudio3.addText("raiders of the lost ark");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
+        final VoiceXmlInterpreterContext context = getContext();
+        final DocumentServer server = context.getDocumentServer();
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable), 
+                Mockito.eq(server));
     }
 
     /**
@@ -116,17 +117,17 @@ public final class TestPromptStrategy extends TagStrategyTestBase {
 
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
-        final CallControlProperties props = new CallControlProperties();
-        platform.renderPrompts(null, null, props);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
         speak.addText("this is 42 times");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
+        final VoiceXmlInterpreterContext context = getContext();
+        final DocumentServer server = context.getDocumentServer();
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable), 
+                Mockito.eq(server));
     }
 
     /**
@@ -152,10 +153,10 @@ public final class TestPromptStrategy extends TagStrategyTestBase {
         
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
 
-        Mockito.verify(platform, Mockito.never()).queuePrompt(Mockito.any());
+        Mockito.verify(platform, Mockito.never()).queuePrompt(Mockito.any(),
+                Mockito.any());
     }
 
     /**
@@ -179,17 +180,16 @@ public final class TestPromptStrategy extends TagStrategyTestBase {
         prompt.setTimeout("10s");
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
-        final CallControlProperties props = new CallControlProperties();
-        platform.renderPrompts(null, null, props);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
         speak.addText("test execute timeout");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
+        final DocumentServer server = context.getDocumentServer();
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable), 
+                Mockito.eq(server));
     }
 
     /**
@@ -212,16 +212,16 @@ public final class TestPromptStrategy extends TagStrategyTestBase {
         prompt.addText("test execute timeout");
         final PromptStrategy strategy = new PromptStrategy();
         final ImplementationPlatform platform = getImplementationPlatform();
-        platform.startPromptQueuing();
         executeTagStrategy(prompt, strategy);
         final CallControlProperties props = new CallControlProperties();
-        platform.renderPrompts(null, null, props);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
         speak.addText("test execute timeout");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable));
+        final DocumentServer server = context.getDocumentServer();
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable), 
+                Mockito.eq(server));
     }
 }

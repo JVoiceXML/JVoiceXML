@@ -23,16 +23,13 @@ package org.jvoicexml.interpreter;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Locale;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfRecognizerProperties;
-import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
@@ -41,6 +38,7 @@ import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.UuidSessionIdentifier;
+import org.jvoicexml.documentserver.ExternalGrammarDocument;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.NoinputEvent;
@@ -49,7 +47,6 @@ import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.mock.MockRecognitionResult;
-import org.jvoicexml.mock.implementation.MockUserInput;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.SsmlParsingStrategyFactory;
 import org.jvoicexml.profile.TagStrategyFactory;
@@ -61,8 +58,10 @@ import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Initial;
+import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -74,7 +73,6 @@ import org.mockito.stubbing.Answer;
  * @since 0.6
  */
 
-@Ignore("Unmaintained test is currently failing. TODO: Fix or delete")
 public final class TestFormInterpretationAlgorithm {
     /** The VoiceXml interpreter context. */
     private VoiceXmlInterpreterContext context;
@@ -88,6 +86,8 @@ public final class TestFormInterpretationAlgorithm {
     /** The mock profile. */
     private Profile profile;
 
+    private JVoiceXMLEvent fiaError;
+
     /**
      * Set up the test environment.
      * 
@@ -98,6 +98,7 @@ public final class TestFormInterpretationAlgorithm {
      */
     @Before
     public void setUp() throws Exception, JVoiceXMLEvent {
+        fiaError = null;
         platform = Mockito.mock(ImplementationPlatform.class);
         final UserInput input = Mockito.mock(UserInput.class);
         Mockito.when(platform.getUserInput()).thenReturn(input);
@@ -112,6 +113,17 @@ public final class TestFormInterpretationAlgorithm {
                 tagfactory);
         final JVoiceXmlCore jvxml = Mockito.mock(JVoiceXmlCore.class);
         final GrammarProcessor processor = Mockito.mock(GrammarProcessor.class);
+        final Answer<GrammarDocument> answerProcessGramamr = new Answer<GrammarDocument>() {
+            @Override
+            public GrammarDocument answer(final InvocationOnMock invocation)
+                    throws Throwable {
+                final Grammar grammar = invocation.getArgumentAt(2,
+                        Grammar.class);
+                return new ExternalGrammarDocument(null, grammar.toString().getBytes(), null, true);
+            }
+        };
+        Mockito.when(processor.process(Mockito.any(), Mockito.any(), 
+                Mockito.any(Grammar.class), Mockito.any())).then(answerProcessGramamr);
         Mockito.when(jvxml.getGrammarProcessor()).thenReturn(processor);
         final Configuration configuration = Mockito.mock(Configuration.class);
         final DataModel model = Mockito.mock(DataModel.class);
@@ -131,14 +143,7 @@ public final class TestFormInterpretationAlgorithm {
         final SessionIdentifier id = new UuidSessionIdentifier();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml,
                 info, profile, id);
-        context = session.getVoiceXmlInterpreterContext();
-        final GrammarDocument document = Mockito.mock(GrammarDocument.class);
-        Mockito.when(
-                processor.process(
-                        Mockito.any(VoiceXmlInterpreterContext.class),
-                        Mockito.any(FetchAttributes.class),
-                        Mockito.any(Grammar.class),
-                        Mockito.any(Locale.class))).thenReturn(document);
+        context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context);
     }
 
@@ -200,9 +205,8 @@ public final class TestFormInterpretationAlgorithm {
                 context, interpreter, executableForm);
         final InputItem item = new FieldFormItem(context, field);
         fia.visitFieldFormItem(item);
-        final MockUserInput input = (MockUserInput) platform.getUserInput();
-        Assert.assertNotNull(input);
-        Assert.assertTrue(input.isRecognitionStarted());
+        final UserInput input = platform.getUserInput();
+        Mockito.verify(input).startRecognition(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
     }
 
     /**
@@ -213,7 +217,8 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test(timeout = 5000)
+    @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void testActivateFieldGrammars() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -241,17 +246,25 @@ public final class TestFormInterpretationAlgorithm {
                     fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
-                    Assert.fail(e.getMessage());
+                    if (e instanceof CancelEvent) {
+                        return;
+                    }
+                    fiaError = e;
                 }
             };
         };
         thread.start();
-        final MockUserInput input = (MockUserInput) platform.getUserInput();
-        input.waitRecognitionStarted();
-        final Collection<GrammarDocument> activeGrammars = input
-                .getActiveGrammars();
-        Assert.assertEquals(1, activeGrammars.size());
+        final UserInput input = platform.getUserInput();
+        ArgumentCaptor<Collection> activeGrammarCaptor = ArgumentCaptor.forClass(Collection.class);
+        Mockito.verify(input, Mockito.after(500)).activateGrammars(activeGrammarCaptor.capture());
+        Assert.assertEquals(1, activeGrammarCaptor.getValue().size());
         final EventHandler handler = context.getEventHandler();
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
         final JVoiceXMLEvent event = new CancelEvent();
         handler.onEvent(event);
     }
@@ -265,7 +278,8 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test(timeout = 5000)
+    @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void testReentrantActivateFieldGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -294,26 +308,31 @@ public final class TestFormInterpretationAlgorithm {
                     fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
-                    Assert.fail(e.getMessage());
+                    if (e instanceof CancelEvent) {
+                        return;
+                    }
+                    fiaError = e;
                 }
             };
         };
         thread.start();
-        final MockUserInput input = (MockUserInput) platform.getUserInput();
-        input.waitRecognitionStarted();
-        final Collection<GrammarDocument> activeGrammars = input
-                .getActiveGrammars();
-        Assert.assertEquals(1, activeGrammars.size());
+        final UserInput input = platform.getUserInput();
+        ArgumentCaptor<Collection> activeGrammarCaptor = ArgumentCaptor.forClass(Collection.class);
+        Mockito.verify(input, Mockito.after(500)).activateGrammars(activeGrammarCaptor.capture());
+        Assert.assertEquals(1, activeGrammarCaptor.getValue().size());
         final EventHandler handler = context.getEventHandler();
         final JVoiceXMLEvent noinput = new NoinputEvent();
         handler.onEvent(noinput);
-        input.waitRecognitionStarted();
-        Collection<GrammarDocument> grammars = input.getActiveGrammars();
-        for (GrammarDocument document : grammars) {
-            System.out.println(document);
-            System.out.println(document.hashCode());
+        ArgumentCaptor<Collection> activeGrammarCaptor2 = ArgumentCaptor.forClass(Collection.class);
+        Thread.sleep(500);
+        Mockito.verify(input, Mockito.times(2)).activateGrammars(activeGrammarCaptor2.capture());
+        Assert.assertEquals(1, activeGrammarCaptor2.getValue().size());
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
         }
-        Assert.assertEquals(1, activeGrammars.size());
+
+        // hangup
         final JVoiceXMLEvent cancel = new CancelEvent();
         handler.onEvent(cancel);
     }
@@ -326,7 +345,8 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test(timeout = 5000)
+    @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void testTwoFieldsActivateFieldGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -367,16 +387,18 @@ public final class TestFormInterpretationAlgorithm {
                     fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
-                    Assert.fail(e.getMessage());
+                    if (e instanceof CancelEvent) {
+                        return;
+                    }
+                    fiaError = e;
                 }
             };
         };
         thread.start();
-        final MockUserInput input = (MockUserInput) platform.getUserInput();
-        input.waitRecognitionStarted();
-        final Collection<GrammarDocument> activeGrammars = input
-                .getActiveGrammars();
-        Assert.assertEquals(1, activeGrammars.size());
+        final UserInput input = platform.getUserInput();
+        ArgumentCaptor<Collection> activeGrammarCaptor = ArgumentCaptor.forClass(Collection.class);
+        Mockito.verify(input, Mockito.after(500)).activateGrammars(activeGrammarCaptor.capture());
+        Assert.assertEquals(1, activeGrammarCaptor.getValue().size());
         final EventHandler handler = context.getEventHandler();
         final MockRecognitionResult result = new MockRecognitionResult();
         result.setUtterance("visa");
@@ -385,8 +407,12 @@ public final class TestFormInterpretationAlgorithm {
         final JVoiceXMLEvent recognitionEvent = new RecognitionEvent(null,
                 null, result);
         handler.onEvent(recognitionEvent);
-        input.waitRecognitionStarted();
-        Assert.assertEquals(1, activeGrammars.size());
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
         final JVoiceXMLEvent cancel = new CancelEvent();
         handler.onEvent(cancel);
     }
@@ -399,7 +425,8 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test(timeout = 5000)
+    @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void testActivateFormGrammars() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -427,17 +454,25 @@ public final class TestFormInterpretationAlgorithm {
                     fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
-                    Assert.fail(e.getMessage());
+                    if (e instanceof CancelEvent) {
+                        return;
+                    }
+                    fiaError = e;
                 }
             };
         };
         thread.start();
-        final MockUserInput input = (MockUserInput) platform.getUserInput();
-        input.waitRecognitionStarted();
-        final Collection<GrammarDocument> activeGrammars = input
-                .getActiveGrammars();
-        Assert.assertEquals(1, activeGrammars.size());
+        final UserInput input = platform.getUserInput();
+        ArgumentCaptor<Collection> activeGrammarCaptor = ArgumentCaptor.forClass(Collection.class);
+        Mockito.verify(input, Mockito.after(500)).activateGrammars(activeGrammarCaptor.capture());
+        Assert.assertEquals(1, activeGrammarCaptor.getValue().size());
         final EventHandler handler = context.getEventHandler();
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
         final JVoiceXMLEvent event = new CancelEvent();
         handler.onEvent(event);
     }
@@ -451,7 +486,8 @@ public final class TestFormInterpretationAlgorithm {
      * @throws JVoiceXMLEvent
      *             Test failed.
      */
-    @Test(timeout = 5000)
+    @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void testReentrantActivateFormGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -480,21 +516,31 @@ public final class TestFormInterpretationAlgorithm {
                     fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
-                    Assert.fail(e.getMessage());
+                    if (e instanceof CancelEvent) {
+                        return;
+                    }
+                    fiaError = e;
                 }
             };
         };
         thread.start();
-        final MockUserInput input = (MockUserInput) platform.getUserInput();
-        input.waitRecognitionStarted();
-        final Collection<GrammarDocument> activeGrammars = input
-                .getActiveGrammars();
-        Assert.assertEquals(1, activeGrammars.size());
+        final UserInput input = platform.getUserInput();
+        ArgumentCaptor<Collection> activeGrammarCaptor = ArgumentCaptor.forClass(Collection.class);
+        Mockito.verify(input, Mockito.after(500)).activateGrammars(activeGrammarCaptor.capture());
+        Assert.assertEquals(1, activeGrammarCaptor.getValue().size());
         final EventHandler handler = context.getEventHandler();
         final JVoiceXMLEvent noinput = new NoinputEvent();
         handler.onEvent(noinput);
-        input.waitRecognitionStarted();
-        Assert.assertEquals(1, activeGrammars.size());
+        ArgumentCaptor<Collection> activeGrammarCaptor2 = ArgumentCaptor.forClass(Collection.class);
+        Thread.sleep(500);
+        Mockito.verify(input, Mockito.times(2)).activateGrammars(activeGrammarCaptor2.capture());
+        Assert.assertEquals(1, activeGrammarCaptor2.getValue().size());
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
         final JVoiceXMLEvent cancel = new CancelEvent();
         handler.onEvent(cancel);
     }
@@ -546,7 +592,10 @@ public final class TestFormInterpretationAlgorithm {
                     fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
-                    Assert.fail(e.getMessage());
+                    if (e instanceof CancelEvent) {
+                        return;
+                    }
+                    fiaError = e;
                 }
             };
         };
@@ -572,6 +621,15 @@ public final class TestFormInterpretationAlgorithm {
         }
         Mockito.verify(input).activateGrammars(
                 Mockito.anyCollectionOf(GrammarDocument.class));
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
+        final EventHandler handler = context.getEventHandler();
+        final JVoiceXMLEvent cancel = new CancelEvent();
+        handler.onEvent(cancel);       
     }
 
     /**
@@ -612,32 +670,27 @@ public final class TestFormInterpretationAlgorithm {
                     fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
-                    Assert.fail(e.getMessage());
+                    if (e instanceof CancelEvent) {
+                        return;
+                    }
+                    fiaError = e;
                 }
             };
         };
         thread.start();
         final UserInput input = platform.getUserInput();
-        final Answer<Integer> answer = new Answer<Integer>() {
-            @Override
-            public Integer answer(final InvocationOnMock invocation)
-                    throws Throwable {
-                final Collection grammars = invocation.getArgumentAt(0,
-                        Collection.class);
-                synchronized (lock) {
-                    lock.notifyAll();
-                }
-                return grammars.size();
-            }
-        };
-        Mockito.when(
-                input.activateGrammars(Mockito
-                        .anyCollectionOf(GrammarDocument.class))).then(answer);
-        synchronized (lock) {
-            lock.wait();
+        ArgumentCaptor<Collection> activeGrammarCaptor = ArgumentCaptor.forClass(Collection.class);
+        Mockito.verify(input, Mockito.after(500)).activateGrammars(activeGrammarCaptor.capture());
+        Assert.assertEquals(1, activeGrammarCaptor.getValue().size());
+        
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
         }
-        Mockito.verify(input).activateGrammars(
-                Mockito.anyCollectionOf(GrammarDocument.class));
+
+        // hangup
+        final EventHandler handler = context.getEventHandler();
+        final JVoiceXMLEvent cancel = new CancelEvent();
+        handler.onEvent(cancel);       
     }
 
     /**
@@ -687,21 +740,31 @@ public final class TestFormInterpretationAlgorithm {
                     fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
-                    Assert.fail(e.getMessage());
+                    if (e instanceof CancelEvent) {
+                        return;
+                    }
+                    fiaError = e;
                 }
             };
         };
         thread.start();
-        final MockUserInput input = (MockUserInput) platform.getUserInput();
-        input.waitRecognitionStarted();
-        final Collection<GrammarDocument> activeGrammars = input
-                .getActiveGrammars();
-        Assert.assertEquals(2, activeGrammars.size());
+        final UserInput input = platform.getUserInput();
+        ArgumentCaptor<Collection> activeGrammarCaptor = ArgumentCaptor.forClass(Collection.class);
+        Mockito.verify(input, Mockito.after(500)).activateGrammars(activeGrammarCaptor.capture());
+        Assert.assertEquals(2, activeGrammarCaptor.getValue().size());
         final EventHandler handler = context.getEventHandler();
         final JVoiceXMLEvent noinput = new NoinputEvent();
         handler.onEvent(noinput);
-        input.waitRecognitionStarted();
-        Assert.assertEquals(2, activeGrammars.size());
+        ArgumentCaptor<Collection> activeGrammarCaptor2 = ArgumentCaptor.forClass(Collection.class);
+        Thread.sleep(500);
+        Mockito.verify(input, Mockito.times(2)).activateGrammars(activeGrammarCaptor2.capture());
+        Assert.assertEquals(2, activeGrammarCaptor2.getValue().size());
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
         final JVoiceXMLEvent cancel = new CancelEvent();
         handler.onEvent(cancel);
     }
@@ -762,17 +825,19 @@ public final class TestFormInterpretationAlgorithm {
                     fia.initialize(profile, null);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
-                    Assert.fail(e.getMessage());
+                    if (e instanceof CancelEvent) {
+                        return;
+                    }
+                    fiaError = e;
                 }
             };
         };
         thread.start();
         // There should be only 1 grammar when we start
-        final MockUserInput input = (MockUserInput) platform.getUserInput();
-        input.waitRecognitionStarted();
-        final Collection<GrammarDocument> activeGrammars = input
-                .getActiveGrammars();
-        Assert.assertEquals(1, activeGrammars.size());
+        final UserInput input = platform.getUserInput();
+        ArgumentCaptor<Collection> activeGrammarCaptor = ArgumentCaptor.forClass(Collection.class);
+        Mockito.verify(input, Mockito.after(500)).activateGrammars(activeGrammarCaptor.capture());
+        Assert.assertEquals(1, activeGrammarCaptor.getValue().size());
         // Fake an input to fill one of the fields using the form grammar
         final EventHandler handler = context.getEventHandler();
         final RecognitionResult result = Mockito.mock(RecognitionResult.class);
@@ -788,8 +853,15 @@ public final class TestFormInterpretationAlgorithm {
         handler.onEvent(recognitionEvent);
         // Processing should continue with the second field
         // from level grammar and field grammar should be active
-        input.waitRecognitionStarted();
-        Assert.assertEquals(2, activeGrammars.size());
+        ArgumentCaptor<Collection> activeGrammarCaptor2 = ArgumentCaptor.forClass(Collection.class);
+        Thread.sleep(500);
+        Mockito.verify(input, Mockito.times(2)).activateGrammars(activeGrammarCaptor2.capture());
+        Assert.assertEquals(2, activeGrammarCaptor2.getValue().size());
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
         // hangup
         final JVoiceXMLEvent cancel = new CancelEvent();
         handler.onEvent(cancel);
@@ -818,4 +890,66 @@ public final class TestFormInterpretationAlgorithm {
         fia.setJustFilled(item);
         Assert.assertTrue(fia.isJustFilled(item));
     }
-}
+
+    /**
+     * Test method to play prompts.
+     * 
+     * @throws Exception
+     *             Test failed.
+     * @throws JVoiceXMLEvent
+     *             Test failed.
+     */
+    @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public void testPlayPrompts() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+        final Prompt prompt = field.appendChild(Prompt.class);
+        prompt.addText("Payment?");
+        final Grammar grammar = field.appendChild(Grammar.class);
+        grammar.setVersion("1.0");
+        grammar.setType(GrammarType.SRGS_XML);
+        final Rule rule = grammar.appendChild(Rule.class);
+        final OneOf oneof = rule.appendChild(OneOf.class);
+        final Item item1 = oneof.appendChild(Item.class);
+        item1.addText("visa");
+        final Item item2 = oneof.appendChild(Item.class);
+        item2.addText("mastercard");
+        final Item item3 = oneof.appendChild(Item.class);
+        item3.addText("american express");
+        final Dialog executableForm = new ExecutablePlainForm();
+        executableForm.setNode(form);
+        final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
+                context, interpreter, executableForm);
+        final DataModel model = context.getDataModel();
+        Mockito.when(model.evaluateExpression(Mockito.anyString(),
+                Mockito.any(Boolean.class.getClass()))).thenReturn(Boolean.TRUE);
+        final Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    fia.initialize(profile, null);
+                    fia.mainLoop();
+                } catch (JVoiceXMLEvent e) {
+                    if (e instanceof CancelEvent) {
+                        return;
+                    }
+                    fiaError = e;
+                }
+            };
+        };
+        thread.start();
+        final UserInput input = platform.getUserInput();
+        Mockito.verify(input, Mockito.after(500)).startRecognition(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+        final EventHandler handler = context.getEventHandler();
+
+        if (fiaError != null) {
+            Assert.fail(fiaError.getMessage());
+        }
+
+        // hangup
+        final JVoiceXMLEvent event = new CancelEvent();
+        handler.onEvent(event);
+    }}

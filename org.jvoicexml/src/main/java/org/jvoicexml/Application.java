@@ -75,7 +75,7 @@ public interface Application {
      * @return URI of the application.
      * 
      * @since 0.6
-     * @throws BadFetchError
+     * @throws BadFetchError application URI could not be resolved
      */
     URI getApplication() throws BadFetchError;
 

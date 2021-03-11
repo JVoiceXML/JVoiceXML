@@ -26,12 +26,14 @@ import java.util.Queue;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent;
@@ -85,9 +87,6 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
             BadFetchError {
         id = sessionId;
         speakables.offer(speakableText);
-        synchronized (thread) {
-            thread.notify();
-        }
     }
 
     /**
@@ -277,6 +276,15 @@ public final class MockSynthesizedOutput implements SynthesizedOutput {
                     fireOutputEvent(end);
                 }
             }
+        }
+    }
+
+    @Override
+    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
+            CallControlProperties callProps) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
+        synchronized (thread) {
+            thread.notify();
         }
     }
 }

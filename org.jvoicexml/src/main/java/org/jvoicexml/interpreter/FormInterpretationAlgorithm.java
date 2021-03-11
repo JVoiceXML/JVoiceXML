@@ -45,6 +45,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeechRecognizerProperties;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.EventBus;
@@ -455,6 +456,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         String gotoFormItemName = null;
 
         do {
+            interpreter.setState(InterpreterState.TRANSITIONING);
             item = select(gotoFormItemName);
             gotoFormItemName = null;
 
@@ -474,7 +476,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                     initializeNodes(model, children);
 
                     // Execute the form item
-                    interpreter.setState(InterpreterState.WAITING);
                     collect(item);
 
                     // Process the input or event.
@@ -714,8 +715,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      *                Error processing the event.
      */
     private void process(final FormItem formItem) throws JVoiceXMLEvent {
-        interpreter.setState(InterpreterState.TRANSITIONING);
-
         LOGGER.info("processing '" + formItem.getName() + "'...");
 
         // Clear all "just_filled" flags.
@@ -747,7 +746,10 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         }
         final CallControl call = platform.getCallControl();
         if (call != null) {
-            platform.waitNonBargeInPlayed();
+            if ((isInputItem || isInitialItem)
+                    && !interpreter.isInFinalProcessingState()) {
+                    platform.waitNonBargeInPlayed();
+            }
             call.stopPlay();
             call.stopRecord();
         }
@@ -842,11 +844,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 context);
         final Collection<VoiceXmlNode> prompts = promptChooser.collect();
 
-        // Now, we may start queuing
-        final ImplementationPlatform platform = context
-                .getImplementationPlatform();
-        platform.startPromptQueuing();
-
         // Actually queue the prompts
         Prompt lastPrompt = null;
         for (VoiceXmlNode node : prompts) {
@@ -879,17 +876,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             throw new BadFetchError("error setting the timeout value", e);
         }
 
-        
-        final DocumentServer server = context.getDocumentServer();
-        final Session session = context.getSession();
-        final SessionIdentifier sessionId = session.getSessionId();
-        try {
-            final CallControlProperties callProps = context
-                    .getCallControlProperties(this);
-            platform.renderPrompts(sessionId, server, callProps);
-        } catch (ConfigurationException ex) {
-            throw new NoresourceError(ex.getMessage(), ex);
-        }
         queuingPrompts = false;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...queued prompts");
@@ -1278,14 +1264,17 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 .getImplementationPlatform();
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
-        platform.waitNonBargeInPlayed();
 
         final UserInput input = platform.getUserInput();
+        final SystemOutput output = platform.getSystemOutput();
         final CallControl call = platform.getCallControl();
         try {
             if (call != null) {
                 final CallControlProperties callProps = context
                         .getCallControlProperties(this);
+                final DocumentServer server = context.getDocumentServer();
+                platform.playPrompts(server, callProps);
+                platform.waitNonBargeInPlayed();
                 call.record(input, callProps);
             }
             final DataModel model = context.getDataModel();
@@ -1325,18 +1314,18 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
 
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
-        platform.waitNonBargeInPlayed();
 
         final CallControl call = platform.getCallControl();
-        if (call != null) {
-            try {
-                call.record(input, null);
-            } catch (IOException e) {
-                throw new BadFetchError("error recording", e);
-            }
-        }
-
         try {
+            if (call != null) {
+                final CallControlProperties callProps = context
+                        .getCallControlProperties(this);
+                final DocumentServer server = context.getDocumentServer();
+                final SystemOutput output = platform.getSystemOutput();
+                platform.playPrompts(server, callProps);
+                platform.waitNonBargeInPlayed();
+                call.record(input, callProps);
+            }
             final DataModel model = context.getDataModel();
             final SpeechRecognizerProperties speech = context
                     .getSpeechRecognizerProperties(this);
@@ -1347,6 +1336,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             final Collection<ModeType> types =
                     activeGrammars.getModeTypes();
             input.startRecognition(model, types, speech, dtmf);
+        } catch (IOException e) {
+            throw new BadFetchError("error recording", e);
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
         }
@@ -1370,6 +1361,17 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
         platform.waitNonBargeInPlayed();
+
+        try {
+            final CallControlProperties callProps = context
+                    .getCallControlProperties(this);
+            final DocumentServer server = context.getDocumentServer();
+            final SystemOutput output = platform.getSystemOutput();
+            platform.playPrompts(server, callProps);
+            platform.waitNonBargeInPlayed();
+        } catch (ConfigurationException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
 
         // Execute...
         final ObjectExecutorThread objectExecutor = new ObjectExecutorThread(
@@ -1397,10 +1399,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final EventHandler handler = context.getEventHandler();
         eventStrategies = handler.collect(context, interpreter, this, record);
 
-        // Wait until all non-bargein prompts have been played so that the timer
-        // starts up correctly.
-        platform.waitNonBargeInPlayed();
-
         // Start the monitor for the requested recording time.
         long maxTime = record.getMaxtime();
         if (maxTime < 0) {
@@ -1409,6 +1407,19 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
 
+        // Wait until all non-bargein prompts have been played so that the timer
+        // starts up correctly.
+        try {
+            final CallControlProperties callProps = context
+                    .getCallControlProperties(this);
+            final DocumentServer server = context.getDocumentServer();
+            final SystemOutput output = platform.getSystemOutput();
+            platform.playPrompts(server, callProps);
+            platform.waitNonBargeInPlayed();
+        } catch (ConfigurationException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
+        
         // Notify that the recording has started
         final RecordingReceiverThread recording = new RecordingReceiverThread(
                 eventbus, maxTime);
@@ -1515,7 +1526,16 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         eventStrategies = handler.collect(context, interpreter, this, transfer);
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
-        platform.waitNonBargeInPlayed();
+        try {
+            final CallControlProperties callProps = context
+                    .getCallControlProperties(this);
+            final DocumentServer server = context.getDocumentServer();
+            final SystemOutput output = platform.getSystemOutput();
+            platform.playPrompts(server, callProps);
+            platform.waitNonBargeInPlayed();
+        } catch (ConfigurationException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
 
         // Transfer
         call.transfer(dest);

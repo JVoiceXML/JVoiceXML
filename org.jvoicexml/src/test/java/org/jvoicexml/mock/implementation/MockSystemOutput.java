@@ -22,12 +22,14 @@ package org.jvoicexml.mock.implementation;
 
 import java.util.Collection;
 
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
@@ -88,9 +90,6 @@ public final class MockSystemOutput implements SystemOutput {
         throws NoresourceError, BadFetchError {
         speakable = speakableText;
         sessionId = id;
-        final SynthesizedOutputEvent event =
-            new OutputStartedEvent(null, sessionId, speakable);
-        fireOutputEvent(event);
     }
 
     /**
@@ -150,5 +149,15 @@ public final class MockSystemOutput implements SystemOutput {
      */
     public SynthesizedOutput getSynthesizedOutput() throws NoresourceError {
         return output;
+    }
+
+    @Override
+    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
+            CallControlProperties callProps) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
+        final SynthesizedOutputEvent event =
+                new OutputStartedEvent(null, sessionId, speakable);
+        fireOutputEvent(event);
+        outputEnded();
     }
 }

@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
@@ -34,6 +35,7 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
 import org.jvoicexml.event.plain.implementation.QueueEmptyEvent;
@@ -171,6 +173,16 @@ final class TextSynthesizedOutput
      * {@inheritDoc}
      */
     @Override
+    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
+            CallControlProperties callProps) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
+        // Nothing done here as playing is triggered by TextTelephony
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean supportsBargeIn() {
         return true;
     }
@@ -214,6 +226,9 @@ final class TextSynthesizedOutput
     SpeakableText getNextText() {
         final SpeakableText speakable;
         try {
+            if (texts.isEmpty()) {
+                return null;
+            }
             speakable = texts.take();
             processingSpeakable = true;
             fireOutputStarted(speakable);

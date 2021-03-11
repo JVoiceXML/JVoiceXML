@@ -21,11 +21,13 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 /**
  * Facade for easy access to the system output as an external resource.
@@ -60,11 +62,38 @@ public interface SynthesizedOutput extends ExternalResource, OutputDevice {
      * @exception BadFetchError
      *                A URI within the speakable could not be obtained or a
      *                parsing error occurred.
+     * @exception ConnectionDisconnectHangupEvent
+     *                  the user hung up
      */
-    void queueSpeakable(SpeakableText speakable, SessionIdentifier sessionId,
-            DocumentServer documentServer)
-            throws NoresourceError, BadFetchError;
-
+    void queueSpeakable(SpeakableText speakable,
+            final SessionIdentifier sessionId,
+            final DocumentServer documentServer)
+            throws BadFetchError, NoresourceError,
+                ConnectionDisconnectHangupEvent;
+    
+    /**
+     * Playback all queued prompts. Does nothing if all prompts are already
+     * played back.
+     * 
+     * @param sessionId
+     *        the session Id
+     * @param server the document server to use
+     * @param callProps properties for the call control
+     * @exception BadFetchError
+     *            error playing back the prompt
+     * @exception NoresourceError
+     *            Output device is not available.
+     * @exception BadFetchError
+     *                A URI within the speakable could not be obtained or a
+     *                parsing error occurred.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
+     */
+    void playPrompts(final SessionIdentifier sessionId,
+            final DocumentServer server, final CallControlProperties callProps)
+            throws BadFetchError, NoresourceError,
+                ConnectionDisconnectHangupEvent;
+    
     /**
      * Delays until all prompts are played that do not allow for barge-in.
      * 

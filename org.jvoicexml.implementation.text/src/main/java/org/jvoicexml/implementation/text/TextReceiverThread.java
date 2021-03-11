@@ -104,9 +104,7 @@ final class TextReceiverThread extends Thread {
                 if (message == null) {
                     continue;
                 }
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("read: " + message);
-                }
+                LOGGER.info("read: " + message);
                 final TextMessageType type = message.getType();
                 if ((type == TextMessageType.USER) && (input != null)) {
                     final String str = message.getData();

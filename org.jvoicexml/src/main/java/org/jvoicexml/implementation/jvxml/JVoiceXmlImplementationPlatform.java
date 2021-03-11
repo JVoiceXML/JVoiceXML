@@ -159,9 +159,6 @@ public final class JVoiceXmlImplementationPlatform
     /** The current session. */
     private Session session;
 
-    /** The prompt accumulator methods are implemented as a delegate. */
-    private final JVoiceXmlPromptAccumulator promptAccumulator;
-
     /**
      * A reaper to monitor that the platform is returned within a predefined
      * timespan.
@@ -232,7 +229,6 @@ public final class JVoiceXmlImplementationPlatform
         recognizerPoolLock = new Object();
         dtmfInput = bufferedCharacterInput;
         inputLock = new Object();
-        promptAccumulator = new JVoiceXmlPromptAccumulator(this);
     }
 
     /**
@@ -797,13 +793,7 @@ public final class JVoiceXmlImplementationPlatform
     @Override
     public void inputStatusChanged(final SpokenInputEvent event) {
         if (event.isType(RecognitionStartedEvent.EVENT_TYPE)) {
-            // Start the timer with a default timeout if there were no
-            // prompts to queue.
-            final SpeakableText lastSpeakable = promptAccumulator
-                    .getLastSpeakableText();
-            if (lastSpeakable == null) {
-                startTimer();
-            }
+            startTimer();
         } else if (event.isType(InputStartedEvent.EVENT_TYPE)) {
             final InputStartedEvent started =
                     (InputStartedEvent) event;
@@ -1024,16 +1014,6 @@ public final class JVoiceXmlImplementationPlatform
         if (eventbus == null) {
             return;
         }
-
-        // The timer is only needed within the field.
-        final SpeakableText lastSpeakable = promptAccumulator
-                .getLastSpeakableText();
-        if (speakable.equals(lastSpeakable)) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("reached last speakable. starting timer");
-            }
-            startTimer();
-        }
     }
 
     /**
@@ -1087,26 +1067,30 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public void startPromptQueuing() {
-        promptAccumulator.startPromptQueuing();
+    public void queuePrompt(final SpeakableText speakable,
+            final DocumentServer server) 
+            throws NoresourceError, ConnectionDisconnectHangupEvent,
+                BadFetchError {
+        final SystemOutput output = getSystemOutput();
+        final SessionIdentifier sessionId = session.getSessionId();
+        output.queueSpeakable(speakable, sessionId, server);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void queuePrompt(final SpeakableText speakable) {
-        promptAccumulator.queuePrompt(speakable);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void renderPrompts(final SessionIdentifier sessionId,
-            final DocumentServer server, final CallControlProperties props)
-            throws BadFetchError, NoresourceError,
-            ConnectionDisconnectHangupEvent {
-        promptAccumulator.renderPrompts(sessionId, server, props);
+    public void playPrompts(DocumentServer server,
+            CallControlProperties callProps) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
+        final CallControl call = getCallControl();
+        final SystemOutput output = getSystemOutput();
+        final SessionIdentifier sessionId = session.getSessionId();
+        try {
+            call.play(output, callProps);
+            output.playPrompts(sessionId, server, callProps);
+        } catch (IOException e) {
+            throw new BadFetchError("error playing to calling device", e);
+        }
     }
 }

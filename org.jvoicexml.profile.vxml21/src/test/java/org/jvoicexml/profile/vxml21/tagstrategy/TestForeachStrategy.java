@@ -28,6 +28,7 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
@@ -127,7 +128,10 @@ public final class TestForeachStrategy extends TagStrategyTestBase {
         final SpeakableText speakable = new SpeakableSsmlText(doc);
         final ImplementationPlatform platform = getContext()
                 .getImplementationPlatform();
-        Mockito.verify(platform).queuePrompt(speakable);
+        final VoiceXmlInterpreterContext context = getContext();
+        final DocumentServer server = context.getDocumentServer();
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable), 
+                Mockito.eq(server));
     }
 
     /**
@@ -169,7 +173,9 @@ public final class TestForeachStrategy extends TagStrategyTestBase {
         final SpeakableText speakable = new SpeakableSsmlText(doc);
         final ImplementationPlatform platform = getContext()
                 .getImplementationPlatform();
-        Mockito.verify(platform, Mockito.times(3)).queuePrompt(speakable);
+        final VoiceXmlInterpreterContext context = getContext();
+        final DocumentServer server = context.getDocumentServer();
+        Mockito.verify(platform, Mockito.times(3)).queuePrompt(speakable, server);
     }
 
     /**
@@ -210,7 +216,11 @@ public final class TestForeachStrategy extends TagStrategyTestBase {
         final SpeakableText speakable = new SpeakableSsmlText(doc);
         final ImplementationPlatform platform = getContext()
                 .getImplementationPlatform();
-        Mockito.verify(platform, Mockito.times(3)).queuePrompt(speakable);
+        final VoiceXmlInterpreterContext context = getContext();
+        final DocumentServer server = context.getDocumentServer();
+        Mockito.verify(platform).queuePrompt(Mockito.eq(speakable), 
+                Mockito.eq(server));
+        Mockito.verify(platform, Mockito.times(3)).queuePrompt(speakable, server);
         Mockito.verify(model, Mockito.times(3)).evaluateExpression(
                 script.getTextContent(), Object.class);
     }

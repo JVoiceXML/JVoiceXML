@@ -43,6 +43,7 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
@@ -51,6 +52,7 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.implementation.MarkerReachedEvent;
 import org.jvoicexml.event.plain.implementation.OutputEndedEvent;
 import org.jvoicexml.event.plain.implementation.OutputStartedEvent;
@@ -317,14 +319,16 @@ public final class Jsapi10SynthesizedOutput
         documentServer = server;
         synchronized (queuedSpeakables) {
             queuedSpeakables.offer(speakable);
-
-            // Do not process the speakable if there is some ongoing processing
-            if (queuedSpeakables.size() > 1) {
-                return;
-            }
         }
+    }
 
-        // Otherwise process the added speakable asynchronous.
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
+            CallControlProperties callProps) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
         final Runnable runnable = new Runnable() {
             /**
              * {@inheritDoc}
@@ -343,7 +347,7 @@ public final class Jsapi10SynthesizedOutput
         final Thread thread = new Thread(runnable);
         thread.start();
     }
-
+    
     /**
      * Processes the next speakable in the queue.
      * 

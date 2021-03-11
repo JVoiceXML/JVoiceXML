@@ -25,12 +25,8 @@ import java.util.Collection;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jvoicexml.CallControlProperties;
-import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.Session;
-import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -126,22 +122,8 @@ final class TextStrategy extends AbstractTagStrategy
             NoresourceError, ConnectionDisconnectHangupEvent {
         final ImplementationPlatform platform = context
                 .getImplementationPlatform();
-        if (!fia.isQueuingPrompts()) {
-            platform.startPromptQueuing();
-        }
-        platform.queuePrompt(speakable);
-        if (!fia.isQueuingPrompts()) {
-            final Session session = context.getSession();
-            final SessionIdentifier sessionId = session.getSessionId();
-            try {
-                final CallControlProperties callProps = context
-                        .getCallControlProperties(fia);
-                final DocumentServer server = context.getDocumentServer();
-                platform.renderPrompts(sessionId, server, callProps);
-            } catch (ConfigurationException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
-            }
-        }
+        final DocumentServer server = context.getDocumentServer();
+        platform.queuePrompt(speakable, server);
     }
 
     /**
