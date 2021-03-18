@@ -30,6 +30,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -38,7 +39,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.UuidSessionIdentifer;
 import org.jvoicexml.documentserver.schemestrategy.SessionStorage;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.datamodel.KeyValuePair;
@@ -57,8 +57,14 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public final class TestHttpSchemeStrategy {
 
+    @SuppressWarnings("serial")
     private static final SessionIdentifier SESSION_ID =
-            new UuidSessionIdentifer();
+            new SessionIdentifier() {
+                @Override
+                public String getId() {
+                    return UUID.randomUUID().toString();
+                }
+            };
     private static final String BASE_URL = "http://example.com:8080";
     private static final long TIMEOUT = 0;
 
