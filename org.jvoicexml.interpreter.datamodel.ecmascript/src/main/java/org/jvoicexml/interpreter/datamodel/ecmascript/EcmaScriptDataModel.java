@@ -74,7 +74,7 @@ public class EcmaScriptDataModel implements DataModel {
     private final Collection<DataModelObjectDeserializer> deserializers;
 
     /** Maximal length of a logged script before truncating. */
-    private static final int MAX_SCRIPT_LOG_LENGTH = 256;
+    private static final int MAX_SCRIPT_LOG_LENGTH = 512;
 
     static {
         if (!ContextFactory.hasExplicitGlobal()) {

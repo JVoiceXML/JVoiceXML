@@ -85,7 +85,7 @@ public final class JVoiceXmlDocumentServer
     private DocumentRepository repository;
 
     /** Maximal length of a logged document before truncating. */
-    private static final int MAX_DOCUMENT_LOG_LENGTH = 256;
+    private static final int MAX_DOCUMENT_LOG_LENGTH = 512;
 
     /**
      * Creates a new object.
