@@ -28,6 +28,8 @@
     to handle URIs.
   -->
   <bean id="org.jvoicexml.DocumentServer" class="org.jvoicexml.documentserver.JVoiceXmlDocumentServer">
+    <!-- number of characters to log the loaded document. -1 if all should be logged -->
+    <property name="maxDocumentLogLength" value="512"/>
     <property name="schemeStrategies">
       <list>
         <bean
