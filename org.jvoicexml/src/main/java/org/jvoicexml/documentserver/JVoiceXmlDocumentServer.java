@@ -84,6 +84,9 @@ public final class JVoiceXmlDocumentServer
     /** The internal document repository. */
     private DocumentRepository repository;
 
+    /** Maximal length of a logged document before truncating. */
+    private static final int MAX_DOCUMENT_LOG_LENGTH = 256;
+
     /**
      * Creates a new object.
      *
@@ -265,7 +268,17 @@ public final class JVoiceXmlDocumentServer
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...read document");
-            LOGGER.debug(document);
+            final String docString = document.toString();
+            final String logDocument;
+            if (docString.length() > MAX_DOCUMENT_LOG_LENGTH) {
+                logDocument = 
+                        docString.substring(0, MAX_DOCUMENT_LOG_LENGTH - 3)
+                        + "...";
+            } else {
+                logDocument = docString;
+            }
+            
+            LOGGER.debug(logDocument);
         }
 
         final Vxml vxml = document.getVxml();

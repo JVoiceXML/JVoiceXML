@@ -73,6 +73,9 @@ public class EcmaScriptDataModel implements DataModel {
     /** The known deserializers. */
     private final Collection<DataModelObjectDeserializer> deserializers;
 
+    /** Maximal length of a logged script before truncating. */
+    private static final int MAX_SCRIPT_LOG_LENGTH = 256;
+
     static {
         if (!ContextFactory.hasExplicitGlobal()) {
             // Initialize GlobalFactory with custom factory
@@ -992,8 +995,15 @@ public class EcmaScriptDataModel implements DataModel {
             }
             if (LOGGER.isDebugEnabled()) {
                 final String json = toString(value);
+                final String logJson;
+                if (json.length() > MAX_SCRIPT_LOG_LENGTH) {
+                    logJson = json.substring(0, MAX_SCRIPT_LOG_LENGTH - 3)
+                                + "...";
+                } else {
+                    logJson = json;
+                }
                 LOGGER.debug("evaluated '" + preparedExpression + "' to '"
-                        + json + "'");
+                        + logJson + "'");
             }
             @SuppressWarnings("unchecked")
             final T t = (T) Context.jsToJava(value, type);
