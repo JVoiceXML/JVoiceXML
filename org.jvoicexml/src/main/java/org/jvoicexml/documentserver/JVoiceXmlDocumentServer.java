@@ -283,7 +283,7 @@ public final class JVoiceXmlDocumentServer
             LOGGER.debug("...read document");
             final String docString = document.toString();
             final String logDocument;
-            if ((maxDocumentLogLength > 0) 
+            if ((maxDocumentLogLength > 3) 
                     && (docString.length() > maxDocumentLogLength)) {
                 logDocument = 
                         docString.substring(0, maxDocumentLogLength - 3)

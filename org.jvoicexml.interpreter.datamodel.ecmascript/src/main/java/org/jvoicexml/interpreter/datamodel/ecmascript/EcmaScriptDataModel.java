@@ -1010,7 +1010,7 @@ public class EcmaScriptDataModel implements DataModel {
             if (LOGGER.isDebugEnabled()) {
                 final String json = toString(value);
                 final String logJson;
-                if ((maxScriptLogLength > 0)
+                if ((maxScriptLogLength > 3)
                         && (json.length() > maxScriptLogLength)) {
                     logJson = json.substring(0, maxScriptLogLength - 3)
                                 + "...";
