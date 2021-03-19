@@ -25,6 +25,7 @@
 package org.jvoicexml.demo.scriptdemo;
 
 import java.net.URI;
+import java.rmi.RemoteException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -37,6 +38,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.BasicConnectionInformation;
+import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
@@ -81,11 +83,12 @@ public final class ScriptDemo {
      *            URI of the first document to load
      * @exception JVoiceXMLEvent
      *                Error processing the call.
+     * @throws RemoteException error creating the session
      */
-    private void interpretDocument(final URI uri) throws JVoiceXMLEvent {
-        JVoiceXml jvxml;
+    private void interpretDocument(final URI uri) throws JVoiceXMLEvent, RemoteException {
+        RemoteJVoiceXml jvxml;
         try {
-            jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+            jvxml = (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining JVoiceXml", ne);
 
