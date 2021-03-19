@@ -468,13 +468,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 activeDialogChanged = !name.equals(lastFormItem);
                 lastFormItem = name;
                 try {
-                    // Initialize the child nodes of this form item
-                    final VoiceXmlNode node = item.getNode();
-                    final Collection<? extends XmlNode> children =
-                            node.getChildren();
-                    final DataModel model = context.getDataModel();
-                    initializeNodes(model, children);
-
                     // Execute the form item
                     collect(item);
 
