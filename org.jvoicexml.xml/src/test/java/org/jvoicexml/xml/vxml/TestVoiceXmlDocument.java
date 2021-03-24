@@ -31,12 +31,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.DocumentType;
+import org.xml.sax.InputSource;
 
 /**
  * Test cases for {@link VoiceXmlDocument}.
@@ -95,6 +97,23 @@ public final class TestVoiceXmlDocument {
     }
 
     /**
+     * Tests toXML with a document with a DTD
+     * @throws Exception
+     * @since 0.7.9
+     */
+    @Test
+    public void testToXmlDTDDocument() throws Exception {
+        final InputStream in =
+                Test.class.getResourceAsStream("/VoiceXMLDTDSchema.vxml");
+        final InputSource inputSource = new InputSource(in);
+        final VoiceXmlDocument document = new VoiceXmlDocument(inputSource);
+        final String xml = document.toXml();
+        Assert.assertTrue("missing xml prefix", xml.startsWith("<?xml"));
+        Assert.assertTrue("missing xml prefix", 
+                xml.indexOf("<!DOCTYPE vxml SYSTEM \"http://www.w3.org/TR/voicexml20/vxml.dtd\">") > 0);
+    }
+    
+    /**
      * Test case for the serialization of an XML document.
      * @throws Exception
      *         test failed.
@@ -152,5 +171,6 @@ public final class TestVoiceXmlDocument {
         final Object o = oin.readObject();
         Assert.assertEquals(doc.toString(), o.toString());
     }
+    
 }
 

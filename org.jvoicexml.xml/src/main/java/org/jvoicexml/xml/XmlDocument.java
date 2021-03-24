@@ -1176,10 +1176,16 @@ public abstract class XmlDocument
             transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
             final DocumentType type = getDoctype();
             if (type != null) {
-                transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC,
-                        type.getPublicId());
-                transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM,
-                        type.getSystemId());
+                final String publicId = type.getPublicId();
+                if (publicId != null) {
+                    transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC,
+                            publicId);
+                }
+                final String systemId = type.getSystemId();
+                if (systemId != null) {
+                    transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM,
+                            systemId);
+                }
             }
             final Source source = new DOMSource(document);
             transformer.transform(source, result);

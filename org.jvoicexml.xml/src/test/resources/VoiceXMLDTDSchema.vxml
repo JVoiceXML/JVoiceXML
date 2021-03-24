@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE vxml SYSTEM "http://www.w3.org/TR/voicexml20/vxml.dtd">
+
+<vxml version = "2.0" xmlns="http://www.w3.org/2001/vxml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/2001/vxml     
+                        http://www.w3.org/TR/voicexml20/vxml.xsd">
+  
+    <form>
+        <block>
+            <prompt>hello from x m l land. This is my first voice program. </prompt>
+        </block> 
+        <goto next="document2.vxml"/>   
+    </form>
+</vxml>
