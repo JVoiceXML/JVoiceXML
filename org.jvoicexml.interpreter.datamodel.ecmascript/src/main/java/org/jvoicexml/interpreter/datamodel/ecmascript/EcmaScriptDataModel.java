@@ -1008,16 +1008,11 @@ public class EcmaScriptDataModel implements DataModel {
                 return null;
             }
             if (LOGGER.isDebugEnabled()) {
+                final String logPreparedExpression = 
+                        maybeTruncateScriptForLogging(preparedExpression);
                 final String json = toString(value);
-                final String logJson;
-                if ((maxScriptLogLength > 3)
-                        && (json.length() > maxScriptLogLength)) {
-                    logJson = json.substring(0, maxScriptLogLength - 3)
-                                + "...";
-                } else {
-                    logJson = json;
-                }
-                LOGGER.debug("evaluated '" + preparedExpression + "' to '"
+                final String logJson = maybeTruncateScriptForLogging(json);
+                LOGGER.debug("evaluated '" + logPreparedExpression + "' to '"
                         + logJson + "'");
             }
             @SuppressWarnings("unchecked")
@@ -1033,6 +1028,23 @@ public class EcmaScriptDataModel implements DataModel {
         }
     }
 
+    /**
+     * Truncates the given script in case it exceeds the maximum log length
+     * @param script the script to check
+     * @return script with a length not exceeding the max length
+     * @since 0.7.9
+     */
+    private String maybeTruncateScriptForLogging(final String script) {
+        if (script == null) {
+            return null;
+        }
+        if ((maxScriptLogLength < 3) ||
+                (script.length() <= maxScriptLogLength)) {
+            return script;
+        }
+        return script.substring(0, maxScriptLogLength - 3) + "...";
+    }
+    
     /**
      * Creates a new error message from the message and the detailed message
      * with max 256 chars.
