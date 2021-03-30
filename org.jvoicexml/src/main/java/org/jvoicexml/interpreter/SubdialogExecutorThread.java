@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,11 +24,14 @@ import java.net.URI;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.jvxml.ReturnEvent;
 import org.jvoicexml.event.plain.jvxml.SubdialogResultEvent;
 import org.jvoicexml.interpreter.datamodel.DataModel;
@@ -41,6 +44,10 @@ import org.jvoicexml.interpreter.scope.Scope;
  * @since 0.7.4
  */
 final class SubdialogExecutorThread extends Thread {
+    /** Logger for this class. */
+    private static final Logger LOGGER = LogManager
+            .getLogger(SubdialogExecutorThread.class);
+
     /** The URI of the subdialog. */
     private final URI uri;
 
@@ -111,7 +118,14 @@ final class SubdialogExecutorThread extends Thread {
             eventbus.publish(event);
             return;
         } catch (JVoiceXMLEvent e) {
+            LOGGER.warn("Caught JVoiceXMLEvent in subdialog", e);
             eventbus.publish(e);
+            return;
+        } catch (Exception e) {
+            LOGGER.error("Caught error in subdialog", e);
+            final ExceptionWrapper wrapper = 
+                    new ExceptionWrapper(e.getMessage(), e);
+            eventbus.publish(wrapper);
             return;
         } finally {
             model.deleteScope(Scope.DIALOG);
