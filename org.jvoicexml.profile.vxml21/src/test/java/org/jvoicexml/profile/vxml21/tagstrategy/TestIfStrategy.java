@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/unittests/src/org/jvoicexml/interpreter/tagstrategy/TestIfStrategy.java $
- * Version: $LastChangedRevision: 4080 $
- * Date:    $Date: 2013-12-17 09:46:17 +0100 (Tue, 17 Dec 2013) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,22 +21,23 @@
 
 package org.jvoicexml.profile.vxml21.tagstrategy;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.TagStrategyFactory;
-import org.jvoicexml.profile.vxml21.VoiceXml21Profile;
-import org.jvoicexml.xml.vxml.Assign;
+import org.jvoicexml.xml.ccxml.Else;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.If;
+import org.jvoicexml.xml.vxml.Throw;
 import org.mockito.Mockito;
 
 /**
  * This class provides a test case for the {@link IfStrategy}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4080 $
  * @since 0.7.5
  */
 public final class TestIfStrategy extends TagStrategyTestBase {
@@ -57,27 +53,71 @@ public final class TestIfStrategy extends TagStrategyTestBase {
      */
     @Test
     public void testExecute() throws Exception, JVoiceXMLEvent {
+        
         final Block block = createBlock();
         final If ifNode = block.appendChild(If.class);
         ifNode.setCond("test == 'horst'");
-        final Assign assign = ifNode.appendChild(Assign.class);
-        assign.setName("test");
-        assign.setExpr("'fritz'");
+        final Throw throwTag = ifNode.appendChild(Throw.class);
+        throwTag.setEvent("ifentered");
 
-        final TagStrategyFactory tagfactory = Mockito
-                .mock(TagStrategyFactory.class);
         final Profile profile = getContext().getProfile();
-        final VoiceXml21Profile vxml21Profile = (VoiceXml21Profile) profile;
-        vxml21Profile.setTagStrategyFactory(tagfactory);
-
+        final TagStrategyFactory tagFactory = profile.getTagStrategyFactory();
+        Mockito.when(tagFactory.getTagStrategy(throwTag)).thenReturn(new ThrowStrategy());
+        
         final DataModel model = getDataModel();
         Mockito.when(model.evaluateExpression(ifNode.getCond(), Boolean.class))
                 .thenReturn(true);
 
         final IfStrategy strategy = new IfStrategy();
-        executeTagStrategy(ifNode, strategy);
+        JVoiceXMLEvent event = null;
+        try {
+            executeTagStrategy(ifNode, strategy);
+        } catch (GenericVoiceXmlEvent e) {
+            event = e;
+        }
+        Assert.assertNotNull(event);
+        Assert.assertEquals(throwTag.getEvent(), event.getMessage());
+    }
 
-        Mockito.verify(model).evaluateExpression(ifNode.getCond(),
-                Boolean.class);
+    /**
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.IfStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
+     * .
+     * 
+     * @exception Exception
+     *                fest failed.
+     * @exception JVoiceXMLEvent
+     *                test failed
+     */
+    @Test
+    public void testExecuteElse() throws Exception, JVoiceXMLEvent {
+        
+        final Block block = createBlock();
+        final If ifNode = block.appendChild(If.class);
+        ifNode.setCond("test == 'horst'");
+        final Throw throwTag = ifNode.appendChild(Throw.class);
+        throwTag.setEvent("ifentered");
+        final Else elseTag = ifNode.appendChild(Else.class);
+        final Throw throwElse = ifNode.appendChild(Throw.class);
+        throwElse.setEvent("elseentered");
+                
+        final Profile profile = getContext().getProfile();
+        final TagStrategyFactory tagFactory = profile.getTagStrategyFactory();
+        Mockito.when(tagFactory.getTagStrategy(throwTag)).thenReturn(new ThrowStrategy());
+        Mockito.when(tagFactory.getTagStrategy(throwElse)).thenReturn(new ThrowStrategy());
+        
+        final DataModel model = getDataModel();
+        Mockito.when(model.evaluateExpression(ifNode.getCond(), Boolean.class))
+                .thenReturn(false);
+
+        final IfStrategy strategy = new IfStrategy();
+        JVoiceXMLEvent event = null;
+        try {
+            executeTagStrategy(ifNode, strategy);
+        } catch (GenericVoiceXmlEvent e) {
+            event = e;
+        }
+        Assert.assertNotNull(event);
+        Assert.assertEquals(throwElse.getEvent(), event.getMessage());
     }
 }
