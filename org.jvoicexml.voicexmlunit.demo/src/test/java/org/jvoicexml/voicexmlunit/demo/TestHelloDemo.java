@@ -61,7 +61,7 @@ public final class TestHelloDemo {
      */
     @Before
     public void setUp() throws Exception {
-        uri = TestHelloDemo.class.getResource("/app.vxml").toURI();
+        uri = TestHelloDemo.class.getResource("/helloworld.vxml").toURI();
         call = new TextCall();
     }
 
