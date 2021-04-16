@@ -447,4 +447,14 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
         // TODO add a real implementation
         return terminal.isBusy();
     }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public CallControlProperties createCallControlProperties() {
+        return null;
+    }
 }

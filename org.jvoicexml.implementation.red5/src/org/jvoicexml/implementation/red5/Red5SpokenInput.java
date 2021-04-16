@@ -230,4 +230,23 @@ public final class Red5SpokenInput implements SpokenInput {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public SpeechRecognizerProperties createSpeechRecognizerProperties() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public DtmfRecognizerProperties createDtmfRecognizerProperties() {
+        return null;
+    }
 }

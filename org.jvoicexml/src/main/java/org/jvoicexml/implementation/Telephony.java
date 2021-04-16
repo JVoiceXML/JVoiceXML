@@ -57,6 +57,14 @@ import org.jvoicexml.event.error.NoresourceError;
  */
 public interface Telephony extends ExternalResource {
     /**
+     * Creates the {@link CallControlProperties} to use.
+     * @return new instance of a {@link CallControlProperties} or 
+     * {@code null} in case the default should be used.
+     * @since 0.7.9
+     */
+    CallControlProperties createCallControlProperties();
+
+    /**
      * Plays a stream from the given output device.
      * This method gets called
      *  prior to calling

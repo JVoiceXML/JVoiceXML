@@ -29,7 +29,7 @@ package org.jvoicexml.callmanager.mmi;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.callmanager.mmi.mock.MockETLProtocolAdapter;
 import org.jvoicexml.client.ConnectionInformationFactory;
@@ -57,7 +57,7 @@ public final class TestMMICallManager {
      */
     @Before
     public void setUp() throws Exception, JVoiceXMLEvent {
-        final JVoiceXml jvxml = new MockJvoiceXmlCore();
+        final JVoiceXmlCore jvxml = new MockJvoiceXmlCore();
         cm = new MMICallManager();
         cm.setJVoiceXml(jvxml);
         final ETLProtocolAdapter adapter = new MockETLProtocolAdapter();

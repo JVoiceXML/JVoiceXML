@@ -262,7 +262,7 @@ final class TextSpokenInput implements SpokenInput {
             BadFetchError {
         model = dataModel;
         recognizing = true;
-        timeout = speech.getNoInputTimeoutAsMsec();
+        timeout = speech.getTimeoutAsMsec();
 
         final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
         fireInputEvent(event);
@@ -363,5 +363,25 @@ final class TextSpokenInput implements SpokenInput {
                 current.inputStatusChanged(event);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public SpeechRecognizerProperties createSpeechRecognizerProperties() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public DtmfRecognizerProperties createDtmfRecognizerProperties() {
+        return null;
     }
 }

@@ -329,4 +329,35 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
     public boolean isBusy() {
         return spokenInput.isBusy();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SpeechRecognizerProperties createSpeechRecognizerProperties() {
+        final SpeechRecognizerProperties properties = 
+                spokenInput.createSpeechRecognizerProperties();
+        if (properties == null) {
+            return new SpeechRecognizerProperties();
+        } else {
+            return properties;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DtmfRecognizerProperties createDtmfRecognizerProperties() {
+        if (dtmfInput == null) {
+            return null;
+        }
+        final DtmfRecognizerProperties properties = 
+                dtmfInput.createDtmfRecognizerProperties();
+        if (properties == null) {
+            return new DtmfRecognizerProperties();
+        } else {
+            return properties;
+        }
+    }
 }

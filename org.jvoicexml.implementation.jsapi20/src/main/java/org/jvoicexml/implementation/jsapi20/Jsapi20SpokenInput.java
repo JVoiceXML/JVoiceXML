@@ -428,7 +428,7 @@ public final class Jsapi20SpokenInput
             // TODO search a corresponding option in JSAPI2
         }
 
-        timeout = speech.getNoInputTimeoutAsMsec();
+        timeout = speech.getTimeoutAsMsec();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("starting recognition...");
@@ -641,5 +641,25 @@ public final class Jsapi20SpokenInput
                 current.inputStatusChanged(event);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public SpeechRecognizerProperties createSpeechRecognizerProperties() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public DtmfRecognizerProperties createDtmfRecognizerProperties() {
+        return null;
     }
 }

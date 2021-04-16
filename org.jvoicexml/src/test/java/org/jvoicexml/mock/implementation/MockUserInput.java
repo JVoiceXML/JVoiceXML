@@ -278,4 +278,20 @@ public class MockUserInput implements UserInput {
             recognitionStarted = false;
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SpeechRecognizerProperties createSpeechRecognizerProperties() {
+        return new SpeechRecognizerProperties();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DtmfRecognizerProperties createDtmfRecognizerProperties() {
+        return new DtmfRecognizerProperties();
+    }
 }

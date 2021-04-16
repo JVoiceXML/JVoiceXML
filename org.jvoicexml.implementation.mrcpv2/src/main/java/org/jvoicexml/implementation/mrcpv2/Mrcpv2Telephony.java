@@ -348,4 +348,15 @@ public final class Mrcpv2Telephony implements Telephony {
     public boolean isActive() {
         return active;
     }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public CallControlProperties createCallControlProperties() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

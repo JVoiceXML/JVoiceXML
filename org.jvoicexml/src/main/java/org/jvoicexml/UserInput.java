@@ -50,6 +50,24 @@ import org.jvoicexml.xml.vxml.BargeInType;
  */
 public interface UserInput {
     /**
+     * In case the user input supports {@link ModeType#VOICE} the input
+     * must return the {@link SpeechRecognizerProperties} to use.
+     * @return new instance of a {@link SpeechRecognizerProperties} or
+     * {@code null} if this is not supported. 
+     * @since 0.7.9
+     */
+    SpeechRecognizerProperties createSpeechRecognizerProperties();
+    
+    /**
+     * In case the user input supports {@link ModeType#DTMF} the input
+     * must return the {@link DtmfRecognizerProperties} to use.
+     * @return new instance of a {@link DtmfRecognizerProperties} or
+     * {@code null} if this is not supported. 
+     * @since 0.7.9
+     */
+    DtmfRecognizerProperties createDtmfRecognizerProperties();
+    
+    /**
      * Detects and reports character and/or spoken input simultaneously.
      *
      * @param model

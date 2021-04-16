@@ -236,7 +236,7 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
             final SpeechRecognizerProperties speech,
             final DtmfRecognizerProperties dtmf)
             throws NoresourceError, BadFetchError {
-        timeout = dtmf.getNoInputTimeoutAsMsec();
+        timeout = dtmf.getTimeoutAsMsec();
         model = dataModel;
         props = dtmf;
         inputThread = new DtmfInputThread(this, props);
@@ -415,6 +415,26 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
      */
     @Override
     public Collection<BargeInType> getSupportedBargeInTypes() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} as not supported
+     */
+    @Override
+    public SpeechRecognizerProperties createSpeechRecognizerProperties() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public DtmfRecognizerProperties createDtmfRecognizerProperties() {
         return null;
     }
 }

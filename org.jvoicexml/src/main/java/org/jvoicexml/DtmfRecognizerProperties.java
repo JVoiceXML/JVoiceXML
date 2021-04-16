@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2011-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@ package org.jvoicexml;
 import java.util.Map;
 
 import org.jvoicexml.xml.TimeParser;
+import org.jvoicexml.xml.vxml.Prompt;
 
 /**
  * Generic DTMF recognizer properties as described in
@@ -37,8 +38,8 @@ import org.jvoicexml.xml.TimeParser;
  * @since 0.7.5
  */
 public class DtmfRecognizerProperties {
-    /** Name of the <code>no-input-timeout</code> property. */
-    public static final String NO_INPUT_TIMEOUT = "no-input-timeout";
+    /** Name of the <code>timeout</code> property from the last prompt. */
+    public static final String PROPERTY_TIMEOUT = Prompt.ATTRIBUTE_TIMEOUT;
 
     /** Name of the <code>interdigittimeout</code> property. */
     public static final String PROPERTY_INTERDIGIT_TIMEOUT
@@ -75,7 +76,7 @@ public class DtmfRecognizerProperties {
     private char termchar;
 
     /** The no input timeout. */
-    private long noInputTimeout;
+    private long timeout;
 
     /**
      * Constructs a new object.
@@ -83,6 +84,7 @@ public class DtmfRecognizerProperties {
     public DtmfRecognizerProperties() {
         setTermtimeout(DEFAULT_TERM_TIMEOUT);
         termchar = DEFAULT_TERM_CHAR;
+        timeout = DEFAULT_NO_INPUT_TIMEOUT;
     }
 
     /**
@@ -169,12 +171,12 @@ public class DtmfRecognizerProperties {
     }
 
     /**
-    /* Retrieves the duration when recognition is started and there is no speech
+    /* Retrieves the duration when recognition is started and there is no DTMF input
      * detected.
      * @return the no input timeout
      */
-    public final long getNoInputTimeoutAsMsec() {
-        return noInputTimeout;
+    public final long getTimeoutAsMsec() {
+        return timeout;
     }
 
     /**
@@ -182,17 +184,58 @@ public class DtmfRecognizerProperties {
      * detected.
      * @param value the no input timeout to set as a time designation
      */
-    public final void setNoInputTimeout(final String value) {
+    public final void setTimeout(final String value) {
         final TimeParser parser = new TimeParser(value);
-        noInputTimeout = parser.parse();
+        timeout = parser.parse();
     }
 
     /**
-    /* Sets the the duration when recognition is started and there is no speech
+    /* Sets the the duration when recognition is started and there is no DTMF input
      * detected.
      * @param value the no input timeout to set as a time designation
      */
-    public final void setNoInputTimeout(final long value) {
-        noInputTimeout = value;
+    public final void setTimeout(final long value) {
+        timeout = value;
     }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     * Subclasses are requested to override
+     * {@link SpeechRecognizerProperties#appendToStringEnhancedProperties(StringBuilder)}
+     * to add their values.
+     */
+    @Override
+    public final String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append(getClass().getName());
+        builder.append(" [");
+        builder.append(PROPERTY_TIMEOUT);
+        builder.append("=");
+        builder.append(timeout);
+        builder.append(", ");
+        builder.append(PROPERTY_INTERDIGIT_TIMEOUT);
+        builder.append("=");
+        builder.append(interdigittimeout);
+        builder.append(", ");
+        builder.append(PROPERTY_TERM_TIMEOUT);
+        builder.append("=");
+        builder.append(termtimeout);
+        builder.append(", ");
+        builder.append(PROPERTY_TERM_CHAR);
+        builder.append("=");
+        builder.append(termchar);
+        appendToStringEnhancedProperties(builder);
+        builder.append("]");
+        return builder.toString();
+    }
+    
+    /**
+     * Add custom properties added by custom implementation. Preferred format is
+     * {@code , <ClassName> [<property1>=..., <property2>=..., ...]}
+     * @param str the builder to append to.
+     * @since 0.7.9
+     */
+    protected void appendToStringEnhancedProperties(final StringBuilder str) {
+    }    
 }

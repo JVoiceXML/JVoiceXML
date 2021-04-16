@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,11 +25,14 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 
+import org.jvoicexml.DtmfRecognizerProperties;
+import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -57,6 +60,24 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @since 0.5
  */
 public interface SpokenInput extends ExternalResource, InputDevice {
+    /**
+     * In case the user input supports {@link ModeType#VOICE} the input
+     * must return the {@link SpeechRecognizerProperties} to use.
+     * @return new instance of a {@link SpeechRecognizerProperties} or
+     * {@code null} if this is not supported or the default should be used. 
+     * @since 0.7.9
+     */
+    SpeechRecognizerProperties createSpeechRecognizerProperties();
+    
+    /**
+     * In case the user input supports {@link ModeType#DTMF} the input
+     * must return the {@link DtmfRecognizerProperties} to use.
+     * @return new instance of a {@link DtmfRecognizerProperties} or
+     * {@code null} if this is not supported or the default should be used. 
+     * @since 0.7.9
+     */
+    DtmfRecognizerProperties createDtmfRecognizerProperties();
+
     /**
      * Retrieves the no input timeout that was provided in the
      * {@link org.jvoicexml.SpeechRecognizerProperties} when recognition was
