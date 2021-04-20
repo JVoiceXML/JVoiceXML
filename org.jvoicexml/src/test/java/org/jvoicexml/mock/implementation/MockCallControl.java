@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2008-2012 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -42,7 +37,6 @@ import org.jvoicexml.event.error.NoresourceError;
  * purposes.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public final class MockCallControl implements CallControl {
@@ -118,5 +112,13 @@ public final class MockCallControl implements CallControl {
     @Override
     public boolean isCallActive() {
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CallControlProperties createCallControlProperties() {
+        return new CallControlProperties();
     }
 }

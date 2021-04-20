@@ -241,7 +241,7 @@ public final class KinectSpokenInput implements SpokenInput {
         } catch (KinectRecognizerException e) {
             throw new NoresourceError(e.getMessage(), e);
         }
-        timeout = speech.getNoInputTimeoutAsMsec();
+        timeout = speech.getTimeoutAsMsec();
         recognizer.startRecognition();
 
         final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
@@ -397,5 +397,25 @@ public final class KinectSpokenInput implements SpokenInput {
                 current.inputError(error);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public SpeechRecognizerProperties createSpeechRecognizerProperties() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public DtmfRecognizerProperties createDtmfRecognizerProperties() {
+        return null;
     }
 }

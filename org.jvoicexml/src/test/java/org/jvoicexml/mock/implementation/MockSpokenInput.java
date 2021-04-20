@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2008-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -52,7 +47,6 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * purposes.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public final class MockSpokenInput
@@ -231,5 +225,21 @@ public final class MockSpokenInput
                 current.inputStatusChanged(event);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SpeechRecognizerProperties createSpeechRecognizerProperties() {
+        return new SpeechRecognizerProperties();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DtmfRecognizerProperties createDtmfRecognizerProperties() {
+        return new DtmfRecognizerProperties();
     }
 }

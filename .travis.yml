@@ -6,13 +6,18 @@ jdk:
   - oraclejdk8
 
 before_install:
- - sudo apt-get update 
- - sudo apt-get install -y texlive-latex-base
- - sudo apt-get install -y texlive-fonts-recommended
- - sudo apt-get install -y texlive-fonts-extra
- - sudo apt-get install -y texlive-latex-extra
+ - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3CB3BD13
+ - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 762E3157
  - chmod +x gradlew
  
+addons:
+  apt:
+    packages:
+    - texlive-latex-base
+    - texlive-fonts-recommended
+    - texlive-fonts-extra
+    - texlive-fonts-extra
+    
 script:
   - ./gradlew jar 
 

@@ -41,6 +41,13 @@ import org.jvoicexml.event.error.NoresourceError;
  */
 public interface CallControl {
     /**
+     * Creates the {@link CallControlProperties} to use.
+     * @return new instance of a {@link CallControlProperties} 
+     * @since 0.7.9
+     */
+    CallControlProperties createCallControlProperties();
+
+    /**
      * Plays a stream from the given output device.
      *
      * <p>

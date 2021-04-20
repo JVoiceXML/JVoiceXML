@@ -255,7 +255,7 @@ public final class Mrcpv2SpokenInput
         }
         try {
 
-            lastUsedTimeout = speech.getNoInputTimeoutAsMsec();
+            lastUsedTimeout = speech.getTimeoutAsMsec();
             boolean hotword = false;
             boolean attachGrammar = true;
             GrammarImplementation<?> firstGrammar = activeGrammars.iterator().next(); 
@@ -548,5 +548,25 @@ public final class Mrcpv2SpokenInput
      */
     public void setSessionManager(final SessionManager manager) {
         sessionManager = manager;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public SpeechRecognizerProperties createSpeechRecognizerProperties() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public DtmfRecognizerProperties createDtmfRecognizerProperties() {
+        return null;
     }
 }

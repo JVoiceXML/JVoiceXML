@@ -211,4 +211,18 @@ public final class JVoiceXmlCallControl implements CallControl {
     public boolean isCallActive() {
         return telephony.isActive();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CallControlProperties createCallControlProperties() {
+        final CallControlProperties properties = 
+                telephony.createCallControlProperties();
+        if (properties == null) {
+            return new CallControlProperties();
+        } else {
+            return properties;
+        }
+    }
 }

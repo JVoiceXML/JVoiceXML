@@ -396,4 +396,13 @@ public final class DesktopTelephonySupport implements Telephony {
     public boolean isActive() {
         return active;
     }
+
+    /**
+     * {@inheritDoc}
+     * @return {@code null} to use the default
+     */
+    @Override
+    public CallControlProperties createCallControlProperties() {
+        return null;
+    }
 }

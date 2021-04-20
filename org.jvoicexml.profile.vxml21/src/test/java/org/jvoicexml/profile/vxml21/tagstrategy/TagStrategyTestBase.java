@@ -133,12 +133,16 @@ public abstract class TagStrategyTestBase {
         final TagStrategyFactory taginitfactory = Mockito
                 .mock(TagStrategyFactory.class);
         final VoiceXml21Profile vxml21Profile = (VoiceXml21Profile) profile;
-        vxml21Profile.setInitializationTagStrategyFactory(taginitfactory);        
+        vxml21Profile.setInitializationTagStrategyFactory(taginitfactory);    
+        final TagStrategyFactory tagFactory = 
+                Mockito.mock(TagStrategyFactory.class);
+        vxml21Profile.setTagStrategyFactory(tagFactory);
         final Session session = Mockito.mock(Session.class);
         context = Mockito.mock(VoiceXmlInterpreterContext.class);
         Mockito.when(context.getSession()).thenReturn(session);
         Mockito.when(context.getProfile()).thenReturn(new VoiceXml21Profile());
         Mockito.when(context.getImplementationPlatform()).thenReturn(platform);
+        Mockito.when(context.getProfile()).thenReturn(profile);
         interpreter = new VoiceXmlInterpreter(context);
         model = Mockito.mock(DataModel.class);
         final DataModelObjectSerializer serializer = Mockito

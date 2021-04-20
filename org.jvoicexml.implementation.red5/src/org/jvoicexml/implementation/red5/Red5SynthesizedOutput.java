@@ -31,12 +31,14 @@ package org.jvoicexml.implementation.red5;
 
 import java.io.IOException;
 
+import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -196,6 +198,14 @@ public class Red5SynthesizedOutput implements SynthesizedOutput {
     public void waitQueueEmpty() {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
+            CallControlProperties callProps) throws BadFetchError,
+            NoresourceError, ConnectionDisconnectHangupEvent {
+        // TODO Auto-generated method stub
+        
     }
 
 }

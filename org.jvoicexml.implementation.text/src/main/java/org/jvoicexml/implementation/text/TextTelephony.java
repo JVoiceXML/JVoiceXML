@@ -598,4 +598,14 @@ public final class TextTelephony implements Telephony {
             }
         }
     }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@code null} to use the default
+     */
+    @Override
+    public CallControlProperties createCallControlProperties() {
+        return null;
+    }
 }

@@ -33,19 +33,17 @@ import javax.activation.MimeType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
+import org.jvoicexml.CallControl;
 import org.jvoicexml.CallControlProperties;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
-import org.jvoicexml.SpeechRecognizerProperties;
-import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -376,84 +374,14 @@ public class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Loads the speech recognizer properties. The values from the configuration
-     * are replaced by property settings if any.
-     * 
-     * @param fia
-     *            the current form interpretation algorithm, maybe
-     *            <code>null</code>.
-     * @return the speech recognizer properties
-     * @throws ConfigurationException
-     *             if the object could not be loaded.
-     * @since 0.7.5
-     */
-    public SpeechRecognizerProperties getSpeechRecognizerProperties(
-            final FormInterpretationAlgorithm fia)
-            throws ConfigurationException {
-        final SpeechRecognizerProperties speech = configuration
-                .loadObject(SpeechRecognizerProperties.class);
-        final Map<String, String> props = getProperties(fia);
-        speech.setProperties(props);
-        return speech;
-    }
-
-    /**
-     * Loads the DTMF recognizer properties. The values from the configuration
-     * are replaced by property settings if any.
-     * 
-     * @param fia
-     *            the current form interpretation algorithm, maybe
-     *            <code>null</code>.
-     * @return the DTMF recognizer properties
-     * @throws ConfigurationException
-     *             if the object could not be loaded.
-     * @since 0.7.5
-     */
-    public DtmfRecognizerProperties getDtmfRecognizerProperties(
-            final FormInterpretationAlgorithm fia)
-            throws ConfigurationException {
-        final DtmfRecognizerProperties dtmf = configuration
-                .loadObject(DtmfRecognizerProperties.class);
-        final Map<String, String> props = getProperties(fia);
-        dtmf.setProperties(props);
-        return dtmf;
-    }
-
-    /**
-     * Loads the speech recognizer properties. The values from the configuration
-     * are replaced by property settings if any.
-     * 
-     * @param fia
-     *            the current form interpretation algorithm, maybe
-     *            <code>null</code>.
-     * @return the speech recognizer properties
-     * @throws ConfigurationException
-     *             if the object could not be loaded.
-     * @since 0.7.5
-     */
-    public CallControlProperties getCallControlProperties(
-            final FormInterpretationAlgorithm fia)
-            throws ConfigurationException {
-        final CallControlProperties call = configuration
-                .loadObject(CallControlProperties.class);
-        if (call == null) {
-            return null;
-        }
-        final Map<String, String> props = getProperties(fia);
-        call.setProperties(props);
-        return call;
-    }
-
-    /**
      * Retrieves the currently defined properties.
      * 
      * @param fia
-     *            the current form interpretation algorithm, maybe
-     *            <code>null</code>.
+     *            the current form interpretation algorithm, maybe {@code null}.
      * @return the currently defined properties
      * @since 0.7.5
      */
-    private Map<String, String> getProperties(
+    public Map<String, String> getProperties(
             final FormInterpretationAlgorithm fia) {
         final Map<String, String> props =
                 new java.util.HashMap<String, String>();
@@ -577,12 +505,15 @@ public class VoiceXmlInterpreterContext {
     private void playQueuedPromptsBeforeExit()
             throws BadFetchError, ConfigurationException, NoresourceError {
         LOGGER.info("playing queued prompts before exit");
-        final CallControlProperties callProps = getCallControlProperties(null);
         final DocumentServer server = getDocumentServer();
         final ImplementationPlatform platform = getImplementationPlatform();
         try {
-            final SystemOutput output = platform.getSystemOutput();
-            platform.playPrompts(server, callProps);
+            final Map<String, String> props = getProperties(null);
+            final CallControl call = platform.getCallControl();
+            final CallControlProperties callProperties =
+                    call.createCallControlProperties();
+            callProperties.setProperties(props);
+            platform.playPrompts(server, callProperties);
             platform.waitOutputQueueEmpty();
         } catch (ConnectionDisconnectHangupEvent e) {
             LOGGER.info("call already hung up", e);

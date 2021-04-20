@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2012-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,7 +29,6 @@ import java.util.Map;
  * This class must be extended to specify platform specific values.
  * </p>
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  */
 public class CallControlProperties {
@@ -53,4 +47,28 @@ public class CallControlProperties {
     protected void setEnhancedProperties(final Map<String, String> props) {
     }
 
+    /**
+     * {@inheritDoc}
+     * Subclasses are requested to override
+     * {@link SpeechRecognizerProperties#appendToStringEnhancedProperties(StringBuilder)}
+     * to add their values.
+     */
+    @Override
+    public final String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append(getClass().getName());
+        builder.append(" [");
+        appendToStringEnhancedProperties(builder);
+        builder.append("]");
+        return builder.toString();
+    }
+    
+    /**
+     * Add custom properties added by custom implementation. Preferred format is
+     * {@code , <ClassName> [<property1>=..., <property2>=..., ...]}
+     * @param str the builder to append to.
+     * @since 0.7.9
+     */
+    protected void appendToStringEnhancedProperties(final StringBuilder str) {
+    }
 }
