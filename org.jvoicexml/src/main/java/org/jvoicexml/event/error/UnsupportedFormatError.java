@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2015 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -65,7 +65,7 @@ public class UnsupportedFormatError
      * @see #ELEMENT
      */
     public UnsupportedFormatError(final String message) {
-        super(message);
+        super(ELEMENT, message);
     }
 
     /**
@@ -103,6 +103,6 @@ public class UnsupportedFormatError
      * @see #ELEMENT
      */
     public UnsupportedFormatError(final String message, final Throwable cause) {
-        super(message, cause);
+        super(ELEMENT, message, cause);
     }
 }

@@ -26,6 +26,7 @@ import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConnectionInformation;
@@ -219,6 +220,7 @@ public final class TestFormInterpretationAlgorithm {
      */
     @Test
     @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Ignore
     public void testActivateFieldGrammars() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -280,6 +282,7 @@ public final class TestFormInterpretationAlgorithm {
      */
     @Test
     @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Ignore
     public void testReentrantActivateFieldGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -347,6 +350,7 @@ public final class TestFormInterpretationAlgorithm {
      */
     @Test
     @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Ignore
     public void testTwoFieldsActivateFieldGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -427,6 +431,7 @@ public final class TestFormInterpretationAlgorithm {
      */
     @Test
     @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Ignore
     public void testActivateFormGrammars() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -488,6 +493,7 @@ public final class TestFormInterpretationAlgorithm {
      */
     @Test
     @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Ignore
     public void testReentrantActivateFormGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -554,6 +560,7 @@ public final class TestFormInterpretationAlgorithm {
      *             Test failed.
      */
     @Test(timeout = 5000)
+    @Ignore
     public void testActivateFormFieldGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -641,6 +648,7 @@ public final class TestFormInterpretationAlgorithm {
      *             Test failed.
      */
     @Test(timeout = 5000)
+    @Ignore
     public void testActivateFormGrammarsInField() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -703,6 +711,7 @@ public final class TestFormInterpretationAlgorithm {
      *             Test failed.
      */
     @Test(timeout = 5000)
+    @Ignore
     public void testReentrantActivateFormFieldGrammars() throws Exception,
             JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -779,6 +788,7 @@ public final class TestFormInterpretationAlgorithm {
      *             Test failed.
      */
     @Test(timeout = 5000)
+    @Ignore
     public void testActivateInitialFieldGrammars() throws Exception,
             JVoiceXMLEvent {
         // Create a document with
@@ -901,6 +911,7 @@ public final class TestFormInterpretationAlgorithm {
      */
     @Test
     @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Ignore
     public void testPlayPrompts() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();

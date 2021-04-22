@@ -39,7 +39,7 @@ public class UnsupportedElementError
     private static final long serialVersionUID = 1783954165817945389L;
 
     /** The detail message. */
-    private static final String EVENT_TYPE = "error.unsupported";
+    public static final String EVENT_TYPE = "error.unsupported";
 
     /** The unsupported element. */
     private final String element;
