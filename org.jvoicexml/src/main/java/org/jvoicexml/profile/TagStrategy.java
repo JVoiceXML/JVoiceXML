@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -59,7 +59,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * </p>
  *
  * <p>
- * Execution of a <code>TagStrategy</code> comprises the following steps:
+ * Execution of a {@link TagStrategy} comprises the following steps:
  *
  * <ol>
  * <li>
@@ -82,7 +82,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * </ol>
  *
  * <p>
- * The tags for which a <code>TagStrategy</code> exists are executable content.
+ * The tags for which a {@link TagStrategy} exists are executable content.
  * Executable content refers to a block of procedural logic. Such logic appears
  * in:
  * <ul>
@@ -178,9 +178,9 @@ public interface TagStrategy {
      *            The current VoiceXML interpreter.
      * @param fia
      *            The current form interpretation algorithm, maybe
-     *            <code>null</code> if there is no current fia.
+     *            {@code null} if there is no current fia.
      * @param item
-     *            The current form item,maybe <code>null</code> if there is no
+     *            The current form item,maybe {@code null} if there is no
      *            current form item.
      * @param node
      *            The current child node.
@@ -193,7 +193,8 @@ public interface TagStrategy {
             final VoiceXmlNode node) throws JVoiceXMLEvent;
 
     /**
-     * Executes the strategy with the current parameters local to a form item.
+     * Executes the strategy with the current parameters local to a
+     * {@link FormItem}.
      *
      * @param context
      *            The VoiceXML interpreter context.
@@ -201,9 +202,9 @@ public interface TagStrategy {
      *            The current VoiceXML interpreter.
      * @param fia
      *            The current form interpretation algorithm, maybe
-     *            <code>null</code> if there is no current fia.
+     *            {@code null} if there is no current fia.
      * @param item
-     *            The current form item,maybe <code>null</code> if there is no
+     *            The current form item,maybe {@code null} if there is no
      *            current form item.
      * @param node
      *            The current child node.

@@ -30,12 +30,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.scope.Scope;
+import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Property;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link PromptStrategy}.
@@ -53,38 +55,48 @@ public final class TestPropertyStrategy extends TagStrategyTestBase {
     public void testExecute() throws Exception {
         final VoiceXmlDocument document = createDocument();
         final Vxml vxml = document.getVxml();
-        final Property property1 = vxml.appendChild(Property.class);
+        final Property property = vxml.appendChild(Property.class);
         final String name = "test";
-        final String value1 = "value1";
-        property1.setName(name);
-        property1.setValue(value1);
-        final Form form = createForm();
-        final Property property2 = form.appendChild(Property.class);
-        final String value2 = "value2";
-        property2.setName(name);
-        property2.setValue(value2);
+        final String value = "value1";
+        property.setName(name);
+        property.setValue(value);
 
         final VoiceXmlInterpreterContext context = getContext();
-        Assert.assertNull(context.getProperty(name));
 
-        final PropertyStrategy strategy1 = new PropertyStrategy();
+        final PropertyStrategy strategy = new PropertyStrategy();
         try {
-            executeTagStrategy(property1, strategy1);
+            executeTagStrategy(property, strategy);
         } catch (JVoiceXMLEvent e) {
             Assert.fail(e.getMessage());
         }
-        Assert.assertEquals(value1, context.getProperty(name));
-        context.enterScope(Scope.DIALOG);
-        Assert.assertEquals(value1, context.getProperty(name));
-        final PropertyStrategy strategy2 = new PropertyStrategy();
+        Mockito.verify(context, Mockito.times(1)).setProperty(name, value);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.PropertyStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testExecuteLocal() throws Exception {
+        final Form form = createForm();
+        final Field field = form.appendChild(Field.class);
+        final Property property = field.appendChild(Property.class);
+        final String name = "test";
+        final String value = "value1";
+        property.setName(name);
+        property.setValue(value);
+
+        final VoiceXmlInterpreterContext context = getContext();
+
+        final PropertyStrategy strategy = new PropertyStrategy();
         try {
-            executeTagStrategy(property2, strategy2);
+            executeLocalTagStrategy(form, property, strategy);
         } catch (JVoiceXMLEvent e) {
             Assert.fail(e.getMessage());
         }
-        Assert.assertEquals(value2, context.getProperty(name));
-        context.exitScope(Scope.DIALOG);
-        Assert.assertEquals(value1, context.getProperty(name));
+        final FormInterpretationAlgorithm fia = getFia();
+        Assert.assertEquals(value, fia.getLocalProperty(name));
     }
 
     /**
@@ -133,7 +145,7 @@ public final class TestPropertyStrategy extends TagStrategyTestBase {
      *            test failed
      */
     @Test
-    public void testExecuteInvalidNValue() throws Exception {
+    public void testExecuteInvalidValue() throws Exception {
         final VoiceXmlDocument document1 = createDocument();
         final Vxml vxml1 = document1.getVxml();
         final Property property1 = vxml1.appendChild(Property.class);
