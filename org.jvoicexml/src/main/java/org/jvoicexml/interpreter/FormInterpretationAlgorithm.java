@@ -45,7 +45,6 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.SpeechRecognizerProperties;
-import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.EventBus;
@@ -1507,7 +1506,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
         final DocumentServer server = context.getDocumentServer();
-        final SystemOutput output = platform.getSystemOutput();
         platform.playPrompts(server, callProperties);
         platform.waitNonBargeInPlayed();
 

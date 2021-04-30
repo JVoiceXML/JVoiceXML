@@ -24,12 +24,14 @@ package org.jvoicexml.profile.vxml21.tagstrategy;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream.GetField;
 
 import javax.activation.MimeType;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
@@ -121,6 +123,15 @@ public abstract class TagStrategyTestBase {
      */
     protected final ImplementationPlatform getImplementationPlatform() {
         return platform;
+    }
+
+    /**
+     * Retrieves the {@link FormInterpretationAlgorithm}.
+     * @return the fia
+     * @since 0.7.9
+     */
+    protected FormInterpretationAlgorithm getFia() {
+        return fia;
     }
 
     /**
@@ -238,6 +249,8 @@ public abstract class TagStrategyTestBase {
      *            the form for which to create a fia.
      */
     protected final void createFia(final Form form) {
+        final Configuration configuration = Mockito.mock(Configuration.class);
+        Mockito.when(context.getConfiguration()).thenReturn(configuration);
         final Dialog executableForm = new ExecutablePlainForm();
         executableForm.setNode(form);
         fia = new FormInterpretationAlgorithm(context, interpreter,
@@ -267,6 +280,34 @@ public abstract class TagStrategyTestBase {
         strategy.execute(context, interpreter, fia, null, node);
     }
 
+    /**
+     * Convenient method to execute the tag strategy.
+     * 
+     * @param form
+     *            the form of the node
+     * @param node
+     *            the node.
+     * @param strategy
+     *            the tag strategy.
+     * 
+     * @exception JVoiceXMLEvent
+     *                error executing the strategy.
+     * @exception Exception
+     *                error executing the strategy.
+     */
+    protected final void executeLocalTagStrategy(final Form form,
+            final VoiceXmlNode node, final TagStrategy strategy)
+                        throws JVoiceXMLEvent, Exception {
+        if(fia == null) {
+            createFia(form);
+        }
+        fia.initialize(profile, null);
+        strategy.getAttributes(context, fia, node);
+        strategy.evalAttributes(context);
+        strategy.validateAttributes(model);
+        strategy.executeLocal(context, interpreter, fia, null, node);
+    }
+    
     /**
      * Reads the specified resource as a string.
      * @param name name of the resource to read

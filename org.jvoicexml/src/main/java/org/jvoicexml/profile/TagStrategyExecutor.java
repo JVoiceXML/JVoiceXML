@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -114,7 +114,7 @@ public final class TagStrategyExecutor {
 
     /**
      * Execute the {@link TagStrategy}s for all child nodes of the given parent
-     * node.
+     * node local to a {@link FormItem}.
      *
      * @param context
      *            the current VoiceXML interpreter context
@@ -140,7 +140,36 @@ public final class TagStrategyExecutor {
         final Collection<VoiceXmlNode> nodes = container
                 .getLocalExecutableTags();
         for (VoiceXmlNode node : nodes) {
-            executeTagStrategy(context, interpreter, fia, formItem, node);
+            executeLocalTagStrategy(context, interpreter, fia, formItem, node);
+        }
+    }
+
+    /**
+     * Executes the {@link TagStrategy} for the given node local to a
+     * {@link FormItem}.
+     * 
+     * @param context
+     *            the current VoiceXML interpreter context
+     * @param interpreter
+     *            the current VoiceXML interpreter
+     * @param fia
+     *            the current Form Interpretation Algorithm
+     * @param formItem
+     *            the current {@link FormItem}
+     * @param node
+     *            the node to execute.
+     * @throws JVoiceXMLEvent
+     *             Error or event executing the child node.
+     * @since 0.6
+     */
+    public void executeLocalTagStrategy(final VoiceXmlInterpreterContext context,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem formItem,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
+        final TagStrategy strategy = prepareTagStrategyExecution(context, fia,
+                node);
+        if (strategy != null) {
+            strategy.executeLocal(context, interpreter, fia, formItem, node);
         }
     }
 
@@ -206,6 +235,7 @@ public final class TagStrategyExecutor {
         }
     }
 
+    
     /**
      * Prepares the execution of the {@link TagStrategy}.
      * 
