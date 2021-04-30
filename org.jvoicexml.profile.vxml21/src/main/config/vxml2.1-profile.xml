@@ -113,6 +113,10 @@
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.JVoiceXmlPromptStrategy" />
                         </beans:entry>
+                        <beans:entry key="property">
+                            <beans:bean
+                                class="org.jvoicexml.profile.vxml21.tagstrategy.PropertyStrategy" />
+                        </beans:entry>
                         <beans:entry key="reprompt">
                             <beans:bean
                                 class="org.jvoicexml.profile.vxml21.tagstrategy.RepromptStrategy" />
