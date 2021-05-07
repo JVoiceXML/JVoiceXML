@@ -793,6 +793,24 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 (FormItemLocalExecutableTagContainer) formItem;
         executor.executeChildNodesLocal(context, interpreter, this, formItem,
                 container);
+        updateFromLocalProperties();
+    }
+
+    /**
+     * Updates the property container objects with values from local properties.
+     * 
+     * @since 0.7.9
+     */
+    private void updateFromLocalProperties() {
+        if (callProperties != null) {
+            callProperties.setProperties(localProperties);
+        }
+        if (speechProperties != null) {
+            speechProperties.setProperties(localProperties);
+        }
+        if (dtmfProperties != null) {
+            dtmfProperties.setProperties(localProperties);
+        }
     }
 
     /**
