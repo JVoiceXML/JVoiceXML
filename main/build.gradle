@@ -53,11 +53,6 @@ configurations {
         extendsFrom compile
     }
 
-    jvxmlImplementationJSAPI10 {
-        description = "support for the JSAPI 1.0 implementation platform"
-        extendsFrom compile
-    }
-
     jvxmlImplementationJSAPI20 {
         description = "support for the JSAPI 2.0 implementation platform"
         extendsFrom compile
@@ -68,18 +63,8 @@ configurations {
         extendsFrom compile
     }
 
-    jvxmlImplementationKinect {
-        description = "support for the Kinect implementation platform"
-        extendsFrom compile
-    }
-
     jvxmlImplementationLightweightBML {
         description = "support for the lightweight BML implementation platform"
-        extendsFrom compile
-    }
-
-    jvxmlImplementationMarc {
-        description = "support for the MARC implementation platform"
         extendsFrom compile
     }
 
@@ -133,11 +118,6 @@ configurations {
         extendsFrom compile
     }
 
-    jvxmlProfileMMIuMundo {
-        description = "VoiceXML MMI Profile with a uMundo ETL"
-        extendsFrom compile
-    }
-    
     jvxmlDocumentation {
         description = "JVoiceXML documentation"
     }
@@ -154,24 +134,17 @@ dependencies {
     jvxmlDocumentServerSchemestrategyFile project(':org.jvoicexml.documentserver.schemestrategy.file')
     jvxmlDocumentServerSchemestrategyHttp project(':org.jvoicexml.documentserver.schemestrategy.http')
     
-    jvxmlImplementationJSAPI10 project(':org.jvoicexml.implementation.jsapi10')
-
     jvxmlImplementationJSAPI20 project(':org.jvoicexml.implementation.jsapi20')
 
     jvxmlImplementationJTAPI project(':org.jvoicexml.implementation.jtapi')
 
-    jvxmlImplementationKinect project(':org.jvoicexml.implementation.kinect')
-
     jvxmlImplementationLightweightBML project(':org.jvoicexml.implementation.lightweightbml')
     jvxmlImplementationLightweightBML project(':org.jvoicexml.talkinghead')
-
-    jvxmlImplementationMarc project(':org.jvoicexml.implementation.marc')
 
     jvxmlImplementationMary project(':org.jvoicexml.implementation.mary')
 
     jvxmlImplementationMrcpv2 project(':org.jvoicexml.client.mrcpv2')
     jvxmlImplementationMrcpv2 project(':org.jvoicexml.zanzibar')
-    jvxmlImplementationMrcpv2 project(':org.jvoicexml.interpreter.grammar.halef')
     jvxmlImplementationMrcpv2 project(':org.jvoicexml.implementation.mrcpv2')
     jvxmlImplementationMrcpv2 project(':org.jvoicexml.callmanager.sip')
 
@@ -198,7 +171,6 @@ dependencies {
     jvxmlProfileMMI project(':org.jvoicexml.callmanager.mmi.servlet')
     jvxmlProfileMMIHTTP project(':org.jvoicexml.callmanager.mmi.http')
     jvxmlProfileMMISocket project(':org.jvoicexml.callmanager.mmi.socket')
-    jvxmlProfileMMIuMundo project(':org.jvoicexml.callmanager.mmi.umundo')
 
     jvxmlDocumentation project(':howtobuild')
     jvxmlDocumentation project(':userguide')
@@ -233,23 +205,14 @@ task jvxmlConfigurations {
     if (project.property('JVOICEXML_INTERPRETER_GRAMMAR_REGEX') == 'true') {
         dependsOn configurations.jvxmlInterpreterGrammarRegex
     }
-    if (project.property('JVOICEXML_IMPLEMENTATION_JSAPI10') == 'true') {
-        dependsOn configurations.jvxmlImplementationJSAPI10 
-    }
     if (project.property('JVOICEXML_IMPLEMENTATION_JSAPI20') == 'true') {
         dependsOn configurations.jvxmlImplementationJSAPI20 
     }
     if (project.property('JVOICEXML_IMPLEMENTATION_JTAPI') == 'true') {
         dependsOn configurations.jvxmlImplementationJTAPI 
     }
-    if (project.property('JVOICEXML_IMPLEMENTATION_KINECT') == 'true' && isFamily(FAMILY_WINDOWS)) {
-        dependsOn configurations.jvxmlImplementationKinect 
-    }
     if (project.property('JVOICEXML_IMPLEMENTATION_BML') == 'true') {
         dependsOn configurations.jvxmlImplementationLightweightBML 
-    }
-    if (project.property('JVOICEXML_IMPLEMENTATION_MARC') == 'true') {
-        dependsOn configurations.jvxmlImplementationMarc 
     }
     if (project.property('JVOICEXML_IMPLEMENTATION_MARY') == 'true') {
         dependsOn configurations.jvxmlImplementationMary
@@ -272,9 +235,6 @@ task jvxmlConfigurations {
         if (project.property('JVOICEXML_CALLMANAGER_MMI_SOCKET') == 'true') {
             dependsOn configurations.jvxmlProfileMMISocket
         }
-        if (project.property('JVOICEXML_CALLMANAGER_MMI_UMUNDO') == 'true') {
-            dependsOn configurations.jvxmlProfileMMIuMundo
-        }
     }
 }
 
@@ -288,16 +248,9 @@ task jvxmlDistributionConfigurations {
     dependsOn configurations.jvxmlInterpreterDatamodelECMAScript
     dependsOn configurations.jvxmlInterpreterGrammarLUIS
     dependsOn configurations.jvxmlInterpreterGrammarRegex
-    dependsOn configurations.jvxmlImplementationJSAPI10 
     dependsOn configurations.jvxmlImplementationJSAPI20 
     dependsOn configurations.jvxmlImplementationJTAPI
-    dependsOn configurations.jvxmlImplementationKinect {
-        onlyIf { 
-            isFamily(FAMILY_WINDOWS)
-        }
-    }
     dependsOn configurations.jvxmlImplementationLightweightBML 
-    dependsOn configurations.jvxmlImplementationMarc 
     dependsOn configurations.jvxmlImplementationMary
     dependsOn configurations.jvxmlImplementationMrcpv2
     dependsOn configurations.jvxmlImplementationText
@@ -305,7 +258,6 @@ task jvxmlDistributionConfigurations {
     dependsOn configurations.jvxmlProfileMMI
     dependsOn configurations.jvxmlProfileMMIHTTP
     dependsOn configurations.jvxmlProfileMMISocket
-    dependsOn configurations.jvxmlProfileMMIuMundo
 }
 
 
@@ -339,12 +291,8 @@ distributions {
                 from configurations.jvxmlInterpreterDatamodelECMAScript
                 from configurations.jvxmlInterpreterGrammarLUIS
                 from configurations.jvxmlInterpreterGrammarRegex
-                from configurations.jvxmlImplementationJSAPI10 
                 from configurations.jvxmlImplementationJSAPI20 
-                from configurations.jvxmlImplementationKinect 
                 from configurations.jvxmlImplementationLightweightBML 
-                from configurations.jvxmlImplementationMary
-                from configurations.jvxmlImplementationMarc
                 from configurations.jvxmlImplementationMrcpv2
                 from configurations.jvxmlImplementationText
 
@@ -354,7 +302,6 @@ distributions {
                 from configurations.jvxmlProfileMMI
                 from configurations.jvxmlProfileMMIHTTP
                 from configurations.jvxmlProfileMMISocket
-                from configurations.jvxmlProfileMMIuMundo
                 
                 from("${project(':org.jvoicexml').buildDir}/jni")
             }
@@ -463,18 +410,6 @@ distributions {
                     "build.gradle"
                 }
                 from(project(':org.jvoicexml.demo.luis').projectDir) {
-                    include "build.gradle"
-                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
-                }
-            }
-            into('demo/org.jvoicexml.demo.marcdemo') {
-                from(project(':org.jvoicexml.demo.marcdemo').projectDir) {
-                    exclude "**/build",
-                    "**/logging",
-                    "**/bin",
-                    "build.gradle"
-                }
-                from(project(':org.jvoicexml.demo.marcdemo').projectDir) {
                     include "build.gradle"
                     filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
                 }

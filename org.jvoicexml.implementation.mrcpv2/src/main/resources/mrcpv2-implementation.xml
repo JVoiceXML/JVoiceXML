@@ -22,7 +22,7 @@
       <beans:property name="basePort" value="42346" />
       <property name="grammarParsers">
       <list>
-          <bean class="org.jvoicexml.interpreter.grammar.halef.HalefGrammarParser" />
+          <bean class="org.jvoicexml.srgs.SrgsSisrXmlGrammarParser" />
       </list>    
      </property>
   </beans:bean>

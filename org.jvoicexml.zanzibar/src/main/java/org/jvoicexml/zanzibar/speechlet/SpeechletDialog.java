@@ -34,7 +34,7 @@ import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.recog.RecognitionResult;
 import org.speechforge.cairo.sip.SipSession;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * Speechlet Dialog interface.
  * 
@@ -57,6 +57,7 @@ public interface SpeechletDialog {
      * @throws IllegalValueException the illegal value exception
      * @throws AuthenticationFailedException the authentication failed exception
      * @throws TimeoutException the timeout exception
+     * @exception NoMediaControlChannelException  no channel to control media
      */
     public  RecognitionResult runDialog(SpeechClient sClient, TelephonyClient tClient,
             SipSession session) throws IOException, MrcpInvocationException,

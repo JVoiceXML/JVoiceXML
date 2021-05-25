@@ -2,9 +2,10 @@
 <vxml xmlns="http://www.w3.org/2001/vxml" version="2.1">
     <form>
         <field name="answer">
-            <grammar src="yesno.srgs" type="application/srgs+xml" />
+            <grammar src="file:///C:/Users/dwalka/Documents/git/JVoiceXML/org.jvoicexml.voicexmlunit.demo/src/test/resources/yesno.srgs" type="application/wfst" />
             <prompt>Do you like this example?</prompt>
             <audio src="chime.wav" />
+            <property name="dummy" value="42"/>
             <filled>
                 <log expr="application.lastresult$.utterance" />
                 <if cond="answer=='Y'">
