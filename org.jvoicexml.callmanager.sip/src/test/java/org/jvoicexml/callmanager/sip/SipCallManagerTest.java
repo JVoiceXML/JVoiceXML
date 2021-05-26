@@ -18,11 +18,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.callmanager.mrcpv2;
+package org.jvoicexml.callmanager.sip;
 
 import java.io.IOException;
 
 import org.junit.Test;
+import org.jvoicexml.callmanager.sip.SipCallManager;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.zanzibar.sip.SipServer;
 

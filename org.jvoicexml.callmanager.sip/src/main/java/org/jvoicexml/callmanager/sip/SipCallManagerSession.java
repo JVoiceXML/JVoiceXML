@@ -1,4 +1,4 @@
-package org.jvoicexml.callmanager.mrcpv2;
+package org.jvoicexml.callmanager.sip;
 
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;

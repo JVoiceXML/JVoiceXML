@@ -16,7 +16,12 @@ buildscript {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
+    jcenter()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
 }
 
 sourceSets {
@@ -27,60 +32,111 @@ sourceSets {
     }
 }
 
-dependencies {
-    compile group: 'javax.sip', name: 'jain-sip-api', version: '1.2.1.4'
-    compile group: 'javax.sip', name: 'jain-sip-ri', version: '1.2.1'
-    compile group: 'javax.sdp', name: 'nist-sdp', version: '1.0'
-    compile group: 'log4j', name: 'log4j', version: '1.2.17'
-        
-    testCompile group: 'junit', name: 'junit', version: '4.13.1'
-    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
-
-    compile project(':org.jvoicexml')
-    compile project(':org.jvoicexml.client')
+configurations.all {
+    exclude group: 'com.spokentech', module:'speechcloud-client'
+    exclude group: 'log4j', module: 'log4j'
 }
 
-xslt {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/sip-callmanager.xml"
-    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/sip-callmanager.xml"
+dependencies {
+    compile project(':org.jvoicexml')
+    compile project(':org.jvoicexml.client')
+    compile project(':org.jvoicexml.client.mrcpv2')
+    compile project(':org.jvoicexml.zanzibar')
+    
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.client', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.sip', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.rtp', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.mrcp4j', version: '0.3-SNAPSHOT'
+    compile group: 'concurrent', name: 'concurrent', version: '1.3.4'
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+    compile group: 'javax.media', name: 'jmf', version: '2.1.1e'
+    
+    testCompile group: 'junit', name: 'junit', version: '4.13.1'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+}
+
+def getIP() {
+    InetAddress result = null;
+    Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+    while (interfaces.hasMoreElements()) {
+        Enumeration<InetAddress> addresses = interfaces.nextElement().getInetAddresses();
+        while (addresses.hasMoreElements()) {
+            InetAddress address = addresses.nextElement();
+            if (!address.isLoopbackAddress()) {
+                if (address.isSiteLocalAddress()) {
+                    return address.getHostAddress();
+                } else if (result == null) {
+                    result = address;
+                }
+            }
+        }
+    }
+    return (result != null ? result : InetAddress.getLocalHost()).getHostAddress();
+}
+
+task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/sip-callmanager.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-callmanager.xml"
     parameters(
         buildpath: "${buildDir}/libs",
         version: JVOICEXML_VERSION,
-        libs: configurations.compile
+        libs: configurations.compile,
+        address: JVOICEXML_IMPLEMENTATION_MRCPV2_SIP_ADDRESS,
+        port: JVOICEXML_IMPLEMENTATION_MRCPV2_SIP_PORT,
+        cairoAddress: "sip:cairo@${getIP()}",
+        cairoHost: getIP(),
+        cairoPort: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_PORT,
+        baseReceiverRTPPort: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_RCV_RTP_PORT,
+        baseTransmitterRTPPort: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_XMIT_RTP_PORT
     )
 }
 
-task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/sip-callmanager.xml"
+task xsltCallmanagerDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/sip-callmanager.xml"
     output "${project(':main').buildDir}/config/sip-callmanager.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
-        libs: configurations.compile
+        libs: configurations.compile,
+        address: JVOICEXML_IMPLEMENTATION_MRCPV2_SIP_ADDRESS,
+        port: JVOICEXML_IMPLEMENTATION_MRCPV2_SIP_PORT,
+        cairoAddress: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_ADDRESS,
+        cairoHost: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_HOST,
+        cairoPort: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_PORT,
+        baseReceiverRTPPort: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_RCV_RTP_PORT,
+        baseTransmitterRTPPort: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_XMIT_RTP_PORT
     )
 }
 
 task copyReferencedLibraries(type: Copy) {
-    into "$buildDir/libs"
+    into "${buildDir}/libs"
     from(configurations.compile) {
-        include 'jain-sip-api*.jar',
-            'jain-sip-ri*.jar',
-            'nist-sdp*.jar',
-            'log4j*.jar'
+        include 'org.speechforge.cairo.client*.jar',
+         'org.speechforge.cairo.sip*.jar',
+         'org.speechforge.cairo.rtp*.jar',
+         'org.mrcp4j*.jar',
+         'org.jvoicexml.client.mrcpv2*.jar',
+         'org.jvoicexml.zanzibar*.jar',
+         'jain-sip-api*.jar',
+         'jain-sip-ri*.jar',
+         'nist-sdp*.jar',
+         'concurrent*.jar',
+         'commons-lang*.jar',
+         'jmf*.jar'
     }
 }
 
 jar {
     version = JVOICEXML_VERSION
 
-    dependsOn xslt
-    dependsOn xsltDistribution
+    dependsOn xsltCallmanager
+    dependsOn xsltCallmanagerDistribution
     dependsOn copyReferencedLibraries
 
     manifest {
-        attributes("Implementation-Title": "JVoiceXML SIP call manager",
+        attributes("Implementation-Title": "JVoiceXML SIP CallManager",
                    'Implementation-Vendor': 'switch',
                    'Implementation-Version': JVOICEXML_VERSION,
                    'Built-By'       : System.properties['user.name'],
@@ -89,7 +145,7 @@ jar {
                    'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
                    'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}")
     }
-    baseName 'org.jvoicexml.callmanager.sip'
+    baseName 'org.jvoicexml.implementation.mrcpv2'
 }
 
 install {

@@ -41,7 +41,6 @@ dependencies {
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
     compile project(':org.jvoicexml.client.mrcpv2')
-    compile project(':org.jvoicexml.zanzibar')
     
     compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.client', version: '0.3.1-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.sip', version: '0.3.1-SNAPSHOT'
@@ -56,8 +55,8 @@ dependencies {
 }
 
 task xsltImplementation(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/mrcpv2-implementation.xml"
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/mrcpv2-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -67,68 +66,13 @@ task xsltImplementation(type: com.github.eerohele.SaxonXsltTask) {
 }
 
 task xsltImplementationDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/mrcpv2-implementation.xml"
+    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
+    input "${projectDir}/src/main/config/mrcpv2-implementation.xml"
     output "${project(':main').buildDir}/config/mrcpv2-implementation.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
         libs: configurations.compile
-    )
-}
-
-def getIP() {
-    InetAddress result = null;
-    Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-    while (interfaces.hasMoreElements()) {
-        Enumeration<InetAddress> addresses = interfaces.nextElement().getInetAddresses();
-        while (addresses.hasMoreElements()) {
-            InetAddress address = addresses.nextElement();
-            if (!address.isLoopbackAddress()) {
-                if (address.isSiteLocalAddress()) {
-                    return address.getHostAddress();
-                } else if (result == null) {
-                    result = address;
-                }
-            }
-        }
-    }
-    return (result != null ? result : InetAddress.getLocalHost()).getHostAddress();
-}
-
-task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
-    stylesheet "${projectDir}/src/main/resources/patch-callmanager-configuration.xsl"
-    input "${projectDir}/src/main/resources/mrcpv2-callmanager.xml"
-    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-callmanager.xml"
-    parameters(
-        buildpath: "${buildDir}/libs",
-        version: JVOICEXML_VERSION,
-        libs: configurations.compile,
-        address: JVOICEXML_IMPLEMENTATION_MRCPV2_SIP_ADDRESS,
-        port: JVOICEXML_IMPLEMENTATION_MRCPV2_SIP_PORT,
-        cairoAddress: "sip:cairo@${getIP()}",
-        cairoHost: getIP(),
-        cairoPort: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_PORT,
-        baseReceiverRTPPort: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_RCV_RTP_PORT,
-        baseTransmitterRTPPort: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_XMIT_RTP_PORT
-    )
-}
-
-task xsltCallmanagerDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-callmanager-configuration.xsl"
-    input "${projectDir}/src/main/resources/mrcpv2-callmanager.xml"
-    output "${project(':main').buildDir}/config/mrcpv2-callmanager.xml"
-    parameters(
-        buildpath: "lib",
-        version: JVOICEXML_VERSION,
-        libs: configurations.compile,
-        address: JVOICEXML_IMPLEMENTATION_MRCPV2_SIP_ADDRESS,
-        port: JVOICEXML_IMPLEMENTATION_MRCPV2_SIP_PORT,
-        cairoAddress: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_ADDRESS,
-        cairoHost: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_HOST,
-        cairoPort: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_PORT,
-        baseReceiverRTPPort: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_RCV_RTP_PORT,
-        baseTransmitterRTPPort: JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_XMIT_RTP_PORT
     )
 }
 
@@ -140,7 +84,6 @@ task copyReferencedLibraries(type: Copy) {
          'org.speechforge.cairo.rtp*.jar',
          'org.mrcp4j*.jar',
          'org.jvoicexml.client.mrcpv2*.jar',
-         'org.jvoicexml.zanzibar*.jar',
          'jain-sip-api*.jar',
          'jain-sip-ri*.jar',
          'nist-sdp*.jar',
@@ -155,8 +98,6 @@ jar {
 
     dependsOn xsltImplementation
     dependsOn xsltImplementationDistribution
-    dependsOn xsltCallmanager
-    dependsOn xsltCallmanagerDistribution
     dependsOn copyReferencedLibraries
 
     manifest {
@@ -178,6 +119,5 @@ install {
 }
 
 clean {
-    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-callmanager.xml")
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-implementation.xml")
 }
