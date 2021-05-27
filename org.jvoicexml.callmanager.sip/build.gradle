@@ -77,7 +77,7 @@ def getIP() {
 task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
     stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
     input "${projectDir}/src/main/config/sip-callmanager.xml"
-    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-callmanager.xml"
+    output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/sip-callmanager.xml"
     parameters(
         buildpath: "${buildDir}/libs",
         version: JVOICEXML_VERSION,
@@ -116,6 +116,7 @@ task copyReferencedLibraries(type: Copy) {
         include 'org.speechforge.cairo.client*.jar',
          'org.speechforge.cairo.sip*.jar',
          'org.speechforge.cairo.rtp*.jar',
+         'org.speechforge.cairo.server*.jar',
          'org.mrcp4j*.jar',
          'org.jvoicexml.client.mrcpv2*.jar',
          'org.jvoicexml.zanzibar*.jar',
