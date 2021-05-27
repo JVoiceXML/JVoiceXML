@@ -1,5 +1,7 @@
 /**
- * A {@link org.jvoicexml.CallManager} implementation for the SIP protocol.
+ * This package contains SIP
+ * {@link org.jvoicexml.CallManager}.
  */
+
 package org.jvoicexml.callmanager.sip;
 
