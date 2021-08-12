@@ -5,24 +5,13 @@ repositories {
     mavenCentral()
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
-    test {
-        resources {
-            srcDir "src/main/config"
-        }
-    }
-}
 configurations {
     jvxmlConfiguration
 }
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
 
 dependencies {
-    jvxmlConfiguration fileTree(dir: "src/main/config")
+	jvxmlConfiguration fileTree(jvxmlConfigurationDir)
 
     compile group: 'org.springframework', name: 'spring-context', version: '4.3.4.RELEASE'
     compile group: 'org.springframework', name: 'spring-beans', version: '4.3.4.RELEASE'
@@ -49,10 +38,6 @@ jar {
     dependsOn copyConfiguration
     dependsOn copyConfigurationDistribution
     
-    from ('./src/main/resources/META-INF') {
-        include 'services/*'
-        into 'META-INF'
-    }
     manifest {
         attributes("Implementation-Title": "JVoiceXML configuration library",
                    'Implementation-Vendor': 'switch',

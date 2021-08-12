@@ -17,6 +17,7 @@ repositories {
     }
 }
 
+
 configurations {
     jvxmlCoreProjects {
         description = "Core projects needed for JVoiceXML"

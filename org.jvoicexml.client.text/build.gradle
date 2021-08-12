@@ -23,9 +23,7 @@ sourceSets {
         }
         java {
             srcDir 'src/main/java'
-        }
-        resources {
-            exclude '**'
+            srcDir '${buildDir}/generated/source/proto/main/java'
         }
     }
 }
