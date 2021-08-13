@@ -32,6 +32,9 @@ sourceSets {
     }
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
     compile group: 'org.jvoicexml', name: 'javax.speech', version: '0.6-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2', version: '0.6-SNAPSHOT'

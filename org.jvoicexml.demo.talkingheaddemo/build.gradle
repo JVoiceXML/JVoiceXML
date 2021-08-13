@@ -5,6 +5,9 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
     if (project.property('JVOICEXML_DEVELOPMENT_ENVIRONMENT') == 'true') {
         compile project(':org.jvoicexml.client')

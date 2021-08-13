@@ -5,6 +5,9 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.3'
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
