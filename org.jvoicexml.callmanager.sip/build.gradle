@@ -101,7 +101,7 @@ task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
 task xsltCallmanagerDistribution(type: com.github.eerohele.SaxonXsltTask) {
     stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
     input "${jvxmlConfigurationDir}/sip-callmanager.xml"
-    output "${project(':main').buildDir}/config/sip-callmanager.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/sip-callmanager.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

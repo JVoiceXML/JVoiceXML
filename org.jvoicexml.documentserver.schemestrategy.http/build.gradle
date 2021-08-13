@@ -19,14 +19,6 @@ repositories {
     mavenCentral()
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -34,8 +26,10 @@ configurations {
     jvxmlConfiguration
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
-    jvxmlConfiguration fileTree(dir: "src/main/config")
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
 
     compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.11'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.9'
@@ -47,8 +41,8 @@ dependencies {
 }
 
 task xsltHttp(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/http-schemestrategy.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/http-schemestrategy.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/http-schemestrategy.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -58,8 +52,8 @@ task xsltHttp(type: com.github.eerohele.SaxonXsltTask) {
 }
 
 task xsltHttps(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/https-schemestrategy.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/https-schemestrategy.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/https-schemestrategy.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -69,9 +63,9 @@ task xsltHttps(type: com.github.eerohele.SaxonXsltTask) {
 }
 
 task xsltDistributionHttp(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/http-schemestrategy.xml"
-    output "${project(':main').buildDir}/config/http-schemestrategy.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/http-schemestrategy.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/http-schemestrategy.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
@@ -80,9 +74,9 @@ task xsltDistributionHttp(type: com.github.eerohele.SaxonXsltTask) {
 }
 
 task xsltDistributionHttps(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/https-schemestrategy.xml"
-    output "${project(':main').buildDir}/config/https-schemestrategy.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/https-schemestrategy.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/https-schemestrategy.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

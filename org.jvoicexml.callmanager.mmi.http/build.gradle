@@ -63,7 +63,7 @@ xslt {
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
     stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
     input "${jvxmlConfigurationDir}/mmi-callmanager-http.xml"
-    output "${project(':main').buildDir}/config/mmi-callmanager-http.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/mmi-callmanager-http.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

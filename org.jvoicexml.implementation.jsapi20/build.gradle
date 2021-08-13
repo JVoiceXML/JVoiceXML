@@ -24,18 +24,18 @@ repositories {
     }
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+configurations {
+    jvxmlConfiguration
+}
+
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     compile group: 'org.jvoicexml', name: 'javax.speech', version: '0.6-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2', version: '0.6-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.freetts', version: '0.6-SNAPSHOT'
@@ -52,8 +52,8 @@ dependencies {
 }
 
 task xsltSphinxFreeTTS(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/jsapi20-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/jsapi20-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi20-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -63,9 +63,9 @@ task xsltSphinxFreeTTS(type: com.github.eerohele.SaxonXsltTask) {
 }
 
 task xsltSphinxFreeTTSDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/jsapi20-implementation.xml"
-    output "${project(':main').buildDir}/config/jsapi20-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/jsapi20-implementation.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/jsapi20-implementation.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
@@ -74,8 +74,8 @@ task xsltSphinxFreeTTSDistribution(type: com.github.eerohele.SaxonXsltTask) {
 }
 
 task xsltSAPI(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/jsapi20-sapi-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/jsapi20-sapi-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jsapi20-sapi-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -85,9 +85,9 @@ task xsltSAPI(type: com.github.eerohele.SaxonXsltTask) {
 }
 
 task xsltSAPIDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/jsapi20-sapi-implementation.xml"
-    output "${project(':main').buildDir}/config/jsapi20-sapi-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/jsapi20-sapi-implementation.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/jsapi20-sapi-implementation.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

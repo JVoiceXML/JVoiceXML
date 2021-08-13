@@ -22,15 +22,15 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
+configurations {
+    jvxmlConfiguration
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.1.0'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     
@@ -45,8 +45,8 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/text-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/text-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/text-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -57,9 +57,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/text-implementation.xml"
-    output "${project(':main').buildDir}/config/text-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/text-implementation.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/text-implementation.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

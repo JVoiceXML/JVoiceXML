@@ -54,7 +54,7 @@ xslt {
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
     stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
     input "${jvxmlConfigurationDir}/text-callmanager.xml"
-    output "${project(':main').buildDir}/config/text-callmanager.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/text-callmanager.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
