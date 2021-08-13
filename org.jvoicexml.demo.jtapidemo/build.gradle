@@ -8,7 +8,15 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+configurations {
+    jvxmlConfiguration
+}
+
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     if (project.property('JVOICEXML_DEVELOPMENT_ENVIRONMENT') == 'true') {
         compile project(':org.jvoicexml.client')
         compile project(':org.jvoicexml.xml')
@@ -45,5 +53,5 @@ run {
     classpath += files("${buildDir}/resources/main")
     jvmArgs = ["-Djvoicexml.config=${buildDir}/resources/main",
                "-Djava.security.manager",
-               "-Djava.security.policy=${projectDir}/src/main/config/jvoicexml.policy"]
+               "-Djava.security.policy=${jvxmlConfigurationDir}/jvoicexml.policy"]
 }

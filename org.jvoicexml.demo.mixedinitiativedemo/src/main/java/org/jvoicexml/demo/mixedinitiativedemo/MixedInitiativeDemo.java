@@ -21,7 +21,6 @@
 
 package org.jvoicexml.demo.mixedinitiativedemo;
 
-import java.io.File;
 import java.net.URI;
 
 import javax.naming.Context;
@@ -110,8 +109,7 @@ public final class MixedInitiativeDemo {
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final MixedInitiativeDemo demo = new MixedInitiativeDemo();
-            final File file = new File("test.vxml");
-            final URI uri = file.toURI();
+            final URI uri = MixedInitiativeDemo.class.getResource("/pizza.vxml").toURI();
             LOGGER.info("interpreting document '" + uri + "'...");
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
