@@ -27,16 +27,10 @@ configurations {
     jvxmlConfiguration
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
-}
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
 
 dependencies {
-    jvxmlConfiguration fileTree(dir: "src/main/config")
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
 
     compile group: 'org.mozilla', name: 'rhino', version: '1.7.10'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
@@ -49,8 +43,8 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/ecmascript-datamodel.xml"
+    stylesheet "${jvxmlConfiguration}/patch-configuration.xsl"
+    input "${jvxmlConfiguration}/ecmascript-datamodel.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/ecmascript-datamodel.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -60,9 +54,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/ecmascript-datamodel.xml"
-    output "${project(':main').buildDir}/config/ecmascript-datamodel.xml"
+    stylesheet "${jvxmlConfiguration}/patch-configuration.xsl"
+    input "${jvxmlConfiguration}/ecmascript-datamodel.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/ecmascript-datamodel.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

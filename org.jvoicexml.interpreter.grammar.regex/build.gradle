@@ -22,15 +22,15 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
+configurations {
+    jvxmlConfiguration
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     testCompile group: 'junit', name: 'junit', version: '4.13.1'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
@@ -39,8 +39,8 @@ dependencies {
 
 
 xslt {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/regex-grammar.xml"
+    stylesheet "${jvxmlConfiguration}/patch-configuration.xsl"
+    input "${jvxmlConfiguration}/regex-grammar.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/regex-grammar.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -50,9 +50,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/regex-grammar.xml"
-    output "${project(':main').buildDir}/config/regex-grammar.xml"
+    stylesheet "${jvxmlConfiguration}/patch-configuration.xsl"
+    input "${jvxmlConfiguration}/regex-grammar.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/regex-grammar.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
@@ -65,11 +65,6 @@ jar {
 
     dependsOn xslt
     dependsOn xsltDistribution
-
-    from ('./src/main/resources') {
-        include 'services/*'
-        into 'META-INF'
-    }
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML Regex Grammar support",
