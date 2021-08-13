@@ -12,19 +12,18 @@ repositories {
     }
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    jvxmlConfiguration
 }
 
-configurations.all {
-    exclude group: 'log4j', module: 'log4j'
-}
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
 
 dependencies {
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client.mrcpv2')
     compile project(':org.jvoicexml.config')

@@ -24,20 +24,18 @@ repositories {
     }
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    jvxmlConfiguration
 }
 
-configurations.all {
-    exclude group: 'com.spokentech', module:'speechcloud-client'
-    exclude group: 'log4j', module: 'log4j'
-}
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
 
 dependencies {
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
     compile project(':org.jvoicexml.client.mrcpv2')
@@ -52,8 +50,8 @@ dependencies {
 }
 
 task xsltImplementation(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/mrcpv2-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/mrcpv2-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mrcpv2-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -63,9 +61,9 @@ task xsltImplementation(type: com.github.eerohele.SaxonXsltTask) {
 }
 
 task xsltImplementationDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/mrcpv2-implementation.xml"
-    output "${project(':main').buildDir}/config/mrcpv2-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/mrcpv2-implementation.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/mrcpv2-implementation.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

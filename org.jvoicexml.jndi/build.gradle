@@ -20,12 +20,17 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 configurations {
     jvxmlConfiguration
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
-    jvxmlConfiguration fileTree(dir: "src/main/config")
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
 
     testCompile group: 'junit', name: 'junit', version: '4.13.1'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
@@ -35,8 +40,8 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/jvxml-jndi.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/jvxml-jndi.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jvxml-jndi.xml"
     parameters(
         repositoryname: JVOICEXML_JNDI_REPOSITORY,
@@ -48,9 +53,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/jvxml-jndi.xml"
-    output "${project(':main').buildDir}/config/jvxml-jndi.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/jvxml-jndi.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/jvxml-jndi.xml"
     parameters(
         buildpath: "lib",
         repositoryname: JVOICEXML_JNDI_REPOSITORY,
@@ -60,16 +65,12 @@ task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
     )
 }
 
-task copyConfiguration(type: Copy) {
-    into "${project(':org.jvoicexml').copyConfiguration.destinationDir}"
-}
-
 
 task copyReferencedLibraries(type: Copy) {
-    into "$buildDir/libs"
     from(configurations.compile) {
         include 'org.jvoicexml.client*.jar'
     }
+    into "$buildDir/libs"
 }
 
 jar {
@@ -77,7 +78,6 @@ jar {
 
     dependsOn xslt
     dependsOn xsltDistribution
-    dependsOn copyConfiguration
     dependsOn copyReferencedLibraries
     
     manifest {

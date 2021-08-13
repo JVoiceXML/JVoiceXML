@@ -19,8 +19,18 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    jvxmlConfiguration
+}
+
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
 
 dependencies {
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.5'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
@@ -35,8 +45,8 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/luis-grammar.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/luis-grammar.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/luis-grammar.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -46,9 +56,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/luis-grammar.xml"
-    output "${project(':main').buildDir}/config/luis-grammar.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/luis-grammar.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/luis-grammar.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
@@ -71,11 +81,6 @@ jar {
     dependsOn xslt
     dependsOn xsltDistribution
     dependsOn copyReferencedLibraries
-
-    from ('./src/main/resources') {
-        include 'services/*'
-        into 'META-INF'
-    }
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML LUIS Grammar support",

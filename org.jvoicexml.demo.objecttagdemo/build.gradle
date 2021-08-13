@@ -19,13 +19,17 @@ repositories {
     mavenLocal()
     mavenCentral()
 }
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 configurations {
     jvxmlConfiguration
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
-    jvxmlConfiguration fileTree(dir: "src/main/config")
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
     
     if (project.property('JVOICEXML_DEVELOPMENT_ENVIRONMENT') == 'true') {
         compile project(':org.jvoicexml.client')
@@ -37,8 +41,8 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/config/patch-vxml.xsl"
-    input "${projectDir}/src/main/config/objectdemo.vxml"
+    stylesheet "${jvxmlConfigurationDir}/patch-vxml.xsl"
+    input "${jvxmlConfigurationDir}/objectdemo.vxml"
     output "${sourceSets.main.output.resourcesDir}/objectdemo.vxml"
     parameters(
         datapath: "${sourceSets.main.output.classesDirs.singleFile.toURL()}/"
@@ -91,5 +95,5 @@ run {
                "-Djava.security.manager",
                "-Djava.rmi.server.codebase=http://${getIP()}:9698/",
                "-Djava.rmi.server.useCodebaseOnly=false",
-               "-Djava.security.policy=${projectDir}/src/main/config/jvoicexml.policy"]
+               "-Djava.security.policy=${jvxmlConfigurationDir}/jvoicexml.policy"]
 }

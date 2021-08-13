@@ -19,15 +19,18 @@ buildscript {
     }
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+	jvxmlConfiguration
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
+	jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     testCompile group: 'junit', name: 'junit', version: '4.13.1'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
@@ -38,8 +41,8 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/text-callmanager.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/text-callmanager.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/text-callmanager.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -49,9 +52,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/text-callmanager.xml"
-    output "${project(':main').buildDir}/config/text-callmanager.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/text-callmanager.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/text-callmanager.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

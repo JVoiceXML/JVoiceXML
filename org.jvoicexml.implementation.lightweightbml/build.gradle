@@ -20,15 +20,18 @@ repositories {
     jcenter()
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    jvxmlConfiguration
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     compile group: 'org.jdom', name: 'jdom2', version: '2.0.5'
     
     testCompile group: 'junit', name: 'junit', version: '4.13.1'
@@ -38,8 +41,8 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/lightweightbml-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/lightweightbml-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/lightweightbml-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -49,9 +52,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/lightweightbml-implementation.xml"
-    output "${project(':main').buildDir}/config/lightweightbml-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/lightweightbml-implementation.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/lightweightbml-implementation.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

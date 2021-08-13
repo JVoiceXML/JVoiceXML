@@ -19,12 +19,17 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 configurations {
     jvxmlConfiguration
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
-    jvxmlConfiguration fileTree(dir: "src/main/config")
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
 
     compile fileTree(dir: './3rdparty/gjtapi1.9/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/jainsip1.19/lib', include: ['*.jar'])
@@ -40,8 +45,8 @@ dependencies {
 }
 
 task xsltImplementation(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/jtapi-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/jtapi-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -51,9 +56,9 @@ task xsltImplementation(type: com.github.eerohele.SaxonXsltTask) {
 }
 
 task xsltImplementationDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/jtapi-implementation.xml"
-    output "${project(':main').buildDir}/config/jtapi-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/jtapi-implementation.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/jtapi-implementation.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
@@ -63,8 +68,8 @@ task xsltImplementationDistribution(type: com.github.eerohele.SaxonXsltTask) {
 
 
 task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
-    stylesheet "${projectDir}/src/main/config/patch-callmanager-configuration.xsl"
-    input "${projectDir}/src/main/config/jtapi-callmanager.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-callmanager-configuration.xsl"
+    input "${jvxmlConfigurationDir}/jtapi-callmanager.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-callmanager.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -78,9 +83,9 @@ task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
 }
 
 task xsltCallmanagerDistribution(type: com.github.eerohele.SaxonXsltTask)  {
-    stylesheet "${projectDir}/src/main/config/patch-callmanager-configuration.xsl"
-    input "${projectDir}/src/main/config/jtapi-callmanager.xml"
-    output "${project(':main').buildDir}/config/jtapi-callmanager.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-callmanager-configuration.xsl"
+    input "${jvxmlConfigurationDir}/jtapi-callmanager.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/jtapi-callmanager.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

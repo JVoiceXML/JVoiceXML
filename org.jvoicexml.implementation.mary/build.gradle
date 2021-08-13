@@ -21,19 +21,18 @@ repositories {
     jcenter()
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    jvxmlConfiguration
 }
 
-configurations.all {
-    exclude group: 'log4j', module: 'log4j'
-}
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
 
 dependencies {
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     compile group: 'de.dfki.mary', name: 'marytts-client', version: '5.2'
     
     testCompile group: 'junit', name: 'junit', version: '4.13.1'
@@ -44,8 +43,8 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/mary-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/mary-implementation.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mary-implementation.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -55,9 +54,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/mary-implementation.xml"
-    output "${project(':main').buildDir}/config/mary-implementation.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/mary-implementation.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/mary-implementation.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

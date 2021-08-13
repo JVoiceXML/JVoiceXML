@@ -17,6 +17,8 @@ repositories {
     }
 }
 
+def jvxmlConfigurationDir = "${buildDir}/config"
+
 configurations {
     jvxmlCoreProjects {
         description = "Core projects needed for JVoiceXML"
@@ -307,7 +309,7 @@ distributions {
             }
             
             into('config') { 
-                from("${buildDir}/config") {
+                from(jvxmlConfigurationDir) {
                     exclude "**/kinect-implementation.xml",
                         "**/mmi-callmanager-umundo.xml",
                         "**/jsapi10-talking-java-implementation.xml",
@@ -319,7 +321,7 @@ distributions {
             }
 
             into('config/disabled') { 
-                from("${buildDir}/config") {
+                from(jvxmlConfigurationDir) {
                     include "**/kinect-implementation.xml",
                         "**/mmi-callmanager-umundo.xml",
                         "**/jsapi10-talking-java-implementation.xml",

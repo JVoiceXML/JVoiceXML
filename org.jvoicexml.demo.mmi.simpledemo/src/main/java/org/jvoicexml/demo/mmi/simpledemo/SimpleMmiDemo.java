@@ -22,7 +22,6 @@
 package org.jvoicexml.demo.mmi.simpledemo;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -113,10 +112,8 @@ public final class SimpleMmiDemo {
         start.setTarget(target.toString());
         start.setContext(context);
         start.setRequestId(Integer.toString(requestId));
-        // final File file = new File("simpleexample.vxml");
-        final File file = new File("simpleexample-de.vxml");
-        final URI example = file.toURI();
-        start.setContentURL(example);
+        final URI uri = SimpleMmiDemo.class.getResource("/simpleexample.vxml").toURI();
+        start.setContentURL(uri);
         send(mmi, target);
     }
 

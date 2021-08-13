@@ -32,12 +32,18 @@ sourceSets {
     }
 }
 
-configurations.all {
-    exclude group: 'com.spokentech', module:'speechcloud-client'
-    exclude group: 'log4j', module: 'log4j'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+	jvxmlConfiguration
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
+	jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
     compile project(':org.jvoicexml.client.mrcpv2')
@@ -75,8 +81,8 @@ def getIP() {
 }
 
 task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/sip-callmanager.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/sip-callmanager.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/sip-callmanager.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -93,9 +99,9 @@ task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
 }
 
 task xsltCallmanagerDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/sip-callmanager.xml"
-    output "${project(':main').buildDir}/config/sip-callmanager.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/sip-callmanager.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/sip-callmanager.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

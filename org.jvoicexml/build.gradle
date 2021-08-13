@@ -6,13 +6,18 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 configurations {
-    jvxmlConfiguration
+	jvxmlConfiguration
     testArtifacts
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
-    jvxmlConfiguration fileTree(dir: "src/main/config")
+	jvxmlConfiguration fileTree(jvxmlConfigurationDir)
     testArtifacts sourceSets.test.output
     
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.3'

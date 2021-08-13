@@ -5,7 +5,18 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    jvxmlConfiguration
+}
+
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.3'
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.20.v20190813'
@@ -51,5 +62,5 @@ run {
     classpath += files("${buildDir}/resources/main")
     jvmArgs = ["-Djvoicexml.config=${buildDir}/resources/main",
                "-Djava.security.manager",
-               "-Djava.security.policy=${projectDir}/src/main/config/jvoicexml.policy"]
+               "-Djava.security.policy=${jvxmlConfigurationDir}/jvoicexml.policy"]
 }

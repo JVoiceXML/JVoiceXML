@@ -19,20 +19,17 @@ repositories {
     mavenCentral()
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
-}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 configurations {
     jvxmlConfiguration
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
-    jvxmlConfiguration fileTree(dir: "src/main/config")
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
 
     compile project(':org.jvoicexml')
 
@@ -41,8 +38,8 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/file-schemestrategy.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/file-schemestrategy.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/file-schemestrategy.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -52,9 +49,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/file-schemestrategy.xml"
-    output "${project(':main').buildDir}/config/file-schemestrategy.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/file-schemestrategy.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/file-schemestrategy.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

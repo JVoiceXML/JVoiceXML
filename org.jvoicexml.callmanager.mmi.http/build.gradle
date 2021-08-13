@@ -19,15 +19,18 @@ repositories {
     mavenCentral()
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+	jvxmlConfiguration
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
+	jvxmlConfiguration fileTree(jvxmlConfigurationDir)
+
     compile group: 'org.mozilla', name: 'rhino', version: '1.7.10'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.11'
@@ -47,8 +50,8 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/mmi-callmanager-http.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/mmi-callmanager-http.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-callmanager-http.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -58,9 +61,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/resources/patch-configuration.xsl"
-    input "${projectDir}/src/main/resources/mmi-callmanager-http.xml"
-    output "${project(':main').buildDir}/config/mmi-callmanager-http.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/mmi-callmanager-http.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/mmi-callmanager-http.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,

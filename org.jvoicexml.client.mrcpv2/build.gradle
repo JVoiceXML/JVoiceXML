@@ -24,17 +24,8 @@ repositories {
     }
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
-}
-
-configurations.all {
-    exclude group: 'com.spokentech', module:'speechcloud-client'
-}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
     compile project(':org.jvoicexml')

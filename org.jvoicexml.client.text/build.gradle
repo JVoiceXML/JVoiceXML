@@ -16,6 +16,9 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 sourceSets {
     main {
         proto {
@@ -23,9 +26,7 @@ sourceSets {
         }
         java {
             srcDir 'src/main/java'
-        }
-        resources {
-            exclude '**'
+            srcDir '${buildDir}/generated/source/proto/main/java'
         }
     }
 }
