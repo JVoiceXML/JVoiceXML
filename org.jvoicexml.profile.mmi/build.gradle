@@ -26,16 +26,14 @@ configurations {
     jvxmlConfiguration
 }
 
-sourceSets {
-    main {
-        resources {
-            exclude '**'
-        }
-    }
+configurations {
+    jvxmlConfiguration
 }
 
+def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
 dependencies {
-    jvxmlConfiguration fileTree(dir: "src/main/config")
+    jvxmlConfiguration fileTree(jvxmlConfigurationDir)
 
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.profile.vxml21')
@@ -46,8 +44,8 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/mmi-profile.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/mmi-profile.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/mmi-profile.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -57,9 +55,9 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${projectDir}/src/main/config/patch-configuration.xsl"
-    input "${projectDir}/src/main/config/mmi-profile.xml"
-    output "${project(':main').buildDir}/config/mmi-profile.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/mmi-profile.xml"
+    output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/mmi-profile.xml"
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
