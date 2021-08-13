@@ -82,7 +82,7 @@ def getIP() {
 
 task xsltCallmanager(type: com.github.eerohele.SaxonXsltTask)  {
     stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
-    input "${jvxmlConfigurationDir}sip-callmanager.xml"
+    input "${jvxmlConfigurationDir}/sip-callmanager.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/sip-callmanager.xml"
     parameters(
         buildpath: "${buildDir}/libs",

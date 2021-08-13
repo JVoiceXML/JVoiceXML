@@ -43,8 +43,8 @@ dependencies {
 }
 
 xslt {
-    stylesheet "${jvxmlConfiguration}/patch-configuration.xsl"
-    input "${jvxmlConfiguration}/ecmascript-datamodel.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/ecmascript-datamodel.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/ecmascript-datamodel.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -54,8 +54,8 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${jvxmlConfiguration}/patch-configuration.xsl"
-    input "${jvxmlConfiguration}/ecmascript-datamodel.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/ecmascript-datamodel.xml"
     output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/ecmascript-datamodel.xml"
     parameters(
         buildpath: "lib",

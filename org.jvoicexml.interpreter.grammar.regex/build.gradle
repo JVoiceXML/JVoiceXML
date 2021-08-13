@@ -39,8 +39,8 @@ dependencies {
 
 
 xslt {
-    stylesheet "${jvxmlConfiguration}/patch-configuration.xsl"
-    input "${jvxmlConfiguration}/regex-grammar.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/regex-grammar.xml"
     output "${project(':org.jvoicexml').copyConfiguration.destinationDir}/regex-grammar.xml"
     parameters(
         buildpath: "${buildDir}/libs",
@@ -50,8 +50,8 @@ xslt {
 }
 
 task xsltDistribution(type: com.github.eerohele.SaxonXsltTask) {
-    stylesheet "${jvxmlConfiguration}/patch-configuration.xsl"
-    input "${jvxmlConfiguration}/regex-grammar.xml"
+    stylesheet "${jvxmlConfigurationDir}/patch-configuration.xsl"
+    input "${jvxmlConfigurationDir}/regex-grammar.xml"
     output "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}/regex-grammar.xml"
     parameters(
         buildpath: "lib",
