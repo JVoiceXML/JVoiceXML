@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
@@ -93,6 +94,9 @@ public final class TestJVoiceXmlEventHandler {
     /** The profile. */
     private Profile profile;
 
+    /** The event bus to use. */
+    private EventBus eventbus;
+    
     /**
      * Sets up the test environment.
      * 
@@ -119,6 +123,7 @@ public final class TestJVoiceXmlEventHandler {
                 tagStrategyFactory);
         Mockito.when(profile.getTagStrategyFactory()).thenReturn(
                 tagStrategyFactory);
+        eventbus = new EventBus();
     }
 
     /**
@@ -147,7 +152,7 @@ public final class TestJVoiceXmlEventHandler {
         final Dialog dialog = new ExecutablePlainForm();
         dialog.setNode(form);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
-                null);
+                null, eventbus);
         handler.collect(context, interpreter, dialog);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
@@ -182,7 +187,7 @@ public final class TestJVoiceXmlEventHandler {
 
         final FieldFormItem item = new FieldFormItem(context, field);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
-                null);
+                null, eventbus);
         handler.collect(null, null, null, item);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
@@ -221,7 +226,7 @@ public final class TestJVoiceXmlEventHandler {
 
         final FieldFormItem item = new FieldFormItem(context, field);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
-                null);
+                null, eventbus);
         handler.collect(context, interpreter, null, item);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
@@ -272,7 +277,7 @@ public final class TestJVoiceXmlEventHandler {
         observer.enterScope(Scope.DIALOG);
         final FieldFormItem item1 = new FieldFormItem(context, field1);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
-                observer);
+                observer, eventbus);
         handler.collect(context, interpreter, null, item1);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
@@ -340,7 +345,7 @@ public final class TestJVoiceXmlEventHandler {
 
         final FieldFormItem item = new FieldFormItem(context, field);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
-                null);
+                null, eventbus);
         handler.collect(context, interpreter, null, item);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
@@ -413,7 +418,7 @@ public final class TestJVoiceXmlEventHandler {
                 context, interpreter, dialog);
         fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
-                context.getScopeObserver());
+                context.getScopeObserver(), eventbus);
         handler.collect(context, interpreter, fia, item);
 
         Mockito.when(context.getProperty("confidencelevel", "0.5")).thenReturn(
@@ -470,7 +475,7 @@ public final class TestJVoiceXmlEventHandler {
                 context, interpreter, dialog);
         fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
-                context.getScopeObserver());
+                context.getScopeObserver(), eventbus);
         handler.collect(context, interpreter, fia, item);
 
         final MockRecognitionResult result = new MockRecognitionResult();
@@ -517,7 +522,7 @@ public final class TestJVoiceXmlEventHandler {
                 context, null, dialog);
         fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
-                context.getScopeObserver());
+                context.getScopeObserver(), eventbus);
         handler.collect(context, interpreter, document);
         handler.collect(context, interpreter, fia, item);
 
@@ -569,7 +574,7 @@ public final class TestJVoiceXmlEventHandler {
                 context, interpreter, dialog);
         fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
-                context.getScopeObserver());
+                context.getScopeObserver(), eventbus);
         handler.collect(context, interpreter, dialog);
         handler.collect(context, interpreter, fia, item);
 
@@ -636,7 +641,7 @@ public final class TestJVoiceXmlEventHandler {
                 context, interpreter, dialog);
         fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
-                context.getScopeObserver());
+                context.getScopeObserver(), eventbus);
         final InitialFormItem initialItem = new InitialFormItem(context,
                 initial);
         handler.collect(context, interpreter, fia, initialItem);
@@ -725,7 +730,7 @@ public final class TestJVoiceXmlEventHandler {
                 context, interpreter, dialog);
         fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
-                context.getScopeObserver());
+                context.getScopeObserver(), eventbus);
         final InitialFormItem initialItem = new InitialFormItem(context,
                 initial);
         handler.collect(context, null, fia, initialItem);
@@ -818,7 +823,7 @@ public final class TestJVoiceXmlEventHandler {
                 context, interpreter, dialog);
         fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
-                context.getScopeObserver());
+                context.getScopeObserver(), eventbus);
         handler.collect(context, interpreter, fia, item);
 
         final MockRecognitionResult result = new MockRecognitionResult();
@@ -871,7 +876,7 @@ public final class TestJVoiceXmlEventHandler {
                 context, interpreter, dialog);
         fia.initialize(profile, null);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
-                context.getScopeObserver());
+                context.getScopeObserver(), eventbus);
         handler.collect(context, interpreter, fia, item);
 
         final MockRecognitionResult result = new MockRecognitionResult();
@@ -900,7 +905,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setConfidence(1.0f);
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
-                context.getScopeObserver());
+                context.getScopeObserver(), eventbus);
         handler.onEvent(event);
         final JVoiceXMLEvent waitEvent = handler.waitEvent();
         Assert.assertEquals(event.getEventType(), waitEvent.getEventType());
@@ -922,7 +927,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setSemanticInterpretation("cancel");
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
-                context.getScopeObserver());
+                context.getScopeObserver(), eventbus);
         handler.onEvent(event);
         final JVoiceXMLEvent waitEvent = handler.waitEvent();
         Assert.assertEquals(CancelEvent.EVENT_TYPE, waitEvent.getEventType());
@@ -944,7 +949,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setSemanticInterpretation("help");
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
-                context.getScopeObserver());
+                context.getScopeObserver(), eventbus);
         handler.onEvent(event);
         final JVoiceXMLEvent waitEvent = handler.waitEvent();
         Assert.assertEquals(HelpEvent.EVENT_TYPE, waitEvent.getEventType());

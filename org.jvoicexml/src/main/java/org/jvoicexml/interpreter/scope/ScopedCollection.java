@@ -58,6 +58,9 @@ public final class ScopedCollection<E>
     /** A view onto all items of all elements. */
     private final Collection<E> view;
 
+    /** Known listeners to scope changes. */
+    private final Collection<ScopedCollectionListener<E>> listeners;
+    
     /** {@code true} if the view must be recreated. */
     private boolean needRecreatedView;
     
@@ -74,6 +77,7 @@ public final class ScopedCollection<E>
     public ScopedCollection(final ScopeObserver scopeObserver) {
         stack = new Stack<ScopedCollectionItem<E>>();
         view = new java.util.ArrayList<E>();
+        listeners = new java.util.ArrayList<ScopedCollectionListener<E>>();
         if (scopeObserver != null) {
             observer = scopeObserver;
             observer.addScopeSubscriber(this);
@@ -83,6 +87,26 @@ public final class ScopedCollection<E>
             observer = null;
             scope = null;
         }
+    }
+
+    /**
+     * Adds the provided listener to the list of known scoped collection
+     * listeners.
+     * @param listener the listener to add
+     * @since 0.7.9
+     */
+    public void addScopedCollectionListener(ScopedCollectionListener<E> listener) {
+        listeners.add(listener);
+    }
+
+    /**
+     * Removes the provided listener from the list of known scoped collection
+     * listeners.
+     * @param listener the listener to add
+     * @since 0.7.9
+     */
+    public void removeScopedCollectionListener(ScopedCollectionListener<E> listener) {
+        listeners.add(listener);
     }
 
     /**
@@ -110,6 +134,11 @@ public final class ScopedCollection<E>
             if (item.getScope() == previous) {
                 stack.pop();
                 view.removeAll(item);
+                
+                // Notify the listeners about this change
+                for (ScopedCollectionListener<E> listener : listeners) {
+                    listener.removedForScopeChange(previous, next, item);
+                }
             }
         }
 

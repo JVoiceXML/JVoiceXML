@@ -27,6 +27,7 @@ import java.util.Iterator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.CancelEvent;
@@ -99,6 +100,9 @@ public final class JVoiceXmlEventHandler implements EventHandler {
     /** The employed data model. */
     private final DataModel model;
 
+    /** The event bus that transports events. */
+    private final EventBus eventbus;
+    
     /**
      * Construct a new object.
      *
@@ -108,7 +112,7 @@ public final class JVoiceXmlEventHandler implements EventHandler {
      *            the scope observer.
      */
     public JVoiceXmlEventHandler(final DataModel dataModel,
-            final ScopeObserver observer) {
+            final ScopeObserver observer, final EventBus bus) {
         strategies = new ScopedCollection<EventStrategy>(observer);
         inputItemFactory = new EventStrategyDecoratorFactory();
         semaphore = new Object();
@@ -120,6 +124,9 @@ public final class JVoiceXmlEventHandler implements EventHandler {
         filtersNoinput = new java.util.ArrayList<EventFilter>();
         filtersNoinput.add(new EventTypeFilter());
         model = dataModel;
+        eventbus = bus;
+        eventbus.subscribe("", this);
+
     }
 
     /**
