@@ -87,7 +87,7 @@ public final class EventBus {
                 if (subscription.equals(current)) {
                     subscriptions.remove(subscription);
                     if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("added subsription of '" + type 
+                        LOGGER.debug("removed subsription of '" + type 
                                 + "' for '"
                                 + subscriber.getClass().getCanonicalName()
                                 + "'");

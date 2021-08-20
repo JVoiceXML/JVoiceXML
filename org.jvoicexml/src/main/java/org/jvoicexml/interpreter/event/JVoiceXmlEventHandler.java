@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -46,8 +46,10 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
+import org.jvoicexml.interpreter.scope.ScopedCollectionListener;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Filled;
@@ -69,7 +71,8 @@ import org.w3c.dom.NodeList;
  * @author Dirk Schnelle-Walka
  * @see org.jvoicexml.ImplementationPlatform
  */
-public final class JVoiceXmlEventHandler implements EventHandler {
+public final class JVoiceXmlEventHandler
+    implements EventHandler, ScopedCollectionListener<EventStrategy> {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
             .getLogger(JVoiceXmlEventHandler.class);
@@ -114,6 +117,7 @@ public final class JVoiceXmlEventHandler implements EventHandler {
     public JVoiceXmlEventHandler(final DataModel dataModel,
             final ScopeObserver observer, final EventBus bus) {
         strategies = new ScopedCollection<EventStrategy>(observer);
+        strategies.addScopedCollectionListener(this);
         inputItemFactory = new EventStrategyDecoratorFactory();
         semaphore = new Object();
         filters = new java.util.ArrayList<EventFilter>();
@@ -125,8 +129,6 @@ public final class JVoiceXmlEventHandler implements EventHandler {
         filtersNoinput.add(new EventTypeFilter());
         model = dataModel;
         eventbus = bus;
-        eventbus.subscribe("", this);
-
     }
 
     /**
@@ -352,11 +354,13 @@ public final class JVoiceXmlEventHandler implements EventHandler {
             LOGGER.debug("can not add a null strategy");
             return false;
         }
+        
+        final String type = strategy.getEventType();
 
         if (strategies.contains(strategy)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("strategy: '" + strategy.getClass()
-                        + "' for event type '" + strategy.getEventType() + "'"
+                        + "' for event type '" + type + "'"
                         + " ignored since it is already registered");
             }
             return false;
@@ -364,9 +368,11 @@ public final class JVoiceXmlEventHandler implements EventHandler {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("adding strategy: '" + strategy.getClass()
-                    + "' for event type '" + strategy.getEventType() + "'");
+                    + "' for event type '" + type + "'");
         }
 
+        eventbus.subscribe(type, this);
+        
         return strategies.add(strategy);
     }
 
@@ -618,6 +624,37 @@ public final class JVoiceXmlEventHandler implements EventHandler {
         if (strats == null) {
             return false;
         }
-        return strategies.removeAll(strats);
+        boolean removed = strategies.removeAll(strats);
+        if (removed) {
+            maybeUnsubscribeFromEventBus(strats);
+        }
+        return removed;
+    }
+
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removedForScopeChange(Scope previous, Scope next,
+            Collection<EventStrategy> items) {
+        maybeUnsubscribeFromEventBus(items);
+    }
+    
+    /**
+     * Remove subscriptions to the events of the removed strategies if
+     * there are no other strategies on the scope stack
+     * @param items the strategies that were removed
+     * @since 0.7.9
+     */
+    private void maybeUnsubscribeFromEventBus(
+            final Collection<EventStrategy> items) {
+        for (EventStrategy strategy : items) {
+            final String type = strategy.getEventType();
+            final EventStrategy otherStratey = getStrategy(type);
+            if (otherStratey == null) {
+                eventbus.unsubscribe(type, this);
+            }
+        }
     }
 }
