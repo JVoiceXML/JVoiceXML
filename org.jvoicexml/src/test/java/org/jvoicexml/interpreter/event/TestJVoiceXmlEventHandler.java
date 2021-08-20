@@ -439,7 +439,7 @@ public final class TestJVoiceXmlEventHandler {
 
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
-        handler.processEvent(item);
+        handler.processEvent(item, event);
 
         Mockito.verify(model).updateVariable(name, utterance);
     }
@@ -491,7 +491,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setConfidence(0.2f);
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
-        handler.processEvent(item);
+        handler.processEvent(item, event);
     }
 
     /**
@@ -539,7 +539,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setConfidence(1.0f);
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
-        handler.processEvent(item);
+        handler.processEvent(item, event);
 
         Mockito.verify(model).updateVariable(name, utterance);
     }
@@ -591,7 +591,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setConfidence(0.2f);
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
-        handler.processEvent(item);
+        handler.processEvent(item, event);
 
         Mockito.verify(model, never()).updateVariable(name, utterance);
         // The nomatch will not be processed since there is no related FIA.
@@ -678,7 +678,7 @@ public final class TestJVoiceXmlEventHandler {
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
 
-        handler.processEvent(item2);
+        handler.processEvent(item2, event);
         Mockito.verify(model).updateVariable(name1, utterance1);
         Mockito.verify(model).updateVariable(name2, utterance2);
     }
@@ -760,7 +760,7 @@ public final class TestJVoiceXmlEventHandler {
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
 
-        handler.processEvent(item2);
+        handler.processEvent(item2, event);
         Mockito.verify(model).updateVariable(name1, utterance);
         Mockito.verify(model, never()).updateVariable(name2, utterance);
     }
@@ -841,7 +841,7 @@ public final class TestJVoiceXmlEventHandler {
         handler.onEvent(event);
         JVoiceXMLEvent error = null;
         try {
-            handler.processEvent(item);
+            handler.processEvent(item, event);
         } catch (JVoiceXMLEvent e) {
             error = e;
         }
@@ -893,7 +893,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setSemanticInterpretation("help");
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
         handler.onEvent(event);
-        handler.processEvent(item);
+        handler.processEvent(item, event);
     }
 
     /**

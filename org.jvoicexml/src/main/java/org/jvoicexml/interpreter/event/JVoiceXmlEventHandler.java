@@ -23,6 +23,7 @@ package org.jvoicexml.interpreter.event;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Queue;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +35,6 @@ import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.HelpEvent;
 import org.jvoicexml.event.plain.implementation.NomatchEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
-import org.jvoicexml.event.plain.jvxml.InputEvent;
 import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventCountable;
@@ -80,9 +80,6 @@ public final class JVoiceXmlEventHandler
     /** Input item strategy factory. */
     private final EventStrategyDecoratorFactory inputItemFactory;
 
-    /** The caught event. */
-    private JVoiceXMLEvent event;
-
     /** Event filter chain to determine the relevant event strategy. */
     private final Collection<EventFilter> filters;
 
@@ -106,6 +103,9 @@ public final class JVoiceXmlEventHandler
     /** The event bus that transports events. */
     private final EventBus eventbus;
     
+    /** The caught event. */
+    private final Queue<JVoiceXMLEvent> events;
+
     /**
      * Construct a new object.
      *
@@ -129,6 +129,7 @@ public final class JVoiceXmlEventHandler
         filtersNoinput.add(new EventTypeFilter());
         model = dataModel;
         eventbus = bus;
+        events = new java.util.LinkedList<JVoiceXMLEvent>();
         
         final HangupEventStrategy hangupEventStrategy = new HangupEventStrategy();
         addStrategy(hangupEventStrategy);
@@ -443,10 +444,10 @@ public final class JVoiceXmlEventHandler
             LOGGER.debug("waiting for an event...");
         }
 
-        while (event == null) {
+        while (events.isEmpty()) {
             try {
                 synchronized (semaphore) {
-                    if (event == null) {
+                    if (events.isEmpty()) {
                         semaphore.wait();
                     }
                 }
@@ -456,15 +457,21 @@ public final class JVoiceXmlEventHandler
             }
         }
 
+        JVoiceXMLEvent event;
+        try {
+            final JVoiceXMLEvent queuedEvent;
+            synchronized (semaphore) {
+                queuedEvent = events.poll();
+            }
+            event = transformEvent(queuedEvent);
+        } catch (SemanticError e) {
+            LOGGER.warn("unable to transform event", e);
+            event = e;
+        }
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("received event: " + event);
         }
-        try {
-            event = transformEvent(event);
-        } catch (SemanticError e) {
-            LOGGER.warn("unable to transform event", e);
-        }
-
         return event;
     }
 
@@ -473,7 +480,8 @@ public final class JVoiceXmlEventHandler
      * chaining of {@link EventFilter}s.
      */
     @Override
-    public void processEvent(final CatchContainer item) throws JVoiceXMLEvent {
+    public void processEvent(final CatchContainer item, JVoiceXMLEvent event)
+            throws JVoiceXMLEvent {
         if (event == null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("no event: nothing to do");
@@ -523,8 +531,7 @@ public final class JVoiceXmlEventHandler
             // If the result was not accepted, we may receive a nomatch event.
             // Hence, we have to redo the whole stuff to get the relevant
             // nomatch strategy.
-            event = e;
-            processEvent(item);
+            processEvent(item, e);
         } finally {
             // Be prepared that an event is thrown while processing the current
             // event,
@@ -536,8 +543,10 @@ public final class JVoiceXmlEventHandler
      * {@inheritDoc}
      */
     @Override
-    public void clearEvent() {
-        event = null;
+    public void clearEvents() {
+        synchronized (semaphore) {
+            events.clear();
+        }
     }
 
     /**
@@ -547,27 +556,14 @@ public final class JVoiceXmlEventHandler
      * handle form interpretation.
      */
     @Override
-    public synchronized void onEvent(final JVoiceXMLEvent e) {
-        if (e == null) {
+    public synchronized void onEvent(final JVoiceXMLEvent event) {
+        if (event == null) {
             return;
         }
-        final String type = e.getEventType();
-        if (!(e instanceof InputEvent)) {
-            if (type.startsWith("org.jvoicexml.event.plain.implementation")) {
-                // Ignore events coming from the system output etc.
-                return;
-            }
-        }
-
-        // Allow for only one event.
-        if (event != null) {
-            LOGGER.info("ignoring second event '" + type
-                    + "' current  event is '" + event.getEventType() + "'");
-            return;
-        }
+        final String type = event.getEventType();
         synchronized (semaphore) {
             try {
-                event = e;
+                events.offer(event);
                 LOGGER.info("notified event '" + event.getEventType() + "'");
             } finally {
                 semaphore.notify();
@@ -610,13 +606,6 @@ public final class JVoiceXmlEventHandler
             return new CancelEvent();
         }
         return e;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public JVoiceXMLEvent getEvent() {
-        return event;
     }
 
     /**

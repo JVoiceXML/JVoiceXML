@@ -123,11 +123,12 @@ public interface EventHandler
     /**
      * Processes the last received event.
      * @param item The current form item.
+     * @param event the caught event
      * @exception JVoiceXMLEvent
      *            Error or event processing the event or there was no handler
      *            to process the current event
      */
-    void processEvent(final CatchContainer item)
+    void processEvent(final CatchContainer item, final JVoiceXMLEvent event)
             throws JVoiceXMLEvent;
 
     /**
@@ -135,7 +136,7 @@ public interface EventHandler
      * 
      * @since 0.7.7
      */
-    void clearEvent();
+    void clearEvents();
 
     /**
      * Adds a strategy for the given event type.
@@ -152,10 +153,4 @@ public interface EventHandler
      * @since 0.7.2
      */
     boolean removeStrategies(final Collection<EventStrategy> strategies);
-
-    /**
-     * Retrieves the event.
-     * @return the caught event.
-     */
-    JVoiceXMLEvent getEvent();
 }

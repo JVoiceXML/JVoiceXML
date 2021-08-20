@@ -135,7 +135,7 @@ public class TestSubdialogExecutorThread {
         executor.join();
         ReturnEvent event = null;
         try {
-            handler.processEvent(item);
+            handler.processEvent(item, event);
         } catch (ReturnEvent e) {
             event = e;
         }

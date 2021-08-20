@@ -576,7 +576,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             inputItem = null;
         }
         final EventHandler handler = context.getEventHandler();
-        handler.processEvent(inputItem);
+        handler.processEvent(inputItem, event);
     }
 
     /**
@@ -668,7 +668,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
 
         // Clear the event handler cache.
         final EventHandler handler = context.getEventHandler();
-        handler.clearEvent();
+        handler.clearEvents();
 
         // unless ( the last loop iteration ended with
         // a catch that had no <reprompt>,
@@ -727,10 +727,13 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final EventHandler handler = context.getEventHandler();
         final boolean isInputItem = formItem instanceof InputItem;
         final boolean isInitialItem = formItem instanceof InitialFormItem;
+        final JVoiceXMLEvent event;
         if ((isInputItem || isInitialItem)
                 && !interpreter.isInFinalProcessingState()) {
             interpreter.setState(InterpreterState.WAITING);
-            handler.waitEvent();
+            event = handler.waitEvent();
+        } else {
+            event = null;
         }
 
         // Do some cleanup before continuing.
@@ -757,10 +760,11 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
 
         // If there is an input item or an initial form item, wait for the
         // event coming from the implementation platform.
-        if (isInputItem || isInitialItem) {
+        if (event != null) {
             final CatchContainer container = (CatchContainer) formItem;
-            handler.processEvent(container);
+            handler.processEvent(container, event);
             handler.removeStrategies(eventStrategies);
+            handler.clearEvents();
         }
 
         if (reprompt) {
