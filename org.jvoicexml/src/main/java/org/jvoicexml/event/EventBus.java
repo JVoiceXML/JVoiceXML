@@ -66,7 +66,7 @@ public final class EventBus {
         synchronized (subscriptions) {
             subscriptions.add(subscription);
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("added subsription of '" + type + "' for '"
+                LOGGER.debug("added subscription of '" + type + "' for '"
                         + subscriber.getClass().getCanonicalName() + "'");
             }
         }
@@ -87,7 +87,7 @@ public final class EventBus {
                 if (subscription.equals(current)) {
                     subscriptions.remove(subscription);
                     if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("removed subsription of '" + type 
+                        LOGGER.debug("removed subscription of '" + type 
                                 + "' for '"
                                 + subscriber.getClass().getCanonicalName()
                                 + "'");

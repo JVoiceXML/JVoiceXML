@@ -129,6 +129,9 @@ public final class JVoiceXmlEventHandler
         filtersNoinput.add(new EventTypeFilter());
         model = dataModel;
         eventbus = bus;
+        
+        final HangupEventStrategy hangupEventStrategy = new HangupEventStrategy();
+        addStrategy(hangupEventStrategy);
     }
 
     /**

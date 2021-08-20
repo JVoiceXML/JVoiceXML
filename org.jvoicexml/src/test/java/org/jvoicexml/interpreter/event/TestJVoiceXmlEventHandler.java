@@ -153,10 +153,11 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
                 null, eventbus);
+        final int numDefaultHandlers = handler.getStrategies().size();
         handler.collect(context, interpreter, dialog);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
-        Assert.assertEquals(3, strategies.size());
+        Assert.assertEquals(numDefaultHandlers + 3, strategies.size());
         Assert.assertTrue("expected to find type test",
                 containsType(strategies, "test"));
         Assert.assertTrue("expected to find type noinput",
@@ -188,10 +189,11 @@ public final class TestJVoiceXmlEventHandler {
         final FieldFormItem item = new FieldFormItem(context, field);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
                 null, eventbus);
+        final int numDefaultHandlers = handler.getStrategies().size();
         handler.collect(null, null, null, item);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
-        Assert.assertEquals(6, strategies.size());
+        Assert.assertEquals(numDefaultHandlers + 6, strategies.size());
         Assert.assertTrue("expected to find type test",
                 containsType(strategies, "test"));
         Assert.assertTrue("expected to find type noinput",
@@ -227,10 +229,11 @@ public final class TestJVoiceXmlEventHandler {
         final FieldFormItem item = new FieldFormItem(context, field);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
                 null, eventbus);
+        final int numDefaultHandlers = handler.getStrategies().size();
         handler.collect(context, interpreter, null, item);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
-        Assert.assertEquals(6, strategies.size());
+        Assert.assertEquals(numDefaultHandlers + 6, strategies.size());
         Assert.assertTrue("expected to find type test",
                 containsType(strategies, "test"));
         Assert.assertTrue("expected to find type noinput",
@@ -274,14 +277,16 @@ public final class TestJVoiceXmlEventHandler {
         catchNode2.setEvent("test2");
 
         final ScopeObserver observer = new ScopeObserver();
-        observer.enterScope(Scope.DIALOG);
-        final FieldFormItem item1 = new FieldFormItem(context, field1);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
                 observer, eventbus);
+        final int numDefaultHandlers = handler.getStrategies().size();
+        observer.enterScope(Scope.DIALOG);
+
+        final FieldFormItem item1 = new FieldFormItem(context, field1);
         handler.collect(context, interpreter, null, item1);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
-        Assert.assertEquals(6, strategies.size());
+        Assert.assertEquals(numDefaultHandlers + 6, strategies.size());
         Assert.assertTrue("expected to find type test",
                 containsType(strategies, "test"));
         Assert.assertTrue("expected to find type noinput",
@@ -297,7 +302,7 @@ public final class TestJVoiceXmlEventHandler {
         observer.exitScope(Scope.DIALOG);
         final Collection<EventStrategy> strategiesLeave1 = handler
                 .getStrategies();
-        Assert.assertEquals(0, strategiesLeave1.size());
+        Assert.assertEquals(numDefaultHandlers, strategiesLeave1.size());
 
         observer.enterScope(Scope.DIALOG);
         final FieldFormItem item2 = new FieldFormItem(context, field2);
@@ -305,7 +310,7 @@ public final class TestJVoiceXmlEventHandler {
 
         final Collection<EventStrategy> strategiesEnter2 = handler
                 .getStrategies();
-        Assert.assertEquals(6, strategiesEnter2.size());
+        Assert.assertEquals(numDefaultHandlers + 6, strategiesEnter2.size());
         Assert.assertTrue("expected to find type test2",
                 containsType(strategiesEnter2, "test2"));
         Assert.assertTrue("expected to find type noinput",
@@ -320,7 +325,7 @@ public final class TestJVoiceXmlEventHandler {
         observer.exitScope(Scope.DIALOG);
         final Collection<EventStrategy> strategiesLeave2 = handler
                 .getStrategies();
-        Assert.assertEquals(0, strategiesLeave2.size());
+        Assert.assertEquals(numDefaultHandlers, strategiesLeave2.size());
     }
 
     /**
@@ -346,10 +351,11 @@ public final class TestJVoiceXmlEventHandler {
         final FieldFormItem item = new FieldFormItem(context, field);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
                 null, eventbus);
+        final int numDefaultHandlers = handler.getStrategies().size();
         handler.collect(context, interpreter, null, item);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
-        Assert.assertEquals(6, strategies.size());
+        Assert.assertEquals(numDefaultHandlers + 6, strategies.size());
         Assert.assertTrue("expected to find type test",
                 containsType(strategies, "test"));
         Assert.assertTrue("expected to find type noinput",
@@ -368,7 +374,7 @@ public final class TestJVoiceXmlEventHandler {
         handler.collect(context, interpreter, null, item);
         final Collection<EventStrategy> strategiesSecond = handler
                 .getStrategies();
-        Assert.assertEquals(6, strategiesSecond.size());
+        Assert.assertEquals(numDefaultHandlers + 6, strategiesSecond.size());
         Assert.assertTrue("expected to find type test",
                 containsType(strategiesSecond, "test"));
         Assert.assertTrue("expected to find type noinput",
