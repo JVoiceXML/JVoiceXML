@@ -496,6 +496,12 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                     gotoFormItemName = e.getItem();
                     LOGGER.info("going to form item '" + gotoFormItemName
                             + "'...");
+                } catch (ConnectionDisconnectHangupEvent e) {
+                    LOGGER.debug("caught hangup event while processing '"
+                            + e.getEventType() + "'");
+                    final EventBus eventbus = context.getEventBus();
+                    eventbus.publish(e);
+                    break;
                 } catch (JVoiceXMLEvent e) {
                     try {
                         LOGGER.debug("caught JVoiceXML event while processing '"

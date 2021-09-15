@@ -64,14 +64,6 @@ public final class RecognitionEvent
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getEventType() {
-        return EVENT_TYPE;
-    }
-
-    /**
      * Retrieves the result of the recognition process.
      *
      * @return RecognitionResult

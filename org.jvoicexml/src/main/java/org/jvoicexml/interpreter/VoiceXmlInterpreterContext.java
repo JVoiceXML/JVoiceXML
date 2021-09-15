@@ -164,8 +164,9 @@ public class VoiceXmlInterpreterContext {
         eventHandler =
                 new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
                         model, scopeObserver, eventbus);
+        final HangupEventHandler hangupHandler = new HangupEventHandler();
         eventbus.subscribe(ConnectionDisconnectHangupEvent.EVENT_TYPE,
-                deactivator);
+                hangupHandler);
     }
 
     /**
