@@ -157,7 +157,7 @@ final class SessionSkeleton
             final SessionIdentifier id = session.getSessionId();
             final DtmfInput input = session.getDtmfInput();
             final RemoteDtmfInput skeleton = new DtmfInputSkeleton(id, input);
-            final RemoteSession stub = (RemoteSession) 
+            final RemoteDtmfInput stub = (RemoteDtmfInput) 
                     UnicastRemoteObject.exportObject(skeleton, 0);
             final String name = 
                     ((DtmfInputSkeleton) skeleton).getSkeletonName();
