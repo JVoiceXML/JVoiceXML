@@ -113,6 +113,8 @@ public final class JVoiceXmlEventHandler
      *            the emplyoed data model
      * @param observer
      *            the scope observer.
+     * @param bus
+     *            the used event bus
      */
     public JVoiceXmlEventHandler(final DataModel dataModel,
             final ScopeObserver observer, final EventBus bus) {
