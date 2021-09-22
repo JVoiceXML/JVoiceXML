@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,17 +23,18 @@ package org.jvoicexml.interpreter.event;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Queue;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.HelpEvent;
 import org.jvoicexml.event.plain.implementation.NomatchEvent;
 import org.jvoicexml.event.plain.implementation.RecognitionEvent;
-import org.jvoicexml.event.plain.jvxml.InputEvent;
 import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventCountable;
@@ -45,8 +46,10 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
+import org.jvoicexml.interpreter.scope.ScopedCollectionListener;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Filled;
@@ -68,16 +71,14 @@ import org.w3c.dom.NodeList;
  * @author Dirk Schnelle-Walka
  * @see org.jvoicexml.ImplementationPlatform
  */
-public final class JVoiceXmlEventHandler implements EventHandler {
+public final class JVoiceXmlEventHandler
+    implements EventHandler, ScopedCollectionListener<EventStrategy> {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
             .getLogger(JVoiceXmlEventHandler.class);
 
     /** Input item strategy factory. */
     private final EventStrategyDecoratorFactory inputItemFactory;
-
-    /** The caught event. */
-    private JVoiceXMLEvent event;
 
     /** Event filter chain to determine the relevant event strategy. */
     private final Collection<EventFilter> filters;
@@ -99,6 +100,12 @@ public final class JVoiceXmlEventHandler implements EventHandler {
     /** The employed data model. */
     private final DataModel model;
 
+    /** The event bus that transports events. */
+    private final EventBus eventbus;
+    
+    /** The caught event. */
+    private final Queue<JVoiceXMLEvent> events;
+
     /**
      * Construct a new object.
      *
@@ -106,10 +113,13 @@ public final class JVoiceXmlEventHandler implements EventHandler {
      *            the emplyoed data model
      * @param observer
      *            the scope observer.
+     * @param bus
+     *            the used event bus
      */
     public JVoiceXmlEventHandler(final DataModel dataModel,
-            final ScopeObserver observer) {
+            final ScopeObserver observer, final EventBus bus) {
         strategies = new ScopedCollection<EventStrategy>(observer);
+        strategies.addScopedCollectionListener(this);
         inputItemFactory = new EventStrategyDecoratorFactory();
         semaphore = new Object();
         filters = new java.util.ArrayList<EventFilter>();
@@ -120,6 +130,11 @@ public final class JVoiceXmlEventHandler implements EventHandler {
         filtersNoinput = new java.util.ArrayList<EventFilter>();
         filtersNoinput.add(new EventTypeFilter());
         model = dataModel;
+        eventbus = bus;
+        events = new java.util.LinkedList<JVoiceXMLEvent>();
+        
+        final HangupEventStrategy hangupEventStrategy = new HangupEventStrategy();
+        addStrategy(hangupEventStrategy);
     }
 
     /**
@@ -345,11 +360,13 @@ public final class JVoiceXmlEventHandler implements EventHandler {
             LOGGER.debug("can not add a null strategy");
             return false;
         }
+        
+        final String type = strategy.getEventType();
 
         if (strategies.contains(strategy)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("strategy: '" + strategy.getClass()
-                        + "' for event type '" + strategy.getEventType() + "'"
+                        + "' for event type '" + type + "'"
                         + " ignored since it is already registered");
             }
             return false;
@@ -357,9 +374,11 @@ public final class JVoiceXmlEventHandler implements EventHandler {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("adding strategy: '" + strategy.getClass()
-                    + "' for event type '" + strategy.getEventType() + "'");
+                    + "' for event type '" + type + "'");
         }
 
+        eventbus.subscribe(type, this);
+        
         return strategies.add(strategy);
     }
 
@@ -427,10 +446,10 @@ public final class JVoiceXmlEventHandler implements EventHandler {
             LOGGER.debug("waiting for an event...");
         }
 
-        while (event == null) {
+        while (events.isEmpty()) {
             try {
                 synchronized (semaphore) {
-                    if (event == null) {
+                    if (events.isEmpty()) {
                         semaphore.wait();
                     }
                 }
@@ -440,15 +459,21 @@ public final class JVoiceXmlEventHandler implements EventHandler {
             }
         }
 
+        JVoiceXMLEvent event;
+        try {
+            final JVoiceXMLEvent queuedEvent;
+            synchronized (semaphore) {
+                queuedEvent = events.poll();
+            }
+            event = transformEvent(queuedEvent);
+        } catch (SemanticError e) {
+            LOGGER.warn("unable to transform event", e);
+            event = e;
+        }
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("received event: " + event);
         }
-        try {
-            event = transformEvent(event);
-        } catch (SemanticError e) {
-            LOGGER.warn("unable to transform event", e);
-        }
-
         return event;
     }
 
@@ -457,7 +482,8 @@ public final class JVoiceXmlEventHandler implements EventHandler {
      * chaining of {@link EventFilter}s.
      */
     @Override
-    public void processEvent(final CatchContainer item) throws JVoiceXMLEvent {
+    public void processEvent(final CatchContainer item, JVoiceXMLEvent event)
+            throws JVoiceXMLEvent {
         if (event == null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("no event: nothing to do");
@@ -507,8 +533,7 @@ public final class JVoiceXmlEventHandler implements EventHandler {
             // If the result was not accepted, we may receive a nomatch event.
             // Hence, we have to redo the whole stuff to get the relevant
             // nomatch strategy.
-            event = e;
-            processEvent(item);
+            processEvent(item, e);
         } finally {
             // Be prepared that an event is thrown while processing the current
             // event,
@@ -520,8 +545,10 @@ public final class JVoiceXmlEventHandler implements EventHandler {
      * {@inheritDoc}
      */
     @Override
-    public void clearEvent() {
-        event = null;
+    public void clearEvents() {
+        synchronized (semaphore) {
+            events.clear();
+        }
     }
 
     /**
@@ -531,27 +558,14 @@ public final class JVoiceXmlEventHandler implements EventHandler {
      * handle form interpretation.
      */
     @Override
-    public synchronized void onEvent(final JVoiceXMLEvent e) {
-        if (e == null) {
+    public synchronized void onEvent(final JVoiceXMLEvent event) {
+        if (event == null) {
             return;
         }
-        final String type = e.getEventType();
-        if (!(e instanceof InputEvent)) {
-            if (type.startsWith("org.jvoicexml.event.plain.implementation")) {
-                // Ignore events coming from the system output etc.
-                return;
-            }
-        }
-
-        // Allow for only one event.
-        if (event != null) {
-            LOGGER.info("ignoring second event '" + type
-                    + "' current  event is '" + event.getEventType() + "'");
-            return;
-        }
+        final String type = event.getEventType();
         synchronized (semaphore) {
             try {
-                event = e;
+                events.offer(event);
                 LOGGER.info("notified event '" + event.getEventType() + "'");
             } finally {
                 semaphore.notify();
@@ -599,18 +613,42 @@ public final class JVoiceXmlEventHandler implements EventHandler {
     /**
      * {@inheritDoc}
      */
-    public JVoiceXMLEvent getEvent() {
-        return event;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean removeStrategies(final Collection<EventStrategy> strats) {
         if (strats == null) {
             return false;
         }
-        return strategies.removeAll(strats);
+        boolean removed = strategies.removeAll(strats);
+        if (removed) {
+            maybeUnsubscribeFromEventBus(strats);
+        }
+        return removed;
+    }
+
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removedForScopeChange(Scope previous, Scope next,
+            Collection<EventStrategy> items) {
+        maybeUnsubscribeFromEventBus(items);
+    }
+    
+    /**
+     * Remove subscriptions to the events of the removed strategies if
+     * there are no other strategies on the scope stack
+     * @param items the strategies that were removed
+     * @since 0.7.9
+     */
+    private void maybeUnsubscribeFromEventBus(
+            final Collection<EventStrategy> items) {
+        for (EventStrategy strategy : items) {
+            final String type = strategy.getEventType();
+            final EventStrategy otherStratey = getStrategy(type);
+            if (otherStratey == null) {
+                eventbus.unsubscribe(type, this);
+            }
+        }
     }
 }

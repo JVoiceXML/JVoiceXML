@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014-2020 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +22,9 @@ package org.jvoicexml.event;
 
 import java.util.Collection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * An event bus to transport events between interpreter and implementation
  * platform. Events are published via a simple publish-subscribe mechanism.
@@ -31,10 +34,13 @@ import java.util.Collection;
  * {@link #publish(JVoiceXMLEvent)}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 public final class EventBus {
+    /** Logger for this class. */
+    private static final Logger LOGGER = LogManager
+            .getLogger(EventBus.class);
+
     /** The registered event subscriptions. */
     private final Collection<EventSubscription> subscriptions;
     
@@ -59,6 +65,10 @@ public final class EventBus {
                 new EventSubscription(type, subscriber);
         synchronized (subscriptions) {
             subscriptions.add(subscription);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added subscription of '" + type + "' for '"
+                        + subscriber.getClass().getCanonicalName() + "'");
+            }
         }
     }
 
@@ -76,6 +86,12 @@ public final class EventBus {
             for (EventSubscription current : subscriptions) {
                 if (subscription.equals(current)) {
                     subscriptions.remove(subscription);
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("removed subscription of '" + type 
+                                + "' for '"
+                                + subscriber.getClass().getCanonicalName()
+                                + "'");
+                    }
                     return true;
                 }
             }
@@ -89,12 +105,17 @@ public final class EventBus {
      */
     public void publish(final JVoiceXMLEvent event) {
         final String type = event.getEventType();
+        boolean publishedEvent = false;
         synchronized (subscriptions) {
             for (EventSubscription subscription : subscriptions) {
                 if (subscription.matches(type)) {
                     subscription.publish(event);
+                    publishedEvent = true;
                 }
             }
+        }
+        if (!publishedEvent) {
+            LOGGER.warn("no handler known for event '" + type + "'");
         }
     }
 }

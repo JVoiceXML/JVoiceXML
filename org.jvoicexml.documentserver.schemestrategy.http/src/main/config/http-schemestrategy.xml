@@ -11,6 +11,6 @@
           class="org.jvoicexml.documentserver.schemestrategy.http.HttpSchemeStrategy">
           <!-- Strategy default fetch timeout in msec -->
           <property name="fetchTimeout" value="5000"/>
-          <property name="scheme" value="https" />
+          <property name="scheme" value="http" />
     </beans:bean>
 </schemestrategy>

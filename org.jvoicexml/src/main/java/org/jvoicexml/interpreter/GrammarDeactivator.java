@@ -27,8 +27,6 @@ import org.apache.logging.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.UserInput;
-import org.jvoicexml.event.EventSubscriber;
-import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
@@ -41,7 +39,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * @author Dirk Schnelle-Walka
  * @since 0.7.3
  */
-class GrammarDeactivator implements ActiveGrammarSetObserver, EventSubscriber {
+class GrammarDeactivator implements ActiveGrammarSetObserver {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
             .getLogger(GrammarDeactivator.class);
@@ -104,22 +102,5 @@ class GrammarDeactivator implements ActiveGrammarSetObserver, EventSubscriber {
         } catch (BadFetchError e) {
             LOGGER.error(e.getMessage(), e);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onEvent(final JVoiceXMLEvent event) {
-        if (!event.isType(ConnectionDisconnectHangupEvent.EVENT_TYPE)) {
-            return;
-        }
-        if (platform.isHungup()) {
-            LOGGER.info("no need to cleanup grammars. caller has hung up.");
-            return;
-        }
-        LOGGER.info("hangup: deactivating all grammars");
-        final Collection<GrammarDocument> allGrammars = grammars.getGrammars();
-        deactivateGramars(allGrammars);
     }
 }

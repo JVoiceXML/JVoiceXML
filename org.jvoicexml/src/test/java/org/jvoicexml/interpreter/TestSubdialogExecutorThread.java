@@ -117,10 +117,9 @@ public class TestSubdialogExecutorThread {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, null, dialog);
-        final EventHandler handler = new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
-                null, null);
         final EventBus eventbus = context.getEventBus();
-        eventbus.subscribe("", handler);
+        final EventHandler handler = new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
+                null, null, eventbus);
         handler.collect(context, null, fia, item);
 
         final URI uri = new URI("#subid");
@@ -136,7 +135,7 @@ public class TestSubdialogExecutorThread {
         executor.join();
         ReturnEvent event = null;
         try {
-            handler.processEvent(item);
+            handler.processEvent(item, event);
         } catch (ReturnEvent e) {
             event = e;
         }

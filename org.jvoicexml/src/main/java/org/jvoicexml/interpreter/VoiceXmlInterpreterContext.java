@@ -159,14 +159,14 @@ public class VoiceXmlInterpreterContext {
         grammars.addActiveGrammarSetObserver(deactivator);
         properties = new ScopedMap<String, String>(scopeObserver);
 
-        // Subscribe the default event handler to all events of the event bus.
+        // Create an eventbus and register default handlers;
         eventbus = new EventBus();
         eventHandler =
                 new org.jvoicexml.interpreter.event.JVoiceXmlEventHandler(
-                        model, scopeObserver);
-        eventbus.subscribe("", eventHandler);
+                        model, scopeObserver, eventbus);
+        final HangupEventHandler hangupHandler = new HangupEventHandler();
         eventbus.subscribe(ConnectionDisconnectHangupEvent.EVENT_TYPE,
-                deactivator);
+                hangupHandler);
     }
 
     /**

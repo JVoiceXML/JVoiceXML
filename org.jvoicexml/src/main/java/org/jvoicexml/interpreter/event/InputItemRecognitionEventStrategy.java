@@ -83,7 +83,7 @@ final class InputItemRecognitionEventStrategy
             final FormInterpretationAlgorithm algorithm,
             final FormItem formItem) {
         super(ctx, interpreter, algorithm, formItem,
-                RecognitionEvent.EVENT_TYPE);
+                RecognitionEvent.EVENT_TYPE + "." + RecognitionEvent.DETAIL);
     }
 
     /**

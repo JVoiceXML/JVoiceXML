@@ -25,6 +25,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.rmi.RemoteException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -37,6 +38,7 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
+import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.client.text.TextServer;
@@ -73,8 +75,8 @@ public final class TextDemo implements TextListener {
     public void sequentialMode() {
         try {
             final Context context = new InitialContext();
-            final JVoiceXml jvxml = (JVoiceXml) context.lookup(
-                    JVoiceXml.class.getSimpleName());
+            final RemoteJVoiceXml jvxml =
+                    (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
             final URI dialog =
                     TextDemo.class.getResource("/helloworld.vxml").toURI();
             for (int i = 0; i < MAX_SESSIONS; i++) {
@@ -93,7 +95,7 @@ public final class TextDemo implements TextListener {
                 LOGGER.info("...done with call " + i);
             }
         } catch (NamingException | ErrorEvent | UnknownHostException
-                | URISyntaxException | InterruptedException e) {
+                | URISyntaxException | InterruptedException | RemoteException e) {
             LOGGER.fatal(e.getMessage(), e);
             return;
         }        
@@ -114,8 +116,8 @@ public final class TextDemo implements TextListener {
 
         try {
             final Context context = new InitialContext();
-            final JVoiceXml jvxml = (JVoiceXml) context.lookup(
-                    JVoiceXml.class.getSimpleName());
+            final RemoteJVoiceXml jvxml =
+                    (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
             final URI dialog =
                     TextDemo.class.getResource("/helloworld.vxml").toURI();
             LOGGER.info("initiating " + MAX_SESSIONS + " calls...");
@@ -137,7 +139,7 @@ public final class TextDemo implements TextListener {
             }
             LOGGER.info("...done");
         } catch (NamingException | ErrorEvent | UnknownHostException
-                | URISyntaxException e) {
+                | URISyntaxException | RemoteException e) {
             LOGGER.fatal(e.getMessage(), e);
             return;
         }

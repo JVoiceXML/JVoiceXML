@@ -35,7 +35,7 @@ import org.jvoicexml.implementation.SpokenInput;
 public final class RecognitionEvent
         extends SpokenInputEvent implements InputEvent {
 
-    /** The unsupported element. */
+    /** The detailing part. */
     public static final String DETAIL = "accepted";
 
     /** The result of the recognition process. */
@@ -61,14 +61,6 @@ public final class RecognitionEvent
                     "recognition result must not be null!");
         }
         result = recognitionResult;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getEventType() {
-        return EVENT_TYPE;
     }
 
     /**
