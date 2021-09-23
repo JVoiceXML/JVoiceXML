@@ -36,6 +36,17 @@ public class HangupEventHandler implements EventSubscriber {
     private static final Logger LOGGER = LogManager
             .getLogger(HangupEventHandler.class);
 
+    /** The used form interpretation algorithm. */
+    private final FormInterpretationAlgorithm fia;
+    
+    /**
+     * Creates a new object.
+     * @param algorithm the FIA to use
+     */
+    public HangupEventHandler(final FormInterpretationAlgorithm algorithm) {
+        fia = algorithm;
+    }
+    
     /**
      * {@inheritDoc}
      */

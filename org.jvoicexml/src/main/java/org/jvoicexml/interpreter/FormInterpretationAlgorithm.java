@@ -504,7 +504,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                     break;
                 } catch (JVoiceXMLEvent e) {
                     try {
-                        LOGGER.debug("caught JVoiceXML event while processing '"
+                        LOGGER.info("caught JVoiceXML event while processing '"
                                 + e.getEventType() + "'");
                         final EventBus eventbus = context.getEventBus();
                         eventbus.publish(e);

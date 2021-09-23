@@ -32,6 +32,10 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
+import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
+import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -242,6 +246,10 @@ public final class VoiceXmlInterpreter {
         // There is no next dialog by default.
         nextDialog = null;
         fia = new FormInterpretationAlgorithm(context, this, dialog);
+        final EventBus eventbus = context.getEventBus();
+        final HangupEventHandler hangupHandler = new HangupEventHandler(fia);
+        eventbus.subscribe(ConnectionDisconnectHangupEvent.EVENT_TYPE,
+                hangupHandler);
 
         // Collect dialog level catches.
         final EventHandler eventHandler = context.getEventHandler();
@@ -254,13 +262,16 @@ public final class VoiceXmlInterpreter {
         try {
             try {
                 fia.initialize(profile, parameters);
+                fia.mainLoop();
+            } catch (GotoNextFormEvent | GotoNextDocumentEvent | SubmitEvent e) {
+                throw e;
             } catch (JVoiceXMLEvent event) {
-                final EventBus eventbus = context.getEventBus();
                 eventbus.publish(event);
             }
-            fia.mainLoop();
         } finally {
             fia = null;
+            eventbus.subscribe(ConnectionDisconnectHangupEvent.EVENT_TYPE,
+                    hangupHandler);
         }
     }
 
