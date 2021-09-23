@@ -48,4 +48,17 @@ public class UuidSessionIdentifier implements SessionIdentifier {
     public String getId() {
         return uuid.toString();
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append(UuidSessionIdentifier.class.getCanonicalName());
+        str.append('[');
+        str.append(getId());
+        str.append(']');
+        return str.toString();
+    }
 }

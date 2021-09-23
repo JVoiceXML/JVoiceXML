@@ -184,7 +184,8 @@ public class DocumentStorage implements ContextHandlerProvider {
         final Collection<GrammarDocument> currentDocuments = sessionDocuments
                 .get(sessionId);
         if (currentDocuments == null) {
-            LOGGER.warn("session '" + sessionId + "' unknown. cannot clear");
+            LOGGER.warn("session '" + sessionId.getId() 
+                + "' unknown. cannot clear");
             return;
         }
         for (GrammarDocument document : currentDocuments) {
@@ -194,7 +195,8 @@ public class DocumentStorage implements ContextHandlerProvider {
             documents.remove(pathUri);
         }
         sessionDocuments.remove(sessionId);
-        LOGGER.info("cleared document storage for session '" + sessionId + "'");
+        LOGGER.info("cleared document storage for session '" + sessionId.getId()
+            + "'");
     }
 
     @Override
