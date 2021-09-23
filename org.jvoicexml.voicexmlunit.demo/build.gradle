@@ -31,6 +31,7 @@ dependencies {
         compile group: 'org.jvoicexml', name: 'org.jvoicexml.client.text', version: JVOICEXML_VERSION
         compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: JVOICEXML_VERSION
         compile group: 'org.jvoicexml', name: 'org.jvoicexml.jndi', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.voicexmlunit', version: JVOICEXML_VERSION
     }
 }
 
