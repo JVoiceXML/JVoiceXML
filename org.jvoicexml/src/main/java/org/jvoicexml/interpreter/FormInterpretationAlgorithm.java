@@ -528,6 +528,27 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
     }
 
     /**
+     * Checks, if the interpreter is in the final processing state.
+     * 
+     * @return <code>true</code> if the interpreter is in the final processing
+     *         state.
+     * @since 0.7.9
+     */
+    public boolean isInFinalProcessingState() {
+        return interpreter.isInFinalProcessingState();
+    }
+
+    /**
+     * A hangup has been detected and the interpreter should enter the
+     * final processing state.
+     * 
+     * @since 0.7.9
+     */
+    public void enterFinalProcessing() {
+        interpreter.setState(InterpreterState.FINALPROCESSING);
+    }
+
+    /**
      * Deactivates the local grammars.
      * 
      * @throws BadFetchError
@@ -738,6 +759,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 && !interpreter.isInFinalProcessingState()) {
             interpreter.setState(InterpreterState.WAITING);
             event = handler.waitEvent();
+            interpreter.setState(InterpreterState.TRANSITIONING);
         } else {
             event = null;
         }

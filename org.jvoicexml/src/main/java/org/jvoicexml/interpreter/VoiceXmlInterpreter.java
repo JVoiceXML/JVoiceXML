@@ -75,16 +75,6 @@ public final class VoiceXmlInterpreter {
     private InterpreterState state;
 
     /**
-     * The interpreter has entered the final processing state.
-     *
-     * <p>
-     * Since this is not a valid interpreter state, this state has to be
-     * handeled seperately.
-     * </p>
-     */
-    private boolean finalProcessingState;
-
-    /**
      * Constructs a new object.
      *
      * @param ctx
@@ -276,28 +266,13 @@ public final class VoiceXmlInterpreter {
     }
 
     /**
-     * Under certain circumstances (in particular, while the VoiceXML
-     * interpreter is processing a disconnect event) the interpreter may
-     * continue executing in the final processing state after there is no longer
-     * a connection to allow the interpreter to interact with the end user. The
-     * purpose of this state is to allow the VoiceXML application to perform any
-     * necessary final cleanup, such as submitting information to the
-     * application server.
-     */
-    public void enterFinalProcessingState() {
-        LOGGER.info("entered final processing state");
-
-        finalProcessingState = true;
-    }
-
-    /**
      * Checks, if the interpreter is in the final processing state.
      * 
      * @return <code>true</code> if the interpreter is in the final processing
      *         state.
      */
     public boolean isInFinalProcessingState() {
-        return finalProcessingState;
+        return state == InterpreterState.FINALPROCESSING;
     }
 
     /**

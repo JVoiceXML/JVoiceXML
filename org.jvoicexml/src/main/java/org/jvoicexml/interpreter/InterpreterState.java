@@ -21,7 +21,7 @@
 package org.jvoicexml.interpreter;
 
 /**
- * A VoiceXML interpreter is at all times in one of two states:
+ * A VoiceXML interpreter is at all times in one of follwoing states:
  *
  * <ol>
  * <li>
@@ -67,8 +67,19 @@ public enum InterpreterState {
      * transition should also be buffered until the waiting state (e.g.
      * <code>connection.disconnect.hangup</code>).
      */
-    TRANSITIONING("transitioning");
+    TRANSITIONING("transitioning"),
 
+    /**
+     * Under certain circumstances (in particular, while the VoiceXML
+     * interpreter is processing a disconnect event) the interpreter may
+     * continue executing in the final processing state after there is no longer
+     * a connection to allow the interpreter to interact with the end user. The
+     * purpose of this state is to allow the VoiceXML application to perform any
+     * necessary final cleanup, such as submitting information to the
+     * application server.
+     */
+    FINALPROCESSING("finalprocessing");
+    
     /** Name of the state. */
     private final String name;
 
