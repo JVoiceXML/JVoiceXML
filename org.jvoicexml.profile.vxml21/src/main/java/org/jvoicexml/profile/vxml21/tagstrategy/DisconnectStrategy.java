@@ -72,11 +72,7 @@ class DisconnectStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("disconnecting...");
-        }
-
-        interpreter.enterFinalProcessingState();
+        LOGGER.info("disconnecting...");
 
         throw new ConnectionDisconnectHangupEvent();
     }

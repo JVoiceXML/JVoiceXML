@@ -757,7 +757,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final JVoiceXMLEvent event;
         if ((isInputItem || isInitialItem)
                 && !interpreter.isInFinalProcessingState()) {
-            interpreter.setState(InterpreterState.WAITING);
             event = handler.waitEvent();
             interpreter.setState(InterpreterState.TRANSITIONING);
         } else {
@@ -1323,6 +1322,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      */
     public void visitFieldFormItem(final InputItem field)
             throws JVoiceXMLEvent {
+        if (interpreter.isInFinalProcessingState()) {
+            return;
+        }
         LOGGER.info("visiting field '" + field.getName() + "'");
 
         // Add the handlers.
@@ -1334,6 +1336,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
 
+        interpreter.setState(InterpreterState.WAITING);
         final UserInput input = platform.getUserInput();
         final CallControl call = platform.getCallControl();
         try {
@@ -1360,6 +1363,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      */
     public void visitInitialFormItem(final InitialFormItem initial)
             throws JVoiceXMLEvent {
+        if (interpreter.isInFinalProcessingState()) {
+            return;
+        }
         LOGGER.info("visiting initial form item '" + initial.getName() + "'");
 
         final ImplementationPlatform platform = context
@@ -1373,6 +1379,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
 
+        interpreter.setState(InterpreterState.WAITING);
         final CallControl call = platform.getCallControl();
         try {
             if (call != null) {
@@ -1398,6 +1405,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      */
     public void visitObjectFormItem(final ObjectFormItem object)
             throws JVoiceXMLEvent {
+        if (interpreter.isInFinalProcessingState()) {
+            return;
+        }
         LOGGER.info("visiting object form item '" + object.getName() + "'");
 
         // Add the handlers.
@@ -1407,8 +1417,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 .getImplementationPlatform();
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
-        platform.waitNonBargeInPlayed();
 
+        interpreter.setState(InterpreterState.WAITING);
         final DocumentServer server = context.getDocumentServer();
         platform.playPrompts(server, callProperties);
         platform.waitNonBargeInPlayed();
@@ -1424,6 +1434,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      */
     public void visitRecordFormItem(final RecordFormItem record)
             throws JVoiceXMLEvent {
+        if (interpreter.isInFinalProcessingState()) {
+            return;
+        }
         LOGGER.info("visiting record form item '" + record.getName() + "'");
 
         // Obtain the needed resources.
@@ -1444,6 +1457,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
 
+        interpreter.setState(InterpreterState.WAITING);
         // Wait until all non-bargein prompts have been played so that the timer
         // starts up correctly.
         final DocumentServer server = context.getDocumentServer();
@@ -1477,6 +1491,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
     @Override
     public void visitSubdialogFormItem(final SubdialogFormItem subdialog)
             throws JVoiceXMLEvent {
+        if (interpreter.isInFinalProcessingState()) {
+            return;
+        }
         LOGGER.info("visiting subdialog form item '" + subdialog.getName() 
             + "'");
 
@@ -1522,6 +1539,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 new VoiceXmlInterpreterContext(session, configuration,
                         observer, subdialogModel);
         final EventBus bus = context.getEventBus();
+        interpreter.setState(InterpreterState.WAITING);
         // Start the subdialog thread
         final Thread thread = new SubdialogExecutorThread(resolvedUri,
                 subdialogContext, application, parameters, bus, model);
@@ -1534,6 +1552,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      */
     public void visitTransferFormItem(final TransferFormItem transfer)
             throws JVoiceXMLEvent {
+        if (interpreter.isInFinalProcessingState()) {
+            return;
+        }
         // TODO Implement bridge transfer.
         // TODO Have to send event "connection.disconnect.transfer"
 
@@ -1555,6 +1576,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         eventStrategies = handler.collect(context, interpreter, this, transfer);
         final EventBus eventbus = context.getEventBus();
         platform.setEventBus(eventbus);
+
+        interpreter.setState(InterpreterState.WAITING);
         final DocumentServer server = context.getDocumentServer();
         platform.playPrompts(server, callProperties);
         platform.waitNonBargeInPlayed();
