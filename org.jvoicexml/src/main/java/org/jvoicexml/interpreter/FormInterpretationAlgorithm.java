@@ -659,7 +659,16 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         // Find the next selectable form item
         for (FormItem formItem : formItems) {
             if (formItem.isSelectable()) {
-                return formItem;
+                // If in the final processing state do not select input items
+                if (interpreter.isInFinalProcessingState()) {
+                    final boolean isInputItem = formItem instanceof InputItem;
+                    final boolean isInitialItem = formItem instanceof InitialFormItem;
+                    if (!isInputItem && !isInitialItem) {
+                        return formItem;
+                    }
+                } else {
+                    return formItem;
+                }
             }
         }
 
