@@ -20,6 +20,7 @@
  */
 package org.jvoicexml;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -48,4 +49,32 @@ public class UuidSessionIdentifier implements SessionIdentifier {
     public String getId() {
         return uuid.toString();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        UuidSessionIdentifier other = (UuidSessionIdentifier) obj;
+        return Objects.equals(uuid, other.uuid);
+    }
+
+
 }
