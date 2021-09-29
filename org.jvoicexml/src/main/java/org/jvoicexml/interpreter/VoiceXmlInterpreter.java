@@ -32,6 +32,10 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
+import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
+import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.profile.Profile;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -69,16 +73,6 @@ public final class VoiceXmlInterpreter {
 
     /** The interpreter state. */
     private InterpreterState state;
-
-    /**
-     * The interpreter has entered the final processing state.
-     *
-     * <p>
-     * Since this is not a valid interpreter state, this state has to be
-     * handeled seperately.
-     * </p>
-     */
-    private boolean finalProcessingState;
 
     /**
      * Constructs a new object.
@@ -242,6 +236,10 @@ public final class VoiceXmlInterpreter {
         // There is no next dialog by default.
         nextDialog = null;
         fia = new FormInterpretationAlgorithm(context, this, dialog);
+        final EventBus eventbus = context.getEventBus();
+        final HangupEventHandler hangupHandler = new HangupEventHandler(fia);
+        eventbus.subscribe(ConnectionDisconnectHangupEvent.EVENT_TYPE,
+                hangupHandler);
 
         // Collect dialog level catches.
         final EventHandler eventHandler = context.getEventHandler();
@@ -254,29 +252,17 @@ public final class VoiceXmlInterpreter {
         try {
             try {
                 fia.initialize(profile, parameters);
+                fia.mainLoop();
+            } catch (GotoNextFormEvent | GotoNextDocumentEvent | SubmitEvent e) {
+                throw e;
             } catch (JVoiceXMLEvent event) {
-                final EventBus eventbus = context.getEventBus();
                 eventbus.publish(event);
             }
-            fia.mainLoop();
         } finally {
             fia = null;
+            eventbus.subscribe(ConnectionDisconnectHangupEvent.EVENT_TYPE,
+                    hangupHandler);
         }
-    }
-
-    /**
-     * Under certain circumstances (in particular, while the VoiceXML
-     * interpreter is processing a disconnect event) the interpreter may
-     * continue executing in the final processing state after there is no longer
-     * a connection to allow the interpreter to interact with the end user. The
-     * purpose of this state is to allow the VoiceXML application to perform any
-     * necessary final cleanup, such as submitting information to the
-     * application server.
-     */
-    public void enterFinalProcessingState() {
-        LOGGER.info("entered final processing state");
-
-        finalProcessingState = true;
     }
 
     /**
@@ -286,7 +272,7 @@ public final class VoiceXmlInterpreter {
      *         state.
      */
     public boolean isInFinalProcessingState() {
-        return finalProcessingState;
+        return state == InterpreterState.FINALPROCESSING;
     }
 
     /**
