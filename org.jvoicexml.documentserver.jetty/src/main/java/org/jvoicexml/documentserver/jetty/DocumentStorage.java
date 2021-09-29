@@ -65,7 +65,8 @@ public class DocumentStorage implements ContextHandlerProvider {
      * Creates a new object.
      */
     public DocumentStorage() {
-        sessionDocuments = new java.util.HashMap<SessionIdentifier, Collection<GrammarDocument>>();
+        sessionDocuments = 
+                new java.util.HashMap<SessionIdentifier, Collection<GrammarDocument>>();
         documents = new java.util.HashMap<URI, GrammarDocument>();
         internalGrammarHandler = new InternalGrammarDocumentHandler(this);
         builtinGrammarHandler = new BuiltinGrammarHandler();
@@ -118,15 +119,17 @@ public class DocumentStorage implements ContextHandlerProvider {
      */
     public URI addGrammarDocument(final SessionIdentifier sessionId,
             final GrammarDocument document) throws URISyntaxException {
-        Collection<GrammarDocument> currentDocuments = getCurrentSessionDocuments(sessionId);
+        Collection<GrammarDocument> currentDocuments = 
+                getCurrentSessionDocuments(sessionId);
         currentDocuments.add(document);
+        final String id = sessionId.getId();
         final URI localUri = new URI(
-                InternalGrammarDocumentHandler.CONTEXT_PATH + "/" + sessionId
+                InternalGrammarDocumentHandler.CONTEXT_PATH + "/" + id
                         + "/" + document.hashCode());
         documents.put(localUri, document);
         final URI uri = new URI(baseUri
                 + InternalGrammarDocumentHandler.CONTEXT_PATH.substring(1)
-                + "/" + sessionId + "/" + document.hashCode());
+                + "/" + id + "/" + document.hashCode());
         document.setURI(uri);
         LOGGER.info("added grammar document at '" + uri + "'");
         if (LOGGER.isDebugEnabled()) {
@@ -153,8 +156,8 @@ public class DocumentStorage implements ContextHandlerProvider {
         }
         currentDocuments = new java.util.ArrayList<GrammarDocument>();
         sessionDocuments.put(sessionId, currentDocuments);
-        LOGGER.info("initialized document storage for session '" + sessionId
-                + "'");
+        LOGGER.info("initialized document storage for session '" 
+                + sessionId.getId() + "'");
         return currentDocuments;
     }
 
