@@ -32,7 +32,9 @@ import java.io.Serializable;
  * 
  * Note, that it may be helpful to also override the {@code #toString()} method
  * to have something meaningful in log statements.
- *  
+ * 
+ * Implemnting classes MUST override {@link #equals(Object)} and
+ * {@link #hashCode()}.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
