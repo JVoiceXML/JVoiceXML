@@ -21,7 +21,13 @@
 
 package org.jvoicexml.jndi;
 
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
+import java.rmi.server.RemoteServer;
+import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 
 import javax.naming.Context;
@@ -34,6 +40,8 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
+import org.jvoicexml.client.BasicConnectionInformation;
+import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.client.jndi.RemoteSession;
 import org.jvoicexml.client.jndi.SessionStub;
@@ -120,6 +128,11 @@ class JVoiceXmlSkeleton implements RemoteJVoiceXml {
         if (jvxml == null) {
             return null;
         }
+        if (info instanceof BasicConnectionInformation) {
+            final BasicConnectionInformation basic =
+                (BasicConnectionInformation) info;
+            maybeAdaptConnectionInformation(basic);
+        }
         final Session session;
         try {
             session = jvxml.createSession(info, id);
@@ -147,6 +160,35 @@ class JVoiceXmlSkeleton implements RemoteJVoiceXml {
         return new SessionStub(session.getSessionId());
     }
 
+    private void maybeAdaptConnectionInformation(
+            final BasicConnectionInformation info) {
+        if (info.getCalledDevice() == null) {
+            try {
+                final InetAddress localhost = InetAddress.getLocalHost();
+                final URI uri = TcpUriFactory.createUri(localhost);
+                info.setCalledDevice(uri);
+            } catch (UnknownHostException | URISyntaxException e) {
+                LOGGER.warn("unable to set called device", e);
+            }
+        }
+        if (info.getCallingDevice() == null) {
+            try {
+                final String clienthost = RemoteServer.getClientHost();
+                final URI uri = new URI("tcp", clienthost, null, null);
+                info.setCallingDevice(uri);
+            } catch (ServerNotActiveException | URISyntaxException e) {
+                LOGGER.warn("unable to set calling device", e);
+            }
+        }
+        if (info.getProtocolName() == null) {
+            info.setProtocolName("jndi");
+        }
+        if (info.getProtocolVersion() == null) {
+            // Use the Java version as RMI has no specific version
+            final String version = System.getProperty("java.version");
+            info.setProtocolVersion(version);
+        }
+    }
     /**
      * {@inheritDoc}
      */

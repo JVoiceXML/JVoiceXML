@@ -150,7 +150,7 @@ public final class GenericClient {
 
         // Create a new connection info
         infoController = createConnectionInformation(input, output, call);
-        ConnectionInformation info = infoController.getConnectionInformation();
+        final ConnectionInformation info = infoController.getConnectionInformation();
         return call(uri, info);
     }
 
@@ -223,7 +223,7 @@ public final class GenericClient {
     public Session call(final URI uri, final ConnectionInformation info,
             final SessionIdentifier id)
             throws NamingException, ErrorEvent {
-    final JVoiceXml jvoicexml = getJVoiceXml();
+        final JVoiceXml jvoicexml = getJVoiceXml();
         if (jvoicexml == null) {
           throw new NoresourceError(
                     "JVoiceXML server could not be found");

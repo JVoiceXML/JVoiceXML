@@ -33,7 +33,6 @@ import javax.naming.InitialContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
@@ -95,10 +94,10 @@ public final class ScriptDemo {
             return;
         }
 
-        final ConnectionInformation client = new BasicConnectionInformation(
+        final ConnectionInformation info = new BasicConnectionInformation(
                 "desktop", "jsapi20", "jsapi20");
         final SessionIdentifier id = new UuidSessionIdentifier();
-        final Session session = jvxml.createSession(client, id);
+        final Session session = jvxml.createSession(info, id);
 
         session.call(uri);
 
