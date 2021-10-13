@@ -61,4 +61,12 @@ public final class ConnectionRemote {
     public String getUri() {
         return uri;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "ConnectionRemote [uri=" + uri + "]";
+    }
 }

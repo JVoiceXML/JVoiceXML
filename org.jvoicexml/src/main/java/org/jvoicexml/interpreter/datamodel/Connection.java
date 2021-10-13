@@ -29,6 +29,9 @@ package org.jvoicexml.interpreter.datamodel;
 import java.net.URI;
 
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.event.EventSubscriber;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 /**
  * A variable container to hold the connection information.
@@ -37,7 +40,7 @@ import org.jvoicexml.ConnectionInformation;
  * @version $Revision: 4080 $
  * @since 0.7
  */
-public final class Connection {
+public final class Connection implements EventSubscriber {
     /** The remote connection info. */
     private ConnectionRemote remote;
 
@@ -47,20 +50,27 @@ public final class Connection {
     /** The protocol info. */
     private final ConnectionProtocol protocol;
 
+    /** {@code true} if the user did not hung up. */
+    private boolean hangup;
+    
+    /** The encapuslated {@link ConnectionInformation} object. */
+    private final ConnectionInformation info;
+    
     /**
      * Constructs a new object.
      * 
-     * @param info
+     * @param connectionInfo
      *            the connection information
      */
-    public Connection(final ConnectionInformation info) {
-        final String protocolName = info.getProtocolName();
-        final String protocolVersion = info.getProtocolVersion();
+    public Connection(final ConnectionInformation connectionInfo) {
+        final String protocolName = connectionInfo.getProtocolName();
+        final String protocolVersion = connectionInfo.getProtocolVersion();
         protocol = new ConnectionProtocol(protocolName, protocolVersion);
-        final URI remoteUri = info.getCallingDevice();
+        final URI remoteUri = connectionInfo.getCallingDevice();
         remote = new ConnectionRemote(remoteUri);
-        final URI localUri = info.getCalledDevice();
+        final URI localUri = connectionInfo.getCalledDevice();
         local = new ConnectionLocal(localUri);
+        info = connectionInfo;
     }
 
     /**
@@ -108,5 +118,44 @@ public final class Connection {
      */
     public ConnectionProtocol getProtocol() {
         return protocol;
+    }
+
+    /**
+     * Checks if the connection is active, i.e. the user did not hang up.
+     * @return {@code true} if the user did hang up
+     * @since 0.7.9
+     */
+    public boolean getHangup() {
+        return hangup;
+    }
+    
+    /**
+     * Retrieves the connection information object.
+     * @return the connection information object
+     * @since 0.7.9
+     */
+    public ConnectionInformation getInfo() {
+        return info;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onEvent(JVoiceXMLEvent event) {
+        if (!event.getEventType().equals(ConnectionDisconnectHangupEvent.EVENT_TYPE)) {
+            return;
+        }
+        hangup = true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Connection [remote=" + remote + ", local=" + local
+                + ", protocol=" + protocol + ", hangup=" + hangup + ", info="
+                + info + "]";
     }
 }
