@@ -21,10 +21,8 @@
 
 package org.jvoicexml.jndi;
 
-import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.server.RemoteServer;
 import java.rmi.server.ServerNotActiveException;
@@ -41,7 +39,6 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.BasicConnectionInformation;
-import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.client.jndi.RemoteSession;
 import org.jvoicexml.client.jndi.SessionStub;
@@ -64,6 +61,9 @@ class JVoiceXmlSkeleton implements RemoteJVoiceXml {
 
     /** The JNDI context. */
     private final Context context;
+    
+    /** The URI of the called device. */
+    private URI calledDevice;
 
     /**
      * Constructs a new object.
@@ -79,13 +79,16 @@ class JVoiceXmlSkeleton implements RemoteJVoiceXml {
      * Constructs a new object with the given main entry point.
      * @param ctx the current JNDI context.
      * @param jvoicexml Main entry point for all clients.
+     * @param uri the URI of the JVoiceXML called device, i.e. the JNDI registry
      * @throws RemoteException
      *         Error creating the remote object.
      */
-    JVoiceXmlSkeleton(final Context ctx, final JVoiceXml jvoicexml)
+    JVoiceXmlSkeleton(final Context ctx, final JVoiceXml jvoicexml,
+            final URI uri)
             throws RemoteException {
         context = ctx;
         jvxml = jvoicexml;
+        calledDevice = uri;
     }
 
     /**
@@ -163,13 +166,7 @@ class JVoiceXmlSkeleton implements RemoteJVoiceXml {
     private void maybeAdaptConnectionInformation(
             final BasicConnectionInformation info) {
         if (info.getCalledDevice() == null) {
-            try {
-                final InetAddress localhost = InetAddress.getLocalHost();
-                final URI uri = TcpUriFactory.createUri(localhost);
-                info.setCalledDevice(uri);
-            } catch (UnknownHostException | URISyntaxException e) {
-                LOGGER.warn("unable to set called device", e);
-            }
+            info.setCalledDevice(calledDevice);
         }
         if (info.getCallingDevice() == null) {
             try {
