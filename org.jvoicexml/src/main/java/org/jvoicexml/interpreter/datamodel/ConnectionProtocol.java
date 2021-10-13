@@ -71,4 +71,13 @@ public final class ConnectionProtocol {
     public String getVersion() {
         return version;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "ConnectionProtocol [name=" + name + ", version=" + version
+                + "]";
+    }
 }

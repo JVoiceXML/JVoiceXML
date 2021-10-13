@@ -375,6 +375,53 @@ public class JVoiceXmlSession extends Thread
             return;
         }
 
+        logCalledApplication();
+
+        processingError = null;
+        createSessionVariables();
+        context.setProperty("bargein", "true");
+        notifySessionStarted();
+        try {
+            context.process(application);
+        } catch (ErrorEvent e) {
+            LOGGER.error("error processing application '" + application + "'",
+                    e);
+            processingError = e;
+        } catch (Exception e) {
+            LOGGER.error("error processing application '" + application + "'",
+                    e);
+            processingError = new ExceptionWrapper(e.getMessage(), e);
+        } finally {
+            cleanup();
+        }
+    }
+
+    /**
+     * Creates the session variables in the used {@link DataModel}.
+     * 
+     * @since 0.7.9
+     */
+    private void createSessionVariables() {
+        final DataModel model = getDataModel();
+        scopeObserver.enterScope(Scope.SESSION);
+        final Connection connection = new Connection(info);
+        model.createVariable("session.connection", connection, Scope.SESSION);
+        model.createVariable("session.sessionid", identifier.getId(),
+                Scope.SESSION);
+        
+        /// Let the connection info know about the connection status
+        final EventBus eventbus = context.getEventBus();
+        eventbus.subscribe(ConnectionDisconnectHangupEvent.EVENT_TYPE,
+                connection);
+
+    }
+
+    /**
+     * Log some info that the application hast been called
+     * 
+     * @since 0.7.9
+     */
+    private void logCalledApplication() {
         final URI calledDevice;
         final URI callingDevice;
         final String protocolName;
@@ -395,29 +442,6 @@ public class JVoiceXmlSession extends Thread
             protocolVersion = null;
             LOGGER.info("start processing application '" + application
                     + "'...");
-        }
-
-        processingError = null;
-        final DataModel model = getDataModel();
-        scopeObserver.enterScope(Scope.SESSION);
-        final Connection connection = new Connection(info);
-        model.createVariable("session.connection", connection, Scope.SESSION);
-        model.createVariable("session.sessionid", identifier.getId(),
-                Scope.SESSION);
-        context.setProperty("bargein", "true");
-        notifySessionStarted();
-        try {
-            context.process(application);
-        } catch (ErrorEvent e) {
-            LOGGER.error("error processing application '" + application + "'",
-                    e);
-            processingError = e;
-        } catch (Exception e) {
-            LOGGER.error("error processing application '" + application + "'",
-                    e);
-            processingError = new ExceptionWrapper(e.getMessage(), e);
-        } finally {
-            cleanup();
         }
     }
 

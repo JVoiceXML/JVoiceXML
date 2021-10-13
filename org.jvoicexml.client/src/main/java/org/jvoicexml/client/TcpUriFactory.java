@@ -66,4 +66,19 @@ public final class TcpUriFactory {
         final String host = address.getHostName();
         return new URI("tcp", host, null, null);
     }
+
+    /**
+     * Retrieves a URI for the given address and port.
+     * @param address the address
+     * @param port the port
+     * @return URI representation of the address.
+     * @throws URISyntaxException
+     *         error creating the URI.
+     * @since 0.7.9
+     */
+    public static URI createUri(final InetAddress address, final int port)
+        throws URISyntaxException {
+        final String host = address.getHostName();
+        return new URI("tcp", null, host, port, null, null, null);
+    }
 }

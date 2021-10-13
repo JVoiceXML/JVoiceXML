@@ -57,4 +57,12 @@ public final class ConnectionLocal  {
     public String getUri() {
         return uri;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "ConnectionLocal [uri=" + uri + "]";
+    }
 }

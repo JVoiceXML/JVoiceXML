@@ -22,6 +22,10 @@
 package org.jvoicexml.jndi;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.rmi.server.Skeleton;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Hashtable;
@@ -35,6 +39,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.JndiSupport;
+import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.client.jndi.RemoteMappedDocumentRepository;
 import org.jvoicexml.client.jndi.Stub;
@@ -235,7 +240,11 @@ public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
         }
 
         try {
-            final RemoteJVoiceXml skeleton = new JVoiceXmlSkeleton(context, jvxml);
+            final InetAddress localhost = InetAddress.getLocalHost();
+            final int port = registry.getPort();
+            final URI uri = TcpUriFactory.createUri(localhost, port);
+            final RemoteJVoiceXml skeleton =
+                    new JVoiceXmlSkeleton(context, jvxml, uri);
             final RemoteJVoiceXml stub = 
                     (RemoteJVoiceXml) 
                         UnicastRemoteObject.exportObject(skeleton, 0);
@@ -246,7 +255,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
                     + stub.getClass().getCanonicalName() + "("
                     + JVoiceXmlSkeleton.class.getCanonicalName()
                     + ")'");
-        } catch (java.rmi.RemoteException | NamingException re) {
+        } catch (java.rmi.RemoteException | NamingException | UnknownHostException | URISyntaxException re) {
             LOGGER.error("error creating the skeleton", re);
             return false;
         }
