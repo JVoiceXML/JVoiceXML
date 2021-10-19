@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/variables/ConnectionVarContainer.java $
- * Version: $LastChangedRevision: 4080 $
- * Date:    $Date: 2013-12-17 09:46:17 +0100 (Tue, 17 Dec 2013) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +23,8 @@ package org.jvoicexml.interpreter.datamodel;
 
 import java.net.URI;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.EventSubscriber;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -37,10 +34,12 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * A variable container to hold the connection information.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4080 $
  * @since 0.7
  */
 public final class Connection implements EventSubscriber {
+    /** Logger for this class. */
+    private static final Logger LOGGER = LogManager.getLogger(Connection.class);
+
     /** The remote connection info. */
     private ConnectionRemote remote;
 
@@ -53,7 +52,7 @@ public final class Connection implements EventSubscriber {
     /** {@code true} if the user did not hung up. */
     private boolean hangup;
     
-    /** The encapuslated {@link ConnectionInformation} object. */
+    /** The encapsulated {@link ConnectionInformation} object. */
     private final ConnectionInformation info;
     
     /**
@@ -145,6 +144,9 @@ public final class Connection implements EventSubscriber {
     public void onEvent(JVoiceXMLEvent event) {
         if (!event.getEventType().equals(ConnectionDisconnectHangupEvent.EVENT_TYPE)) {
             return;
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("setting hangup in scripting environment to true");
         }
         hangup = true;
     }
