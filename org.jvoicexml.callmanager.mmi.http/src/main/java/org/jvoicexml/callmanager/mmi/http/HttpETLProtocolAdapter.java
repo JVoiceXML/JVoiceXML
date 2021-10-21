@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,11 +31,12 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.HttpClient;
+import org.apache.http.HttpHost;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.jvoicexml.callmanager.mmi.ETLProtocolAdapter;
@@ -52,7 +48,6 @@ import org.jvoicexml.mmi.events.Mmi;
  * A protocol adapter using the HTTP protocol.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 public class HttpETLProtocolAdapter implements ETLProtocolAdapter {
@@ -68,6 +63,25 @@ public class HttpETLProtocolAdapter implements ETLProtocolAdapter {
     /** The handler for incoming requests. */
     private final MmiHandler handler;
 
+    /** The default proxy port. */
+    private static final int DEFAULT_PROXY_PORT = 80;
+
+    /** The name of the proxy to use. */
+    private static final String PROXY_HOST;
+
+    /** The port of the proxy server. */
+    private static final int PROXY_PORT;
+
+    static {
+        PROXY_HOST = System.getProperty("http.proxyHost");
+        final String port = System.getProperty("http.proxyPort");
+        if (PROXY_HOST != null && port != null) {
+            PROXY_PORT = Integer.parseInt(port);
+        } else {
+            PROXY_PORT = DEFAULT_PROXY_PORT;
+        }
+    }
+    
     /**
      * Constructs a new object.
      */
@@ -136,7 +150,12 @@ public class HttpETLProtocolAdapter implements ETLProtocolAdapter {
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
             marshaller.marshal(mmi, out);
             final URI uri = new URI(target);
-            final HttpClient client = new DefaultHttpClient();
+            final HttpClientBuilder builder = HttpClientBuilder.create();
+            if (PROXY_HOST != null) {
+                HttpHost proxy = new HttpHost(PROXY_HOST, PROXY_PORT);
+                builder.setProxy(proxy);
+            }
+            final CloseableHttpClient client = builder.build(); 
             final HttpPost post = new HttpPost(uri);
             final HttpEntity entity = new StringEntity(out.toString(), ContentType.APPLICATION_XML);
             post.setEntity(entity);
