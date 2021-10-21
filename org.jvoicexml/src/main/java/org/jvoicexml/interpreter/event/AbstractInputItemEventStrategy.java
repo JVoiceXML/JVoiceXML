@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -260,7 +260,8 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
     protected void setResult(final T item, final InputEvent event,
             final Object result) throws SemanticError {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("setting form item variable to '" + result + "'");
+            LOGGER.debug("setting form item variable '" + item.getName() 
+                        + "' to " + result + "'");
         }
         item.setFormItemVariable(result);
 

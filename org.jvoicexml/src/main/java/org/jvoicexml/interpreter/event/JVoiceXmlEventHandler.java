@@ -511,6 +511,9 @@ public final class JVoiceXmlEventHandler
             eventFilters = filters;
         }
 
+        for (EventStrategy f : strategies) {
+            LOGGER.info(f);
+        }
         // Filter the matching strategies.
         for (EventFilter filter : eventFilters) {
             filter.filter(matchingStrategies, event, item);
@@ -566,7 +569,7 @@ public final class JVoiceXmlEventHandler
         synchronized (semaphore) {
             try {
                 events.offer(event);
-                LOGGER.info("notified event '" + event.getEventType() + "'");
+                LOGGER.info("notified event '" + type + "'");
             } finally {
                 semaphore.notify();
             }

@@ -126,6 +126,8 @@ abstract class AbstractFormItem
      */
     @Override
     public int setFormItemVariable(final Object value) throws SemanticError {
+        LOGGER.info("setting form item variable '" + name + "' to " 
+                + value + "'");
         final DataModel model = context.getDataModel();
         return model.updateVariable(name, value);
     }

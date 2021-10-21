@@ -798,9 +798,13 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         // event coming from the implementation platform.
         if (event != null) {
             final CatchContainer container = (CatchContainer) formItem;
-            handler.processEvent(container, event);
-            handler.removeStrategies(eventStrategies);
-            handler.clearEvents();
+            try {
+                handler.processEvent(container, event);
+            } finally {
+                // Ensure that all local event handlers are removed
+                handler.removeStrategies(eventStrategies);
+                handler.clearEvents();
+            }
         }
 
         if (reprompt) {
