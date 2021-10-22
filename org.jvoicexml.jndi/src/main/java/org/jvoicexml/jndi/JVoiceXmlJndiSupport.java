@@ -26,7 +26,6 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.rmi.server.Skeleton;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Hashtable;
 import java.util.Map;
@@ -51,13 +50,12 @@ import org.jvoicexml.jndi.classserver.ClassloaderServer;
  * JNDI support for remote access to the VoiceXML interpreter.
  *
  * <p>
- * Unfortunately there is no automatism to create the remote interface from
+ * Unfortunately there is no automated way to create the remote interface from
  * the original interface, hence custom skeletons are used to simply the
  * remote access.
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @see Skeleton
  * @see Stub
  * @since 0.4
  */

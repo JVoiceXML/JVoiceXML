@@ -36,6 +36,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -166,8 +167,13 @@ public abstract class ClassServer implements Runnable {
     /**
      * Returns the path to the class file obtained from parsing the HTML header.
      */
-    private static String getPath(DataInputStream in) throws IOException {
-        String line = in.readLine();
+    private static String getPath(final DataInputStream in) throws IOException {
+        final Scanner scanner = new Scanner(in);
+        if (!scanner.hasNextLine()) {
+            scanner.close();
+            throw new IOException("Malformed Header");
+        }
+        String line = scanner.nextLine();
         String path = "";
 
         // extract class from GET line
@@ -181,11 +187,10 @@ public abstract class ClassServer implements Runnable {
         }
 
         // eat the rest of header
-        do {
-            line = in.readLine();
-        } while ((line.length() != 0) && (line.charAt(0) != '\r')
-                && (line.charAt(0) != '\n'));
-
+        while (scanner.hasNextLine()) {
+            line = scanner.nextLine();
+        } 
+        scanner.close();
         if (path.length() != 0) {
             return path;
         } else {
