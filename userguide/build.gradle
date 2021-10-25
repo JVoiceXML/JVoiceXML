@@ -1,15 +1,16 @@
 buildscript {
     repositories {
-        mavenLocal()
-        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
-        classpath group: 'com.github.csabasulyok', name: 'gradle-latex', version: '1.0'
+        classpath "org.danilopianini:gradle-latex:0.2.7"
     }
 }
 
+apply plugin: "org.danilopianini.gradle-latex"
 
-apply plugin: 'latex'
 
 defaultTasks 'pdfLatex'
 
@@ -30,13 +31,21 @@ task createVersionFile {
 }
 
 latex {
-    tex tex:'userguide.tex',
-        bib: 'userguide.bib',
-        pdf:"jvxml-userguide-${JVOICEXML_VERSION}.pdf"
+    "userguide"
 }
 
-pdfLatex {
+task pdfLatex (type: Copy) {
     doFirst {
         createVersionFile
     }
+    dependsOn buildLatex
+    from ('.')
+    include 'userguide.pdf'
+    destinationDir file('.')
+    rename 'userguide.pdf', "jvxml-userguide-${JVOICEXML_VERSION}.pdf"
+}
+
+task clean {
+    delete file("userguide.pdf")
+    delete file("jvxml-userguide-${JVOICEXML_VERSION}.pdf")
 }
