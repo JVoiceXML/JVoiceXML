@@ -2,9 +2,12 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
+        maven { 
+            url 'https://oss.sonatype.org/content/repositories/snapshots' 
+        }
     }
     dependencies {
-        classpath group: 'com.github.csabasulyok', name: 'gradle-latex', version: '1.0'
+        classpath group: 'org.jvoicexml', name: 'gradle-latex', version: '2.0-SNAPSHOT'
     }
 }
 
@@ -20,6 +23,10 @@ configurations {
 
 dependencies {
     "default" fileTree(dir: "${projectDir}", includes: ['*.tex', '*.bib', '*.jpg', '*.png', '"*.eps'])
+}
+
+task clean {
+    dependsOn cleanLatex
 }
 
 task createVersionFile {
