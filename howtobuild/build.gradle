@@ -1,15 +1,17 @@
 buildscript {
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
+        mavenLocal()
+        mavenCentral()
+        maven { 
+            url 'https://oss.sonatype.org/content/repositories/snapshots' 
         }
     }
     dependencies {
-        classpath "org.danilopianini:gradle-latex:0.2.7"
+        classpath group: 'org.jvoicexml', name: 'gradle-latex', version: '2.0-SNAPSHOT'
     }
 }
 
-apply plugin: "org.danilopianini.gradle-latex"
+apply plugin: 'latex'
 
 defaultTasks 'pdfLatex'
 
@@ -23,6 +25,10 @@ dependencies {
     "default" fileTree(dir: "${projectDir}", includes: ['*.tex', '*.bib', '*.jpg', '*.png', '"*.eps'])
 }
 
+task clean {
+    dependsOn cleanLatex
+}
+
 task createVersionFile {
     def file = new File("${projectDir}/version.tex")
     file.createNewFile()
@@ -30,21 +36,13 @@ task createVersionFile {
 }
 
 latex {   
-    "howtobuild"
+    tex tex:'howtobuild.tex', 
+        bib: 'howtobuild.bib', 
+        pdf:"jvxml-howtobuild-${JVOICEXML_VERSION}.pdf"
 }
 
-task pdfLatex (type: Copy) {
+pdfLatex {
     doFirst {
         createVersionFile
     }
-    dependsOn buildLatex
-    from ('.')
-    include 'howtobuild.pdf'
-    destinationDir file('.')
-    rename 'howtobuild.pdf', "jvxml-howtobuild-${JVOICEXML_VERSION}.pdf"
-}
-
-task clean {
-    delete file("howtobuild.pdf")
-    delete file("jvxml-howtobuild-${JVOICEXML_VERSION}.pdf")
 }
