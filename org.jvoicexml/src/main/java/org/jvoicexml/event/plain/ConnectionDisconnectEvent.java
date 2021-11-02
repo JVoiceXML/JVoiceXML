@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,19 +21,20 @@
 
 package org.jvoicexml.event.plain;
 
+import org.jvoicexml.event.PlainEvent;
+
 /**
- * The user has been transferred unconditionally to another line and will not
- * return.
+ * The user has disconnected.
  *
  * @author Dirk Schnelle-Walka
  */
-public class ConnectionDisconnectTransferEvent
-        extends ConnectionDisconnectEvent {
+public class ConnectionDisconnectEvent
+        extends PlainEvent {
     /** The serial version UID. */
-    private static final long serialVersionUID = 5858887089917522537L;
-
+    private static final long serialVersionUID = 3093029300408606286L;
+    
     /** The detail message. */
-    public static final String DETAIL = "transfer";
+    public static final String EVENT_TYPE = "connection.disconnect";
 
     /**
      * Constructs a new event with the event type as its detail message. The
@@ -41,7 +42,7 @@ public class ConnectionDisconnectTransferEvent
      *
      * @see #getEventType()
      */
-    public ConnectionDisconnectTransferEvent() {
+    public ConnectionDisconnectEvent() {
         super();
     }
 
@@ -56,7 +57,7 @@ public class ConnectionDisconnectTransferEvent
      *
      * @see #getEventType()
      */
-    public ConnectionDisconnectTransferEvent(final String message) {
+    public ConnectionDisconnectEvent(final String message) {
         super(message);
     }
 
@@ -70,7 +71,7 @@ public class ConnectionDisconnectTransferEvent
      *
      * @see #getEventType()
      */
-    public ConnectionDisconnectTransferEvent(final Throwable cause) {
+    public ConnectionDisconnectEvent(final Throwable cause) {
         super(cause);
     }
 
@@ -82,7 +83,7 @@ public class ConnectionDisconnectTransferEvent
      * @param cause
      *        The cause.
      */
-    public ConnectionDisconnectTransferEvent(final String message,
+    public ConnectionDisconnectEvent(final String message,
             final Throwable cause) {
         super(message, cause);
     }
@@ -91,9 +92,17 @@ public class ConnectionDisconnectTransferEvent
      * Appends detail information to the type information.
      * @param str type prefix.
      */
-    @Override
     protected void appendSpecificationDetails(final StringBuilder str) {
-        str.append('.');
-        str.append(DETAIL);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final String getEventType() {
+        final StringBuilder str = new StringBuilder();
+        str.append(EVENT_TYPE);
+        appendSpecificationDetails(str);
+        return str.toString();
     }
 }

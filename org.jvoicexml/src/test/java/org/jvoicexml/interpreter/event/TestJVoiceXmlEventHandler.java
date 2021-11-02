@@ -244,7 +244,8 @@ public final class TestJVoiceXmlEventHandler {
                 containsType(strategies, "cancel"));
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
-                containsType(strategies, RecognitionEvent.EVENT_TYPE));
+                containsType(strategies, RecognitionEvent.EVENT_TYPE + "."
+                        + RecognitionEvent.DETAIL));
     }
 
     /**
@@ -297,7 +298,8 @@ public final class TestJVoiceXmlEventHandler {
                 containsType(strategies, "cancel"));
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
-                containsType(strategies, RecognitionEvent.EVENT_TYPE));
+                containsType(strategies, RecognitionEvent.EVENT_TYPE + "."
+                        + RecognitionEvent.DETAIL));
 
         observer.exitScope(Scope.DIALOG);
         final Collection<EventStrategy> strategiesLeave1 = handler
@@ -321,7 +323,8 @@ public final class TestJVoiceXmlEventHandler {
                 containsType(strategiesEnter2, "cancel"));
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
-                containsType(strategiesEnter2, RecognitionEvent.EVENT_TYPE));
+                containsType(strategiesEnter2, RecognitionEvent.EVENT_TYPE + "."
+                        + RecognitionEvent.DETAIL));
         observer.exitScope(Scope.DIALOG);
         final Collection<EventStrategy> strategiesLeave2 = handler
                 .getStrategies();
@@ -368,7 +371,8 @@ public final class TestJVoiceXmlEventHandler {
                 containsType(strategies, "cancel"));
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
-                containsType(strategies, RecognitionEvent.EVENT_TYPE));
+                containsType(strategies, RecognitionEvent.EVENT_TYPE + "."
+                        + RecognitionEvent.DETAIL));
 
         // Second run
         handler.collect(context, interpreter, null, item);
@@ -387,7 +391,8 @@ public final class TestJVoiceXmlEventHandler {
                 containsType(strategiesSecond, "cancel"));
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
-                containsType(strategiesSecond, RecognitionEvent.EVENT_TYPE));
+                containsType(strategiesSecond, RecognitionEvent.EVENT_TYPE + "."
+                        + RecognitionEvent.DETAIL));
     }
 
     /**
