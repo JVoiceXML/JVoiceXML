@@ -54,7 +54,10 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.event.plain.CancelEvent;
+import org.jvoicexml.event.plain.ConnectionDisconnectEvent;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.event.plain.ExitEvent;
 import org.jvoicexml.event.plain.implementation.RecordingStartedEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
@@ -496,11 +499,12 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                     gotoFormItemName = e.getItem();
                     LOGGER.info("going to form item '" + gotoFormItemName
                             + "'...");
-                } catch (ConnectionDisconnectHangupEvent e) {
+                } catch (ConnectionDisconnectEvent | CancelEvent | ExitEvent e) {
                     LOGGER.debug("caught hangup event while processing '"
                             + e.getEventType() + "'");
                     final EventBus eventbus = context.getEventBus();
                     eventbus.publish(e);
+                    processEvent(e);
                     break;
                 } catch (JVoiceXMLEvent e) {
                     try {
