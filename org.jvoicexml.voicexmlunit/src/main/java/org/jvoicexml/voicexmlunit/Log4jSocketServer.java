@@ -1,25 +1,11 @@
 package org.jvoicexml.voicexmlunit;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.parser.JsonLogEventParser;
-import org.apache.logging.log4j.core.parser.ParseException;
-import org.apache.logging.log4j.server.JsonInputStreamLogEventBridge;
 import org.apache.logging.log4j.server.TcpSocketServer;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * A socket server to receive logging events from JVoiceXML. This is an

@@ -86,8 +86,10 @@ public final class TextCall implements Call {
      * 
      * @throws InterruptedException
      *             error initializing the output buffer
+     * @throws IOException 
+     *             error creating the socket server
      */
-    public TextCall() throws InterruptedException {
+    public TextCall() throws InterruptedException, IOException {
         this(DEFAULT_SERVER_PORT);
     }
 
@@ -100,9 +102,11 @@ public final class TextCall implements Call {
      *            number to use for the {@link TextServer}.
      * @throws InterruptedException
      *             error initializing the output buffer
+     * @throws IOException 
+     *             error creating the socket server
      */
     public TextCall(final String hostname, final int port)
-            throws InterruptedException {
+            throws InterruptedException, IOException {
         portNumber = port;
         server = new TextServer(hostname, portNumber);
         server.setAutoAcknowledge(false);
@@ -112,7 +116,7 @@ public final class TextCall implements Call {
         server.addTextListener(inputMonitor);
         listeners = new java.util.ArrayList<CallListener>();
         
-        logServer = new Log4jSocketServer("localhost", 14712);
+        logServer = new Log4jSocketServer(14712);
         logServer.startLoggingServer();
     }
 
@@ -123,8 +127,10 @@ public final class TextCall implements Call {
      *            number to use for the {@link TextServer}.
      * @throws InterruptedException
      *             error initializing the output buffer
+     * @throws IOException 
+     *             error creating the socket server
      */
-    public TextCall(final int port) throws InterruptedException {
+    public TextCall(final int port) throws InterruptedException, IOException {
         this(null, port);
     }
 
@@ -161,7 +167,6 @@ public final class TextCall implements Call {
                     (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
 
             // Start the text server
-            logServer.waitConnected();
             server.start();
             server.waitStarted();
 
