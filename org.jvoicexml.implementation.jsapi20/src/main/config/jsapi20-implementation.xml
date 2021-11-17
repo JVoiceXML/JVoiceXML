@@ -20,10 +20,6 @@
     </classpath>
     <classpath>sphinx4-data-5prealpha-SNAPSHOT.jar
     </classpath>
-    <classpath>WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar
-    </classpath>
-    <classpath>speechdata2014.cd_cont_2000.jar
-    </classpath>
 
     <!-- TTS Configuration -->
     <beans:bean
