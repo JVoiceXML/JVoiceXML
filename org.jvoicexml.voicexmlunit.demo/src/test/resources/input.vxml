@@ -21,4 +21,7 @@
             </nomatch>
         </field>
     </form>
+    <catch event="connection.disconnect">
+        <log>User hung up</log>
+    </catch>
 </vxml>

@@ -72,6 +72,8 @@ public final class TextCall implements Call {
     /** The last observed error. */
     private JVoiceXMLEvent lastError;
 
+    final Log4jSocketServer logServer;
+    
     /**
      * Server port number to use. Port number must be greater than 1024.
      */
@@ -109,6 +111,9 @@ public final class TextCall implements Call {
         inputMonitor = new InputMonitor();
         server.addTextListener(inputMonitor);
         listeners = new java.util.ArrayList<CallListener>();
+        
+        logServer = new Log4jSocketServer("localhost", 14712);
+        logServer.startLoggingServer();
     }
 
     /**
@@ -156,6 +161,7 @@ public final class TextCall implements Call {
                     (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
 
             // Start the text server
+            logServer.waitConnected();
             server.start();
             server.waitStarted();
 

@@ -19,6 +19,10 @@
                  <TimeBasedTriggeringPolicy interval="1"/>
              </Policies>
         </RollingFile>
+        
+        <Socket name="remote" host="localhost" port="14712" reconnectionDelay="1000">
+            <JsonLayout properties="true"/>
+        </Socket>
     </Appenders>
 
     <Loggers>
@@ -27,9 +31,10 @@
         <Logger name="org.eclipse.jetty" level="info"/>
         <Logger name="gov.nist" level="info"/>
 
-        <Root level="warn">
-             <AppenderRef ref="stdout" />
-             <AppenderRef ref="dailyrotfile" />
+        <Root>
+             <AppenderRef ref="stdout"/>
+             <AppenderRef ref="dailyrotfile"/>
+             <AppenderRef ref="remote" level="info"/>
         </Root>
     </Loggers>
 </Configuration>
