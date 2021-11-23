@@ -41,7 +41,7 @@ import org.apache.logging.log4j.core.config.plugins.PluginFactory;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-@Plugin(name = "Log4jListAppender", 
+@Plugin(name = "ListAppender", 
         category = Core.CATEGORY_NAME, 
         elementType = Appender.ELEMENT_TYPE)
 public class Log4jListAppender extends AbstractAppender {
@@ -61,9 +61,16 @@ public class Log4jListAppender extends AbstractAppender {
             final Layout<? extends Serializable> layout) {
         super(name, filter, layout, true, Property.EMPTY_ARRAY);
         events = new java.util.ArrayList<LogEvent>();
-        System.err.println("*** created");
     }
     
+    /**
+     * Creates a new object.
+     * @param name name of this appender
+     * @param layout the lyouts to be used
+     * @param filter the filters to be used
+     * @return created appender
+     * @since 0.7.9
+     */
     @PluginFactory
     public static Log4jListAppender createAppender(
       @PluginAttribute("name") String name, 
