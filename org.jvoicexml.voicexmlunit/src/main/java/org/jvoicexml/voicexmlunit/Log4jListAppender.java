@@ -21,7 +21,6 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Core;
@@ -45,8 +44,8 @@ import org.apache.logging.log4j.core.config.plugins.PluginFactory;
         category = Core.CATEGORY_NAME, 
         elementType = Appender.ELEMENT_TYPE)
 public class Log4jListAppender extends AbstractAppender {
-    /** Captured log events. */
-    private final List<LogEvent> events;
+    /** The log buffer to use. */
+    private final LogBuffer buffer;
 
     /**
      * Creates a new object.
@@ -58,15 +57,16 @@ public class Log4jListAppender extends AbstractAppender {
      *          then passed to the application.
      */
     protected Log4jListAppender(final String name, final Filter filter,
-            final Layout<? extends Serializable> layout) {
+            final Layout<? extends Serializable> layout,
+            final LogBuffer logBuffer) {
         super(name, filter, layout, true, Property.EMPTY_ARRAY);
-        events = new java.util.ArrayList<LogEvent>();
+        buffer = logBuffer;
     }
     
     /**
      * Creates a new object.
      * @param name name of this appender
-     * @param layout the lyouts to be used
+     * @param layout the layouts to be used
      * @param filter the filters to be used
      * @return created appender
      * @since 0.7.9
@@ -74,9 +74,19 @@ public class Log4jListAppender extends AbstractAppender {
     @PluginFactory
     public static Log4jListAppender createAppender(
       @PluginAttribute("name") String name, 
+      @PluginAttribute("buffer") String buffer,
       @PluginElement("Layout") Layout<String> layout,
       @PluginElement("Filter") Filter filter) {
-        return new Log4jListAppender(name, filter, layout);
+        final LogBufferProvider provider = LogBufferProvider.getInstance();
+        final LogBuffer logBuffer;
+        if (buffer.equals("interpreter")) {
+            logBuffer = provider.getInterpreterBuffer();
+        } else if (buffer.equals("client")) {
+            logBuffer = provider.getClientBuffer();
+        } else {
+            logBuffer = null;
+        }
+        return new Log4jListAppender(name, filter, layout, logBuffer);
     }
     
     /**
@@ -84,8 +94,7 @@ public class Log4jListAppender extends AbstractAppender {
      */
     @Override
     public void append(final LogEvent event) {
-        events.add(event);
-        System.err.println("*** " + event.getMessage().getFormattedMessage());
+        buffer.add(event);
     }
 
 }

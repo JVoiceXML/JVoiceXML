@@ -28,7 +28,7 @@ public class Log4jSocketServer {
 
     /** The server thread. */
     private Thread thread;
-    
+
     /**
      * Constructs a new object at the specified host name with the specified
      * port.
