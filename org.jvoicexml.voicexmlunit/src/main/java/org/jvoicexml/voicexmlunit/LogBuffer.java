@@ -41,7 +41,9 @@ public class LogBuffer {
      * Prepares this log buffer for the next call.
      */
     public void init() {
-        events.clear();
+        synchronized (events) {
+            events.clear();
+        }
     }
 
     /**
@@ -49,16 +51,22 @@ public class LogBuffer {
      * @param event the event to add
      */
     public void add(final LogEvent event) {
-        events.add(event);
-        System.err.println("*** " + event.getMessage().getFormattedMessage());        
+        synchronized (event) {
+            events.add(event);
+            System.err.println("*** " + event.getMessage().getFormattedMessage());        
+        }
     }
     
     /**
-     * Retrieves the list of captured events.
+     * Retrieves a copy of the list of captured events.
      * @return captured events
      */
     public List<LogEvent> getEvents() {
-        return events;
+        final List<LogEvent> copy = new java.util.ArrayList<LogEvent>();
+        synchronized (events) {
+            copy.addAll(events);
+        }
+        return copy;
     }
     
 }

@@ -30,17 +30,17 @@ public class LogBufferProvider {
     private static LogBufferProvider INSTANCE;
 
     /** The interpreter buffer. */
-    private final LogBuffer INTERPRETER_BUFFER;
+    private final LogBuffer interpreterBuffer;
     
     /** The client buffer. */
-    private final LogBuffer CLIENT_BUFFER;
+    private final LogBuffer clientBuffer;
     
     /**
      * Prevent creation from outside
      */
     private LogBufferProvider() {
-        INTERPRETER_BUFFER = new LogBuffer();
-        CLIENT_BUFFER = new LogBuffer();
+        interpreterBuffer = new LogBuffer();
+        clientBuffer = new LogBuffer();
     }
     
     public static LogBufferProvider getInstance() {
@@ -51,11 +51,19 @@ public class LogBufferProvider {
     }
 
     /**
+     * Prepares the log buffers for the next call.
+     */
+    public void init() {
+        interpreterBuffer.init();
+        clientBuffer.init();
+    }
+
+    /**
      * Retrieves the interpreter buffer.
      * @return the interpreter buffer;
      */
     public LogBuffer getInterpreterBuffer() {
-        return INTERPRETER_BUFFER;
+        return interpreterBuffer;
     }
     
     /**
@@ -63,6 +71,6 @@ public class LogBufferProvider {
      * @return the interpreter buffer;
      */
     public LogBuffer getClientBuffer() {
-        return CLIENT_BUFFER;
+        return clientBuffer;
     }
 }
