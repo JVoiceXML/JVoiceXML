@@ -133,16 +133,24 @@ public final class MockCall implements Call {
      * {@inheritDoc}
      */
     @Override
-    public void waitUnitExpectingInput() {
+    public void waitUntilExpectingInput() {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void waitUnitExpectingInput(final long timeout) {
+    public void waitUntilExpectingInput(final long timeout) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitForInterpreterLog(final String message)
+            throws InterruptedException {
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -157,4 +165,5 @@ public final class MockCall implements Call {
     public JVoiceXMLEvent getLastError() {
         return null;
     }
+
 }

@@ -166,7 +166,7 @@ public interface Call {
      * Delays until an input is expected, i.e. the voice browser is expecting
      * input.
      */
-    void waitUnitExpectingInput();
+    void waitUntilExpectingInput();
 
     /**
      * Delays until an input is expected.
@@ -175,8 +175,17 @@ public interface Call {
      *            the timeout to wait at max in msec, waits forever, if timeout
      *            is zero
      */
-    void waitUnitExpectingInput(long timeout);
+    void waitUntilExpectingInput(long timeout);
 
+    /**
+     * Waits until the provided log message is seen in the interpreter log.
+     * @param message the log message to look for
+     * @throws InterruptedException error waiting for the next log
+     * @since 0.7.9
+     */
+    void waitForInterpreterLog(final String message)
+            throws InterruptedException;
+    
     /**
      * Issues a hangup event.
      */

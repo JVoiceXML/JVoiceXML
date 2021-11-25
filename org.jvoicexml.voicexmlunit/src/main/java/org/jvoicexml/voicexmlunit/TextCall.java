@@ -432,7 +432,7 @@ public final class TextCall implements Call {
      * {@inheritDoc}
      */
     @Override
-    public void waitUnitExpectingInput() {
+    public void waitUntilExpectingInput() {
         Assert.assertNotNull("no active session", session);
         try {
             inputMonitor.waitUntilExpectingInput();
@@ -459,7 +459,7 @@ public final class TextCall implements Call {
      * {@inheritDoc}
      */
     @Override
-    public void waitUnitExpectingInput(final long timeout) {
+    public void waitUntilExpectingInput(final long timeout) {
         Assert.assertNotNull("no active session", session);
         try {
             if (timeout == 0) {
@@ -498,6 +498,17 @@ public final class TextCall implements Call {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitForInterpreterLog(final String message)
+            throws InterruptedException {
+        final LogBufferProvider provider = LogBufferProvider.getInstance();
+        final LogBuffer buffer = provider.getInterpreterBuffer();
+        buffer.waitForLog(message);
+    }
+    
     /**
      * {@inheritDoc}
      */

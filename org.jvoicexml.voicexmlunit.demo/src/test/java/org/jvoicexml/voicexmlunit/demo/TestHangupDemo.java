@@ -84,12 +84,13 @@ public final class TestHangupDemo {
      * @throws Exception
      *             test failed
      */
-    @Test//(timeout = TIMEOUT)
+    @Test(timeout = TIMEOUT)
     public void testHangupInput() throws Exception {
         call.call(uri);
         call.hears("Do you like this example?");
         final URI chime = uri.resolve("chime.wav");
         call.hearsAudio(chime);
         call.hangup();
+        call.waitForInterpreterLog("User hung up");
     }
 }

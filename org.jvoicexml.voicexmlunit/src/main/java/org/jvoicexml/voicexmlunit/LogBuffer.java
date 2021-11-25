@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 /**
  * A buffer of log events per call
@@ -39,7 +40,13 @@ public class LogBuffer {
 
     /** Captured logs. */
     private final List<LogEvent> events;
-    
+
+    /** Lock to sync on addition of events. */
+    private final Object lock;
+
+    /** Last read position. */
+    private int position;
+
     /** 
      * {@code true} if this buffer has been configured in log4j and is ready to
      * use.
@@ -53,6 +60,7 @@ public class LogBuffer {
     LogBuffer(final String logicalName) {
         events = new java.util.ArrayList<LogEvent>();
         name = logicalName;
+        lock = new Object();
     }
 
     /**
@@ -82,7 +90,35 @@ public class LogBuffer {
         }
         synchronized (events) {
             events.clear();
+            position = 0;
         }
+    }
+
+    /**
+     * Waits until the provided log message is seen.
+     * @param message the log message to look for
+     * @throws InterruptedException error waiting for the next log
+     * @since 0.7.9
+     */
+    public void waitForLog(final String message) throws InterruptedException {
+        do {
+            final LogEvent current;
+            synchronized (events) {
+                current = events.get(position);
+                position ++;
+            }
+            final Message currentMesage = current.getMessage();
+            final String formattedMessage = currentMesage.getFormattedMessage();
+            if (message.equals(formattedMessage)) {
+                LOGGER.info("saw log message '" + message + "'");
+                return;
+            }
+            if (position >= events.size()) {
+                synchronized (lock) {
+                    lock.wait();
+                }
+            }
+        } while (true);
     }
 
     /**
@@ -90,9 +126,11 @@ public class LogBuffer {
      * @param event the event to add
      */
     public void add(final LogEvent event) {
-        synchronized (event) {
+        synchronized (events) {
             events.add(event);
-            System.err.println("*** " + event.getMessage().getFormattedMessage());        
+            synchronized (lock) {
+                lock.notifyAll();
+            }
         }
     }
     
