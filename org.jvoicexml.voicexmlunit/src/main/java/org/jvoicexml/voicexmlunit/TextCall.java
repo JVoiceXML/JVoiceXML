@@ -150,11 +150,6 @@ public final class TextCall implements Call {
      */
     @Override
     public void call(final File file) {
-        // Prepare the logevent buffers for the next call
-        final LogBufferProvider provider = LogBufferProvider.getInstance();
-        provider.init();
-        
-        // Actually make the call
         final URI uri = file.toURI();
         call(uri);
     }
@@ -164,6 +159,11 @@ public final class TextCall implements Call {
      */
     @Override
     public void call(final URI uri) {
+        // Prepare the logevent buffers for the next call
+        final LogBufferProvider provider = LogBufferProvider.getInstance();
+        provider.init();
+        
+        // Actually make the call
         LOGGER.info("calling '" + uri + "'");
         try {
             lastError = null;

@@ -20,12 +20,18 @@
  */
 package org.jvoicexml.voicexmlunit;
 
+import org.apache.log4j.Logger;
+
 /**
  * An instance that knows about the available {@link LogBuffer}s.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
 public class LogBufferProvider {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(LogBufferProvider.class);
+
     /** The singleton. */
     private static LogBufferProvider INSTANCE;
 
@@ -34,13 +40,19 @@ public class LogBufferProvider {
     
     /** The client buffer. */
     private final LogBuffer clientBuffer;
+
+    /** Logical name of the interpreter log buffer. */
+    public static final String INTERPRETER = "interpreter";
+
+    /** Logical name of the client log buffer. */
+    public static final String CLIENT = "client";
     
     /**
      * Prevent creation from outside
      */
     private LogBufferProvider() {
-        interpreterBuffer = new LogBuffer();
-        clientBuffer = new LogBuffer();
+        interpreterBuffer = new LogBuffer(LogBufferProvider.INTERPRETER);
+        clientBuffer = new LogBuffer(LogBufferProvider.CLIENT);
     }
     
     public static LogBufferProvider getInstance() {
@@ -56,6 +68,9 @@ public class LogBufferProvider {
     public void init() {
         interpreterBuffer.init();
         clientBuffer.init();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("log buffers initialized");
+        }
     }
 
     /**

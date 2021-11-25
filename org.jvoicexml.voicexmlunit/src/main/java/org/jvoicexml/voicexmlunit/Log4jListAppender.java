@@ -61,6 +61,7 @@ public class Log4jListAppender extends AbstractAppender {
             final LogBuffer logBuffer) {
         super(name, filter, layout, true, Property.EMPTY_ARRAY);
         buffer = logBuffer;
+        buffer.setConfigured(true);
     }
     
     /**
@@ -79,9 +80,9 @@ public class Log4jListAppender extends AbstractAppender {
       @PluginElement("Filter") Filter filter) {
         final LogBufferProvider provider = LogBufferProvider.getInstance();
         final LogBuffer logBuffer;
-        if (buffer.equals("interpreter")) {
+        if (buffer.equals(LogBufferProvider.INTERPRETER)) {
             logBuffer = provider.getInterpreterBuffer();
-        } else if (buffer.equals("client")) {
+        } else if (buffer.equals(LogBufferProvider.CLIENT)) {
             logBuffer = provider.getClientBuffer();
         } else {
             logBuffer = null;

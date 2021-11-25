@@ -61,8 +61,11 @@ public class Log4jSocketServer {
         }
         try {
             server.shutdown();
-        } catch (IOException e) {
+            server.awaitTermination(thread);
+        } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
+        } finally {
+            thread = null;
         }
     }
     

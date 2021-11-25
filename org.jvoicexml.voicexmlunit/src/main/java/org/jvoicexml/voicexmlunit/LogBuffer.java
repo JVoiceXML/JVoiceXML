@@ -22,6 +22,7 @@ package org.jvoicexml.voicexmlunit;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.logging.log4j.core.LogEvent;
 
 /**
@@ -30,17 +31,55 @@ import org.apache.logging.log4j.core.LogEvent;
  * @since 0.7.9
  */
 public class LogBuffer {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger.getLogger(LogBuffer.class);
+
+    /** The logical name of this log buffer. */
+    private final String name;
+
     /** Captured logs. */
     private final List<LogEvent> events;
     
-    public LogBuffer() {
+    /** 
+     * {@code true} if this buffer has been configured in log4j and is ready to
+     * use.
+     */
+    private boolean configured;
+    
+    /**
+     * Constructs a new object
+     * @param logicalName logicagl name of this buffer
+     */
+    LogBuffer(final String logicalName) {
         events = new java.util.ArrayList<LogEvent>();
+        name = logicalName;
+    }
+
+    /**
+     * Checks if this log buffer is configured in the log4j configuration.
+     * @return {@code true} if it was configured and can be used
+     * @since 0.7.9
+     */
+    public boolean isConfigured() {
+        return configured;
+    }
+
+    /**
+     * Marks this log buffer as configured
+     * @param isConfigured {@code true} if this buffer is configured
+     * @since 0.7.9
+     */
+    public void setConfigured(boolean isConfigured) {
+        configured = isConfigured;
     }
 
     /**
      * Prepares this log buffer for the next call.
      */
     public void init() {
+        if (!configured) {
+            LOGGER.warn("log buffer '" + name + "' is not configured in log4j");
+        }
         synchronized (events) {
             events.clear();
         }

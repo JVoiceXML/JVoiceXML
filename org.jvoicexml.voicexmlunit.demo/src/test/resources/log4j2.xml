@@ -33,11 +33,11 @@
              <AppenderRef ref="interpreter"/>
         </Root>
         
-        <Logger name ="org.jvoicexml.voicexmlunit" level="debug" additivity="false"> 
+        <Logger name ="org.jvoicexml.voicexmlunit" level="debug"> 
             <AppenderRef ref = "client"/>
         </Logger>
 
-        <Logger name ="org.jvoicexml.client" level="debug" additivity="false"> 
+        <Logger name ="org.jvoicexml.client" level="debug"> 
             <AppenderRef ref = "client"/>
         </Logger>
 
