@@ -52,8 +52,6 @@ public final class TestHangupDemo {
     private static final int TIMEOUT = 10000;
     /** The call to JVoiceXML. */
     private Call call;
-    /** URI of the application to call. */
-    private URI uri;
 
     /**
      * Set up the test environment.
@@ -63,7 +61,6 @@ public final class TestHangupDemo {
      */
     @Before
     public void setUp() throws Exception {
-        uri = TestHangupDemo.class.getResource("/input.vxml").toURI();
         call = new TextCall();
     }
 
@@ -86,10 +83,26 @@ public final class TestHangupDemo {
      */
     @Test(timeout = TIMEOUT)
     public void testHangupInput() throws Exception {
+        final URI uri = TestHangupDemo.class.getResource("/input.vxml").toURI();
         call.call(uri);
         call.hears("Do you like this example?");
         final URI chime = uri.resolve("chime.wav");
         call.hearsAudio(chime);
+        call.hangup();
+        call.waitForInterpreterLog("User hung up");
+    }
+
+    /**
+     * Runs a test with a hangup in script.
+     *
+     * @throws Exception
+     *             test failed
+     */
+    @Test(timeout = TIMEOUT)
+    public void testHangupScript() throws Exception {
+        final URI uri = TestHangupDemo.class.getResource("/scripthangup.vxml").toURI();
+        call.call(uri);
+        call.hears("You should not hear this!");
         call.hangup();
         call.waitForInterpreterLog("User hung up");
     }

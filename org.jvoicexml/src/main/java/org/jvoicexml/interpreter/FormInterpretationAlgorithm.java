@@ -500,6 +500,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                     LOGGER.info("going to form item '" + gotoFormItemName
                             + "'...");
                 } catch (ConnectionDisconnectEvent | CancelEvent | ExitEvent e) {
+                    // Similar to the catch below but terminating processing
                     LOGGER.debug("caught hangup event while processing '"
                             + e.getEventType() + "'");
                     final EventBus eventbus = context.getEventBus();

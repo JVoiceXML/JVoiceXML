@@ -28,7 +28,7 @@ import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.EventSubscriber;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.event.plain.ConnectionDisconnectEvent;
 
 /**
  * A variable container to hold the connection information.
@@ -142,7 +142,8 @@ public final class Connection implements EventSubscriber {
      */
     @Override
     public void onEvent(JVoiceXMLEvent event) {
-        if (!event.getEventType().equals(ConnectionDisconnectHangupEvent.EVENT_TYPE)) {
+        final String eventType = event.getEventType();
+        if (!eventType.startsWith(ConnectionDisconnectEvent.EVENT_TYPE)) {
             return;
         }
         if (LOGGER.isDebugEnabled()) {
