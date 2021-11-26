@@ -29,16 +29,17 @@
         <Logger name="org.jvoicexml" level="debug" />
 
         <Root>
-             <AppenderRef ref="stdout"/>
              <AppenderRef ref="interpreter"/>
         </Root>
         
         <Logger name ="org.jvoicexml.voicexmlunit" level="debug"> 
             <AppenderRef ref = "client"/>
+             <AppenderRef ref="stdout"/>
         </Logger>
 
         <Logger name ="org.jvoicexml.client" level="debug"> 
             <AppenderRef ref = "client"/>
+             <AppenderRef ref="stdout"/>
         </Logger>
 
     </Loggers>

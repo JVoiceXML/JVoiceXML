@@ -508,6 +508,17 @@ public final class TextCall implements Call {
         final LogBuffer buffer = provider.getInterpreterBuffer();
         buffer.waitForLog(message);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitForInterpreterLog(final String message, final long timeout)
+            throws InterruptedException, TimeoutException {
+        final LogBufferProvider provider = LogBufferProvider.getInstance();
+        final LogBuffer buffer = provider.getInterpreterBuffer();
+        buffer.waitForLog(message, timeout);
+    }
     
     /**
      * {@inheritDoc}

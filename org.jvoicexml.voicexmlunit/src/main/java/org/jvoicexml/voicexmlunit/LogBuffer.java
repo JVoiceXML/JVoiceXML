@@ -21,6 +21,7 @@
 package org.jvoicexml.voicexmlunit;
 
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
 import org.apache.logging.log4j.core.LogEvent;
@@ -34,6 +35,9 @@ import org.apache.logging.log4j.message.Message;
 public class LogBuffer {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(LogBuffer.class);
+
+    /** Time to wait before checking again if the waiting timeout expired. */
+    private static final int WAIT_TIME = 100;
 
     /** The logical name of this log buffer. */
     private final String name;
@@ -66,7 +70,6 @@ public class LogBuffer {
     /**
      * Checks if this log buffer is configured in the log4j configuration.
      * @return {@code true} if it was configured and can be used
-     * @since 0.7.9
      */
     public boolean isConfigured() {
         return configured;
@@ -75,7 +78,6 @@ public class LogBuffer {
     /**
      * Marks this log buffer as configured
      * @param isConfigured {@code true} if this buffer is configured
-     * @since 0.7.9
      */
     public void setConfigured(boolean isConfigured) {
         configured = isConfigured;
@@ -98,7 +100,6 @@ public class LogBuffer {
      * Waits until the provided log message is seen.
      * @param message the log message to look for
      * @throws InterruptedException error waiting for the next log
-     * @since 0.7.9
      */
     public void waitForLog(final String message) throws InterruptedException {
         do {
@@ -110,7 +111,7 @@ public class LogBuffer {
             final Message currentMesage = current.getMessage();
             final String formattedMessage = currentMesage.getFormattedMessage();
             if (message.equals(formattedMessage)) {
-                LOGGER.info("saw log message '" + message + "'");
+                LOGGER.info("'" + name + "' saw log message '" + message + "'");
                 return;
             }
             if (position >= events.size()) {
@@ -121,6 +122,39 @@ public class LogBuffer {
         } while (true);
     }
 
+    /**
+     * Waits until the provided log message is seen.
+     * @param message the log message to look for
+     * @param timeout the max timeout in msecs
+     * @throws InterruptedException error waiting for the next log
+     * @throws TimeoutException
+     *             waiting time exceeded
+     */
+    public void waitForLog(final String message, final long timeout)
+            throws InterruptedException, TimeoutException {
+        final long maxEndTime = System.currentTimeMillis() + timeout;
+        do {
+            final LogEvent current;
+            synchronized (events) {
+                current = events.get(position);
+                position ++;
+            }
+            final Message currentMesage = current.getMessage();
+            final String formattedMessage = currentMesage.getFormattedMessage();
+            if (message.equals(formattedMessage)) {
+                LOGGER.info("'" + name + "' saw log message '" + message + "'");
+                return;
+            }
+            if (position >= events.size()) {
+                synchronized (lock) {
+                    lock.wait(WAIT_TIME);
+                }
+            }
+        } while (System.currentTimeMillis() < maxEndTime);
+        throw new TimeoutException("timeout of '" + timeout
+                + "' msec exceeded while waiting for '" + message + "'");
+    }
+    
     /**
      * Adds the given event to the list of known events.
      * @param event the event to add
